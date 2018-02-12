@@ -26,7 +26,7 @@ import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
 
-var LeftPanel = React.createClass({
+const LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     // NB. If you add props, don't forget to update
@@ -96,37 +96,33 @@ var LeftPanel = React.createClass({
     },
 
     _onMoveFocus: function(up) {
-        var element = this.focusedElement;
+        let element = this.focusedElement;
 
         // unclear why this isn't needed
         // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
         // this.focusDirection = up;
 
-        var descending = false; // are we currently descending or ascending through the DOM tree?
-        var classes;
+        let descending = false; // are we currently descending or ascending through the DOM tree?
+        let classes;
 
         do {
-            var child = up ? element.lastElementChild : element.firstElementChild;
-            var sibling = up ? element.previousElementSibling : element.nextElementSibling;
+            const child = up ? element.lastElementChild : element.firstElementChild;
+            const sibling = up ? element.previousElementSibling : element.nextElementSibling;
 
             if (descending) {
                 if (child) {
                     element = child;
-                }
-                else if (sibling) {
+                } else if (sibling) {
                     element = sibling;
-                }
-                else {
+                } else {
                     descending = false;
                     element = element.parentElement;
                 }
-            }
-            else {
+            } else {
                 if (sibling) {
                     element = sibling;
                     descending = true;
-                }
-                else {
+                } else {
                     element = element.parentElement;
                 }
             }
@@ -138,8 +134,7 @@ var LeftPanel = React.createClass({
                     descending = true;
                 }
             }
-
-        } while(element && !(
+        } while (element && !(
             classes.contains("mx_RoomTile") ||
             classes.contains("mx_SearchBox_search") ||
             classes.contains("mx_RoomSubList_ellipsis")));
@@ -169,32 +164,32 @@ var LeftPanel = React.createClass({
         let topBox;
         if (MatrixClientPeg.get().isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
-            topBox = <LoginBox collapsed={ this.props.collapsed }/>;
+            topBox = <LoginBox collapsed={this.props.collapsed} />;
         } else {
             const SearchBox = sdk.getComponent('structures.SearchBox');
-            topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
+            topBox = <SearchBox collapsed={this.props.collapsed} onSearch={this.onSearch} />;
         }
 
-        let classes = classNames(
+        const classes = classNames(
             "mx_LeftPanel", "mx_fadable",
             {
                 "collapsed": this.props.collapsed,
                 "mx_fadable_faded": this.props.disabled,
-            }
+            },
         );
 
         return (
-            <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+            <aside className={classes} onKeyDown={this._onKeyDown} onFocus={this._onFocus} onBlur={this._onBlur}>
                 { topBox }
                 <CallPreview ConferenceHandler={VectorConferenceHandler} />
                 <RoomList
                     collapsed={this.props.collapsed}
                     searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed}/>
+                <BottomLeftMenu collapsed={this.props.collapsed} />
             </aside>
         );
-    }
+    },
 });
 
 module.exports = LeftPanel;

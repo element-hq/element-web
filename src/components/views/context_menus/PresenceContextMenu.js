@@ -84,7 +84,7 @@ module.exports = React.createClass({
 
     render: function() {
         const statusElements = [];
-        for (let status of Object.keys(STATUS_LABELS)) {
+        for (const status of Object.keys(STATUS_LABELS)) {
             statusElements.push((
                 <PresenceContextMenuOption forStatus={status} key={status}
                                            onChange={this.onChange}

@@ -17,38 +17,38 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var classNames = require('classnames');
-var sdk = require('matrix-react-sdk');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const classNames = require('classnames');
+const sdk = require('matrix-react-sdk');
 import { Droppable } from 'react-beautiful-dnd';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var Unread = require('matrix-react-sdk/lib/Unread');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
-var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+const dis = require('matrix-react-sdk/lib/dispatcher');
+const Unread = require('matrix-react-sdk/lib/Unread');
+const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+const RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
+const FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
+const AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 import Modal from 'matrix-react-sdk/lib/Modal';
 import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 
 
 // turn this on for drop & drag console debugging galore
-var debug = false;
+const debug = false;
 
 const TRUNCATE_AT = 10;
 
-var roomListTarget = {
+const roomListTarget = {
     canDrop: function() {
         return true;
     },
 
     drop: function(props, monitor, component) {
-        if (debug) console.log("dropped on sublist")
+        if (debug) console.log("dropped on sublist");
     },
 
     hover: function(props, monitor, component) {
-        var item = monitor.getItem();
+        const item = monitor.getItem();
 
         if (component.state.sortedList.length == 0 && props.editable) {
             if (debug) console.log("hovering on sublist " + props.label + ", isOver=" + monitor.isOver());
@@ -63,7 +63,7 @@ var roomListTarget = {
     },
 };
 
-var RoomSubList = React.createClass({
+const RoomSubList = React.createClass({
     displayName: 'RoomSubList',
 
     debug: debug,
@@ -122,14 +122,14 @@ var RoomSubList = React.createClass({
     applySearchFilter: function(list, filter) {
         if (filter === "") return list;
         return list.filter((room) => {
-            return room.name && room.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0
+            return room.name && room.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
         });
     },
 
     // The header is collapsable if it is hidden or not stuck
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isCollapsableOnClick: function() {
-        var stuck = this.refs.header.dataset.stuck;
+        const stuck = this.refs.header.dataset.stuck;
         if (this.state.hidden || stuck === undefined || stuck === "none") {
             return true;
         } else {
@@ -140,12 +140,12 @@ var RoomSubList = React.createClass({
     onClick: function(ev) {
         if (this.isCollapsableOnClick()) {
             // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
-            var isHidden = !this.state.hidden;
-            this.setState({ hidden : isHidden });
+            const isHidden = !this.state.hidden;
+            this.setState({ hidden: isHidden });
 
             if (isHidden) {
                 // as good a way as any to reset the truncate state
-                this.setState({ truncateAt : TRUNCATE_AT });
+                this.setState({ truncateAt: TRUNCATE_AT });
             }
 
             this.props.onShowMoreRooms();
@@ -165,8 +165,8 @@ var RoomSubList = React.createClass({
     },
 
     tsOfNewestEvent: function(room) {
-        for (var i = room.timeline.length - 1; i >= 0; --i) {
-            var ev = room.timeline[i];
+        for (let i = room.timeline.length - 1; i >= 0; --i) {
+            const ev = room.timeline[i];
             if (ev.getTs() &&
                 (Unread.eventTriggersUnreadCount(ev) ||
                 (ev.getSender() === MatrixClientPeg.get().credentials.userId))
@@ -201,8 +201,8 @@ var RoomSubList = React.createClass({
         if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
 
         // Make sure the room tag has an order element, if not set it to be the bottom
-        var a = roomA.tags[this.props.tagName].order;
-        var b = roomB.tags[this.props.tagName].order;
+        const a = roomA.tags[this.props.tagName].order;
+        const b = roomB.tags[this.props.tagName].order;
 
         // Order undefined room tag orders to the bottom
         if (a === undefined && b !== undefined) {
@@ -211,13 +211,13 @@ var RoomSubList = React.createClass({
             return -1;
         }
 
-        return a == b ? this.lexicographicalComparator(roomA, roomB) : ( a > b  ? 1 : -1);
+        return a == b ? this.lexicographicalComparator(roomA, roomB) : ( a > b ? 1 : -1);
     },
 
     sortList: function(list, order) {
         if (list === undefined) list = this.state.sortedList;
         if (order === undefined) order = this.props.order;
-        var comparator;
+        let comparator;
         list = list || [];
         if (order === "manual") comparator = this.manualComparator;
         if (order === "recent") comparator = this.recentsComparator;
@@ -245,7 +245,7 @@ var RoomSubList = React.createClass({
      * @returns {Array} The array takes the form [total, highlight] where highlight is a bool
      */
     roomNotificationCount: function(truncateAt) {
-        var self = this;
+        const self = this;
 
         if (this.props.isInvite) {
             return [0, true];
@@ -253,9 +253,9 @@ var RoomSubList = React.createClass({
 
         return this.props.list.reduce(function(result, room, index) {
             if (truncateAt === undefined || index >= truncateAt) {
-                var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-                var highlight = room.getUnreadNotificationCount('highlight') > 0;
-                var notificationCount = room.getUnreadNotificationCount();
+                const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+                const highlight = room.getUnreadNotificationCount('highlight') > 0;
+                const notificationCount = room.getUnreadNotificationCount();
 
                 const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
                 const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
@@ -282,14 +282,13 @@ var RoomSubList = React.createClass({
     moveRoomTile: function(room, atIndex) {
         if (debug) console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
         //console.log("moveRoomTile before: " + JSON.stringify(this.state.rooms));
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
+        const found = this.findRoomTile(room);
+        const rooms = this.state.sortedList;
         if (found.room) {
             if (debug) console.log("removing at index " + found.index + " and adding at index " + atIndex);
             rooms.splice(found.index, 1);
             rooms.splice(atIndex, 0, found.room);
-        }
-        else {
+        } else {
             if (debug) console.log("Adding at index " + atIndex);
             rooms.splice(atIndex, 0, room);
         }
@@ -301,23 +300,21 @@ var RoomSubList = React.createClass({
     // the roomList property method.  Unsure how evil this is.
     removeRoomTile: function(room) {
         if (debug) console.log("remove room " + room.roomId);
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
+        const found = this.findRoomTile(room);
+        const rooms = this.state.sortedList;
         if (found.room) {
             rooms.splice(found.index, 1);
-        }
-        else {
+        } else {
             console.warn("Can't remove room " + room.roomId + " - can't find it");
         }
         this.setState({ sortedList: rooms });
     },
 
     findRoomTile: function(room) {
-        var index = this.state.sortedList.indexOf(room);
+        const index = this.state.sortedList.indexOf(room);
         if (index >= 0) {
             // console.log("found: room: " + room.roomId + " with index " + index);
-        }
-        else {
+        } else {
             if (debug) console.log("didn't find room");
             room = null;
         }
@@ -372,51 +369,51 @@ var RoomSubList = React.createClass({
     },
 
     makeRoomTiles: function() {
-        var self = this;
-        var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
+        const self = this;
+        const DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         return this.state.sortedList.map(function(room, index) {
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <DNDRoomTile
                     index={index} // For DND
-                    room={ room }
-                    roomSubList={ self }
+                    room={room}
+                    roomSubList={self}
                     tagName={self.props.tagName}
-                    key={ room.roomId }
-                    collapsed={ self.props.collapsed || false}
-                    unread={ Unread.doesRoomHaveUnreadMessages(room) }
-                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite }
-                    isInvite={ self.props.isInvite }
-                    refreshSubList={ self._updateSubListCount }
-                    incomingCall={ null }
-                    onClick={ self.onRoomTileClick }
+                    key={room.roomId}
+                    collapsed={self.props.collapsed || false}
+                    unread={Unread.doesRoomHaveUnreadMessages(room)}
+                    highlight={room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite}
+                    isInvite={self.props.isInvite}
+                    refreshSubList={self._updateSubListCount}
+                    incomingCall={null}
+                    onClick={self.onRoomTileClick}
                 />
             );
         });
     },
 
     _getHeaderJsx: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var subListNotifications = this.roomNotificationCount();
-        var subListNotifCount = subListNotifications[0];
-        var subListNotifHighlight = subListNotifications[1];
+        const subListNotifications = this.roomNotificationCount();
+        const subListNotifCount = subListNotifications[0];
+        const subListNotifHighlight = subListNotifications[1];
 
-        var totalTiles = this.props.list.length + (this.props.extraTiles || []).length;
-        var roomCount = totalTiles > 0 ? totalTiles : '';
+        const totalTiles = this.props.list.length + (this.props.extraTiles || []).length;
+        const roomCount = totalTiles > 0 ? totalTiles : '';
 
-        var chevronClasses = classNames({
+        const chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronRight': this.state.hidden,
             'mx_RoomSubList_chevronDown': !this.state.hidden,
         });
 
-        var badgeClasses = classNames({
+        const badgeClasses = classNames({
             'mx_RoomSubList_badge': true,
             'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
         });
 
-        var badge;
+        let badge;
         if (subListNotifCount > 0) {
             badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
         } else if (this.props.isInvite) {
@@ -426,7 +423,7 @@ var RoomSubList = React.createClass({
 
         // When collapsed, allow a long hover on the header to show user
         // the full tag name and room count
-        var title;
+        let title;
         if (this.props.collapsed) {
             title = this.props.label;
             if (roomCount !== '') {
@@ -434,25 +431,25 @@ var RoomSubList = React.createClass({
             }
         }
 
-        var incomingCall;
+        let incomingCall;
         if (this.props.incomingCall) {
-            var self = this;
+            const self = this;
             // Check if the incoming call is for this section
-            var incomingCallRoom = this.props.list.filter(function(room) {
+            const incomingCallRoom = this.props.list.filter(function(room) {
                 return self.props.incomingCall.roomId === room.roomId;
             });
 
             if (incomingCallRoom.length === 1) {
-                var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
-                incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={ this.props.incomingCall }/>;
+                const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+                incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
             }
         }
 
-        var tabindex = this.props.searchFilter === "" ? "0" : "-1";
+        const tabindex = this.props.searchFilter === "" ? "0" : "-1";
 
         return (
-            <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
+            <div className="mx_RoomSubList_labelContainer" title={title} ref="header">
+                <AccessibleButton onClick={this.onClick} className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
@@ -464,16 +461,16 @@ var RoomSubList = React.createClass({
     },
 
     _createOverflowTile: function(overflowCount, totalCount) {
-        var content = <div className="mx_RoomSubList_chevronDown"></div>;
+        let content = <div className="mx_RoomSubList_chevronDown"></div>;
 
-        var overflowNotifications = this.roomNotificationCount(TRUNCATE_AT);
-        var overflowNotifCount = overflowNotifications[0];
-        var overflowNotifHighlight = overflowNotifications[1];
+        const overflowNotifications = this.roomNotificationCount(TRUNCATE_AT);
+        const overflowNotifCount = overflowNotifications[0];
+        const overflowNotifHighlight = overflowNotifications[1];
         if (overflowNotifCount && !this.props.collapsed) {
             content = FormattingUtils.formatCount(overflowNotifCount);
         }
 
-        var badgeClasses = classNames({
+        const badgeClasses = classNames({
             'mx_RoomSubList_moreBadge': true,
             'mx_RoomSubList_moreBadgeNotify': overflowNotifCount && !this.props.collapsed,
             'mx_RoomSubList_moreBadgeHighlight': overflowNotifHighlight && !this.props.collapsed,
@@ -483,14 +480,14 @@ var RoomSubList = React.createClass({
             <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
                 <div className="mx_RoomSubList_more">{ _t("more") }</div>
-                <div className={ badgeClasses }>{ content }</div>
+                <div className={badgeClasses}>{ content }</div>
             </AccessibleButton>
         );
     },
 
     _showFullMemberList: function() {
         this.setState({
-            truncateAt: -1
+            truncateAt: -1,
         });
 
         this.props.onShowMoreRooms();
@@ -501,8 +498,8 @@ var RoomSubList = React.createClass({
     //     room.tag[tagname].order
     _fixUndefinedOrder: function(list) {
         if (this.props.order === "manual") {
-            var order = 0.0;
-            var self = this;
+            let order = 0.0;
+            const self = this;
 
             // Find the highest (lowest position) order of a room in a manual ordered list
             list.forEach(function(room) {
@@ -525,7 +522,7 @@ var RoomSubList = React.createClass({
                     MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
                         // Do any final stuff here
                     }).catch(function(err) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
                             title: _t('Failed to add tag %(tagName)s to room', {tagName: self.props.tagName}),
@@ -533,16 +530,16 @@ var RoomSubList = React.createClass({
                         });
                     });
                     break;
-                };
-            };
+                }
+            }
         }
     },
 
     render: function() {
-        var connectDropTarget = this.props.connectDropTarget;
-        var TruncatedList = sdk.getComponent('elements.TruncatedList');
+        const connectDropTarget = this.props.connectDropTarget;
+        const TruncatedList = sdk.getComponent('elements.TruncatedList');
 
-        var label = this.props.collapsed ? null : this.props.label;
+        const label = this.props.collapsed ? null : this.props.label;
 
         let content;
         if (this.state.sortedList.length === 0 && !this.props.searchFilter && this.props.extraTiles.length === 0) {
@@ -553,17 +550,16 @@ var RoomSubList = React.createClass({
         }
 
         if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0 || this.props.editable) {
-            var subList;
-            var classes = "mx_RoomSubList";
+            let subList;
+            const classes = "mx_RoomSubList";
 
             if (!this.state.hidden) {
-                subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
+                subList = <TruncatedList className={classes} truncateAt={this.state.truncateAt}
                                          createOverflowElement={this._createOverflowTile} >
                                 { content }
                           </TruncatedList>;
-            }
-            else {
-                subList = <TruncatedList className={ classes }>
+            } else {
+                subList = <TruncatedList className={classes}>
                           </TruncatedList>;
             }
 
@@ -579,9 +575,8 @@ var RoomSubList = React.createClass({
                     </div>
                 ) }
             </Droppable> : subListContent;
-        }
-        else {
-            var Loader = sdk.getComponent("elements.Spinner");
+        } else {
+            const Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
                     { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
@@ -589,7 +584,7 @@ var RoomSubList = React.createClass({
                 </div>
             );
         }
-    }
+    },
 });
 
 module.exports = RoomSubList;

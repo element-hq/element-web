@@ -16,18 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CompatibilityPage',
     propTypes: {
-        onAccept: React.PropTypes.func
+        onAccept: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
-            onAccept: function() {} // NOP
+            onAccept: function() {}, // NOP
         };
     },
 
@@ -36,11 +36,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-
         return (
         <div className="mx_CompatibilityPage">
             <div className="mx_CompatibilityPage_box">
-                <p>{ _t("Sorry, your browser is <b>not</b> able to run Riot.", {}, { 'b': (sub) => <b>{sub}</b> }) } </p>
+                <p>{ _t("Sorry, your browser is <b>not</b> able to run Riot.", {}, { 'b': (sub) => <b>{ sub }</b> }) } </p>
                 <p>
                 { _t("Riot uses many advanced browser features, some of which are not available or experimental in your current browser.") }
                 </p>
@@ -48,17 +47,17 @@ module.exports = React.createClass({
                 { _t('Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.',
                     {},
                     {
-                        'chromeLink': (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
-                        'firefoxLink': (sub) => <a href="https://getfirefox.com">{sub}</a>,
+                        'chromeLink': (sub) => <a href="https://www.google.com/chrome">{ sub }</a>,
+                        'firefoxLink': (sub) => <a href="https://getfirefox.com">{ sub }</a>,
                     },
-                )}
+                ) }
                 { _t('<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.',
                     {},
                     {
-                        'safariLink': (sub) => <a href="http://apple.com/safari">{sub}</a>,
-                        'operaLink': (sub) => <a href="http://opera.com">{sub}</a>,
+                        'safariLink': (sub) => <a href="http://apple.com/safari">{ sub }</a>,
+                        'operaLink': (sub) => <a href="http://opera.com">{ sub }</a>,
                     },
-                )}
+                ) }
                 </p>
                 <p>
                 { _t("With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!") }
@@ -69,5 +68,5 @@ module.exports = React.createClass({
             </div>
         </div>
         );
-    }
+    },
 });

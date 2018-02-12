@@ -16,18 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var ContentRepo = require("matrix-js-sdk").ContentRepo;
-var Modal = require('matrix-react-sdk/lib/Modal');
-var sdk = require('matrix-react-sdk');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+const ContentRepo = require("matrix-js-sdk").ContentRepo;
+const Modal = require('matrix-react-sdk/lib/Modal');
+const sdk = require('matrix-react-sdk');
+const dis = require('matrix-react-sdk/lib/dispatcher');
 
-var linkify = require('linkifyjs');
-var linkifyString = require('linkifyjs/string');
-var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
-var sanitizeHtml = require('sanitize-html');
+const linkify = require('linkifyjs');
+const linkifyString = require('linkifyjs/string');
+const linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
+const sanitizeHtml = require('sanitize-html');
 import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -46,7 +46,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             config: {},
-        }
+        };
     },
 
     getInitialState: function() {
@@ -58,7 +58,7 @@ module.exports = React.createClass({
             includeAll: false,
             roomServer: null,
             filterString: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -134,13 +134,12 @@ module.exports = React.createClass({
             opts.include_all_networks = true;
         }
         if (this.nextBatch) opts.since = this.nextBatch;
-        if (my_filter_string) opts.filter = { generic_search_term: my_filter_string } ;
+        if (my_filter_string) opts.filter = { generic_search_term: my_filter_string };
         return MatrixClientPeg.get().publicRooms(opts).then((data) => {
             if (
                 my_filter_string != this.state.filterString ||
                 my_server != this.state.roomServer ||
-                my_next_batch != this.nextBatch)
-            {
+                my_next_batch != this.nextBatch) {
                 // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
@@ -163,8 +162,7 @@ module.exports = React.createClass({
             if (
                 my_filter_string != this.state.filterString ||
                 my_server != this.state.roomServer ||
-                my_next_batch != this.nextBatch)
-            {
+                my_next_batch != this.nextBatch) {
                 // as above: we don't care about errors for old
                 // requests either
                 return;
@@ -177,10 +175,10 @@ module.exports = React.createClass({
 
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
                 title: _t('Failed to get public room list'),
-                description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
+                description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded')),
             });
         });
     },
@@ -193,13 +191,13 @@ module.exports = React.createClass({
      * this needs SPEC-417.
      */
     removeFromDirectory: function(room) {
-        var alias = get_display_alias_for_room(room);
-        var name = room.name || alias || _t('Unnamed room');
+        const alias = get_display_alias_for_room(room);
+        const name = room.name || alias || _t('Unnamed room');
 
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-        var desc;
+        let desc;
         if (alias) {
             desc = _t('Delete the room alias %(alias)s and remove %(name)s from the directory?', {alias: alias, name: name});
         } else {
@@ -212,9 +210,9 @@ module.exports = React.createClass({
             onFinished: (should_delete) => {
                 if (!should_delete) return;
 
-                var Loader = sdk.getComponent("elements.Spinner");
-                var modal = Modal.createDialog(Loader);
-                var step = _t('remove %(name)s from the directory.', {name: name});
+                const Loader = sdk.getComponent("elements.Spinner");
+                const modal = Modal.createDialog(Loader);
+                let step = _t('remove %(name)s from the directory.', {name: name});
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
@@ -229,10 +227,10 @@ module.exports = React.createClass({
                     console.error("Failed to " + step + ": " + err);
                     Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
                         title: _t('Error'),
-                        description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
+                        description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded')),
                     });
                 });
-            }
+            },
         });
     },
 
@@ -347,7 +345,7 @@ module.exports = React.createClass({
     },
 
     showRoom: function(room, room_alias) {
-        var payload = {action: 'view_room'};
+        const payload = {action: 'view_room'};
         if (room) {
             // Don't let the user view a room they won't be able to either
             // peek or join: fail earlier so they don't have to click back
@@ -383,16 +381,16 @@ module.exports = React.createClass({
     },
 
     getRows: function() {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         if (!this.state.publicRooms) return [];
 
-        var rooms = this.state.publicRooms;
-        var rows = [];
-        var self = this;
-        var guestRead, guestJoin, perms;
-        for (var i = 0; i < rooms.length; i++) {
-            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
+        const rooms = this.state.publicRooms;
+        const rows = [];
+        const self = this;
+        let guestRead, guestJoin, perms;
+        for (let i = 0; i < rooms.length; i++) {
+            const name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
             guestRead = null;
             guestJoin = null;
 
@@ -409,37 +407,37 @@ module.exports = React.createClass({
 
             perms = null;
             if (guestRead || guestJoin) {
-                perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
+                perms = <div className="mx_RoomDirectory_perms">{ guestRead }{ guestJoin }</div>;
             }
 
-            var topic = rooms[i].topic || '';
+            let topic = rooms[i].topic || '';
             topic = linkifyString(sanitizeHtml(topic));
 
             rows.push(
-                <tr key={ rooms[i].room_id }
+                <tr key={rooms[i].room_id}
                     onClick={self.onRoomClicked.bind(self, rooms[i])}
                     // cancel onMouseDown otherwise shift-clicking highlights text
                     onMouseDown={(ev) => {ev.preventDefault();}}
                 >
                     <td className="mx_RoomDirectory_roomAvatar">
                         <BaseAvatar width={24} height={24} resizeMethod='crop'
-                            name={ name } idName={ name }
-                            url={ ContentRepo.getHttpUriForMxc(
+                            name={name} idName={name}
+                            url={ContentRepo.getHttpUriForMxc(
                                     MatrixClientPeg.get().getHomeserverUrl(),
-                                    rooms[i].avatar_url, 24, 24, "crop") } />
+                                    rooms[i].avatar_url, 24, 24, "crop")} />
                     </td>
                     <td className="mx_RoomDirectory_roomDescription">
                         <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                         { perms }
                         <div className="mx_RoomDirectory_topic"
-                             onClick={ function(e) { e.stopPropagation() } }
-                             dangerouslySetInnerHTML={{ __html: topic }}/>
+                             onClick={function(e) { e.stopPropagation(); }}
+                             dangerouslySetInnerHTML={{ __html: topic }} />
                         <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(rooms[i]) }</div>
                     </td>
                     <td className="mx_RoomDirectory_roomMemberCount">
                         { rooms[i].num_joined_members }
                     </td>
-                </tr>
+                </tr>,
             );
         }
         return rows;
@@ -492,7 +490,7 @@ module.exports = React.createClass({
         if (this.state.protocolsLoading) {
             return (
                 <div className="mx_RoomDirectory">
-                    <SimpleRoomHeader title={ _t('Directory') } />
+                    <SimpleRoomHeader title={_t('Directory')} />
                     <Loader />
                 </div>
             );
@@ -521,10 +519,10 @@ module.exports = React.createClass({
             const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
             content = <ScrollPanel ref={this.collectScrollPanel}
                 className="mx_RoomDirectory_tableWrapper"
-                onFillRequest={ this.onFillRequest }
+                onFillRequest={this.onFillRequest}
                 stickyBottom={false}
                 startAtBottom={false}
-                onResize={function(){}}
+                onResize={function() {}}
             >
                 { scrollpanel_content }
             </ScrollPanel>;
@@ -563,7 +561,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title={ _t('Directory') } icon="img/icons-directory.svg" />
+                <SimpleRoomHeader title={_t('Directory')} icon="img/icons-directory.svg" />
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox
@@ -573,15 +571,15 @@ module.exports = React.createClass({
                         />
                         <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
                     </div>
-                    {content}
+                    { content }
                 </div>
             </div>
         );
-    }
+    },
 });
 
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
 function get_display_alias_for_room(room) {
-    return  room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+    return room.canonical_alias || (room.aliases ? room.aliases[0] : "");
 }

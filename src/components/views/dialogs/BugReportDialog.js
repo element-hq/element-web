@@ -106,7 +106,7 @@ export default class BugReportDialog extends React.Component {
         let error = null;
         if (this.state.err) {
             error = <div className="error">
-                {this.state.err}
+                { this.state.err }
             </div>;
         }
 
@@ -122,7 +122,7 @@ export default class BugReportDialog extends React.Component {
             progress = (
                 <div className="progress">
                     <Loader />
-                    {this.state.progress} ...
+                    { this.state.progress } ...
                 </div>
             );
         }
@@ -147,12 +147,12 @@ export default class BugReportDialog extends React.Component {
                     { _t("In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:") }
                     </p>
                     <input type="checkbox" checked={this.state.sendLogs}
-                        onChange={this._onSendLogsChange} id="mx_BugReportDialog_logs"/>
+                        onChange={this._onSendLogsChange} id="mx_BugReportDialog_logs" />
                     <label htmlFor="mx_BugReportDialog_logs">
                         { _t("Send logs") }
                     </label>
-                    {progress}
-                    {error}
+                    { progress }
+                    { error }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button
@@ -164,7 +164,7 @@ export default class BugReportDialog extends React.Component {
                         { _t("Send") }
                     </button>
 
-                    {cancelButton}
+                    { cancelButton }
                 </div>
             </div>
         );

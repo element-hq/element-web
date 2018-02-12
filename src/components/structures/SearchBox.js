@@ -72,7 +72,7 @@ module.exports = React.createClass({
         function() {
             this.props.onSearch(this.refs.search.value);
         },
-        100
+        100,
     ),
 
     onToggleCollapse: function(show) {
@@ -80,8 +80,7 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'show_left_panel',
             });
-        }
-        else {
+        } else {
             dis.dispatch({
                 action: 'hide_left_panel',
             });
@@ -103,31 +102,30 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
-        var collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";
+        const collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";
 
-        var toggleCollapse;
+        let toggleCollapse;
         if (this.props.collapsed) {
             toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_maximise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt={ _t("Expand panel") }/>
-                </AccessibleButton>
-        }
-        else {
+                <AccessibleButton className="mx_SearchBox_maximise" tabIndex={collapseTabIndex} onClick={this.onToggleCollapse.bind(this, true)}>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt={_t("Expand panel")} />
+                </AccessibleButton>;
+        } else {
             toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_minimise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt={ _t("Collapse panel") }/>
-                </AccessibleButton>
+                <AccessibleButton className="mx_SearchBox_minimise" tabIndex={collapseTabIndex} onClick={this.onToggleCollapse.bind(this, false)}>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt={_t("Collapse panel")} />
+                </AccessibleButton>;
         }
 
-        var searchControls;
+        let searchControls;
         if (!this.props.collapsed) {
             searchControls = [
                     this.state.searchTerm.length > 0 ?
                     <AccessibleButton key="button"
                             className="mx_SearchBox_closeButton"
-                            onClick={ ()=>{ this._clearSearch(); } }>
+                            onClick={()=>{ this._clearSearch(); }}>
                         <TintableSvg
                             className="mx_SearchBox_searchButton"
                             src="img/icons-close.svg" width="24" height="24"
@@ -144,20 +142,20 @@ module.exports = React.createClass({
                         type="text"
                         ref="search"
                         className="mx_SearchBox_search"
-                        value={ this.state.searchTerm }
-                        onChange={ this.onChange }
-                        onKeyDown={ this._onKeyDown }
-                        placeholder={ _t('Filter room names') }
-                    />
+                        value={this.state.searchTerm}
+                        onChange={this.onChange}
+                        onKeyDown={this._onKeyDown}
+                        placeholder={_t('Filter room names')}
+                    />,
                 ];
         }
 
-        var self = this;
+        const self = this;
         return (
             <div className="mx_SearchBox">
                 { searchControls }
                 { toggleCollapse }
             </div>
         );
-    }
+    },
 });

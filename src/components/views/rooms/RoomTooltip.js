@@ -16,9 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const dis = require('matrix-react-sdk/lib/dispatcher');
 import classNames from 'classnames';
 
 module.exports = React.createClass({
@@ -60,14 +60,14 @@ module.exports = React.createClass({
     },
 
     _renderTooltip: function() {
-        var label = this.props.room ? this.props.room.name : this.props.label;
+        const label = this.props.room ? this.props.room.name : this.props.label;
 
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        var parent = ReactDOM.findDOMNode(this);
-        var style = {};
+        const parent = ReactDOM.findDOMNode(this);
+        const style = {};
         style.top = parent.getBoundingClientRect().top + window.pageYOffset;
         style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
         style.display = "block";
@@ -76,7 +76,7 @@ module.exports = React.createClass({
             "mx_RoomTooltip", this.props.tooltipClassName,
         );
 
-        var tooltip = (
+        const tooltip = (
             <div className={tooltipClasses} style={style} >
                 <div className="mx_RoomTooltip_chevron"></div>
                 { label }
@@ -97,8 +97,8 @@ module.exports = React.createClass({
     render: function() {
         // Render a placeholder
         return (
-            <div className={ this.props.className } >
+            <div className={this.props.className} >
             </div>
         );
-    }
+    },
 });

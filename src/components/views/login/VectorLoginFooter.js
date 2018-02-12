@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
 
@@ -28,8 +28,8 @@ module.exports = React.createClass({
 
     render: function() {
         // FIXME: replace this with a proper Status skin
-        if (SettingsStore.getValue("theme") === 'status') return <div/>;
-        
+        if (SettingsStore.getValue("theme") === 'status') return <div />;
+
         return (
             <div className="mx_Login_links">
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
@@ -38,5 +38,5 @@ module.exports = React.createClass({
                 <a href="https://matrix.org">{ _t('powered by Matrix') }</a>
             </div>
         );
-    }
+    },
 });
