@@ -224,5 +224,7 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> и <operaLink>Opera</operaLink> работают тоже.",
     "Reply": "Ответить",
     "%(count)s Members|other": "%(count)s членов",
-    "%(count)s Members|one": "%(count)s член"
+    "%(count)s Members|one": "%(count)s член",
+    "Online": "Онлайн",
+    "View Community": "Просмотр сообщества"
 }
