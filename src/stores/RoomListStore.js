@@ -176,11 +176,12 @@ class RoomListStore extends Store {
             listOrders[order].forEach((listKey) => {
                 let comparator;
                 switch (order) {
-                    case "manual":
-                        comparator = this._getManualComparator(listKey, optimisticRequest);
-                        break;
                     case "recent":
                         comparator = this._recentsComparator;
+                        break;
+                    case "manual":
+                    default:
+                        comparator = this._getManualComparator(listKey, optimisticRequest);
                         break;
                 }
                 lists[listKey].sort(comparator);
