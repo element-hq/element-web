@@ -25,6 +25,7 @@ export default function DNDTagTile(props) {
             key={props.tag}
             draggableId={props.tag}
             index={props.index}
+            type="draggable-TagTile"
         >
             { (provided, snapshot) => (
                 <div>
