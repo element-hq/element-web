@@ -224,5 +224,7 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> et <operaLink>Opera</operaLink> fonctionnent également.",
     "Reply": "Répondre",
     "%(count)s Members|other": "%(count)s membres",
-    "%(count)s Members|one": "%(count)s membre"
+    "%(count)s Members|one": "%(count)s membre",
+    "Online": "En ligne",
+    "View Community": "Voir la communauté"
 }
