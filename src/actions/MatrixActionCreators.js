@@ -62,6 +62,14 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
     };
 }
 
+function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
+    return { action: 'MatrixActions.Room.tags', room };
+}
+
+function createRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
+    return { action: 'MatrixActions.RoomMember.membership', member };
+}
+
 /**
  * This object is responsible for dispatching actions when certain events are emitted by
  * the given MatrixClient.
@@ -78,6 +86,8 @@ export default {
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+        this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
+        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
     },
 
     /**
@@ -91,7 +101,7 @@ export default {
      */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {
-            dis.dispatch(actionCreator(matrixClient, ...args));
+            dis.dispatch(actionCreator(matrixClient, ...args), true);
         };
         matrixClient.on(eventName, listener);
         this._matrixClientListenersStop.push(() => {
