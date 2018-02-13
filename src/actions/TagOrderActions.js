@@ -56,4 +56,51 @@ TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
     });
 };
 
+/**
+ * Creates an action thunk that will do an asynchronous request to
+ * label a tag as removed in im.vector.web.tag_ordering account data.
+ *
+ * The reason this is implemented with new state `removedTags` is that
+ * we incrementally and initially populate `tags` with groups that
+ * have been joined. If we remove a group from `tags`, it will just
+ * get added (as it looks like a group we've recently joined).
+ *
+ * NB: If we ever support adding of tags (which is planned), we should
+ * take special care to remove the tag from `removedTags` when we add
+ * it.
+ *
+ * @param {MatrixClient} matrixClient the matrix client to set the
+ *                                    account data on.
+ * @param {string} tag the tag to remove.
+ * @returns {function} an action thunk that will dispatch actions
+ *                     indicating the status of the request.
+ * @see asyncAction
+ */
+TagOrderActions.removeTag = function(matrixClient, tag) {
+    // Don't change tags, just removedTags
+    const tags = TagOrderStore.getOrderedTags();
+    const removedTags = TagOrderStore.getRemovedTagsAccountData() || [];
+
+    if (removedTags.includes(tag)) {
+        // Return a thunk that doesn't do anything, we don't even need
+        // an asynchronous action here, the tag is already removed.
+        return () => {};
+    }
+
+    removedTags.push(tag);
+
+    const storeId = TagOrderStore.getStoreId();
+
+    return asyncAction('TagOrderActions.removeTag', () => {
+        Analytics.trackEvent('TagOrderActions', 'removeTag');
+        return matrixClient.setAccountData(
+            'im.vector.web.tag_ordering',
+            {tags, removedTags, _storeId: storeId},
+        );
+    }, () => {
+        // For an optimistic update
+        return {removedTags};
+    });
+};
+
 export default TagOrderActions;
