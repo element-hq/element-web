@@ -25,8 +25,10 @@
     "Can't update user notification settings": "Неуспешно обновяване на потребителски настройки за известяване",
     "Failed to update keywords": "Грешка при обновяване на ключови думи",
     "Messages containing <span>keywords</span>": "Съобщения съдържащи <span>ключови думи</span>",
-    "Notify for all other messages/rooms": "Известия за всички други съобщения/стаи",
-    "Notify me for anything else": "Известия за всичко останало",
+    "Notify for all other messages/rooms": "Извести ме за всички други съобщения/стаи",
+    "Notify me for anything else": "Извести ме за всичко останало",
     "Enable notifications for this account": "Активиране на известията за този профил",
-    "All notifications are currently disabled for all targets.": "В момента известията са изключени за всички цели."
+    "All notifications are currently disabled for all targets.": "В момента известията са изключени за всички цели.",
+    "Add an email address above to configure email notifications": "За конфигурация на имейл известия добавете имейл адрес по-горе",
+    "Enable email notifications": "Активиране на имейл известия"
 }
