@@ -984,5 +984,6 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s изменил отображаемое имя на %(displayName)s.",
     "Failed to set direct chat tag": "Не удалось установить тег прямого чата",
     "Failed to remove tag %(tagName)s from room": "Не удалось удалить тег %(tagName)s из комнаты",
-    "Failed to add tag %(tagName)s to room": "Не удалось добавить тег %(tagName)s в комнату"
+    "Failed to add tag %(tagName)s to room": "Не удалось добавить тег %(tagName)s в комнату",
+    "Clear filter": "Очистить фильтр"
 }
