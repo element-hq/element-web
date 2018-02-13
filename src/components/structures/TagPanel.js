@@ -20,12 +20,11 @@ import { MatrixClient } from 'matrix-js-sdk';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
-import TagOrderActions from '../../actions/TagOrderActions';
 
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 const TagPanel = React.createClass({
     displayName: 'TagPanel',
@@ -94,25 +93,8 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
-    onTagTileEndDrag(result) {
-        // Dragged to an invalid destination, not onto a droppable
-        if (!result.destination) {
-            return;
-        }
-
-        // Dispatch synchronously so that the TagPanel receives an
-        // optimistic update from TagOrderStore before the previous
-        // state is shown.
-        dis.dispatch(TagOrderActions.moveTag(
-            this.context.matrixClient,
-            result.draggableId,
-            result.destination.index,
-        ), true);
-    },
-
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
         const tags = this.state.orderedTags.map((tag, index) => {
@@ -124,27 +106,28 @@ const TagPanel = React.createClass({
             />;
         });
         return <div className="mx_TagPanel">
-            <DragDropContext onDragEnd={this.onTagTileEndDrag}>
-                <Droppable droppableId="tag-panel-droppable">
-                    { (provided, snapshot) => (
-                        <div
-                            className="mx_TagPanel_tagTileContainer"
-                            ref={provided.innerRef}
-                            // react-beautiful-dnd has a bug that emits a click to the parent
-                            // of draggables upon dropping
-                            //   https://github.com/atlassian/react-beautiful-dnd/issues/273
-                            // so we use onMouseDown here as a workaround.
-                            onMouseDown={this.onClick}
-                        >
-                            { tags }
-                            { provided.placeholder }
-                        </div>
-                    ) }
-                </Droppable>
-            </DragDropContext>
-            <AccessibleButton className="mx_TagPanel_createGroupButton" onClick={this.onCreateGroupClick}>
-                <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-            </AccessibleButton>
+            <Droppable
+                droppableId="tag-panel-droppable"
+                type="draggable-TagTile"
+            >
+                { (provided, snapshot) => (
+                    <div
+                        className="mx_TagPanel_tagTileContainer"
+                        ref={provided.innerRef}
+                        // react-beautiful-dnd has a bug that emits a click to the parent
+                        // of draggables upon dropping
+                        //   https://github.com/atlassian/react-beautiful-dnd/issues/273
+                        // so we use onMouseDown here as a workaround.
+                        onMouseDown={this.onClick}
+                    >
+                        { tags }
+                        { provided.placeholder }
+                    </div>
+                ) }
+            </Droppable>
+            <div className="mx_TagPanel_createGroupButton">
+                <GroupsButton tooltip={true} />
+            </div>
         </div>;
     },
 });
