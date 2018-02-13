@@ -376,7 +376,7 @@
     "Idle for %(duration)s": "Inactiu durant %(duration)s",
     "Offline for %(duration)s": "Desconnectat durant %(duration)s",
     "Unknown for %(duration)s": "Desconegut durant %(duration)s",
-    "Online": "En línia",
+    "Online": "Conectat",
     "Idle": "Inactiu",
     "Offline": "Desconnectat",
     "Unknown": "Desconegut",
