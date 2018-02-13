@@ -221,5 +221,7 @@
     "Dev chat for the Dendrite dev team": "Xat de l'equip Dendrite per a desenvolupadors",
     "Co-ordination for Riot/Web translators": "Coordinació per a traductors de Riot/Web",
     "%(count)s Members|other": "%(count)s membres",
-    "%(count)s Members|one": "%(count)s membre"
+    "%(count)s Members|one": "%(count)s membre",
+    "Online": "Conectat",
+    "View Community": "Mira la communitat"
 }
