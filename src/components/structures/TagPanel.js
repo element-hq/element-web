@@ -111,8 +111,7 @@ const TagPanel = React.createClass({
     },
 
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
         const tags = this.state.orderedTags.map((tag, index) => {
@@ -142,9 +141,9 @@ const TagPanel = React.createClass({
                     ) }
                 </Droppable>
             </DragDropContext>
-            <AccessibleButton className="mx_TagPanel_createGroupButton" onClick={this.onCreateGroupClick}>
-                <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-            </AccessibleButton>
+            <div className="mx_TagPanel_createGroupButton">
+                <GroupsButton tooltip={true} />
+            </div>
         </div>;
     },
 });
