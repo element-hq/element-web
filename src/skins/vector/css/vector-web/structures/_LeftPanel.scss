@@ -23,6 +23,13 @@ limitations under the License.
 
 .mx_LeftPanel_container {
     display: flex;
+
+    flex: 0 0 295px;
+}
+
+.mx_LeftPanel_container_collapsed {
+    /* TagPanel 60px + Collapsed LeftPanel 60px */
+    flex: 0 0 120px;
 }
 
 .mx_LeftPanel_hideButton {

@@ -238,9 +238,14 @@ var LeftPanel = React.createClass({
             }
         );
 
+        const containerClasses = classNames(
+            "mx_LeftPanel_container",
+            { "mx_LeftPanel_container_collapsed": this.props.collapsed },
+        );
+
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
-                <div className="mx_LeftPanel_container">
+                <div className={containerClasses}>
                     { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
                     <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                         { topBox }
