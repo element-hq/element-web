@@ -41,6 +41,7 @@ export default class DNDRoomTile extends React.Component {
                 key={props.room.roomId}
                 draggableId={props.tagName + '_' + props.room.roomId}
                 index={props.index}
+                type="draggable-RoomTile"
             >
                 { (provided, snapshot) => {
                     return (
