@@ -175,15 +175,15 @@ class TagOrderStore extends Store {
     _mergeGroupsAndTags() {
         const groupIds = this._state.joinedGroupIds || [];
         const tags = this._state.orderedTagsAccountData || [];
-        const removedTags = this._state.removedTagsAccountData || [];
+        const removedTags = new Set(this._state.removedTagsAccountData || []);
 
 
         const tagsToKeep = tags.filter(
-            (t) => (t[0] !== '+' || groupIds.includes(t)) && !removedTags.includes(t),
+            (t) => (t[0] !== '+' || groupIds.includes(t)) && !removedTags.has(t),
         );
 
         const groupIdsToAdd = groupIds.filter(
-            (groupId) => !tags.includes(groupId) && !removedTags.includes(groupId),
+            (groupId) => !tags.includes(groupId) && !removedTags.has(groupId),
         );
 
         return tagsToKeep.concat(groupIdsToAdd);
