@@ -58,6 +58,7 @@ module.exports = React.createClass({
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: PropTypes.func,
         onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -218,6 +219,8 @@ module.exports = React.createClass({
         if (config.isUrl !== undefined) {
             newState.enteredIdentityServerUrl = config.isUrl;
         }
+
+        this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });

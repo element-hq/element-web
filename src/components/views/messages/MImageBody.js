@@ -18,8 +18,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
+
 import MFileBody from './MFileBody';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -40,15 +41,37 @@ module.exports = React.createClass({
         onWidgetLoad: PropTypes.func.isRequired,
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
     getInitialState: function() {
         return {
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
             error: null,
+            imgError: false,
         };
     },
 
+    componentWillMount() {
+        this.unmounted = false;
+        this.context.matrixClient.on('sync', this.onClientSync);
+    },
+
+    onClientSync(syncState, prevState) {
+        if (this.unmounted) return;
+        // Consider the client reconnected if there is no error with syncing.
+        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        const reconnected = syncState !== "ERROR" && prevState !== syncState;
+        if (reconnected && this.state.imgError) {
+            // Load the image again
+            this.setState({
+                imgError: false,
+            });
+        }
+    },
 
     onClick: function onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
@@ -97,12 +120,18 @@ module.exports = React.createClass({
         imgElement.src = this._getThumbUrl();
     },
 
+    onImageError: function() {
+        this.setState({
+            imgError: true,
+        });
+    },
+
     _getContentUrl: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            return this.context.matrixClient.mxcUrlToHttp(content.url);
         }
     },
 
@@ -115,7 +144,7 @@ module.exports = React.createClass({
             }
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+            return this.context.matrixClient.mxcUrlToHttp(content.url, 800, 600);
         }
     },
 
@@ -156,7 +185,9 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this.unmounted = true;
         dis.unregister(this.dispatcherRef);
+        this.context.matrixClient.removeListener('sync', this.onClientSync);
     },
 
     onAction: function(payload) {
@@ -217,6 +248,14 @@ module.exports = React.createClass({
             );
         }
 
+        if (this.state.imgError) {
+            return (
+                <span className="mx_MImageBody">
+                    { _t("This image cannot be displayed.") }
+                </span>
+            );
+        }
+
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
@@ -231,6 +270,7 @@ module.exports = React.createClass({
                     <a href={contentUrl} onClick={this.onClick}>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
+                            onError={this.onImageError}
                             onLoad={this.props.onWidgetLoad}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />

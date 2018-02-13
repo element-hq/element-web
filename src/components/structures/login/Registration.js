@@ -61,6 +61,7 @@ module.exports = React.createClass({
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
         onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -131,6 +132,7 @@ module.exports = React.createClass({
         if (config.isUrl !== undefined) {
             newState.isUrl = config.isUrl;
         }
+        this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             this._replaceClient();
         });

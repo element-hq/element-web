@@ -48,7 +48,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Det går inte att ansluta till en hemserver via HTTP då adressen i webbläsaren är HTTPS. Använd HTTPS, eller <a>sätt på osäkra skript</a>.",
     "Can't load user settings": "Det gick inte att ladda användarinställningar",
     "Change Password": "Byt lösenord",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s bytte namn från %(oldDisplayName)s till %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s bytte sin profilbild.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s bytte rummets namn till %(roomName)s.",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s tog bort rummets namn.",

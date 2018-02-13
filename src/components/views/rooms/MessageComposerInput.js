@@ -723,6 +723,7 @@ export default class MessageComposerInput extends React.Component {
         const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
+                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });

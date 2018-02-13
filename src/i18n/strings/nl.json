@@ -35,7 +35,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Kan niet met de thuisserver verbinden via HTTP wanneer er een HTTPS-URL in je browser balk staat. Gebruik HTTPS of <a>activeer onveilige scripts</a>.",
     "Can't load user settings": "Kan de gebruikersinstellingen niet laden",
     "Change Password": "Wachtwoord veranderen",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s heeft zijn of haar weergavenaam veranderd van %(oldDisplayName)s naar %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s heeft zijn of haar profielfoto veranderd.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s heeft het machtsniveau van %(powerLevelDiffText)s gewijzigd.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s heeft de kamernaam van %(roomName)s gewijzigd.",

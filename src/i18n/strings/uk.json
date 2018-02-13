@@ -80,7 +80,6 @@
     "Can't load user settings": "Неможливо завантажити настройки користувача",
     "Cannot add any more widgets": "Неможливо додати більше віджетів",
     "Change Password": "Поміняти пароль",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s змінено з %(oldDisplayName)s на %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s змінив зображення профіля.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s змінив(ла) рівень доступу для %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s змінив(ла) назву кімнати на %(roomName)s.",

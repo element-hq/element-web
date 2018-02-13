@@ -43,6 +43,7 @@ const TagPanel = React.createClass({
     componentWillMount: function() {
         this.unmounted = false;
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
+        this.context.matrixClient.on("sync", this.onClientSync);
 
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
@@ -60,6 +61,7 @@ const TagPanel = React.createClass({
     componentWillUnmount() {
         this.unmounted = true;
         this.context.matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
+        this.context.matrixClient.removeListener("sync", this.onClientSync);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
         }
@@ -68,6 +70,16 @@ const TagPanel = React.createClass({
     _onGroupMyMembership() {
         if (this.unmounted) return;
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
+    },
+
+    onClientSync(syncState, prevState) {
+        // Consider the client reconnected if there is no error with syncing.
+        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        const reconnected = syncState !== "ERROR" && prevState !== syncState;
+        if (reconnected) {
+            // Load joined groups
+            dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
+        }
     },
 
     onClick(e) {
@@ -82,8 +94,7 @@ const TagPanel = React.createClass({
     },
 
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
         const tags = this.state.orderedTags.map((tag, index) => {
@@ -114,9 +125,9 @@ const TagPanel = React.createClass({
                     </div>
                 ) }
             </Droppable>
-            <AccessibleButton className="mx_TagPanel_createGroupButton" onClick={this.onCreateGroupClick}>
-                <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-            </AccessibleButton>
+            <div className="mx_TagPanel_createGroupButton">
+                <GroupsButton tooltip={true} />
+            </div>
         </div>;
     },
 });

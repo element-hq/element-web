@@ -145,7 +145,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Nie można nawiązać połączenia z serwerem przy użyciu HTTP podczas korzystania z HTTPS dla bieżącej strony. Użyj HTTPS lub <a>włącz niebezpieczne skrypty</a>.",
     "Can't load user settings": "Nie można załadować ustawień użytkownika",
     "Cannot add any more widgets": "Nie można dodać już więcej widżetów",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s zmienił swoją nazwę z %(oldDisplayName)s na %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s zmienił swoje zdjęcie profilowe.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s zmienił poziom mocy %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s zmienił nazwę pokoju na %(roomName)s.",

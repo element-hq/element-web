@@ -218,7 +218,6 @@
     "%(senderName)s requested a VoIP conference.": "%(senderName)s forespurgte en VoIP konference.",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s inviterede %(targetName)s.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s bannede %(targetName)s.",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s ændrede deres viste navn fra %(oldDisplayName)s til %(displayName)s.",
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s satte deres viste navn til %(displayName)s.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s fjernede deres viste navn (%(oldDisplayName)s).",
     "%(senderName)s removed their profile picture.": "%(senderName)s fjernede deres profilbillede.",

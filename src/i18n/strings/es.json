@@ -35,7 +35,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "No se puede conectar al servidor via HTTP, cuando es necesario un enlace HTTPS en la barra de direcciones de tu navegador. Ya sea usando HTTPS o <a>habilitando los scripts inseguros</a>.",
     "Can't load user settings": "No se puede cargar las configuraciones del usuario",
     "Change Password": "Cambiar clave",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s ha cambiado su nombre de %(oldDisplayName)s a %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s ha cambiado su foto de perfil.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ha cambiado el nivel de acceso de %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ha cambiado el nombre de la sala a %(roomName)s.",

@@ -96,7 +96,6 @@
     "Call Timeout": "전화 대기 시간 초과",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "홈 서버에 연결할 수 없어요 - 연결을 확인해주시고, <a>홈 서버의 SSL 인증서</a>가 믿을 수 있는지 확인하시고, 브라우저 확장기능이 요청을 차단하고 있는지 확인해주세요.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "주소창에 HTTPS URL이 있을 때는 HTTP로 홈 서버를 연결할 수 없어요. HTTPS를 쓰거나 <a>안전하지 않은 스크립트를 허용해주세요</a>.",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s님이 별명을 %(oldDisplayName)s에서 %(displayName)s로 바꾸셨어요.",
     "%(senderName)s changed their profile picture.": "%(senderName)s님이 자기 소개 사진을 바꾸셨어요.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s님이 %(powerLevelDiffText)s의 권한 등급을 바꾸셨어요.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s님이 방 이름을 %(roomName)s로 바꾸셨어요.",

@@ -53,7 +53,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Neizdevās savienoties ar serveri izmantojot HTTP protokolu, kad tava pārlūka adreses laukā ir HTTPS saite. Tā vietā izmanto HTTPS savienojumu vai <a>iespējo nedrošos skriptus</a>.",
     "Can't load user settings": "Neizdevās ielādēt lietotāja uzstādījumus",
     "Change Password": "Paroles maiņa",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s nomainīja redzamo vārdu no %(oldDisplayName)s uz %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s nomainīja profila attēlu.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s nomainīja statusa līmeni %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s nomainīja istabas nosaukumu uz %(roomName)s.",
