@@ -17,14 +17,19 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { MatrixClient } from 'matrix-js-sdk';
 import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import CallHandler from 'matrix-react-sdk/lib/CallHandler';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
+
+import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
+import TagOrderActions from 'matrix-react-sdk/lib/actions/TagOrderActions';
+import RoomListActions from 'matrix-react-sdk/lib/actions/RoomListActions';
+
 
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
@@ -32,7 +37,11 @@ var LeftPanel = React.createClass({
     // NB. If you add props, don't forget to update
     // shouldComponentUpdate!
     propTypes: {
-        collapsed: React.PropTypes.bool.isRequired,
+        collapsed: PropTypes.bool.isRequired,
+    },
+
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getInitialState: function() {
@@ -161,13 +170,59 @@ var LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
+    onDragEnd: function(result) {
+        // Dragged to an invalid destination, not onto a droppable
+        if (!result.destination) {
+            return;
+        }
+
+        const dest = result.destination.droppableId;
+
+        if (dest === 'tag-panel-droppable') {
+            // Dispatch synchronously so that the TagPanel receives an
+            // optimistic update from TagOrderStore before the previous
+            // state is shown.
+            dis.dispatch(TagOrderActions.moveTag(
+                this.context.matrixClient,
+                result.draggableId,
+                result.destination.index,
+            ), true);
+        } else {
+            this.onRoomTileEndDrag(result);
+        }
+    },
+
+    onRoomTileEndDrag: function(result) {
+        let newTag = result.destination.droppableId.split('_')[1];
+        let prevTag = result.source.droppableId.split('_')[1];
+        if (newTag === 'undefined') newTag = undefined;
+        if (prevTag === 'undefined') prevTag = undefined;
+
+        const roomId = result.draggableId.split('_')[1];
+
+        const oldIndex = result.source.index;
+        const newIndex = result.destination.index;
+
+        dis.dispatch(RoomListActions.tagRoom(
+            this.context.matrixClient,
+            this.context.matrixClient.getRoom(roomId),
+            prevTag, newTag,
+            oldIndex, newIndex,
+        ), true);
+    },
+
+    collectRoomList: function(ref) {
+        this._roomList = ref;
+    },
+
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
+        const TagPanel = sdk.getComponent('structures.TagPanel');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
         let topBox;
-        if (MatrixClientPeg.get().isGuest()) {
+        if (this.context.matrixClient.isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
             topBox = <LoginBox collapsed={ this.props.collapsed }/>;
         } else {
@@ -184,15 +239,21 @@ var LeftPanel = React.createClass({
         );
 
         return (
-            <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
-                { topBox }
-                <CallPreview ConferenceHandler={VectorConferenceHandler} />
-                <RoomList
-                    collapsed={this.props.collapsed}
-                    searchFilter={this.state.searchFilter}
-                    ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed}/>
-            </aside>
+            <DragDropContext onDragEnd={this.onDragEnd}>
+                <div className="mx_LeftPanel_container">
+                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
+                    <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+                        { topBox }
+                        <CallPreview ConferenceHandler={VectorConferenceHandler} />
+                        <RoomList
+                            ref={this.collectRoomList}
+                            collapsed={this.props.collapsed}
+                            searchFilter={this.state.searchFilter}
+                            ConferenceHandler={VectorConferenceHandler} />
+                        <BottomLeftMenu collapsed={this.props.collapsed}/>
+                    </aside>
+                </div>
+            </DragDropContext>
         );
     }
 });
