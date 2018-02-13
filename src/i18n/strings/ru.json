@@ -536,7 +536,7 @@
     "Drop file here to upload": "Перетащите файл сюда для отправки",
     " (unsupported)": " (не поддерживается)",
     "Ongoing conference call%(supportedText)s.": "Установлен групповой вызов %(supportedText)s.",
-    "Online": "В сети",
+    "Online": "Онлайн",
     "Idle": "Неактивен",
     "Offline": "Не в сети",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s сменил аватар комнаты на <img/>",
