@@ -37,6 +37,7 @@ limitations under the License.
 .mx_TagPanel .mx_TagTile {
     padding: 6px 3px;
     opacity: 0.5;
+    position: relative;
 }
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
@@ -62,6 +63,23 @@ limitations under the License.
     position: relative;
     top: -30px;
     left: 5px;
+}
+
+.mx_TagTile_context_button {
+    min-width: 15px;
+    height: 15px;
+    position: absolute;
+    right: -5px;
+    top: 1px;
+    border-radius: 8px;
+    background-color: $neutral-badge-color;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 10px;
+    text-align: center;
+    padding-top: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .mx_TagPanel_createGroupButton {
