@@ -238,15 +238,21 @@ var LeftPanel = React.createClass({
             }
         );
 
+        const tagPanelEnabled = SettingsStore.isFeatureEnabled("feature_tag_panel");
+        const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
+
         const containerClasses = classNames(
             "mx_LeftPanel_container",
-            { "mx_LeftPanel_container_collapsed": this.props.collapsed },
+            {
+                "mx_LeftPanel_container_collapsed": this.props.collapsed,
+                "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
+            },
         );
 
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
                 <div className={containerClasses}>
-                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
+                    { tagPanel }
                     <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                         { topBox }
                         <CallPreview ConferenceHandler={VectorConferenceHandler} />
