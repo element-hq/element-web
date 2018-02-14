@@ -160,32 +160,26 @@ class RoomListStore extends Store {
         });
 
         const listOrders = {
-            "manual": [
-                "m.favourite",
-            ],
-            "recent": [
-                "im.vector.fake.invite",
-                "im.vector.fake.recent",
-                "im.vector.fake.direct",
-                "m.lowpriority",
-                "im.vector.fake.archived",
-            ],
+            "m.favourite": "manual",
+            "im.vector.fake.invite": "recent",
+            "im.vector.fake.recent": "recent",
+            "im.vector.fake.direct": "recent",
+            "m.lowpriority": "recent",
+            "im.vector.fake.archived": "recent",
         };
 
-        Object.keys(listOrders).forEach((order) => {
-            listOrders[order].forEach((listKey) => {
-                let comparator;
-                switch (order) {
-                    case "recent":
-                        comparator = this._recentsComparator;
-                        break;
-                    case "manual":
-                    default:
-                        comparator = this._getManualComparator(listKey, optimisticRequest);
-                        break;
-                }
-                lists[listKey].sort(comparator);
-            });
+        Object.keys(lists).forEach((listKey) => {
+            let comparator;
+            switch (listOrders[listKey]) {
+                case "recent":
+                    comparator = this._recentsComparator;
+                    break;
+                case "manual":
+                default:
+                    comparator = this._getManualComparator(listKey, optimisticRequest);
+                    break;
+            }
+            lists[listKey].sort(comparator);
         });
 
         this._setState({
