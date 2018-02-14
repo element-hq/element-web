@@ -431,10 +431,10 @@ module.exports = React.createClass({
         // FIXME: remove status.im theme tweaks
         const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
-            header = <h2>{ _t('Sign in') }</h2>;
+            header = <h2>{ _t('Sign in') } { loader }</h2>;
         } else {
             if (!this.state.errorText) {
-                header = <h2>{ _t('Sign in to get started') }</h2>;
+                header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
             }
         }
 
