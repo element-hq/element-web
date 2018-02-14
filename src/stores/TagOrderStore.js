@@ -89,6 +89,7 @@ class TagOrderStore extends Store {
                 // Optimistic update of a moved tag
                 this._setState({
                     orderedTags: payload.request.tags,
+                    removedTagsAccountData: payload.request.removedTags,
                 });
                 break;
             }
