@@ -7,7 +7,7 @@
     "Cancel Sending": "Cancelar envío",
     "Can't update user notification settings": "No se puede actualizar la configuración de notificaciones del usuario",
     "Close": "Cerrar",
-    "Couldn't find a matching Matrix room": "No se encontró una sala Matrix que coincida.",
+    "Couldn't find a matching Matrix room": "No se encontró una sala Matrix que coincida",
     "Custom Server Options": "Opciones de Servidor Personalizado",
     "customServer_text": "Puedes utilizar las opciones de servidor personalizadas para iniciar sesión en otros servidores Matrix especificando una URL de Home server distinta.<br/>Esto te permite usar Riot con una cuenta Matrix existente en un Home server distinto.<br/><br/>También puedes configurar un servidor de identidad personalizado, pero no podrás ni invitar usuarios ni ser invitado a través de tu dirección de correo electrónico.",
     "delete the alias.": "borrar el alias.",
