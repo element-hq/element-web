@@ -115,6 +115,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_GroupTile_avatar {
+    cursor: -webkit-grab;
+}
+
 .mx_GroupTile_profile {
     margin-left: 10px;
     display: flex;
