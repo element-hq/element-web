@@ -224,5 +224,7 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Működik <safariLink>Safari</safariLink> és <operaLink>Opera</operaLink> böngészővel is.",
     "Reply": "Válasz",
     "%(count)s Members|other": "%(count)s tag",
-    "%(count)s Members|one": "%(count)s tag"
+    "%(count)s Members|one": "%(count)s tag",
+    "Online": "Elérhető",
+    "View Community": "Közösség megtekintése"
 }
