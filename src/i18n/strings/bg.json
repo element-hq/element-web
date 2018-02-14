@@ -30,5 +30,9 @@
     "Enable notifications for this account": "Активиране на известията за този профил",
     "All notifications are currently disabled for all targets.": "В момента известията са изключени за всички цели.",
     "Add an email address above to configure email notifications": "За конфигурация на имейл известия добавете имейл адрес по-горе",
-    "Enable email notifications": "Активиране на имейл известия"
+    "Enable email notifications": "Активиране на имейл известия",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Известия за следните ключови думи изпълняват правила, които не могат да бъдат показани тук:",
+    "Unable to fetch notification target list": "Неуспешно извличане на списък с устройства получаващи известия",
+    "Notification targets": "Устройства получаващи известия",
+    "Advanced notification settings": "Разширени настройки за известяване"
 }
