@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import FlairStore from '../../../stores/FlairStore';
@@ -80,33 +80,39 @@ const GroupTile = React.createClass({
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
         return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
-            <Draggable
-                key={"GroupTile " + this.props.groupId}
-                draggableId={"GroupTile " + this.props.groupId}
-                index={this.props.groupId}
-                type="draggable-TagTile"
-            >
-                { (provided, snapshot) => (
-                    <div>
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+            <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
+                { (droppableProvided, droppableSnapshot) => (
+                    <div ref={droppableProvided.innerRef}>
+                        <Draggable
+                            key={"GroupTile " + this.props.groupId}
+                            draggableId={"GroupTile " + this.props.groupId}
+                            index={this.props.groupId}
+                            type="draggable-TagTile"
                         >
-                            <div className="mx_GroupTile_avatar">
-                                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
-                            </div>
-                        </div>
-                        { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
-                        { provided.placeholder ?
-                            <div className="mx_GroupTile_avatar">
-                                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
-                            </div> :
-                            <div />
-                        }
+                            { (provided, snapshot) => (
+                                <div>
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                    >
+                                        <div className="mx_GroupTile_avatar">
+                                            <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                                        </div>
+                                    </div>
+                                    { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
+                                    { provided.placeholder ?
+                                        <div className="mx_GroupTile_avatar">
+                                            <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                                        </div> :
+                                        <div />
+                                    }
+                                </div>
+                            ) }
+                        </Draggable>
                     </div>
                 ) }
-            </Draggable>
+            </Droppable>
             <div className="mx_GroupTile_profile">
                 <div className="mx_GroupTile_name">{ name }</div>
                 { descElement }

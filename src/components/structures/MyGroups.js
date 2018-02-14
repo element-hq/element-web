@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import GeminiScrollbar from 'react-gemini-scrollbar';
-import { Droppable } from 'react-beautiful-dnd';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
@@ -74,14 +73,10 @@ export default withMatrixClient(React.createClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <GeminiScrollbar className="mx_MyGroups_joinedGroups">
-                    <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
-                        { (provided, snapshot) => (
-                            <div ref={provided.innerRef}>
-                                { groupNodes }
-                            </div>
-                        ) }
-                    </Droppable>
+                <GeminiScrollbar>
+                    <div className="mx_MyGroups_joinedGroups">
+                        { groupNodes }
+                    </div>
                 </GeminiScrollbar> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(
