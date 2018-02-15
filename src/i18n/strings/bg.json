@@ -44,5 +44,14 @@
     "Failed to forget room %(errCode)s": "Не успешно забравяне на стаята %(errCode)s",
     "Mute": "Заглуши",
     "Leave": "Напусни",
-    "Favourite": "Любим"
+    "Favourite": "Любим",
+    "Register": "Регистрация",
+    "Notifications": "Известия",
+    "Rooms": "Стаи",
+    "Add rooms to this community": "Добави стаи в това общество",
+    "Unnamed room": "Ненаименувана стая",
+    "World readable": "Четимо за всички",
+    "Guests can join": "Гости могат да се присъединят",
+    "No rooms to show": "Няма стаи, които да бъдат показани",
+    "Failed to add tag %(tagName)s to room": "Неуспешно добавяне на %(tagName)s етикет в стаята"
 }
