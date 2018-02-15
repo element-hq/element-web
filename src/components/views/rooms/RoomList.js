@@ -544,17 +544,20 @@ module.exports = React.createClass({
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
 
+        let tip = null;
+
         switch (section) {
             case 'im.vector.fake.direct':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "Press <StartChatButton> to start a chat with someone",
                         {},
                         { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
                     ) }
                 </div>;
+                break;
             case 'im.vector.fake.recent':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
                         " <RoomDirectoryButton> to browse the directory",
@@ -565,6 +568,13 @@ module.exports = React.createClass({
                         },
                     ) }
                 </div>;
+                break;
+        }
+
+        if (tip) {
+            return <div className="mx_RoomList_emptySubListTip_container">
+                { tip }
+            </div>;
         }
 
         // We don't want to display drop targets if there are no room tiles to drag'n'drop
