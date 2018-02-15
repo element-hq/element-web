@@ -191,6 +191,10 @@ module.exports = React.createClass({
             this._tagStoreToken.remove();
         }
 
+        if (this._roomListStoreToken) {
+            this._roomListStoreToken.remove();
+        }
+
         if (this._groupStoreTokens.length > 0) {
             // NB: GroupStore is not a Flux.Store
             this._groupStoreTokens.forEach((token) => token.unregister());
