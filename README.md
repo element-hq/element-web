@@ -24,9 +24,9 @@ released version of Riot:
 Releases are signed by PGP, and can be checked against the public key
 at https://riot.im/packages/keys/riot.asc
 
-Note that Chrome does not allow microphone or webcam access for sites served
-over http (except localhost), so for working VoIP you will need to serve Riot
-over https.
+Note that for the security of your chats will need to serve Riot
+over HTTPS. Mayor browsers also do not allow you to use VoIP/video
+chats over HTTP, as WebRTC is only usable over HTTPS.
 
 ### Installation Steps for Debian Stretch
 1. Add the repository to your sources.list using either of the following two options:
