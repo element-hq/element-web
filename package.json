@@ -128,7 +128,7 @@
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
     "sinon": "^1.17.3",
-    "source-map-loader": "^0.1.5",
+    "source-map-loader": "^0.1.6",
     "walk": "^2.3.9",
     "webpack": "^1.12.14"
   }
