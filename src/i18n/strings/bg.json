@@ -53,5 +53,20 @@
     "World readable": "Четимо за всички",
     "Guests can join": "Гости могат да се присъединят",
     "No rooms to show": "Няма стаи, които да бъдат показани",
-    "Failed to add tag %(tagName)s to room": "Неуспешно добавяне на %(tagName)s етикет в стаята"
+    "Failed to add tag %(tagName)s to room": "Неуспешно добавяне на %(tagName)s етикет в стаята",
+    "This email address is already in use": "Този имейл адрес е вече зает",
+    "This phone number is already in use": "Този телефонен номер е вече зает",
+    "Failed to verify email address: make sure you clicked the link in the email": "Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла",
+    "The platform you're on": "Платформата, която използвате",
+    "The version of Riot.im": "Версията на Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Независимо дали сте в профила си или не (не записваме Вашето потребителско име)",
+    "Your language of choice": "Вашият език по избор",
+    "Which officially provided instance you are using, if any": "Коя официално предоставена инстанция използвате, ако има такава",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Независимо дали използвате Richtext режим на Rich Text Editor",
+    "Your homeserver's URL": "Адрес на Вашия Home сървър",
+    "Your identity server's URL": "Адрес на Вашия сървър за самоличност",
+    "Analytics": "Статистика",
+    "The information being sent to us to help make Riot.im better includes:": "За да направи Riot по-добър, информацията изпратена до нас включва:",
+    "Call Failed": "Неуспешно повикване",
+    "Call": "Обаждане"
 }
