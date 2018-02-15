@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from 'matrix-react-sdk';
+import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
@@ -60,7 +61,7 @@ class GenericEditor extends DevtoolsComponent {
                 <label htmlFor={id}>{ label }</label>
             </div>
             <div className="mx_DevTools_inputCell">
-                <input id={id} onChange={this._onChange} value={this.state[id]} size="32" />
+                <input id={id} className="mx_TextInputDialog_input" onChange={this._onChange} value={this.state[id]} size="32" />
             </div>
         </div>;
     }
@@ -244,24 +245,22 @@ class SendAccountData extends GenericEditor {
 class FilteredList extends React.Component {
     static propTypes = {
         children: PropTypes.any,
+        query: PropTypes.string,
+        onChange: PropTypes.func,
     };
 
     constructor(props, context) {
         super(props, context);
         this.onQuery = this.onQuery.bind(this);
-
-        this.state = {
-            query: '',
-        };
     }
 
     onQuery(ev) {
-        this.setState({ query: ev.target.value });
+        if (this.props.onChange) this.props.onChange(ev.target.value);
     }
 
     filterChildren() {
-        if (this.state.query) {
-            const lowerQuery = this.state.query.toLowerCase();
+        if (this.props.query) {
+            const lowerQuery = this.props.query.toLowerCase();
             return this.props.children.filter((child) => child.key.toLowerCase().includes(lowerQuery));
         }
         return this.props.children;
@@ -271,7 +270,7 @@ class FilteredList extends React.Component {
         return <div>
             <input size="64"
                    onChange={this.onQuery}
-                   value={this.state.query}
+                   value={this.props.query}
                    placeholder={_t('Filter results')}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" />
             { this.filterChildren() }
@@ -295,11 +294,16 @@ class RoomStateExplorer extends DevtoolsComponent {
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
+        this.onQueryEventType = this.onQueryEventType.bind(this);
+        this.onQueryStateKey = this.onQueryStateKey.bind(this);
 
         this.state = {
             eventType: null,
             event: null,
             editing: false,
+
+            queryEventType: '',
+            queryStateKey: '',
         };
     }
 
@@ -331,6 +335,14 @@ class RoomStateExplorer extends DevtoolsComponent {
         this.setState({ editing: true });
     }
 
+    onQueryEventType(filterEventType) {
+        this.setState({ queryEventType: filterEventType });
+    }
+
+    onQueryStateKey(filterStateKey) {
+        this.setState({ queryStateKey: filterStateKey });
+    }
+
     render() {
         if (this.state.event) {
             if (this.state.editing) {
@@ -343,7 +355,9 @@ class RoomStateExplorer extends DevtoolsComponent {
 
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{ JSON.stringify(this.state.event.event, null, 2) }</pre>
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.state.event.event, null, 2) }
+                    </SyntaxHighlight>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -352,41 +366,47 @@ class RoomStateExplorer extends DevtoolsComponent {
             </div>;
         }
 
-        const rows = [];
+        let list = null;
 
         const classes = 'mx_DevTools_RoomStateExplorer_button';
         if (this.state.eventType === null) {
-            Object.keys(this.roomStateEvents).forEach((evType) => {
-                const stateGroup = this.roomStateEvents[evType];
-                const stateKeys = Object.keys(stateGroup);
+            list = <FilteredList query={this.state.queryEventType} onChange={this.onQueryEventType}>
+                {
+                    Object.keys(this.roomStateEvents).map((evType) => {
+                        const stateGroup = this.roomStateEvents[evType];
+                        const stateKeys = Object.keys(stateGroup);
 
-                let onClickFn;
-                if (stateKeys.length > 1) {
-                    onClickFn = this.browseEventType(evType);
-                } else if (stateKeys.length === 1) {
-                    onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
+                        let onClickFn;
+                        if (stateKeys.length > 1) {
+                            onClickFn = this.browseEventType(evType);
+                        } else if (stateKeys.length === 1) {
+                            onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
+                        }
+
+                        return <button className={classes} key={evType} onClick={onClickFn}>
+                            { evType }
+                        </button>;
+                    })
                 }
-
-                rows.push(<button className={classes} key={evType} onClick={onClickFn}>
-                    { evType }
-                </button>);
-            });
+            </FilteredList>;
         } else {
-            const evType = this.state.eventType;
-            const stateGroup = this.roomStateEvents[evType];
-            Object.keys(stateGroup).forEach((stateKey) => {
-                const ev = stateGroup[stateKey];
-                rows.push(<button className={classes} key={stateKey} onClick={this.onViewSourceClick(ev)}>
-                    { stateKey }
-                </button>);
-            });
+            const stateGroup = this.roomStateEvents[this.state.eventType];
+
+            list = <FilteredList query={this.state.queryStateKey} onChange={this.onQueryStateKey}>
+                {
+                    Object.keys(stateGroup).map((stateKey) => {
+                        const ev = stateGroup[stateKey];
+                        return <button className={classes} key={stateKey} onClick={this.onViewSourceClick(ev)}>
+                            { stateKey }
+                        </button>;
+                    })
+                }
+            </FilteredList>;
         }
 
         return <div>
             <div className="mx_Dialog_content">
-                <FilteredList>
-                    { rows }
-                </FilteredList>
+                { list }
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -408,11 +428,14 @@ class AccountDataExplorer extends DevtoolsComponent {
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
         this._onChange = this._onChange.bind(this);
+        this.onQueryEventType = this.onQueryEventType.bind(this);
 
         this.state = {
             isRoomAccountData: false,
             event: null,
             editing: false,
+
+            queryEventType: '',
         };
     }
 
@@ -448,6 +471,10 @@ class AccountDataExplorer extends DevtoolsComponent {
         this.setState({ editing: true });
     }
 
+    onQueryEventType(queryEventType) {
+        this.setState({ queryEventType });
+    }
+
     render() {
         if (this.state.event) {
             if (this.state.editing) {
@@ -459,7 +486,9 @@ class AccountDataExplorer extends DevtoolsComponent {
 
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{ JSON.stringify(this.state.event.event, null, 2) }</pre>
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.state.event.event, null, 2) }
+                    </SyntaxHighlight>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -482,7 +511,7 @@ class AccountDataExplorer extends DevtoolsComponent {
 
         return <div>
             <div className="mx_Dialog_content">
-                <FilteredList>
+                <FilteredList query={this.state.queryEventType} onChange={this.onQueryEventType}>
                     { rows }
                 </FilteredList>
             </div>

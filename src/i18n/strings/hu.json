@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "E-mail értesítés beállításához írd be az e-mail címed",
     "Advanced notification settings": "Haladó értesítési beállítások",
     "All messages": "Minden üzenet",
-    "All messages (loud)": "Minden üzenet (hangos)",
+    "All messages (noisy)": "Minden üzenet (hangos)",
     "All notifications are currently disabled for all targets.": "Minden céleszközön minden értesítés tiltva van.",
     "An error occurred whilst saving your email notification preferences.": "Hiba történt az e-mail értesítés beállításánál.",
     "Call invitation": "Hívás meghívó",
@@ -132,7 +132,7 @@
     "Riot is not supported on mobile web. Install the app?": "Riot nem támogatott mobil webböngészőn. Telepíted az alkalmazást?",
     "Search": "Keresés",
     "Search…": "Keresés…",
-    "Send": "Küld",
+    "Send": "Elküld",
     "Send logs": "Naplók elküldése",
     "This Room": "Ebben a szobában",
     "Unavailable": "Elérhetetlen",
@@ -217,5 +217,10 @@
     "Add rooms to this community": "Szobák hozzáadása ehhez a közösséghez",
     "Toolbox": "Szerszámok",
     "Send Account Data": "Fiók adatok küldése",
-    "Explore Account Data": "Fiók adatok böngészése"
+    "Explore Account Data": "Fiók adatok böngészése",
+    "Appear Offline": "Kapcsolat nélkülinek tűnik",
+    "Away": "Távol",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "A legjobb élmény érdekében telepíts <chromeLink>Chrome</chromeLink>ot vagy <firefoxLink>Firefox</firefoxLink>ot.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Működik <safariLink>Safari</safariLink> és <operaLink>Opera</operaLink> böngészővel is.",
+    "Reply": "Válasz"
 }

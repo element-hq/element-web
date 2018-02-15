@@ -17,16 +17,16 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import { MatrixClient } from 'matrix-js-sdk';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import CallHandler from 'matrix-react-sdk/lib/CallHandler';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
+
+import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
+
 
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
@@ -34,7 +34,11 @@ var LeftPanel = React.createClass({
     // NB. If you add props, don't forget to update
     // shouldComponentUpdate!
     propTypes: {
-        collapsed: React.PropTypes.bool.isRequired,
+        collapsed: PropTypes.bool.isRequired,
+    },
+
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getInitialState: function() {
@@ -163,13 +167,18 @@ var LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
+    collectRoomList: function(ref) {
+        this._roomList = ref;
+    },
+
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
+        const TagPanel = sdk.getComponent('structures.TagPanel');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
         let topBox;
-        if (MatrixClientPeg.get().isGuest()) {
+        if (this.context.matrixClient.isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
             topBox = <LoginBox collapsed={ this.props.collapsed }/>;
         } else {
@@ -185,18 +194,33 @@ var LeftPanel = React.createClass({
             }
         );
 
+        const tagPanelEnabled = SettingsStore.isFeatureEnabled("feature_tag_panel");
+        const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
+
+        const containerClasses = classNames(
+            "mx_LeftPanel_container",
+            {
+                "mx_LeftPanel_container_collapsed": this.props.collapsed,
+                "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
+            },
+        );
+
         return (
-            <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
-                { topBox }
-                <CallPreview ConferenceHandler={VectorConferenceHandler} />
-                <RoomList
-                    collapsed={this.props.collapsed}
-                    searchFilter={this.state.searchFilter}
-                    ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed}/>
-            </aside>
+            <div className={containerClasses}>
+                { tagPanel }
+                <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+                    { topBox }
+                    <CallPreview ConferenceHandler={VectorConferenceHandler} />
+                    <RoomList
+                        ref={this.collectRoomList}
+                        collapsed={this.props.collapsed}
+                        searchFilter={this.state.searchFilter}
+                        ConferenceHandler={VectorConferenceHandler} />
+                    <BottomLeftMenu collapsed={this.props.collapsed}/>
+                </aside>
+            </div>
         );
     }
 });
 
-module.exports = DragDropContext(HTML5Backend)(LeftPanel);
+module.exports = LeftPanel;

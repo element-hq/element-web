@@ -21,19 +21,7 @@ limitations under the License.
 }
 
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_textButton {
-    border: 0px;
-    height: 36px;
-    border-radius: 40px;
-    border: solid 1px $accent-color;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
-    margin-left: 0px;
-    margin-right: 8px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    outline: none;
-    cursor: pointer;
-    color: $accent-color;
+    @mixin mx_DialogButton;
     background-color: $primary-bg-color;
+    color: $accent-color;
 }

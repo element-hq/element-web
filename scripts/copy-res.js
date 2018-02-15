@@ -9,6 +9,7 @@
 // This could readily be automated, but it's nice to explicitly
 // control when we languages are available.
 const INCLUDE_LANGS = [
+    {'value': 'ca', 'label': 'Català'},
     {'value': 'da', 'label': 'Dansk'},
     {'value': 'de_DE', 'label': 'Deutsch'},
     {'value': 'en_EN', 'label': 'English'},
@@ -16,7 +17,7 @@ const INCLUDE_LANGS = [
     {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
     {'value': 'es', 'label': 'Español'},
-    {'value': 'eu', 'label': 'Euskal'},
+    {'value': 'eu', 'label': 'Euskara'},
     {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'hu', 'label': 'Magyar'},
@@ -43,10 +44,11 @@ const INCLUDE_LANGS = [
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
     ["res/home.html", "webapp"],
+    ["res/home-status.html", "webapp"],
     ["res/home/**", "webapp/home"],
     ["res/{media,vector-icons}/**", "webapp"],
     ["res/flags/*", "webapp/flags/"],
-    ["src/skins/vector/{fonts,img}/**", "webapp"],
+    ["src/skins/vector/{fonts,img,themes}/**", "webapp"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", { directwatch: 1 }],

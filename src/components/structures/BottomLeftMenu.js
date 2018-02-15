@@ -21,7 +21,7 @@ import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Velocity from 'velocity-vector';
 import 'velocity-vector/velocity.ui';
-import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 const CALLOUT_ANIM_DURATION = 1000;
 
@@ -167,7 +167,6 @@ module.exports = React.createClass({
         const StartChatButton = sdk.getComponent('elements.StartChatButton');
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
         return (
@@ -183,7 +182,6 @@ module.exports = React.createClass({
                     <div ref={this._collectCreateRoomButton}>
                         <CreateRoomButton tooltip={true} />
                     </div>
-                    <GroupsButton tooltip={true} />
                     <span className="mx_BottomLeftMenu_settings">
                         <SettingsButton tooltip={true} />
                     </span>

@@ -24,10 +24,12 @@ import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { MatrixClient } from 'matrix-js-sdk';
 import Analytics from 'matrix-react-sdk/lib/Analytics';
-import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
+import RateLimitedFunc from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from 'matrix-react-sdk/lib/GroupAddressPicker';
 import GroupStoreCache from 'matrix-react-sdk/lib/stores/GroupStoreCache';
+
+import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
 
 class HeaderButton extends React.Component {
     constructor() {
@@ -47,13 +49,19 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        return <AccessibleButton className="mx_RightPanel_headerButton" onClick={this.onClick} >
-            <div className="mx_RightPanel_headerButton_badge">
-                { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
-            </div>
-            <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
-            { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
-        </AccessibleButton>;
+        return <AccessibleButton
+            aria-label={this.props.title}
+            title={this.props.title}
+            className="mx_RightPanel_headerButton"
+            onClick={this.onClick} >
+
+                <div className="mx_RightPanel_headerButton_badge">
+                    { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
+                </div>
+                <TintableSvg src={this.props.iconSrc} width="25" height="25" />
+                { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight" /> : <div /> }
+
+            </AccessibleButton>;
     }
 }
 
@@ -69,6 +77,9 @@ HeaderButton.propTypes = {
     badge: PropTypes.node,
     // The parameters to track the click event
     analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+    // Button title
+    title: PropTypes.string.isRequired,
 };
 
 module.exports = React.createClass({
@@ -116,7 +127,7 @@ module.exports = React.createClass({
         return {
             phase: this.props.groupId ? this.Phase.GroupMemberList : this.Phase.RoomMemberList,
             isUserPrivilegedInGroup: null,
-        }
+        };
     },
 
     componentWillReceiveProps(newProps) {
@@ -128,9 +139,7 @@ module.exports = React.createClass({
 
     _initGroupStore(groupId) {
         if (!groupId) return;
-        this._groupStore = GroupStoreCache.getGroupStore(
-            this.context.matrixClient, groupId,
-        );
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(this.onGroupStoreUpdated);
     },
 
@@ -140,7 +149,7 @@ module.exports = React.createClass({
         }
     },
 
-    onGroupStoreUpdated: function(){
+    onGroupStoreUpdated: function() {
         this.setState({
             isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
@@ -175,18 +184,17 @@ module.exports = React.createClass({
 
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
-        if (this.state.phase == this.Phase.RoomMemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase === this.Phase.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
-        }
-        else if (this.state.phase === this.Phase.RoomMemberInfo && member.roomId === this.props.roomId &&
+        } else if (this.state.phase === this.Phase.RoomMemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
         }
     },
 
-    _delayedUpdate: new rate_limited_func(function() {
-        this.forceUpdate();
+    _delayedUpdate: new RateLimitedFunc(function() {
+        this.forceUpdate(); // eslint-disable-line babel/no-invalid-this
     }, 500),
 
     onAction: function(payload) {
@@ -257,22 +265,23 @@ module.exports = React.createClass({
         let inviteGroup;
 
         let membersBadge;
-        if ((this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo)
+        let membersTitle = _t('Members');
+        if ((this.state.phase === this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo)
             && this.props.roomId
         ) {
             const cli = this.context.matrixClient;
             const room = cli.getRoom(this.props.roomId);
-            let userIsInRoom;
+            let isUserInRoom;
             if (room) {
-                membersBadge = room.getJoinedMembers().length;
-                userIsInRoom = room.hasMembershipState(
-                    this.context.matrixClient.credentials.userId, 'join',
-                );
+                const numMembers = room.getJoinedMembers().length;
+                membersTitle = _t('%(count)s Members', { count: numMembers });
+                membersBadge = <div title={membersTitle}>{ formatCount(numMembers) }</div>;
+                isUserInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
             }
 
-            if (userIsInRoom) {
+            if (isUserInRoom) {
                 inviteGroup =
-                    <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                    <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteButtonClick}>
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
@@ -283,13 +292,13 @@ module.exports = React.createClass({
 
         const isPhaseGroup = [
             this.Phase.GroupMemberInfo,
-            this.Phase.GroupMemberList
+            this.Phase.GroupMemberList,
         ].includes(this.state.phase);
 
         let headerButtons = [];
         if (this.props.roomId) {
             headerButtons = [
-                <HeaderButton key="_membersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
+                <HeaderButton key="_membersButton" title={membersTitle} iconSrc="img/icons-people.svg"
                     isHighlighted={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo].includes(this.state.phase)}
                     clickPhase={this.Phase.RoomMemberList}
                     badge={membersBadge}
@@ -327,54 +336,54 @@ module.exports = React.createClass({
             // button on these 2 screens or you won't be able to re-expand the panel.
             headerButtons.push(
                 <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
-                    title={ _t("Hide panel") } onClick={ this.onCollapseClick }
+                    title={_t("Hide panel")} aria-label={_t("Hide panel")} onClick={this.onCollapseClick}
                 >
-                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" />
                 </div>,
             );
         }
 
         let panel = <div />;
         if (!this.props.collapsed) {
-            if (this.props.roomId && this.state.phase == this.Phase.RoomMemberList) {
+            if (this.props.roomId && this.state.phase === this.Phase.RoomMemberList) {
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
-            } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
+            } else if (this.props.groupId && this.state.phase === this.Phase.GroupMemberList) {
                 panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
             } else if (this.state.phase === this.Phase.GroupRoomList) {
                 panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-            } else if (this.state.phase == this.Phase.RoomMemberInfo) {
+            } else if (this.state.phase === this.Phase.RoomMemberInfo) {
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
-            } else if (this.state.phase == this.Phase.GroupMemberInfo) {
+            } else if (this.state.phase === this.Phase.GroupMemberInfo) {
                 panel = <GroupMemberInfo
                     groupMember={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.user_id} />;
-            } else if (this.state.phase == this.Phase.GroupRoomInfo) {
+            } else if (this.state.phase === this.Phase.GroupRoomInfo) {
                 panel = <GroupRoomInfo
                     groupRoomId={this.state.groupRoomId}
                     groupId={this.props.groupId}
                     key={this.state.groupRoomId} />;
-            } else if (this.state.phase == this.Phase.NotificationPanel) {
+            } else if (this.state.phase === this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />;
-            } else if (this.state.phase == this.Phase.FilePanel) {
+            } else if (this.state.phase === this.Phase.FilePanel) {
                 panel = <FilePanel roomId={this.props.roomId} />;
             }
         }
 
         if (!panel) {
-            panel = <div className="mx_RightPanel_blank"></div>;
+            panel = <div className="mx_RightPanel_blank" />;
         }
 
         if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
             inviteGroup = isPhaseGroup ? (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteButtonClick}>
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                     </div>
                     <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
                 </AccessibleButton>
             ) : (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteButtonClick}>
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
                     </div>
@@ -383,19 +392,16 @@ module.exports = React.createClass({
             );
         }
 
-        let classes = classNames(
-            "mx_RightPanel", "mx_fadable",
-            {
-                "collapsed": this.props.collapsed,
-                "mx_fadable_faded": this.props.disabled,
-            }
-        );
+        const classes = classNames("mx_RightPanel", "mx_fadable", {
+            "collapsed": this.props.collapsed,
+            "mx_fadable_faded": this.props.disabled,
+        });
 
         return (
             <aside className={classes}>
                 <div className="mx_RightPanel_header">
                     <div className="mx_RightPanel_headerButtonGroup">
-                        {headerButtons}
+                        { headerButtons }
                     </div>
                 </div>
                 { panel }

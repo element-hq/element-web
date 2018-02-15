@@ -81,7 +81,7 @@
     "Riot is not supported on mobile web. Install the app?": "Riot ไม่รองรับเว็บบนอุปกรณ์พกพา ติดตั้งแอป?",
     "Riot does not know how to join a room on this network": "Riot ไม่รู้วิธีเข้าร่วมห้องในเครือข่ายนี้",
     "Direct Chat": "แชทโดยตรง",
-    "All messages (loud)": "ทุกข้อความ (เสียงดัง)",
+    "All messages (noisy)": "ทุกข้อความ (เสียงดัง)",
     "Custom Server Options": "กำหนดเซิร์ฟเวอร์เอง",
     "Directory": "ไดเรกทอรี",
     "Enable audible notifications in web client": "เปิดใช้งานเสียงแจ้งเตือนบนเว็บไคลเอนต์",

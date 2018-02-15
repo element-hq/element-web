@@ -17,14 +17,15 @@ limitations under the License.
 import React from 'react';
 import Promise from 'bluebird';
 import sdk from 'matrix-react-sdk';
-import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
 import Modal from 'matrix-react-sdk/lib/Modal';
 import {
-    NotificationUtils, 
-    VectorPushRulesDefinitions, 
-    PushRuleVectorState, 
+    NotificationUtils,
+    VectorPushRulesDefinitions,
+    PushRuleVectorState,
     ContentRules
 } from '../../../notifications';
 
@@ -112,12 +113,33 @@ module.exports = React.createClass({
     },
 
     onEnableDesktopNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
+        SettingsStore.setValue(
+            "notificationsEnabled", null,
+            SettingLevel.DEVICE,
+            event.target.checked,
+        ).finally(() => {
+            this.forceUpdate();
+        });
     },
 
     onEnableDesktopNotificationBodyChange: function(event) {
-        UserSettingsStore.setEnableNotificationBody(event.target.checked);
-        this.forceUpdate();
+        SettingsStore.setValue(
+            "notificationBodyEnabled", null,
+            SettingLevel.DEVICE,
+            event.target.checked,
+        ).finally(() => {
+            this.forceUpdate();
+        });
+    },
+
+    onEnableAudioNotificationsChange: function(event) {
+        SettingsStore.setValue(
+            "audioNotificationsEnabled", null,
+            SettingLevel.DEVICE,
+            event.target.checked,
+        ).finally(() => {
+            this.forceUpdate();
+        });
     },
 
     onEnableEmailNotificationsChange: function(address, event) {
@@ -433,7 +455,7 @@ module.exports = React.createClass({
                     needsUpdate.push( function(kind, rule) {
                         return cli.setPushRuleActions(
                             'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
-                        ).then(() => 
+                        ).then(() =>
                             cli.deletePushRule('global', kind, rule.rule_id)
                         ).catch( (e) => {
                             console.warn(`Error when porting legacy rule: ${e}`);
@@ -446,7 +468,7 @@ module.exports = React.createClass({
         if (needsUpdate.length > 0) {
             // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
-            return Promise.all(needsUpdate).then(() => 
+            return Promise.all(needsUpdate).then(() =>
                 cli.getPushRules()
             );
         } else {
@@ -542,10 +564,11 @@ module.exports = React.createClass({
                         "vectorRuleId": "_keywords",
                         "description" : (
                             <span>
-                            { _tJsx('Messages containing <span>keywords</span>',
-                                /<span>(.*?)<\/span>/,
-                                (sub) =>
+                            { _t('Messages containing <span>keywords</span>',
+                                {},
+                                { 'span': (sub) =>
                                     <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>
+                                },
                             )}
                             </span>
                         ),
@@ -694,13 +717,13 @@ module.exports = React.createClass({
 
     render: function() {
         const self = this;
-        
+
         let spinner;
         if (this.state.phase === this.phases.LOADING) {
             const Loader = sdk.getComponent("elements.Spinner");
             spinner = <Loader />;
         }
-        
+
         let masterPushRuleDiv;
         if (this.state.masterPushRule) {
             masterPushRuleDiv = (
@@ -710,7 +733,7 @@ module.exports = React.createClass({
                             ref="enableNotifications"
                             type="checkbox"
                             checked={ !this.state.masterPushRule.enabled }
-                            onChange={ this.onEnableNotificationsChange } 
+                            onChange={ this.onEnableNotificationsChange }
                         />
                     </div>
                     <div className="mx_UserNotifSettings_labelCell">
@@ -824,7 +847,7 @@ module.exports = React.createClass({
                             <input id="enableDesktopNotifications"
                                 ref="enableDesktopNotifications"
                                 type="checkbox"
-                                checked={ UserSettingsStore.getEnableNotifications() }
+                                checked={ SettingsStore.getValue("notificationsEnabled") }
                                 onChange={ this.onEnableDesktopNotificationsChange } />
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
@@ -839,7 +862,7 @@ module.exports = React.createClass({
                             <input id="enableDesktopNotificationBody"
                                 ref="enableDesktopNotificationBody"
                                 type="checkbox"
-                                checked={ UserSettingsStore.getEnableNotificationBody() }
+                                checked={ SettingsStore.getValue("notificationBodyEnabled") }
                                 onChange={ this.onEnableDesktopNotificationBodyChange } />
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
@@ -854,11 +877,8 @@ module.exports = React.createClass({
                             <input id="enableDesktopAudioNotifications"
                                 ref="enableDesktopAudioNotifications"
                                 type="checkbox"
-                                checked={ UserSettingsStore.getEnableAudioNotifications() }
-                                onChange={ (e) => {
-                                    UserSettingsStore.setEnableAudioNotifications(e.target.checked);
-                                    this.forceUpdate();
-                                }} />
+                                checked={ SettingsStore.getValue("audioNotificationsEnabled") }
+                                onChange={ this.onEnableAudioNotificationsChange } />
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopAudioNotifications">

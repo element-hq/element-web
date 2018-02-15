@@ -64,30 +64,13 @@ limitations under the License.
 }
 
 .mx_UserSettings_button {
+    @mixin mx_DialogButton;
     display: inline;
-    vertical-align: middle;
-    border: 0px;
-    border-radius: 36px;
-    font-weight: 400;
-    font-size: 16px;
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    width: auto;
     margin: auto;
-    padding: 7px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
 }
 
-.mx_UserSettings_button.mx_UserSettings_buttonSmall {
-    height: 36px;
-    padding: 4px;
-    padding-left: 7px;
-    padding-right: 7px;
-    font-size: 12px;
-    margin-right: 5px;
-    line-height: 12px;
+.mx_UserSettings_button:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_UserSettings_button.danger {
