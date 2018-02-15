@@ -35,6 +35,7 @@ const TagOrderActions = {};
 TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
     // Only commit tags if the state is ready, i.e. not null
     let tags = TagOrderStore.getOrderedTags();
+    let removedTags = TagOrderStore.getRemovedTagsAccountData();
     if (!tags) {
         return;
     }
@@ -42,17 +43,19 @@ TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
     tags = tags.filter((t) => t !== tag);
     tags = [...tags.slice(0, destinationIx), tag, ...tags.slice(destinationIx)];
 
+    removedTags = removedTags.filter((t) => t !== tag);
+
     const storeId = TagOrderStore.getStoreId();
 
     return asyncAction('TagOrderActions.moveTag', () => {
         Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
         return matrixClient.setAccountData(
             'im.vector.web.tag_ordering',
-            {tags, _storeId: storeId},
+            {tags, removedTags, _storeId: storeId},
         );
     }, () => {
         // For an optimistic update
-        return {tags};
+        return {tags, removedTags};
     });
 };
 
