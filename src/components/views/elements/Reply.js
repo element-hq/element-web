@@ -82,7 +82,6 @@ export default class Reply extends React.Component {
     }
 
     async loadNextEvent() {
-        this.props.onWidgetLoad();
         const ev = this.state.events[0];
         const inReplyTo = Reply.getInReplyTo(ev);
 
@@ -90,7 +89,7 @@ export default class Reply extends React.Component {
             if (this.unmounted) return;
             this.setState({
                 loading: false,
-            });
+            }, this.props.onWidgetLoad);
             return;
         }
 
@@ -98,9 +97,9 @@ export default class Reply extends React.Component {
         if (this.unmounted) return;
 
         if (loadedEv) {
-            this.setState({loadedEv});
+            this.setState({loadedEv}, this.props.onWidgetLoad);
         } else {
-            this.setState({err: true});
+            this.setState({err: true}, this.props.onWidgetLoad);
         }
     }
 
