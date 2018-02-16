@@ -197,3 +197,8 @@ $progressbar-color: #000;
         }
     }
 }
+
+// Add a line to the right side of the left panel to distinguish it from the middle panel
+.mx_LeftPanel {
+    border-right: 1px solid $tertiary-accent-color;
+}
