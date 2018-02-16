@@ -71,7 +71,6 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
         action: 'MatrixActions.Room.timeline',
         event: timelineEvent,
         isLiveEvent: data.liveEvent,
-        room,
     };
 }
 
