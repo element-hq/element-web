@@ -221,5 +221,7 @@
     "Reply": "Одговори",
     "All messages (noisy)": "Све поруке (гласно)",
     "%(count)s Members|other": "%(count)s чланова",
-    "%(count)s Members|one": "%(count)s члан"
+    "%(count)s Members|one": "%(count)s члан",
+    "Online": "На мрежи",
+    "View Community": "Погледај заједницу"
 }
