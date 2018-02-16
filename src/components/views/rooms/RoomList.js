@@ -76,7 +76,6 @@ module.exports = React.createClass({
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
@@ -177,7 +176,6 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
@@ -234,13 +232,6 @@ module.exports = React.createClass({
     onSubListHeaderClick: function(isHidden, scrollToPosition) {
         // The scroll area has expanded or contracted, so re-calculate sticky headers positions
         this._updateStickyHeaders(true, scrollToPosition);
-    },
-
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
-        this._delayedRefreshRoomList();
     },
 
     onRoomReceipt: function(receiptEvent, room) {

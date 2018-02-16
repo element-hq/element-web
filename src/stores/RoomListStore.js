@@ -23,6 +23,16 @@ import Unread from '../Unread';
  * the RoomList.
  */
 class RoomListStore extends Store {
+
+    static _listOrders = {
+        "m.favourite": "manual",
+        "im.vector.fake.invite": "recent",
+        "im.vector.fake.recent": "recent",
+        "im.vector.fake.direct": "recent",
+        "m.lowpriority": "recent",
+        "im.vector.fake.archived": "recent",
+    };
+
     constructor() {
         super(dis);
 
@@ -65,6 +75,14 @@ class RoomListStore extends Store {
             break;
             case 'MatrixActions.Room.tags': {
                 if (!this._state.ready) break;
+                this._generateRoomLists();
+            }
+            break;
+            case 'MatrixActions.Room.timeline': {
+                if (!this._state.ready ||
+                    !payload.isLiveEvent ||
+                    !this._eventTriggersRecentReorder(payload.event)
+                ) break;
                 this._generateRoomLists();
             }
             break;
@@ -159,18 +177,9 @@ class RoomListStore extends Store {
             }
         });
 
-        const listOrders = {
-            "m.favourite": "manual",
-            "im.vector.fake.invite": "recent",
-            "im.vector.fake.recent": "recent",
-            "im.vector.fake.direct": "recent",
-            "m.lowpriority": "recent",
-            "im.vector.fake.archived": "recent",
-        };
-
         Object.keys(lists).forEach((listKey) => {
             let comparator;
-            switch (listOrders[listKey]) {
+            switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
                     comparator = this._recentsComparator;
                     break;
@@ -188,13 +197,17 @@ class RoomListStore extends Store {
         });
     }
 
+    _eventTriggersRecentReorder(ev) {
+        return ev.getTs() && (
+            Unread.eventTriggersUnreadCount(ev) ||
+            ev.getSender() === this._matrixClient.credentials.userId
+        );
+    }
+
     _tsOfNewestEvent(room) {
         for (let i = room.timeline.length - 1; i >= 0; --i) {
             const ev = room.timeline[i];
-            if (ev.getTs() &&
-                (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.getSender() === this._matrixClient.credentials.userId))
-            ) {
+            if (this._eventTriggersRecentReorder(ev)) {
                 return ev.getTs();
             }
         }
@@ -210,6 +223,8 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(roomA, roomB) {
+        // XXX: We could use a cache here and update it when we see new
+        // events that trigger a reorder
         return this._tsOfNewestEvent(roomB) - this._tsOfNewestEvent(roomA);
     }
 
