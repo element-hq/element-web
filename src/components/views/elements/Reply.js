@@ -17,6 +17,7 @@ import React from 'react';
 import sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
+import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
@@ -131,6 +132,8 @@ export default class Reply extends React.Component {
             loadedEv: null,
             events,
         }, this.loadNextEvent);
+
+        dis.dispatch({action: 'focus_composer'});
     }
 
     static getInReplyTo(ev) {
