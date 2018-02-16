@@ -35,7 +35,7 @@ const TagOrderActions = {};
 TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
     // Only commit tags if the state is ready, i.e. not null
     let tags = TagOrderStore.getOrderedTags();
-    let removedTags = TagOrderStore.getRemovedTagsAccountData();
+    let removedTags = TagOrderStore.getRemovedTagsAccountData() || [];
     if (!tags) {
         return;
     }
