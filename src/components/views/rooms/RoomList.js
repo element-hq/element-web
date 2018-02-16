@@ -34,6 +34,7 @@ import RoomListStore from '../../../stores/RoomListStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
+const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function phraseForSection(section) {
     switch (section) {
@@ -365,7 +366,7 @@ module.exports = React.createClass({
         });
 
         Object.keys(lists).forEach((tagName) => {
-            filteredLists[tagName] = lists[tagName].filter((taggedRoom) => {
+            const filteredRooms = lists[tagName].filter((taggedRoom) => {
                 // Somewhat impossible, but guard against it anyway
                 if (!taggedRoom) {
                     return;
@@ -377,6 +378,10 @@ module.exports = React.createClass({
 
                 return Boolean(isRoomVisible[taggedRoom.roomId]);
             });
+            
+            if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
+                filteredLists[tagName] = filteredRooms;
+            }
         });
 
         return filteredLists;
@@ -682,7 +687,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                    if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
                              label={tagName}
