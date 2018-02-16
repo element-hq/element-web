@@ -609,6 +609,27 @@ module.exports = withMatrixClient(React.createClass({
                     </div>
                 );
             }
+            case 'reply_preview': {
+                return (
+                    <div className={classes}>
+                        { avatar }
+                        { sender }
+                        <div className="mx_EventTile_line mx_EventTile_reply">
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                                { timestamp }
+                            </a>
+                            { this._renderE2EPadlock() }
+                            { Reply.getQuote(this.props.mxEvent, this.props.onWidgetLoad) }
+                            <EventTileType ref="tile"
+                                           mxEvent={this.props.mxEvent}
+                                           highlights={this.props.highlights}
+                                           highlightLink={this.props.highlightLink}
+                                           onWidgetLoad={this.props.onWidgetLoad}
+                                           showUrlPreview={false} />
+                        </div>
+                    </div>
+                );
+            }
             default: {
                 return (
                     <div className={classes}>

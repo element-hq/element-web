@@ -71,7 +71,7 @@ export default class ReplyPreview extends React.Component {
                          onClick={cancelQuoting} />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
-                <EventTile mxEvent={this.state.event} last={true} tileShape="reply" onWidgetLoad={dummyOnWidgetLoad} />
+                <EventTile mxEvent={this.state.event} last={true} tileShape="reply_preview" onWidgetLoad={dummyOnWidgetLoad} />
             </div>
         </div>;
     }
