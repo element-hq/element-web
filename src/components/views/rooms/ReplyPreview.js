@@ -19,6 +19,7 @@ import dis from '../../../dispatcher';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -71,7 +72,11 @@ export default class ReplyPreview extends React.Component {
                          onClick={cancelQuoting} />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
-                <EventTile mxEvent={this.state.event} last={true} tileShape="reply_preview" onWidgetLoad={dummyOnWidgetLoad} />
+                <EventTile last={true}
+                           tileShape="reply_preview"
+                           mxEvent={this.state.event}
+                           onWidgetLoad={dummyOnWidgetLoad}
+                           isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </div>
         </div>;
     }

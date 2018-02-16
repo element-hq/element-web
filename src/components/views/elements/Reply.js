@@ -197,7 +197,10 @@ export default class Reply extends React.Component {
 
             return <blockquote className="mx_Reply" key={ev.getId()}>
                 { dateSep }
-                <EventTile mxEvent={ev} tileShape="reply" onWidgetLoad={this.props.onWidgetLoad} />
+                <EventTile mxEvent={ev}
+                           tileShape="reply"
+                           onWidgetLoad={this.props.onWidgetLoad}
+                           isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </blockquote>;
         });
 
