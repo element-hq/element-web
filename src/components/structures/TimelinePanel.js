@@ -1121,9 +1121,9 @@ var TimelinePanel = React.createClass({
         // exist.
         if (this.state.timelineLoading) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <Loader />
-                    </div>
+                <div className="mx_RoomView_messagePanelSpinner">
+                    <Loader />
+                </div>
             );
         }
 
