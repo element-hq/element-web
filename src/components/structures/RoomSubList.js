@@ -194,26 +194,27 @@ var RoomSubList = React.createClass({
     },
 
     makeRoomTiles: function() {
-        var self = this;
-        var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
-        return this.state.sortedList.map(function(room, index) {
-            // XXX: is it evil to pass in self as a prop to RoomTile?
-            return (
-                <DNDRoomTile
-                    index={index} // For DND
-                    room={ room }
-                    roomSubList={ self }
-                    tagName={self.props.tagName}
-                    key={ room.roomId }
-                    collapsed={ self.props.collapsed || false}
-                    unread={ Unread.doesRoomHaveUnreadMessages(room) }
-                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite }
-                    isInvite={ self.props.isInvite }
-                    refreshSubList={ self._updateSubListCount }
-                    incomingCall={ null }
-                    onClick={ self.onRoomTileClick }
-                />
-            );
+        const DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
+        const RoomTile = sdk.getComponent("rooms.RoomTile");
+        return this.state.sortedList.map((room, index) => {
+            // XXX: is it evil to pass in this as a prop to RoomTile? Yes.
+
+            // We should only use <DNDRoomTile /> when editable
+            const RoomTileComponent = this.props.editable ? DNDRoomTile : RoomTile;
+            return <RoomTileComponent
+                index={index} // For DND
+                room={room}
+                roomSubList={this}
+                tagName={this.props.tagName}
+                key={room.roomId}
+                collapsed={this.props.collapsed || false}
+                unread={Unread.doesRoomHaveUnreadMessages(room)}
+                highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
+                isInvite={this.props.isInvite}
+                refreshSubList={this._updateSubListCount}
+                incomingCall={null}
+                onClick={this.onRoomTileClick}
+            />;
         });
     },
 
