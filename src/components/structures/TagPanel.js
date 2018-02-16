@@ -84,8 +84,6 @@ const TagPanel = React.createClass({
     },
 
     onClick(e) {
-        // Ignore clicks on children
-        if (e.target !== e.currentTarget) return;
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -116,7 +114,11 @@ const TagPanel = React.createClass({
                 <img src="img/logos/riot-logo.svg" />
             </AccessibleButton>
             <div className="mx_TagPanel_divider" />
-            <GeminiScrollbar autoShow={true} className="mx_TagPanel_scroller">
+            <GeminiScrollbar
+                className="mx_TagPanel_scroller"
+                autoShow={true}
+                onClick={this.onClick}
+            >
                 <Droppable
                     droppableId="tag-panel-droppable"
                     type="draggable-TagTile"
@@ -125,11 +127,6 @@ const TagPanel = React.createClass({
                             <div
                                 className="mx_TagPanel_tagTileContainer"
                                 ref={provided.innerRef}
-                                // react-beautiful-dnd has a bug that emits a click to the parent
-                                // of draggables upon dropping
-                                //   https://github.com/atlassian/react-beautiful-dnd/issues/273
-                                // so we use onMouseDown here as a workaround.
-                                onMouseDown={this.onClick}
                             >
                                 { tags }
                                 { provided.placeholder }
