@@ -35,7 +35,7 @@ Head to the explanations under Steb 2b
 ## Step 2b: Adding a new language
 
 1. Go to one of the projects listed https://translate.riot.im/projects/riot-web/
-2. Click the ``Start new language`` button at the bottom
+2. Click the ``Start new translation`` button at the bottom
 3. Select a language
 4. Start translating like in 2a.3
 5. Repeat these steps for the other projects which are listed at the link of step 2b.1
