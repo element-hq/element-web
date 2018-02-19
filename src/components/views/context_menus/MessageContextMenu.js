@@ -182,7 +182,7 @@ module.exports = React.createClass({
 
     onReplyClick: function() {
         dis.dispatch({
-            action: 'quote_event',
+            action: 'reply_to_event',
             event: this.props.mxEvent,
         });
         this.closeMenu();
