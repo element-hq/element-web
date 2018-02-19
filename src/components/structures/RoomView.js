@@ -45,6 +45,7 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import SettingsStore from "../../settings/SettingsStore";
+import Reply from "../views/elements/Reply";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -895,11 +896,17 @@ module.exports = React.createClass({
             return;
         }
 
+        const baseContent = Reply.getMRelatesTo(RoomViewStore.getQuotingEvent());
+
         ContentMessages.sendContentToRoom(
-            file, this.state.room.roomId, MatrixClientPeg.get(),
-        ).done(undefined, (error) => {
+            file, this.state.room.roomId, MatrixClientPeg.get(), baseContent,
+        ).done(() => {
+            dis.dispatch({
+                action: 'message_sent',
+            });
+        }, (error) => {
             if (error.name === "UnknownDeviceError") {
-                // Let the staus bar handle this
+                // Let the status bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

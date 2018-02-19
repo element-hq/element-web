@@ -56,7 +56,7 @@ export default class Reply extends React.Component {
 
     componentWillMount() {
         this.unmounted = false;
-        this.room = this.getRoom(this.props.parentEv.getRoomId());
+        this.room = MatrixClientPeg.get().getRoom(this.props.parentEv.getRoomId());
         this.initialize();
     }
 
@@ -67,8 +67,12 @@ export default class Reply extends React.Component {
     async initialize() {
         const {parentEv} = this.props;
         const inReplyTo = Reply.getInReplyTo(parentEv);
+        if (!inReplyTo) {
+            this.setState({err: true});
+            return;
+        }
 
-        const ev = await this.getEvent(this.room, inReplyTo['event_id']);
+        const ev = await Reply.getEvent(this.room, inReplyTo['event_id']);
         if (this.unmounted) return;
 
         if (ev) {
@@ -81,18 +85,18 @@ export default class Reply extends React.Component {
     }
 
     async loadNextEvent() {
+        if (this.unmounted) return;
         const ev = this.state.events[0];
         const inReplyTo = Reply.getInReplyTo(ev);
 
         if (!inReplyTo) {
-            if (this.unmounted) return;
             this.setState({
                 loading: false,
             }, this.props.onWidgetLoad);
             return;
         }
 
-        const loadedEv = await this.getEvent(this.room, inReplyTo['event_id']);
+        const loadedEv = await Reply.getEvent(this.room, inReplyTo['event_id']);
         if (this.unmounted) return;
 
         if (loadedEv) {
@@ -102,23 +106,14 @@ export default class Reply extends React.Component {
         }
     }
 
-    getRoom(id) {
-        const cli = MatrixClientPeg.get();
-        if (id[0] === '!') return cli.getRoom(id);
-
-        return cli.getRooms().find((r) => {
-            return r.getAliases().includes(id);
-        });
-    }
-
-    async getEvent(room, eventId) {
+    static async getEvent(room, eventId) {
         const event = room.findEventById(eventId);
         if (event) return event;
 
         try {
             await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
-            return;
+            return null;
         }
         return room.findEventById(eventId);
     }
@@ -144,7 +139,8 @@ export default class Reply extends React.Component {
         }
     }
 
-    static getRelationship(ev) {
+    static getMRelatesTo(ev) {
+        if (!ev) return {};
         return {
             'm.relates_to': {
                 'm.in_reply_to': {
@@ -155,7 +151,7 @@ export default class Reply extends React.Component {
     }
 
     static getQuote(parentEv, onWidgetLoad) {
-        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Reply.getInReplyTo(parentEv)) return null;
+        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Reply.getInReplyTo(parentEv)) return <div />;
         return <Reply parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
     }
 
