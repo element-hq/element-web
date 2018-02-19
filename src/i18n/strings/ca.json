@@ -873,7 +873,7 @@
     "Your homeserver's URL": "URL del teu homeserver",
     "Your identity server's URL": "URL del teu servidor d'identitat",
     "Analytics": "Analítiques",
-    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ha canviat el seu nom visible a %(displayName)s",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ha canviat el seu nom visible a %(displayName)s.",
     "Server may be unavailable or overloaded": "El servidor pot estar inaccessible o sobrecarregat",
     "Report it": "Informa",
     "Found a bug?": "Has trobat un error?",
