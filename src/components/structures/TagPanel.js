@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -83,8 +84,6 @@ const TagPanel = React.createClass({
     },
 
     onClick(e) {
-        // Ignore clicks on children
-        if (e.target !== e.currentTarget) return;
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -93,9 +92,14 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
+    onLogoClick(ev) {
+        dis.dispatch({action: 'deselect_tags'});
+    },
+
     render() {
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -106,25 +110,31 @@ const TagPanel = React.createClass({
             />;
         });
         return <div className="mx_TagPanel">
-            <Droppable
-                droppableId="tag-panel-droppable"
-                type="draggable-TagTile"
+            <AccessibleButton className="mx_TagPanel_logo" onClick={this.onLogoClick}>
+                <img src="img/logos/riot-logo.svg" />
+            </AccessibleButton>
+            <div className="mx_TagPanel_divider" />
+            <GeminiScrollbar
+                className="mx_TagPanel_scroller"
+                autoShow={true}
+                onClick={this.onClick}
             >
-                { (provided, snapshot) => (
-                    <div
-                        className="mx_TagPanel_tagTileContainer"
-                        ref={provided.innerRef}
-                        // react-beautiful-dnd has a bug that emits a click to the parent
-                        // of draggables upon dropping
-                        //   https://github.com/atlassian/react-beautiful-dnd/issues/273
-                        // so we use onMouseDown here as a workaround.
-                        onMouseDown={this.onClick}
-                    >
-                        { tags }
-                        { provided.placeholder }
-                    </div>
-                ) }
-            </Droppable>
+                <Droppable
+                    droppableId="tag-panel-droppable"
+                    type="draggable-TagTile"
+                >
+                    { (provided, snapshot) => (
+                            <div
+                                className="mx_TagPanel_tagTileContainer"
+                                ref={provided.innerRef}
+                            >
+                                { tags }
+                                { provided.placeholder }
+                            </div>
+                    ) }
+                </Droppable>
+            </GeminiScrollbar>
+            <div className="mx_TagPanel_divider" />
             <div className="mx_TagPanel_createGroupButton">
                 <GroupsButton tooltip={true} />
             </div>
