@@ -23,7 +23,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 function cancelQuoting() {
     dis.dispatch({
-        action: 'quote_event',
+        action: 'reply_to_event',
         event: null,
     });
 }

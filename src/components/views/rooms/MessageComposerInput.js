@@ -275,7 +275,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
-            case 'quote_event':
+            case 'reply_to_event':
             case 'focus_composer':
                 editor.focus();
                 break;
@@ -838,14 +838,7 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-        const quotingEv = RoomViewStore.getQuotingEvent();
-        const content = quotingEv ? Reply.getRelationship(quotingEv) : {};
-        // we have finished quoting, clear the quotingEvent
-        // TODO maybe delay this until the event actually sends?
-        dis.dispatch({
-            action: 'quote_event',
-            event: null,
-        });
+        const content = Reply.getMRelatesTo(RoomViewStore.getQuotingEvent());
 
         let sendMessagePromise;
         if (contentHTML) {
