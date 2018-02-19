@@ -71,6 +71,8 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
         action: 'MatrixActions.Room.timeline',
         event: timelineEvent,
         isLiveEvent: data.liveEvent,
+        isLiveUnfilteredRoomTimelineEvent:
+            room && data.timeline.getTimelineSet() === room.getUnfilteredTimelineSet(),
     };
 }
 

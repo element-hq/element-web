@@ -81,6 +81,7 @@ class RoomListStore extends Store {
             case 'MatrixActions.Room.timeline': {
                 if (!this._state.ready ||
                     !payload.isLiveEvent ||
+                    !payload.isLiveUnfilteredRoomTimelineEvent ||
                     !this._eventTriggersRecentReorder(payload.event)
                 ) break;
                 this._generateRoomLists();
