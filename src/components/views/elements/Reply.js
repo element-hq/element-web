@@ -52,11 +52,10 @@ export default class Reply extends React.Component {
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
-
-        this.unmounted = false;
     }
 
     componentWillMount() {
+        this.unmounted = false;
         this.room = this.getRoom(this.props.parentEv.getRoomId());
         this.initialize();
     }
