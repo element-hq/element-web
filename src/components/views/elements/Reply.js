@@ -24,14 +24,14 @@ import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
-// This component does no cycle detection, simply because the only way to make such a cycle
-// would be to craft event_id's, using a custom homeserver; even then the impact would be low
-// as each event being loaded (after the first) is triggered by an explicit user action.
+// This component does no cycle detection, simply because the only way to make such a cycle would be to
+// craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
+// be low as each event being loaded (after the first) is triggered by an explicit user action.
 export default class Reply extends React.Component {
     static propTypes = {
-        // The parent event
+        // the latest event in this chain of replies
         parentEv: PropTypes.instanceOf(MatrixEvent),
-
+        // called when the preview's contents has loaded
         onWidgetLoad: PropTypes.func.isRequired,
     };
 
