@@ -159,7 +159,7 @@ export default class Reply extends React.Component {
         let header = null;
 
         if (this.state.err) {
-            header = <blockquote className="mx_Reply mx_Reply_error">
+            header = <blockquote className="mx_ReplyThread mx_ReplyThread_error">
                 {
                     _t('Unable to load event that was replied to, ' +
                         'it either does not exist or you do not have permission to view it.')
@@ -169,10 +169,10 @@ export default class Reply extends React.Component {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
             const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
-            header = <blockquote className="mx_Reply">
+            header = <blockquote className="mx_ReplyThread">
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
-                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Reply_show">{ sub }</a>,
+                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
                         'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
                                       url={makeUserPermalink(ev.getSender())} shouldShowPillAvatar={true} />,
                     })
@@ -192,7 +192,7 @@ export default class Reply extends React.Component {
                 dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
             }
 
-            return <blockquote className="mx_Reply" key={ev.getId()}>
+            return <blockquote className="mx_ReplyThread" key={ev.getId()}>
                 { dateSep }
                 <EventTile mxEvent={ev}
                            tileShape="reply"

@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 
-import Reply from "../elements/Reply";
+import Reply from "../elements/ReplyThread";
 
 const React = require('react');
 import PropTypes from 'prop-types';

@@ -54,7 +54,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
-import Reply from "../elements/Reply";
+import Reply from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
