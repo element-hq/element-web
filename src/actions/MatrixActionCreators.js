@@ -66,6 +66,16 @@ function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
     return { action: 'MatrixActions.Room.tags', room };
 }
 
+function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTimeline, removed, data) {
+    return {
+        action: 'MatrixActions.Room.timeline',
+        event: timelineEvent,
+        isLiveEvent: data.liveEvent,
+        isLiveUnfilteredRoomTimelineEvent:
+            room && data.timeline.getTimelineSet() === room.getUnfilteredTimelineSet(),
+    };
+}
+
 function createRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
     return { action: 'MatrixActions.RoomMember.membership', member };
 }
@@ -87,6 +97,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
+        this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
         this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
     },
 
