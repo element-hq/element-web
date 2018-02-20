@@ -275,13 +275,13 @@ class ContentMessages {
         this.nextId = 0;
     }
 
-    sendContentToRoom(file, roomId, matrixClient, baseContent) {
-        const content = Object.assign({}, baseContent, {
+    sendContentToRoom(file, roomId, matrixClient) {
+        const content = {
             body: file.name || 'Attachment',
             info: {
                 size: file.size,
             },
-        });
+        };
 
         // if we have a mime type for the file, add it to the message metadata
         if (file.type) {

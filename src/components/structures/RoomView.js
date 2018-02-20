@@ -896,10 +896,8 @@ module.exports = React.createClass({
             return;
         }
 
-        const baseContent = Reply.getMRelatesTo(RoomViewStore.getQuotingEvent());
-
         ContentMessages.sendContentToRoom(
-            file, this.state.room.roomId, MatrixClientPeg.get(), baseContent,
+            file, this.state.room.roomId, MatrixClientPeg.get(),
         ).done(() => {
             dis.dispatch({
                 action: 'message_sent',

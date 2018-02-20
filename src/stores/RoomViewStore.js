@@ -116,11 +116,6 @@ class RoomViewStore extends Store {
                     replyingToEvent: payload.event,
                 });
                 break;
-            case 'message_sent':
-                this._setState({
-                    replyingToEvent: null,
-                });
-                break;
         }
     }
 
