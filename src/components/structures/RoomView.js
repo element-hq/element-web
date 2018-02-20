@@ -677,23 +677,7 @@ module.exports = React.createClass({
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
-
-        // if we are now a member of the room, where we were not before, that
-        // means we have finished joining a room we were previously peeking
-        // into.
-        const me = MatrixClientPeg.get().credentials.userId;
-        if (this.state.joining && this.state.room.hasMembershipState(me, "join")) {
-            // Having just joined a room, check to see if it looks like a DM room, and if so,
-            // mark it as one. This is to work around the fact that some clients don't support
-            // is_direct. We should remove this once they do.
-            const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-            if (Rooms.looksLikeDirectMessageRoom(this.state.room, me)) {
-                // XXX: There's not a whole lot we can really do if this fails: at best
-                // perhaps we could try a couple more times, but since it's a temporary
-                // compatability workaround, let's not bother.
-                Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender()).done();
-            }
-        }
+        this._updateDMState();
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -732,6 +716,44 @@ module.exports = React.createClass({
                 confMember.membership === "join"
             ),
         });
+    },
+
+    _updateDMState() {
+        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me || me.membership !== "join") {
+            return;
+        }
+
+        // The user may have accepted an invite with is_direct set
+        if (me.events.member.getPrevContent().membership === "invite" &&
+            me.events.member.getPrevContent().is_direct
+        ) {
+            // This is a DM with the sender of the invite event (which we assume
+            // preceded the join event)
+            Rooms.setDMRoom(
+                this.state.room.roomId,
+                me.events.member.getUnsigned().prev_sender,
+            );
+            return;
+        }
+
+        const invitedMembers = this.state.room.getMembersWithMembership("invite");
+        const joinedMembers = this.state.room.getMembersWithMembership("join");
+
+        // There must be one invited member and one joined member
+        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
+            return;
+        }
+
+        // The user may have sent an invite with is_direct sent
+        const other = invitedMembers[0];
+        if (other &&
+            other.membership === "invite" &&
+            other.events.member.getContent().is_direct
+        ) {
+            Rooms.setDMRoom(this.state.room.roomId, other.userId);
+            return;
+        }
     },
 
     onSearchResultsResize: function() {
@@ -826,18 +848,6 @@ module.exports = React.createClass({
                 action: 'join_room',
                 opts: { inviteSignUrl: signUrl },
             });
-
-            // if this is an invite and has the 'direct' hint set, mark it as a DM room now.
-            if (this.state.room) {
-                const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-                if (me && me.membership == 'invite') {
-                    if (me.events.member.getContent().is_direct) {
-                        // The 'direct' hint is there, so declare that this is a DM room for
-                        // whoever invited us.
-                        return Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender());
-                    }
-                }
-            }
             return Promise.resolve();
         });
     },
