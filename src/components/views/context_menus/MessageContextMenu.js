@@ -234,7 +234,7 @@ module.exports = React.createClass({
                     </div>
                 );
 
-                if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
+                if (SettingsStore.isFeatureEnabled("feature_rich_quoting") && content.msgtype === 'm.text') {
                     replyButton = (
                         <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
                             { _t('Reply') }
