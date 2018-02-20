@@ -131,7 +131,7 @@
     "Failed to remove tag %(tagName)s from room": "Неуспешно премахване на %(tagName)s етикет от стаята",
     "Failed to set Direct Message status of room": "Неуспешно настройване на стаята като Директен чат",
     "unknown error code": "неизвестен код за грешка",
-    "Failed to forget room %(errCode)s": "Не успешно забравяне на стаята %(errCode)s",
+    "Failed to forget room %(errCode)s": "Неуспешно забравяне на стаята %(errCode)s",
     "All messages (noisy)": "Всички съобщения (шумно)",
     "All messages": "Всички съобщения",
     "Mentions only": "Само при споменаване",
