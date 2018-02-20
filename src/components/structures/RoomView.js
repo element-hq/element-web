@@ -677,42 +677,7 @@ module.exports = React.createClass({
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
-
-        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-        if (!me || me.membership !== "join") {
-            return;
-        }
-
-        // The user may have accepted an invite with is_direct set
-        if (me.events.member.getPrevContent().membership === "invite" &&
-            me.events.member.getPrevContent().is_direct
-        ) {
-            // This is a DM with the sender of the invite event (which we assume
-            // preceded the join event)
-            Rooms.setDMRoom(
-                this.state.room.roomId,
-                me.events.member.getUnsigned().prev_sender,
-            );
-            return;
-        }
-
-        const invitedMembers = this.state.room.getMembersWithMembership("invite");
-        const joinedMembers = this.state.room.getMembersWithMembership("join");
-
-        // There must be one invited member and one joined member
-        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
-            return;
-        }
-
-        // The user may have sent an invite with is_direct sent
-        const other = invitedMembers[0];
-        if (other &&
-            other.membership === "invite" &&
-            other.events.member.getContent().is_direct
-        ) {
-            Rooms.setDMRoom(this.state.room.roomId, other.userId);
-            return;
-        }
+        this._updateDMState();
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -751,6 +716,44 @@ module.exports = React.createClass({
                 confMember.membership === "join"
             ),
         });
+    },
+
+    _updateDMState() {
+        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me || me.membership !== "join") {
+            return;
+        }
+
+        // The user may have accepted an invite with is_direct set
+        if (me.events.member.getPrevContent().membership === "invite" &&
+            me.events.member.getPrevContent().is_direct
+        ) {
+            // This is a DM with the sender of the invite event (which we assume
+            // preceded the join event)
+            Rooms.setDMRoom(
+                this.state.room.roomId,
+                me.events.member.getUnsigned().prev_sender,
+            );
+            return;
+        }
+
+        const invitedMembers = this.state.room.getMembersWithMembership("invite");
+        const joinedMembers = this.state.room.getMembersWithMembership("join");
+
+        // There must be one invited member and one joined member
+        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
+            return;
+        }
+
+        // The user may have sent an invite with is_direct sent
+        const other = invitedMembers[0];
+        if (other &&
+            other.membership === "invite" &&
+            other.events.member.getContent().is_direct
+        ) {
+            Rooms.setDMRoom(this.state.room.roomId, other.userId);
+            return;
+        }
     },
 
     onSearchResultsResize: function() {
