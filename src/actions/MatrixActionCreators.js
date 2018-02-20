@@ -62,6 +62,10 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
     };
 }
 
+function createRoomAction(matrixClient, room) {
+    return { action: 'MatrixActions.Room', room };
+}
+
 function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
     return { action: 'MatrixActions.Room.tags', room };
 }
@@ -96,6 +100,7 @@ export default {
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+        this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
         this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);

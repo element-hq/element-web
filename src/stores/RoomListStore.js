@@ -97,6 +97,14 @@ class RoomListStore extends Store {
                 this._generateRoomLists();
             }
             break;
+            // This could be a new room that we've been invited to, joined or created
+            // we won't get a RoomMember.membership for these cases if we're not already
+            // a member.
+            case 'MatrixActions.Room': {
+                if (!this._state.ready || !this._matrixClient.credentials.userId) break;
+                this._generateRoomLists();
+            }
+            break;
             case 'RoomListActions.tagRoom.pending': {
                 // XXX: we only show one optimistic update at any one time.
                 // Ideally we should be making a list of in-flight requests
