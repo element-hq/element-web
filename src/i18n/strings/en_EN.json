@@ -381,9 +381,6 @@
     "Drop here to restore": "Drop here to restore",
     "Drop here to demote": "Drop here to demote",
     "Drop here to tag %(section)s": "Drop here to tag %(section)s",
-    "Failed to set direct chat tag": "Failed to set direct chat tag",
-    "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "Press <StartChatButton> to start a chat with someone": "Press <StartChatButton> to start a chat with someone",
     "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory",
     "Community Invites": "Community Invites",
@@ -826,6 +823,7 @@
     "Click to mute video": "Click to mute video",
     "Click to unmute audio": "Click to unmute audio",
     "Click to mute audio": "Click to mute audio",
+    "Clear filter": "Clear filter",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "Failed to load timeline position": "Failed to load timeline position",
@@ -984,5 +982,8 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "File to import": "File to import",
-    "Import": "Import"
+    "Import": "Import",
+    "Failed to set direct chat tag": "Failed to set direct chat tag",
+    "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
 }
