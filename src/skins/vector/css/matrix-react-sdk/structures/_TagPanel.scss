@@ -25,7 +25,7 @@ limitations under the License.
     justify-content: space-between;
 }
 
-.mx_TagPanel .mx_TagPanel_logo {
+.mx_TagPanel .mx_TagPanel_clearButton {
     /* Constant height within flex mx_TagPanel */
     height: 70px;
     width: 60px;
@@ -37,12 +37,12 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_TagPanel .mx_TagPanel_logo.mx_AccessibleButton:focus {
+.mx_TagPanel .mx_TagPanel_clearButton.mx_AccessibleButton:focus {
     filter: none;
     background: rgba(255,255,255, 0.2);
 }
 
-.mx_TagPanel .mx_TagPanel_logo object {
+.mx_TagPanel .mx_TagPanel_clearButton object {
     pointer-events: none;
 }
 
