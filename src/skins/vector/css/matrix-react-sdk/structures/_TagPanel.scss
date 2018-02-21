@@ -26,9 +26,15 @@ limitations under the License.
 }
 
 .mx_TagPanel .mx_TagPanel_logo {
+    /* Constant height within flex mx_TagPanel */
+    height: 70px;
     width: 60px;
-    height: 60px;
-    padding: 5px 0px;
+
+    flex: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_TagPanel .mx_TagPanel_logo.mx_AccessibleButton:focus {
