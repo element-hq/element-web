@@ -417,7 +417,7 @@ export default React.createClass({
                         <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
                             { this.state.loading && loadingElement }
                             <iframe
-                                is // This is required in order to enable passing of that "allow" preoperty, which is unknown to react 15
+                                is // This is required in order to enable passing of the "allow" property, which is unknown to react 15
                                 allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}
