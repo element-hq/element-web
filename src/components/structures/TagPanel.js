@@ -24,6 +24,7 @@ import GroupActions from '../../actions/GroupActions';
 
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
 
@@ -92,7 +93,7 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
-    onLogoClick(ev) {
+    onClearFilterClick(ev) {
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -109,9 +110,19 @@ const TagPanel = React.createClass({
                 selected={this.state.selectedTags.includes(tag)}
             />;
         });
+
+        const clearButton = this.state.selectedTags.length > 0 ?
+            <img
+                src="img/icons-close.svg"
+                alt={_t("Clear filter")}
+                title={_t("Clear filter")}
+                width="24"
+                height="24" /> :
+            <div />;
+
         return <div className="mx_TagPanel">
-            <AccessibleButton className="mx_TagPanel_logo" onClick={this.onLogoClick}>
-                <img src="img/icons-close.svg" width="24" height="24" />
+            <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
+                { clearButton }
             </AccessibleButton>
             <div className="mx_TagPanel_divider" />
             <GeminiScrollbar
