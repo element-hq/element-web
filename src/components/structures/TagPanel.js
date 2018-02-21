@@ -111,7 +111,7 @@ const TagPanel = React.createClass({
         });
         return <div className="mx_TagPanel">
             <AccessibleButton className="mx_TagPanel_logo" onClick={this.onLogoClick}>
-                <img src="img/logos/riot-logo.svg" />
+                <img src="img/icons-close.svg" width="24" height="24" />
             </AccessibleButton>
             <div className="mx_TagPanel_divider" />
             <GeminiScrollbar
