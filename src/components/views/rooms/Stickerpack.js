@@ -195,8 +195,6 @@ export default class Stickerpack extends React.Component {
      */
     onFinished() {
         this.setState({showStickers: false});
-        this.stickersMenu = null;
-        this.forceUpdate();
         console.warn("finshed");
     }
 
@@ -204,7 +202,6 @@ export default class Stickerpack extends React.Component {
      * Launch the integrations manager on the stickers integration page
      */
     _launchManageIntegrations() {
-        this.onFinished();
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
@@ -216,6 +213,7 @@ export default class Stickerpack extends React.Component {
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
+        this.stickersMenu.close();
     }
 
     render() {
