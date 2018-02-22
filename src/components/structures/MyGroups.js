@@ -73,8 +73,10 @@ export default withMatrixClient(React.createClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <GeminiScrollbar className="mx_MyGroups_joinedGroups">
-                    { groupNodes }
+                <GeminiScrollbar>
+                    <div className="mx_MyGroups_joinedGroups">
+                        { groupNodes }
+                    </div>
                 </GeminiScrollbar> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(

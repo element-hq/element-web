@@ -563,7 +563,7 @@ const onMessage = function(event) {
     const url = SdkConfig.get().integrations_ui_url;
     if (
         event.origin.length === 0 ||
-        !url.startsWith(event.origin) ||
+        !url.startsWith(event.origin + '/') ||
         !event.data.action ||
         event.data.api // Ignore messages with specific API set
     ) {

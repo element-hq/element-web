@@ -82,7 +82,7 @@ Tinter.registerTintable(updateTintedDownloadImage);
 // downloaded. This limit does not seem to apply when the url is used as
 // the source attribute of an image tag.
 //
-// Blob URLs are generated using window.URL.createObjectURL and unforuntately
+// Blob URLs are generated using window.URL.createObjectURL and unfortunately
 // for our purposes they inherit the origin of the page that created them.
 // This means that any scripts that run when the URL is viewed will be able
 // to access local storage.

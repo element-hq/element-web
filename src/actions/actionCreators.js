@@ -31,6 +31,15 @@ limitations under the License.
  *                         `${id}.pending` and either
  *                         `${id}.success` or
  *                         `${id}.failure`.
+ *
+ *                     The shape of each are:
+ *                     { action: '${id}.pending', request }
+ *                     { action: '${id}.success', result }
+ *                     { action: '${id}.failure', err }
+ *
+ *                     where `request` is returned by `pendingFn` and
+ *                     result is the result of the promise returned by
+ *                     `fn`.
  */
 export function asyncAction(id, fn, pendingFn) {
     return (dispatch) => {
