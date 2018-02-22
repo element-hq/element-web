@@ -39,7 +39,7 @@ export default class Stickerpack extends React.Component {
         this.defaultStickersContent = (
             <div className='mx_Stickers_contentPlaceholder'>
                 <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
-                <p>{ _t("Click") } <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") } </span>{ _t("to add some!") }</p>
+                <p>{ _t("Click") } <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") }</span> { _t("to add some!") }</p>
                 <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
             </div>
         );
