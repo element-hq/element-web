@@ -27,10 +27,11 @@ function memberEventDiff(ev) {
     const content = ev.getContent();
     const prevContent = ev.getPrevContent();
 
-    diff.isJoin = content.membership === 'join' && prevContent.membership !== 'ban';
-    diff.isPart = content.membership === 'leave' && ev.getStateKey() === ev.getSender();
-
     const isJoinToJoin = content.membership === prevContent.membership && content.membership === 'join';
+
+    diff.isJoin = !isJoinToJoin && content.membership === 'join' && prevContent.membership !== 'ban';
+    diff.isPart = !isJoinToJoin && content.membership === 'leave' && ev.getStateKey() === ev.getSender();
+
     diff.isDisplaynameChange = isJoinToJoin && content.displayname !== prevContent.displayname;
     diff.isAvatarChange = isJoinToJoin && content.avatar_url !== prevContent.avatar_url;
     return diff;
