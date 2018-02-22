@@ -627,8 +627,8 @@ module.exports = React.createClass({
         const room = this.state.room;
         if (!room) return;
 
-        const color_scheme = SettingsStore.getValue("roomColor", room.room_id);
         console.log("Tinter.tint from updateTint");
+        const color_scheme = SettingsStore.getValue("roomColor", room.roomId);
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
