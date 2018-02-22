@@ -92,6 +92,7 @@ class Analytics {
      */
     disable() {
         this.trackEvent('Analytics', 'opt-out');
+        this._paq.push(['disableHeartBeatTimer']);
         this.disabled = true;
     }
 
