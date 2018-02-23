@@ -90,12 +90,25 @@ class RoomListStore extends Store {
             // When an event is decrypted, it could mean we need to reorder the room
             // list because we now know the type of the event.
             case 'MatrixActions.Event.decrypted': {
-                const room = this._matrixClient.getRoom(payload.event.getRoomId());
+                // We may not have synced or done an initial generation of the lists
+                if (!this._matrixClient || !this._state.ready) break;
+
+                const roomId = payload.event.getRoomId();
+
+                // We may have decrypted an event without a roomId (e.g to_device)
+                if (!roomId) break;
+
+                const room = this._matrixClient.getRoom(roomId);
+
+                // We somehow decrypted an event for a room our client is unaware of
+                if (!room) break;
+
                 const liveTimeline = room.getLiveTimeline();
                 const eventTimeline = room.getTimelineForEvent(payload.event.getId());
 
-                if (!this._state.ready ||
-                    liveTimeline !== eventTimeline ||
+                // Either this event was not added to the live timeline (e.g. pagination)
+                // or it doesn't affect the ordering of the room list.
+                if (liveTimeline !== eventTimeline ||
                     !this._eventTriggersRecentReorder(payload.event)
                 ) break;
                 this._generateRoomLists();
