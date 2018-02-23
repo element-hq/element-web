@@ -973,5 +973,10 @@
     "Your identity server's URL": "O URL da súa identidade no servidor",
     "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Esta sala non é pública. Non poderá voltar a ela sin un convite.",
-    "This room is not showing flair for any communities": "Esta sala non mostra popularidade para as comunidades"
+    "This room is not showing flair for any communities": "Esta sala non mostra popularidade para as comunidades",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s cambiou o seu nome mostrado a %(displayName)s.",
+    "Clear filter": "Quitar filtro",
+    "Failed to set direct chat tag": "Fallo ao establecer etiqueta do chat directo",
+    "Failed to remove tag %(tagName)s from room": "Fallo ao eliminar a etiqueta %(tagName)s da sala",
+    "Failed to add tag %(tagName)s to room": "Fallo ao engadir a etiqueta %(tagName)s a sala"
 }
