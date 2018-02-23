@@ -87,6 +87,20 @@ class RoomListStore extends Store {
                 this._generateRoomLists();
             }
             break;
+            // When an event is decrypted, it could mean we need to reorder the room
+            // list because we now know the type of the event.
+            case 'MatrixActions.Event.decrypted': {
+                const room = this._matrixClient.getRoom(payload.event.getRoomId());
+                const liveTimeline = room.getLiveTimeline();
+                const eventTimeline = room.getTimelineForEvent(payload.event.getId());
+
+                if (!this._state.ready ||
+                    liveTimeline !== eventTimeline ||
+                    !this._eventTriggersRecentReorder(payload.event)
+                ) break;
+                this._generateRoomLists();
+            }
+            break;
             case 'MatrixActions.accountData': {
                 if (payload.event_type !== 'm.direct') break;
                 this._generateRoomLists();
