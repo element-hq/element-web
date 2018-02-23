@@ -164,6 +164,26 @@ function createRoomMembershipAction(matrixClient, membershipEvent, member, oldMe
 }
 
 /**
+ * @typedef EventDecryptedAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Event.decrypted'.
+ * @property {MatrixEvent} event the matrix event that was decrypted.
+ */
+
+/**
+ * Create a MatrixActions.Event.decrypted action that represents
+ * a MatrixClient `Event.decrypted` matrix event, emitted when a
+ * matrix event is decrypted.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} event the matrix event that was decrypted.
+ * @returns {EventDecryptedAction} an action of type `MatrixActions.Event.decrypted`.
+ */
+function createEventDecryptedAction(matrixClient, event) {
+    return { action: 'MatrixActions.Event.decrypted', event };
+}
+
+/**
  * This object is responsible for dispatching actions when certain events are emitted by
  * the given MatrixClient.
  */
@@ -183,6 +203,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
         this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
+        this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
     },
 
     /**
