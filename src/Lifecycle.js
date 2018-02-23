@@ -362,7 +362,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
     });
 
-    startMatrixClient();
+    await startMatrixClient();
     return MatrixClientPeg.get();
 }
 
@@ -423,7 +423,7 @@ export function logout() {
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
  */
-function startMatrixClient() {
+async function startMatrixClient() {
     console.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -437,7 +437,7 @@ function startMatrixClient() {
     Presence.start();
     DMRoomMap.makeShared().start();
 
-    MatrixClientPeg.start();
+    await MatrixClientPeg.start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
