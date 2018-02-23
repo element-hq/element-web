@@ -15,146 +15,8 @@ limitations under the License.
 */
 
 /*
-POSTMESSAGE API
-===============
-
-Listens for incoming postMessage requests from embedded widgets. The following API is exposed:
-{
-    api: "widget",
-    action: "content_loaded",
-    widgetId: $WIDGET_ID,
-    data: {}
-    // additional request fields
-}
-
-The complete request object is returned to the caller with an additional "response" key like so:
-{
-    api: "widget",
-    action: "content_loaded",
-    widgetId: $WIDGET_ID,
-    data: {},
-    // additional request fields
-    response: { ... }
-}
-
-The "api" field is required to use this API, and must be set to "widget" in all requests.
-
-The "action" determines the format of the request and response. All actions can return an error response.
-
-Additional data can be sent as abritrary fields. However, typically the data object should be used.
-
-A success response is an object with zero or more keys.
-
-An error response is a "response" object which consists of a sole "error" key to indicate an error.
-They look like:
-{
-    error: {
-        message: "Unable to invite user into room.",
-        _error: <Original Error Object>
-    }
-}
-The "message" key should be a human-friendly string.
-
-ACTIONS
-=======
-** All actions must include an "api" field with value of "widget".**
-All actions can return an error response instead of the response outlined below.
-
-content_loaded
---------------
-Indicates that widget contet has fully loaded
-
-Request:
- - widgetId is the unique ID of the widget instance in riot / matrix state.
- - No additional fields.
-Response:
-{
-    success: "true"
-}
-Example:
-{
-    api: "widget",
-    action: "content_loaded",
-    widgetId: $WIDGET_ID
-}
-
-
-api_version
------------
-Get the current version of the widget postMessage API
-
-Request:
- - No additional fields.
-Response:
-{
-    api_version: "0.0.1"
-}
-Example:
-{
-    api: "widget",
-    action: "api_version",
-}
-
-supported_api_versions
-----------------------
-Get versions of the widget postMessage API that are currently supported
-
-Request:
- - No additional fields.
-Response:
-{
-    api: "widget"
-    supported_versions: ["0.0.1"]
-}
-Example:
-{
-    api: "widget",
-    action: "supported_api_versions",
-}
-
-
-OUTBOUND POSTMESSAGE API
-========================
-
-This API can be used to initiate actions in remote widget instances.
-
-ACTIONS
-=======
-
-Outbound actions use the "widget_client" API key / name, which must be included
-on all requests.
-
-{
-    api: "widget_client",
-    action: "screenshot",
-    widgetId: $WIDGET_ID,
-    data: {}
-    // additional request fields
-}
-
-
-screenshot
-----------
-
-Request a screenshot from the widget (if supported).
-This can currently only be supported by widgets that have access to all of their DOM tree.
-For example, widgets that nest further levels of iframes can not support this capability.
-
-The screenshot is returned as a Blob object.
-
-Request:
- - No additional fields.
-Response:
-{
-    screenshot: {<Blob>data...}
-}
-Example:
-{
-    api: "widget_client",
-    action: "screenshot",
-    widgetId: $WIDGET_ID
-}
-
+* See - https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing for
+* spec. details / documentation.
 */
 
 import URL from 'url';
@@ -166,6 +28,8 @@ const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
     '0.0.1',
 ];
+const INBOUND_API_NAME = 'fromWidget';
+const OUTBOUND_API_NAME = 'toWidget';
 
 if (!global.mxWidgetMessagingListenerCount) {
     global.mxWidgetMessagingListenerCount = 0;
@@ -293,7 +157,6 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
         return false;
     }
 
-
     /**
      * Handle widget postMessage events
      * @param  {Event} event Event to handle
@@ -308,7 +171,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
         if (
             event.origin.length === 0 ||
             !this.trustedEndpoint(event.origin) ||
-            event.data.api !== "widget" ||
+            event.data.api !== INBOUND_API_NAME ||
             !event.data.widgetId
         ) {
             return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
@@ -324,12 +187,12 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
             this.sendResponse(event, {success: true});
         } else if (action === 'supported_api_versions') {
             this.sendResponse(event, {
-                api: "widget",
+                api: INBOUND_API_NAME,
                 supported_versions: SUPPORTED_WIDGET_API_VERSIONS,
             });
         } else if (action === 'api_version') {
             this.sendResponse(event, {
-                api: "widget",
+                api: INBOUND_API_NAME,
                 version: WIDGET_API_VERSION,
             });
         } else if (action === 'sticker_message') {
@@ -393,10 +256,9 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
     getScreenshot() {
         return new Promise((resolve, reject) => {
             this.exec({
-                api: "widget_client",
+                api: OUTBOUND_API_NAME,
                 action: "screenshot",
             }).then(function(response) {
-                // console.warn("got screenshot", response.screenshot);
                 resolve(response.screenshot);
             }).catch((error) => {
                 reject(Error("Failed to get screenshot: " + error.message));
@@ -407,10 +269,9 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
     getCapabilities() {
         return new Promise((resolve, reject) => {
             this.exec({
-                api: "widget_client",
+                api: OUTBOUND_API_NAME,
                 action: "capabilities",
             }).then(function(response) {
-                // console.warn("got capabilities", response.capabilities);
                 resolve(response.capabilities);
             }).catch((error) => {
                 reject(Error("Failed to get capabilities: " + error.message));
@@ -418,7 +279,6 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
         });
     }
 }
-
 
 /**
  * Represents mapping of widget instance to URLs for trusted postMessage communication.
