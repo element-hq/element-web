@@ -93,7 +93,6 @@ export default class Stickerpack extends React.Component {
 
     _onWidgetAction(payload) {
         if (payload.action === "user_widget_updated") {
-            console.warn("user widget updated");
             this._getStickerPickerWidget();
             return;
         }
@@ -103,7 +102,6 @@ export default class Stickerpack extends React.Component {
         // Stickers
         // TODO - Add support for stickerpacks from multiple app stores.
         // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
-        console.warn("Checking for sticker picker widgets");
         const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
         let stickersContent;
 
@@ -111,7 +109,6 @@ export default class Stickerpack extends React.Component {
         if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
             // Set default name
             stickerpackWidget.content.name = stickerpackWidget.name || "Stickerpack";
-            console.warn('Stickerpack widget', stickerpackWidget);
             this.widgetId = stickerpackWidget.id;
 
             stickersContent = (
@@ -205,7 +202,6 @@ export default class Stickerpack extends React.Component {
      */
     onFinished() {
         this.setState({showStickers: false});
-        console.warn("finshed");
     }
 
     /**
