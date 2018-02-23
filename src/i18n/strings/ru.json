@@ -63,7 +63,7 @@
     "You are not receiving desktop notifications": "Вы не получаете уведомления на рабочем столе",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Возможно вы настроили их не в Riot, а в другом Matrix-клиенте. Настроить их в Riot не удастся, но они будут в нем применяться",
     "All messages": "Все сообщения",
-    "All messages (loud)": "Все сообщения (со звуком)",
+    "All messages (noisy)": "Все сообщения (со звуком)",
     "Cancel Sending": "Отменить отправку",
     "Close": "Закрыть",
     "Download this file": "Скачать этот файл",
@@ -132,7 +132,7 @@
     "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot использует многие передовые возможности браузера, некоторые из которых недоступны или являются экспериментальным в вашем текущем браузере.",
     "Search": "Поиск",
     "Search…": "Поиск.…",
-    "Send": "Отослать",
+    "Send": "Отправить",
     "Send logs": "Отправка журналов",
     "Sorry, your browser is <b>not</b> able to run Riot.": "К сожалению, ваш браузер <b>не способен</b> запустить Riot.",
     "This Room": "Эта комната",
@@ -217,5 +217,10 @@
     "Add rooms to this community": "Добавить комнаты в это сообщество",
     "Toolbox": "Панель инструментов",
     "Send Account Data": "Отправить данные аккаунта",
-    "Explore Account Data": "Просмотр данных аккаунта"
+    "Explore Account Data": "Просмотр данных аккаунта",
+    "Away": "Нет на месте",
+    "Appear Offline": "Отображать как не в сети",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Лучший опыт вы получите, установив <chromeLink>Chrome</chromeLink> или <firefoxLink>Firefox</firefoxLink>.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> и <operaLink>Opera</operaLink> работают тоже.",
+    "Reply": "Ответить"
 }

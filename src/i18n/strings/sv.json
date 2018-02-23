@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "Lägg till en epostadress här för att konfigurera epostaviseringar",
     "Advanced notification settings": "Avancerade aviseringsinställingar",
     "All messages": "Alla meddelanden",
-    "All messages (loud)": "Alla meddelanden (högljudd)",
+    "All messages (noisy)": "Alla meddelanden (högljudd)",
     "All notifications are currently disabled for all targets.": "Alla aviseringar är för tillfället avstängda för alla mål.",
     "An error occurred whilst saving your email notification preferences.": "Ett fel uppstod då epostaviseringsinställningarna sparades.",
     "Call invitation": "Inbjudan till samtal",

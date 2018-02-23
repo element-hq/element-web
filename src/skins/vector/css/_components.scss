@@ -36,6 +36,7 @@
 @import "./matrix-react-sdk/views/elements/_EditableItemList.scss";
 @import "./matrix-react-sdk/views/elements/_MemberEventListSummary.scss";
 @import "./matrix-react-sdk/views/elements/_ProgressBar.scss";
+@import "./matrix-react-sdk/views/elements/_Quote.scss";
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
@@ -45,6 +46,7 @@
 @import "./matrix-react-sdk/views/login/_InteractiveAuthEntryComponents.scss";
 @import "./matrix-react-sdk/views/login/_ServerConfig.scss";
 @import "./matrix-react-sdk/views/messages/_MEmoteBody.scss";
+@import "./matrix-react-sdk/views/messages/_MFileBody.scss";
 @import "./matrix-react-sdk/views/messages/_MImageBody.scss";
 @import "./matrix-react-sdk/views/messages/_MNoticeBody.scss";
 @import "./matrix-react-sdk/views/messages/_MTextBody.scss";
@@ -64,6 +66,7 @@
 @import "./matrix-react-sdk/views/rooms/_PinnedEventTile.scss";
 @import "./matrix-react-sdk/views/rooms/_PinnedEventsPanel.scss";
 @import "./matrix-react-sdk/views/rooms/_PresenceLabel.scss";
+@import "./matrix-react-sdk/views/rooms/_QuotePreview.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomHeader.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomList.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomPreviewBar.scss";
@@ -87,6 +90,7 @@
 @import "./vector-web/views/context_menus/_MessageContextMenu.scss";
 @import "./vector-web/views/context_menus/_PresenceContextMenuOption.scss";
 @import "./vector-web/views/context_menus/_RoomTileContextMenu.scss";
+@import "./vector-web/views/context_menus/_TagTileContextMenu.scss";
 @import "./vector-web/views/dialogs/_ChangelogDialog.scss";
 @import "./vector-web/views/dialogs/_DevtoolsDialog.scss";
 @import "./vector-web/views/dialogs/_SetEmailDialog.scss";
@@ -95,6 +99,7 @@
 @import "./vector-web/views/elements/_ImageView.scss";
 @import "./vector-web/views/elements/_InlineSpinner.scss";
 @import "./vector-web/views/elements/_Spinner.scss";
+@import "./vector-web/views/elements/_SyntaxHighlight.scss";
 @import "./vector-web/views/globals/_MatrixToolbar.scss";
 @import "./vector-web/views/messages/_DateSeparator.scss";
 @import "./vector-web/views/messages/_MessageTimestamp.scss";

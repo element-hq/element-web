@@ -96,6 +96,10 @@ limitations under the License.
     line-height: 22px;
 }
 
+.mx_EventTile_quote {
+    margin-right: 10px;
+}
+
 .mx_EventTile_info .mx_EventTile_line {
     padding-left: 83px;
 }
@@ -109,13 +113,13 @@ limitations under the License.
 /* this is used for the tile for the event which is selected via the URL.
  * TODO: ultimately we probably want some transition on here.
  */
-.mx_EventTile_selected .mx_EventTile_line {
+.mx_EventTile_selected > .mx_EventTile_line {
     border-left: $accent-color 5px solid;
     padding-left: 60px;
     background-color: $event-selected-color;
 }
 
-.mx_EventTile:hover .mx_EventTile_line,
+.mx_EventTile:hover .mx_EventTile_line:not(.mx_EventTile_quote),
 .mx_EventTile.menu .mx_EventTile_line
 {
     background-color: $event-selected-color;
@@ -209,7 +213,7 @@ limitations under the License.
     visibility: visible;
 }
 
-.mx_EventTile_selected .mx_MessageTimestamp {
+.mx_EventTile_selected > div > a > .mx_MessageTimestamp {
     left: 3px;
     width: auto;
 }

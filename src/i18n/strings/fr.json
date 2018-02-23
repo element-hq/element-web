@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "Ajouter une adresse e-mail pour la configuration des notifications par e-mail",
     "All messages": "Tous les messages",
-    "All messages (loud)": "Tous les messages (fort)",
+    "All messages (noisy)": "Tous les messages (fort)",
     "All notifications are currently disabled for all targets.": "Toutes les notifications sont désactivées pour tous les appareils.",
     "An error occurred whilst saving your email notification preferences.": "Une erreur est survenue lors de la sauvegarde de vos préférences de notification par e-mail.",
     "Cancel Sending": "Annuler l'envoi",
@@ -217,5 +217,10 @@
     "Invite to this community": "Inviter à cette communauté",
     "Toolbox": "Boîte à outils",
     "Send Account Data": "Envoyer les données du compte",
-    "Explore Account Data": "Explorer les données du compte"
+    "Explore Account Data": "Explorer les données du compte",
+    "Appear Offline": "Apparaître Hors ligne",
+    "Away": "Absent",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink> ou <firefoxLink>Firefox</firefoxLink> pour une expérience optimale.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> et <operaLink>Opera</operaLink> fonctionnent également.",
+    "Reply": "Répondre"
 }

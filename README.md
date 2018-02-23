@@ -128,8 +128,13 @@ You can configure the app by copying `config.sample.json` to
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
+1. `piwik`: an object containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting Analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
+    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
 
 Running as a Desktop app
 ========================
@@ -314,31 +319,51 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-Issues will be triaged by the core team using the following primary set of tags:
+Issues will be triaged by the core team using the below set of tags.
 
-priority:
+Tags are meant to be used in combination - e.g.:
+ * P1 critical bug == really urgent stuff that should be next in the bugfixing todo list
+ * "release blocker" == stuff which is blocking us from cutting the next release.
+ * P1 feature type:voip == what VoIP features should we be working on next?
 
-* P1: top priority; typically blocks releases
+priority: **compulsory**
+
+* P1: top priority - i.e. pool of stuff which we should be working on next
 * P2: still need to fix, but lower than P1
 * P3: non-urgent
-* P4: intereseting idea - bluesky some day
+* P4: interesting idea - bluesky some day
 * P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
-bug or feature:
+bug or feature: **compulsory**
 
 * bug
 * feature
 
-bug severity:
+bug severity: **compulsory, if bug**
 
-* cosmetic - feature works functionally but UI/UX is broken
 * critical - whole app doesn't work
 * major - entire feature doesn't work
 * minor - partially broken feature (but still usable)
+* cosmetic - feature works functionally but UI/UX is broken
 
-additional categories:
+types
+* type:* - refers to a particular part of the app; used to filter bugs
+  on a given topic - e.g. VOIP, signup, timeline, etc.
+
+additional categories (self-explanatory):
 
 * release blocker
 * ui/ux (think of this as cosmetic)
 * network (specific to network conditions)
-* platform (platform specific)
+* platform specific
+* accessibility
+* maintenance
+* performance
+* i18n
+* blocked - whether this issue currently can't be progressed due to outside factors
+
+community engagement
+* easy
+* hacktoberfest
+* bounty? - proposal to be included in a bounty programme
+* bounty - included in Status Open Bounty

@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "Legg til en epost adresse for å sette opp epost varsling",
     "Advanced notification settings": "Avanserte varslingsinnstillinger",
     "All messages": "Alle meldinger",
-    "All messages (loud)": "Alle meldinger (høy)",
+    "All messages (noisy)": "Alle meldinger (høy)",
     "All notifications are currently disabled for all targets.": "Alle varsler er deaktivert for alle mottakere.",
     "An error occurred whilst saving your email notification preferences.": "En feil oppsto i forbindelse med lagring av epost varsel innstillinger.",
     "Cancel Sending": "Avbryt sending",

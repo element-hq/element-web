@@ -20,8 +20,8 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
-var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk');
+import { Droppable } from 'react-beautiful-dnd';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
@@ -32,35 +32,11 @@ var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/A
 import Modal from 'matrix-react-sdk/lib/Modal';
 import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 
+
 // turn this on for drop & drag console debugging galore
 var debug = false;
 
 const TRUNCATE_AT = 10;
-
-var roomListTarget = {
-    canDrop: function() {
-        return true;
-    },
-
-    drop: function(props, monitor, component) {
-        if (debug) console.log("dropped on sublist")
-    },
-
-    hover: function(props, monitor, component) {
-        var item = monitor.getItem();
-
-        if (component.state.sortedList.length == 0 && props.editable) {
-            if (debug) console.log("hovering on sublist " + props.label + ", isOver=" + monitor.isOver());
-
-            if (item.targetList !== component) {
-                 item.targetList.removeRoomTile(item.room);
-                 item.targetList = component;
-            }
-
-            component.moveRoomTile(item.room, 0);
-        }
-    },
-};
 
 var RoomSubList = React.createClass({
     displayName: 'RoomSubList',
@@ -109,13 +85,17 @@ var RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
+        this.setState({
+            sortedList: this.applySearchFilter(this.props.list, this.props.searchFilter),
+        });
     },
 
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
-        this.sortList(this.applySearchFilter(newProps.list, newProps.searchFilter), newProps.order);
+        this.setState({
+            sortedList: this.applySearchFilter(newProps.list, newProps.searchFilter),
+        });
     },
 
     applySearchFilter: function(list, filter) {
@@ -161,71 +141,6 @@ var RoomSubList = React.createClass({
             room_id: roomId,
             clear_search: (ev && (ev.keyCode == KeyCode.ENTER || ev.keyCode == KeyCode.SPACE)),
         });
-    },
-
-    tsOfNewestEvent: function(room) {
-        for (var i = room.timeline.length - 1; i >= 0; --i) {
-            var ev = room.timeline[i];
-            if (ev.getTs() &&
-                (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.getSender() === MatrixClientPeg.get().credentials.userId))
-            ) {
-                return ev.getTs();
-            }
-        }
-
-        // we might only have events that don't trigger the unread indicator,
-        // in which case use the oldest event even if normally it wouldn't count.
-        // This is better than just assuming the last event was forever ago.
-        if (room.timeline.length && room.timeline[0].getTs()) {
-            return room.timeline[0].getTs();
-        } else {
-            return Number.MAX_SAFE_INTEGER;
-        }
-    },
-
-    // TODO: factor the comparators back out into a generic comparator
-    // so that view_prev_room and view_next_room can do the right thing
-
-    recentsComparator: function(roomA, roomB) {
-        return this.tsOfNewestEvent(roomB) - this.tsOfNewestEvent(roomA);
-    },
-
-    lexicographicalComparator: function(roomA, roomB) {
-        return roomA.name > roomB.name ? 1 : -1;
-    },
-
-    // Generates the manual comparator using the given list
-    manualComparator: function(roomA, roomB) {
-        if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
-
-        // Make sure the room tag has an order element, if not set it to be the bottom
-        var a = roomA.tags[this.props.tagName].order;
-        var b = roomB.tags[this.props.tagName].order;
-
-        // Order undefined room tag orders to the bottom
-        if (a === undefined && b !== undefined) {
-            return 1;
-        } else if (a !== undefined && b === undefined) {
-            return -1;
-        }
-
-        return a == b ? this.lexicographicalComparator(roomA, roomB) : ( a > b  ? 1 : -1);
-    },
-
-    sortList: function(list, order) {
-        if (list === undefined) list = this.state.sortedList;
-        if (order === undefined) order = this.props.order;
-        var comparator;
-        list = list || [];
-        if (order === "manual") comparator = this.manualComparator;
-        if (order === "recent") comparator = this.recentsComparator;
-
-        // Fix undefined orders here, and make sure the backend gets updated as well
-        this._fixUndefinedOrder(list);
-
-        //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
-        this.setState({ sortedList: list.sort(comparator) });
     },
 
     _shouldShowNotifBadge: function(roomNotifState) {
@@ -278,119 +193,28 @@ var RoomSubList = React.createClass({
         this.setState(this.state);
     },
 
-    moveRoomTile: function(room, atIndex) {
-        if (debug) console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
-        //console.log("moveRoomTile before: " + JSON.stringify(this.state.rooms));
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
-        if (found.room) {
-            if (debug) console.log("removing at index " + found.index + " and adding at index " + atIndex);
-            rooms.splice(found.index, 1);
-            rooms.splice(atIndex, 0, found.room);
-        }
-        else {
-            if (debug) console.log("Adding at index " + atIndex);
-            rooms.splice(atIndex, 0, room);
-        }
-        this.setState({ sortedList: rooms });
-        // console.log("moveRoomTile after: " + JSON.stringify(this.state.rooms));
-    },
-
-    // XXX: this isn't invoked via a property method but indirectly via
-    // the roomList property method.  Unsure how evil this is.
-    removeRoomTile: function(room) {
-        if (debug) console.log("remove room " + room.roomId);
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
-        if (found.room) {
-            rooms.splice(found.index, 1);
-        }
-        else {
-            console.warn("Can't remove room " + room.roomId + " - can't find it");
-        }
-        this.setState({ sortedList: rooms });
-    },
-
-    findRoomTile: function(room) {
-        var index = this.state.sortedList.indexOf(room);
-        if (index >= 0) {
-            // console.log("found: room: " + room.roomId + " with index " + index);
-        }
-        else {
-            if (debug) console.log("didn't find room");
-            room = null;
-        }
-        return ({
-            room: room,
-            index: index,
-        });
-    },
-
-    calcManualOrderTagData: function(room) {
-        const index = this.state.sortedList.indexOf(room);
-
-        // we sort rooms by the lexicographic ordering of the 'order' metadata on their tags.
-        // for convenience, we calculate this for now a floating point number between 0.0 and 1.0.
-
-        let orderA = 0.0; // by default we're next to the beginning of the list
-        if (index > 0) {
-            const prevTag = this.state.sortedList[index - 1].tags[this.props.tagName];
-            if (!prevTag) {
-                console.error("Previous room in sublist is not tagged to be in this list. This should never happen.");
-            } else if (prevTag.order === undefined) {
-                console.error("Previous room in sublist has no ordering metadata. This should never happen.");
-            } else {
-                orderA = prevTag.order;
-            }
-        }
-
-        let orderB = 1.0; // by default we're next to the end of the list too
-        if (index < this.state.sortedList.length - 1) {
-            const nextTag = this.state.sortedList[index + 1].tags[this.props.tagName];
-            if (!nextTag) {
-                console.error("Next room in sublist is not tagged to be in this list. This should never happen.");
-            } else if (nextTag.order === undefined) {
-                console.error("Next room in sublist has no ordering metadata. This should never happen.");
-            } else {
-                orderB = nextTag.order;
-            }
-        }
-
-        const order = (orderA + orderB) / 2.0;
-
-        if (order === orderA || order === orderB) {
-            console.error("Cannot describe new list position.  This should be incredibly unlikely.");
-            this.state.sortedList.forEach((room, index) => {
-                MatrixClientPeg.get().setRoomTag(
-                    room.roomId, this.props.tagName,
-                    {order: index / this.state.sortedList.length},
-                );
-            });
-            return index / this.state.sortedList.length;
-        }
-
-        return order;
-    },
-
     makeRoomTiles: function() {
-        var self = this;
-        var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
-        return this.state.sortedList.map(function(room) {
-            // XXX: is it evil to pass in self as a prop to RoomTile?
-            return (
-                <DNDRoomTile
-                    room={ room }
-                    roomSubList={ self }
-                    key={ room.roomId }
-                    collapsed={ self.props.collapsed || false}
-                    unread={ Unread.doesRoomHaveUnreadMessages(room) }
-                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite }
-                    isInvite={ self.props.isInvite }
-                    refreshSubList={ self._updateSubListCount }
-                    incomingCall={ null }
-                    onClick={ self.onRoomTileClick }
-                />
-            );
+        const DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
+        const RoomTile = sdk.getComponent("rooms.RoomTile");
+        return this.state.sortedList.map((room, index) => {
+            // XXX: is it evil to pass in this as a prop to RoomTile? Yes.
+
+            // We should only use <DNDRoomTile /> when editable
+            const RoomTileComponent = this.props.editable ? DNDRoomTile : RoomTile;
+            return <RoomTileComponent
+                index={index} // For DND
+                room={room}
+                roomSubList={this}
+                tagName={this.props.tagName}
+                key={room.roomId}
+                collapsed={this.props.collapsed || false}
+                unread={Unread.doesRoomHaveUnreadMessages(room)}
+                highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
+                isInvite={this.props.isInvite}
+                refreshSubList={this._updateSubListCount}
+                incomingCall={null}
+                onClick={this.onRoomTileClick}
+            />;
         });
     },
 
@@ -496,47 +320,6 @@ var RoomSubList = React.createClass({
         this.props.onHeaderClick(false);
     },
 
-    // Fix any undefined order elements of a room in a manual ordered list
-    //     room.tag[tagname].order
-    _fixUndefinedOrder: function(list) {
-        if (this.props.order === "manual") {
-            var order = 0.0;
-            var self = this;
-
-            // Find the highest (lowest position) order of a room in a manual ordered list
-            list.forEach(function(room) {
-                if (room.tags.hasOwnProperty(self.props.tagName)) {
-                    if (order < room.tags[self.props.tagName].order) {
-                        order = room.tags[self.props.tagName].order;
-                    }
-                }
-            });
-
-            // Fix any undefined order elements of a room in a manual ordered list
-            // Do this one at a time, as each time a rooms tag data is updated the RoomList
-            // gets triggered and another list is passed in. Doing it one at a time means that
-            // we always correctly calculate the highest order for the list - stops multiple
-            // rooms getting the same order. This is only really relevant for the first time this
-            // is run with historical room tag data, after that there should only be undefined
-            // in the list at a time anyway.
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
-                    MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
-                        // Do any final stuff here
-                    }).catch(function(err) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        console.error("Failed to add tag " + self.props.tagName + " to room" + err);
-                        Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
-                            title: _t('Failed to add tag %(tagName)s to room', {tagName: self.props.tagName}),
-                            description: ((err && err.message) ? err.message : _t('Operation failed')),
-                        });
-                    });
-                    break;
-                };
-            };
-        }
-    },
-
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
         var TruncatedList = sdk.getComponent('elements.TruncatedList');
@@ -566,12 +349,22 @@ var RoomSubList = React.createClass({
                           </TruncatedList>;
             }
 
-            return connectDropTarget(
-                <div>
-                    { this._getHeaderJsx() }
-                    { subList }
-                </div>
-            );
+            const subListContent = <div>
+                { this._getHeaderJsx() }
+                { subList }
+            </div>;
+
+            return this.props.editable ?
+                <Droppable
+                    droppableId={"room-sub-list-droppable_" + this.props.tagName}
+                    type="draggable-RoomTile"
+                >
+                    { (provided, snapshot) => (
+                        <div ref={provided.innerRef}>
+                            { subListContent }
+                        </div>
+                    ) }
+                </Droppable> : subListContent;
         }
         else {
             var Loader = sdk.getComponent("elements.Spinner");
@@ -585,11 +378,4 @@ var RoomSubList = React.createClass({
     }
 });
 
-// Export the wrapped version, inlining the 'collect' functions
-// to more closely resemble the ES7
-module.exports =
-DropTarget('RoomTile', roomListTarget, function(connect) {
-    return {
-        connectDropTarget: connect.dropTarget(),
-    }
-})(RoomSubList);
+module.exports = RoomSubList;
