@@ -74,7 +74,6 @@ export default class AppTile extends React.Component {
         };
     }
 
-
     /**
      * Does the widget support a given capability
      * @param  {[type]}  capability Capability to check for
@@ -111,7 +110,6 @@ export default class AppTile extends React.Component {
 
         return u.format();
     }
-
 
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
@@ -164,7 +162,6 @@ export default class AppTile extends React.Component {
 
     componentWillUnmount() {
         // Widget action listeners
-        console.warn('Removing widget event listener', this.dispatcherRef);
         dis.unregister(this.dispatcherRef);
 
         // Widget postMessage listeners
@@ -339,7 +336,6 @@ export default class AppTile extends React.Component {
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        console.warn("App frame loaded", this.props.id);
         this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
