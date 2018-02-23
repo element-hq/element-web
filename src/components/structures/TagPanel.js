@@ -127,7 +127,7 @@ const TagPanel = React.createClass({
             <div className="mx_TagPanel_divider" />
             <GeminiScrollbar
                 className="mx_TagPanel_scroller"
-                autoShow={true}
+                autoshow={true}
                 onClick={this.onClick}
             >
                 <Droppable
