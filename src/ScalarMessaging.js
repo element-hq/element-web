@@ -334,7 +334,6 @@ function setWidget(event, roomId) {
     };
 
     if (userWidget) {
-        console.warn('Adding user widget');
         const client = MatrixClientPeg.get();
         const userWidgets = client.getAccountData('m.widgets').getContent() || {};
 
@@ -357,7 +356,6 @@ function setWidget(event, roomId) {
         }
 
         client.setAccountData('m.widgets', userWidgets);
-        console.warn(`Set user widgets to:`, client.getAccountData('m.widgets'));
         sendResponse(event, {
             success: true,
         });
@@ -619,17 +617,14 @@ const onMessage = function(event) {
     const userId = event.data.user_id;
 
     // These APIs don't require roomId
+    // Get and set user widgets (not associated with a specific room)
+    // If roomId is specified, it must be validated, so room-based widgets agreed
+    // handled further down.
     if (event.data.action === "get_widgets") {
-        getWidgets(event, roomId);
+        getWidgets(event, null);
         return;
     } else if (event.data.action === "set_widget") {
-        setWidget(event, roomId);
-        return;
-    } else if (event.data.action === "add_widget_asset") {
-        addWidgetAsset(event, roomId);
-        return;
-    } else if (event.data.action === "remove_widget_asset") {
-        removeWidgetAsset(event, roomId);
+        setWidget(event, null);
         return;
     }
 
@@ -653,6 +648,15 @@ const onMessage = function(event) {
     promise.then((viewingRoomId) => {
         if (roomId !== viewingRoomId) {
             sendError(event, _t('Room %(roomId)s not visible', {roomId: roomId}));
+            return;
+        }
+
+        // Get and set room-based widgets
+        if (event.data.action === "get_widgets") {
+            getWidgets(event, null);
+            return;
+        } else if (event.data.action === "set_widget") {
+            setWidget(event, null);
             return;
         }
 
