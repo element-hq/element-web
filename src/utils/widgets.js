@@ -50,9 +50,7 @@ function getUserWidgets() {
  */
 function getStickerpackWidgets() {
     const widgets = getUserWidgets();
-    console.warn("widgets", widgets);
     const stickerpackWidgets = widgets.filter((widget) => widget.type='stickerpack');
-    console.warn('Stickerpack widgets', stickerpackWidgets);
     return stickerpackWidgets;
 }
 
