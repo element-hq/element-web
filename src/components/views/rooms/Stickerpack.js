@@ -49,6 +49,7 @@ export default class Stickerpack extends React.Component {
         this.state = {
             stickersContent: this.defaultStickersContent,
             showStickers: false,
+            imError: null,
         };
     }
 
@@ -56,7 +57,7 @@ export default class Stickerpack extends React.Component {
         console.warn('Removing stickerpack widgets');
         Widgets.removeStickerpackWidgets();
         this._getStickerPickerWidget();
-        this.onFinished();
+        this.stickersMenu.close();
     }
 
     componentDidMount() {
@@ -66,19 +67,28 @@ export default class Stickerpack extends React.Component {
             this.scalarClient.connect().then(() => {
                 this.forceUpdate();
             }).catch((e) => {
-                console.log("Failed to connect to integrations server");
-                // TODO -- Handle Scalar errors
-                //     this.setState({
-                //         scalar_error: err,
-                //     });
+                this._imError("Failed to connect to integrations server", e);
             });
         }
-        this._getStickerPickerWidget();
-        this.dispatcherRef = dis.register(this._onWidgetAction);
+
+        if (!this.state.imError) {
+            this._getStickerPickerWidget();
+            this.dispatcherRef = dis.register(this._onWidgetAction);
+        }
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
+    }
+
+    _imError(errorMsg, e) {
+        console.error(errorMsg, e);
+        const imErrorContent = <div style={{"text-align": "center"}} className="error"><p> { errorMsg } </p></div>;
+        this.setState({
+            showStickers: false,
+            imError: errorMsg,
+            stickersContent: imErrorContent,
+        });
     }
 
     _onWidgetAction(payload) {
