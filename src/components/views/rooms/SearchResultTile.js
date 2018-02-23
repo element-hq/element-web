@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 
 module.exports = React.createClass({
@@ -24,15 +25,15 @@ module.exports = React.createClass({
 
     propTypes: {
         // a matrix-js-sdk SearchResult containing the details of this result
-        searchResult: React.PropTypes.object.isRequired,
+        searchResult: PropTypes.object.isRequired,
 
         // a list of strings to be highlighted in the results
-        searchHighlights: React.PropTypes.array,
+        searchHighlights: PropTypes.array,
 
         // href for the highlights in this result
-        resultLink: React.PropTypes.string,
+        resultLink: PropTypes.string,
 
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
     },
 
     render: function() {

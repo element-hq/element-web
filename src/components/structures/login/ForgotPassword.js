@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
@@ -29,13 +30,13 @@ module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
-        defaultHsUrl: React.PropTypes.string,
-        defaultIsUrl: React.PropTypes.string,
-        customHsUrl: React.PropTypes.string,
-        customIsUrl: React.PropTypes.string,
-        onLoginClick: React.PropTypes.func,
-        onRegisterClick: React.PropTypes.func,
-        onComplete: React.PropTypes.func.isRequired,
+        defaultHsUrl: PropTypes.string,
+        defaultIsUrl: PropTypes.string,
+        customHsUrl: PropTypes.string,
+        customIsUrl: PropTypes.string,
+        onLoginClick: PropTypes.func,
+        onRegisterClick: PropTypes.func,
+        onComplete: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

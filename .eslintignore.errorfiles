@@ -8,7 +8,6 @@ src/CallHandler.js
 src/component-index.js
 src/components/structures/ContextualMenu.js
 src/components/structures/CreateRoom.js
-src/components/structures/FilePanel.js
 src/components/structures/LoggedInView.js
 src/components/structures/login/ForgotPassword.js
 src/components/structures/login/Login.js
@@ -27,16 +26,10 @@ src/components/views/dialogs/ChatCreateOrReuseDialog.js
 src/components/views/dialogs/DeactivateAccountDialog.js
 src/components/views/dialogs/UnknownDeviceDialog.js
 src/components/views/elements/AddressSelector.js
-src/components/views/elements/CreateRoomButton.js
 src/components/views/elements/DeviceVerifyButtons.js
 src/components/views/elements/DirectorySearchBox.js
 src/components/views/elements/EditableText.js
-src/components/views/elements/HomeButton.js
 src/components/views/elements/MemberEventListSummary.js
-src/components/views/elements/PowerSelector.js
-src/components/views/elements/RoomDirectoryButton.js
-src/components/views/elements/SettingsButton.js
-src/components/views/elements/StartChatButton.js
 src/components/views/elements/TintableSvg.js
 src/components/views/elements/UserSelector.js
 src/components/views/login/CountryDropdown.js
@@ -93,7 +86,6 @@ src/RichText.js
 src/Roles.js
 src/Rooms.js
 src/ScalarAuthClient.js
-src/Tinter.js
 src/UiEffects.js
 src/Unread.js
 src/utils/DecryptFile.js

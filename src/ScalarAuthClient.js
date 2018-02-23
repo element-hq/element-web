@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
+import SettingsStore from "./settings/SettingsStore";
 const request = require('browser-request');
 
 const SdkConfig = require('./SdkConfig');
@@ -38,11 +39,53 @@ class ScalarAuthClient {
 
     // Returns a scalar_token string
     getScalarToken() {
-        const tok = window.localStorage.getItem("mx_scalar_token");
-        if (tok) return Promise.resolve(tok);
+        const token = window.localStorage.getItem("mx_scalar_token");
 
-        // No saved token, so do the dance to get one. First, we
-        // need an openid bearer token from the HS.
+        if (!token) {
+            return this.registerForToken();
+        } else {
+            return this.validateToken(token).then(userId => {
+                const me = MatrixClientPeg.get().getUserId();
+                if (userId !== me) {
+                    throw new Error("Scalar token is owned by someone else: " + me);
+                }
+                return token;
+            }).catch(err => {
+                console.error(err);
+
+                // Something went wrong - try to get a new token.
+                console.warn("Registering for new scalar token");
+                return this.registerForToken();
+            })
+        }
+    }
+
+    validateToken(token) {
+        let url = SdkConfig.get().integrations_rest_url + "/account";
+
+        const defer = Promise.defer();
+        request({
+            method: "GET",
+            uri: url,
+            qs: {scalar_token: token},
+            json: true,
+        }, (err, response, body) => {
+            if (err) {
+                defer.reject(err);
+            } else if (response.statusCode / 100 !== 2) {
+                defer.reject({statusCode: response.statusCode});
+            } else if (!body || !body.user_id) {
+                defer.reject(new Error("Missing user_id in response"));
+            } else {
+                defer.resolve(body.user_id);
+            }
+        });
+
+        return defer.promise;
+    }
+
+    registerForToken() {
+        // Get openid bearer token from the HS as the first part of our dance
         return MatrixClientPeg.get().getOpenIdToken().then((token_object) => {
             // Now we can send that to scalar and exchange it for a scalar token
             return this.exchangeForScalarToken(token_object);
@@ -112,6 +155,7 @@ class ScalarAuthClient {
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
         url += "&room_name=" + encodeURIComponent(roomName);
+        url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
         if (id) {
             url += '&integ_id=' + encodeURIComponent(id);
         }

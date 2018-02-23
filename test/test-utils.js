@@ -2,7 +2,8 @@
 
 import sinon from 'sinon';
 import Promise from 'bluebird';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
@@ -264,4 +265,27 @@ export function getDispatchForStore(store) {
         dis._callbacks[store._dispatchToken](payload);
         dis._isDispatching = false;
     };
+}
+
+export function wrapInMatrixClientContext(WrappedComponent) {
+    class Wrapper extends React.Component {
+        static childContextTypes = {
+            matrixClient: PropTypes.object,
+        }
+
+        getChildContext() {
+            return {
+                matrixClient: this._matrixClient,
+            };
+        }
+
+        componentWillMount() {
+            this._matrixClient = peg.get();
+        }
+
+        render() {
+            return <WrappedComponent {...this.props} />;
+        }
+    }
+    return Wrapper;
 }

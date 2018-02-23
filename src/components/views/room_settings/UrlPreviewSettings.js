@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require("../../../index");
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
@@ -25,7 +26,7 @@ module.exports = React.createClass({
     displayName: 'UrlPreviewSettings',
 
     propTypes: {
-        room: React.PropTypes.object,
+        room: PropTypes.object,
     },
 
     saveSettings: function() {

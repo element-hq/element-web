@@ -315,6 +315,30 @@ module.exports = React.createClass({
         });
     },
 
+    _getPending3PidInvites: function() {
+        // include 3pid invites (m.room.third_party_invite) state events.
+        // The HS may have already converted these into m.room.member invites so
+        // we shouldn't add them if the 3pid invite state key (token) is in the
+        // member invite (content.third_party_invite.signed.token)
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+
+        if (room) {
+            return room.currentState.getStateEvents("m.room.third_party_invite").filter(function(e) {
+                // any events without these keys are not valid 3pid invites, so we ignore them
+                const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
+                for (let i = 0; i < requiredKeys.length; ++i) {
+                    if (e.getContent()[requiredKeys[i]] === undefined) return false;
+                }
+
+                // discard all invites which have a m.room.member event since we've
+                // already added them.
+                const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
+                if (memberEvent) return false;
+                return true;
+            });
+        }
+    },
+
     _makeMemberTiles: function(members, membership) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
 
@@ -329,33 +353,13 @@ module.exports = React.createClass({
         // Double XXX: Now it's really, really not the right home for this logic:
         // we shouldn't even be passing in the 'membership' param to this function.
         // Ew, ew, and ew.
+        // Triple XXX: This violates the size constraint, the output is expected/desired
+        // to be the same length as the members input array.
         if (membership === "invite") {
-            // include 3pid invites (m.room.third_party_invite) state events.
-            // The HS may have already converted these into m.room.member invites so
-            // we shouldn't add them if the 3pid invite state key (token) is in the
-            // member invite (content.third_party_invite.signed.token)
-            const room = MatrixClientPeg.get().getRoom(this.props.roomId);
             const EntityTile = sdk.getComponent("rooms.EntityTile");
-            if (room) {
-                room.currentState.getStateEvents("m.room.third_party_invite").forEach(
-                function(e) {
-                    // any events without these keys are not valid 3pid invites, so we ignore them
-                    const required_keys = ['key_validity_url', 'public_key', 'display_name'];
-                    for (let i = 0; i < required_keys.length; ++i) {
-                        if (e.getContent()[required_keys[i]] === undefined) return;
-                    }
-
-                    // discard all invites which have a m.room.member event since we've
-                    // already added them.
-                    const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
-                    if (memberEvent) {
-                        return;
-                    }
-                    memberList.push(
-                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />,
-                    );
-                });
-            }
+            memberList.push(...this._getPending3PidInvites().map((e) => {
+                return <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />;
+            }));
         }
 
         return memberList;
@@ -374,7 +378,7 @@ module.exports = React.createClass({
     },
 
     _getChildCountInvited: function() {
-        return this.state.filteredInvitedMembers.length;
+        return this.state.filteredInvitedMembers.length + (this._getPending3PidInvites() || []).length;
     },
 
     render: function() {

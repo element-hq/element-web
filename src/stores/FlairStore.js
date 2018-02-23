@@ -39,6 +39,9 @@ class FlairStore {
             //      avatar_url: 'mxc://...'
             //  }
         };
+        this._groupProfilesPromise = {
+            //  $groupId: Promise
+        };
         this._usersPending = {
             //  $userId: {
             //      prom: Promise
@@ -149,13 +152,29 @@ class FlairStore {
             return this._groupProfiles[groupId];
         }
 
-        const profile = await matrixClient.getGroupProfile(groupId);
+        // No request yet, start one
+        if (!this._groupProfilesPromise[groupId]) {
+            this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
+        }
+
+        let profile;
+        try {
+            profile = await this._groupProfilesPromise[groupId];
+        } catch (e) {
+            console.log('Failed to get group profile for ' + groupId, e);
+            // Don't retry, but allow a retry when the profile is next requested
+            delete this._groupProfilesPromise[groupId];
+            return;
+        }
+
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
             name: profile.name,
             shortDescription: profile.short_description,
         };
+        delete this._groupProfilesPromise[groupId];
+
         setTimeout(() => {
             delete this._groupProfiles[groupId];
         }, GROUP_PROFILES_CACHE_BUST_MS);

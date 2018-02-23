@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
 import dis from '../../../dispatcher';
@@ -27,7 +28,7 @@ module.exports = React.createClass({
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: React.PropTypes.object,
+        ConferenceHandler: PropTypes.object,
     },
 
     getInitialState: function() {

@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
@@ -26,17 +27,17 @@ export default React.createClass({
     displayName: 'AddressSelector',
 
     propTypes: {
-        onSelected: React.PropTypes.func.isRequired,
+        onSelected: PropTypes.func.isRequired,
 
         // List of the addresses to display
-        addressList: React.PropTypes.arrayOf(UserAddressType).isRequired,
+        addressList: PropTypes.arrayOf(UserAddressType).isRequired,
         // Whether to show the address on the address tiles
-        showAddress: React.PropTypes.bool,
-        truncateAt: React.PropTypes.number.isRequired,
-        selected: React.PropTypes.number,
+        showAddress: PropTypes.bool,
+        truncateAt: PropTypes.number.isRequired,
+        selected: PropTypes.number,
 
         // Element to put as a header on top of the list
-        header: React.PropTypes.node,
+        header: PropTypes.node,
     },
 
     getInitialState: function() {

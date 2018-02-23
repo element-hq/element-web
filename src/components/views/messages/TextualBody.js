@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import * as linkify from 'linkifyjs';
@@ -31,8 +33,6 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ContextualMenu from '../../structures/ContextualMenu';
-import {RoomMember} from 'matrix-js-sdk';
-import classNames from 'classnames';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 
@@ -43,19 +43,26 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* a list of words to highlight */
-        highlights: React.PropTypes.array,
+        highlights: PropTypes.array,
 
         /* link URL for the highlights */
-        highlightLink: React.PropTypes.string,
+        highlightLink: PropTypes.string,
 
         /* should show URL previews for this event */
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         /* callback for when our widget has loaded */
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
+
+        /* the shape of the tile, used */
+        tileShape: PropTypes.string,
+    },
+
+    contextTypes: {
+        addRichQuote: PropTypes.func,
     },
 
     getInitialState: function() {
@@ -179,6 +186,7 @@ module.exports = React.createClass({
 
                 // If the link is a (localised) matrix.to link, replace it with a pill
                 const Pill = sdk.getComponent('elements.Pill');
+                const Quote = sdk.getComponent('elements.Quote');
                 if (Pill.isMessagePillUrl(href)) {
                     const pillContainer = document.createElement('span');
 
@@ -197,6 +205,21 @@ module.exports = React.createClass({
 
                     // update the current node with one that's now taken its place
                     node = pillContainer;
+                } else if (SettingsStore.isFeatureEnabled("feature_rich_quoting") && Quote.isMessageUrl(href)) {
+                    if (this.context.addRichQuote) { // We're already a Rich Quote so just append the next one above
+                        this.context.addRichQuote(href);
+                        node.remove();
+                    } else { // We're the first in the chain
+                        const quoteContainer = document.createElement('span');
+
+                        const quote =
+                            <Quote url={href} parentEv={this.props.mxEvent} node={node} />;
+
+                        ReactDOM.render(quote, quoteContainer);
+                        node.parentNode.replaceChild(quoteContainer, node);
+                        node = quoteContainer;
+                    }
+                    pillified = true;
                 }
             } else if (node.nodeType == Node.TEXT_NODE) {
                 const Pill = sdk.getComponent('elements.Pill');

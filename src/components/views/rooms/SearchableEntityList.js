@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 const React = require('react');
+import PropTypes from 'prop-types';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const Modal = require("../../../Modal");
 const sdk = require("../../../index");
@@ -26,12 +27,12 @@ const SearchableEntityList = React.createClass({
     displayName: 'SearchableEntityList',
 
     propTypes: {
-        emptyQueryShowsAll: React.PropTypes.bool,
-        showInputBox: React.PropTypes.bool,
-        onQueryChanged: React.PropTypes.func, // fn(inputText)
-        onSubmit: React.PropTypes.func, // fn(inputText)
-        entities: React.PropTypes.array,
-        truncateAt: React.PropTypes.number,
+        emptyQueryShowsAll: PropTypes.bool,
+        showInputBox: PropTypes.bool,
+        onQueryChanged: PropTypes.func, // fn(inputText)
+        onSubmit: PropTypes.func, // fn(inputText)
+        entities: PropTypes.array,
+        truncateAt: PropTypes.number,
     },
 
     getDefaultProps: function() {

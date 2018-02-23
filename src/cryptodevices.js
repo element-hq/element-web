@@ -20,6 +20,20 @@ import Modal from './Modal';
 import { _t } from './languageHandler';
 
 /**
+ * Mark all given devices as 'known'
+ *
+ * @param {MatrixClient} matrixClient A MatrixClient
+ * @param {Object} devices Map from userid -> deviceid -> deviceinfo
+ */
+export function markAllDevicesKnown(matrixClient, devices) {
+    Object.keys(devices).forEach((userId) => {
+        Object.keys(devices[userId]).map((deviceId) => {
+            matrixClient.setDeviceKnown(userId, deviceId, true);
+        });
+    });
+}
+
+/**
  * Gets all crypto devices in a room that are marked neither known
  * nor verified.
  *

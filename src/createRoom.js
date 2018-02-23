@@ -22,6 +22,7 @@ import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
 
 import Promise from 'bluebird';
+import {getAddressType} from "./UserAddress";
 
 /**
  * Create a new room, and switch to it.
@@ -52,7 +53,17 @@ function createRoom(opts) {
     createOpts.preset = createOpts.preset || defaultPreset;
     createOpts.visibility = createOpts.visibility || 'private';
     if (opts.dmUserId && createOpts.invite === undefined) {
-        createOpts.invite = [opts.dmUserId];
+        switch (getAddressType(opts.dmUserId)) {
+            case 'mx-user-id':
+                createOpts.invite = [opts.dmUserId];
+                break;
+            case 'email':
+                createOpts.invite_3pid = [{
+                    id_server: MatrixClientPeg.get().getIdentityServerUrl(true),
+                    medium: 'email',
+                    address: opts.dmUserId,
+                }];
+        }
     }
     if (opts.dmUserId && createOpts.is_direct === undefined) {
         createOpts.is_direct = true;

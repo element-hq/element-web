@@ -17,6 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
@@ -35,11 +36,11 @@ const USERNAME_CHECK_DEBOUNCE_MS = 250;
 export default React.createClass({
     displayName: 'SetMxIdDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
         // Called when the user requests to register with a different homeserver
-        onDifferentServerClicked: React.PropTypes.func.isRequired,
+        onDifferentServerClicked: PropTypes.func.isRequired,
         // Called if the user wants to switch to login instead
-        onLoginClick: React.PropTypes.func.isRequired,
+        onLoginClick: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

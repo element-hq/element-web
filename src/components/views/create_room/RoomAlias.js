@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -22,9 +23,9 @@ module.exports = React.createClass({
     propTypes: {
         // Specifying a homeserver will make magical things happen when you,
         // e.g. start typing in the room alias box.
-        homeserver: React.PropTypes.string,
-        alias: React.PropTypes.string,
-        onChange: React.PropTypes.func,
+        homeserver: PropTypes.string,
+        alias: PropTypes.string,
+        onChange: PropTypes.func,
     },
 
     getDefaultProps: function() {

@@ -19,6 +19,7 @@ import SettingsStore from "../../settings/SettingsStore";
 
 const React = require('react');
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 
 const Matrix = require("matrix-js-sdk");
@@ -58,49 +59,49 @@ var TimelinePanel = React.createClass({
         // representing.  This may or may not have a room, depending on what it's
         // a timeline representing.  If it has a room, we maintain RRs etc for
         // that room.
-        timelineSet: React.PropTypes.object.isRequired,
+        timelineSet: PropTypes.object.isRequired,
 
-        showReadReceipts: React.PropTypes.bool,
+        showReadReceipts: PropTypes.bool,
         // Enable managing RRs and RMs. These require the timelineSet to have a room.
-        manageReadReceipts: React.PropTypes.bool,
-        manageReadMarkers: React.PropTypes.bool,
+        manageReadReceipts: PropTypes.bool,
+        manageReadMarkers: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
-        hidden: React.PropTypes.bool,
+        hidden: PropTypes.bool,
 
         // ID of an event to highlight. If undefined, no event will be highlighted.
         // typically this will be either 'eventId' or undefined.
-        highlightedEventId: React.PropTypes.string,
+        highlightedEventId: PropTypes.string,
 
         // id of an event to jump to. If not given, will go to the end of the
         // live timeline.
-        eventId: React.PropTypes.string,
+        eventId: PropTypes.string,
 
         // where to position the event given by eventId, in pixels from the
         // bottom of the viewport. If not given, will try to put the event
         // half way down the viewport.
-        eventPixelOffset: React.PropTypes.number,
+        eventPixelOffset: PropTypes.number,
 
         // Should we show URL Previews
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         // callback which is called when the panel is scrolled.
-        onScroll: React.PropTypes.func,
+        onScroll: PropTypes.func,
 
         // callback which is called when the read-up-to mark is updated.
-        onReadMarkerUpdated: React.PropTypes.func,
+        onReadMarkerUpdated: PropTypes.func,
 
         // maximum number of events to show in a timeline
-        timelineCap: React.PropTypes.number,
+        timelineCap: PropTypes.number,
 
         // classname to use for the messagepanel
-        className: React.PropTypes.string,
+        className: PropTypes.string,
 
         // shape property to be passed to EventTiles
-        tileShape: React.PropTypes.string,
+        tileShape: PropTypes.string,
 
         // placeholder text to use if the timeline is empty
-        empty: React.PropTypes.string,
+        empty: PropTypes.string,
     },
 
     statics: {
@@ -301,6 +302,8 @@ var TimelinePanel = React.createClass({
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
+        if (!this._shouldPaginate()) return Promise.resolve(false);
+
         const dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         const canPaginateKey = backwards ? 'canBackPaginate' : 'canForwardPaginate';
         const paginatingKey = backwards ? 'backPaginating' : 'forwardPaginating';
@@ -1090,6 +1093,17 @@ var TimelinePanel = React.createClass({
         }, this.props.onReadMarkerUpdated);
     },
 
+    _shouldPaginate: function() {
+        // don't try to paginate while events in the timeline are
+        // still being decrypted. We don't render events while they're
+        // being decrypted, so they don't take up space in the timeline.
+        // This means we can pull quite a lot of events into the timeline
+        // and end up trying to render a lot of events.
+        return !this.state.events.some((e) => {
+            return e.isBeingDecrypted();
+        });
+    },
+
     render: function() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -1107,9 +1121,9 @@ var TimelinePanel = React.createClass({
         // exist.
         if (this.state.timelineLoading) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <Loader />
-                    </div>
+                <div className="mx_RoomView_messagePanelSpinner">
+                    <Loader />
+                </div>
             );
         }
 

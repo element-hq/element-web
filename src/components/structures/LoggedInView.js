@@ -18,8 +18,8 @@ limitations under the License.
 
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import PropTypes from 'prop-types';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import Notifier from '../../Notifier';
@@ -30,6 +30,9 @@ import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
+
+import TagOrderActions from '../../actions/TagOrderActions';
+import RoomListActions from '../../actions/RoomListActions';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -44,23 +47,23 @@ const LoggedInView = React.createClass({
     displayName: 'LoggedInView',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        page_type: React.PropTypes.string.isRequired,
-        onRoomCreated: React.PropTypes.func,
-        onUserSettingsClose: React.PropTypes.func,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        page_type: PropTypes.string.isRequired,
+        onRoomCreated: PropTypes.func,
+        onUserSettingsClose: PropTypes.func,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
-        onRegistered: React.PropTypes.func,
+        onRegistered: PropTypes.func,
 
-        teamToken: React.PropTypes.string,
+        teamToken: PropTypes.string,
 
         // and lots and lots of other stuff.
     },
 
     childContextTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient),
-        authCache: React.PropTypes.object,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient),
+        authCache: PropTypes.object,
     },
 
     getChildContext: function() {
@@ -208,8 +211,51 @@ const LoggedInView = React.createClass({
         }
     },
 
+    _onDragEnd: function(result) {
+        // Dragged to an invalid destination, not onto a droppable
+        if (!result.destination) {
+            return;
+        }
+
+        const dest = result.destination.droppableId;
+
+        if (dest === 'tag-panel-droppable') {
+            // Could be "GroupTile +groupId:domain"
+            const draggableId = result.draggableId.split(' ').pop();
+
+            // Dispatch synchronously so that the TagPanel receives an
+            // optimistic update from TagOrderStore before the previous
+            // state is shown.
+            dis.dispatch(TagOrderActions.moveTag(
+                this._matrixClient,
+                draggableId,
+                result.destination.index,
+            ), true);
+        } else if (dest.startsWith('room-sub-list-droppable_')) {
+            this._onRoomTileEndDrag(result);
+        }
+    },
+
+    _onRoomTileEndDrag: function(result) {
+        let newTag = result.destination.droppableId.split('_')[1];
+        let prevTag = result.source.droppableId.split('_')[1];
+        if (newTag === 'undefined') newTag = undefined;
+        if (prevTag === 'undefined') prevTag = undefined;
+
+        const roomId = result.draggableId.split('_')[1];
+
+        const oldIndex = result.source.index;
+        const newIndex = result.destination.index;
+
+        dis.dispatch(RoomListActions.tagRoom(
+            this._matrixClient,
+            this._matrixClient.getRoom(roomId),
+            prevTag, newTag,
+            oldIndex, newIndex,
+        ), true);
+    },
+
     render: function() {
-        const TagPanel = sdk.getComponent('structures.TagPanel');
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
@@ -330,21 +376,21 @@ const LoggedInView = React.createClass({
         return (
             <div className='mx_MatrixChat_wrapper'>
                 { topBar }
-                <div className={bodyClasses}>
-                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
-                    <LeftPanel
-                        selectedRoom={this.props.currentRoomId}
-                        collapsed={this.props.collapseLhs || false}
-                        disabled={this.props.leftDisabled}
-                    />
-                    <main className='mx_MatrixChat_middlePanel'>
-                        { page_element }
-                    </main>
-                    { right_panel }
-                </div>
+                <DragDropContext onDragEnd={this._onDragEnd}>
+                    <div className={bodyClasses}>
+                        <LeftPanel
+                            collapsed={this.props.collapseLhs || false}
+                            disabled={this.props.leftDisabled}
+                        />
+                        <main className='mx_MatrixChat_middlePanel'>
+                            { page_element }
+                        </main>
+                        { right_panel }
+                    </div>
+                </DragDropContext>
             </div>
         );
     },
 });
 
-export default DragDropContext(HTML5Backend)(LoggedInView);
+export default LoggedInView;

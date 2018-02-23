@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 import { _t } from "../../../languageHandler";
 
@@ -24,29 +25,44 @@ module.exports = React.createClass({
     displayName: 'RoomTopicEditor',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            topic: null,
+        };
     },
 
     componentWillMount: function() {
         const room = this.props.room;
         const topic = room.currentState.getStateEvents('m.room.topic', '');
-        this._initialTopic = topic ? topic.getContent().topic : '';
+        this.setState({
+            topic: topic ? topic.getContent().topic : '',
+        });
     },
 
     getTopic: function() {
-        return this.refs.editor.getValue();
+        return this.state.topic;
+    },
+
+    _onValueChanged: function(value) {
+        this.setState({
+            topic: value,
+        });
     },
 
     render: function() {
         const EditableText = sdk.getComponent("elements.EditableText");
 
         return (
-                <EditableText ref="editor"
+                <EditableText
                      className="mx_RoomHeader_topic mx_RoomHeader_editable"
                      placeholderClassName="mx_RoomHeader_placeholder"
                      placeholder={_t("Add a topic")}
                      blurToCancel={false}
-                     initialValue={this._initialTopic}
+                     initialValue={this.state.topic}
+                     onValueChanged={this._onValueChanged}
                      dir="auto" />
         );
     },

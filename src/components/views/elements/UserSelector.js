@@ -17,14 +17,15 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'UserSelector',
 
     propTypes: {
-        onChange: React.PropTypes.func,
-        selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
+        onChange: PropTypes.func,
+        selected_users: PropTypes.arrayOf(React.PropTypes.string),
     },
 
     getDefaultProps: function() {

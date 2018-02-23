@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require('../../../index');
@@ -51,18 +52,18 @@ const EntityTile = React.createClass({
     displayName: 'EntityTile',
 
     propTypes: {
-        name: React.PropTypes.string,
-        title: React.PropTypes.string,
-        avatarJsx: React.PropTypes.any, // <BaseAvatar />
-        className: React.PropTypes.string,
-        presenceState: React.PropTypes.string,
-        presenceLastActiveAgo: React.PropTypes.number,
-        presenceLastTs: React.PropTypes.number,
-        presenceCurrentlyActive: React.PropTypes.bool,
-        showInviteButton: React.PropTypes.bool,
-        shouldComponentUpdate: React.PropTypes.func,
-        onClick: React.PropTypes.func,
-        suppressOnHover: React.PropTypes.bool,
+        name: PropTypes.string,
+        title: PropTypes.string,
+        avatarJsx: PropTypes.any, // <BaseAvatar />
+        className: PropTypes.string,
+        presenceState: PropTypes.string,
+        presenceLastActiveAgo: PropTypes.number,
+        presenceLastTs: PropTypes.number,
+        presenceCurrentlyActive: PropTypes.bool,
+        showInviteButton: PropTypes.bool,
+        shouldComponentUpdate: PropTypes.func,
+        onClick: PropTypes.func,
+        suppressOnHover: PropTypes.bool,
     },
 
     getDefaultProps: function() {

@@ -19,6 +19,7 @@ limitations under the License.
 import url from 'url';
 import qs from 'querystring';
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
@@ -463,6 +464,10 @@ export default class AppTile extends React.Component {
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
             "allow-same-origin allow-scripts allow-presentation";
 
+        // Additional iframe feature pemissions
+        // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
+        const iframeFeatures = "microphone; camera; encrypted-media;";
+
         if (this.props.show) {
             const loadingElement = (
                 <div className='mx_AppTileBody mx_AppLoading'>
@@ -482,7 +487,13 @@ export default class AppTile extends React.Component {
                     appTileBody = (
                         <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
                             { this.state.loading && loadingElement }
+                            { /*
+                                The "is" attribute in the following iframe tag is needed in order to enable rendering of the
+                                "allow" attribute, which is unknown to react 15.
+                            */ }
                             <iframe
+                                is
+                                allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}
                                 allowFullScreen="true"

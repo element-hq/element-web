@@ -37,12 +37,7 @@
     "%(count)s new messages|other": "新しい発言 %(count)s",
     "Don't send typing notifications": "文字入力中であることを公表しない",
     "Filter room members": "参加者検索",
-    "Send a message (unencrypted)": "ここに送信文を入力 (暗号化なし)",
-    "Send an encrypted message": "暗号文を送る",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "発言時刻を12時間形式で表示 (例 2:30PM)",
-    "since the point in time of selecting this option": "この設定を選択した時点から",
-    "since they joined": "参加した時点から",
-    "since they were invited": "招待を送った時点から",
     "Upload avatar": "アイコン画像を変更",
     "Upload file": "添付ファイル送信",
     "Use compact timeline layout": "会話表示の行間を狭くする",
@@ -57,5 +52,7 @@
     "No Webcams detected": "カメラが見つかりません",
     "Microphone": "マイク",
     "Camera": "カメラ",
-    "Are you sure?": "本当によろしいですか？"
+    "Are you sure?": "本当によろしいですか？",
+    "OK": "OK",
+    "Operation failed": "操作に失敗しました"
 }

@@ -20,23 +20,55 @@ import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import { isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
+import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
+import ContextualMenu from '../../structures/ContextualMenu';
 
+import FlairStore from '../../../stores/FlairStore';
+
+// A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
+// a thing to click on for the user to filter the visible rooms in the RoomList to:
+//  - Rooms that are part of the group
+//  - Direct messages with members of the group
+// with the intention that this could be expanded to arbitrary tags in future.
 export default React.createClass({
     displayName: 'TagTile',
 
     propTypes: {
-        groupProfile: PropTypes.object,
+        // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
+        // For now, only group IDs are handled.
+        tag: PropTypes.string,
     },
 
     contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     getInitialState() {
         return {
+            // Whether the mouse is over the tile
             hover: false,
+            // The profile data of the group if this.props.tag is a group ID
+            profile: null,
         };
+    },
+
+    componentWillMount() {
+        this.unmounted = false;
+        if (this.props.tag[0] === '+') {
+            FlairStore.getGroupProfileCached(
+                this.context.matrixClient,
+                this.props.tag,
+            ).then((profile) => {
+                if (this.unmounted) return;
+                this.setState({profile});
+            }).catch((err) => {
+                console.warn('Could not fetch group profile for ' + this.props.tag, err);
+            });
+        }
+    },
+
+    componentWillUnmount() {
+        this.unmounted = true;
     },
 
     onClick: function(e) {
@@ -44,10 +76,39 @@ export default React.createClass({
         e.stopPropagation();
         dis.dispatch({
             action: 'select_tag',
-            tag: this.props.groupProfile.groupId,
-            ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
+            tag: this.props.tag,
+            ctrlOrCmdKey: isOnlyCtrlOrCmdIgnoreShiftKeyEvent(e),
             shiftKey: e.shiftKey,
         });
+    },
+
+    onContextButtonClick: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Hide the (...) immediately
+        this.setState({ hover: false });
+
+        const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
+        const elementRect = e.target.getBoundingClientRect();
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const x = elementRect.right + window.pageXOffset + 3;
+        const chevronOffset = 12;
+        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
+
+        const self = this;
+        ContextualMenu.createMenu(TagTileContextMenu, {
+            chevronOffset: chevronOffset,
+            left: x,
+            top: y,
+            tag: this.props.tag,
+            onFinished: function() {
+                self.setState({ menuDisplayed: false });
+            },
+        });
+        this.setState({ menuDisplayed: true });
     },
 
     onMouseOver: function() {
@@ -62,8 +123,8 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
-        const profile = this.props.groupProfile || {};
-        const name = profile.name || profile.groupId;
+        const profile = this.state.profile || {};
+        const name = profile.name || this.props.tag;
         const avatarHeight = 35;
 
         const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
@@ -78,10 +139,15 @@ export default React.createClass({
         const tip = this.state.hover ?
             <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
             <div />;
+        const contextButton = this.state.hover || this.state.menuDisplayed ?
+            <div className="mx_TagTile_context_button" onClick={this.onContextButtonClick}>
+                { "\u00B7\u00B7\u00B7" }
+            </div> : <div />;
         return <AccessibleButton className={className} onClick={this.onClick}>
             <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                 <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
                 { tip }
+                { contextButton }
             </div>
         </AccessibleButton>;
     },

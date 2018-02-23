@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 const React = require("react");
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -25,13 +26,15 @@ const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
-const Rooms = require('../../../Rooms');
+import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
-import FilterStore from '../../../stores/FilterStore';
+import TagOrderStore from '../../../stores/TagOrderStore';
+import RoomListStore from '../../../stores/RoomListStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
+const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function phraseForSection(section) {
     switch (section) {
@@ -52,9 +55,9 @@ module.exports = React.createClass({
     displayName: 'RoomList',
 
     propTypes: {
-        ConferenceHandler: React.PropTypes.any,
-        collapsed: React.PropTypes.bool.isRequired,
-        searchFilter: React.PropTypes.string,
+        ConferenceHandler: PropTypes.any,
+        collapsed: PropTypes.bool.isRequired,
+        searchFilter: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -71,11 +74,10 @@ module.exports = React.createClass({
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();
+
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
-        cli.on("Room.tags", this.onRoomTags);
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -83,21 +85,38 @@ module.exports = React.createClass({
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
+        const dmRoomMap = DMRoomMap.shared();
         this._groupStores = {};
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
+        this._groupStoreTokens = [];
+        // A map between tags which are group IDs and the room IDs of rooms that should be kept
+        // in the room list when filtering by that tag.
+        this._visibleRoomsForGroup = {
+            // $groupId: [$roomId1, $roomId2, ...],
+        };
+        // All rooms that should be kept in the room list when filtering.
+        // By default, show all rooms.
+        this._visibleRooms = MatrixClientPeg.get().getRooms();
         // When the selected tags are changed, initialise a group store if necessary
-        this._filterStoreToken = FilterStore.addListener(() => {
-            FilterStore.getSelectedTags().forEach((tag) => {
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
                 if (tag[0] !== '+' || this._groupStores[tag]) {
                     return;
                 }
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
-                this._groupStores[tag].registerListener(() => {
-                    this.updateSelectedTagsEntities();
-                });
+                this._groupStoreTokens.push(
+                    this._groupStores[tag].registerListener(() => {
+                        // This group's rooms or members may have updated, update rooms for its tag
+                        this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                        this.updateVisibleRooms();
+                    }),
+                );
             });
-            this.updateSelectedTagsEntities();
+            // Filters themselves have changed, refresh the selected tags
+            this.updateVisibleRooms();
+        });
+
+        this._roomListStoreToken = RoomListStore.addListener(() => {
+            this._delayedRefreshRoomList();
         });
 
         this.refreshRoomList();
@@ -158,9 +177,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
-            MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
@@ -169,8 +186,17 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
 
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagStoreToken) {
+            this._tagStoreToken.remove();
+        }
+
+        if (this._roomListStoreToken) {
+            this._roomListStoreToken.remove();
+        }
+
+        if (this._groupStoreTokens.length > 0) {
+            // NB: GroupStore is not a Flux.Store
+            this._groupStoreTokens.forEach((token) => token.unregister());
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -178,11 +204,11 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onDeleteRoom: function(roomId) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onArchivedHeaderClick: function(isHidden, scrollToPosition) {
@@ -209,13 +235,6 @@ module.exports = React.createClass({
         this._updateStickyHeaders(true, scrollToPosition);
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
-        this._delayedRefreshRoomList();
-    },
-
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
@@ -225,10 +244,6 @@ module.exports = React.createClass({
     },
 
     onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomTags: function(event, room) {
         this._delayedRefreshRoomList();
     },
 
@@ -259,39 +274,52 @@ module.exports = React.createClass({
         this.refreshRoomList();
     }, 500),
 
-    // Update which rooms and users should appear in RoomList as dictated by selected tags
-    updateSelectedTagsEntities: function() {
+    // Update which rooms and users should appear in RoomList for a given group tag
+    updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
-        FilterStore.getSelectedTags().forEach((tag) => {
-            this._selectedTagsRoomIds = this._selectedTagsRoomIds.concat(
-               this._groupStores[tag].getGroupRooms().map((room) => room.roomId),
-            );
-            // TODO: Check if room has been tagged to the group by the user
+        // For now, only handle group tags
+        const store = this._groupStores[tag];
+        if (!store) return;
 
-            this._selectedTagsUserIds = this._selectedTagsUserIds.concat(
-               this._groupStores[tag].getGroupMembers().map((member) => member.userId),
+        this._visibleRoomsForGroup[tag] = [];
+        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
+        store.getGroupMembers().forEach((member) => {
+            if (member.userId === MatrixClientPeg.get().credentials.userId) return;
+            dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
+                (roomId) => this._visibleRoomsForGroup[tag].push(roomId),
             );
         });
-        this.setState({
-            selectedTags: FilterStore.getSelectedTags(),
-        }, () => {
-            this.refreshRoomList();
-        });
+        // TODO: Check if room has been tagged to the group by the user
     },
 
-    isRoomInSelectedTags: function(room, me, dmRoomMap) {
-        // No selected tags = every room is visible in the list
-        if (this.state.selectedTags.length === 0) {
-            return true;
+    // Update which rooms and users should appear according to which tags are selected
+    updateVisibleRooms: function() {
+        const selectedTags = TagOrderStore.getSelectedTags();
+        const visibleGroupRooms = [];
+        selectedTags.forEach((tag) => {
+            (this._visibleRoomsForGroup[tag] || []).forEach(
+                (roomId) => visibleGroupRooms.push(roomId),
+            );
+        });
+
+        // If there are any tags selected, constrain the rooms listed to the
+        // visible rooms as determined by visibleGroupRooms. Here, we
+        // de-duplicate and filter out rooms that the client doesn't know
+        // about (hence the Set and the null-guard on `room`).
+        if (selectedTags.length > 0) {
+            const roomSet = new Set();
+            visibleGroupRooms.forEach((roomId) => {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    roomSet.add(room);
+                }
+            });
+            this._visibleRooms = Array.from(roomSet);
+        } else {
+            // Show all rooms
+            this._visibleRooms = MatrixClientPeg.get().getRooms();
         }
-        if (this._selectedTagsRoomIds.includes(room.roomId)) {
-            return true;
-        }
-        const dmUserId = dmRoomMap.getUserIdForRoomId(room.roomId);
-        return dmUserId && dmUserId !== me.userId &&
-            this._selectedTagsUserIds.includes(dmUserId);
+        this._delayedRefreshRoomList();
     },
 
     refreshRoomList: function() {
@@ -305,83 +333,49 @@ module.exports = React.createClass({
             totalRooms += l.length;
         }
         this.setState({
-            lists: this.getRoomLists(),
+            lists,
             totalRoomCount: totalRooms,
+            // Do this here so as to not render every time the selected tags
+            // themselves change.
+            selectedTags: TagOrderStore.getSelectedTags(),
         });
 
         // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
-        const lists = {};
-        lists["im.vector.fake.invite"] = [];
-        lists["m.favourite"] = [];
-        lists["im.vector.fake.recent"] = [];
-        lists["im.vector.fake.direct"] = [];
-        lists["m.lowpriority"] = [];
-        lists["im.vector.fake.archived"] = [];
+        const lists = RoomListStore.getRoomLists();
 
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        MatrixClientPeg.get().getRooms().forEach((room) => {
-            const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-            if (!me) return;
+        const filteredLists = {};
 
-            // console.log("room = " + room.name + ", me.membership = " + me.membership +
-            //             ", sender = " + me.events.member.getSender() +
-            //             ", target = " + me.events.member.getStateKey() +
-            //             ", prevMembership = " + me.events.member.getPrevContent().membership);
+        const isRoomVisible = {
+            // $roomId: true,
+        };
 
-            if (me.membership == "invite") {
-                lists["im.vector.fake.invite"].push(room);
-            } else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, this.props.ConferenceHandler)) {
-                // skip past this room & don't put it in any lists
-            } else if (me.membership == "join" || me.membership === "ban" ||
-                     (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
-                // Used to split rooms via tags
-                const tagNames = Object.keys(room.tags);
+        this._visibleRooms.forEach((r) => {
+            isRoomVisible[r.roomId] = true;
+        });
 
-                // Apply TagPanel filtering, derived from FilterStore
-                if (!this.isRoomInSelectedTags(room, me, dmRoomMap)) {
+        Object.keys(lists).forEach((tagName) => {
+            const filteredRooms = lists[tagName].filter((taggedRoom) => {
+                // Somewhat impossible, but guard against it anyway
+                if (!taggedRoom) {
+                    return;
+                }
+                const me = taggedRoom.getMember(MatrixClientPeg.get().credentials.userId);
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, me, this.props.ConferenceHandler)) {
                     return;
                 }
 
-                if (tagNames.length) {
-                    for (let i = 0; i < tagNames.length; i++) {
-                        const tagName = tagNames[i];
-                        lists[tagName] = lists[tagName] || [];
-                        lists[tagName].push(room);
-                    }
-                } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                    // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push(room);
-                } else {
-                    lists["im.vector.fake.recent"].push(room);
-                }
-            } else if (me.membership === "leave") {
-                lists["im.vector.fake.archived"].push(room);
-            } else {
-                console.error("unrecognised membership: " + me.membership + " - this should never happen");
+                return Boolean(isRoomVisible[taggedRoom.roomId]);
+            });
+            
+            if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
+                filteredLists[tagName] = filteredRooms;
             }
         });
 
-        // we actually apply the sorting to this when receiving the prop in RoomSubLists.
-
-        // we'll need this when we get to iterating through lists programatically - e.g. ctrl-shift-up/down
-/*
-        this.listOrder = [
-            "im.vector.fake.invite",
-            "m.favourite",
-            "im.vector.fake.recent",
-            "im.vector.fake.direct",
-            Object.keys(otherTagNames).filter(tagName=>{
-                return (!tagName.match(/^m\.(favourite|lowpriority)$/));
-            }).sort(),
-            "m.lowpriority",
-            "im.vector.fake.archived"
-        ];
-*/
-
-        return lists;
+        return filteredLists;
     },
 
     _getScrollNode: function() {
@@ -638,7 +632,6 @@ module.exports = React.createClass({
                              editable={false}
                              order="recent"
                              isInvite={true}
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -652,7 +645,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.favourite')}
                              editable={true}
                              order="manual"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -666,7 +658,6 @@ module.exports = React.createClass({
                              headerItems={this._getHeaderItems('im.vector.fake.direct')}
                              editable={true}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              alwaysShowHeader={true}
@@ -680,7 +671,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('im.vector.fake.recent')}
                              headerItems={this._getHeaderItems('im.vector.fake.recent')}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -688,7 +678,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                    if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
                              label={tagName}
@@ -696,7 +686,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent(tagName)}
                              editable={true}
                              order="manual"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -711,7 +700,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.lowpriority')}
                              editable={true}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -722,7 +710,6 @@ module.exports = React.createClass({
                              label={_t('Historical')}
                              editable={false}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              collapsed={self.props.collapsed}
                              alwaysShowHeader={true}
                              startAsHidden={true}

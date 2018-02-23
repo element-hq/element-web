@@ -24,7 +24,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
+            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
             if (typeof(content['disable']) !== "boolean") return null;
@@ -35,16 +35,18 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         if (settingName === "roomColor") {
             // The event content should already be in an appropriate format, we just need
             // to get the right value.
+            // don't fallback to {} because thats truthy and would imply there is an event specifying tint
             return this._getSettings(roomId, "org.matrix.room.color_scheme");
         }
 
-        return this._getSettings(roomId)[settingName];
+        const settings = this._getSettings(roomId) || {};
+        return settings[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
+            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
         }
@@ -55,7 +57,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
             return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
         }
 
-        const content = this._getSettings(roomId);
+        const content = this._getSettings(roomId) || {};
         content[settingName] = newValue;
         return MatrixClientPeg.get().setRoomAccountData(roomId, "im.vector.web.settings", content);
     }
@@ -74,10 +76,10 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
 
     _getSettings(roomId, eventType = "im.vector.settings") {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) return {};
+        if (!room) return null;
 
         const event = room.getAccountData(eventType);
-        if (!event || !event.getContent()) return {};
+        if (!event || !event.getContent()) return null;
         return event.getContent();
     }
 }

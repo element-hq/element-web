@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 import { _t } from '../../../languageHandler';
@@ -22,13 +23,13 @@ import { _t } from '../../../languageHandler';
 module.exports = React.createClass({
     displayName: 'ChangeAvatar',
     propTypes: {
-        initialAvatarUrl: React.PropTypes.string,
-        room: React.PropTypes.object,
+        initialAvatarUrl: PropTypes.string,
+        room: PropTypes.object,
         // if false, you need to call changeAvatar.onFileSelected yourself.
-        showUploadSection: React.PropTypes.bool,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        className: React.PropTypes.string,
+        showUploadSection: PropTypes.bool,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        className: PropTypes.string,
     },
 
     Phases: {

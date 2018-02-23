@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import { MatrixClient } from 'matrix-js-sdk';
 
 import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /**
  * Basic container for modal dialogs.
@@ -31,23 +35,43 @@ export default React.createClass({
 
     propTypes: {
         // onFinished callback to call when Escape is pressed
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
 
         // callback to call when Enter is pressed
-        onEnterPressed: React.PropTypes.func,
+        onEnterPressed: PropTypes.func,
+
+        // called when a key is pressed
+        onKeyDown: PropTypes.func,
 
         // CSS class to apply to dialog div
-        className: React.PropTypes.string,
+        className: PropTypes.string,
 
         // Title for the dialog.
         // (could probably actually be something more complicated than a string if desired)
-        title: React.PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
 
         // children should be the content of the dialog
-        children: React.PropTypes.node,
+        children: PropTypes.node,
+    },
+
+    childContextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: this._matrixClient,
+        };
+    },
+
+    componentWillMount() {
+        this._matrixClient = MatrixClientPeg.get();
     },
 
     _onKeyDown: function(e) {
+        if (this.props.onKeyDown) {
+            this.props.onKeyDown(e);
+        }
         if (e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
@@ -75,7 +99,7 @@ export default React.createClass({
                 >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
                 </AccessibleButton>
-                <div className='mx_Dialog_title'>
+                <div className={'mx_Dialog_title ' + this.props.titleClass}>
                     { this.props.title }
                 </div>
                 { this.props.children }

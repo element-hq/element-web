@@ -31,6 +31,7 @@ import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -209,7 +210,7 @@ const FeaturedRoom = React.createClass({
 
         let permalink = null;
         if (this.props.summaryInfo.profile && this.props.summaryInfo.profile.canonical_alias) {
-            permalink = 'https://matrix.to/#/' + this.props.summaryInfo.profile.canonical_alias;
+            permalink = makeGroupPermalink(this.props.summaryInfo.profile.canonical_alias);
         }
 
         let roomNameNode = null;
@@ -366,7 +367,7 @@ const FeaturedUser = React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
 
-        const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
+        const permalink = makeUserPermalink(this.props.summaryInfo.user_id);
         const userNameNode = <a href={permalink} onClick={this.onClick}>{ name }</a>;
         const httpUrl = MatrixClientPeg.get()
             .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
@@ -390,7 +391,7 @@ const FeaturedUser = React.createClass({
 });
 
 const GroupContext = {
-    groupStore: React.PropTypes.instanceOf(GroupStore).isRequired,
+    groupStore: PropTypes.instanceOf(GroupStore).isRequired,
 };
 
 CategoryRoomList.contextTypes = GroupContext;
@@ -408,7 +409,7 @@ export default React.createClass({
     },
 
     childContextTypes: {
-        groupStore: React.PropTypes.instanceOf(GroupStore),
+        groupStore: PropTypes.instanceOf(GroupStore),
     },
 
     getChildContext: function() {

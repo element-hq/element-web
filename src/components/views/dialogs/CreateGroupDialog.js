@@ -55,11 +55,15 @@ export default React.createClass({
 
     _checkGroupId: function(e) {
         let error = null;
-        if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
+        if (!this.state.groupId) {
+            error = _t("Community IDs cannot not be empty.");
+        } else if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
             error = _t("Community IDs may only contain characters a-z, 0-9, or '=_-./'");
         }
         this.setState({
             groupIdError: error,
+            // Reset createError to get rid of now stale error message
+            createError: null,
         });
         return error;
     },
@@ -159,10 +163,10 @@ export default React.createClass({
                         { createErrorNode }
                     </div>
                     <div className="mx_Dialog_buttons">
+                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                         <button onClick={this._onCancel}>
                             { _t("Cancel") }
                         </button>
-                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                     </div>
                 </form>
             </BaseDialog>

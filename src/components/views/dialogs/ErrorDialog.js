@@ -26,20 +26,21 @@ limitations under the License.
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'ErrorDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {

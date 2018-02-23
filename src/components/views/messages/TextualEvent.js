@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const TextForEvent = require('../../../TextForEvent');
 import sdk from '../../../index';
@@ -26,7 +27,7 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
     },
 
     render: function() {

@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
+import url from 'url';
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -43,6 +44,8 @@ const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 // And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+
+const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
 /*
  * Return true if the given string contains emoji
@@ -152,6 +155,25 @@ export function sanitizedHtmlNode(insaneHtml) {
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
+/**
+ * Tests if a URL from an untrusted source may be safely put into the DOM
+ * The biggest threat here is javascript: URIs.
+ * Note that the HTML sanitiser library has its own internal logic for
+ * doing this, to which we pass the same list of schemes. This is used in
+ * other places we need to sanitise URLs.
+ * @return true if permitted, otherwise false
+ */
+export function isUrlPermitted(inputUrl) {
+    try {
+        const parsed = url.parse(inputUrl);
+        if (!parsed.protocol) return false;
+        // URL parser protocol includes the trailing colon
+        return PERMITTED_URL_SCHEMES.includes(parsed.protocol.slice(0, -1));
+    } catch (e) {
+        return false;
+    }
+}
+
 const sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
@@ -172,7 +194,7 @@ const sanitizeHtmlParams = {
     // Lots of these won't come up by default because we don't allow them
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
     // URL schemes we permit
-    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'magnet'],
+    allowedSchemes: PERMITTED_URL_SCHEMES,
 
     allowProtocolRelative: false,
 

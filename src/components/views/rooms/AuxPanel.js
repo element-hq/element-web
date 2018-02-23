@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from '../../../index';
 import dis from "../../../dispatcher";
@@ -29,27 +30,27 @@ module.exports = React.createClass({
 
     propTypes: {
         // js-sdk room object
-        room: React.PropTypes.object.isRequired,
-        userId: React.PropTypes.string.isRequired,
-        showApps: React.PropTypes.bool, // Render apps
-        hideAppsDrawer: React.PropTypes.bool, // Do not display apps drawer and content (may still be rendered)
+        room: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        showApps: PropTypes.bool, // Render apps
+        hideAppsDrawer: PropTypes.bool, // Do not display apps drawer and content (may still be rendered)
 
         // Conference Handler implementation
-        conferenceHandler: React.PropTypes.object,
+        conferenceHandler: PropTypes.object,
 
         // set to true to show the file drop target
-        draggingFile: React.PropTypes.bool,
+        draggingFile: PropTypes.bool,
 
         // set to true to show the 'active conf call' banner
-        displayConfCallNotification: React.PropTypes.bool,
+        displayConfCallNotification: PropTypes.bool,
 
         // maxHeight attribute for the aux panel and the video
         // therein
-        maxHeight: React.PropTypes.number,
+        maxHeight: PropTypes.number,
 
         // a callback which is called when the content of the aux panel changes
         // content in a way that is likely to make it change size.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
     },
 
     defaultProps: {

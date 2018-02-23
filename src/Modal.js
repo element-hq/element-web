@@ -19,6 +19,7 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 import Analytics from './Analytics';
 import sdk from './index';
 
@@ -33,7 +34,7 @@ const AsyncWrapper = React.createClass({
         /** A function which takes a 'callback' argument which it will call
          * with the real component once it loads.
          */
-        loader: React.PropTypes.func.isRequired,
+        loader: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

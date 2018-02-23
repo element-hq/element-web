@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const Avatar = require('../../../Avatar');
 const sdk = require("../../../index");
 const dispatcher = require("../../../dispatcher");
@@ -25,15 +26,15 @@ module.exports = React.createClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
-        member: React.PropTypes.object.isRequired,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string,
+        member: PropTypes.object.isRequired,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
         // The onClick to give the avatar
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
         // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
-        viewUserOnClick: React.PropTypes.bool,
-        title: React.PropTypes.string,
+        viewUserOnClick: PropTypes.bool,
+        title: PropTypes.string,
     },
 
     getDefaultProps: function() {

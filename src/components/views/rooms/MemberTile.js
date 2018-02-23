@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require('../../../index');
@@ -28,7 +29,7 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
 
     propTypes: {
-        member: React.PropTypes.any.isRequired, // RoomMember
+        member: PropTypes.any.isRequired, // RoomMember
     },
 
     getInitialState: function() {

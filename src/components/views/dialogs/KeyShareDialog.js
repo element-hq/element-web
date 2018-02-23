@@ -16,6 +16,7 @@ limitations under the License.
 
 import Modal from '../../../Modal';
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 
 import { _t, _td } from '../../../languageHandler';
@@ -30,10 +31,10 @@ import { _t, _td } from '../../../languageHandler';
  */
 export default React.createClass({
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        userId: React.PropTypes.string.isRequired,
-        deviceId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        deviceId: PropTypes.string.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
@@ -27,6 +28,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -35,10 +37,10 @@ module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        room: React.PropTypes.object.isRequired,
-        showApps: React.PropTypes.bool, // Should apps be rendered
-        hide: React.PropTypes.bool, // If rendered, should apps drawer be visible
+        userId: PropTypes.string.isRequired,
+        room: PropTypes.object.isRequired,
+        showApps: PropTypes.bool, // Should apps be rendered
+        hide: PropTypes.bool, // If rendered, should apps drawer be visible
     },
 
     defaultProps: {
@@ -139,6 +141,9 @@ module.exports = React.createClass({
             '$matrix_room_id': this.props.room.roomId,
             '$matrix_display_name': user ? user.displayName : this.props.userId,
             '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
+
+            // TODO: Namespace themes through some standard
+            '$theme': SettingsStore.getValue("theme"),
         };
 
         app.id = appId;

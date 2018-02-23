@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import url from 'url';
 import classnames from 'classnames';
 
@@ -69,12 +70,12 @@ export const PasswordAuthEntry = React.createClass({
     },
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        submitAuthDict: React.PropTypes.func.isRequired,
-        errorText: React.PropTypes.string,
+        matrixClient: PropTypes.object.isRequired,
+        submitAuthDict: PropTypes.func.isRequired,
+        errorText: PropTypes.string,
         // is the auth logic currently waiting for something to
         // happen?
-        busy: React.PropTypes.bool,
+        busy: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -158,10 +159,10 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 
     propTypes: {
-        submitAuthDict: React.PropTypes.func.isRequired,
-        stageParams: React.PropTypes.object.isRequired,
-        errorText: React.PropTypes.string,
-        busy: React.PropTypes.bool,
+        submitAuthDict: PropTypes.func.isRequired,
+        stageParams: PropTypes.object.isRequired,
+        errorText: PropTypes.string,
+        busy: PropTypes.bool,
     },
 
     _onCaptchaResponse: function(response) {
@@ -200,15 +201,15 @@ export const EmailIdentityAuthEntry = React.createClass({
     },
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        submitAuthDict: React.PropTypes.func.isRequired,
-        authSessionId: React.PropTypes.string.isRequired,
-        clientSecret: React.PropTypes.string.isRequired,
-        inputs: React.PropTypes.object.isRequired,
-        stageState: React.PropTypes.object.isRequired,
-        fail: React.PropTypes.func.isRequired,
-        setEmailSid: React.PropTypes.func.isRequired,
-        makeRegistrationUrl: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        submitAuthDict: PropTypes.func.isRequired,
+        authSessionId: PropTypes.string.isRequired,
+        clientSecret: PropTypes.string.isRequired,
+        inputs: PropTypes.object.isRequired,
+        stageState: PropTypes.object.isRequired,
+        fail: PropTypes.func.isRequired,
+        setEmailSid: PropTypes.func.isRequired,
+        makeRegistrationUrl: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -275,15 +276,15 @@ export const MsisdnAuthEntry = React.createClass({
     },
 
     propTypes: {
-        inputs: React.PropTypes.shape({
-            phoneCountry: React.PropTypes.string,
-            phoneNumber: React.PropTypes.string,
+        inputs: PropTypes.shape({
+            phoneCountry: PropTypes.string,
+            phoneNumber: PropTypes.string,
         }),
-        fail: React.PropTypes.func,
-        clientSecret: React.PropTypes.func,
-        submitAuthDict: React.PropTypes.func.isRequired,
-        matrixClient: React.PropTypes.object,
-        submitAuthDict: React.PropTypes.func,
+        fail: PropTypes.func,
+        clientSecret: PropTypes.func,
+        submitAuthDict: PropTypes.func.isRequired,
+        matrixClient: PropTypes.object,
+        submitAuthDict: PropTypes.func,
     },
 
     getInitialState: function() {
@@ -374,7 +375,7 @@ export const MsisdnAuthEntry = React.createClass({
             return (
                 <div>
                     <p>{ _t("A text message has been sent to %(msisdn)s",
-                        { msisdn: <i>this._msisdn</i> },
+                        { msisdn: <i>{ this._msisdn }</i> },
                     ) }
                     </p>
                     <p>{ _t("Please enter the code it contains:") }</p>
@@ -405,11 +406,11 @@ export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        authSessionId: React.PropTypes.string.isRequired,
-        loginType: React.PropTypes.string.isRequired,
-        submitAuthDict: React.PropTypes.func.isRequired,
-        errorText: React.PropTypes.string,
+        matrixClient: PropTypes.object.isRequired,
+        authSessionId: PropTypes.string.isRequired,
+        loginType: PropTypes.string.isRequired,
+        submitAuthDict: PropTypes.func.isRequired,
+        errorText: PropTypes.string,
     },
 
     componentWillMount: function() {

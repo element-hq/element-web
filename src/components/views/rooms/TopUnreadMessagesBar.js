@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const sdk = require('../../../index');
 
@@ -25,8 +26,8 @@ module.exports = React.createClass({
     displayName: 'TopUnreadMessagesBar',
 
     propTypes: {
-        onScrollUpClick: React.PropTypes.func,
-        onCloseClick: React.PropTypes.func,
+        onScrollUpClick: PropTypes.func,
+        onCloseClick: PropTypes.func,
     },
 
     render: function() {

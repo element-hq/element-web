@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from "react";
+import PropTypes from 'prop-types';
 import {ContentRepo} from "matrix-js-sdk";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from "../../../index";
@@ -25,11 +26,11 @@ module.exports = React.createClass({
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     propTypes: {
-        room: React.PropTypes.object,
-        oobData: React.PropTypes.object,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string,
+        room: PropTypes.object,
+        oobData: PropTypes.object,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
     },
 
     getDefaultProps: function() {

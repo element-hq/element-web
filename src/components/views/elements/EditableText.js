@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const KEY_TAB = 9;
 const KEY_SHIFT = 16;
@@ -26,18 +27,18 @@ module.exports = React.createClass({
     displayName: 'EditableText',
 
     propTypes: {
-        onValueChanged: React.PropTypes.func,
-        initialValue: React.PropTypes.string,
-        label: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        className: React.PropTypes.string,
-        labelClassName: React.PropTypes.string,
-        placeholderClassName: React.PropTypes.string,
+        onValueChanged: PropTypes.func,
+        initialValue: PropTypes.string,
+        label: PropTypes.string,
+        placeholder: PropTypes.string,
+        className: PropTypes.string,
+        labelClassName: PropTypes.string,
+        placeholderClassName: PropTypes.string,
         // Overrides blurToSubmit if true
-        blurToCancel: React.PropTypes.bool,
+        blurToCancel: PropTypes.bool,
         // Will cause onValueChanged(value, true) to fire on blur
-        blurToSubmit: React.PropTypes.bool,
-        editable: React.PropTypes.bool,
+        blurToSubmit: PropTypes.bool,
+        editable: PropTypes.bool,
     },
 
     Phases: {

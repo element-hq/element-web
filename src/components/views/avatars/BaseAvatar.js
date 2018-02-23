@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
 import sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -23,16 +25,20 @@ module.exports = React.createClass({
     displayName: 'BaseAvatar',
 
     propTypes: {
-        name: React.PropTypes.string.isRequired, // The name (first initial used as default)
-        idName: React.PropTypes.string, // ID for generating hash colours
-        title: React.PropTypes.string, // onHover title text
-        url: React.PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
-        urls: React.PropTypes.array, // [highest_priority, ... , lowest_priority]
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
+        name: PropTypes.string.isRequired, // The name (first initial used as default)
+        idName: PropTypes.string, // ID for generating hash colours
+        title: PropTypes.string, // onHover title text
+        url: PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
+        urls: PropTypes.array, // [highest_priority, ... , lowest_priority]
+        width: PropTypes.number,
+        height: PropTypes.number,
         // XXX resizeMethod not actually used.
-        resizeMethod: React.PropTypes.string,
-        defaultToInitialLetter: React.PropTypes.bool, // true to add default url
+        resizeMethod: PropTypes.string,
+        defaultToInitialLetter: PropTypes.bool, // true to add default url
+    },
+
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getDefaultProps: function() {
@@ -46,6 +52,16 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return this._getState(this.props);
+    },
+
+    componentWillMount() {
+        this.unmounted = false;
+        this.context.matrixClient.on('sync', this.onClientSync);
+    },
+
+    componentWillUnmount() {
+        this.unmounted = true;
+        this.context.matrixClient.removeListener('sync', this.onClientSync);
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -63,6 +79,23 @@ module.exports = React.createClass({
                     break;
                 }
             }
+        }
+    },
+
+    onClientSync(syncState, prevState) {
+        if (this.unmounted) return;
+
+        // Consider the client reconnected if there is no error with syncing.
+        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        const reconnected = syncState !== "ERROR" && prevState !== syncState;
+        if (reconnected &&
+            // Did we fall back?
+            this.state.urlsIndex > 0
+        ) {
+            // Start from the highest priority URL again
+            this.setState({
+                urlsIndex: 0,
+            });
         }
     },
 

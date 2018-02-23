@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { field_input_incorrect } from '../../../UiEffects';
 import sdk from '../../../index';
 import Email from '../../../email';
@@ -40,25 +41,25 @@ module.exports = React.createClass({
 
     propTypes: {
         // Values pre-filled in the input boxes when the component loads
-        defaultEmail: React.PropTypes.string,
-        defaultPhoneCountry: React.PropTypes.string,
-        defaultPhoneNumber: React.PropTypes.string,
-        defaultUsername: React.PropTypes.string,
-        defaultPassword: React.PropTypes.string,
-        teamsConfig: React.PropTypes.shape({
+        defaultEmail: PropTypes.string,
+        defaultPhoneCountry: PropTypes.string,
+        defaultPhoneNumber: PropTypes.string,
+        defaultUsername: PropTypes.string,
+        defaultPassword: PropTypes.string,
+        teamsConfig: PropTypes.shape({
             // Email address to request new teams
-            supportEmail: React.PropTypes.string,
-            teams: React.PropTypes.arrayOf(React.PropTypes.shape({
+            supportEmail: PropTypes.string,
+            teams: PropTypes.arrayOf(React.PropTypes.shape({
                 // The displayed name of the team
-                "name": React.PropTypes.string,
+                "name": PropTypes.string,
                 // The domain of team email addresses
-                "domain": React.PropTypes.string,
+                "domain": PropTypes.string,
             })).required,
         }),
 
-        minPasswordLength: React.PropTypes.number,
-        onError: React.PropTypes.func,
-        onRegisterClick: React.PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
+        minPasswordLength: PropTypes.number,
+        onError: PropTypes.func,
+        onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
     },
 
     getDefaultProps: function() {
