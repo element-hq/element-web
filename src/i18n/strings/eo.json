@@ -222,5 +222,8 @@
     "Invite to this community": "Inviti al tiu ĉi komunumo",
     "Add rooms to this community": "Aldoni ĉambrojn al ĉi tiu komunumo",
     "Online": "Enreta",
-    "Reply": "Respondi"
+    "Reply": "Respondi",
+    "%(count)s Members|other": "%(count)s Membroj",
+    "%(count)s Members|one": "%(count)s Membro",
+    "View Community": "Vidi Komunumon"
 }
