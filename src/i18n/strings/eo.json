@@ -956,5 +956,7 @@
     "Send a message (unencrypted)…": "Sendi mesaĝon (neĉifritan)…",
     "Replying": "Respondanta",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privato gravas al ni, tial ni ne kolektas personajn aŭ spureblajn datumojn por nia analizo.",
-    "Learn more about how we use analytics.": "Lernu pli pri nia uzo de analiziloj."
+    "Learn more about how we use analytics.": "Lernu pli pri nia uzo de analiziloj.",
+    "Your homeserver's URL": "La URL de via servilo",
+    "Your identity server's URL": "La URL de via identigan servilo"
 }
