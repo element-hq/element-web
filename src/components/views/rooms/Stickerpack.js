@@ -55,6 +55,15 @@ export default class Stickerpack extends React.Component {
 
     _removeStickerpackWidgets() {
         console.warn('Removing stickerpack widgets');
+        if (this.widgetId) {
+            this.scalarClient.disableWidgetAssets('stickerpack', this.widgetId).then(() => {
+                console.warn('Assets disabled');
+            }).catch((err) => {
+                console.error('Failed to disable assets');
+            });
+        } else {
+            console.warn('No widget ID specified, not disabling assets');
+        }
         Widgets.removeStickerpackWidgets();
         this._getStickerPickerWidget();
         this.stickersMenu.close();
@@ -151,6 +160,7 @@ export default class Stickerpack extends React.Component {
             // Default content to show if stickerpack widget not added
             console.warn("No available sticker picker widgets");
             stickersContent = this.defaultStickersContent;
+            this.widgetId = null;
             this.forceUpdate();
         }
         this.setState({

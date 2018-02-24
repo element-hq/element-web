@@ -148,6 +148,33 @@ class ScalarAuthClient {
         return defer.promise;
     }
 
+    disableWidgetAssets(widgetType, widgetId) {
+        let url = SdkConfig.get().integrations_rest_url + '/widgets/set_assets_state';
+        url = this.getStarterLink(url);
+        return new Promise((resolve, reject) => {
+            request({
+                method: 'GET',
+                uri: url,
+                json: true,
+                qs: {
+                    'widget_type': widgetType,
+                    'widget_id': widgetId,
+                    'state': 'disable',
+                },
+            }, (err, response, body) => {
+                if (err) {
+                    reject(err);
+                } else if (response.statusCode / 100 !== 2) {
+                    reject({statusCode: response.statusCode});
+                } else if (!body) {
+                    reject(new Error("Failed to set widget assets state"));
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
     getScalarInterfaceUrlForRoom(room, screen, id) {
         const roomId = room.roomId;
         const roomName = room.name;
