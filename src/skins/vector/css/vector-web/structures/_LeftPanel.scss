@@ -21,6 +21,27 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_LeftPanel_container {
+    display: flex;
+    /* LeftPanel 235px */
+    flex: 0 0 235px;
+}
+
+.mx_LeftPanel_container.mx_LeftPanel_container_hasTagPanel {
+    /* TagPanel 60px + LeftPanel 235px */
+    flex: 0 0 295px;
+}
+
+.mx_LeftPanel_container_collapsed {
+    /* Collapsed LeftPanel 60px */
+    flex: 0 0 60px;
+}
+
+.mx_LeftPanel_container_collapsed.mx_LeftPanel_container_hasTagPanel {
+    /* TagPanel 60px + Collapsed LeftPanel 60px */
+    flex: 0 0 120px;
+}
+
 .mx_LeftPanel_hideButton {
     position: absolute;
     top: 10px;
