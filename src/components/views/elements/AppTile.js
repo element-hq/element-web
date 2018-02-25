@@ -587,30 +587,30 @@ export default class AppTile extends React.Component {
 AppTile.displayName ='AppTile';
 
 AppTile.propTypes = {
-    id: React.PropTypes.string.isRequired,
-    url: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    room: React.PropTypes.object.isRequired,
-    type: React.PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    room: PropTypes.object.isRequired,
+    type: PropTypes.string.isRequired,
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
-    fullWidth: React.PropTypes.bool,
+    fullWidth: PropTypes.bool,
     // UserId of the current user
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
     // UserId of the entity that added / modified the widget
-    creatorUserId: React.PropTypes.string,
-    waitForIframeLoad: React.PropTypes.bool,
-    showMenubar: React.PropTypes.bool,
+    creatorUserId: PropTypes.string,
+    waitForIframeLoad: PropTypes.bool,
+    showMenubar: PropTypes.bool,
     // Should the AppTile render itself
-    show: React.PropTypes.bool,
+    show: PropTypes.bool,
     // Optional onEditClickHandler (overrides default behaviour)
-    onEditClick: React.PropTypes.func,
+    onEditClick: PropTypes.func,
     // Optional onDeleteClickHandler (overrides default behaviour)
-    onDeleteClick: React.PropTypes.func,
+    onDeleteClick: PropTypes.func,
     // Optionally hide the tile title
-    showTitle: React.PropTypes.bool,
+    showTitle: PropTypes.bool,
     // Optionally hide the tile minimise icon
-    showMinimise: React.PropTypes.bool,
+    showMinimise: PropTypes.bool,
 };
 
 AppTile.defaultProps = {
