@@ -94,3 +94,19 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_MemberInfo label {
+    font-size: 13px;
+}
+
+.mx_MemberInfo label .mx_MemberInfo_label_text {
+    display: inline-block;
+    max-width: 180px;
+    vertical-align: text-top;
+}
+
+.mx_MemberInfo input[type="radio"] {
+    vertical-align: -2px;
+    margin-right: 5px;
+    margin-left: 8px;
+}
+

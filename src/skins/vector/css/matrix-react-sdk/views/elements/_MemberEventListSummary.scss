@@ -50,11 +50,22 @@ limitations under the License.
 }
 
 .mx_MatrixChat_useCompactLayout {
+    .mx_MemberEventListSummary {
+        font-size: 13px;
+        .mx_EventTile_line {
+            line-height: 20px;
+        }
+    }
+
     .mx_MemberEventListSummary_line {
         line-height: 22px;
     }
 
     .mx_MemberEventListSummary_toggle {
-        margin-top: 2px;
+        margin-top: 3px;
+    }
+
+    .mx_TextualEvent.mx_MemberEventListSummary_summary {
+        font-size: 13px;
     }
 }

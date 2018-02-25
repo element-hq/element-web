@@ -18,20 +18,21 @@ limitations under the License.
     padding: 10px 0px;
 }
 
+.mx_MemberDeviceInfo.mx_DeviceVerifyButtons {
+    padding: 6px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
 .mx_MemberDeviceInfo_textButton {
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    border-radius: 17px;
-    text-align: center;
-    padding-left: 1em;
-    padding-right: 1em;
-    width: 95px;
-    border: 0px;
-    font-size: 14px;
+    @mixin mx_DialogButton_small;
+    margin: 2px;
+    flex: 1;
+}
 
-    cursor: pointer;
-    display: inline;
+.mx_MemberDeviceInfo_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_MemberDeviceInfo_deviceId {
@@ -42,11 +43,6 @@ limitations under the License.
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.mx_MemberDeviceInfo_blacklist,
-.mx_MemberDeviceInfo_unblacklist {
-    float: right;
 }
 
 /* "Unblacklist" is too long for a regular button: make it wider and

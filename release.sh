@@ -11,7 +11,7 @@ cd `dirname $0`
 
 for i in matrix-js-sdk matrix-react-sdk
 do
-    depver=`cat package.json | jq -r .dependencies.\"$i\"`
+    depver=`cat package.json | jq -r .dependencies[\"$i\"]`
     latestver=`npm show $i version`
     if [ "$depver" != "$latestver" ]
     then

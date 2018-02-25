@@ -23,9 +23,11 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_RoomDropTarget">
-                <div className="mx_RoomDropTarget_label">
-                    { this.props.label }
+            <div className="mx_RoomDropTarget_container">
+                <div className="mx_RoomDropTarget">
+                    <div className="mx_RoomDropTarget_label">
+                        { this.props.label }
+                    </div>
                 </div>
             </div>
         );

@@ -16,13 +16,13 @@ released version of Riot:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the vector-x.x.x directory to an appropriate name
+1. Move (or symlink) the riot-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot-master.asc
+at https://riot.im/packages/keys/riot.asc
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -62,7 +62,7 @@ to build.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
-   scripts/fetch-develop-deps.sh
+   scripts/fetch-develop.deps.sh
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
@@ -115,7 +115,9 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
-1. `integrations_ui_url`: URL to the web interface for the integrations server.
+1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
+   server is not Riot and normally not your Home Server either. The integration server settings
+   may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
@@ -126,9 +128,14 @@ You can configure the app by copying `config.sample.json` to
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
 1. `themes`: List of the themes available to the user. The first one will be default for new users and for those that haven't expicitly chosen their theme. Learn how to create your own Riot themes at https://github.com/vector-im/riot-web/blob/master/docs/theming.md
+1. `piwik`: an object containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting Analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
+    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
 
 Running as a Desktop app
 ========================
@@ -313,31 +320,51 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-Issues will be triaged by the core team using the following primary set of tags:
+Issues will be triaged by the core team using the below set of tags.
 
-priority:
+Tags are meant to be used in combination - e.g.:
+ * P1 critical bug == really urgent stuff that should be next in the bugfixing todo list
+ * "release blocker" == stuff which is blocking us from cutting the next release.
+ * P1 feature type:voip == what VoIP features should we be working on next?
 
-* P1: top priority; typically blocks releases
+priority: **compulsory**
+
+* P1: top priority - i.e. pool of stuff which we should be working on next
 * P2: still need to fix, but lower than P1
 * P3: non-urgent
-* P4: intereseting idea - bluesky some day
+* P4: interesting idea - bluesky some day
 * P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
-bug or feature:
+bug or feature: **compulsory**
 
 * bug
 * feature
 
-bug severity:
+bug severity: **compulsory, if bug**
 
-* cosmetic - feature works functionally but UI/UX is broken
 * critical - whole app doesn't work
 * major - entire feature doesn't work
 * minor - partially broken feature (but still usable)
+* cosmetic - feature works functionally but UI/UX is broken
 
-additional categories:
+types
+* type:* - refers to a particular part of the app; used to filter bugs
+  on a given topic - e.g. VOIP, signup, timeline, etc.
+
+additional categories (self-explanatory):
 
 * release blocker
 * ui/ux (think of this as cosmetic)
 * network (specific to network conditions)
-* platform (platform specific)
+* platform specific
+* accessibility
+* maintenance
+* performance
+* i18n
+* blocked - whether this issue currently can't be progressed due to outside factors
+
+community engagement
+* easy
+* hacktoberfest
+* bounty? - proposal to be included in a bounty programme
+* bounty - included in Status Open Bounty

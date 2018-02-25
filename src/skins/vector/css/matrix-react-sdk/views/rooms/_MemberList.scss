@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberList {
+.mx_MemberList,
+.mx_GroupMemberList,
+.mx_GroupRoomList {
     height: 100%;
 
     margin-top: 12px;
@@ -44,8 +46,10 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList_query {
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+.mx_MemberList_query,
+.mx_GroupMemberList_query,
+.mx_GroupRoomList_query {
+    font-family: $font-family;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;
@@ -57,13 +61,17 @@ limitations under the License.
     width: 189px;
 }
 
-.mx_MemberList_query::-moz-placeholder {
+.mx_MemberList_query::-moz-placeholder,
+.mx_GroupMemberList_query::-moz-placeholder,
+.mx_GroupRoomList_query::-moz-placeholder {
     color: $primary-fg-color;
     opacity: 0.5;
     font-size: 14px;
 }
 
-.mx_MemberList_query::-webkit-input-placeholder {
+.mx_MemberList_query::-webkit-input-placeholder,
+.mx_GroupMemberList_query::-webkit-input-placeholder,
+.mx_GroupRoomList_query::-webkit-input-placeholder {
     color: $primary-fg-color;
     opacity: 0.5;
     font-size: 14px;
@@ -84,6 +92,7 @@ limitations under the License.
 }
 */
 
+.mx_GroupMemberList_invited h2,
 .mx_MemberList_invited h2 {
     text-transform: uppercase;
     color: $h3-color;

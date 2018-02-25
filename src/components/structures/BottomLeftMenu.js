@@ -19,9 +19,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import Velocity from 'velocity-vector';
 import 'velocity-vector/velocity.ui';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 const CALLOUT_ANIM_DURATION = 1000;
 
@@ -188,5 +188,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });

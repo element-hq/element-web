@@ -16,6 +16,9 @@ limitations under the License.
 
 /* joining.js: tests for the various paths when joining a room */
 
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import Platform from '../../src/vector/platform';
+
 require('skin-sdk');
 
 var jssdk = require('matrix-js-sdk');
@@ -84,6 +87,8 @@ describe('joining a room', function () {
             localStorage.setItem("mx_is_url", IS_URL );
             localStorage.setItem("mx_access_token", ACCESS_TOKEN );
             localStorage.setItem("mx_user_id", USER_ID);
+
+            PlatformPeg.set(new Platform());
 
             var mc = (
                 <MatrixChat config={{}}
@@ -176,8 +181,9 @@ describe('joining a room', function () {
 
                 return Promise.delay(1);
             }).then(() => {
-                // We've joined, expect this to false
-                expect(roomView.state.joining).toBe(false);
+                // NB. we don't expect the 'joining' flag to reset at any point:
+                // it will stay set and we observe whether we have Room object for
+                // the room and whether our member event shows we're joined.
 
                 // now send the room down the /sync pipe
                 httpBackend.when('GET', '/sync').

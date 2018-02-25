@@ -14,12 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_RoomDropTarget_container {
+    background-color: $secondary-accent-color;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+}
+
+.collapsed .mx_RoomDropTarget_container {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 .mx_RoomDropTarget {
     font-size: 13px;
-    margin-left: 18px;
-    margin-right: 18px;
-    margin-top: 8px;
-    margin-bottom: 7px;
     padding-top: 5px;
     padding-bottom: 5px;
     border: 1px dashed $accent-color;
@@ -28,10 +37,6 @@ limitations under the License.
     border-radius: 4px;
 }
 
-.collapsed .mx_RoomDropTarget {
-    margin-right: 10px;
-    margin-left: 10px;
-}
 
 .mx_RoomDropTarget_label {
     position: relative;

@@ -18,6 +18,10 @@ limitations under the License.
     position: relative;
 }
 
+.mx_Dropdown_disabled {
+    opacity: 0.3;
+}
+
 .mx_Dropdown_input {
     position: relative;
     border-radius: 3px;

@@ -94,17 +94,20 @@ distdir="$builddir/electron_app/dist"
 pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
+rm -r "$projdir/electron_app/dist" || true
+mkdir -p "$projdir/electron_app/dist/unsigned/"
 
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
 mkdir -p "$pubdir/install/macos"
 cp $distdir/mac/*.dmg "$pubdir/install/macos/"
 
+# Windows installers go to the dist dir because they need signing
 mkdir -p "$pubdir/install/win32/ia32/"
-cp $distdir/win-ia32/*.exe "$pubdir/install/win32/ia32/"
+cp $distdir/win-ia32/*.exe "$projdir/electron_app/dist/unsigned/"
 
 mkdir -p "$pubdir/install/win32/x64/"
-cp $distdir/win/*.exe "$pubdir/install/win32/x64/"
+cp $distdir/win/*.exe "$projdir/electron_app/dist/unsigned/"
 
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
@@ -120,11 +123,11 @@ cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
 cp $distdir/win/RELEASES "$pubdir/update/win32/x64/"
 
 # Move the debs to the main project dir's dist folder
-rm -r "$projdir/electron_app/dist" || true
-mkdir -p "$projdir/electron_app/dist"
 cp $distdir/*.deb "$projdir/electron_app/dist/"
 
 rm -rf "$builddir"
 
-echo "Riot Desktop is ready to go in $pubdir: this directory can be hosted on your web server."
+echo "Unsigned Windows installers have been placed in electron_app/dist/unsigned/ - sign them,"
+echo "or just copy them to "$pubdir/install/win32/\<arch\>/""
+echo "Once you've done this, $pubdir can be hosted on your web server."
 echo "deb archives are in electron_app/dist/ - these should be added into your debian repository"

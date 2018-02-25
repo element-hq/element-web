@@ -20,6 +20,7 @@
     <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
     <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    <meta property="og:image" content="https://chat.status.im/img/logos/riot-im-logo-1.png" />
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
@@ -27,7 +28,7 @@
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
             var defaultTheme = (i == 0);
         %>
-           <link rel="<%= defaultTheme ? '' : 'alternate ' %>stylesheet" title="<%= title %>"
+           <link rel="stylesheet"<%= defaultTheme ? '' : 'disabled="disabled"' %> title="<%= title %>"
                href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
@@ -72,6 +73,8 @@
         <source src="media/busy.ogg" type="audio/ogg" />
         <source src="media/busy.mp3" type="audio/mpeg" />
     </audio>
-    <audio id="remoteAudio"/>
+    <audio id="remoteAudio"></audio>
+    <!-- let CSS themes pass constants to the app -->
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"/></div><div id="mx_theme_tertiaryAccentColor"/></div>
   </body>
 </html>

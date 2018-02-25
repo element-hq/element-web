@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var DateUtils = require('matrix-react-sdk/lib/DateUtils');
+import {formatDate} from 'matrix-react-sdk/lib/DateUtils';
 var filesize = require('filesize');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 const Modal = require('matrix-react-sdk/lib/Modal');
@@ -66,7 +66,7 @@ module.exports = React.createClass({
 
     onRedactClick: function() {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-        Modal.createDialog(ConfirmRedactDialog, {
+        Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
                 var self = this;
@@ -76,7 +76,7 @@ module.exports = React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     var code = e.errcode || e.statusCode;
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this image.', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this image. (%(code)s)', {code: code})
                     });
@@ -150,8 +150,16 @@ module.exports = React.createClass({
 
         var eventMeta;
         if(showEventMeta) {
+            // Figure out the sender, defaulting to mxid
+            let sender = this.props.mxEvent.getSender();
+            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+            if (room) {
+                const member = room.getMember(sender);
+                if (member) sender = member.name;
+            }
+
             eventMeta = (<div className="mx_ImageView_metadata">
-                { _t('Uploaded on %(date)s by %(user)s', {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: this.props.mxEvent.getSender()}) }
+                { _t('Uploaded on %(date)s by %(user)s', {date: formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
             </div>);
         }
 

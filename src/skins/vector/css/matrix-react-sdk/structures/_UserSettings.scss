@@ -64,20 +64,13 @@ limitations under the License.
 }
 
 .mx_UserSettings_button {
+    @mixin mx_DialogButton;
     display: inline;
-    vertical-align: middle;
-    border: 0px;
-    border-radius: 36px;
-    font-weight: 400;
-    font-size: 16px;
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    width: auto;
     margin: auto;
-    padding: 7px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
+}
+
+.mx_UserSettings_button:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_UserSettings_button.danger {
@@ -240,6 +233,16 @@ input.mx_UserSettings_phoneNumberField {
 
 .mx_UserSettings_avatarPicker_edit > input {
     display: none;
+}
+
+.mx_UserSettings_avatarPicker_imgContainer {
+    display: inline-block;
+}
+
+.mx_UserSettings_avatarPicker_remove {
+    display: inline-block;
+    float: right;
+    margin-right: -15px;
 }
 
 .mx_UserSettings_advanced_spoiler,

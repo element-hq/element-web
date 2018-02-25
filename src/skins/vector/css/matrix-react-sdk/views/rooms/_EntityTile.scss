@@ -28,7 +28,8 @@ limitations under the License.
     width: 26px;
 }
 
-.mx_EntityTile_avatar {
+.mx_EntityTile_avatar,
+.mx_GroupRoomTile_avatar {
     display: table-cell;
     padding-left: 3px;
     padding-right: 12px;
@@ -48,12 +49,15 @@ limitations under the License.
     right: 6px;
 }
 
-.mx_EntityTile_name {
+.mx_EntityTile_name,
+.mx_GroupRoomTile_name {
     display: table-cell;
     vertical-align: middle;
     overflow: hidden;
     font-size: 14px;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 155px;
 }
 
 .mx_EntityTile_details {
@@ -64,8 +68,6 @@ limitations under the License.
 
 .mx_EntityTile_name_hover {
     font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .mx_EntityTile_chevron {

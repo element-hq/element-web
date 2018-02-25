@@ -21,6 +21,27 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_LeftPanel_container {
+    display: flex;
+    /* LeftPanel 235px */
+    flex: 0 0 235px;
+}
+
+.mx_LeftPanel_container.mx_LeftPanel_container_hasTagPanel {
+    /* TagPanel 60px + LeftPanel 235px */
+    flex: 0 0 295px;
+}
+
+.mx_LeftPanel_container_collapsed {
+    /* Collapsed LeftPanel 60px */
+    flex: 0 0 60px;
+}
+
+.mx_LeftPanel_container_collapsed.mx_LeftPanel_container_hasTagPanel {
+    /* TagPanel 60px + Collapsed LeftPanel 60px */
+    flex: 0 0 120px;
+}
+
 .mx_LeftPanel_hideButton {
     position: absolute;
     top: 10px;
@@ -44,12 +65,13 @@ limitations under the License.
 
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu {
    flex: 0 0 160px;
+   margin-bottom: 9px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
     order: 3;
 
-    border-top: 1px solid rgba(118, 207, 166, 0.2);
+    border-top: 1px solid $panel-divider-color;
     margin-left: 16px; /* gutter */
     margin-right: 16px; /* gutter */
     flex: 0 0 60px;
@@ -77,6 +99,7 @@ limitations under the License.
 .mx_BottomLeftMenu_options .mx_RoleButton {
     margin-left: 0px;
     margin-right: 10px;
+    height: 30px;
 }
 
 .mx_BottomLeftMenu_options .mx_BottomLeftMenu_settings {

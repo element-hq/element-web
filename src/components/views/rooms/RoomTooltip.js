@@ -19,13 +19,16 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require('react-dom');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+import classNames from 'classnames';
 
 module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {
-        // Alllow the tooltip to be styled by the parent element
+        // Class applied to the element used to position the tooltip
         className: React.PropTypes.string.isRequired,
+        // Class applied to the tooltip itself
+        tooltipClassName: React.PropTypes.string,
         // The tooltip is derived from either the room name or a label
         room: React.PropTypes.object,
         label: React.PropTypes.string,
@@ -69,8 +72,12 @@ module.exports = React.createClass({
         style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
         style.display = "block";
 
+        const tooltipClasses = classNames(
+            "mx_RoomTooltip", this.props.tooltipClassName,
+        );
+
         var tooltip = (
-            <div className="mx_RoomTooltip" style={style} >
+            <div className={tooltipClasses} style={style} >
                 <div className="mx_RoomTooltip_chevron"></div>
                 { label }
             </div>
