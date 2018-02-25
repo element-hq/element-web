@@ -335,7 +335,10 @@ function setWidget(event, roomId) {
 
     if (userWidget) {
         const client = MatrixClientPeg.get();
-        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        let userWidgets = {};
+        if (client.getAccountData('m.widgets')) {
+          userWidgets = client.getAccountData('m.widgets').getContent();
+        }
 
         // Delete existing widget with ID
         try {
