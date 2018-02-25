@@ -45,26 +45,26 @@ function getUserWidgets() {
 }
 
 /**
- * Get active stickerpack widgets (stickerpacks are user widgets by nature)
- * @return {[object]} Array containing current / active stickerpack widgets
+ * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
+ * @return {[object]} Array containing current / active stickerpicker widgets
  */
-function getStickerpackWidgets() {
+function getStickerpickerWidgets() {
     const widgets = getUserWidgets();
-    const stickerpackWidgets = widgets.filter((widget) => widget.type='stickerpack');
-    return stickerpackWidgets;
+    const stickerpickerWidgets = widgets.filter((widget) => widget.type='m.stickerpicker');
+    return stickerpickerWidgets;
 }
 
 /**
- * Remove all stickerpack widgets (stickerpacks are user widgets by nature)
+ * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
  */
-function removeStickerpackWidgets() {
+function removeStickerpickerWidgets() {
     const client = MatrixClientPeg.get();
     if (!client) {
         throw new Error('User not logged in');
     }
     const userWidgets = client.getAccountData('m.widgets').getContent() || {};
     Object.entries(userWidgets).forEach(([key, widget]) => {
-        if (widget.type === 'stickerpack') {
+        if (widget.type === 'm.stickerpicker') {
             delete userWidgets[key];
         }
     });
@@ -76,6 +76,6 @@ export default {
     getWidgets,
     getRoomWidgets,
     getUserWidgets,
-    getStickerpackWidgets,
-    removeStickerpackWidgets,
+    getStickerpickerWidgets,
+    removeStickerpickerWidgets,
 };

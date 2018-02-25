@@ -24,7 +24,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import Stickerpack from './Stickerpack';
+import Stickerpicker from './Stickerpicker';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -344,7 +344,7 @@ export default class MessageComposer extends React.Component {
                 hangupButton,
                 callButton,
                 videoCallButton,
-                <Stickerpack key='stickerpack_controls_button' room={this.props.room} />,
+                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
             );
         } else {
             controls.push(

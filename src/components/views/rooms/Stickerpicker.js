@@ -26,14 +26,14 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 
-export default class Stickerpack extends React.Component {
+export default class Stickerpicker extends React.Component {
     constructor(props) {
         super(props);
         this.onShowStickersClick = this.onShowStickersClick.bind(this);
         this.onHideStickersClick = this.onHideStickersClick.bind(this);
         this.onFinished = this.onFinished.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
-        this._removeStickerpackWidgets = this._removeStickerpackWidgets.bind(this);
+        this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
 
         this.defaultStickersContent = (
@@ -53,8 +53,8 @@ export default class Stickerpack extends React.Component {
         };
     }
 
-    _removeStickerpackWidgets() {
-        console.warn('Removing stickerpack widgets');
+    _removeStickerpickerWidgets() {
+        console.warn('Removing Stickerpicker widgets');
         if (this.widgetId) {
             this.scalarClient.disableWidgetAssets('stickerpack', this.widgetId).then(() => {
                 console.warn('Assets disabled');
@@ -64,7 +64,7 @@ export default class Stickerpack extends React.Component {
         } else {
             console.warn('No widget ID specified, not disabling assets');
         }
-        Widgets.removeStickerpackWidgets();
+        Widgets.removeStickerpickerWidgets();
         this._getStickerPickerWidget();
         this.stickersMenu.close();
     }
@@ -109,16 +109,16 @@ export default class Stickerpack extends React.Component {
 
     _getStickerPickerWidget() {
         // Stickers
-        // TODO - Add support for stickerpacks from multiple app stores.
-        // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
-        const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
+        // TODO - Add support for Stickerpickers from multiple app stores.
+        // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpicker UI element.
+        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
         let stickersContent;
 
         // Load stickerpack content
-        if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
+        if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
             // Set default name
-            stickerpackWidget.content.name = stickerpackWidget.name || "Stickerpack";
-            this.widgetId = stickerpackWidget.id;
+            stickerpickerWidget.content.name = stickerpickerWidget.name || "Stickerpack";
+            this.widgetId = stickerpickerWidget.id;
 
             stickersContent = (
                 <div
@@ -137,19 +137,19 @@ export default class Stickerpack extends React.Component {
                         }}
                     >
                         <AppTile
-                            id={stickerpackWidget.id}
-                            url={stickerpackWidget.content.url}
-                            name={stickerpackWidget.content.name}
+                            id={stickerpickerWidget.id}
+                            url={stickerpickerWidget.content.url}
+                            name={stickerpickerWidget.content.name}
                             room={this.props.room}
-                            type={stickerpackWidget.content.type}
+                            type={stickerpickerWidget.content.type}
                             fullWidth={true}
-                            userId={stickerpackWidget.sender || MatrixClientPeg.get().credentials.userId}
+                            userId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
                             creatorUserId={MatrixClientPeg.get().credentials.userId}
                             waitForIframeLoad={true}
                             show={true}
                             showMenubar={true}
                             onEditClick={this._launchManageIntegrations}
-                            onDeleteClick={this._removeStickerpackWidgets}
+                            onDeleteClick={this._removeStickerpickerWidgets}
                             showTitle={false}
                             showMinimise={false}
                         />
@@ -157,7 +157,7 @@ export default class Stickerpack extends React.Component {
                 </div>
             );
         } else {
-            // Default content to show if stickerpack widget not added
+            // Default content to show if stickerpicker widget not added
             console.warn("No available sticker picker widgets");
             stickersContent = this.defaultStickersContent;
             this.widgetId = null;
