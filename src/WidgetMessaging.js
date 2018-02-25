@@ -22,7 +22,6 @@ limitations under the License.
 import URL from 'url';
 import dis from './dispatcher';
 import MatrixPostMessageApi from './MatrixPostMessageApi';
-import Promise from 'bluebird';
 
 const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -251,32 +250,26 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
 
     /**
      * Request a screenshot from a widget
-     * @return {Promise} To be resolved when screenshot has been generated
+     * @return {Promise} To be resolved with screenshot data when it has been generated
      */
     getScreenshot() {
-        return new Promise((resolve, reject) => {
-            this.exec({
+        return this.exec({
                 api: OUTBOUND_API_NAME,
                 action: "screenshot",
-            }).then(function(response) {
-                resolve(response.screenshot);
-            }).catch((error) => {
-                reject(Error("Failed to get screenshot: " + error.message));
-            });
-        });
+            }).then((response) => response.screenshot)
+            .catch((error) => new Error("Failed to get screenshot: " + error.message));
     }
 
+    /**
+     * Request capabilities required by the widget
+     * @return {Promise} To be resolved with an array of requested widget capabilities
+     */
     getCapabilities() {
-        return new Promise((resolve, reject) => {
-            this.exec({
+        return this.exec({
                 api: OUTBOUND_API_NAME,
                 action: "capabilities",
-            }).then(function(response) {
-                resolve(response.capabilities);
-            }).catch((error) => {
-                reject(Error("Failed to get capabilities: " + error.message));
-            });
-        });
+            }).then((response) => response.capabilities)
+            .catch((error) => new Error("Failed to get capabilities: " + error.message));
     }
 }
 
