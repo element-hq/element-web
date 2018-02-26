@@ -198,6 +198,9 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
         } else if (action === 'sticker_message') {
             dis.dispatch({action: 'sticker_message', data: event.data.widgetData, widgetId: event.data.widgetId});
         } else if (action === 'integration_manager_open') {
+            // Close the stickerpicker
+            dis.dispatch({action: 'stickerpicker_close'});
+            // Open the integration manager
             const data = event.data.widgetData;
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;

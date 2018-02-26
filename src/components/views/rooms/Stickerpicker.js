@@ -104,6 +104,8 @@ export default class Stickerpicker extends React.Component {
         if (payload.action === "user_widget_updated") {
             this._getStickerPickerWidget();
             return;
+        } else if (payload.action === "stickerpicker_close") {
+          this.stickersMenu.close();
         }
     }
 

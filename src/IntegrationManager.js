@@ -57,7 +57,6 @@ export default class IntegrationManager {
       return;
     }
     integType = 'type_' + integType;
-    console.warn("Current room", RoomViewStore.getRoomId());
     const src = (global.im.client && global.im.client.hasCredentials()) ?
       global.im.client.getScalarInterfaceUrlForRoom(
         RoomViewStore.getRoomId(),
