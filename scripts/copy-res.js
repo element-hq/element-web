@@ -9,6 +9,7 @@
 // This could readily be automated, but it's nice to explicitly
 // control when we languages are available.
 const INCLUDE_LANGS = [
+    {'value': 'bg', 'label': 'Български'},
     {'value': 'ca', 'label': 'Català'},
     {'value': 'da', 'label': 'Dansk'},
     {'value': 'de_DE', 'label': 'Deutsch'},
