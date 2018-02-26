@@ -37,7 +37,7 @@
     "Filter room names": "Filtrar salas por título",
     "Forget": "Esquecer",
     "Forward Message": "Encaminhar",
-    "Guests can join": "Convidados podem entrar",
+    "Guests can join": "Convidadas/os podem entrar",
     "Invite to this room": "Convidar para esta sala",
     "Keywords": "Palavras-chave",
     "Leave": "Sair",
@@ -51,7 +51,7 @@
     "Messages sent by bot": "Mensagens enviadas por bots",
     "more": "ver mais",
     "Mute": "Mudo",
-    "No rooms to show": "Não existem salas a serem exibidas",
+    "No rooms to show": "Nenhuma sala para mostrar",
     "Noisy": "Barulhento",
     "Notification targets": "Alvos de notificação",
     "Notifications": "Notificações",
@@ -87,7 +87,7 @@
     "View Decrypted Source": "Ver a fonte descriptografada",
     "View Source": "Ver a fonte",
     "When I'm invited to a room": "Quando sou convidada(o) a uma sala",
-    "World readable": "Público",
+    "World readable": "Aberto publicamente à leitura",
     "You cannot delete this image. (%(code)s)": "Você não pode apagar esta imagem. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "Você não pode apagar esta mensagem. (%(code)s)",
     "You are not receiving desktop notifications": "Você não está recebendo notificações desktop",
@@ -223,5 +223,8 @@
     "Invite to this community": "Convidar para essa comunidade",
     "Add rooms to this community": "Adicionar salas na comunidade",
     "Reply": "Responder",
-    "%(count)s Members|one": "%(count)s Membros"
+    "%(count)s Members|one": "%(count)s Membros",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Você pode usar as opções customizadas de servidor para conectar-se a outros servidores Matrix ao especificar uma outra URL de Servidor de Base (homeserver).<br/> Isso permite que você use o Riot com uma conta Matrix existente em outro servidor de base.<br/><br/>Você também pode definir um servidor de identidade customizado, mas neste caso você não poderá convidar outras pesoas por endereço de email, ou ser convidada/o pelo seu endereço de email.",
+    "Online": "Conectada/o",
+    "View Community": "Ver a comunidade"
 }
