@@ -16,209 +16,27 @@ limitations under the License.
 
 'use strict';
 
-import React from 'react';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import ImageUtils from '../../../ImageUtils';
-import dis from '../../../dispatcher';
-import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
-import { _t } from '../../../languageHandler';
-import SettingsStore from "../../../settings/SettingsStore";
+import MImageBody from "./MImageBody";
 
-module.exports = React.createClass({
-    displayName: 'MStickerBody',
+export default class MStickerBody extends MImageBody {
+    displayName: 'MStickerBody'
 
-    propTypes: {
-        /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+    constructor(props) {
+      super(props);
+    }
 
-        /* called when the image has loaded */
-        onWidgetLoad: React.PropTypes.func.isRequired,
-    },
-
-    getInitialState: function() {
-        return {
-            decryptedUrl: null,
-            decryptedThumbnailUrl: null,
-            decryptedBlob: null,
-            error: null,
-        };
-    },
-
-    _isGif: function() {
-        const content = this.props.mxEvent.getContent();
+    _messageContent(contentUrl, thumbUrl, content) {
         return (
-          content &&
-          content.info &&
-          content.info.mimetype === "image/gif"
+            <span className="mx_MImageBody" ref="body">
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                    alt={content.body}
+                    onLoad={this.props.onWidgetLoad}
+                    onMouseEnter={this.onImageEnter}
+                    onMouseLeave={this.onImageLeave} />
+            </span>
         );
-    },
+    }
 
-    onImageEnter: function(e) {
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
-            return;
-        }
-        const imgElement = e.target;
-        imgElement.src = this._getContentUrl();
-    },
-
-    onImageLeave: function(e) {
-        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
-            return;
-        }
-        const imgElement = e.target;
-        imgElement.src = this._getThumbUrl();
-    },
-
-    _getContentUrl: function() {
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
-            return this.state.decryptedUrl;
-        } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
-        }
-    },
-
-    _getThumbUrl: function() {
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
-            // Don't use the thumbnail for clients wishing to autoplay gifs.
-            if (this.state.decryptedThumbnailUrl) {
-                return this.state.decryptedThumbnailUrl;
-            }
-            return this.state.decryptedUrl;
-        } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
-        }
-    },
-
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-        this.fixupHeight();
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            let thumbnailPromise = Promise.resolve(null);
-            if (content.info.thumbnail_file) {
-                thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file,
-                ).then(function(blob) {
-                    return readBlobAsDataUri(blob);
-                });
-            }
-            let decryptedBlob;
-            thumbnailPromise.then((thumbnailUrl) => {
-                return decryptFile(content.file).then(function(blob) {
-                    decryptedBlob = blob;
-                    return readBlobAsDataUri(blob);
-                }).then((contentUrl) => {
-                    this.setState({
-                        decryptedUrl: contentUrl,
-                        decryptedThumbnailUrl: thumbnailUrl,
-                        decryptedBlob: decryptedBlob,
-                    });
-                    this.props.onWidgetLoad();
-                });
-            }).catch((err) => {
-                console.warn("Unable to decrypt attachment: ", err);
-                // Set a placeholder image when we can't decrypt the image.
-                this.setState({
-                    error: err,
-                });
-            }).done();
-        }
-    },
-
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-    },
-
-    onAction: function(payload) {
-        if (payload.action === "timeline_resize") {
-            this.fixupHeight();
-        }
-    },
-
-    fixupHeight: function() {
-        if (!this.refs.image) {
-            console.warn("Refusing to fix up height on MStickerBody with no image element");
-            return;
-        }
-
-        const content = this.props.mxEvent.getContent();
-        const timelineWidth = this.refs.body.offsetWidth;
-        const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
-        // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
-
-        //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
-        let thumbHeight = null;
-        if (content.info) {
-            thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
-        }
-        this.refs.image.style.height = thumbHeight + "px";
-        // console.log("Image height now", thumbHeight);
-    },
-
-    render: function() {
-        const content = this.props.mxEvent.getContent();
-
-        if (this.state.error !== null) {
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16" />
-                    { _t("Error decrypting image") }
-                </span>
-            );
-        }
-
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            // Need to decrypt the attachment
-            // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
-                        "display": "flex",
-                        "alignItems": "center",
-                        "width": "100%",
-                    }}>
-                        <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
-                            "margin": "auto",
-                        }} />
-                    </div>
-                </span>
-            );
-        }
-
-        const contentUrl = this._getContentUrl();
-        let thumbUrl;
-        if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
-          thumbUrl = contentUrl;
-        } else {
-          thumbUrl = this._getThumbUrl();
-        }
-
-        if (thumbUrl) {
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                        alt={content.body}
-                        onLoad={this.props.onWidgetLoad}
-                        onMouseEnter={this.onImageEnter}
-                        onMouseLeave={this.onImageLeave} />
-                </span>
-            );
-        } else if (content.body) {
-            return (
-                <span className="mx_MImageBody">
-                    { _t("Image '%(Body)s' cannot be displayed.", {Body: content.body}) }
-                </span>
-            );
-        } else {
-            return (
-                <span className="mx_MImageBody">
-                    { _t("This image cannot be displayed.") }
-                </span>
-            );
-        }
-    },
-});
+    onClick() {
+    }
+}
