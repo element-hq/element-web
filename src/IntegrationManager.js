@@ -19,8 +19,6 @@ import SdkConfig from './SdkConfig';
 import ScalarMessaging from './ScalarMessaging';
 import ScalarAuthClient from './ScalarAuthClient';
 
-let currentRoomId = "!JWyCNPOtOmEXOylMBv:matrix.org";
-
 if (!global.im) {
   global.im = {};
 }
@@ -53,14 +51,13 @@ export default class IntegrationManager {
   static async open(integType, integId, onClose) {
     await IntegrationManager._init();
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-    console.warn("IM", global.im);
     if (global.im.error || !(global.im.client && global.im.client.hasCredentials())) {
       console.error("Scalar error", global.im);
       return;
     }
     integType = 'type_' + integType;
-    console.warn("Launching integration manager", currentRoomId, integType, integId);
     const src = (global.im.client && global.im.client.hasCredentials()) ?
+    // FIXME -- Currently broken. Get current room ID
     global.im.client.getScalarInterfaceUrlForRoom(
       currentRoomId,
       integType,
