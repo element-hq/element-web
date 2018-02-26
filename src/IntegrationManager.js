@@ -18,6 +18,7 @@ import sdk from './index';
 import SdkConfig from './SdkConfig';
 import ScalarMessaging from './ScalarMessaging';
 import ScalarAuthClient from './ScalarAuthClient';
+import RoomViewStore from './stores/RoomViewStore';
 
 if (!global.im) {
   global.im = {};
@@ -56,14 +57,14 @@ export default class IntegrationManager {
       return;
     }
     integType = 'type_' + integType;
+    console.warn("Current room", RoomViewStore.getRoomId());
     const src = (global.im.client && global.im.client.hasCredentials()) ?
-    // FIXME -- Currently broken. Get current room ID
-    global.im.client.getScalarInterfaceUrlForRoom(
-      currentRoomId,
-      integType,
-      integId,
-    ) :
-    null;
+      global.im.client.getScalarInterfaceUrlForRoom(
+        RoomViewStore.getRoomId(),
+        integType,
+        integId,
+      ) :
+      null;
     Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
       src: src,
     }, "mx_IntegrationsManager");
