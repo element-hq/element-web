@@ -22,6 +22,7 @@ limitations under the License.
 import URL from 'url';
 import dis from './dispatcher';
 import MatrixPostMessageApi from './MatrixPostMessageApi';
+import IntegrationManager from './IntegrationManager';
 
 const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -196,6 +197,11 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
             });
         } else if (action === 'sticker_message') {
             dis.dispatch({action: 'sticker_message', data: event.data.widgetData, widgetId: event.data.widgetId});
+        } else if (action === 'integration_manager_open') {
+            const data = event.data.widgetData;
+            const integType = (data && data.integType) ? data.integType : null;
+            const integId = (data && data.integId) ? data.integId : null;
+            IntegrationManager.open(integType, integId);
         } else {
             console.warn("Widget postMessage event unhandled");
             this.sendError(event, {message: "The postMessage was unhandled"});
