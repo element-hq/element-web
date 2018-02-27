@@ -936,7 +936,7 @@
     "Display your community flair in rooms configured to show it.": "Zeige deinen Community-Flair in den Räumen, die es erlauben.",
     "This homeserver doesn't offer any login flows which are supported by this client.": "Dieser Heimserver verfügt über keinen, von diesem Client unterstütztes Anmeldeverfahren.",
     "Call Failed": "Anruf fehlgeschlagen",
-    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "In diesem Raum befinden sich nicht verifizierte Geräte. Wenn du ohne Verifizierung fortfährst, könnten Angreifer den Anruf mithören.",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "In diesem Raum befinden sich nicht verifizierte Geräte. Wenn du fortfährst, ohne sie zu verifizieren, könnten Angreifer den Anruf mithören.",
     "Review Devices": "Geräte ansehen",
     "Call Anyway": "Trotzdem anrufen",
     "Answer Anyway": "Trotzdem annehmen",
