@@ -987,5 +987,6 @@
     "Failed to add tag %(tagName)s to room": "Échec de l'ajout de l'étiquette %(tagName)s au salon",
     "Clear filter": "Supprimer les filtres",
     "Did you know: you can use communities to filter your Riot.im experience!": "Le saviez-vous : vous pouvez utiliser les communautés pour filtrer votre expérience Riot.im !",
-    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Pour activer un filtre, faites glisser un avatar de communauté sur le panneau des filtres tout à gauche de l'écran. Vous pouvez cliquer sur un avatar dans ce panneau quand vous le souhaitez afin de ne voir que les salons et les personnes associés à cette communauté."
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Pour activer un filtre, faites glisser un avatar de communauté sur le panneau des filtres tout à gauche de l'écran. Vous pouvez cliquer sur un avatar dans ce panneau quand vous le souhaitez afin de ne voir que les salons et les personnes associés à cette communauté.",
+    "Disable Community Filter Panel": "Désactiver le panneau de filtre de communauté"
 }
