@@ -66,7 +66,7 @@ export default class Stickerpicker extends React.Component {
         }
         Widgets.removeStickerpickerWidgets();
         this._getStickerPickerWidget();
-        this.stickersMenu.close();
+        setTimeout(() => this.stickersMenu.close());
     }
 
     componentDidMount() {
@@ -105,7 +105,7 @@ export default class Stickerpicker extends React.Component {
             this._getStickerPickerWidget();
             return;
         } else if (payload.action === "stickerpicker_close") {
-          this.stickersMenu.close();
+          setTimeout(() => this.stickersMenu.close());
         }
     }
 
@@ -206,7 +206,7 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} ev Event that triggered the function call
      */
     onHideStickersClick(ev) {
-        this.stickersMenu.close();
+        setTimeout(() => this.stickersMenu.close());
     }
 
     /**
