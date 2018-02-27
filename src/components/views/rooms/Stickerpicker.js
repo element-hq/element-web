@@ -26,6 +26,8 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 
+const widgetType = 'm.stickerpicker';
+
 export default class Stickerpicker extends React.Component {
     constructor(props) {
         super(props);
@@ -56,7 +58,7 @@ export default class Stickerpicker extends React.Component {
     _removeStickerpickerWidgets() {
         console.warn('Removing Stickerpicker widgets');
         if (this.widgetId) {
-            this.scalarClient.disableWidgetAssets('stickerpack', this.widgetId).then(() => {
+            this.scalarClient.disableWidgetAssets(widgetType, this.widgetId).then(() => {
                 console.warn('Assets disabled');
             }).catch((err) => {
                 console.error('Failed to disable assets');
@@ -224,7 +226,7 @@ export default class Stickerpicker extends React.Component {
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
                     this.props.room,
-                    'type_stickerpack',
+                    'type_' + widgetType,
                     this.widgetId,
                 ) :
                 null;
