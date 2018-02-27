@@ -224,5 +224,7 @@
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Bitte installiere <chromeLink>Chrome</chromeLink> oder <firefoxLink>Firefox</firefoxLink> für ein optimales Anwendungsergebnis.",
     "Reply": "Antworten",
     "%(count)s Members|other": "%(count)s Mitglieder",
-    "%(count)s Members|one": "%(count)s Mitglied"
+    "%(count)s Members|one": "%(count)s Mitglied",
+    "Online": "Online",
+    "View Community": "Community ansehen"
 }
