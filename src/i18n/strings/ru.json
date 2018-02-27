@@ -987,5 +987,6 @@
     "Failed to add tag %(tagName)s to room": "Не удалось добавить тег %(tagName)s в комнату",
     "Clear filter": "Очистить фильтр",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Чтобы настроить фильтр, перетащите аватар сообщества на панель фильтров в левой части экрана. Вы можете нажать на аватар в панели фильтров в любое время, чтобы увидеть только комнаты и людей, связанных с этим сообществом.",
-    "Did you know: you can use communities to filter your Riot.im experience!": "Знаете ли вы: вы можете использовать сообщества, чтобы фильтровать в Riot.im!"
+    "Did you know: you can use communities to filter your Riot.im experience!": "Знаете ли вы: вы можете использовать сообщества, чтобы фильтровать в Riot.im!",
+    "Disable Community Filter Panel": "Отключить панель фильтра сообщества"
 }
