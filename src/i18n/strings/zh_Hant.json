@@ -188,7 +188,7 @@
     "Sun": "星期日",
     "Mon": "星期一",
     "Tue": "星期二",
-    "Online": "在線",
+    "Online": "線上",
     "Idle": "閒置",
     "Offline": "下線",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s 更改了聊天室的圖像為 <img/>",
