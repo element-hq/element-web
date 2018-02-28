@@ -985,5 +985,7 @@
     "Room Notification": "Notificação da sala",
     "Failed to set direct chat tag": "Falha ao definir esta conversa como direta",
     "Failed to remove tag %(tagName)s from room": "Falha ao remover a tag %(tagName)s da sala",
-    "Failed to add tag %(tagName)s to room": "Falha ao adicionar a tag %(tagName)s para a sala"
+    "Failed to add tag %(tagName)s to room": "Falha ao adicionar a tag %(tagName)s para a sala",
+    "Did you know: you can use communities to filter your Riot.im experience!": "Você sabia? Você pode usar as comunidades para filtrar a sua experiência no Riot!",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Para criar um filtro, arraste a imagem de uma comunidade sobre o painel de filtros na extrema esquerda da sua tela. Você pode clicar na imagem de uma comunidade no painel de filtros a qualquer momento para ver apenas as salas e pessoas associadas com esta comunidade."
 }
