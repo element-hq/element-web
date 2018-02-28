@@ -48,7 +48,7 @@ export default class MStickerBody extends MImageBody {
             const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
             tooltip = <RoomTooltip
                 className="mx_RoleButton_tooltip"
-                label={ tooltipBody } />;
+                label={tooltipBody} />;
         }
 
         return (
