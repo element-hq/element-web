@@ -63,7 +63,7 @@
     "(HTTP status %(httpStatus)s)": "(HTTP 状态 %(httpStatus)s)",
     "I understand the risks and wish to continue": "我了解这些风险并愿意继续",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "为了诊断问题，来自客户端的活动记录会随着这个程序 bug 报告一并发出。如果你只想送出以上文字，请取消勾选：",
-    "Invite to this room": "邀请加入此聊天室",
+    "Invite to this room": "邀请别人加入此聊天室",
     "Keywords": "关键字",
     "Leave": "离开",
     "Login": "登录",
@@ -224,5 +224,7 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 和 <operaLink>Opera</operaLink> 也能工作。",
     "Reply": "回复",
     "Online": "在线",
-    "View Community": "查看社区"
+    "View Community": "查看社区",
+    "%(count)s Members|other": "%(count)s 位成员",
+    "%(count)s Members|one": "%(count)s 位成员"
 }
