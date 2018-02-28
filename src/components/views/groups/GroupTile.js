@@ -59,7 +59,7 @@ const GroupTile = React.createClass({
         });
     },
 
-    onClick: function(e) {
+    onMouseDown: function(e) {
         e.preventDefault();
         dis.dispatch({
             action: 'view_group',
@@ -79,7 +79,9 @@ const GroupTile = React.createClass({
         const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
-        return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
+        // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
+        // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6156
+        return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown}>
             <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
                 { (droppableProvided, droppableSnapshot) => (
                     <div ref={droppableProvided.innerRef}>
