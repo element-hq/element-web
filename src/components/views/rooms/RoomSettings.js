@@ -117,7 +117,6 @@ module.exports = React.createClass({
 
     propTypes: {
         room: PropTypes.object.isRequired,
-        onSaveClick: PropTypes.func,
     },
 
     getInitialState: function() {
