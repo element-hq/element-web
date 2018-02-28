@@ -222,5 +222,7 @@
     "Away": "离开",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "请安装 <chromeLink>Chrome</chromeLink> 或 <firefoxLink>Firefox</firefoxLink> 以获得最佳体验。",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 和 <operaLink>Opera</operaLink> 也能工作。",
-    "Reply": "回复"
+    "Reply": "回复",
+    "Online": "在线",
+    "View Community": "查看社区"
 }
