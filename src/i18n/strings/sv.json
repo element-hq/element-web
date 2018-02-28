@@ -196,5 +196,6 @@
     "Thank you!": "Tack!",
     "Back": "Tillbaka",
     "Filter results": "Filtrera resultaten",
-    "Explore Room State": "Utforska rumläget"
+    "Explore Room State": "Utforska rumläget",
+    "Show message in desktop notification": "Visa meddelande i skrivbordsavisering"
 }
