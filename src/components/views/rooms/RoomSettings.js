@@ -150,7 +150,7 @@ module.exports = React.createClass({
 
         MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId,
-        ).done((result) => {
+        ).done((result = {}) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
             this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
