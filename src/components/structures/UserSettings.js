@@ -79,6 +79,7 @@ const SIMPLE_SETTINGS = [
     { id: "Pill.shouldHidePillAvatar" },
     { id: "TextualBody.disableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
+    { id: "TagPanel.disableTagPanel" },
 ];
 
 // These settings must be defined in SettingsStore
