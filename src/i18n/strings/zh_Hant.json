@@ -224,5 +224,7 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 與 <operaLink>Opera</operaLink> 也可以運作。",
     "Reply": "回覆",
     "%(count)s Members|other": "%(count)s 個成員",
-    "%(count)s Members|one": "%(count)s 個成員"
+    "%(count)s Members|one": "%(count)s 個成員",
+    "Online": "線上",
+    "View Community": "檢視社群"
 }
