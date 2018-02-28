@@ -984,5 +984,8 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s 變更了他們的顯示名稱為 %(displayName)s 。",
     "Failed to set direct chat tag": "設定直接聊天標籤失敗",
     "Failed to remove tag %(tagName)s from room": "從聊天室移除標籤 %(tagName)s 失敗",
-    "Failed to add tag %(tagName)s to room": "新增標籤 %(tagName)s 到聊天室失敗"
+    "Failed to add tag %(tagName)s to room": "新增標籤 %(tagName)s 到聊天室失敗",
+    "Did you know: you can use communities to filter your Riot.im experience!": "您知道嗎：您可以使用社群來強化您的 Riot.im 使用體驗！",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "要設定過濾器，拖曳社群大頭貼到位於螢幕最左邊的過濾器面板。您可以在任何時候在過濾器面板中的大頭貼上點按以檢視與該社群關聯的聊天室與夥伴。",
+    "Clear filter": "清除過濾器"
 }
