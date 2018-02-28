@@ -987,5 +987,6 @@
     "Failed to add tag %(tagName)s to room": "新增標籤 %(tagName)s 到聊天室失敗",
     "Did you know: you can use communities to filter your Riot.im experience!": "您知道嗎：您可以使用社群來強化您的 Riot.im 使用體驗！",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "要設定過濾器，拖曳社群大頭貼到位於螢幕最左邊的過濾器面板。您可以在任何時候在過濾器面板中的大頭貼上點按以檢視與該社群關聯的聊天室與夥伴。",
-    "Clear filter": "清除過濾器"
+    "Clear filter": "清除過濾器",
+    "Disable Community Filter Panel": "停用社群過濾面板"
 }
