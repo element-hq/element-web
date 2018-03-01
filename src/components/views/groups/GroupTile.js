@@ -99,13 +99,23 @@ const GroupTile = React.createClass({
                                         {...provided.dragHandleProps}
                                     >
                                         <div className="mx_GroupTile_avatar">
-                                            <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                                            <BaseAvatar
+                                                name={name}
+                                                idName={this.props.groupId}
+                                                url={httpUrl}
+                                                width={avatarHeight}
+                                                height={avatarHeight} />
                                         </div>
                                     </div>
                                     { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
                                     { provided.placeholder ?
                                         <div className="mx_GroupTile_avatar">
-                                            <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                                            <BaseAvatar
+                                                name={name}
+                                                idName={this.props.groupId}
+                                                url={httpUrl}
+                                                width={avatarHeight}
+                                                height={avatarHeight} />
                                         </div> :
                                         <div />
                                     }

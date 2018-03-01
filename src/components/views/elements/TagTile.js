@@ -154,7 +154,13 @@ export default React.createClass({
             </div> : <div />;
         return <AccessibleButton className={className} onClick={this.onClick}>
             <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                <BaseAvatar
+                    name={name}
+                    idName={this.props.tag}
+                    url={httpUrl}
+                    width={avatarHeight}
+                    height={avatarHeight}
+                />
                 { tip }
                 { contextButton }
             </div>
