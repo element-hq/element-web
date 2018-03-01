@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EventEmitter from 'events';
 import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
@@ -28,8 +29,9 @@ const GROUP_PROFILES_CACHE_BUST_MS = 1800000; // 30 mins
 /**
  * Stores data used by <Flair/>
  */
-class FlairStore {
+class FlairStore extends EventEmitter {
     constructor(matrixClient) {
+        super();
         this._matrixClient = matrixClient;
         this._userGroups = {
             // $userId: ['+group1:domain', '+group2:domain', ...]
@@ -175,11 +177,22 @@ class FlairStore {
         };
         delete this._groupProfilesPromise[groupId];
 
+        /// XXX: This is verging on recreating a third "Flux"-looking Store. We really
+        /// should replace FlairStore with a Flux store and some async actions.
+        this.emit('updateGroupProfile');
+
         setTimeout(() => {
-            delete this._groupProfiles[groupId];
+            this.refreshGroupProfile(groupId);
         }, GROUP_PROFILES_CACHE_BUST_MS);
 
         return this._groupProfiles[groupId];
+    }
+
+    refreshGroupProfile(matrixClient, groupId) {
+        // Invalidate the cache
+        delete this._groupProfiles[groupId];
+        // Fetch new profile data, and cache it
+        return this.getGroupProfileCached(matrixClient, groupId);
     }
 }
 
