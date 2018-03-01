@@ -45,7 +45,7 @@ const TagPanel = React.createClass({
     componentWillMount: function() {
         this.unmounted = false;
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.on("sync", this.onClientSync);
+        this.context.matrixClient.on("sync", this._onClientSync);
 
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
@@ -63,7 +63,7 @@ const TagPanel = React.createClass({
     componentWillUnmount() {
         this.unmounted = true;
         this.context.matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.removeListener("sync", this.onClientSync);
+        this.context.matrixClient.removeListener("sync", this._onClientSync);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
         }
@@ -74,7 +74,7 @@ const TagPanel = React.createClass({
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
-    onClientSync(syncState, prevState) {
+    _onClientSync(syncState, prevState) {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING or PREPARED.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
