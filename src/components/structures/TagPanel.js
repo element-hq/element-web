@@ -84,7 +84,7 @@ const TagPanel = React.createClass({
         }
     },
 
-    onClick(e) {
+    onMouseDown(e) {
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -128,7 +128,9 @@ const TagPanel = React.createClass({
             <GeminiScrollbar
                 className="mx_TagPanel_scroller"
                 autoshow={true}
-                onClick={this.onClick}
+                // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
+                // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6253
+                onMouseDown={this.onMouseDown}
             >
                 <Droppable
                     droppableId="tag-panel-droppable"
