@@ -151,7 +151,7 @@
     "Reason": "Причина",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s прие поканата за %(displayName)s.",
     "%(targetName)s accepted an invitation.": "%(targetName)s прие поканата.",
-    "%(senderName)s requested a VoIP conference.": "%(senderName)s заяви VoIP конферентен разговор.",
+    "%(senderName)s requested a VoIP conference.": "%(senderName)s заяви VoIP групов разговор.",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s покани %(targetName)s.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s блокира %(targetName)s.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s смени своето име на %(displayName)s.",
