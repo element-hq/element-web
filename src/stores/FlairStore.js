@@ -182,7 +182,7 @@ class FlairStore extends EventEmitter {
         this.emit('updateGroupProfile');
 
         setTimeout(() => {
-            this.refreshGroupProfile(groupId);
+            this.refreshGroupProfile(matrixClient, groupId);
         }, GROUP_PROFILES_CACHE_BUST_MS);
 
         return this._groupProfiles[groupId];
