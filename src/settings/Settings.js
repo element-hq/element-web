@@ -188,6 +188,11 @@ export const SETTINGS = {
         displayName: _td('Mirror local video feed'),
         default: false,
     },
+    "TagPanel.disableTagPanel": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Disable Community Filter Panel'),
+        default: false,
+    },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: "light",
