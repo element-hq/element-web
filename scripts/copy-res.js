@@ -134,8 +134,19 @@ function next(i, err) {
             const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + source + '.json';
             const riotWebFile = 'src/i18n/strings/' + source + '.json';
 
-            const translations = {};
-            const makeLang = () => { genLangFile(source, dest) };
+            // XXX: Use a debounce because for some reason if we read the language
+            // file immediately after the FS event is received, the file contents
+            // appears empty. Possibly https://github.com/nodejs/node/issues/6112
+            let makeLangDebouncer;
+            const makeLang = () => {
+                if (makeLangDebouncer) {
+                    clearTimeout(makeLangDebouncer);
+                }
+                makeLangDebouncer = setTimeout(() => {
+                    genLangFile(source, dest);
+                }, 500);
+            };
+
             [reactSdkFile, riotWebFile].forEach(function(f) {
                 chokidar.watch(f)
                     .on('add', makeLang)
@@ -170,13 +181,13 @@ function genLangFile(lang, dest) {
                     JSON.parse(fs.readFileSync(f).toString())
                 );
             } catch (e) {
-                console.error("Failed: "+f, e);
+                console.error("Failed: " + f, e);
                 throw e;
             }
         }
     });
 
-    translations = weblateToCounterpart(translations)
+    translations = weblateToCounterpart(translations);
 
     fs.writeFileSync(dest + lang + '.json', JSON.stringify(translations, null, 4));
     if (verbose) {
