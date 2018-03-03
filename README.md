@@ -106,7 +106,9 @@ config.json
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-1. `default_hs_url` is the default home server url.
+For a good example, see https://riot.im/develop/config.json
+
+1. `default_hs_url` is the default homeserver url.
 1. `default_is_url` is the default identity server url (this is the server used
    for verifying third party identifiers like email addresses). If this is blank,
    registering with an email address, adding an email address to your account,
@@ -115,12 +117,20 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
+1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
+   in the `labs` section of settings.  The available optional experimental features vary from
+   release to release.
+1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
+   homeserver know what email template to use when talking to you.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your Home Server either. The integration server settings
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
+1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
+1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
+   https://github.com/matrix-org/rageshake server)
 1. `roomDirectory`: config for the public room directory. This section is optional.
-1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
+1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
@@ -135,6 +145,9 @@ You can configure the app by copying `config.sample.json` to
     1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
     1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
     1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
+1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
+   with referral tracking; please ignore it.
+1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
 
 Running as a Desktop app
 ========================
