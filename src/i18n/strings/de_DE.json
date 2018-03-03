@@ -987,5 +987,6 @@
     "Failed to add tag %(tagName)s to room": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
     "Did you know: you can use communities to filter your Riot.im experience!": "Wusstest du: Du kannst Communities nutzen um deine Riot.im-Erfahrung zu filtern!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Um einen Filter zu setzen, siehe einen Community-Bild auf das Filter-Panel ganz links. Du kannst jederzeit auf einen Avatar im Filter-Panel klicken um nur die Räume und Personen aus der Community zu sehen.",
-    "Clear filter": "Filter zurücksetzen"
+    "Clear filter": "Filter zurücksetzen",
+    "Disable Community Filter Panel": "Deaktivere Community-Filter-Panel"
 }
