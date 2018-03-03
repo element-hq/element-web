@@ -985,5 +985,8 @@
     "Failed to set direct chat tag": "Nem sikerült a közvetlen beszélgetés jelzést beállítani",
     "Failed to remove tag %(tagName)s from room": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
     "Failed to add tag %(tagName)s to room": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
-    "Clear filter": "Szűrő törlése"
+    "Clear filter": "Szűrő törlése",
+    "Disable Community Filter Panel": "Közösség keresési panel tiltása",
+    "Did you know: you can use communities to filter your Riot.im experience!": "Tudtad, hogy a közösségeket használhatod a Riot.im élmény fokozásához?",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "A szűrő beállításához húzd a közösség avatarját a szűrő panel fölé a képernyő bal szélén. A szűrő panelen az avatarra kattintva bármikor leszűrheted azokat a szobákat és embereket akik a megadott közösséghez tartoznak."
 }
