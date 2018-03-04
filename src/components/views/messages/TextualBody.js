@@ -35,6 +35,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
+import ReplyThread from "../elements/ReplyThread";
 
 linkifyMatrix(linkify);
 
@@ -423,6 +424,8 @@ module.exports = React.createClass({
 
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
+            // Part of Replies fallback support
+            stripReplyFallback: Boolean(ReplyThread.getInReplyTo(mxEvent)),
         });
 
         if (this.props.highlightLink) {

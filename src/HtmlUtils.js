@@ -17,6 +17,8 @@ limitations under the License.
 
 'use strict';
 
+import ReplyThread from "./components/views/elements/ReplyThread";
+
 const React = require('react');
 const sanitizeHtml = require('sanitize-html');
 const highlight = require('highlight.js');
@@ -184,6 +186,7 @@ const sanitizeHtmlParams = {
     ],
     allowedAttributes: {
         // custom ones first:
+        blockquote: ['data-mx-reply'], // for reply fallback
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
@@ -408,10 +411,19 @@ class TextHighlighter extends BaseHighlighter {
      *
      * opts.highlightLink: optional href to add to highlighted words
      * opts.disableBigEmoji: optional argument to disable the big emoji class.
+     * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
      */
 export function bodyToHtml(content, highlights, opts={}) {
     const isHtml = (content.format === "org.matrix.custom.html");
-    const body = isHtml ? content.formatted_body : escape(content.body);
+    let body;
+    if (isHtml) {
+        body = content.formatted_body;
+        // Part of Replies fallback support
+        if (opts.stripReplyFallback) body = ReplyThread.stripHTMLReply(body);
+    } else {
+        // Part of Replies fallback support - special because strip must be before escape
+        body = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : escape(content.body);
+    }
 
     let bodyHasEmoji = false;
 

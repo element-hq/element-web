@@ -21,13 +21,13 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
-import {makeUserPermalink} from "../../../matrix-to";
+import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
-export default class Reply extends React.Component {
+export default class ReplyThread extends React.Component {
     static propTypes = {
         // the latest event in this chain of replies
         parentEv: PropTypes.instanceOf(MatrixEvent),
@@ -66,13 +66,13 @@ export default class Reply extends React.Component {
 
     async initialize() {
         const {parentEv} = this.props;
-        const inReplyTo = Reply.getInReplyTo(parentEv);
+        const inReplyTo = ReplyThread.getInReplyTo(parentEv);
         if (!inReplyTo) {
             this.setState({err: true});
             return;
         }
 
-        const ev = await Reply.getEvent(this.room, inReplyTo['event_id']);
+        const ev = await ReplyThread.getEvent(this.room, inReplyTo['event_id']);
         if (this.unmounted) return;
 
         if (ev) {
@@ -87,7 +87,7 @@ export default class Reply extends React.Component {
     async loadNextEvent() {
         if (this.unmounted) return;
         const ev = this.state.events[0];
-        const inReplyTo = Reply.getInReplyTo(ev);
+        const inReplyTo = ReplyThread.getInReplyTo(ev);
 
         if (!inReplyTo) {
             this.setState({
@@ -96,7 +96,7 @@ export default class Reply extends React.Component {
             return;
         }
 
-        const loadedEv = await Reply.getEvent(this.room, inReplyTo['event_id']);
+        const loadedEv = await ReplyThread.getEvent(this.room, inReplyTo['event_id']);
         if (this.unmounted) return;
 
         if (loadedEv) {
@@ -130,7 +130,7 @@ export default class Reply extends React.Component {
     }
 
     static getInReplyTo(ev) {
-        if (ev.isRedacted()) return;
+        if (!ev || ev.isRedacted()) return;
 
         const mRelatesTo = ev.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
@@ -139,7 +139,39 @@ export default class Reply extends React.Component {
         }
     }
 
-    static getMRelatesTo(ev) {
+    // Part of Replies fallback support
+    static stripPlainReply(body) {
+        const lines = body.split('\n');
+        while (lines[0].startsWith('> ')) lines.shift();
+        return lines.join('\n');
+    }
+
+    // Part of Replies fallback support
+    static stripHTMLReply(html) {
+        return html.replace(/^<blockquote data-mx-reply>[\s\S]+?<\/blockquote>/, '');
+    }
+
+    // Part of Replies fallback support
+    static getNestedReplyText(ev) {
+        if (!ev) return null;
+
+        let {body, formatted_body: html} = ev.getContent();
+        if (this.getInReplyTo(ev)) {
+            if (body) body = this.stripPlainReply(body);
+            if (html) html = this.stripHTMLReply(html);
+        }
+
+        html = `<blockquote data-mx-reply><a href="${makeEventPermalink(ev.getRoomId(), ev.getId())}">In reply to</a> `
+            + `<a href="${makeUserPermalink(ev.getSender())}">${ev.getSender()}</a> ${html || body}</blockquote>`;
+        // `&lt;${ev.getSender()}&gt; ${html || body}</blockquote>`;
+        const lines = body.split('\n');
+        const first = `> <${ev.getSender()}> ${lines.shift()}`;
+        body = first + lines.map((line) => `> ${line}`).join('\n') + '\n';
+
+        return {body, html};
+    }
+
+    static getReplyEvContent(ev) {
         if (!ev) return {};
         return {
             'm.relates_to': {
@@ -151,8 +183,10 @@ export default class Reply extends React.Component {
     }
 
     static getQuote(parentEv, onWidgetLoad) {
-        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Reply.getInReplyTo(parentEv)) return <div />;
-        return <Reply parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
+        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getInReplyTo(parentEv)) {
+            return <div />;
+        }
+        return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
     }
 
     render() {

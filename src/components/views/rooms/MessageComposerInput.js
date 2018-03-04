@@ -54,7 +54,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
-import Reply from "../elements/ReplyThread";
+import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -830,7 +830,18 @@ export default class MessageComposerInput extends React.Component {
             this.state.isRichtextEnabled ? 'html' : 'markdown',
         );
 
+        const replyingToEv = RoomViewStore.getQuotingEvent();
+
         if (contentText.startsWith('/me')) {
+            if (replyingToEv) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Emote Reply Fail', '', ErrorDialog, {
+                    title: _t("Unable to reply"),
+                    description: _t("At this time it is not possible to reply with an emote."),
+                });
+                return false;
+            }
+
             contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
@@ -838,18 +849,24 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-        const content = Reply.getMRelatesTo(RoomViewStore.getQuotingEvent());
 
-        let sendMessagePromise;
-        if (contentHTML) {
-            Object.assign(content, sendHtmlFn(contentText, contentHTML));
-            sendMessagePromise = this.client.sendMessage(this.props.room.roomId, content);
-        } else {
-            Object.assign(content, sendTextFn(contentText));
-            sendMessagePromise = this.client.sendMessage(this.props.room.roomId, content);
+        let content = contentHTML || replyingToEv ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
+
+        if (replyingToEv) {
+            const replyContent = ReplyThread.getReplyEvContent(replyingToEv);
+            content = Object.assign(replyContent, content);
+
+            // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            if (nestedReply) {
+                if (content.formatted_body) {
+                    content.formatted_body = nestedReply.html + content.formatted_body;
+                }
+                content.body = nestedReply.body + content.body;
+            }
         }
 
-        sendMessagePromise.done((res) => {
+        this.client.sendMessage(this.props.room.roomId, content).done((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
