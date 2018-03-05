@@ -1,7 +1,7 @@
 {
     "Riot is not supported on mobile web. Install the app?": "Riot не поддържа мобилен уеб браузър. Инсталиране на приложението?",
     "Collecting app version information": "Събиране на информация за версията на приложението",
-    "Collecting logs": "Събиране на исторически данни",
+    "Collecting logs": "Събиране на логове",
     "Uploading report": "Качване на доклада",
     "Waiting for response from server": "Изчакване на отговор от сървъра",
     "Riot Desktop on %(platformName)s": "Riot Desktop под %(platformName)s",
