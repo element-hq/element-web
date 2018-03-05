@@ -55,20 +55,29 @@ export default React.createClass({
     componentWillMount() {
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
-            FlairStore.getGroupProfileCached(
-                this.context.matrixClient,
-                this.props.tag,
-            ).then((profile) => {
-                if (this.unmounted) return;
-                this.setState({profile});
-            }).catch((err) => {
-                console.warn('Could not fetch group profile for ' + this.props.tag, err);
-            });
+            FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
+            this._onFlairStoreUpdated();
         }
     },
 
     componentWillUnmount() {
         this.unmounted = true;
+        if (this.props.tag[0] === '+') {
+            FlairStore.removeListener('updateGroupProfile', this._onFlairStoreUpdated);
+        }
+    },
+
+    _onFlairStoreUpdated() {
+        if (this.unmounted) return;
+        FlairStore.getGroupProfileCached(
+            this.context.matrixClient,
+            this.props.tag,
+        ).then((profile) => {
+            if (this.unmounted) return;
+            this.setState({profile});
+        }).catch((err) => {
+            console.warn('Could not fetch group profile for ' + this.props.tag, err);
+        });
     },
 
     onClick: function(e) {
@@ -145,7 +154,13 @@ export default React.createClass({
             </div> : <div />;
         return <AccessibleButton className={className} onClick={this.onClick}>
             <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
+                <BaseAvatar
+                    name={name}
+                    idName={this.props.tag}
+                    url={httpUrl}
+                    width={avatarHeight}
+                    height={avatarHeight}
+                />
                 { tip }
                 { contextButton }
             </div>
