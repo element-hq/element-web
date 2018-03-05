@@ -414,7 +414,7 @@ class TextHighlighter extends BaseHighlighter {
      * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
      */
 export function bodyToHtml(content, highlights, opts={}) {
-    const isHtml = (content.format === "org.matrix.custom.html");
+    const isHtml = (content.format === "org.matrix.custom.html") && content.formatted_body;
     let body;
     if (isHtml) {
         body = content.formatted_body;
