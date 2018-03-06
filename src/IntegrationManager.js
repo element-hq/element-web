@@ -20,22 +20,22 @@ import ScalarMessaging from './ScalarMessaging';
 import ScalarAuthClient from './ScalarAuthClient';
 import RoomViewStore from './stores/RoomViewStore';
 
-if (!global.im) {
-  global.im = {};
+if (!global.mxIntegrationManager) {
+  global.mxIntegrationManager = {};
 }
 
 export default class IntegrationManager {
   static async _init() {
-    if (!global.im.client || !global.im.connected) {
+    if (!global.mxIntegrationManager.client || !global.mxIntegrationManager.connected) {
       if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
         ScalarMessaging.startListening();
-        global.im.client = new ScalarAuthClient();
+        global.mxIntegrationManager.client = new ScalarAuthClient();
 
-        await global.im.client.connect().then(() => {
-          global.im.connected = true;
+        await global.mxIntegrationManager.client.connect().then(() => {
+          global.mxIntegrationManager.connected = true;
         }).catch((e) => {
           console.error("Failed to connect to integrations server", e);
-          global.im.error = e;
+          global.mxIntegrationManager.error = e;
         });
       } else {
         console.error('Invalid integration manager config', SdkConfig.get());
@@ -52,13 +52,13 @@ export default class IntegrationManager {
   static async open(integType, integId, onClose) {
     await IntegrationManager._init();
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-    if (global.im.error || !(global.im.client && global.im.client.hasCredentials())) {
-      console.error("Scalar error", global.im);
+    if (global.mxIntegrationManager.error || !(global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials())) {
+      console.error("Scalar error", global.mxIntegrationManager);
       return;
     }
     integType = 'type_' + integType;
-    const src = (global.im.client && global.im.client.hasCredentials()) ?
-      global.im.client.getScalarInterfaceUrlForRoom(
+    const src = (global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials()) ?
+      global.mxIntegrationManager.client.getScalarInterfaceUrlForRoom(
         RoomViewStore.getRoomId(),
         integType,
         integId,
