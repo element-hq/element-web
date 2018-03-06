@@ -89,7 +89,6 @@ module.exports = React.createClass({
         // tooltips chevron
         var parent = ReactDOM.findDOMNode(this).parentNode;
         var style = {};
-        console.warn('Bounding box', parent.getBoundingClientRect());
         style = this._updatePosition(style);
         style.display = "block";
 
