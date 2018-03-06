@@ -52,7 +52,8 @@ export default class IntegrationManager {
   static async open(integType, integId, onClose) {
     await IntegrationManager._init();
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-    if (global.mxIntegrationManager.error || !(global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials())) {
+    if (global.mxIntegrationManager.error ||
+        !(global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials())) {
       console.error("Scalar error", global.mxIntegrationManager);
       return;
     }
