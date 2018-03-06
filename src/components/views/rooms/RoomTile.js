@@ -41,6 +41,8 @@ module.exports = React.createClass({
         collapsed: PropTypes.bool.isRequired,
         unread: PropTypes.bool.isRequired,
         highlight: PropTypes.bool.isRequired,
+        // If true, apply mx_RoomTile_transparent class
+        transparent: PropTypes.bool,
         isInvite: PropTypes.bool.isRequired,
         incomingCall: PropTypes.object,
     },
@@ -188,6 +190,7 @@ module.exports = React.createClass({
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
+            'mx_RoomTile_transparent': this.props.transparent,
         });
 
         const avatarClasses = classNames({
