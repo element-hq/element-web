@@ -142,7 +142,7 @@ export default class ReplyThread extends React.Component {
     // Part of Replies fallback support
     static stripPlainReply(body) {
         const lines = body.split('\n');
-        while (lines[0].startsWith('> ')) lines.shift();
+        while (lines.length && lines[0].startsWith('> ')) lines.shift();
         return lines.join('\n');
     }
 
