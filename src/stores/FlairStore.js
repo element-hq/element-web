@@ -160,7 +160,7 @@ class FlairStore extends EventEmitter {
                 await this._groupProfilesPromise[groupId];
             } catch (e) {
                 // Don't log the error; this is done below
-                return undefined;
+                return null;
             }
             return this._groupProfiles[groupId];
         }
@@ -176,7 +176,7 @@ class FlairStore extends EventEmitter {
             console.log('FlairStore: Failed to get group profile for ' + groupId, e);
             // Don't retry, but allow a retry when the profile is next requested
             delete this._groupProfilesPromise[groupId];
-            return;
+            return null;
         }
 
         this._groupProfiles[groupId] = {
