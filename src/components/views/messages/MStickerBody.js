@@ -53,13 +53,15 @@ export default class MStickerBody extends MImageBody {
 
         return (
             <span className="mx_MImageBody" ref="body">
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                    alt={content.body}
-                    onLoad={this.props.onWidgetLoad}
-                    onMouseEnter={this._onMouseEnter}
-                    onMouseLeave={this._onMouseLeave}
-                />
-                { tooltip }
+                <div className="mx_MImageBody_thumbnail_container">
+                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                        alt={content.body}
+                        onLoad={this.props.onWidgetLoad}
+                        onMouseEnter={this._onMouseEnter}
+                        onMouseLeave={this._onMouseLeave}
+                    />
+                    { tooltip }
+                </div>
             </span>
         );
     }
