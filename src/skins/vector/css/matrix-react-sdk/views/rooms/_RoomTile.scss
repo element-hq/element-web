@@ -180,3 +180,11 @@ limitations under the License.
     right: 0px;
 }
 
+.mx_RoomTile.mx_RoomTile_transparent {
+    background-color: transparent;
+}
+
+.mx_RoomTile.mx_RoomTile_transparent:focus {
+    background-color: $roomtile-transparent-focused-color;
+}
+
