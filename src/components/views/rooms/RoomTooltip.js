@@ -39,6 +39,7 @@ module.exports = React.createClass({
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
+        window.addEventListener('scroll', this._renderTooltip, true);
 
         this._renderTooltip();
     },
@@ -57,6 +58,7 @@ module.exports = React.createClass({
 
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
         document.body.removeChild(this.tooltipContainer);
+        window.removeEventListener('scroll', this._renderTooltip, true);
     },
 
     _renderTooltip: function() {
