@@ -167,7 +167,7 @@ class FlairStore extends EventEmitter {
 
         // No request yet, start one
         console.log('FlairStore: Request group profile of ' + groupId);
-        this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId).delay(5000);
+        this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
 
         let profile;
         try {
