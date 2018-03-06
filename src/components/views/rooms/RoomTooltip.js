@@ -66,7 +66,7 @@ module.exports = React.createClass({
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        var parent = ReactDOM.findDOMNode(this);
+        var parent = ReactDOM.findDOMNode(this).parentNode;
         var style = {};
         style.top = parent.getBoundingClientRect().top + window.pageYOffset;
         style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
