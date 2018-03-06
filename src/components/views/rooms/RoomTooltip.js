@@ -21,6 +21,8 @@ var ReactDOM = require('react-dom');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 import classNames from 'classnames';
 
+const MIN_TOOLTIP_HEIGHT = 25;
+
 module.exports = React.createClass({
     displayName: 'RoomTooltip',
 
@@ -40,6 +42,12 @@ module.exports = React.createClass({
         this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
         window.addEventListener('scroll', this._renderTooltip, true);
+
+        const parent = ReactDOM.findDOMNode(this).parentNode;
+        this.state={
+            parent,
+            parentBox: parent.getBoundingClientRect(),
+        };
 
         this._renderTooltip();
     },
@@ -61,6 +69,17 @@ module.exports = React.createClass({
         window.removeEventListener('scroll', this._renderTooltip, true);
     },
 
+    _updatePosition(style) {
+        const parentBox = this.state.parent.getBoundingClientRect();
+        let offset = 0;
+        if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
+            offset = Math.floor((parentBox.height - MIN_TOOLTIP_HEIGHT) / 2);
+        }
+        style.top = (parentBox.top - 2) + window.pageYOffset + offset;
+        style.left = 6 + parentBox.right + window.pageXOffset;
+        return style;
+    },
+
     _renderTooltip: function() {
         var label = this.props.room ? this.props.room.name : this.props.label;
 
@@ -70,8 +89,8 @@ module.exports = React.createClass({
         // tooltips chevron
         var parent = ReactDOM.findDOMNode(this).parentNode;
         var style = {};
-        style.top = parent.getBoundingClientRect().top + window.pageYOffset;
-        style.left = 6 + parent.getBoundingClientRect().right + window.pageXOffset;
+        console.warn('Bounding box', parent.getBoundingClientRect());
+        style = this._updatePosition(style);
         style.display = "block";
 
         const tooltipClasses = classNames(
