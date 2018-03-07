@@ -33,7 +33,7 @@
     "Enable email notifications": "Активиране на имейл известия",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Известия за следните ключови думи изпълняват правила, които не могат да бъдат показани тук:",
     "Unable to fetch notification target list": "Неуспешно извличане на списък с устройства получаващи известия",
-    "Notification targets": "Устройства получаващи известия",
+    "Notification targets": "Устройства, получаващи известия",
     "Advanced notification settings": "Разширени настройки за известяване",
     "There are advanced notifications which are not shown here": "Съществуват разширени настройки за известия, които не са показани тук",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Възможна конфигурация на настройките за известия в клиент, различен от Riot. Не могат да бъдат променени в Riot, но важат въпреки това",
