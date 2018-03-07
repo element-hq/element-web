@@ -340,11 +340,11 @@ export default class MessageComposer extends React.Component {
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
+                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 uploadButton,
                 hangupButton,
                 callButton,
                 videoCallButton,
-                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
             );
         } else {
             controls.push(
