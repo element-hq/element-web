@@ -298,6 +298,34 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_EventTile_keyRequestInfo {
+    font-size: 12px;
+}
+
+.mx_EventTile_keyRequestInfo_text {
+    opacity: 0.5;
+}
+
+.mx_EventTile_keyRequestInfo_text a {
+    color: $primary-fg-color;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.mx_EventTile_keyRequestInfo_tooltip_contents p {
+    text-align: auto;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.mx_EventTile_keyRequestInfo_tooltip_contents p:first-child {
+    margin-top: 0px;
+}
+
+.mx_EventTile_keyRequestInfo_tooltip_contents p:last-child {
+    margin-bottom: 0px;
+}
+
 .mx_EventTile_12hr .mx_EventTile_e2eIcon {
     padding-left: 5px;
 }
