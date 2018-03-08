@@ -568,7 +568,8 @@ export default class AppTile extends React.Component {
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
                             src="img/edit_green.svg"
-                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            className={"mx_AppTileMenuBarWidget " +
+                              (this.props.showDelete ? "mx_AppTileMenuBarWidgetPadding" : "")}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
                             width="10"
