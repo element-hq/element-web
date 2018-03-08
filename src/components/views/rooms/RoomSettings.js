@@ -704,8 +704,10 @@ module.exports = React.createClass({
                         { Object.keys(userLevels).map(function(user, i) {
                             return (
                                 <li className="mx_RoomSettings_userLevel" key={user}>
-                                    { _t("%(user)s is a", {user: user}) }
-                                    <PowerSelector value={userLevels[user]} disabled={true} />
+                                    { _t("%(user)s is a %(userRole)s", {
+                                        user: user,
+                                        userRole: <PowerSelector value={userLevels[user]} disabled={true} />,
+                                    }) }
                                 </li>
                             );
                         }) }
