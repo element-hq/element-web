@@ -31,7 +31,7 @@ module.exports = React.createClass({
         tooltipClassName: React.PropTypes.string,
         // The tooltip is derived from either the room name or a label
         room: React.PropTypes.object,
-        label: React.PropTypes.string,
+        label: React.PropTypes.node,
     },
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
