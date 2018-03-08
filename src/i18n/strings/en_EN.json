@@ -445,7 +445,7 @@
     "To ban users, you must be a": "To ban users, you must be a",
     "To remove other users' messages, you must be a": "To remove other users' messages, you must be a",
     "Privileged Users": "Privileged Users",
-    "%(user)s is a": "%(user)s is a",
+    "%(user)s is a %(userRole)s": "%(user)s is a %(userRole)s",
     "No users have specific privileges in this room": "No users have specific privileges in this room",
     "Banned users": "Banned users",
     "This room is not accessible by remote Matrix servers": "This room is not accessible by remote Matrix servers",
