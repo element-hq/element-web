@@ -187,7 +187,7 @@ export default class Stickerpicker extends React.Component {
         const buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset - 37;
+        const x = buttonRect.right + window.pageXOffset - 42;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
         // const self = this;
         this.stickersMenu = ContextualMenu.createMenu(GenericElementContextMenu, {
