@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MImageBody {
+.mx_MStickerBody {
   display: block;
   margin-right: 34px;
+  min-height: 110px;
+}
+
+.mx_MStickerBody_thumbnail_container {
+  display: inline-block;
+  position: relative;
+}
+
+.mx_MStickerBody_thumbnail {
+  max-width: 100%;
+  transition: 500ms;
+  opacity: 0;
+}
+
+.mx_MStickerBody_thumbnail_visible {
+  transition: 500ms;
+  opacity: 1;
+}
+
+.mx_MStickerBody_placeholder {
+  position: absolute;
+  transition: 500ms;
+  opacity: 1;
+}
+
+.mx_MStickerBody_placeholder_invisible {
+  transition: 500ms;
+  opacity: 0;
 }
