@@ -988,5 +988,11 @@
     "Clear filter": "Supprimer les filtres",
     "Did you know: you can use communities to filter your Riot.im experience!": "Le saviez-vous : vous pouvez utiliser les communautés pour filtrer votre expérience Riot.im !",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Pour activer un filtre, faites glisser un avatar de communauté sur le panneau des filtres tout à gauche de l'écran. Vous pouvez cliquer sur un avatar dans ce panneau quand vous le souhaitez afin de ne voir que les salons et les personnes associés à cette communauté.",
-    "Disable Community Filter Panel": "Désactiver le panneau de filtre de communauté"
+    "Disable Community Filter Panel": "Désactiver le panneau de filtre de communauté",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Votre demande de partage de clé a été envoyée - veuillez vérifier les demandes de partage de clé sur vos autres appareils.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Les demandes de partage de clé sont envoyées à vos autres appareils automatiquement. Si vous rejetez ou supprimez la demande de partage de clé sur vos autres appareils, cliquez ici pour redemander les clés pour cette session.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Si vos autres appareils n'ont pas la clé pour ce message, vous ne pourrez pas le déchiffrer.",
+    "Key request sent.": "Demande de clé envoyée.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Re-demander les clés de chiffrement</requestLink> depuis vos autres appareils.",
+    "%(user)s is a %(userRole)s": "%(user)s est %(userRole)s"
 }
