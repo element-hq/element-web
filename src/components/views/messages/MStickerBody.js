@@ -103,7 +103,7 @@ export default class MStickerBody extends MImageBody {
                     height: placeholderFixupHeight,
                 }}>
                 <div className={'mx_MStickerBody_thumbnail_container'}>
-
+                  { this.state.placeholderVisible &&
                     <div
                         className={'mx_MStickerBody_placeholder ' + this.state.placeholderClasses}
                         style={{
@@ -115,7 +115,7 @@ export default class MStickerBody extends MImageBody {
                             src={'img/icons-show-stickers.svg'}
                             width={placeholderSize}
                             height={placeholderSize} />
-                    </div>
+                    </div> }
                     <img
                         className={'mx_MStickerBody_thumbnail ' + this.state.thumbnailClasses}
                         src={thumbUrl}
