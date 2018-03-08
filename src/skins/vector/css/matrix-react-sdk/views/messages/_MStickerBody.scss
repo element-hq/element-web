@@ -18,6 +18,7 @@ limitations under the License.
   display: block;
   margin-right: 34px;
   min-height: 110px;
+  padding: 20px 0;
 }
 
 .mx_MStickerBody_thumbnail_container {
@@ -27,18 +28,15 @@ limitations under the License.
 
 .mx_MStickerBody_thumbnail {
   max-width: 100%;
-  transition: 500ms;
   opacity: 0;
 }
 
 .mx_MStickerBody_thumbnail_visible {
-  transition: 500ms;
   opacity: 1;
 }
 
 .mx_MStickerBody_placeholder {
   position: absolute;
-  transition: 500ms;
   opacity: 1;
 }
 
