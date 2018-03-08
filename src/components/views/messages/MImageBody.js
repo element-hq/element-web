@@ -192,6 +192,12 @@ export default class extends React.Component {
                 });
             }).done();
         }
+        this._afterComponentDidMount();
+    }
+
+    // To be overridden by subclasses (e.g. MStickerBody) for further
+    // initialisation after componentDidMount
+    _afterComponentDidMount() {
     }
 
     componentWillUnmount() {
