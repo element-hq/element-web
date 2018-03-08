@@ -49,6 +49,7 @@ export default class AppTile extends React.Component {
         this._onDeleteClick = this._onDeleteClick.bind(this);
         this._onSnapshotClick = this._onSnapshotClick.bind(this);
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
+        this._onMinimiseClick = this._onMinimiseClick.bind(this);
     }
 
     /**
@@ -448,6 +449,12 @@ export default class AppTile extends React.Component {
         );
     }
 
+    _onMinimiseClick(e) {
+        if (this.props.onMinimiseClick) {
+            this.props.onMinimiseClick();
+        }
+    }
+
     render() {
         let appTileBody;
 
@@ -536,13 +543,14 @@ export default class AppTile extends React.Component {
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 { this.props.showMenubar &&
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    <span className="mx_AppTileMenuBarTitle">
+                    <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
                         { this.props.showMinimise && <TintableSvgButton
                             src={windowStateIcon}
                             className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Minimize apps')}
                             width="10"
                             height="10"
+                            onClick={this._onMinimiseClick}
                         /> }
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
@@ -568,14 +576,14 @@ export default class AppTile extends React.Component {
                         /> }
 
                         { /* Delete widget */ }
-                        <TintableSvgButton
+                        { this.props.showDelete && <TintableSvgButton
                             src={deleteIcon}
                             className={deleteClasses}
                             title={_t(deleteWidgetLabel)}
                             onClick={this._onDeleteClick}
                             width="10"
                             height="10"
-                        />
+                        /> }
                     </span>
                 </div> }
                 { appTileBody }
@@ -607,10 +615,16 @@ AppTile.propTypes = {
     onEditClick: PropTypes.func,
     // Optional onDeleteClickHandler (overrides default behaviour)
     onDeleteClick: PropTypes.func,
+    // Optional onMinimiseClickHandler
+    onMinimiseClick: PropTypes.func,
     // Optionally hide the tile title
     showTitle: PropTypes.bool,
     // Optionally hide the tile minimise icon
     showMinimise: PropTypes.bool,
+    // Optionally handle minimise button pointer events (default false)
+    handleMinimisePointerEvents: PropTypes.bool,
+    // Optionally hide the delete icon
+    showDelete: PropTypes.bool,
 };
 
 AppTile.defaultProps = {
@@ -619,4 +633,6 @@ AppTile.defaultProps = {
     showMenubar: true,
     showTitle: true,
     showMinimise: true,
+    showDelete: true,
+    handleMinimisePointerEvents: false,
 };

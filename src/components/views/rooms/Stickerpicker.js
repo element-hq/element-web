@@ -155,7 +155,10 @@ export default class Stickerpicker extends React.Component {
                             onEditClick={this._launchManageIntegrations}
                             onDeleteClick={this._removeStickerpickerWidgets}
                             showTitle={false}
-                            showMinimise={false}
+                            showMinimise={true}
+                            showDelete={false}
+                            onMinimiseClick={this.onHideStickersClick}
+                            handleMinimisePointerEvents={true}
                         />
                     </div>
                 </div>

@@ -96,7 +96,6 @@ export default class MStickerBody extends MImageBody {
         }
 
         placeholderSize = placeholderSize + 'px';
-        console.warn('placeholder classes', this.state.placeholderClasses);
 
         return (
             <span className='mx_MStickerBody' ref='body'
