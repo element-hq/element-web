@@ -985,5 +985,8 @@
     "Failed to set direct chat tag": "Huts egin du txat zuzenarenaren etiketa jartzean",
     "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
     "Failed to add tag %(tagName)s to room": "Huts egin du %(tagName)s etiketa gelara gehitzean",
-    "Clear filter": "Garbitu iragazkia"
+    "Clear filter": "Garbitu iragazkia",
+    "Disable Community Filter Panel": "Desgaitu komunitate-iragazi panela",
+    "Did you know: you can use communities to filter your Riot.im experience!": "Ba al zenekien? Komunitateak erabili ditzakezu zure Riot.im esperientzia iragazteko!",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Iragazki bat ezartzeko, arrastatu komunitate baten abatarra pantailaren ezkerrean dagoen  iragazki-panelera. Iragazki-paneleko abatar batean klik egin dezakezu komunitate horri lotutako gelak eta pertsonak besterik ez ikusteko."
 }
