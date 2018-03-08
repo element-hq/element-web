@@ -34,10 +34,12 @@ limitations under the License.
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .mx_TagPanel .mx_TagPanel_clearButton object {
+    /* Same as .mx_SearchBox padding-top */
+    margin-top: 24px;
     pointer-events: none;
 }
 
