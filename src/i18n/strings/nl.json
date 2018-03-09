@@ -224,5 +224,7 @@
     "Toolbox": "Eigenschappen",
     "%(count)s Members|other": "%(count)s Deelnemers",
     "%(count)s Members|one": "%(count)s Deelnemer",
-    "Reply": "Beantwoord"
+    "Reply": "Beantwoord",
+    "Online": "Online",
+    "View Community": "Gemeenschap Weergeven"
 }
