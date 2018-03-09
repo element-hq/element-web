@@ -988,5 +988,11 @@
     "Clear filter": "Szűrő törlése",
     "Disable Community Filter Panel": "Közösség keresési panel tiltása",
     "Did you know: you can use communities to filter your Riot.im experience!": "Tudtad, hogy a közösségeket használhatod a Riot.im élmény fokozásához?",
-    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "A szűrő beállításához húzd a közösség avatarját a szűrő panel fölé a képernyő bal szélén. A szűrő panelen az avatarra kattintva bármikor leszűrheted azokat a szobákat és embereket akik a megadott közösséghez tartoznak."
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "A szűrő beállításához húzd a közösség avatarját a szűrő panel fölé a képernyő bal szélén. A szűrő panelen az avatarra kattintva bármikor leszűrheted azokat a szobákat és embereket akik a megadott közösséghez tartoznak.",
+    "Your key share request has been sent - please check your other devices for key share requests.": "A kulcs megosztási kérést elküldtük - ellenőrizd a többi eszközödön a kulcs megosztási kéréseket.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "A kulcs megosztási kérelem automatikusan el lett küldve a többi eszközödre. Ha elutasítottad vagy törölted a kérést a másik eszközön ide kattintva újra kérheted a kulcsokat.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Ha a másik eszközödön nincs meg a kulcs az üzenet visszafejtéséhez akkor nem tudod visszafejteni.",
+    "Key request sent.": "Kulcs kérés elküldve.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Kulcsok újrakérése</requestLink> a többi eszközödtől.",
+    "%(user)s is a %(userRole)s": "%(user)s egy %(userRole)s"
 }
