@@ -16,36 +16,6 @@ limitations under the License.
 
 import Promise from "bluebird";
 
-function defer() {
-    let resolve;
-    let reject;
-    let isPending = true;
-    const promise = new Promise(function(...args) {
-        resolve = args[0];
-        reject = args[1];
-    });
-    return {
-        resolve: function(...args) {
-            if (!isPending) {
-                return;
-            }
-            isPending = false;
-            resolve(args[0]);
-        },
-        reject: function(...args) {
-            if (!isPending) {
-                return;
-            }
-            isPending = false;
-            reject(args[0]);
-        },
-        isPending: function() {
-            return isPending;
-        },
-        promise: promise,
-    };
-}
-
 // NOTE: PostMessageApi only handles message events with a data payload with a
 // response field
 export default class PostMessageApi {
@@ -53,8 +23,8 @@ export default class PostMessageApi {
         this._window = targetWindow || window.parent; // default to parent window
         this._timeoutMs = timeoutMs || 5000; // default to 5s timer
         this._counter = 0;
-        this._pending = {
-            // $ID: Deferred
+        this._requestMap = {
+            // $ID: {resolve, reject}
         };
     }
 
@@ -82,15 +52,12 @@ export default class PostMessageApi {
             if (payload.response === undefined) {
                 return;
             }
-            const deferred = self._pending[payload._id];
-            if (!deferred) {
+            const promise = self._requestMap[payload._id];
+            if (!promise) {
                 return;
             }
-            if (!deferred.isPending()) {
-                return;
-            }
-            delete self._pending[payload._id];
-            deferred.resolve(payload);
+            delete self._requestMap[payload._id];
+            promise.resolve(payload);
         };
         return this._onMsgCallback;
     }
@@ -99,19 +66,20 @@ export default class PostMessageApi {
         this._counter += 1;
         target = target || "*";
         action._id = Date.now() + "-" + Math.random().toString(36) + "-" + this._counter;
-        const d = defer();
-        this._pending[action._id] = d;
-        this._window.postMessage(action, target);
 
-        if (this._timeoutMs > 0) {
-            setTimeout(function() {
-                if (!d.isPending()) {
-                    return;
-                }
-                console.error("postMessage request timed out. Sent object: " + JSON.stringify(action));
-                d.reject(new Error("Timed out"));
-            }, this._timeoutMs);
-        }
-        return d.promise;
+        return new Promise((resolve, reject) => {
+            this._requestMap[action._id] = {resolve, reject};
+            this._window.postMessage(action, target);
+
+            if (this._timeoutMs > 0) {
+                setTimeout(() => {
+                    if (!this._requestMap[action._id]) {
+                        return;
+                    }
+                    console.error("postMessage request timed out. Sent object: " + JSON.stringify(action));
+                    this._requestMap[action._id].reject(new Error("Timed out"));
+                }, this._timeoutMs);
+            }
+        });
     }
 }
