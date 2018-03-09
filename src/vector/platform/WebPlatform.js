@@ -179,7 +179,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     installUpdate() {
-        window.location.reload();
+        window.location.reload(true);
     }
 
     getDefaultDeviceDisplayName(): string {
