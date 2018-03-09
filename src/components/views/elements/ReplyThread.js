@@ -162,11 +162,12 @@ export default class ReplyThread extends React.Component {
         }
 
         html = `<blockquote data-mx-reply><a href="${makeEventPermalink(ev.getRoomId(), ev.getId())}">In reply to</a> `
-            + `<a href="${makeUserPermalink(ev.getSender())}">${ev.getSender()}</a> ${html || body}</blockquote>`;
-        // `&lt;${ev.getSender()}&gt; ${html || body}</blockquote>`;
-        const lines = body.split('\n');
-        const first = `> <${ev.getSender()}> ${lines.shift()}`;
-        body = first + lines.map((line) => `> ${line}`).join('\n') + '\n';
+            + `<a href="${makeUserPermalink(ev.getSender())}">${ev.getSender()}</a><br>${html || body}</blockquote>`;
+        const lines = body.trim().split('\n');
+        if (lines.length > 0) {
+            lines[0] = `<${ev.getSender()}> ${lines[0]}`;
+            body = lines.map((line) => `> ${line}`).join('\n') + '\n\n';
+        }
 
         return {body, html};
     }

@@ -753,9 +753,14 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
+        const replyingToEv = RoomViewStore.getQuotingEvent();
+        const mustSendHTML = Boolean(replyingToEv);
+
         if (this.state.isRichtextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
+
+            if (mustSendHTML) shouldSendHTML = true;
 
             const blocks = contentState.getBlocksAsArray();
             if (blocks.some((block) => block.getType() !== 'unstyled')) {
@@ -815,7 +820,7 @@ export default class MessageComposerInput extends React.Component {
 
             const md = new Markdown(pt);
             // if contains no HTML and we're not quoting (needing HTML)
-            if (md.isPlainText()) {
+            if (md.isPlainText() && !mustSendHTML) {
                 contentText = md.toPlaintext();
             } else {
                 contentHTML = md.toHTML();
@@ -829,8 +834,6 @@ export default class MessageComposerInput extends React.Component {
             contentState,
             this.state.isRichtextEnabled ? 'html' : 'markdown',
         );
-
-        const replyingToEv = RoomViewStore.getQuotingEvent();
 
         if (contentText.startsWith('/me')) {
             if (replyingToEv) {
@@ -850,7 +853,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
 
-        let content = contentHTML || replyingToEv ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
+        let content = contentHTML ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
 
         if (replyingToEv) {
             const replyContent = ReplyThread.getReplyEvContent(replyingToEv);
