@@ -7,7 +7,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
  */
 function getWidgets(room) {
     const widgets = getRoomWidgets(room);
-    widgets.concat(getUserWidgets());
+    widgets.concat(getUserWidgetsArray());
     return widgets;
 }
 
@@ -29,7 +29,7 @@ function getRoomWidgets(room) {
 
 /**
  * Get user specific widgets (not linked to a specific room)
- * @return {[object]} Array containing current / active user widgets
+ * @return {object} Event content object containing current / active user widgets
  */
 function getUserWidgets() {
     const client = MatrixClientPeg.get();
@@ -41,7 +41,16 @@ function getUserWidgets() {
     if (userWidgets && userWidgets.getContent()) {
       userWidgetContent = userWidgets.getContent();
     }
-    return Object.keys(userWidgetContent).map((key) => userWidgetContent[key]);
+    return userWidgetContent;
+}
+
+/**
+ * Get user specific widgets (not linked to a specific room) as an array
+ * @return {[object]} Array containing current / active user widgets
+ */
+function getUserWidgetsArray() {
+  const userWidgetContent = getUserWidgets();
+  return Object.keys(userWidgetContent).map((key) => userWidgetContent[key]);
 }
 
 /**
@@ -49,7 +58,7 @@ function getUserWidgets() {
  * @return {[object]} Array containing current / active stickerpicker widgets
  */
 function getStickerpickerWidgets() {
-    const widgets = getUserWidgets();
+    const widgets = getUserWidgetsArray();
     const stickerpickerWidgets = widgets.filter((widget) => widget.type='m.stickerpicker');
     return stickerpickerWidgets;
 }
@@ -76,6 +85,7 @@ export default {
     getWidgets,
     getRoomWidgets,
     getUserWidgets,
+    getUserWidgetsArray,
     getStickerpickerWidgets,
     removeStickerpickerWidgets,
 };

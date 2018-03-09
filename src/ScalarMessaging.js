@@ -335,10 +335,7 @@ function setWidget(event, roomId) {
 
     if (userWidget) {
         const client = MatrixClientPeg.get();
-        let userWidgets = {};
-        if (client.getAccountData('m.widgets')) {
-          userWidgets = client.getAccountData('m.widgets').getContent();
-        }
+        const userWidgets = Widgets.getUserWidgets();
 
         // Delete existing widget with ID
         try {
@@ -408,7 +405,7 @@ function getWidgets(event, roomId) {
     }
 
     // Add user widgets (not linked to a specific room)
-    const userWidgets = Widgets.getUserWidgets();
+    const userWidgets = Widgets.getUserWidgetsArray();
     widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
