@@ -981,5 +981,19 @@
     "Your identity server's URL": "De URL van je thuisserver",
     "<a>In reply to</a> <pill>": "<a>Als antwoord op</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Deze ruimte is niet publiekelijk. Je zal niet opnieuw kunnen toetreden zonder een uitnodiging.",
-    "were unbanned %(count)s times|one": "waren ontbant"
+    "were unbanned %(count)s times|one": "waren ontbant",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s heeft zijn/haar weergavenaam veranderd naar %(displayName)s.",
+    "Disable Community Filter Panel": "Gemeenschapsfilterpaneel uitzetten",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Je verzoek om sleutels te delen is verzonden - controleer je andere apparaten voor het verzoek.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Verzoeken om sleutels te delen worden automatisch naar andere apparaten verstuurd. Als je het verzoek hebt afgewezen of weg hebt geklikt, klik dan hier voor een nieuwe verzoek voor de sleutels van deze sessie.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Het is niet mogelijk om dit bericht te ontsleutelen als je andere apparaten er geen sleutel voor hebben.",
+    "Key request sent.": "Sleutel verzoek verstuurd.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Versleutelingssleutels opnieuw aanvragen</requestLink> van je andere apparaten.",
+    "%(user)s is a %(userRole)s": "%(user)s is een %(userRole)s",
+    "Did you know: you can use communities to filter your Riot.im experience!": "Wist je dat: je gemeenschappen kan gebruiken om je Riot.im ervaring te filteren!",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Sleep een gemeenschapsavatar naar het filterpaneel helemaal aan de linkerkant van het scherm om een filter te maken. Je kan dan altijd op de avatar in het filterpaneel klikken om alleen de ruimtes en mensen te zien die met die gemeenschap geassocieerd zijn.",
+    "Clear filter": "Filter vrijmaken",
+    "Failed to set direct chat tag": "Het is niet gelukt om de 'privégesprek' label in te stellen",
+    "Failed to remove tag %(tagName)s from room": "Het is niet gelukt om de label %(tagName)s van de ruimte te verwijderen",
+    "Failed to add tag %(tagName)s to room": "Het is niet gelukt om de label %(tagName)s aan deze ruimte toe te voegen"
 }
