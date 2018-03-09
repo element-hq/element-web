@@ -43,12 +43,13 @@ export default class MStickerBody extends MImageBody {
         this.setState({
             placeholderClasses: 'mx_MStickerBody_placeholder_invisible',
         });
-        setTimeout(() => {
+        const hidePlaceholderTimer = setTimeout(() => {
             this.setState({
                 placeholderVisible: false,
                 thumbnailClasses: 'mx_MStickerBody_thumbnail_visible',
             });
         }, 500);
+        this.setState({hidePlaceholderTimer});
     }
 
     _afterComponentDidMount() {
@@ -66,6 +67,13 @@ export default class MStickerBody extends MImageBody {
                 placeholderClasses: '',
                 thumbnailClasses: '',
             });
+        }
+    }
+
+    _afterComponentWillUnmount() {
+        if (this.state.hidePlaceholderTimer) {
+            clearTimeout(this.state.hidePlaceholderTimer);
+            this.setState({hidePlaceholderTimer: null});
         }
     }
 

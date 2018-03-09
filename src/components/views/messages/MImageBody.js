@@ -204,6 +204,12 @@ export default class extends React.Component {
         this.unmounted = true;
         dis.unregister(this.dispatcherRef);
         this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this._afterComponentWillUnmount();
+    }
+
+    // To be overridden by subclasses (e.g. MStickerBody) for further
+    // cleanup after componentWillUnmount
+    _afterComponentWillUnmount() {
     }
 
     onAction(payload) {
