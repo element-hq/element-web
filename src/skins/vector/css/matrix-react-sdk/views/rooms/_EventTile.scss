@@ -203,9 +203,9 @@ limitations under the License.
     text-decoration: none;
 }
 
-.mx_EventTile_last .mx_MessageTimestamp,
-.mx_EventTile:hover .mx_MessageTimestamp,
-.mx_EventTile.menu .mx_MessageTimestamp
+.mx_EventTile_last > div > a > .mx_MessageTimestamp,
+.mx_EventTile:hover > div > a > .mx_MessageTimestamp,
+.mx_EventTile.menu  > div > a > .mx_MessageTimestamp
 {
     visibility: visible;
 }
@@ -238,10 +238,6 @@ limitations under the License.
 .mx_EventTile:hover .mx_EventTile_editButton,
 .mx_EventTile.menu .mx_EventTile_editButton
 {
-    visibility: visible;
-}
-
-.mx_EventTile.menu .mx_MessageTimestamp {
     visibility: visible;
 }
 
