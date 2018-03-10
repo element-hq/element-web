@@ -988,5 +988,11 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Експортираният файл може да бъде предпазен с парола. Трябва да въведете парола тук, за да разшифровате файла.",
     "Did you know: you can use communities to filter your Riot.im experience!": "Знаете ли, че: може да използвате общности, за да филтрирате Вашето Riot.im преживяване!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "За да създадете филтър, дръпнете и пуснете аватара на общността върху панела за филтриране в най-лявата част на екрана. По всяко време може да натиснете върху аватар от панела, за да видите само стаите и хората от тази общност.",
-    "Disable Community Filter Panel": "Изключи панела за филтриране на общности"
+    "Disable Community Filter Panel": "Изключи панела за филтриране на общности",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Заявката за споделяне на ключ е изпратена. Моля, проверете другите си устройства за заявка за споделяне.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Заявки за споделяне на ключове са изпратени автоматично към другите Ви устройства. Ако ги откажете на другите устройства, натиснете тук, за да заявите нови за тази сесия.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Ако другите Ви устройства нямат ключ за това съобщение, няма да можете да ги разшифровате.",
+    "Key request sent.": "Заявката за ключ е изпратена.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Отново заявени ключове за шифроване</requestLink> от Вашите други устройства.",
+    "%(user)s is a %(userRole)s": "%(user)s е %(userRole)s"
 }
