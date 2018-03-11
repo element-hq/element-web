@@ -988,5 +988,12 @@
     "Import": "Увези",
     "Disable Community Filter Panel": "Онемогући површ за филтрирање  заједнице",
     "Did you know: you can use communities to filter your Riot.im experience!": "Да ли сте знали: можете користити заједнице за филтрирање вашег Riot.im искуства!",
-    "Clear filter": "Очисти филтер"
+    "Clear filter": "Очисти филтер",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Ваш захтев за дељење кључа је послат. Проверите да ли има захтева за дељење кључа на осталим вашим уређајима.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Захтеви за дељење кључа се самостално шаљу на остале ваше уређаје. Ако сте одбили или одбацили захтев за дељење кључа на неком другом вашем уређају, кликните овде да бисте затражили поново кључеве за ову сесију.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Ако остали ваши уређаји немају кључ за ову поруку, нећете моћи да је дешифрујете.",
+    "Key request sent.": "Захтев за дељење кључа послат.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Поново затражи кључеве за шифровање</requestLink> са осталих ваших уређаја.",
+    "%(user)s is a %(userRole)s": "Корисник %(user)s је у улози %(userRole)s",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Да бисте поставили филтер, повуците аватар заједнице на површ филтрирања скроз на леву страну екрана. Можете кликнути на аватар у површи филтрирања било када да бисте видели само собе и особе везане за ту заједницу."
 }
