@@ -195,8 +195,8 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
                 api: INBOUND_API_NAME,
                 version: WIDGET_API_VERSION,
             });
-        } else if (action === 'sticker_message') {
-            dis.dispatch({action: 'sticker_message', data: event.data.widgetData, widgetId: event.data.widgetId});
+        } else if (action === 'm.sticker') {
+            dis.dispatch({action: 'm.sticker', data: event.data.widgetData, widgetId: event.data.widgetId});
         } else if (action === 'integration_manager_open') {
             // Close the stickerpicker
             dis.dispatch({action: 'stickerpicker_close'});

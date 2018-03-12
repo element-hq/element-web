@@ -65,7 +65,7 @@ module.exports = React.createClass({
         let BodyType = UnknownBody;
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
-        } else if (this.props.mxEvent.getType() === 'm.room.sticker') {
+        } else if (this.props.mxEvent.getType() === 'm.sticker') {
             BodyType = sdk.getComponent('messages.MStickerBody');
         } else if (content.url) {
             // Fallback to MFileBody if there's a content URL

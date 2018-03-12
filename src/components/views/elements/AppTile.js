@@ -72,7 +72,9 @@ export default class AppTile extends React.Component {
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
-            capabilities: [],
+            allowedCapabilities: (this.props.whitelistCapabilities && this.props.whitelistCapabilities.length > 0) ?
+                this.props.whitelistCapabilities : [],
+            requestedCapabilities: [],
         };
     }
 
@@ -82,7 +84,7 @@ export default class AppTile extends React.Component {
      * @return {Boolean}            True if capability supported
      */
     _hasCapability(capability) {
-        return this.state.capabilities.some((c) => {return c === capability;});
+        return this.state.allowedCapabilities.some((c) => {return c === capability;});
     }
 
     /**
@@ -341,10 +343,27 @@ export default class AppTile extends React.Component {
         this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
-        this.widgetMessaging.getCapabilities().then((capabilities) => {
-            console.log("Got widget capabilities", this.props.id, capabilities);
-            capabilities = capabilities || [];
-            this.setState({capabilities});
+        this.widgetMessaging.getCapabilities().then((requestedCapabilities) => {
+            console.log(`Widget ${this.props.id} requested capabilities:`, requestedCapabilities);
+            requestedCapabilities = requestedCapabilities || [];
+
+            // Allow whitelisted capabilities
+            const requestedWhitelistCapabilies =
+                requestedCapabilities.filter(function(e) {
+                    return this.indexOf(e)>=0;
+                }, this.props.whitelistCapabilities);
+            console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties:`,
+                requestedWhitelistCapabilies);
+
+            // TODO -- Add UI to warn about and optionally allow requested capabilities
+            this.setState({
+                requestedCapabilities,
+                allowedCapabilities: this.state.allowedCapabilities.concat(requestedWhitelistCapabilies),
+            });
+
+            if (this.props.onCapabilityRequest) {
+                this.props.onCapabilityRequest(requestedCapabilities);
+            }
         }).catch((err) => {
             console.log("Failed to get widget capabilities", this.widgetId, err);
         });
@@ -354,8 +373,8 @@ export default class AppTile extends React.Component {
     _onWidgetAction(payload) {
         if (payload.widgetId === this.props.id) {
             switch (payload.action) {
-                case 'sticker_message':
-                if (this._hasCapability('sticker_message')) {
+                case 'm.sticker':
+                if (this._hasCapability('m.sticker')) {
                     dis.dispatch({action: 'post_sticker_message', data: payload.data});
                 } else {
                     console.warn('Ignoring sticker message. Invalid capability');
@@ -626,6 +645,13 @@ AppTile.propTypes = {
     handleMinimisePointerEvents: PropTypes.bool,
     // Optionally hide the delete icon
     showDelete: PropTypes.bool,
+    // Widget apabilities to allow by default (without user confirmation)
+    // NOTE -- Use with caution. This is intended to aid better integration / UX
+    // basic widget capabilities, e.g. injecting sticker message events.
+    whitelistCapabilities: PropTypes.array,
+    // Optional function to be called on widget capability request
+    // Called with an array of the requested capabilities
+    onCapabilityRequest: PropTypes.func,
 };
 
 AppTile.defaultProps = {
@@ -636,4 +662,5 @@ AppTile.defaultProps = {
     showMinimise: true,
     showDelete: true,
     handleMinimisePointerEvents: false,
+    whitelistCapabilities: [],
 };
