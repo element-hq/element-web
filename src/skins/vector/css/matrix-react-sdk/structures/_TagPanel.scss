@@ -75,9 +75,15 @@ limitations under the License.
     padding: 3px 0px;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar {
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
     border: 3px solid $accent-color;
+    background-color: $accent-color;
     border-radius: 60px;
+
+    /* In case this is a "initial" avatar */
+    display: block;
+    height: 35px;
+    width: 35px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
