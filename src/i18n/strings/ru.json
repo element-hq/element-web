@@ -992,5 +992,5 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Если у других устройств нет ключа для этого сообщения, вы не сможете его расшифровать.",
     "Key request sent.": "Запрос ключа отправлен.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Повторно запросить ключи шифрования</requestLink> с других устройств.",
-    "%(user)s is a %(userRole)s": "%(user)s яаляется %(userRole)s"
+    "%(user)s is a %(userRole)s": "%(user)s является %(userRole)s"
 }
