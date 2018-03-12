@@ -263,9 +263,9 @@ async function loadApp() {
     } catch (e) {
         configError = e;
     }
-    
+
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme. 
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     SdkConfig.put(configJson);
 
     // don't try to redirect to the native apps if we're
@@ -313,7 +313,11 @@ async function loadApp() {
         if (match) {
             if (match[1] === theme) {
                 // remove the disabled flag off the stylesheet
-                a.removeAttribute("disabled");
+
+                // Firefox requires setting the attribute to false, so do
+                // that instead of removing it. Related:
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1281135
+                a.disabled = false;
 
                 // in case the Tinter.tint() in MatrixChat fires before the
                 // CSS has actually loaded (which in practice happens)...
@@ -321,9 +325,14 @@ async function loadApp() {
                 // FIXME: we should probably block loading the app or even
                 // showing a spinner until the theme is loaded, to avoid
                 // flashes of unstyled content.
-                a.onload = () => { 
+                a.onload = () => {
                     Tinter.setTheme(theme);
                 };
+            } else {
+                // Firefox requires this to not be done via `setAttribute`
+                // or via HTML.
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1281135
+                a.disabled = true;
             }
         }
     }
