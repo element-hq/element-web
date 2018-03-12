@@ -82,7 +82,7 @@ module.exports = React.createClass({
         }
     },
 
-    onClientSync(syncState, prevState) {
+    onClientSync: function(syncState, prevState) {
         if (this.unmounted) return;
 
         // Consider the client reconnected if there is no error with syncing.
