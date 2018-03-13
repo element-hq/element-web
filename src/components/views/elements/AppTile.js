@@ -496,7 +496,7 @@ export default class AppTile extends React.Component {
 
         if (this.props.show) {
             const loadingElement = (
-                <div className='mx_AppTileBody mx_AppLoading'>
+                <div>
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
@@ -511,7 +511,7 @@ export default class AppTile extends React.Component {
                     );
                 } else {
                     appTileBody = (
-                        <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
+                        <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
                             { this.state.loading && loadingElement }
                             { /*
                                 The "is" attribute in the following iframe tag is needed in order to enable rendering of the
