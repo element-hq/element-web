@@ -58,6 +58,7 @@ limitations under the License.
     margin-right: 5px;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
+    background-color: $dialog-background-bg-color;
 }
 
 .mx_AppTile:last-child {
@@ -257,12 +258,21 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppLoading {
-    min-height: 305px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    position: relative;
+    height: 280px;
+}
+
+.mx_AppLoading .mx_Spinner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .mx_AppLoading iframe {
