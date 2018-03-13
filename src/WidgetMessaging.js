@@ -277,8 +277,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
         return this.exec({
                 api: OUTBOUND_API_NAME,
                 action: "capabilities",
-            }).then((response) => response.capabilities)
-            .catch((error) => new Error("Failed to get capabilities: " + error.message));
+            }).then((response) => response.capabilities);
     }
 }
 
