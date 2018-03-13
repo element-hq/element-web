@@ -350,12 +350,18 @@ export default class AppTile extends React.Component {
             requestedCapabilities = requestedCapabilities || [];
 
             // Allow whitelisted capabilities
-            const requestedWhitelistCapabilies =
-                requestedCapabilities.filter(function(e) {
+            let requestedWhitelistCapabilies = [];
+
+            if (this.props.whitelistCapabilities && this.props.whitelistCapabilities.length > 0) {
+                requestedWhitelistCapabilies = requestedCapabilities.filter(function(e) {
                     return this.indexOf(e)>=0;
                 }, this.props.whitelistCapabilities);
-            console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties:`,
-                requestedWhitelistCapabilies);
+
+                if (requestedWhitelistCapabilies.length > 0 ) {
+                    console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties:`,
+                        requestedWhitelistCapabilies);
+                }
+            }
 
             // TODO -- Add UI to warn about and optionally allow requested capabilities
             this.setState({
