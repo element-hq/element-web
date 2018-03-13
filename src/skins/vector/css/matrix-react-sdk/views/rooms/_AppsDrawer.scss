@@ -72,8 +72,6 @@ limitations under the License.
     padding: 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    // height: 350px;
-    // display: inline-block;
 }
 
 .mx_AppTile, .mx_AppTileFullWidth {
@@ -108,7 +106,6 @@ limitations under the License.
 }
 
 .mx_AppTileMenuBarWidget {
-    // pointer-events: none;
     cursor: pointer;
     width: 10px;
     height: 10px;
@@ -127,23 +124,20 @@ limitations under the License.
 }
 
 .mx_AppTileBody{
-    height: 350px;
+    height: 280px;
     width: 100%;
     overflow: hidden;
 }
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: 350px;
+    height: 280px;
     overflow: hidden;
     border: none;
     padding: 0;
     margin: 0;
     display: block;
 }
-
-// .mx_CloseAppWidget {
-// }
 
 .mx_AppTileMenuBarWidgetPadding {
     margin-right: 5px;
