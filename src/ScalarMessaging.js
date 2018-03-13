@@ -624,23 +624,21 @@ const onMessage = function(event) {
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
 
-    // These APIs don't require roomId
-    // Get and set user widgets (not associated with a specific room)
-    // If roomId is specified, it must be validated, so room-based widgets agreed
-    // handled further down.
-    if (event.data.userWidget) {
+    if (!roomId) {
+        // These APIs don't require roomId
+        // Get and set user widgets (not associated with a specific room)
+        // If roomId is specified, it must be validated, so room-based widgets agreed
+        // handled further down.
         if (event.data.action === "get_widgets") {
             getWidgets(event, null);
             return;
         } else if (event.data.action === "set_widget") {
             setWidget(event, null);
             return;
+        } else {
+            sendError(event, _t('Missing room_id in request'));
+            return;
         }
-    }
-
-    if (!roomId) {
-        sendError(event, _t('Missing room_id in request'));
-        return;
     }
     let promise = Promise.resolve(currentRoomId);
     if (!currentRoomId) {
