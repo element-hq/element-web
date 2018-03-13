@@ -994,5 +994,6 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Ha a másik eszközödön nincs meg a kulcs az üzenet visszafejtéséhez akkor nem tudod visszafejteni.",
     "Key request sent.": "Kulcs kérés elküldve.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Kulcsok újrakérése</requestLink> a többi eszközödtől.",
-    "%(user)s is a %(userRole)s": "%(user)s egy %(userRole)s"
+    "%(user)s is a %(userRole)s": "%(user)s egy %(userRole)s",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "A közösségedben végrehajtott változtatás valószínűleg legalább 30 percig nem lesz látható mások számára."
 }
