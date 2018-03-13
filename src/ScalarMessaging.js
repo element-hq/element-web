@@ -628,12 +628,14 @@ const onMessage = function(event) {
     // Get and set user widgets (not associated with a specific room)
     // If roomId is specified, it must be validated, so room-based widgets agreed
     // handled further down.
-    if (event.data.action === "get_widgets") {
-        getWidgets(event, null);
-        return;
-    } else if (event.data.action === "set_widget") {
-        setWidget(event, null);
-        return;
+    if (event.data.userWidget) {
+        if (event.data.action === "get_widgets") {
+            getWidgets(event, null);
+            return;
+        } else if (event.data.action === "set_widget") {
+            setWidget(event, null);
+            return;
+        }
     }
 
     if (!roomId) {
@@ -661,10 +663,10 @@ const onMessage = function(event) {
 
         // Get and set room-based widgets
         if (event.data.action === "get_widgets") {
-            getWidgets(event, null);
+            getWidgets(event, roomId);
             return;
         } else if (event.data.action === "set_widget") {
-            setWidget(event, null);
+            setWidget(event, roomId);
             return;
         }
 
