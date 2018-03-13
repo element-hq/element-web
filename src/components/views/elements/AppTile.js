@@ -365,7 +365,7 @@ export default class AppTile extends React.Component {
                 this.props.onCapabilityRequest(requestedCapabilities);
             }
         }).catch((err) => {
-            console.log("Failed to get widget capabilities", this.widgetId, err);
+            console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
         this.setState({loading: false});
     }
