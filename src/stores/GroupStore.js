@@ -27,6 +27,48 @@ function parseRoomsResponse(response) {
     return response.chunk.map((apiRoom) => groupRoomFromApiObject(apiRoom));
 }
 
+// The number of ongoing group requests
+let ongoingRequestCount = 0;
+
+// This has arbitrarily been set to a small number to lower the priority
+// of doing group-related requests because we care about other important
+// requests like hitting /sync.
+const LIMIT = 3; // Maximum number of ongoing group requests
+
+// FIFO queue of functions to call in the backlog
+const backlogQueue = [
+    // () => {...}
+];
+
+// Pull from the FIFO queue
+function checkBacklog() {
+    const item = backlogQueue.shift();
+    if (typeof item === 'function') item();
+}
+
+// Limit the maximum number of ongoing promises returned by fn to LIMIT and
+// use a FIFO queue to handle the backlog.
+function limitConcurrency(fn) {
+    return new Promise((resolve, reject) => {
+        const item = () => {
+            ongoingRequestCount++;
+            resolve();
+        };
+        if (ongoingRequestCount >= LIMIT) {
+            // Enqueue this request for later execution
+            backlogQueue.push(item);
+        } else {
+            item();
+        }
+    })
+    .then(fn)
+    .then((result) => {
+        ongoingRequestCount--;
+        checkBacklog();
+        return result;
+    });
+}
+
 /**
  * Stores the group summary for a room and provides an API to change it and
  * other useful group APIs that may have an effect on the group summary.
@@ -56,23 +98,24 @@ export default class GroupStore extends EventEmitter {
         this._fetchResourcePromise = {};
         this._resourceFetcher = {
             [GroupStore.STATE_KEY.Summary]: () => {
-                return MatrixClientPeg.get()
-                    .getGroupSummary(this.groupId);
+                return limitConcurrency(
+                    () => MatrixClientPeg.get().getGroupSummary(this.groupId),
+                );
             },
             [GroupStore.STATE_KEY.GroupRooms]: () => {
-                return MatrixClientPeg.get()
-                    .getGroupRooms(this.groupId)
-                    .then(parseRoomsResponse);
+                return limitConcurrency(
+                    () => MatrixClientPeg.get().getGroupRooms(this.groupId).then(parseRoomsResponse),
+                );
             },
             [GroupStore.STATE_KEY.GroupMembers]: () => {
-                return MatrixClientPeg.get()
-                    .getGroupUsers(this.groupId)
-                    .then(parseMembersResponse);
+                return limitConcurrency(
+                    () => MatrixClientPeg.get().getGroupUsers(this.groupId).then(parseMembersResponse),
+                );
             },
             [GroupStore.STATE_KEY.GroupInvitedMembers]: () => {
-                return MatrixClientPeg.get()
-                    .getGroupInvitedUsers(this.groupId)
-                    .then(parseMembersResponse);
+                return limitConcurrency(
+                    () => MatrixClientPeg.get().getGroupInvitedUsers(this.groupId).then(parseMembersResponse),
+                );
             },
         };
 
