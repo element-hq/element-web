@@ -988,5 +988,9 @@
     "Clear filter": "Garbitu iragazkia",
     "Disable Community Filter Panel": "Desgaitu komunitate-iragazi panela",
     "Did you know: you can use communities to filter your Riot.im experience!": "Ba al zenekien? Komunitateak erabili ditzakezu zure Riot.im esperientzia iragazteko!",
-    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Iragazki bat ezartzeko, arrastatu komunitate baten abatarra pantailaren ezkerrean dagoen  iragazki-panelera. Iragazki-paneleko abatar batean klik egin dezakezu komunitate horri lotutako gelak eta pertsonak besterik ez ikusteko."
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Iragazki bat ezartzeko, arrastatu komunitate baten abatarra pantailaren ezkerrean dagoen  iragazki-panelera. Iragazki-paneleko abatar batean klik egin dezakezu komunitate horri lotutako gelak eta pertsonak besterik ez ikusteko.",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Zure gakoa partekatzeko eskaria bidali da - egiaztatu zure beste gailuetan gakoa partekatzeko eskariak.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Gakoa partekatzeko eskariak automatikoki bidaltzen dira zure beste gailuetara. Zure beste gailuetan gakoa partekatzeko eskaria ukatu edo baztertu baduzu, egin klik hemen saio honetarako gakoak eskatzeko berriz ere.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Zure beste gailuek mezu honetarako gakoa ez badute ezin izango dute deszifratu.",
+    "Key request sent.": "Gako eskaria bidalita."
 }
