@@ -11,10 +11,14 @@
 @import "./matrix-react-sdk/structures/_RoomStatusBar.scss";
 @import "./matrix-react-sdk/structures/_RoomView.scss";
 @import "./matrix-react-sdk/structures/_SearchBox.scss";
+@import "./matrix-react-sdk/structures/_TabbedView.scss";
 @import "./matrix-react-sdk/structures/_TagPanel.scss";
 @import "./matrix-react-sdk/structures/_UploadBar.scss";
 @import "./matrix-react-sdk/structures/_UserSettings.scss";
 @import "./matrix-react-sdk/structures/login/_Login.scss";
+@import "./matrix-react-sdk/structures/settings/_common.scss";
+@import "./matrix-react-sdk/structures/settings/user/_AboutAppSettingsPanel.scss";
+@import "./matrix-react-sdk/structures/settings/user/_GeneralSettingsPanel.scss";
 @import "./matrix-react-sdk/views/avatars/_BaseAvatar.scss";
 @import "./matrix-react-sdk/views/avatars/_MemberPresenceAvatar.scss";
 @import "./matrix-react-sdk/views/dialogs/_BugReportDialog.scss";
@@ -74,6 +78,7 @@
 @import "./matrix-react-sdk/views/rooms/_SearchableEntityList.scss";
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
+@import "./matrix-react-sdk/views/settings/_FieldCommitment.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
 @import "./matrix-react-sdk/views/voip/_IncomingCallbox.scss";
