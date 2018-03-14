@@ -48,9 +48,27 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+    },
+
+    componentWillUnmount: function() {
+        MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+    },
+
     componentWillReceiveProps: function(newProps) {
         this.setState({
             urls: this.getImageUrls(newProps),
+        });
+    },
+
+    onRoomStateEvents: function(ev) {
+        if (ev.getRoomId() !== this.props.room.roomId ||
+            ev.getType() !== 'm.room.avatar'
+        ) return;
+
+        this.setState({
+            urls: this.getImageUrls(this.props),
         });
     },
 
