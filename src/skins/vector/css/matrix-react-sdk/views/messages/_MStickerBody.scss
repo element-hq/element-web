@@ -21,17 +21,17 @@ limitations under the License.
   padding: 20px 0;
 }
 
-.mx_MStickerBody_thumbnail_container {
+.mx_MStickerBody_image_container {
   display: inline-block;
   position: relative;
 }
 
-.mx_MStickerBody_thumbnail {
+.mx_MStickerBody_image {
   max-width: 100%;
   opacity: 0;
 }
 
-.mx_MStickerBody_thumbnail_visible {
+.mx_MStickerBody_image_visible {
   opacity: 1;
 }
 
