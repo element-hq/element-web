@@ -33,6 +33,17 @@ export default class DNDRoomTile extends React.Component {
         });
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        // Do a shallow comparison of the props that we pass through (there is no
+        // state to check).
+        // NB: We might want to ignore changes to index in future if reordering
+        // occurs (all indices of all tiles in the sublist will change).
+        if (Object.keys(nextProps).some((k) => nextProps[k] !== this.props[k])) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         const props = this.props;
 
