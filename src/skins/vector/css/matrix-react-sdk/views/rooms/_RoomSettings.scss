@@ -134,6 +134,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_RoomSettings .mx_RoomSettings_roomColor.mx_RoomSettings_roomColor_disabled {
+    cursor: auto;
+}
+
 .mx_RoomSettings .mx_RoomSettings_roomColor_selected {
     position: absolute;
     left: 10px;
