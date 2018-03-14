@@ -994,5 +994,6 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Wenn deine anderen Geräte keine Schlüssel für diese Nachricht haben, wirst du diese nicht entschlüsseln können.",
     "Key request sent.": "Schlüssel-Anfragen gesendet.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "Verschlüsselungs-Schlüssel von deinen anderen Geräten <requestLink>erneut anfragen</requestLink>.",
-    "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s"
+    "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Änderungen, die an deiner Community gemacht werden, können bis zu 30 Minuten brauchen, bis sie für andere sichtbar sind."
 }
