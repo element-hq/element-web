@@ -410,8 +410,7 @@ class TextHighlighter extends BaseHighlighter {
      * opts.disableBigEmoji: optional argument to disable the big emoji class.
      */
 export function bodyToHtml(content, highlights, opts={}) {
-    const isHtml = (content.format === "org.matrix.custom.html");
-    const body = isHtml ? content.formatted_body : escape(content.body);
+    let isHtml = (content.format === "org.matrix.custom.html");
 
     let bodyHasEmoji = false;
 
@@ -431,9 +430,27 @@ export function bodyToHtml(content, highlights, opts={}) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
             };
         }
-        safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        bodyHasEmoji = containsEmoji(body);
-        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
+
+        bodyHasEmoji = containsEmoji(isHtml ? content.formatted_body : content.body);
+
+        // Only generate safeBody if the message was sent as org.matrix.custom.html
+        if (isHtml) {
+            safeBody = sanitizeHtml(content.formatted_body, sanitizeHtmlParams);
+        } else {
+            // ... or if there are emoji, which we insert as HTML alongside the
+            // escaped plaintext body.
+            if (bodyHasEmoji) {
+                isHtml = true;
+                safeBody = sanitizeHtml(escape(content.body), sanitizeHtmlParams);
+            }
+        }
+
+        // An HTML message with emoji
+        //  or a plaintext message with emoji that was escaped and sanitized into
+        //  HTML.
+        if (bodyHasEmoji) {
+            safeBody = unicodeToImage(safeBody);
+        }
     } finally {
         delete sanitizeHtmlParams.textFilter;
     }
@@ -451,7 +468,10 @@ export function bodyToHtml(content, highlights, opts={}) {
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtml,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
+
+    return isHtml ?
+        <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span className={className} dir="auto">{ content.body }</span>;
 }
 
 export function emojifyText(text) {
