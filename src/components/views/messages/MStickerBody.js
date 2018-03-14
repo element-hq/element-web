@@ -46,7 +46,7 @@ export default class MStickerBody extends MImageBody {
         const hidePlaceholderTimer = setTimeout(() => {
             this.setState({
                 placeholderVisible: false,
-                thumbnailClasses: 'mx_MStickerBody_thumbnail_visible',
+                imageClasses: 'mx_MStickerBody_image_visible',
             });
         }, 500);
         this.setState({hidePlaceholderTimer});
@@ -58,14 +58,14 @@ export default class MStickerBody extends MImageBody {
             this.setState({
                 placeholderVisible: false,
                 placeholderClasses: '.mx_MStickerBody_placeholder_invisible',
-                thumbnailClasses: 'mx_MStickerBody_thumbnail_visible',
+                imageClasses: 'mx_MStickerBody_image_visible',
             });
         } else {
             // Image not already loaded
             this.setState({
                 placeholderVisible: true,
                 placeholderClasses: '',
-                thumbnailClasses: '',
+                imageClasses: '',
             });
         }
     }
@@ -110,7 +110,7 @@ export default class MStickerBody extends MImageBody {
                 style={{
                     height: placeholderFixupHeight,
                 }}>
-                <div className={'mx_MStickerBody_thumbnail_container'}>
+                <div className={'mx_MStickerBody_image_container'}>
                   { this.state.placeholderVisible &&
                     <div
                         className={'mx_MStickerBody_placeholder ' + this.state.placeholderClasses}
@@ -125,8 +125,8 @@ export default class MStickerBody extends MImageBody {
                             height={placeholderSize} />
                     </div> }
                     <img
-                        className={'mx_MStickerBody_thumbnail ' + this.state.thumbnailClasses}
-                        src={thumbUrl}
+                        className={'mx_MStickerBody_image ' + this.state.imageClasses}
+                        src={contentUrl}
                         ref='image'
                         alt={content.body}
                         onLoad={this.props.onWidgetLoad}
