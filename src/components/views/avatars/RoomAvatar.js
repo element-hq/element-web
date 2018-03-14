@@ -53,7 +53,10 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.events", this.onRoomStateEvents);
+        }
     },
 
     componentWillReceiveProps: function(newProps) {
