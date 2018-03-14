@@ -988,5 +988,11 @@
     "Did you know: you can use communities to filter your Riot.im experience!": "Wusstest du: Du kannst Communities nutzen um deine Riot.im-Erfahrung zu filtern!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Um einen Filter zu setzen, siehe einen Community-Bild auf das Filter-Panel ganz links. Du kannst jederzeit auf einen Avatar im Filter-Panel klicken um nur die Räume und Personen aus der Community zu sehen.",
     "Clear filter": "Filter zurücksetzen",
-    "Disable Community Filter Panel": "Deaktivere Community-Filter-Panel"
+    "Disable Community Filter Panel": "Deaktivere Community-Filter-Panel",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Deine Schlüssel-Teil-Anfragen wurden gesendet. Bitte prüfe deine anderen Geräte auf die Schlüssel-Teil-Anfragen.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Schlüssel-Anfragen wurden automatisch zu den anderen Geräten gesendet. Wenn du diese Anfragen auf deinen anderen Geräten abgelehnt oder verpasst hast, klicke hier um die Schlüssel für diese Sitzung erneut anzufragen.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Wenn deine anderen Geräte keine Schlüssel für diese Nachricht haben, wirst du diese nicht entschlüsseln können.",
+    "Key request sent.": "Schlüssel-Anfragen gesendet.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "Verschlüsselungs-Schlüssel von deinen anderen Geräten <requestLink>erneut anfragen</requestLink>.",
+    "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s"
 }
