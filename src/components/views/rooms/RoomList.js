@@ -77,9 +77,7 @@ module.exports = React.createClass({
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.name", this.onRoomName);
         cli.on("Room.receipt", this.onRoomReceipt);
-        cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
@@ -161,12 +159,6 @@ module.exports = React.createClass({
                     });
                 }
                 break;
-            case 'on_room_read':
-                // Force an update because the notif count state is too deep to cause
-                // an update. This forces the local echo of reading notifs to be
-                // reflected by the RoomTiles.
-                this.forceUpdate();
-                break;
         }
     },
 
@@ -177,9 +169,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -241,14 +231,6 @@ module.exports = React.createClass({
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
             this._delayedRefreshRoomList();
         }
-    },
-
-    onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomStateEvents: function(ev, state) {
-        this._delayedRefreshRoomList();
     },
 
     onRoomMemberName: function(ev, member) {
