@@ -988,5 +988,12 @@
     "Did you know: you can use communities to filter your Riot.im experience!": "您知道嗎：您可以使用社群來強化您的 Riot.im 使用體驗！",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "要設定過濾器，拖曳社群大頭貼到位於螢幕最左邊的過濾器面板。您可以在任何時候在過濾器面板中的大頭貼上點按以檢視與該社群關聯的聊天室與夥伴。",
     "Clear filter": "清除過濾器",
-    "Disable Community Filter Panel": "停用社群過濾面板"
+    "Disable Community Filter Panel": "停用社群過濾面板",
+    "Your key share request has been sent - please check your other devices for key share requests.": "您的金鑰分享請求已傳送，請檢查您的其他裝置來看看金鑰分享請求。",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "金鑰分享請求已自動傳送到您的其他裝置。若您在您的其他裝置上回絕了金鑰分享請求，點按這裡以再次請求這個工作階段的金鑰。",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "若您的其他裝置沒有這個訊息的金鑰，您將無法將它們解密。",
+    "Key request sent.": "金鑰請求已傳送。",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "從您的其他裝置<requestLink>重新請求加密金鑰</requestLink>。",
+    "%(user)s is a %(userRole)s": "%(user)s 是 %(userRole)s",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "其他使用者在最多 30 分鐘內可能不會慨到您對社群所做的變更。"
 }
