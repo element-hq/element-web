@@ -206,5 +206,6 @@
     "Register": "Registrera",
     "%(count)s Members|other": "%(count)s 1 Medlemmar",
     "%(count)s Members|one": "%(count)s 1 Medlem",
-    "Rooms": "Rum"
+    "Rooms": "Rum",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda anpassade serverinställningar för att logga in på andra Matrix-servrar genom att ange en annan hemserver-URL.<BR/>Du kan då använda Riot med ett befintligt Matrix-konto på en annan hemserver.<br/><br/>Du kan också ange en anpassad identitetsserver men kommer då inte kunna bjuda in användare med epostadress, eller själv bli inbjuden med epostadress."
 }
