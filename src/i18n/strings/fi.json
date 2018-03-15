@@ -514,7 +514,6 @@
     "Use with caution": "Käytä varoen",
     "User ID": "Käyttäjätunniste",
     "User Interface": "Käyttöliittymä",
-    "%(user)s is a": "%(user)s on",
     "User name": "Käyttäjänimi",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s asetti aiheeksi \"%(topic)s\".",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Salasanan muuttaminen uudelleenalustaa myös päästä päähän-salausavaimet kaikilla laitteilla, jolloin vanhojen viestien lukeminen ei ole enään mahdollista, ellet ensin vie huoneavaimet ja tuo ne takaisin jälkeenpäin. Tämä tulee muuttumaan tulevaisuudessa.",
@@ -934,7 +933,6 @@
     "Custom of %(powerLevel)s": "Valinnaiset %(powerLevel)s",
     "To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:": "Varmistaaksesi että tähän laitteeseen voidaan luottaa, ole yhteydessä omistajaan jollain muulla tavalla (henkilökohtaisesti tai puhelimitse) ja pyydä heitä varmistamaan näkyykö Käyttäjäasetuksissa laite jolla on alla oleva avain:",
     "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.": "Jos avain täsmää, valitse painike alla. Jos avain ei täsmää, niin joku muu salakuuntelee laitetta ja haluat todennäköisesti painaa estopainiketta.",
-    "Cryptography data migrated": "Salaustiedot siirretty",
     "Old cryptography data detected": "Vanhat salaustiedot havaittu",
     "Warning": "Varoitus",
     "Access Token:": "Pääsykoodi:"

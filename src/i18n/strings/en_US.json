@@ -639,7 +639,6 @@
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "Upload new:": "Upload new:",
-    "%(user)s is a": "%(user)s is a",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "Username invalid: %(errMessage)s": "Username invalid: %(errMessage)s",
     "Verified": "Verified",

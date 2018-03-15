@@ -615,7 +615,6 @@
     "Unnamed Room": "Sala sem nome",
     "Unverified": "Não verificado",
     "Upload new:": "Enviar novo:",
-    "%(user)s is a": "%(user)s é um(a)",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
     "Verified": "Verificado",
     "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Você gostaria de <acceptText>aceitar</acceptText> ou <declineText>recusar</declineText> este convite?",

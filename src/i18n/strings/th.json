@@ -392,7 +392,6 @@
     "Rejoin": "กลับเข้าร่วม",
     "This room": "ห้องนี้",
     "Unnamed Room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
-    "%(user)s is a": "%(user)s เป็น",
     "(~%(count)s results)|one": "(~%(count)s ผลลัพท์)",
     "(~%(count)s results)|other": "(~%(count)s ผลลัพท์)",
     "Missing Media Permissions, click here to request.": "ไม่มีสิทธิ์เข้าถึงสื่อ, คลิกที่นี่เพื่อขอสิทธิ์",

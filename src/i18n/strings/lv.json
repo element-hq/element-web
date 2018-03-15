@@ -333,7 +333,6 @@
     "Uploading %(filename)s and %(count)s others|zero": "Tiek augšuplādēts %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Tiek augšuplādēts %(filename)s un %(count)s citi",
     "Uploading %(filename)s and %(count)s others|other": "Tiek augšuplādēts %(filename)s un %(count)s citi",
-    "%(user)s is a": "%(user)s ir",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "Username invalid: %(errMessage)s": "Neatbilstošs lietotājvārds: %(errMessage)s",
     "(unknown failure: %(reason)s)": "(nezināma kļūda: %(reason)s)",

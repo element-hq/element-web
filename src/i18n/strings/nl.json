@@ -450,7 +450,6 @@
     "Use with caution": "Gebruik met behoedzaamheid",
     "User ID": "Gebruikers-ID",
     "User Interface": "Gebruikersinterface",
-    "%(user)s is a": "%(user)s is een",
     "User name": "Gebruikersnaam",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (macht %(powerLevelNumber)s)",
     "Username invalid: %(errMessage)s": "Gebruikersnaam ongeldig: %(errMessage)s",
