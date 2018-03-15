@@ -869,14 +869,14 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        this.client.sendMessage(this.props.room.roomId, content).done((res) => {
-            dis.dispatch({
-                action: 'message_sent',
-            });
-            // Once replies are not only for text, we can use message_sent for this
+        this.client.sendMessage(this.props.room.roomId, content).finally(() => {
             dis.dispatch({
                 action: 'reply_to_event',
                 event: null,
+            });
+        }).done((res) => {
+            dis.dispatch({
+                action: 'message_sent',
             });
         }, (e) => onSendMessageFailed(e, this.props.room));
 
