@@ -932,7 +932,7 @@
     "Flair": "Badge",
     "Showing flair for these communities:": "Ce salon affichera les badges pour ces communautés :",
     "This room is not showing flair for any communities": "Ce salon n'affiche de badge pour aucune communauté",
-    "Flair will appear if enabled in room settings": "Les badges n'apparaîtront que s'ils sont activés dans les paramètres du salon",
+    "Flair will appear if enabled in room settings": "Les badges n'apparaîtront que s'ils sont activés dans les paramètres de chaque salon",
     "Flair will not appear": "Les badges n'apparaîtront pas",
     "Display your community flair in rooms configured to show it.": "Sélectionnez les badges dans les paramètres de chaque salon pour les afficher.",
     "Tag Panel": "Panneau des étiquettes",
