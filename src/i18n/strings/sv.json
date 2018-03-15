@@ -197,5 +197,14 @@
     "Back": "Tillbaka",
     "Filter results": "Filtrera resultaten",
     "Explore Room State": "Utforska rumläget",
-    "Show message in desktop notification": "Visa meddelande i skrivbordsavisering"
+    "Show message in desktop notification": "Visa meddelande i skrivbordsavisering",
+    "Edit": "Editera",
+    "Reply": "Svara",
+    "Online": "Aktiv",
+    "Away": "Borta",
+    "Appear Offline": "Visa som utloggad",
+    "Register": "Registrera",
+    "%(count)s Members|other": "%(count)s 1 Medlemmar",
+    "%(count)s Members|one": "%(count)s 1 Medlem",
+    "Rooms": "Rum"
 }
