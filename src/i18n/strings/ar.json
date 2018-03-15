@@ -1,11 +1,17 @@
 {
-    "Continue": "استمر",
+    "Continue": "إستمر",
     "Username available": "اسم المستخدم متاح",
     "Username not available": "الإسم المستخدم غير موجود",
     "Something went wrong!": "هناك خطأ ما!",
     "Cancel": "إلغاء",
     "Close": "إغلاق",
     "Create new room": "إنشاء غرفة جديدة",
-    "Custom Server Options": "إعدادات السيرفر خاصة",
-    "Dismiss": "صرف النظر"
+    "Custom Server Options": "الإعدادات الشخصية للخادوم",
+    "Dismiss": "تجاهل",
+    "Failed to change password. Is your password correct?": "فشلت عملية تعديل الكلمة السرية. هل كلمتك السرية صحيحة ؟",
+    "Warning": "تنبيه",
+    "Error": "خطأ",
+    "Remove": "حذف",
+    "Send": "إرسال",
+    "Edit": "تعديل"
 }
