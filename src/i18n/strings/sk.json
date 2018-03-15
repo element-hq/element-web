@@ -977,5 +977,12 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Či pri písaní správ používate rozbalenú lištu formátovania textu",
     "Your homeserver's URL": "URL adresa vami používaného domovského servera",
     "Your identity server's URL": "URL adresa vami používaného servera totožností",
-    "This room is not public. You will not be able to rejoin without an invite.": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu."
+    "This room is not public. You will not be able to rejoin without an invite.": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu.",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s si zmenil zobrazované meno na %(displayName)s.",
+    "Failed to set direct chat tag": "Nepodarilo sa nastaviť značku priama konverzácia",
+    "Failed to remove tag %(tagName)s from room": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
+    "Failed to add tag %(tagName)s to room": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
+    "<a>In reply to</a> <pill>": "<a>Odpoveď na</a> <pill>",
+    "Community IDs cannot not be empty.": "ID komunity nemôže ostať prázdne.",
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Zobraziť zariadenia</showDevicesText>, <sendAnywayText>napriek tomu odoslať</sendAnywayText> alebo <cancelText>zrušiť</cancelText>."
 }
