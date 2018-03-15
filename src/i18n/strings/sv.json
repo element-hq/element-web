@@ -10,7 +10,7 @@
     "VoIP": "VoIP",
     "Missing Media Permissions, click here to request.": "Saknar mediebehörigheter, klicka för att begära.",
     "No Microphones detected": "Ingen mikrofon hittades",
-    "No Webcams detected": "Ingen kamera hittades",
+    "No Webcams detected": "Ingen webbkamera hittades",
     "No media permissions": "Inga mediebehörigheter",
     "You may need to manually permit Riot to access your microphone/webcam": "Du måste manuellt tillåta Riot att komma åt din mikrofon/kamera",
     "Default Device": "Standardenhet",
