@@ -222,5 +222,9 @@
     "Pin Message": "Blocca messaggio",
     "Add rooms to this community": "Aggiungi stanze a questa community",
     "Reply": "Rispondi",
-    "Invite to this community": "Invita a questa comunità"
+    "Invite to this community": "Invita a questa comunità",
+    "Online": "Online",
+    "View Community": "Vedi la comunità",
+    "%(count)s Members|other": "%(count)s membri",
+    "%(count)s Members|one": "%(count)s membro"
 }

@@ -222,5 +222,9 @@
     "Appear Offline": "Отображать как не в сети",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Лучший опыт вы получите, установив <chromeLink>Chrome</chromeLink> или <firefoxLink>Firefox</firefoxLink>.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> и <operaLink>Opera</operaLink> работают тоже.",
-    "Reply": "Ответить"
+    "Reply": "Ответить",
+    "%(count)s Members|other": "%(count)s членов",
+    "%(count)s Members|one": "%(count)s член",
+    "Online": "Онлайн",
+    "View Community": "Просмотр сообщества"
 }

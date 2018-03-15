@@ -46,7 +46,7 @@
     "Failed to get public room list": "Huts egin du gela publikoen zerrenda jasotzean",
     "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
     "Failed to send report: ": "Huts egin du txostena bidaltzean: ",
-    "Failed to set direct chat tag": "Huts egin du txat zuzeneko etiketa jartzean",
+    "Failed to set direct chat tag": "Huts egin du txat zuzenarenaren etiketa jartzean",
     "Failed to set Direct Message status of room": "Huts egin du Mezu Zuzena egoera gelan ezartzean",
     "Favourite": "Gogokoa",
     "Fetching third party location failed": "Huts egin du hirugarrengoen kokalekua eskuratzean",
@@ -221,5 +221,9 @@
     "Invite to this community": "Gonbidatu komunitate honetara",
     "Add rooms to this community": "Gehitu gelak komunitate honetara",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Zerbitzari pertsonalizatuaren aukerak erabili ditzakezu beste Matrix zerbitzarietan saioa hasteko, han beste hasiera-zerbitzari baten URLa sartuz.<br/>Horrela Riot aurretik duzun kontu batekin erabili dezakezu beste hasiera-zerbitzari batean.<br/><br/>Identitate-zerbitzari pertsonalizatu bat ezarri dezakezu ere, baina orduan ezin izango dituzu erabiltzaileak e-mail helbidea erabiliz gonbidatu, edo ezin izan izango zaituzte zu e-mail helbidea erabiliz gonbidatu.",
-    "Reply": "Erantzun"
+    "Reply": "Erantzun",
+    "%(count)s Members|other": "%(count)s kide",
+    "%(count)s Members|one": "Kide %(count)s",
+    "Online": "Konektatuta",
+    "View Community": "Ikusi komunitatea"
 }

@@ -221,5 +221,9 @@
     "Register": "Rekisteröidy",
     "Rooms": "Huoneet",
     "Invite to this community": "Kutsu käyttäjiä",
-    "Add rooms to this community": "Lisää huoneita yhteisöön"
+    "Add rooms to this community": "Lisää huoneita yhteisöön",
+    "Reply": "Vastaa",
+    "View Community": "Näytä yhteisö",
+    "%(count)s Members|other": "%(count)s jäsentä",
+    "%(count)s Members|one": "%(count)s jäsen"
 }

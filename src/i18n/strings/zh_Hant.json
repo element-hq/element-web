@@ -97,12 +97,12 @@
     "Enable audible notifications in web client": "在網頁客戶端啟用音訊通知",
     "Enter keywords separated by a comma:": "輸入以逗號隔開的關鍵字：",
     "Error saving email notification preferences": "儲存電子郵件通知偏好設定時出錯",
-    "Failed to add tag %(tagName)s to room": "無法為聊天室新增標籤 %(tagName)s",
+    "Failed to add tag %(tagName)s to room": "新增標籤 %(tagName)s 到聊天室失敗",
     "Failed to get protocol list from Home Server": "無法從主機伺服器取得協定清單",
     "Failed to get public room list": "無法取得公開的聊天室清單",
-    "Failed to remove tag %(tagName)s from room": "移除聊天室的標籤 %(tagName)s 失敗",
+    "Failed to remove tag %(tagName)s from room": "從聊天室移除標籤 %(tagName)s 失敗",
     "Failed to send report: ": "無法傳送報告： ",
-    "Failed to set direct chat tag": "無法設定私人聊天標籤",
+    "Failed to set direct chat tag": "設定直接聊天標籤失敗",
     "Failed to set Direct Message status of room": "無法設定聊天室的私人訊息狀態",
     "Fetching third party location failed": "抓取第三方位置失敗",
     "Files": "檔案",
@@ -222,5 +222,9 @@
     "Away": "離開",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "請安裝 <chromeLink>Chrome</chromeLink> 或 <firefoxLink>Firefox</firefoxLink> 以取得最佳體驗。",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 與 <operaLink>Opera</operaLink> 也可以運作。",
-    "Reply": "回覆"
+    "Reply": "回覆",
+    "%(count)s Members|other": "%(count)s 個成員",
+    "%(count)s Members|one": "%(count)s 個成員",
+    "Online": "線上",
+    "View Community": "檢視社群"
 }

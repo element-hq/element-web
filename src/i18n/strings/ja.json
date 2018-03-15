@@ -72,5 +72,6 @@
     "Can't update user notification settings": "ユーザー通知の設定を更新できません",
     "Failed to update keywords": "キーワードの更新に失敗しました",
     "Messages containing <span>keywords</span>": "<span>keywords</span>を含むメッセージ",
-    "Add an email address above to configure email notifications": "メール通知を設定するために、メールアドレスを追加してください"
+    "Add an email address above to configure email notifications": "メール通知を設定するためには、メールアドレスを追加してください",
+    "Call invitation": "通話への招待"
 }

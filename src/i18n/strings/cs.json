@@ -221,5 +221,10 @@
     "Appear Offline": "Jevit se offline",
     "Away": "Pryč",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Pro nejlepší zážitek si prosím nainstalujte <chromeLink>Chrome</chromeLink> nebo <firefoxLink>Firefox</firefoxLink>.",
-    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> a <operaLink>Opera</operaLink> fungují taky."
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> a <operaLink>Opera</operaLink> fungují taky.",
+    "Reply": "Odpovědět",
+    "Online": "Online",
+    "View Community": "Zobrazit Komunitu",
+    "%(count)s Members|other": "%(count)s Členů",
+    "%(count)s Members|one": "%(count)s Člen"
 }
