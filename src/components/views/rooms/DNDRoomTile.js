@@ -20,7 +20,7 @@ import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
 
 import classNames from 'classnames';
 
-export default class DNDRoomTile extends React.Component {
+export default class DNDRoomTile extends React.PureComponent {
     constructor() {
         super();
         this.getClassName = this.getClassName.bind(this);
