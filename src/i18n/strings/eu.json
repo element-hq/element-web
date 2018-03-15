@@ -994,5 +994,6 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Zure beste gailuek mezu honetarako gakoa ez badute ezin izango dute deszifratu.",
     "Key request sent.": "Gako eskaria bidalita.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Berriz eskatu zifratze-gakoak</requestLink> zure beste gailuetatik.",
-    "%(user)s is a %(userRole)s": "%(user)s %(userRole)s da"
+    "%(user)s is a %(userRole)s": "%(user)s %(userRole)s da",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Zure komunitateari egindako aldaketak agian ez dira beste erabiltzaileentzat ikusgai egongo 30 minutu pasatu arte."
 }
