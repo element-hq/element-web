@@ -132,6 +132,7 @@ For a good example, see https://riot.im/develop/config.json
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
+1. `default_theme`: name of theme to use by default (e.g. 'light')
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
    and `win32` (for update packages, not installer packages).
