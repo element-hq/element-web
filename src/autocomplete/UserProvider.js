@@ -72,6 +72,7 @@ export default class UserProvider extends AutocompleteProvider {
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
 
+        // TODO: lazyload if we have no ev.sender room member?
         this.onUserSpoke(ev.sender);
     }
 
@@ -147,6 +148,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     onUserSpoke(user: RoomMember) {
         if (this.users === null) return;
+        if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
         // Move the user that spoke to the front of the array
