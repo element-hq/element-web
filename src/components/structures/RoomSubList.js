@@ -88,6 +88,11 @@ var RoomSubList = React.createClass({
         this.setState({
             sortedList: this.applySearchFilter(this.props.list, this.props.searchFilter),
         });
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -113,6 +118,21 @@ var RoomSubList = React.createClass({
             return true;
         } else {
             return false;
+        }
+    },
+
+    onAction: function(payload) {
+        // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
+        // but this is no longer true, so we must do it here (and can apply the small
+        // optimisation of checking that we care about the room being read).
+        //
+        // Ultimately we need to transition to a state pushing flow where something
+        // explicitly notifies the components concerned that the notif count for a room
+        // has change (e.g. a Flux store).
+        if (payload.action === 'on_room_read' &&
+            this.props.list.some((r) => r.roomId === payload.roomId)
+        ) {
+            this.forceUpdate();
         }
     },
 
