@@ -36,6 +36,7 @@ import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
+const ENABLE_REACT_PERF = false;
 
 export default class AppTile extends React.Component {
     constructor(props) {
@@ -452,7 +453,11 @@ export default class AppTile extends React.Component {
     }
 
     _getSafeUrl() {
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+        const parsedWidgetUrl = url.parse(this.state.widgetUrl, true);
+        if (ENABLE_REACT_PERF) {
+            parsedWidgetUrl.search = null;
+            parsedWidgetUrl.query.react_perf = true;
+        }
         let safeWidgetUrl = '';
         if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
