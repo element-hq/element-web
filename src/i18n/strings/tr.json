@@ -418,7 +418,6 @@
     "Use with caution": "Dikkatli kullan",
     "User ID": "Kullanıcı ID",
     "User Interface": "Kullanıcı Arayüzü",
-    "%(user)s is a": "%(user)s bir",
     "User name": "Kullanıcı ismi",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (güç %(powerLevelNumber)s)",
     "Username invalid: %(errMessage)s": "Kullanıcı ismi geçersiz : %(errMessage)s",
