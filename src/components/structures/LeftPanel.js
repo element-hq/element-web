@@ -186,12 +186,11 @@ var LeftPanel = React.createClass({
             topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
         }
 
-        let classes = classNames(
-            "mx_LeftPanel", "mx_fadable",
+        const classes = classNames(
+            "mx_LeftPanel",
             {
                 "collapsed": this.props.collapsed,
-                "mx_fadable_faded": this.props.disabled,
-            }
+            },
         );
 
         const tagPanelEnabled =
@@ -200,10 +199,11 @@ var LeftPanel = React.createClass({
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
         const containerClasses = classNames(
-            "mx_LeftPanel_container",
+            "mx_LeftPanel_container", "mx_fadable",
             {
                 "mx_LeftPanel_container_collapsed": this.props.collapsed,
                 "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
+                "mx_fadable_faded": this.props.disabled,
             },
         );
 
