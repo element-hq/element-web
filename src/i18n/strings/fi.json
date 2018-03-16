@@ -560,7 +560,7 @@
     "Sep": "syyskuu",
     "Oct": "lokakuu",
     "Nov": "marraskuu",
-    "Dec": "jolukuu",
+    "Dec": "joulukuu",
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "Käyttäjänimet voivat sisältää vain kirjaimia, numeroita, pisteitä, viivoja ja alaviivoja.",
     "To continue, please enter your password.": "Ole hyvä ja syötä salasanasi jatkaaksesi.",
     "Verifies a user, device, and pubkey tuple": "Varmentaa käyttäjän, laitteen ja julkisen avaimen kolmikon",

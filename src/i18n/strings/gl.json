@@ -765,7 +765,7 @@
     "Create a new community": "Crear unha nova comunidade",
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Crear unha comunidade para agrupar usuarias e salas! Poña unha páxina de inicio personalizada para destacar o seu lugar no universo Matrix.",
     "Join an existing community": "Unirse a unha comunidade existente",
-    "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Para unirse a unha comunidade existente deberá coñecer o identificador de esa comunidade; terá un aspecto como <i>+exemplo:matrix.org</i>",
+    "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Para unirse a unha comunidade existente deberá coñecer o identificador de esa comunidade; terá un aspecto como <i>+exemplo:matrix.org</i>.",
     "You have no visible notifications": "Non ten notificacións visibles",
     "Scroll to bottom of page": "Desplácese ate o final da páxina",
     "Message not sent due to unknown devices being present": "Non se enviou a mensaxe porque hai dispositivos non coñecidos",
@@ -970,5 +970,10 @@
     "Your identity server's URL": "O URL da súa identidade no servidor",
     "<a>In reply to</a> <pill>": "<a>En resposta a</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Esta sala non é pública. Non poderá voltar a ela sin un convite.",
-    "This room is not showing flair for any communities": "Esta sala non mostra popularidade para as comunidades"
+    "This room is not showing flair for any communities": "Esta sala non mostra popularidade para as comunidades",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s cambiou o seu nome mostrado a %(displayName)s.",
+    "Clear filter": "Quitar filtro",
+    "Failed to set direct chat tag": "Fallo ao establecer etiqueta do chat directo",
+    "Failed to remove tag %(tagName)s from room": "Fallo ao eliminar a etiqueta %(tagName)s da sala",
+    "Failed to add tag %(tagName)s to room": "Fallo ao engadir a etiqueta %(tagName)s a sala"
 }
