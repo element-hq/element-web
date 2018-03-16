@@ -419,7 +419,6 @@
     "Encryption is enabled in this room": "Шифровање је омогућено у овој соби",
     "Encryption is not enabled in this room": "Шифровање није омогућено у овој соби",
     "Privileged Users": "Овлашћени корисници",
-    "%(user)s is a": "%(user)s је",
     "No users have specific privileges in this room": "Нема корисника са посебним овлашћењима у овој соби",
     "Banned users": "Корисници са забраном приступа",
     "This room is not accessible by remote Matrix servers": "Овој соби не могу приступити удаљени Матрикс сервери",
