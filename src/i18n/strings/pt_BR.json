@@ -112,7 +112,7 @@
     "Privacy warning": "Alerta sobre privacidade",
     "Privileged Users": "Usuárias/os privilegiadas/os",
     "Profile": "Perfil",
-    "Refer a friend to Riot:": "Indicar um amigo para participar",
+    "Refer a friend to Riot:": "Indicar um amigo para participar:",
     "Reject invitation": "Rejeitar convite",
     "Remove Contact Information?": "Remover informação de contato?",
     "Remove": "Remover",
@@ -914,7 +914,7 @@
     "Failed to add the following rooms to the summary of %(groupId)s:": "Não foi possível adicionar as seguintes salas para o índice da comunidade %(groupId)s:",
     "Add a Room": "Adicionar uma sala",
     "Failed to remove the room from the summary of %(groupId)s": "Não foi possível remover a sala do índice da comunidade %(groupId)s",
-    "The room '%(roomName)s' could not be removed from the summary.": "A sala '%(roomName)s' não pôde ser removida do índice",
+    "The room '%(roomName)s' could not be removed from the summary.": "A sala '%(roomName)s' não pôde ser removida do índice.",
     "Add users to the community summary": "Adicionar pessoas para o índice da comunidade",
     "Who would you like to add to this summary?": "Quem você gostaria de adicionar a este índice?",
     "Failed to add the following users to the summary of %(groupId)s:": "Não foi possível adicionar as seguintes pessoas para o índice da comunidade %(groupId)s:",
@@ -986,5 +986,13 @@
     "Failed to remove tag %(tagName)s from room": "Falha ao remover a tag %(tagName)s da sala",
     "Failed to add tag %(tagName)s to room": "Falha ao adicionar a tag %(tagName)s para a sala",
     "Did you know: you can use communities to filter your Riot.im experience!": "Você sabia? Você pode usar as comunidades para filtrar a sua experiência no Riot!",
-    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Para criar um filtro, arraste a imagem de uma comunidade sobre o painel de filtros na extrema esquerda da sua tela. Você pode clicar na imagem de uma comunidade no painel de filtros a qualquer momento para ver apenas as salas e pessoas associadas com esta comunidade."
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Para criar um filtro, arraste a imagem de uma comunidade sobre o painel de filtros na extrema esquerda da sua tela. Você pode clicar na imagem de uma comunidade no painel de filtros a qualquer momento para ver apenas as salas e pessoas associadas com esta comunidade.",
+    "Disable Community Filter Panel": "Desativar painel de filtros de Comunidades",
+    "Your key share request has been sent - please check your other devices for key share requests.": "Seu pedido de confirmação de chaves foi realizado - favor verificar seus outros dispositivos.",
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Pedidos de confirmação de chaves são enviados aos outros dispositivos automaticamente. Se você rejeitou ou negou uma confirmação de chaves em seus outros dispositivos, clique aqui para enviar novamente.",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Se seus outros dispositivos não têm a chave para esta mensagem, você não poderá decriptá-las.",
+    "Key request sent.": "Requisição de chave enviada.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Requisitar novamente chaves de encriptação</requestLink> de seus outros dispositivos.",
+    "%(user)s is a %(userRole)s": "%(user)s é %(userRole)s",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Mudanças feitas para sua comunidade podem não chegar aos outros usuários por até 30 minutos."
 }
