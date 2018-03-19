@@ -1,3 +1,11 @@
 {
-    "Room directory": "Romkatalog"
+    "Room directory": "Romkatalog",
+    "This email address is already in use": "Denne e-post adressen er allerede i bruk",
+    "This phone number is already in use": "Dette mobilnummeret er allerede i bruk",
+    "Failed to verify email address: make sure you clicked the link in the email": "Klarte ikke verifisere e-post adressen: dobbelsjekk at du trykket på lenken i e-posten",
+    "The platform you're on": "Platformen du bruker",
+    "The version of Riot.im": "Versjonen av Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Om du er logget inn eller ei (vi loggfører ikke brukernavnet ditt)",
+    "Your language of choice": "Ditt valgte språk",
+    "Your homeserver's URL": "Din hjemservers URL"
 }
