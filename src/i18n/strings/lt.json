@@ -1,1 +1,16 @@
-{}
+{
+    "This email address is already in use": "Šis el. pašto adresas jau naudojamas",
+    "This phone number is already in use": "Šis telefono numeris jau naudojamas",
+    "Failed to verify email address: make sure you clicked the link in the email": "Nepavyko patvirtinti el. pašto adreso: patikrinkite ar paspaudėte nuorodą atsiųstame el. laiške",
+    "The platform you're on": "Jūsų platforma",
+    "The version of Riot.im": "Riot.im versija",
+    "Whether or not you're logged in (we don't record your user name)": "Nesvarbu jūs prisijungę ar ne (mes nesaugome jūsų slapyvardžio)",
+    "Your language of choice": "Jūsų pasirinkta kalba",
+    "Which officially provided instance you are using, if any": "Kurį oficialiai pateiktą pavyzdį jūs naudojate, jei naudojate",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Nesvarbu jūs naudojate ar ne raiškiojo teksto režimą Raiškiojo tekto redaktoriuje",
+    "Your homeserver's URL": "Jūsų serverio URL adresas",
+    "Your identity server's URL": "Jūsų identifikavimo serverio URL adresas",
+    "Analytics": "Statistika",
+    "The information being sent to us to help make Riot.im better includes:": "Informacijoje, kuri yra siunčiama Riot.im tobulinimui yra:",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Mes taip pat saugome kiekvieną puslapį, kurį jūs naudojate programėlėje (dabartinis <CurrentPageHash>), jūsų paskyros agentas (<CurrentUserAgent>) ir jūsų įrenginio rezoliucija (<CurrentDeviceResolution>)."
+}
