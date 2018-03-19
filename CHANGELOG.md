@@ -1,3 +1,12 @@
+Changes in [0.14.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.14.0-rc.2) (2018-03-19)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0-rc.1...v0.14.0-rc.2)
+
+ * Take TagPanel out of labs
+   [\#6347](https://github.com/vector-im/riot-web/pull/6347)
+ * Add languages (czech, galician and serbian)
+   [\#6343](https://github.com/vector-im/riot-web/pull/6343)
+
 Changes in [0.14.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.14.0-rc.1) (2018-03-19)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.5...v0.14.0-rc.1)
