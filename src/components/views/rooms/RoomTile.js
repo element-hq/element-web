@@ -21,6 +21,7 @@ const React = require('react');
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 const classNames = require('classnames');
+import dis from '../../../dispatcher';
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 import DMRoomMap from '../../../utils/DMRoomMap';
 const sdk = require('../../../index');
@@ -41,6 +42,8 @@ module.exports = React.createClass({
         collapsed: PropTypes.bool.isRequired,
         unread: PropTypes.bool.isRequired,
         highlight: PropTypes.bool.isRequired,
+        // If true, apply mx_RoomTile_transparent class
+        transparent: PropTypes.bool,
         isInvite: PropTypes.bool.isRequired,
         incomingCall: PropTypes.object,
     },
@@ -56,7 +59,9 @@ module.exports = React.createClass({
             hover: false,
             badgeHover: false,
             menuDisplayed: false,
+            roomName: this.props.room.name,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+            notificationCount: this.props.room.getUnreadNotificationCount(),
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
         });
     },
@@ -79,11 +84,40 @@ module.exports = React.createClass({
         }
     },
 
+    onRoomTimeline: function(ev, room) {
+        if (room !== this.props.room) return;
+        this.setState({
+            notificationCount: this.props.room.getUnreadNotificationCount(),
+        });
+    },
+
+    onRoomName: function(room) {
+        if (room !== this.props.room) return;
+        this.setState({
+            roomName: this.props.room.name,
+        });
+    },
+
     onAccountData: function(accountDataEvent) {
         if (accountDataEvent.getType() == 'm.push_rules') {
             this.setState({
                 notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             });
+        }
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            // XXX: slight hack in order to zero the notification count when a room
+            // is read. Ideally this state would be given to this via props (as we
+            // do with `unread`). This is still better than forceUpdating the entire
+            // RoomList when a room is read.
+            case 'on_room_read':
+                if (payload.roomId !== this.props.room.roomId) break;
+                this.setState({
+                    notificationCount: this.props.room.getUnreadNotificationCount(),
+                });
+            break;
         }
     },
 
@@ -95,15 +129,37 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentWillUnmount: function() {
         const cli = MatrixClientPeg.get();
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
+            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
+        dis.unregister(this.dispatcherRef);
+    },
+
+    // Do a simple shallow comparison of props and state to avoid unnecessary
+    // renders. The assumption made here is that only state and props are used
+    // in rendering this component and children.
+    //
+    // RoomList is frequently made to forceUpdate, so this decreases number of
+    // RoomTile renderings.
+    shouldComponentUpdate: function(newProps, newState) {
+        if (Object.keys(newProps).some((k) => newProps[k] !== this.props[k])) {
+            return true;
+        }
+        if (Object.keys(newState).some((k) => newState[k] !== this.state[k])) {
+            return true;
+        }
+        return false;
     },
 
     onClick: function(ev) {
@@ -172,7 +228,7 @@ module.exports = React.createClass({
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const me = this.props.room.currentState.members[myUserId];
 
-        const notificationCount = this.props.room.getUnreadNotificationCount();
+        const notificationCount = this.state.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
         const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
@@ -188,6 +244,7 @@ module.exports = React.createClass({
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
+            'mx_RoomTile_transparent': this.props.transparent,
         });
 
         const avatarClasses = classNames({
@@ -199,9 +256,7 @@ module.exports = React.createClass({
             'mx_RoomTile_badgeButton': this.state.badgeHover || this.state.menuDisplayed,
         });
 
-        // XXX: We should never display raw room IDs, but sometimes the
-        // room name js sdk gives is undefined (cannot repro this -- k)
-        let name = this.props.room.name || this.props.room.roomId;
+        let name = this.state.roomName;
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         let badge;

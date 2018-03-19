@@ -59,6 +59,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 );
                 tiles.push(
                     <RoomTile key={room.roomId} room={room}
+                        transparent={true}
                         collapsed={false}
                         selected={false}
                         unread={Unread.doesRoomHaveUnreadMessages(room)}

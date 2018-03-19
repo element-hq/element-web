@@ -29,6 +29,7 @@ import classnames from 'classnames';
 
 import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
+import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
@@ -429,6 +430,7 @@ export default React.createClass({
             editing: false,
             saving: false,
             uploadingAvatar: false,
+            avatarChanged: false,
             membershipBusy: false,
             publicityBusy: false,
             inviterProfile: null,
@@ -590,6 +592,10 @@ export default React.createClass({
             this.setState({
                 uploadingAvatar: false,
                 profileForm: newProfileForm,
+
+                // Indicate that FlairStore needs to be poked to show this change
+                // in TagTile (TagPanel), Flair and GroupTile (MyGroups).
+                avatarChanged: true,
             });
         }).catch((e) => {
             this.setState({uploadingAvatar: false});
@@ -615,6 +621,11 @@ export default React.createClass({
             });
             dis.dispatch({action: 'panel_disable'});
             this._initGroupStore(this.props.groupId);
+
+            if (this.state.avatarChanged) {
+                // XXX: Evil - poking a store should be done from an async action
+                FlairStore.refreshGroupProfile(this._matrixClient, this.props.groupId);
+            }
         }).catch((e) => {
             this.setState({
                 saving: false,
@@ -624,6 +635,10 @@ export default React.createClass({
             Modal.createTrackedDialog('Failed to update group', '', ErrorDialog, {
                 title: _t('Error'),
                 description: _t('Failed to update community'),
+            });
+        }).finally(() => {
+            this.setState({
+                avatarChanged: false,
             });
         }).done();
     },
@@ -692,8 +707,15 @@ export default React.createClass({
         });
 
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
+        const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
+            <div className="mx_GroupView_changeDelayWarning">
+                { _t( 'Changes made to your community might not be seen by other users ' +
+                      'for up to 30 minutes.',
+                ) }
+            </div> : <div />;
         return <div className={groupSettingsSectionClasses}>
             { header }
+            { changeDelayWarning }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }
         </div>;

@@ -73,8 +73,25 @@ export default withMatrixClient(React.createClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <GeminiScrollbar className="mx_MyGroups_joinedGroups">
-                    { groupNodes }
+                <GeminiScrollbar>
+                    <div className="mx_MyGroups_microcopy">
+                        <p>
+                            { _t(
+                                "Did you know: you can use communities to filter your Riot.im experience!",
+                            ) }
+                        </p>
+                        <p>
+                            { _t(
+                                "To set up a filter, drag a community avatar over to the filter panel on " +
+                                "the far left hand side of the screen. You can click on an avatar in the " +
+                                "filter panel at any time to see only the rooms and people associated " +
+                                "with that community.",
+                            ) }
+                        </p>
+                    </div>
+                    <div className="mx_MyGroups_joinedGroups">
+                        { groupNodes }
+                    </div>
                 </GeminiScrollbar> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(

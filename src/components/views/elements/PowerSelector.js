@@ -42,6 +42,9 @@ module.exports = React.createClass({
         // should the user be able to change the value? false by default.
         disabled: PropTypes.bool,
         onChange: PropTypes.func,
+
+        // Optional key to pass as the second argument to `onChange`
+        powerLevelKey: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -84,17 +87,17 @@ module.exports = React.createClass({
     onSelectChange: function(event) {
         this.setState({ custom: event.target.value === "SELECT_VALUE_CUSTOM" });
         if (event.target.value !== "SELECT_VALUE_CUSTOM") {
-            this.props.onChange(event.target.value);
+            this.props.onChange(event.target.value, this.props.powerLevelKey);
         }
     },
 
     onCustomBlur: function(event) {
-        this.props.onChange(parseInt(this.refs.custom.value));
+        this.props.onChange(parseInt(this.refs.custom.value), this.props.powerLevelKey);
     },
 
     onCustomKeyDown: function(event) {
         if (event.key == "Enter") {
-            this.props.onChange(parseInt(this.refs.custom.value));
+            this.props.onChange(parseInt(this.refs.custom.value), this.props.powerLevelKey);
         }
     },
 

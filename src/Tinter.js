@@ -252,7 +252,6 @@ class Tinter {
 
 
     setTheme(theme) {
-        console.trace("setTheme " + theme);
         this.theme = theme;
 
         // update keyRgb from the current theme CSS itself, if it defines it
