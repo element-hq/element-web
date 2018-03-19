@@ -796,7 +796,14 @@ module.exports = React.createClass({
             <div>
                 <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Want to send logs?") }</p>
+                    <p>{
+                        _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contian messages."
+                        )
+                    }</p>
                     <button className="mx_UserSettings_button danger"
                         onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
