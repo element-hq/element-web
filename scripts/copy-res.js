@@ -7,20 +7,22 @@
 // a translation in the app (because having a translation with only
 // 3 strings translated is just frustrating)
 // This could readily be automated, but it's nice to explicitly
-// control when we languages are available.
+// control when new languages are available.
 const INCLUDE_LANGS = [
     {'value': 'bg', 'label': 'Български'},
     {'value': 'ca', 'label': 'Català'},
+    {'value': 'cs', 'label': 'čeština'},
     {'value': 'da', 'label': 'Dansk'},
     {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'en_EN', 'label': 'English'},
     {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
     {'value': 'es', 'label': 'Español'},
     {'value': 'eu', 'label': 'Euskara'},
     {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
+    {'value': 'gl', 'label': 'Galego'},
     {'value': 'hu', 'label': 'Magyar'},
     {'value': 'ko', 'label': '한국어'},
     {'value': 'lv', 'label': 'Latviešu'},
@@ -30,10 +32,11 @@ const INCLUDE_LANGS = [
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
-    {'value': 'sv', 'label': 'Svenska'},
     {'value': 'sk', 'label': 'Slovenčina'},
-    {'value': 'th', 'label': 'ไทย'},
+    {'value': 'sr', 'label': 'српски'},
+    {'value': 'sv', 'label': 'Svenska'},
     {'value': 'te', 'label': 'తెలుగు'},
+    {'value': 'th', 'label': 'ไทย'},
     {'value': 'tr', 'label': 'Türk'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
