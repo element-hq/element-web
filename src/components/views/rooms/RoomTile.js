@@ -146,6 +146,15 @@ module.exports = React.createClass({
         dis.unregister(this.dispatcherRef);
     },
 
+    componentWillReceiveProps: function(props) {
+        // XXX: This could be a lot better - this makes the assumption that
+        // the notification count may have changed when the properties of
+        // the room tile change.
+        this.setState({
+            notificationCount: this.props.room.getUnreadNotificationCount(),
+        });
+    },
+
     // Do a simple shallow comparison of props and state to avoid unnecessary
     // renders. The assumption made here is that only state and props are used
     // in rendering this component and children.
