@@ -226,5 +226,13 @@
     "%(count)s Members|other": "%(count)s Mitglieder",
     "%(count)s Members|one": "%(count)s Mitglied",
     "Online": "Online",
-    "View Community": "Community ansehen"
+    "View Community": "Community ansehen",
+    "Submit debug logs": "Fehlerberichte einreichen",
+    "Preparing to send logs": "Senden von Logs wird vorbereitet",
+    "Logs sent": "Logs gesendet",
+    "Failed to send logs: ": "Senden von Logs fehlgeschlagen: ",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Klicke hier</a> um ein GithHub-Problem zu erstellen.",
+    "GitHub issue link:": "Link des GitHub-Problems:",
+    "Notes:": "Notizen:",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Fehlerberichte enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast sowie Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten."
 }
