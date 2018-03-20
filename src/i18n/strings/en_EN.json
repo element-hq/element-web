@@ -531,6 +531,7 @@
     "Token incorrect": "Token incorrect",
     "A text message has been sent to %(msisdn)s": "A text message has been sent to %(msisdn)s",
     "Please enter the code it contains:": "Please enter the code it contains:",
+    "Code": "Code",
     "Start authentication": "Start authentication",
     "powered by Matrix": "powered by Matrix",
     "Username on %(hs)s": "Username on %(hs)s",

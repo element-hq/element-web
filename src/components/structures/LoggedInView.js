@@ -374,7 +374,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper'>
+            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div className={bodyClasses}>
