@@ -235,14 +235,14 @@ export default React.createClass({
                 "error": Boolean(this.state.usernameError),
                 "success": usernameAvailable,
             });
-            usernameIndicator = <div className={usernameIndicatorClasses}>
+            usernameIndicator = <div className={usernameIndicatorClasses} role="alert">
                 { usernameAvailable ? _t('Username available') : this.state.usernameError }
             </div>;
         }
 
         let authErrorIndicator = null;
         if (this.state.authError) {
-            authErrorIndicator = <div className="error">
+            authErrorIndicator = <div className="error" role="alert">
                 { this.state.authError }
             </div>;
         }
@@ -254,8 +254,9 @@ export default React.createClass({
             <BaseDialog className="mx_SetMxIdDialog"
                 onFinished={this.props.onFinished}
                 title={_t('To get started, please pick a username!')}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <div className="mx_SetMxIdDialog_input_group">
                         <input type="text" ref="input_value" value={this.state.username}
                             autoFocus={true}

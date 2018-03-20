@@ -114,10 +114,10 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
+                <div id="mx_Dialog_content" className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
                         { avatar }
                     </div>

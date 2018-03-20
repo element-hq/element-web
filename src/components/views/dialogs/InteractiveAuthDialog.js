@@ -73,11 +73,12 @@ export default React.createClass({
         let content;
         if (this.state.authError) {
             content = (
-                <div>
-                    <div>{ this.state.authError.message || this.state.authError.toString() }</div>
+                <div id='mx_Dialog_content'>
+                    <div role="alert">{ this.state.authError.message || this.state.authError.toString() }</div>
                     <br />
                     <AccessibleButton onClick={this._onDismissClick}
                         className="mx_UserSettings_button"
+                        autoFocus="true"
                     >
                         { _t("Dismiss") }
                     </AccessibleButton>
@@ -85,7 +86,7 @@ export default React.createClass({
             );
         } else {
             content = (
-                <div>
+                <div id='mx_Dialog_content'>
                     <InteractiveAuth ref={this._collectInteractiveAuth}
                         matrixClient={this.props.matrixClient}
                         authData={this.props.authData}
@@ -100,6 +101,7 @@ export default React.createClass({
             <BaseDialog className="mx_InteractiveAuthDialog"
                 onFinished={this.props.onFinished}
                 title={this.state.authError ? 'Error' : (this.props.title || _t('Authentication'))}
+                contentId='mx_Dialog_content'
             >
                 { content }
             </BaseDialog>

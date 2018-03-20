@@ -61,17 +61,18 @@ export default React.createClass({
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
             >
-                <div className="mx_Dialog_content">
-                    <div className="mx_TextInputDialog_label">
-                        <label htmlFor="textinput"> { this.props.description } </label>
+                <form onSubmit={this.onOk}>
+                    <div className="mx_Dialog_content">
+                        <div className="mx_TextInputDialog_label">
+                            <label htmlFor="textinput"> { this.props.description } </label>
+                        </div>
+                        <div>
+                            <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
+                        </div>
                     </div>
-                    <div>
-                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
-                    </div>
-                </div>
+                </form>
                 <DialogButtons primaryButton={this.props.button}
                     onPrimaryButtonClick={this.onOk}
                     onCancel={this.onCancel} />
