@@ -44,6 +44,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
             shouldMatchPrefix: true,
+            shouldMatchWordsOnly: false
         });
 
         this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
