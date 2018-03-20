@@ -30,6 +30,13 @@ module.exports = React.createClass({
 
     propTypes: {
         member: PropTypes.any.isRequired, // RoomMember
+        showPresence: PropTypes.bool,
+    },
+
+    getDefaultProps: function() {
+        return {
+            showPresence: true,
+        };
     },
 
     getInitialState: function() {
@@ -99,7 +106,7 @@ module.exports = React.createClass({
                 presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
                 presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}
                 avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
-                name={name} powerStatus={powerStatus} />
+                name={name} powerStatus={powerStatus} showPresence={this.props.showPresence} />
         );
     },
 });
