@@ -92,6 +92,10 @@ class Analytics {
      */
     disable() {
         this.trackEvent('Analytics', 'opt-out');
+        // disableHeartBeatTimer is undocumented but exists in the piwik code
+        // the _paq.push method will result in an error being printed in the console
+        // if an unknown method signature is passed
+        this._paq.push(['disableHeartBeatTimer']);
         this.disabled = true;
     }
 
