@@ -108,7 +108,7 @@ const COMMANDS = [
     {
         command: '/devtools',
         args: '',
-        description: _td('Opens the Developer Tools dialog')
+        description: _td('Opens the Developer Tools dialog'),
     },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
