@@ -14,23 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-class GeminiScrollbarWrapper extends React.Component {
-    render() {
-        // Enable forceGemini so that gemini is always enabled. This is
-        // to avoid future issues where a feature is implemented without
-        // doing QA on every OS/browser combination.
-        //
-        // By default GeminiScrollbar allows native scrollbars to be used
-        // on macOS. Use forceGemini to enable Gemini's non-native
-        // scrollbars on all OSs.
-        return <GeminiScrollbar ref={this.props.wrappedRef} forceGemini={true} {...this.props}>
-            { this.props.children }
-        </GeminiScrollbar>;
-    }
+function GeminiScrollbarWrapper(props) {
+    // Enable forceGemini so that gemini is always enabled. This is
+    // to avoid future issues where a feature is implemented without
+    // doing QA on every OS/browser combination.
+    //
+    // By default GeminiScrollbar allows native scrollbars to be used
+    // on macOS. Use forceGemini to enable Gemini's non-native
+    // scrollbars on all OSs.
+    return <GeminiScrollbar ref={props.wrappedRef} forceGemini={true} {...props}>
+        { props.children }
+    </GeminiScrollbar>;
 }
-
 export default GeminiScrollbarWrapper;
 
