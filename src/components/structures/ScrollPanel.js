@@ -17,7 +17,6 @@ limitations under the License.
 const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
-const GeminiScrollbar = require('react-gemini-scrollbar');
 import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
 
@@ -669,10 +668,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
-        return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
+        return (<GeminiScrollbarWrapper autoshow={true} ref="geminiPanel"
                 onScroll={this.onScroll} onResize={this.onResize}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
@@ -680,7 +680,7 @@ module.exports = React.createClass({
                             { this.props.children }
                         </ol>
                     </div>
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
                );
     },
 });

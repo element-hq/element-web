@@ -20,7 +20,6 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
@@ -351,7 +350,7 @@ module.exports = React.createClass({
 
                 return Boolean(isRoomVisible[taggedRoom.roomId]);
             });
-            
+
             if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
                 filteredLists[tagName] = filteredRooms;
             }
@@ -601,10 +600,11 @@ module.exports = React.createClass({
 
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const self = this;
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar"
+            <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
@@ -711,7 +711,7 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms} />
             </div>
-            </GeminiScrollbar>
+            </GeminiScrollbarWrapper>
         );
     },
 });
