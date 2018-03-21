@@ -507,7 +507,8 @@ module.exports = React.createClass({
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
-        this.refs.gemscroll.forceUpdate();
+        if (!this._gemScroll) return;
+        this._gemScroll.forceUpdate();
     },
 
     _getEmptyContent: function(section) {
@@ -598,6 +599,10 @@ module.exports = React.createClass({
         return ret;
     },
 
+    _collectGemini(gemScroll) {
+        this._gemScroll = gemScroll;
+    },
+
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
@@ -605,7 +610,7 @@ module.exports = React.createClass({
         const self = this;
         return (
             <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
+                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
                              extraTiles={this._makeGroupInviteTiles()}

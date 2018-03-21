@@ -26,7 +26,7 @@ class GeminiScrollbarWrapper extends React.Component {
         // By default GeminiScrollbar allows native scrollbars to be used
         // on macOS. Use forceGemini to enable Gemini's non-native
         // scrollbars on all OSs.
-        return <GeminiScrollbar forceGemini={true} {...this.props}>
+        return <GeminiScrollbar ref={this.props.wrappedRef} forceGemini={true} {...this.props}>
             { this.props.children }
         </GeminiScrollbar>;
     }
