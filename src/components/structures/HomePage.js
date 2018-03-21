@@ -18,7 +18,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import request from 'browser-request';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sanitizeHtml from 'sanitize-html';
@@ -99,11 +98,12 @@ module.exports = React.createClass({
             );
         }
         else {
+            const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
             return (
-                <GeminiScrollbar autoshow={true} className="mx_HomePage">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_HomePage">
                     <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
                     </div>
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             );
         }
     }
