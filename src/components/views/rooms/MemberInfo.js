@@ -871,6 +871,7 @@ module.exports = withMatrixClient(React.createClass({
 
         let presenceLabel = null;
         if (showPresence) {
+            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
             presenceLabel = <PresenceLabel activeAgo={presenceLastActiveAgo}
                 currentlyActive={presenceCurrentlyActive}
                 presenceState={presenceState} />;
@@ -879,7 +880,6 @@ module.exports = withMatrixClient(React.createClass({
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
-            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
             roomMemberDetails = <div>
                 <div className="mx_MemberInfo_profileField">
                     { _t("Level:") } <b>
