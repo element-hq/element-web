@@ -25,7 +25,7 @@ Releases are signed by PGP, and can be checked against the public key
 at https://riot.im/packages/keys/riot.asc
 
 Note that for the security of your chats will need to serve Riot
-over HTTPS. Mayor browsers also do not allow you to use VoIP/video
+over HTTPS. Major browsers also do not allow you to use VoIP/video
 chats over HTTP, as WebRTC is only usable over HTTPS.
 An exception of this is localhost, which usually is trusted in
 browsers.
