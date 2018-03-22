@@ -225,5 +225,13 @@
     "%(count)s Members|other": "%(count)s kide",
     "%(count)s Members|one": "Kide %(count)s",
     "Online": "Konektatuta",
-    "View Community": "Ikusi komunitatea"
+    "View Community": "Ikusi komunitatea",
+    "Submit debug logs": "Bidali arazte-txostenak",
+    "Preparing to send logs": "Egunkariak bidaltzeko prestatzen",
+    "Logs sent": "Egunkariak bidalita",
+    "Failed to send logs: ": "Huts egin du egunkariak bidaltzean: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Arazte-egunkariek aplikazioak darabilen datuak dauzkate, zure erabiltzaile izena barne, bisitatu dituzun gelen ID-ak edo ezizenak eta beste erabiltzaileen izenak. Ez dute mezurik.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Egin klik hemen</a> GitHub-en arazoaren berri emateko.",
+    "GitHub issue link:": "Arazoaren esteka GitHuben:",
+    "Notes:": "Oharrak:"
 }
