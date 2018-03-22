@@ -992,5 +992,10 @@
     "Key request sent.": "Kulcs kérés elküldve.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Kulcsok újrakérése</requestLink> a többi eszközödtől.",
     "%(user)s is a %(userRole)s": "%(user)s egy %(userRole)s",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "A közösségedben végrehajtott változtatás valószínűleg legalább 30 percig nem lesz látható mások számára."
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "A közösségedben végrehajtott változtatás valószínűleg legalább 30 percig nem lesz látható mások számára.",
+    "Code": "Kód",
+    "Debug Logs Submission": "Hibakeresési napló elküldése",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ha a GitHubon keresztül küldted be a hibát, a hibakeresési napló segíthet nekünk a javításban. A napló felhasználási adatokat tartalmaz mint a felhasználói neved, az általad meglátogatott szobák vagy csoportok azonosítóját vagy alternatív nevét és mások felhasználói nevét. De nem tartalmazzák az üzeneteket.",
+    "Submit debug logs": "Hibakeresési napló küldése",
+    "Opens the Developer Tools dialog": "Megnyitja a fejlesztői eszközök ablakát"
 }
