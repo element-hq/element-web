@@ -997,5 +997,6 @@
     "Debug Logs Submission": "Отправка журналов отладки",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Если вы отправили ошибку через GitHub, журналы отладки могут помочь нам выявить проблему. Журналы отладки содержат данные об использовании приложения, включая ваше имя пользователя, идентификаторы или псевдонимы комнат или групп, которые вы посетили, а также имена других пользователей. Они не содержат сообщений.",
     "Submit debug logs": "Отправка журналов отладки",
-    "Opens the Developer Tools dialog": "Открывает Инструменты разработчика"
+    "Opens the Developer Tools dialog": "Открывает Инструменты разработчика",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Просмотрено %(displayName)s (%(userName)s) в %(dateTime)s"
 }
