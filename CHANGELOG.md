@@ -1,3 +1,10 @@
+Changes in [0.12.0-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.4) (2018-03-22)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.3...v0.12.0-rc.4)
+
+ * Fix broken import preventing people tag
+   [\#1811](https://github.com/matrix-org/matrix-react-sdk/pull/1811)
+
 Changes in [0.12.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.3) (2018-03-20)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.2...v0.12.0-rc.3)
