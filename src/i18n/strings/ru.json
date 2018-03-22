@@ -992,5 +992,10 @@
     "%(user)s is a %(userRole)s": "%(user)s является %(userRole)s",
     "Your key share request has been sent - please check your other devices for key share requests.": "Ваш запрос на передачу ключей отправлен - пожалуйста, проверьте другие ваши устройства на запросы передачи ключей.",
     "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Запросы передачи ключей автоматически отправляются на другие устройства. Если вы отклонили или отменили запрос на передачу ключей на других устройствах, нажмите здесь, чтобы запросить ключи для этого сеанса повторно.",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Изменения, сделанные в вашем сообществе, могут не отображаться для других пользователей в течение 30 минут."
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Изменения, сделанные в вашем сообществе, могут не отображаться для других пользователей в течение 30 минут.",
+    "Code": "Код",
+    "Debug Logs Submission": "Отправка журналов отладки",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Если вы отправили ошибку через GitHub, журналы отладки могут помочь нам выявить проблему. Журналы отладки содержат данные об использовании приложения, включая ваше имя пользователя, идентификаторы или псевдонимы комнат или групп, которые вы посетили, а также имена других пользователей. Они не содержат сообщений.",
+    "Submit debug logs": "Отправка журналов отладки",
+    "Opens the Developer Tools dialog": "Открывает Инструменты разработчика"
 }
