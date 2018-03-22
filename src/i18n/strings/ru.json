@@ -226,5 +226,6 @@
     "%(count)s Members|other": "%(count)s членов",
     "%(count)s Members|one": "%(count)s член",
     "Online": "Онлайн",
-    "View Community": "Просмотр сообщества"
+    "View Community": "Просмотр сообщества",
+    "Submit debug logs": "Отправка журналов отладки"
 }
