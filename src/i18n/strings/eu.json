@@ -997,5 +997,6 @@
     "Debug Logs Submission": "Arazte-egunkarien bidalketak",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Akats bat bidali baduzu GitHub bidez, arazte-egunkariek arazoa aurkitzen lagundu gaitzakete. Arazte-egunkariek aplikazioak darabilen datuak dauzkate, zure erabiltzaile izena barne, bisitatu dituzun gelen ID-ak edo ezizenak eta beste erabiltzaileen izenak. Ez dute mezurik.",
     "Submit debug logs": "Bidali arazte-txostenak",
-    "Opens the Developer Tools dialog": "Garatzailearen tresnen elkarrizketa-koadroa irekitzen du"
+    "Opens the Developer Tools dialog": "Garatzailearen tresnen elkarrizketa-koadroa irekitzen du",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s)(e)k ikusita %(dateTime)s(e)tan"
 }
