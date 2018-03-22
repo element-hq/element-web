@@ -223,5 +223,15 @@
     "Rooms": "Istabas",
     "Invite to this community": "Uzaicināt šajā komūnā",
     "Add rooms to this community": "Pievienot istabas šai kopienai",
-    "Reply": "Atbildēt"
+    "Reply": "Atbildēt",
+    "Submit debug logs": "Iesniegt atutošanas žurnālus",
+    "Preparing to send logs": "Gatavojos nosūtīt atutošanas žurnālus",
+    "Logs sent": "Žurnāli nosūtīti",
+    "Failed to send logs: ": "Neizdevās nosūtīt žurnālus: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Atutošanas žurnāli satur programmas datus, ieskaitot Tavu lietotājvārdu, istabu/grupu ID vai aliases, kuras esi apmeklējis un citu lietotāju lietotājvārdus. Tie nesatur pašas ziņas.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Nospied šeit</a> lai izveidotu GitHub problēmpaziņojumu.",
+    "GitHub issue link:": "GitHub problēmpaziņojuma saite:",
+    "Notes:": "Piezīmes:",
+    "Online": "Onlainā",
+    "View Community": "Skatīt kopienu"
 }
