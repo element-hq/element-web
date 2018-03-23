@@ -427,7 +427,6 @@
     "Use with caution": "조심해주세요",
     "User ID": "사용자 ID",
     "User Interface": "사용자 인터페이스",
-    "%(user)s is a": "%(user)s는",
     "User name": "사용자 이름",
     "Username invalid: %(errMessage)s": "사용자 이름을 인식할 수 없어요: %(errMessage)s",
     "Users": "사용자들",

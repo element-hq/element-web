@@ -68,6 +68,8 @@ export function createTestClient() {
     return {
         getHomeserverUrl: sinon.stub(),
         getIdentityServerUrl: sinon.stub(),
+        getDomain: sinon.stub().returns("matrix.rog"),
+        getUserId: sinon.stub().returns("@userId:matrix.rog"),
 
         getPushActionsForEvent: sinon.stub(),
         getRoom: sinon.stub().returns(mkStubRoom()),
@@ -81,6 +83,7 @@ export function createTestClient() {
         paginateEventTimeline: sinon.stub().returns(Promise.resolve()),
         sendReadReceipt: sinon.stub().returns(Promise.resolve()),
         getRoomIdForAlias: sinon.stub().returns(Promise.resolve()),
+        getRoomDirectoryVisibility: sinon.stub().returns(Promise.resolve()),
         getProfileInfo: sinon.stub().returns(Promise.resolve({})),
         getAccountData: (type) => {
             return mkEvent({
@@ -244,6 +247,7 @@ export function mkStubRoom(roomId = null) {
             roomId: roomId,
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
         }),
+        getMembersWithMembership: sinon.stub().returns([]),
         getJoinedMembers: sinon.stub().returns([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -252,8 +256,16 @@ export function mkStubRoom(roomId = null) {
         hasMembershipState: () => null,
         currentState: {
             getStateEvents: sinon.stub(),
+            mayClientSendStateEvent: sinon.stub().returns(true),
+            maySendStateEvent: sinon.stub().returns(true),
             members: [],
         },
+        tags: {
+            "m.favourite": {
+                order: 0.5,
+            },
+        },
+        setBlacklistUnverifiedDevices: sinon.stub(),
     };
 }
 
@@ -284,7 +296,7 @@ export function wrapInMatrixClientContext(WrappedComponent) {
         }
 
         render() {
-            return <WrappedComponent {...this.props} />;
+            return <WrappedComponent ref={this.props.wrappedRef} {...this.props} />;
         }
     }
     return Wrapper;

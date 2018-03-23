@@ -366,7 +366,6 @@
     "Encryption is enabled in this room": "V tejto miestnosti je povolené šifrovanie",
     "Encryption is not enabled in this room": "V tejto miestnosti nie je povolené šifrovanie",
     "Privileged Users": "Poverení používatelia",
-    "%(user)s is a": "%(user)s je",
     "No users have specific privileges in this room": "Žiadny používatelia nemajú v tejto miestnosti pridelené konkrétne poverenia",
     "Banned users": "Používatelia, ktorým bol zakázaný vstup",
     "This room is not accessible by remote Matrix servers": "Táto miestnosť nie je prístupná cez vzdialené Matrix servery",
@@ -940,8 +939,6 @@
     "Something went wrong when trying to get your communities.": "Niečo sa pokazilo pri získavaní vašich komunít.",
     "collapse": "zbaliť",
     "expand": "rozbaliť",
-    "Cryptography data migrated": "Kryptografické údaje zmigrované",
-    "A one-off migration of cryptography data has been performed. End-to-end encryption will not work if you go back to an older version of Riot. If you need to use end-to-end cryptography on an older version, log out of Riot first. To retain message history, export and re-import your keys.": "Práve bola vykonaná jednorázová migrácia kryptografických údajov. E2E šifrovanie vám nebude fungovať, ak sa vrátite k staršej verzii programu Riot. Ak plánujete použiť šifrovanie v staršej verzii Riot, mali by ste sa pred tým odhlásiť. Aby ste si zachovali históriu šifrovaných konverzácií, exportujte a znovu importujte kľúče miestností.",
     "Old cryptography data detected": "Nájdené zastaralé kryptografické údaje",
     "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Boli nájdené údaje zo staršej verzie Riot. Toto spôsobí, že E2E šifrovanie nebude v staršej verzii Riot fungovať. Zašifrované správy prijaté a odoslané v poslednom čase cez staršiu verziu Riot nemusia byť čitateľné v tejto verzii Riot. Môže to tiež spôsobiť, že šifrované konverzácie nebudú s touto verziou Riot čitateľné. Ak spozorujete niektoré s týchto problémov, odhláste sa a opätovne sa prihláste prosím. Históriu šifrovaných konverzácií zachováte tak, že si exportujete a znovu importujete kľúče miestností.",
     "Warning": "Upozornenie",
@@ -977,5 +974,12 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Či pri písaní správ používate rozbalenú lištu formátovania textu",
     "Your homeserver's URL": "URL adresa vami používaného domovského servera",
     "Your identity server's URL": "URL adresa vami používaného servera totožností",
-    "This room is not public. You will not be able to rejoin without an invite.": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu."
+    "This room is not public. You will not be able to rejoin without an invite.": "Toto nie je verejne dostupná miestnosť. Bez pozvánky nebudete do nej môcť vstúpiť znovu.",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s si zmenil zobrazované meno na %(displayName)s.",
+    "Failed to set direct chat tag": "Nepodarilo sa nastaviť značku priama konverzácia",
+    "Failed to remove tag %(tagName)s from room": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
+    "Failed to add tag %(tagName)s to room": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
+    "<a>In reply to</a> <pill>": "<a>Odpoveď na</a> <pill>",
+    "Community IDs cannot not be empty.": "ID komunity nemôže ostať prázdne.",
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Zobraziť zariadenia</showDevicesText>, <sendAnywayText>napriek tomu odoslať</sendAnywayText> alebo <cancelText>zrušiť</cancelText>."
 }

@@ -55,6 +55,7 @@ class TagOrderStore extends Store {
                 const tagOrderingEventContent = tagOrderingEvent ? tagOrderingEvent.getContent() : {};
                 this._setState({
                     orderedTagsAccountData: tagOrderingEventContent.tags || null,
+                    removedTagsAccountData: tagOrderingEventContent.removedTags || null,
                     hasSynced: true,
                 });
                 this._updateOrderedTags();
@@ -70,6 +71,7 @@ class TagOrderStore extends Store {
 
                 this._setState({
                     orderedTagsAccountData: payload.event_content ? payload.event_content.tags : null,
+                    removedTagsAccountData: payload.event_content ? payload.event_content.removedTags : null,
                 });
                 this._updateOrderedTags();
                 break;
@@ -87,7 +89,16 @@ class TagOrderStore extends Store {
                 // Optimistic update of a moved tag
                 this._setState({
                     orderedTags: payload.request.tags,
+                    removedTagsAccountData: payload.request.removedTags,
                 });
+                break;
+            }
+            case 'TagOrderActions.removeTag.pending': {
+                // Optimistic update of a removed tag
+                this._setState({
+                    removedTagsAccountData: payload.request.removedTags,
+                });
+                this._updateOrderedTags();
                 break;
             }
             case 'select_tag': {
@@ -165,13 +176,15 @@ class TagOrderStore extends Store {
     _mergeGroupsAndTags() {
         const groupIds = this._state.joinedGroupIds || [];
         const tags = this._state.orderedTagsAccountData || [];
+        const removedTags = new Set(this._state.removedTagsAccountData || []);
+
 
         const tagsToKeep = tags.filter(
-            (t) => t[0] !== '+' || groupIds.includes(t),
+            (t) => (t[0] !== '+' || groupIds.includes(t)) && !removedTags.has(t),
         );
 
         const groupIdsToAdd = groupIds.filter(
-            (groupId) => !tags.includes(groupId),
+            (groupId) => !tags.includes(groupId) && !removedTags.has(groupId),
         );
 
         return tagsToKeep.concat(groupIdsToAdd);
@@ -179,6 +192,10 @@ class TagOrderStore extends Store {
 
     getOrderedTags() {
         return this._state.orderedTags;
+    }
+
+    getRemovedTagsAccountData() {
+        return this._state.removedTagsAccountData;
     }
 
     getStoreId() {

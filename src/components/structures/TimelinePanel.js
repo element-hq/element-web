@@ -624,6 +624,7 @@ var TimelinePanel = React.createClass({
                 this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
                 dis.dispatch({
                     action: 'on_room_read',
+                    roomId: this.props.timelineSet.room.roomId,
                 });
             }
         }
@@ -1121,9 +1122,9 @@ var TimelinePanel = React.createClass({
         // exist.
         if (this.state.timelineLoading) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <Loader />
-                    </div>
+                <div className="mx_RoomView_messagePanelSpinner">
+                    <Loader />
+                </div>
             );
         }
 

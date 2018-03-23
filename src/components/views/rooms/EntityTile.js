@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,7 +33,11 @@ const PRESENCE_CLASS = {
 };
 
 
-function presenceClassForMember(presenceState, lastActiveAgo) {
+function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
+    if (showPresence === false) {
+        return 'mx_EntityTile_online_beenactive';
+    }
+
     // offline is split into two categories depending on whether we have
     // a last_active_ago for them.
     if (presenceState == 'offline') {
@@ -64,6 +69,7 @@ const EntityTile = React.createClass({
         shouldComponentUpdate: PropTypes.func,
         onClick: PropTypes.func,
         suppressOnHover: PropTypes.bool,
+        showPresence: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -75,6 +81,7 @@ const EntityTile = React.createClass({
             presenceLastTs: 0,
             showInviteButton: false,
             suppressOnHover: false,
+            showPresence: true,
         };
     },
 
@@ -99,7 +106,7 @@ const EntityTile = React.createClass({
 
     render: function() {
         const presenceClass = presenceClassForMember(
-            this.props.presenceState, this.props.presenceLastActiveAgo,
+            this.props.presenceState, this.props.presenceLastActiveAgo, this.props.showPresence,
         );
 
         let mainClassName = "mx_EntityTile ";
@@ -114,15 +121,21 @@ const EntityTile = React.createClass({
 
             mainClassName += " mx_EntityTile_hover";
             const PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
+            let presenceLabel = null;
+            let nameClasses = 'mx_EntityTile_name';
+            if (this.props.showPresence) {
+                presenceLabel = <PresenceLabel activeAgo={activeAgo}
+                    currentlyActive={this.props.presenceCurrentlyActive}
+                    presenceState={this.props.presenceState} />;
+                nameClasses += ' mx_EntityTile_name_hover';
+            }
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12" />
-                    <EmojiText element="div" className="mx_EntityTile_name mx_EntityTile_name_hover" dir="auto">
+                    <EmojiText element="div" className={nameClasses} dir="auto">
                         { name }
                     </EmojiText>
-                    <PresenceLabel activeAgo={activeAgo}
-                        currentlyActive={this.props.presenceCurrentlyActive}
-                        presenceState={this.props.presenceState} />
+                    {presenceLabel}
                 </div>
             );
         } else {
