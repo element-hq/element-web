@@ -221,5 +221,13 @@
     "Contributing code to Matrix and Riot": "Допринасяне с код към Matrix и Riot",
     "Dev chat for the Riot/Web dev team": "Чат за разработващия екип на Riot/Web",
     "Dev chat for the Dendrite dev team": "Чат за разработващия екип на Dendrite",
-    "Co-ordination for Riot/Web translators": "Координация за преводачи на Riot/Web"
+    "Co-ordination for Riot/Web translators": "Координация за преводачи на Riot/Web",
+    "Submit debug logs": "Изпрати дебъг логове",
+    "Preparing to send logs": "Подготовка за изпращане на логове",
+    "Logs sent": "Логовете са изпратени",
+    "Failed to send logs: ": "Неуспешно изпращане на логове: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Логовете за дебъгване съдържат данни за използване на приложението, включващи потребителското Ви име, идентификаторите или псевдонимите на стаите или групите, които сте посетили, и потребителските имена на други потребители. Те не съдържат съобщения.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Натиснете тук</a>, за да създадете GitHub issue.",
+    "GitHub issue link:": "Линк към GitHub issue:",
+    "Notes:": "Бележки:"
 }
