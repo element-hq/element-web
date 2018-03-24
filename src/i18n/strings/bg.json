@@ -995,5 +995,10 @@
     "Key request sent.": "Заявката за ключ е изпратена.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Заявете отново ключове за шифроване</requestLink> от другите Ви устройства.",
     "%(user)s is a %(userRole)s": "%(user)s е %(userRole)s",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Промени, направени във общността Ви, може да не бъдат видяни от другите потребители за най-много 30 минути."
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Промени, направени във общността Ви, може да не бъдат видяни от другите потребители за най-много 30 минути.",
+    "Code": "Код",
+    "Debug Logs Submission": "Изпращане на логове за дебъгване",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ако сте изпратили грешка чрез GitHub, логовете за дебъгване могат да ни помогнат да проследим проблема. Логовете за дебъгване съдържат данни за използване на приложението, включващи потребителското Ви име, идентификаторите или псевдонимите на стаите или групите, които сте посетили, и потребителските имена на други потребители. Те не съдържат съобщения.",
+    "Submit debug logs": "Изпрати дебъг логове",
+    "Opens the Developer Tools dialog": "Отваря прозорец с инструменти на разработчика"
 }
