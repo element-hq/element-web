@@ -318,7 +318,7 @@ module.exports = React.createClass({
 
     _addCodeCopyButton() {
         // Add 'copy' buttons to pre blocks
-        ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
+        Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
             button.onclick = (e) => {

@@ -18,7 +18,7 @@ import { asyncAction } from './actionCreators';
 import RoomListStore from '../stores/RoomListStore';
 
 import Modal from '../Modal';
-import Rooms from '../Rooms';
+import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
 import sdk from '../index';
 

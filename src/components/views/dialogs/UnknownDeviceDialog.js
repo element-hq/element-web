@@ -189,8 +189,9 @@ export default React.createClass({
             <BaseDialog className='mx_UnknownDeviceDialog'
                 onFinished={this.props.onFinished}
                 title={_t('Room contains unknown devices')}
+                contentId='mx_Dialog_content'
             >
-                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
+                <GeminiScrollbar autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
                         { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>

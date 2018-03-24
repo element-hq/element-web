@@ -34,6 +34,7 @@ import RoomListStore from '../../../stores/RoomListStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
+const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function phraseForSection(section) {
     switch (section) {
@@ -76,10 +77,7 @@ module.exports = React.createClass({
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.timeline", this.onRoomTimeline);
-        cli.on("Room.name", this.onRoomName);
         cli.on("Room.receipt", this.onRoomReceipt);
-        cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
@@ -161,12 +159,6 @@ module.exports = React.createClass({
                     });
                 }
                 break;
-            case 'on_room_read':
-                // Force an update because the notif count state is too deep to cause
-                // an update. This forces the local echo of reading notifs to be
-                // reflected by the RoomTiles.
-                this.forceUpdate();
-                break;
         }
     },
 
@@ -177,10 +169,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -236,27 +225,12 @@ module.exports = React.createClass({
         this._updateStickyHeaders(true, scrollToPosition);
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
-        this._delayedRefreshRoomList();
-    },
-
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
             this._delayedRefreshRoomList();
         }
-    },
-
-    onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomStateEvents: function(ev, state) {
-        this._delayedRefreshRoomList();
     },
 
     onRoomMemberName: function(ev, member) {
@@ -365,7 +339,7 @@ module.exports = React.createClass({
         });
 
         Object.keys(lists).forEach((tagName) => {
-            filteredLists[tagName] = lists[tagName].filter((taggedRoom) => {
+            const filteredRooms = lists[tagName].filter((taggedRoom) => {
                 // Somewhat impossible, but guard against it anyway
                 if (!taggedRoom) {
                     return;
@@ -377,6 +351,10 @@ module.exports = React.createClass({
 
                 return Boolean(isRoomVisible[taggedRoom.roomId]);
             });
+            
+            if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
+                filteredLists[tagName] = filteredRooms;
+            }
         });
 
         return filteredLists;
@@ -548,17 +526,20 @@ module.exports = React.createClass({
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
 
+        let tip = null;
+
         switch (section) {
             case 'im.vector.fake.direct':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "Press <StartChatButton> to start a chat with someone",
                         {},
                         { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
                     ) }
                 </div>;
+                break;
             case 'im.vector.fake.recent':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
                         " <RoomDirectoryButton> to browse the directory",
@@ -569,6 +550,13 @@ module.exports = React.createClass({
                         },
                     ) }
                 </div>;
+                break;
+        }
+
+        if (tip) {
+            return <div className="mx_RoomList_emptySubListTip_container">
+                { tip }
+            </div>;
         }
 
         // We don't want to display drop targets if there are no room tiles to drag'n'drop
@@ -682,7 +670,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                    if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
                              label={tagName}

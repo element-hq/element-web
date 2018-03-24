@@ -175,4 +175,4 @@ class MatrixClientPeg {
 if (!global.mxMatrixClientPeg) {
     global.mxMatrixClientPeg = new MatrixClientPeg();
 }
-module.exports = global.mxMatrixClientPeg;
+export default global.mxMatrixClientPeg;

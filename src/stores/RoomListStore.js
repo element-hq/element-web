@@ -23,6 +23,16 @@ import Unread from '../Unread';
  * the RoomList.
  */
 class RoomListStore extends Store {
+
+    static _listOrders = {
+        "m.favourite": "manual",
+        "im.vector.fake.invite": "recent",
+        "im.vector.fake.recent": "recent",
+        "im.vector.fake.direct": "recent",
+        "m.lowpriority": "recent",
+        "im.vector.fake.archived": "recent",
+    };
+
     constructor() {
         super(dis);
 
@@ -68,6 +78,42 @@ class RoomListStore extends Store {
                 this._generateRoomLists();
             }
             break;
+            case 'MatrixActions.Room.timeline': {
+                if (!this._state.ready ||
+                    !payload.isLiveEvent ||
+                    !payload.isLiveUnfilteredRoomTimelineEvent ||
+                    !this._eventTriggersRecentReorder(payload.event)
+                ) break;
+                this._generateRoomLists();
+            }
+            break;
+            // When an event is decrypted, it could mean we need to reorder the room
+            // list because we now know the type of the event.
+            case 'MatrixActions.Event.decrypted': {
+                // We may not have synced or done an initial generation of the lists
+                if (!this._matrixClient || !this._state.ready) break;
+
+                const roomId = payload.event.getRoomId();
+
+                // We may have decrypted an event without a roomId (e.g to_device)
+                if (!roomId) break;
+
+                const room = this._matrixClient.getRoom(roomId);
+
+                // We somehow decrypted an event for a room our client is unaware of
+                if (!room) break;
+
+                const liveTimeline = room.getLiveTimeline();
+                const eventTimeline = room.getTimelineForEvent(payload.event.getId());
+
+                // Either this event was not added to the live timeline (e.g. pagination)
+                // or it doesn't affect the ordering of the room list.
+                if (liveTimeline !== eventTimeline ||
+                    !this._eventTriggersRecentReorder(payload.event)
+                ) break;
+                this._generateRoomLists();
+            }
+            break;
             case 'MatrixActions.accountData': {
                 if (payload.event_type !== 'm.direct') break;
                 this._generateRoomLists();
@@ -75,6 +121,14 @@ class RoomListStore extends Store {
             break;
             case 'MatrixActions.RoomMember.membership': {
                 if (!this._matrixClient || payload.member.userId !== this._matrixClient.credentials.userId) break;
+                this._generateRoomLists();
+            }
+            break;
+            // This could be a new room that we've been invited to, joined or created
+            // we won't get a RoomMember.membership for these cases if we're not already
+            // a member.
+            case 'MatrixActions.Room': {
+                if (!this._state.ready || !this._matrixClient.credentials.userId) break;
                 this._generateRoomLists();
             }
             break;
@@ -159,18 +213,9 @@ class RoomListStore extends Store {
             }
         });
 
-        const listOrders = {
-            "m.favourite": "manual",
-            "im.vector.fake.invite": "recent",
-            "im.vector.fake.recent": "recent",
-            "im.vector.fake.direct": "recent",
-            "m.lowpriority": "recent",
-            "im.vector.fake.archived": "recent",
-        };
-
         Object.keys(lists).forEach((listKey) => {
             let comparator;
-            switch (listOrders[listKey]) {
+            switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
                     comparator = this._recentsComparator;
                     break;
@@ -188,13 +233,17 @@ class RoomListStore extends Store {
         });
     }
 
+    _eventTriggersRecentReorder(ev) {
+        return ev.getTs() && (
+            Unread.eventTriggersUnreadCount(ev) ||
+            ev.getSender() === this._matrixClient.credentials.userId
+        );
+    }
+
     _tsOfNewestEvent(room) {
         for (let i = room.timeline.length - 1; i >= 0; --i) {
             const ev = room.timeline[i];
-            if (ev.getTs() &&
-                (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.getSender() === this._matrixClient.credentials.userId))
-            ) {
+            if (this._eventTriggersRecentReorder(ev)) {
                 return ev.getTs();
             }
         }
@@ -210,6 +259,8 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(roomA, roomB) {
+        // XXX: We could use a cache here and update it when we see new
+        // events that trigger a reorder
         return this._tsOfNewestEvent(roomB) - this._tsOfNewestEvent(roomA);
     }
 

@@ -414,19 +414,11 @@ class TextHighlighter extends BaseHighlighter {
      * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
      */
 export function bodyToHtml(content, highlights, opts={}) {
-    const isHtml = (content.format === "org.matrix.custom.html") && content.formatted_body;
-    let body;
-    if (isHtml) {
-        body = content.formatted_body;
-        // Part of Replies fallback support
-        if (opts.stripReplyFallback) body = ReplyThread.stripHTMLReply(body);
-    } else {
-        // Part of Replies fallback support - special because strip must be before escape
-        body = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : escape(content.body);
-    }
+    let isHtml = content.format === "org.matrix.custom.html" && content.formatted_body;
 
     let bodyHasEmoji = false;
 
+    let strippedBody;
     let safeBody;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
@@ -443,9 +435,32 @@ export function bodyToHtml(content, highlights, opts={}) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
             };
         }
-        safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        bodyHasEmoji = containsEmoji(body);
-        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
+
+        let formattedBody = content.formatted_body;
+        if (opts.stripReplyFallback) formattedBody = ReplyThread.stripHTMLReply(content.formatted_body);
+        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
+
+        bodyHasEmoji = containsEmoji(isHtml ? formattedBody : content.body);
+
+
+        // Only generate safeBody if the message was sent as org.matrix.custom.html
+        if (isHtml) {
+            safeBody = sanitizeHtml(formattedBody, sanitizeHtmlParams);
+        } else {
+            // ... or if there are emoji, which we insert as HTML alongside the
+            // escaped plaintext body.
+            if (bodyHasEmoji) {
+                isHtml = true;
+                safeBody = sanitizeHtml(escape(strippedBody), sanitizeHtmlParams);
+            }
+        }
+
+        // An HTML message with emoji
+        //  or a plaintext message with emoji that was escaped and sanitized into
+        //  HTML.
+        if (bodyHasEmoji) {
+            safeBody = unicodeToImage(safeBody);
+        }
     } finally {
         delete sanitizeHtmlParams.textFilter;
     }
@@ -463,7 +478,12 @@ export function bodyToHtml(content, highlights, opts={}) {
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtml,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
+
+    if (isHtml) {
+        return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
+    }
+
+    return <span className={className} dir="auto">{ strippedBody }</span>;
 }
 
 export function emojifyText(text) {

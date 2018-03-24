@@ -171,6 +171,10 @@ export default React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
+
+            // When showing Modal dialogs we need to set aria-hidden on the root app element
+            // and disable it when there are no dialogs
+            hideToSRUsers: false,
         };
         return s;
     },
@@ -607,6 +611,16 @@ export default React.createClass({
                 break;
             case 'send_event':
                 this.onSendEvent(payload.room_id, payload.event);
+                break;
+            case 'aria_hide_main_app':
+                this.setState({
+                    hideToSRUsers: true,
+                });
+                break;
+            case 'aria_unhide_main_app':
+                this.setState({
+                    hideToSRUsers: false,
+                });
                 break;
         }
     },
@@ -1171,18 +1185,6 @@ export default React.createClass({
         cli.on("crypto.warning", (type) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             switch (type) {
-                case 'CRYPTO_WARNING_ACCOUNT_MIGRATED':
-                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
-                        title: _t('Cryptography data migrated'),
-                        description: _t(
-                            "A one-off migration of cryptography data has been performed. "+
-                            "End-to-end encryption will not work if you go back to an older "+
-                            "version of Riot. If you need to use end-to-end cryptography on "+
-                            "an older version, log out of Riot first. To retain message history, "+
-                            "export and re-import your keys.",
-                        ),
-                    });
-                    break;
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),

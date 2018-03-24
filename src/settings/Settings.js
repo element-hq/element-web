@@ -94,12 +94,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_tag_panel": {
-        isFeature: true,
-        displayName: _td("Tag Panel"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Disable Emoji suggestions while typing'),
@@ -186,6 +180,11 @@ export const SETTINGS = {
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Mirror local video feed'),
+        default: false,
+    },
+    "TagPanel.disableTagPanel": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Disable Community Filter Panel'),
         default: false,
     },
     "theme": {

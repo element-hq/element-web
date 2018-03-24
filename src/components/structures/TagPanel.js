@@ -17,12 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
 
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
 
@@ -43,7 +45,7 @@ const TagPanel = React.createClass({
     componentWillMount: function() {
         this.unmounted = false;
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.on("sync", this.onClientSync);
+        this.context.matrixClient.on("sync", this._onClientSync);
 
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
@@ -61,7 +63,7 @@ const TagPanel = React.createClass({
     componentWillUnmount() {
         this.unmounted = true;
         this.context.matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
-        this.context.matrixClient.removeListener("sync", this.onClientSync);
+        this.context.matrixClient.removeListener("sync", this._onClientSync);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
         }
@@ -72,7 +74,7 @@ const TagPanel = React.createClass({
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
-    onClientSync(syncState, prevState) {
+    _onClientSync(syncState, prevState) {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING or PREPARED.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
@@ -82,9 +84,7 @@ const TagPanel = React.createClass({
         }
     },
 
-    onClick(e) {
-        // Ignore clicks on children
-        if (e.target !== e.currentTarget) return;
+    onMouseDown(e) {
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -93,9 +93,15 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
+    onClearFilterClick(ev) {
+        dis.dispatch({action: 'deselect_tags'});
+    },
+
     render() {
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -105,26 +111,42 @@ const TagPanel = React.createClass({
                 selected={this.state.selectedTags.includes(tag)}
             />;
         });
+
+        const clearButton = this.state.selectedTags.length > 0 ?
+            <TintableSvg src="img/icons-close.svg" width="24" height="24"
+                alt={_t("Clear filter")}
+                title={_t("Clear filter")}
+            /> :
+            <div />;
+
         return <div className="mx_TagPanel">
-            <Droppable
-                droppableId="tag-panel-droppable"
-                type="draggable-TagTile"
+            <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
+                { clearButton }
+            </AccessibleButton>
+            <div className="mx_TagPanel_divider" />
+            <GeminiScrollbar
+                className="mx_TagPanel_scroller"
+                autoshow={true}
+                // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
+                // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6253
+                onMouseDown={this.onMouseDown}
             >
-                { (provided, snapshot) => (
-                    <div
-                        className="mx_TagPanel_tagTileContainer"
-                        ref={provided.innerRef}
-                        // react-beautiful-dnd has a bug that emits a click to the parent
-                        // of draggables upon dropping
-                        //   https://github.com/atlassian/react-beautiful-dnd/issues/273
-                        // so we use onMouseDown here as a workaround.
-                        onMouseDown={this.onClick}
-                    >
-                        { tags }
-                        { provided.placeholder }
-                    </div>
-                ) }
-            </Droppable>
+                <Droppable
+                    droppableId="tag-panel-droppable"
+                    type="draggable-TagTile"
+                >
+                    { (provided, snapshot) => (
+                            <div
+                                className="mx_TagPanel_tagTileContainer"
+                                ref={provided.innerRef}
+                            >
+                                { tags }
+                                { provided.placeholder }
+                            </div>
+                    ) }
+                </Droppable>
+            </GeminiScrollbar>
+            <div className="mx_TagPanel_divider" />
             <div className="mx_TagPanel_createGroupButton">
                 <GroupsButton tooltip={true} />
             </div>

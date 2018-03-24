@@ -60,10 +60,10 @@ export default React.createClass({
         }
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}

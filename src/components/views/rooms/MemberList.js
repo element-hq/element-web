@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const GeminiScrollbar = require('react-gemini-scrollbar');
@@ -59,6 +60,14 @@ module.exports = React.createClass({
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
+
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = MatrixClientPeg.get().baseUrl;
+
+        this._showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            this._showPresence = enablePresenceByHsUrl[hsUrl];
+        }
     },
 
     componentWillUnmount: function() {
@@ -345,7 +354,7 @@ module.exports = React.createClass({
         const memberList = members.map((userId) => {
             const m = this.memberDict[userId];
             return (
-                <MemberTile key={userId} member={m} ref={userId} />
+                <MemberTile key={userId} member={m} ref={userId} showPresence={this._showPresence} />
             );
         });
 
@@ -358,7 +367,10 @@ module.exports = React.createClass({
         if (membership === "invite") {
             const EntityTile = sdk.getComponent("rooms.EntityTile");
             memberList.push(...this._getPending3PidInvites().map((e) => {
-                return <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />;
+                return <EntityTile key={e.getStateKey()}
+                    name={e.getContent().display_name}
+                    suppressOnHover={true}
+                />;
             }));
         }
 

@@ -132,7 +132,9 @@ module.exports = React.createClass({
     render: function() {
         if (this.state.removingUser) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
+            return <div className="mx_MemberInfo">
+                <Spinner />
+            </div>;
         }
 
         let adminTools;
