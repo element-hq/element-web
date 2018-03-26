@@ -192,8 +192,7 @@ module.exports = React.createClass({
                     {userName: this.props.member.userId,
                     dateTime: dateString},
                 );
-            }
-            else {
+            } else {
                 title = _t(
                     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
                     {displayName: this.props.member.rawDisplayName,
