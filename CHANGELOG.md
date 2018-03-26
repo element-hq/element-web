@@ -1,3 +1,9 @@
+Changes in [0.13.5-cryptowarning.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.5-cryptowarning.2) (2018-03-26)
+============================================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.5-cryptowarning.1...v0.13.5-cryptowarning.2)
+
+ * Fix strings file
+
 Changes in [0.13.5-cryptowarning.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.5-cryptowarning.1) (2018-03-26)
 ============================================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.5...v0.13.5-cryptowarning.1)
