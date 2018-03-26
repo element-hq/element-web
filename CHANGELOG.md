@@ -1,3 +1,9 @@
+Changes in [0.13.5-cryptowarning.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.5-cryptowarning.1) (2018-03-26)
+============================================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.5...v0.13.5-cryptowarning.1)
+
+ * Disable e2e crypto with a big warning if the database schema is newer than we expect.
+
 Changes in [0.13.5](https://github.com/vector-im/riot-web/releases/tag/v0.13.5) (2018-02-09)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.4...v0.13.5)
