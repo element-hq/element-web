@@ -44,7 +44,7 @@
     "On": "Укључено",
     "Noisy": "Бучно",
     "Failed to set direct chat tag": "Нисам успео да поставим ознаку директног ћаскања",
-    "Failed to remove tag %(tagName)s from room": "Нисам успео да уклоним ознаку %(tagName)s са собе",
+    "Failed to remove tag %(tagName)s from room": "Нисам успео да скинем ознаку %(tagName)s са собе",
     "Failed to add tag %(tagName)s to room": "Нисам успео да додам ознаку %(tagName)s на собу",
     "Search…": "Претрага…",
     "Search": "Претрага",
@@ -118,7 +118,7 @@
     "You can now return to your account after signing out, and sign in on other devices.": "Можете се вратити у ваш налог након што се одјавите и пријавите поново, на другим уређајима.",
     "Remember, you can always set an email address in user settings if you change your mind.": "Запамтите, увек можете поставити мејл адресу у корисничким подешавањима, уколико се предомислите.",
     "Continue": "Настави",
-    "Failed to change password. Is your password correct?": "Нисам успео да променим лозинку. Да ли је ваша лозинка исправна?",
+    "Failed to change password. Is your password correct?": "Нисам успео да променим лозинку. Да ли је ваша лозинка тачна?",
     "(HTTP status %(httpStatus)s)": "(HTTP стање %(httpStatus)s)",
     "Please set a password!": "Поставите лозинку!",
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Ово ће вам омогућити да се вратите у ваш налог након што се одјавите и пријавите, на другим уређајима.",
@@ -132,7 +132,7 @@
     "View Decrypted Source": "Погледај дешифровани извор",
     "Unhide Preview": "Откриј преглед",
     "Permalink": "Трајна веза",
-    "Quote": "Цитирај",
+    "Quote": "Цитат",
     "Source URL": "Адреса извора",
     "Failed to set Direct Message status of room": "Нисам успео да подесим стање директне поруке собе",
     "unknown error code": "непознати код грешке",
@@ -218,5 +218,10 @@
     "Dev chat for the Riot/Web dev team": "Програмерско ћаскање за Riot/веб програмерски тим",
     "Dev chat for the Dendrite dev team": "Програмерско ћаскање за Dendrite програмерски тим",
     "Co-ordination for Riot/Web translators": "Координација за Riot/веб преводиоце",
-    "Reply": "Одговори"
+    "Reply": "Одговори",
+    "All messages (noisy)": "Све поруке (гласно)",
+    "%(count)s Members|other": "%(count)s чланова",
+    "%(count)s Members|one": "%(count)s члан",
+    "Online": "На мрежи",
+    "View Community": "Погледај заједницу"
 }

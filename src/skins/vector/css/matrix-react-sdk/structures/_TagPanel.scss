@@ -25,13 +25,40 @@ limitations under the License.
     justify-content: space-between;
 }
 
+.mx_TagPanel .mx_TagPanel_clearButton {
+    /* Constant height within flex mx_TagPanel */
+    height: 70px;
+    width: 60px;
+
+    flex: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.mx_TagPanel .mx_TagPanel_clearButton object {
+    /* Same as .mx_SearchBox padding-top */
+    margin-top: 24px;
+    pointer-events: none;
+}
+
+.mx_TagPanel .mx_TagPanel_divider {
+    height: 0px;
+    width: 42px;
+    border-bottom: 1px solid $panel-divider-color;
+}
+
+.mx_TagPanel .mx_TagPanel_scroller {
+    flex-grow: 1;
+}
+
 .mx_TagPanel .mx_TagPanel_tagTileContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 65px;
 
-    flex-grow: 1;
+    height: 100%;
 }
 
 .mx_TagPanel .mx_TagTile {
@@ -50,9 +77,15 @@ limitations under the License.
     padding: 3px 0px;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar {
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
     border: 3px solid $accent-color;
+    background-color: $accent-color;
     border-radius: 60px;
+
+    /* In case this is a "initial" avatar */
+    display: block;
+    height: 35px;
+    width: 35px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -85,6 +118,7 @@ limitations under the License.
 .mx_TagPanel_createGroupButton {
     opacity: 0.5;
     margin-bottom: 17px;
+    margin-top: 18px;
     height: 25px;
 }
 

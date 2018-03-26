@@ -214,5 +214,11 @@
     "Register": "Rejestracja",
     "Rooms": "Pokoje",
     "Invite to this community": "Zaproś do tej społeczności",
-    "Add rooms to this community": "Dodaj pokoje do tej społeczności"
+    "Add rooms to this community": "Dodaj pokoje do tej społeczności",
+    "Send Account Data": "Wyślij dane konta",
+    "Explore Account Data": "Odkryj dane konta",
+    "Reply": "Odpowiedz",
+    "View Community": "Pokaż społeczność",
+    "%(count)s Members|other": "%(count)s Członków",
+    "%(count)s Members|one": "%(count)s Członek"
 }

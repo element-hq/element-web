@@ -191,5 +191,10 @@
     "Remember, you can always set an email address in user settings if you change your mind.": "Ingat, Anda selalu dapat mengubah alamat email di pengaturan pengguna jika anda berubah pikiran.",
     "To return to your account in future you need to <u>set a password</u>": "Untuk kembali ke akun di lain waktu, Anda perlu <u>mengisi password</u>",
     "Set Password": "Ubah Password",
-    "Couldn't load home page": "Tidak dapat memuat halaman utama"
+    "Couldn't load home page": "Tidak dapat memuat halaman utama",
+    "Show message in desktop notification": "Tampilkan pesan pada desktop",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Anda dapat menggunakan opsi lain untuk mendaftar pada server Matrix yang berbeda dengan memasukkan URL server yang sesuai. <br/>Hal ini memungkinkan anda untuk menggunakan Riot dengan akun matrix yang telah tersedia pada Home server yang berbeda.<br/><br/>Anda juga dapat melakukan pengubahan identitas server akan tetapi akan berakibat tidak dapat mengundang pengguna melalui email, atau diundang melalui email.",
+    "Bug report sent": "Laporan bug terkirim",
+    "Thank you!": "Terima kasih!",
+    "Back": "Kembali"
 }

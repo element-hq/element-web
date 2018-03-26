@@ -41,13 +41,13 @@
     "Error saving email notification preferences": "Fallo ao cargar os axustes de notificacións",
     "#example": "#exemplo",
     "Expand panel": "Expandir panel",
-    "Failed to add tag %(tagName)s to room": "Fallou ao engadir a etiqueta %(tagName)s a sala",
+    "Failed to add tag %(tagName)s to room": "Fallo ao engadir a etiqueta %(tagName)s a sala",
     "Failed to change settings": "Fallo ao cambiar os axustes",
     "Failed to forget room %(errCode)s": "Fallo ao esquecer sala %(errCode)s",
     "Failed to update keywords": "Fallo ao actualizar as palabras chave",
     "Failed to get protocol list from Home Server": "Fallo ao obter a lista de protocolo desde o servidor",
     "Failed to get public room list": "Fallo ao obter a lista de salas públicas",
-    "Failed to remove tag %(tagName)s from room": "Fallo ao eliminar etiqueta %(tagName)s da sala",
+    "Failed to remove tag %(tagName)s from room": "Fallo ao eliminar a etiqueta %(tagName)s da sala",
     "Failed to send custom event.": "Fallo ao enviar evento personalizado.",
     "Failed to send report: ": "Fallo no envío do informe: ",
     "Failed to set direct chat tag": "Fallo ao establecer etiqueta do chat directo",
@@ -222,5 +222,9 @@
     "Away": "Fóra",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Por favor instale <chromeLink>Chrome</chromeLink> ou <firefoxLink>Firefox</firefoxLink> para a mellor experiencia de usuaria.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> e <operaLink>Opera</operaLink> tamén funcionan.",
-    "Reply": "Resposta"
+    "Reply": "Resposta",
+    "Online": "En liña",
+    "View Community": "Ver Comunidade",
+    "%(count)s Members|other": "%(count)s Membros",
+    "%(count)s Members|one": "%(count)s Membro"
 }

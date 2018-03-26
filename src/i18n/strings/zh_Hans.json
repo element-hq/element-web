@@ -63,7 +63,7 @@
     "(HTTP status %(httpStatus)s)": "(HTTP 状态 %(httpStatus)s)",
     "I understand the risks and wish to continue": "我了解这些风险并愿意继续",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "为了诊断问题，来自客户端的活动记录会随着这个程序 bug 报告一并发出。如果你只想送出以上文字，请取消勾选：",
-    "Invite to this room": "邀请加入此聊天室",
+    "Invite to this room": "邀请别人加入此聊天室",
     "Keywords": "关键字",
     "Leave": "离开",
     "Login": "登录",
@@ -130,7 +130,7 @@
     "View Source": "查看源码",
     "What's New": "新鲜事",
     "What's new?": "有什么新闻？",
-    "Waiting for response from server": "正在等待来自服务器的回应",
+    "Waiting for response from server": "正在等待服务器响应",
     "When I'm invited to a room": "当我被邀请进入聊天室",
     "World readable": "公开可读",
     "You cannot delete this image. (%(code)s)": "您不能删除这个图片。(%(code)s)",
@@ -222,5 +222,9 @@
     "Away": "离开",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "请安装 <chromeLink>Chrome</chromeLink> 或 <firefoxLink>Firefox</firefoxLink> 以获得最佳体验。",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 和 <operaLink>Opera</operaLink> 也能工作。",
-    "Reply": "回复"
+    "Reply": "回复",
+    "Online": "在线",
+    "View Community": "查看社区",
+    "%(count)s Members|other": "%(count)s 位成员",
+    "%(count)s Members|one": "%(count)s 位成员"
 }

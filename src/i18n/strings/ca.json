@@ -219,5 +219,9 @@
     "Contributing code to Matrix and Riot": "Contribuir amb codi a Matrix i Riot",
     "Dev chat for the Riot/Web dev team": "Xat de l'equip de desenvolupadors Riot/Web per a desenvolupadors",
     "Dev chat for the Dendrite dev team": "Xat de l'equip Dendrite per a desenvolupadors",
-    "Co-ordination for Riot/Web translators": "Coordinació per a traductors de Riot/Web"
+    "Co-ordination for Riot/Web translators": "Coordinació per a traductors de Riot/Web",
+    "%(count)s Members|other": "%(count)s membres",
+    "%(count)s Members|one": "%(count)s membre",
+    "Online": "Conectat",
+    "View Community": "Mira la communitat"
 }

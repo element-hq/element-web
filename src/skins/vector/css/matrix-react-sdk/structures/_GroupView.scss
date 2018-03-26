@@ -314,13 +314,21 @@ limitations under the License.
     height: 150px;
 }
 
-.mx_GroupView_groupDesc_placeholder {
+.mx_GroupView_groupDesc_placeholder,
+.mx_GroupView_changeDelayWarning {
     background-color: $info-plinth-bg-color;
     color: $info-plinth-fg-color;
     border-radius: 10px;
     text-align: center;
 
-    cursor: pointer;
-    padding: 100px 20px;
     margin: 20px 0px;
+}
+
+.mx_GroupView_groupDesc_placeholder {
+    padding: 100px 20px;
+    cursor: pointer;
+}
+
+.mx_GroupView_changeDelayWarning {
+    padding: 40px 20px;
 }
