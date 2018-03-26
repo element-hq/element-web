@@ -43,11 +43,7 @@ module.exports = React.createClass({
         document.body.appendChild(this.tooltipContainer);
         window.addEventListener('scroll', this._renderTooltip, true);
 
-        const parent = ReactDOM.findDOMNode(this).parentNode;
-        this.state={
-            parent,
-            parentBox: parent.getBoundingClientRect(),
-        };
+        this.parent = ReactDOM.findDOMNode(this).parentNode;
 
         this._renderTooltip();
     },
@@ -70,7 +66,7 @@ module.exports = React.createClass({
     },
 
     _updatePosition(style) {
-        const parentBox = this.state.parent.getBoundingClientRect();
+        const parentBox = this.parent.getBoundingClientRect();
         let offset = 0;
         if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
             offset = Math.floor((parentBox.height - MIN_TOOLTIP_HEIGHT) / 2);
@@ -117,8 +113,8 @@ module.exports = React.createClass({
     render: function() {
         // Render a placeholder
         return (
-            <div className={ this.props.className } >
+            <div className={this.props.className} >
             </div>
         );
-    }
+    },
 });
