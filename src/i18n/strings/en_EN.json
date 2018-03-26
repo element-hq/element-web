@@ -390,6 +390,7 @@
     "Unknown": "Unknown",
     "Replying": "Replying",
     "Seen by %(userName)s at %(dateTime)s": "Seen by %(userName)s at %(dateTime)s",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
     "No rooms to show": "No rooms to show",
     "Unnamed room": "Unnamed room",
     "World readable": "World readable",
