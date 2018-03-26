@@ -19,9 +19,19 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/*
+ * This component can be used to display generic HTML content in a contextual
+ * menu.
+ */
+
+
 export default class GenericElementContextMenu extends React.Component {
     static PropTypes = {
         element: PropTypes.element.isRequired,
+        // Function to be called when the parent window is resized
+        // This can be used to reposition or close the menu on resize and
+        // ensure that it is not displayed in a stale position.
+        onResize: PropTypes.func,
     };
 
     constructor(props) {
