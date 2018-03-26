@@ -220,5 +220,17 @@
     "Reply": "Odpowiedz",
     "View Community": "Pokaż społeczność",
     "%(count)s Members|other": "%(count)s Członków",
-    "%(count)s Members|one": "%(count)s Członek"
+    "%(count)s Members|one": "%(count)s Członek",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Możesz skorzystać z opcji dedykowanego serwera, aby zalogować się na inne serwery Matrix, podając inny adres URL serwera Domowego.<br/>Pozwala to na używanie Riot z istniejącym kontem Matrix na innym serwerze domowym.<br/><br/>Możesz również ustawić dedykowany serwer tożsamości, ale nie będziesz w stanie zapraszać użytkowników przez adres email, lub otrzymywać zaproszeń na adres email.",
+    "Preparing to send logs": "Przygotowywanie do wysłania zapisu rozmów",
+    "Logs sent": "Zapis rozmów wysłany",
+    "Failed to send logs: ": "Niepowodzenie wysyłki zapisu rozmów ",
+    "Submit debug logs": "Wyślij dzienniki błędów",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Dziennik błędów zawiera dane użytkowania aplikacji, w tym: twoją nazwę użytkownika, numery ID, aliasy pokojów i grup które odwiedzałeś i loginy innych użytkowników. Nie zawiera wiadomości.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Kliknij tutaj</a> aby założyć wątek na GitHubie dot. problemu.",
+    "GitHub issue link:": "Link do wątku na GitHubie:",
+    "Notes:": "Notatki:",
+    "Online": "Dostępny",
+    "Away": "Niedostępny",
+    "Appear Offline": "Ustaw status niedostępny"
 }
