@@ -690,5 +690,13 @@
     "Which rooms would you like to add to this community?": "Które pokoje chcesz dodać do tej społeczności?",
     "Room name or alias": "Nazwa pokoju lub alias",
     "Add to community": "Dodaj do społeczności",
-    "Call": "Połącz"
+    "Call": "Połącz",
+    "Submit debug logs": "Wyślij dzienniki błędów",
+    "The version of Riot.im": "Wersja Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Czy jesteś zalogowany, czy nie (nie zapisujemy twojej nazwy użytkownika)",
+    "Your language of choice": "Twój wybrany język",
+    "Your homeserver's URL": "Adres URL twojego serwera domowego",
+    "Your identity server's URL": "Adres URL twojego serwera tożsamości",
+    "The information being sent to us to help make Riot.im better includes:": "Oto informacje przesyłane do nas, służące do poprawy Riot.im:",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Zapisujemy również każdą stronę, z której korzystasz w aplikacji (obecnie <CurrentPageHash>), twój User Agent (<CurrentUserAgent>) oraz rozdzielczość ekranu twojego urządzenia (<CurrentDeviceResolution>)."
 }
