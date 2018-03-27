@@ -187,7 +187,7 @@
     "Set Password": "Imposta Password",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s su %(osName)s",
     "Unable to fetch notification target list": "Impossibile ottenere la lista di obiettivi notifiche",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat &amp; collaborazione decentralizzata e criptata offerta da [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat criptate e collaborazioni decentralizzate offerte da [matrix]",
     "Discussion of all things Matrix!": "Discussione su tutto quanto riguardi Matrix!",
     "Dev chat for the Riot/Web dev team": "Chat per gli sviluppatori di Riot/Web",
     "Dev chat for the Dendrite dev team": "Chat per gli sviluppatori di Dendrite",
