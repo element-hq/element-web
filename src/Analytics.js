@@ -74,6 +74,7 @@ class Analytics {
         this._paq = null;
         this.disabled = true;
         this.firstPage = true;
+        this.generationTimeMs = null;
     }
 
     /**
@@ -147,6 +148,23 @@ class Analytics {
         return true;
     }
 
+    startPageChangeTimer() {
+        performance.clearMarks('riot_page_change_start');
+        performance.mark('riot_page_change_start');
+    }
+
+    stopPageChangeTimer() {
+        performance.mark('riot_page_change_stop');
+        performance.measure(
+            'riot_page_change_delta',
+            'riot_page_change_start',
+            'riot_page_change_stop',
+        );
+
+        const measurement = performance.getEntriesByName('riot_page_change_delta').pop();
+        this.generationTimeMs = measurement.duration;
+    }
+
     trackPageChange() {
         if (this.disabled) return;
         if (this.firstPage) {
@@ -156,6 +174,9 @@ class Analytics {
             return;
         }
         this._paq.push(['setCustomUrl', getRedactedUrl()]);
+        if (typeof this.generationTimeMs === 'number') {
+            this._paq.push(['setGenerationTimeMs', this.generationTimeMs]);
+        }
         this._paq.push(['trackPageView']);
     }
 

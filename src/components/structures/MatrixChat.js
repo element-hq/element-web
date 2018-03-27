@@ -368,11 +368,27 @@ export default React.createClass({
         window.removeEventListener('resize', this.handleResize);
     },
 
-    componentDidUpdate: function() {
+    componentWillUpdate: function(props, state) {
+        if (this.shouldTrackPageChange(this.state, state)) {
+            Analytics.startPageChangeTimer();
+        }
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.shouldTrackPageChange(prevState, this.state)) {
+            Analytics.stopPageChangeTimer();
+            Analytics.trackPageChange();
+        }
         if (this.focusComposer) {
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
+    },
+
+    shouldTrackPageChange(prevState, state) {
+        return prevState.currentRoomId !== state.currentRoomId ||
+            prevState.view !== state.view ||
+            prevState.page_type !== state.page_type;
     },
 
     setStateForNewView: function(state) {
@@ -1341,7 +1357,6 @@ export default React.createClass({
         if (this.props.onNewScreen) {
             this.props.onNewScreen(screen);
         }
-        Analytics.trackPageChange();
     },
 
     onAliasClick: function(event, alias) {
