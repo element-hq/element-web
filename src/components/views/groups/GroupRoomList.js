@@ -17,7 +17,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
@@ -120,16 +119,17 @@ export default React.createClass({
             </form>
         );
 
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_GroupRoomList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

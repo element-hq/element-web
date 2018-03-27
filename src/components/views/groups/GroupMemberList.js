@@ -18,7 +18,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
@@ -134,6 +133,7 @@ export default React.createClass({
     },
 
     render: function() {
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
@@ -162,10 +162,10 @@ export default React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_outerWrapper">
                     { joined }
                     { invited }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },
