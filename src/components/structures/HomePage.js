@@ -21,6 +21,7 @@ import React from 'react';
 import request from 'browser-request';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sanitizeHtml from 'sanitize-html';
+import sdk from 'matrix-react-sdk/lib';
 
 module.exports = React.createClass({
     displayName: 'HomePage',
