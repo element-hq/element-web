@@ -51,6 +51,7 @@ export default class AppTile extends React.Component {
         this._onSnapshotClick = this._onSnapshotClick.bind(this);
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
         this._onMinimiseClick = this._onMinimiseClick.bind(this);
+        this._onInitialLoad = this._onInitialLoad.bind(this);
     }
 
     /**
@@ -172,8 +173,7 @@ export default class AppTile extends React.Component {
         // Widget postMessage listeners
         try {
             if (this.widgetMessaging) {
-                this.widgetMessaging.stopListening();
-                this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+                this.widgetMessaging.stop();
             }
         } catch (e) {
             console.error('Failed to stop listening for widgetMessaging events', e.message);
@@ -290,14 +290,16 @@ export default class AppTile extends React.Component {
 
     _onSnapshotClick(e) {
         console.warn("Requesting widget snapshot");
-        this.widgetMessaging.getScreenshot().then((screenshot) => {
-            dis.dispatch({
-                action: 'picture_snapshot',
-                file: screenshot,
-            }, true);
-        }).catch((err) => {
-            console.error("Failed to get screenshot", err);
-        });
+        this.widgetMessaging.getScreenshot()
+            .catch((err) => {
+                console.error("Failed to get screenshot", err);
+            })
+            .then((screenshot) => {
+                dis.dispatch({
+                    action: 'picture_snapshot',
+                    file: screenshot,
+                }, true);
+            });
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -343,9 +345,16 @@ export default class AppTile extends React.Component {
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
-        this.widgetMessaging.startListening();
-        this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
+        if (!this.widgetMessaging) {
+            this._onInitialLoad();
+        }
+    }
+
+    /**
+     * Called on initial load of the widget iframe
+     */
+    _onInitialLoad() {
+        this.widgetMessaging = new WidgetMessaging(this.props.id, this.props.url, this.refs.appFrame.contentWindow);
         this.widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.id} requested capabilities:`, requestedCapabilities);
             requestedCapabilities = requestedCapabilities || [];
