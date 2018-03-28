@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
@@ -63,6 +62,8 @@ export default withMatrixClient(React.createClass({
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const GroupTile = sdk.getComponent("groups.GroupTile");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+
 
         let content;
         let contentHeader;
@@ -73,7 +74,7 @@ export default withMatrixClient(React.createClass({
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
-                <GeminiScrollbar>
+                <GeminiScrollbarWrapper>
                     <div className="mx_MyGroups_microcopy">
                         <p>
                             { _t(
@@ -92,7 +93,7 @@ export default withMatrixClient(React.createClass({
                     <div className="mx_MyGroups_joinedGroups">
                         { groupNodes }
                     </div>
-                </GeminiScrollbar> :
+                </GeminiScrollbarWrapper> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(
                         "You're not currently a member of any communities.",

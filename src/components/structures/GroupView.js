@@ -31,7 +31,6 @@ import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
 
 const LONG_DESC_PLACEHOLDER = _td(
@@ -969,6 +968,7 @@ export default React.createClass({
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
@@ -1119,9 +1119,9 @@ export default React.createClass({
                             { rightButtons }
                         </div>
                     </div>
-                    <GeminiScrollbar className="mx_GroupView_body">
+                    <GeminiScrollbarWrapper className="mx_GroupView_body">
                         { bodyNodes }
-                    </GeminiScrollbar>
+                    </GeminiScrollbarWrapper>
                 </div>
             );
         } else if (this.state.error) {
