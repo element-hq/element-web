@@ -291,6 +291,8 @@ export default React.createClass({
         this.handleResize();
         window.addEventListener('resize', this.handleResize);
 
+        this._pageChanging = false;
+
         // check we have the right tint applied for this theme.
         // N.B. we don't call the whole of setTheme() here as we may be
         // racing with the theme CSS download finishing from index.js
