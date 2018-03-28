@@ -370,19 +370,48 @@ export default React.createClass({
 
     componentWillUpdate: function(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
-            Analytics.startPageChangeTimer();
+            this.startPageChangeTimer();
         }
     },
 
     componentDidUpdate: function(prevProps, prevState) {
         if (this.shouldTrackPageChange(prevState, this.state)) {
-            Analytics.stopPageChangeTimer();
-            Analytics.trackPageChange();
+            const durationMs = this.stopPageChangeTimer();
+            Analytics.trackPageChange(durationMs);
         }
         if (this.focusComposer) {
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
+    },
+
+    startPageChangeTimer() {
+        // This shouldn't happen because componentWillUpdate and componentDidUpdate
+        // are used.
+        if (this._pageChanging) {
+            console.warn('MatrixChat.startPageChangeTimer: timer already started');
+            return;
+        }
+        this._pageChanging = true;
+        performance.mark('riot_MatrixChat_page_change_start');
+    },
+
+    stopPageChangeTimer() {
+        if (!this._pageChanging) {
+            console.warn('MatrixChat.stopPageChangeTimer: timer not started');
+            return;
+        }
+        this._pageChanging = false;
+        performance.mark('riot_MatrixChat_page_change_stop');
+        performance.measure(
+            'riot_MatrixChat_page_change_delta',
+            'riot_MatrixChat_page_change_start',
+            'riot_MatrixChat_page_change_stop',
+        );
+        performance.clearMarks('riot_MatrixChat_page_change_start');
+        performance.clearMarks('riot_MatrixChat_page_change_stop');
+        const measurement = performance.getEntriesByName('riot_MatrixChat_page_change_delta').pop();
+        return measurement.duration;
     },
 
     shouldTrackPageChange(prevState, state) {

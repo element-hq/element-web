@@ -148,24 +148,7 @@ class Analytics {
         return true;
     }
 
-    startPageChangeTimer() {
-        performance.clearMarks('riot_page_change_start');
-        performance.mark('riot_page_change_start');
-    }
-
-    stopPageChangeTimer() {
-        performance.mark('riot_page_change_stop');
-        performance.measure(
-            'riot_page_change_delta',
-            'riot_page_change_start',
-            'riot_page_change_stop',
-        );
-
-        const measurement = performance.getEntriesByName('riot_page_change_delta').pop();
-        this.generationTimeMs = measurement.duration;
-    }
-
-    trackPageChange() {
+    trackPageChange(generationTimeMs) {
         if (this.disabled) return;
         if (this.firstPage) {
             // De-duplicate first page
@@ -174,8 +157,8 @@ class Analytics {
             return;
         }
         this._paq.push(['setCustomUrl', getRedactedUrl()]);
-        if (typeof this.generationTimeMs === 'number') {
-            this._paq.push(['setGenerationTimeMs', this.generationTimeMs]);
+        if (typeof generationTimeMs === 'number') {
+            this._paq.push(['setGenerationTimeMs', generationTimeMs]);
         }
         this._paq.push(['trackPageView']);
     }
