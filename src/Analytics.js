@@ -74,7 +74,6 @@ class Analytics {
         this._paq = null;
         this.disabled = true;
         this.firstPage = true;
-        this.generationTimeMs = null;
     }
 
     /**
