@@ -39,7 +39,6 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
 
@@ -897,11 +896,12 @@ module.exports = withMatrixClient(React.createClass({
             </div>;
         }
 
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbar autoshow={true}>
+                <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
@@ -925,7 +925,7 @@ module.exports = withMatrixClient(React.createClass({
                     { this._renderDevices() }
 
                     { spinner }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

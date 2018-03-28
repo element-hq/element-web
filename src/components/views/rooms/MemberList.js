@@ -21,7 +21,6 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const rate_limited_func = require('../../../ratelimitedfunc');
 const CallHandler = require("../../../CallHandler");
 
@@ -395,6 +394,7 @@ module.exports = React.createClass({
 
     render: function() {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         let invitedSection = null;
         if (this._getChildCountInvited() > 0) {
@@ -423,14 +423,14 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                     <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
                     { invitedSection }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

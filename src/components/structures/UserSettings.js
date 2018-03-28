@@ -30,7 +30,6 @@ import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
@@ -1118,6 +1117,7 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const Notifications = sdk.getComponent("settings.Notifications");
         const EditableText = sdk.getComponent('elements.EditableText');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
@@ -1213,8 +1213,9 @@ module.exports = React.createClass({
                     onCancelClick={this.props.onClose}
                 />
 
-                <GeminiScrollbar className="mx_UserSettings_body"
-                                 autoshow={true}>
+                <GeminiScrollbarWrapper
+                    className="mx_UserSettings_body"
+                    autoshow={true}>
 
                 <h3>{ _t("Profile") }</h3>
 
@@ -1327,7 +1328,7 @@ module.exports = React.createClass({
 
                 { this._renderDeactivateAccount() }
 
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },
