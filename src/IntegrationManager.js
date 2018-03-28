@@ -60,7 +60,7 @@ export default class IntegrationManager {
     integType = 'type_' + integType;
     const src = (global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials()) ?
       global.mxIntegrationManager.client.getScalarInterfaceUrlForRoom(
-        RoomViewStore.getRoomId(),
+        {roomId: RoomViewStore.getRoomId()},
         integType,
         integId,
       ) :
