@@ -232,5 +232,7 @@
     "Notes:": "Notatki:",
     "Online": "Dostępny",
     "Away": "Niedostępny",
-    "Appear Offline": "Ustaw status niedostępny"
+    "Appear Offline": "Ustaw status niedostępny",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink> lub <firefoxLink>Firefox</firefoxLink> dla najlepszego doświadczenia.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> i <operaLink>Opera</operaLink> również się sprawdzą."
 }
