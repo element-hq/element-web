@@ -776,6 +776,8 @@
     "%(inviter)s has invited you to join this community": "%(inviter)s has invited you to join this community",
     "You are an administrator of this community": "You are an administrator of this community",
     "You are a member of this community": "You are a member of this community",
+    "Who can join this community?": "Who can join this community?",
+    "Everyone": "Everyone",
     "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!",
     "Long Description (HTML)": "Long Description (HTML)",
     "Description": "Description",
