@@ -49,8 +49,7 @@ function getUserWidgets() {
  * @return {[object]} Array containing current / active user widgets
  */
 function getUserWidgetsArray() {
-  const userWidgetContent = getUserWidgets();
-  return Object.keys(userWidgetContent).map((key) => userWidgetContent[key]);
+  return Object.values(getUserWidgets());
 }
 
 /**
