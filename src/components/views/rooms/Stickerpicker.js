@@ -125,7 +125,7 @@ export default class Stickerpicker extends React.Component {
         // Load stickerpack content
         if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
             // Set default name
-            stickerpickerWidget.content.name = stickerpickerWidget.name || "Stickerpack";
+            stickerpickerWidget.content.name = stickerpickerWidget.name || _t("Stickerpack");
             this.widgetId = stickerpickerWidget.id;
 
             stickersContent = (
