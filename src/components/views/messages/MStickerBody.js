@@ -142,6 +142,7 @@ export default class MStickerBody extends MImageBody {
         );
     }
 
+    // Empty to prevent default behaviour of MImageBody
     onClick() {
     }
 }
