@@ -330,6 +330,7 @@ export default class AppTile extends React.Component {
                             this.props.id,
                         ).catch((e) => {
                             console.error('Failed to delete widget', e);
+                        }).finally(() => {
                             this.setState({deleting: false});
                         });
                     },
