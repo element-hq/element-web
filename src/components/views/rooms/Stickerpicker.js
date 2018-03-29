@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,21 +37,24 @@ export default class Stickerpicker extends React.Component {
         this._onWidgetAction = this._onWidgetAction.bind(this);
         this.onFinished = this.onFinished.bind(this);
 
-        this.defaultStickersContent = (
+        this.popoverWidth = 300;
+        this.popoverHeight = 300;
+
+        this.state = {
+            stickersContent: this.defaultStickersContent(),
+            showStickers: false,
+            imError: null,
+        };
+    }
+
+    defaultStickersContent() {
+        return (
             <div className='mx_Stickers_contentPlaceholder'>
                 <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
                 <p>{ _t("Click") } <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") }</span> { _t("to add some!") }</p>
                 <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
             </div>
         );
-        this.popoverWidth = 300;
-        this.popoverHeight = 300;
-
-        this.state = {
-            stickersContent: this.defaultStickersContent,
-            showStickers: false,
-            imError: null,
-        };
     }
 
     _removeStickerpickerWidgets() {
@@ -175,7 +177,7 @@ export default class Stickerpicker extends React.Component {
         } else {
             // Default content to show if stickerpicker widget not added
             console.warn("No available sticker picker widgets");
-            stickersContent = this.defaultStickersContent;
+            stickersContent = this.defaultStickersContent();
             this.widgetId = null;
             this.forceUpdate();
         }
