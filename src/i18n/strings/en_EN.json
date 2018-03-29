@@ -766,7 +766,7 @@
     "Leave": "Leave",
     "Unable to leave community": "Unable to leave community",
     "Community Settings": "Community Settings",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Changes made to your community might not be seen by other users for up to 30 minutes.",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.",
     "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.",
     "Add rooms to this community": "Add rooms to this community",
     "Featured Rooms:": "Featured Rooms:",

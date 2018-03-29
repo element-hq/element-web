@@ -752,8 +752,14 @@ export default React.createClass({
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
         const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
             <div className="mx_GroupView_changeDelayWarning">
-                { _t( 'Changes made to your community might not be seen by other users ' +
-                      'for up to 30 minutes.',
+                { _t(
+                    'Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> ' +
+                    'might not be seen by other users for up to 30 minutes.',
+                    {},
+                    {
+                        'bold1': (sub) => <b> { sub } </b>,
+                        'bold2': (sub) => <b> { sub } </b>,
+                    },
                 ) }
             </div> : <div />;
         return <div className={groupSettingsSectionClasses}>
