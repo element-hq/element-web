@@ -546,6 +546,9 @@ export default React.createClass({
         this.setState({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
+            joinableForm: {
+                isJoinable: this.state.summary.profile.is_joinable,
+            },
         });
         dis.dispatch({
             action: 'panel_disable',
@@ -608,11 +611,15 @@ export default React.createClass({
         }).done();
     },
 
+    _onJoinableChange: function(ev) {
+        this.setState({
+            joinableForm: { isJoinable: ev.target.value === "true" },
+        });
+    },
+
     _onSaveClick: function() {
         this.setState({saving: true});
-        const savePromise = this.state.isUserPrivileged ?
-            this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm) :
-            Promise.resolve();
+        const savePromise = this.state.isUserPrivileged ? this._saveGroup() : Promise.resolve();
         savePromise.then((result) => {
             this.setState({
                 saving: false,
@@ -641,6 +648,11 @@ export default React.createClass({
                 avatarChanged: false,
             });
         }).done();
+    },
+
+    _saveGroup: async function() {
+        await this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm);
+        await this._matrixClient.setGroupJoinable(this.props.groupId, this.state.joinableForm.isJoinable);
     },
 
     _onAcceptInviteClick: function() {
@@ -716,6 +728,7 @@ export default React.createClass({
         return <div className={groupSettingsSectionClasses}>
             { header }
             { changeDelayWarning }
+            { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }
         </div>;
@@ -924,6 +937,41 @@ export default React.createClass({
             </div>;
         }
         return null;
+    },
+
+    _getJoinableNode: function() {
+        return this.state.editing ? <div>
+            <h3>
+                { _t('Who can join this community?') }
+                { this.state.groupJoinableLoading ?
+                    <InlineSpinner /> : <div />
+                }
+            </h3>
+            <div>
+                <label>
+                    <input type="radio"
+                        value="false"
+                        checked={!this.state.joinableForm.isJoinable}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Only people who have been invited') }
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio"
+                        value="true"
+                        checked={this.state.joinableForm.isJoinable}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Everyone') }
+                    </div>
+                </label>
+            </div>
+        </div> : null;
     },
 
     _getLongDescriptionNode: function() {
