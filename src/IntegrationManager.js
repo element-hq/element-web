@@ -47,9 +47,9 @@ export default class IntegrationManager {
    * Launch the integrations manager on the stickers integration page
    * @param  {string} integName integration / widget type
    * @param  {string} integId   integration / widget ID
-   * @param  {function} onClose Callback to invoke on integration manager close
+   * @param  {function} onFinished Callback to invoke on integration manager close
    */
-  static async open(integName, integId, onClose) {
+  static async open(integName, integId, onFinished) {
     await IntegrationManager._init();
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
     if (global.mxIntegrationManager.error ||
@@ -67,10 +67,7 @@ export default class IntegrationManager {
       null;
     Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
       src: src,
+      onFinished: onFinished,
     }, "mx_IntegrationsManager");
-
-    if (onClose) {
-      onClose();
-    }
   }
 }
