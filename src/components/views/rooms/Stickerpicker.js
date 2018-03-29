@@ -135,12 +135,7 @@ export default class Stickerpicker extends React.Component {
             this.widgetId = stickerpickerWidget.id;
 
             stickersContent = (
-                <div
-                    style={{
-                        overflow: 'hidden',
-                        height: '300px',
-                    }}
-                >
+                <div className='mx_Stickers_content_container'>
                     <div
                         id='stickersContent'
                         className='mx_Stickers_content'
