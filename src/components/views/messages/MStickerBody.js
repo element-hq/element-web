@@ -50,6 +50,9 @@ export default class MStickerBody extends MImageBody {
             });
         }, 500);
         this.setState({hidePlaceholderTimer});
+        if (this.props.onWidgetLoad) {
+            this.props.onWidgetLoad();
+        }
     }
 
     _afterComponentDidMount() {
@@ -129,7 +132,6 @@ export default class MStickerBody extends MImageBody {
                         src={contentUrl}
                         ref='image'
                         alt={content.body}
-                        onLoad={this.props.onWidgetLoad}
                         onLoad={this._onImageLoad}
                         onMouseEnter={this._onMouseEnter}
                         onMouseLeave={this._onMouseLeave}
