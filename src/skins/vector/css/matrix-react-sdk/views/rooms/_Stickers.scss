@@ -1,0 +1,30 @@
+.mx_Stickers_content {
+    overflow: hidden;
+}
+
+.mx_Stickers_content .mx_AppTileFullWidth {
+    border: none;
+}
+
+.mx_Stickers_contentPlaceholder {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.mx_Stickers_contentPlaceholder p {
+    max-width: 200px;
+}
+
+.mx_Stickers_addLink {
+    display: inline;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.mx_Stickers_hideStickers {
+    z-index: 2001;
+}
