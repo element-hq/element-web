@@ -400,6 +400,9 @@ FeaturedRoom.contextTypes = GroupContext;
 RoleUserList.contextTypes = GroupContext;
 FeaturedUser.contextTypes = GroupContext;
 
+const GROUP_JOINABLE = "GROUP_JOINABLE";
+const GROUP_NOT_JOINABLE = "GROUP_NOT_JOINABLE";
+
 export default React.createClass({
     displayName: 'GroupView',
 
@@ -613,7 +616,7 @@ export default React.createClass({
 
     _onJoinableChange: function(ev) {
         this.setState({
-            joinableForm: { isJoinable: ev.target.value === "true" },
+            joinableForm: { isJoinable: ev.target.value === GROUP_JOINABLE },
         });
     },
 
@@ -950,7 +953,7 @@ export default React.createClass({
             <div>
                 <label>
                     <input type="radio"
-                        value="false"
+                        value={GROUP_NOT_JOINABLE}
                         checked={!this.state.joinableForm.isJoinable}
                         onClick={this._onJoinableChange}
                     />
@@ -962,7 +965,7 @@ export default React.createClass({
             <div>
                 <label>
                     <input type="radio"
-                        value="true"
+                        value={GROUP_JOINABLE}
                         checked={this.state.joinableForm.isJoinable}
                         onClick={this._onJoinableChange}
                     />
