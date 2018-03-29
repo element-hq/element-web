@@ -25,13 +25,13 @@ if (!global.mxIntegrationManager) {
 }
 
 export default class IntegrationManager {
-  static async _init() {
+  static _init() {
     if (!global.mxIntegrationManager.client || !global.mxIntegrationManager.connected) {
       if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
         ScalarMessaging.startListening();
         global.mxIntegrationManager.client = new ScalarAuthClient();
 
-        await global.mxIntegrationManager.client.connect().then(() => {
+        return global.mxIntegrationManager.client.connect().then(() => {
           global.mxIntegrationManager.connected = true;
         }).catch((e) => {
           console.error("Failed to connect to integrations server", e);
