@@ -937,12 +937,12 @@ module.exports = React.createClass({
         }
 
         ContentMessages.sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
-          .done(undefined, (error) => {
-              if (error.name === "UnknownDeviceError") {
-                  // Let the staus bar handle this
-                  return;
-              }
-          });
+            .done(undefined, (error) => {
+                if (error.name === "UnknownDeviceError") {
+                    // Let the staus bar handle this
+                    return;
+                }
+            });
     },
 
     onSearch: function(term, scope) {
