@@ -90,7 +90,9 @@ export default class Stickerpicker extends React.Component {
     }
 
     componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) {
+            dis.unregister(this.dispatcherRef);
+        }
     }
 
     _imError(errorMsg, e) {
