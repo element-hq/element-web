@@ -355,12 +355,13 @@ function setWidget(event, roomId) {
             };
         }
 
-        client.setAccountData('m.widgets', userWidgets);
-        sendResponse(event, {
-            success: true,
-        });
+        client.setAccountData('m.widgets', userWidgets).then(() => {
+            sendResponse(event, {
+                success: true,
+            });
 
-        dis.dispatch({ action: "user_widget_updated" });
+            dis.dispatch({ action: "user_widget_updated" });
+        });
     } else { // Room widget
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
