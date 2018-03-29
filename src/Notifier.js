@@ -256,6 +256,10 @@ const Notifier = {
     },
 
     onEventDecrypted: function(ev) {
+        // 'decrypted' means the decryption process has finished: it may have failed,
+        // in which case it might decrypt soon if the keys arrive
+        if (ev.isDecryptionFailure()) return;
+
         const idx = this.pendingEncryptedEventIds.indexOf(ev.getId());
         if (idx === -1) return;
 
