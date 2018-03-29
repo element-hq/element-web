@@ -68,6 +68,7 @@ export default class Stickerpicker extends React.Component {
         }
         Widgets.removeStickerpickerWidgets();
         this._getStickerPickerWidget();
+        // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
         setTimeout(() => this.stickersMenu.close());
     }
 
