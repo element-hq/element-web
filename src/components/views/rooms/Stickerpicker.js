@@ -31,12 +31,12 @@ const widgetType = 'm.stickerpicker';
 export default class Stickerpicker extends React.Component {
     constructor(props) {
         super(props);
-        this.onShowStickersClick = this.onShowStickersClick.bind(this);
-        this.onHideStickersClick = this.onHideStickersClick.bind(this);
-        this.onFinished = this.onFinished.bind(this);
+        this._onShowStickersClick = this._onShowStickersClick.bind(this);
+        this._onHideStickersClick = this._onHideStickersClick.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
+        this.onFinished = this.onFinished.bind(this);
 
         this.defaultStickersContent = (
             <div className='mx_Stickers_contentPlaceholder'>
@@ -157,7 +157,7 @@ export default class Stickerpicker extends React.Component {
                             showTitle={false}
                             showMinimise={true}
                             showDelete={false}
-                            onMinimiseClick={this.onHideStickersClick}
+                            onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
                             whitelistCapabilities={['m.sticker']}
                         />
@@ -182,7 +182,7 @@ export default class Stickerpicker extends React.Component {
      * If no stickerpacks have been added, show a link to the integration manager add sticker packs page.
      * @param  {Event} e Event that triggered the function
      */
-    onShowStickersClick(e) {
+    _onShowStickersClick(e) {
         this._getStickerPickerWidget();
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
@@ -211,7 +211,7 @@ export default class Stickerpicker extends React.Component {
      * Trigger hiding of the sticker picker overlay
      * @param  {Event} ev Event that triggered the function call
      */
-    onHideStickersClick(ev) {
+    _onHideStickersClick(ev) {
         setTimeout(() => this.stickersMenu.close());
     }
 
@@ -252,7 +252,7 @@ export default class Stickerpicker extends React.Component {
                     id='stickersButton'
                     key="controls_hide_stickers"
                     className="mx_MessageComposer_stickers mx_Stickers_hideStickers"
-                    onClick={this.onHideStickersClick}
+                    onClick={this._onHideStickersClick}
                     ref='target'
                     title={_t("Hide Stickers")}>
                     <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
@@ -264,7 +264,7 @@ export default class Stickerpicker extends React.Component {
                     id='stickersButton'
                     key="constrols_show_stickers"
                     className="mx_MessageComposer_stickers"
-                    onClick={this.onShowStickersClick}
+                    onClick={this._onShowStickersClick}
                     title={_t("Show Stickers")}>
                     <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
                 </div>;
