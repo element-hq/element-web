@@ -916,7 +916,7 @@ module.exports = React.createClass({
 
         ContentMessages.sendContentToRoom(
             file, this.state.room.roomId, MatrixClientPeg.get(),
-        ).done(undefined, (error) => {
+        ).catch((error) => {
             if (error.name === "UnknownDeviceError") {
                 // Let the staus bar handle this
                 return;
@@ -925,7 +925,8 @@ module.exports = React.createClass({
             console.error("Failed to upload file " + file + " " + error);
             Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
-                description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
+                description: ((error && error.message)
+                    ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
         });
     },
