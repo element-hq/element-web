@@ -76,7 +76,7 @@ function removeStickerpickerWidgets() {
             delete userWidgets[key];
         }
     });
-    client.setAccountData('m.widgets', userWidgets);
+    return client.setAccountData('m.widgets', userWidgets);
 }
 
 
