@@ -66,10 +66,14 @@ export default class Stickerpicker extends React.Component {
         } else {
             console.warn('No widget ID specified, not disabling assets');
         }
-        Widgets.removeStickerpickerWidgets();
-        this._getStickerPickerWidget();
+
         // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
         setTimeout(() => this.stickersMenu.close());
+        Widgets.removeStickerpickerWidgets().then(() => {
+            this._getStickerPickerWidget();
+        }).catch((e) => {
+            console.error('Failed to remove sticker picker widget', e);
+        });
     }
 
     componentDidMount() {
