@@ -108,7 +108,8 @@ export default class Stickerpicker extends React.Component {
             this._getStickerPickerWidget();
             return;
         } else if (payload.action === "stickerpicker_close") {
-          setTimeout(() => this.stickersMenu.close());
+            // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
+            setTimeout(() => this.stickersMenu.close());
         }
     }
 
