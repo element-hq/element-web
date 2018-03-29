@@ -108,8 +108,9 @@ export default class MStickerBody extends MImageBody {
 
         placeholderSize = placeholderSize + 'px';
 
+        // Body 'ref' required by MImageBody
         return (
-            <span className='mx_MStickerBody'
+            <span className='mx_MStickerBody' ref='body'
                 style={{
                     height: placeholderFixupHeight,
                 }}>
