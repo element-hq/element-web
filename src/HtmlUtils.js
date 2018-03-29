@@ -437,7 +437,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         }
 
         let formattedBody = content.formatted_body;
-        if (opts.stripReplyFallback) formattedBody = ReplyThread.stripHTMLReply(content.formatted_body);
+        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
         bodyHasEmoji = containsEmoji(isHtml ? formattedBody : content.body);
