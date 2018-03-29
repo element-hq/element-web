@@ -670,6 +670,20 @@ export default React.createClass({
         });
     },
 
+    _onJoinClick: function() {
+        this.setState({membershipBusy: true});
+        this._matrixClient.joinGroup(this.props.groupId).then(() => {
+            // don't reset membershipBusy here: wait for the membership change to come down the sync
+        }).catch((e) => {
+            this.setState({membershipBusy: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Error joining room', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Unable to join community"),
+            });
+        });
+    },
+
     _onLeaveClick: function() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Leave Group', '', QuestionDialog, {
@@ -686,9 +700,9 @@ export default React.createClass({
                 }).catch((e) => {
                     this.setState({membershipBusy: false});
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Error leaving room', '', ErrorDialog, {
+                    Modal.createTrackedDialog('Error leaving community', '', ErrorDialog, {
                         title: _t("Error"),
-                        description: _t("Unable to leave room"),
+                        description: _t("Unable to leave community"),
                     });
                 });
             },
@@ -859,9 +873,8 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         const group = this._matrixClient.getGroup(this.props.groupId);
-        if (!group) return null;
 
-        if (group.myMembership === 'invite') {
+        if (group && group.myMembership === 'invite') {
             if (this.state.membershipBusy || this.state.inviterProfileBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
@@ -902,33 +915,72 @@ export default React.createClass({
                     </div>
                 </div>
             </div>;
-        } else if (group.myMembership === 'join' && this.state.editing) {
-            const leaveButtonTooltip = this.state.isUserPrivileged ?
+        }
+
+        let membershipContainerExtraClasses;
+        let membershipButtonExtraClasses;
+        let membershipButtonTooltip;
+        let membershipButtonText;
+        let membershipButtonOnClick;
+
+        // User is not in the group
+        if ((!group || group.myMembership === 'leave') &&
+            this.state.summary &&
+            this.state.summary.profile &&
+            Boolean(this.state.summary.profile.is_joinable)
+        ) {
+            membershipButtonText = _t("Join this community");
+            membershipButtonOnClick = this._onJoinClick;
+
+            membershipButtonExtraClasses = 'mx_GroupView_joinButton';
+            membershipContainerExtraClasses = 'mx_GroupView_membershipSection_leave';
+        } else if (
+            group &&
+            group.myMembership === 'join' &&
+            this.state.editing
+        ) {
+            membershipButtonText = _t("Leave this community");
+            membershipButtonOnClick = this._onLeaveClick;
+            membershipButtonTooltip = this.state.isUserPrivileged ?
                 _t("You are an administrator of this community") :
                 _t("You are a member of this community");
-            const leaveButtonClasses = classnames({
-                "mx_RoomHeader_textButton": true,
-                "mx_GroupView_textButton": true,
-                "mx_GroupView_leaveButton": true,
-                "mx_RoomHeader_textButton_danger": this.state.isUserPrivileged,
-            });
-            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
-                <div className="mx_GroupView_membershipSubSection">
-                    { /* Empty div for flex alignment */ }
-                    <div />
-                    <div className="mx_GroupView_membership_buttonContainer">
-                        <AccessibleButton
-                            className={leaveButtonClasses}
-                            onClick={this._onLeaveClick}
-                            title={leaveButtonTooltip}
-                        >
-                            { _t("Leave") }
-                        </AccessibleButton>
-                    </div>
-                </div>
-            </div>;
+
+            membershipButtonExtraClasses = {
+                'mx_GroupView_leaveButton': true,
+                'mx_RoomHeader_textButton_danger': this.state.isUserPrivileged,
+            };
+            membershipContainerExtraClasses = 'mx_GroupView_membershipSection_joined';
+        } else {
+            return null;
         }
-        return null;
+
+        const membershipButtonClasses = classnames([
+            'mx_RoomHeader_textButton',
+            'mx_GroupView_textButton',
+        ],
+            membershipButtonExtraClasses,
+        );
+
+        const membershipContainerClasses = classnames(
+            'mx_GroupView_membershipSection',
+            membershipContainerExtraClasses,
+        );
+
+        return <div className={membershipContainerClasses}>
+            <div className="mx_GroupView_membershipSubSection">
+                { /* Empty div for flex alignment */ }
+                <div />
+                <div className="mx_GroupView_membership_buttonContainer">
+                    <AccessibleButton
+                        className={membershipButtonClasses}
+                        onClick={membershipButtonOnClick}
+                        title={membershipButtonTooltip}
+                    >
+                        { membershipButtonText }
+                    </AccessibleButton>
+                </div>
+            </div>
+        </div>;
     },
 
     _getLongDescriptionNode: function() {
