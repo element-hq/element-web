@@ -45,11 +45,11 @@ export default class IntegrationManager {
 
   /**
    * Launch the integrations manager on the stickers integration page
-   * @param  {string} integType integration / widget type
+   * @param  {string} integName integration / widget type
    * @param  {string} integId   integration / widget ID
    * @param  {function} onClose Callback to invoke on integration manager close
    */
-  static async open(integType, integId, onClose) {
+  static async open(integName, integId, onClose) {
     await IntegrationManager._init();
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
     if (global.mxIntegrationManager.error ||
@@ -57,7 +57,7 @@ export default class IntegrationManager {
       console.error("Scalar error", global.mxIntegrationManager);
       return;
     }
-    integType = 'type_' + integType;
+    const integType = 'type_' + integName;
     const src = (global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials()) ?
       global.mxIntegrationManager.client.getScalarInterfaceUrlForRoom(
         {roomId: RoomViewStore.getRoomId()},
