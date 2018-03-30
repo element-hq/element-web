@@ -992,5 +992,16 @@
     "Changes made to your community might not be seen by other users for up to 30 minutes.": "Os cambios feitos a súa comunidade poderían tardar uns 30 minutos en ser visibles para os membros.",
     "Did you know: you can use communities to filter your Riot.im experience!": "Sabía que pode utilizar as comunidades para mellorar a súa experiencia con Riot.im!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Para establecer un filtro, arrastre un avatar da comunidade sobre o panel de filtros na parte esquerda da pantalla. Pode pulsar nun avatar no panel de filtrado en calquer moemento para ver só salas e xente asociada a esa comunidade.",
-    "Deops user with given id": "Degradar usuaria co id dado"
+    "Deops user with given id": "Degradar usuaria co id dado",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Visto por %(displayName)s(%(userName)s en %(dateTime)s",
+    "Code": "Código",
+    "Unable to join community": "Non se puido unir a comunidade",
+    "Unable to leave community": "Non se puido deixar a comunidade",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Os cambios realizados a súa comunidade <bold1>name</bold1> e <bold2>avatar</bold2) poderían non ser vistos por outras usuarias ate dentro de 30 minutos.",
+    "Join this community": "Únase a esta comunidade",
+    "Leave this community": "Deixar esta comunidade",
+    "Debug Logs Submission": "Envío de rexistro de depuración",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Si enviou un reporte de fallo a través de GitHub, os informes poden axudarnos a examinar o problema. Os informes de fallo conteñen datos do uso do aplicativo incluíndo o seu nome de usuaria, os IDs ou alcumes das salas e grupos que visitou e os nomes de usuaria de outras personas. Non conteñen mensaxes.",
+    "Submit debug logs": "Enviar informes de depuración",
+    "Opens the Developer Tools dialog": "Abre o cadro de Ferramentas de Desenvolvedoras"
 }
