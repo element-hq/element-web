@@ -998,5 +998,10 @@
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "如果您透過 GitHub 來回報錯誤，除錯訊息可以用來追蹤問題。除錯訊息包含應用程式的使用資料，包括您的使用者名稱、您所造訪的房間/群組的 ID 或別名、其他使用者的使用者名稱等，其中不包含訊息本身。",
     "Submit debug logs": "傳送除錯訊息",
     "Opens the Developer Tools dialog": "開啟開發者工具對話視窗",
-    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "被 %(displayName)s (%(userName)s) 於 %(dateTime)s 看過"
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "被 %(displayName)s (%(userName)s) 於 %(dateTime)s 看過",
+    "Unable to join community": "無法加入社群",
+    "Unable to leave community": "無法離開社群",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "對您的社群的<bold1>名稱</bold1>與<bold2>大頭貼</bold2>的變更可能在最多30分鐘內不會被其他使用者看到。",
+    "Join this community": "加入此社群",
+    "Leave this community": "離開此社群"
 }
