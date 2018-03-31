@@ -289,7 +289,7 @@
     "No pinned messages.": "Žiadne pripnuté správy.",
     "Loading...": "Načítanie...",
     "Pinned Messages": "Pripnuté správy",
-    "Online": "Prítomný",
+    "Online": "Pripojený",
     "Idle": "Nečinný",
     "Offline": "Nedostupný",
     "Unknown": "Neznámy",
@@ -1000,7 +1000,7 @@
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Ak si chcete nastaviť filter, pretiahnite avatara komunity na panel filtrovania úplne na ľavej strane obrazovky. Potom môžete kedykoľvek kliknúť na avatara komunity na tomto panely a Riot.im vám bude zobrazovať len miestnosti a ľudí z komunity, na ktorej avatar ste klikli.",
     "Clear filter": "Zrušiť filter",
     "Debug Logs Submission": "Odoslanie ladiacich záznamov",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ak ste nám poslali hlásenie o chybe cez Github, ladiace záznamy nám môžu pomôcť lepšie identifikovať chybu. Ladiace záznamy obsahujú údaje o používaní aplikácii vrátane vašeho používateľského mena, názvy a aliasy miestností a komunít, do ktorých ste vstúpili, mená používateľov, s ktorými ste komunikovali. Tieto záznamy neobsahujú samotný obsah vašich správ.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ak ste nám poslali hlásenie o chybe cez Github, ladiace záznamy nám môžu pomôcť lepšie identifikovať chybu. Ladiace záznamy obsahujú údaje o používaní aplikácii, vrátane vašeho používateľského mena, názvy a aliasy miestností a komunít, ku ktorým ste sa pripojili a mená ostatných používateľov. Tieto záznamy neobsahujú samotný obsah vašich správ.",
     "Submit debug logs": "Odoslať ladiace záznamy",
     "Opens the Developer Tools dialog": "Otvorí dialóg nástroje pre vývojárov"
 }
