@@ -167,7 +167,7 @@
       "webapp/**/*"
     ],
     "linux": {
-      "target": "deb",
+      "target": ["deb", "AppImage"],
       "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
