@@ -998,5 +998,9 @@
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ha a GitHubon keresztül küldted be a hibát, a hibakeresési napló segíthet nekünk a javításban. A napló felhasználási adatokat tartalmaz mint a felhasználói neved, az általad meglátogatott szobák vagy csoportok azonosítóját vagy alternatív nevét és mások felhasználói nevét. De nem tartalmazzák az üzeneteket.",
     "Submit debug logs": "Hibakeresési napló küldése",
     "Opens the Developer Tools dialog": "Megnyitja a fejlesztői eszközök ablakát",
-    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s) az alábbi időpontban látta: %(dateTime)s"
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s) az alábbi időpontban látta: %(dateTime)s",
+    "Unable to join community": "Nem sikerült csatlakozni a közösséghez",
+    "Unable to leave community": "Nem sikerült elhagyni a közösséget",
+    "Join this community": "Csatlakozás ehhez a közösséghez",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "A közösséget <bold1>name</bold1> and <bold2>avatar</bold2> érintő változások legfeljebb 30 percig nem lesznek láthatóak más felhasználók számára."
 }
