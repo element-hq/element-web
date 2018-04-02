@@ -64,6 +64,7 @@ function getStickerpickerWidgets() {
 
 /**
  * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
+ * @return {Promise} Resolves on account data updated
  */
 function removeStickerpickerWidgets() {
     const client = MatrixClientPeg.get();
