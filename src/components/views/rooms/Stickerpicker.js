@@ -62,7 +62,7 @@ export default class Stickerpicker extends React.Component {
         // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
         setTimeout(() => this.stickersMenu.close());
         Widgets.removeStickerpickerWidgets().then(() => {
-            this._getStickerpickerContent();
+            this.forceUpdate();
         }).catch((e) => {
             console.error('Failed to remove sticker picker widget', e);
         });
@@ -82,7 +82,6 @@ export default class Stickerpicker extends React.Component {
         if (!this.state.imError) {
             this.dispatcherRef = dis.register(this._onWidgetAction);
         }
-        this._getStickerpickerContent();
     }
 
     componentWillUnmount() {
@@ -101,8 +100,7 @@ export default class Stickerpicker extends React.Component {
 
     _onWidgetAction(payload) {
         if (payload.action === "user_widget_updated") {
-            this._getStickerpickerContent();
-            return;
+            this.forceUpdate();
         } else if (payload.action === "stickerpicker_close") {
             // Wrap this in a timeout in order to avoid the DOM node from being
             // pulled from under its feet
@@ -186,7 +184,7 @@ export default class Stickerpicker extends React.Component {
         } else {
             // Default content to show if stickerpicker widget not added
             console.warn("No available sticker picker widgets");
-            stickersContent = this.defaultStickersContent();
+            stickersContent = this._defaultStickerpickerContent();
             this.widgetId = null;
             this.forceUpdate();
         }
@@ -202,7 +200,6 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
-        this._getStickerpickerContent();
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
 
