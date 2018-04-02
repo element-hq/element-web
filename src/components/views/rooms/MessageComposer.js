@@ -329,6 +329,11 @@ export default class MessageComposer extends React.Component {
                 }
             }
 
+            let stickerpickerButton;
+            if (SettingsStore.isFeatureEnabled('feature_sticker_messages')) {
+                stickerpickerButton = <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />;
+            }
+
             controls.push(
                 <MessageComposerInput
                     ref={(c) => this.messageComposerInput = c}
@@ -340,7 +345,7 @@ export default class MessageComposer extends React.Component {
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
-                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
+                stickerpickerButton,
                 uploadButton,
                 hangupButton,
                 callButton,
