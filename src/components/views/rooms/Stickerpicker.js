@@ -36,27 +36,15 @@ export default class Stickerpicker extends React.Component {
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
-        this.onFinished = this.onFinished.bind(this);
+        this._onFinished = this._onFinished.bind(this);
 
         this.popoverWidth = 300;
         this.popoverHeight = 300;
 
         this.state = {
-            stickersContent: this.defaultStickersContent(),
             showStickers: false,
             imError: null,
         };
-    }
-
-    defaultStickersContent() {
-        return (
-            <AccessibleButton onClick={this._launchManageIntegrations}
-                className='mx_Stickers_contentPlaceholder'>
-                <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
-                <p className='mx_Stickers_addLink'>Add some now</p>
-                <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
-            </AccessibleButton>
-        );
     }
 
     _removeStickerpickerWidgets() {
@@ -74,7 +62,7 @@ export default class Stickerpicker extends React.Component {
         // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
         setTimeout(() => this.stickersMenu.close());
         Widgets.removeStickerpickerWidgets().then(() => {
-            this._getStickerPickerWidget();
+            this._getStickerpickerContent();
         }).catch((e) => {
             console.error('Failed to remove sticker picker widget', e);
         });
@@ -92,9 +80,9 @@ export default class Stickerpicker extends React.Component {
         }
 
         if (!this.state.imError) {
-            this._getStickerPickerWidget();
             this.dispatcherRef = dis.register(this._onWidgetAction);
         }
+        this._getStickerpickerContent();
     }
 
     componentWillUnmount() {
@@ -105,28 +93,52 @@ export default class Stickerpicker extends React.Component {
 
     _imError(errorMsg, e) {
         console.error(errorMsg, e);
-        const imErrorContent = <div style={{"text-align": "center"}} className="error"><p> { errorMsg } </p></div>;
         this.setState({
             showStickers: false,
             imError: errorMsg,
-            stickersContent: imErrorContent,
         });
     }
 
     _onWidgetAction(payload) {
         if (payload.action === "user_widget_updated") {
-            this._getStickerPickerWidget();
+            this._getStickerpickerContent();
             return;
         } else if (payload.action === "stickerpicker_close") {
-            // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
+            // Wrap this in a timeout in order to avoid the DOM node from being
+            // pulled from under its feet
             setTimeout(() => this.stickersMenu.close());
         }
     }
 
-    _getStickerPickerWidget() {
+    _defaultStickerpickerContent() {
+        return (
+            <AccessibleButton onClick={this._launchManageIntegrations}
+                className='mx_Stickers_contentPlaceholder'>
+                <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
+                <p className='mx_Stickers_addLink'>Add some now</p>
+                <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
+            </AccessibleButton>
+        );
+    }
+
+    _errorStickerpickerContent() {
+        return (
+            <div style={{"text-align": "center"}} className="error">
+                <p> { this.state.imError } </p>
+            </div>
+        );
+    }
+
+    _getStickerpickerContent() {
+        // Handle Integration Manager errors
+        if (this.state._imError) {
+            return this._errorStickerpickerContent();
+        }
+
         // Stickers
         // TODO - Add support for Stickerpickers from multiple app stores.
-        // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpicker UI element.
+        // Render content from multiple stickerpack sources, each within their
+        // own iframe, within the stickerpicker UI element.
         const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
         let stickersContent;
 
@@ -180,8 +192,8 @@ export default class Stickerpicker extends React.Component {
         }
         this.setState({
             showStickers: false,
-            stickersContent: stickersContent,
         });
+        return stickersContent;
     }
 
     /**
@@ -190,7 +202,7 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
-        this._getStickerPickerWidget();
+        this._getStickerpickerContent();
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
 
@@ -205,8 +217,8 @@ export default class Stickerpicker extends React.Component {
             top: y,
             menuWidth: this.popoverWidth,
             menuHeight: this.popoverHeight,
-            element: this.state.stickersContent,
-            onFinished: this.onFinished,
+            element: this._getStickerpickerContent(),
+            onFinished: this._onFinished,
             menuPaddingTop: 0,
         });
 
@@ -225,7 +237,7 @@ export default class Stickerpicker extends React.Component {
     /**
      * The stickers picker was hidden
      */
-    onFinished() {
+    _onFinished() {
         this.setState({showStickers: false});
     }
 
