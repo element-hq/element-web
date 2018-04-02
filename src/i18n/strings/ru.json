@@ -228,11 +228,11 @@
     "Online": "Онлайн",
     "View Community": "Просмотр сообщества",
     "Submit debug logs": "Отправка журналов отладки",
-    "Preparing to send logs": "Подготовить к пересылке отчетов",
-    "Logs sent": "Отчеты отосланы",
-    "Failed to send logs: ": "Ошибка пересылки отчётов ",
-    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Отчёт об ошибках содержит такие данные приложения как ваше имя регистрации, комнаты,  ID-группы и алиас которыми ты пользовался ровно как имя регистрации других пользователей. Они не получат сообщения.",
-    "<a>Click here</a> to create a GitHub issue.": "<a>Нажми здесь</a> для создания отчета об ошибке на GitHub.",
-    "GitHub issue link:": "Ссылка на GitHub-Проблему",
+    "Preparing to send logs": "Подготовка к отправке журналов",
+    "Logs sent": "Журналы отправлены",
+    "Failed to send logs: ": "Не удалось отправить журналы: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Журналы отладки содержат данные об использовании приложения, включая ваше имя пользователя, идентификаторы или псевдонимы комнат или групп, которые вы посетили, а также имена других пользователей. Они не содержат сообщений.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Нажмите здесь</a> для создания запроса о проблеме на GitHub.",
+    "GitHub issue link:": "Ссылка на проблему в GitHub:",
     "Notes:": "Заметки:"
 }
