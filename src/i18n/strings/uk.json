@@ -222,5 +222,9 @@
     "Away": "Нема на місці",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Краще встановіть <chromeLink>Chrome</chromeLink> або <firefoxLink>Firefox</firefoxLink>.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> та <operaLink>Opera</operaLink> працюють теж.",
-    "Reply": "Відповісти"
+    "Reply": "Відповісти",
+    "Preparing to send logs": "Підготовка до відправки журланлу",
+    "Logs sent": "Журнали відправленні",
+    "Failed to send logs: ": "Не вдалося відправити журнали: ",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Нажміть тут</a> для створення запитання по проблемі  на GitHub."
 }
