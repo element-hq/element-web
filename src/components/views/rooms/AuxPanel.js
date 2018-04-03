@@ -32,7 +32,8 @@ module.exports = React.createClass({
         // js-sdk room object
         room: PropTypes.object.isRequired,
         userId: PropTypes.string.isRequired,
-        showApps: PropTypes.bool,
+        showApps: PropTypes.bool, // Render apps
+        hideAppsDrawer: PropTypes.bool, // Do not display apps drawer and content (may still be rendered)
 
         // Conference Handler implementation
         conferenceHandler: PropTypes.object,
@@ -50,6 +51,11 @@ module.exports = React.createClass({
         // a callback which is called when the content of the aux panel changes
         // content in a way that is likely to make it change size.
         onResize: PropTypes.func,
+    },
+
+    defaultProps: {
+        showApps: true,
+        hideAppsDrawer: false,
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -134,6 +140,7 @@ module.exports = React.createClass({
             userId={this.props.userId}
             maxHeight={this.props.maxHeight}
             showApps={this.props.showApps}
+            hide={this.props.hideAppsDrawer}
         />;
 
         return (

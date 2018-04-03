@@ -52,12 +52,17 @@ module.exports = {
     createMenu: function(Element, props) {
         const self = this;
 
-        const closeMenu = function() {
+        const closeMenu = function(...args) {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) {
-                props.onFinished.apply(null, arguments);
+                props.onFinished.apply(null, args);
             }
+        };
+
+        // Close the menu on window resize
+        const windowResize = function() {
+            closeMenu();
         };
 
         const position = {};
@@ -130,13 +135,17 @@ module.exports = {
             menuStyle["backgroundColor"] = props.menuColour;
         }
 
+        if (!isNaN(Number(props.menuPaddingTop))) {
+            menuStyle["paddingTop"] = props.menuPaddingTop;
+        }
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         const menu = (
             <div className={className} style={position}>
                 <div className={menuClasses} style={menuStyle}>
                     { chevron }
-                    <Element {...props} onFinished={closeMenu} />
+                    <Element {...props} onFinished={closeMenu} onResize={windowResize} />
                 </div>
                 <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
                 <style>{ chevronCSS }</style>
