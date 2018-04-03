@@ -226,5 +226,13 @@
     "Online": "在线",
     "View Community": "查看社区",
     "%(count)s Members|other": "%(count)s 位成员",
-    "%(count)s Members|one": "%(count)s 位成员"
+    "%(count)s Members|one": "%(count)s 位成员",
+    "Preparing to send logs": "准备发送日志",
+    "Logs sent": "记录已发送",
+    "Failed to send logs: ": "无法发送日志： ",
+    "Submit debug logs": "提交调试日志",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "调试日志包含使用数据（包括您的用户名，您访问过的聊天室 / 小组的 ID 或别名以及其他用户的用户名）。它们不包含聊天信息。",
+    "<a>Click here</a> to create a GitHub issue.": "<a>点击这里</a> 创建一个 GitHub issue.",
+    "GitHub issue link:": "Github issue 链接：",
+    "Notes:": "记录："
 }
