@@ -24,7 +24,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-
+import Stickerpicker from './Stickerpicker';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -32,8 +32,6 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
-        this.onShowAppsClick = this.onShowAppsClick.bind(this);
-        this.onHideAppsClick = this.onHideAppsClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
@@ -202,20 +200,6 @@ export default class MessageComposer extends React.Component {
         // this._startCallApp(true);
     }
 
-    onShowAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: true,
-        });
-    }
-
-    onHideAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: false,
-        });
-    }
-
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
             autocompleteQuery: content,
@@ -281,7 +265,12 @@ export default class MessageComposer extends React.Component {
                 alt={e2eTitle} title={e2eTitle}
             />,
         );
-        let callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
+
+        let callButton;
+        let videoCallButton;
+        let hangupButton;
+
+        // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
@@ -295,19 +284,6 @@ export default class MessageComposer extends React.Component {
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
                     <TintableSvg src="img/icons-video.svg" width="35" height="35" />
-                </div>;
-        }
-
-        // Apps
-        if (this.props.showApps) {
-            hideAppsButton =
-                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
-                </div>;
-        } else {
-            showAppsButton =
-                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
                 </div>;
         }
 
@@ -353,6 +329,11 @@ export default class MessageComposer extends React.Component {
                 }
             }
 
+            let stickerpickerButton;
+            if (SettingsStore.isFeatureEnabled('feature_sticker_messages')) {
+                stickerpickerButton = <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />;
+            }
+
             controls.push(
                 <MessageComposerInput
                     ref={(c) => this.messageComposerInput = c}
@@ -364,12 +345,11 @@ export default class MessageComposer extends React.Component {
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
+                stickerpickerButton,
                 uploadButton,
                 hangupButton,
                 callButton,
                 videoCallButton,
-                showAppsButton,
-                hideAppsButton,
             );
         } else {
             controls.push(
