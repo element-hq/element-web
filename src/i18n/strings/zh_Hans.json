@@ -802,5 +802,6 @@
     "Your Communities": "你的社区",
     "Failed to set direct chat tag": "无法设定私聊标签",
     "Failed to remove tag %(tagName)s from room": "移除聊天室标签 %(tagName)s 失败",
-    "Failed to add tag %(tagName)s to room": "无法为聊天室新增标签 %(tagName)s"
+    "Failed to add tag %(tagName)s to room": "无法为聊天室新增标签 %(tagName)s",
+    "Submit debug logs": "提交调试日志"
 }
