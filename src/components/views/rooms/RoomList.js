@@ -20,7 +20,6 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
@@ -77,9 +76,7 @@ module.exports = React.createClass({
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.name", this.onRoomName);
         cli.on("Room.receipt", this.onRoomReceipt);
-        cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
@@ -161,12 +158,6 @@ module.exports = React.createClass({
                     });
                 }
                 break;
-            case 'on_room_read':
-                // Force an update because the notif count state is too deep to cause
-                // an update. This forces the local echo of reading notifs to be
-                // reflected by the RoomTiles.
-                this.forceUpdate();
-                break;
         }
     },
 
@@ -177,9 +168,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -241,14 +230,6 @@ module.exports = React.createClass({
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
             this._delayedRefreshRoomList();
         }
-    },
-
-    onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomStateEvents: function(ev, state) {
-        this._delayedRefreshRoomList();
     },
 
     onRoomMemberName: function(ev, member) {
@@ -369,7 +350,7 @@ module.exports = React.createClass({
 
                 return Boolean(isRoomVisible[taggedRoom.roomId]);
             });
-            
+
             if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
                 filteredLists[tagName] = filteredRooms;
             }
@@ -526,7 +507,8 @@ module.exports = React.createClass({
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
-        this.refs.gemscroll.forceUpdate();
+        if (!this._gemScroll) return;
+        this._gemScroll.forceUpdate();
     },
 
     _getEmptyContent: function(section) {
@@ -617,13 +599,18 @@ module.exports = React.createClass({
         return ret;
     },
 
+    _collectGemini(gemScroll) {
+        this._gemScroll = gemScroll;
+    },
+
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const self = this;
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
+            <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
+                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
                              extraTiles={this._makeGroupInviteTiles()}
@@ -729,7 +716,7 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms} />
             </div>
-            </GeminiScrollbar>
+            </GeminiScrollbarWrapper>
         );
     },
 });

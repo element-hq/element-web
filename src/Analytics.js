@@ -92,6 +92,10 @@ class Analytics {
      */
     disable() {
         this.trackEvent('Analytics', 'opt-out');
+        // disableHeartBeatTimer is undocumented but exists in the piwik code
+        // the _paq.push method will result in an error being printed in the console
+        // if an unknown method signature is passed
+        this._paq.push(['disableHeartBeatTimer']);
         this.disabled = true;
     }
 
@@ -143,7 +147,10 @@ class Analytics {
         return true;
     }
 
-    trackPageChange() {
+    trackPageChange(generationTimeMs) {
+        if (typeof generationTimeMs !== 'number') {
+            throw new Error('Analytics.trackPageChange: expected generationTimeMs to be a number');
+        }
         if (this.disabled) return;
         if (this.firstPage) {
             // De-duplicate first page
@@ -152,6 +159,7 @@ class Analytics {
             return;
         }
         this._paq.push(['setCustomUrl', getRedactedUrl()]);
+        this._paq.push(['setGenerationTimeMs', generationTimeMs]);
         this._paq.push(['trackPageView']);
     }
 

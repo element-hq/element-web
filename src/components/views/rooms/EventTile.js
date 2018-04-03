@@ -153,7 +153,17 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     getInitialState: function() {
-        return {menu: false, allReadAvatars: false, verified: null};
+        return {
+            // Whether the context menu is being displayed.
+            menu: false,
+            // Whether all read receipts are being displayed. If not, only display
+            // a truncation of them.
+            allReadAvatars: false,
+            // Whether the event's sender has been verified.
+            verified: null,
+            // Whether onRequestKeysClick has been called since mounting.
+            previouslyRequestedKeys: false,
+        };
     },
 
     componentWillMount: function() {
@@ -394,6 +404,19 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
+    onRequestKeysClick: function() {
+        this.setState({
+            // Indicate in the UI that the keys have been requested (this is expected to
+            // be reset if the component is mounted in the future).
+            previouslyRequestedKeys: true,
+        });
+
+        // Cancel any outgoing key request for this event and resend it. If a response
+        // is received for the request with the required keys, the event could be
+        // decrypted successfully.
+        this.props.matrixClient.cancelAndResendEventRoomKeyRequest(this.props.mxEvent);
+    },
+
     onPermalinkClicked: function(e) {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Riot when clicked.
@@ -460,6 +483,7 @@ module.exports = withMatrixClient(React.createClass({
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
+        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
         const classes = classNames({
             mx_EventTile: true,
@@ -476,7 +500,7 @@ module.exports = withMatrixClient(React.createClass({
             menu: this.state.menu,
             mx_EventTile_verified: this.state.verified == true,
             mx_EventTile_unverified: this.state.verified == false,
-            mx_EventTile_bad: msgtype === 'm.bad.encrypted',
+            mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
         });
@@ -535,6 +559,40 @@ module.exports = withMatrixClient(React.createClass({
 
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
+
+        const keyRequestHelpText =
+            <div className="mx_EventTile_keyRequestInfo_tooltip_contents">
+                <p>
+                    { this.state.previouslyRequestedKeys ?
+                        _t( 'Your key share request has been sent - please check your other devices ' +
+                            'for key share requests.') :
+                        _t( 'Key share requests are sent to your other devices automatically. If you ' +
+                            'rejected or dismissed the key share request on your other devices, click ' +
+                            'here to request the keys for this session again.')
+                    }
+                </p>
+                <p>
+                    { _t( 'If your other devices do not have the key for this message you will not ' +
+                            'be able to decrypt them.')
+                    }
+                </p>
+            </div>;
+        const keyRequestInfoContent = this.state.previouslyRequestedKeys ?
+            _t('Key request sent.') :
+            _t(
+                '<requestLink>Re-request encryption keys</requestLink> from your other devices.',
+                {},
+                {'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a>},
+            );
+
+        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
+        const keyRequestInfo = isEncryptionFailure ?
+            <div className="mx_EventTile_keyRequestInfo">
+                <span className="mx_EventTile_keyRequestInfo_text">
+                    { keyRequestInfoContent }
+                </span>
+                <ToolTipButton helpText={keyRequestHelpText} />
+            </div> : null;
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -629,6 +687,7 @@ module.exports = withMatrixClient(React.createClass({
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
                                            onWidgetLoad={this.props.onWidgetLoad} />
+                            { keyRequestInfo }
                             { editButton }
                         </div>
                     </div>

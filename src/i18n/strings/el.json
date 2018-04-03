@@ -316,7 +316,6 @@
     "Use with caution": "Χρησιμοποιήστε τα με προσοχή",
     "User ID": "Αναγνωριστικό χρήστη",
     "User Interface": "Διεπαφή χρήστη",
-    "%(user)s is a": "Ο %(user)s είναι",
     "User name": "Όνομα χρήστη",
     "Username invalid: %(errMessage)s": "Μη έγκυρο όνομα χρήστη: %(errMessage)s",
     "Users": "Χρήστες",

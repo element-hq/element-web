@@ -492,7 +492,6 @@
     "Upload Files": "Prześlij pliki",
     "Upload new:": "Prześlij nowy:",
     "Use with caution": "Używać ostrożnie",
-    "%(user)s is a": "%(user)s jest",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (moc uprawnień administratorskich %(powerLevelNumber)s)",
     "Username invalid: %(errMessage)s": "Niepoprawna nazwa użytkownika: %(errMessage)s",
     "Verification Pending": "Oczekuje weryfikacji",

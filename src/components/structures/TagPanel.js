@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -101,6 +100,9 @@ const TagPanel = React.createClass({
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -112,12 +114,10 @@ const TagPanel = React.createClass({
         });
 
         const clearButton = this.state.selectedTags.length > 0 ?
-            <img
-                src="img/icons-close.svg"
+            <TintableSvg src="img/icons-close.svg" width="24" height="24"
                 alt={_t("Clear filter")}
                 title={_t("Clear filter")}
-                width="24"
-                height="24" /> :
+            /> :
             <div />;
 
         return <div className="mx_TagPanel">
@@ -125,7 +125,7 @@ const TagPanel = React.createClass({
                 { clearButton }
             </AccessibleButton>
             <div className="mx_TagPanel_divider" />
-            <GeminiScrollbar
+            <GeminiScrollbarWrapper
                 className="mx_TagPanel_scroller"
                 autoshow={true}
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
@@ -146,7 +146,7 @@ const TagPanel = React.createClass({
                             </div>
                     ) }
                 </Droppable>
-            </GeminiScrollbar>
+            </GeminiScrollbarWrapper>
             <div className="mx_TagPanel_divider" />
             <div className="mx_TagPanel_createGroupButton">
                 <GroupsButton tooltip={true} />

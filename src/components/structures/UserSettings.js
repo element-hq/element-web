@@ -30,7 +30,6 @@ import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
@@ -795,11 +794,18 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Bug Report") }</h3>
+                <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Found a bug?") }</p>
+                    <p>{
+                        _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contian messages.",
+                        )
+                    }</p>
                     <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{ _t('Report it') }
+                        onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
             </div>
@@ -1111,6 +1117,7 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const Notifications = sdk.getComponent("settings.Notifications");
         const EditableText = sdk.getComponent('elements.EditableText');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
@@ -1206,8 +1213,9 @@ module.exports = React.createClass({
                     onCancelClick={this.props.onClose}
                 />
 
-                <GeminiScrollbar className="mx_UserSettings_body"
-                                 autoshow={true}>
+                <GeminiScrollbarWrapper
+                    className="mx_UserSettings_body"
+                    autoshow={true}>
 
                 <h3>{ _t("Profile") }</h3>
 
@@ -1320,7 +1328,7 @@ module.exports = React.createClass({
 
                 { this._renderDeactivateAccount() }
 
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },
