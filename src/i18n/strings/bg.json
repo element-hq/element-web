@@ -1003,5 +1003,8 @@
     "Opens the Developer Tools dialog": "Отваря прозорец с инструменти на разработчика",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Видяно от %(displayName)s (%(userName)s) в %(dateTime)s",
     "Unable to join community": "Неуспешно влизане в общността",
-    "Unable to leave community": "Неуспешно напускане на общността"
+    "Unable to leave community": "Неуспешно напускане на общността",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Промени направени по <bold1>името</bold1> и <bold2>аватара</bold2> на вашата общност може да не се отразят при другите потребители за до 30 минути.",
+    "Join this community": "Присъединете се в тази общност",
+    "Leave this community": "Напуснете тази общност"
 }
