@@ -66,7 +66,8 @@ module.exports = React.createClass({
     },
 
     onRoomStateEvents: function(ev) {
-        if (ev.getRoomId() !== this.props.room.roomId ||
+        if (!this.props.room ||
+            ev.getRoomId() !== this.props.room.roomId ||
             ev.getType() !== 'm.room.avatar'
         ) return;
 
