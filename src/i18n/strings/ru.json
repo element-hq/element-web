@@ -1003,5 +1003,8 @@
     "Unable to leave community": "Не удалось покинуть сообщество",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Изменения <bold1>имени</bold1> и <bold2>аватара</bold2>, внесенные в ваше сообщество, могут не отображаться другим пользователям в течение 30 минут.",
     "Join this community": "Присоединиться к сообществу",
-    "Leave this community": "Покинуть это сообщество"
+    "Leave this community": "Покинуть это сообщество",
+    "here": "здесь",
+    "to add some!": "для добавления!",
+    "Click": "Нажмите"
 }
