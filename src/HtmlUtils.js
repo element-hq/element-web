@@ -468,7 +468,7 @@ export function bodyToHtml(content, highlights, opts={}) {
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
         EMOJI_REGEX.lastIndex = 0;
-        const contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        const contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
         const match = EMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
     }
