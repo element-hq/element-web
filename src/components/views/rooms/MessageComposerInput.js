@@ -869,12 +869,14 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        this.client.sendMessage(this.props.room.roomId, content).finally(() => {
-            dis.dispatch({
-                action: 'reply_to_event',
-                event: null,
-            });
-        }).done((res) => {
+        // Clear reply_to_event as we put the message into the queue
+        // if the send fails, retry will handle resending.
+        dis.dispatch({
+            action: 'reply_to_event',
+            event: null,
+        });
+
+        this.client.sendMessage(this.props.room.roomId, content).done((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
