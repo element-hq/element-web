@@ -73,7 +73,6 @@
     "Banned users": "Заблоковані користувачі",
     "Bans user with given id": "Блокує користувача з заданим ID",
     "Blacklisted": "В чорному списку",
-    "Bug Report": "Звіт про помилку",
     "Bulk Options": "Групові параметри",
     "Call Timeout": "Час очікування виклика",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Не вдається підключитись до домашнього серверу - перевірте підключення, переконайтесь, що ваш <a>SSL-сертифікат домашнього сервера</a> є довіреним і що розширення браузера не блокує запити.",
