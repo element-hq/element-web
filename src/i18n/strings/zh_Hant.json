@@ -1003,5 +1003,15 @@
     "Unable to leave community": "無法離開社群",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "對您的社群的<bold1>名稱</bold1>與<bold2>大頭貼</bold2>的變更可能在最多30分鐘內不會被其他使用者看到。",
     "Join this community": "加入此社群",
-    "Leave this community": "離開此社群"
+    "Leave this community": "離開此社群",
+    "Stickerpack": "貼圖包",
+    "Sticker Messages": "貼圖訊息",
+    "You don't currently have any stickerpacks enabled": "您目前未啟用任何貼圖包",
+    "Click": "點按",
+    "here": "這裡",
+    "to add some!": "來新增一些！",
+    "Add a stickerpack": "新增貼圖包",
+    "Hide Stickers": "隱藏貼圖",
+    "Show Stickers": "顯示貼圖",
+    "Manage sticker packs": "管理貼圖包"
 }
