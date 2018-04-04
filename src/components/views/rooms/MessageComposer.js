@@ -111,6 +111,14 @@ export default class MessageComposer extends React.Component {
             </li>);
         }
 
+        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        let replyToWarning = null;
+        if (isQuoting) {
+            replyToWarning = <p>{
+                _t('At this time it is not possible to reply with a file so this will be sent without being a reply.')
+            }</p>;
+        }
+
         Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
             description: (
@@ -119,6 +127,7 @@ export default class MessageComposer extends React.Component {
                     <ul style={{listStyle: 'none', textAlign: 'left'}}>
                         { fileList }
                     </ul>
+                    { replyToWarning }
                 </div>
             ),
             onFinished: (shouldUpload) => {
