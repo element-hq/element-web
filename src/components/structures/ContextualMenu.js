@@ -30,11 +30,21 @@ module.exports = {
     ContextualMenuContainerId: "mx_ContextualMenu_Container",
 
     propTypes: {
+        top: PropTypes.number,
+        bottom: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number,
         menuWidth: PropTypes.number,
         menuHeight: PropTypes.number,
         chevronOffset: PropTypes.number,
         menuColour: PropTypes.string,
         chevronFace: PropTypes.string, // top, bottom, left, right
+        // Function to be called on menu close
+        onFinished: PropTypes.func,
+        menuPaddingTop: PropTypes.number,
+        menuPaddingRight: PropTypes.number,
+        menuPaddingBottom: PropTypes.number,
+        menuPaddingLeft: PropTypes.number,
     },
 
     getOrCreateContainer: function() {
