@@ -217,6 +217,8 @@ export default class Stickerpicker extends React.Component {
             element: this._getStickerpickerContent(),
             onFinished: this._onFinished,
             menuPaddingTop: 0,
+            menuPaddingLeft: 0,
+            menuPaddingRight: 0,
         });
 
 
