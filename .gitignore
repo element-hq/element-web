@@ -16,5 +16,6 @@ electron/dist
 electron/pub
 **/.idea
 /config.json
+/config.json.*
 /config.local*.json
 /src/component-index.js
