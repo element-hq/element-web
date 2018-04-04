@@ -13,7 +13,6 @@
     "Banned users": "Заблокированные пользователи",
     "Bans user with given id": "Блокирует пользователя с заданным ID",
     "Blacklisted": "В черном списке",
-    "Bug Report": "Отчет об ошибке",
     "Bulk Options": "Групповые параметры",
     "Can't load user settings": "Невозможно загрузить пользовательские настройки",
     "Changes to who can read history will only apply to future messages in this room": "Изменения того, кто может прочитать историю, будут применяться только к будущим сообщениям в этой комнате",
@@ -61,7 +60,6 @@
     "Forget room": "Забыть комнату",
     "Forgot your password?": "Забыли пароль?",
     "For security, this session has been signed out. Please sign in again.": "Для обеспечения безопасности ваша сессия была завершена. Пожалуйста, войдите снова.",
-    "Found a bug?": "Нашли ошибку?",
     "Hangup": "Закончить",
     "Historical": "Архив",
     "Homeserver is": "Домашний сервер это",
@@ -314,7 +312,6 @@
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s удалил свое отображаемое имя (%(oldDisplayName)s).",
     "%(senderName)s removed their profile picture.": "%(senderName)s удалил свое изображение профиля.",
     "%(senderName)s requested a VoIP conference.": "%(senderName)s хочет начать VoIP-конференцию.",
-    "Report it": "Сообщить об этом",
     "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Сброс пароля на данный момент сбрасывает ключи шифрования на всех устройствах, делая зашифрованную историю чатов нечитаемой. Чтобы избежать этого, экспортируйте ключи комнат и импортируйте их после сброса пароля. В будущем это будет исправлено.",
     "Riot does not have permission to send you notifications - please check your browser settings": "У Riot нет разрешений на отправку уведомлений - проверьте настройки браузера",
     "Riot was not given permission to send notifications - please try again": "Riot не получил разрешение на отправку уведомлений, пожалуйста, попробуйте снова",
@@ -719,7 +716,6 @@
     "Description": "Описание",
     "Name or matrix ID": "Имя или matrix ID",
     "Unable to accept invite": "Невозможно принять приглашение",
-    "Unable to leave room": "Невозможно покинуть комнату",
     "Leave": "Покинуть",
     "Failed to invite the following users to %(groupId)s:": "Не удалось пригласить следующих пользователей в %(groupId)s:",
     "Failed to remove '%(roomName)s' from %(groupId)s": "Не удалось удалить '%(roomName)s' из %(groupId)s",
@@ -924,7 +920,6 @@
     "Unknown for %(duration)s": "Неизвестно %(duration)s",
     "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Здесь никого нет! Хотите <inviteText>пригласить кого-нибудь</inviteText> или <nowarnText>выключить предупреждение о пустой комнате</nowarnText>?",
     "Something went wrong when trying to get your communities.": "Что-то пошло не так, во время отображения ваших сообществ.",
-    "Tag Panel": "Панель тегов",
     "Delete %(count)s devices|other": "Удалить %(count)s устройств",
     "Delete %(count)s devices|one": "Удалить устройство",
     "Select devices": "Выбрать устройства",
@@ -991,6 +986,5 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Повторно запросить ключи шифрования</requestLink> с других устройств.",
     "%(user)s is a %(userRole)s": "%(user)s является %(userRole)s",
     "Your key share request has been sent - please check your other devices for key share requests.": "Ваш запрос на передачу ключей отправлен - пожалуйста, проверьте другие ваши устройства на запросы передачи ключей.",
-    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Запросы передачи ключей автоматически отправляются на другие устройства. Если вы отклонили или отменили запрос на передачу ключей на других устройствах, нажмите здесь, чтобы запросить ключи для этого сеанса повторно.",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Изменения, сделанные в вашем сообществе, могут не отображаться для других пользователей в течение 30 минут."
+    "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Запросы передачи ключей автоматически отправляются на другие устройства. Если вы отклонили или отменили запрос на передачу ключей на других устройствах, нажмите здесь, чтобы запросить ключи для этого сеанса повторно."
 }

@@ -214,7 +214,6 @@
     "Message Replies": "Respostes del missatge",
     "Message Pinning": "Fixació de missatges",
     "Presence Management": "Gestió de presència",
-    "Tag Panel": "Tauler d'etiquetes",
     "Disable Emoji suggestions while typing": "Desactiva els suggeriments d'Emoji mentre s'escriu",
     "Use compact timeline layout": "Utilitza el disseny compacte de la línia de temps",
     "Hide join/leave messages (invites/kicks/bans unaffected)": "Amaga els missatges d'entrada i sortida (no afecta a les invitacions, expulsions o prohibicions)",
@@ -756,7 +755,6 @@
     "Leave Community": "Abandona la comunitat",
     "Leave %(groupName)s?": "Voleu sortir de la comunitat %(groupName)s?",
     "Leave": "Surt",
-    "Unable to leave room": "No s'ha pogut sortir de la sala",
     "Community Settings": "Paràmetres de la comunitat",
     "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Aquestes sales es mostren a la pàgina de la comunitat als seus membres i poden entrar-hi fent clic sobre elles.",
     "Featured Rooms:": "Sales destacades:",
@@ -872,8 +870,6 @@
     "Analytics": "Analítiques",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ha canviat el seu nom visible a %(displayName)s.",
     "Server may be unavailable or overloaded": "El servidor pot estar inaccessible o sobrecarregat",
-    "Report it": "Informa",
-    "Found a bug?": "Has trobat un error?",
     "Display name": "Nom visible",
     "Identity Server is": "El servidor d'identitat es"
 }

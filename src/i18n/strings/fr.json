@@ -57,7 +57,6 @@
     "Banned users": "Utilisateurs bannis",
     "Bans user with given id": "Bannit l'utilisateur à partir de son identifiant",
     "Blacklisted": "Sur liste noire",
-    "Bug Report": "Rapport d'erreur",
     "Call Timeout": "Délai d’appel expiré",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Impossible de se connecter au serveur d'accueil en HTTP si l'URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez le support des scripts non-vérifiés</a>.",
     "Can't load user settings": "Impossible de charger les paramètres de l'utilisateur",
@@ -133,7 +132,6 @@
     "Forget room": "Oublier le salon",
     "Forgot your password?": "Mot de passe oublié ?",
     "For security, this session has been signed out. Please sign in again.": "Par mesure de sécurité, la session a expiré. Merci de vous authentifier à nouveau.",
-    "Found a bug?": "Vous avez trouvé un problème ?",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s à %(toPowerLevel)s",
     "Hangup": "Raccrocher",
     "Hide read receipts": "Cacher les accusés de lecture",
@@ -241,7 +239,6 @@
     "%(senderName)s removed their profile picture.": "%(senderName)s a supprimé son image de profil.",
     "Remove %(threePid)s?": "Supprimer %(threePid)s ?",
     "%(senderName)s requested a VoIP conference.": "%(senderName)s a demandé une téléconférence audio.",
-    "Report it": "Le signaler",
     "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Pour le moment, réinitialiser le mot de passe va réinitialiser les clés de chiffrement sur tous les appareils, rendant l’historique des salons chiffrés illisible, à moins que vous exportiez d'abord les clés de salon puis que vous les ré-importiez après. Cela sera amélioré prochainement.",
     "Return to login screen": "Retourner à l’écran de connexion",
     "Riot does not have permission to send you notifications - please check your browser settings": "Riot n’a pas la permission de vous envoyer des notifications - merci de vérifier les paramètres de votre navigateur",
@@ -862,7 +859,6 @@
     "Leave Community": "Quitter la communauté",
     "Leave %(groupName)s?": "Quitter %(groupName)s ?",
     "Leave": "Quitter",
-    "Unable to leave room": "Impossible de partir du salon",
     "Community Settings": "Paramètres de la communauté",
     "Add rooms to this community": "Ajouter des salons à cette communauté",
     "%(inviter)s has invited you to join this community": "%(inviter)s vous a invité à rejoindre cette communauté",
@@ -934,7 +930,6 @@
     "Flair will appear if enabled in room settings": "Les badges n'apparaîtront que s'ils sont activés dans les paramètres de chaque salon",
     "Flair will not appear": "Les badges n'apparaîtront pas",
     "Display your community flair in rooms configured to show it.": "Sélectionnez les badges dans les paramètres de chaque salon pour les afficher.",
-    "Tag Panel": "Panneau des étiquettes",
     "Addresses": "Adresses",
     "expand": "développer",
     "collapse": "réduire",
@@ -991,6 +986,5 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Si vos autres appareils n'ont pas la clé pour ce message, vous ne pourrez pas le déchiffrer.",
     "Key request sent.": "Demande de clé envoyée.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Re-demander les clés de chiffrement</requestLink> depuis vos autres appareils.",
-    "%(user)s is a %(userRole)s": "%(user)s est %(userRole)s",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Les changements effectués sur votre communauté peuvent ne pas apparaître pour les autres utilisateurs avant 30 minutes."
+    "%(user)s is a %(userRole)s": "%(user)s est %(userRole)s"
 }

@@ -12,7 +12,6 @@
     "Ban": "封禁",
     "Banned users": "被封禁的用戶",
     "Blacklisted": "已列入黑名單",
-    "Bug Report": "臭蟲回報",
     "Call Timeout": "通話超時",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "當瀏覽器網址列裡有 HTTPS URL 時，不能使用 HTTP 連線到家伺服器。請採用 HTTPS 或者<a>允許不安全的指令稿</a>。",
     "Can't load user settings": "無法載入使用者設定",
@@ -102,7 +101,6 @@
     "Forgot your password?": "忘記密碼？",
     "For security, this session has been signed out. Please sign in again.": "因為安全因素，此工作階段已被登出。請重新登入。",
     "For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.": "因為安全因素，登出將會從此瀏覽器刪除任何端到端加密的金鑰。若您想要在未來的 Riot 工作階段中解密您的對話紀錄，請將您的聊天室金鑰匯出並好好存放。",
-    "Found a bug?": "發現漏洞？",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s 從 %(fromPowerLevel)s 變為 %(toPowerLevel)s",
     "Guests cannot join this room even if explicitly invited.": "游客不能加入此聊天室，即使有人主動邀請。.",
     "Hangup": "掛斷",
@@ -127,7 +125,6 @@
     "Leave room": "離開聊天室",
     "Login as guest": "以游客的身份登錄",
     "New password": "新密碼",
-    "Report it": "報告",
     "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "重設密碼目前會把所有裝置上的端到端加密金鑰重設，讓已加密的聊天歷史不可讀，除非您先匯出您的聊天室金鑰並在稍後重新匯入。這會在未來改進。",
     "Return to login screen": "返回登錄頁面",
     "Riot does not have permission to send you notifications - please check your browser settings": "Riot 未被允許向你推送通知 ── 請檢查您的瀏覽器設定",
@@ -719,7 +716,6 @@
     "Message Replies": "訊息回覆",
     "Message Pinning": "訊息釘選",
     "Presence Management": "出席管理",
-    "Tag Panel": "標籤面板",
     "Disable Emoji suggestions while typing": "在輸入時停用繪文字建議",
     "Hide avatar changes": "隱藏大頭貼變更",
     "Hide display name changes": "隱藏顯示名稱變更",
@@ -923,7 +919,6 @@
     "Leave Community": "離開社群",
     "Leave %(groupName)s?": "離開 %(groupName)s？",
     "Leave": "離開",
-    "Unable to leave room": "無法離開聊天室",
     "Community Settings": "社群設定",
     "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "這些聊天室在社群頁面上顯示給社群成員。社群成員可以透過點按它們來加入聊天室。",
     "%(inviter)s has invited you to join this community": "%(inviter)s 已經邀請您加入此社群",
@@ -991,6 +986,5 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "若您的其他裝置沒有這個訊息的金鑰，您將無法將它們解密。",
     "Key request sent.": "金鑰請求已傳送。",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "從您的其他裝置<requestLink>重新請求加密金鑰</requestLink>。",
-    "%(user)s is a %(userRole)s": "%(user)s 是 %(userRole)s",
-    "Changes made to your community might not be seen by other users for up to 30 minutes.": "其他使用者在最多 30 分鐘內可能不會慨到您對社群所做的變更。"
+    "%(user)s is a %(userRole)s": "%(user)s 是 %(userRole)s"
 }
