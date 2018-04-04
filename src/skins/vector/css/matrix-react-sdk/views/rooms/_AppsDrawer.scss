@@ -68,14 +68,11 @@ limitations under the License.
 .mx_AppTileFullWidth {
     max-width: 960px;
     width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-}
-
-.mx_AppTile, .mx_AppTileFullWidth {
-    margin-top: 3px;
 }
 
 .mx_AppTileMenuBar {
