@@ -38,6 +38,7 @@ const ObjectUtils = require('../../../ObjectUtils');
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
+    'm.sticker': 'messages.MessageEvent',
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
@@ -472,7 +473,8 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (eventType !== 'm.room.message');
+        // For now assume that anything that doesn't have a content body is an isInfoMessage
+        const isInfoMessage = !content.body; // Boolean comparison of non-boolean content body
 
         const EventTileType = sdk.getComponent(getHandlerTile(this.props.mxEvent));
         // This shouldn't happen: the caller should check we support this type

@@ -468,6 +468,15 @@ module.exports = React.createClass({
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
                 break;
+            case 'post_sticker_message':
+              this.injectSticker(
+                  payload.data.content.url,
+                  payload.data.content.info,
+                  payload.data.description || payload.data.name);
+              break;
+            case 'picture_snapshot':
+                this.uploadFile(payload.file);
+                break;
             case 'notifier_enabled':
             case 'upload_failed':
             case 'upload_started':
@@ -921,9 +930,25 @@ module.exports = React.createClass({
             console.error("Failed to upload file " + file + " " + error);
             Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
-                description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
+                description: ((error && error.message)
+                    ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
         });
+    },
+
+    injectSticker: function(url, info, text) {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+
+        ContentMessages.sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
+            .done(undefined, (error) => {
+                if (error.name === "UnknownDeviceError") {
+                    // Let the staus bar handle this
+                    return;
+                }
+            });
     },
 
     onSearch: function(term, scope) {
@@ -1608,7 +1633,8 @@ module.exports = React.createClass({
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
               onResize={this.onChildResize}
-              showApps={this.state.showApps && !this.state.editingRoomSettings} >
+              showApps={this.state.showApps}
+              hideAppsDrawer={this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );
