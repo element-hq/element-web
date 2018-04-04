@@ -138,6 +138,15 @@ module.exports = {
         if (!isNaN(Number(props.menuPaddingTop))) {
             menuStyle["paddingTop"] = props.menuPaddingTop;
         }
+        if (!isNaN(Number(props.menuPaddingLeft))) {
+            menuStyle["paddingLeft"] = props.menuPaddingLeft;
+        }
+        if (!isNaN(Number(props.menuPaddingBottom))) {
+            menuStyle["paddingBottom"] = props.menuPaddingBottom;
+        }
+        if (!isNaN(Number(props.menuPaddingRight))) {
+            menuStyle["paddingRight"] = props.menuPaddingRight;
+        }
 
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
