@@ -18,6 +18,8 @@ import React from 'react';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
 function GeminiScrollbarWrapper(props) {
+    const {wrappedRef, ...wrappedProps} = props;
+
     // Enable forceGemini so that gemini is always enabled. This is
     // to avoid future issues where a feature is implemented without
     // doing QA on every OS/browser combination.
@@ -25,7 +27,7 @@ function GeminiScrollbarWrapper(props) {
     // By default GeminiScrollbar allows native scrollbars to be used
     // on macOS. Use forceGemini to enable Gemini's non-native
     // scrollbars on all OSs.
-    return <GeminiScrollbar ref={props.wrappedRef} forceGemini={true} {...props}>
+    return <GeminiScrollbar ref={wrappedRef} forceGemini={true} {...wrappedProps}>
         { props.children }
     </GeminiScrollbar>;
 }
