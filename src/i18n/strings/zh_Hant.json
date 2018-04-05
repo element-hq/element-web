@@ -129,7 +129,7 @@
     "New password": "新密碼",
     "Report it": "報告",
     "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "重設密碼目前會把所有裝置上的端到端加密金鑰重設，讓已加密的聊天歷史不可讀，除非您先匯出您的聊天室金鑰並在稍後重新匯入。這會在未來改進。",
-    "Return to login screen": "返回登錄頁面",
+    "Return to login screen": "返回到登入畫面",
     "Riot does not have permission to send you notifications - please check your browser settings": "Riot 未被允許向你推送通知 ── 請檢查您的瀏覽器設定",
     "Riot was not given permission to send notifications - please try again": "Riot 未被允許向你推送通知 ── 請重試",
     "riot-web version:": "riot-網頁版：",
