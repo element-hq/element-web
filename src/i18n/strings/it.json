@@ -421,7 +421,7 @@
     "Favourites": "Preferiti",
     "People": "Persone",
     "Low priority": "Bassa priorità",
-    "Historical": "Storico",
+    "Historical": "Cronologia",
     "Unable to ascertain that the address this invite was sent to matches one associated with your account.": "Impossibile verificare che l'indirizzo al quale questo invito è stato inviato corrisponda a uno associato al tuo account.",
     "Power level must be positive integer.": "Il livello di poteri deve essere un intero positivo.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ha modificato il livello di poteri di %(powerLevelDiffText)s.",
