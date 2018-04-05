@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -400,8 +400,8 @@ FeaturedRoom.contextTypes = GroupContext;
 RoleUserList.contextTypes = GroupContext;
 FeaturedUser.contextTypes = GroupContext;
 
-const GROUP_JOINABLE = "GROUP_JOINABLE";
-const GROUP_NOT_JOINABLE = "GROUP_NOT_JOINABLE";
+const GROUP_JOINPOLICY_OPEN = "open";
+const GROUP_JOINPOLICY_INVITE = "invite";
 
 export default React.createClass({
     displayName: 'GroupView',
@@ -550,7 +550,7 @@ export default React.createClass({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
             joinableForm: {
-                isJoinable: this.state.summary.profile.is_joinable,
+                policyType: this.state.summary.profile.join_policy,
             },
         });
         dis.dispatch({
@@ -616,7 +616,7 @@ export default React.createClass({
 
     _onJoinableChange: function(ev) {
         this.setState({
-            joinableForm: { isJoinable: ev.target.value === GROUP_JOINABLE },
+            joinableForm: { policyType: ev.target.value },
         });
     },
 
@@ -655,7 +655,9 @@ export default React.createClass({
 
     _saveGroup: async function() {
         await this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm);
-        await this._matrixClient.setGroupJoinable(this.props.groupId, this.state.joinableForm.isJoinable);
+        await this._matrixClient.setGroupJoinPolicy(this.props.groupId, {
+            type: this.state.joinableForm.policyType,
+        });
     },
 
     _onAcceptInviteClick: function() {
@@ -953,8 +955,8 @@ export default React.createClass({
             <div>
                 <label>
                     <input type="radio"
-                        value={GROUP_NOT_JOINABLE}
-                        checked={!this.state.joinableForm.isJoinable}
+                        value={GROUP_JOINPOLICY_INVITE}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_INVITE}
                         onClick={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
@@ -965,8 +967,8 @@ export default React.createClass({
             <div>
                 <label>
                     <input type="radio"
-                        value={GROUP_JOINABLE}
-                        checked={this.state.joinableForm.isJoinable}
+                        value={GROUP_JOINPOLICY_OPEN}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_OPEN}
                         onClick={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
