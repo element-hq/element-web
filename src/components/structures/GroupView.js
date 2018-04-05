@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -399,6 +399,9 @@ FeaturedRoom.contextTypes = GroupContext;
 RoleUserList.contextTypes = GroupContext;
 FeaturedUser.contextTypes = GroupContext;
 
+const GROUP_JOINPOLICY_OPEN = "open";
+const GROUP_JOINPOLICY_INVITE = "invite";
+
 export default React.createClass({
     displayName: 'GroupView',
 
@@ -545,6 +548,9 @@ export default React.createClass({
         this.setState({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
+            joinableForm: {
+                policyType: this.state.summary.profile.join_policy,
+            },
         });
         dis.dispatch({
             action: 'panel_disable',
@@ -607,11 +613,15 @@ export default React.createClass({
         }).done();
     },
 
+    _onJoinableChange: function(ev) {
+        this.setState({
+            joinableForm: { policyType: ev.target.value },
+        });
+    },
+
     _onSaveClick: function() {
         this.setState({saving: true});
-        const savePromise = this.state.isUserPrivileged ?
-            this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm) :
-            Promise.resolve();
+        const savePromise = this.state.isUserPrivileged ? this._saveGroup() : Promise.resolve();
         savePromise.then((result) => {
             this.setState({
                 saving: false,
@@ -640,6 +650,13 @@ export default React.createClass({
                 avatarChanged: false,
             });
         }).done();
+    },
+
+    _saveGroup: async function() {
+        await this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm);
+        await this._matrixClient.setGroupJoinPolicy(this.props.groupId, {
+            type: this.state.joinableForm.policyType,
+        });
     },
 
     _onAcceptInviteClick: function() {
@@ -735,6 +752,7 @@ export default React.createClass({
         return <div className={groupSettingsSectionClasses}>
             { header }
             { changeDelayWarning }
+            { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }
         </div>;
@@ -981,6 +999,41 @@ export default React.createClass({
                 </div>
             </div>
         </div>;
+    },
+
+    _getJoinableNode: function() {
+        return this.state.editing ? <div>
+            <h3>
+                { _t('Who can join this community?') }
+                { this.state.groupJoinableLoading ?
+                    <InlineSpinner /> : <div />
+                }
+            </h3>
+            <div>
+                <label>
+                    <input type="radio"
+                        value={GROUP_JOINPOLICY_INVITE}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_INVITE}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Only people who have been invited') }
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio"
+                        value={GROUP_JOINPOLICY_OPEN}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_OPEN}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Everyone') }
+                    </div>
+                </label>
+            </div>
+        </div> : null;
     },
 
     _getLongDescriptionNode: function() {
