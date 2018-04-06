@@ -102,7 +102,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
     _readFeature(featureName) {
         if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
             // Guests should not have any labs features enabled.
-            return {enabled: false};
+            return false;
         }
 
         const value = localStorage.getItem("mx_labs_feature_" + featureName);
