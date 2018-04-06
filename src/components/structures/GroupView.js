@@ -550,7 +550,10 @@ export default React.createClass({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
             joinableForm: {
-                policyType: this.state.summary.profile.join_policy,
+                policyType:
+                    this.state.summary.profile.is_openly_joinable ?
+                        GROUP_JOINPOLICY_OPEN :
+                        GROUP_JOINPOLICY_INVITE,
             },
         });
         dis.dispatch({
