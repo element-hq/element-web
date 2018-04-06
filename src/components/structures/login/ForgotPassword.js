@@ -23,6 +23,7 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import SdkConfig from "../../../SdkConfig";
 
 import PasswordReset from "../../../PasswordReset";
 
@@ -185,7 +186,7 @@ module.exports = React.createClass({
             );
         } else {
             let serverConfigSection;
-            if (!config.disable_custom_urls) {
+            if (!SdkConfig.get().disable_custom_urls) {
                 serverConfigSection = (
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}
