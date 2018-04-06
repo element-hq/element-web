@@ -193,7 +193,9 @@ var LeftPanel = React.createClass({
             },
         );
 
-        const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
+        const tagPanelEnabled =
+            SettingsStore.isFeatureEnabled("feature_tag_panel") &&
+            !SettingsStore.getValue("TagPanel.disableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
         const containerClasses = classNames(

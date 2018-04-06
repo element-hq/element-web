@@ -170,8 +170,10 @@ module.exports = React.createClass({
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
 
-        const groupsButton = SettingsStore.getValue("TagPanel.disableTagPanel") ?
-            <GroupsButton tooltip={true} /> : null;
+        const groupsButton =
+            !SettingsStore.isFeatureEnabled("feature_tag_panel") ||
+            SettingsStore.getValue("TagPanel.disableTagPanel") ?
+                <GroupsButton tooltip={true} /> : null;
 
         return (
             <div className="mx_BottomLeftMenu">
