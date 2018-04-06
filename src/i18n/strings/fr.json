@@ -1003,5 +1003,17 @@
     "Unable to leave community": "Impossible de quitter la communauté",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Les changements effectués au <bold1>nom</bold1> et à l'<bold2>avatar</bold2> de votre communauté peuvent prendre jusqu'à 30 minutes avant d'être vus par d'autres utilisateurs.",
     "Join this community": "Rejoindre cette communauté",
-    "Leave this community": "Quitter cette communauté"
+    "Leave this community": "Quitter cette communauté",
+    "Stickerpack": "Pack de stickers",
+    "Sticker Messages": "Messages sticker",
+    "You don't currently have any stickerpacks enabled": "Vous n'avez activé aucun pack de stickers pour l'instant",
+    "Click": "Cliquer",
+    "here": "ici",
+    "to add some!": "pour en ajouter !",
+    "Add a stickerpack": "Ajouter un pack de stickers",
+    "Hide Stickers": "Masquer les stickers",
+    "Show Stickers": "Afficher les stickers",
+    "Manage sticker packs": "Gérer les packs de stickers",
+    "Who can join this community?": "Qui peut rejoindre cette communauté ?",
+    "Everyone": "Tout le monde"
 }
