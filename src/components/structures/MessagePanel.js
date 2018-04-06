@@ -447,15 +447,18 @@ module.exports = React.createClass({
         // is this a continuation of the previous message?
         let continuation = false;
 
+        // Some events should appear as continuations from previous events of
+        // different types.
+        const continuedTypes = ['m.sticker', 'm.room.message'];
+        const eventTypeContinues =
+            prevEvent !== null &&
+            continuedTypes.includes(mxEv.getType()) &&
+            continuedTypes.includes(prevEvent.getType());
+
         if (prevEvent !== null
                 && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
-                // The preferred way of checking for 'continuation messages' is by
-                // checking whether subsiquent messages from the same user have a
-                // message body. This is because all messages intended to be displayed
-                // should have a 'body' whereas some (non-m.room) messages (such as
-                // m.sticker) may not have a message 'type'.
-                && Boolean(mxEv.getContent().body) == Boolean(prevEvent.getContent().body)) {
+                && (mxEv.getType() == prevEvent.getType() || eventTypeContinues)) {
             continuation = true;
         }
 
