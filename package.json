@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/vector-im/riot-web"
   },
+  "engines": {
+    "node": ">= 6.3.0"
+  },
   "license": "Apache-2.0",
   "files": [
     "AUTHORS.rst",
