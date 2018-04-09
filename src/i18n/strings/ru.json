@@ -226,5 +226,13 @@
     "%(count)s Members|other": "%(count)s членов",
     "%(count)s Members|one": "%(count)s член",
     "Online": "Онлайн",
-    "View Community": "Просмотр сообщества"
+    "View Community": "Просмотр сообщества",
+    "Submit debug logs": "Отправка журналов отладки",
+    "Preparing to send logs": "Подготовка к отправке журналов",
+    "Logs sent": "Журналы отправлены",
+    "Failed to send logs: ": "Не удалось отправить журналы: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Журналы отладки содержат данные об использовании приложения, включая ваше имя пользователя, идентификаторы или псевдонимы комнат или групп, которые вы посетили, а также имена других пользователей. Они не содержат сообщений.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Нажмите здесь</a> для создания запроса о проблеме на GitHub.",
+    "GitHub issue link:": "Ссылка на проблему в GitHub:",
+    "Notes:": "Заметки:"
 }

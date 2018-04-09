@@ -226,5 +226,13 @@
     "%(count)s Members|other": "%(count)s tag",
     "%(count)s Members|one": "%(count)s tag",
     "Online": "Online",
-    "View Community": "Közösség megtekintése"
+    "View Community": "Közösség megtekintése",
+    "Submit debug logs": "Hibakeresési napló küldése",
+    "Preparing to send logs": "Előkészülés napló küldéshez",
+    "Logs sent": "Napló elküldve",
+    "Failed to send logs: ": "Hiba a napló küldésénél: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "A hibakereső napló alkalmazás használati adatokat tartalmaz beleértve a felhasználói nevedet, az általad meglátogatott szobák és csoportok azonosítóit alternatív neveit és más felhasználói neveket. Csevegés üzenetek szövegét nem tartalmazza.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Kattints ide</a> GitHub hibajegy nyitásához .",
+    "GitHub issue link:": "GitHub hibajegy hivatkozás:",
+    "Notes:": "Jegyzetek:"
 }

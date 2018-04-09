@@ -226,5 +226,13 @@
     "Online": "En liña",
     "View Community": "Ver Comunidade",
     "%(count)s Members|other": "%(count)s Membros",
-    "%(count)s Members|one": "%(count)s Membro"
+    "%(count)s Members|one": "%(count)s Membro",
+    "Submit debug logs": "Enviar informes de depuración",
+    "Preparing to send logs": "Preparándose para enviar informe",
+    "Logs sent": "Informes enviados",
+    "Failed to send logs: ": "Fallo ao enviar os informes: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Os informes de depuración conteñen datos de utilización do aplicativo como o seu nome de usuaria, os IDs ou alcumes de salas e grupos que vostede visitou e os nomes de usuaria de outras usuarias. Non conteñen mensaxes.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Pulse aquí</a> para crear un reporte en GitHub.",
+    "GitHub issue link:": "Ligazón ao reporte en GitHub:",
+    "Notes:": "Notas:"
 }

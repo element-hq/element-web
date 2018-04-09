@@ -226,5 +226,6 @@
     "%(count)s Members|other": "%(count)s membres",
     "%(count)s Members|one": "%(count)s membre",
     "Online": "En ligne",
-    "View Community": "Voir la communauté"
+    "View Community": "Voir la communauté",
+    "Submit debug logs": "Envoyer les journaux de débogage"
 }

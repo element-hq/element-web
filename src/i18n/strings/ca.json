@@ -223,5 +223,13 @@
     "%(count)s Members|other": "%(count)s membres",
     "%(count)s Members|one": "%(count)s membre",
     "Online": "Conectat",
-    "View Community": "Mira la communitat"
+    "View Community": "Mira la communitat",
+    "Preparing to send logs": "Preparant l'enviament de logs",
+    "Logs sent": "Logs enviats",
+    "Failed to send logs: ": "No s'han pogut enviar els logs: ",
+    "Submit debug logs": "Enviar logs de depuració",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Clica aquí</a> per crear una issue a GitHub.",
+    "GitHub issue link:": "Enllaç de l'issue de GitHub:",
+    "Notes:": "Notes:",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Els logs de depuració contenen dades d'ús de l'aplicació que inclouen el teu nom d'usuari, les IDs o pseudònims de les sales o grups que has visitat i els noms d'usuari d'altres usuaris. No contenen missatges."
 }

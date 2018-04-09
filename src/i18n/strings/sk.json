@@ -222,5 +222,15 @@
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Správne fungujú aj <safariLink>Safari</safariLink> a <operaLink>Opera</operaLink>.",
     "Reply": "Odpovedať",
     "%(count)s Members|other": "%(count)s Členov",
-    "%(count)s Members|one": "%(count)s Člen"
+    "%(count)s Members|one": "%(count)s Člen",
+    "Submit debug logs": "Odoslať ladiace záznamy",
+    "Preparing to send logs": "príprava odoslania záznamov",
+    "Logs sent": "Záznamy boli odoslané",
+    "Failed to send logs: ": "Nepodarilo sa odoslať záznamy: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Ladiace záznamy obsahujú údaje o používaní aplikácii, vrátane vašeho používateľského mena, názvy a aliasy miestností a komunít, ku ktorým ste sa pripojili a mená ostatných používateľov. Tieto záznamy neobsahujú samotný obsah vašich správ.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Kliknutím sem</a> nám pošlete hlásenie o chybe cez Github.",
+    "GitHub issue link:": "Odkaz hlásenia na Github:",
+    "Notes:": "Poznámky:",
+    "Online": "Pripojený",
+    "View Community": "Zobraziť komunitu"
 }
