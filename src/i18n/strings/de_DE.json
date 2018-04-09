@@ -991,5 +991,17 @@
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Wenn deine anderen Geräte keine Schlüssel für diese Nachricht haben, wirst du diese nicht entschlüsseln können.",
     "Key request sent.": "Schlüssel-Anfragen gesendet.",
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "Verschlüsselungs-Schlüssel von deinen anderen Geräten <requestLink>erneut anfragen</requestLink>.",
-    "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s"
+    "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s",
+    "Changes made to your community might not be seen by other users for up to 30 minutes.": "Änderungen, die an deiner Community gemacht werden, können bis zu 30 Minuten brauchen, bis sie für andere sichtbar sind.",
+    "Debug Logs Submission": "Einsenden des Fehlerprotokolls",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Wenn du einen Fehler via GitHub gemeldet hast, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast und Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten.",
+    "Submit debug logs": "Fehlerberichte einreichen",
+    "Code": "Code",
+    "Opens the Developer Tools dialog": "Öffnet den Entwicklerwerkzeugkasten",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Von %(displayName)s (%(userName)s) um %(dateTime)s gesehen",
+    "Unable to join community": "Community konnte nicht betreten werden",
+    "Unable to leave community": "Community konnte nicht verlassen werden",
+    "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Änderungen am <bold1>Namen</bold1> und <bold2>Bild</bold2> deiner Community werden evtl. erst nach 30 Minuten von anderen Nutzern gesehen werden.",
+    "Join this community": "Community beitreten",
+    "Leave this community": "Community verlassen"
 }
