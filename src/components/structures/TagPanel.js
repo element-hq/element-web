@@ -148,7 +148,7 @@ const TagPanel = React.createClass({
                 </Droppable>
             </GeminiScrollbarWrapper>
             <div className="mx_TagPanel_divider" />
-            <div className="mx_TagPanel_createGroupButton">
+            <div className="mx_TagPanel_groupsButton">
                 <GroupsButton tooltip={true} />
             </div>
         </div>;
