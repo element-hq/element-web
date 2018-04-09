@@ -943,7 +943,7 @@ export default React.createClass({
         if ((!group || group.myMembership === 'leave') &&
             this.state.summary &&
             this.state.summary.profile &&
-            Boolean(this.state.summary.profile.is_joinable)
+            Boolean(this.state.summary.profile.is_openly_joinable)
         ) {
             membershipButtonText = _t("Join this community");
             membershipButtonOnClick = this._onJoinClick;
