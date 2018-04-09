@@ -1,3 +1,9 @@
+Changes in [0.12.0-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.6) (2018-04-09)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.5...v0.12.0-rc.6)
+
+ * Fix group join button not appearing
+
 Changes in [0.12.0-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.5) (2018-04-09)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.4...v0.12.0-rc.5)
