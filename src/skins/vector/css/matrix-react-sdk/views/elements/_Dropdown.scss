@@ -18,6 +18,10 @@ limitations under the License.
     position: relative;
 }
 
+.mx_Dropdown_disabled {
+    opacity: 0.3;
+}
+
 .mx_Dropdown_input {
     position: relative;
     border-radius: 3px;
@@ -50,6 +54,12 @@ limitations under the License.
 
 .mx_Dropdown.left_aligned .mx_Dropdown_arrow {
     left: 10px;
+}
+
+.mx_Dropdown_input > .mx_Dropdown_option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mx_Dropdown.left_aligned .mx_Dropdown_input > .mx_Dropdown_option {
@@ -98,6 +108,11 @@ input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
     background-color: $primary-bg-color;
     max-height: 200px;
     overflow-y: auto;
+}
+
+.mx_Dropdown_menu .mx_Dropdown_option {
+    height: auto;
+    min-height: 35px;
 }
 
 .mx_Dropdown_menu .mx_Dropdown_option_highlight {

@@ -150,6 +150,16 @@ limitations under the License.
     display: block;
 }
 
+.mx_RoomStatusBar_isAlone {
+    height: 50px;
+    line-height: 50px;
+
+    color: $primary-fg-color;
+    opacity: 0.5;
+    overflow-y: hidden;
+    display: block;
+}
+
 .mx_MatrixChat_useCompactLayout {
     .mx_RoomStatusBar {
         min-height: 40px;

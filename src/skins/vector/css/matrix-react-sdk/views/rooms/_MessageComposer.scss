@@ -34,6 +34,10 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_MessageComposer_row div:last-child{
+    padding-right: 0;
+}
+
 .mx_MessageComposer .mx_MessageComposer_avatar {
     padding-left: 10px;
     padding-right: 28px;
@@ -55,9 +59,11 @@ limitations under the License.
 .mx_MessageComposer_noperm_error {
     width: 100%;
     height: 60px;
-    text-align: center;
     font-style: italic;
     color: $greyed-fg-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mx_MessageComposer_input_wrapper {
@@ -96,6 +102,9 @@ limitations under the License.
     width: 100%;
     flex: 1;
     word-break: break-word;
+    max-height: 120px;
+    min-height: 21px;
+    overflow: auto;
 }
 
 .mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
@@ -103,10 +112,8 @@ limitations under the License.
     padding-top: 2px;
 }
 
-.mx_MessageComposer_input .public-DraftEditor-content {
-    max-height: 120px;
-    min-height: 21px;
-    overflow: auto;
+.mx_MessageComposer .public-DraftStyleDefault-block {
+    overflow-x: hidden;
 }
 
 .mx_MessageComposer_input blockquote {
@@ -138,7 +145,7 @@ limitations under the License.
     max-height: 120px;
     overflow: auto;
     /* needed for FF */
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
 }
 
 /* hack for FF as vertical alignment of custom placeholder text is broken */
@@ -155,7 +162,8 @@ limitations under the License.
 .mx_MessageComposer_hangup,
 .mx_MessageComposer_voicecall,
 .mx_MessageComposer_videocall,
-.mx_MessageComposer_apps {
+.mx_MessageComposer_apps,
+.mx_MessageComposer_stickers {
     /*display: table-cell;*/
     /*vertical-align: middle;*/
     /*padding-left: 10px;*/
@@ -168,13 +176,16 @@ limitations under the License.
 .mx_MessageComposer_hangup object,
 .mx_MessageComposer_voicecall object,
 .mx_MessageComposer_videocall object,
-.mx_MessageComposer_apps object {
+.mx_MessageComposer_apps object,
+.mx_MessageComposer_stickers object {
     pointer-events: none;
 }
 
 .mx_MessageComposer_formatting {
     cursor: pointer;
     margin: 0 11px;
+    width: 24px;
+    height: 18px;
 }
 
 .mx_MessageComposer_formatbar_wrapper {

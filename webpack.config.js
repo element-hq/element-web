@@ -3,6 +3,9 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+let og_image_url = process.env.RIOT_OG_IMAGE_URL;
+if (!og_image_url) og_image_url = 'https://riot.im/app/img/logos/riot-im-logo-1.png';
+
 module.exports = {
     entry: {
         "bundle": "./src/vector/index.js",
@@ -20,6 +23,7 @@ module.exports = {
         // CSS themes
         "theme-light": "./src/skins/vector/css/themes/light.scss",
         "theme-dark": "./src/skins/vector/css/themes/dark.scss",
+        "theme-status": "./src/skins/vector/themes/status/css/status.scss",
     },
     module: {
         rules: [
@@ -128,6 +132,9 @@ module.exports = {
             // bottom of <head> or the bottom of <body>, and I'm a bit scared
             // about moving them.
             inject: false,
+            vars: {
+                og_image_url: og_image_url,
+            },
         }),
     ],
     devtool: 'source-map',

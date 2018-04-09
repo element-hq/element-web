@@ -84,7 +84,7 @@ module.exports = React.createClass({
 
         var self = this;
         return (
-            <div className="mx_SearchBox">
+            <div className="mx_SearchBox mx_LoginBox">
                 { loginButton }
                 { toggleCollapse }
             </div>

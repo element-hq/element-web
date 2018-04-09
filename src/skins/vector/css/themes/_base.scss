@@ -1,3 +1,9 @@
+/* Open Sans lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics however do not combine
+   nicely with Open Sans (on OSX, at least) and result in a huge
+   horizontal mess.  Arial empirically gets it right, hence prioritising
+   Arial here. */
+$font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #454545;
@@ -22,10 +28,19 @@ $warning-color: #ff0064;
 $mention-user-pill-bg-color: #ff0064;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
+// pinned events indicator
+$pinned-unread-color: #ff0064; // $warning-color
+$pinned-color: #888;
+
+// informational plinth
+$info-plinth-bg-color: #f7f7f7;
+$info-plinth-fg-color: #888;
+
 $preview-bar-bg-color: #f7f7f7;
 
 // left-panel style muted accent color
 $secondary-accent-color: #eaf5f0;
+$tertiary-accent-color: #d3efe1;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -34,7 +49,7 @@ $plinth-bg-color: $secondary-accent-color;
 $droptarget-bg-color: rgba(255,255,255,0.5);
 
 // used by AddressSelector
-$selected-color: #eaf5f0;
+$selected-color: $secondary-accent-color;
 
 // selected for hoverover & selected event tiles
 $event-selected-color: #f7f7f7;
@@ -57,6 +72,7 @@ $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #f6f6f6;
 
 $avatar-initial-color: #ffffff;
+$avatar-bg-color: #ffffff;
 
 $h3-color: #3d3b39;
 
@@ -88,8 +104,18 @@ $roomtile-name-color: rgba(69, 69, 69, 0.8);
 $roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
 
+$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
+
+$roomsublist-background: rgba(0, 0, 0, 0.05);
 $roomsublist-label-fg-color: $h3-color;
-$roomsublist-label-bg-color: #d3efe1;
+$roomsublist-label-bg-color: $tertiary-accent-color;
+$roomsublist-chevron-color: $accent-color;
+
+$panel-divider-color: rgba(118, 207, 166, 0.2);
+
+// ********************
+
+$widget-menu-bar-bg-color: $tertiary-accent-color;
 
 // ********************
 
@@ -99,7 +125,8 @@ $event-sending-color: #ddd;
 $event-notsent-color: #f44;
 
 // event redaction
-$event-redacted-img: url('../../img/redacted.jpg');
+$event-redacted-fg-color: #e2e2e2;
+$event-redacted-border-color: #cccccc;
 
 // event timestamp
 $event-timestamp-color: #acacac;
@@ -112,6 +139,11 @@ $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
 $e2e-unverified-color: #e8bf37;
 $e2e-warning-color: #ba6363;
 
+// presence
+$presence-online: #60de00;
+$presence-unavailable: #deb800;
+$presence-offline: #b7b7b7;
+
 /*** ImageView ***/
 $lightbox-bg-color: #454545;
 $lightbox-fg-color: #ffffff;
@@ -119,3 +151,32 @@ $lightbox-border-color: #ffffff;
 
 // unused?
 $progressbar-color: #000;
+
+// ***** Mixins! *****
+
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 36px;
+    font-family: $font-family;
+    font-size: 14px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+}
+
+@define-mixin mx_DialogButton_hover {
+}
+
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    font-size: 15px;
+    padding: 0px 1.5em 0px 1.5em;
+}

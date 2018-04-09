@@ -15,12 +15,18 @@ limitations under the License.
 */
 
 .mx_AppsDrawer {
+    margin: 5px;
+}
+
+.mx_AppsDrawer_hidden {
+    display: none;
 }
 
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 .mx_AddWidget_button {
@@ -28,9 +34,13 @@ limitations under the License.
     cursor: pointer;
     padding-right: 12px;
     padding: 0;
-    margin: 0 0 5px 0;
+    margin: 5px auto 5px auto;
     color: $accent-color;
     font-size: 12px;
+}
+
+.mx_AddWidget_button_full_width {
+    max-width: 960px;
 }
 
 .mx_SetAppURLDialog_input {
@@ -43,38 +53,56 @@ limitations under the License.
 }
 
 .mx_AppTile {
+    max-width: 960px;
     width: 50%;
-    margin: 0 5px 2px 0;
+    margin-right: 5px;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    // height: 350px;
-    // display: inline-block;
+    background-color: $dialog-background-bg-color;
+}
+
+.mx_AppTile:last-child {
+    margin-right: 1px;
 }
 
 .mx_AppTileFullWidth {
+    max-width: 960px;
     width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    // height: 350px;
-    // display: inline-block;
 }
 
 .mx_AppTileMenuBar {
-    // height: 15px;
     margin: 0;
     padding: 2px 10px;
-    // background-color: $e2e-verified-color;
     border-bottom: 1px solid $primary-hairline-color;
     font-size: 10px;
+    background-color: $widget-menu-bar-bg-color;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.mx_AppTileMenuBarTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    pointer-events: none;
 }
 
 .mx_AppTileMenuBarWidgets {
     float: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
 .mx_AppTileMenuBarWidget {
-    // pointer-events: none;
     cursor: pointer;
     width: 10px;
     height: 10px;
@@ -88,26 +116,24 @@ limitations under the License.
 }
 
 .mx_AppTileMenuBarWidget:hover {
-    border: 1px solid $primary-hairline-color;
+    border: 1px solid $primary-fg-color;
     border-radius: 2px;
 }
 
 .mx_AppTileBody{
-    height: 350px;
+    height: 280px;
+    width: 100%;
     overflow: hidden;
 }
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: 350px;
+    height: 280px;
     overflow: hidden;
     border: none;
     padding: 0;
     margin: 0;
     display: block;
-}
-
-.mx_CloseAppWidget {
 }
 
 .mx_AppTileMenuBarWidgetPadding {
@@ -179,8 +205,12 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppPermissionWarning {
     text-align: center;
-    padding: 30px 0;
     background-color: $primary-bg-color;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_AppPermissionWarningImage {
@@ -219,10 +249,23 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppLoading {
-    min-height: 305px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    position: relative;
+    height: 280px;
+}
+
+.mx_AppLoading .mx_Spinner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.mx_AppLoading iframe {
+  display: none;
 }

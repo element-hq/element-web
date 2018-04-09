@@ -21,40 +21,48 @@ limitations under the License.
 }
 
 .mx_RoomSettings_leaveButton,
-.mx_RoomSettings_unbanButton,
-.mx_RoomSettings_integrationsButton,
+.mx_RoomSettings_unbanButton {
+    @mixin mx_DialogButton;
+    position: relative;
+    margin-right: 8px;
+}
+
+.mx_RoomSettings_leaveButton:hover,
+.mx_RoomSettings_unbanButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_RoomSettings_integrationsButton_error {
     position: relative;
-    height: 36px;
-    background-color: $accent-color;
-    border-radius: 36px;
-    margin-right: 8px;
-    color: $accent-fg-color;
-    line-height: 34px;
-    text-align: center;
-    cursor: pointer;
-    padding-left: 12px;
-    padding-right: 12px;
+    cursor: not-allowed;
+}
+.mx_RoomSettings_integrationsButton_error img {
+    position: absolute;
+    right: -5px;
+    top: -5px;
 }
 .mx_RoomSettings_leaveButton,
-.mx_RoomSettings_integrationsButton,
 .mx_RoomSettings_integrationsButton_error {
     float: right;
 }
-.mx_RoomSettings_integrationsButton_error {
-    pointer: not-allowed;
+.mx_RoomSettings_integrationsButton_error .mx_RoomSettings_integrationsButton_errorPopup {
+    display: none;
+}
+.mx_RoomSettings_integrationsButton_error:hover .mx_RoomSettings_integrationsButton_errorPopup {
+    display: inline;
 }
 .mx_RoomSettings_integrationsButton_errorPopup {
     position: absolute;
     top: 110%;
-    left: -26%;
-    width: 150%;
+    left: -125%;
+    width: 348%;
     padding: 2%;
     font-size: 10pt;
     line-height: 1.5em;
     border-radius: 5px;
     background-color: $accent-color;
     color: $accent-fg-color;
+    text-align: center;
 }
 .mx_RoomSettings_unbanButton {
     display: inline;
