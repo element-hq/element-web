@@ -994,8 +994,8 @@ export default React.createClass({
 
         return <div className={membershipContainerClasses}>
             <div className="mx_GroupView_membershipSubSection">
-                { /* Empty div for flex alignment */ }
-                <div />
+                { /* The <div /> is for flex alignment */ }
+                { this.state.membershipBusy ? <Spinner /> : <div /> }
                 <div className="mx_GroupView_membership_buttonContainer">
                     <AccessibleButton
                         className={membershipButtonClasses}
