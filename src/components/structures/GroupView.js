@@ -467,6 +467,10 @@ export default React.createClass({
     _onGroupMyMembership: function(group) {
         if (group.groupId !== this.props.groupId) return;
 
+        if (group.myMembership === 'leave') {
+            // Leave settings - the user might have clicked the "Leave" button
+            this._onCancelClick();
+        }
         this.setState({membershipBusy: false});
     },
 
