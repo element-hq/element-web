@@ -242,5 +242,7 @@
     "(unknown failure: %(reason)s)": "(ukendt fejl: %(reason)s)",
     "%(senderName)s ended the call.": "%(senderName)s afsluttede opkaldet.",
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s startede et %(callType)s opkald.",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet."
+    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
+    "Submit debug logs": "Indsend debug-logfiler",
+    "Online": "Online"
 }
