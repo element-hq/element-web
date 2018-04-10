@@ -1,3 +1,12 @@
+Changes in [0.12.0-rc.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.7) (2018-04-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.6...v0.12.0-rc.7)
+
+ * Reword group setting delay
+  [\#1816](https://github.com/matrix-org/matrix-react-sdk/pull/1816)
+ * Improve group joining/leaving feedback
+  [\#1831](https://github.com/matrix-org/matrix-react-sdk/pull/1831)
+ 
 Changes in [0.12.0-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.6) (2018-04-09)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.0-rc.5...v0.12.0-rc.6)
