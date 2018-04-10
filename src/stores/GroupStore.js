@@ -252,12 +252,36 @@ export default class GroupStore extends EventEmitter {
 
     acceptGroupInvite() {
         return MatrixClientPeg.get().acceptGroupInvite(this.groupId)
+            // The user should now be able to access (personal) group settings
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.Summary))
             // The user might be able to see more rooms now
             .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupRooms))
             // The user should now appear as a member
             .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupMembers))
             // The user should now not appear as an invited member
             .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupInvitedMembers));
+    }
+
+    joinGroup() {
+        return MatrixClientPeg.get().joinGroup(this.groupId)
+            // The user should now be able to access (personal) group settings
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.Summary))
+            // The user might be able to see more rooms now
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupRooms))
+            // The user should now appear as a member
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupMembers))
+            // The user should now not appear as an invited member
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupInvitedMembers));
+    }
+
+    leaveGroup() {
+        return MatrixClientPeg.get().leaveGroup(this.groupId)
+            // The user should now not be able to access group settings
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.Summary))
+            // The user might only be able to see a subset of rooms now
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupRooms))
+            // The user should now not appear as a member
+            .then(this._fetchResource.bind(this, GroupStore.STATE_KEY.GroupMembers));
     }
 
     addRoomToGroupSummary(roomId, categoryId) {
