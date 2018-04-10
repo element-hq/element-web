@@ -468,7 +468,7 @@ export default React.createClass({
 
         if (group.myMembership === 'leave') {
             // Leave settings - the user might have clicked the "Leave" button
-            this._onCancelClick();
+            this._closeSettings();
         }
         this.setState({membershipBusy: false});
     },
@@ -566,6 +566,10 @@ export default React.createClass({
     },
 
     _onCancelClick: function() {
+        this._closeSettings();
+    },
+
+    _closeSettings() {
         this.setState({
             editing: false,
             profileForm: null,
