@@ -50,6 +50,6 @@
     "All messages (noisy)": "Alle meddelelser (højlydt)",
     "View Community": "Vis community",
     "%(count)s Members|other": "%(count)s medlemmer",
-    "%(count)s Members|one": "%(count)s medlem"
+    "%(count)s Members|one": "%(count)s medlem",
     "Dev chat for the Dendrite dev team": "Udviklerchat til Dendrite udviklerholdet"
 }
