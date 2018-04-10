@@ -678,7 +678,7 @@ export default React.createClass({
 
     _onRejectInviteClick: function() {
         this.setState({membershipBusy: true});
-        this._matrixClient.leaveGroup(this.props.groupId).then(() => {
+        this._groupStore.leaveGroup().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -692,7 +692,8 @@ export default React.createClass({
 
     _onJoinClick: function() {
         this.setState({membershipBusy: true});
-        this._matrixClient.joinGroup(this.props.groupId).then(() => {
+
+        this._groupStore.joinGroup().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -715,7 +716,7 @@ export default React.createClass({
                 if (!confirmed) return;
 
                 this.setState({membershipBusy: true});
-                this._matrixClient.leaveGroup(this.props.groupId).then(() => {
+                this._groupStore.leaveGroup().then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
                 }).catch((e) => {
                     this.setState({membershipBusy: false});
