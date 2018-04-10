@@ -234,6 +234,10 @@ limitations under the License.
     display: flex;
 }
 
+.mx_GroupView_membershipSubSection .mx_Spinner {
+    justify-content: flex-end;
+}
+
 .mx_GroupView_membershipSection_description {
     /* To match textButton */
     line-height: 34px;
