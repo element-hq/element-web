@@ -673,7 +673,8 @@ export default React.createClass({
     _onAcceptInviteClick: async function() {
         this.setState({membershipBusy: true});
 
-        // Wait 500ms to prevent flashing
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
         await Promise.delay(500);
 
         this._groupStore.acceptGroupInvite().then(() => {
@@ -691,7 +692,8 @@ export default React.createClass({
     _onRejectInviteClick: async function() {
         this.setState({membershipBusy: true});
 
-        // Wait 500ms to prevent flashing
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
         await Promise.delay(500);
 
         this._groupStore.leaveGroup().then(() => {
@@ -709,7 +711,8 @@ export default React.createClass({
     _onJoinClick: async function() {
         this.setState({membershipBusy: true});
 
-        // Wait 500ms to prevent flashing
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
         await Promise.delay(500);
 
         this._groupStore.joinGroup().then(() => {
@@ -736,7 +739,8 @@ export default React.createClass({
 
                 this.setState({membershipBusy: true});
 
-                // Wait 500ms to prevent flashing
+                // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+                // spinner disappearing after we have fetched new group data.
                 await Promise.delay(500);
 
                 this._groupStore.leaveGroup().then(() => {
