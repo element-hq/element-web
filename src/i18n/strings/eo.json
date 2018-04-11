@@ -223,7 +223,15 @@
     "Add rooms to this community": "Aldoni ĉambrojn al ĉi tiu komunumo",
     "Online": "Enreta",
     "Reply": "Respondi",
-    "%(count)s Members|other": "%(count)s Membroj",
-    "%(count)s Members|one": "%(count)s Membro",
-    "View Community": "Vidi Komunumon"
+    "%(count)s Members|other": "%(count)s membroj",
+    "%(count)s Members|one": "%(count)s membro",
+    "View Community": "Vidi Komunumon",
+    "Preparing to send logs": "Pretiganta sendon de protokolo",
+    "Logs sent": "Protokolo sendiĝis",
+    "Failed to send logs: ": "Malsukcesis sendi protokolon: ",
+    "Submit debug logs": "Sendi sencimigan protokolon",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Sencimigaj protokoloj enhavas informojn pri uzo de aplikaĵo, inkluzive vian salutnomon, la identigilojn aŭ nomojn de la ĉambroj aŭ grupoj kiujn vi vizitis, kaj la salutnomojn de aliaj uzantoj. Ili ne enhavas mesaĝojn.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Klaku ĉi tie</a> por krei raporton ĉe GitHub.",
+    "GitHub issue link:": "Ligilo al raporto ĉe GitHub:",
+    "Notes:": "Rimarkoj:"
 }
