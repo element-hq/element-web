@@ -1,12 +1,15 @@
-const expect = require('expect');
-const React = require('react');
-const ReactDOM = require("react-dom");
-const ReactTestUtils = require('react-addons-test-utils');
-const sdk = require('matrix-react-sdk');
-const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
+import expect from 'expect';
+import React from 'react';
+import ReactTestUtils from 'react-addons-test-utils';
+import sdk from 'matrix-react-sdk';
 import * as languageHandler from '../../../../src/languageHandler';
+import * as testUtils from '../../../test-utils';
 
-const testUtils = require('../../../test-utils');
+// Give MELS a matrixClient in its child context
+const MemberEventListSummary = testUtils.wrapInMatrixClientContext(
+    sdk.getComponent('views.elements.MemberEventListSummary'),
+);
+
 describe('MemberEventListSummary', function() {
     let sandbox;
 
@@ -113,7 +116,6 @@ describe('MemberEventListSummary', function() {
         renderer.render(<MemberEventListSummary {...props} />);
         const result = renderer.getRenderOutput();
 
-        expect(result.type).toBe('div');
         expect(result.props.children).toEqual([
           <div className="event_tile" key="event0">Expanded membership</div>,
         ]);
@@ -136,7 +138,6 @@ describe('MemberEventListSummary', function() {
         renderer.render(<MemberEventListSummary {...props} />);
         const result = renderer.getRenderOutput();
 
-        expect(result.type).toBe('div');
         expect(result.props.children).toEqual([
           <div className="event_tile" key="event0">Expanded membership</div>,
           <div className="event_tile" key="event1">Expanded membership</div>,

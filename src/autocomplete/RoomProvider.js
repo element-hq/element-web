@@ -25,6 +25,7 @@ import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
+import {makeRoomPermalink} from "../matrix-to";
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
 
@@ -78,7 +79,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 return {
                     completion: displayAlias,
                     suffix: ' ',
-                    href: 'https://matrix.to/#/' + displayAlias,
+                    href: makeRoomPermalink(displayAlias),
                     component: (
                         <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
                     ),

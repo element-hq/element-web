@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import sdk from '../../../index';
@@ -30,14 +31,14 @@ module.exports = React.createClass({
 
     propTypes: {
         // maxHeight style attribute for the video element
-        maxHeight: React.PropTypes.number,
+        maxHeight: PropTypes.number,
 
         // a callback which is called when the user clicks on the video div
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
 
         // a callback which is called when the video element is resized due to
         // a change in video metadata
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
     },
 
     componentDidMount: function() {

@@ -22,28 +22,30 @@ import MatrixClientPeg from './MatrixClientPeg';
 import GroupStoreCache from './stores/GroupStoreCache';
 
 export function showGroupInviteDialog(groupId) {
-    const description = <div>
-        <div>{ _t("Who would you like to add to this community?") }</div>
-        <div className="warning">
-            { _t(
-                "Warning: any person you add to a community will be publicly "+
-                "visible to anyone who knows the community ID",
-            ) }
-        </div>
-    </div>;
+    return new Promise((resolve, reject) => {
+        const description = <div>
+            <div>{ _t("Who would you like to add to this community?") }</div>
+            <div className="warning">
+                { _t(
+                    "Warning: any person you add to a community will be publicly "+
+                    "visible to anyone who knows the community ID",
+                ) }
+            </div>
+        </div>;
 
-    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
-    Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
-        title: _t("Invite new community members"),
-        description: description,
-        placeholder: _t("Name or matrix ID"),
-        button: _t("Invite to Community"),
-        validAddressTypes: ['mx-user-id'],
-        onFinished: (success, addrs) => {
-            if (!success) return;
+        const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+        Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
+            title: _t("Invite new community members"),
+            description: description,
+            placeholder: _t("Name or matrix ID"),
+            button: _t("Invite to Community"),
+            validAddressTypes: ['mx-user-id'],
+            onFinished: (success, addrs) => {
+                if (!success) return;
 
-            _onGroupInviteFinished(groupId, addrs);
-        },
+                _onGroupInviteFinished(groupId, addrs).then(resolve, reject);
+            },
+        });
     });
 }
 
@@ -87,7 +89,7 @@ function _onGroupInviteFinished(groupId, addrs) {
 
     const addrTexts = addrs.map((addr) => addr.address);
 
-    multiInviter.invite(addrTexts).then((completionStates) => {
+    return multiInviter.invite(addrTexts).then((completionStates) => {
         // Show user any errors
         const errorList = [];
         for (const addr of Object.keys(completionStates)) {

@@ -19,6 +19,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 const sdk = require('../../index');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const PlatformPeg = require("../../PlatformPeg");
@@ -29,7 +30,6 @@ import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
@@ -78,6 +78,7 @@ const SIMPLE_SETTINGS = [
     { id: "Pill.shouldHidePillAvatar" },
     { id: "TextualBody.disableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
+    { id: "TagPanel.disableTagPanel" },
 ];
 
 // These settings must be defined in SettingsStore
@@ -125,8 +126,8 @@ const THEMES = [
 
 const IgnoredUser = React.createClass({
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        onUnignored: React.PropTypes.func.isRequired,
+        userId: PropTypes.string.isRequired,
+        onUnignored: PropTypes.func.isRequired,
     },
 
     _onUnignoreClick: function() {
@@ -155,16 +156,16 @@ module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
-        onClose: React.PropTypes.func,
+        onClose: PropTypes.func,
         // The brand string given when creating email pushers
-        brand: React.PropTypes.string,
+        brand: PropTypes.string,
 
         // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: React.PropTypes.string,
+        referralBaseUrl: PropTypes.string,
 
         // Team token for the referral link. If falsy, the referral section will
         // not appear
-        teamToken: React.PropTypes.string,
+        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -375,7 +376,7 @@ module.exports = React.createClass({
              { _t("For security, logging out will delete any end-to-end " +
                   "encryption keys from this browser. If you want to be able " +
                   "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.") }.
+                  "please export your room keys for safe-keeping.") }
                 </div>,
             button: _t("Sign out"),
             extraButtons: [
@@ -793,11 +794,18 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Bug Report") }</h3>
+                <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Found a bug?") }</p>
+                    <p>{
+                        _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contian messages.",
+                        )
+                    }</p>
                     <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{ _t('Report it') }
+                        onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
             </div>
@@ -811,6 +819,12 @@ module.exports = React.createClass({
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
                 { _t('Riot collects anonymous analytics to allow us to improve the application.') }
+                <br />
+                { _t('Privacy is important to us, so we don\'t collect any personal'
+                    + ' or identifiable data for our analytics.') }
+                <div className="mx_UserSettings_advanced_spoiler" onClick={Analytics.showDetailsModal}>
+                    { _t('Learn more about how we use analytics.') }
+                </div>
                 { ANALYTICS_SETTINGS.map( this._renderDeviceSetting ) }
             </div>
         </div>;
@@ -1103,6 +1117,7 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const Notifications = sdk.getComponent("settings.Notifications");
         const EditableText = sdk.getComponent('elements.EditableText');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
@@ -1198,8 +1213,9 @@ module.exports = React.createClass({
                     onCancelClick={this.props.onClose}
                 />
 
-                <GeminiScrollbar className="mx_UserSettings_body"
-                                 autoshow={true}>
+                <GeminiScrollbarWrapper
+                    className="mx_UserSettings_body"
+                    autoshow={true}>
 
                 <h3>{ _t("Profile") }</h3>
 
@@ -1312,7 +1328,7 @@ module.exports = React.createClass({
 
                 { this._renderDeactivateAccount() }
 
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

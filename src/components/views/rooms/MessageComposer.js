@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import Autocomplete from './Autocomplete';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-
+import Stickerpicker from './Stickerpicker';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -31,8 +32,6 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
-        this.onShowAppsClick = this.onShowAppsClick.bind(this);
-        this.onHideAppsClick = this.onHideAppsClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
@@ -42,6 +41,7 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -53,6 +53,7 @@ export default class MessageComposer extends React.Component {
                 wordCount: 0,
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
+            isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
         };
     }
 
@@ -62,11 +63,15 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
+        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
     }
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
+        }
+        if (this._roomStoreToken) {
+            this._roomStoreToken.remove();
         }
     }
 
@@ -74,6 +79,12 @@ export default class MessageComposer extends React.Component {
         if (event.getType() !== 'm.room.encryption') return;
         if (event.getRoomId() !== this.props.room.roomId) return;
         this.forceUpdate();
+    }
+
+    _onRoomViewStoreUpdate() {
+        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        if (this.state.isQuoting === isQuoting) return;
+        this.setState({ isQuoting });
     }
 
     onUploadClick(ev) {
@@ -189,20 +200,6 @@ export default class MessageComposer extends React.Component {
         // this._startCallApp(true);
     }
 
-    onShowAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: true,
-        });
-    }
-
-    onHideAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: false,
-        });
-    }
-
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
             autocompleteQuery: content,
@@ -268,7 +265,12 @@ export default class MessageComposer extends React.Component {
                 alt={e2eTitle} title={e2eTitle}
             />,
         );
-        let callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
+
+        let callButton;
+        let videoCallButton;
+        let hangupButton;
+
+        // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
@@ -282,19 +284,6 @@ export default class MessageComposer extends React.Component {
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
                     <TintableSvg src="img/icons-video.svg" width="35" height="35" />
-                </div>;
-        }
-
-        // Apps
-        if (this.props.showApps) {
-            hideAppsButton =
-                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
-                </div>;
-        } else {
-            showAppsButton =
-                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
                 </div>;
         }
 
@@ -325,8 +314,25 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             );
 
-            const placeholderText = roomIsEncrypted ?
-                _t('Send an encrypted message') + '…' : _t('Send a message (unencrypted)') + '…';
+            let placeholderText;
+            if (this.state.isQuoting) {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted reply…');
+                } else {
+                    placeholderText = _t('Send a reply (unencrypted)…');
+                }
+            } else {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted message…');
+                } else {
+                    placeholderText = _t('Send a message (unencrypted)…');
+                }
+            }
+
+            let stickerpickerButton;
+            if (SettingsStore.isFeatureEnabled('feature_sticker_messages')) {
+                stickerpickerButton = <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />;
+            }
 
             controls.push(
                 <MessageComposerInput
@@ -339,12 +345,11 @@ export default class MessageComposer extends React.Component {
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
+                stickerpickerButton,
                 uploadButton,
                 hangupButton,
                 callButton,
                 videoCallButton,
-                showAppsButton,
-                hideAppsButton,
             );
         } else {
             controls.push(
@@ -399,17 +404,17 @@ export default class MessageComposer extends React.Component {
 MessageComposer.propTypes = {
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // string representing the current voip call state
-    callState: React.PropTypes.string,
+    callState: PropTypes.string,
 
     // callback when a file to upload is chosen
-    uploadFile: React.PropTypes.func.isRequired,
+    uploadFile: PropTypes.func.isRequired,
 
     // string representing the current room app drawer state
-    showApps: React.PropTypes.bool,
+    showApps: PropTypes.bool,
 };

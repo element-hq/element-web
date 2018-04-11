@@ -18,16 +18,17 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 const Tinter = require("../../../Tinter");
 
 var TintableSvg = React.createClass({
     displayName: 'TintableSvg',
 
     propTypes: {
-        src: React.PropTypes.string.isRequired,
-        width: React.PropTypes.string.isRequired,
-        height: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string,
+        src: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired,
+        height: PropTypes.string.isRequired,
+        className: PropTypes.string,
     },
 
     statics: {

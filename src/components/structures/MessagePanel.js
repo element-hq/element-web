@@ -16,14 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
+import {wantsDateSeparator} from '../../DateUtils';
 import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
-
-const MILLIS_IN_DAY = 86400000;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -32,63 +32,63 @@ module.exports = React.createClass({
 
     propTypes: {
         // true to give the component a 'display: none' style.
-        hidden: React.PropTypes.bool,
+        hidden: PropTypes.bool,
 
         // true to show a spinner at the top of the timeline to indicate
         // back-pagination in progress
-        backPaginating: React.PropTypes.bool,
+        backPaginating: PropTypes.bool,
 
         // true to show a spinner at the end of the timeline to indicate
         // forward-pagination in progress
-        forwardPaginating: React.PropTypes.bool,
+        forwardPaginating: PropTypes.bool,
 
         // the list of MatrixEvents to display
-        events: React.PropTypes.array.isRequired,
+        events: PropTypes.array.isRequired,
 
         // ID of an event to highlight. If undefined, no event will be highlighted.
-        highlightedEventId: React.PropTypes.string,
+        highlightedEventId: PropTypes.string,
 
         // Should we show URL Previews
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         // event after which we should show a read marker
-        readMarkerEventId: React.PropTypes.string,
+        readMarkerEventId: PropTypes.string,
 
         // whether the read marker should be visible
-        readMarkerVisible: React.PropTypes.bool,
+        readMarkerVisible: PropTypes.bool,
 
         // the userid of our user. This is used to suppress the read marker
         // for pending messages.
-        ourUserId: React.PropTypes.string,
+        ourUserId: PropTypes.string,
 
         // true to suppress the date at the start of the timeline
-        suppressFirstDateSeparator: React.PropTypes.bool,
+        suppressFirstDateSeparator: PropTypes.bool,
 
         // whether to show read receipts
-        showReadReceipts: React.PropTypes.bool,
+        showReadReceipts: PropTypes.bool,
 
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
         // for more details.
-        stickyBottom: React.PropTypes.bool,
+        stickyBottom: PropTypes.bool,
 
         // callback which is called when the panel is scrolled.
-        onScroll: React.PropTypes.func,
+        onScroll: PropTypes.func,
 
         // callback which is called when more content is needed.
-        onFillRequest: React.PropTypes.func,
+        onFillRequest: PropTypes.func,
 
         // className for the panel
-        className: React.PropTypes.string.isRequired,
+        className: PropTypes.string.isRequired,
 
         // shape parameter to be passed to EventTiles
-        tileShape: React.PropTypes.string,
+        tileShape: PropTypes.string,
 
         // show twelve hour timestamps
-        isTwelveHour: React.PropTypes.bool,
+        isTwelveHour: PropTypes.bool,
 
         // show timestamps always
-        alwaysShowTimestamps: React.PropTypes.bool,
+        alwaysShowTimestamps: PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -325,7 +325,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
+                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} /></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -447,10 +447,18 @@ module.exports = React.createClass({
         // is this a continuation of the previous message?
         let continuation = false;
 
+        // Some events should appear as continuations from previous events of
+        // different types.
+        const continuedTypes = ['m.sticker', 'm.room.message'];
+        const eventTypeContinues =
+            prevEvent !== null &&
+            continuedTypes.includes(mxEv.getType()) &&
+            continuedTypes.includes(prevEvent.getType());
+
         if (prevEvent !== null
                 && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
-                && mxEv.getType() == prevEvent.getType()) {
+                && (mxEv.getType() == prevEvent.getType() || eventTypeContinues)) {
             continuation = true;
         }
 
@@ -479,7 +487,7 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
+            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
             continuation = false;
         }
@@ -522,17 +530,7 @@ module.exports = React.createClass({
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
-        const prevEventDate = prevEvent.getDate();
-        if (!nextEventDate || !prevEventDate) {
-            return false;
-        }
-        // Return early for events that are > 24h apart
-        if (Math.abs(prevEvent.getTs() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
-            return true;
-        }
-
-        // Compare weekdays
-        return prevEventDate.getDay() !== nextEventDate.getDay();
+        return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
     },
 
     // get a list of read receipts that should be shown next to this event

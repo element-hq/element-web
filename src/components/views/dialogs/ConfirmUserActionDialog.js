@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import classnames from 'classnames';
 import { GroupMemberType } from '../../../groups';
 
 /*
@@ -33,20 +33,20 @@ export default React.createClass({
     displayName: 'ConfirmUserActionDialog',
     propTypes: {
         // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
-        member: React.PropTypes.object,
+        member: PropTypes.object,
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
         // needed if a group member is specified
-        matrixClient: React.PropTypes.instanceOf(MatrixClient),
-        action: React.PropTypes.string.isRequired, // eg. 'Ban'
-        title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+        action: PropTypes.string.isRequired, // eg. 'Ban'
+        title: PropTypes.string.isRequired, // eg. 'Ban this user?'
 
         // Whether to display a text field for a reason
         // If true, the second argument to onFinished will
         // be the string entered.
-        askReason: React.PropTypes.bool,
-        danger: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        askReason: PropTypes.bool,
+        danger: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     defaultProps: {
@@ -76,13 +76,11 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
-        const confirmButtonClass = classnames({
-            'mx_Dialog_primary': true,
-            'danger': this.props.danger,
-        });
+        const confirmButtonClass = this.props.danger ? 'danger' : '';
 
         let reasonBox;
         if (this.props.askReason) {
@@ -116,10 +114,10 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
+                <div id="mx_Dialog_content" className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
                         { avatar }
                     </div>
@@ -127,17 +125,11 @@ export default React.createClass({
                     <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
                 </div>
                 { reasonBox }
-                <div className="mx_Dialog_buttons">
-                    <button className={confirmButtonClass}
-                        onClick={this.onOk} autoFocus={!this.props.askReason}
-                    >
-                        { this.props.action }
-                    </button>
-
-                    <button onClick={this.onCancel}>
-                        { _t("Cancel") }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={this.props.action}
+                    onPrimaryButtonClick={this.onOk}
+                    primaryButtonClass={confirmButtonClass}
+                    focus={!this.props.askReason}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },

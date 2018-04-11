@@ -17,12 +17,13 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 module.exports = React.createClass({
     displayName: 'ProgressBar',
     propTypes: {
-        value: React.PropTypes.number,
-        max: React.PropTypes.number,
+        value: PropTypes.number,
+        max: PropTypes.number,
     },
 
     render: function() {

@@ -28,6 +28,7 @@ import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';
 
 import type {Room, RoomMember} from 'matrix-js-sdk';
+import {makeUserPermalink} from "../matrix-to";
 
 const USER_REGEX = /@\S*/g;
 
@@ -43,6 +44,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
             shouldMatchPrefix: true,
+            shouldMatchWordsOnly: false
         });
 
         this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
@@ -71,6 +73,7 @@ export default class UserProvider extends AutocompleteProvider {
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
 
+        // TODO: lazyload if we have no ev.sender room member?
         this.onUserSpoke(ev.sender);
     }
 
@@ -106,7 +109,7 @@ export default class UserProvider extends AutocompleteProvider {
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName.replace(' (IRC)', ''),
                     suffix: range.start === 0 ? ': ' : ' ',
-                    href: 'https://matrix.to/#/' + user.userId,
+                    href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24} />}
@@ -146,6 +149,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     onUserSpoke(user: RoomMember) {
         if (this.users === null) return;
+        if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
         // Move the user that spoke to the front of the array
@@ -157,7 +161,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
+        return <div className="mx_Autocomplete_Completion_container_pill">
             { completions }
         </div>;
     }

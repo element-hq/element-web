@@ -105,6 +105,11 @@ const COMMANDS = [
         args: '<user-id>',
         description: _td('Stops ignoring a user, showing their messages going forward'),
     },
+    {
+        command: '/devtools',
+        args: '',
+        description: _td('Opens the Developer Tools dialog'),
+    },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 

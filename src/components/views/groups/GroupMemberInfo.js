@@ -25,7 +25,6 @@ import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import AccessibleButton from '../elements/AccessibleButton';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 
 module.exports = React.createClass({
     displayName: 'GroupMemberInfo',
@@ -132,7 +131,9 @@ module.exports = React.createClass({
     render: function() {
         if (this.state.removingUser) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
+            return <div className="mx_MemberInfo">
+                <Spinner />
+            </div>;
         }
 
         let adminTools;
@@ -178,9 +179,10 @@ module.exports = React.createClass({
         );
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
+        const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbar autoshow={true}>
+                <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
                         <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
@@ -197,7 +199,7 @@ module.exports = React.createClass({
                     </div>
 
                     { adminTools }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

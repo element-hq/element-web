@@ -15,6 +15,9 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import { KeyCode } from '../../../Keyboard';
 
 /**
  * AccessibleButton is a generic wrapper for any element that should be treated
@@ -27,8 +30,34 @@ import React from 'react';
 export default function AccessibleButton(props) {
     const {element, onClick, children, ...restProps} = props;
     restProps.onClick = onClick;
+    // We need to consume enter onKeyDown and space onKeyUp
+    // otherwise we are risking also activating other keyboard focusable elements
+    // that might receive focus as a result of the AccessibleButtonClick action
+    // It's because we are using html buttons at a few places e.g. inside dialogs
+    // And divs which we report as role button to assistive technologies.
+    // Browsers handle space and enter keypresses differently and we are only adjusting to the
+    // inconsistencies here
+    restProps.onKeyDown = function(e) {
+        if (e.keyCode === KeyCode.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+            return onClick(e);
+        }
+        if (e.keyCode === KeyCode.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
     restProps.onKeyUp = function(e) {
-        if (e.keyCode == 13 || e.keyCode == 32) return onClick(e);
+        if (e.keyCode === KeyCode.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            return onClick(e);
+        }
+        if (e.keyCode === KeyCode.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
     };
     restProps.tabIndex = restProps.tabIndex || "0";
     restProps.role = "button";
@@ -44,9 +73,9 @@ export default function AccessibleButton(props) {
  *           implemented exactly like a normal onClick handler.
  */
 AccessibleButton.propTypes = {
-    children: React.PropTypes.node,
-    element: React.PropTypes.string,
-    onClick: React.PropTypes.func.isRequired,
+    children: PropTypes.node,
+    element: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
 };
 
 AccessibleButton.defaultProps = {

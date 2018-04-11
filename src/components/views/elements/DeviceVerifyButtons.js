@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -24,8 +25,8 @@ export default React.createClass({
     displayName: 'DeviceVerifyButtons',
 
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        device: React.PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        device: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {

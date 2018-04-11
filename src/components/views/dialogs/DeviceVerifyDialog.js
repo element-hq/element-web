@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
@@ -71,7 +72,7 @@ export default function DeviceVerifyDialog(props) {
 }
 
 DeviceVerifyDialog.propTypes = {
-    userId: React.PropTypes.string.isRequired,
-    device: React.PropTypes.object.isRequired,
-    onFinished: React.PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

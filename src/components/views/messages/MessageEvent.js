@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 
 module.exports = React.createClass({
@@ -24,22 +25,22 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* a list of words to highlight */
-        highlights: React.PropTypes.array,
+        highlights: PropTypes.array,
 
         /* link URL for the highlights */
-        highlightLink: React.PropTypes.string,
+        highlightLink: PropTypes.string,
 
         /* should show URL previews for this event */
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         /* callback called when dynamic content in events are loaded */
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
 
         /* the shsape of the tile, used */
-        tileShape: React.PropTypes.string,
+        tileShape: PropTypes.string,
     },
 
     getEventTileOps: function() {
@@ -64,15 +65,19 @@ module.exports = React.createClass({
         let BodyType = UnknownBody;
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
+        } else if (this.props.mxEvent.getType() === 'm.sticker') {
+            BodyType = sdk.getComponent('messages.MStickerBody');
         } else if (content.url) {
             // Fallback to MFileBody if there's a content URL
             BodyType = bodyTypes['m.file'];
         }
 
-        return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
-                    highlightLink={this.props.highlightLink}
-                    showUrlPreview={this.props.showUrlPreview}
-                    tileShape={this.props.tileShape}
-                    onWidgetLoad={this.props.onWidgetLoad} />;
+        return <BodyType
+            ref="body" mxEvent={this.props.mxEvent}
+            highlights={this.props.highlights}
+            highlightLink={this.props.highlightLink}
+            showUrlPreview={this.props.showUrlPreview}
+            tileShape={this.props.tileShape}
+            onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });

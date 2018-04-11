@@ -20,6 +20,7 @@ limitations under the License.
 const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -29,11 +30,21 @@ module.exports = {
     ContextualMenuContainerId: "mx_ContextualMenu_Container",
 
     propTypes: {
-        menuWidth: React.PropTypes.number,
-        menuHeight: React.PropTypes.number,
-        chevronOffset: React.PropTypes.number,
-        menuColour: React.PropTypes.string,
-        chevronFace: React.PropTypes.string, // top, bottom, left, right
+        top: PropTypes.number,
+        bottom: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number,
+        menuWidth: PropTypes.number,
+        menuHeight: PropTypes.number,
+        chevronOffset: PropTypes.number,
+        menuColour: PropTypes.string,
+        chevronFace: PropTypes.string, // top, bottom, left, right
+        // Function to be called on menu close
+        onFinished: PropTypes.func,
+        menuPaddingTop: PropTypes.number,
+        menuPaddingRight: PropTypes.number,
+        menuPaddingBottom: PropTypes.number,
+        menuPaddingLeft: PropTypes.number,
     },
 
     getOrCreateContainer: function() {
@@ -51,12 +62,17 @@ module.exports = {
     createMenu: function(Element, props) {
         const self = this;
 
-        const closeMenu = function() {
+        const closeMenu = function(...args) {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) {
-                props.onFinished.apply(null, arguments);
+                props.onFinished.apply(null, args);
             }
+        };
+
+        // Close the menu on window resize
+        const windowResize = function() {
+            closeMenu();
         };
 
         const position = {};
@@ -129,13 +145,26 @@ module.exports = {
             menuStyle["backgroundColor"] = props.menuColour;
         }
 
+        if (!isNaN(Number(props.menuPaddingTop))) {
+            menuStyle["paddingTop"] = props.menuPaddingTop;
+        }
+        if (!isNaN(Number(props.menuPaddingLeft))) {
+            menuStyle["paddingLeft"] = props.menuPaddingLeft;
+        }
+        if (!isNaN(Number(props.menuPaddingBottom))) {
+            menuStyle["paddingBottom"] = props.menuPaddingBottom;
+        }
+        if (!isNaN(Number(props.menuPaddingRight))) {
+            menuStyle["paddingRight"] = props.menuPaddingRight;
+        }
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         const menu = (
             <div className={className} style={position}>
                 <div className={menuClasses} style={menuStyle}>
                     { chevron }
-                    <Element {...props} onFinished={closeMenu} />
+                    <Element {...props} onFinished={closeMenu} onResize={windowResize} />
                 </div>
                 <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
                 <style>{ chevronCSS }</style>

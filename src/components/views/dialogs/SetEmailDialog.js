@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
@@ -30,7 +31,7 @@ import Modal from '../../../Modal';
 export default React.createClass({
     displayName: 'SetEmailDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -38,9 +39,6 @@ export default React.createClass({
             emailAddress: null,
             emailBusy: false,
         };
-    },
-
-    componentDidMount: function() {
     },
 
     onEmailAddressChanged: function(value) {
@@ -130,6 +128,7 @@ export default React.createClass({
 
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             className="mx_SetEmailDialog_email_input"
+            autoFocus="true"
             placeholder={_t("Email address")}
             placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
             blurToCancel={false}
@@ -139,9 +138,10 @@ export default React.createClass({
             <BaseDialog className="mx_SetEmailDialog"
                 onFinished={this.onCancelled}
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content">
-                    <p>
+                    <p id='mx_Dialog_content'>
                         { _t('This will allow you to reset your password and receive notifications.') }
                     </p>
                     { emailInput }

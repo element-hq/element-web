@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
@@ -50,6 +51,10 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
+import QuotePreview from "./QuotePreview";
+import RoomViewStore from '../../../stores/RoomViewStore';
+
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -86,15 +91,15 @@ export default class MessageComposerInput extends React.Component {
     static propTypes = {
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
         // called with current plaintext content (as a string) whenever it changes
-        onContentChanged: React.PropTypes.func,
+        onContentChanged: PropTypes.func,
 
-        onInputStateChanged: React.PropTypes.func,
+        onInputStateChanged: PropTypes.func,
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
@@ -268,6 +273,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
+            case 'quote_event':
             case 'focus_composer':
                 editor.focus();
                 break;
@@ -281,12 +287,13 @@ export default class MessageComposerInput extends React.Component {
                 this.setDisplayedCompletion({
                     completion,
                     selection,
-                    href: `https://matrix.to/#/${payload.user_id}`,
+                    href: makeUserPermalink(payload.user_id),
                     suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
                 });
             }
                 break;
-            case 'quote': {
+
+            case 'quote': { // old quoting, whilst rich quoting is in labs
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
                 /// https://github.com/vector-im/riot-web/issues/4756.
@@ -512,7 +519,8 @@ export default class MessageComposerInput extends React.Component {
             // composer. For some reason the editor won't scroll automatically if we paste
             // blocks of text in or insert newlines.
             if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
+                let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
+                editorRoot.scrollTop = editorRoot.scrollHeight;
             }
         });
     }
@@ -652,7 +660,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         return false;
-    }
+    };
 
     onTextPasted(text: string, html?: string) {
         const currentSelection = this.state.editorState.getSelection();
@@ -715,6 +723,7 @@ export default class MessageComposerInput extends React.Component {
         const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
+                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });
@@ -742,9 +751,17 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
+        const quotingEv = RoomViewStore.getQuotingEvent();
+
         if (this.state.isRichtextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
+
+            // If we are quoting we need HTML Content
+            if (quotingEv) {
+                shouldSendHTML = true;
+            }
+
             const blocks = contentState.getBlocksAsArray();
             if (blocks.some((block) => block.getType() !== 'unstyled')) {
                 shouldSendHTML = true;
@@ -802,7 +819,8 @@ export default class MessageComposerInput extends React.Component {
             }).join('\n');
 
             const md = new Markdown(pt);
-            if (md.isPlainText()) {
+            // if contains no HTML and we're not quoting (needing HTML)
+            if (md.isPlainText() && !quotingEv) {
                 contentText = md.toPlaintext();
             } else {
                 contentHTML = md.toHTML();
@@ -823,6 +841,24 @@ export default class MessageComposerInput extends React.Component {
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
+        }
+
+        if (quotingEv) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(quotingEv.getRoomId());
+            const sender = room.currentState.getMember(quotingEv.getSender());
+
+            const {body/*, formatted_body*/} = quotingEv.getContent();
+
+            const perma = makeEventPermalink(quotingEv.getRoomId(), quotingEv.getId());
+            contentText = `${sender.name}:\n> ${body}\n\n${contentText}`;
+            contentHTML = `<a href="${perma}">Quote<br></a>${contentHTML}`;
+
+            // we have finished quoting, clear the quotingEvent
+            dis.dispatch({
+                action: 'quote_event',
+                event: null,
+            });
         }
 
         let sendMessagePromise;
@@ -1137,6 +1173,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
+                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <QuotePreview /> }
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}
@@ -1177,15 +1214,15 @@ export default class MessageComposerInput extends React.Component {
 MessageComposerInput.propTypes = {
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: React.PropTypes.func,
+    onContentChanged: PropTypes.func,
 
-    onFilesPasted: React.PropTypes.func,
+    onFilesPasted: PropTypes.func,
 
-    onInputStateChanged: React.PropTypes.func,
+    onInputStateChanged: PropTypes.func,
 };

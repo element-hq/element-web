@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
@@ -36,27 +37,28 @@ module.exports = React.createClass({
     displayName: 'Login',
 
     propTypes: {
-        onLoggedIn: React.PropTypes.func.isRequired,
+        onLoggedIn: PropTypes.func.isRequired,
 
-        enableGuest: React.PropTypes.bool,
+        enableGuest: PropTypes.bool,
 
-        customHsUrl: React.PropTypes.string,
-        customIsUrl: React.PropTypes.string,
-        defaultHsUrl: React.PropTypes.string,
-        defaultIsUrl: React.PropTypes.string,
+        customHsUrl: PropTypes.string,
+        customIsUrl: PropTypes.string,
+        defaultHsUrl: PropTypes.string,
+        defaultIsUrl: PropTypes.string,
         // Secondary HS which we try to log into if the user is using
         // the default HS but login fails. Useful for migrating to a
         // different home server without confusing users.
-        fallbackHsUrl: React.PropTypes.string,
+        fallbackHsUrl: PropTypes.string,
 
-        defaultDeviceDisplayName: React.PropTypes.string,
+        defaultDeviceDisplayName: PropTypes.string,
 
         // login shouldn't know or care how registration is done.
-        onRegisterClick: React.PropTypes.func.isRequired,
+        onRegisterClick: PropTypes.func.isRequired,
 
         // login shouldn't care how password recovery is done.
-        onForgotPasswordClick: React.PropTypes.func,
-        onCancelClick: React.PropTypes.func,
+        onForgotPasswordClick: PropTypes.func,
+        onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -217,6 +219,8 @@ module.exports = React.createClass({
         if (config.isUrl !== undefined) {
             newState.enteredIdentityServerUrl = config.isUrl;
         }
+
+        this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
@@ -427,10 +431,10 @@ module.exports = React.createClass({
         // FIXME: remove status.im theme tweaks
         const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
-            header = <h2>{ _t('Sign in') }</h2>;
+            header = <h2>{ _t('Sign in') } { loader }</h2>;
         } else {
             if (!this.state.errorText) {
-                header = <h2>{ _t('Sign in to get started') }</h2>;
+                header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
             }
         }
 

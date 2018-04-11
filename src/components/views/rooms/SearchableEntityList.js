@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 const React = require('react');
+import PropTypes from 'prop-types';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const Modal = require("../../../Modal");
 const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
-const GeminiScrollbar = require('react-gemini-scrollbar');
 
 // A list capable of displaying entities which conform to the SearchableEntity
 // interface which is an object containing getJsx(): Jsx and matches(query: string): boolean
@@ -26,12 +26,12 @@ const SearchableEntityList = React.createClass({
     displayName: 'SearchableEntityList',
 
     propTypes: {
-        emptyQueryShowsAll: React.PropTypes.bool,
-        showInputBox: React.PropTypes.bool,
-        onQueryChanged: React.PropTypes.func, // fn(inputText)
-        onSubmit: React.PropTypes.func, // fn(inputText)
-        entities: React.PropTypes.array,
-        truncateAt: React.PropTypes.number,
+        emptyQueryShowsAll: PropTypes.bool,
+        showInputBox: PropTypes.bool,
+        onQueryChanged: PropTypes.func, // fn(inputText)
+        onSubmit: PropTypes.func, // fn(inputText)
+        entities: PropTypes.array,
+        truncateAt: PropTypes.number,
     },
 
     getDefaultProps: function() {
@@ -163,11 +163,12 @@ const SearchableEntityList = React.createClass({
                     </div>
                 );
             }
+            const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
             list = (
-                <GeminiScrollbar autoshow={true}
+                <GeminiScrollbarWrapper autoshow={true}
                                  className="mx_SearchableEntityList_listWrapper">
                     { list }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             );
         }
 

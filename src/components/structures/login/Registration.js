@@ -19,6 +19,7 @@ import Matrix from 'matrix-js-sdk';
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import ServerConfig from '../../views/login/ServerConfig';
@@ -35,31 +36,32 @@ module.exports = React.createClass({
     displayName: 'Registration',
 
     propTypes: {
-        onLoggedIn: React.PropTypes.func.isRequired,
-        clientSecret: React.PropTypes.string,
-        sessionId: React.PropTypes.string,
-        makeRegistrationUrl: React.PropTypes.func.isRequired,
-        idSid: React.PropTypes.string,
-        customHsUrl: React.PropTypes.string,
-        customIsUrl: React.PropTypes.string,
-        defaultHsUrl: React.PropTypes.string,
-        defaultIsUrl: React.PropTypes.string,
-        brand: React.PropTypes.string,
-        email: React.PropTypes.string,
-        referrer: React.PropTypes.string,
-        teamServerConfig: React.PropTypes.shape({
+        onLoggedIn: PropTypes.func.isRequired,
+        clientSecret: PropTypes.string,
+        sessionId: PropTypes.string,
+        makeRegistrationUrl: PropTypes.func.isRequired,
+        idSid: PropTypes.string,
+        customHsUrl: PropTypes.string,
+        customIsUrl: PropTypes.string,
+        defaultHsUrl: PropTypes.string,
+        defaultIsUrl: PropTypes.string,
+        brand: PropTypes.string,
+        email: PropTypes.string,
+        referrer: PropTypes.string,
+        teamServerConfig: PropTypes.shape({
             // Email address to request new teams
-            supportEmail: React.PropTypes.string.isRequired,
+            supportEmail: PropTypes.string.isRequired,
             // URL of the riot-team-server to get team configurations and track referrals
-            teamServerURL: React.PropTypes.string.isRequired,
+            teamServerURL: PropTypes.string.isRequired,
         }),
-        teamSelected: React.PropTypes.object,
+        teamSelected: PropTypes.object,
 
-        defaultDeviceDisplayName: React.PropTypes.string,
+        defaultDeviceDisplayName: PropTypes.string,
 
         // registration shouldn't know or care how login is done.
-        onLoginClick: React.PropTypes.func.isRequired,
-        onCancelClick: React.PropTypes.func,
+        onLoginClick: PropTypes.func.isRequired,
+        onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -130,6 +132,7 @@ module.exports = React.createClass({
         if (config.isUrl !== undefined) {
             newState.isUrl = config.isUrl;
         }
+        this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             this._replaceClient();
         });

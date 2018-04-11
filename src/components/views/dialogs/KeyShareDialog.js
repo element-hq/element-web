@@ -16,6 +16,7 @@ limitations under the License.
 
 import Modal from '../../../Modal';
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 
 import { _t, _td } from '../../../languageHandler';
@@ -30,10 +31,10 @@ import { _t, _td } from '../../../languageHandler';
  */
 export default React.createClass({
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        userId: React.PropTypes.string.isRequired,
-        deviceId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        deviceId: PropTypes.string.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -125,11 +126,11 @@ export default React.createClass({
         text = _t(text, {displayName: displayName});
 
         return (
-            <div>
+            <div id='mx_Dialog_content'>
                 <p>{ text }</p>
 
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._onVerifyClicked}>
+                    <button onClick={this._onVerifyClicked} autoFocus="true">
                         { _t('Start verification') }
                     </button>
                     <button onClick={this._onShareClicked}>
@@ -153,7 +154,7 @@ export default React.createClass({
             content = this._renderContent();
         } else {
             content = (
-                <div>
+                <div id='mx_Dialog_content'>
                     <p>{ _t('Loading device info...') }</p>
                     <Spinner />
                 </div>
@@ -164,6 +165,7 @@ export default React.createClass({
             <BaseDialog className='mx_KeyShareRequestDialog'
                 onFinished={this.props.onFinished}
                 title={_t('Encryption key request')}
+                contentId='mx_Dialog_content'
             >
                 { content }
             </BaseDialog>

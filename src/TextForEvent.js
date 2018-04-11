@@ -52,8 +52,7 @@ function textForMemberEvent(ev) {
         case 'join':
             if (prevContent && prevContent.membership === 'join') {
                 if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
-                    return _t('%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.', {
-                        senderName,
+                    return _t('%(oldDisplayName)s changed their display name to %(displayName)s.', {
                         oldDisplayName: prevContent.displayname,
                         displayName: content.displayname,
                     });

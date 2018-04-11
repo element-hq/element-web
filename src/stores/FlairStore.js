@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EventEmitter from 'events';
 import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
@@ -28,8 +29,9 @@ const GROUP_PROFILES_CACHE_BUST_MS = 1800000; // 30 mins
 /**
  * Stores data used by <Flair/>
  */
-class FlairStore {
+class FlairStore extends EventEmitter {
     constructor(matrixClient) {
+        super();
         this._matrixClient = matrixClient;
         this._userGroups = {
             // $userId: ['+group1:domain', '+group2:domain', ...]
@@ -38,6 +40,9 @@ class FlairStore {
             //  $groupId: {
             //      avatar_url: 'mxc://...'
             //  }
+        };
+        this._groupProfilesPromise = {
+            //  $groupId: Promise
         };
         this._usersPending = {
             //  $userId: {
@@ -149,18 +154,56 @@ class FlairStore {
             return this._groupProfiles[groupId];
         }
 
-        const profile = await matrixClient.getGroupProfile(groupId);
+        // A request is ongoing, wait for it to complete and return the group profile.
+        if (this._groupProfilesPromise[groupId]) {
+            try {
+                await this._groupProfilesPromise[groupId];
+            } catch (e) {
+                // Don't log the error; this is done below
+                return null;
+            }
+            return this._groupProfiles[groupId];
+        }
+
+        // No request yet, start one
+        console.log('FlairStore: Request group profile of ' + groupId);
+        this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
+
+        let profile;
+        try {
+            profile = await this._groupProfilesPromise[groupId];
+        } catch (e) {
+            console.log('FlairStore: Failed to get group profile for ' + groupId, e);
+            // Don't retry, but allow a retry when the profile is next requested
+            delete this._groupProfilesPromise[groupId];
+            return null;
+        }
+
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
             name: profile.name,
             shortDescription: profile.short_description,
         };
+        delete this._groupProfilesPromise[groupId];
+
+        /// XXX: This is verging on recreating a third "Flux"-looking Store. We really
+        /// should replace FlairStore with a Flux store and some async actions.
+        console.log('FlairStore: Emit updateGroupProfile for ' + groupId);
+        this.emit('updateGroupProfile');
+
         setTimeout(() => {
-            delete this._groupProfiles[groupId];
+            this.refreshGroupProfile(matrixClient, groupId);
         }, GROUP_PROFILES_CACHE_BUST_MS);
 
         return this._groupProfiles[groupId];
+    }
+
+    refreshGroupProfile(matrixClient, groupId) {
+        // Invalidate the cache
+        delete this._groupProfiles[groupId];
+        // Fetch new profile data, and cache it
+        return this.getGroupProfileCached(matrixClient, groupId);
     }
 }
 

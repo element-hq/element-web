@@ -15,71 +15,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DragSource, DropTarget } from 'react-dnd';
-
 import TagTile from './TagTile';
-import dis from '../../../dispatcher';
-import { findDOMNode } from 'react-dom';
 
-const tagTileSource = {
-    canDrag: function(props, monitor) {
-        return true;
-    },
+import { Draggable } from 'react-beautiful-dnd';
 
-    beginDrag: function(props) {
-        // Return the data describing the dragged item
-        return {
-            tag: props.groupProfile.groupId,
-        };
-    },
-
-    endDrag: function(props, monitor, component) {
-        const dropResult = monitor.getDropResult();
-        if (!monitor.didDrop() || !dropResult) {
-            return;
-        }
-        props.onEndDrag();
-    },
-};
-
-const tagTileTarget = {
-    canDrop(props, monitor) {
-        return true;
-    },
-
-    hover(props, monitor, component) {
-        if (!monitor.canDrop()) return;
-        const draggedY = monitor.getClientOffset().y;
-        const {top, bottom} = findDOMNode(component).getBoundingClientRect();
-        const targetY = (top + bottom) / 2;
-        dis.dispatch({
-            action: 'order_tag',
-            tag: monitor.getItem().tag,
-            targetTag: props.groupProfile.groupId,
-            // Note: we indicate that the tag should be after the target when
-            // it's being dragged over the top half of the target.
-            after: draggedY < targetY,
-        });
-    },
-
-    drop(props) {
-        // Return the data to be returned by getDropResult
-        return {
-            tag: props.groupProfile.groupId,
-        };
-    },
-};
-
-export default
-    DropTarget('TagTile', tagTileTarget, (connect, monitor) => ({
-        connectDropTarget: connect.dropTarget(),
-    }))(DragSource('TagTile', tagTileSource, (connect, monitor) => ({
-        connectDragSource: connect.dragSource(),
-    }))((props) => {
-        const { connectDropTarget, connectDragSource, ...otherProps } = props;
-        return connectDropTarget(connectDragSource(
-            <div>
-                <TagTile {...otherProps} />
-            </div>,
-        ));
-    }));
+export default function DNDTagTile(props) {
+    return <div>
+        <Draggable
+            key={props.tag}
+            draggableId={props.tag}
+            index={props.index}
+            type="draggable-TagTile"
+        >
+            { (provided, snapshot) => (
+                <div>
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                    >
+                        <TagTile {...props} />
+                    </div>
+                    { provided.placeholder }
+                </div>
+            ) }
+        </Draggable>
+    </div>;
+}

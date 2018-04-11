@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import * as languageHandler from '../../../languageHandler';
@@ -114,7 +115,7 @@ export default class LanguageDropdown extends React.Component {
 }
 
 LanguageDropdown.propTypes = {
-    className: React.PropTypes.string,
-    onOptionChange: React.PropTypes.func.isRequired,
-    value: React.PropTypes.string,
+    className: PropTypes.string,
+    onOptionChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
 };

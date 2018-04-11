@@ -17,6 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
@@ -35,11 +36,11 @@ const USERNAME_CHECK_DEBOUNCE_MS = 250;
 export default React.createClass({
     displayName: 'SetMxIdDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
         // Called when the user requests to register with a different homeserver
-        onDifferentServerClicked: React.PropTypes.func.isRequired,
+        onDifferentServerClicked: PropTypes.func.isRequired,
         // Called if the user wants to switch to login instead
-        onLoginClick: React.PropTypes.func.isRequired,
+        onLoginClick: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -234,14 +235,14 @@ export default React.createClass({
                 "error": Boolean(this.state.usernameError),
                 "success": usernameAvailable,
             });
-            usernameIndicator = <div className={usernameIndicatorClasses}>
+            usernameIndicator = <div className={usernameIndicatorClasses} role="alert">
                 { usernameAvailable ? _t('Username available') : this.state.usernameError }
             </div>;
         }
 
         let authErrorIndicator = null;
         if (this.state.authError) {
-            authErrorIndicator = <div className="error">
+            authErrorIndicator = <div className="error" role="alert">
                 { this.state.authError }
             </div>;
         }
@@ -253,8 +254,9 @@ export default React.createClass({
             <BaseDialog className="mx_SetMxIdDialog"
                 onFinished={this.props.onFinished}
                 title={_t('To get started, please pick a username!')}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <div className="mx_SetMxIdDialog_input_group">
                         <input type="text" ref="input_value" value={this.state.username}
                             autoFocus={true}

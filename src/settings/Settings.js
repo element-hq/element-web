@@ -76,6 +76,12 @@ export const SETTINGS = {
     //     // level is always appended to the end.
     //     supportedLevelsAreOrdered: false,
     // },
+    "feature_rich_quoting": {
+        isFeature: true,
+        displayName: _td("Message Replies"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -85,6 +91,12 @@ export const SETTINGS = {
     "feature_tag_panel": {
         isFeature: true,
         displayName: _td("Tag Panel"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_sticker_messages": {
+        isFeature: true,
+        displayName: _td("Sticker Messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -174,6 +186,11 @@ export const SETTINGS = {
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Mirror local video feed'),
+        default: false,
+    },
+    "TagPanel.disableTagPanel": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Disable Community Filter Panel'),
         default: false,
     },
     "theme": {

@@ -222,9 +222,9 @@ export default class SettingsStore {
 
         if (explicit) {
             const handler = handlers[level];
-            if (!handler) return SettingsStore._tryControllerOverride(settingName, level, roomId, null);
+            if (!handler) return SettingsStore._tryControllerOverride(settingName, level, roomId, null, null);
             const value = handler.getValue(settingName, roomId);
-            return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
+            return SettingsStore._tryControllerOverride(settingName, level, roomId, value, level);
         }
 
         for (let i = minIndex; i < levelOrder.length; i++) {
@@ -234,17 +234,17 @@ export default class SettingsStore {
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
-            return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
+            return SettingsStore._tryControllerOverride(settingName, level, roomId, value, levelOrder[i]);
         }
 
-        return SettingsStore._tryControllerOverride(settingName, level, roomId, null);
+        return SettingsStore._tryControllerOverride(settingName, level, roomId, null, null);
     }
 
-    static _tryControllerOverride(settingName, level, roomId, calculatedValue) {
+    static _tryControllerOverride(settingName, level, roomId, calculatedValue, calculatedAtLevel) {
         const controller = SETTINGS[settingName].controller;
         if (!controller) return calculatedValue;
 
-        const actualValue = controller.getValueOverride(level, roomId, calculatedValue);
+        const actualValue = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
         if (actualValue !== undefined && actualValue !== null) return actualValue;
         return calculatedValue;
     }

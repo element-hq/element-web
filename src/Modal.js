@@ -19,8 +19,10 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 import Analytics from './Analytics';
 import sdk from './index';
+import dis from './dispatcher';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 
@@ -33,7 +35,7 @@ const AsyncWrapper = React.createClass({
         /** A function which takes a 'callback' argument which it will call
          * with the real component once it loads.
          */
-        loader: React.PropTypes.func.isRequired,
+        loader: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -187,9 +189,21 @@ class ModalManager {
 
     _reRender() {
         if (this._modals.length == 0) {
+            // If there is no modal to render, make all of Riot available
+            // to screen reader users again
+            dis.dispatch({
+                action: 'aria_unhide_main_app',
+            });
             ReactDOM.unmountComponentAtNode(this.getOrCreateContainer());
             return;
         }
+
+        // Hide the content outside the modal to screen reader users
+        // so they won't be able to navigate into it and act on it using
+        // screen reader specific features
+        dis.dispatch({
+            action: 'aria_hide_main_app',
+        });
 
         const modal = this._modals[0];
         const dialog = (

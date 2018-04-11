@@ -18,6 +18,7 @@ import Matrix from 'matrix-js-sdk';
 const InteractiveAuth = Matrix.InteractiveAuth;
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {getEntryComponentForLoginType} from '../views/login/InteractiveAuthEntryComponents';
 
@@ -26,18 +27,18 @@ export default React.createClass({
 
     propTypes: {
         // matrix client to use for UI auth requests
-        matrixClient: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
 
         // response from initial request. If not supplied, will do a request on
         // mount.
-        authData: React.PropTypes.shape({
-            flows: React.PropTypes.array,
-            params: React.PropTypes.object,
-            session: React.PropTypes.string,
+        authData: PropTypes.shape({
+            flows: PropTypes.array,
+            params: PropTypes.object,
+            session: PropTypes.string,
         }),
 
         // callback
-        makeRequest: React.PropTypes.func.isRequired,
+        makeRequest: PropTypes.func.isRequired,
 
         // callback called when the auth process has finished,
         // successfully or unsuccessfully.
@@ -51,22 +52,22 @@ export default React.createClass({
         //            the auth session.
         //      * clientSecret {string} The client secret used in auth
         //            sessions with the ID server.
-        onAuthFinished: React.PropTypes.func.isRequired,
+        onAuthFinished: PropTypes.func.isRequired,
 
         // Inputs provided by the user to the auth process
         // and used by various stages. As passed to js-sdk
         // interactive-auth
-        inputs: React.PropTypes.object,
+        inputs: PropTypes.object,
 
         // As js-sdk interactive-auth
-        makeRegistrationUrl: React.PropTypes.func,
-        sessionId: React.PropTypes.string,
-        clientSecret: React.PropTypes.string,
-        emailSid: React.PropTypes.string,
+        makeRegistrationUrl: PropTypes.func,
+        sessionId: PropTypes.string,
+        clientSecret: PropTypes.string,
+        emailSid: PropTypes.string,
 
         // If true, poll to see if the auth flow has been completed
         // out-of-band
-        poll: React.PropTypes.bool,
+        poll: PropTypes.bool,
     },
 
     getInitialState: function() {

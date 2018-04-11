@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ limitations under the License.
  * 'isTargetMod': boolean
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -38,16 +39,15 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import RoomViewStore from '../../../stores/RoomViewStore';
-
+import SdkConfig from '../../../SdkConfig';
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        member: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -440,40 +440,57 @@ module.exports = withMatrixClient(React.createClass({
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
-        const self = this;
-        if (!room) {
-            return;
-        }
-        const powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevelEvent) {
-            return;
-        }
-        if (powerLevelEvent.getContent().users) {
-            const myPower = powerLevelEvent.getContent().users[this.props.matrixClient.credentials.userId];
-            if (parseInt(myPower) === parseInt(powerLevel)) {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
-                            { _t("Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                    onFinished: function(confirmed) {
-                        if (confirmed) {
-                            self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                        }
-                    },
-                });
-            } else {
-                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-            }
-        } else {
+        if (!room) return;
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
+        if (!powerLevelEvent.getContent().users) {
             this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            return;
         }
+
+        const myUserId = this.props.matrixClient.getUserId();
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
+        if (myUserId === target) {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
+        }
+
+        const myPower = powerLevelEvent.getContent().users[myUserId];
+        if (parseInt(myPower) === parseInt(powerLevel)) {
+            Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
+        }
+        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     },
 
     onNewDMClick: function() {
@@ -713,6 +730,10 @@ module.exports = withMatrixClient(React.createClass({
 
         if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
             const dmRoomMap = new DMRoomMap(this.props.matrixClient);
+            // dmRooms will not include dmRooms that we have been invited into but did not join.
+            // Because DMRoomMap runs off account_data[m.direct] which is only set on join of dm room.
+            // XXX: we potentially want DMs we have been invited to, to also show up here :L
+            // especially as logic below concerns specially if we haven't joined but have been invited
             const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
 
             const RoomTile = sdk.getComponent("rooms.RoomTile");
@@ -722,12 +743,18 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
-                    const highlight = (
-                        room.getUnreadNotificationCount('highlight') > 0 ||
-                        me.membership === "invite"
-                    );
+
+                    // not a DM room if we have are not joined
+                    if (!me.membership || me.membership !== 'join') continue;
+                    // not a DM room if they are not joined
+                    const them = this.props.member;
+                    if (!them.membership || them.membership !== 'join') continue;
+
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
+
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
+                            transparent={true}
                             collapsed={false}
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
@@ -831,13 +858,27 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
-        const poweLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
-        const powerLevelUsersDefault = poweLevelEvent.getContent().users_default;
+        const powerLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
+        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
+
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = this.props.matrixClient.baseUrl;
+        let showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            showPresence = enablePresenceByHsUrl[hsUrl];
+        }
+
+        let presenceLabel = null;
+        if (showPresence) {
+            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
+            presenceLabel = <PresenceLabel activeAgo={presenceLastActiveAgo}
+                currentlyActive={presenceCurrentlyActive}
+                presenceState={presenceState} />;
+        }
 
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
-            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
             roomMemberDetails = <div>
                 <div className="mx_MemberInfo_profileField">
                     { _t("Level:") } <b>
@@ -850,18 +891,17 @@ module.exports = withMatrixClient(React.createClass({
                     </b>
                 </div>
                 <div className="mx_MemberInfo_profileField">
-                    <PresenceLabel activeAgo={presenceLastActiveAgo}
-                        currentlyActive={presenceCurrentlyActive}
-                        presenceState={presenceState} />
+                    {presenceLabel}
                 </div>
             </div>;
         }
 
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbar autoshow={true}>
+                <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
@@ -885,7 +925,7 @@ module.exports = withMatrixClient(React.createClass({
                     { this._renderDevices() }
 
                     { spinner }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

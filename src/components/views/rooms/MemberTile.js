@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require('../../../index');
@@ -28,7 +29,14 @@ module.exports = React.createClass({
     displayName: 'MemberTile',
 
     propTypes: {
-        member: React.PropTypes.any.isRequired, // RoomMember
+        member: PropTypes.any.isRequired, // RoomMember
+        showPresence: PropTypes.bool,
+    },
+
+    getDefaultProps: function() {
+        return {
+            showPresence: true,
+        };
     },
 
     getInitialState: function() {
@@ -98,7 +106,7 @@ module.exports = React.createClass({
                 presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
                 presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}
                 avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
-                name={name} powerStatus={powerStatus} />
+                name={name} powerStatus={powerStatus} showPresence={this.props.showPresence} />
         );
     },
 });

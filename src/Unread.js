@@ -28,6 +28,8 @@ module.exports = {
             return false;
         } else if (ev.getType() == 'm.room.member') {
             return false;
+        } else if (ev.getType() == 'm.room.third_party_invite') {
+            return false;
         } else if (ev.getType() == 'm.call.answer' || ev.getType() == 'm.call.hangup') {
             return false;
         } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {

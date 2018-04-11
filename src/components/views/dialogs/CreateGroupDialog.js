@@ -55,11 +55,15 @@ export default React.createClass({
 
     _checkGroupId: function(e) {
         let error = null;
-        if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
+        if (!this.state.groupId) {
+            error = _t("Community IDs cannot not be empty.");
+        } else if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
             error = _t("Community IDs may only contain characters a-z, 0-9, or '=_-./'");
         }
         this.setState({
             groupIdError: error,
+            // Reset createError to get rid of now stale error message
+            createError: null,
         });
         return error;
     },
@@ -108,7 +112,7 @@ export default React.createClass({
             // XXX: We should catch errcodes and give sensible i18ned messages for them,
             // rather than displaying what the server gives us, but synapse doesn't give
             // any yet.
-            createErrorNode = <div className="error">
+            createErrorNode = <div className="error" role="alert">
                 <div>{ _t('Something went wrong whilst creating your community') }</div>
                 <div>{ this.state.createError.message }</div>
             </div>;
@@ -116,7 +120,6 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this._onFormSubmit}
                 title={_t('Create Community')}
             >
                 <form onSubmit={this._onFormSubmit}>
@@ -159,10 +162,10 @@ export default React.createClass({
                         { createErrorNode }
                     </div>
                     <div className="mx_Dialog_buttons">
+                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                         <button onClick={this._onCancel}>
                             { _t("Cancel") }
                         </button>
-                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                     </div>
                 </form>
             </BaseDialog>

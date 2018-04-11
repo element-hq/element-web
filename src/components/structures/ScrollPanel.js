@@ -16,9 +16,10 @@ limitations under the License.
 
 const React = require("react");
 const ReactDOM = require("react-dom");
-const GeminiScrollbar = require('react-gemini-scrollbar');
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
+import sdk from '../../index.js';
 
 const DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;
@@ -86,7 +87,7 @@ module.exports = React.createClass({
          * scroll down to show the new element, rather than preserving the
          * existing view.
          */
-        stickyBottom: React.PropTypes.bool,
+        stickyBottom: PropTypes.bool,
 
         /* startAtBottom: if set to true, the view is assumed to start
          * scrolled to the bottom.
@@ -95,7 +96,7 @@ module.exports = React.createClass({
          * behaviour stays the same for other uses of ScrollPanel.
          * If so, let's remove this parameter down the line.
          */
-        startAtBottom: React.PropTypes.bool,
+        startAtBottom: PropTypes.bool,
 
         /* onFillRequest(backwards): a callback which is called on scroll when
          * the user nears the start (backwards = true) or end (backwards =
@@ -110,7 +111,7 @@ module.exports = React.createClass({
          * directon (at this time) - which will stop the pagination cycle until
          * the user scrolls again.
          */
-        onFillRequest: React.PropTypes.func,
+        onFillRequest: PropTypes.func,
 
         /* onUnfillRequest(backwards): a callback which is called on scroll when
          * there are children elements that are far out of view and could be removed
@@ -121,24 +122,24 @@ module.exports = React.createClass({
          * first element to remove if removing from the front/bottom, and last element
          * to remove if removing from the back/top.
          */
-        onUnfillRequest: React.PropTypes.func,
+        onUnfillRequest: PropTypes.func,
 
         /* onScroll: a callback which is called whenever any scroll happens.
          */
-        onScroll: React.PropTypes.func,
+        onScroll: PropTypes.func,
 
         /* onResize: a callback which is called whenever the Gemini scroll
          * panel is resized
          */
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         /* className: classnames to add to the top-level div
          */
-        className: React.PropTypes.string,
+        className: PropTypes.string,
 
         /* style: styles to add to the top-level div
          */
-        style: React.PropTypes.object,
+        style: PropTypes.object,
     },
 
     getDefaultProps: function() {
@@ -223,7 +224,7 @@ module.exports = React.createClass({
     onResize: function() {
         this.props.onResize();
         this.checkScroll();
-        this.refs.geminiPanel.forceUpdate();
+        if (this._gemScroll) this._gemScroll.forceUpdate();
     },
 
     // after an update to the contents of the panel, check that the scroll is
@@ -664,14 +665,25 @@ module.exports = React.createClass({
             throw new Error("ScrollPanel._getScrollNode called when unmounted");
         }
 
-        return this.refs.geminiPanel.scrollbar.getViewElement();
+        if (!this._gemScroll) {
+            // Likewise, we should have the ref by this point, but if not
+            // turn the NPE into something meaningful.
+            throw new Error("ScrollPanel._getScrollNode called before gemini ref collected");
+        }
+
+        return this._gemScroll.scrollbar.getViewElement();
+    },
+
+    _collectGeminiScroll: function(gemScroll) {
+        this._gemScroll = gemScroll;
     },
 
     render: function() {
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
-        return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
+        return (<GeminiScrollbarWrapper autoshow={true} wrappedRef={this._collectGeminiScroll}
                 onScroll={this.onScroll} onResize={this.onResize}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
@@ -679,7 +691,7 @@ module.exports = React.createClass({
                             { this.props.children }
                         </ol>
                     </div>
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
                );
     },
 });

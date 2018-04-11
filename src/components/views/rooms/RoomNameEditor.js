@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 import { _t } from '../../../languageHandler';
@@ -25,7 +26,13 @@ module.exports = React.createClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            name: null,
+        };
     },
 
     componentWillMount: function() {
@@ -34,7 +41,9 @@ module.exports = React.createClass({
         const myId = MatrixClientPeg.get().credentials.userId;
         const defaultName = room.getDefaultRoomName(myId);
 
-        this._initialName = name ? name.getContent().name : '';
+        this.setState({
+            name: name ? name.getContent().name : '',
+        });
 
         this._placeholderName = _t("Unnamed Room");
         if (defaultName && defaultName !== 'Empty room') { // default name from JS SDK, needs no translation as we don't ever show it.
@@ -43,7 +52,13 @@ module.exports = React.createClass({
     },
 
     getRoomName: function() {
-        return this.refs.editor.getValue();
+        return this.state.name;
+    },
+
+    _onValueChanged: function(value, shouldSubmit) {
+        this.setState({
+            name: value,
+        });
     },
 
     render: function() {
@@ -56,7 +71,8 @@ module.exports = React.createClass({
                          placeholderClassName="mx_RoomHeader_placeholder"
                          placeholder={this._placeholderName}
                          blurToCancel={false}
-                         initialValue={this._initialName}
+                         initialValue={this.state.name}
+                         onValueChanged={this._onValueChanged}
                          dir="auto" />
                 </div>
         );

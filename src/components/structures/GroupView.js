@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ import classnames from 'classnames';
 
 import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
+import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
-import GeminiScrollbar from 'react-gemini-scrollbar';
+import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -209,7 +210,7 @@ const FeaturedRoom = React.createClass({
 
         let permalink = null;
         if (this.props.summaryInfo.profile && this.props.summaryInfo.profile.canonical_alias) {
-            permalink = 'https://matrix.to/#/' + this.props.summaryInfo.profile.canonical_alias;
+            permalink = makeGroupPermalink(this.props.summaryInfo.profile.canonical_alias);
         }
 
         let roomNameNode = null;
@@ -366,7 +367,7 @@ const FeaturedUser = React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
 
-        const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
+        const permalink = makeUserPermalink(this.props.summaryInfo.user_id);
         const userNameNode = <a href={permalink} onClick={this.onClick}>{ name }</a>;
         const httpUrl = MatrixClientPeg.get()
             .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
@@ -390,13 +391,16 @@ const FeaturedUser = React.createClass({
 });
 
 const GroupContext = {
-    groupStore: React.PropTypes.instanceOf(GroupStore).isRequired,
+    groupStore: PropTypes.instanceOf(GroupStore).isRequired,
 };
 
 CategoryRoomList.contextTypes = GroupContext;
 FeaturedRoom.contextTypes = GroupContext;
 RoleUserList.contextTypes = GroupContext;
 FeaturedUser.contextTypes = GroupContext;
+
+const GROUP_JOINPOLICY_OPEN = "open";
+const GROUP_JOINPOLICY_INVITE = "invite";
 
 export default React.createClass({
     displayName: 'GroupView',
@@ -408,7 +412,7 @@ export default React.createClass({
     },
 
     childContextTypes: {
-        groupStore: React.PropTypes.instanceOf(GroupStore),
+        groupStore: PropTypes.instanceOf(GroupStore),
     },
 
     getChildContext: function() {
@@ -428,6 +432,7 @@ export default React.createClass({
             editing: false,
             saving: false,
             uploadingAvatar: false,
+            avatarChanged: false,
             membershipBusy: false,
             publicityBusy: false,
             inviterProfile: null,
@@ -461,6 +466,10 @@ export default React.createClass({
     _onGroupMyMembership: function(group) {
         if (group.groupId !== this.props.groupId) return;
 
+        if (group.myMembership === 'leave') {
+            // Leave settings - the user might have clicked the "Leave" button
+            this._closeSettings();
+        }
         this.setState({membershipBusy: false});
     },
 
@@ -543,6 +552,12 @@ export default React.createClass({
         this.setState({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
+            joinableForm: {
+                policyType:
+                    this.state.summary.profile.is_openly_joinable ?
+                        GROUP_JOINPOLICY_OPEN :
+                        GROUP_JOINPOLICY_INVITE,
+            },
         });
         dis.dispatch({
             action: 'panel_disable',
@@ -551,6 +566,10 @@ export default React.createClass({
     },
 
     _onCancelClick: function() {
+        this._closeSettings();
+    },
+
+    _closeSettings() {
         this.setState({
             editing: false,
             profileForm: null,
@@ -589,6 +608,10 @@ export default React.createClass({
             this.setState({
                 uploadingAvatar: false,
                 profileForm: newProfileForm,
+
+                // Indicate that FlairStore needs to be poked to show this change
+                // in TagTile (TagPanel), Flair and GroupTile (MyGroups).
+                avatarChanged: true,
             });
         }).catch((e) => {
             this.setState({uploadingAvatar: false});
@@ -601,11 +624,15 @@ export default React.createClass({
         }).done();
     },
 
+    _onJoinableChange: function(ev) {
+        this.setState({
+            joinableForm: { policyType: ev.target.value },
+        });
+    },
+
     _onSaveClick: function() {
         this.setState({saving: true});
-        const savePromise = this.state.isUserPrivileged ?
-            this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm) :
-            Promise.resolve();
+        const savePromise = this.state.isUserPrivileged ? this._saveGroup() : Promise.resolve();
         savePromise.then((result) => {
             this.setState({
                 saving: false,
@@ -614,6 +641,11 @@ export default React.createClass({
             });
             dis.dispatch({action: 'panel_disable'});
             this._initGroupStore(this.props.groupId);
+
+            if (this.state.avatarChanged) {
+                // XXX: Evil - poking a store should be done from an async action
+                FlairStore.refreshGroupProfile(this._matrixClient, this.props.groupId);
+            }
         }).catch((e) => {
             this.setState({
                 saving: false,
@@ -624,11 +656,27 @@ export default React.createClass({
                 title: _t('Error'),
                 description: _t('Failed to update community'),
             });
+        }).finally(() => {
+            this.setState({
+                avatarChanged: false,
+            });
         }).done();
     },
 
-    _onAcceptInviteClick: function() {
+    _saveGroup: async function() {
+        await this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm);
+        await this._matrixClient.setGroupJoinPolicy(this.props.groupId, {
+            type: this.state.joinableForm.policyType,
+        });
+    },
+
+    _onAcceptInviteClick: async function() {
         this.setState({membershipBusy: true});
+
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
+        await Promise.delay(500);
+
         this._groupStore.acceptGroupInvite().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
@@ -641,9 +689,14 @@ export default React.createClass({
         });
     },
 
-    _onRejectInviteClick: function() {
+    _onRejectInviteClick: async function() {
         this.setState({membershipBusy: true});
-        this._matrixClient.leaveGroup(this.props.groupId).then(() => {
+
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
+        await Promise.delay(500);
+
+        this._groupStore.leaveGroup().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -655,6 +708,25 @@ export default React.createClass({
         });
     },
 
+    _onJoinClick: async function() {
+        this.setState({membershipBusy: true});
+
+        // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+        // spinner disappearing after we have fetched new group data.
+        await Promise.delay(500);
+
+        this._groupStore.joinGroup().then(() => {
+            // don't reset membershipBusy here: wait for the membership change to come down the sync
+        }).catch((e) => {
+            this.setState({membershipBusy: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Error joining room', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Unable to join community"),
+            });
+        });
+    },
+
     _onLeaveClick: function() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Leave Group', '', QuestionDialog, {
@@ -662,18 +734,23 @@ export default React.createClass({
             description: _t("Leave %(groupName)s?", {groupName: this.props.groupId}),
             button: _t("Leave"),
             danger: true,
-            onFinished: (confirmed) => {
+            onFinished: async (confirmed) => {
                 if (!confirmed) return;
 
                 this.setState({membershipBusy: true});
-                this._matrixClient.leaveGroup(this.props.groupId).then(() => {
+
+                // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
+                // spinner disappearing after we have fetched new group data.
+                await Promise.delay(500);
+
+                this._groupStore.leaveGroup().then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
                 }).catch((e) => {
                     this.setState({membershipBusy: false});
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Error leaving room', '', ErrorDialog, {
+                    Modal.createTrackedDialog('Error leaving community', '', ErrorDialog, {
                         title: _t("Error"),
-                        description: _t("Unable to leave room"),
+                        description: _t("Unable to leave community"),
                     });
                 });
             },
@@ -691,8 +768,22 @@ export default React.createClass({
         });
 
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
+        const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
+            <div className="mx_GroupView_changeDelayWarning">
+                { _t(
+                    'Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> ' +
+                    'might not be seen by other users for up to 30 minutes.',
+                    {},
+                    {
+                        'bold1': (sub) => <b> { sub } </b>,
+                        'bold2': (sub) => <b> { sub } </b>,
+                    },
+                ) }
+            </div> : <div />;
         return <div className={groupSettingsSectionClasses}>
             { header }
+            { changeDelayWarning }
+            { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }
         </div>;
@@ -831,9 +922,8 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         const group = this._matrixClient.getGroup(this.props.groupId);
-        if (!group) return null;
 
-        if (group.myMembership === 'invite') {
+        if (group && group.myMembership === 'invite') {
             if (this.state.membershipBusy || this.state.inviterProfileBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
@@ -874,33 +964,107 @@ export default React.createClass({
                     </div>
                 </div>
             </div>;
-        } else if (group.myMembership === 'join' && this.state.editing) {
-            const leaveButtonTooltip = this.state.isUserPrivileged ?
+        }
+
+        let membershipContainerExtraClasses;
+        let membershipButtonExtraClasses;
+        let membershipButtonTooltip;
+        let membershipButtonText;
+        let membershipButtonOnClick;
+
+        // User is not in the group
+        if ((!group || group.myMembership === 'leave') &&
+            this.state.summary &&
+            this.state.summary.profile &&
+            Boolean(this.state.summary.profile.is_openly_joinable)
+        ) {
+            membershipButtonText = _t("Join this community");
+            membershipButtonOnClick = this._onJoinClick;
+
+            membershipButtonExtraClasses = 'mx_GroupView_joinButton';
+            membershipContainerExtraClasses = 'mx_GroupView_membershipSection_leave';
+        } else if (
+            group &&
+            group.myMembership === 'join' &&
+            this.state.editing
+        ) {
+            membershipButtonText = _t("Leave this community");
+            membershipButtonOnClick = this._onLeaveClick;
+            membershipButtonTooltip = this.state.isUserPrivileged ?
                 _t("You are an administrator of this community") :
                 _t("You are a member of this community");
-            const leaveButtonClasses = classnames({
-                "mx_RoomHeader_textButton": true,
-                "mx_GroupView_textButton": true,
-                "mx_GroupView_leaveButton": true,
-                "mx_RoomHeader_textButton_danger": this.state.isUserPrivileged,
-            });
-            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
-                <div className="mx_GroupView_membershipSubSection">
-                    { /* Empty div for flex alignment */ }
-                    <div />
-                    <div className="mx_GroupView_membership_buttonContainer">
-                        <AccessibleButton
-                            className={leaveButtonClasses}
-                            onClick={this._onLeaveClick}
-                            title={leaveButtonTooltip}
-                        >
-                            { _t("Leave") }
-                        </AccessibleButton>
-                    </div>
-                </div>
-            </div>;
+
+            membershipButtonExtraClasses = {
+                'mx_GroupView_leaveButton': true,
+                'mx_RoomHeader_textButton_danger': this.state.isUserPrivileged,
+            };
+            membershipContainerExtraClasses = 'mx_GroupView_membershipSection_joined';
+        } else {
+            return null;
         }
-        return null;
+
+        const membershipButtonClasses = classnames([
+            'mx_RoomHeader_textButton',
+            'mx_GroupView_textButton',
+        ],
+            membershipButtonExtraClasses,
+        );
+
+        const membershipContainerClasses = classnames(
+            'mx_GroupView_membershipSection',
+            membershipContainerExtraClasses,
+        );
+
+        return <div className={membershipContainerClasses}>
+            <div className="mx_GroupView_membershipSubSection">
+                { /* The <div /> is for flex alignment */ }
+                { this.state.membershipBusy ? <Spinner /> : <div /> }
+                <div className="mx_GroupView_membership_buttonContainer">
+                    <AccessibleButton
+                        className={membershipButtonClasses}
+                        onClick={membershipButtonOnClick}
+                        title={membershipButtonTooltip}
+                    >
+                        { membershipButtonText }
+                    </AccessibleButton>
+                </div>
+            </div>
+        </div>;
+    },
+
+    _getJoinableNode: function() {
+        return this.state.editing ? <div>
+            <h3>
+                { _t('Who can join this community?') }
+                { this.state.groupJoinableLoading ?
+                    <InlineSpinner /> : <div />
+                }
+            </h3>
+            <div>
+                <label>
+                    <input type="radio"
+                        value={GROUP_JOINPOLICY_INVITE}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_INVITE}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Only people who have been invited') }
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio"
+                        value={GROUP_JOINPOLICY_OPEN}
+                        checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_OPEN}
+                        onClick={this._onJoinableChange}
+                    />
+                    <div className="mx_GroupView_label_text">
+                        { _t('Everyone') }
+                    </div>
+                </label>
+            </div>
+        </div> : null;
     },
 
     _getLongDescriptionNode: function() {
@@ -946,6 +1110,7 @@ export default React.createClass({
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
@@ -1096,9 +1261,9 @@ export default React.createClass({
                             { rightButtons }
                         </div>
                     </div>
-                    <GeminiScrollbar className="mx_GroupView_body">
+                    <GeminiScrollbarWrapper className="mx_GroupView_body">
                         { bodyNodes }
-                    </GeminiScrollbar>
+                    </GeminiScrollbarWrapper>
                 </div>
             );
         } else if (this.state.error) {

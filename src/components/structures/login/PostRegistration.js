@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
@@ -25,7 +26,7 @@ module.exports = React.createClass({
     displayName: 'PostRegistration',
 
     propTypes: {
-        onComplete: React.PropTypes.func.isRequired,
+        onComplete: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

@@ -18,6 +18,7 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 
 const sdk = require('../../../index');
 
@@ -25,7 +26,7 @@ const Velociraptor = require('../../../Velociraptor');
 require('../../../VelocityBounce');
 import { _t } from '../../../languageHandler';
 
-import DateUtils from '../../../DateUtils';
+import {formatDate} from '../../../DateUtils';
 
 let bounce = false;
 try {
@@ -40,35 +41,35 @@ module.exports = React.createClass({
 
     propTypes: {
         // the RoomMember to show the RR for
-        member: React.PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
 
         // number of pixels to offset the avatar from the right of its parent;
         // typically a negative value.
-        leftOffset: React.PropTypes.number,
+        leftOffset: PropTypes.number,
 
         // true to hide the avatar (it will still be animated)
-        hidden: React.PropTypes.bool,
+        hidden: PropTypes.bool,
 
         // don't animate this RR into position
-        suppressAnimation: React.PropTypes.bool,
+        suppressAnimation: PropTypes.bool,
 
         // an opaque object for storing information about this user's RR in
         // this room
-        readReceiptInfo: React.PropTypes.object,
+        readReceiptInfo: PropTypes.object,
 
         // A function which is used to check if the parent panel is being
         // unmounted, to avoid unnecessary work. Should return true if we
         // are being unmounted.
-        checkUnmounting: React.PropTypes.func,
+        checkUnmounting: PropTypes.func,
 
         // callback for clicks on this RR
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
 
         // Timestamp when the receipt was read
-        timestamp: React.PropTypes.number,
+        timestamp: PropTypes.number,
 
         // True to show twelve hour format, false otherwise
-        showTwelveHour: React.PropTypes.bool,
+        showTwelveHour: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -184,10 +185,21 @@ module.exports = React.createClass({
 
         let title;
         if (this.props.timestamp) {
-            title = _t(
-                "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
-            );
+            const dateString = formatDate(new Date(this.props.timestamp), this.props.showTwelveHour);
+            if (this.props.member.userId === this.props.member.rawDisplayName) {
+                title = _t(
+                    "Seen by %(userName)s at %(dateTime)s",
+                    {userName: this.props.member.userId,
+                    dateTime: dateString},
+                );
+            } else {
+                title = _t(
+                    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
+                    {displayName: this.props.member.rawDisplayName,
+                    userName: this.props.member.userId,
+                    dateTime: dateString},
+                );
+            }
         }
 
         return (

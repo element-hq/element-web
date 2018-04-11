@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const Avatar = require("../../../Avatar");
 const MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -28,7 +29,7 @@ module.exports = React.createClass({
     displayName: 'UserTile',
 
     propTypes: {
-        user: React.PropTypes.any.isRequired, // User
+        user: PropTypes.any.isRequired, // User
     },
 
     render: function() {

@@ -15,12 +15,17 @@ limitations under the License.
 */
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
+import Analytics from '../Analytics';
 
 const INITIAL_STATE = {
     orderedTags: null,
     orderedTagsAccountData: null,
     hasSynced: false,
     joinedGroupIds: null,
+
+    selectedTags: [],
+    // Last selected tag when shift was not being pressed
+    anchorTag: null,
 };
 
 /**
@@ -43,13 +48,14 @@ class TagOrderStore extends Store {
         switch (payload.action) {
             // Initialise state after initial sync
             case 'MatrixActions.sync': {
-                if (!(payload.prevState === 'PREPARED' && payload.state === 'SYNCING')) {
+                if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
                 const tagOrderingEvent = payload.matrixClient.getAccountData('im.vector.web.tag_ordering');
                 const tagOrderingEventContent = tagOrderingEvent ? tagOrderingEvent.getContent() : {};
                 this._setState({
                     orderedTagsAccountData: tagOrderingEventContent.tags || null,
+                    removedTagsAccountData: tagOrderingEventContent.removedTags || null,
                     hasSynced: true,
                 });
                 this._updateOrderedTags();
@@ -58,8 +64,14 @@ class TagOrderStore extends Store {
             // Get ordering from account data
             case 'MatrixActions.accountData': {
                 if (payload.event_type !== 'im.vector.web.tag_ordering') break;
+
+                // Ignore remote echos caused by this store so as to avoid setting
+                // state back to old state.
+                if (payload.event_content._storeId === this.getStoreId()) break;
+
                 this._setState({
                     orderedTagsAccountData: payload.event_content ? payload.event_content.tags : null,
+                    removedTagsAccountData: payload.event_content ? payload.event_content.removedTags : null,
                 });
                 this._updateOrderedTags();
                 break;
@@ -73,26 +85,76 @@ class TagOrderStore extends Store {
                 this._updateOrderedTags();
                 break;
             }
-            // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
-            case 'order_tag': {
-                if (!this._state.orderedTags ||
-                    !payload.tag ||
-                    !payload.targetTag ||
-                    payload.tag === payload.targetTag
-                ) return;
-
-                const tags = this._state.orderedTags;
-
-                let orderedTags = tags.filter((t) => t !== payload.tag);
-                const newIndex = orderedTags.indexOf(payload.targetTag) + (payload.after ? 1 : 0);
-                orderedTags = [
-                    ...orderedTags.slice(0, newIndex),
-                    payload.tag,
-                    ...orderedTags.slice(newIndex),
-                ];
-                this._setState({orderedTags});
+            case 'TagOrderActions.moveTag.pending': {
+                // Optimistic update of a moved tag
+                this._setState({
+                    orderedTags: payload.request.tags,
+                    removedTagsAccountData: payload.request.removedTags,
+                });
                 break;
             }
+            case 'TagOrderActions.removeTag.pending': {
+                // Optimistic update of a removed tag
+                this._setState({
+                    removedTagsAccountData: payload.request.removedTags,
+                });
+                this._updateOrderedTags();
+                break;
+            }
+            case 'select_tag': {
+                let newTags = [];
+                // Shift-click semantics
+                if (payload.shiftKey) {
+                    // Select range of tags
+                    let start = this._state.orderedTags.indexOf(this._state.anchorTag);
+                    let end = this._state.orderedTags.indexOf(payload.tag);
+
+                    if (start === -1) {
+                        start = end;
+                    }
+                    if (start > end) {
+                        const temp = start;
+                        start = end;
+                        end = temp;
+                    }
+                    newTags = payload.ctrlOrCmdKey ? this._state.selectedTags : [];
+                    newTags = [...new Set(
+                        this._state.orderedTags.slice(start, end + 1).concat(newTags),
+                    )];
+                } else {
+                    if (payload.ctrlOrCmdKey) {
+                        // Toggle individual tag
+                        if (this._state.selectedTags.includes(payload.tag)) {
+                            newTags = this._state.selectedTags.filter((t) => t !== payload.tag);
+                        } else {
+                            newTags = [...this._state.selectedTags, payload.tag];
+                        }
+                    } else {
+                        // Select individual tag
+                        newTags = [payload.tag];
+                    }
+                    // Only set the anchor tag if the tag was previously unselected, otherwise
+                    // the next range starts with an unselected tag.
+                    if (!this._state.selectedTags.includes(payload.tag)) {
+                        this._setState({
+                            anchorTag: payload.tag,
+                        });
+                    }
+                }
+
+                this._setState({
+                    selectedTags: newTags,
+                });
+
+                Analytics.trackEvent('FilterStore', 'select_tag');
+            }
+            break;
+            case 'deselect_tags':
+                this._setState({
+                    selectedTags: [],
+                });
+                Analytics.trackEvent('FilterStore', 'deselect_tags');
+            break;
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
@@ -114,13 +176,15 @@ class TagOrderStore extends Store {
     _mergeGroupsAndTags() {
         const groupIds = this._state.joinedGroupIds || [];
         const tags = this._state.orderedTagsAccountData || [];
+        const removedTags = new Set(this._state.removedTagsAccountData || []);
+
 
         const tagsToKeep = tags.filter(
-            (t) => t[0] !== '+' || groupIds.includes(t),
+            (t) => (t[0] !== '+' || groupIds.includes(t)) && !removedTags.has(t),
         );
 
         const groupIdsToAdd = groupIds.filter(
-            (groupId) => !tags.includes(groupId),
+            (groupId) => !tags.includes(groupId) && !removedTags.has(groupId),
         );
 
         return tagsToKeep.concat(groupIdsToAdd);
@@ -128,6 +192,21 @@ class TagOrderStore extends Store {
 
     getOrderedTags() {
         return this._state.orderedTags;
+    }
+
+    getRemovedTagsAccountData() {
+        return this._state.removedTagsAccountData;
+    }
+
+    getStoreId() {
+        // Generate a random ID to prevent this store from clobbering its
+        // state with redundant remote echos.
+        if (!this._id) this._id = Math.random().toString(16).slice(2, 10);
+        return this._id;
+    }
+
+    getSelectedTags() {
+        return this._state.selectedTags;
     }
 }
 

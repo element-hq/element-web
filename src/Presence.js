@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ class Presence {
         this.running = true;
         if (undefined === this.state) {
             this._resetTimer();
-            this.dispatcherRef = dis.register(this._onUserActivity.bind(this));
+            this.dispatcherRef = dis.register(this._onAction.bind(this));
         }
     }
 
@@ -95,8 +96,10 @@ class Presence {
         this.setState("unavailable");
     }
 
-    _onUserActivity() {
-        this._resetTimer();
+    _onAction(payload) {
+        if (payload.action === "user_activity") {
+            this._resetTimer();
+        }
     }
 
     /**

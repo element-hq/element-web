@@ -17,6 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -60,10 +61,10 @@ const plEventsToShow = {
 
 const BannedUser = React.createClass({
     propTypes: {
-        canUnban: React.PropTypes.bool,
-        member: React.PropTypes.object.isRequired, // js-sdk RoomMember
-        by: React.PropTypes.string.isRequired,
-        reason: React.PropTypes.string,
+        canUnban: PropTypes.bool,
+        member: PropTypes.object.isRequired, // js-sdk RoomMember
+        by: PropTypes.string.isRequired,
+        reason: PropTypes.string,
     },
 
     _onUnbanClick: function() {
@@ -115,8 +116,7 @@ module.exports = React.createClass({
     displayName: 'RoomSettings',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
-        onSaveClick: React.PropTypes.func,
+        room: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -131,7 +131,8 @@ module.exports = React.createClass({
             join_rule: this._yankValueFromEvent("m.room.join_rules", "join_rule"),
             history_visibility: this._yankValueFromEvent("m.room.history_visibility", "history_visibility"),
             guest_access: this._yankValueFromEvent("m.room.guest_access", "guest_access"),
-            power_levels_changed: false,
+            powerLevels: this._yankContentFromEvent("m.room.power_levels", {}),
+            powerLevelsChanged: false,
             tags_changed: false,
             tags: tags,
             // isRoomPublished is loaded async in componentWillMount so when the component
@@ -150,7 +151,7 @@ module.exports = React.createClass({
 
         MatrixClientPeg.get().getRoomDirectoryVisibility(
             this.props.room.roomId,
-        ).done((result) => {
+        ).done((result = {}) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
             this._originalIsRoomPublished = result.visibility === "public";
         }, (err) => {
@@ -271,8 +272,8 @@ module.exports = React.createClass({
 
 
         // power levels
-        const powerLevels = this._getPowerLevels();
-        if (powerLevels) {
+        const powerLevels = this.state.powerLevels;
+        if (this.state.powerLevelsChanged) {
             promises.push(MatrixClientPeg.get().sendStateEvent(
                 roomId, "m.room.power_levels", powerLevels, "",
             ));
@@ -383,36 +384,32 @@ module.exports = React.createClass({
         return strA !== strB;
     },
 
-    _getPowerLevels: function() {
-        if (!this.state.power_levels_changed) return undefined;
+    onPowerLevelsChanged: function(value, powerLevelKey) {
+        const powerLevels = Object.assign({}, this.state.powerLevels);
+        const eventsLevelPrefix = "event_levels_";
 
-        let powerLevels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
-        powerLevels = powerLevels ? powerLevels.getContent() : {};
+        value = parseInt(value);
 
-        for (const key of Object.keys(this.refs).filter((k) => k.startsWith("event_levels_"))) {
-            const eventType = key.substring("event_levels_".length);
-            powerLevels.events[eventType] = parseInt(this.refs[key].getValue());
+        if (powerLevelKey.startsWith(eventsLevelPrefix)) {
+            // deep copy "events" object, Object.assign itself won't deep copy
+            powerLevels["events"] = Object.assign({}, this.state.powerLevels["events"] || {});
+            powerLevels["events"][powerLevelKey.slice(eventsLevelPrefix.length)] = value;
+        } else {
+            powerLevels[powerLevelKey] = value;
         }
-
-        const newPowerLevels = {
-            ban: parseInt(this.refs.ban.getValue()),
-            kick: parseInt(this.refs.kick.getValue()),
-            redact: parseInt(this.refs.redact.getValue()),
-            invite: parseInt(this.refs.invite.getValue()),
-            events_default: parseInt(this.refs.events_default.getValue()),
-            state_default: parseInt(this.refs.state_default.getValue()),
-            users_default: parseInt(this.refs.users_default.getValue()),
-            users: powerLevels.users,
-            events: powerLevels.events,
-        };
-
-        return newPowerLevels;
+        this.setState({
+            powerLevels,
+            powerLevelsChanged: true,
+        });
     },
 
-    onPowerLevelsChanged: function() {
-        this.setState({
-            power_levels_changed: true,
-        });
+    _yankContentFromEvent: function(stateEventType, defaultValue) {
+        // E.g.("m.room.name") would yank the content of "m.room.name"
+        const event = this.props.room.currentState.getStateEvents(stateEventType, '');
+        if (!event) {
+            return defaultValue;
+        }
+        return event.getContent() || defaultValue;
     },
 
     _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
@@ -632,29 +629,61 @@ module.exports = React.createClass({
 
         const cli = MatrixClientPeg.get();
         const roomState = this.props.room.currentState;
-        const user_id = cli.credentials.userId;
+        const myUserId = cli.credentials.userId;
 
-        const power_level_event = roomState.getStateEvents('m.room.power_levels', '');
-        const power_levels = power_level_event ? power_level_event.getContent() : {};
-        const events_levels = power_levels.events || {};
-        const user_levels = power_levels.users || {};
+        const powerLevels = this.state.powerLevels;
+        const eventsLevels = powerLevels.events || {};
+        const userLevels = powerLevels.users || {};
 
-        const ban_level = parseIntWithDefault(power_levels.ban, 50);
-        const kick_level = parseIntWithDefault(power_levels.kick, 50);
-        const redact_level = parseIntWithDefault(power_levels.redact, 50);
-        const invite_level = parseIntWithDefault(power_levels.invite, 50);
-        const send_level = parseIntWithDefault(power_levels.events_default, 0);
-        const state_level = power_level_event ? parseIntWithDefault(power_levels.state_default, 50) : 0;
-        const default_user_level = parseIntWithDefault(power_levels.users_default, 0);
+        const powerLevelDescriptors = {
+            users_default: {
+                desc: _t('The default role for new room members is'),
+                defaultValue: 0,
+            },
+            events_default: {
+                desc: _t('To send messages, you must be a'),
+                defaultValue: 0,
+            },
+            invite: {
+                desc: _t('To invite users into the room, you must be a'),
+                defaultValue: 50,
+            },
+            state_default: {
+                desc: _t('To configure the room, you must be a'),
+                defaultValue: 50,
+            },
+            kick: {
+                desc: _t('To kick users, you must be a'),
+                defaultValue: 50,
+            },
+            ban: {
+                desc: _t('To ban users, you must be a'),
+                defaultValue: 50,
+            },
+            redact: {
+                desc: _t('To remove other users\' messages, you must be a'),
+                defaultValue: 50,
+            },
+        };
 
-        this._populateDefaultPlEvents(events_levels, state_level, send_level);
+        const banLevel = parseIntWithDefault(powerLevels.ban, powerLevelDescriptors.ban.defaultValue);
+        const defaultUserLevel = parseIntWithDefault(
+            powerLevels.users_default,
+            powerLevelDescriptors.users_default.defaultValue,
+        );
 
-        let current_user_level = user_levels[user_id];
-        if (current_user_level === undefined) {
-            current_user_level = default_user_level;
+        this._populateDefaultPlEvents(
+            eventsLevels,
+            parseIntWithDefault(powerLevels.state_default, powerLevelDescriptors.state_default.defaultValue),
+            parseIntWithDefault(powerLevels.events_default, powerLevelDescriptors.events_default.defaultValue),
+        );
+
+        let currentUserLevel = userLevels[myUserId];
+        if (currentUserLevel === undefined) {
+            currentUserLevel = defaultUserLevel;
         }
 
-        const can_change_levels = roomState.mayClientSendStateEvent("m.room.power_levels", cli);
+        const canChangeLevels = roomState.mayClientSendStateEvent("m.room.power_levels", cli);
 
         const canSetTag = !cli.isGuest();
 
@@ -667,15 +696,18 @@ module.exports = React.createClass({
         />;
 
         let userLevelsSection;
-        if (Object.keys(user_levels).length) {
+        if (Object.keys(userLevels).length) {
             userLevelsSection =
                 <div>
                     <h3>{ _t('Privileged Users') }</h3>
                     <ul className="mx_RoomSettings_userLevels">
-                        { Object.keys(user_levels).map(function(user, i) {
+                        { Object.keys(userLevels).map(function(user, i) {
                             return (
                                 <li className="mx_RoomSettings_userLevel" key={user}>
-                                    { _t("%(user)s is a", {user: user}) } <PowerSelector value={user_levels[user]} disabled={true} />
+                                    { _t("%(user)s is a %(userRole)s", {
+                                        user: user,
+                                        userRole: <PowerSelector value={userLevels[user]} disabled={true} />,
+                                    }) }
                                 </li>
                             );
                         }) }
@@ -688,7 +720,7 @@ module.exports = React.createClass({
         const banned = this.props.room.getMembersWithMembership("ban");
         let bannedUsersSection;
         if (banned.length) {
-            const canBanUsers = current_user_level >= ban_level;
+            const canBanUsers = currentUserLevel >= banLevel;
             bannedUsersSection =
                 <div>
                     <h3>{ _t('Banned users') }</h3>
@@ -710,13 +742,13 @@ module.exports = React.createClass({
         if (this._yankValueFromEvent("m.room.create", "m.federate", true) === false) {
              unfederatableSection = (
                 <div className="mx_RoomSettings_powerLevel">
-                { _t('This room is not accessible by remote Matrix servers') }.
+                    { _t('This room is not accessible by remote Matrix servers') }.
                 </div>
             );
         }
 
         let leaveButton = null;
-        const myMember = this.props.room.getMember(user_id);
+        const myMember = this.props.room.getMember(myUserId);
         if (myMember) {
             if (myMember.membership === "join") {
                 leaveButton = (
@@ -773,7 +805,8 @@ module.exports = React.createClass({
         const aliasEvents = this.props.room.currentState.getStateEvents('m.room.aliases') || [];
         let aliasCount = 0;
         aliasEvents.forEach((event) => {
-            aliasCount += event.getContent().aliases.length;
+            const aliases = event.getContent().aliases || [];
+            aliasCount += aliases.length;
         });
 
         if (this.state.join_rule === "public" && aliasCount == 0) {
@@ -797,6 +830,50 @@ module.exports = React.createClass({
                     }}>{ _t('Click here to fix') }</a>.
                 </div>;
         }
+
+        const powerSelectors = Object.keys(powerLevelDescriptors).map((key, index) => {
+            const descriptor = powerLevelDescriptors[key];
+
+            const value = parseIntWithDefault(powerLevels[key], descriptor.defaultValue);
+            return <div key={index} className="mx_RoomSettings_powerLevel">
+                <span className="mx_RoomSettings_powerLevelKey">
+                    { descriptor.desc }
+                </span>
+                <PowerSelector
+                    value={value}
+                    usersDefault={defaultUserLevel}
+                    controlled={false}
+                    disabled={!canChangeLevels || currentUserLevel < value}
+                    powerLevelKey={key} // Will be sent as the second parameter to `onChange`
+                    onChange={this.onPowerLevelsChanged}
+                />
+            </div>;
+        });
+
+        const eventPowerSelectors = Object.keys(eventsLevels).map(function(eventType, i) {
+            let label = plEventsToLabels[eventType];
+            if (label) {
+                label = _t(label);
+            } else {
+                label = _t(
+                    "To send events of type <eventType/>, you must be a", {},
+                    { 'eventType': <code>{ eventType }</code> },
+                );
+            }
+            return (
+                <div className="mx_RoomSettings_powerLevel" key={eventType}>
+                    <span className="mx_RoomSettings_powerLevelKey">{ label } </span>
+                    <PowerSelector
+                        value={eventsLevels[eventType]}
+                        usersDefault={defaultUserLevel}
+                        controlled={false}
+                        disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
+                        powerLevelKey={"event_levels_" + eventType}
+                        onChange={self.onPowerLevelsChanged}
+                    />
+                </div>
+            );
+        });
 
         return (
             <div className="mx_RoomSettings">
@@ -897,49 +974,9 @@ module.exports = React.createClass({
 
                 <h3>{ _t('Permissions') }</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('The default role for new room members is') } </span>
-                        <PowerSelector ref="users_default" value={default_user_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages, you must be a') } </span>
-                        <PowerSelector ref="events_default" value={send_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room, you must be a') } </span>
-                        <PowerSelector ref="invite" value={invite_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room, you must be a') } </span>
-                        <PowerSelector ref="state_default" value={state_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users, you must be a') } </span>
-                        <PowerSelector ref="kick" value={kick_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users, you must be a') } </span>
-                        <PowerSelector ref="ban" value={ban_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-                    <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages, you must be a') } </span>
-                        <PowerSelector ref="redact" value={redact_level} usersDefault={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged} />
-                    </div>
-
-                    { Object.keys(events_levels).map(function(event_type, i) {
-                        let label = plEventsToLabels[event_type];
-                        if (label) label = _t(label);
-                        else label = _t("To send events of type <eventType/>, you must be a", {}, { 'eventType': <code>{ event_type }</code> });
-                        return (
-                            <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                <span className="mx_RoomSettings_powerLevelKey">{ label } </span>
-                                <PowerSelector ref={"event_levels_"+event_type} value={events_levels[event_type]} usersDefault={default_user_level} onChange={self.onPowerLevelsChanged}
-                                               controlled={false} disabled={!can_change_levels || current_user_level < events_levels[event_type]} />
-                            </div>
-                        );
-                    }) }
-
-                { unfederatableSection }
+                    { powerSelectors }
+                    { eventPowerSelectors }
+                    { unfederatableSection }
                 </div>
 
                 { userLevelsSection }

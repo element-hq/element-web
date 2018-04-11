@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
@@ -28,9 +29,9 @@ export default React.createClass({
 
     propTypes: {
         address: UserAddressType.isRequired,
-        canDismiss: React.PropTypes.bool,
-        onDismissed: React.PropTypes.func,
-        justified: React.PropTypes.bool,
+        canDismiss: PropTypes.bool,
+        onDismissed: PropTypes.func,
+        justified: PropTypes.bool,
     },
 
     getDefaultProps: function() {

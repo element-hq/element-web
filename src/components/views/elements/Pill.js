@@ -17,7 +17,7 @@ import React from 'react';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { MATRIXTO_URL_PATTERN } from '../../../linkify-matrix';
@@ -59,6 +59,17 @@ const Pill = React.createClass({
         room: PropTypes.instanceOf(Room),
         // Whether to include an avatar in the pill
         shouldShowPillAvatar: PropTypes.bool,
+    },
+
+
+    childContextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
+    getChildContext() {
+        return {
+            matrixClient: this._matrixClient,
+        };
     },
 
     getInitialState() {
@@ -135,6 +146,7 @@ const Pill = React.createClass({
 
     componentWillMount() {
         this._unmounted = false;
+        this._matrixClient = MatrixClientPeg.get();
         this.componentWillReceiveProps(this.props);
     },
 
@@ -195,6 +207,7 @@ const Pill = React.createClass({
                     const member = this.state.member;
                     if (member) {
                         userId = member.userId;
+                        member.rawDisplayName = member.rawDisplayName || '';
                         linkText = member.rawDisplayName.replace(' (IRC)', ''); // FIXME when groups are done
                         if (this.props.shouldShowPillAvatar) {
                             avatar = <MemberAvatar member={member} width={16} height={16} />;

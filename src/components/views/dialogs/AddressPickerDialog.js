@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
@@ -507,7 +506,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
@@ -580,14 +580,8 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
-                <div className="mx_Dialog_title">
-                    { this.props.title }
-                </div>
-                <AccessibleButton className="mx_ChatInviteDialog_cancel"
-                        onClick={this.onCancel} >
-                    <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </AccessibleButton>
+            <BaseDialog className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}
+                onFinished={this.props.onFinished} title={this.props.title}>
                 <div className="mx_ChatInviteDialog_label">
                     <label htmlFor="textinput">{ this.props.description }</label>
                 </div>
@@ -597,12 +591,10 @@ module.exports = React.createClass({
                     { addressSelector }
                     { this.props.extraNode }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
-                        { this.props.button }
-                    </button>
-                </div>
-            </div>
+                <DialogButtons primaryButton={this.props.button}
+                    onPrimaryButtonClick={this.onButtonClick}
+                    onCancel={this.onCancel} />
+            </BaseDialog>
         );
     },
 });

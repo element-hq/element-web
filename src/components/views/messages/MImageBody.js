@@ -17,8 +17,10 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
+
 import MFileBody from './MFileBody';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -28,28 +30,60 @@ import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
-module.exports = React.createClass({
-    displayName: 'MImageBody',
+export default class extends React.Component {
+    displayName: 'MImageBody'
 
-    propTypes: {
+    static propTypes = {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* called when the image has loaded */
-        onWidgetLoad: React.PropTypes.func.isRequired,
-    },
+        onWidgetLoad: PropTypes.func.isRequired,
+    }
 
-    getInitialState: function() {
-        return {
+    static contextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.onAction = this.onAction.bind(this);
+        this.onImageEnter = this.onImageEnter.bind(this);
+        this.onImageLeave = this.onImageLeave.bind(this);
+        this.onClientSync = this.onClientSync.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.fixupHeight = this.fixupHeight.bind(this);
+        this._isGif = this._isGif.bind(this);
+
+        this.state = {
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
             error: null,
+            imgError: false,
         };
-    },
+    }
 
+    componentWillMount() {
+        this.unmounted = false;
+        this.context.matrixClient.on('sync', this.onClientSync);
+    }
 
-    onClick: function onClick(ev) {
+    onClientSync(syncState, prevState) {
+        if (this.unmounted) return;
+        // Consider the client reconnected if there is no error with syncing.
+        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        const reconnected = syncState !== "ERROR" && prevState !== syncState;
+        if (reconnected && this.state.imgError) {
+            // Load the image again
+            this.setState({
+                imgError: false,
+            });
+        }
+    }
+
+    onClick(ev) {
         if (ev.button == 0 && !ev.metaKey) {
             ev.preventDefault();
             const content = this.props.mxEvent.getContent();
@@ -69,43 +103,49 @@ module.exports = React.createClass({
 
             Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
         }
-    },
+    }
 
-    _isGif: function() {
+    _isGif() {
         const content = this.props.mxEvent.getContent();
         return (
           content &&
           content.info &&
           content.info.mimetype === "image/gif"
         );
-    },
+    }
 
-    onImageEnter: function(e) {
+    onImageEnter(e) {
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
         imgElement.src = this._getContentUrl();
-    },
+    }
 
-    onImageLeave: function(e) {
+    onImageLeave(e) {
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
         const imgElement = e.target;
         imgElement.src = this._getThumbUrl();
-    },
+    }
 
-    _getContentUrl: function() {
+    onImageError() {
+        this.setState({
+            imgError: true,
+        });
+    }
+
+    _getContentUrl() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            return this.context.matrixClient.mxcUrlToHttp(content.url);
         }
-    },
+    }
 
-    _getThumbUrl: function() {
+    _getThumbUrl() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             // Don't use the thumbnail for clients wishing to autoplay gifs.
@@ -114,11 +154,11 @@ module.exports = React.createClass({
             }
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url, 800, 600);
+            return this.context.matrixClient.mxcUrlToHttp(content.url, 800, 600);
         }
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
@@ -152,21 +192,35 @@ module.exports = React.createClass({
                 });
             }).done();
         }
-    },
+        this._afterComponentDidMount();
+    }
 
-    componentWillUnmount: function() {
+    // To be overridden by subclasses (e.g. MStickerBody) for further
+    // initialisation after componentDidMount
+    _afterComponentDidMount() {
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
         dis.unregister(this.dispatcherRef);
-    },
+        this.context.matrixClient.removeListener('sync', this.onClientSync);
+        this._afterComponentWillUnmount();
+    }
 
-    onAction: function(payload) {
+    // To be overridden by subclasses (e.g. MStickerBody) for further
+    // cleanup after componentWillUnmount
+    _afterComponentWillUnmount() {
+    }
+
+    onAction(payload) {
         if (payload.action === "timeline_resize") {
             this.fixupHeight();
         }
-    },
+    }
 
-    fixupHeight: function() {
+    fixupHeight() {
         if (!this.refs.image) {
-            console.warn("Refusing to fix up height on MImageBody with no image element");
+            console.warn(`Refusing to fix up height on ${this.displayName} with no image element`);
             return;
         }
 
@@ -182,10 +236,25 @@ module.exports = React.createClass({
         }
         this.refs.image.style.height = thumbHeight + "px";
         // console.log("Image height now", thumbHeight);
-    },
+    }
 
-    render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+    _messageContent(contentUrl, thumbUrl, content) {
+        return (
+            <span className="mx_MImageBody" ref="body">
+                <a href={contentUrl} onClick={this.onClick}>
+                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                        alt={content.body}
+                        onError={this.onImageError}
+                        onLoad={this.props.onWidgetLoad}
+                        onMouseEnter={this.onImageEnter}
+                        onMouseLeave={this.onImageLeave} />
+                </a>
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+          </span>
+      );
+    }
+
+    render() {
         const content = this.props.mxEvent.getContent();
 
         if (this.state.error !== null) {
@@ -216,6 +285,14 @@ module.exports = React.createClass({
             );
         }
 
+        if (this.state.imgError) {
+            return (
+                <span className="mx_MImageBody">
+                    { _t("This image cannot be displayed.") }
+                </span>
+            );
+        }
+
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
@@ -225,18 +302,7 @@ module.exports = React.createClass({
         }
 
         if (thumbUrl) {
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <a href={contentUrl} onClick={this.onClick}>
-                        <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                            alt={content.body}
-                            onLoad={this.props.onWidgetLoad}
-                            onMouseEnter={this.onImageEnter}
-                            onMouseLeave={this.onImageLeave} />
-                    </a>
-                    <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
-                </span>
-            );
+            return this._messageContent(contentUrl, thumbUrl, content);
         } else if (content.body) {
             return (
                 <span className="mx_MImageBody">
@@ -250,5 +316,5 @@ module.exports = React.createClass({
                 </span>
             );
         }
-    },
-});
+    }
+}
