@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 import sdk from '../../../index';
 import { MatrixClient } from 'matrix-js-sdk';
 import { _t } from '../../../languageHandler';
@@ -54,15 +55,14 @@ export default React.createClass({
             text = _t('Loading...');
         } else if (groups.length > 0) {
             const GroupPublicityToggle = sdk.getComponent('groups.GroupPublicityToggle');
-            const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
             const groupPublicityToggles = groups.map((groupId, index) => {
                 return <GroupPublicityToggle key={index} groupId={groupId} />;
             });
             text = _t('Display your community flair in rooms configured to show it.');
             scrollbox = <div className="mx_GroupUserSettings_groupPublicity_scrollbox">
-                <GeminiScrollbarWrapper>
+                <GeminiScrollbar>
                     { groupPublicityToggles }
-                </GeminiScrollbarWrapper>
+                </GeminiScrollbar>
             </div>;
         } else {
             text = _t("You're not currently a member of any communities.");
