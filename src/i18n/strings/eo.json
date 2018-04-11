@@ -963,5 +963,6 @@
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Kiam ĉi tiu paĝo enhavas identigeblajn informojn, ekzemple ĉambron, uzantan aŭ grupan identigilon, ĝi sendiĝas al la servilo sen tiuj.",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Disable Community Filter Panel": "Malŝalti komunuman filtran breton",
-    "Failed to add tag %(tagName)s to room": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro"
+    "Failed to add tag %(tagName)s to room": "Malsukcesis aldoni etikedon %(tagName)s al ĉambro",
+    "Submit debug logs": "Sendi sencimigan protokolon"
 }
