@@ -1,3 +1,9 @@
+Changes in [0.14.0](https://github.com/vector-im/riot-web/releases/tag/v0.14.0) (2018-04-11)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0-rc.6...v0.14.0)
+
+ * Cosmetic changes for group UI
+
 Changes in [0.14.0-rc.6](https://github.com/vector-im/riot-web/releases/tag/v0.14.0-rc.6) (2018-04-09)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0-rc.5...v0.14.0-rc.6)
