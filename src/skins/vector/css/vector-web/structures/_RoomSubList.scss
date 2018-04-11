@@ -18,6 +18,8 @@ limitations under the License.
     display: table;
     table-layout: fixed;
     width: 100%;
+
+    background-color: $roomsublist-background;
 }
 
 .mx_RoomSubList_labelContainer {
@@ -155,6 +157,8 @@ limitations under the License.
     position: relative;
     cursor: pointer;
     font-size: 13px;
+
+    background-color: $secondary-accent-color;
 }
 
 .collapsed .mx_RoomSubList_ellipsis {

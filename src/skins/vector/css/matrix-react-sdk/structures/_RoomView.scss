@@ -96,6 +96,11 @@ limitations under the License.
     order: 2;
 }
 
+.mx_RoomView_body .mx_RoomView_messagePanelSpinner {
+    order: 2;
+    margin: auto;
+}
+
 .mx_RoomView_body .mx_RoomView_statusArea {
     order: 3;
 }

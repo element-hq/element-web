@@ -16,6 +16,9 @@ limitations under the License.
 
 /* joining.js: tests for the various paths when joining a room */
 
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import Platform from '../../src/vector/platform';
+
 require('skin-sdk');
 
 var jssdk = require('matrix-js-sdk');
@@ -84,6 +87,8 @@ describe('joining a room', function () {
             localStorage.setItem("mx_is_url", IS_URL );
             localStorage.setItem("mx_access_token", ACCESS_TOKEN );
             localStorage.setItem("mx_user_id", USER_ID);
+
+            PlatformPeg.set(new Platform());
 
             var mc = (
                 <MatrixChat config={{}}

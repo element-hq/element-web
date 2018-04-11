@@ -167,8 +167,11 @@ module.exports = React.createClass({
         const StartChatButton = sdk.getComponent('elements.StartChatButton');
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
+        const GroupsButton = sdk.getComponent('elements.GroupsButton');
+
+        const groupsButton = SettingsStore.getValue("TagPanel.disableTagPanel") ?
+            <GroupsButton tooltip={true} /> : null;
 
         return (
             <div className="mx_BottomLeftMenu">
@@ -183,7 +186,7 @@ module.exports = React.createClass({
                     <div ref={this._collectCreateRoomButton}>
                         <CreateRoomButton tooltip={true} />
                     </div>
-                    <GroupsButton tooltip={true} />
+                    { groupsButton }
                     <span className="mx_BottomLeftMenu_settings">
                         <SettingsButton tooltip={true} />
                     </span>

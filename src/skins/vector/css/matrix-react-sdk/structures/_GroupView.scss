@@ -90,6 +90,8 @@ limitations under the License.
 
 .mx_GroupView_header_leftCol {
     flex: 1;
+
+    overflow: hidden;
 }
 
 .mx_GroupView_header_rightCol {
@@ -147,6 +149,17 @@ limitations under the License.
 .mx_GroupView_cancelButton img {
     position: relative;
     top: 5px;
+}
+
+.mx_GroupView input[type='radio'] {
+    margin: 10px 10px 0px 10px;
+}
+
+.mx_GroupView_label_text {
+    display: inline-block;
+    max-width: 80%;
+    vertical-align: 0.1em;
+    line-height: 2em;
 }
 
 .mx_GroupView_body  {
@@ -219,6 +232,10 @@ limitations under the License.
 .mx_GroupView_membershipSubSection {
     justify-content: space-between;
     display: flex;
+}
+
+.mx_GroupView_membershipSubSection .mx_Spinner {
+    justify-content: flex-end;
 }
 
 .mx_GroupView_membershipSection_description {
@@ -312,13 +329,21 @@ limitations under the License.
     height: 150px;
 }
 
-.mx_GroupView_groupDesc_placeholder {
+.mx_GroupView_groupDesc_placeholder,
+.mx_GroupView_changeDelayWarning {
     background-color: $info-plinth-bg-color;
     color: $info-plinth-fg-color;
     border-radius: 10px;
     text-align: center;
 
-    cursor: pointer;
-    padding: 100px 20px;
     margin: 20px 0px;
+}
+
+.mx_GroupView_groupDesc_placeholder {
+    padding: 100px 20px;
+    cursor: pointer;
+}
+
+.mx_GroupView_changeDelayWarning {
+    padding: 40px 20px;
 }

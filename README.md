@@ -106,7 +106,9 @@ config.json
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-1. `default_hs_url` is the default home server url.
+For a good example, see https://riot.im/develop/config.json
+
+1. `default_hs_url` is the default homeserver url.
 1. `default_is_url` is the default identity server url (this is the server used
    for verifying third party identifiers like email addresses). If this is blank,
    registering with an email address, adding an email address to your account,
@@ -115,21 +117,49 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
+1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
+   in the `labs` section of settings.  The available optional experimental features vary from
+   release to release.
+1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
+   homeserver know what email template to use when talking to you.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your Home Server either. The integration server settings
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
+1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
+1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
+   https://github.com/matrix-org/rageshake server)
 1. `roomDirectory`: config for the public room directory. This section is optional.
-1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
+1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
+1. `default_theme`: name of theme to use by default (e.g. 'light')
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
    and `win32` (for update packages, not installer packages).
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
+1. `piwik`: an object containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting Analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
+    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
+1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
+   with referral tracking; please ignore it.
+1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
+
+
+Note that `index.html` also has an og:image meta tag that is set to an image
+hosted on riot.im. This is the image used if links to your copy of Riot
+appear in some websites like Facebook, and indeed Riot itself. This has to be
+static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
+not possible for this to be an option in config.json. If you'd like to change
+it, you can build Riot as above, but run
+`RIOT_OG_IMAGE_URL="http://example.com/logo.png" npm run build`.
+Alternatively, you can edit the `og:image` meta tag in `index.html` directly
+each time you download a new version of Riot.
 
 Running as a Desktop app
 ========================
@@ -314,31 +344,51 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-Issues will be triaged by the core team using the following primary set of tags:
+Issues will be triaged by the core team using the below set of tags.
 
-priority:
+Tags are meant to be used in combination - e.g.:
+ * P1 critical bug == really urgent stuff that should be next in the bugfixing todo list
+ * "release blocker" == stuff which is blocking us from cutting the next release.
+ * P1 feature type:voip == what VoIP features should we be working on next?
 
-* P1: top priority; typically blocks releases
+priority: **compulsory**
+
+* P1: top priority - i.e. pool of stuff which we should be working on next
 * P2: still need to fix, but lower than P1
 * P3: non-urgent
-* P4: intereseting idea - bluesky some day
+* P4: interesting idea - bluesky some day
 * P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
-bug or feature:
+bug or feature: **compulsory**
 
 * bug
 * feature
 
-bug severity:
+bug severity: **compulsory, if bug**
 
-* cosmetic - feature works functionally but UI/UX is broken
 * critical - whole app doesn't work
 * major - entire feature doesn't work
 * minor - partially broken feature (but still usable)
+* cosmetic - feature works functionally but UI/UX is broken
 
-additional categories:
+types
+* type:* - refers to a particular part of the app; used to filter bugs
+  on a given topic - e.g. VOIP, signup, timeline, etc.
+
+additional categories (self-explanatory):
 
 * release blocker
 * ui/ux (think of this as cosmetic)
 * network (specific to network conditions)
-* platform (platform specific)
+* platform specific
+* accessibility
+* maintenance
+* performance
+* i18n
+* blocked - whether this issue currently can't be progressed due to outside factors
+
+community engagement
+* easy
+* hacktoberfest
+* bounty? - proposal to be included in a bounty programme
+* bounty - included in Status Open Bounty

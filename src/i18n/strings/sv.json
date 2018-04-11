@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "Lägg till en epostadress här för att konfigurera epostaviseringar",
     "Advanced notification settings": "Avancerade aviseringsinställingar",
     "All messages": "Alla meddelanden",
-    "All messages (loud)": "Alla meddelanden (högljudd)",
+    "All messages (noisy)": "Alla meddelanden (högljudd)",
     "All notifications are currently disabled for all targets.": "Alla aviseringar är för tillfället avstängda för alla mål.",
     "An error occurred whilst saving your email notification preferences.": "Ett fel uppstod då epostaviseringsinställningarna sparades.",
     "Call invitation": "Inbjudan till samtal",
@@ -196,5 +196,16 @@
     "Thank you!": "Tack!",
     "Back": "Tillbaka",
     "Filter results": "Filtrera resultaten",
-    "Explore Room State": "Utforska rumläget"
+    "Explore Room State": "Utforska rumläget",
+    "Show message in desktop notification": "Visa meddelande i skrivbordsavisering",
+    "Edit": "Editera",
+    "Reply": "Svara",
+    "Online": "Aktiv",
+    "Away": "Borta",
+    "Appear Offline": "Visa som utloggad",
+    "Register": "Registrera",
+    "%(count)s Members|other": "%(count)s 1 Medlemmar",
+    "%(count)s Members|one": "%(count)s 1 Medlem",
+    "Rooms": "Rum",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda anpassade serverinställningar för att logga in på andra Matrix-servrar genom att ange en annan hemserver-URL.<BR/>Du kan då använda Riot med ett befintligt Matrix-konto på en annan hemserver.<br/><br/>Du kan också ange en anpassad identitetsserver men kommer då inte kunna bjuda in användare med epostadress, eller själv bli inbjuden med epostadress."
 }

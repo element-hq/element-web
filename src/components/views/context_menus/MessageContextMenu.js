@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +17,17 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 
-const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-const dis = require('matrix-react-sdk/lib/dispatcher');
-const sdk = require('matrix-react-sdk');
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import sdk from 'matrix-react-sdk';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-const Modal = require('matrix-react-sdk/lib/Modal');
-const Resend = require("matrix-react-sdk/lib/Resend");
+import Modal from 'matrix-react-sdk/lib/Modal';
+import Resend from "matrix-react-sdk/lib/Resend";
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import {makeEventPermalink} from 'matrix-react-sdk/lib/matrix-to';
+import { isUrlPermitted } from 'matrix-react-sdk/lib/HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -107,15 +110,14 @@ module.exports = React.createClass({
             onFinished: (proceed) => {
                 if (!proceed) return;
 
-                MatrixClientPeg.get().redactEvent(
-                    this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
-                ).catch(function(e) {
+                const cli = MatrixClientPeg.get();
+                cli.redactEvent(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()).catch(function(e) {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     const code = e.errcode || e.statusCode;
                     Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                         title: _t('Error'),
-                        description: _t('You cannot delete this message. (%(code)s)', {code: code})
+                        description: _t('You cannot delete this message. (%(code)s)', {code}),
                     });
                 }).done();
             },
@@ -138,12 +140,12 @@ module.exports = React.createClass({
 
     onPinClick: function() {
         MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '')
-            .catch(e => {
+            .catch((e) => {
                 // Intercept the Event Not Found error and fall through the promise chain with no event.
                 if (e.errcode === "M_NOT_FOUND") return null;
                 throw e;
             })
-            .then(event => {
+            .then((event) => {
                 const eventIds = (event ? event.pinned : []) || [];
                 if (!eventIds.includes(this.props.mxEvent.getId())) {
                     // Not pinned - add
@@ -153,7 +155,8 @@ module.exports = React.createClass({
                     eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
                 }
 
-                MatrixClientPeg.get().sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
+                const cli = MatrixClientPeg.get();
+                cli.sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
             });
         this.closeMenu();
     },
@@ -177,6 +180,14 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onReplyClick: function() {
+        dis.dispatch({
+            action: 'quote_event',
+            event: this.props.mxEvent,
+        });
+        this.closeMenu();
+    },
+
     render: function() {
         const eventStatus = this.props.mxEvent.status;
         let resendButton;
@@ -184,12 +195,11 @@ module.exports = React.createClass({
         let cancelButton;
         let forwardButton;
         let pinButton;
-        let viewSourceButton;
         let viewClearSourceButton;
         let unhidePreviewButton;
-        let permalinkButton;
         let externalURLButton;
         let quoteButton;
+        let replyButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -224,17 +234,25 @@ module.exports = React.createClass({
                     </div>
                 );
 
+                if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
+                    replyButton = (
+                        <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
+                            { _t('Reply') }
+                        </div>
+                    );
+                }
+
                 if (this.state.canPin) {
                     pinButton = (
                         <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
-                            {this._isPinned() ? _t('Unpin Message') : _t('Pin Message')}
+                            { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
                         </div>
                     );
                 }
             }
         }
 
-        viewSourceButton = (
+        const viewSourceButton = (
             <div className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
                 { _t('View Source') }
             </div>
@@ -259,10 +277,10 @@ module.exports = React.createClass({
         }
 
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
-        permalinkButton = (
+        const permalinkButton = (
             <div className="mx_MessageContextMenu_field">
-                <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                  target="_blank" rel="noopener" onClick={ this.closeMenu }>{ _t('Permalink') }</a>
+                <a href={makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId())}
+                  target="_blank" rel="noopener" onClick={this.closeMenu}>{ _t('Permalink') }</a>
             </div>
         );
 
@@ -275,29 +293,33 @@ module.exports = React.createClass({
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
-          externalURLButton = (
-              <div className="mx_MessageContextMenu_field">
-                  <a href={ this.props.mxEvent.event.content.external_url }
-                    rel="noopener" target="_blank" onClick={ this.closeMenu }>{ _t('Source URL') }</a>
-              </div>
+        if (
+            typeof(this.props.mxEvent.event.content.external_url) === "string" &&
+            isUrlPermitted(this.props.mxEvent.event.content.external_url)
+        ) {
+            externalURLButton = (
+                <div className="mx_MessageContextMenu_field">
+                    <a href={this.props.mxEvent.event.content.external_url}
+                      rel="noopener" target="_blank" onClick={this.closeMenu}>{ _t('Source URL') }</a>
+                </div>
           );
         }
 
 
         return (
             <div>
-                {resendButton}
-                {redactButton}
-                {cancelButton}
-                {forwardButton}
-                {pinButton}
-                {viewSourceButton}
-                {viewClearSourceButton}
-                {unhidePreviewButton}
-                {permalinkButton}
-                {quoteButton}
-                {externalURLButton}
+                { resendButton }
+                { redactButton }
+                { cancelButton }
+                { forwardButton }
+                { pinButton }
+                { viewSourceButton }
+                { viewClearSourceButton }
+                { unhidePreviewButton }
+                { permalinkButton }
+                { quoteButton }
+                { replyButton }
+                { externalURLButton }
             </div>
         );
     },

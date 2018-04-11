@@ -20,6 +20,8 @@ limitations under the License.
     font-size: 13px;
     display: block;
     height: 34px;
+
+    background-color: $secondary-accent-color;
 }
 
 .mx_RoomTile_tooltip {
@@ -155,6 +157,15 @@ limitations under the License.
     background-color: $roomtile-selected-bg-color;
 }
 
+.mx_DNDRoomTile {
+    transform: none;
+    transition: transform 0.2s;
+}
+
+.mx_DNDRoomTile_dragging {
+    transform: scale(1.05, 1.05);
+}
+
 .mx_RoomTile:focus {
     filter: none ! important;
     background-color: $roomtile-focused-bg-color;
@@ -167,5 +178,13 @@ limitations under the License.
 .mx_RoomTile_arrow {
     position: absolute;
     right: 0px;
+}
+
+.mx_RoomTile.mx_RoomTile_transparent {
+    background-color: transparent;
+}
+
+.mx_RoomTile.mx_RoomTile_transparent:focus {
+    background-color: $roomtile-transparent-focused-color;
 }
 
