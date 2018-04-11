@@ -326,7 +326,9 @@ class Tinter {
             // Vector Green as any other colour.
             // --matthew
 
-            if (ss.href && !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
+            // stylesheets we don't have permission to access (eg. ones from extensions) have a null
+            // href and will throw exceptions if we try to access their rules.
+            if (!ss.href || !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
             if (ss.disabled) continue;
             if (!ss.cssRules) continue;
 
