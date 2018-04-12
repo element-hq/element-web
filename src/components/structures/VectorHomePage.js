@@ -24,7 +24,10 @@ import sanitizeHtml from 'sanitize-html';
 import sdk from 'matrix-react-sdk/lib';
 
 module.exports = React.createClass({
-    displayName: 'HomePage',
+    displayName: 'VectorHomePage',
+    statics: {
+        replaces: 'HomePage',
+    },
 
     propTypes: {
         // URL base of the team server. Optional.
