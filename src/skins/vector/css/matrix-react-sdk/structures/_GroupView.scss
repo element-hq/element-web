@@ -151,6 +151,17 @@ limitations under the License.
     top: 5px;
 }
 
+.mx_GroupView input[type='radio'] {
+    margin: 10px 10px 0px 10px;
+}
+
+.mx_GroupView_label_text {
+    display: inline-block;
+    max-width: 80%;
+    vertical-align: 0.1em;
+    line-height: 2em;
+}
+
 .mx_GroupView_body  {
     flex-grow: 1;
 }
@@ -221,6 +232,10 @@ limitations under the License.
 .mx_GroupView_membershipSubSection {
     justify-content: space-between;
     display: flex;
+}
+
+.mx_GroupView_membershipSubSection .mx_Spinner {
+    justify-content: flex-end;
 }
 
 .mx_GroupView_membershipSection_description {

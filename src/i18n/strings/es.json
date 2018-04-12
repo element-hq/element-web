@@ -225,5 +225,13 @@
     "%(count)s Members|other": "%(count)s miembros",
     "%(count)s Members|one": "%(count)s miembro",
     "Online": "Conectado",
-    "View Community": "Ver la comunidad"
+    "View Community": "Ver la comunidad",
+    "Preparing to send logs": "Preparando para enviar registros",
+    "Logs sent": "Registros enviados",
+    "Failed to send logs: ": "Error al enviar registros: ",
+    "Submit debug logs": "Enviar registros de depuración",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Los registros de depuración contienen datos de uso de la aplicación como nombre de usuario, ID o alias de las salas o grupos que hayas visitado (y nombres de usuario de otros usuarios). No contienen mensajes.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Haz click aquí</a> para crear una incidencia en Github.",
+    "GitHub issue link:": "Enlace de incidencia en GitHub:",
+    "Notes:": "Notas:"
 }

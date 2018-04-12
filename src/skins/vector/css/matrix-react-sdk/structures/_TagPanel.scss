@@ -115,17 +115,12 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.mx_TagPanel_createGroupButton {
-    opacity: 0.5;
+.mx_TagPanel_groupsButton {
     margin-bottom: 17px;
     margin-top: 18px;
     height: 25px;
 }
 
-.mx_TagPanel_createGroupButton:hover {
-    opacity: 1;
-}
-
-.mx_TagPanel_createGroupButton object {
+.mx_TagPanel_groupsButton object {
     pointer-events: none;
 }
