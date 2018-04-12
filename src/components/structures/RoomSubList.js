@@ -20,17 +20,17 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
-var sdk = require('matrix-react-sdk');
+var sdk = require('../../index');
 import { Droppable } from 'react-beautiful-dnd';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var Unread = require('matrix-react-sdk/lib/Unread');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
-var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
-import Modal from 'matrix-react-sdk/lib/Modal';
-import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
+import { _t } from '../../languageHandler';
+var dis = require('../../dispatcher');
+var Unread = require('../../Unread');
+var MatrixClientPeg = require('../../MatrixClientPeg');
+var RoomNotifs = require('../../RoomNotifs');
+var FormattingUtils = require('../../utils/FormattingUtils');
+var AccessibleButton = require('../../components/views/elements/AccessibleButton');
+import Modal from '../../Modal';
+import { KeyCode } from '../../Keyboard';
 
 
 // turn this on for drop & drag console debugging galore

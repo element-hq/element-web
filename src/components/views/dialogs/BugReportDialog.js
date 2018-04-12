@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from 'matrix-react-sdk';
-import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
-import Modal from 'matrix-react-sdk/lib/Modal';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import sdk from '../../../index';
+import SdkConfig from '../../../SdkConfig';
+import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 export default class BugReportDialog extends React.Component {
     constructor(props, context) {

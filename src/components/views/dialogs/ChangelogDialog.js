@@ -15,9 +15,9 @@
  */
 
 import React from 'react';
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../index';
 import request from 'browser-request';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from '../../../languageHandler';
 
 const REPOS = ['vector-im/riot-web', 'matrix-org/matrix-react-sdk', 'matrix-org/matrix-js-sdk'];
 

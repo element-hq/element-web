@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t, _td } from 'matrix-react-sdk/lib/languageHandler';
-import sdk from 'matrix-react-sdk';
+import { _t, _td } from '../../../languageHandler';
+import sdk from '../../../index';
 
 const STATUS_LABELS = {
     "online": _td("Online"),

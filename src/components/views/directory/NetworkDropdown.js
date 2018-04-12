@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
 
 const DEFAULT_ICON_URL = "img/network-matrix.svg";

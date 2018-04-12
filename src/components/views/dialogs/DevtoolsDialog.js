@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import { _t } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 class DevtoolsComponent extends React.Component {
     static contextTypes = {

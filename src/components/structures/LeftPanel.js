@@ -20,12 +20,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
-import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
-import sdk from 'matrix-react-sdk';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+import { KeyCode } from '../../Keyboard';
+import sdk from '../../index';
+import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
 
-import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
+import SettingsStore from '../../settings/SettingsStore';
 
 
 var LeftPanel = React.createClass({

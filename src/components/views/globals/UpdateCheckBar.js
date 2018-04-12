@@ -17,10 +17,10 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import { _t } from '../../../languageHandler';
+import PlatformPeg from '../../../PlatformPeg';
 import {updateCheckStatusEnum} from '../../../vector/platform/VectorBasePlatform';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
 const doneStatuses = [
     updateCheckStatusEnum.ERROR,

@@ -19,17 +19,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import sdk from 'matrix-react-sdk';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+import { _t } from '../../languageHandler';
+import sdk from '../../index';
+import dis from '../../dispatcher';
 import { MatrixClient } from 'matrix-js-sdk';
-import Analytics from 'matrix-react-sdk/lib/Analytics';
-import RateLimitedFunc from 'matrix-react-sdk/lib/ratelimitedfunc';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
-import { showGroupInviteDialog, showGroupAddRoomDialog } from 'matrix-react-sdk/lib/GroupAddressPicker';
-import GroupStoreCache from 'matrix-react-sdk/lib/stores/GroupStoreCache';
+import Analytics from '../../Analytics';
+import RateLimitedFunc from '../../ratelimitedfunc';
+import AccessibleButton from '../../components/views/elements/AccessibleButton';
+import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
+import GroupStoreCache from '../../stores/GroupStoreCache';
 
-import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
+import { formatCount } from '../../utils/FormattingUtils';
 
 class HeaderButton extends React.Component {
     constructor() {

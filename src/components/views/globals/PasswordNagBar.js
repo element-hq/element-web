@@ -17,10 +17,10 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import sdk from 'matrix-react-sdk';
-import Modal from 'matrix-react-sdk/lib/Modal';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import sdk from '../../../index';
+import Modal from '../../../Modal';
+import dis from '../../../dispatcher';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     onUpdateClicked: function() {

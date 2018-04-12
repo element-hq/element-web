@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-import { _td } from 'matrix-react-sdk/lib/languageHandler';
+import { _td } from '../languageHandler';
 
 var StandardActions = require('./StandardActions');
 var PushRuleVectorState = require('./PushRuleVectorState');

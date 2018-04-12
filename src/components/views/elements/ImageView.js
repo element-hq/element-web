@@ -18,14 +18,14 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
 
-import {formatDate} from 'matrix-react-sdk/lib/DateUtils';
+import {formatDate} from '../../../DateUtils';
 var filesize = require('filesize');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
-const Modal = require('matrix-react-sdk/lib/Modal');
-const sdk = require('matrix-react-sdk');
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+var AccessibleButton = require('../../../components/views/elements/AccessibleButton');
+const Modal = require('../../../Modal');
+const sdk = require('../../../index');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ImageView',

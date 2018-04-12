@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+var dis = require('../../../dispatcher');
 import classNames from 'classnames';
 
 const MIN_TOOLTIP_HEIGHT = 25;

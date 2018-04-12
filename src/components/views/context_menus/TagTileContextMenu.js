@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import TagOrderActions from 'matrix-react-sdk/lib/actions/TagOrderActions';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import sdk from 'matrix-react-sdk/lib/index';
+import { _t } from '../../../languageHandler';
+import dis from '../../../dispatcher';
+import TagOrderActions from '../../../actions/TagOrderActions';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
 
 export default class TagTileContextMenu extends React.Component {
     static propTypes = {

@@ -17,12 +17,12 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
-import sdk from 'matrix-react-sdk';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import { _t } from '../../languageHandler';
+import { KeyCode } from '../../Keyboard';
+import sdk from '../../index';
+import dis from '../../dispatcher';
+import rate_limited_func from '../../ratelimitedfunc';
+import AccessibleButton from '../../components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'SearchBox',

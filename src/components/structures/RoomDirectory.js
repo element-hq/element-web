@@ -18,19 +18,19 @@ limitations under the License.
 
 var React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var MatrixClientPeg = require('../../MatrixClientPeg');
 var ContentRepo = require("matrix-js-sdk").ContentRepo;
-var Modal = require('matrix-react-sdk/lib/Modal');
-var sdk = require('matrix-react-sdk');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+var Modal = require('../../Modal');
+var sdk = require('../../index');
+var dis = require('../../dispatcher');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
-var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
+var linkifyMatrix = require('../../linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
 import Promise from 'bluebird';
 
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from '../../languageHandler';
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 

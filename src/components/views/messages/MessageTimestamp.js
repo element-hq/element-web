@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {formatFullDate, formatTime} from 'matrix-react-sdk/lib/DateUtils';
+import {formatFullDate, formatTime} from '../../../DateUtils';
 
 export default class MessageTimestamp extends React.Component {
     static propTypes = {

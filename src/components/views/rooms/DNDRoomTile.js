@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
+import RoomTile from '../../../components/views/rooms/RoomTile';
 
 import classNames from 'classnames';
 

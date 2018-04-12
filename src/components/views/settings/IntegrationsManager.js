@@ -17,9 +17,9 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var sdk = require('matrix-react-sdk');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+var sdk = require('../../../index');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
+var dis = require('../../../dispatcher');
 
 module.exports = React.createClass({
     displayName: 'IntegrationsManager',

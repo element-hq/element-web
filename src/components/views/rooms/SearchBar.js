@@ -17,11 +17,11 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var sdk = require('matrix-react-sdk');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
+var sdk = require('../../../index');
 var classNames = require('classnames');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
-import { _t } from "matrix-react-sdk/lib/languageHandler";
+var AccessibleButton = require('../../../components/views/elements/AccessibleButton');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'SearchBar',

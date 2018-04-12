@@ -21,15 +21,15 @@ import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import sdk from 'matrix-react-sdk';
-import { _t, _td } from 'matrix-react-sdk/lib/languageHandler';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
-import * as Rooms from 'matrix-react-sdk/lib/Rooms';
-import * as RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
-import Modal from 'matrix-react-sdk/lib/Modal';
-import RoomListActions from 'matrix-react-sdk/lib/actions/RoomListActions';
+import sdk from '../../../index';
+import { _t, _td } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher';
+import DMRoomMap from '../../../utils/DMRoomMap';
+import * as Rooms from '../../../Rooms';
+import * as RoomNotifs from '../../../RoomNotifs';
+import Modal from '../../../Modal';
+import RoomListActions from '../../../actions/RoomListActions';
 
 module.exports = React.createClass({
     displayName: 'RoomTileContextMenu',

@@ -19,9 +19,9 @@ limitations under the License.
 
 import React from 'react';
 import request from 'browser-request';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
-import sdk from 'matrix-react-sdk/lib';
+import sdk from '../../index';
 
 module.exports = React.createClass({
     displayName: 'HomePage',

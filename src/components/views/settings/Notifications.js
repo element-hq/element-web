@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import Promise from 'bluebird';
-import sdk from 'matrix-react-sdk';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
-import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
-import Modal from 'matrix-react-sdk/lib/Modal';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import UserSettingsStore from '../../../UserSettingsStore';
+import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
+import Modal from '../../../Modal';
 import {
     NotificationUtils,
     VectorPushRulesDefinitions,

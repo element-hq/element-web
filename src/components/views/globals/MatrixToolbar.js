@@ -17,9 +17,9 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import Notifier from 'matrix-react-sdk/lib/Notifier';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import { _t } from '../../../languageHandler';
+import Notifier from '../../../Notifier';
+import AccessibleButton from '../../../components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',

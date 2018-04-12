@@ -17,11 +17,11 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import { _t } from '../../languageHandler';
+var sdk = require('../../index')
+var dis = require('../../dispatcher');
+var rate_limited_func = require('../../ratelimitedfunc');
+var AccessibleButton = require('../../components/views/elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'LoginBox',

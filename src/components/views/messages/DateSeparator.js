@@ -17,8 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import {formatFullDateNoTime} from 'matrix-react-sdk/lib/DateUtils';
+import { _t } from '../../../languageHandler';
+import {formatFullDateNoTime} from '../../../DateUtils';
 
 function getdaysArray() {
 	return [

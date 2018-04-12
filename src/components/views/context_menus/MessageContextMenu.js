@@ -19,15 +19,15 @@ limitations under the License.
 
 import React from 'react';
 
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import sdk from 'matrix-react-sdk';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import Modal from 'matrix-react-sdk/lib/Modal';
-import Resend from "matrix-react-sdk/lib/Resend";
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
-import {makeEventPermalink} from 'matrix-react-sdk/lib/matrix-to';
-import { isUrlPermitted } from 'matrix-react-sdk/lib/HtmlUtils';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
+import Resend from '../../../Resend';
+import SettingsStore from '../../../settings/SettingsStore';
+import {makeEventPermalink} from '../../../matrix-to';
+import { isUrlPermitted } from '../../../HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
