@@ -102,7 +102,7 @@
     "You cannot delete this image. (%(code)s)": "Nem törölheted ezt a képet. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "Nem törölheted ezt az üzenetet. (%(code)s)",
     "You are not receiving desktop notifications": "Nem fogadsz asztali értesítéseket",
-    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Egy másik, nem Riot-klienssel állítothattad be. A Riotban módosítani nem tudod ezeket, de érvényben vannak",
+    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Egy másik, nem Riot-klienssel állíthattad be. A Riotban nem tudod módosítani ezeket, de érvényben vannak",
     "Sunday": "Vasárnap",
     "Monday": "Hétfő",
     "Tuesday": "Kedd",
