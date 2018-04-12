@@ -126,7 +126,7 @@
     "karma-summary-reporter": "^1.3.3",
     "karma-webpack": "^1.7.0",
     "matrix-react-test-utils": "^0.1.1",
-    "mocha": "^2.4.5",
+    "mocha": "^5.0.5",
     "parallelshell": "^3.0.2",
     "react-addons-test-utils": "^15.4.0",
     "require-json": "0.0.1",
