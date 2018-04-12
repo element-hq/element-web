@@ -9,7 +9,7 @@ if (!og_image_url) og_image_url = 'https://riot.im/app/img/logos/riot-im-logo-1.
 module.exports = {
     entry: {
         "bundle": "./src/vector/index.js",
-        "indexeddb-worker": "./src/vector/indexedbd-worker.js",
+        "indexeddb-worker": "./src/vector/indexeddb-worker.js",
 
         // We ship olm.js as a separate lump of javascript. This makes it get
         // loaded via a separate <script/> tag in index.html (which loads it
