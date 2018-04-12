@@ -1,3 +1,13 @@
+Changes in [0.14.1](https://github.com/vector-im/riot-web/releases/tag/v0.14.1) (2018-04-12)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0...v0.14.1)
+
+ * Remove presence management feature from labs
+ * Fix an issue where Riot would fail to load at all if certain
+   extensions were installed on Firefox
+ * Fix an issue where e2e cryptography could be disabled due to
+   a migration error.
+
 Changes in [0.14.0](https://github.com/vector-im/riot-web/releases/tag/v0.14.0) (2018-04-11)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0-rc.6...v0.14.0)
