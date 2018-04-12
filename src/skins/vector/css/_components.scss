@@ -16,7 +16,6 @@
 @import "./matrix-react-sdk/structures/_UserSettings.scss";
 @import "./matrix-react-sdk/structures/login/_Login.scss";
 @import "./matrix-react-sdk/views/avatars/_BaseAvatar.scss";
-@import "./matrix-react-sdk/views/avatars/_MemberPresenceAvatar.scss";
 @import "./matrix-react-sdk/views/dialogs/_BugReportDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_ChatCreateOrReuseChatDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_ChatInviteDialog.scss";
@@ -89,7 +88,6 @@
 @import "./vector-web/structures/_RoomSubList.scss";
 @import "./vector-web/structures/_ViewSource.scss";
 @import "./vector-web/views/context_menus/_MessageContextMenu.scss";
-@import "./vector-web/views/context_menus/_PresenceContextMenuOption.scss";
 @import "./vector-web/views/context_menus/_RoomTileContextMenu.scss";
 @import "./vector-web/views/context_menus/_TagTileContextMenu.scss";
 @import "./vector-web/views/dialogs/_ChangelogDialog.scss";
