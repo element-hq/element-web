@@ -568,5 +568,21 @@
     "Dec": "Dic",
     "Warning": "Advertencia",
     "Unpin Message": "Desmarcar Mensaje",
-    "Online": "Conectado"
+    "Online": "Conectado",
+    "Submit debug logs": "Enviar registros de depuración",
+    "The platform you're on": "La plataforma en la que te encuentras",
+    "The version of Riot.im": "La versión de Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Estés identificado o no (no almacenamos tu nombre de usuario)",
+    "Your language of choice": "El idioma que has elegido",
+    "Your homeserver's URL": "La URL de tu homeserver",
+    "Your identity server's URL": "La URL de tu servidor de identidad",
+    "The information being sent to us to help make Riot.im better includes:": "La información remitida a nosotros para ayudar a mejorar Riot.im incluye:",
+    "Drop here to demote": "Suelta aquí para degradar",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Estés o no usando el modo Richtext del Editor de Texto Enriquecido",
+    "Who would you like to add to this community?": "¿A quién deseas añadir a esta comunidad?",
+    "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID": "Aviso: cualquier persona que añadas a una comunidad será públicamente visible a cualquiera que conozca el ID de la comunidad",
+    "Invite new community members": "Invita nuevos miembros de la comunidad",
+    "Name or matrix ID": "Nombre o ID de matrix",
+    "Invite to Community": "Invitar a la comunidad",
+    "Which rooms would you like to add to this community?": "¿Qué salas deseas añadir a esta comunidad?"
 }

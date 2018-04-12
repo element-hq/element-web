@@ -871,5 +871,12 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ha canviat el seu nom visible a %(displayName)s.",
     "Server may be unavailable or overloaded": "El servidor pot estar inaccessible o sobrecarregat",
     "Display name": "Nom visible",
-    "Identity Server is": "El servidor d'identitat es"
+    "Identity Server is": "El servidor d'identitat es",
+    "Submit debug logs": "Enviar logs de depuració",
+    "The platform you're on": "La plataforma a la que estàs",
+    "Whether or not you're logged in (we don't record your user name)": "Si estàs identificat o no (no desem el teu nom d'usuari)",
+    "Your language of choice": "El teu idioma preferit",
+    "Which officially provided instance you are using, if any": "Quina instància oficial estàs utilitzant, si escau",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Si estàs utilitzant el mode Richtext del Rich Text Editor o no",
+    "The information being sent to us to help make Riot.im better includes:": "La informació enviada a Riot.im per ajudar-nos a millorar inclou:"
 }

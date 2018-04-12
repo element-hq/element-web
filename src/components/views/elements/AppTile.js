@@ -52,6 +52,8 @@ export default class AppTile extends React.Component {
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
         this._onMinimiseClick = this._onMinimiseClick.bind(this);
         this._onInitialLoad = this._onInitialLoad.bind(this);
+        this._grantWidgetPermission = this._grantWidgetPermission.bind(this);
+        this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
     }
 
     /**

@@ -420,5 +420,15 @@
     "Name or matrix ID": "Namn eller matrix ID",
     "Invite to Community": "",
     "Unable to enable Notifications": "Det går inte att aktivera Notifieringar",
-    "Failed to invite user": "Misslyckades med att bjuda in användaren"
+    "Failed to invite user": "Misslyckades med att bjuda in användaren",
+    "The information being sent to us to help make Riot.im better includes:": "Informationen som skickas till oss för att hjälpa Riot.im att bli bättre inkluderar:",
+    "Review Devices": "Granska enheter",
+    "Answer Anyway": "Svara ändå",
+    "VoIP is unsupported": "VoIP stöds ej",
+    "Who would you like to add to this room?": "Vem vill du lägga till i det här rummet?",
+    "Failed to invite": "Misslyckades med att bjuda in",
+    "You need to be logged in.": "Du måste vara inloggad.",
+    "You need to be able to invite users to do that.": "Du måste kunna bjuda in användare för att göra det.",
+    "You are not in this room.": "Du är inte i det här rummet.",
+    "You do not have permission to do that in this room.": "Du har inte behörighet att göra det i det här rummet."
 }
