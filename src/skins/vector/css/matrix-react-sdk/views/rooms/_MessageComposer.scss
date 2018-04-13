@@ -34,6 +34,10 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_MessageComposer_row div:last-child{
+    padding-right: 0;
+}
+
 .mx_MessageComposer .mx_MessageComposer_avatar {
     padding-left: 10px;
     padding-right: 28px;
@@ -108,6 +112,10 @@ limitations under the License.
     padding-top: 2px;
 }
 
+.mx_MessageComposer .public-DraftStyleDefault-block {
+    overflow-x: hidden;
+}
+
 .mx_MessageComposer_input blockquote {
     color: $blockquote-fg-color;
     margin: 0 0 16px;
@@ -154,7 +162,8 @@ limitations under the License.
 .mx_MessageComposer_hangup,
 .mx_MessageComposer_voicecall,
 .mx_MessageComposer_videocall,
-.mx_MessageComposer_apps {
+.mx_MessageComposer_apps,
+.mx_MessageComposer_stickers {
     /*display: table-cell;*/
     /*vertical-align: middle;*/
     /*padding-left: 10px;*/
@@ -167,7 +176,8 @@ limitations under the License.
 .mx_MessageComposer_hangup object,
 .mx_MessageComposer_voicecall object,
 .mx_MessageComposer_videocall object,
-.mx_MessageComposer_apps object {
+.mx_MessageComposer_apps object,
+.mx_MessageComposer_stickers object {
     pointer-events: none;
 }
 

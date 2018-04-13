@@ -104,6 +104,9 @@ $roomtile-name-color: rgba(69, 69, 69, 0.8);
 $roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
 
+$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
+
+$roomsublist-background: rgba(0, 0, 0, 0.05);
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
@@ -135,11 +138,6 @@ $copy-button-url: "../../img/icon_copy_message.svg";
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
 $e2e-unverified-color: #e8bf37;
 $e2e-warning-color: #ba6363;
-
-// presence
-$presence-online: #60de00;
-$presence-unavailable: #deb800;
-$presence-offline: #b7b7b7;
 
 /*** ImageView ***/
 $lightbox-bg-color: #454545;

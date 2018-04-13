@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Travis Ralston
+Copyright 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,30 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberPresenceAvatar {
-    display: inline-block;
-    position: relative;
+.mx_MStickerBody {
+  display: block;
+  margin-right: 34px;
+  min-height: 110px;
+  padding: 20px 0;
 }
 
-.mx_MemberPresenceAvatar_status {
-    display: block;
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-
-    position: absolute;
-    bottom: -2px;
-    right: -3px;
+.mx_MStickerBody_image_container {
+  display: inline-block;
+  position: relative;
 }
 
-.mx_MemberPresenceAvatar_status_online {
-    background-color: $presence-online;
+.mx_MStickerBody_image {
+  max-width: 100%;
+  opacity: 0;
 }
 
-.mx_MemberPresenceAvatar_status_unavailable {
-    background-color: $presence-unavailable;
+.mx_MStickerBody_image_visible {
+  opacity: 1;
 }
 
-.mx_MemberPresenceAvatar_status_offline {
-    background-color: $presence-offline;
+.mx_MStickerBody_placeholder {
+  position: absolute;
+  opacity: 1;
+}
+
+.mx_MStickerBody_placeholder_invisible {
+  transition: 500ms;
+  opacity: 0;
 }

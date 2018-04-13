@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_TagPanel {
-    width: 60px;
+    flex: 0 0 60px;
     background-color: $tertiary-accent-color;
     cursor: pointer;
 
@@ -25,16 +25,46 @@ limitations under the License.
     justify-content: space-between;
 }
 
+.mx_TagPanel .mx_TagPanel_clearButton {
+    /* Constant height within flex mx_TagPanel */
+    height: 70px;
+    width: 60px;
+
+    flex: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.mx_TagPanel .mx_TagPanel_clearButton object {
+    /* Same as .mx_SearchBox padding-top */
+    margin-top: 24px;
+    pointer-events: none;
+}
+
+.mx_TagPanel .mx_TagPanel_divider {
+    height: 0px;
+    width: 42px;
+    border-bottom: 1px solid $panel-divider-color;
+}
+
+.mx_TagPanel .mx_TagPanel_scroller {
+    flex-grow: 1;
+}
+
 .mx_TagPanel .mx_TagPanel_tagTileContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 65px;
+
+    height: 100%;
 }
 
 .mx_TagPanel .mx_TagTile {
-    margin: 6px 0px;
+    padding: 6px 3px;
     opacity: 0.5;
+    position: relative;
 }
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
@@ -44,12 +74,18 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
     /* To offset border of mx_TagTile_avatar */
-    margin: 3px 0px;
+    padding: 3px 0px;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar {
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
     border: 3px solid $accent-color;
+    background-color: $accent-color;
     border-radius: 60px;
+
+    /* In case this is a "initial" avatar */
+    display: block;
+    height: 35px;
+    width: 35px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -62,16 +98,29 @@ limitations under the License.
     left: 5px;
 }
 
-.mx_TagPanel_createGroupButton {
-    opacity: 0.5;
+.mx_TagTile_context_button {
+    min-width: 15px;
+    height: 15px;
+    position: absolute;
+    right: -5px;
+    top: 1px;
+    border-radius: 8px;
+    background-color: $neutral-badge-color;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 10px;
+    text-align: center;
+    padding-top: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.mx_TagPanel_groupsButton {
     margin-bottom: 17px;
+    margin-top: 18px;
     height: 25px;
 }
 
-.mx_TagPanel_createGroupButton:hover {
-    opacity: 1;
-}
-
-.mx_TagPanel_createGroupButton object {
+.mx_TagPanel_groupsButton object {
     pointer-events: none;
 }

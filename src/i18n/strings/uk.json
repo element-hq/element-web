@@ -1,7 +1,7 @@
 {
     "A new version of Riot is available.": "Доступне оновлення для Riot.",
     "All messages": "Усі повідомлення",
-    "All messages (loud)": "Усі повідомлення (гучно)",
+    "All messages (noisy)": "Усі повідомлення (гучно)",
     "All Rooms": "Усі кімнати",
     "All notifications are currently disabled for all targets.": "Сповіщення для усіх цілей на даний момент вимкнені.",
     "An error occurred whilst saving your email notification preferences.": "Під час збереження налаштувань сповіщень е-поштою трапилася помилка.",
@@ -216,5 +216,15 @@
     "Add rooms to this community": "Добавити кімнати в це суспільство",
     "Toolbox": "Панель інструментів",
     "Send Account Data": "Відправити данні аккаунта",
-    "Explore Account Data": "Продивитись данні аккаунта"
+    "Explore Account Data": "Продивитись данні аккаунта",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви можете використовувати параметри користувача сервера для входа на другі сервера Matrix, вказав другий URL-адресу домашнього сервера. <br/>Це дозволяє використовувати Riot з обліковим записом Matrix який існує на другому домашньому сервері.<br/><br/>Окрім цього, можливо встановити ідентифікаційний сервер користувача, але ви не зможете запросити других користувачів та бути запрошенному  використовуючи адресу електронної пошти.",
+    "Appear Offline": "Відображати як не в мережі",
+    "Away": "Нема на місці",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Краще встановіть <chromeLink>Chrome</chromeLink> або <firefoxLink>Firefox</firefoxLink>.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> та <operaLink>Opera</operaLink> працюють теж.",
+    "Reply": "Відповісти",
+    "Preparing to send logs": "Підготовка до відправки журланлу",
+    "Logs sent": "Журнали відправленні",
+    "Failed to send logs: ": "Не вдалося відправити журнали: ",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Нажміть тут</a> для створення запитання по проблемі  на GitHub."
 }

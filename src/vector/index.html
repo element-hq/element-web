@@ -20,7 +20,7 @@
     <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
     <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-    <meta property="og:image" content="https://chat.status.im/img/logos/riot-im-logo-1.png" />
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
@@ -71,7 +71,7 @@
         <source src="media/busy.ogg" type="audio/ogg" />
         <source src="media/busy.mp3" type="audio/mpeg" />
     </audio>
-    <audio id="remoteAudio"/>
+    <audio id="remoteAudio"></audio>
     <!-- let CSS themes pass constants to the app -->
     <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"/></div><div id="mx_theme_tertiaryAccentColor"/></div>
   </body>
