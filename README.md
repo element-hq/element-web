@@ -262,7 +262,7 @@ First clone and build `matrix-js-sdk`:
 1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
 1. `pushd matrix-js-sdk`
 1. `git checkout develop`
-1. `npm install`
+1. `npm link`
 1. `npm install source-map-loader` # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
 1. `popd`
 
@@ -271,8 +271,8 @@ Then similarly with `matrix-react-sdk`:
 1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
 1. `pushd matrix-react-sdk`
 1. `git checkout develop`
-1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+1. `npm link`
+1. `npm link matrix-js-sdk`
 1. `popd`
 
 Finally, build and start Riot itself:
@@ -281,8 +281,8 @@ Finally, build and start Riot itself:
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
-1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
+1. `npm link matrix-js-sdk`
+1. `npm link matrix-react-sdk`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
     ```
