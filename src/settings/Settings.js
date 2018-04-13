@@ -88,12 +88,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_presence_management": {
-        isFeature: true,
-        displayName: _td("Presence Management"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_tag_panel": {
         isFeature: true,
         displayName: _td("Tag Panel"),
