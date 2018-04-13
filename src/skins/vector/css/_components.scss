@@ -35,7 +35,7 @@
 @import "./matrix-react-sdk/views/elements/_EditableItemList.scss";
 @import "./matrix-react-sdk/views/elements/_MemberEventListSummary.scss";
 @import "./matrix-react-sdk/views/elements/_ProgressBar.scss";
-@import "./matrix-react-sdk/views/elements/_Quote.scss";
+@import "./matrix-react-sdk/views/elements/_ReplyThread.scss";
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
@@ -66,7 +66,7 @@
 @import "./matrix-react-sdk/views/rooms/_PinnedEventTile.scss";
 @import "./matrix-react-sdk/views/rooms/_PinnedEventsPanel.scss";
 @import "./matrix-react-sdk/views/rooms/_PresenceLabel.scss";
-@import "./matrix-react-sdk/views/rooms/_QuotePreview.scss";
+@import "./matrix-react-sdk/views/rooms/_ReplyPreview.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomHeader.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomList.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomPreviewBar.scss";
