@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
@@ -34,13 +35,16 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent associated with the context menu */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* an optional EventTileOps implementation that can be used to unhide preview widgets */
-        eventTileOps: React.PropTypes.object,
+        eventTileOps: PropTypes.object,
+
+        /* an optional function which allows to collapse reply thread */
+        collapseReplyThread: PropTypes.func,
 
         /* callback called when the menu is dismissed */
-        onFinished: React.PropTypes.func,
+        onFinished: PropTypes.func,
     },
 
     getInitialState: function() {
@@ -188,6 +192,11 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onCollapseReplyThreadClick: function () {
+        this.props.collapseReplyThread();
+        this.closeMenu();
+    },
+
     render: function() {
         const eventStatus = this.props.mxEvent.status;
         let resendButton;
@@ -200,6 +209,7 @@ module.exports = React.createClass({
         let externalURLButton;
         let quoteButton;
         let replyButton;
+        let collapseReplyThread;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -305,6 +315,14 @@ module.exports = React.createClass({
           );
         }
 
+        if (this.props.collapseReplyThread) {
+            collapseReplyThread = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onCollapseReplyThreadClick}>
+                    { _t('Collapse Reply Thread') }
+                </div>
+            );
+        }
+
 
         return (
             <div>
@@ -320,6 +338,7 @@ module.exports = React.createClass({
                 { quoteButton }
                 { replyButton }
                 { externalURLButton }
+                { collapseReplyThread }
             </div>
         );
     },
