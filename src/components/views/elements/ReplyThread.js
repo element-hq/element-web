@@ -52,6 +52,8 @@ export default class ReplyThread extends React.Component {
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
+        this.canCollapse = this.canCollapse.bind(this);
+        this.collapse = this.collapse.bind(this);
     }
 
     componentWillMount() {
@@ -62,6 +64,14 @@ export default class ReplyThread extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
+    }
+
+    canCollapse() {
+        return this.state.events.length > 1;
+    }
+
+    collapse() {
+        this.initialize();
     }
 
     async initialize() {
@@ -227,11 +237,11 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static getQuote(parentEv, onWidgetLoad) {
+    static getThread(parentEv, onWidgetLoad, ref) {
         if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getInReplyTo(parentEv)) {
             return <div />;
         }
-        return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
+        return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} ref={ref} />;
     }
 
     render() {

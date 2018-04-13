@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 
-import Reply from "../elements/ReplyThread";
+import ReplyThread from "../elements/ReplyThread";
 
 const React = require('react');
 import PropTypes from 'prop-types';
@@ -302,12 +302,16 @@ module.exports = withMatrixClient(React.createClass({
         const x = buttonRect.right + window.pageXOffset;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
         const self = this;
+
+        const {tile, replyThread} = this.refs;
+
         ContextualMenu.createMenu(MessageContextMenu, {
             chevronOffset: 10,
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
-            eventTileOps: this.refs.tile && this.refs.tile.getEventTileOps ? this.refs.tile.getEventTileOps() : undefined,
+            eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
+            collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
             onFinished: function() {
                 self.setState({menu: false});
             },
@@ -662,7 +666,7 @@ module.exports = withMatrixClient(React.createClass({
                             { this._renderE2EPadlock() }
                             {
                                 this.props.tileShape === 'reply_preview'
-                                && Reply.getQuote(this.props.mxEvent, this.props.onWidgetLoad)
+                                && ReplyThread.getThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread')
                             }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
@@ -687,7 +691,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
-                            { Reply.getQuote(this.props.mxEvent, this.props.onWidgetLoad) }
+                            { ReplyThread.getThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread') }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
