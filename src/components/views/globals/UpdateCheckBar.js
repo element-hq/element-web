@@ -19,13 +19,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import PlatformPeg from '../../../PlatformPeg';
-import {updateCheckStatusEnum} from '../../../vector/platform/VectorBasePlatform';
 import AccessibleButton from '../../../components/views/elements/AccessibleButton';
-
-const doneStatuses = [
-    updateCheckStatusEnum.ERROR,
-    updateCheckStatusEnum.NOTAVAILABLE,
-];
 
 export default React.createClass({
     propTypes: {
@@ -42,6 +36,7 @@ export default React.createClass({
     },
 
     getStatusText: function() {
+        const updateCheckStatusEnum = PlatformPeg.get().getUpdateCheckStatusEnum();
         switch(this.props.status) {
             case updateCheckStatusEnum.ERROR:
                 return _t('Error encountered (%(errorDetail)s).', { errorDetail: this.props.detail });
@@ -52,8 +47,7 @@ export default React.createClass({
             case updateCheckStatusEnum.DOWNLOADING:
                 return _t('Downloading update...');
         }
-    }
-    ,
+    },
 
     hideToolbar: function() {
         PlatformPeg.get().stopUpdateCheck();
@@ -62,6 +56,16 @@ export default React.createClass({
     render: function() {
         const message = this.getStatusText();
         const warning = _t('Warning');
+
+        if (!'getUpdateCheckStatusEnum' in PlatformPeg.get()) {
+            return <div></div>;
+        }
+
+        const updateCheckStatusEnum = PlatformPeg.get().getUpdateCheckStatusEnum();
+        const doneStatuses = [
+            updateCheckStatusEnum.ERROR,
+            updateCheckStatusEnum.NOTAVAILABLE,
+        ];
 
         let image;
         if (doneStatuses.includes(this.props.status)) {
