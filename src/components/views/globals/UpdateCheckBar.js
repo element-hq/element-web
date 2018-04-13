@@ -23,7 +23,7 @@ import AccessibleButton from '../../../components/views/elements/AccessibleButto
 
 export default React.createClass({
     propTypes: {
-        status: React.PropTypes.oneOf(Object.values(updateCheckStatusEnum)).isRequired,
+        status: React.PropTypes.string, // oneOf(Object.values(updateCheckStatusEnum)).isRequired,
         // Currently for error detail but will be usable for download progress
         // once that is a thing that squirrel passes through electron.
         detail: React.PropTypes.string,
