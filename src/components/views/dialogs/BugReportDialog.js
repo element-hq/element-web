@@ -56,7 +56,7 @@ export default class BugReportDialog extends React.Component {
         this.setState({ busy: true, progress: null, err: null });
         this._sendProgressCallback(_t("Preparing to send logs"));
 
-        require(['../../../vector/submit-rageshake'], (s) => {
+        require(['../../../rageshake/submit-rageshake'], (s) => {
             s(SdkConfig.get().bug_report_endpoint_url, {
                 userText,
                 sendLogs: true,
