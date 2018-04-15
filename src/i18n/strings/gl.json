@@ -236,7 +236,7 @@
     "Enable Notifications": "Habilitar notificacións",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s  %(fullYear)s",
     "Message Replies": "Respostas a mensaxe",
-    "Mirror local video feed": "Espellar fonte de vídeo local",
+    "Mirror local video feed": "Copiar fonte de vídeo local",
     "Opt out of analytics": "Saírse de analytics",
     "Cannot add any more widgets": "Non pode engadir máis widgets",
     "The maximum permitted number of widgets have already been added to this room.": "Xa se engadeu o número máximo de widgets a esta sala.",
