@@ -74,7 +74,7 @@ module.exports = function (config) {
                 watched: false, included: false, served: true, nocache: false,
             },
             {
-                pattern: 'res/themes/riot/img/*',
+                pattern: 'res/themes/**',
                 watched: false, included: false, served: true, nocache: false,
             },
         ],
@@ -82,7 +82,7 @@ module.exports = function (config) {
         proxies: {
             // redirect img links to the karma server. See above.
             "/img/": "/base/node_modules/matrix-react-sdk/res/img/",
-            "/themes/riot/img/": "/base/res/themes/riot/img/",
+            "/themes/": "/base/res/themes/",
         },
 
         // preprocess matching files before serving them to the browser
