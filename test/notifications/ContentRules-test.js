@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var notifications = require('../../../src/notifications');
+var notifications = require('../../src/notifications');
 
 var ContentRules = notifications.ContentRules;
 var PushRuleVectorState = notifications.PushRuleVectorState;
 
 var expect = require('expect');
-var test_utils = require('../../test-utils');
+var test_utils = require('../test-utils');
 
 var NORMAL_RULE = {
     actions: [
