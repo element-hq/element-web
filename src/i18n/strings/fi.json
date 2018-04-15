@@ -95,7 +95,6 @@
     "Failed to change settings": "Asetusten muuttaminen epäonnistui",
     "Failed to forget room %(errCode)s": "Huoneen unohtaminen epäonnistui %(errCode)s",
     "Failed to update keywords": "Avainsanojen päivittäminen epäonnistui",
-    "Enable audible notifications in web client": "Ota käyttöön äänelliset ilmoitukset",
     "Enable desktop notifications": "Ota käyttöön työpöytäilmoitukset",
     "Enable email notifications": "Ota käyttöön sähköposti-ilmoitukset",
     "Enable notifications for this account": "Ota käyttöön ilmoitukset tälle tilille",

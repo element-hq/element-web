@@ -882,7 +882,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopAudioNotifications">
-                                { _t('Enable audible notifications in web client') }
+                                { _t('Enable audible notifications') }
                             </label>
                         </div>
                     </div>

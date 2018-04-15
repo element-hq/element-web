@@ -94,7 +94,6 @@
     "An error occurred whilst saving your email notification preferences.": "在儲存你的電子郵件通知偏好時發生錯誤。",
     "Collecting app version information": "收集應用程式版本資訊",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "刪除聊天室別名 %(alias)s 並從目錄移除 %(name)s？",
-    "Enable audible notifications in web client": "在網頁客戶端啟用音訊通知",
     "Enter keywords separated by a comma:": "輸入以逗號隔開的關鍵字：",
     "Error saving email notification preferences": "儲存電子郵件通知偏好設定時出錯",
     "Failed to add tag %(tagName)s to room": "新增標籤 %(tagName)s 到聊天室失敗",

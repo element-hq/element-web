@@ -52,7 +52,6 @@
     "Custom Server Options": "Propraj servilaj elektoj",
     "customServer_text": "Vi povas uzi opciojn personigitajn de la servilo por ensaluti en aliajn servilojn Matrix specifante alian adreson URL-an de alia servilo Home.<br/>Tio permesas al vi uzi Riot per ekzistanta konto en alia Home servilo.<br/><br/>Vi povas ankaŭ agordi servilon identecan personigita, sed ne eblos inviti uzantojn pere de retpoŝtadreso, aŭ esti invitita pere de retpoŝtadreso vi mem.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Ĉu forigi la ĉambran kromnomon %(alias)s kaj forigi %(name)s de la ujo?",
-    "Enable audible notifications in web client": "Ŝalti aŭdeblajn sciigojn en la retkliento",
     "Enable desktop notifications": "Ŝalti labortablajn sciigojn",
     "Enable email notifications": "Ŝalti retpoŝtajn sciigojn",
     "Enable notifications for this account": "Ŝalti sciigojn por tiu ĉi konto",

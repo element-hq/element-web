@@ -39,7 +39,6 @@
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Можда сте их подесили у неком другом клијенту а не Riot-у. Не можете их преправљати у Riot-у али се и даље примењују",
     "Enable desktop notifications": "Омогући стона обавештења",
     "Show message in desktop notification": "Прикажи поруку у стоном обавештењу",
-    "Enable audible notifications in web client": "Омогући звучна обавештења у веб клијенту",
     "Off": "Искључено",
     "On": "Укључено",
     "Noisy": "Бучно",

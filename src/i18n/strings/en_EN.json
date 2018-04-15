@@ -39,7 +39,7 @@
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply",
     "Enable desktop notifications": "Enable desktop notifications",
     "Show message in desktop notification": "Show message in desktop notification",
-    "Enable audible notifications in web client": "Enable audible notifications in web client",
+    "Enable audible notifications": "Enable audible notifications",
     "Off": "Off",
     "On": "On",
     "Noisy": "Noisy",
