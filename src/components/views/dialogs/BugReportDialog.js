@@ -65,7 +65,7 @@ export default class BugReportDialog extends React.Component {
                 if (!this._unmounted) {
                     this.props.onFinished(false);
                     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
+                    Modal.createTrackedDialog(_t('Bug report sent'), '', QuestionDialog, {
                         title: _t('Logs sent'),
                         description: _t('Thank you!'),
                         hasCancelButton: false,
