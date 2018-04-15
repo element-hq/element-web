@@ -79,5 +79,5 @@
     "Notify me for anything else": "他の場合についても通知する",
     "All notifications are currently disabled for all targets.": "現在すべての対象についての全通知が無効です。",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "ルールにより、次のキーワードについての通知はここに表示されません:",
-    "Unable to fetch notification target list": "通知対象リストを取得できません"
+    "Unable to fetch notification target list": "通知先リストを取得できませんでした"
 }
