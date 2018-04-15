@@ -26,6 +26,11 @@ function getColorName(hex) {
 }
 ```
 
+## Editing existing strings
+
+1. Edit every occurrence of the string in `src/i18n/strings/en_EN.json` and inside `_t()` and `_td()` in the JSX files.
+1. Remove every translation of this string from `src/i18n/strings/*.json`, _except_ for `src/i18n/strings/en_EN.json`, as that string no longer exists.
+
 ## Adding new strings
 
  1. Check if the import ``import { _t } from 'matrix-react-sdk/lib/languageHandler';`` is present. If not add it to the other import statements. Also import `_td` if needed.
