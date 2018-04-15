@@ -100,7 +100,6 @@
     "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">사파리</a>와 <a href=\"http://opera.com\">오페라</a>에서도 작동해요.",
     "customServer_text": "사용자 지정 서버 설정에서 다른 홈 서버 URL을 지정해 다른 매트릭스 서버에 로그인할 수 있어요.<br/>이를 통해 라이엇과 다른 홈 서버의 기존 매트릭스 계정을 함께 쓸 수 있죠.<br/><br/>사용자 지정 ID 서버를 설정할 수도 있지만 이메일 주소로 사용자를 초대하거나 초대받을 수는 없답니다.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "방 가명 %(alias)s 을 지우고 목록에서 %(name)s를 지우시겠어요?",
-    "Enable audible notifications in web client": "웹 클라이언트에서 알림 소리 켜기",
     "Enable them now": "지금 켜기",
     "Enter keywords separated by a comma:": "키워드를 쉼표로 구분해 입력해주세요:",
     "Failed to add tag %(tagName)s to room": "방에 %(tagName)s로 지정하지 못했어요",

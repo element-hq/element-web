@@ -107,7 +107,6 @@
     "Collecting logs": "Sbírání logů",
     "Couldn't find a matching Matrix room": "Odpovídající Matrix místost nenalezena",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Smazat alias místnosti %(alias)s a odstranit %(name)s z adresáře?",
-    "Enable audible notifications in web client": "Povolit zvuková upozornění ve webové aplikaci",
     "Enable them now": "Povolit nyní",
     "Enter keywords separated by a comma:": "Vložte klíčová slova oddělená čárkou:",
     "Error saving email notification preferences": "Chyba při ukládání nastavení e-mailových upozornění",

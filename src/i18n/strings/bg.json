@@ -39,7 +39,6 @@
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Възможна конфигурация на настройките за известия в клиент, различен от Riot. Не могат да бъдат променени в Riot, но важат въпреки това",
     "Enable desktop notifications": "Включване на известия на работния плот",
     "Show message in desktop notification": "Показване на съдържание в известията на работния плот",
-    "Enable audible notifications in web client": "Включване на звукови известия в уеб клиент",
     "Off": "Изключено",
     "On": "Включено",
     "Noisy": "Шумно",

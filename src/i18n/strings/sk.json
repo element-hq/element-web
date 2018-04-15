@@ -39,7 +39,6 @@
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Tieto nastavenia oznámení sa použijú aj napriek tomu, že ich nemôžete meniť cez Riot. Pravdepodobne ste si ich nastavili v inej aplikácii",
     "Enable desktop notifications": "Povoliť oznámenia na pracovnej ploche",
     "Show message in desktop notification": "Zobraziť text správy v oznámení na pracovnej ploche",
-    "Enable audible notifications in web client": "Povoliť zvukové oznámenia vo webovom klientovi",
     "Off": "Zakázané",
     "On": "Povolené",
     "Noisy": "Hlučné",
