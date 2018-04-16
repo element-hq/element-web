@@ -226,5 +226,13 @@
     "%(count)s Members|one": "%(count)s Deelnemer",
     "Reply": "Beantwoord",
     "Online": "Online",
-    "View Community": "Gemeenschap Weergeven"
+    "View Community": "Gemeenschap Weergeven",
+    "Submit debug logs": "Debug logs indienen",
+    "Preparing to send logs": "Voorbereiden om logs te versturen",
+    "Logs sent": "Logs verstuurd",
+    "Failed to send logs: ": "Het is niet gelukt om de logs te versturen: ",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debug logs bevatten applicatie-gebruik data inclusief je gebruikersnaam, de ID's of namen van de ruimtes en groepen die je hebt bezocht en de gebruikersnamen van andere gebruikers. Ze bevatten geen berichten.",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Klik hier</a> om een Github opgave in te dienen.",
+    "GitHub issue link:": "GitHub opgave link:",
+    "Notes:": "Constateringen:"
 }
