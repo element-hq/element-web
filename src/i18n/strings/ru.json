@@ -958,7 +958,7 @@
     "Send a reply (unencrypted)…": "Отправить ответ (незашифрованный)…",
     "Send an encrypted message…": "Отправить зашифрованное сообщение…",
     "Send a message (unencrypted)…": "Отправить сообщение (незашифрованное)…",
-    "Replying": "Отвечая",
+    "Replying": "Отвечает",
     "Minimize apps": "Свернуть приложения",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Конфиденциальность важна для нас, поэтому мы не собираем никаких личных или идентифицируемых данных для нашей аналитики.",
     "Learn more about how we use analytics.": "Подробнее о том, как мы используем аналитику.",
@@ -1008,5 +1008,11 @@
     "to add some!": "для добавления!",
     "Click": "Нажмите",
     "Who can join this community?": "Кто может присоединиться к этому сообществу?",
-    "Everyone": "Все"
+    "Everyone": "Все",
+    "Stickerpack": "Этикетки",
+    "Sticker Messages": "Сообщения этикеткой",
+    "Add a stickerpack": "Добавить этикетки",
+    "Hide Stickers": "Скрыть этикетки",
+    "Show Stickers": "Показать этикетки",
+    "Manage sticker packs": "Упорядочить этикетки"
 }
