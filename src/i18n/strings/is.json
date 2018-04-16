@@ -3,7 +3,7 @@
     "OK": "Í lagi",
     "Off": "Slökkt",
     "On": "Kveikt",
-    "Search…": "Leita...",
+    "Search…": "Leita…",
     "Search": "Leita",
     "Sunday": "Sunnudagur",
     "Monday": "Mánudagur",
@@ -86,7 +86,7 @@
     "Set Password": "Setja lykilorð",
     "Preparing to send logs": "Undirbý sendingu atvikaskráa",
     "Logs sent": "Sendi atvikaskrár",
-    "Failed to send logs: ": "Mistókst að senda atvikaskrá",
+    "Failed to send logs: ": "Mistókst að senda atvikaskrár: ",
     "Send logs": "Senda atvikaskrá",
     "Unavailable": "Ekki tiltækt",
     "Developer Tools": "Forritunartól",
@@ -110,5 +110,9 @@
     "No rooms to show": "Engar spjallrásir sem hægt er að birta",
     "Search for a room": "Leita að spjallrás",
     "Filter room names": "Sía heiti spjallrása",
-    "Riot/Web &amp; Desktop chat": "Riot/Spjall á vef- &amp; skjáborði"
+    "Riot/Web &amp; Desktop chat": "Riot/Spjall á vef- &amp; skjáborði",
+    "Noisy": "Hávært",
+    "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
+    "Checking for an update...": "Athuga með uppfærslu...",
+    "Uploaded on %(date)s by %(user)s": "Sent inn %(date)s af %(user)s"
 }
