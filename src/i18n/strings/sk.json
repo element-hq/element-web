@@ -1002,5 +1002,17 @@
     "Debug Logs Submission": "Odoslanie ladiacich záznamov",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ak ste nám poslali hlásenie o chybe cez Github, ladiace záznamy nám môžu pomôcť lepšie identifikovať chybu. Ladiace záznamy obsahujú údaje o používaní aplikácii, vrátane vašeho používateľského mena, názvy a aliasy miestností a komunít, ku ktorým ste sa pripojili a mená ostatných používateľov. Tieto záznamy neobsahujú samotný obsah vašich správ.",
     "Submit debug logs": "Odoslať ladiace záznamy",
-    "Opens the Developer Tools dialog": "Otvorí dialóg nástroje pre vývojárov"
+    "Opens the Developer Tools dialog": "Otvorí dialóg nástroje pre vývojárov",
+    "Stickerpack": "Balíček nálepiek",
+    "Sticker Messages": "Správy s nálepkami",
+    "You don't currently have any stickerpacks enabled": "Momentálne nemáte aktívne žiadne balíčky s nálepkami",
+    "Click": "Kliknutím",
+    "here": "sem",
+    "to add some!": "si nejaké pridajte!",
+    "Add a stickerpack": "Pridať balíček s nálepkami",
+    "Hide Stickers": "Skryť nálepky",
+    "Show Stickers": "Zobraziť nálepky",
+    "Manage sticker packs": "Spravovať balíčky s nálepkami",
+    "Who can join this community?": "Kto môže vstúpiť do tejto komunity?",
+    "Everyone": "Ktokoľvek"
 }
