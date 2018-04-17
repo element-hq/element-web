@@ -1003,5 +1003,17 @@
     "Unable to leave community": "Ezinezkoa komunitatetik ateratzea",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Zure komunitatearen <bold1>izen</bold1> eta <bold2>abatar</bold2>ari egindako aldaketak 30 minutu behar ditzakete beste erabiltzaileek ikusi arte.",
     "Join this community": "Elkartu komunitate honetara",
-    "Leave this community": "Atera komunitate honetatik"
+    "Leave this community": "Atera komunitate honetatik",
+    "Stickerpack": "Eranskailu-multzoa",
+    "Sticker Messages": "Eranskailu mezuak",
+    "You don't currently have any stickerpacks enabled": "Ez duzu eranskailu multzorik aktibatuta",
+    "Click": "Klik",
+    "here": "hemen",
+    "to add some!": "batzuk gehitzeko!",
+    "Add a stickerpack": "Gehitu eranskailu-multzoa",
+    "Hide Stickers": "Ezkutatu eranskailuak",
+    "Show Stickers": "Erakutsi eranskailuak",
+    "Manage sticker packs": "Kudeatu eranskailu-multzoak",
+    "Who can join this community?": "Nor elkartu daiteke komunitate honetara?",
+    "Everyone": "Edonor"
 }
