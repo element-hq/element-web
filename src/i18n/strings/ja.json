@@ -140,5 +140,10 @@
     "Reply": "返信",
     "Unpin Message": "メッセージの固定を外す",
     "Pin Message": "メッセージを固定する",
-    "View Source": "ソースコードを表示する"
+    "View Source": "ソースコードを表示する",
+    "Riot Desktop on %(platformName)s": "%(platformName)s向けデスクトップ版Riot",
+    "You need to be using HTTPS to place a screen-sharing call.": "画面共有通話を行うにはHTTPS通信を使う必要があります。",
+    "Notification targets": "通知先",
+    "Advanced notification settings": "通知の詳細設定",
+    "Show message in desktop notification": "デスクトップ通知にメッセージ内容を表示する"
 }
