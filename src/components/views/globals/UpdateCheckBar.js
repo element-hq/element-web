@@ -23,7 +23,7 @@ import AccessibleButton from '../../../components/views/elements/AccessibleButto
 
 export default React.createClass({
     propTypes: {
-        status: React.PropTypes.string, // oneOf(Object.values(updateCheckStatusEnum)).isRequired,
+        status: React.PropTypes.string.isRequired,
         // Currently for error detail but will be usable for download progress
         // once that is a thing that squirrel passes through electron.
         detail: React.PropTypes.string,
@@ -36,6 +36,8 @@ export default React.createClass({
     },
 
     getStatusText: function() {
+        // we can't import the enum from riot-web as we don't want matrix-react-sdk
+        // to depend on riot-web. so we grab it as a normal object via API instead.
         const updateCheckStatusEnum = PlatformPeg.get().getUpdateCheckStatusEnum();
         switch(this.props.status) {
             case updateCheckStatusEnum.ERROR:
