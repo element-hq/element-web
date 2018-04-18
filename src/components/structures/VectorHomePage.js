@@ -23,8 +23,8 @@ import sanitizeHtml from 'sanitize-html';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 class VectorHomePage extends HomePage {
-    displayName = 'VectorHomePage'
-    static replaces = 'HomePage'
+    static displayName = 'VectorHomePage';
+    static replaces = 'HomePage';
 
     // we're overriding the base component here, for Riot-specific tweaks
     translate(s) {
