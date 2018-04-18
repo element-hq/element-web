@@ -18,40 +18,36 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
 
-module.exports = React.createClass({
-    displayName: 'HomePage',
+class HomePage extends React.Component {
+    displayName = 'HomePage';
 
-    propTypes: {
+    static propTypes = {
         // URL base of the team server. Optional.
-        teamServerUrl: React.PropTypes.string,
+        teamServerUrl: PropTypes.string,
         // Team token. Optional. If set, used to get the static homepage of the team
         //      associated. If unset, homePageUrl will be used.
-        teamToken: React.PropTypes.string,
+        teamToken: PropTypes.string,
         // URL to use as the iFrame src. Defaults to /home.html.
-        homePageUrl: React.PropTypes.string,
-    },
+        homePageUrl: PropTypes.string,
+    };
 
-    getInitialState: function() {
-        return {
+    state = {
             iframeSrc: '',
             page: '',
-        };
-    },
+    };
 
-    translate: function(s) {
-        s = sanitizeHtml(_t(s));
-        // ugly fix for https://github.com/vector-im/riot-web/issues/4243
-        s = s.replace(/Riot\.im/, '<a href="https://riot.im" target="_blank" rel="noopener">Riot.im</a>');
-        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank" rel="noopener"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="home/images/matrix.svg"/></a>');
-        return s;
-    },
+    translate(s) {
+        // default implementation - skins may wish to extend this
+        return sanitizeHtml(_t(s));
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this._unmounted = false;
 
         if (this.props.teamToken && this.props.teamServerUrl) {
@@ -84,13 +80,13 @@ module.exports = React.createClass({
                 }
             );
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    render: function() {
+    render() {
         if (this.state.iframeSrc) {
             return (
                 <div className="mx_HomePage">
@@ -108,4 +104,6 @@ module.exports = React.createClass({
             );
         }
     }
-});
+}
+
+module.exports = HomePage;
