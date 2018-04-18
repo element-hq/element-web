@@ -1,0 +1,67 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2107 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomList {
+    padding-bottom: 12px;
+    min-height: 400px;
+}
+
+.mx_RoomList_expandButton {
+    margin-left: 8px;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Evil hacky override until Chrome fixes drop and drag table cells
+   and we can correctly fix horizontal wrapping in the sidebar again */
+.mx_RoomList_scrollbar .gm-scroll-view {
+    overflow-x: hidden ! important;
+    overflow-y: scroll ! important;
+}
+
+/* Make sure the scrollbar is above the sticky headers from RoomList */
+.mx_RoomList_scrollbar .gm-scrollbar.-vertical {
+    z-index: 6;
+}
+
+.mx_RoomList_emptySubListTip_container {
+    background-color: $secondary-accent-color;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+}
+
+.mx_RoomList_emptySubListTip {
+    font-size: 13px;
+    padding: 5px;
+    border: 1px dashed $accent-color;
+    color: $primary-fg-color;
+    background-color: $droptarget-bg-color;
+    border-radius: 4px;
+    line-height: 16px;
+}
+
+.mx_RoomList_emptySubListTip .mx_RoleButton {
+    vertical-align: -2px;
+}
+
+.mx_RoomList_headerButtons {
+    position: absolute;
+    right: 60px;
+}
