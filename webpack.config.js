@@ -3,10 +3,13 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+let og_image_url = process.env.RIOT_OG_IMAGE_URL;
+if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-1.png';
+
 module.exports = {
     entry: {
         "bundle": "./src/vector/index.js",
-        "indexeddb-worker": "./src/vector/indexedbd-worker.js",
+        "indexeddb-worker": "./src/vector/indexeddb-worker.js",
 
         // We ship olm.js as a separate lump of javascript. This makes it get
         // loaded via a separate <script/> tag in index.html (which loads it
@@ -18,9 +21,9 @@ module.exports = {
         "olm": "./src/vector/olm-loader.js",
 
         // CSS themes
-        "theme-light": "./src/skins/vector/css/themes/light.scss",
-        "theme-dark": "./src/skins/vector/css/themes/dark.scss",
-        "theme-status": "./src/skins/vector/themes/status/css/status.scss",
+        "theme-light":  "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
+        "theme-dark":   "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+        "theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
         preLoaders: [
@@ -125,6 +128,9 @@ module.exports = {
             // bottom of <head> or the bottom of <body>, and I'm a bit scared
             // about moving them.
             inject: false,
+            vars: {
+                og_image_url: og_image_url,
+            },
         }),
     ],
     devtool: 'source-map',

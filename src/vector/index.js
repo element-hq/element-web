@@ -32,12 +32,12 @@ require('babel-polyfill');
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require('gemini-scrollbar/gemini-scrollbar.css');
-require('gfm.css/gfm.css');
-require('highlight.js/styles/github.css');
-require('draft-js/dist/Draft.css');
+require('matrix-react-sdk/node_modules/gemini-scrollbar/gemini-scrollbar.css');
+require('matrix-react-sdk/node_modules/gfm.css/gfm.css');
+require('matrix-react-sdk/node_modules/highlight.js/styles/github.css');
+require('matrix-react-sdk/node_modules/draft-js/dist/Draft.css');
 
-const rageshake = require("./rageshake");
+const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
     console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
     rageshake.cleanup();
@@ -64,7 +64,7 @@ var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
-var VectorConferenceHandler = require('../VectorConferenceHandler');
+var VectorConferenceHandler = require('matrix-react-sdk/lib/VectorConferenceHandler');
 import Promise from 'bluebird';
 var request = require('browser-request');
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
@@ -274,9 +274,9 @@ async function loadApp() {
     } catch (e) {
         configError = e;
     }
-    
+
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme. 
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     SdkConfig.put(configJson);
 
     // don't try to redirect to the native apps if we're
@@ -324,7 +324,11 @@ async function loadApp() {
         if (match) {
             if (match[1] === theme) {
                 // remove the disabled flag off the stylesheet
-                a.removeAttribute("disabled");
+
+                // Firefox requires setting the attribute to false, so do
+                // that instead of removing it. Related:
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1281135
+                a.disabled = false;
 
                 // in case the Tinter.tint() in MatrixChat fires before the
                 // CSS has actually loaded (which in practice happens)...
@@ -332,9 +336,14 @@ async function loadApp() {
                 // FIXME: we should probably block loading the app or even
                 // showing a spinner until the theme is loaded, to avoid
                 // flashes of unstyled content.
-                a.onload = () => { 
+                a.onload = () => {
                     Tinter.setTheme(theme);
                 };
+            } else {
+                // Firefox requires this to not be done via `setAttribute`
+                // or via HTML.
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1281135
+                a.disabled = true;
             }
         }
     }

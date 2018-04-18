@@ -3,7 +3,10 @@ dist: trusty
 
 # we don't need sudo, so can run in a container, which makes startup much
 # quicker.
-sudo: false
+#
+# unfortunately we do temporarily require sudo as a workaround for
+# https://github.com/travis-ci/travis-ci/issues/8836
+sudo: required
 
 language: node_js
 node_js:
