@@ -39,7 +39,7 @@ export default class VectorBasePlatform extends BasePlatform {
         super();
 
         // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animationb every time you set the badge,
+        // Also it re-starts the animation every time you set the badge,
         // and we set the state each time, even if the value hasn't changed,
         // so we'd need to fix that if enabling the animation.
         this.favicon = new Favico({animation: 'none'});
@@ -115,6 +115,10 @@ export default class VectorBasePlatform extends BasePlatform {
             action: 'check_updates',
             value: false,
         })
+    }
+
+    getUpdateCheckStatusEnum() {
+        return updateCheckStatusEnum;
     }
 
     /**
