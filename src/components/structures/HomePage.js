@@ -25,7 +25,7 @@ import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
 
 class HomePage extends React.Component {
-    displayName = 'HomePage';
+    static displayName = 'HomePage';
 
     static propTypes = {
         // URL base of the team server. Optional.
