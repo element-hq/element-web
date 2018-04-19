@@ -73,5 +73,19 @@
     "Unnamed room": "名前のない部屋",
     "World readable": "誰でも読むことができます",
     "Guests can join": "ゲストが参加できます",
-    "No rooms to show": "表示する部屋がありません"
+    "No rooms to show": "表示する部屋がありません",
+    "This email address is already in use": "このメールアドレスは既に使われています",
+    "This phone number is already in use": "この電話番号は既に使われています",
+    "Failed to verify email address: make sure you clicked the link in the email": "メールアドレスの認証に失敗しました。メール中のリンクをクリックしたか、確認してください",
+    "The platform you're on": "利用中のプラットフォーム",
+    "The version of Riot.im": "Riot.imのバージョン",
+    "Whether or not you're logged in (we don't record your user name)": "ログインしているか否か（私達はあなたのユーザ名を記録しません）",
+    "Your language of choice": "選択した言語",
+    "Which officially provided instance you are using, if any": "どの公式に提供されたインスタンスを利用していますか（もしあれば）",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "リッチテキストエディタのリッチテキストモードを利用しているか否か",
+    "Your homeserver's URL": "あなたのホームサーバのURL",
+    "Your identity server's URL": "あなたのアイデンティティサーバのURL",
+    "Analytics": "分析",
+    "The information being sent to us to help make Riot.im better includes:": "Riot.imをよりよくするために私達に送信される情報は以下を含みます:",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "私達はこのアプリであなたが利用したページ（現在は<CurrentPageHash>）、あなたのユーザエージェント（現在は<CurrentUserAgent>）、並びにあなたの端末の解像度（現在の端末では<CurrentDeviceResolution>）も記録します。"
 }
