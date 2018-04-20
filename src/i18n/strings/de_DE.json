@@ -1157,5 +1157,7 @@
     "Collapse panel": "Panel einklappen",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "In deinem aktuell verwendeten Browser können Aussehen und Handhabung der Anwendung unter Umständen noch komplett fehlerhaft sein, so dass einige bzw. im Extremfall alle Funktionen nicht zur Verfügung stehen. Du kannst es trotzdem versuchen und fortfahren, bist dabei aber bezüglich aller auftretenden Probleme auf dich allein gestellt!",
     "Checking for an update...": "Nach Updates suchen...",
-    "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden"
+    "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden",
+    "Missing roomId.": "Fehlende Raum-ID.",
+    "Picture": "Bild"
 }
