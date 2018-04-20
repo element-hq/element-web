@@ -1003,5 +1003,17 @@
     "Unable to leave community": "Community konnte nicht verlassen werden",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Änderungen am <bold1>Namen</bold1> und <bold2>Bild</bold2> deiner Community werden evtl. erst nach 30 Minuten von anderen Nutzern gesehen werden.",
     "Join this community": "Community beitreten",
-    "Leave this community": "Community verlassen"
+    "Leave this community": "Community verlassen",
+    "Sticker Messages": "Sticker-Nachrichten",
+    "You don't currently have any stickerpacks enabled": "Du hast aktuell keine Stickerpacks aktiviert",
+    "Click": "Klick",
+    "here": "hier",
+    "to add some!": "um einige hinzuzufügen!",
+    "Add a stickerpack": "Füge ein Stickerpack hinzu",
+    "Hide Stickers": "Sticker verbergen",
+    "Show Stickers": "Sticker zeigen",
+    "Manage sticker packs": "Verwalte Stickerpacks",
+    "Who can join this community?": "Wer kann dieser Community beitreten?",
+    "Everyone": "Jeder",
+    "Stickerpack": "Stickerpack"
 }
