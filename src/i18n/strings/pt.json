@@ -817,7 +817,6 @@
     "Notify for all other messages/rooms": "Notificar para todas as outras mensagens/salas",
     "Unable to look up room ID from server": "Não foi possível obter a identificação da sala do servidor",
     "Couldn't find a matching Matrix room": "Não foi possível encontrar uma sala correspondente no servidor Matrix",
-    "Bug report sent": "Relatório de erros enviado",
     "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",

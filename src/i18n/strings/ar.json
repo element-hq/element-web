@@ -43,7 +43,6 @@
     "Collecting logs": "تجميع السجلات",
     "No update available.": "لا يوجد هناك أي تحديث.",
     "An error occurred whilst saving your email notification preferences.": "حدث خطأ ما أثناء عملية حفظ إعدادات الإشعارات عبر البريد الإلكتروني.",
-    "Bug report sent": "تم إرسال تقرير الأخطاء",
     "Collecting app version information": "تجميع المعلومات حول نسخة التطبيق",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "إلغاء مُعرف الغرفة %(alias)s وحذف %(name)s من الدليل؟",
     "Changelog": "سِجل التغييرات",

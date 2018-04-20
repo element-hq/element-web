@@ -285,7 +285,6 @@
     "Messages containing my user name": "Pesan mengandung nama pengguna saya",
     "Collecting logs": "Mengumpulkan catatan",
     "more": "lagi",
-    "Bug report sent": "Laporan bug terkirim",
     "(HTTP status %(httpStatus)s)": "(status HTTP %(httpStatus)s)",
     "Failed to forget room %(errCode)s": "Gagal melupakan ruang %(errCode)s",
     "Wednesday": "Rabu",
