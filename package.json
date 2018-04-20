@@ -58,8 +58,6 @@
     "babel-runtime": "^6.11.6",
     "bluebird": "^3.5.0",
     "browser-request": "^0.3.3",
-    "classnames": "^2.1.2",
-    "draft-js": "^0.11.0-alpha",
     "extract-text-webpack-plugin": "^3.0.0",
     "favico.js": "^0.3.10",
     "matrix-js-sdk": "0.10.1",
