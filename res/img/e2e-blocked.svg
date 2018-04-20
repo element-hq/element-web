@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>2805649B-D39D-43EA-A357-659EF9B97BA4</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Typing-Indicator" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="typing-indicator" transform="translate(-301.000000, -328.000000)" fill="#BA6363">
+            <path d="M307,340 C310.313708,340 313,337.313708 313,334 C313,330.686292 310.313708,328 307,328 C303.686292,328 301,330.686292 301,334 C301,337.313708 303.686292,340 307,340 Z M304,333 L310,333 L310,335 L304,335 L304,333 Z" id="blocked_icon"></path>
+        </g>
+    </g>
+</svg>

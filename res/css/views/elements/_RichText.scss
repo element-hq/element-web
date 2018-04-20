@@ -1,0 +1,75 @@
+// XXX: bleurgh, what is this? These classes totally break the component
+// naming scheme; it's completely unclear where or how they're being used
+// --Matthew
+
+.mx_UserPill,
+.mx_RoomPill,
+.mx_AtRoomPill {
+    border-radius: 16px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 5px;
+}
+
+.mx_EventTile_body .mx_UserPill,
+.mx_EventTile_body .mx_RoomPill {
+    cursor: pointer;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_UserPill,
+.mx_UserPill {
+    color: $primary-fg-color;
+    background-color: $other-user-pill-bg-color;
+    padding-right: 5px;
+}
+
+.mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me,
+.mx_EventTile_content .mx_AtRoomPill,
+.mx_MessageComposer_input .mx_AtRoomPill {
+    color: $accent-fg-color;
+    background-color: $mention-user-pill-bg-color;
+    padding-right: 5px;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_RoomPill,
+.mx_RoomPill {
+    color: $accent-fg-color;
+    background-color: $rte-room-pill-color;
+    padding-right: 5px;
+}
+
+.mx_UserPill .mx_BaseAvatar,
+.mx_RoomPill .mx_BaseAvatar,
+.mx_AtRoomPill .mx_BaseAvatar {
+    position: relative;
+    left: -3px;
+    top: 2px;
+}
+
+.mx_Markdown_BOLD {
+    font-weight: bold;
+}
+
+.mx_Markdown_ITALIC {
+    font-style: italic;
+}
+
+.mx_Markdown_CODE {
+    padding: .2em 0;
+    margin: 0;
+    font-size: 85%;
+    background-color: $rte-code-bg-color;
+    border-radius: 3px;
+}
+
+.mx_Markdown_HR {
+    display: block;
+    background: $rte-bg-color;
+}
+
+.mx_Markdown_STRIKETHROUGH {
+    text-decoration: line-through;
+}
