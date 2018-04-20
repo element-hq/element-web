@@ -228,8 +228,10 @@
     "Online": "En ligne",
     "View Community": "Voir la communauté",
     "Submit debug logs": "Envoyer les journaux de débogage",
-    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Les rapports de Debogage contiennent des données d'usage de l'application qui incluent votre pseudo d'utilisateur, les identifiants ou alias des salons ou groupes auxquels vous avez rendu visite ainsi que les pseudos des autres utilisateurs. Ils ne contiennent aucun messages.",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Les rapports de débogage contiennent des données d'usage de l'application qui incluent votre nom d'utilisateur, les identifiants ou alias des salons ou groupes auxquels vous avez rendu visite ainsi que les noms des autres utilisateurs. Ils ne contiennent aucun message.",
     "Preparing to send logs": "Préparation d'envoi des rapports",
     "Logs sent": "Rapports envoyés",
-    "Notes:": "Notes :"
+    "Notes:": "Notes :",
+    "Failed to send logs: ": "Échec lors de l'envoi des rapports : ",
+    "GitHub issue link:": "Lien du signalement GitHub :"
 }
