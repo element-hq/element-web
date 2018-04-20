@@ -32,12 +32,12 @@ require('babel-polyfill');
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require('gemini-scrollbar/gemini-scrollbar.css');
-require('gfm.css/gfm.css');
-require('highlight.js/styles/github.css');
-require('draft-js/dist/Draft.css');
+require('matrix-react-sdk/node_modules/gemini-scrollbar/gemini-scrollbar.css');
+require('matrix-react-sdk/node_modules/gfm.css/gfm.css');
+require('matrix-react-sdk/node_modules/highlight.js/styles/github.css');
+require('matrix-react-sdk/node_modules/draft-js/dist/Draft.css');
 
-const rageshake = require("./rageshake");
+const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
     console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
     rageshake.cleanup();
@@ -64,7 +64,7 @@ var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
-var VectorConferenceHandler = require('../VectorConferenceHandler');
+var VectorConferenceHandler = require('matrix-react-sdk/lib/VectorConferenceHandler');
 import Promise from 'bluebird';
 var request = require('browser-request');
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';

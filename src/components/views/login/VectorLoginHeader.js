@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
-const DEFAULT_LOGO_URI = "img/logos/riot-im-logo-" + i + ".svg";
+const DEFAULT_LOGO_URI = "themes/riot/img/logos/riot-im-logo-" + i + ".svg";
 
 module.exports = React.createClass({
     displayName: 'VectorLoginHeader',

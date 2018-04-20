@@ -1,0 +1,12 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s með %(browserName)s á %(osName)s",
+    "powered by Matrix": "keyrt með Matrix",
+    "Welcome to Riot.im": "Velkomin í Riot.im",
+    "Riot Desktop on %(platformName)s": "Riot skjáborðsforrit á %(platformName)s",
+    "Unknown device": "Óþekkt tæki",
+    "Dismiss": "Hafna",
+    "Riot/Web &amp; Desktop chat": "Riot/Spjall á vef- &amp; skjáborði",
+    "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
+    "Riot is not supported on mobile web. Install the app?": "Riot er ekki studd á farsímavef. Setja upp appið?",
+    "You need to be using HTTPS to place a screen-sharing call.": "Þú þarft að vera að nota HTTPS til að nota skjáadeild."
+}

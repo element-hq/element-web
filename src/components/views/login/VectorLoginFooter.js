@@ -28,6 +28,7 @@ module.exports = React.createClass({
 
     render: function() {
         // FIXME: replace this with a proper Status skin
+        // ...except then we wouldn't be able to switch to the Status theme at runtime.
         if (SettingsStore.getValue("theme") === 'status') return <div/>;
         
         return (
