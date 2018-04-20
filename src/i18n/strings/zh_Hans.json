@@ -28,7 +28,7 @@
     "Design and implementation of E2E in Matrix": "在 Matrix 中 E2E 的设计与实现",
     "Implementing VR services with Matrix": "使用 Matrix 实现虚拟现实服务",
     "Implementing VoIP services with Matrix": "使用 Matrix 实现 VoIP 服务",
-    "Discussion of the Identity Service API": "关于身份识别服务 API 的讨论",
+    "Discussion of the Identity Service API": "关于身份认证服务 API 的讨论",
     "Support for those using, running and writing other bridges": "使用、运行、撰写其他桥接服务的支持",
     "Contributing code to Matrix and Riot": "为 Matrix 和 Riot 贡献代码",
     "Dev chat for the Riot/Web dev team": "Riot/Web 开发团队的开发讨论",
