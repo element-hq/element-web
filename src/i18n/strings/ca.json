@@ -1,6 +1,5 @@
 {
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s per a %(osName)s",
-    "Couldn't load home page": "No s'ha pogut carregar la pàgina d'inici",
     "Custom Server Options": "Opcions de servidor personalitzat",
     "Dismiss": "Omet",
     "Unknown device": "Dispositiu desconegut",

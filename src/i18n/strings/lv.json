@@ -34,6 +34,5 @@
     "Dev chat for the Riot/Web dev team": "Riot/Web izstrādātāju komandas čats",
     "Dev chat for the Dendrite dev team": "Dendrite izstrādatāju komandas čats",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix-ā pastāv daudzas neatkarīgas un/vai eksistējošiem tīmekļa resursiem (Slack, IRC, Gitter u.tml.) piesaistītas istabas. Ieskaties katalogā!",
-    "Couldn't load home page": "Neizdevās ielādēt sākumlapu",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Tu vari lietot \"custom\" servera opcijas, lai ielogotos citos Matrix serveros, norādot citu Bāzes servera URL.<br> Tas atļaus tev lietot Riot ar esošo Matrix kontu uz cita Bāzes servera.<br/><br/>Tu arī vari uzstādīt atsevišķu Identitāšu serveri, taču tad Tev nebūs iespēju uzaicināt lietotājus, izmantojot epasta adresi, vai pašam tikt uzaicinātam, izmantojot epasta adresi."
 }

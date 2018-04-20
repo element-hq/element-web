@@ -33,7 +33,6 @@
     "Dev chat for the Riot/Web dev team": "Chat para o equipo de desenvolvemento do Riot/Web",
     "Dev chat for the Dendrite dev team": "Chat para o equipo de desenvolvemento de Dendrite",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Xa existen multitude de salas en Matrix, ligadas a redes existentes (Slack, IRC, Gitter etc) ou independentes. Busque no directorio!",
-    "Couldn't load home page": "Non se cargou a páxina de inicio",
     "Riot/Android &amp; matrix-android-sdk chat": "Chat para Riot/Android &amp; matrix-android-sdk",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Vostede pode utilizar as opcións de servidor personalizado para conectarse a outros servidores Matrix indicando o enderezo URL do Servidor.</br>Esto permítelle utilizar Riot con unha conta Matrix existente en outro servidor.<br/><br/>Tamén pode indicar un servidor de identidade pero non poderá convidar a usarias polo seu enderezo de correo electrónico, o ser convidada vostede por correo electrónico."
 }

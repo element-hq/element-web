@@ -34,6 +34,5 @@
     "Dev chat for the Dendrite dev team": "Чат команди розробників Dendrite",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "У мережі Matrix вже існує багато кімнат, що з'єднані як з існуючими мережами (Slack, IRC, Gitter тощо), так і незалежними. Подивіться у каталозі кімнат!",
     "Running Matrix services": "Запуск служби Matrix",
-    "Couldn't load home page": "Не вдалось завантажити домівку",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви можете використовувати параметри користувача сервера для входа на другі сервера Matrix, вказав другий URL-адресу домашнього сервера. <br/>Це дозволяє використовувати Riot з обліковим записом Matrix який існує на другому домашньому сервері.<br/><br/>Окрім цього, можливо встановити ідентифікаційний сервер користувача, але ви не зможете запросити других користувачів та бути запрошенному  використовуючи адресу електронної пошти."
 }

@@ -33,6 +33,5 @@
     "Contributing code to Matrix and Riot": "매트릭스와 라이엇에 코드 기여하기",
     "Dev chat for the Riot/Web dev team": "라이엇/웹 개발 팀을 위한 개발자 대화",
     "Dev chat for the Dendrite dev team": "덴드라이트 개발 팀을 위한 개발자 대화",
-    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "기존 네트워크(Slack, IRC, Gitter 등)에 연결되있거나 독립된 많은 방들이 이미 매트릭스에 있어요. 목록을 확인해보세요!",
-    "Couldn't load home page": "중심 화면을 불러올 수 없어요"
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "기존 네트워크(Slack, IRC, Gitter 등)에 연결되있거나 독립된 많은 방들이 이미 매트릭스에 있어요. 목록을 확인해보세요!"
 }

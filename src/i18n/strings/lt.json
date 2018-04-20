@@ -12,7 +12,6 @@
     "Custom Server Options": "Pasirinktiniai serverio nustatymai",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Norėdami jungtis prie kito nei Matrix serverio galite pasirinktinio serverio nustatymuose nurodyti kito serverio URL adresą.<br/>Ši funkcija leis naudoti Riot su esama Matrix serverio paskyrą kituose serveriuose.<br/><br/>Taip pat galite nurodyti pasirinktinį identifikavimo serverį, bet tuomet negalėsite kviesti kitų vartotojų el. paštu ar jie jūsų.",
     "Dismiss": "Nutraukti",
-    "Couldn't load home page": "Nepavyksta užkrauti namų puslapio",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizuotas, šifruotas čatas; bendradarbiavimas palaikomas [matrix]",
     "Search the room directory": "Ieškoti kambarių kataloge",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Daugybė kambarių yra prisijungę prie Matrix, kurie yra susieti su egzistuojančiais tinklais (Slack, IRC, Gitter etc) arba nepriklausomi. Patikrinkite kambarių katalogą!",
