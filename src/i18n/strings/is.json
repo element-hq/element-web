@@ -114,5 +114,13 @@
     "Noisy": "Hávært",
     "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
     "Checking for an update...": "Athuga með uppfærslu...",
-    "Uploaded on %(date)s by %(user)s": "Sent inn %(date)s af %(user)s"
+    "Uploaded on %(date)s by %(user)s": "Sent inn %(date)s af %(user)s",
+    "You have successfully set a password!": "Þú hefur sett upp lykilorð!",
+    "Riot is not supported on mobile web. Install the app?": "Riot er ekki studd á farsímavef. Setja upp appið?",
+    "Couldn't load home page": "Gat ekki hlaðið heimasíðu",
+    "You need to be using HTTPS to place a screen-sharing call.": "Þú þarft að vera að nota HTTPS til að nota skjáadeild.",
+    "Messages sent by bot": "Skilaboð sent af vélmenni",
+    "Error saving email notification preferences": "Villa við að vista netpost tilkynninga stillingar",
+    "An error occurred whilst saving your email notification preferences.": "Villa gerðist meðan var að vista netpost tilkynningar stillingar þínar.",
+    "Messages in group chats": "Skilaboð í hópspjöllum"
 }
