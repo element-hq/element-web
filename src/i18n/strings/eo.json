@@ -1106,5 +1106,12 @@
     "Collapse panel": "Maletendi panelon",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Kun via nuna foliumilo, la aspekto kaj funkciado de la aplikaĵo povas esti tute malĝusta, kaj kelkaj aŭ ĉiu funkcioj eble ne tute funkcios. Se vi tamen volas provi, vi povas daŭrigi, sed vi ricevos nenian subtenon se vi renkontos problemojn!",
     "Checking for an update...": "Serĉanta ĝisdatigojn…",
-    "There are advanced notifications which are not shown here": "Ekzistas specialaj sciigoj, kiuj ne montriĝas ĉi tie"
+    "There are advanced notifications which are not shown here": "Ekzistas specialaj sciigoj, kiuj ne montriĝas ĉi tie",
+    "Logs sent": "Protokolo sendiĝis",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Klaku ĉi tie</a> por krei raporton ĉe GitHub.",
+    "GitHub issue link:": "Ligilo al raporto ĉe GitHub:",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Sencimigaj protokoloj enhavas informojn pri uzo de aplikaĵo, inkluzive vian salutnomon, la identigilojn aŭ nomojn de la ĉambroj aŭ grupoj kiujn vi vizitis, kaj la salutnomojn de aliaj uzantoj. Ili ne enhavas mesaĝojn.",
+    "Failed to send logs: ": "Malsukcesis sendi protokolon: ",
+    "Notes:": "Rimarkoj:",
+    "Preparing to send logs": "Pretiganta sendon de protokolo"
 }

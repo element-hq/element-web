@@ -1150,5 +1150,12 @@
     "Collapse panel": "Paneel inklappen",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Met uw huidige browser kan de applicatie er volledig incorrect uitzien. Tevens is het mogelijk dat niet alle functies naar behoren werken. U kunt doorgaan als u het toch wil proberen, maar bij problemen bent u volledig op uzelf aangewezen!",
     "Checking for an update...": "Aan het kijken voor een update...",
-    "There are advanced notifications which are not shown here": "Er zijn geavanceerde notificaties die hier niet getoond worden"
+    "There are advanced notifications which are not shown here": "Er zijn geavanceerde notificaties die hier niet getoond worden",
+    "Logs sent": "Logs verstuurd",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Klik hier</a> om een Github opgave in te dienen.",
+    "GitHub issue link:": "GitHub opgave link:",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debug logs bevatten applicatie-gebruik data inclusief je gebruikersnaam, de ID's of namen van de ruimtes en groepen die je hebt bezocht en de gebruikersnamen van andere gebruikers. Ze bevatten geen berichten.",
+    "Failed to send logs: ": "Het is niet gelukt om de logs te versturen: ",
+    "Notes:": "Constateringen:",
+    "Preparing to send logs": "Voorbereiden om logs te versturen"
 }
