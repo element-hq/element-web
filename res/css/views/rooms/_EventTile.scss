@@ -119,7 +119,7 @@ limitations under the License.
     background-color: $event-selected-color;
 }
 
-..mx_EventTile:hover .mx_EventTile_line,
+.mx_EventTile:hover .mx_EventTile_line,
 .mx_EventTile.menu .mx_EventTile_line
 {
     background-color: $event-selected-color;
