@@ -1,0 +1,36 @@
+.mx_QuotePreview {
+    position: absolute;
+    bottom: 0;
+    z-index: 1000;
+    width: 100%;
+    border: 1px solid $primary-hairline-color;
+    background: $primary-bg-color;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    max-height: 50vh;
+    overflow: auto
+}
+
+.mx_QuotePreview_section {
+    border-bottom: 1px solid $primary-hairline-color;
+}
+
+.mx_QuotePreview_header {
+    margin: 12px;
+    color: $primary-fg-color;
+    font-weight: 400;
+    opacity: 0.4;
+}
+
+.mx_QuotePreview_title {
+    float: left;
+}
+
+.mx_QuotePreview_cancel {
+    float: right;
+    cursor: pointer;
+}
+
+.mx_QuotePreview_clear {
+    clear: both;
+}

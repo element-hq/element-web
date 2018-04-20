@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="35" height="35" viewBox="0, 0, 35, 35">
+  <g id="Symbols">
+    <path d="M17.5,35 C27.165,35 35,27.165 35,17.5 C35,7.835 27.165,0 17.5,0 C7.835,0 0,7.835 0,17.5 C0,27.165 7.835,35 17.5,35 z" fill="#76CFA6" opacity="0.15" id="Oval-1-Copy-7"/>
+    <path d="M22.4,15.4 C22.4,19.266 19.266,22.4 15.4,22.4 C11.534,22.4 8.4,19.266 8.4,15.4 C8.4,11.534 11.534,8.4 15.4,8.4 C19.266,8.4 22.4,11.534 22.4,15.4 z" fill-opacity="0" stroke="#76CFA6" stroke-width="1" stroke-linecap="round" id="path-1" opacity="0.7"/>
+    <path d="M20.3,20.3 L25.25,25.25" fill-opacity="0" stroke="#76CFA6" stroke-width="1" stroke-linecap="round" id="Line" opacity="0.7"/>
+  </g>
+</svg>

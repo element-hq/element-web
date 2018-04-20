@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="scrollup.svg">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="12.20339"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <!-- Generator: Sketch 3.4.4 (17249) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title4">icon_newmessages</title>
+  <desc
+     id="desc6">Created with Sketch.</desc>
+  <defs
+     id="defs8" />
+  <g
+     id="02-Chat"
+     sketch:type="MSPage"
+     transform="matrix(1,0,0,-1,0,24)"
+     style="fill:none;stroke:none">
+    <g
+       id="02_7-Chat-new-messages"
+       sketch:type="MSArtboardGroup"
+       transform="translate(-809,-325)">
+      <g
+         id="icon_newmessages"
+         sketch:type="MSLayerGroup"
+         transform="translate(809,325)">
+        <circle
+           id="Oval-1909"
+           sketch:type="MSShapeGroup"
+           cx="12"
+           cy="12"
+           r="12"
+           d="M 24,12 C 24,18.627417 18.627417,24 12,24 5.372583,24 0,18.627417 0,12 0,5.372583 5.372583,0 12,0 18.627417,0 24,5.372583 24,12 z"
+           sodipodi:cx="12"
+           sodipodi:cy="12"
+           sodipodi:rx="12"
+           sodipodi:ry="12"
+           style="fill:#454545;fill-opacity:0.5" />
+        <path
+           d="m 16.340043,11.526774 c 0.146962,0 0.293924,-0.05588 0.406442,-0.168394 0.223505,-0.224271 0.223505,-0.587084 0,-0.811354 L 12.36594,6.1680115 C 12.142435,5.943741 11.778856,5.9445065 11.554586,6.167246 l -4.3859037,4.372891 c -0.2242704,0.224271 -0.2250358,0.587849 -0.00153,0.812119 0.223505,0.225036 0.5870834,0.225036 0.8113538,0.0015 l 3.4130447,-3.4030933 0.0015,9.4752353 c 0,0.316887 0.25795,0.574071 0.574072,0.574071 0.317652,0 0.574071,-0.257184 0.574071,-0.574071 l -0.0015,-9.4606922 3.394674,3.3931432 c 0.111752,0.112518 0.258714,0.168394 0.405677,0.168394 l 0,0 z"
+           sketch:type="MSShapeGroup"
+           transform="matrix(-1,0,0,-1,23.914114,24)"
+           id="path14"
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff" />
+      </g>
+    </g>
+  </g>
+</svg>
