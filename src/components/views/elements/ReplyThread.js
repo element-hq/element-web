@@ -192,22 +192,22 @@ export default class ReplyThread extends React.Component {
             case 'm.image':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
                      + `<br>sent an image.</blockquote>`;
-                body = `> <${mxid}> sent an image.\n\n${body}`;
+                body = `> <${mxid}> sent an image.\n\n`;
                 break;
             case 'm.video':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
                     + `<br>sent a video.</blockquote>`;
-                body = `> <${mxid}> sent a video.\n\n${body}`;
+                body = `> <${mxid}> sent a video.\n\n`;
                 break;
             case 'm.audio':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
                     + `<br>sent an audio file.</blockquote>`;
-                body = `> <${mxid}> sent an audio file.\n\n${body}`;
+                body = `> <${mxid}> sent an audio file.\n\n`;
                 break;
             case 'm.file':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
                     + `<br>sent a file.</blockquote>`;
-                body = `> <${mxid}> sent a file.\n\n${body}`;
+                body = `> <${mxid}> sent a file.\n\n`;
                 break;
             case 'm.emote': {
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> * `
