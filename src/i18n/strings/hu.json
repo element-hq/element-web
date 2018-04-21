@@ -362,7 +362,7 @@
     "This email address was not found": "Az e-mail cím nem található",
     "The email address linked to your account must be entered.": "A fiókodhoz kötött e-mail címet add meg.",
     "Press <StartChatButton> to start a chat with someone": "Nyomd meg a <StartChatButton> gombot  ha szeretnél csevegni valakivel",
-    "Privacy warning": "Magánéleti figyelmeztetés",
+    "Privacy warning": "Titoktartási figyelmeztetés",
     "The file '%(fileName)s' exceeds this home server's size limit for uploads": "'%(fileName)s' fájl túllépte a Saját szerverben beállított feltöltési méret határt",
     "The file '%(fileName)s' failed to upload": "'%(fileName)s' fájl feltöltése sikertelen",
     "The remote side failed to pick up": "A hívott fél nem vette fel",
