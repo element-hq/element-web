@@ -1157,5 +1157,7 @@
     "Collapse panel": "Свий панела",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "С текущия Ви браузър, изглеждането и усещането на приложението може да бъде неточно, и някои или всички от функциите може да не функционират,работят......... Ако искате може да продължите така или иначе, но сте сами по отношение на евентуалните проблеми, които може да срещнете!",
     "Checking for an update...": "Проверяване за нова версия...",
-    "There are advanced notifications which are not shown here": "Съществуват разширени настройки за известия, които не са показани тук"
+    "There are advanced notifications which are not shown here": "Съществуват разширени настройки за известия, които не са показани тук",
+    "Missing roomId.": "Липсва идентификатор на стая.",
+    "Picture": "Изображение"
 }
