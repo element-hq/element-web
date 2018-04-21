@@ -12,5 +12,13 @@
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk spjall",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; matrix-android-sdk spjall",
     "Matrix technical discussions": "Tæknilegar umræður varðandi Matrix",
-    "Running Matrix services": "Að keyra Matrix þjónustur"
+    "Running Matrix services": "Að keyra Matrix þjónustur",
+    "Chat with Riot Bot": "Spjalla við Riot-róbótann",
+    "Get started with some tips from Riot Bot!": "Komdu þér í gang með nokkrum ábendingum frá Riot-róbótanum!",
+    "General discussion about Matrix and Riot": "Almenn umræða um Matrix og Riot",
+    "Discussion of all things Matrix!": "Almenn umræða um Matrix!",
+    "Implementing VR services with Matrix": "Uppsetning á VR-þjónustum með Matrix",
+    "Implementing VoIP services with Matrix": "Uppsetning á VoIP-þjónustum með Matrix",
+    "Contributing code to Matrix and Riot": "Framlög á kóða til Matrix og Riot",
+    "Co-ordination for Riot translators": "Yfirlit fyrir þýðendur Riot"
 }
