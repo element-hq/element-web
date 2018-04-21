@@ -1157,5 +1157,7 @@
     "Collapse panel": "Panel becsukása",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Ebben a böngészőben az alkalmazás felülete tele lehet hibával, és az is lehet, hogy egyáltalán nem működik. Ha így is ki szeretnéd próbálni, megteheted, de ha valami gondod van, nem tudunk segíteni!",
     "Checking for an update...": "Frissítés keresése...",
-    "There are advanced notifications which are not shown here": "Vannak itt nem látható, haladó értesítések"
+    "There are advanced notifications which are not shown here": "Vannak itt nem látható, haladó értesítések",
+    "Missing roomId.": "Hiányzó szoba azonosító.",
+    "Picture": "Kép"
 }
