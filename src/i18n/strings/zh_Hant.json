@@ -1157,5 +1157,7 @@
     "Collapse panel": "摺疊面板",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "您目前的瀏覽器，其應用程式的外觀和感覺可能完全不正確，有些或全部功能可以無法使用。如果您仍想要繼續嘗試，可以繼續，但必須自行承擔後果！",
     "Checking for an update...": "正在檢查更新...",
-    "There are advanced notifications which are not shown here": "有些進階的通知並未在此顯示"
+    "There are advanced notifications which are not shown here": "有些進階的通知並未在此顯示",
+    "Missing roomId.": "缺少 roomid。",
+    "Picture": "圖片"
 }
