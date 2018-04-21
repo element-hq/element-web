@@ -7,6 +7,10 @@
     "Dismiss": "Hafna",
     "Riot/Web &amp; Desktop chat": "Riot/Spjall á vef- &amp; skjáborði",
     "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
-    "Riot is not supported on mobile web. Install the app?": "Riot er ekki studd á farsímavef. Setja upp appið?",
-    "You need to be using HTTPS to place a screen-sharing call.": "Þú þarft að vera að nota HTTPS til að nota skjáadeild."
+    "Riot is not supported on mobile web. Install the app?": "Riot er ekki stutt í farsímaútgáfu vefsins. Setja upp forritið?",
+    "You need to be using HTTPS to place a screen-sharing call.": "Þú verður að nota HTTPS til að hringja samtal með deilingu á skjá.",
+    "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk spjall",
+    "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; matrix-android-sdk spjall",
+    "Matrix technical discussions": "Tæknilegar umræður varðandi Matrix",
+    "Running Matrix services": "Að keyra Matrix þjónustur"
 }
