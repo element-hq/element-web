@@ -1159,5 +1159,6 @@
     "Preparing to send logs": "Préparation d'envoi des rapports",
     "Missing roomId.": "Identifiant de salon manquant.",
     "Picture": "Image",
-    "<a>Click here</a> to create a GitHub issue.": "<a>Cliquez ici</a> pour créer un signalement sur GitHub."
+    "<a>Click here</a> to create a GitHub issue.": "<a>Cliquez ici</a> pour créer un signalement sur GitHub.",
+    "Popout widget": "Détacher le widget"
 }
