@@ -213,6 +213,7 @@
     "Failed to join room": "No s'ha pogut entrar a la sala",
     "Message Replies": "Respostes del missatge",
     "Message Pinning": "Fixació de missatges",
+    "Tag Panel": "Tauler d'etiquetes",
     "Disable Emoji suggestions while typing": "Desactiva els suggeriments d'Emoji mentre s'escriu",
     "Use compact timeline layout": "Utilitza el disseny compacte de la línia de temps",
     "Hide join/leave messages (invites/kicks/bans unaffected)": "Amaga els missatges d'entrada i sortida (no afecta a les invitacions, expulsions o prohibicions)",

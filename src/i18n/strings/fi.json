@@ -831,6 +831,7 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s pienoisohjelman lisännyt %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s pienoisohjelman poistanut %(senderName)s",
     "Send": "Lähetä",
+    "Tag Panel": "Tagit",
     "Delete %(count)s devices|other": "Poista %(count)s laitetta",
     "Delete %(count)s devices|one": "Poista laite",
     "Select devices": "Valitse laitteet",

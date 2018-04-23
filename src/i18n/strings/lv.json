@@ -731,6 +731,7 @@
     "%(names)s and %(count)s others are typing|one": "%(names)s un vēl kāds raksta",
     "Message Replies": "Atbildes uz ziņām",
     "Message Pinning": "Ziņu piekabināšana",
+    "Tag Panel": "Birku panelis",
     "Disable Emoji suggestions while typing": "Atspējot Emoji ieteikumus teksta rakstīšanas laikā",
     "Hide avatar changes": "Slēpt avatara izmaiņas",
     "Hide display name changes": "Slēpt attēlojamā/redzamā vārda izmaiņas",

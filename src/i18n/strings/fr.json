@@ -92,8 +92,8 @@
     "Current password": "Mot de passe actuel",
     "Curve25519 identity key": "Clé d’identité Curve25519",
     "/ddg is not a command": "/ddg n'est pas une commande",
-    "Deactivate Account": "Supprimer le compte",
-    "Deactivate my account": "Supprimer mon compte",
+    "Deactivate Account": "Désactiver le compte",
+    "Deactivate my account": "Désactiver mon compte",
     "Decrypt %(text)s": "Déchiffrer %(text)s",
     "Decryption error": "Erreur de déchiffrement",
     "Delete": "Supprimer",
@@ -1149,5 +1149,11 @@
     "Collapse panel": "Cacher le panneau",
     "When I'm invited to a room": "Quand je suis invité dans un salon",
     "Checking for an update...": "Recherche de mise à jour...",
-    "There are advanced notifications which are not shown here": "Il existe une configuration avancée des notifications qui ne peut être affichée ici"
+    "There are advanced notifications which are not shown here": "Il existe une configuration avancée des notifications qui ne peut être affichée ici",
+    "Logs sent": "Rapports envoyés",
+    "GitHub issue link:": "Lien du signalement GitHub :",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Les rapports de débogage contiennent des données d'usage de l'application qui incluent votre nom d'utilisateur, les identifiants ou alias des salons ou groupes auxquels vous avez rendu visite ainsi que les noms des autres utilisateurs. Ils ne contiennent aucun message.",
+    "Failed to send logs: ": "Échec lors de l'envoi des rapports : ",
+    "Notes:": "Notes :",
+    "Preparing to send logs": "Préparation d'envoi des rapports"
 }
