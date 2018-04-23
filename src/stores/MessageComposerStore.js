@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import dis from '../dispatcher';
-import {Store} from 'flux/utils';
-import {convertToRaw, convertFromRaw} from 'draft-js';
+import { Store } from 'flux/utils';
 
 const INITIAL_STATE = {
-    editorStateMap: localStorage.getItem('content_state') ?
-        JSON.parse(localStorage.getItem('content_state')) : {},
+    // a map of room_id to rich text editor composer state
+    editorStateMap: localStorage.getItem('editor_state') ?
+        JSON.parse(localStorage.getItem('editor_state')) : {},
 };
 
 /**
- * A class for storing application state to do with the message composer. This is a simple
+ * A class for storing application state to do with the message composer (specifically
+ * in-progress message drafts). This is a simple
  * flux store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  */
@@ -42,7 +43,7 @@ class MessageComposerStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
-            case 'content_state':
+            case 'editor_state':
                 this._contentState(payload);
                 break;
             case 'on_logged_out':
@@ -53,16 +54,15 @@ class MessageComposerStore extends Store {
 
     _contentState(payload) {
         const editorStateMap = this._state.editorStateMap;
-        editorStateMap[payload.room_id] = convertToRaw(payload.content_state);
-        localStorage.setItem('content_state', JSON.stringify(editorStateMap));
+        editorStateMap[payload.room_id] = payload.editor_state;
+        localStorage.setItem('editor_state', JSON.stringify(editorStateMap));
         this._setState({
             editorStateMap: editorStateMap,
         });
     }
 
     getContentState(roomId) {
-        return this._state.editorStateMap[roomId] ?
-            convertFromRaw(this._state.editorStateMap[roomId]) : null;
+        return this._state.editorStateMap[roomId];
     }
 
     reset() {

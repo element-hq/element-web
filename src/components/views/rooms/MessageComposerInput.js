@@ -18,9 +18,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
-import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
-    Entity} from 'draft-js';
+import { Editor } from 'slate-react';
+import { Value } from 'slate';
+
+import Html from 'slate-html-serializer';
+import Markdown as Md from 'slate-md-serializer';
+import Plain from 'slate-plain-serializer';
+
+// import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
+//     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
+//     Entity} from 'draft-js';
 
 import classNames from 'classnames';
 import escape from 'lodash/escape';
@@ -61,19 +68,9 @@ const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
-const ZWS_CODE = 8203;
-const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
-
 const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
 };
-
-function stateToMarkdown(state) {
-    return __stateToMarkdown(state)
-        .replace(
-            ZWS, // draft-js-export-markdown adds these
-            ''); // this is *not* a zero width space, trust me :)
-}
 
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -103,8 +100,6 @@ export default class MessageComposerInput extends React.Component {
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
-
         // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
         // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
         // handle this in `getDefaultKeyBinding` so we do it ourselves here.
@@ -121,7 +116,7 @@ export default class MessageComposerInput extends React.Component {
         }[ev.keyCode];
 
         if (ctrlCmdCommand) {
-            if (!ctrlCmdOnly) {
+            if (!isOnlyCtrlOrCmdKeyEvent(ev)) {
                 return null;
             }
             return ctrlCmdCommand;
@@ -145,17 +140,6 @@ export default class MessageComposerInput extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.onAction = this.onAction.bind(this);
-        this.handleReturn = this.handleReturn.bind(this);
-        this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
-        this.onUpArrow = this.onUpArrow.bind(this);
-        this.onDownArrow = this.onDownArrow.bind(this);
-        this.onTab = this.onTab.bind(this);
-        this.onEscape = this.onEscape.bind(this);
-        this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
-        this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
-        this.onTextPasted = this.onTextPasted.bind(this);
 
         const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
@@ -185,6 +169,7 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
+/*
     findPillEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
@@ -199,13 +184,15 @@ export default class MessageComposerInput extends React.Component {
             }, callback,
         );
     }
+*/
 
     /*
-     * "Does the right thing" to create an EditorState, based on:
+     * "Does the right thing" to create an Editor value, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
-    createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
+    createEditorState(richText: boolean, value: ?Value): Value {
+/*
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
         const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
@@ -239,7 +226,6 @@ export default class MessageComposerInput extends React.Component {
             },
         });
         const compositeDecorator = new CompositeDecorator(decorators);
-
         let editorState = null;
         if (contentState) {
             editorState = EditorState.createWithContent(contentState, compositeDecorator);
@@ -248,6 +234,8 @@ export default class MessageComposerInput extends React.Component {
         }
 
         return EditorState.moveFocusToEnd(editorState);
+*/
+        return value;        
     }
 
     componentDidMount() {
@@ -260,12 +248,14 @@ export default class MessageComposerInput extends React.Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
+/*        
         // this is dirty, but moving all this state to MessageComposer is dirtier
         if (this.props.onInputStateChanged && nextState !== this.state) {
             const state = this.getSelectionInfo(nextState.editorState);
             state.isRichtextEnabled = nextState.isRichtextEnabled;
             this.props.onInputStateChanged(state);
         }
+*/        
     }
 
     onAction = (payload) => {
@@ -277,6 +267,7 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
+/*                
             case 'insert_mention': {
                 // Pretend that we've autocompleted this user because keeping two code
                 // paths for inserting a user pill is not fun
@@ -322,6 +313,7 @@ export default class MessageComposerInput extends React.Component {
                 }
             }
                 break;
+*/                
         }
     };
 
@@ -372,7 +364,7 @@ export default class MessageComposerInput extends React.Component {
 
     stopServerTypingTimer() {
         if (this.serverTypingTimer) {
-            clearTimeout(this.servrTypingTimer);
+            clearTimeout(this.serverTypingTimer);
             this.serverTypingTimer = null;
         }
     }
@@ -492,9 +484,9 @@ export default class MessageComposerInput extends React.Component {
             // Record the editor state for this room so that it can be retrieved after
             // switching to another room and back
             dis.dispatch({
-                action: 'content_state',
+                action: 'editor_state',
                 room_id: this.props.room.roomId,
-                content_state: state.editorState.getCurrentContent(),
+                editor_state: state.editorState.getCurrentContent(),
             });
 
             if (!state.hasOwnProperty('originalEditorState')) {
@@ -528,28 +520,36 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichtextEnabled) return;
 
-        let contentState = null;
+        // FIXME: this conversion should be handled in the store, surely
+        // i.e. "convert my current composer value into Rich or MD, as ComposerHistoryManager already does"
+
+        let value = null;
         if (enabled) {
-            const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.htmlToContentState(md.toHTML());
+            // const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
+            // contentState = RichText.htmlToContentState(md.toHTML());
+
+            const plain = new Plain({});
+            const md = new Md({});
+            value = md.deserialize(plain.serialize(this.state.editorState));
         } else {
-            let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
-            if (markdown[markdown.length - 1] === '\n') {
-                markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
-            }
-            contentState = ContentState.createFromText(markdown);
+            // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
+            // value = ContentState.createFromText(markdown);
+
+            const markdown = new Markdown({});
+            value = Value({ data: markdown.serialize(value) });
         }
 
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, contentState),
+            editorState: this.createEditorState(enabled, value),
             isRichtextEnabled: enabled,
         });
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
     }
 
     handleKeyCommand = (command: string): boolean => {
+/*
         if (command === 'toggle-mode') {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
@@ -658,11 +658,11 @@ export default class MessageComposerInput extends React.Component {
             this.setState({editorState: newState});
             return true;
         }
-
+*/    
         return false;
     };
-
-    onTextPasted(text: string, html?: string) {
+/*
+    onTextPasted = (text: string, html?: string) => {
         const currentSelection = this.state.editorState.getSelection();
         const currentContent = this.state.editorState.getCurrentContent();
 
@@ -682,9 +682,10 @@ export default class MessageComposerInput extends React.Component {
         newEditorState = EditorState.forceSelection(newEditorState, contentState.getSelectionAfter());
         this.onEditorContentChanged(newEditorState);
         return true;
-    }
-
-    handleReturn(ev) {
+    };
+*/
+    handleReturn = (ev) => {
+/*        
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
             return true;
@@ -701,15 +702,21 @@ export default class MessageComposerInput extends React.Component {
             // See handleKeyCommand (when command === 'backspace')
             return false;
         }
-
-        const contentState = this.state.editorState.getCurrentContent();
+*/
+        const contentState = this.state.editorState;
+/*
         if (!contentState.hasText()) {
             return true;
         }
+*/
 
+        const plain = new Plain({});
+        value = md.deserialize();
 
-        let contentText = contentState.getPlainText(), contentHTML;
+        let contentText = plain.serialize(contentState);
+        let contentHTML;
 
+/*
         // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
         // We have to do this now as opposed to after calculating the contentText for MD
         // mode because entity positions may not be maintained when using
@@ -720,10 +727,12 @@ export default class MessageComposerInput extends React.Component {
 
         // Some commands (/join) require pills to be replaced with their text content
         const commandText = this.removeMDLinks(contentState, ['#']);
+*/
+        const commandText = contentText;
         const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
-                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
+                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });
@@ -754,6 +763,7 @@ export default class MessageComposerInput extends React.Component {
         const quotingEv = RoomViewStore.getQuotingEvent();
 
         if (this.state.isRichtextEnabled) {
+/*
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
 
@@ -788,6 +798,8 @@ export default class MessageComposerInput extends React.Component {
                 });
                 shouldSendHTML = hasLink;
             }
+*/
+            let shouldSendHTML = true;            
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
                     RichText.contentStateToHTML(contentState),
@@ -797,6 +809,7 @@ export default class MessageComposerInput extends React.Component {
             // Use the original contentState because `contentText` has had mentions
             // stripped and these need to end up in contentHTML.
 
+/*
             // Replace all Entities of type `LINK` with markdown link equivalents.
             // TODO: move this into `Markdown` and do the same conversion in the other
             // two places (toggling from MD->RT mode and loading MD history into RT mode)
@@ -817,7 +830,7 @@ export default class MessageComposerInput extends React.Component {
                 });
                 return blockText;
             }).join('\n');
-
+*/
             const md = new Markdown(pt);
             // if contains no HTML and we're not quoting (needing HTML)
             if (md.isPlainText() && !quotingEv) {
@@ -832,7 +845,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.historyManager.save(
             contentState,
-            this.state.isRichtextEnabled ? 'html' : 'markdown',
+            this.state.isRichtextEnabled ? 'rich' : 'markdown',
         );
 
         if (contentText.startsWith('/me')) {
@@ -881,7 +894,7 @@ export default class MessageComposerInput extends React.Component {
         });
 
         return true;
-    }
+    };
 
     onUpArrow = (e) => {
         this.onVerticalArrow(e, true);
@@ -896,6 +909,7 @@ export default class MessageComposerInput extends React.Component {
             return;
         }
 
+/*
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
             // Don't go back in history if we're in the middle of a multi-line message
@@ -927,8 +941,10 @@ export default class MessageComposerInput extends React.Component {
             this.moveAutocompleteSelection(up);
             e.preventDefault();
         }
+*/        
     };
 
+/*
     selectHistory = async (up) => {
         const delta = up ? -1 : 1;
 
@@ -950,7 +966,7 @@ export default class MessageComposerInput extends React.Component {
             return;
         }
 
-        const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
+        const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'rich' : 'markdown');
         if (!newContent) return false;
         let editorState = EditorState.push(
             this.state.editorState,
@@ -969,6 +985,7 @@ export default class MessageComposerInput extends React.Component {
         this.setState({editorState});
         return true;
     };
+*/    
 
     onTab = async (e) => {
         this.setState({
@@ -1061,8 +1078,9 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) {
+    onFormatButtonClicked = (name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) => {
         e.preventDefault(); // don't steal focus from the editor!
+/*
         const command = {
                 code: 'code-block',
                 quote: 'blockquote',
@@ -1070,7 +1088,8 @@ export default class MessageComposerInput extends React.Component {
                 numbullet: 'ordered-list-item',
             }[name] || name;
         this.handleKeyCommand(command);
-    }
+*/        
+    };
 
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
      buttons. */

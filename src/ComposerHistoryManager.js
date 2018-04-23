@@ -15,38 +15,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ContentState, convertToRaw, convertFromRaw} from 'draft-js';
+import { Value } from 'slate';
+import Html from 'slate-html-serializer';
+import Markdown as Md from 'slate-md-serializer';
+import Plain from 'slate-plain-serializer';
 import * as RichText from './RichText';
 import Markdown from './Markdown';
+
 import _clamp from 'lodash/clamp';
 
-type MessageFormat = 'html' | 'markdown';
+type MessageFormat = 'rich' | 'markdown';
 
 class HistoryItem {
 
     // Keeping message for backwards-compatibility
     message: string;
-    rawContentState: RawDraftContentState;
-    format: MessageFormat = 'html';
+    value: Value;
+    format: MessageFormat = 'rich';
 
-    constructor(contentState: ?ContentState, format: ?MessageFormat) {
+    constructor(value: ?Value, format: ?MessageFormat) {
         this.rawContentState = contentState ? convertToRaw(contentState) : null;
         this.format = format;
+
     }
 
-    toContentState(outputFormat: MessageFormat): ContentState {
-        const contentState = convertFromRaw(this.rawContentState);
+    toValue(outputFormat: MessageFormat): Value {
         if (outputFormat === 'markdown') {
-            if (this.format === 'html') {
-                return ContentState.createFromText(RichText.stateToMarkdown(contentState));
+            if (this.format === 'rich') {
+                // convert a rich formatted history entry to its MD equivalent
+                const markdown = new Markdown({});
+                return new Value({ data: markdown.serialize(value) });
+                // return ContentState.createFromText(RichText.stateToMarkdown(contentState));
             }
-        } else {
+            else if (this.format === 'markdown') {
+                return value;
+            }
+        } else if (outputFormat === 'rich') {
             if (this.format === 'markdown') {
-                return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
+                // convert MD formatted string to its rich equivalent.
+                const plain = new Plain({});
+                const md = new Md({});
+                return md.deserialize(plain.serialize(value));
+                // return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
+            }
+            else if (this.format === 'rich') {
+                return value;
             }
         }
-        // history item has format === outputFormat
-        return contentState;
+        log.error("unknown format -> outputFormat conversion");
+        return value;
     }
 }
 
@@ -69,16 +86,16 @@ export default class ComposerHistoryManager {
         this.lastIndex = this.currentIndex;
     }
 
-    save(contentState: ContentState, format: MessageFormat) {
-        const item = new HistoryItem(contentState, format);
+    save(value: Value, format: MessageFormat) {
+        const item = new HistoryItem(value, format);
         this.history.push(item);
         this.currentIndex = this.lastIndex + 1;
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item));
     }
 
-    getItem(offset: number, format: MessageFormat): ?ContentState {
+    getItem(offset: number, format: MessageFormat): ?Value {
         this.currentIndex = _clamp(this.currentIndex + offset, 0, this.lastIndex - 1);
         const item = this.history[this.currentIndex];
-        return item ? item.toContentState(format) : null;
+        return item ? item.toValue(format) : null;
     }
 }
