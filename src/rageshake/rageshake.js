@@ -395,9 +395,6 @@ function selectQuery(store, keyRange, resultMapper) {
 }
 
 
-let store = null;
-let logger = null;
-let initPromise = null;
 module.exports = {
 
     /**
@@ -406,11 +403,11 @@ module.exports = {
      * @return {Promise} Resolves when set up.
      */
     init: function() {
-        if (initPromise) {
-            return initPromise;
+        if (global.mx_rage_initPromise) {
+            return global.mx_rage_initPromise;
         }
-        logger = new ConsoleLogger();
-        logger.monkeyPatch(window.console);
+        global.mx_rage_logger = new ConsoleLogger();
+        global.mx_rage_logger.monkeyPatch(window.console);
 
         // just *accessing* indexedDB throws an exception in firefox with
         // indexeddb disabled.
@@ -420,19 +417,19 @@ module.exports = {
         } catch(e) {}
 
         if (indexedDB) {
-            store = new IndexedDBLogStore(indexedDB, logger);
-            initPromise = store.connect();
-            return initPromise;
+            global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
+            global.mx_rage_initPromise = global.mx_rage_store.connect();
+            return global.mx_rage_initPromise;
         }
-        initPromise = Promise.resolve();
-        return initPromise;
+        global.mx_rage_initPromise = Promise.resolve();
+        return global.mx_rage_initPromise;
     },
 
     flush: function() {
-        if (!store) {
+        if (!global.mx_rage_store) {
             return;
         }
-        store.flush();
+        global.mx_rage_store.flush();
     },
 
     /**
@@ -440,10 +437,10 @@ module.exports = {
      * @return Promise Resolves if cleaned logs.
      */
     cleanup: async function() {
-        if (!store) {
+        if (!global.mx_rage_store) {
             return;
         }
-        await store.consume();
+        await global.mx_rage_store.consume();
     },
 
     /**
@@ -452,21 +449,21 @@ module.exports = {
      * @return {Array<{lines: string, id, string}>}  list of log data
      */
     getLogsForReport: async function() {
-        if (!logger) {
+        if (!global.mx_rage_logger) {
             throw new Error(
                 "No console logger, did you forget to call init()?"
             );
         }
         // If in incognito mode, store is null, but we still want bug report
         // sending to work going off the in-memory console logs.
-        if (store) {
+        if (global.mx_rage_store) {
             // flush most recent logs
-            await store.flush();
-            return await store.consume();
+            await global.mx_rage_store.flush();
+            return await global.mx_rage_store.consume();
         }
         else {
             return [{
-                lines: logger.flush(true),
+                lines: global.mx_rage_logger.flush(true),
                 id: "-",
             }];
         }
