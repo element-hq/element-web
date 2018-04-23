@@ -1159,5 +1159,6 @@
     "Checking for an update...": "Frissítés keresése...",
     "There are advanced notifications which are not shown here": "Vannak itt nem látható, haladó értesítések",
     "Missing roomId.": "Hiányzó szoba azonosító.",
-    "Picture": "Kép"
+    "Picture": "Kép",
+    "Popout widget": "Kiugró kisalkalmazás"
 }
