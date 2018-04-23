@@ -1157,5 +1157,7 @@
     "Collapse panel": "Tolestu panela",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Zure oraingo nabigatzailearekin aplikazioaren itxura eta portaera guztiz okerra izan daiteke, eta funtzio batzuk ez dira ibiliko. Hala ere aurrera jarraitu dezakezu saiatu nahi baduzu, baina zure erantzukizunaren menpe geratzen dira aurkitu ditzakezun arazoak!",
     "Checking for an update...": "Eguneraketarik dagoen egiaztatzen...",
-    "There are advanced notifications which are not shown here": "Hemen erakusten ez diren jakinarazpen aurreratuak daude"
+    "There are advanced notifications which are not shown here": "Hemen erakusten ez diren jakinarazpen aurreratuak daude",
+    "Missing roomId.": "Gelaren ID-a falta da.",
+    "Picture": "Irudia"
 }
