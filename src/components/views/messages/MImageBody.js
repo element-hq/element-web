@@ -49,6 +49,7 @@ export default class extends React.Component {
         super(props);
 
         this.onAction = this.onAction.bind(this);
+        this.onImageError = this.onImageError.bind(this);
         this.onImageEnter = this.onImageEnter.bind(this);
         this.onImageLeave = this.onImageLeave.bind(this);
         this.onClientSync = this.onClientSync.bind(this);
