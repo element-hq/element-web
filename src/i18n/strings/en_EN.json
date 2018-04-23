@@ -198,6 +198,7 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Show timestamps in 12 hour format (e.g. 2:30pm)",
     "Always show message timestamps": "Always show message timestamps",
     "Autoplay GIFs and videos": "Autoplay GIFs and videos",
+    "Always show encryption icons": "Always show encryption icons",
     "Enable automatic language detection for syntax highlighting": "Enable automatic language detection for syntax highlighting",
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
     "Disable big emoji in chat": "Disable big emoji in chat",

@@ -742,7 +742,11 @@ function E2ePadlockUnencrypted(props) {
 }
 
 function E2ePadlock(props) {
-    return <img className="mx_EventTile_e2eIcon" {...props} />;
+    if (SettingsStore.getValue("alwaysShowEncryptionIcons")) {
+        return <img className="mx_EventTile_e2eIcon" {...props} />;
+    } else {
+        return <img className="mx_EventTile_e2eIcon" hidden {...props} />;
+    }
 }
 
 module.exports.getHandlerTile = getHandlerTile;
