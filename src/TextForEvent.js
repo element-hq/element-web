@@ -58,7 +58,7 @@ function textForMemberEvent(ev) {
                     });
                 } else if (!prevContent.displayname && content.displayname) {
                     return _t('%(senderName)s set their display name to %(displayName)s.', {
-                        senderName,
+                        senderName: ev.getSender(),
                         displayName: content.displayname,
                     });
                 } else if (prevContent.displayname && !content.displayname) {
