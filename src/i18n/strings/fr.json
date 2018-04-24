@@ -1156,5 +1156,8 @@
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Les rapports de débogage contiennent des données d'usage de l'application qui incluent votre nom d'utilisateur, les identifiants ou alias des salons ou groupes auxquels vous avez rendu visite ainsi que les noms des autres utilisateurs. Ils ne contiennent aucun message.",
     "Failed to send logs: ": "Échec lors de l'envoi des rapports : ",
     "Notes:": "Notes :",
-    "Preparing to send logs": "Préparation d'envoi des rapports"
+    "Preparing to send logs": "Préparation d'envoi des rapports",
+    "Missing roomId.": "Identifiant de salon manquant.",
+    "Picture": "Image",
+    "<a>Click here</a> to create a GitHub issue.": "<a>Cliquez ici</a> pour créer un signalement sur GitHub."
 }

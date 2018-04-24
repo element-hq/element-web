@@ -1156,5 +1156,8 @@
     "Collapse panel": "Свернуть панель",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "В текущем браузере внешний вид приложения может быть полностью неверным, а некоторые или все функции могут не работать. Если вы хотите попробовать в любом случае, то можете продолжить, но с теми проблемами, с которыми вы можете столкнуться вам придется разбираться самостоятельно!",
     "Checking for an update...": "Проверка обновлений...",
-    "There are advanced notifications which are not shown here": "Существуют дополнительные уведомления, которые не показаны здесь"
+    "There are advanced notifications which are not shown here": "Существуют дополнительные уведомления, которые не показаны здесь",
+    "Missing roomId.": "Отсутствует идентификатор комнаты.",
+    "You don't currently have any stickerpacks enabled": "У вас нет доступных  стикеров",
+    "Picture": "Изображение"
 }
