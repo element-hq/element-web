@@ -1002,7 +1002,7 @@
     "Everyone": "Iedereen",
     "Leave this community": "Deze gemeenschap verlaten",
     "Debug Logs Submission": "Debug Logs Indienen",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Als je een bug via Github hebt ingediend kunnen debug logs ons helpen om het probleem te vinden. Debug logs bevatten applicatie-gebruik data inclusief je gebruikersnaam, de ID's of namen van de ruimtes en groepen die je hebt bezocht en de gebruikersnamen van andere gebruikers. Ze bevatten geen berichten.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Als je een bug via Github hebt ingediend kunnen debug logs ons helpen om het probleem te vinden. Debug logs bevatten applicatie-gebruik data inclusief je gebruikersnaam, de ID's of namen van de ruimtes en groepen die je hebt bezocht en de gebruikersnamen van andere gebruikers. Ze bevatten geen berichten.",
     "Submit debug logs": "Debug logs indienen",
     "Opens the Developer Tools dialog": "Opent het Ontwikkelaars Gereedschappen dialoog",
     "Fetching third party location failed": "Het ophalen van de locatie van de derde partij is mislukt",

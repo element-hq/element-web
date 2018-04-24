@@ -966,7 +966,7 @@
     "Ignores a user, hiding their messages from you": "忽略用户，隐藏他们的消息",
     "Stops ignoring a user, showing their messages going forward": "解除忽略用户，显示他们的消息",
     "To return to your account in future you need to set a password": "如果你想再次使用账号，您得为它设置一个密码",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "如果你在 GitHub 提交了一个 bug，调试日志可以帮助我们追踪这个问题。 调试日志包含应用程序使用数据，这包括您的用户名、您访问的房间或社区的 ID 或名称以及其他用户的用户名，不包扩聊天记录。",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "如果你在 GitHub 提交了一个 bug，调试日志可以帮助我们追踪这个问题。 调试日志包含应用程序使用数据，这包括您的用户名、您访问的房间或社区的 ID 或名称以及其他用户的用户名，不包扩聊天记录。",
     "Debug Logs Submission": "发送调试日志",
     "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "密码修改成功。在您在其他设备上重新登录之前，其他设备不会收到推送通知",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "尝试加载此房间的时间线的特定时间点，但是无法找到。",

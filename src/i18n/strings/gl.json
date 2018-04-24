@@ -993,7 +993,7 @@
     "Join this community": "Únase a esta comunidade",
     "Leave this community": "Deixar esta comunidade",
     "Debug Logs Submission": "Envío de rexistro de depuración",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Si enviou un reporte de fallo a través de GitHub, os informes poden axudarnos a examinar o problema. Os informes de fallo conteñen datos do uso do aplicativo incluíndo o seu nome de usuaria, os IDs ou alcumes das salas e grupos que visitou e os nomes de usuaria de outras personas. Non conteñen mensaxes.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Si enviou un reporte de fallo a través de GitHub, os informes poden axudarnos a examinar o problema. Os informes de fallo conteñen datos do uso do aplicativo incluíndo o seu nome de usuaria, os IDs ou alcumes das salas e grupos que visitou e os nomes de usuaria de outras personas. Non conteñen mensaxes.",
     "Submit debug logs": "Enviar informes de depuración",
     "Opens the Developer Tools dialog": "Abre o cadro de Ferramentas de Desenvolvedoras",
     "Stickerpack": "Peganitas",
