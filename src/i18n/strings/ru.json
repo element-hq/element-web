@@ -583,7 +583,7 @@
     "Incoming video call from %(name)s": "Входящий видеовызов от %(name)s",
     "Incoming voice call from %(name)s": "Входящий голосовой вызов от %(name)s",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Войти как <voiceText>голос</voiceText> или <videoText>видео</videoText>.",
-    "Last seen": "Последний визит",
+    "Last seen": "Последний вход",
     "Level:": "Уровень:",
     "No display name": "Нет отображаемого имени",
     "Otherwise, <a>click here</a> to send a bug report.": "В противном случае, <a> нажмите </a> 2 для отправки отчета об ошибке.",
