@@ -799,7 +799,7 @@
     "Join an existing community": "Присоединиться к существующему сообществу",
     "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Чтобы присоединиться к существующему сообществу, вам нужно знать его ID; это будет выглядеть примерно так<i>+primer:matrix.org</i>.",
     "Something went wrong whilst creating your community": "При создании сообщества что-то пошло не так",
-    "%(names)s and %(count)s others are typing|other": "%(names)s и %(count)s другие печатают",
+    "%(names)s and %(count)s others are typing|other": "%(names)s и ещё %(count)s печатают",
     "And %(count)s more...|other": "И более %(count)s...",
     "Delete Widget": "Удалить виджет",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Удаление виджета удаляет его для всех пользователей этой комнаты. Вы действительно хотите удалить этот виджет?",
