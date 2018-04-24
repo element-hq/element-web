@@ -961,7 +961,7 @@
     "The platform you're on": "Используемая платформа",
     "The version of Riot.im": "Версия Riot.im",
     "Whether or not you're logged in (we don't record your user name)": "Независимо от того, вошли вы или нет (мы не храним ваше имя пользователя)",
-    "Your language of choice": "Выбранный вами язык",
+    "Your language of choice": "Выбранный язык",
     "Your homeserver's URL": "URL-адрес домашнего сервера",
     "Your identity server's URL": "URL-адрес вашего идентификационного сервера",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
