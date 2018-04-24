@@ -988,7 +988,7 @@
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Vu par %(displayName)s (%(userName)s) à %(dateTime)s",
     "Code": "Code",
     "Debug Logs Submission": "Envoi des journaux de débogage",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Si vous avez signalé un bug via GitHub, les journaux de débogage peuvent nous aider à identifier le problème. Les journaux de débogage contiennent des données d'utilisation de l'application dont votre nom d'utilisateur, les identifiants ou alias des salons ou groupes que vous avez visité et les noms d'utilisateur des autres participants. Ils ne contiennent pas les messages.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Si vous avez signalé un bug via GitHub, les journaux de débogage peuvent nous aider à identifier le problème. Les journaux de débogage contiennent des données d'utilisation de l'application dont votre nom d'utilisateur, les identifiants ou alias des salons ou groupes que vous avez visité et les noms d'utilisateur des autres participants. Ils ne contiennent pas les messages.",
     "Submit debug logs": "Envoyer les journaux de débogage",
     "Opens the Developer Tools dialog": "Ouvre la fenêtre des Outils de développeur",
     "Unable to join community": "Impossible de rejoindre la communauté",

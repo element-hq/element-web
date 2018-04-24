@@ -801,7 +801,7 @@ module.exports = React.createClass({
                             "us track down the problem. Debug logs contain application " +
                             "usage data including your username, the IDs or aliases of " +
                             "the rooms or groups you have visited and the usernames of " +
-                            "other users. They do not contian messages.",
+                            "other users. They do not contain messages.",
                         )
                     }</p>
                     <button className="mx_UserSettings_button danger"
