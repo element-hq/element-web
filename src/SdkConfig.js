@@ -21,13 +21,6 @@ const DEFAULTS = {
     integrations_rest_url: "https://scalar.vector.im/api",
     // Where to send bug reports. If not specified, bugs cannot be sent.
     bug_report_endpoint_url: null,
-
-    piwik: {
-        url: "https://piwik.riot.im/",
-        whitelistedHSUrls: ["https://matrix.org"],
-        whitelistedISUrls: ["https://vector.im", "https://matrix.org"],
-        siteId: 1,
-    },
 };
 
 class SdkConfig {
