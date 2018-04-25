@@ -25,7 +25,8 @@
     "release.sh",
     "scripts",
     "src",
-    "test"
+    "test",
+    "res"
   ],
   "bin": {
     "reskindex": "scripts/reskindex.js",
