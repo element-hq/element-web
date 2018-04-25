@@ -36,8 +36,8 @@ function getRedactedHash(hash) {
 
 // Return the current origin and hash separated with a `/`. This does not include query parameters.
 function getRedactedUrl() {
-    const { origin, hash } = window.location;
-    return origin + '/' + getRedactedHash(hash);
+    const { origin, pathname, hash } = window.location;
+    return origin + pathname + getRedactedHash(hash);
 }
 
 const customVariables = {
