@@ -20,7 +20,7 @@ import SdkConfig, { DEFAULTS } from './SdkConfig';
 import Modal from './Modal';
 import sdk from './index';
 
-const hashRegex = /#\/(group|room|user)\/(.+)/;
+const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
 
 // Remove all but the first item in the hash path. Redact unexpected hashes.
 function getRedactedHash(hash) {
