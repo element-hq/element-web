@@ -49,6 +49,15 @@ We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
 https://github.com/vector-im/riot-web/issues/1977 for more details.
 
+The same applies for end-to-end encrypted content, but since this is decrypted
+on the client, Riot needs a way to supply the decrypted content from a separate
+origin to the one Riot is hosted on. This currently done with a 'cross origin
+renderer' which is a small piece of javascript hosted on a different domain.
+To avoid all Riot installs needing one of these to be set up, riot.im hosts
+one on usercontent.riot.im which is used by default. See 'config.json' if you'd
+like to host your own. https://github.com/vector-im/riot-web/issues/6173 tracks
+progress on replacing this with something better.
+
 Building From Source
 ====================
 
