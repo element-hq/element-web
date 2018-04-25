@@ -111,7 +111,7 @@ Tinter.registerTintable(updateTintedDownloadImage);
 //          if (parts[0] == 'origin') lockOrigin = decodeURIComponent(parts[1]);
 //      }
 //      window.onmessage=function(e){
-//          if (lockOrigin && event.origin === lockOrigin) eval("("+e.data.code+")")(e);
+//          if (lockOrigin === undefined || event.origin === lockOrigin) eval("("+e.data.code+")")(e);
 //      }
 //      </script></head><body></body></html>
 //
