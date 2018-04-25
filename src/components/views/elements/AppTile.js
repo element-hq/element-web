@@ -609,14 +609,14 @@ export default class AppTile extends React.Component {
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Popout widget */ }
-                        <TintableSvgButton
+                        { this.props.showPopout && <TintableSvgButton
                             src={popoutWidgetIcon}
                             className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Popout widget')}
                             onClick={this._onPopoutWidgetClick}
                             width="10"
                             height="10"
-                        />
+                        /> }
 
                         { /* Snapshot widget */ }
                         { showPictureSnapshotButton && <TintableSvgButton
@@ -689,6 +689,8 @@ AppTile.propTypes = {
     handleMinimisePointerEvents: PropTypes.bool,
     // Optionally hide the delete icon
     showDelete: PropTypes.bool,
+    // Optionally hide the popout widget icon
+    showPopout: PropTypes.bool,
     // Widget apabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX
     // basic widget capabilities, e.g. injecting sticker message events.
@@ -705,6 +707,7 @@ AppTile.defaultProps = {
     showTitle: true,
     showMinimise: true,
     showDelete: true,
+    showPopout: true,
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
 };
