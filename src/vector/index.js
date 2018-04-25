@@ -32,10 +32,10 @@ require('babel-polyfill');
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require('matrix-react-sdk/node_modules/gemini-scrollbar/gemini-scrollbar.css');
-require('matrix-react-sdk/node_modules/gfm.css/gfm.css');
-require('matrix-react-sdk/node_modules/highlight.js/styles/github.css');
-require('matrix-react-sdk/node_modules/draft-js/dist/Draft.css');
+require('gemini-scrollbar/gemini-scrollbar.css');
+require('gfm.css/gfm.css');
+require('highlight.js/styles/github.css');
+require('draft-js/dist/Draft.css');
 
 const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
