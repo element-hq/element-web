@@ -1159,5 +1159,6 @@
     "There are advanced notifications which are not shown here": "Существуют дополнительные уведомления, которые не показаны здесь",
     "Missing roomId.": "Отсутствует идентификатор комнаты.",
     "You don't currently have any stickerpacks enabled": "У вас нет стикеров",
-    "Picture": "Снимок"
+    "Picture": "Снимок",
+    "Popout widget": "Всплывающий виджет"
 }
