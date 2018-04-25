@@ -20,13 +20,24 @@ import SdkConfig, { DEFAULTS } from './SdkConfig';
 import Modal from './Modal';
 import sdk from './index';
 
-function getRedactedHash() {
-    return window.location.hash.replace(/#\/(group|room|user)\/(.+)/, "#/$1/<redacted>");
+const hashRegex = /#\/(group|room|user)\/(.+)/;
+
+// Remove all but the first item in the hash path. Redact unexpected hashes.
+function getRedactedHash(hash) {
+    // Don't leak URLs we aren't expecting - they could contain tokens/PPI
+    const match = hashRegex.exec(hash);
+    if (!match) {
+        console.warn(`Unexpected hash location "${hash}"`);
+        return '#/<unexpected hash location>';
+    }
+
+    return hash.replace(hashRegex, "#/$1");
 }
 
+// Return the current origin and hash separated with a `/`. This does not include query parameters.
 function getRedactedUrl() {
-    // hardcoded url to make piwik happy
-    return 'https://riot.im/app/' + getRedactedHash();
+    const { origin, hash } = window.location;
+    return origin + '/' + getRedactedHash(hash);
 }
 
 const customVariables = {
