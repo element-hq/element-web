@@ -337,7 +337,7 @@ module.exports = React.createClass({
             if (this.context.appConfig && this.context.appConfig.cross_origin_renderer_url) {
                 renderer_url = this.context.appConfig.cross_origin_renderer_url;
             }
-            renderer_url += "?origin=" + encodeURIComponent(document.origin);
+            renderer_url += "?origin=" + encodeURIComponent(window.location.origin);
             return (
                 <span className="mx_MFileBody">
                     <div className="mx_MFileBody_download">
