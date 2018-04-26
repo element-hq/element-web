@@ -695,7 +695,6 @@
     "Your homeserver's URL": "Bāzes servera URL adrese",
     "Your identity server's URL": "Tava Identitātes servera URL adrese",
     "The information being sent to us to help make Riot.im better includes:": "Informācija, kura mums tiek nosūtīta, lai ļautu padarīt Riot.im labāku, ietver:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Mēs arī fiksējam katru lapu, kuru tu izmanto programmā (currently <CurrentPageHash>), Tavu lietotāja aģentu (<CurrentUserAgent>) un Tavas ierīces ekrāna izšķirtspēju (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Ja šī lapa ietver identificējamu informāciju, tādu kā istaba, lietotājs, grupas Id, šie dati tiek noņemti pirms nosūtīšanas uz serveri.",
     "Call Failed": "Zvans neizdevās",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Šajā istabā ir nepazīstamas ierīces: ja Tu turpināsi bez to pārbaudes, ir iespējams, ka kāda nepiederoša persona var noklausīties Tavas sarunas.",

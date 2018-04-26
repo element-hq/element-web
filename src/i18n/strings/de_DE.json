@@ -952,7 +952,6 @@
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Nachricht jetzt erneut senden</resendText> oder <cancelText>senden abbrechen</cancelText> now.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privatsphäre ist uns wichtig, deshalb sammeln wir keine persönlichen oder identifizierbaren Daten für unsere Analysen.",
     "The information being sent to us to help make Riot.im better includes:": "Die Informationen, die an uns gesendet werden um Riot.im zu verbessern enthalten:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Wir speichern auch jede Seite, die du in der App benutzt (currently <CurrentPageHash>), deinen User Agent (<CurrentUserAgent>) und die Bildschirmauflösung deines Gerätes (<CurrentDeviceResolution>).",
     "The platform you're on": "Benutzte Plattform",
     "The version of Riot.im": "Riot.im Version",
     "Your language of choice": "Deine ausgewählte Sprache",

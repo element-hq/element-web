@@ -12,7 +12,6 @@
     "Your identity server's URL": "URL-ja e server-it identiteti tëndë",
     "Analytics": "Analiza",
     "The information being sent to us to help make Riot.im better includes:": "Informacionet që dërgohen për t'i ndihmuar Riot.im-it të përmirësohet përmbajnë:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Ne gjithashtu inçizojmë çdo faqe që përdorë në aplikacion (në këtë çast <CurrentPageHash>), agjentin e përdoruesit tëndë (<CurrentUserAgent>) dhe rezolucionin e pajisjes tënde (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Kur kjo faqe pëmban informacione që mund të të identifikojnë, sikur një dhomë, përdorues apo identifikatues grupi, këto të dhëna do të mënjanohen para se t‘i dërgohën një server-it.",
     "Call Failed": "Thirrja nuk mundej të realizohet",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Pajisje të panjohura ndodhen në këtë dhomë: nësë vazhdon pa i vërtetuar, është e mundshme që dikush të jua përgjon thirrjen.",

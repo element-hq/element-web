@@ -693,7 +693,6 @@
     "Your homeserver's URL": "Adres URL twojego serwera domowego",
     "Your identity server's URL": "Adres URL twojego serwera tożsamości",
     "The information being sent to us to help make Riot.im better includes:": "Oto informacje przesyłane do nas, służące do poprawy Riot.im:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Zapisujemy również każdą stronę, z której korzystasz w aplikacji (obecnie <CurrentPageHash>), twój User Agent (<CurrentUserAgent>) oraz rozdzielczość ekranu twojego urządzenia (<CurrentDeviceResolution>).",
     "The platform you're on": "Platforma na której jesteś",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "W tym pokoju są nieznane urządzenia: jeżeli będziesz kontynuować bez ich weryfikacji, możliwe będzie podsłuchiwanie Twojego połączenia.",
     "Answer": "Odbierz",

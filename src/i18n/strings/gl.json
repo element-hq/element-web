@@ -951,7 +951,6 @@
     "File to import": "Ficheiro a importar",
     "Import": "Importar",
     "The information being sent to us to help make Riot.im better includes:": "A información enviada a Riot.im para axudarnos a mellorar inclúe:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Tamén rexistramos cada páxina que vostede utiliza no aplicativo (actualmente <CurrentPageHash>), o User Agent (<CurrentUserAgent>) e a resolución do dispositivo (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Si esta páxina inclúe información identificable como ID de grupo, usuario ou sala, estes datos son eliminados antes de ser enviados ao servidor.",
     "The platform you're on": "A plataforma na que está",
     "The version of Riot.im": "A versión de Riot.im",

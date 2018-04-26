@@ -773,7 +773,6 @@
     "Your identity server's URL": "Адреса вашег идентитеског сервера",
     "Analytics": "Аналитика",
     "The information being sent to us to help make Riot.im better includes:": "У податке које нам шаљете зарад побољшавања Riot.im-а спадају:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Такође бележимо сваку страницу коју користите у апликацији (тренутно <CurrentPageHash>), ваш кориснички агент (<CurrentUserAgent>) и резолуцију вашег уређаја (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Ако страница садржи поверљиве податке (као што је назив собе, корисника или ИБ-ја групе), ти подаци се уклањају пре слања на сервер.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "Корисник %(oldDisplayName)s је променио приказно име у %(displayName)s.",
     "Failed to set direct chat tag": "Нисам успео да поставим ознаку директног ћаскања",
