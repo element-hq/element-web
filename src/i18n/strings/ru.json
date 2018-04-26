@@ -956,7 +956,6 @@
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Конфиденциальность важна для нас, поэтому мы не собираем никаких личных или идентифицируемых данных для нашей аналитики.",
     "Learn more about how we use analytics.": "Подробнее о том, как мы используем аналитику.",
     "The information being sent to us to help make Riot.im better includes:": "Информация, отправляемая нам, чтобы помочь нам сделать Riot.im лучше, включает в себя:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Мы также записываем, какими страницами в приложении вы пользуетесь (сейчас — <CurrentPageHash>), ваш User-Agent (<CurrentUserAgent>) и разрешение экрана вашего устройства (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Если на этой странице встречаются сведения личного характера, например имя комнаты, имя пользователя или группы, они удаляются перед отправкой на сервер.",
     "The platform you're on": "Используемая платформа",
     "The version of Riot.im": "Версия Riot.im",

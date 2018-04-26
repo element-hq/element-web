@@ -959,7 +959,6 @@
     "Notify the whole room": "Notificeer de gehele ruimte",
     "Room Notification": "Ruimte Notificatie",
     "The information being sent to us to help make Riot.im better includes:": "De informatie dat naar ons wordt verstuurd om Riot.im beter te maken betrekt:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "We nemen ook elke pagina die je in de applicatie gebruikt (momenteel <CurrentPageHash>), je User Agent (<CurrentUserAgent>) en de resolutie van je apparaat (<CurrentDeviceResolution>) op.",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Waar deze pagina identificeerbare informatie bevat, zoals een ruimte, gebruiker of groep ID, zal deze data verwijderd worden voordat het naar de server gestuurd wordt.",
     "The platform you're on": "Het platform waar je je op bevindt",
     "The version of Riot.im": "De versie van Riot.im",

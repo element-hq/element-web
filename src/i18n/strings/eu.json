@@ -959,7 +959,6 @@
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Pribatutasuna garrantzitsua da guretzat, beraz ez dugu datu pertsonalik edo identifikagarririk jasotzen gure estatistiketan.",
     "Learn more about how we use analytics.": "Ikasi gehiago estatistikei ematen diegun erabileraz.",
     "The information being sent to us to help make Riot.im better includes:": "Riot.im hobetzeko bidaltzen zaigun informazioan hau dago:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Aplikazioan erabiltzen duzun orri bakoitza jasotzen dugu (orain <CurrentPageHash>), erabiltzaile-agentea (<CurrentUserAgent>) eta gailuaren bereizmena (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Orri honek informazio identifikagarria badu ere, esaterako gela, erabiltzailea edo talde ID-a, datu hauek ezabatu egiten dira zerbitzarira bidali aurretik.",
     "Whether or not you're logged in (we don't record your user name)": "Saioa hasita dagoen ala ez (ez dugu erabiltzaile-izena gordetzen)",
     "Which officially provided instance you are using, if any": "Erabiltzen ari zaren instantzia ofiziala, balego",

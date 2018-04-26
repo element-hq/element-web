@@ -956,7 +956,6 @@
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "A személyes adatok védelme fontos számunkra, így mi nem gyűjtünk személyes és személyhez köthető adatokat az analitikánkhoz.",
     "Learn more about how we use analytics.": "Tudj meg többet arról hogyan használjuk az analitikai adatokat.",
     "The information being sent to us to help make Riot.im better includes:": "Az adatok amiket a Riot.im javításához felhasználunk az alábbiak:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Felvesszük az összes oldalt amit az alkalmazásban használsz (jelenleg <CurrentPageHash>), a \"User Agent\"-et (<CurrentUserAgent>) és az eszköz felbontását (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Minden azonosításra alkalmas adatot mint a szoba, felhasználó vagy csoport azonosítót mielőtt az adatokat elküldenénk eltávolításra kerülnek.",
     "The platform you're on": "A platform amit használsz",
     "The version of Riot.im": "Riot.im verziója",

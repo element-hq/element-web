@@ -956,7 +956,6 @@
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Le respect de votre vie privée est important pour nous, donc nous ne collectons aucune donnée personnelle ou permettant de vous identifier pour nos statistiques.",
     "Learn more about how we use analytics.": "En savoir plus sur notre utilisation des statistiques.",
     "The information being sent to us to help make Riot.im better includes:": "Les informations qui nous sont envoyées pour nous aider à améliorer Riot.im comprennent :",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Nous enregistrons aussi chaque page que vous utilisez dans l'application (en ce moment <CurrentPageHash>), votre User Agent (<CurrentUserAgent>) et la résolution de votre appareil (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Si la page contient des informations permettant de vous identifier, comme un salon, un identifiant d'utilisateur ou de groupe, ces données sont enlevées avant qu'elle ne soit envoyée au serveur.",
     "The platform you're on": "La plateforme que vous utilisez",
     "The version of Riot.im": "La version de Riot.im",

@@ -87,7 +87,6 @@
     "Your identity server's URL": "あなたのアイデンティティサーバのURL",
     "Analytics": "分析",
     "The information being sent to us to help make Riot.im better includes:": "Riot.imをよりよくするために私達に送信される情報は以下を含みます:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "私達はこのアプリであなたが利用したページ（現在は<CurrentPageHash>）、あなたのユーザエージェント（現在は<CurrentUserAgent>）、並びにあなたの端末の解像度（現在の端末では<CurrentDeviceResolution>）も記録します。",
     "Thursday": "木曜日",
     "Messages in one-to-one chats": "一対一のチャットでのメッセージ",
     "A new version of Riot is available.": "新しいバージョンのRiotが利用可能です。",
