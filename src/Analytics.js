@@ -210,11 +210,25 @@ class Analytics {
         const rows = Object.values(customVariables).map((v) => Tracker.getCustomVariable(v.id)).filter(Boolean);
 
         const resolution = `${window.screen.width}x${window.screen.height}`;
+        const otherVariables = [
+            {
+                expl: _td('Every page you use in the app'),
+                value: _t(
+                    'e.g. <CurrentPageURL>',
+                    {},
+                    {
+                        CurrentPageURL: getRedactedUrl(),
+                    },
+                ),
+            },
+            { expl: _td('Your User Agent'), value: navigator.userAgent },
+            { expl: _td('Your device resolution'), value: resolution },
+        ];
 
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
-            description: <div>
+            description: <div className="mx_UserSettings_analyticsModal">
                 <div>
                     { _t('The information being sent to us to help make Riot.im better includes:') }
                 </div>
@@ -223,19 +237,14 @@ class Analytics {
                         <td>{ _t(customVariables[row[0]].expl) }</td>
                         <td><code>{ row[1] }</code></td>
                     </tr>) }
-                </table>
-                <br />
-                <div>
-                    { _t('We also record each page you use in the app (currently <CurrentPageHash>), your User Agent'
-                        + ' (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).',
-                        {},
-                        {
-                            CurrentPageHash: <code>{ getRedactedHash() }</code>,
-                            CurrentUserAgent: <code>{ navigator.userAgent }</code>,
-                            CurrentDeviceResolution: <code>{ resolution }</code>,
-                        },
+                    { otherVariables.map((item, index) =>
+                        <tr key={index}>
+                            <td>{ _t(item.expl) }</td>
+                            <td><code>{ item.value }</code></td>
+                        </tr>,
                     ) }
-
+                </table>
+                <div>
                     { _t('Where this page includes identifiable information, such as a room, '
                         + 'user or group ID, that data is removed before being sent to the server.') }
                 </div>
