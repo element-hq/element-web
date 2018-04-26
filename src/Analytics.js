@@ -16,7 +16,7 @@
 
 import { getCurrentLanguage, _t, _td } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
-import SdkConfig, { DEFAULTS } from './SdkConfig';
+import SdkConfig from './SdkConfig';
 import Modal from './Modal';
 import sdk from './index';
 
@@ -199,8 +199,8 @@ class Analytics {
         const config = SdkConfig.get();
         if (!config.piwik) return;
 
-        const whitelistedHSUrls = config.piwik.whitelistedHSUrls || DEFAULTS.piwik.whitelistedHSUrls;
-        const whitelistedISUrls = config.piwik.whitelistedISUrls || DEFAULTS.piwik.whitelistedISUrls;
+        const whitelistedHSUrls = config.piwik.whitelistedHSUrls;
+        const whitelistedISUrls = config.piwik.whitelistedISUrls;
 
         this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
