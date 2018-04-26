@@ -1159,5 +1159,9 @@
     "Missing roomId.": "Identifiant de salon manquant.",
     "Picture": "Image",
     "<a>Click here</a> to create a GitHub issue.": "<a>Cliquez ici</a> pour créer un signalement sur GitHub.",
-    "Popout widget": "Détacher le widget"
+    "Popout widget": "Détacher le widget",
+    "Every page you use in the app": "Toutes les pages que vous utilisez dans l'application",
+    "e.g. <CurrentPageURL>": "par ex. <CurrentPageURL>",
+    "Your User Agent": "Votre user agent",
+    "Your device resolution": "La résolution de votre appareil"
 }
