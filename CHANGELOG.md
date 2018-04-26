@@ -1,3 +1,10 @@
+Changes in [0.14.2-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.14.2-rc.3) (2018-04-26)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.2...v0.14.2-rc.3)
+
+ * Fix CSS dependency versions to be the same as those in react-sdk to fix
+   left panel header positions.
+
 Changes in [0.14.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.14.2-rc.2) (2018-04-26)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.1...v0.14.2-rc.2)
