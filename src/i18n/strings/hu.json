@@ -1159,5 +1159,9 @@
     "There are advanced notifications which are not shown here": "Vannak itt nem látható, haladó értesítések",
     "Missing roomId.": "Hiányzó szoba azonosító.",
     "Picture": "Kép",
-    "Popout widget": "Kiugró kisalkalmazás"
+    "Popout widget": "Kiugró kisalkalmazás",
+    "Every page you use in the app": "Minden oldal, amit az alkalmazásban használsz",
+    "e.g. <CurrentPageURL>": "pl.: <CurrentPageURL>",
+    "Your User Agent": "Felhasználói ügynököd",
+    "Your device resolution": "Eszközöd felbontása"
 }
