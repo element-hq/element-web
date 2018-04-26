@@ -197,6 +197,8 @@ class Analytics {
         if (this.disabled) return;
 
         const config = SdkConfig.get();
+        if (!config.piwik) return;
+
         const whitelistedHSUrls = config.piwik.whitelistedHSUrls || DEFAULTS.piwik.whitelistedHSUrls;
         const whitelistedISUrls = config.piwik.whitelistedISUrls || DEFAULTS.piwik.whitelistedISUrls;
 
