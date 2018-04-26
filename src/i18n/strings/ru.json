@@ -1159,5 +1159,9 @@
     "Missing roomId.": "Отсутствует идентификатор комнаты.",
     "You don't currently have any stickerpacks enabled": "У вас нет стикеров",
     "Picture": "Снимок",
-    "Popout widget": "Всплывающий виджет"
+    "Popout widget": "Всплывающий виджет",
+    "Every page you use in the app": "Каждая страница, которую вы используете в приложении",
+    "e.g. <CurrentPageURL>": "напр. <CurrentPageURL>",
+    "Your User Agent": "Ваш пользовательский агент",
+    "Your device resolution": "Разрешение вашего устройства"
 }
