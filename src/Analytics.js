@@ -190,6 +190,7 @@ class Analytics {
     }
 
     _setVisitVariable(key, value) {
+        if (this.disabled) return;
         this._paq.push(['setCustomVariable', customVariables[key].id, key, value, 'visit']);
     }
 
@@ -199,8 +200,8 @@ class Analytics {
         const config = SdkConfig.get();
         if (!config.piwik) return;
 
-        const whitelistedHSUrls = config.piwik.whitelistedHSUrls;
-        const whitelistedISUrls = config.piwik.whitelistedISUrls;
+        const whitelistedHSUrls = config.piwik.whitelistedHSUrls || [];
+        const whitelistedISUrls = config.piwik.whitelistedISUrls || [];
 
         this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
