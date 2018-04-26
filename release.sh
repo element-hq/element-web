@@ -10,7 +10,7 @@ set -e
 orig_args=$@
 
 # chomp any args starting with '-' as these need to go
-# through to the rleease script and otherwise we'll get
+# through to the release script and otherwise we'll get
 # confused about what the version arg is.
 while [[ "$1" == -* ]]; do
     shift
