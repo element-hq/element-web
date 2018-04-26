@@ -45,4 +45,3 @@ class SdkConfig {
 }
 
 module.exports = SdkConfig;
-module.exports.DEFAULTS = DEFAULTS;
