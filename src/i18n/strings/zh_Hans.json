@@ -738,7 +738,6 @@
     "Your homeserver's URL": "您的主服务器的链接",
     "Your identity server's URL": "您的身份认证服务器的链接",
     "The information being sent to us to help make Riot.im better includes:": "将要为帮助 Riot.im 发展而发送的信息包含：",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "我们也记录了您在本应用中使用的页面（目前为 <CurrentPageHash>）， User Agent（<CurrentUserAgent>）和设备的分辨率（<CurrentDeviceResolution>）。",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "这个页面中含有可能能用于识别您身份的信息，比如聊天室、用户或群组 ID，在它们发送到服务器上之前，这些数据会被移除。",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s，%(monthName)s %(day)s %(time)s",

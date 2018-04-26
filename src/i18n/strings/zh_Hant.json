@@ -956,7 +956,6 @@
     "Notify the whole room": "通知整個聊天室",
     "Room Notification": "聊天室通知",
     "The information being sent to us to help make Riot.im better includes:": "協助讓 Riot.im 變得更好的傳送給我們的資訊包含了：",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "我們也紀錄了每個您在應用程式中使用的頁面（目前 <CurrentPageHash>），您的使用者代理（<CurrentUserAgent>）與您的裝置解析度（<CurrentDeviceResolution>）。",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "這個頁面包含了可識別的資訊，如聊天室、使用者或群組 ID，這些資料會在傳到伺服器前被刪除。",
     "The platform you're on": "您使用的平臺是",
     "The version of Riot.im": "Riot.im 的版本",

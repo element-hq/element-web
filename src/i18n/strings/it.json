@@ -101,7 +101,6 @@
     "Your identity server's URL": "L'URL del tuo server di identità",
     "Analytics": "Statistiche",
     "The information being sent to us to help make Riot.im better includes:": "Le informazioni inviate per aiutarci a migliorare Riot.im includono:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Registriamo anche ogni pagina che usi nell'app (attualmente <CurrentPageHash>), il tuo User Agent (<CurrentUserAgent>) e la risoluzione del dispositivo (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Se questa pagina include informazioni identificabili, come una stanza, utente o ID di gruppo, questi dati sono rimossi prima che vengano inviati al server.",
     "Call Failed": "Chiamata fallita",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Ci sono dispositivi sconosciuti in questa stanza: se procedi senza verificarli, qualcuno avrà la possibilità di intercettare la tua chiamata.",

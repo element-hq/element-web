@@ -664,7 +664,6 @@
     "Your homeserver's URL": "A URL do seu Servidor de Base (homeserver)",
     "Your identity server's URL": "A URL do seu servidor de identidade",
     "The information being sent to us to help make Riot.im better includes:": "As informações que estão sendo usadas para ajudar a melhorar o Riot.im incluem:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Nós também gravamos cada página que você usa no app (atualmente <CurrentPageHash>), o seu User Agent (<CurrentUserAgent>) e a resolução do seu dispositivo (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Quando esta página tem informação de identificação, como uma sala, ID de usuária/o ou de grupo, estes dados são removidos antes de serem enviados ao servidor.",
     "Call Failed": "A chamada falhou",
     "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Há dispositivos desconhecidos nesta sala: se você continuar sem verificá-los, será possível alguém espiar sua chamada.",

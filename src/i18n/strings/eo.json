@@ -952,7 +952,6 @@
     "The platform you're on": "Via sistemtipo",
     "Which officially provided instance you are using, if any": "Kiun oficiale disponeblan aperon vi uzas, se iun ajn",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Ĉu vi uzas la riĉtekstan reĝimon de la riĉteksta redaktilo aŭ ne",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Ni ankaŭ registras ĉiun paĝon, kiun vi uzas en la programo (nun <CurrentPageHash>), vian klientan aplikaĵon (<CurrentUserAgent>) kaj vian aparatan distingon (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Kiam ĉi tiu paĝo enhavas identigeblajn informojn, ekzemple ĉambron, uzantan aŭ grupan identigilon, ĝi sendiĝas al la servilo sen tiuj.",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "Disable Community Filter Panel": "Malŝalti komunuman filtran breton",
