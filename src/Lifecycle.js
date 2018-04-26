@@ -215,18 +215,16 @@ function _restoreFromLocalStorage() {
 
     if (accessToken && userId && hsUrl) {
         console.log(`Restoring session for ${userId}`);
-        try {
-            return _doSetLoggedIn({
-                userId: userId,
-                deviceId: deviceId,
-                accessToken: accessToken,
-                homeserverUrl: hsUrl,
-                identityServerUrl: isUrl,
-                guest: isGuest,
-            }, false).then(() => true);
-        } catch (e) {
+        return _doSetLoggedIn({
+            userId: userId,
+            deviceId: deviceId,
+            accessToken: accessToken,
+            homeserverUrl: hsUrl,
+            identityServerUrl: isUrl,
+            guest: isGuest,
+        }, false).catch((e) => {
             return _handleRestoreFailure(e);
-        }
+        }).then(() => true);
     } else {
         console.log("No previous session found.");
         return Promise.resolve(false);
