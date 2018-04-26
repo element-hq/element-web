@@ -28,10 +28,14 @@ module.exports = {
     module: {
         rules: [
             { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
-            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
             {
                 test: /\.scss$/,
-
+                include: [
+                    path.resolve(__dirname, 'res/themes/status/css/'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/light/css/'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/dark/css/'),
+                ],
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
