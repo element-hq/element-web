@@ -21,6 +21,7 @@ import Modal from './Modal';
 import sdk from './index';
 
 const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
+const hashVarRegex = /#\/(group|room|user)\/.*$/;
 
 // Remove all but the first item in the hash path. Redact unexpected hashes.
 function getRedactedHash(hash) {
@@ -29,6 +30,10 @@ function getRedactedHash(hash) {
     if (!match) {
         console.warn(`Unexpected hash location "${hash}"`);
         return '#/<unexpected hash location>';
+    }
+
+    if (hashVarRegex.test(hash)) {
+        return hash.replace(hashVarRegex, "#/$1/<redacted>");
     }
 
     return hash.replace(hashRegex, "#/$1");
