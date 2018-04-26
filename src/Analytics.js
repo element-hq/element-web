@@ -25,7 +25,7 @@ const hashVarRegex = /#\/(group|room|user)\/.*$/;
 
 // Remove all but the first item in the hash path. Redact unexpected hashes.
 function getRedactedHash(hash) {
-    // Don't leak URLs we aren't expecting - they could contain tokens/PPI
+    // Don't leak URLs we aren't expecting - they could contain tokens/PII
     const match = hashRegex.exec(hash);
     if (!match) {
         console.warn(`Unexpected hash location "${hash}"`);
