@@ -986,7 +986,7 @@
     "%(user)s is a %(userRole)s": "%(user)s е %(userRole)s",
     "Code": "Код",
     "Debug Logs Submission": "Изпращане на логове за дебъгване",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Ако сте изпратили грешка чрез GitHub, логовете за дебъгване могат да ни помогнат да проследим проблема. Логовете за дебъгване съдържат данни за използване на приложението, включващи потребителското Ви име, идентификаторите или псевдонимите на стаите или групите, които сте посетили, и потребителските имена на други потребители. Те не съдържат съобщения.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Ако сте изпратили грешка чрез GitHub, логовете за дебъгване могат да ни помогнат да проследим проблема. Логовете за дебъгване съдържат данни за използване на приложението, включващи потребителското Ви име, идентификаторите или псевдонимите на стаите или групите, които сте посетили, и потребителските имена на други потребители. Те не съдържат съобщения.",
     "Submit debug logs": "Изпрати логове за дебъгване",
     "Opens the Developer Tools dialog": "Отваря прозорец с инструменти на разработчика",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Видяно от %(displayName)s (%(userName)s) в %(dateTime)s",

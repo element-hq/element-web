@@ -54,6 +54,7 @@ export default class AppTile extends React.Component {
         this._onInitialLoad = this._onInitialLoad.bind(this);
         this._grantWidgetPermission = this._grantWidgetPermission.bind(this);
         this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
+        this._onPopoutWidgetClick = this._onPopoutWidgetClick.bind(this);
     }
 
     /**
@@ -499,6 +500,13 @@ export default class AppTile extends React.Component {
         }
     }
 
+    _onPopoutWidgetClick(e) {
+        // Using Object.assign workaround as the following opens in a new window instead of a new tab.
+        // window.open(this._getSafeUrl(), '_blank', 'noopener=yes,noreferrer=yes');
+        Object.assign(document.createElement('a'),
+            { target: '_blank', href: this._getSafeUrl(), rel: 'noopener noreferrer'}).click();
+    }
+
     render() {
         let appTileBody;
 
@@ -581,6 +589,7 @@ export default class AppTile extends React.Component {
         // Picture snapshot - only show button when apps are maximised.
         const showPictureSnapshotButton = this._hasCapability('screenshot') && this.props.show;
         const showPictureSnapshotIcon = 'img/camera_green.svg';
+        const popoutWidgetIcon = 'img/button-new-window.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
         return (
@@ -599,15 +608,25 @@ export default class AppTile extends React.Component {
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
-                      { /* Snapshot widget */ }
-                      { showPictureSnapshotButton && <TintableSvgButton
-                          src={showPictureSnapshotIcon}
-                          className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
-                          title={_t('Picture')}
-                          onClick={this._onSnapshotClick}
-                          width="10"
-                          height="10"
-                      /> }
+                        { /* Popout widget */ }
+                        { this.props.showPopout && <TintableSvgButton
+                            src={popoutWidgetIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Popout widget')}
+                            onClick={this._onPopoutWidgetClick}
+                            width="10"
+                            height="10"
+                        /> }
+
+                        { /* Snapshot widget */ }
+                        { showPictureSnapshotButton && <TintableSvgButton
+                            src={showPictureSnapshotIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Picture')}
+                            onClick={this._onSnapshotClick}
+                            width="10"
+                            height="10"
+                        /> }
 
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
@@ -670,6 +689,8 @@ AppTile.propTypes = {
     handleMinimisePointerEvents: PropTypes.bool,
     // Optionally hide the delete icon
     showDelete: PropTypes.bool,
+    // Optionally hide the popout widget icon
+    showPopout: PropTypes.bool,
     // Widget apabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX
     // basic widget capabilities, e.g. injecting sticker message events.
@@ -686,6 +707,7 @@ AppTile.defaultProps = {
     showTitle: true,
     showMinimise: true,
     showDelete: true,
+    showPopout: true,
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
 };

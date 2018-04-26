@@ -864,7 +864,7 @@
     "Device key:": "Chiave dispositivo:",
     "Ignored Users": "Utenti ignorati",
     "Debug Logs Submission": "Invio dei log di debug",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Se hai segnalato un errore via Github, i log di debug possono aiutarci a identificare il problema. I log di debug contengono dati di utilizzo dell'applicazione inclusi il nome utente, gli ID o alias delle stanze o gruppi visitati e i nomi degli altri utenti. Non contengono messaggi.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Se hai segnalato un errore via Github, i log di debug possono aiutarci a identificare il problema. I log di debug contengono dati di utilizzo dell'applicazione inclusi il nome utente, gli ID o alias delle stanze o gruppi visitati e i nomi degli altri utenti. Non contengono messaggi.",
     "Submit debug logs": "Invia log di debug",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot raccoglie statistiche anonime per permetterci di migliorare l'applicazione.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Diamo importanza alla privacy, perciò non raccogliamo dati personali o identificabili per le nostre statistiche.",

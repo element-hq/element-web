@@ -985,7 +985,7 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "Verschlüsselungs-Schlüssel von deinen anderen Geräten <requestLink>erneut anfragen</requestLink>.",
     "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s",
     "Debug Logs Submission": "Einsenden des Fehlerprotokolls",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Wenn du einen Fehler via GitHub gemeldet hast, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast und Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Wenn du einen Fehler via GitHub gemeldet hast, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast und Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten.",
     "Submit debug logs": "Fehlerberichte einreichen",
     "Code": "Code",
     "Opens the Developer Tools dialog": "Öffnet den Entwicklerwerkzeugkasten",

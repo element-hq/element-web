@@ -241,5 +241,7 @@
     "Collapse panel": "パネルを折りたたむ",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "現在ご使用のブラウザでは、アプリの外見や使い心地が正常でない可能性があります。また、一部または全部の機能がご使用いただけない可能性があります。このままご使用いただけますが、問題が発生した場合は対応しかねます！",
     "Checking for an update...": "アップデートを確認しています…",
-    "There are advanced notifications which are not shown here": "ここに表示されない詳細な通知があります"
+    "There are advanced notifications which are not shown here": "ここに表示されない詳細な通知があります",
+    "Call": "通話",
+    "Answer": "応答"
 }
