@@ -479,11 +479,9 @@ export function bodyToHtml(content, highlights, opts={}) {
         'markdown-body': isHtml,
     });
 
-    if (isHtml) {
-        return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
-    }
-
-    return <span className={className} dir="auto">{ strippedBody }</span>;
+    return isHtml ?
+        <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span className={className} dir="auto">{ strippedBody }</span>;
 }
 
 export function emojifyText(text) {
