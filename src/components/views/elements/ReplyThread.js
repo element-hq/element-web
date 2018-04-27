@@ -31,7 +31,7 @@ export default class ReplyThread extends React.Component {
     static propTypes = {
         // the latest event in this chain of replies
         parentEv: PropTypes.instanceOf(MatrixEvent),
-        // called when the preview's contents has loaded
+        // called when the ReplyThread contents has changed, including EventTiles thereof
         onWidgetLoad: PropTypes.func.isRequired,
     };
 
