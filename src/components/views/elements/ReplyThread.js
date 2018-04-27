@@ -18,9 +18,8 @@ import sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import {wantsDateSeparator} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk';
+import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -33,6 +32,10 @@ export default class ReplyThread extends React.Component {
         parentEv: PropTypes.instanceOf(MatrixEvent),
         // called when the ReplyThread contents has changed, including EventTiles thereof
         onWidgetLoad: PropTypes.func.isRequired,
+    };
+
+    static contextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     };
 
     constructor(props, context) {
@@ -58,7 +61,7 @@ export default class ReplyThread extends React.Component {
 
     componentWillMount() {
         this.unmounted = false;
-        this.room = MatrixClientPeg.get().getRoom(this.props.parentEv.getRoomId());
+        this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
         this.initialize();
     }
 
@@ -121,7 +124,7 @@ export default class ReplyThread extends React.Component {
         if (event) return event;
 
         try {
-            await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
+            await this.context.matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             return null;
         }
@@ -257,7 +260,7 @@ export default class ReplyThread extends React.Component {
         } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
-            const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+            const room = this.context.matrixClient.getRoom(ev.getRoomId());
             header = <blockquote className="mx_ReplyThread">
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
