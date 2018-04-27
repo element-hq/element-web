@@ -52,7 +52,7 @@ function waitForUpdate(inst) {
     });
 }
 
-describe.only('GroupView', function() {
+describe('GroupView', function() {
     let root;
     let rootElement;
     let httpBackend;
