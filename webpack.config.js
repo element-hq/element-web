@@ -45,7 +45,7 @@ module.exports = {
                 // 3. ExtractTextPlugin turns that string into a separate asset.
                 use: ExtractTextPlugin.extract({
                     use: [
-                        "css-raw-loader",
+                        "raw-loader",
                         "postcss-loader"
                     ],
                 }),
@@ -60,7 +60,7 @@ module.exports = {
                     path.resolve(__dirname, "node_modules/matrix-react-sdk/node_modules/gemini-scrollbar/"),
                 ],
                 use: ExtractTextPlugin.extract({
-                    use: "css-raw-loader"
+                    use: "raw-loader"
                 }),
             },
 
