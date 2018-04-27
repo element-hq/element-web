@@ -158,8 +158,11 @@ export default class ReplyThread extends React.Component {
 
     // Part of Replies fallback support
     static stripPlainReply(body) {
+        // Removes lines beginning with `> ` until you reach one that doesn't.
         const lines = body.split('\n');
         while (lines.length && lines[0].startsWith('> ')) lines.shift();
+        // Reply fallback has a blank line after it, so remove it to prevent leading newline
+        if (lines[0] === '') lines.shift();
         return lines.join('\n');
     }
 
