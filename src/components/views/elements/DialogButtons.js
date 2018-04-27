@@ -39,11 +39,14 @@ module.exports = React.createClass({
         onCancel: PropTypes.func,
 
         focus: PropTypes.bool,
+
+        disabled: PropTypes.bool,
     },
 
     getDefaultProps: function() {
         return {
             hasCancel: true,
+            disabled: false,
         }
     },
 
@@ -56,18 +59,23 @@ module.exports = React.createClass({
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
+        let cancelButton;
+        if (this.props.hasCancel) {
+            cancelButton = <button onClick={this._onCancelClick} disabled={this.props.disabled}>
+                { _t("Cancel") }
+            </button>;
+        }
         return (
             <div className="mx_Dialog_buttons">
                 <button className={primaryButtonClassName}
                     onClick={this.props.onPrimaryButtonClick}
                     autoFocus={this.props.focus}
+                    disabled={this.props.disabled}
                 >
                     { this.props.primaryButton }
                 </button>
                 { this.props.children }
-                { this.props.hasCancel ? <button onClick={this._onCancelClick}>
-                    { _t("Cancel") }
-                </button> : null }
+                { cancelButton }
             </div>
         );
     },
