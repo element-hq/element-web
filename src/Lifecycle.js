@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,32 +66,33 @@ import sdk from './index';
  *     failed.
  */
 export function loadSession(opts) {
-    const fragmentQueryParams = opts.fragmentQueryParams || {};
-    let enableGuest = opts.enableGuest || false;
-    const guestHsUrl = opts.guestHsUrl;
-    const guestIsUrl = opts.guestIsUrl;
-    const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+    return new Promise.resolve().then(() => {
+        const fragmentQueryParams = opts.fragmentQueryParams || {};
+        let enableGuest = opts.enableGuest || false;
+        const guestHsUrl = opts.guestHsUrl;
+        const guestIsUrl = opts.guestIsUrl;
+        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-    if (!guestHsUrl) {
-        console.warn("Cannot enable guest access: can't determine HS URL to use");
-        enableGuest = false;
-    }
+        if (!guestHsUrl) {
+            console.warn("Cannot enable guest access: can't determine HS URL to use");
+            enableGuest = false;
+        }
 
-    if (enableGuest &&
-        fragmentQueryParams.guest_user_id &&
-        fragmentQueryParams.guest_access_token
-       ) {
-        console.log("Using guest access credentials");
-        return _doSetLoggedIn({
-            userId: fragmentQueryParams.guest_user_id,
-            accessToken: fragmentQueryParams.guest_access_token,
-            homeserverUrl: guestHsUrl,
-            identityServerUrl: guestIsUrl,
-            guest: true,
-        }, true).then(() => true);
-    }
-
-    return _restoreFromLocalStorage().then((success) => {
+        if (enableGuest &&
+            fragmentQueryParams.guest_user_id &&
+            fragmentQueryParams.guest_access_token
+           ) {
+            console.log("Using guest access credentials");
+            return _doSetLoggedIn({
+                userId: fragmentQueryParams.guest_user_id,
+                accessToken: fragmentQueryParams.guest_access_token,
+                homeserverUrl: guestHsUrl,
+                identityServerUrl: guestIsUrl,
+                guest: true,
+            }, true).then(() => true);
+        }
+        return _restoreFromLocalStorage();
+    }).then((success) => {
         if (success) {
             return true;
         }
@@ -101,6 +103,8 @@ export function loadSession(opts) {
 
         // fall back to login screen
         return false;
+    }).catch((e) => {
+        return _handleLoadSessionFailure(e);
     });
 }
 
@@ -196,43 +200,43 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
-    if (!localStorage) {
-        return Promise.resolve(false);
-    }
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-    const accessToken = localStorage.getItem("mx_access_token");
-    const userId = localStorage.getItem("mx_user_id");
-    const deviceId = localStorage.getItem("mx_device_id");
+    return Promise.resolve().then(() => {
+        if (!localStorage) {
+            return Promise.resolve(false);
+        }
+        const hsUrl = localStorage.getItem("mx_hs_url");
+        const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+        const accessToken = localStorage.getItem("mx_access_token");
+        const userId = localStorage.getItem("mx_user_id");
+        const deviceId = localStorage.getItem("mx_device_id");
 
-    let isGuest;
-    if (localStorage.getItem("mx_is_guest") !== null) {
-        isGuest = localStorage.getItem("mx_is_guest") === "true";
-    } else {
-        // legacy key name
-        isGuest = localStorage.getItem("matrix-is-guest") === "true";
-    }
+        let isGuest;
+        if (localStorage.getItem("mx_is_guest") !== null) {
+            isGuest = localStorage.getItem("mx_is_guest") === "true";
+        } else {
+            // legacy key name
+            isGuest = localStorage.getItem("matrix-is-guest") === "true";
+        }
 
-    if (accessToken && userId && hsUrl) {
-        console.log(`Restoring session for ${userId}`);
-        return _doSetLoggedIn({
-            userId: userId,
-            deviceId: deviceId,
-            accessToken: accessToken,
-            homeserverUrl: hsUrl,
-            identityServerUrl: isUrl,
-            guest: isGuest,
-        }, false).catch((e) => {
-            return _handleRestoreFailure(e);
-        }).then(() => true);
-    } else {
-        console.log("No previous session found.");
-        return Promise.resolve(false);
-    }
+        if (accessToken && userId && hsUrl) {
+            console.log(`Restoring session for ${userId}`);
+            return _doSetLoggedIn({
+                userId: userId,
+                deviceId: deviceId,
+                accessToken: accessToken,
+                homeserverUrl: hsUrl,
+                identityServerUrl: isUrl,
+                guest: isGuest,
+            }, false).then(() => true);
+        } else {
+            console.log("No previous session found.");
+            return Promise.resolve(false);
+        }
+    });
 }
 
-function _handleRestoreFailure(e) {
-    console.log("Unable to restore session", e);
+function _handleLoadSessionFailure(e) {
+    console.log("Unable to load session", e);
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
@@ -253,7 +257,7 @@ function _handleRestoreFailure(e) {
         }
 
         // try, try again
-        return _restoreFromLocalStorage();
+        return loadSession();
     });
 }
 
