@@ -72,8 +72,7 @@ export function loadSession(opts) {
     const fragmentQueryParams = opts.fragmentQueryParams || {};
     const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-    return new Promise.resolve().then(() => {
-
+    return Promise.resolve().then(() => {
         if (!guestHsUrl) {
             console.warn("Cannot enable guest access: can't determine HS URL to use");
             enableGuest = false;
