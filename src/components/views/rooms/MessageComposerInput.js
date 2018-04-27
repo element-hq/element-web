@@ -856,7 +856,7 @@ export default class MessageComposerInput extends React.Component {
         let content = contentHTML ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
 
         if (replyingToEv) {
-            const replyContent = ReplyThread.getReplyEvContent(replyingToEv);
+            const replyContent = ReplyThread.makeReplyMixIn(replyingToEv);
             content = Object.assign(replyContent, content);
 
             // Part of Replies fallback support - prepend the text we're sending with the text we're replying to

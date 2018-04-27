@@ -232,7 +232,7 @@ export default class ReplyThread extends React.Component {
         return {body, html};
     }
 
-    static getReplyEvContent(ev) {
+    static makeReplyMixIn(ev) {
         if (!ev) return {};
         return {
             'm.relates_to': {
@@ -243,7 +243,7 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static getThread(parentEv, onWidgetLoad, ref) {
+    static makeThread(parentEv, onWidgetLoad, ref) {
         if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getParentEventId(parentEv)) {
             return <div />;
         }

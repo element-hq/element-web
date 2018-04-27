@@ -666,7 +666,7 @@ module.exports = withMatrixClient(React.createClass({
                             { this._renderE2EPadlock() }
                             {
                                 this.props.tileShape === 'reply_preview'
-                                && ReplyThread.getThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread')
+                                && ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread')
                             }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
@@ -691,7 +691,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
-                            { ReplyThread.getThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread') }
+                            { ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread') }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
