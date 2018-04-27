@@ -47,7 +47,7 @@ module.exports = React.createClass({
         return {
             hasCancel: true,
             disabled: false,
-        }
+        };
     },
 
     _onCancelClick: function() {
