@@ -83,7 +83,7 @@ export default class ReplyThread extends React.Component {
 
     async initialize() {
         const {parentEv} = this.props;
-        const inReplyTo = ReplyThread.getInReplyTo(parentEv);
+        const inReplyTo = ReplyThread.getParentEventId(parentEv);
         if (!inReplyTo) {
             this.setState({err: true});
             return;
@@ -104,7 +104,7 @@ export default class ReplyThread extends React.Component {
     async loadNextEvent() {
         if (this.unmounted) return;
         const ev = this.state.events[0];
-        const inReplyTo = ReplyThread.getInReplyTo(ev);
+        const inReplyTo = ReplyThread.getParentEventId(ev);
 
         if (!inReplyTo) {
             this.setState({
@@ -146,13 +146,13 @@ export default class ReplyThread extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
-    static getInReplyTo(ev) {
+    static getParentEventId(ev) {
         if (!ev || ev.isRedacted()) return;
 
         const mRelatesTo = ev.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
-            if (mInReplyTo['event_id']) return mInReplyTo;
+            if (mInReplyTo && mInReplyTo['event_id']) return mInReplyTo['event_id'];
         }
     }
 
@@ -173,7 +173,7 @@ export default class ReplyThread extends React.Component {
         if (!ev) return null;
 
         let {body, formatted_body: html} = ev.getContent();
-        if (this.getInReplyTo(ev)) {
+        if (this.getParentEventId(ev)) {
             if (body) body = this.stripPlainReply(body);
             if (html) html = this.stripHTMLReply(html);
         }
@@ -195,7 +195,6 @@ export default class ReplyThread extends React.Component {
                 }
                 break;
             }
-
             case 'm.image':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
                      + `<br>sent an image.</blockquote>`;
@@ -245,7 +244,7 @@ export default class ReplyThread extends React.Component {
     }
 
     static getThread(parentEv, onWidgetLoad, ref) {
-        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getInReplyTo(parentEv)) {
+        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getParentEventId(parentEv)) {
             return <div />;
         }
         return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} ref={ref} />;
