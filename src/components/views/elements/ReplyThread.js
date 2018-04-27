@@ -132,7 +132,7 @@ export default class ReplyThread extends React.Component {
     }
 
     onQuoteClick() {
-        const events = [this.state.loadedEv].concat(this.state.events);
+        const events = [this.state.loadedEv, ...this.state.events];
 
         this.setState({
             loadedEv: null,
