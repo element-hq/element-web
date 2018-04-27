@@ -66,12 +66,13 @@ import sdk from './index';
  *     failed.
  */
 export function loadSession(opts) {
+    let enableGuest = opts.enableGuest || false;
+    const guestHsUrl = opts.guestHsUrl;
+    const guestIsUrl = opts.guestIsUrl;
+    const fragmentQueryParams = opts.fragmentQueryParams || {};
+    const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+
     return new Promise.resolve().then(() => {
-        const fragmentQueryParams = opts.fragmentQueryParams || {};
-        let enableGuest = opts.enableGuest || false;
-        const guestHsUrl = opts.guestHsUrl;
-        const guestIsUrl = opts.guestIsUrl;
-        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
         if (!guestHsUrl) {
             console.warn("Cannot enable guest access: can't determine HS URL to use");
