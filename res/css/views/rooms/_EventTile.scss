@@ -203,9 +203,10 @@ limitations under the License.
     text-decoration: none;
 }
 
+// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile_last > div > a > .mx_MessageTimestamp,
 .mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.menu  > div > a > .mx_MessageTimestamp {
+.mx_EventTile.menu > div > a > .mx_MessageTimestamp {
     visibility: visible;
 }
 
@@ -343,6 +344,7 @@ limitations under the License.
     border-left: $e2e-unverified-color 5px solid;
 }
 
+// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp {
     left: 3px;
@@ -355,6 +357,7 @@ limitations under the License.
 }
 */
 
+// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > .mx_EventTile_e2eIcon,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon {
     display: block;
