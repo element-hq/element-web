@@ -40,7 +40,7 @@ module.exports = React.createClass({
         /* an optional EventTileOps implementation that can be used to unhide preview widgets */
         eventTileOps: PropTypes.object,
 
-        /* an optional function which allows to collapse reply thread */
+        /* an optional function to be called when the user clicks collapse thread, if not provided hide button */
         collapseReplyThread: PropTypes.func,
 
         /* callback called when the menu is dismissed */
