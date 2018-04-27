@@ -45,7 +45,6 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import SettingsStore from "../../settings/SettingsStore";
-import Reply from "../views/elements/ReplyThread";
 
 const DEBUG = false;
 let debuglog = function() {};
