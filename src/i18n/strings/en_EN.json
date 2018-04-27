@@ -745,7 +745,7 @@
     "Failed to send logs: ": "Failed to send logs: ",
     "Submit debug logs": "Submit debug logs",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.",
-    "<a>Click here</a> to create a GitHub issue.": "<a>Click here</a> to create a GitHub issue.",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.",
     "GitHub issue link:": "GitHub issue link:",
     "Notes:": "Notes:",
     "Send logs": "Send logs",

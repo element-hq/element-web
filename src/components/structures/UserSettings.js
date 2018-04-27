@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -804,7 +804,7 @@ module.exports = React.createClass({
                             "other users. They do not contain messages.",
                         )
                     }</p>
-                    <button className="mx_UserSettings_button danger"
+                    <button className="mx_UserSettings_button"
                         onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
