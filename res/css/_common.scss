@@ -250,6 +250,7 @@ textarea {
 .mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
     background-color: $warning-color;
     border: solid 1px $warning-color;
+    color: $accent-fg-color;
 }
 
 .mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
