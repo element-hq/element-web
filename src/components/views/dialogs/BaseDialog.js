@@ -36,6 +36,9 @@ export default React.createClass({
 
     propTypes: {
         // onFinished callback to call when Escape is pressed
+        // Take a boolean which is true is the dialog was dismissed
+        // with a positive / confirm action or false if it was
+        // cancelled (from BaseDialog, this is always false).
         onFinished: PropTypes.func.isRequired,
 
         // called when a key is pressed
@@ -77,12 +80,12 @@ export default React.createClass({
         if (e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
-            this.props.onFinished();
+            this.props.onFinished(false);
         }
     },
 
     _onCancelClick: function(e) {
-        this.props.onFinished();
+        this.props.onFinished(false);
     },
 
     render: function() {
