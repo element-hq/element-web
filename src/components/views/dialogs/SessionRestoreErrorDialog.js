@@ -68,7 +68,7 @@ export default React.createClass({
                 <button onClick={this._onClearStorageClick} className="danger">
                     { _t("Clear Storage and Sign Out") }
                 </button>
-            </DialogButtons>
+            </DialogButtons>;
         } else {
             dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
                 onPrimaryButtonClick={this._onRefreshClick}
@@ -78,7 +78,7 @@ export default React.createClass({
                 <button onClick={this._onClearStorageClick} className="danger">
                     { _t("Clear Storage and Sign Out") }
                 </button>
-            </DialogButtons>
+            </DialogButtons>;
         }
 
         return (

@@ -44,7 +44,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             hasCancel: true,
-        }
+        };
     },
 
     _onCancelClick: function() {
