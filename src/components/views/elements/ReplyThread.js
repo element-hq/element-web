@@ -65,6 +65,10 @@ export default class ReplyThread extends React.Component {
         this.initialize();
     }
 
+    componentDidUpdate() {
+        this.props.onWidgetLoad();
+    }
+
     componentWillUnmount() {
         this.unmounted = true;
     }
@@ -105,7 +109,7 @@ export default class ReplyThread extends React.Component {
         if (!inReplyTo) {
             this.setState({
                 loading: false,
-            }, this.props.onWidgetLoad);
+            });
             return;
         }
 
@@ -113,9 +117,9 @@ export default class ReplyThread extends React.Component {
         if (this.unmounted) return;
 
         if (loadedEv) {
-            this.setState({loadedEv}, this.props.onWidgetLoad);
+            this.setState({loadedEv});
         } else {
-            this.setState({err: true}, this.props.onWidgetLoad);
+            this.setState({err: true});
         }
     }
 
