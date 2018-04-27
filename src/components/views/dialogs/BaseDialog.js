@@ -36,7 +36,7 @@ export default React.createClass({
 
     propTypes: {
         // onFinished callback to call when Escape is pressed
-        // Take a boolean which is true is the dialog was dismissed
+        // Take a boolean which is true if the dialog was dismissed
         // with a positive / confirm action or false if it was
         // cancelled (from BaseDialog, this is always false).
         onFinished: PropTypes.func.isRequired,
