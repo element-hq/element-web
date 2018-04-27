@@ -831,7 +831,7 @@
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sвошли %(count)s раз",
     "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sвошли",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sвошёл(-ла) %(count)s раз",
+    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sвошел(-ла) %(count)s раз",
     "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sвошёл(-ла)",
     "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sушли %(count)s раз",
     "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sушли",
