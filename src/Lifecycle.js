@@ -65,14 +65,14 @@ import sdk from './index';
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
-export function loadSession(opts) {
-    let enableGuest = opts.enableGuest || false;
-    const guestHsUrl = opts.guestHsUrl;
-    const guestIsUrl = opts.guestIsUrl;
-    const fragmentQueryParams = opts.fragmentQueryParams || {};
-    const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+export async function loadSession(opts) {
+    try {
+        let enableGuest = opts.enableGuest || false;
+        const guestHsUrl = opts.guestHsUrl;
+        const guestIsUrl = opts.guestIsUrl;
+        const fragmentQueryParams = opts.fragmentQueryParams || {};
+        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-    return Promise.resolve().then(() => {
         if (!guestHsUrl) {
             console.warn("Cannot enable guest access: can't determine HS URL to use");
             enableGuest = false;
@@ -91,8 +91,7 @@ export function loadSession(opts) {
                 guest: true,
             }, true).then(() => true);
         }
-        return _restoreFromLocalStorage();
-    }).then((success) => {
+        const success = await _restoreFromLocalStorage();
         if (success) {
             return true;
         }
@@ -103,9 +102,9 @@ export function loadSession(opts) {
 
         // fall back to login screen
         return false;
-    }).catch((e) => {
+    } catch (e) {
         return _handleLoadSessionFailure(e);
-    });
+    }
 }
 
 /**
@@ -199,40 +198,39 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. teamToken, isGuest etc.)
-function _restoreFromLocalStorage() {
-    return Promise.resolve().then(() => {
-        if (!localStorage) {
-            return Promise.resolve(false);
-        }
-        const hsUrl = localStorage.getItem("mx_hs_url");
-        const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-        const accessToken = localStorage.getItem("mx_access_token");
-        const userId = localStorage.getItem("mx_user_id");
-        const deviceId = localStorage.getItem("mx_device_id");
+async function _restoreFromLocalStorage() {
+    if (!localStorage) {
+        return false;
+    }
+    const hsUrl = localStorage.getItem("mx_hs_url");
+    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const accessToken = localStorage.getItem("mx_access_token");
+    const userId = localStorage.getItem("mx_user_id");
+    const deviceId = localStorage.getItem("mx_device_id");
 
-        let isGuest;
-        if (localStorage.getItem("mx_is_guest") !== null) {
-            isGuest = localStorage.getItem("mx_is_guest") === "true";
-        } else {
-            // legacy key name
-            isGuest = localStorage.getItem("matrix-is-guest") === "true";
-        }
+    let isGuest;
+    if (localStorage.getItem("mx_is_guest") !== null) {
+        isGuest = localStorage.getItem("mx_is_guest") === "true";
+    } else {
+        // legacy key name
+        isGuest = localStorage.getItem("matrix-is-guest") === "true";
+    }
 
-        if (accessToken && userId && hsUrl) {
-            console.log(`Restoring session for ${userId}`);
-            return _doSetLoggedIn({
-                userId: userId,
-                deviceId: deviceId,
-                accessToken: accessToken,
-                homeserverUrl: hsUrl,
-                identityServerUrl: isUrl,
-                guest: isGuest,
-            }, false).then(() => true);
-        } else {
-            console.log("No previous session found.");
-            return Promise.resolve(false);
-        }
-    });
+    if (accessToken && userId && hsUrl) {
+        console.log(`Restoring session for ${userId}`);
+        await _doSetLoggedIn({
+            userId: userId,
+            deviceId: deviceId,
+            accessToken: accessToken,
+            homeserverUrl: hsUrl,
+            identityServerUrl: isUrl,
+            guest: isGuest,
+        }, false);
+        return true;
+    } else {
+        console.log("No previous session found.");
+        return false;
+    }
 }
 
 function _handleLoadSessionFailure(e) {
