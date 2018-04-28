@@ -127,6 +127,8 @@ export default class ReplyThread extends React.Component {
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
             await this.context.matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
+            // if it fails, capture the error and dump it because it'll make findEventById return false, which
+            // captures a superset of errors.
             return null;
         }
         return room.findEventById(eventId);
