@@ -200,7 +200,7 @@
     "You need to be logged in.": "Вы должны войти в систему.",
     "You need to be able to invite users to do that.": "Для этого вы должны иметь возможность приглашать пользователей.",
     "You cannot place VoIP calls in this browser.": "Звонки не поддерживаются в этом браузере.",
-    "You are already in a call.": "Вы уже сделали звонок.",
+    "You are already in a call.": "Вы уже делаете звонок.",
     "You are trying to access %(roomName)s.": "Вы пытаетесь войти в %(roomName)s.",
     "You cannot place a call with yourself.": "Вы не можете позвонить самому себе.",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s отозвал(а) свое приглашение %(targetName)s.",
