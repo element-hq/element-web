@@ -1156,5 +1156,12 @@
     "Collapse panel": "Zbaliť panel",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Vo vašom súčasnom prehliadači nemusí Riot vizerať ani fungovať správne a niektoré alebo všetky vlastnosti môžu chýbať. Ak to chcete vyskúšať, môžete pokračovať, no pri riešení problémov s tým spojených si budete musieť poradiť na vlastnú päsť!",
     "Checking for an update...": "Kontrola dostupnosti aktualizácie...",
-    "There are advanced notifications which are not shown here": "Niektoré pokročilé oznámenia nemôžu byť zobrazené"
+    "There are advanced notifications which are not shown here": "Niektoré pokročilé oznámenia nemôžu byť zobrazené",
+    "Every page you use in the app": "Každú stránku v aplikácii, ktorú navštívite",
+    "e.g. <CurrentPageURL>": "príklad <CurrentPageURL>",
+    "Your User Agent": "Reťazec User Agent vašeho zariadenia",
+    "Your device resolution": "Rozlíšenie obrazovky vašeho zariadenia",
+    "Popout widget": "Otvoriť widget v novom okne",
+    "Missing roomId.": "Chýba ID miestnosti.",
+    "Picture": "Vytvoriť snímku"
 }
