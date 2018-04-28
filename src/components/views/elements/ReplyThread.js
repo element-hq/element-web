@@ -83,13 +83,8 @@ export default class ReplyThread extends React.Component {
 
     async initialize() {
         const {parentEv} = this.props;
-        const inReplyTo = ReplyThread.getParentEventId(parentEv);
-        if (!inReplyTo) {
-            this.setState({err: true});
-            return;
-        }
-
-        const ev = await ReplyThread.getEvent(this.room, inReplyTo['event_id']);
+        // at time of making this component we checked that props.parentEv has a parentEventId
+        const ev = await ReplyThread.getEvent(this.room, ReplyThread.getParentEventId(parentEv));
         if (this.unmounted) return;
 
         if (ev) {
@@ -104,16 +99,16 @@ export default class ReplyThread extends React.Component {
     async loadNextEvent() {
         if (this.unmounted) return;
         const ev = this.state.events[0];
-        const inReplyTo = ReplyThread.getParentEventId(ev);
+        const inReplyToEventId = ReplyThread.getParentEventId(ev);
 
-        if (!inReplyTo) {
+        if (!inReplyToEventId) {
             this.setState({
                 loading: false,
             });
             return;
         }
 
-        const loadedEv = await ReplyThread.getEvent(this.room, inReplyTo['event_id']);
+        const loadedEv = await ReplyThread.getEvent(this.room, inReplyToEventId);
         if (this.unmounted) return;
 
         if (loadedEv) {
