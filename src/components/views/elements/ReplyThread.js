@@ -123,6 +123,8 @@ export default class ReplyThread extends React.Component {
         if (event) return event;
 
         try {
+            // ask the client to fetch the event we want using the context API, only interface to do so is to ask
+            // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
             await this.context.matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             return null;
