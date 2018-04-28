@@ -59,28 +59,6 @@ export default class ReplyThread extends React.Component {
         this.collapse = this.collapse.bind(this);
     }
 
-    componentWillMount() {
-        this.unmounted = false;
-        this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
-        this.initialize();
-    }
-
-    componentDidUpdate() {
-        this.props.onWidgetLoad();
-    }
-
-    componentWillUnmount() {
-        this.unmounted = true;
-    }
-
-    canCollapse() {
-        return this.state.events.length > 1;
-    }
-
-    collapse() {
-        this.initialize();
-    }
-
     async initialize() {
         const {parentEv} = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
@@ -134,17 +112,6 @@ export default class ReplyThread extends React.Component {
         return room.findEventById(eventId);
     }
 
-    onQuoteClick() {
-        const events = [this.state.loadedEv, ...this.state.events];
-
-        this.setState({
-            loadedEv: null,
-            events,
-        }, this.loadNextEvent);
-
-        dis.dispatch({action: 'focus_composer'});
-    }
-
     static getParentEventId(ev) {
         if (!ev || ev.isRedacted()) return;
 
@@ -189,7 +156,7 @@ export default class ReplyThread extends React.Component {
             case 'm.text':
             case 'm.notice': {
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                     + `<br>${html || body}</blockquote>`;
+                    + `<br>${html || body}</blockquote>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `<${mxid}> ${lines[0]}`;
@@ -199,7 +166,7 @@ export default class ReplyThread extends React.Component {
             }
             case 'm.image':
                 html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                     + `<br>sent an image.</blockquote>`;
+                    + `<br>sent an image.</blockquote>`;
                 body = `> <${mxid}> sent an image.\n\n`;
                 break;
             case 'm.video':
@@ -250,6 +217,39 @@ export default class ReplyThread extends React.Component {
             return <div />;
         }
         return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} ref={ref} />;
+    }
+
+    componentWillMount() {
+        this.unmounted = false;
+        this.room = this.context.matrixClient.getRoom(this.props.parentEv.getRoomId());
+        this.initialize();
+    }
+
+    componentDidUpdate() {
+        this.props.onWidgetLoad();
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
+    }
+
+    canCollapse() {
+        return this.state.events.length > 1;
+    }
+
+    collapse() {
+        this.initialize();
+    }
+
+    onQuoteClick() {
+        const events = [this.state.loadedEv, ...this.state.events];
+
+        this.setState({
+            loadedEv: null,
+            events,
+        }, this.loadNextEvent);
+
+        dis.dispatch({action: 'focus_composer'});
     }
 
     render() {
