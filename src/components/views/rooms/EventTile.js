@@ -745,7 +745,7 @@ function E2ePadlock(props) {
     if (SettingsStore.getValue("alwaysShowEncryptionIcons")) {
         return <img className="mx_EventTile_e2eIcon" {...props} />;
     } else {
-        return <img className="mx_EventTile_e2eIcon" hidden {...props} />;
+        return <img className="mx_EventTile_e2eIcon hidden" {...props} />;
     }
 }
 
