@@ -104,7 +104,7 @@ export function decryptFile(file) {
         // they introduce XSS attacks if the Blob URI is viewed directly in the
         // browser (e.g. by copying the URI into a new tab or window.)
         // See warning at top of file.
-        const mimetype = file.mimetype ? file.mimetype.split(";")[0].trim() : '';
+        let mimetype = file.mimetype ? file.mimetype.split(";")[0].trim() : '';
         if (!ALLOWED_BLOB_MIMETYPES[mimetype]) {
             mimetype = 'application/octet-stream';
         }
