@@ -50,6 +50,7 @@ export default class extends React.Component {
 
         this.onAction = this.onAction.bind(this);
         this.onImageError = this.onImageError.bind(this);
+        this.onImageLoad = this.onImageLoad.bind(this);
         this.onImageEnter = this.onImageEnter.bind(this);
         this.onImageLeave = this.onImageLeave.bind(this);
         this.onClientSync = this.onClientSync.bind(this);
@@ -137,6 +138,11 @@ export default class extends React.Component {
         });
     }
 
+    onImageLoad() {
+        this.fixupHeight();
+        this.props.onWidgetLoad();
+    }
+
     _getContentUrl() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -170,7 +176,6 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -192,7 +197,6 @@ export default class extends React.Component {
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
-                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err);
@@ -244,7 +248,7 @@ export default class extends React.Component {
 
         // FIXME: It will also break really badly for images with broken or missing thumbnails
 
-        //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
+        // console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
         let thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
@@ -259,7 +263,7 @@ export default class extends React.Component {
                 <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                     alt={content.body}
                     onError={this.onImageError}
-                    onLoad={this.props.onWidgetLoad}
+                    onLoad={this.onImageLoad}
                     onMouseEnter={this.onImageEnter}
                     onMouseLeave={this.onImageLeave} />
             </a>
