@@ -120,6 +120,15 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+        if (this.state.decryptedThumbnailUrl) {
+            URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
+        }
+    },
+
     render: function() {
         const content = this.props.mxEvent.getContent();
 

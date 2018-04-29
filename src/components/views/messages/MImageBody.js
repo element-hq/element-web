@@ -71,6 +71,7 @@ export default class extends React.Component {
         this.context.matrixClient.on('sync', this.onClientSync);
     }
 
+    // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
     onClientSync(syncState, prevState) {
         if (this.unmounted) return;
         // Consider the client reconnected if there is no error with syncing.
@@ -206,6 +207,13 @@ export default class extends React.Component {
         dis.unregister(this.dispatcherRef);
         this.context.matrixClient.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
+
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+        if (this.state.decryptedThumbnailUrl) {
+            URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
+        }
     }
 
     // To be overridden by subclasses (e.g. MStickerBody) for further

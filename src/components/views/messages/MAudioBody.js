@@ -69,6 +69,12 @@ export default class MAudioBody extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+    }
+
     render() {
         const content = this.props.mxEvent.getContent();
 
