@@ -160,16 +160,14 @@ export default class extends React.Component {
                 return this.state.decryptedThumbnailUrl;
             }
             return this.state.decryptedUrl;
-        }
-        else if (content.info.mimetype == "image/svg+xml" && content.info.thumbnail_url) {
+        } else if (content.info.mimetype == "image/svg+xml" && content.info.thumbnail_url) {
             // special case to return client-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
             return this.context.matrixClient.mxcUrlToHttp(
-                content.info.thumbnail_url, 800, 600
+                content.info.thumbnail_url, 800, 600,
             );
-        }
-        else {
+        } else {
             return this.context.matrixClient.mxcUrlToHttp(content.url, 800, 600);
         }
     }
