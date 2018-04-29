@@ -422,7 +422,8 @@ module.exports = React.createClass({
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
-        const stripReply = SettingsStore.isFeatureEnabled("feature_rich_quoting") && ReplyThread.getInReplyTo(mxEvent);
+        const stripReply = SettingsStore.isFeatureEnabled("feature_rich_quoting") &&
+            ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
             // Part of Replies fallback support
