@@ -242,6 +242,8 @@ export default class extends React.Component {
         // FIXME: this will break on clientside generated thumbnails (as per e2e rooms)
         // which may well be much smaller than the 800x600 bounding box.
 
+        // FIXME: It will also break really badly for images with broken or missing thumbnails
+
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
         let thumbHeight = null;
         if (content.info) {
