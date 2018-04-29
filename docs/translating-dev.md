@@ -32,7 +32,7 @@ function getColorName(hex) {
 
 1. Edit every occurrence of the string inside `_t()` and `_td()` in the JSX files.
 1. Run `npm run i18n` to update `src/i18n/strings/en_EN.json`. (Be sure to run this in the same project as the JSX files you just edited.)
-1. Run `npm run i18n-prune` to remove the old string from `src/i18n/strings/*.json`.
+1. Run `npm run prunei18n` to remove the old string from `src/i18n/strings/*.json`.
 
 ## Adding new strings
 
