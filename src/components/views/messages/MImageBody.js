@@ -246,6 +246,10 @@ export default class extends React.Component {
 
         // FIXME: It will also break really badly for images with broken or missing thumbnails
 
+        // FIXME: Because we don't know what size of thumbnail the server's actually going to send
+        // us, we can't even really layout the page nicely for it.  Instead we have to assume
+        // it'll target 800x600 and we'll downsize if needed to make things fit.
+
         // console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
         let thumbHeight = null;
         if (content.info) {
