@@ -361,7 +361,7 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
-                            <a className="mx_ImageBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
+                            <a className="mx_MFileBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
                                 { fileName }
                             </a>
                             <div className="mx_MImageBody_size">
