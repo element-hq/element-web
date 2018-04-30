@@ -20,7 +20,7 @@ import React from 'react';
 import MFileBody from './MFileBody';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 
 export default class MAudioBody extends React.Component {
@@ -54,7 +54,7 @@ export default class MAudioBody extends React.Component {
             let decryptedBlob;
             decryptFile(content.file).then(function(blob) {
                 decryptedBlob = blob;
-                return readBlobAsDataUri(decryptedBlob);
+                return URL.createObjectURL(decryptedBlob);
             }).done((url) => {
                 this.setState({
                     decryptedUrl: url,
@@ -66,6 +66,12 @@ export default class MAudioBody extends React.Component {
                     error: err,
                 });
             });
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
         }
     }
 

@@ -25,7 +25,7 @@ import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -72,6 +72,7 @@ export default class extends React.Component {
         this.context.matrixClient.on('sync', this.onClientSync);
     }
 
+    // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
     onClientSync(syncState, prevState) {
         if (this.unmounted) return;
         // Consider the client reconnected if there is no error with syncing.
@@ -181,14 +182,14 @@ export default class extends React.Component {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file,
                 ).then(function(blob) {
-                    return readBlobAsDataUri(blob);
+                    return URL.createObjectURL(blob);
                 });
             }
             let decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
                 return decryptFile(content.file).then(function(blob) {
                     decryptedBlob = blob;
-                    return readBlobAsDataUri(blob);
+                    return URL.createObjectURL(blob);
                 }).then((contentUrl) => {
                     this.setState({
                         decryptedUrl: contentUrl,
@@ -217,6 +218,13 @@ export default class extends React.Component {
         dis.unregister(this.dispatcherRef);
         this.context.matrixClient.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
+
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+        if (this.state.decryptedThumbnailUrl) {
+            URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
+        }
     }
 
     // To be overridden by subclasses (e.g. MStickerBody) for further
