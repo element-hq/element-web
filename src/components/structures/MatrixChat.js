@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -351,16 +351,16 @@ export default React.createClass({
                     guestIsUrl: this.getCurrentIsUrl(),
                     defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
                 });
-            }).catch((e) => {
-                console.error('Error attempting to load session', e);
-                return false;
             }).then((loadedSession) => {
                 if (!loadedSession) {
                     // fall back to showing the login screen
                     dis.dispatch({action: "start_login"});
                 }
             });
-        }).done();
+            // Note we don't catch errors from this: we catch everything within
+            // loadSession as there's logic there to ask the user if they want
+            // to try logging out.
+        });
     },
 
     componentWillUnmount: function() {
