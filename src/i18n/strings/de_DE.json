@@ -1158,5 +1158,10 @@
     "Checking for an update...": "Nach Updates suchen...",
     "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden",
     "Missing roomId.": "Fehlende Raum-ID.",
-    "Picture": "Bild"
+    "Picture": "Bild",
+    "Every page you use in the app": "Jede Seite, die du in der App benutzt",
+    "e.g. <CurrentPageURL>": "z.B. <CurrentPageURL>",
+    "Your User Agent": "Deine Browser-Kennung",
+    "Your device resolution": "Deine Bildschirmauflösung",
+    "Popout widget": "Widget ausklinken"
 }
