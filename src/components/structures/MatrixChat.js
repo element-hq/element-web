@@ -360,7 +360,7 @@ export default React.createClass({
             // Note we don't catch errors from this: we catch everything within
             // loadSession as there's logic there to ask the user if they want
             // to try logging out.
-        }).done();
+        });
     },
 
     componentWillUnmount: function() {
