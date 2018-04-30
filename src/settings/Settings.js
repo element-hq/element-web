@@ -150,6 +150,11 @@ export const SETTINGS = {
         displayName: _td('Autoplay GIFs and videos'),
         default: false,
     },
+    "alwaysShowEncryptionIcons": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Always show encryption icons'),
+        default: true,
+    },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
