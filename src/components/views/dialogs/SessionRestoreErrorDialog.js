@@ -92,12 +92,16 @@ export default React.createClass({
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>{ _t("We encountered an error trying to restore your previous session.") }</p>
 
-                    <p>{ _t("If you have previously used a more recent version of Riot, your session " +
-                    "may be incompatible with this version. Close this window and return " +
-                    "to the more recent version.") }</p>
+                    <p>{ _t(
+                        "If you have previously used a more recent version of Riot, your session " +
+                        "may be incompatible with this version. Close this window and return " +
+                        "to the more recent version."
+                     ) }</p>
 
-                    <p>{ _t("Clearing your browser's storage may fix the problem, but will sign you " +
-                    "out and cause any encrypted chat history to become unreadable.") }</p>
+                    <p>{ _t(
+                        "Clearing your browser's storage may fix the problem, but will sign you " +
+                        "out and cause any encrypted chat history to become unreadable."
+                    ) }</p>
                 </div>
                 { dialogButtons }
             </BaseDialog>
