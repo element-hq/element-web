@@ -71,7 +71,7 @@ export default React.createClass({
                 focus={true}
                 hasCancel={false}
             >
-                {clearStorageButton}
+                { clearStorageButton }
             </DialogButtons>;
         } else {
             dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
@@ -79,7 +79,7 @@ export default React.createClass({
                 focus={true}
                 hasCancel={false}
             >
-                {clearStorageButton}
+                { clearStorageButton }
             </DialogButtons>;
         }
 
@@ -95,12 +95,12 @@ export default React.createClass({
                     <p>{ _t(
                         "If you have previously used a more recent version of Riot, your session " +
                         "may be incompatible with this version. Close this window and return " +
-                        "to the more recent version."
+                        "to the more recent version.",
                      ) }</p>
 
                     <p>{ _t(
                         "Clearing your browser's storage may fix the problem, but will sign you " +
-                        "out and cause any encrypted chat history to become unreadable."
+                        "out and cause any encrypted chat history to become unreadable.",
                     ) }</p>
                 </div>
                 { dialogButtons }
