@@ -39,6 +39,10 @@ module.exports = React.createClass({
         focus: PropTypes.bool,
     },
 
+    _onCancelClick: function() {
+        this.props.onCancel();
+    },
+
     render: function() {
         let primaryButtonClassName = "mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
@@ -53,7 +57,7 @@ module.exports = React.createClass({
                     { this.props.primaryButton }
                 </button>
                 { this.props.children }
-                <button onClick={this.props.onCancel}>
+                <button onClick={this._onCancelClick}>
                     { _t("Cancel") }
                 </button>
             </div>

@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,8 +42,12 @@ export default React.createClass({
         Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
     },
 
-    _continueClicked: function() {
+    _onContinueClick: function() {
         this.props.onFinished(true);
+    },
+
+    _onCancelClick: function() {
+        this.props.onFinished(false);
     },
 
     render: function() {
@@ -81,8 +86,8 @@ export default React.createClass({
                     { bugreport }
                 </div>
                 <DialogButtons primaryButton={_t("Continue anyway")}
-                    onPrimaryButtonClick={this._continueClicked} focus={shouldFocusContinueButton}
-                    onCancel={this.props.onFinished} />
+                    onPrimaryButtonClick={this._onContinueClick} focus={shouldFocusContinueButton}
+                    onCancel={this._onCancelClick} />
             </BaseDialog>
         );
     },
