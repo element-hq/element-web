@@ -44,9 +44,9 @@ export default React.createClass({
 
         // Whether the dialog should have a 'close' button that will
         // cause the dialog to be cancelled. This should only be set
-        // to true if there is nothing the app can sensibly do if the
+        // to false if there is nothing the app can sensibly do if the
         // dialog is cancelled, eg. "We can't restore your session and
-        // the app cannot work".
+        // the app cannot work". Default: true.
         hasCancel: PropTypes.bool,
 
         // called when a key is pressed

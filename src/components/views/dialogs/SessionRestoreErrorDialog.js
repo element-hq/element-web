@@ -58,6 +58,12 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
+        const clearStorageButton = (
+            <button onClick={this._onClearStorageClick} className="danger">
+                { _t("Clear Storage and Sign Out") }
+            </button>
+        );
+
         let dialogButtons;
         if (SdkConfig.get().bug_report_endpoint_url) {
             dialogButtons = <DialogButtons primaryButton={_t("Send Logs")}
@@ -65,9 +71,7 @@ export default React.createClass({
                 focus={true}
                 hasCancel={false}
             >
-                <button onClick={this._onClearStorageClick} className="danger">
-                    { _t("Clear Storage and Sign Out") }
-                </button>
+                { clearStorageButton }
             </DialogButtons>;
         } else {
             dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
@@ -75,9 +79,7 @@ export default React.createClass({
                 focus={true}
                 hasCancel={false}
             >
-                <button onClick={this._onClearStorageClick} className="danger">
-                    { _t("Clear Storage and Sign Out") }
-                </button>
+                { clearStorageButton }
             </DialogButtons>;
         }
 
@@ -90,12 +92,16 @@ export default React.createClass({
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>{ _t("We encountered an error trying to restore your previous session.") }</p>
 
-                    <p>{ _t("If you have previously used a more recent version of Riot, your session " +
-                    "may be incompatible with this version. Close this window and return " +
-                    "to the more recent version.") }</p>
+                    <p>{ _t(
+                        "If you have previously used a more recent version of Riot, your session " +
+                        "may be incompatible with this version. Close this window and return " +
+                        "to the more recent version.",
+                     ) }</p>
 
-                    <p>{ _t("Clearing your browser's storage may fix the problem, but will sign you " +
-                    "out and cause any encrypted chat history to become unreadable.") }</p>
+                    <p>{ _t(
+                        "Clearing your browser's storage may fix the problem, but will sign you " +
+                        "out and cause any encrypted chat history to become unreadable.",
+                    ) }</p>
                 </div>
                 { dialogButtons }
             </BaseDialog>
