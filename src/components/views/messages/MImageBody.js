@@ -50,6 +50,7 @@ export default class extends React.Component {
 
         this.onAction = this.onAction.bind(this);
         this.onImageError = this.onImageError.bind(this);
+        this.onImageLoad = this.onImageLoad.bind(this);
         this.onImageEnter = this.onImageEnter.bind(this);
         this.onImageLeave = this.onImageLeave.bind(this);
         this.onClientSync = this.onClientSync.bind(this);
@@ -137,6 +138,11 @@ export default class extends React.Component {
         });
     }
 
+    onImageLoad() {
+        this.fixupHeight();
+        this.props.onWidgetLoad();
+    }
+
     _getContentUrl() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -154,6 +160,13 @@ export default class extends React.Component {
                 return this.state.decryptedThumbnailUrl;
             }
             return this.state.decryptedUrl;
+        } else if (content.info.mimetype == "image/svg+xml" && content.info.thumbnail_url) {
+            // special case to return client-generated thumbnails for SVGs, if any,
+            // given we deliberately don't thumbnail them serverside to prevent
+            // billion lol attacks and similar
+            return this.context.matrixClient.mxcUrlToHttp(
+                content.info.thumbnail_url, 800, 600,
+            );
         } else {
             return this.context.matrixClient.mxcUrlToHttp(content.url, 800, 600);
         }
@@ -161,7 +174,6 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -183,7 +195,6 @@ export default class extends React.Component {
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
-                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err);
@@ -230,7 +241,16 @@ export default class extends React.Component {
         const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
         // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
-        //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
+        // FIXME: this will break on clientside generated thumbnails (as per e2e rooms)
+        // which may well be much smaller than the 800x600 bounding box.
+
+        // FIXME: It will also break really badly for images with broken or missing thumbnails
+
+        // FIXME: Because we don't know what size of thumbnail the server's actually going to send
+        // us, we can't even really layout the page nicely for it.  Instead we have to assume
+        // it'll target 800x600 and we'll downsize if needed to make things fit.
+
+        // console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
         let thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
@@ -240,18 +260,22 @@ export default class extends React.Component {
     }
 
     _messageContent(contentUrl, thumbUrl, content) {
+        const thumbnail = (
+            <a href={contentUrl} onClick={this.onClick}>
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                    alt={content.body}
+                    onError={this.onImageError}
+                    onLoad={this.onImageLoad}
+                    onMouseEnter={this.onImageEnter}
+                    onMouseLeave={this.onImageLeave} />
+            </a>
+        );
+
         return (
             <span className="mx_MImageBody" ref="body">
-                <a href={contentUrl} onClick={this.onClick}>
-                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                        alt={content.body}
-                        onError={this.onImageError}
-                        onLoad={this.props.onWidgetLoad}
-                        onMouseEnter={this.onImageEnter}
-                        onMouseLeave={this.onImageLeave} />
-                </a>
+                { thumbUrl && !this.state.imgError ? thumbnail : '' }
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
-          </span>
+            </span>
       );
     }
 
@@ -286,14 +310,6 @@ export default class extends React.Component {
             );
         }
 
-        if (this.state.imgError) {
-            return (
-                <span className="mx_MImageBody">
-                    { _t("This image cannot be displayed.") }
-                </span>
-            );
-        }
-
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
@@ -302,20 +318,6 @@ export default class extends React.Component {
           thumbUrl = this._getThumbUrl();
         }
 
-        if (thumbUrl) {
-            return this._messageContent(contentUrl, thumbUrl, content);
-        } else if (content.body) {
-            return (
-                <span className="mx_MImageBody">
-                    { _t("Image '%(Body)s' cannot be displayed.", {Body: content.body}) }
-                </span>
-            );
-        } else {
-            return (
-                <span className="mx_MImageBody">
-                    { _t("This image cannot be displayed.") }
-                </span>
-            );
-        }
+        return this._messageContent(contentUrl, thumbUrl, content);
     }
 }
