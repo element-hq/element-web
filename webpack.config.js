@@ -28,15 +28,16 @@ module.exports = {
         "theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+        rules: [
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
             {
                 test: /\.scss$/,
-
+                include: [
+                    path.resolve(__dirname, 'res/themes/status/css/'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/light/css/'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/dark/css/'),
+                ],
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
@@ -44,13 +45,21 @@ module.exports = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "css-raw-loader",
+                        "postcss-loader"
+                    ],
+                }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                use: ExtractTextPlugin.extract({
+                    use: "css-raw-loader"
+                }),
             },
+
         ],
         noParse: [
             // for cross platform compatibility use [\\\/] as the path separator
