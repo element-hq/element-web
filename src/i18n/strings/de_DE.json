@@ -722,7 +722,7 @@
     "To change the topic, you must be a": "Notwendiges Berechtigungslevel, um das Thema zu ändern",
     "To modify widgets in the room, you must be a": "Notwendiges Berechtigungslevel, um Widgets in diesem Raum zu ändern",
     "Description": "Beschreibung",
-    "Unable to accept invite": "Einladung kann nicht akzeptiert werden",
+    "Unable to accept invite": "Einladung kann nicht angenommen werden",
     "Failed to invite users to %(groupId)s": "Benutzer konnten nicht in %(groupId)s eingeladen werden",
     "Unable to reject invite": "Einladung konnte nicht abgelehnt werden",
     "Who would you like to add to this summary?": "Wen möchtest zu dieser Übersicht hinzufügen?",
