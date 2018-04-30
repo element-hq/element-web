@@ -1168,8 +1168,8 @@
     "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Les bugs de Riot sont suivis sur GitHub : <a>créer un signalement GitHub</a>.",
     "Log out and remove encryption keys?": "Se déconnecter et effacer les clés de chiffrement ?",
     "Send Logs": "Envoyer les rapports",
-    "Clear Storage and Sign Out": "Vider le stockage et se déconnecter",
+    "Clear Storage and Sign Out": "Effacer le stockage et se déconnecter",
     "Refresh": "Rafraîchir",
     "We encountered an error trying to restore your previous session.": "Une erreur est survenue lors de la récupération de la dernière session.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Vider le cache de votre navigateur peut résoudre le problème, mais cela vous déconnectera et tous les historiques de conversation encryptés seront illisibles."
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Effacer le stockage de votre navigateur peut résoudre le problème, mais cela vous déconnectera et tous les historiques de conversation encryptés seront illisibles."
 }
