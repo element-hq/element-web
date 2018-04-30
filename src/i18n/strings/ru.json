@@ -1163,5 +1163,13 @@
     "Every page you use in the app": "Каждая страница, которую вы используете в приложении",
     "e.g. <CurrentPageURL>": "напр. <CurrentPageURL>",
     "Your User Agent": "Ваш пользовательский агент",
-    "Your device resolution": "Разрешение вашего устройства"
+    "Your device resolution": "Разрешение вашего устройства",
+    "Always show encryption icons": "Всегда показывать значки шифрования",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Ошибки Riot отслеживаются на GitHub: <a>создать проблему на GitHub</a>.",
+    "Log out and remove encryption keys?": "Выйти и удалить ключи шифрования?",
+    "Send Logs": "Отправить логи",
+    "Clear Storage and Sign Out": "Очистить хранилище и выйти",
+    "Refresh": "Обновить",
+    "We encountered an error trying to restore your previous session.": "Произошла ошибка при попытке восстановить предыдущий сеанс.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очистка хранилища вашего браузера может устранить проблему, но при этом ваша сессия будет завершена и зашифрованная история чата станет нечитаемой."
 }
