@@ -31,7 +31,7 @@
     "Sender device information": "Geräte-Informationen des Absenders",
     "Displays action": "Zeigt Aktionen an",
     "Bans user with given id": "Verbannt den Benutzer mit der angegebenen ID",
-    "Deops user with given id": "Setzt beim Benutzer mit der angegebenen ID das Berechtigungslevel herab",
+    "Deops user with given id": "Setzt das Berechtigungslevel beim Benutzer mit der angegebenen ID zurück",
     "Invites user with given id to current room": "Lädt den Benutzer mit der angegebenen ID in den aktuellen Raum ein",
     "Joins room with given alias": "Raum wird mit dem angegebenen Alias betreten",
     "Kicks user with given id": "Benutzer mit der angegebenen ID kicken",
