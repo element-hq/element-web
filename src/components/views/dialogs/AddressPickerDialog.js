@@ -22,7 +22,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -243,9 +243,8 @@ module.exports = React.createClass({
 
     _doNaiveGroupRoomSearch: function(query) {
         const lowerCaseQuery = query.toLowerCase();
-        const groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
         const results = [];
-        groupStore.getGroupRooms().forEach((r) => {
+        GroupStore.getGroupRooms(this.props.groupId).forEach((r) => {
             const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);
             const topicMatch = (r.topic || '').toLowerCase().includes(lowerCaseQuery);
             const aliasMatch = (r.canonical_alias || '').toLowerCase().includes(lowerCaseQuery);

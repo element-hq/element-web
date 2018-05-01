@@ -19,7 +19,7 @@ import sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 import MatrixClientPeg from './MatrixClientPeg';
-import GroupStoreCache from './stores/GroupStoreCache';
+import GroupStore from './stores/GroupStore';
 
 export function showGroupInviteDialog(groupId) {
     return new Promise((resolve, reject) => {
@@ -116,11 +116,10 @@ function _onGroupInviteFinished(groupId, addrs) {
 
 function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
     const matrixClient = MatrixClientPeg.get();
-    const groupStore = GroupStoreCache.getGroupStore(groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
-        return groupStore
-            .addRoomToGroup(addr.address, addRoomsPublicly)
+        return GroupStore
+            .addRoomToGroup(groupId, addr.address, addRoomsPublicly)
             .catch(() => { errorList.push(addr.address); })
             .then(() => {
                 const roomId = addr.address;

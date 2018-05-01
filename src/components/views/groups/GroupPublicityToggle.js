@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GroupStore from '../../../stores/GroupStore';
 import { _t } from '../../../languageHandler.js';
 
@@ -41,11 +40,10 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(groupId);
-        this._groupStore.registerListener(() => {
+        GroupStore.registerListener(groupId, () => {
             this.setState({
-                isGroupPublicised: this._groupStore.getGroupPublicity(),
-                ready: this._groupStore.isStateReady(GroupStore.STATE_KEY.Summary),
+                isGroupPublicised: GroupStore.getGroupPublicity(groupId),
+                ready: GroupStore.isStateReady(groupId, GroupStore.STATE_KEY.Summary),
             });
         });
     },
@@ -57,7 +55,7 @@ export default React.createClass({
             // Optimistic early update
             isGroupPublicised: !this.state.isGroupPublicised,
         });
-        this._groupStore.setGroupPublicity(!this.state.isGroupPublicised).then(() => {
+        GroupStore.setGroupPublicity(this.props.groupId, !this.state.isGroupPublicised).then(() => {
             this.setState({
                 busy: false,
             });

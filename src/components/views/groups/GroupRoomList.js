@@ -16,7 +16,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
@@ -39,22 +39,31 @@ export default React.createClass({
         this._initGroupStore(this.props.groupId);
     },
 
+    componentWillUnmount() {
+        this._unmounted = true;
+        this._unregisterGroupStore();
+    },
+
+    _unregisterGroupStore() {
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
+    },
+
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(groupId);
-        this._groupStore.registerListener(() => {
-            this._fetchRooms();
-        });
-        this._groupStore.on('error', (err) => {
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
+        // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
+        // XXX: This is also leaked - we should remove it when unmounting
+        GroupStore.on('error', (err, errorGroupId) => {
+            if (errorGroupId !== groupId) return;
             this.setState({
                 rooms: null,
             });
         });
     },
 
-    _fetchRooms: function() {
+    onGroupStoreUpdated: function() {
         if (this._unmounted) return;
         this.setState({
-            rooms: this._groupStore.getGroupRooms(),
+            rooms: GroupStore.getGroupRooms(this.props.groupId),
         });
     },
 
