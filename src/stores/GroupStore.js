@@ -167,11 +167,12 @@ class GroupStore extends EventEmitter {
      * immediately triggers an update to send the current state of the
      * store (which could be the initial state).
      *
-     * This also causes a fetch of all data of the specified group,
-     * which might cause 4 separate HTTP requests, but only if said
-     * requests aren't already ongoing.
+     * If a group ID is specified, this also causes a fetch of all data
+     * of the specified group, which might cause 4 separate HTTP
+     * requests, but only if said requests aren't already ongoing.
      *
-     * @param {string} groupId the ID of the group to fetch data for.
+     * @param {string?} groupId the ID of the group to fetch data for.
+     *                          Optional.
      * @param {function} fn the function to call when the store updates.
      * @return {Object} tok a registration "token" with a single
      *                      property `unregister`, a function that can
