@@ -75,11 +75,8 @@ export default class ReplyPreview extends React.Component {
                 <EventTile last={true}
                            tileShape="reply_preview"
                            mxEvent={this.state.event}
-                           onWidgetLoad={dummyOnWidgetLoad}
                            isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </div>
         </div>;
     }
 }
-
-function dummyOnWidgetLoad() {}
