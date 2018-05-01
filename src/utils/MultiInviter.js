@@ -18,7 +18,7 @@ limitations under the License.
 import MatrixClientPeg from '../MatrixClientPeg';
 import {getAddressType} from '../UserAddress';
 import {inviteToRoom} from '../RoomInvite';
-import GroupStoreCache from '../stores/GroupStoreCache';
+import GroupStore from '../stores/GroupStore';
 import Promise from 'bluebird';
 
 /**
@@ -118,9 +118,7 @@ export default class MultiInviter {
 
         let doInvite;
         if (this.groupId !== null) {
-            doInvite = GroupStoreCache
-                .getGroupStore(this.groupId)
-                .inviteUserToGroup(addr);
+            doInvite = GroupStore.inviteUserToGroup(this.groupId, addr);
         } else {
             doInvite = inviteToRoom(this.roomId, addr);
         }
