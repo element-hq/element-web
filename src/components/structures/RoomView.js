@@ -914,14 +914,12 @@ module.exports = React.createClass({
             return;
         }
 
-        ContentMessages.sendContentToRoom(
-            file, this.state.room.roomId, MatrixClientPeg.get(),
-        ).done(() => {
+        ContentMessages.sendContentToRoom(file, this.state.room.roomId, MatrixClientPeg.get()).then(() => {
             // Send message_sent callback, for things like _checkIfAlone because after all a file is still a message.
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, (error) => {
+        }).catch((error) => {
             if (error.name === "UnknownDeviceError") {
                 // Let the status bar handle this
                 return;
