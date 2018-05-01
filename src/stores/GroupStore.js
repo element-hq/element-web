@@ -140,7 +140,6 @@ class GroupStore extends EventEmitter {
 
         clientPromise.then((result) => {
             this._state[stateKey][groupId] = result;
-            console.info(this._state);
             this._ready[stateKey][groupId] = true;
             this._notifyListeners();
         }).catch((err) => {
