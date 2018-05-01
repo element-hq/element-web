@@ -183,10 +183,12 @@ class GroupStore extends EventEmitter {
         // Call to set initial state (before fetching starts)
         this.emit('update');
 
-        this._fetchResource(this.STATE_KEY.Summary, groupId);
-        this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
-        this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
-        this._fetchResource(this.STATE_KEY.GroupInvitedMembers, groupId);
+        if (groupId) {
+            this._fetchResource(this.STATE_KEY.Summary, groupId);
+            this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
+            this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
+            this._fetchResource(this.STATE_KEY.GroupInvitedMembers, groupId);
+        }
 
         // Similar to the Store of flux/utils, we return a "token" that
         // can be used to unregister the listener.
