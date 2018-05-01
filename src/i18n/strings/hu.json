@@ -1163,5 +1163,13 @@
     "Every page you use in the app": "Minden oldal, amit az alkalmazásban használsz",
     "e.g. <CurrentPageURL>": "pl.: <CurrentPageURL>",
     "Your User Agent": "Felhasználói ügynököd",
-    "Your device resolution": "Eszközöd felbontása"
+    "Your device resolution": "Eszközöd felbontása",
+    "Always show encryption icons": "Titkosítási ikon folyamatos megjelenítése",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Riot hibák a GItHubon követhetők: <a>hiba bejelentés a GitHubon</a>.",
+    "Log out and remove encryption keys?": "Kijelentkezel és töröljük a titkosítási kulcsokat?",
+    "Send Logs": "Naplók küldése",
+    "Clear Storage and Sign Out": "Tárhely törlése és kijelentkezés",
+    "Refresh": "Frissítés",
+    "We encountered an error trying to restore your previous session.": "Hibába ütköztünk megpróbáljuk visszaállítani az előző munkamenetet.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "A böngésződ tárhelyének a törlése megoldhatja a problémát, de ezzel kijelentkezel és a titkosított beszélgetések előzményei olvashatatlanná válnak."
 }
