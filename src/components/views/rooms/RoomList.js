@@ -91,19 +91,22 @@ module.exports = React.createClass({
         // All rooms that should be kept in the room list when filtering.
         // By default, show all rooms.
         this._visibleRooms = MatrixClientPeg.get().getRooms();
-        // When the selected tags are changed, initialise a group store if necessary
-        this._tagStoreToken = TagOrderStore.addListener(() => {
+
+        // Listen to updates to group data. RoomList cares about members and rooms in order
+        // to filter the room list when group tags are selected.
+        this._groupStoreToken = GroupStore.registerListener(null, () => {
             (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
                 if (tag[0] !== '+') {
                     return;
                 }
-                this._groupStoreToken = GroupStore.registerListener(tag, () => {
-                    // This group's rooms or members may have updated, update rooms for its tag
-                    this.updateVisibleRoomsForTag(dmRoomMap, tag);
-                    this.updateVisibleRooms();
-                });
+                // This group's rooms or members may have updated, update rooms for its tag
+                this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                this.updateVisibleRooms();
             });
-            // Filters themselves have changed, refresh the selected tags
+        });
+
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            // Filters themselves have changed
             this.updateVisibleRooms();
         });
 

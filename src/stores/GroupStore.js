@@ -140,7 +140,6 @@ class GroupStore extends EventEmitter {
 
         clientPromise.then((result) => {
             this._state[stateKey][groupId] = result;
-            console.info(this._state);
             this._ready[stateKey][groupId] = true;
             this._notifyListeners();
         }).catch((err) => {
@@ -168,11 +167,12 @@ class GroupStore extends EventEmitter {
      * immediately triggers an update to send the current state of the
      * store (which could be the initial state).
      *
-     * This also causes a fetch of all data of the specified group,
-     * which might cause 4 separate HTTP requests, but only if said
-     * requests aren't already ongoing.
+     * If a group ID is specified, this also causes a fetch of all data
+     * of the specified group, which might cause 4 separate HTTP
+     * requests, but only if said requests aren't already ongoing.
      *
-     * @param {string} groupId the ID of the group to fetch data for.
+     * @param {string?} groupId the ID of the group to fetch data for.
+     *                          Optional.
      * @param {function} fn the function to call when the store updates.
      * @return {Object} tok a registration "token" with a single
      *                      property `unregister`, a function that can
@@ -184,10 +184,12 @@ class GroupStore extends EventEmitter {
         // Call to set initial state (before fetching starts)
         this.emit('update');
 
-        this._fetchResource(this.STATE_KEY.Summary, groupId);
-        this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
-        this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
-        this._fetchResource(this.STATE_KEY.GroupInvitedMembers, groupId);
+        if (groupId) {
+            this._fetchResource(this.STATE_KEY.Summary, groupId);
+            this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
+            this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
+            this._fetchResource(this.STATE_KEY.GroupInvitedMembers, groupId);
+        }
 
         // Similar to the Store of flux/utils, we return a "token" that
         // can be used to unregister the listener.
@@ -230,6 +232,14 @@ class GroupStore extends EventEmitter {
     isUserPrivileged(groupId) {
         return (this._state[this.STATE_KEY.Summary][groupId] || {}).user ?
             (this._state[this.STATE_KEY.Summary][groupId] || {}).user.is_privileged : null;
+    }
+
+    refreshGroupRooms(groupId) {
+        return this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
+    }
+
+    refreshGroupMembers(groupId) {
+        return this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
     }
 
     addRoomToGroup(groupId, roomId, isPublic) {

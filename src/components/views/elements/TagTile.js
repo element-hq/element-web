@@ -24,6 +24,7 @@ import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import ContextualMenu from '../../structures/ContextualMenu';
 
 import FlairStore from '../../../stores/FlairStore';
+import GroupStore from '../../../stores/GroupStore';
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -57,6 +58,8 @@ export default React.createClass({
         if (this.props.tag[0] === '+') {
             FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
             this._onFlairStoreUpdated();
+            // New rooms or members may have been added to the group, fetch async
+            this._refreshGroup(this.props.tag);
         }
     },
 
@@ -80,6 +83,11 @@ export default React.createClass({
         });
     },
 
+    _refreshGroup(groupId) {
+        GroupStore.refreshGroupRooms(groupId);
+        GroupStore.refreshGroupMembers(groupId);
+    },
+
     onClick: function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -89,6 +97,10 @@ export default React.createClass({
             ctrlOrCmdKey: isOnlyCtrlOrCmdIgnoreShiftKeyEvent(e),
             shiftKey: e.shiftKey,
         });
+        if (this.props.tag[0] === '+') {
+            // New rooms or members may have been added to the group, fetch async
+            this._refreshGroup(this.props.tag);
+        }
     },
 
     onContextButtonClick: function(e) {
