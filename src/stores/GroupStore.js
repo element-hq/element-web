@@ -62,6 +62,11 @@ function limitConcurrency(fn) {
         }
     })
     .then(fn)
+    .catch((err) => {
+        ongoingRequestCount--;
+        checkBacklog();
+        throw err;
+    })
     .then((result) => {
         ongoingRequestCount--;
         checkBacklog();
