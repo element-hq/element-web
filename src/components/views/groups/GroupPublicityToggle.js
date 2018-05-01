@@ -40,12 +40,16 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        GroupStore.registerListener(groupId, () => {
+        this._groupStoreToken = GroupStore.registerListener(groupId, () => {
             this.setState({
                 isGroupPublicised: GroupStore.getGroupPublicity(groupId),
                 ready: GroupStore.isStateReady(groupId, GroupStore.STATE_KEY.Summary),
             });
         });
+    },
+
+    componentWillUnmount() {
+        if (this._groupStoreToken) this._groupStoreToken.unregister();
     },
 
     _onPublicityToggle: function(e) {
