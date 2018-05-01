@@ -233,6 +233,14 @@ class GroupStore extends EventEmitter {
             (this._state[this.STATE_KEY.Summary][groupId] || {}).user.is_privileged : null;
     }
 
+    refreshGroupRooms(groupId) {
+        return this._fetchResource(this.STATE_KEY.GroupRooms, groupId);
+    }
+
+    refreshGroupMembers(groupId) {
+        return this._fetchResource(this.STATE_KEY.GroupMembers, groupId);
+    }
+
     addRoomToGroup(groupId, roomId, isPublic) {
         return MatrixClientPeg.get()
             .addRoomToGroup(groupId, roomId, isPublic)
