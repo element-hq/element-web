@@ -48,30 +48,30 @@ function checkBacklog() {
 
 // Limit the maximum number of ongoing promises returned by fn to LIMIT and
 // use a FIFO queue to handle the backlog.
-function limitConcurrency(fn) {
-    return new Promise((resolve, reject) => {
-        const item = () => {
-            ongoingRequestCount++;
-            resolve();
-        };
-        if (ongoingRequestCount >= LIMIT) {
-            // Enqueue this request for later execution
-            backlogQueue.push(item);
-        } else {
-            item();
-        }
-    })
-    .then(fn)
-    .catch((err) => {
+async function limitConcurrency(fn) {
+    if (ongoingRequestCount >= LIMIT) {
+        // Enqueue this request for later execution
+        await new Promise((resolve, reject) => {
+            backlogQueue.push(resolve);
+        });
+    }
+
+    let result;
+    let error;
+
+    ongoingRequestCount++;
+    try {
+        result = await fn();
+    } catch (err) {
+        error = err;
+    } finally {
         ongoingRequestCount--;
         checkBacklog();
-        throw err;
-    })
-    .then((result) => {
-        ongoingRequestCount--;
-        checkBacklog();
-        return result;
-    });
+    }
+
+    if (error) throw error;
+
+    return result;
 }
 
 /**
