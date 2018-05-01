@@ -21,7 +21,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 
 module.exports = React.createClass({
     displayName: 'GroupRoomInfo',
@@ -50,29 +50,26 @@ module.exports = React.createClass({
 
     componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
-            this._unregisterGroupStore();
+            this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
     },
 
     componentWillUnmount() {
-        this._unregisterGroupStore();
+        this._unregisterGroupStore(this.props.groupId);
     },
 
     _initGroupStore(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
-        this._groupStore.registerListener(this.onGroupStoreUpdated);
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
     },
 
-    _unregisterGroupStore() {
-        if (this._groupStore) {
-            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
-        }
+    _unregisterGroupStore(groupId) {
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
     },
 
     _updateGroupRoom() {
         this.setState({
-            groupRoom: this._groupStore.getGroupRooms().find(
+            groupRoom: GroupStore.getGroupRooms(this.props.groupId).find(
                 (r) => r.roomId === this.props.groupRoomId,
             ),
         });
@@ -80,7 +77,7 @@ module.exports = React.createClass({
 
     onGroupStoreUpdated: function() {
         this.setState({
-            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+            isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
         this._updateGroupRoom();
     },
@@ -100,7 +97,7 @@ module.exports = React.createClass({
                 this.setState({groupRoomRemoveLoading: true});
                 const groupId = this.props.groupId;
                 const roomId = this.props.groupRoomId;
-                this._groupStore.removeRoomFromGroup(roomId).then(() => {
+                GroupStore.removeRoomFromGroup(this.props.groupId, roomId).then(() => {
                     dis.dispatch({
                         action: "view_group_room_list",
                     });
@@ -134,7 +131,7 @@ module.exports = React.createClass({
         const groupId = this.props.groupId;
         const roomId = this.props.groupRoomId;
         const roomName = this.state.groupRoom.displayname;
-        this._groupStore.updateGroupRoomVisibility(roomId, isPublic).catch((err) => {
+        GroupStore.updateGroupRoomVisibility(this.props.groupId, roomId, isPublic).catch((err) => {
             console.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
