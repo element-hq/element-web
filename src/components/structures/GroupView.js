@@ -483,6 +483,7 @@ export default React.createClass({
             this.setState({
                 summary: null,
                 error: err,
+                editing: false,
             });
         });
     },
