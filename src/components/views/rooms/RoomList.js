@@ -97,7 +97,7 @@ module.exports = React.createClass({
                 if (tag[0] !== '+') {
                     return;
                 }
-                this.groupStoreToken = GroupStore.registerListener(tag, () => {
+                this._groupStoreToken = GroupStore.registerListener(tag, () => {
                     // This group's rooms or members may have updated, update rooms for its tag
                     this.updateVisibleRoomsForTag(dmRoomMap, tag);
                     this.updateVisibleRooms();
@@ -179,7 +179,9 @@ module.exports = React.createClass({
         }
 
         // NB: GroupStore is not a Flux.Store
-        this._groupStoreToken.unregister();
+        if (this._groupStoreToken) {
+            this._groupStoreToken.unregister();
+        }
 
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
