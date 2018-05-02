@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
@@ -42,9 +42,12 @@ export default React.createClass({
         this._initGroupStore(this.props.groupId);
     },
 
+    componentWillUnmount: function() {
+        this._unmounted = true;
+    },
+
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(groupId);
-        this._groupStore.registerListener(() => {
+        GroupStore.registerListener(groupId, () => {
             this._fetchMembers();
         });
     },
@@ -52,8 +55,8 @@ export default React.createClass({
     _fetchMembers: function() {
         if (this._unmounted) return;
         this.setState({
-            members: this._groupStore.getGroupMembers(),
-            invitedMembers: this._groupStore.getGroupInvitedMembers(),
+            members: GroupStore.getGroupMembers(this.props.groupId),
+            invitedMembers: GroupStore.getGroupInvitedMembers(this.props.groupId),
         });
     },
 

@@ -959,7 +959,6 @@
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Pribatutasuna garrantzitsua da guretzat, beraz ez dugu datu pertsonalik edo identifikagarririk jasotzen gure estatistiketan.",
     "Learn more about how we use analytics.": "Ikasi gehiago estatistikei ematen diegun erabileraz.",
     "The information being sent to us to help make Riot.im better includes:": "Riot.im hobetzeko bidaltzen zaigun informazioan hau dago:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Aplikazioan erabiltzen duzun orri bakoitza jasotzen dugu (orain <CurrentPageHash>), erabiltzaile-agentea (<CurrentUserAgent>) eta gailuaren bereizmena (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Orri honek informazio identifikagarria badu ere, esaterako gela, erabiltzailea edo talde ID-a, datu hauek ezabatu egiten dira zerbitzarira bidali aurretik.",
     "Whether or not you're logged in (we don't record your user name)": "Saioa hasita dagoen ala ez (ez dugu erabiltzaile-izena gordetzen)",
     "Which officially provided instance you are using, if any": "Erabiltzen ari zaren instantzia ofiziala, balego",
@@ -987,7 +986,7 @@
     "%(user)s is a %(userRole)s": "%(user)s %(userRole)s da",
     "Code": "Kodea",
     "Debug Logs Submission": "Arazte-egunkarien bidalketak",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Akats bat bidali baduzu GitHub bidez, arazte-egunkariek arazoa aurkitzen lagundu gaitzakete. Arazte-egunkariek aplikazioak darabilen datuak dauzkate, zure erabiltzaile izena barne, bisitatu dituzun gelen ID-ak edo ezizenak eta beste erabiltzaileen izenak. Ez dute mezurik.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Akats bat bidali baduzu GitHub bidez, arazte-egunkariek arazoa aurkitzen lagundu gaitzakete. Arazte-egunkariek aplikazioak darabilen datuak dauzkate, zure erabiltzaile izena barne, bisitatu dituzun gelen ID-ak edo ezizenak eta beste erabiltzaileen izenak. Ez dute mezurik.",
     "Submit debug logs": "Bidali arazte-txostenak",
     "Opens the Developer Tools dialog": "Garatzailearen tresnen elkarrizketa-koadroa irekitzen du",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s)(e)k ikusita %(dateTime)s(e)tan",
@@ -1157,5 +1156,7 @@
     "Collapse panel": "Tolestu panela",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Zure oraingo nabigatzailearekin aplikazioaren itxura eta portaera guztiz okerra izan daiteke, eta funtzio batzuk ez dira ibiliko. Hala ere aurrera jarraitu dezakezu saiatu nahi baduzu, baina zure erantzukizunaren menpe geratzen dira aurkitu ditzakezun arazoak!",
     "Checking for an update...": "Eguneraketarik dagoen egiaztatzen...",
-    "There are advanced notifications which are not shown here": "Hemen erakusten ez diren jakinarazpen aurreratuak daude"
+    "There are advanced notifications which are not shown here": "Hemen erakusten ez diren jakinarazpen aurreratuak daude",
+    "Missing roomId.": "Gelaren ID-a falta da.",
+    "Picture": "Irudia"
 }

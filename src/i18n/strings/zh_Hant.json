@@ -956,7 +956,6 @@
     "Notify the whole room": "通知整個聊天室",
     "Room Notification": "聊天室通知",
     "The information being sent to us to help make Riot.im better includes:": "協助讓 Riot.im 變得更好的傳送給我們的資訊包含了：",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "我們也紀錄了每個您在應用程式中使用的頁面（目前 <CurrentPageHash>），您的使用者代理（<CurrentUserAgent>）與您的裝置解析度（<CurrentDeviceResolution>）。",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "這個頁面包含了可識別的資訊，如聊天室、使用者或群組 ID，這些資料會在傳到伺服器前被刪除。",
     "The platform you're on": "您使用的平臺是",
     "The version of Riot.im": "Riot.im 的版本",
@@ -987,7 +986,7 @@
     "%(user)s is a %(userRole)s": "%(user)s 是 %(userRole)s",
     "Code": "代碼",
     "Debug Logs Submission": "除錯訊息傳送",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "如果您透過 GitHub 來回報錯誤，除錯訊息可以用來追蹤問題。除錯訊息包含應用程式的使用資料，包括您的使用者名稱、您所造訪的房間/群組的 ID 或別名、其他使用者的使用者名稱等，其中不包含訊息本身。",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "如果您透過 GitHub 來回報錯誤，除錯訊息可以用來追蹤問題。除錯訊息包含應用程式的使用資料，包括您的使用者名稱、您所造訪的房間/群組的 ID 或別名、其他使用者的使用者名稱等，其中不包含訊息本身。",
     "Submit debug logs": "傳送除錯訊息",
     "Opens the Developer Tools dialog": "開啟開發者工具對話視窗",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "被 %(displayName)s (%(userName)s) 於 %(dateTime)s 看過",
@@ -1157,5 +1156,7 @@
     "Collapse panel": "摺疊面板",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "您目前的瀏覽器，其應用程式的外觀和感覺可能完全不正確，有些或全部功能可以無法使用。如果您仍想要繼續嘗試，可以繼續，但必須自行承擔後果！",
     "Checking for an update...": "正在檢查更新...",
-    "There are advanced notifications which are not shown here": "有些進階的通知並未在此顯示"
+    "There are advanced notifications which are not shown here": "有些進階的通知並未在此顯示",
+    "Missing roomId.": "缺少 roomid。",
+    "Picture": "圖片"
 }

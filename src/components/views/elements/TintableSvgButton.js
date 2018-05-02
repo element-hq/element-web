@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import TintableSvg from './TintableSvg';
+import AccessibleButton from './AccessibleButton';
 
 export default class TintableSvgButton extends React.Component {
 
@@ -39,9 +40,11 @@ export default class TintableSvgButton extends React.Component {
                     width={this.props.width}
                     height={this.props.height}
                 ></TintableSvg>
-                <span
+                <AccessibleButton
+                    onClick={this.props.onClick}
+                    element='span'
                     title={this.props.title}
-                    onClick={this.props.onClick} />
+                />
             </span>
         );
     }

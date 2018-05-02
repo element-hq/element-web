@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,7 +37,17 @@ export default React.createClass({
 
     propTypes: {
         // onFinished callback to call when Escape is pressed
+        // Take a boolean which is true if the dialog was dismissed
+        // with a positive / confirm action or false if it was
+        // cancelled (BaseDialog itself only calls this with false).
         onFinished: PropTypes.func.isRequired,
+
+        // Whether the dialog should have a 'close' button that will
+        // cause the dialog to be cancelled. This should only be set
+        // to false if there is nothing the app can sensibly do if the
+        // dialog is cancelled, eg. "We can't restore your session and
+        // the app cannot work". Default: true.
+        hasCancel: PropTypes.bool,
 
         // called when a key is pressed
         onKeyDown: PropTypes.func,
@@ -54,6 +65,12 @@ export default React.createClass({
         // Id of content element
         // If provided, this is used to add a aria-describedby attribute
         contentId: React.PropTypes.string,
+    },
+
+    getDefaultProps: function() {
+        return {
+            hasCancel: true,
+        };
     },
 
     childContextTypes: {
@@ -74,15 +91,15 @@ export default React.createClass({
         if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
         }
-        if (e.keyCode === KeyCode.ESCAPE) {
+        if (this.props.hasCancel && e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
-            this.props.onFinished();
+            this.props.onFinished(false);
         }
     },
 
     _onCancelClick: function(e) {
-        this.props.onFinished();
+        this.props.onFinished(false);
     },
 
     render: function() {
@@ -101,11 +118,11 @@ export default React.createClass({
                 // AT users can skip its presentation.
                 aria-describedby={this.props.contentId}
             >
-                <AccessibleButton onClick={this._onCancelClick}
+                { this.props.hasCancel ? <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </AccessibleButton>
+                </AccessibleButton> : null }
                 <div className={'mx_Dialog_title ' + this.props.titleClass} id='mx_BaseDialog_title'>
                     { this.props.title }
                 </div>

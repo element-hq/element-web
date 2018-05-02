@@ -12,7 +12,6 @@
     "Your identity server's URL": "Jūsų identifikavimo serverio URL adresas",
     "Analytics": "Statistika",
     "The information being sent to us to help make Riot.im better includes:": "Informacijoje, kuri yra siunčiama Riot.im tobulinimui yra:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Mes taip pat saugome kiekvieną puslapį, kurį jūs naudojate programėlėje (dabartinis <CurrentPageHash>), jūsų paskyros agentas (<CurrentUserAgent>) ir jūsų įrenginio rezoliucija (<CurrentDeviceResolution>).",
     "Fetching third party location failed": "Nepavyko gauti trečios šalies vietos",
     "A new version of Riot is available.": "Yra nauja Riot versija.",
     "I understand the risks and wish to continue": "Aš suprantu riziką ir noriu tęsti",

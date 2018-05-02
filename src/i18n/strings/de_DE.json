@@ -952,7 +952,6 @@
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Nachricht jetzt erneut senden</resendText> oder <cancelText>senden abbrechen</cancelText> now.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privatsphäre ist uns wichtig, deshalb sammeln wir keine persönlichen oder identifizierbaren Daten für unsere Analysen.",
     "The information being sent to us to help make Riot.im better includes:": "Die Informationen, die an uns gesendet werden um Riot.im zu verbessern enthalten:",
-    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Wir speichern auch jede Seite, die du in der App benutzt (currently <CurrentPageHash>), deinen User Agent (<CurrentUserAgent>) und die Bildschirmauflösung deines Gerätes (<CurrentDeviceResolution>).",
     "The platform you're on": "Benutzte Plattform",
     "The version of Riot.im": "Riot.im Version",
     "Your language of choice": "Deine ausgewählte Sprache",
@@ -986,7 +985,7 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "Verschlüsselungs-Schlüssel von deinen anderen Geräten <requestLink>erneut anfragen</requestLink>.",
     "%(user)s is a %(userRole)s": "%(user)s ist ein %(userRole)s",
     "Debug Logs Submission": "Einsenden des Fehlerprotokolls",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contian messages.": "Wenn du einen Fehler via GitHub gemeldet hast, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast und Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Wenn du einen Fehler via GitHub gemeldet hast, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-ID's und Aliase die du besucht hast und Nutzernamen anderer Nutzer. Sie enthalten keine Nachrichten.",
     "Submit debug logs": "Fehlerberichte einreichen",
     "Code": "Code",
     "Opens the Developer Tools dialog": "Öffnet den Entwicklerwerkzeugkasten",
@@ -1157,5 +1156,7 @@
     "Collapse panel": "Panel einklappen",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "In deinem aktuell verwendeten Browser können Aussehen und Handhabung der Anwendung unter Umständen noch komplett fehlerhaft sein, so dass einige bzw. im Extremfall alle Funktionen nicht zur Verfügung stehen. Du kannst es trotzdem versuchen und fortfahren, bist dabei aber bezüglich aller auftretenden Probleme auf dich allein gestellt!",
     "Checking for an update...": "Nach Updates suchen...",
-    "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden"
+    "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden",
+    "Missing roomId.": "Fehlende Raum-ID.",
+    "Picture": "Bild"
 }

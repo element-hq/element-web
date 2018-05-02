@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ const gHVersionLabel = function(repo, token='') {
 const SIMPLE_SETTINGS = [
     { id: "urlPreviewsEnabled" },
     { id: "autoplayGifsAndVideos" },
+    { id: "alwaysShowEncryptionIcons" },
     { id: "hideReadReceipts" },
     { id: "dontSendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
@@ -801,10 +802,10 @@ module.exports = React.createClass({
                             "us track down the problem. Debug logs contain application " +
                             "usage data including your username, the IDs or aliases of " +
                             "the rooms or groups you have visited and the usernames of " +
-                            "other users. They do not contian messages.",
+                            "other users. They do not contain messages.",
                         )
                     }</p>
-                    <button className="mx_UserSettings_button danger"
+                    <button className="mx_UserSettings_button"
                         onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>

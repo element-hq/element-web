@@ -92,6 +92,7 @@ export function createTestClient() {
                 content: {},
             });
         },
+        mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
         setAccountData: sinon.stub(),
         sendTyping: sinon.stub().returns(Promise.resolve({})),
         sendMessage: () => Promise.resolve({}),
