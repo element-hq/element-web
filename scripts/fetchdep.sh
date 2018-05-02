@@ -5,6 +5,8 @@ set -e
 org="$1"
 repo="$2"
 
+rm -r "$repo" || true
+
 curbranch="$TRAVIS_PULL_REQUEST_BRANCH"
 [ -z "$curbranch" ] && curbranch="$TRAVIS_BRANCH"
 [ -z "$curbranch" ] && curbranch=`"echo $GIT_BRANCH" | sed -e 's/^origin\///'` # jenkins
