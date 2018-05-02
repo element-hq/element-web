@@ -51,7 +51,12 @@ module.exports = {
         // <Element prop={ consideredError} prop={notConsideredError} />
         //
         // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-curly-spacing.md
-        "react/jsx-curly-spacing": ["error", {"when": "never", "children": {"when": "always"}}],
+        //
+        // Disabled for now - if anything we'd like to *enforce* spacing in JSX
+        // curly brackets for legibility, but in practice it's not clear that the
+        // consistency particularly improves legibility here. --Matthew
+        //
+        // "react/jsx-curly-spacing": ["error", {"when": "never", "children": {"when": "always"}}],
 
         // Assert spacing before self-closing JSX tags, and no spacing before or
         // after the closing slash, and no spacing after the opening bracket of
@@ -89,7 +94,6 @@ module.exports = {
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
-        "arrow-parens": ["warn"],
         "prefer-const": ["warn"],
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
