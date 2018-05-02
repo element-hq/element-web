@@ -1171,5 +1171,10 @@
     "Clear Storage and Sign Out": "Effacer le stockage et se déconnecter",
     "Refresh": "Rafraîchir",
     "We encountered an error trying to restore your previous session.": "Une erreur est survenue lors de la récupération de la dernière session.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Effacer le stockage de votre navigateur peut résoudre le problème, mais cela vous déconnectera et tous les historiques de conversation encryptés seront illisibles."
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Effacer le stockage de votre navigateur peut résoudre le problème, mais cela vous déconnectera et tous les historiques de conversation encryptés seront illisibles.",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Pour le moment il n'est pas possible de répondre avec un fichier donc ceci sera envoyé sans être une réponse.",
+    "Unable to reply": "Impossible de répondre",
+    "At this time it is not possible to reply with an emote.": "Pour le moment il n'est pas possible de répondre avec un émoji.",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Impossible de charger l'événement auquel il a été répondu, soit il n'existe pas, soit vous n'avez pas l'autorisation de le voir.",
+    "Collapse Reply Thread": "Dévoiler le fil de réponse"
 }
