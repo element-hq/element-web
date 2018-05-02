@@ -75,39 +75,37 @@ describe('MessageComposerInput', () => {
     });
 
     it('should not send messages when composer is empty', () => {
-        const textSpy = sinon.spy(client, 'sendTextMessage');
-        const htmlSpy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(true);
         mci.handleReturn(sinon.stub());
 
-        expect(textSpy.calledOnce).toEqual(false, 'should not send text message');
-        expect(htmlSpy.calledOnce).toEqual(false, 'should not send html message');
+        expect(spy.calledOnce).toEqual(false, 'should not send message');
     });
 
     it('should not change content unnecessarily on RTE -> Markdown conversion', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(true);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('a');
+        expect(spy.args[0][1].body).toEqual('a');
     });
 
     it('should not change content unnecessarily on Markdown -> RTE conversion', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('a');
+        expect(spy.args[0][1].body).toEqual('a');
     });
 
     it('should send emoji messages when rich text is enabled', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
         mci.handleReturn(sinon.stub());
@@ -116,7 +114,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should send emoji messages when Markdown is enabled', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('☹');
         mci.handleReturn(sinon.stub());
@@ -149,98 +147,98 @@ describe('MessageComposerInput', () => {
     // });
 
     it('should insert formatting characters in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         mci.handleKeyCommand('italic');
         mci.handleReturn(sinon.stub());
-        expect(['__', '**']).toContain(spy.args[0][1]);
+        expect(['__', '**']).toContain(spy.args[0][1].body);
     });
 
     it('should not entity-encode " in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('"');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('"');
+        expect(spy.args[0][1].body).toEqual('"');
     });
 
     it('should escape characters without other markup in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('\\*escaped\\*');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('*escaped*');
+        expect(spy.args[0][1].body).toEqual('*escaped*');
     });
 
     it('should escape characters with other markup in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('\\*escaped\\* *italic*');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('\\*escaped\\* *italic*');
-        expect(spy.args[0][2]).toEqual('*escaped* <em>italic</em>');
+        expect(spy.args[0][1].body).toEqual('\\*escaped\\* *italic*');
+        expect(spy.args[0][1].formatted_body).toEqual('*escaped* <em>italic</em>');
     });
 
     it('should not convert -_- into a horizontal rule in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('-_-');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('-_-');
+        expect(spy.args[0][1].body).toEqual('-_-');
     });
 
     it('should not strip <del> tags in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('<del>striked-out</del>');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('<del>striked-out</del>');
-        expect(spy.args[0][2]).toEqual('<del>striked-out</del>');
+        expect(spy.args[0][1].body).toEqual('<del>striked-out</del>');
+        expect(spy.args[0][1].formatted_body).toEqual('<del>striked-out</del>');
     });
 
     it('should not strike-through ~~~ in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('~~~striked-out~~~');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('~~~striked-out~~~');
+        expect(spy.args[0][1].body).toEqual('~~~striked-out~~~');
     });
 
     it('should not mark single unmarkedup paragraphs as HTML in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+        expect(spy.args[0][1].body).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
     });
 
     it('should not mark two unmarkedup paragraphs as HTML in Markdown mode', () => {
-        const spy = sinon.spy(client, 'sendTextMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         addTextToDraft('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
         mci.handleReturn(sinon.stub());
 
         expect(spy.calledOnce).toEqual(true);
-        expect(spy.args[0][1]).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
+        expect(spy.args[0][1].body).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
     });
 
     it('should strip tab-completed mentions so that only the display name is sent in the plain body in Markdown mode', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(false);
         mci.setDisplayedCompletion({
             completion: 'Some Member',
@@ -250,11 +248,11 @@ describe('MessageComposerInput', () => {
 
         mci.handleReturn(sinon.stub());
 
-        expect(spy.args[0][1]).toEqual(
+        expect(spy.args[0][1].body).toEqual(
             'Some Member',
             'the plaintext body should only include the display name',
         );
-        expect(spy.args[0][2]).toEqual(
+        expect(spy.args[0][1].formatted_body).toEqual(
             '<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>',
             'the html body should contain an anchor tag with a matrix.to href and display name text',
         );
@@ -262,7 +260,7 @@ describe('MessageComposerInput', () => {
 
     it('should strip tab-completed mentions so that only the display name is sent in the plain body in RTE mode', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         mci.enableRichtext(true);
         mci.setDisplayedCompletion({
             completion: 'Some Member',
@@ -272,33 +270,33 @@ describe('MessageComposerInput', () => {
 
         mci.handleReturn(sinon.stub());
 
-        expect(spy.args[0][1]).toEqual('Some Member');
-        expect(spy.args[0][2]).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>');
+        expect(spy.args[0][1].body).toEqual('Some Member');
+        expect(spy.args[0][1].formatted_body).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>');
     });
 
     it('should not strip non-tab-completed mentions when manually typing MD', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         // Markdown mode enabled
         mci.enableRichtext(false);
         addTextToDraft('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
 
         mci.handleReturn(sinon.stub());
 
-        expect(spy.args[0][1]).toEqual('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
-        expect(spy.args[0][2]).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">My Not-Tab-Completed Mention</a>');
+        expect(spy.args[0][1].body).toEqual('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
+        expect(spy.args[0][1].formatted_body).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">My Not-Tab-Completed Mention</a>');
     });
 
     it('should not strip arbitrary typed (i.e. not tab-completed) MD links', () => {
         // Sending a HTML message because we have entities in the composer (because of completions)
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendMessage');
         // Markdown mode enabled
         mci.enableRichtext(false);
         addTextToDraft('[Click here](https://some.lovely.url)');
 
         mci.handleReturn(sinon.stub());
 
-        expect(spy.args[0][1]).toEqual('[Click here](https://some.lovely.url)');
-        expect(spy.args[0][2]).toEqual('<a href="https://some.lovely.url">Click here</a>');
+        expect(spy.args[0][1].body).toEqual('[Click here](https://some.lovely.url)');
+        expect(spy.args[0][1].formatted_body).toEqual('<a href="https://some.lovely.url">Click here</a>');
     });
 });
