@@ -56,22 +56,16 @@ async function limitConcurrency(fn) {
         });
     }
 
-    let result;
-    let error;
-
     ongoingRequestCount++;
     try {
-        result = await fn();
+        return await fn();
     } catch (err) {
-        error = err;
+        // We explicitly do not handle the error here, but let it propogate.
+        throw err;
     } finally {
         ongoingRequestCount--;
         checkBacklog();
     }
-
-    if (error) throw error;
-
-    return result;
 }
 
 /**
