@@ -1171,5 +1171,7 @@
     "Clear Storage and Sign Out": "Очистить хранилище и выйти",
     "Refresh": "Обновить",
     "We encountered an error trying to restore your previous session.": "Произошла ошибка при попытке восстановить предыдущий сеанс.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очистка хранилища вашего браузера может устранить проблему, но при этом ваша сессия будет завершена и зашифрованная история чата станет нечитаемой."
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очистка хранилища вашего браузера может устранить проблему, но при этом ваша сессия будет завершена и зашифрованная история чата станет нечитаемой.",
+    "Unable to reply": "Не удается ответить",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не удается загрузить событие, на которое был дан ответ, либо оно не существует, либо у вас нет разрешения на его просмотр."
 }
