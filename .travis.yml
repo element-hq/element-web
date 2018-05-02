@@ -15,6 +15,5 @@ addons:
     chrome: stable
 install:
     - npm install
-    - (cd node_modules/matrix-js-sdk && npm install)
 script:
     ./scripts/travis.sh
