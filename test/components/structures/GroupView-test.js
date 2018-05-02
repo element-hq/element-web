@@ -26,31 +26,12 @@ import sdk from 'matrix-react-sdk';
 import Matrix from 'matrix-js-sdk';
 
 import * as TestUtils from 'test-utils';
+const { waitForUpdate } = TestUtils;
 
 const GroupView = sdk.getComponent('structures.GroupView');
 const WrappedGroupView = TestUtils.wrapInMatrixClientContext(GroupView);
 
 const Spinner = sdk.getComponent('elements.Spinner');
-
-/**
- * Call fn before calling componentDidUpdate on a react component instance, inst.
- * @param {React.Component} inst an instance of a React component.
- * @returns {Promise} promise that resolves when componentDidUpdate is called on
- *                    given component instance.
- */
-function waitForUpdate(inst) {
-    return new Promise((resolve, reject) => {
-        const cdu = inst.componentDidUpdate;
-
-        inst.componentDidUpdate = (prevProps, prevState, snapshot) => {
-            resolve();
-
-            if (cdu) cdu(prevProps, prevState, snapshot);
-
-            inst.componentDidUpdate = cdu;
-        };
-    });
-}
 
 describe('GroupView', function() {
     let root;
