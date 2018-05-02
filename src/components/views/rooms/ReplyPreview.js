@@ -19,15 +19,16 @@ import dis from '../../../dispatcher';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function cancelQuoting() {
     dis.dispatch({
-        action: 'quote_event',
+        action: 'reply_to_event',
         event: null,
     });
 }
 
-export default class QuotePreview extends React.Component {
+export default class ReplyPreview extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -61,17 +62,20 @@ export default class QuotePreview extends React.Component {
         const EventTile = sdk.getComponent('rooms.EventTile');
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
-        return <div className="mx_QuotePreview">
-            <div className="mx_QuotePreview_section">
-                <EmojiText element="div" className="mx_QuotePreview_header mx_QuotePreview_title">
+        return <div className="mx_ReplyPreview">
+            <div className="mx_ReplyPreview_section">
+                <EmojiText element="div" className="mx_ReplyPreview_header mx_ReplyPreview_title">
                     { '💬 ' + _t('Replying') }
                 </EmojiText>
-                <div className="mx_QuotePreview_header mx_QuotePreview_cancel">
+                <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
                     <img className="mx_filterFlipColor" src="img/cancel.svg" width="18" height="18"
                          onClick={cancelQuoting} />
                 </div>
-                <div className="mx_QuotePreview_clear" />
-                <EventTile mxEvent={this.state.event} last={true} tileShape="quote" />
+                <div className="mx_ReplyPreview_clear" />
+                <EventTile last={true}
+                           tileShape="reply_preview"
+                           mxEvent={this.state.event}
+                           isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </div>
         </div>;
     }
