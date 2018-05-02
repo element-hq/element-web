@@ -41,7 +41,8 @@ module.exports = {
         "react/jsx-uses-react": "error",
 
         // bind or arrow function in props causes performance issues
-        "react/jsx-no-bind": ["error", {
+        // (but we currently use them in some places)
+        "react/jsx-no-bind": ["warn", {
             "ignoreRefs": true,
         }],
         "react/jsx-key": ["error"],
