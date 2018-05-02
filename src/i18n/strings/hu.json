@@ -1171,5 +1171,10 @@
     "Clear Storage and Sign Out": "Tárhely törlése és kijelentkezés",
     "Refresh": "Frissítés",
     "We encountered an error trying to restore your previous session.": "Hibába ütköztünk megpróbáljuk visszaállítani az előző munkamenetet.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "A böngésződ tárhelyének a törlése megoldhatja a problémát, de ezzel kijelentkezel és a titkosított beszélgetések előzményei olvashatatlanná válnak."
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "A böngésződ tárhelyének a törlése megoldhatja a problémát, de ezzel kijelentkezel és a titkosított beszélgetések előzményei olvashatatlanná válnak.",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Jelenleg válaszban nem lehet fájlt küldeni, így most úgy lesz elküldve, hogy ez nem egy válasz.",
+    "Unable to reply": "Nem lehet válaszolni",
+    "At this time it is not possible to reply with an emote.": "Jelenleg nem lehet emodzsival válaszolni.",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Nem lehet betölteni azt az eseményt amire válaszoltál, mert vagy nem létezik, vagy nincs jogod megnézni.",
+    "Collapse Reply Thread": "Beszélgetés szál becsukása"
 }
