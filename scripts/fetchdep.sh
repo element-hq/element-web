@@ -7,7 +7,7 @@ repo="$2"
 
 curbranch="$TRAVIS_PULL_REQUEST_BRANCH"
 [ -z "$curbranch" ] && curbranch="$TRAVIS_BRANCH"
-[ -z "$curbranch" ] && curbranch=`"$GIT_BRANCH" | sed -e 's/^origin\///'` # jenkins
+[ -z "$curbranch" ] && curbranch=`"echo $GIT_BRANCH" | sed -e 's/^origin\///'` # jenkins
 
 if [ -n "$curbranch" ]
 then
