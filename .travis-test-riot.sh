@@ -9,15 +9,8 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
-curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-echo "Determined branch to be $curbranch"
-
-git clone https://github.com/vector-im/riot-web.git \
-    "$RIOT_WEB_DIR"
-
+scripts/fetchdep.sh vector-im riot-web
 cd "$RIOT_WEB_DIR"
-
-git checkout "$curbranch" || git checkout develop
 
 mkdir node_modules
 npm install
