@@ -155,9 +155,11 @@ module.exports = withMatrixClient(React.createClass({
         isTwelveHour: PropTypes.bool,
     },
 
-    defaultProps: {
-        // no-op function because onWidgetLoad is optional yet some subcomponents assume its existence
-        onWidgetLoad: function() {},
+    getDefaultProps: function() {
+        return {
+            // no-op function because onWidgetLoad is optional yet some sub-components assume its existence
+            onWidgetLoad: function() {},
+        };
     },
 
     getInitialState: function() {
