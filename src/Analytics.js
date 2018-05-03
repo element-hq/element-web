@@ -164,9 +164,6 @@ class Analytics {
     }
 
     trackPageChange(generationTimeMs) {
-        if (typeof generationTimeMs !== 'number') {
-            throw new Error('Analytics.trackPageChange: expected generationTimeMs to be a number');
-        }
         if (this.disabled) return;
         if (this.firstPage) {
             // De-duplicate first page
@@ -174,8 +171,15 @@ class Analytics {
             this.firstPage = false;
             return;
         }
+
+        if (typeof generationTimeMs === 'number') {
+            this._paq.push(['setGenerationTimeMs', generationTimeMs]);
+        } else {
+            console.warn('Analytics.trackPageChange: expected generationTimeMs to be a number');
+            // But continue anyway because we still want to track the change
+        }
+
         this._paq.push(['setCustomUrl', getRedactedUrl()]);
-        this._paq.push(['setGenerationTimeMs', generationTimeMs]);
         this._paq.push(['trackPageView']);
     }
 
