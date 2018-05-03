@@ -413,6 +413,10 @@ export default React.createClass({
         performance.clearMarks('riot_MatrixChat_page_change_start');
         performance.clearMarks('riot_MatrixChat_page_change_stop');
         const measurement = performance.getEntriesByName('riot_MatrixChat_page_change_delta').pop();
+
+        // In practice, sometimes the entries list is empty, so we get no measurement
+        if (!measurement) return null;
+
         return measurement.duration;
     },
 
