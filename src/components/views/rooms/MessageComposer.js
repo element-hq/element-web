@@ -65,6 +65,13 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+
+        MatrixClientPeg.get().getMediaLimits().then((limits) => {
+            this._uploadLimits = limits;
+        }).catch(() => {
+            // HS can't or won't provide limits, so don't give any.
+            this._uploadLimits = {};
+        })
     }
 
     componentWillUnmount() {
@@ -99,17 +106,12 @@ export default class MessageComposer extends React.Component {
 
     onUploadFileSelected(files) {
         const tfiles = files.target.files;
-        MatrixClientPeg.get().getMediaLimits().then((limits) => {
-            this.uploadFiles(tfiles, limits);
-        }).catch(() => {
-            // HS can't or won't provide limits, so don't give any.
-            this.uploadFiles(tfiles, {});
-        });
+        this.uploadFiles(tfiles);
     }
 
-    isFileUploadAllowed(file, limits) {
-        if (limits.size != null && file.size > limits.size) {
-            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(limits.size)});
+    isFileUploadAllowed(file) {
+        if (this._uploadLimits.upload_size != null && file.size > this._uploadLimits.upload_size) {
+            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this._uploadLimits.upload_size)});
         }
         return true;
     }
@@ -123,7 +125,7 @@ export default class MessageComposer extends React.Component {
         const failedFiles = [];
 
         for (let i=0; i<files.length; i++) {
-            const fileAcceptedOrError = this.isFileUploadAllowed(files[i], limits);
+            const fileAcceptedOrError = this.isFileUploadAllowed(files[i]);
             if (fileAcceptedOrError === true) {
                 acceptedFiles.push(<li key={i}>
                     <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
