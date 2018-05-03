@@ -59,22 +59,6 @@ export default class ReplyThread extends React.Component {
         this.collapse = this.collapse.bind(this);
     }
 
-    static async getEvent(room, eventId) {
-        const event = room.findEventById(eventId);
-        if (event) return event;
-
-        try {
-            // ask the client to fetch the event we want using the context API, only interface to do so is to ask
-            // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
-            await this.context.matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
-        } catch (e) {
-            // if it fails catch the error and return early, there's no point trying to find the event in this case.
-            // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
-            return null;
-        }
-        return room.findEventById(eventId);
-    }
-
     static getParentEventId(ev) {
         if (!ev || ev.isRedacted()) return;
 
@@ -199,7 +183,7 @@ export default class ReplyThread extends React.Component {
     async initialize() {
         const {parentEv} = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
-        const ev = await ReplyThread.getEvent(this.room, ReplyThread.getParentEventId(parentEv));
+        const ev = await this.getEvent(ReplyThread.getParentEventId(parentEv));
         if (this.unmounted) return;
 
         if (ev) {
@@ -223,7 +207,7 @@ export default class ReplyThread extends React.Component {
             return;
         }
 
-        const loadedEv = await ReplyThread.getEvent(this.room, inReplyToEventId);
+        const loadedEv = await this.getEvent(inReplyToEventId);
         if (this.unmounted) return;
 
         if (loadedEv) {
@@ -231,6 +215,22 @@ export default class ReplyThread extends React.Component {
         } else {
             this.setState({err: true});
         }
+    }
+
+    async getEvent(eventId) {
+        const event = this.room.findEventById(eventId);
+        if (event) return event;
+
+        try {
+            // ask the client to fetch the event we want using the context API, only interface to do so is to ask
+            // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
+            await this.context.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
+        } catch (e) {
+            // if it fails catch the error and return early, there's no point trying to find the event in this case.
+            // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
+            return null;
+        }
+        return this.room.findEventById(eventId);
     }
 
     canCollapse() {
