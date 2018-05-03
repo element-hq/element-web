@@ -101,13 +101,15 @@ export default class MessageComposer extends React.Component {
         const tfiles = files.target.files;
         MatrixClientPeg.get().getMediaLimits().then((limits) => {
             this.uploadFiles(tfiles, limits);
+        }).catch(() => {
+            // HS can't or won't provide limits, so don't give any.
+            this.uploadFiles(tfiles, {});
         });
     }
 
     isFileUploadAllowed(file, limits) {
-        const sizeLimit = limits.size || -1;
-        if (sizeLimit !== -1 && file.size > sizeLimit) {
-            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(sizeLimit)});
+        if (limits.size != null && file.size > limits.size) {
+            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(limits.size)});
         }
         return true;
     }
