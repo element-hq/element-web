@@ -18,7 +18,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import expect from 'expect';
-import Promise from 'bluebird';
 
 import MockHttpBackend from 'matrix-mock-request';
 import MatrixClientPeg from '../../../src/MatrixClientPeg';
