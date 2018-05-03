@@ -16,6 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
+import filesize from "filesize";
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -97,18 +98,40 @@ export default class MessageComposer extends React.Component {
     }
 
     onUploadFileSelected(files) {
-        this.uploadFiles(files.target.files);
+        const tfiles = files.target.files;
+        MatrixClientPeg.get().getMediaLimits().then((limits) => {
+            this.uploadFiles(tfiles, limits);
+        });
     }
 
-    uploadFiles(files) {
+    isFileUploadAllowed(file, limits) {
+        const sizeLimit = limits.size || -1;
+        if (sizeLimit !== -1 && file.size > sizeLimit) {
+            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(sizeLimit)});
+        }
+        return true;
+    }
+
+    uploadFiles(files, limits) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const fileList = [];
+        const acceptedFiles = [];
+        const failedFiles = [];
+
         for (let i=0; i<files.length; i++) {
-            fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
-            </li>);
+            const fileAcceptedOrError = this.isFileUploadAllowed(files[i], limits);
+            if (fileAcceptedOrError === true) {
+                acceptedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
+                </li>);
+                fileList.push(files[i]);
+            } else {
+                failedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') } <b>{ _t('Reason') + ": " + fileAcceptedOrError}</b>
+                </li>);
+            }
         }
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
@@ -119,23 +142,39 @@ export default class MessageComposer extends React.Component {
             }</p>;
         }
 
+        const acceptedFilesPart = acceptedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('Are you sure you want to upload the following files?') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { acceptedFiles }
+                </ul>
+            </div>
+        );
+
+        const failedFilesPart = failedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('The following files cannot be uploaded:') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { failedFiles }
+                </ul>
+            </div>
+        );
+
         Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
-                    <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                        { fileList }
-                    </ul>
+                    { acceptedFilesPart }
+                    { failedFilesPart }
                     { replyToWarning }
                 </div>
             ),
             onFinished: (shouldUpload) => {
                 if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-                    if (files) {
-                        for (let i=0; i<files.length; i++) {
-                            this.props.uploadFile(files[i]);
+                    if (fileList) {
+                        for (let i=0; i<fileList.length; i++) {
+                            this.props.uploadFile(fileList[i]);
                         }
                     }
                 }
