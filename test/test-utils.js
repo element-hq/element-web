@@ -74,6 +74,7 @@ export function createTestClient() {
         getPushActionsForEvent: sinon.stub(),
         getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
+        getGroups: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
@@ -300,4 +301,24 @@ export function wrapInMatrixClientContext(WrappedComponent) {
         }
     }
     return Wrapper;
+}
+
+/**
+ * Call fn before calling componentDidUpdate on a react component instance, inst.
+ * @param {React.Component} inst an instance of a React component.
+ * @returns {Promise} promise that resolves when componentDidUpdate is called on
+ *                    given component instance.
+ */
+export function waitForUpdate(inst) {
+    return new Promise((resolve, reject) => {
+        const cdu = inst.componentDidUpdate;
+
+        inst.componentDidUpdate = (prevProps, prevState, snapshot) => {
+            resolve();
+
+            if (cdu) cdu(prevProps, prevState, snapshot);
+
+            inst.componentDidUpdate = cdu;
+        };
+    });
 }
