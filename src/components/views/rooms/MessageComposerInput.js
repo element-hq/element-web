@@ -237,7 +237,13 @@ export default class MessageComposerInput extends React.Component {
 
         return EditorState.moveFocusToEnd(editorState);
 */
-        return value;        
+        if (value) {
+            // create with this value
+        }
+        else {
+            value = Value.create();
+        }
+        return value;
     }
 
     componentDidMount() {
@@ -262,7 +268,7 @@ export default class MessageComposerInput extends React.Component {
 
     onAction = (payload) => {
         const editor = this.refs.editor;
-        let contentState = this.state.editorState.getCurrentContent();
+        let editorState = this.state.editorState;
 
         switch (payload.action) {
             case 'reply_to_event':
@@ -1030,6 +1036,7 @@ export default class MessageComposerInput extends React.Component {
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
     setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
+/*        
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {
@@ -1084,6 +1091,7 @@ export default class MessageComposerInput extends React.Component {
 
         // for some reason, doing this right away does not update the editor :(
         // setTimeout(() => this.refs.editor.focus(), 50);
+*/        
         return true;
     };
 
@@ -1102,7 +1110,7 @@ export default class MessageComposerInput extends React.Component {
 
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
      buttons. */
-    getSelectionInfo(editorState: EditorState) {
+    getSelectionInfo(editorState: Value) {
         return {};
 /*
         const styleName = {
@@ -1136,7 +1144,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     getAutocompleteQuery(contentState: ContentState) {
-        return [];
+        return '';
 
         // Don't send markdown links to the autocompleter
         // return this.removeMDLinks(contentState, ['@', '#']);
@@ -1184,10 +1192,19 @@ export default class MessageComposerInput extends React.Component {
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
+        let hidePlaceholder = false;
+        // FIXME: in case we need to implement manual placeholdering
+
         const className = classNames('mx_MessageComposer_input', {
             mx_MessageComposer_input_empty: hidePlaceholder,
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
+
+        const content = null;
+        const selection = {
+            start: 0,
+            end: 0,
+        };
 
         // const content = activeEditorState.getCurrentContent();
         // const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
@@ -1214,6 +1231,7 @@ export default class MessageComposerInput extends React.Component {
                     <Editor ref="editor"
                             dir="auto"
                             placeholder={this.props.placeholder}
+                            value={this.state.editorState}
                             /*
                             editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}
