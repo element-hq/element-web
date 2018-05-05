@@ -16,17 +16,33 @@
 
 import { getCurrentLanguage, _t, _td } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
-import SdkConfig, { DEFAULTS } from './SdkConfig';
+import SdkConfig from './SdkConfig';
 import Modal from './Modal';
 import sdk from './index';
 
-function getRedactedHash() {
-    return window.location.hash.replace(/#\/(group|room|user)\/(.+)/, "#/$1/<redacted>");
+const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
+const hashVarRegex = /#\/(group|room|user)\/.*$/;
+
+// Remove all but the first item in the hash path. Redact unexpected hashes.
+function getRedactedHash(hash) {
+    // Don't leak URLs we aren't expecting - they could contain tokens/PII
+    const match = hashRegex.exec(hash);
+    if (!match) {
+        console.warn(`Unexpected hash location "${hash}"`);
+        return '#/<unexpected hash location>';
+    }
+
+    if (hashVarRegex.test(hash)) {
+        return hash.replace(hashVarRegex, "#/$1/<redacted>");
+    }
+
+    return hash.replace(hashRegex, "#/$1");
 }
 
+// Return the current origin and hash separated with a `/`. This does not include query parameters.
 function getRedactedUrl() {
-    // hardcoded url to make piwik happy
-    return 'https://riot.im/app/' + getRedactedHash();
+    const { origin, pathname, hash } = window.location;
+    return origin + pathname + getRedactedHash(hash);
 }
 
 const customVariables = {
@@ -148,9 +164,6 @@ class Analytics {
     }
 
     trackPageChange(generationTimeMs) {
-        if (typeof generationTimeMs !== 'number') {
-            throw new Error('Analytics.trackPageChange: expected generationTimeMs to be a number');
-        }
         if (this.disabled) return;
         if (this.firstPage) {
             // De-duplicate first page
@@ -158,8 +171,15 @@ class Analytics {
             this.firstPage = false;
             return;
         }
+
+        if (typeof generationTimeMs === 'number') {
+            this._paq.push(['setGenerationTimeMs', generationTimeMs]);
+        } else {
+            console.warn('Analytics.trackPageChange: expected generationTimeMs to be a number');
+            // But continue anyway because we still want to track the change
+        }
+
         this._paq.push(['setCustomUrl', getRedactedUrl()]);
-        this._paq.push(['setGenerationTimeMs', generationTimeMs]);
         this._paq.push(['trackPageView']);
     }
 
@@ -174,6 +194,7 @@ class Analytics {
     }
 
     _setVisitVariable(key, value) {
+        if (this.disabled) return;
         this._paq.push(['setCustomVariable', customVariables[key].id, key, value, 'visit']);
     }
 
@@ -181,8 +202,10 @@ class Analytics {
         if (this.disabled) return;
 
         const config = SdkConfig.get();
-        const whitelistedHSUrls = config.piwik.whitelistedHSUrls || DEFAULTS.piwik.whitelistedHSUrls;
-        const whitelistedISUrls = config.piwik.whitelistedISUrls || DEFAULTS.piwik.whitelistedISUrls;
+        if (!config.piwik) return;
+
+        const whitelistedHSUrls = config.piwik.whitelistedHSUrls || [];
+        const whitelistedISUrls = config.piwik.whitelistedISUrls || [];
 
         this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
@@ -199,11 +222,25 @@ class Analytics {
         const rows = Object.values(customVariables).map((v) => Tracker.getCustomVariable(v.id)).filter(Boolean);
 
         const resolution = `${window.screen.width}x${window.screen.height}`;
+        const otherVariables = [
+            {
+                expl: _td('Every page you use in the app'),
+                value: _t(
+                    'e.g. <CurrentPageURL>',
+                    {},
+                    {
+                        CurrentPageURL: getRedactedUrl(),
+                    },
+                ),
+            },
+            { expl: _td('Your User Agent'), value: navigator.userAgent },
+            { expl: _td('Your device resolution'), value: resolution },
+        ];
 
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
-            description: <div>
+            description: <div className="mx_UserSettings_analyticsModal">
                 <div>
                     { _t('The information being sent to us to help make Riot.im better includes:') }
                 </div>
@@ -212,19 +249,14 @@ class Analytics {
                         <td>{ _t(customVariables[row[0]].expl) }</td>
                         <td><code>{ row[1] }</code></td>
                     </tr>) }
-                </table>
-                <br />
-                <div>
-                    { _t('We also record each page you use in the app (currently <CurrentPageHash>), your User Agent'
-                        + ' (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).',
-                        {},
-                        {
-                            CurrentPageHash: <code>{ getRedactedHash() }</code>,
-                            CurrentUserAgent: <code>{ navigator.userAgent }</code>,
-                            CurrentDeviceResolution: <code>{ resolution }</code>,
-                        },
+                    { otherVariables.map((item, index) =>
+                        <tr key={index}>
+                            <td>{ _t(item.expl) }</td>
+                            <td><code>{ item.value }</code></td>
+                        </tr>,
                     ) }
-
+                </table>
+                <div>
                     { _t('Where this page includes identifiable information, such as a room, '
                         + 'user or group ID, that data is removed before being sent to the server.') }
                 </div>

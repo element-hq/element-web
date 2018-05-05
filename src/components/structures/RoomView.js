@@ -908,17 +908,17 @@ module.exports = React.createClass({
         this.setState({ draggingFile: false });
     },
 
-    uploadFile: function(file) {
+    uploadFile: async function(file) {
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
-        ContentMessages.sendContentToRoom(
-            file, this.state.room.roomId, MatrixClientPeg.get(),
-        ).catch((error) => {
+        try {
+            await ContentMessages.sendContentToRoom(file, this.state.room.roomId, MatrixClientPeg.get());
+        } catch (error) {
             if (error.name === "UnknownDeviceError") {
-                // Let the staus bar handle this
+                // Let the status bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -928,6 +928,14 @@ module.exports = React.createClass({
                 description: ((error && error.message)
                     ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
+
+            // bail early to avoid calling the dispatch below
+            return;
+        }
+
+        // Send message_sent callback, for things like _checkIfAlone because after all a file is still a message.
+        dis.dispatch({
+            action: 'message_sent',
         });
     },
 

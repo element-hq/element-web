@@ -11,8 +11,10 @@ set -x
 # install the other dependencies
 npm install
 
-# we may be using a dev branch of js-sdk in which case we need to build it
-(cd node_modules/matrix-js-sdk && npm install)
+scripts/fetchdep.sh matrix-org matrix-js-sdk
+rm -r node_modules/matrix-js-sdk || true
+ln -s ../matrix-js-sdk node_modules/matrix-js-sdk
+(cd matrix-js-sdk && npm install)
 
 # run the mocha tests
 npm run test -- --no-colors

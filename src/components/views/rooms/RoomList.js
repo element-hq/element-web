@@ -30,7 +30,7 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -83,8 +83,6 @@ module.exports = React.createClass({
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
         const dmRoomMap = DMRoomMap.shared();
-        this._groupStores = {};
-        this._groupStoreTokens = [];
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
         // in the room list when filtering by that tag.
         this._visibleRoomsForGroup = {
@@ -93,22 +91,22 @@ module.exports = React.createClass({
         // All rooms that should be kept in the room list when filtering.
         // By default, show all rooms.
         this._visibleRooms = MatrixClientPeg.get().getRooms();
-        // When the selected tags are changed, initialise a group store if necessary
-        this._tagStoreToken = TagOrderStore.addListener(() => {
+
+        // Listen to updates to group data. RoomList cares about members and rooms in order
+        // to filter the room list when group tags are selected.
+        this._groupStoreToken = GroupStore.registerListener(null, () => {
             (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
-                if (tag[0] !== '+' || this._groupStores[tag]) {
+                if (tag[0] !== '+') {
                     return;
                 }
-                this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
-                this._groupStoreTokens.push(
-                    this._groupStores[tag].registerListener(() => {
-                        // This group's rooms or members may have updated, update rooms for its tag
-                        this.updateVisibleRoomsForTag(dmRoomMap, tag);
-                        this.updateVisibleRooms();
-                    }),
-                );
+                // This group's rooms or members may have updated, update rooms for its tag
+                this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                this.updateVisibleRooms();
             });
-            // Filters themselves have changed, refresh the selected tags
+        });
+
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            // Filters themselves have changed
             this.updateVisibleRooms();
         });
 
@@ -183,9 +181,9 @@ module.exports = React.createClass({
             this._roomListStoreToken.remove();
         }
 
-        if (this._groupStoreTokens.length > 0) {
-            // NB: GroupStore is not a Flux.Store
-            this._groupStoreTokens.forEach((token) => token.unregister());
+        // NB: GroupStore is not a Flux.Store
+        if (this._groupStoreToken) {
+            this._groupStoreToken.unregister();
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -259,12 +257,11 @@ module.exports = React.createClass({
     updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
         // For now, only handle group tags
-        const store = this._groupStores[tag];
-        if (!store) return;
+        if (tag[0] !== '+') return;
 
         this._visibleRoomsForGroup[tag] = [];
-        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
-        store.getGroupMembers().forEach((member) => {
+        GroupStore.getGroupRooms(tag).forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
+        GroupStore.getGroupMembers(tag).forEach((member) => {
             if (member.userId === MatrixClientPeg.get().credentials.userId) return;
             dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
                 (roomId) => this._visibleRoomsForGroup[tag].push(roomId),

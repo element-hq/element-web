@@ -50,13 +50,13 @@ limitations under the License.
     margin-right: 0px;
 }
 
-.mx_FilePanel .mx_EventTile .mx_MImageBody_download {
+.mx_FilePanel .mx_EventTile .mx_MFileBody_download {
     display: flex;
     font-size: 14px;
     color: $event-timestamp-color;
 }
 
-.mx_FilePanel .mx_EventTile .mx_MImageBody_downloadLink {
+.mx_FilePanel .mx_EventTile .mx_MFileBody_downloadLink {
     flex: 1 1 auto;
     color: $light-fg-color;
 }

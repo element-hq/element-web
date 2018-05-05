@@ -101,8 +101,13 @@ export default class UserProvider extends AutocompleteProvider {
 
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
-        if (command) {
-            completions = this.matcher.match(command[0]).map((user) => {
+
+        if (!command) return completions;
+
+        const fullMatch = command[0];
+        // Don't search if the query is a single "@"
+        if (fullMatch && fullMatch !== '@') {
+            completions = this.matcher.match(fullMatch).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     // Length of completion should equal length of text in decorator. draft-js

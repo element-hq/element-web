@@ -27,7 +27,7 @@ import Analytics from '../../Analytics';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
-import GroupStoreCache from '../../stores/GroupStoreCache';
+import GroupStore from '../../stores/GroupStore';
 
 import { formatCount } from '../../utils/FormattingUtils';
 
@@ -120,7 +120,7 @@ module.exports = React.createClass({
         if (this.context.matrixClient) {
             this.context.matrixClient.removeListener("RoomState.members", this.onRoomStateMember);
         }
-        this._unregisterGroupStore();
+        this._unregisterGroupStore(this.props.groupId);
     },
 
     getInitialState: function() {
@@ -132,26 +132,23 @@ module.exports = React.createClass({
 
     componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
-            this._unregisterGroupStore();
+            this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
     },
 
     _initGroupStore(groupId) {
         if (!groupId) return;
-        this._groupStore = GroupStoreCache.getGroupStore(groupId);
-        this._groupStore.registerListener(this.onGroupStoreUpdated);
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
     },
 
     _unregisterGroupStore() {
-        if (this._groupStore) {
-            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
-        }
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
     },
 
     onGroupStoreUpdated: function() {
         this.setState({
-            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+            isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
     },
 

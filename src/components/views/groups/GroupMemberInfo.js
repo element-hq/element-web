@@ -23,7 +23,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -47,33 +47,37 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this._initGroupStore(this.props.groupId);
     },
 
     componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
-            this._unregisterGroupStore();
+            this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
     },
 
-    _initGroupStore(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
-        this._groupStore.registerListener(this.onGroupStoreUpdated);
+    componentWillUnmount() {
+        this._unmounted = true;
+        this._unregisterGroupStore(this.props.groupId);
     },
 
-    _unregisterGroupStore() {
-        if (this._groupStore) {
-            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
-        }
+    _initGroupStore(groupId) {
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
+    },
+
+    _unregisterGroupStore(groupId) {
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
     },
 
     onGroupStoreUpdated: function() {
+        if (this._unmounted) return;
         this.setState({
-            isUserInvited: this._groupStore.getGroupInvitedMembers().some(
+            isUserInvited: GroupStore.getGroupInvitedMembers(this.props.groupId).some(
                 (m) => m.userId === this.props.groupMember.userId,
             ),
-            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+            isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
     },
 

@@ -1,5 +1,6 @@
 /*
 Copyright 2017 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -105,19 +106,14 @@ export default class BugReportDialog extends React.Component {
 
     render() {
         const Loader = sdk.getComponent("elements.Spinner");
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         let error = null;
         if (this.state.err) {
             error = <div className="error">
                 {this.state.err}
             </div>;
-        }
-
-        let cancelButton = null;
-        if (!this.state.busy) {
-            cancelButton = <button onClick={this._onCancel}>
-                { _t("Cancel") }
-            </button>;
         }
 
         let progress = null;
@@ -131,11 +127,11 @@ export default class BugReportDialog extends React.Component {
         }
 
         return (
-            <div className="mx_BugReportDialog">
-                <div className="mx_Dialog_title">
-                    { _t("Submit debug logs") }
-                </div>
-                <div className="mx_Dialog_content">
+            <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
+                    title={_t('Submit debug logs')}
+                contentId='mx_Dialog_content'
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>
                         { _t(
                             "Debug logs contain application usage data including your " +
@@ -146,7 +142,7 @@ export default class BugReportDialog extends React.Component {
                     </p>
                     <p>
                         { _t(
-                            "<a>Click here</a> to create a GitHub issue.",
+                            "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.",
                             {},
                             {
                                 a: (sub) => <a
@@ -191,19 +187,13 @@ export default class BugReportDialog extends React.Component {
                     {progress}
                     {error}
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button
-                        className="mx_Dialog_primary danger"
-                        onClick={this._onSubmit}
-                        autoFocus={true}
-                        disabled={this.state.busy}
-                    >
-                        { _t("Send logs") }
-                    </button>
-
-                    {cancelButton}
-                </div>
-            </div>
+                <DialogButtons primaryButton={_t("Send logs")}
+                    onPrimaryButtonClick={this._onSubmit}
+                    focus={true}
+                    onCancel={this._onCancel}
+                    disabled={this.state.busy}
+                />
+            </BaseDialog>
         );
     }
 }
