@@ -22,7 +22,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 
 import Html from 'slate-html-serializer';
-import Markdown as Md from 'slate-md-serializer';
+import { Markdown as Md } from 'slate-md-serializer';
 import Plain from 'slate-plain-serializer';
 
 // import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
@@ -1103,6 +1103,10 @@ export default class MessageComposerInput extends React.Component {
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
      buttons. */
     getSelectionInfo(editorState: EditorState) {
+        return {
+            [], null
+        };
+/*
         const styleName = {
             BOLD: _td('bold'),
             ITALIC: _td('italic'),
@@ -1130,13 +1134,17 @@ export default class MessageComposerInput extends React.Component {
             style,
             blockType,
         };
+*/
     }
 
     getAutocompleteQuery(contentState: ContentState) {
+        return [];
+
         // Don't send markdown links to the autocompleter
-        return this.removeMDLinks(contentState, ['@', '#']);
+        // return this.removeMDLinks(contentState, ['@', '#']);
     }
 
+/*
     removeMDLinks(contentState: ContentState, prefixes: string[]) {
         const plaintext = contentState.getPlainText();
         if (!plaintext) return '';
@@ -1169,7 +1177,7 @@ export default class MessageComposerInput extends React.Component {
             }
         });
     }
-
+*/
     onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
@@ -1178,25 +1186,14 @@ export default class MessageComposerInput extends React.Component {
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
-        // From https://github.com/facebook/draft-js/blob/master/examples/rich/rich.html#L92
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it.
-        let hidePlaceholder = false;
-        const contentState = activeEditorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                hidePlaceholder = true;
-            }
-        }
-
         const className = classNames('mx_MessageComposer_input', {
             mx_MessageComposer_input_empty: hidePlaceholder,
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
-        const content = activeEditorState.getCurrentContent();
-        const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
-            activeEditorState.getCurrentContent().getBlocksAsArray());
+        // const content = activeEditorState.getCurrentContent();
+        // const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
+        //     activeEditorState.getCurrentContent().getBlocksAsArray());
 
         return (
             <div className="mx_MessageComposer_input_wrapper">
@@ -1219,6 +1216,7 @@ export default class MessageComposerInput extends React.Component {
                     <Editor ref="editor"
                             dir="auto"
                             placeholder={this.props.placeholder}
+                            /*
                             editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}
                             blockStyleFn={MessageComposerInput.getBlockStyle}
@@ -1232,7 +1230,9 @@ export default class MessageComposerInput extends React.Component {
                             onUpArrow={this.onUpArrow}
                             onDownArrow={this.onDownArrow}
                             onEscape={this.onEscape}
-                            spellCheck={true} />
+                            spellCheck={true}
+                            */
+                            />
                 </div>
             </div>
         );
