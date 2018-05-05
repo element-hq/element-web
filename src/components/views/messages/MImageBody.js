@@ -163,8 +163,7 @@ export default class extends React.Component {
             return this.state.decryptedUrl;
         } else if (content.info &&
                    content.info.mimetype == "image/svg+xml" &&
-                   content.info.thumbnail_url)
-        {
+                   content.info.thumbnail_url) {
             // special case to return client-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
