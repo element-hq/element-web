@@ -1103,9 +1103,7 @@ export default class MessageComposerInput extends React.Component {
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
      buttons. */
     getSelectionInfo(editorState: EditorState) {
-        return {
-            [], null
-        };
+        return {};
 /*
         const styleName = {
             BOLD: _td('bold'),
