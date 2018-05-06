@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
+import { Value, Document } from 'slate';
 
 import Html from 'slate-html-serializer';
 import { Markdown as Md } from 'slate-md-serializer';
@@ -238,12 +238,17 @@ export default class MessageComposerInput extends React.Component {
         return EditorState.moveFocusToEnd(editorState);
 */
         if (value) {
-            // create with this value
+            // create from the existing value...
         }
         else {
-            value = Value.create();
+            // ...or create a new one.
         }
-        return value;
+
+        return Value.create({
+            document: Document.create({
+                nodes: [],
+            }),
+        });
     }
 
     componentDidMount() {
@@ -394,6 +399,7 @@ export default class MessageComposerInput extends React.Component {
 
     // Called by Draft to change editor contents
     onEditorContentChanged = (editorState: EditorState) => {
+/*        
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
         const currentBlock = editorState.getSelection().getStartKey();
@@ -449,7 +455,7 @@ export default class MessageComposerInput extends React.Component {
                 editorState = EditorState.forceSelection(editorState, newContentState.getSelectionAfter());
             }
         }
-
+*/
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
@@ -466,6 +472,7 @@ export default class MessageComposerInput extends React.Component {
      * @param callback
      */
     setState(state, callback) {
+/*            
         if (state.editorState != null) {
             state.editorState = RichText.attachImmutableEntitiesToEmoji(
                 state.editorState);
@@ -501,12 +508,12 @@ export default class MessageComposerInput extends React.Component {
                 state.originalEditorState = null;
             }
         }
-
+*/        
         super.setState(state, () => {
             if (callback != null) {
                 callback();
             }
-
+/*
             const textContent = this.state.editorState.getCurrentContent().getPlainText();
             const selection = RichText.selectionStateToTextOffsets(
                 this.state.editorState.getSelection(),
@@ -522,6 +529,7 @@ export default class MessageComposerInput extends React.Component {
                 let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
                 editorRoot.scrollTop = editorRoot.scrollHeight;
             }
+*/        
         });
     }
 
@@ -1230,11 +1238,11 @@ export default class MessageComposerInput extends React.Component {
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
                             dir="auto"
+                            className="mx_MessageComposer_editor"
                             placeholder={this.props.placeholder}
                             value={this.state.editorState}
-                            /*
-                            editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}
+                            /*
                             blockStyleFn={MessageComposerInput.getBlockStyle}
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}

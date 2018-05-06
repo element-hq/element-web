@@ -84,6 +84,14 @@ limitations under the License.
     margin-right: 6px;
 }
 
+.mx_MessageComposer_editor {
+    width: 100%;
+    flex: 1;
+    max-height: 120px;
+    min-height: 21px;
+    overflow: auto;
+}
+
 @keyframes visualbell
 {
     from { background-color: #faa }
