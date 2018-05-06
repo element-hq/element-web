@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
-import { Value, Document } from 'slate';
+import { Value, Document, Event } from 'slate';
 
 import Html from 'slate-html-serializer';
 import { Markdown as Md } from 'slate-md-serializer';
@@ -539,15 +539,12 @@ export default class MessageComposerInput extends React.Component {
             // const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
             // contentState = RichText.htmlToContentState(md.toHTML());
 
-            const plain = new Plain({});
-            const md = new Md({});
-            value = md.deserialize(plain.serialize(this.state.editorState));
+            value = Md.deserialize(Plain.serialize(this.state.editorState));
         } else {
             // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             // value = ContentState.createFromText(markdown);
 
-            const markdown = new Markdown({});
-            value = Value({ data: markdown.serialize(value) });
+            value = Plain.deserialize(Md.serialize(this.state.editorState));
         }
 
         Analytics.setRichtextMode(enabled);
@@ -557,6 +554,12 @@ export default class MessageComposerInput extends React.Component {
             isRichtextEnabled: enabled,
         });
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
+    }
+
+    onKeyDown = (ev: Event, change: Change, editor: Editor) => {
+        if (ev.keyCode === KeyCode.ENTER) {
+            return this.handleReturn(ev);
+        }
     }
 
     handleKeyCommand = (command: string): boolean => {
@@ -721,10 +724,7 @@ export default class MessageComposerInput extends React.Component {
         }
 */
 
-        const plain = new Plain({});
-        value = md.deserialize();
-
-        let contentText = plain.serialize(contentState);
+        let contentText = Plain.serialize(contentState);
         let contentHTML;
 
 /*
@@ -808,10 +808,10 @@ export default class MessageComposerInput extends React.Component {
                 shouldSendHTML = hasLink;
             }
 */
-            let shouldSendHTML = true;            
+            let shouldSendHTML = true;
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
-                    RichText.contentStateToHTML(contentState),
+                    RichText.editorStateToHTML(contentState),
                 );
             }
         } else {
@@ -840,11 +840,12 @@ export default class MessageComposerInput extends React.Component {
                 return blockText;
             }).join('\n');
 */
-            const md = new Markdown(pt);
+            const md = new Markdown(contentText);
             // if contains no HTML and we're not quoting (needing HTML)
             if (md.isPlainText() && !mustSendHTML) {
                 contentText = md.toPlaintext();
             } else {
+                contentText = md.toPlaintext();
                 contentHTML = md.toHTML();
             }
         }
@@ -898,7 +899,6 @@ export default class MessageComposerInput extends React.Component {
             });
         }
 
-
         this.client.sendMessage(this.props.room.roomId, content).then((res) => {
             dis.dispatch({
                 action: 'message_sent',
@@ -909,7 +909,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.setState({
             editorState: this.createEditorState(),
-        });
+        }, ()=>{ this.refs.editor.focus() });
 
         return true;
     };
@@ -1237,6 +1237,7 @@ export default class MessageComposerInput extends React.Component {
                             placeholder={this.props.placeholder}
                             value={this.state.editorState}
                             onChange={this.onEditorContentChanged}
+                            onKeyDown={this.onKeyDown}
                             /*
                             blockStyleFn={MessageComposerInput.getBlockStyle}
                             keyBindingFn={MessageComposerInput.getKeyBinding}

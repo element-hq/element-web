@@ -1,4 +1,24 @@
+/*
+Copyright 2015 - 2017 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React from 'react';
+
+/*
 import {
     Editor,
     EditorState,
@@ -12,11 +32,15 @@ import {
     SelectionState,
     Entity,
 } from 'draft-js';
+import { stateToMarkdown as __stateToMarkdown } from 'draft-js-export-markdown';
+*/
+
+import Html from 'slate-html-serializer';
+
 import * as sdk from './index';
 import * as emojione from 'emojione';
-import {stateToHTML} from 'draft-js-export-html';
-import {SelectionRange} from "./autocomplete/Autocompleter";
-import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
+
+import { SelectionRange } from "./autocomplete/Autocompleter";
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -33,6 +57,7 @@ const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+
 export function stateToMarkdown(state) {
     return __stateToMarkdown(state)
         .replace(
@@ -40,19 +65,12 @@ export function stateToMarkdown(state) {
             ''); // this is *not* a zero width space, trust me :)
 }
 
-export const contentStateToHTML = (contentState: ContentState) => {
-    return stateToHTML(contentState, {
-        inlineStyles: {
-            UNDERLINE: {
-                element: 'u',
-            },
-        },
-    });
-};
+export const editorStateToHTML = (editorState: Value) => {
+    return Html.deserialize(editorState);
+}
 
-export function htmlToContentState(html: string): ContentState {
-    const blockArray = convertFromHTML(html).contentBlocks;
-    return ContentState.createFromBlockArray(blockArray);
+export function htmlToEditorState(html: string): Value {
+    return Html.serialize(html);
 }
 
 function unicodeToEmojiUri(str) {

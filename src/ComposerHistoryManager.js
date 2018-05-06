@@ -34,17 +34,15 @@ class HistoryItem {
     format: MessageFormat = 'rich';
 
     constructor(value: ?Value, format: ?MessageFormat) {
-        this.rawContentState = contentState ? convertToRaw(contentState) : null;
+        this.value = value;
         this.format = format;
-
     }
 
     toValue(outputFormat: MessageFormat): Value {
         if (outputFormat === 'markdown') {
             if (this.format === 'rich') {
                 // convert a rich formatted history entry to its MD equivalent
-                const markdown = new Markdown({});
-                return new Value({ data: markdown.serialize(value) });
+                return Plain.deserialize(Md.serialize(value));
                 // return ContentState.createFromText(RichText.stateToMarkdown(contentState));
             }
             else if (this.format === 'markdown') {
@@ -53,9 +51,7 @@ class HistoryItem {
         } else if (outputFormat === 'rich') {
             if (this.format === 'markdown') {
                 // convert MD formatted string to its rich equivalent.
-                const plain = new Plain({});
-                const md = new Md({});
-                return md.deserialize(plain.serialize(value));
+                return Md.deserialize(Plain.serialize(value));
                 // return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
             }
             else if (this.format === 'rich') {
