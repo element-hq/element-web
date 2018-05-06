@@ -237,18 +237,13 @@ export default class MessageComposerInput extends React.Component {
 
         return EditorState.moveFocusToEnd(editorState);
 */
-        if (value) {
-            // create from the existing value...
+        if (value instanceof Value) {
+            return value;
         }
         else {
             // ...or create a new one.
+            return Plain.deserialize('')
         }
-
-        return Value.create({
-            document: Document.create({
-                nodes: [],
-            }),
-        });
     }
 
     componentDidMount() {
@@ -398,7 +393,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     // Called by Draft to change editor contents
-    onEditorContentChanged = (editorState: EditorState) => {
+    onEditorContentChanged = (change: Change) => {
 /*        
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
@@ -458,7 +453,7 @@ export default class MessageComposerInput extends React.Component {
 */
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
-            editorState,
+            editorState: change.value,
             originalEditorState: null,
         });
     };
