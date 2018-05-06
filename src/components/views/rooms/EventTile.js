@@ -202,17 +202,12 @@ module.exports = withMatrixClient(React.createClass({
             return true;
         }
 
-        if (!this._propsEqual(this.props, nextProps)) {
-            return true;
-        }
-
-        return false;
+        return !this._propsEqual(this.props, nextProps);
     },
 
     componentWillUnmount: function() {
         const client = this.props.matrixClient;
-        client.removeListener("deviceVerificationChanged",
-                              this.onDeviceVerificationChanged);
+        client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
     },
 
@@ -227,7 +222,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onDeviceVerificationChanged: function(userId, device) {
-        if (userId == this.props.mxEvent.getSender()) {
+        if (userId === this.props.mxEvent.getSender()) {
             this._verifyEvent(this.props.mxEvent);
         }
     },
@@ -262,7 +257,7 @@ module.exports = withMatrixClient(React.createClass({
             }
 
             // need to deep-compare readReceipts
-            if (key == 'readReceipts') {
+            if (key === 'readReceipts') {
                 const rA = objA[key];
                 const rB = objB[key];
                 if (rA === rB) {
@@ -336,7 +331,7 @@ module.exports = withMatrixClient(React.createClass({
     getReadAvatars: function() {
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return (<span className="mx_EventTile_readAvatars"></span>);
+            return (<span className="mx_EventTile_readAvatars" />);
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -360,7 +355,7 @@ module.exports = withMatrixClient(React.createClass({
             left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
             const userId = receipt.roomMember.userId;
-            var readReceiptInfo;
+            let readReceiptInfo;
 
             if (this.props.readReceiptMap) {
                 readReceiptInfo = this.props.readReceiptMap[userId];
@@ -502,17 +497,17 @@ module.exports = withMatrixClient(React.createClass({
             mx_EventTile: true,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
-            mx_EventTile_encrypting: this.props.eventSendStatus == 'encrypting',
+            mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
             mx_EventTile_sending: isSending,
-            mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
-            mx_EventTile_highlight: this.props.tileShape == 'notif' ? false : this.shouldHighlight(),
+            mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
+            mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
             mx_EventTile_contextual: this.props.contextual,
             menu: this.state.menu,
-            mx_EventTile_verified: this.state.verified == true,
-            mx_EventTile_unverified: this.state.verified == false,
+            mx_EventTile_verified: this.state.verified === true,
+            mx_EventTile_unverified: this.state.verified === false,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_redacted: isRedacted,
@@ -522,7 +517,8 @@ module.exports = withMatrixClient(React.createClass({
 
         const readAvatars = this.getReadAvatars();
 
-        let avatar, sender;
+        let avatar;
+        let sender;
         let avatarSize;
         let needsSenderProfile;
 
