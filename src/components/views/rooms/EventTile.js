@@ -556,11 +556,14 @@ module.exports = withMatrixClient(React.createClass({
 
         if (needsSenderProfile) {
             let text = null;
-            if (!this.props.tileShape) {
+            if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
                 if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
                 else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
                 else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
-                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} enableFlair={!text} text={text} />;
+                sender = <SenderProfile onClick={this.onSenderProfileClick}
+                                        mxEvent={this.props.mxEvent}
+                                        enableFlair={!text}
+                                        text={text} />;
             } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
             }
