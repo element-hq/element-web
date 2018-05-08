@@ -1176,5 +1176,6 @@
     "Unable to reply": "Ezin erantzun",
     "At this time it is not possible to reply with an emote.": "Une honetan ezin da irriabartxo batekin erantzun.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ezin izan da erantzundako gertaera kargatu, edo ez dago edo ez duzu ikusteko baimenik.",
-    "Collapse Reply Thread": "Tolestu erantzun-haria"
+    "Collapse Reply Thread": "Tolestu erantzun-haria",
+    "Enable widget screenshots on supported widgets": "Gaitu trepeten pantaila-argazkiak onartzen duten trepetetan"
 }
