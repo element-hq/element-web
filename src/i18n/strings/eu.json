@@ -1171,5 +1171,10 @@
     "Clear Storage and Sign Out": "Garbitu biltegiratzea eta amaitu saioa",
     "Refresh": "Freskatu",
     "We encountered an error trying to restore your previous session.": "Errore bat aurkitu dugu zure aurreko saioa berrezartzen saiatzean.",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Zure nabigatzailearen biltegiratzea garbitzeak arazoa konpon lezake, baina saioa amaituko da eta zifratutako txaten historiala ezin izango da berriro irakurri."
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Zure nabigatzailearen biltegiratzea garbitzeak arazoa konpon lezake, baina saioa amaituko da eta zifratutako txaten historiala ezin izango da berriro irakurri.",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Une honetan ezin da fitxategi batekin erantzun, mezu arrunt eta ez erantzun gisa bidaliko da.",
+    "Unable to reply": "Ezin erantzun",
+    "At this time it is not possible to reply with an emote.": "Une honetan ezin da irriabartxo batekin erantzun.",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ezin izan da erantzundako gertaera kargatu, edo ez dago edo ez duzu ikusteko baimenik.",
+    "Collapse Reply Thread": "Tolestu erantzun-haria"
 }
