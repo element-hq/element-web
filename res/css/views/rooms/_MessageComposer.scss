@@ -78,7 +78,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     min-height: 60px;
-    justify-content: center;
+    justify-content: start;
     align-items: flex-start;
     font-size: 14px;
     margin-right: 6px;
@@ -86,9 +86,8 @@ limitations under the License.
 
 .mx_MessageComposer_editor {
     width: 100%;
-    flex: 1;
     max-height: 120px;
-    min-height: 21px;
+    min-height: 19px;
     overflow: auto;
 }
 
@@ -106,6 +105,7 @@ limitations under the License.
     display: none;
 }
 
+/*
 .mx_MessageComposer_input .DraftEditor-root {
     width: 100%;
     flex: 1;
@@ -114,6 +114,7 @@ limitations under the License.
     min-height: 21px;
     overflow: auto;
 }
+*/
 
 .mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
     /* Ensure mx_UserPill and mx_RoomPill (see _RichText) are not obscured from the top */

@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
@@ -101,6 +102,7 @@ export default class MessageComposerInput extends React.Component {
         onInputStateChanged: PropTypes.func,
     };
 
+/*
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
         // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
         // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
@@ -135,6 +137,7 @@ export default class MessageComposerInput extends React.Component {
 
         return null;
     }
+*/    
 
     client: MatrixClient;
     autocomplete: Autocomplete;
@@ -392,8 +395,7 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    // Called by Draft to change editor contents
-    onEditorContentChanged = (change: Change) => {
+    onChange = (change: Change) => {
 /*        
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
@@ -557,17 +559,25 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onKeyDown = (ev: Event, change: Change, editor: Editor) => {
-        if (ev.keyCode === KeyCode.ENTER) {
-            return this.handleReturn(ev);
+        switch (ev.keyCode) {
+            case KeyCode.ENTER:
+                return this.handleReturn(ev);
+            case KeyCode.UP:
+                return this.onVerticalArrow(ev, true);
+            case KeyCode.DOWN:
+                return this.onVerticalArrow(ev, false);
+            default:
+                // don't intercept it
+                return;
         }
     }
 
     handleKeyCommand = (command: string): boolean => {
-/*
         if (command === 'toggle-mode') {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
         }
+/*
         let newState: ?EditorState = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
@@ -699,12 +709,10 @@ export default class MessageComposerInput extends React.Component {
     };
 */
     handleReturn = (ev) => {
-/*        
         if (ev.shiftKey) {
-            this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
-            return true;
+            return;
         }
-
+/*
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
         if (
             ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
@@ -718,14 +726,11 @@ export default class MessageComposerInput extends React.Component {
         }
 */
         const contentState = this.state.editorState;
-/*
-        if (!contentState.hasText()) {
-            return true;
-        }
-*/
 
         let contentText = Plain.serialize(contentState);
         let contentHTML;
+
+        if (contentText === '') return true;
 
 /*
         // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
@@ -914,41 +919,39 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onUpArrow = (e) => {
-        this.onVerticalArrow(e, true);
-    };
-
-    onDownArrow = (e) => {
-        this.onVerticalArrow(e, false);
-    };
-
     onVerticalArrow = (e, up) => {
         if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
             return;
         }
 
-/*
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
-            // Don't go back in history if we're in the middle of a multi-line message
-            const selection = this.state.editorState.getSelection();
-            const blockKey = selection.getStartKey();
-            const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
-            const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
 
-            let canMoveUp = false;
-            let canMoveDown = false;
-            if (blockKey === firstBlock.getKey()) {
-                canMoveUp = selection.getStartOffset() === selection.getEndOffset() &&
-                    selection.getStartOffset() === 0;
+            // determine whether our cursor is at the top or bottom of the multiline
+            // input box by just looking at the position of the plain old DOM selection.
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const cursorRect = range.getBoundingClientRect();
+
+            const editorNode = ReactDOM.findDOMNode(this.refs.editor);
+            const editorRect = editorNode.getBoundingClientRect();
+
+            let navigateHistory = false;
+            if (up) {
+                let scrollCorrection = editorNode.scrollTop;
+                if (cursorRect.top - editorRect.top + scrollCorrection == 0) {
+                    navigateHistory = true;
+                }
+            }
+            else {
+                let scrollCorrection =
+                    editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
+                if (cursorRect.bottom - editorRect.bottom + scrollCorrection == 0) {
+                    navigateHistory = true;
+                }
             }
 
-            if (blockKey === lastBlock.getKey()) {
-                canMoveDown = selection.getStartOffset() === selection.getEndOffset() &&
-                    selection.getStartOffset() === lastBlock.getText().length;
-            }
-
-            if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
+            if (!navigateHistory) return;
 
             const selected = this.selectHistory(up);
             if (selected) {
@@ -959,10 +962,8 @@ export default class MessageComposerInput extends React.Component {
             this.moveAutocompleteSelection(up);
             e.preventDefault();
         }
-*/        
     };
 
-/*
     selectHistory = async (up) => {
         const delta = up ? -1 : 1;
 
@@ -984,26 +985,19 @@ export default class MessageComposerInput extends React.Component {
             return;
         }
 
-        const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'rich' : 'markdown');
-        if (!newContent) return false;
-        let editorState = EditorState.push(
-            this.state.editorState,
-            newContent,
-            'insert-characters',
-        );
+        let editorState = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'rich' : 'markdown');
 
         // Move selection to the end of the selected history
-        let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
-        newSelection = newSelection.merge({
-            focusOffset: newContent.getLastBlock().getLength(),
-            anchorOffset: newContent.getLastBlock().getLength(),
-        });
-        editorState = EditorState.forceSelection(editorState, newSelection);
+        const change = editorState.change().collapseToEndOf(editorState.document);
+        // XXX: should we be calling this.onChange(change) now?
+        // we skip it for now given we know we're about to setState anyway
+        editorState = change.value;
 
-        this.setState({editorState});
+        this.setState({ editorState }, ()=>{
+            this.refs.editor.focus();
+        });
         return true;
     };
-*/    
 
     onTab = async (e) => {
         this.setState({
@@ -1236,7 +1230,7 @@ export default class MessageComposerInput extends React.Component {
                             className="mx_MessageComposer_editor"
                             placeholder={this.props.placeholder}
                             value={this.state.editorState}
-                            onChange={this.onEditorContentChanged}
+                            onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
                             /*
                             blockStyleFn={MessageComposerInput.getBlockStyle}

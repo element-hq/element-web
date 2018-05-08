@@ -38,28 +38,44 @@ class HistoryItem {
         this.format = format;
     }
 
+    static fromJSON(obj): HistoryItem {
+        return new HistoryItem(
+            Value.fromJSON(obj.value),
+            obj.format
+        );
+    }
+
+    toJSON(): Object {
+        return {
+            value: this.value.toJSON(),
+            format: this.format
+        };
+    }
+
+    // FIXME: rather than supporting storing history in either format, why don't we pick
+    // one canonical form?
     toValue(outputFormat: MessageFormat): Value {
         if (outputFormat === 'markdown') {
             if (this.format === 'rich') {
                 // convert a rich formatted history entry to its MD equivalent
-                return Plain.deserialize(Md.serialize(value));
+                return Plain.deserialize(Md.serialize(this.value));
                 // return ContentState.createFromText(RichText.stateToMarkdown(contentState));
             }
             else if (this.format === 'markdown') {
-                return value;
+                return this.value;
             }
         } else if (outputFormat === 'rich') {
             if (this.format === 'markdown') {
                 // convert MD formatted string to its rich equivalent.
-                return Md.deserialize(Plain.serialize(value));
+                return Md.deserialize(Plain.serialize(this.value));
                 // return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
             }
             else if (this.format === 'rich') {
-                return value;
+                return this.value;
             }
         }
         log.error("unknown format -> outputFormat conversion");
-        return value;
+        return this.value;
     }
 }
 
@@ -76,7 +92,7 @@ export default class ComposerHistoryManager {
         let item;
         for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
             this.history.push(
-                Object.assign(new HistoryItem(), JSON.parse(item)),
+                HistoryItem.fromJSON(JSON.parse(item))
             );
         }
         this.lastIndex = this.currentIndex;
@@ -86,7 +102,7 @@ export default class ComposerHistoryManager {
         const item = new HistoryItem(value, format);
         this.history.push(item);
         this.currentIndex = this.lastIndex + 1;
-        sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item));
+        sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item.toJSON()));
     }
 
     getItem(offset: number, format: MessageFormat): ?Value {
