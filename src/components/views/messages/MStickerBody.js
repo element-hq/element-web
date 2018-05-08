@@ -40,6 +40,7 @@ export default class MStickerBody extends MImageBody {
     }
 
     _onImageLoad() {
+        this.fixupHeight();
         this.setState({
             placeholderClasses: 'mx_MStickerBody_placeholder_invisible',
         });
