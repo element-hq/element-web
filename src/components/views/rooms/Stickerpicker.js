@@ -164,8 +164,8 @@ export default class Stickerpicker extends React.Component {
                             room={this.props.room}
                             type={stickerpickerWidget.content.type}
                             fullWidth={true}
-                            userId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
-                            creatorUserId={MatrixClientPeg.get().credentials.userId}
+                            userId={MatrixClientPeg.get().credentials.userId}
+                            creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
                             waitForIframeLoad={true}
                             show={true}
                             showMenubar={true}
