@@ -1163,5 +1163,17 @@
     "e.g. <CurrentPageURL>": "z.B. <CurrentPageURL>",
     "Your User Agent": "Deine Browser-Kennung",
     "Your device resolution": "Deine Bildschirmauflösung",
-    "Popout widget": "Widget ausklinken"
+    "Popout widget": "Widget ausklinken",
+    "Always show encryption icons": "Immer Verschlüsselungssymbole zeigen",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Aktuell ist es nicht möglich mit einer Datei zu antworten, sodass diese gesendet wird ohne eine Antwort zu sein.",
+    "Unable to reply": "Antworten nicht möglich",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Das Ereignis auf das geantwortet wurde könnte nicht geladen werden, da es entweder nicht existiert oder du keine Berechtigung hast, dieses anzusehen.",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Riot-Fehler werden auf GitHub festgehalten: <a>Erzeuge ein GitHub-Issue</a>.",
+    "Log out and remove encryption keys?": "Abmelden und alle Verschlüsselungs-Schlüssel löschen?",
+    "Send Logs": "Sende Protokoll",
+    "Clear Storage and Sign Out": "Speicher leeren und abmelden",
+    "Refresh": "Neu laden",
+    "We encountered an error trying to restore your previous session.": "Wir haben ein Problem beim Wiederherstellen deiner vorherigen Sitzung festgestellt.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Den Browser-Speicher zu löschen kann das Problem lösen, wird dich aber abmelden und verschlüsselte Chats unlesbar machen.",
+    "Collapse Reply Thread": "Antwort-Thread zusammenklappen"
 }
