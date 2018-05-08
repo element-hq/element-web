@@ -178,6 +178,7 @@ export default class Stickerpicker extends React.Component {
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
                             whitelistCapabilities={['m.sticker']}
+                            userWidget={true}
                         />
                     </div>
                 </div>

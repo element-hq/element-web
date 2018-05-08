@@ -274,6 +274,11 @@ export default class AppTile extends React.Component {
     }
 
     _canUserModify() {
+        // User widgets should always be modifiable by their creator
+        if (this.props.userWidget && MatrixClientPeg.get().credentials.userId === this.props.creatorUserId) {
+            return true;
+        }
+        // Check if the current user can modify widgets in the current room
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     }
 
@@ -698,6 +703,8 @@ AppTile.propTypes = {
     // Optional function to be called on widget capability request
     // Called with an array of the requested capabilities
     onCapabilityRequest: PropTypes.func,
+    // Is this an instance of a user widget
+    userWidget: PropTypes.bool,
 };
 
 AppTile.defaultProps = {
@@ -710,4 +717,5 @@ AppTile.defaultProps = {
     showPopout: true,
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
+    userWidget: false,
 };
