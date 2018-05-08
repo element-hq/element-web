@@ -1163,5 +1163,18 @@
     "Your device resolution": "Rozlíšenie obrazovky vašeho zariadenia",
     "Popout widget": "Otvoriť widget v novom okne",
     "Missing roomId.": "Chýba ID miestnosti.",
-    "Picture": "Vytvoriť snímku"
+    "Picture": "Vytvoriť snímku",
+    "Always show encryption icons": "Vždy zobrazovať ikony stavu šifrovania",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Zatiaľ nie je možné k odpovedi pridať súbor. Súbor teda nebude odoslaný ako odpoveď.",
+    "Unable to reply": "Nie je možné odpovedať",
+    "At this time it is not possible to reply with an emote.": "V odpovedi zatiaľ nie je možné vijadriť pocit.",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Nie je možné načítať udalosť odkazovanú v odpovedi. Takáto udalosť buď neexistuje alebo nemáte oprávnenie na jej zobrazenie.",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Požiadavky projektu Riot sledujeme na Github: <a>vytvoriť github požiadavku</a>.",
+    "Log out and remove encryption keys?": "Odhlásiť sa a odstrániť šifrovacie kľúče?",
+    "Send Logs": "Odoslať záznamy",
+    "Clear Storage and Sign Out": "Vymazať úložisko a Odhlásiť sa",
+    "Refresh": "Obnoviť",
+    "We encountered an error trying to restore your previous session.": "Počas obnovovania vašej predchádzajúcej relácie sa vyskytla chyba.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Vymazaním úložiska prehliadača možno opravíte váš problém, no zároveň sa týmto odhlásite a história vašich šifrovaných konverzácií sa pre vás môže stať nečitateľná.",
+    "Collapse Reply Thread": "Zbaliť vlákno odpovedí"
 }
