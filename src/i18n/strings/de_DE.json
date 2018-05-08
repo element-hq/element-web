@@ -1176,5 +1176,6 @@
     "We encountered an error trying to restore your previous session.": "Wir haben ein Problem beim Wiederherstellen deiner vorherigen Sitzung festgestellt.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Den Browser-Speicher zu löschen kann das Problem lösen, wird dich aber abmelden und verschlüsselte Chats unlesbar machen.",
     "Collapse Reply Thread": "Antwort-Thread zusammenklappen",
-    "At this time it is not possible to reply with an emote.": "An dieser Stelle ist es nicht möglich mit einer Umschreibung zu antworten."
+    "At this time it is not possible to reply with an emote.": "An dieser Stelle ist es nicht möglich mit einer Umschreibung zu antworten.",
+    "Enable widget screenshots on supported widgets": "Widget-Screenshots bei unterstützten Widgets aktivieren"
 }
