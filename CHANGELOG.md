@@ -1,3 +1,122 @@
+Changes in [0.12.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.3) (2018-04-30)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.3-rc.3...v0.12.3)
+
+ * No changes since rc.3
+
+Changes in [0.12.3-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.3-rc.3) (2018-04-26)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.3-rc.2...v0.12.3-rc.3)
+
+ * Replace document.origin with window.location.origin
+   [\#1855](https://github.com/matrix-org/matrix-react-sdk/pull/1855)
+
+Changes in [0.12.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.3-rc.2) (2018-04-25)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.3-rc.1...v0.12.3-rc.2)
+
+ * Fix npm packaging
+
+Changes in [0.12.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.3-rc.1) (2018-04-25)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.2...v0.12.3-rc.1)
+
+ * Update from Weblate.
+   [\#1852](https://github.com/matrix-org/matrix-react-sdk/pull/1852)
+ * Support origin lock in cross-origin renderer
+   [\#1849](https://github.com/matrix-org/matrix-react-sdk/pull/1849)
+ * s/contian/contain/g
+   [\#1850](https://github.com/matrix-org/matrix-react-sdk/pull/1850)
+ * Don't autocomplete users for single "@"
+   [\#1848](https://github.com/matrix-org/matrix-react-sdk/pull/1848)
+ * Update from Weblate.
+   [\#1844](https://github.com/matrix-org/matrix-react-sdk/pull/1844)
+ * Bind onImageError in constructor
+   [\#1846](https://github.com/matrix-org/matrix-react-sdk/pull/1846)
+ * Use mxid as sender name on set display name
+   [\#1841](https://github.com/matrix-org/matrix-react-sdk/pull/1841)
+ * Fix rageshake
+   [\#1840](https://github.com/matrix-org/matrix-react-sdk/pull/1840)
+ * Add UI for displaying room avatars full size
+   [\#1843](https://github.com/matrix-org/matrix-react-sdk/pull/1843)
+ * Update from Weblate.
+   [\#1842](https://github.com/matrix-org/matrix-react-sdk/pull/1842)
+ * move everything not explicitly riot (or status) branded into matrix-react-
+   sdk
+   [\#1836](https://github.com/matrix-org/matrix-react-sdk/pull/1836)
+ * Null check node before we pass it to velocity
+   [\#1838](https://github.com/matrix-org/matrix-react-sdk/pull/1838)
+ * Remove presence management
+   [\#1676](https://github.com/matrix-org/matrix-react-sdk/pull/1676)
+ * Null check stylesheet href
+   [\#1835](https://github.com/matrix-org/matrix-react-sdk/pull/1835)
+ * TopUnreadMessagesBar a11y
+   [\#1819](https://github.com/matrix-org/matrix-react-sdk/pull/1819)
+ * Use correct 1-1 room avatar after users leave
+   [\#593](https://github.com/matrix-org/matrix-react-sdk/pull/593)
+ * Use GeminiScrollbarWrapper in Flair settings of UserSettings
+   [\#1833](https://github.com/matrix-org/matrix-react-sdk/pull/1833)
+ * Add 500ms delay to show `membershipBusy` for longer
+   [\#1832](https://github.com/matrix-org/matrix-react-sdk/pull/1832)
+ * Improve group join/leave feedback
+   [\#1831](https://github.com/matrix-org/matrix-react-sdk/pull/1831)
+ * Update from Weblate.
+   [\#1830](https://github.com/matrix-org/matrix-react-sdk/pull/1830)
+ * Bump source-map-loader version to avoid bug /w inline base64 maps
+   [\#1829](https://github.com/matrix-org/matrix-react-sdk/pull/1829)
+ * Make stickers/messages continuations of each other
+   [\#1828](https://github.com/matrix-org/matrix-react-sdk/pull/1828)
+ * Update to match is_openly_joinable API
+   [\#1827](https://github.com/matrix-org/matrix-react-sdk/pull/1827)
+ * Fix to prevent guests from seeing features
+   [\#1826](https://github.com/matrix-org/matrix-react-sdk/pull/1826)
+ * Fix broken ForgotPassword component
+   [\#1825](https://github.com/matrix-org/matrix-react-sdk/pull/1825)
+ * Fix warning "Unknown prop `wrappedRef` on <div> tag..."
+   [\#1824](https://github.com/matrix-org/matrix-react-sdk/pull/1824)
+ * Add radio button for setting group is_joinable
+   [\#1817](https://github.com/matrix-org/matrix-react-sdk/pull/1817)
+ * Fix widget grant / revoke permission binding
+   [\#1823](https://github.com/matrix-org/matrix-react-sdk/pull/1823)
+ * Sticker picker styling
+   [\#1822](https://github.com/matrix-org/matrix-react-sdk/pull/1822)
+ * Bi-directional widget postMessaging API (stickerpacks) [WIP]
+   [\#1672](https://github.com/matrix-org/matrix-react-sdk/pull/1672)
+ * Add null-guard to prevent RoomAvatar NPE when room is null
+   [\#1821](https://github.com/matrix-org/matrix-react-sdk/pull/1821)
+ * Don't notify for bad encrypted messages
+   [\#1818](https://github.com/matrix-org/matrix-react-sdk/pull/1818)
+ * Join this community button
+   [\#1815](https://github.com/matrix-org/matrix-react-sdk/pull/1815)
+ * Reword group setting delay
+   [\#1816](https://github.com/matrix-org/matrix-react-sdk/pull/1816)
+ * Track duration of page changes
+   [\#1814](https://github.com/matrix-org/matrix-react-sdk/pull/1814)
+ * Wrap GeminiScrollbar in a component, enabled forceGemini
+   [\#1810](https://github.com/matrix-org/matrix-react-sdk/pull/1810)
+ * Add display name to the read receipt view
+   [\#1742](https://github.com/matrix-org/matrix-react-sdk/pull/1742)
+ * Fix broken import preventing people tag
+   [\#1811](https://github.com/matrix-org/matrix-react-sdk/pull/1811)
+ * Add /devtools to Autocomplete and run gen-i18n
+   [\#1778](https://github.com/matrix-org/matrix-react-sdk/pull/1778)
+ * Fix PresenceLabel in MemberInfo
+   [\#1809](https://github.com/matrix-org/matrix-react-sdk/pull/1809)
+ * Fix room tile badge not disappearing when receiving a read receipt
+   [\#1807](https://github.com/matrix-org/matrix-react-sdk/pull/1807)
+ * Option to remove the presence feature by HS
+   [\#1806](https://github.com/matrix-org/matrix-react-sdk/pull/1806)
+ * Dialog a11y
+   [\#1652](https://github.com/matrix-org/matrix-react-sdk/pull/1652)
+ * Change wording of debug log submission
+   [\#1740](https://github.com/matrix-org/matrix-react-sdk/pull/1740)
+ * Fix TextualBody.js to remove NodeList.forEach()
+   [\#1768](https://github.com/matrix-org/matrix-react-sdk/pull/1768)
+ * Use undocumented piwik cmd to disable heartbeattimer
+   [\#1770](https://github.com/matrix-org/matrix-react-sdk/pull/1770)
+ * Enable autocompletion for non-English languages.
+   [\#1800](https://github.com/matrix-org/matrix-react-sdk/pull/1800)
+
 Changes in [0.12.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.2) (2018-04-12)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.1...v0.12.2)
