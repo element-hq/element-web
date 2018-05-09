@@ -369,7 +369,7 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не удается подключиться к домашнему серверу через HTTP, так как в адресной строке браузера указан URL HTTPS. Используйте HTTPS или <a>либо включите небезопасные сценарии</a>.",
     "Dismiss": "Отклонить",
     "Custom Server Options": "Выбор другого сервера",
-    "Mute": "Заглушить",
+    "Mute": "Приглушить",
     "Operation failed": "Сбой операции",
     "powered by Matrix": "Основано на Matrix",
     "Add a topic": "Задать тему",
