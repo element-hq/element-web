@@ -650,5 +650,6 @@
     "Upload avatar": "Ladda upp profilbild",
     "Remove avatar": "Ta bort profilbild",
     "This invitation was sent to an email address which is not associated with this account:": "Den här inbjudan skickades till en emailadress som inte är kopplad till detta konto:",
-    "To link to a room it must have <a>an address</a>.": "För att länka till ett rum behöver det <a>en adress</a>."
+    "To link to a room it must have <a>an address</a>.": "För att länka till ett rum behöver det <a>en adress</a>.",
+    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nivå %(powerLevelNumber)s)"
 }
