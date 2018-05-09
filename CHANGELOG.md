@@ -1,3 +1,64 @@
+Changes in [0.14.2](https://github.com/vector-im/riot-web/releases/tag/v0.14.2) (2018-04-30)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.3...v0.14.2)
+
+ * No changes since rc.3
+
+Changes in [0.14.2-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.14.2-rc.3) (2018-04-26)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.2...v0.14.2-rc.3)
+
+ * Fix CSS dependency versions to be the same as those in react-sdk to fix
+   left panel header positions.
+
+Changes in [0.14.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.14.2-rc.2) (2018-04-26)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.1...v0.14.2-rc.2)
+
+ * Fix Download of attachments in e2e encrypted rooms in Firefox
+
+Changes in [0.14.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.14.2-rc.1) (2018-04-25)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.1...v0.14.2-rc.1)
+
+ * Update from Weblate.
+   [\#6602](https://github.com/vector-im/riot-web/pull/6602)
+ * Add readme bit on cross-origin renderer
+   [\#6600](https://github.com/vector-im/riot-web/pull/6600)
+ * Update from Weblate.
+   [\#6573](https://github.com/vector-im/riot-web/pull/6573)
+ * Copy media from react-sdk
+   [\#6588](https://github.com/vector-im/riot-web/pull/6588)
+ * Fix favicon
+   [\#6580](https://github.com/vector-im/riot-web/pull/6580)
+ * Update from Weblate.
+   [\#6569](https://github.com/vector-im/riot-web/pull/6569)
+ * move everything not explicitly riot (or status) branded into matrix-react-
+   sdk
+   [\#6500](https://github.com/vector-im/riot-web/pull/6500)
+ * Remove presence management
+   [\#5881](https://github.com/vector-im/riot-web/pull/5881)
+ * change vector-web repo to riot-web in changelog
+   [\#6480](https://github.com/vector-im/riot-web/pull/6480)
+ * Update from Weblate.
+   [\#6473](https://github.com/vector-im/riot-web/pull/6473)
+ * Bump source-map-loader version to avoid bug /w inline base64 maps
+   [\#6472](https://github.com/vector-im/riot-web/pull/6472)
+ * Add CSS for new group admin radio button
+   [\#6415](https://github.com/vector-im/riot-web/pull/6415)
+ * Rxl881/sticker picker styling
+   [\#6447](https://github.com/vector-im/riot-web/pull/6447)
+ * Stickerpacks
+   [\#6242](https://github.com/vector-im/riot-web/pull/6242)
+ * Force gemini on HomePage
+   [\#6368](https://github.com/vector-im/riot-web/pull/6368)
+ * Rename the Riot-Web Translations Room
+   [\#6348](https://github.com/vector-im/riot-web/pull/6348)
+ * Add disable-presence-by-hs option to sample config
+   [\#6350](https://github.com/vector-im/riot-web/pull/6350)
+ * Reword the BugReportDialog.js as per @lampholder
+   [\#6354](https://github.com/vector-im/riot-web/pull/6354)
+
 Changes in [0.14.1](https://github.com/vector-im/riot-web/releases/tag/v0.14.1) (2018-04-12)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0...v0.14.1)
