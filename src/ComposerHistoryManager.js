@@ -74,7 +74,7 @@ class HistoryItem {
                 return this.value;
             }
         }
-        log.error("unknown format -> outputFormat conversion");
+        console.error("unknown format -> outputFormat conversion");
         return this.value;
     }
 }
@@ -91,9 +91,14 @@ export default class ComposerHistoryManager {
         // TODO: Performance issues?
         let item;
         for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
-            this.history.push(
-                HistoryItem.fromJSON(JSON.parse(item))
-            );
+            try {
+                this.history.push(
+                    HistoryItem.fromJSON(JSON.parse(item))
+                );
+            }
+            catch (e) {
+                console.warn("Throwing away unserialisable history", e);
+            }
         }
         this.lastIndex = this.currentIndex;
     }
