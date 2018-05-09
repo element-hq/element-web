@@ -266,6 +266,19 @@ form.mx_Custom_Widget_Form div {
     right: 0;
 }
 
+.mx_AppLoading_spinner_fadeIn {
+    animation-fill-mode: backwards;
+    animation-duration: 200ms;
+    animation-delay: 500ms;
+    animation-name: mx_AppLoading_spinner_fadeIn_animation;
+}
+
+@keyframes mx_AppLoading_spinner_fadeIn_animation {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+
 .mx_AppLoading iframe {
   display: none;
 }
