@@ -674,5 +674,13 @@
     "email address": "epostadress",
     "Try using one of the following valid address types: %(validTypesList)s.": "Prova att använda någon av följande giltiga adresstyper: %(validTypesList)s.",
     "You have entered an invalid address.": "Du har angett en ogiltig adress.",
-    "Preparing to send logs": "Förbereder att skicka loggar"
+    "Preparing to send logs": "Förbereder att skicka loggar",
+    "Logs sent": "Loggar skickade",
+    "Failed to send logs: ": "Det gick inte att skicka loggar: ",
+    "Submit debug logs": "Skicka felsökningsloggar",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Felsökningsloggar innehåller användningsdata för applikationen inklusive ditt användarnamn, ID:n eller alias för de rum och grupper du har besökt och användarnamn för andra användare. De innehåller inte meddelanden.",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Riot-buggar hanteras på GitHub: <a>skapa en GitHub-issue</a>.",
+    "GitHub issue link:": "Länk till GitHub-issue:",
+    "Notes:": "Noteringar:",
+    "Start new chat": "Starta ny chatt"
 }
