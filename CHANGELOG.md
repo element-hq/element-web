@@ -1,3 +1,18 @@
+Changes in [0.14.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.14.3-rc.1) (2018-05-09)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2...v0.14.3-rc.1)
+
+ * Update from Weblate.
+   [\#6688](https://github.com/vector-im/riot-web/pull/6688)
+ * Don't show presence on matrix.org
+   [\#6638](https://github.com/vector-im/riot-web/pull/6638)
+ * Enforce loading babel-polyfill first
+   [\#6625](https://github.com/vector-im/riot-web/pull/6625)
+ * Update hoek
+   [\#6624](https://github.com/vector-im/riot-web/pull/6624)
+ * Fix args in the release wrapper script
+   [\#6614](https://github.com/vector-im/riot-web/pull/6614)
+
 Changes in [0.14.2](https://github.com/vector-im/riot-web/releases/tag/v0.14.2) (2018-04-30)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.2-rc.3...v0.14.2)
