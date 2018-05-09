@@ -534,7 +534,11 @@ export default class AppTile extends React.Component {
                 </div>
             );
             if (this.state.initialising) {
-                appTileBody = loadingElement;
+                appTileBody = (
+                    <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
+                        { loadingElement }
+                    </div>
+                );
             } else if (this.state.hasPermissionToLoad == true) {
                 if (this.isMixedContent()) {
                     appTileBody = (
