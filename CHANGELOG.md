@@ -1,3 +1,68 @@
+Changes in [0.12.4-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.1) (2018-05-09)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.3...v0.12.4-rc.1)
+
+ * Update from Weblate.
+   [\#1881](https://github.com/matrix-org/matrix-react-sdk/pull/1881)
+ * Pin lolex at 2.3.2 to avoid bug causing tests to fail
+   [\#1880](https://github.com/matrix-org/matrix-react-sdk/pull/1880)
+ * Replies: un-break click-to-mention on SenderProfile for reply&preview
+   [\#1878](https://github.com/matrix-org/matrix-react-sdk/pull/1878)
+ * Add tests for RoomList
+   [\#1877](https://github.com/matrix-org/matrix-react-sdk/pull/1877)
+ * Fix crash when browser doesn't report page change measurement
+   [\#1874](https://github.com/matrix-org/matrix-react-sdk/pull/1874)
+ * fix thinko when changing from ClientPeg to context in static method (DUH)
+   [\#1875](https://github.com/matrix-org/matrix-react-sdk/pull/1875)
+ * Fix Replies :D
+   [\#1873](https://github.com/matrix-org/matrix-react-sdk/pull/1873)
+ * Update eslint-plugin-react
+   [\#1871](https://github.com/matrix-org/matrix-react-sdk/pull/1871)
+ * relax lint for jsx-curly-spacing and arrow-parens
+   [\#1872](https://github.com/matrix-org/matrix-react-sdk/pull/1872)
+ * Use develop js-sdk in jenkins build
+   [\#1870](https://github.com/matrix-org/matrix-react-sdk/pull/1870)
+ * Replies
+   [\#1741](https://github.com/matrix-org/matrix-react-sdk/pull/1741)
+ * Use the right js-sdk branch when testing
+   [\#1869](https://github.com/matrix-org/matrix-react-sdk/pull/1869)
+ * Prevent error responses wedging group request concurrency limit
+   [\#1867](https://github.com/matrix-org/matrix-react-sdk/pull/1867)
+ * Refresh group rooms and members when selecting a tag
+   [\#1868](https://github.com/matrix-org/matrix-react-sdk/pull/1868)
+ * Refactor GroupStores into one global GroupStore
+   [\#1866](https://github.com/matrix-org/matrix-react-sdk/pull/1866)
+ * Switch back to using blob URLs for rendering e2e attachments
+   [\#1864](https://github.com/matrix-org/matrix-react-sdk/pull/1864)
+ * Hide inline encryption icons except when hovering over a message
+   [\#1845](https://github.com/matrix-org/matrix-react-sdk/pull/1845)
+ *  UI fixes in SessionRestoreErrorDialog
+   [\#1860](https://github.com/matrix-org/matrix-react-sdk/pull/1860)
+ *  Fix UX issues with bug report dialog
+   [\#1863](https://github.com/matrix-org/matrix-react-sdk/pull/1863)
+ * fix ugly img errors and correctly render SVG thumbnails
+   [\#1865](https://github.com/matrix-org/matrix-react-sdk/pull/1865)
+ * Fix error handling on session restore
+   [\#1859](https://github.com/matrix-org/matrix-react-sdk/pull/1859)
+ * Add tests for GroupView
+   [\#1862](https://github.com/matrix-org/matrix-react-sdk/pull/1862)
+ * Update version of hoek
+   [\#1861](https://github.com/matrix-org/matrix-react-sdk/pull/1861)
+ *  Fix bug that caused crash when analytics HS/IS whitelists not specified
+   [\#1858](https://github.com/matrix-org/matrix-react-sdk/pull/1858)
+ * Fix Analytics to not import DEFAULTS, therefore avoiding NPE
+   [\#1857](https://github.com/matrix-org/matrix-react-sdk/pull/1857)
+ * Null check piwik config before using it
+   [\#1856](https://github.com/matrix-org/matrix-react-sdk/pull/1856)
+ * Track actual window location origin and hash
+   [\#1853](https://github.com/matrix-org/matrix-react-sdk/pull/1853)
+ * Replace document.origin with window.location.origin
+   [\#1855](https://github.com/matrix-org/matrix-react-sdk/pull/1855)
+ * Optionally hide widget popout button.
+   [\#1854](https://github.com/matrix-org/matrix-react-sdk/pull/1854)
+ * Add a button to 'pop out' widgets in to their own tab.
+   [\#1851](https://github.com/matrix-org/matrix-react-sdk/pull/1851)
+
 Changes in [0.12.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.3) (2018-04-30)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.3-rc.3...v0.12.3)
