@@ -40,7 +40,7 @@ function getOrCreateContainer() {
     return container;
 }
 
-class ContextualMenu extends React.Component {
+export default class ContextualMenu extends React.Component {
     propTypes: {
         top: PropTypes.number,
         bottom: PropTypes.number,
@@ -57,6 +57,10 @@ class ContextualMenu extends React.Component {
         menuPaddingRight: PropTypes.number,
         menuPaddingBottom: PropTypes.number,
         menuPaddingLeft: PropTypes.number,
+
+        // If true, insert an invisible screen-sized element behind the
+        // menu that when clicked will close it.
+        hasBackground: PropTypes.bool,
     }
 
     render() {
@@ -154,31 +158,30 @@ class ContextualMenu extends React.Component {
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-            <div className="mx_ContextualMenu_background" onClick={props.closeMenu}></div>
+            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu}></div> }
             <style>{ chevronCSS }</style>
         </div>;
     }
 }
 
-module.exports = {
-    createMenu: function(ElementClass, props) {
-        const closeMenu = function(...args) {
-            ReactDOM.unmountComponentAtNode(getOrCreateContainer());
+export function createMenu(ElementClass, props) {
+    const closeMenu = function(...args) {
+        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
 
-            if (props && props.onFinished) {
-                props.onFinished.apply(null, args);
-            }
-        };
+        if (props && props.onFinished) {
+            props.onFinished.apply(null, args);
+        }
+    };
 
-        const menu = <ContextualMenu
-            {...props}
-            elementClass={ElementClass}
-            closeMenu={closeMenu}
-            windowResize={closeMenu}
-        />;
+    const menu = <ContextualMenu
+        {...props}
+        hasBackground={true}
+        elementClass={ElementClass}
+        closeMenu={closeMenu}
+        windowResize={closeMenu}
+    />;
 
-        ReactDOM.render(menu, getOrCreateContainer());
+    ReactDOM.render(menu, getOrCreateContainer());
 
-        return {close: closeMenu};
-    },
-};
+    return {close: closeMenu};
+}
