@@ -137,12 +137,15 @@ export default class FromWidgetPostMessageApi {
             });
         } else if (action === 'm.sticker') {
             // console.warn('Got sticker message from widget', widgetId);
-            dis.dispatch({action: 'm.sticker', data: event.data.data, widgetId: event.data.widgetId});
+            // NOTE -- The widgetData field is deprecated (in favour of the 'data' field) and will be removed eventually
+            const data = event.data.data || event.data.widgetData;
+            dis.dispatch({action: 'm.sticker', data: data, widgetId: event.data.widgetId});
         } else if (action === 'integration_manager_open') {
             // Close the stickerpicker
             dis.dispatch({action: 'stickerpicker_close'});
             // Open the integration manager
-            const data = event.data.data;
+            // NOTE -- The widgetData field is deprecated (in favour of the 'data' field) and will be removed eventually
+            const data = event.data.data || event.data.widgetData;
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;
             IntegrationManager.open(integType, integId);
