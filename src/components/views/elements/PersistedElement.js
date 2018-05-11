@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
-import PropTypes from 'prop-types';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and

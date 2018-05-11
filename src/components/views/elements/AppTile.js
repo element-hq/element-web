@@ -167,7 +167,6 @@ export default class AppTile extends React.Component {
 
         // Widget action listeners
         this.dispatcherRef = dis.register(this._onWidgetAction);
-
     }
 
     componentDidUpdate() {
