@@ -8,7 +8,9 @@ if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/rio
 
 module.exports = {
     entry: {
-        "bundle": "./src/vector/index.js",
+        // Load babel-polyfill first to avoid issues where some imports (namely react)
+        // are potentially loaded before babel-polyfill.
+        "bundle": ["babel-polyfill", "./src/vector/index.js"],
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
 
         // We ship olm.js as a separate lump of javascript. This makes it get

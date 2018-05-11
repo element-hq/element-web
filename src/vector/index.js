@@ -17,25 +17,13 @@ limitations under the License.
 
 'use strict';
 
-// for ES6 stuff like startsWith() that Safari doesn't handle
-// and babel doesn't do by default
-// Note we use this, as well as the babel transform-runtime plugin
-// since transform-runtime does not cover instance methods
-// such as "foobar".includes("foo") which bits of our library
-// code use, but the babel transform-runtime plugin allows the
-// regenerator runtime to be injected early enough in the process
-// (it can't be here as it's too late: the alternative is to put
-// the babel-polyfill as the first 'entry' in the webpack config).
-// https://babeljs.io/docs/plugins/transform-runtime/
-require('babel-polyfill');
-
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require('matrix-react-sdk/node_modules/gemini-scrollbar/gemini-scrollbar.css');
-require('matrix-react-sdk/node_modules/gfm.css/gfm.css');
-require('matrix-react-sdk/node_modules/highlight.js/styles/github.css');
-require('matrix-react-sdk/node_modules/draft-js/dist/Draft.css');
+require('gemini-scrollbar/gemini-scrollbar.css');
+require('gfm.css/gfm.css');
+require('highlight.js/styles/github.css');
+require('draft-js/dist/Draft.css');
 
 const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
