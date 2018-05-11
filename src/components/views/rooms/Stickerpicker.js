@@ -38,6 +38,8 @@ export default class Stickerpicker extends React.Component {
         this._onResize = this._onResize.bind(this);
         this._onFinished = this._onFinished.bind(this);
 
+        this._collectWidgetMessaging = this._collectWidgetMessaging.bind(this);
+
         this.popoverWidth = 300;
         this.popoverHeight = 300;
 
@@ -102,6 +104,14 @@ export default class Stickerpicker extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this._appWidgetMessaging &&
+            prevState.showStickers !== this.state.showStickers
+        ) {
+            this._appWidgetMessaging.sendVisibility(this.state.showStickers);
+        }
+    }
+
     _imError(errorMsg, e) {
         console.error(errorMsg, e);
         this.setState({
@@ -135,6 +145,12 @@ export default class Stickerpicker extends React.Component {
                 <p> { this.state.imError } </p>
             </div>
         );
+    }
+
+    async _collectWidgetMessaging(prom) {
+        const widgetMessaging = await prom;
+        this._appWidgetMessaging = widgetMessaging;
+        this._appWidgetMessaging.sendVisibility(true);
     }
 
     _getStickerpickerContent() {
@@ -173,6 +189,7 @@ export default class Stickerpicker extends React.Component {
                     >
                     <PersistedElement>
                         <AppTile
+                            collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}
                             url={stickerpickerWidget.content.url}
                             name={stickerpickerWidget.content.name}
@@ -192,7 +209,7 @@ export default class Stickerpicker extends React.Component {
                             showPopout={false}
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
-                            whitelistCapabilities={['m.sticker']}
+                            whitelistCapabilities={['m.sticker', 'visibility']}
                             userWidget={true}
                         />
                     </PersistedElement>
