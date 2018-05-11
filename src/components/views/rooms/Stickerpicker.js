@@ -17,7 +17,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import Widgets from '../../../utils/widgets';
 import AppTile from '../elements/AppTile';
-import ContextualMenu from '../../structures/ContextualMenu';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -36,6 +35,7 @@ export default class Stickerpicker extends React.Component {
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
+        this._onResize = this._onResize.bind(this);
         this._onFinished = this._onFinished.bind(this);
 
         this.popoverWidth = 300;
@@ -44,13 +44,17 @@ export default class Stickerpicker extends React.Component {
         this.state = {
             showStickers: false,
             imError: null,
+            stickerpickerX: null,
+            stickerpickerY: null,
+            stickerpickerWidget: null,
+            widgetId: null,
         };
     }
 
     _removeStickerpickerWidgets() {
         console.warn('Removing Stickerpicker widgets');
-        if (this.widgetId) {
-            this.scalarClient.disableWidgetAssets(widgetType, this.widgetId).then(() => {
+        if (this.state.widgetId) {
+            this.scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
                 console.warn('Assets disabled');
             }).catch((err) => {
                 console.error('Failed to disable assets');
@@ -59,8 +63,7 @@ export default class Stickerpicker extends React.Component {
             console.warn('No widget ID specified, not disabling assets');
         }
 
-        // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
-        setTimeout(() => this.stickersMenu.close());
+        this.setState({showStickers: false});
         Widgets.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
@@ -69,6 +72,9 @@ export default class Stickerpicker extends React.Component {
     }
 
     componentDidMount() {
+        // Close the sticker picker when the window resizes
+        window.addEventListener('resize', this._onResize);
+
         this.scalarClient = null;
         if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
             this.scalarClient = new ScalarAuthClient();
@@ -82,9 +88,15 @@ export default class Stickerpicker extends React.Component {
         if (!this.state.imError) {
             this.dispatcherRef = dis.register(this._onWidgetAction);
         }
+        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        this.setState({
+            stickerpickerWidget,
+            widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
+        });
     }
 
     componentWillUnmount() {
+        window.removeEventListener('resize', this._onResize);
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
         }
@@ -102,9 +114,7 @@ export default class Stickerpicker extends React.Component {
         if (payload.action === "user_widget_updated") {
             this.forceUpdate();
         } else if (payload.action === "stickerpicker_close") {
-            // Wrap this in a timeout in order to avoid the DOM node from being
-            // pulled from under its feet
-            setTimeout(() => this.stickersMenu.close());
+            this.setState({showStickers: false});
         }
     }
 
@@ -137,14 +147,13 @@ export default class Stickerpicker extends React.Component {
         // TODO - Add support for Stickerpickers from multiple app stores.
         // Render content from multiple stickerpack sources, each within their
         // own iframe, within the stickerpicker UI element.
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        const stickerpickerWidget = this.state.stickerpickerWidget;
         let stickersContent;
 
         // Load stickerpack content
         if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
             // Set default name
             stickerpickerWidget.content.name = stickerpickerWidget.name || _t("Stickerpack");
-            this.widgetId = stickerpickerWidget.id;
 
             stickersContent = (
                 <div className='mx_Stickers_content_container'>
@@ -186,12 +195,7 @@ export default class Stickerpicker extends React.Component {
             // Default content to show if stickerpicker widget not added
             console.warn("No available sticker picker widgets");
             stickersContent = this._defaultStickerpickerContent();
-            this.widgetId = null;
-            this.forceUpdate();
         }
-        this.setState({
-            showStickers: false,
-        });
         return stickersContent;
     }
 
@@ -201,29 +205,17 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
-        const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         const x = buttonRect.right + window.pageXOffset - 42;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-        // const self = this;
-        this.stickersMenu = ContextualMenu.createMenu(GenericElementContextMenu, {
-            chevronOffset: 10,
-            chevronFace: 'bottom',
-            left: x,
-            top: y,
-            menuWidth: this.popoverWidth,
-            menuHeight: this.popoverHeight,
-            element: this._getStickerpickerContent(),
-            onFinished: this._onFinished,
-            menuPaddingTop: 0,
-            menuPaddingLeft: 0,
-            menuPaddingRight: 0,
+
+        this.setState({
+            showStickers: true,
+            stickerPickerX: x,
+            stickerPickerY: y,
         });
-
-
-        this.setState({showStickers: true});
     }
 
     /**
@@ -231,7 +223,14 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} ev Event that triggered the function call
      */
     _onHideStickersClick(ev) {
-        setTimeout(() => this.stickersMenu.close());
+        this.setState({showStickers: false});
+    }
+
+    /**
+     * Called when the window is resized
+     */
+    _onResize() {
+        this.setState({showStickers: false});
     }
 
     /**
@@ -250,20 +249,37 @@ export default class Stickerpicker extends React.Component {
                 this.scalarClient.getScalarInterfaceUrlForRoom(
                     this.props.room,
                     'type_' + widgetType,
-                    this.widgetId,
+                    this.state.widgetId,
                 ) :
                 null;
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
 
-        // Wrap this in a timeout in order to avoid the DOM node from being pulled from under its feet
-        setTimeout(() => this.stickersMenu.close());
+        this.setState({showStickers: false});
     }
 
     render() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const ContextualMenu = sdk.getComponent('structures.ContextualMenu');
+        const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         let stickersButton;
+
+        const stickerPicker = <ContextualMenu
+            elementClass={GenericElementContextMenu}
+            chevronOffset={10}
+            chevronFace={'bottom'}
+            left={this.state.stickerPickerX}
+            top={this.state.stickerPickerY}
+            menuWidth={this.popoverWidth}
+            menuHeight={this.popoverHeight}
+            element={this._getStickerpickerContent()}
+            onFinished={this._onFinished}
+            menuPaddingTop={0}
+            menuPaddingLeft={0}
+            menuPaddingRight={0}
+        />;
+
         if (this.state.showStickers) {
             // Show hide-stickers button
             stickersButton =
@@ -288,6 +304,9 @@ export default class Stickerpicker extends React.Component {
                     <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
                 </div>;
         }
-        return stickersButton;
+        return <div>
+            {stickersButton}
+            {this.state.showStickers && stickerPicker}
+        </div>;
     }
 }
