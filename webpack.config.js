@@ -39,9 +39,9 @@ module.exports = {
                     path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/dark/css/'),
                 ],
                 // 1. postcss-loader turns the SCSS into normal CSS.
-                // 2. css-raw-loader turns the CSS into a javascript module
+                // 2. raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
-                //    (css-raw-loader is similar to css-loader, but the latter
+                //    (raw-loader is similar to css-loader, but the latter
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
