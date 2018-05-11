@@ -389,6 +389,10 @@ export default class AppTile extends React.Component {
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
+
+        // Allow parents to access widget messaging
+        if (this.props.collectWidgetMessaging) this.props.collectWidgetMessaging(this.widgetMessaging);
+
         this.setState({loading: false});
     }
 

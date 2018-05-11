@@ -94,6 +94,16 @@ export default class WidgetMessaging {
             });
     }
 
+    sendVisibility(visible) {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: "visibility",
+            visible,
+        })
+        .catch((error) => {
+            console.error("Failed to send visibility: ", error);
+        });
+    }
 
     start() {
         this.fromWidget.addEndpoint(this.widgetId, this.widgetUrl);
