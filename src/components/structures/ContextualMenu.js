@@ -26,9 +26,21 @@ import PropTypes from 'prop-types';
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
-module.exports = {
-    ContextualMenuContainerId: "mx_ContextualMenu_Container",
+const ContextualMenuContainerId = "mx_ContextualMenu_Container";
 
+function getOrCreateContainer() {
+    let container = document.getElementById(ContextualMenuContainerId);
+
+    if (!container) {
+        container = document.createElement("div");
+        container.id = ContextualMenuContainerId;
+        document.body.appendChild(container);
+    }
+
+    return container;
+}
+
+export default class ContextualMenu extends React.Component {
     propTypes: {
         top: PropTypes.number,
         bottom: PropTypes.number,
@@ -45,38 +57,17 @@ module.exports = {
         menuPaddingRight: PropTypes.number,
         menuPaddingBottom: PropTypes.number,
         menuPaddingLeft: PropTypes.number,
-    },
 
-    getOrCreateContainer: function() {
-        let container = document.getElementById(this.ContextualMenuContainerId);
+        // If true, insert an invisible screen-sized element behind the
+        // menu that when clicked will close it.
+        hasBackground: PropTypes.bool,
+    }
 
-        if (!container) {
-            container = document.createElement("div");
-            container.id = this.ContextualMenuContainerId;
-            document.body.appendChild(container);
-        }
-
-        return container;
-    },
-
-    createMenu: function(Element, props) {
-        const self = this;
-
-        const closeMenu = function(...args) {
-            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
-
-            if (props && props.onFinished) {
-                props.onFinished.apply(null, args);
-            }
-        };
-
-        // Close the menu on window resize
-        const windowResize = function() {
-            closeMenu();
-        };
-
+    render() {
         const position = {};
         let chevronFace = null;
+
+        const props = this.props;
 
         if (props.top) {
             position.top = props.top;
@@ -158,21 +149,40 @@ module.exports = {
             menuStyle["paddingRight"] = props.menuPaddingRight;
         }
 
+        const ElementClass = props.elementClass;
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
-        const menu = (
-            <div className={className} style={position}>
-                <div className={menuClasses} style={menuStyle}>
-                    { chevron }
-                    <Element {...props} onFinished={closeMenu} onResize={windowResize} />
-                </div>
-                <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
-                <style>{ chevronCSS }</style>
+        return <div className={className} style={position}>
+            <div className={menuClasses} style={menuStyle}>
+                { chevron }
+                <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-        );
+            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu}></div> }
+            <style>{ chevronCSS }</style>
+        </div>;
+    }
+}
 
-        ReactDOM.render(menu, this.getOrCreateContainer());
+export function createMenu(ElementClass, props) {
+    const closeMenu = function(...args) {
+        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
 
-        return {close: closeMenu};
-    },
-};
+        if (props && props.onFinished) {
+            props.onFinished.apply(null, args);
+        }
+    };
+
+    // We only reference closeMenu once per call to createMenu
+    const menu = <ContextualMenu
+        {...props}
+        hasBackground={true}
+        elementClass={ElementClass}
+        closeMenu={closeMenu} // eslint-disable-line react/jsx-no-bind
+        windowResize={closeMenu} // eslint-disable-line react/jsx-no-bind
+    />;
+
+    ReactDOM.render(menu, getOrCreateContainer());
+
+    return {close: closeMenu};
+}
