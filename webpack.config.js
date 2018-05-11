@@ -56,10 +56,10 @@ module.exports = {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
                 include: [
-                    path.resolve(__dirname, "node_modules/matrix-react-sdk/node_modules/highlight.js/styles"),
-                    path.resolve(__dirname, "node_modules/matrix-react-sdk/node_modules/draft-js/dist"),
-                    path.resolve(__dirname, "node_modules/matrix-react-sdk/node_modules/gfm.css"),
-                    path.resolve(__dirname, "node_modules/matrix-react-sdk/node_modules/gemini-scrollbar/"),
+                    path.resolve(__dirname, "node_modules/highlight.js/styles"),
+                    path.resolve(__dirname, "node_modules/draft-js/dist"),
+                    path.resolve(__dirname, "node_modules/gfm.css"),
+                    path.resolve(__dirname, "node_modules/gemini-scrollbar/"),
                 ],
                 use: ExtractTextPlugin.extract({
                     use: "raw-loader"
