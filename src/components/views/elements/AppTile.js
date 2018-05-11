@@ -169,6 +169,13 @@ export default class AppTile extends React.Component {
         this.dispatcherRef = dis.register(this._onWidgetAction);
     }
 
+    componentDidUpdate() {
+        // Allow parents to access widget messaging
+        if (this.props.collectWidgetMessaging) {
+            this.props.collectWidgetMessaging(this.widgetMessaging);
+        }
+    }
+
     componentWillUnmount() {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
@@ -357,6 +364,9 @@ export default class AppTile extends React.Component {
         if (!this.widgetMessaging) {
             this._onInitialLoad();
         }
+        if (this._exposeWidgetMessaging) {
+            this._exposeWidgetMessaging(this.widgetMessaging);
+        }
     }
 
     /**
@@ -394,6 +404,7 @@ export default class AppTile extends React.Component {
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
+
         this.setState({loading: false});
     }
 
