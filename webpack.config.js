@@ -33,11 +33,6 @@ module.exports = {
             { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
             {
                 test: /\.scss$/,
-                include: [
-                    path.resolve(__dirname, 'res/themes/status/css/'),
-                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/light/css/'),
-                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/res/themes/dark/css/'),
-                ],
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
@@ -48,19 +43,20 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     use: [
                         "raw-loader",
-                        "postcss-loader"
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                config: {
+                                    path: './postcss.config.js'
+                                }
+                            }
+                        }
                     ],
                 }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                include: [
-                    path.resolve(__dirname, "node_modules/highlight.js/styles"),
-                    path.resolve(__dirname, "node_modules/draft-js/dist"),
-                    path.resolve(__dirname, "node_modules/gfm.css"),
-                    path.resolve(__dirname, "node_modules/gemini-scrollbar/"),
-                ],
                 use: ExtractTextPlugin.extract({
                     use: "raw-loader"
                 }),
