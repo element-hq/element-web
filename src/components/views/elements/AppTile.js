@@ -172,12 +172,7 @@ export default class AppTile extends React.Component {
     componentDidUpdate() {
         // Allow parents to access widget messaging
         if (this.props.collectWidgetMessaging) {
-            this.props.collectWidgetMessaging(new Promise((resolve) => {
-                if (this.widgetMessaging) resolve(this.widgetMessaging);
-
-                // Expect this to be resolved later
-                this._exposeWidgetMessaging = resolve;
-            }));
+            this.props.collectWidgetMessaging(this.widgetMessaging);
         }
     }
 
