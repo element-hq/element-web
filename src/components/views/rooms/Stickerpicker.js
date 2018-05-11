@@ -105,11 +105,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._appWidgetMessaging &&
-            prevState.showStickers !== this.state.showStickers
-        ) {
-            this._appWidgetMessaging.sendVisibility(this.state.showStickers);
-        }
+        this._sendVisibilityToWidget(this.state.showStickers);
     }
 
     _imError(errorMsg, e) {
@@ -147,10 +143,19 @@ export default class Stickerpicker extends React.Component {
         );
     }
 
-    async _collectWidgetMessaging(prom) {
-        const widgetMessaging = await prom;
+    _collectWidgetMessaging(widgetMessaging) {
         this._appWidgetMessaging = widgetMessaging;
-        this._appWidgetMessaging.sendVisibility(true);
+
+        // Do this now instead of in componentDidMount because we might not have had the
+        // reference to widgetMessaging when mounting
+        this._sendVisibilityToWidget(true);
+    }
+
+    _sendVisibilityToWidget(visible) {
+        if (this._appWidgetMessaging && visible !== this._prevSentVisibility) {
+            this._appWidgetMessaging.sendVisibility(visible);
+            this._prevSentVisibility = visible;
+        }
     }
 
     _getStickerpickerContent() {
