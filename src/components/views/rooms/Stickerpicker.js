@@ -150,6 +150,11 @@ export default class Stickerpicker extends React.Component {
         const stickerpickerWidget = this.state.stickerpickerWidget;
         let stickersContent;
 
+        // Use a separate ReactDOM tree to render the AppTile separately so that it persists and does
+        // not unmount when we (a) close the sticker picker (b) switch rooms. It's properties are still
+        // updated.
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+
         // Load stickerpack content
         if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
             // Set default name
@@ -166,6 +171,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
+                    <PersistedElement>
                         <AppTile
                             id={stickerpickerWidget.id}
                             url={stickerpickerWidget.content.url}
@@ -188,6 +194,7 @@ export default class Stickerpicker extends React.Component {
                             handleMinimisePointerEvents={true}
                             whitelistCapabilities={['m.sticker']}
                         />
+                    </PersistedElement>
                     </div>
                 </div>
             );
