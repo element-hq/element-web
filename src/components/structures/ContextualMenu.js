@@ -173,12 +173,13 @@ export function createMenu(ElementClass, props) {
         }
     };
 
+    // We only reference closeMenu once per call to createMenu
     const menu = <ContextualMenu
         {...props}
         hasBackground={true}
         elementClass={ElementClass}
-        closeMenu={closeMenu}
-        windowResize={closeMenu}
+        closeMenu={closeMenu} // eslint-disable-line react/jsx-no-bind
+        windowResize={closeMenu} // eslint-disable-line react/jsx-no-bind
     />;
 
     ReactDOM.render(menu, getOrCreateContainer());
