@@ -44,6 +44,8 @@ export default class WidgetMessaging {
     }
 
     messageToWidget(action) {
+        action.widgetId = this.widgetId; // Required to be sent for all outbound requests
+
         return this.toWidget.exec(action, this.target).then((data) => {
             // Check for errors and reject if found
             if (data.response === undefined) { // null is valid
