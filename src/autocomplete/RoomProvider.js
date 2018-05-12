@@ -78,6 +78,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
                     completion: displayAlias,
+                    completionId: displayAlias,
                     suffix: ' ',
                     href: makeRoomPermalink(displayAlias),
                     component: (

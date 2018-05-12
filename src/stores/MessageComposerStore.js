@@ -44,7 +44,7 @@ class MessageComposerStore extends Store {
     __onDispatch(payload) {
         switch (payload.action) {
             case 'editor_state':
-                this._contentState(payload);
+                this._editorState(payload);
                 break;
             case 'on_logged_out':
                 this.reset();
@@ -52,7 +52,7 @@ class MessageComposerStore extends Store {
         }
     }
 
-    _contentState(payload) {
+    _editorState(payload) {
         const editorStateMap = this._state.editorStateMap;
         editorStateMap[payload.room_id] = payload.editor_state;
         localStorage.setItem('editor_state', JSON.stringify(editorStateMap));
@@ -61,7 +61,7 @@ class MessageComposerStore extends Store {
         });
     }
 
-    getContentState(roomId) {
+    getEditorState(roomId) {
         return this._state.editorStateMap[roomId];
     }
 

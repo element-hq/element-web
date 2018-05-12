@@ -113,6 +113,7 @@ export default class UserProvider extends AutocompleteProvider {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName.replace(' (IRC)', ''),
+                    completionId: user.userId,
                     suffix: range.start === 0 ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (

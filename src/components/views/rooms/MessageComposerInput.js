@@ -25,6 +25,7 @@ import { Value, Document, Event, Inline, Text, Range, Node } from 'slate';
 import Html from 'slate-html-serializer';
 import { Markdown as Md } from 'slate-md-serializer';
 import Plain from 'slate-plain-serializer';
+import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerializer";
 
 // import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
 //     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
@@ -157,7 +158,7 @@ export default class MessageComposerInput extends React.Component {
             // the currently displayed editor state (note: this is always what is modified on input)
             editorState: this.createEditorState(
                 isRichtextEnabled,
-                MessageComposerStore.getContentState(this.props.room.roomId),
+                MessageComposerStore.getEditorState(this.props.room.roomId),
             ),
 
             // the original editor state, before we started tabbing through completions
@@ -172,6 +173,10 @@ export default class MessageComposerInput extends React.Component {
         };
 
         this.client = MatrixClientPeg.get();
+
+        this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
+        this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
+        this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
     }
 
 /*
@@ -686,30 +691,27 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 */
-        const contentState = this.state.editorState;
+        const editorState = this.state.editorState;
 
-        let contentText = Plain.serialize(contentState);
+        let contentText;
         let contentHTML;
 
-        if (contentText === '') return true;
+        // only look for commands if the first block contains simple unformatted text
+        // i.e. no pills or rich-text formatting.
+        let cmd, commandText;
+        const firstChild = editorState.document.nodes.get(0);
+        const firstGrandChild = firstChild && firstChild.nodes.get(0);
+        if (firstChild && firstGrandChild &&
+            firstChild.object === 'block' && firstGrandChild.object === 'text' &&
+            firstGrandChild.text[0] === '/' && firstGrandChild.text[1] !== '/')
+        {
+            commandText = this.plainWithIdPills.serialize(editorState);
+            cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
+        }
 
-/*
-        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
-        // We have to do this now as opposed to after calculating the contentText for MD
-        // mode because entity positions may not be maintained when using
-        // md.toPlaintext().
-        // Unfortunately this means we lose mentions in history when in MD mode. This
-        // would be fixed if history was stored as contentState.
-        contentText = this.removeMDLinks(contentState, ['@']);
-
-        // Some commands (/join) require pills to be replaced with their text content
-        const commandText = this.removeMDLinks(contentState, ['#']);
-*/
-        const commandText = contentText;
-        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
-                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'rich' : 'markdown');
+                this.historyManager.save(editorState, this.state.isRichtextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });
@@ -774,46 +776,31 @@ export default class MessageComposerInput extends React.Component {
                 shouldSendHTML = hasLink;
             }
 */
+            contentText = this.plainWithPlainPills.serialize(editorState);
+            if (contentText === '') return true;
+
             let shouldSendHTML = true;
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
-                    RichText.editorStateToHTML(contentState),
+                    RichText.editorStateToHTML(editorState),
                 );
             }
         } else {
+            const sourceWithPills = this.plainWithMdPills.serialize(editorState);
+            if (sourceWithPills === '') return true;
 
-            // Use the original contentState because `contentText` has had mentions
-            // stripped and these need to end up in contentHTML.
+            const mdWithPills = new Markdown(sourceWithPills);
 
-/*
-            // Replace all Entities of type `LINK` with markdown link equivalents.
-            // TODO: move this into `Markdown` and do the same conversion in the other
-            // two places (toggling from MD->RT mode and loading MD history into RT mode)
-            // but this can only be done when history includes Entities.
-            const pt = contentState.getBlocksAsArray().map((block) => {
-                let blockText = block.getText();
-                let offset = 0;
-                this.findPillEntities(contentState, block, (start, end) => {
-                    const entity = contentState.getEntity(block.getEntityAt(start));
-                    if (entity.getType() !== 'LINK') {
-                        return;
-                    }
-                    const text = blockText.slice(offset + start, offset + end);
-                    const url = entity.getData().url;
-                    const mdLink = `[${text}](${url})`;
-                    blockText = blockText.slice(0, offset + start) + mdLink + blockText.slice(offset + end);
-                    offset += mdLink.length - text.length;
-                });
-                return blockText;
-            }).join('\n');
-*/
-            const md = new Markdown(contentText);
             // if contains no HTML and we're not quoting (needing HTML)
-            if (md.isPlainText() && !mustSendHTML) {
-                contentText = md.toPlaintext();
+            if (mdWithPills.isPlainText() && !mustSendHTML) {
+                // N.B. toPlainText is only usable here because we know that the MD
+                // didn't contain any formatting in the first place...
+                contentText = mdWithPills.toPlaintext();
             } else {
-                contentText = md.toPlaintext();
-                contentHTML = md.toHTML();
+                // to avoid ugliness clients which can't parse HTML we don't send pills
+                // in the plaintext body.
+                contentText = this.plainWithPlainPills.serialize(editorState);
+                contentHTML = mdWithPills.toHTML();
             }
         }
 
@@ -821,11 +808,11 @@ export default class MessageComposerInput extends React.Component {
         let sendTextFn = ContentHelpers.makeTextMessage;
 
         this.historyManager.save(
-            contentState,
+            editorState,
             this.state.isRichtextEnabled ? 'rich' : 'markdown',
         );
 
-        if (contentText.startsWith('/me')) {
+        if (commandText && commandText.startsWith('/me')) {
             if (replyingToEv) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Emote Reply Fail', '', ErrorDialog, {
@@ -842,14 +829,16 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-
-        let content = contentHTML ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
+        let content = contentHTML ?
+                      sendHtmlFn(contentText, contentHTML) :
+                      sendTextFn(contentText);
 
         if (replyingToEv) {
             const replyContent = ReplyThread.makeReplyMixIn(replyingToEv);
             content = Object.assign(replyContent, content);
 
-            // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
+            // Part of Replies fallback support - prepend the text we're sending
+            // with the text we're replying to
             const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
             if (nestedReply) {
                 if (content.formatted_body) {
@@ -1009,20 +998,26 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+        const {
+            range = null,
+            completion = '',
+            completionId = '',
+            href = null,
+            suffix = ''
+        } = displayedCompletion;
 
         let inline;
         if (href) {
             inline = Inline.create({
                 type: 'pill',
                 data: { url: href },
-                nodes: [Text.create(completion)],
+                nodes: [Text.create(completionId || completion)],
             });
         } else if (completion === '@room') {
             inline = Inline.create({
                 type: 'pill',
                 data: { type: Pill.TYPE_AT_ROOM_MENTION },
-                nodes: [Text.create(completion)],
+                nodes: [Text.create(completionId || completion)],
             });
         }
 

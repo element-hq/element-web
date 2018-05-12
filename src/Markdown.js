@@ -133,7 +133,10 @@ export default class Markdown {
      * Render the markdown message to plain text. That is, essentially
      * just remove any backslashes escaping what would otherwise be
      * markdown syntax
-     * (to fix https://github.com/vector-im/riot-web/issues/2870)
+     * (to fix https://github.com/vector-im/riot-web/issues/2870).
+     *
+     * N.B. this does **NOT** render arbitrary MD to plain text - only MD
+     * which has no formatting.  Otherwise it emits HTML(!).
      */
     toPlaintext() {
         const renderer = new commonmark.HtmlRenderer({safe: false});
@@ -160,6 +163,14 @@ export default class Markdown {
             this.lit(node.literal);
             if (is_multi_line(node) && node.next) this.lit('\n\n');
         };
+
+        // convert MD links into console-friendly ' < http://foo >' style links
+        // ...except given this function never gets called with links, it's useless.
+        // renderer.link = function(node, entering) {
+        //     if (!entering) {
+        //         this.lit(` < ${node.destination} >`);
+        //     }
+        // };
 
         return renderer.render(this.parsed);
     }
