@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
-import { Value, Document, Event, Inline, Range, Node } from 'slate';
+import { Value, Document, Event, Inline, Text, Range, Node } from 'slate';
 
 import Html from 'slate-html-serializer';
 import { Markdown as Md } from 'slate-md-serializer';
@@ -781,6 +781,7 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
+
             // Use the original contentState because `contentText` has had mentions
             // stripped and these need to end up in contentHTML.
 
@@ -1014,14 +1015,14 @@ export default class MessageComposerInput extends React.Component {
         if (href) {
             inline = Inline.create({
                 type: 'pill',
-                isVoid: true,
                 data: { url: href },
+                nodes: [Text.create(completion)],
             });
         } else if (completion === '@room') {
             inline = Inline.create({
                 type: 'pill',
-                isVoid: true,
                 data: { type: Pill.TYPE_AT_ROOM_MENTION },
+                nodes: [Text.create(completion)],
             });
         }
 
@@ -1262,7 +1263,6 @@ export default class MessageComposerInput extends React.Component {
                             blockStyleFn={MessageComposerInput.getBlockStyle}
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}
-                            handleReturn={this.handleReturn}
                             handlePastedText={this.onTextPasted}
                             handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
