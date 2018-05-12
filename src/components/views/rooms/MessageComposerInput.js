@@ -1038,7 +1038,6 @@ export default class MessageComposerInput extends React.Component {
                 data: { completion, completionId, url: href },
                 // we can't put text in here otherwise the editor tries to select it
                 isVoid: true,
-                nodes: [],
             });
         } else if (completion === '@room') {
             inline = Inline.create({
@@ -1046,7 +1045,6 @@ export default class MessageComposerInput extends React.Component {
                 data: { completion, completionId },
                 // we can't put text in here otherwise the editor tries to select it
                 isVoid: true,
-                nodes: [],
             });
         } else {
             inline = Inline.create({
