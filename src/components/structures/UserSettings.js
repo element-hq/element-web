@@ -80,6 +80,7 @@ const SIMPLE_SETTINGS = [
     { id: "TextualBody.disableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
     { id: "TagPanel.disableTagPanel" },
+    { id: "enableWidgetScreenshots" },
 ];
 
 // These settings must be defined in SettingsStore
