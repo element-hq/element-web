@@ -912,12 +912,17 @@ export default class MessageComposerInput extends React.Component {
             const editorNode = ReactDOM.findDOMNode(this.refs.editor);
             const editorRect = editorNode.getBoundingClientRect();
 
+            // heuristic to handle tall emoji, pills, etc pushing the cursor away from the top
+            // or bottom of the page.
+            // XXX: is this going to break on large inline images or top-to-bottom scripts?
+            const EDGE_THRESHOLD = 8;
+
             let navigateHistory = false;
             if (up) {
                 const scrollCorrection = editorNode.scrollTop;
                 const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
-                //console.log(`Cursor distance from editor top is ${distanceFromTop}`);
-                if (distanceFromTop == 0) {
+                console.log(`Cursor distance from editor top is ${distanceFromTop}`);
+                if (distanceFromTop < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }
             }
@@ -925,8 +930,8 @@ export default class MessageComposerInput extends React.Component {
                 const scrollCorrection =
                     editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
                 const distanceFromBottom = cursorRect.bottom - editorRect.bottom + scrollCorrection;
-                //console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
-                if (distanceFromBottom == 0) {
+                console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
+                if (distanceFromBottom < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }
             }
