@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
-import { Value, Document, Event } from 'slate';
+import { Value, Document, Event, Inline, Range, Node } from 'slate';
 
 import Html from 'slate-html-serializer';
 import { Markdown as Md } from 'slate-md-serializer';
@@ -197,49 +197,6 @@ export default class MessageComposerInput extends React.Component {
      * - contentState was passed in
      */
     createEditorState(richText: boolean, value: ?Value): Value {
-/*
-        const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                RichText.getScopedMDDecorators(this.props);
-        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
-        decorators.push({
-            strategy: this.findPillEntities.bind(this),
-            component: (entityProps) => {
-                const Pill = sdk.getComponent('elements.Pill');
-                const type = entityProps.contentState.getEntity(entityProps.entityKey).getType();
-                const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
-                if (type === ENTITY_TYPES.AT_ROOM_PILL) {
-                    return <Pill
-                        type={Pill.TYPE_AT_ROOM_MENTION}
-                        room={this.props.room}
-                        offsetKey={entityProps.offsetKey}
-                        shouldShowPillAvatar={shouldShowPillAvatar}
-                    />;
-                } else if (Pill.isPillUrl(url)) {
-                    return <Pill
-                        url={url}
-                        room={this.props.room}
-                        offsetKey={entityProps.offsetKey}
-                        shouldShowPillAvatar={shouldShowPillAvatar}
-                    />;
-                }
-
-                return (
-                    <a href={url} data-offset-key={entityProps.offsetKey}>
-                        { entityProps.children }
-                    </a>
-                );
-            },
-        });
-        const compositeDecorator = new CompositeDecorator(decorators);
-        let editorState = null;
-        if (contentState) {
-            editorState = EditorState.createWithContent(contentState, compositeDecorator);
-        } else {
-            editorState = EditorState.createEmpty(compositeDecorator);
-        }
-
-        return EditorState.moveFocusToEnd(editorState);
-*/
         if (value instanceof Value) {
             return value;
         }
@@ -566,6 +523,10 @@ export default class MessageComposerInput extends React.Component {
                 return this.onVerticalArrow(ev, true);
             case KeyCode.DOWN:
                 return this.onVerticalArrow(ev, false);
+            case KeyCode.TAB:
+                return this.onTab(ev);
+            case KeyCode.ESCAPE:
+                return this.onEscape(ev);
             default:
                 // don't intercept it
                 return;
@@ -938,15 +899,19 @@ export default class MessageComposerInput extends React.Component {
 
             let navigateHistory = false;
             if (up) {
-                let scrollCorrection = editorNode.scrollTop;
-                if (cursorRect.top - editorRect.top + scrollCorrection == 0) {
+                const scrollCorrection = editorNode.scrollTop;
+                const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
+                //console.log(`Cursor distance from editor top is ${distanceFromTop}`);
+                if (distanceFromTop == 0) {
                     navigateHistory = true;
                 }
             }
             else {
-                let scrollCorrection =
+                const scrollCorrection =
                     editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
-                if (cursorRect.bottom - editorRect.bottom + scrollCorrection == 0) {
+                const distanceFromBottom = cursorRect.bottom - editorRect.bottom + scrollCorrection;
+                //console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
+                if (distanceFromBottom == 0) {
                     navigateHistory = true;
                 }
             }
@@ -1033,38 +998,50 @@ export default class MessageComposerInput extends React.Component {
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
     setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
-/*        
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
                 let editorState = this.state.originalEditorState;
-                // This is a workaround from https://github.com/facebook/draft-js/issues/458
-                // Due to the way we swap editorStates, Draft does not rerender at times
-                editorState = EditorState.forceSelection(editorState,
-                    editorState.getSelection());
                 this.setState({editorState});
             }
             return false;
         }
 
         const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
-        let contentState = activeEditorState.getCurrentContent();
 
-        let entityKey;
+        let inline;
         if (href) {
-            contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
-                url: href,
-                isCompletion: true,
+            inline = Inline.create({
+                type: 'pill',
+                isVoid: true,
+                data: { url: href },
             });
-            entityKey = contentState.getLastCreatedEntityKey();
         } else if (completion === '@room') {
-            contentState = contentState.createEntity(ENTITY_TYPES.AT_ROOM_PILL, 'IMMUTABLE', {
-                isCompletion: true,
+            inline = Inline.create({
+                type: 'pill',
+                isVoid: true,
+                data: { type: Pill.TYPE_AT_ROOM_MENTION },
             });
-            entityKey = contentState.getLastCreatedEntityKey();
         }
 
+        let editorState = activeEditorState;
+
+        if (range) {
+            const change = editorState.change().moveOffsetsTo(range.start, range.end);
+            editorState = change.value;
+        }
+
+        const change = editorState.change().insertInlineAtRange(
+            editorState.selection, inline
+        );
+        editorState = change.value;
+
+        this.setState({ editorState, originalEditorState: activeEditorState }, ()=>{
+//            this.refs.editor.focus();
+        });
+
+/*
         let selection;
         if (range) {
             selection = RichText.textOffsetsToSelectionState(
@@ -1085,16 +1062,51 @@ export default class MessageComposerInput extends React.Component {
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
         editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
         this.setState({editorState, originalEditorState: activeEditorState});
-
-        // for some reason, doing this right away does not update the editor :(
-        // setTimeout(() => this.refs.editor.focus(), 50);
-*/        
+*/
         return true;
+    };
+
+    renderNode = props => {
+        const { attributes, children, node, isSelected } = props;
+
+        switch (node.type) {
+            case 'paragraph': {
+                return <p {...attributes}>{children}</p>
+            }
+            case 'pill': {
+                const { data, text } = node;
+                const url = data.get('url');
+                const type = data.get('type');
+
+                const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+                const Pill = sdk.getComponent('elements.Pill');
+
+                if (type === Pill.TYPE_AT_ROOM_MENTION) {
+                    return <Pill
+                            type={Pill.TYPE_AT_ROOM_MENTION}
+                            room={this.props.room}
+                            shouldShowPillAvatar={shouldShowPillAvatar}
+                            />;
+                }
+                else if (Pill.isPillUrl(url)) {
+                    return <Pill
+                            url={url}
+                            room={this.props.room}
+                            shouldShowPillAvatar={shouldShowPillAvatar}
+                            />;
+                }
+                else {
+                    return <a href={url} {...props.attributes}>
+                                { text }
+                           </a>;
+                }
+            }
+        }
     };
 
     onFormatButtonClicked = (name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) => {
         e.preventDefault(); // don't steal focus from the editor!
-/*
+
         const command = {
                 code: 'code-block',
                 quote: 'blockquote',
@@ -1102,7 +1114,6 @@ export default class MessageComposerInput extends React.Component {
                 numbullet: 'ordered-list-item',
             }[name] || name;
         this.handleKeyCommand(command);
-*/        
     };
 
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
@@ -1140,14 +1151,41 @@ export default class MessageComposerInput extends React.Component {
 */
     }
 
-    getAutocompleteQuery(contentState: ContentState) {
-        return '';
+    getAutocompleteQuery(editorState: Value) {
+        // FIXME: do we really want to regenerate this every time the control is rerendered?
+        
+        // We can just return the current block where the selection begins, which
+        // should be enough to capture any autocompletion input, given autocompletion
+        // providers only search for the first match which intersects with the current selection.
+        // This avoids us having to serialize the whole thing to plaintext and convert
+        // selection offsets in & out of the plaintext domain.
+        return editorState.document.getDescendant(editorState.selection.anchorKey).text;
 
         // Don't send markdown links to the autocompleter
         // return this.removeMDLinks(contentState, ['@', '#']);
     }
 
+    getSelectionRange(editorState: Value) {
+        // return a character range suitable for handing to an autocomplete provider.
+        // the range is relative to the anchor of the current editor selection.
+        // if the selection spans multiple blocks, then we collapse it for the calculation.
+        const range = {
+            start: editorState.selection.anchorOffset,
+            end: (editorState.selection.anchorKey == editorState.selection.focusKey) ? 
+                 editorState.selection.focusOffset : editorState.selection.anchorOffset,
+        }
+        if (range.start > range.end) {
+            const tmp = range.start;
+            range.start = range.end;
+            range.end = tmp;
+        }
+        return range;
+    }
+
 /*
+    // delinkifies any matrix.to markdown links (i.e. pills) of form
+    // [#foo:matrix.org](https://matrix.to/#/#foo:matrix.org).
+    // the prefixes is an array of sigils that will be matched on.
     removeMDLinks(contentState: ContentState, prefixes: string[]) {
         const plaintext = contentState.getPlainText();
         if (!plaintext) return '';
@@ -1189,23 +1227,9 @@ export default class MessageComposerInput extends React.Component {
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
-        let hidePlaceholder = false;
-        // FIXME: in case we need to implement manual placeholdering
-
         const className = classNames('mx_MessageComposer_input', {
-            mx_MessageComposer_input_empty: hidePlaceholder,
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
-
-        const content = null;
-        const selection = {
-            start: 0,
-            end: 0,
-        };
-
-        // const content = activeEditorState.getCurrentContent();
-        // const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
-        //     activeEditorState.getCurrentContent().getBlocksAsArray());
 
         return (
             <div className="mx_MessageComposer_input_wrapper">
@@ -1216,8 +1240,8 @@ export default class MessageComposerInput extends React.Component {
                         room={this.props.room}
                         onConfirm={this.setDisplayedCompletion}
                         onSelectionChange={this.setDisplayedCompletion}
-                        query={this.getAutocompleteQuery(content)}
-                        selection={selection}
+                        query={this.getAutocompleteQuery(activeEditorState)}
+                        selection={this.getSelectionRange(activeEditorState)}
                     />
                 </div>
                 <div className={className}>
@@ -1232,6 +1256,8 @@ export default class MessageComposerInput extends React.Component {
                             value={this.state.editorState}
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
+                            renderNode={this.renderNode}
+                            spellCheck={true}
                             /*
                             blockStyleFn={MessageComposerInput.getBlockStyle}
                             keyBindingFn={MessageComposerInput.getKeyBinding}
@@ -1240,11 +1266,6 @@ export default class MessageComposerInput extends React.Component {
                             handlePastedText={this.onTextPasted}
                             handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
-                            onTab={this.onTab}
-                            onUpArrow={this.onUpArrow}
-                            onDownArrow={this.onDownArrow}
-                            onEscape={this.onEscape}
-                            spellCheck={true}
                             */
                             />
                 </div>
