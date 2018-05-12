@@ -81,7 +81,7 @@ export default class ReplyThread extends React.Component {
 
     // Part of Replies fallback support
     static stripHTMLReply(html) {
-        return html.replace(/^<blockquote data-mx-reply>[\s\S]+?<!--end-mx-reply--><\/blockquote>/, '');
+        return html.replace(/^<mx-reply>[\s\S]+?<\/mx-reply>/, '');
     }
 
     // Part of Replies fallback support
@@ -102,8 +102,8 @@ export default class ReplyThread extends React.Component {
         switch (ev.getContent().msgtype) {
             case 'm.text':
             case 'm.notice': {
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>${html || body}<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+                    + `<br>${html || body}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `<${mxid}> ${lines[0]}`;
@@ -112,28 +112,28 @@ export default class ReplyThread extends React.Component {
                 break;
             }
             case 'm.image':
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>sent an image.<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+                    + `<br>sent an image.</blockquote></mx-reply>`;
                 body = `> <${mxid}> sent an image.\n\n`;
                 break;
             case 'm.video':
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>sent a video.<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+                    + `<br>sent a video.</blockquote></mx-reply>`;
                 body = `> <${mxid}> sent a video.\n\n`;
                 break;
             case 'm.audio':
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>sent an audio file.<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+                    + `<br>sent an audio file.</blockquote></mx-reply>`;
                 body = `> <${mxid}> sent an audio file.\n\n`;
                 break;
             case 'm.file':
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
-                    + `<br>sent a file.<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+                    + `<br>sent a file.</blockquote></mx-reply>`;
                 body = `> <${mxid}> sent a file.\n\n`;
                 break;
             case 'm.emote': {
-                html = `<blockquote data-mx-reply><a href="${evLink}">In reply to</a> * `
-                    + `<a href="${userLink}">${mxid}</a><br>${html || body}<!--end-mx-reply--></blockquote>`;
+                html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> * `
+                    + `<a href="${userLink}">${mxid}</a><br>${html || body}</blockquote></mx-reply>`;
                 const lines = body.trim().split('\n');
                 if (lines.length > 0) {
                     lines[0] = `* <${mxid}> ${lines[0]}`;
