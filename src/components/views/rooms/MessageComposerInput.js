@@ -177,6 +177,8 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
+
+        this.direction = '';
     }
 
 /*
@@ -358,6 +360,17 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onChange = (change: Change) => {
+
+        let editorState = change.value;
+
+        if (this.direction !== '') {
+            const focusedNode = editorState.focusInline || editorState.focusText;
+            if (focusedNode.isVoid) {
+                change = change[`collapseToEndOf${ this.direction }Text`]();
+                editorState = change.value;
+            }
+        }
+
 /*        
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
@@ -417,7 +430,7 @@ export default class MessageComposerInput extends React.Component {
 */
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
-            editorState: change.value,
+            editorState,
             originalEditorState: null,
         });
     };
@@ -521,6 +534,18 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onKeyDown = (ev: Event, change: Change, editor: Editor) => {
+
+        // skip void nodes - see
+        // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
+        if (ev.keyCode === KeyCode.LEFT) {
+            this.direction = 'Previous';
+        }
+        else if (ev.keyCode === KeyCode.RIGHT) {
+            this.direction = 'Next';
+        } else {
+            this.direction = '';
+        }
+
         switch (ev.keyCode) {
             case KeyCode.ENTER:
                 return this.handleReturn(ev);
@@ -1010,14 +1035,23 @@ export default class MessageComposerInput extends React.Component {
         if (href) {
             inline = Inline.create({
                 type: 'pill',
-                data: { url: href },
-                nodes: [Text.create(completionId || completion)],
+                data: { completion, completionId, url: href },
+                // we can't put text in here otherwise the editor tries to select it
+                isVoid: true,
+                nodes: [],
             });
         } else if (completion === '@room') {
             inline = Inline.create({
                 type: 'pill',
-                data: { type: Pill.TYPE_AT_ROOM_MENTION },
-                nodes: [Text.create(completionId || completion)],
+                data: { completion, completionId },
+                // we can't put text in here otherwise the editor tries to select it
+                isVoid: true,
+                nodes: [],
+            });
+        } else {
+            inline = Inline.create({
+                type: 'autocompletion',
+                nodes: [Text.create(completion)]
             });
         }
 
@@ -1072,12 +1106,12 @@ export default class MessageComposerInput extends React.Component {
             case 'pill': {
                 const { data, text } = node;
                 const url = data.get('url');
-                const type = data.get('type');
+                const completion = data.get('completion');
 
                 const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
                 const Pill = sdk.getComponent('elements.Pill');
 
-                if (type === Pill.TYPE_AT_ROOM_MENTION) {
+                if (completion === '@room') {
                     return <Pill
                             type={Pill.TYPE_AT_ROOM_MENTION}
                             room={this.props.room}

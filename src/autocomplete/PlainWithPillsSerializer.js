@@ -64,11 +64,11 @@ class PlainWithPillsSerializer {
         } else if (node.type == 'pill') {
             switch (this.pillFormat) {
                 case 'plain':
-                    return node.text;
+                    return node.data.get('completion');
                 case 'md':
                     return `[${ node.text }](${ node.data.get('url') })`;
                 case 'id':
-                    return node.data.completionId || node.text;
+                    return node.data.get('completionId') || node.data.get('completion');
             }
         }
         else if (node.nodes) {
