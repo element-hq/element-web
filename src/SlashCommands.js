@@ -434,7 +434,7 @@ module.exports = {
         // trim any trailing whitespace, as it can confuse the parser for
         // IRC-style commands
         input = input.replace(/\s+$/, "");
-        if (input[0] === "/" && input[1] !== "/") {
+        if (input[0] === "/") {
             const bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
             let cmd;
             let args;

@@ -731,7 +731,7 @@ export default class MessageComposerInput extends React.Component {
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         if (firstChild && firstGrandChild &&
             firstChild.object === 'block' && firstGrandChild.object === 'text' &&
-            firstGrandChild.text[0] === '/' && firstGrandChild.text[1] !== '/')
+            firstGrandChild.text[0] === '/')
         {
             commandText = this.plainWithIdPills.serialize(editorState);
             cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
