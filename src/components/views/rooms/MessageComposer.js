@@ -35,7 +35,6 @@ export default class MessageComposer extends React.Component {
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
-        this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -44,13 +43,10 @@ export default class MessageComposer extends React.Component {
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
-            autocompleteQuery: '',
-            selection: null,
             inputState: {
-                style: [],
+                marks: [],
                 blockType: null,
                 isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
-                wordCount: 0,
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
@@ -209,13 +205,6 @@ export default class MessageComposer extends React.Component {
         // this._startCallApp(true);
     }
 
-    onInputContentChanged(content: string, selection: {start: number, end: number}) {
-        this.setState({
-            autocompleteQuery: content,
-            selection,
-        });
-    }
-
     onInputStateChanged(inputState) {
         this.setState({inputState});
     }
@@ -348,7 +337,6 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
-                    onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
                 stickerpickerButton,
@@ -365,10 +353,10 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const {style, blockType} = this.state.inputState;
+        const {marks, blockType} = this.state.inputState;
         const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
             (name) => {
-                const active = style.includes(name) || blockType === name;
+                const active = marks.includes(name) || blockType === name;
                 const suffix = active ? '-o-n' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
                 const className = 'mx_MessageComposer_format_button mx_filterFlipColor';

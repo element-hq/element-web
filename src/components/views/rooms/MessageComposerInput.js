@@ -184,23 +184,6 @@ export default class MessageComposerInput extends React.Component {
         this.direction = '';
     }
 
-/*
-    findPillEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
-        contentBlock.findEntityRanges(
-            (character) => {
-                const entityKey = character.getEntity();
-                return (
-                    entityKey !== null &&
-                    (
-                        contentState.getEntity(entityKey).getType() === 'LINK' ||
-                        contentState.getEntity(entityKey).getType() === ENTITY_TYPES.AT_ROOM_PILL
-                    )
-                );
-            }, callback,
-        );
-    }
-*/
-
     /*
      * "Does the right thing" to create an Editor value, based on:
      * - whether we've got rich text mode enabled
@@ -226,14 +209,12 @@ export default class MessageComposerInput extends React.Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-/*        
         // this is dirty, but moving all this state to MessageComposer is dirtier
         if (this.props.onInputStateChanged && nextState !== this.state) {
             const state = this.getSelectionInfo(nextState.editorState);
             state.isRichtextEnabled = nextState.isRichtextEnabled;
             this.props.onInputStateChanged(state);
         }
-*/        
     }
 
     onAction = (payload) => {
@@ -375,6 +356,19 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
+        if (editorState.document.getFirstText().text !== '') {
+            this.onTypingActivity();
+        } else {
+            this.onFinishedTyping();
+        }
+
+        /*
+        // XXX: what was this ever doing?
+        if (!state.hasOwnProperty('originalEditorState')) {
+            state.originalEditorState = null;
+        }
+        */
+
 /*        
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
@@ -405,6 +399,10 @@ export default class MessageComposerInput extends React.Component {
             // Reset selection
             editorState = EditorState.forceSelection(editorState, currentSelection);
         }
+*/
+
+        const text = editorState.startText.text;
+        const currentStartOffset = editorState.startOffset;
 
         // Automatic replacement of plaintext emoji to Unicode emoji
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
@@ -415,91 +413,32 @@ export default class MessageComposerInput extends React.Component {
                 const emojiUc = asciiList[emojiMatch[1]];
                 // hex unicode -> shortname -> actual unicode
                 const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
-                const newContentState = Modifier.replaceText(
-                    editorState.getCurrentContent(),
-                    currentSelection.merge({
-                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
-                        focusOffset: currentStartOffset,
-                    }),
-                    unicodeEmoji,
-                );
-                editorState = EditorState.push(
-                    editorState,
-                    newContentState,
-                    'insert-characters',
-                );
-                editorState = EditorState.forceSelection(editorState, newContentState.getSelectionAfter());
+
+                const range = Range.create({
+                    anchorKey: editorState.selection.startKey,
+                    anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
+                    focusKey: editorState.selection.startKey,
+                    focusOffset: currentStartOffset,
+                });
+                change = change.insertTextAtRange(range, unicodeEmoji);
+                editorState = change.value;
             }
         }
-*/
+
+        // Record the editor state for this room so that it can be retrieved after
+        // switching to another room and back
+        dis.dispatch({
+            action: 'editor_state',
+            room_id: this.props.room.roomId,
+            editor_state: editorState,
+        });
+
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
             originalEditorState: null,
         });
     };
-
-    /**
-     * We're overriding setState here because it's the most convenient way to monitor changes to the editorState.
-     * Doing it using a separate function that calls setState is a possibility (and was the old approach), but that
-     * approach requires a callback and an extra setState whenever trying to set multiple state properties.
-     *
-     * @param state
-     * @param callback
-     */
-    setState(state, callback) {
-/*            
-        if (state.editorState != null) {
-            state.editorState = RichText.attachImmutableEntitiesToEmoji(
-                state.editorState);
-
-            // Hide the autocomplete if the cursor location changes but the plaintext
-            // content stays the same. We don't hide if the pt has changed because the
-            // autocomplete will probably have different completions to show.
-            if (
-                !state.editorState.getSelection().equals(
-                    this.state.editorState.getSelection(),
-                )
-                && state.editorState.getCurrentContent().getPlainText() ===
-                this.state.editorState.getCurrentContent().getPlainText()
-            ) {
-                this.autocomplete.hide();
-            }
-
-            if (state.editorState.getCurrentContent().hasText()) {
-                this.onTypingActivity();
-            } else {
-                this.onFinishedTyping();
-            }
-
-            // Record the editor state for this room so that it can be retrieved after
-            // switching to another room and back
-            dis.dispatch({
-                action: 'editor_state',
-                room_id: this.props.room.roomId,
-                editor_state: state.editorState.getCurrentContent(),
-            });
-
-            if (!state.hasOwnProperty('originalEditorState')) {
-                state.originalEditorState = null;
-            }
-        }
-*/        
-        super.setState(state, () => {
-            if (callback != null) {
-                callback();
-            }
-/*
-            const textContent = this.state.editorState.getCurrentContent().getPlainText();
-            const selection = RichText.selectionStateToTextOffsets(
-                this.state.editorState.getSelection(),
-                this.state.editorState.getCurrentContent().getBlocksAsArray());
-            if (this.props.onContentChanged) {
-                this.props.onContentChanged(textContent, selection);
-            }
-*/        
-        });
-    }
 
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichtextEnabled) return;
@@ -1133,36 +1072,12 @@ export default class MessageComposerInput extends React.Component {
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
      buttons. */
     getSelectionInfo(editorState: Value) {
-        return {};
-/*
-        const styleName = {
-            BOLD: _td('bold'),
-            ITALIC: _td('italic'),
-            STRIKETHROUGH: _td('strike'),
-            UNDERLINE: _td('underline'),
-        };
-
-        const originalStyle = editorState.getCurrentInlineStyle().toArray();
-        const style = originalStyle
-            .map((style) => styleName[style] || null)
-            .filter((styleName) => !!styleName);
-
-        const blockName = {
-            'code-block': _td('code'),
-            'blockquote': _td('quote'),
-            'unordered-list-item': _td('bullet'),
-            'ordered-list-item': _td('numbullet'),
-        };
-        const originalBlockType = editorState.getCurrentContent()
-            .getBlockForKey(editorState.getSelection().getStartKey())
-            .getType();
-        const blockType = blockName[originalBlockType] || null;
-
         return {
-            style,
-            blockType,
+            marks: editorState.activeMarks,
+            // XXX: shouldn't we return all the types of blocks in the current selection,
+            // not just the anchor?
+            blockType: editorState.anchorBlock.type,
         };
-*/
     }
 
     getAutocompleteQuery(editorState: Value) {
