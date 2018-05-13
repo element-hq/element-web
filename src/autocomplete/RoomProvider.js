@@ -26,6 +26,7 @@ import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../matrix-to";
+import type {SelectionRange} from './Autocompleter';
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
 
@@ -46,14 +47,8 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
+    async getCompletions(query: string, selection: SelectionRange, force = false) {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
-
-        // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
-        if (/^(\/join|\/leave)/.test(query)) {
-            return [];
-        }
 
         const client = MatrixClientPeg.get();
         let completions = [];

@@ -22,6 +22,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import 'whatwg-fetch';
 
 import {TextualCompletion} from './Components';
+import type {SelectionRange} from './Autocompleter';
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
@@ -36,7 +37,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}) {
+    async getCompletions(query: string, selection: SelectionRange) {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];

@@ -20,6 +20,7 @@ import { _t } from '../languageHandler';
 import MatrixClientPeg from '../MatrixClientPeg';
 import {PillCompletion} from './Components';
 import sdk from '../index';
+import type {SelectionRange} from './Autocompleter';
 
 const AT_ROOM_REGEX = /@\S*/g;
 
@@ -29,7 +30,7 @@ export default class NotifProvider extends AutocompleteProvider {
         this.room = room;
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
+    async getCompletions(query: string, selection: SelectionRange, force = false) {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();

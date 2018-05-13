@@ -28,18 +28,21 @@ import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';
 
 import type {Room, RoomMember} from 'matrix-js-sdk';
+import type {SelectionRange} from './Autocompleter';
 import {makeUserPermalink} from "../matrix-to";
 
 const USER_REGEX = /@\S*/g;
+
+// used when you hit 'tab' - we allow some separator chars at the beginning
+// to allow you to tab-complete /mat into /(matthew)
+const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
     constructor(room) {
-        super(USER_REGEX, {
-            keys: ['name'],
-        });
+        super(USER_REGEX, FORCED_USER_REGEX);
         this.room = room;
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
@@ -87,14 +90,8 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
+    async getCompletions(query: string, selection: SelectionRange, force = false) {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
-
-        // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
-        if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
-            return [];
-        }
 
         // lazy-load user list into matcher
         if (this.users === null) this._makeUsers();
@@ -114,7 +111,7 @@ export default class UserProvider extends AutocompleteProvider {
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName.replace(' (IRC)', ''),
                     completionId: user.userId,
-                    suffix: range.start === 0 ? ': ' : ' ',
+                    suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion
