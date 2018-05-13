@@ -129,7 +129,14 @@ export default class CommandProvider extends AutocompleteProvider {
         if (!selection.beginning) return completions;
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.matcher.match(command[0]).map((result) => {
+            let results;
+            if (command[0] == '/') {
+                results = COMMANDS;
+            }
+            else {
+                results = this.matcher.match(command[0]);
+            }
+            completions = results.map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion
