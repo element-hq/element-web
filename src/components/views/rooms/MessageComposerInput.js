@@ -178,6 +178,7 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
 
+        this.suppressAutoComplete = false;
         this.direction = '';
     }
 
@@ -534,6 +535,8 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onKeyDown = (ev: Event, change: Change, editor: Editor) => {
+
+        this.suppressAutoComplete = false;
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
@@ -978,6 +981,8 @@ export default class MessageComposerInput extends React.Component {
         // we skip it for now given we know we're about to setState anyway
         editorState = change.value;
 
+        this.suppressAutoComplete = true;
+
         this.setState({ editorState }, ()=>{
             this.refs.editor.focus();
         });
@@ -1061,13 +1066,15 @@ export default class MessageComposerInput extends React.Component {
         let editorState = activeEditorState;
 
         if (range) {
-            const change = editorState.change().moveOffsetsTo(range.start, range.end);
+            const change = editorState.change()
+                                      .collapseToAnchor()
+                                      .moveOffsetsTo(range.start, range.end);
             editorState = change.value;
         }
 
-        const change = editorState.change().insertInlineAtRange(
-            editorState.selection, inline
-        );
+        const change = editorState.change()
+                                  .insertInlineAtRange(editorState.selection, inline)
+                                  .insertText(suffix);
         editorState = change.value;
 
         this.setState({ editorState, originalEditorState: activeEditorState }, ()=>{
@@ -1185,13 +1192,12 @@ export default class MessageComposerInput extends React.Component {
     }
 
     getAutocompleteQuery(editorState: Value) {
-        // FIXME: do we really want to regenerate this every time the control is rerendered?
-        
         // We can just return the current block where the selection begins, which
         // should be enough to capture any autocompletion input, given autocompletion
         // providers only search for the first match which intersects with the current selection.
         // This avoids us having to serialize the whole thing to plaintext and convert
         // selection offsets in & out of the plaintext domain.
+
         return editorState.document.getDescendant(editorState.selection.anchorKey).text;
 
         // Don't send markdown links to the autocompleter
@@ -1199,10 +1205,19 @@ export default class MessageComposerInput extends React.Component {
     }
 
     getSelectionRange(editorState: Value) {
+        let beginning = false;
+        const query = this.getAutocompleteQuery(editorState);
+        const firstChild = editorState.document.nodes.get(0);
+        const firstGrandChild = firstChild && firstChild.nodes.get(0);
+        beginning = (firstChild && firstGrandChild &&
+                     firstChild.object === 'block' && firstGrandChild.object === 'text' &&
+                     editorState.selection.anchorKey === firstGrandChild.key);
+
         // return a character range suitable for handing to an autocomplete provider.
         // the range is relative to the anchor of the current editor selection.
         // if the selection spans multiple blocks, then we collapse it for the calculation.
         const range = {
+            beginning, // whether the selection is in the first block of the editor or not
             start: editorState.selection.anchorOffset,
             end: (editorState.selection.anchorKey == editorState.selection.focusKey) ? 
                  editorState.selection.focusOffset : editorState.selection.anchorOffset,
@@ -1273,7 +1288,7 @@ export default class MessageComposerInput extends React.Component {
                         room={this.props.room}
                         onConfirm={this.setDisplayedCompletion}
                         onSelectionChange={this.setDisplayedCompletion}
-                        query={this.getAutocompleteQuery(activeEditorState)}
+                        query={ this.suppressAutoComplete ? '' : this.getAutocompleteQuery(activeEditorState) }
                         selection={this.getSelectionRange(activeEditorState)}
                     />
                 </div>
