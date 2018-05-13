@@ -745,9 +745,10 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
             if (cmd.promise) {
-                cmd.promise.then(function() {
+                cmd.promise.then(()=>{
                     console.log("Command success.");
-                }, function(err) {
+                    this.refs.editor.focus();
+                }, (err)=>{
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Server error', '', ErrorDialog, {
