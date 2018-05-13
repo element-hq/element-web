@@ -100,6 +100,8 @@ export default class MessageComposerInput extends React.Component {
         // called with current plaintext content (as a string) whenever it changes
         onContentChanged: PropTypes.func,
 
+        onFilesPasted: PropTypes.func,
+
         onInputStateChanged: PropTypes.func,
     };
 
@@ -1292,19 +1294,3 @@ export default class MessageComposerInput extends React.Component {
         );
     }
 }
-
-MessageComposerInput.propTypes = {
-    // a callback which is called when the height of the composer is
-    // changed due to a change in content.
-    onResize: PropTypes.func,
-
-    // js-sdk Room object
-    room: PropTypes.object.isRequired,
-
-    // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: PropTypes.func,
-
-    onFilesPasted: PropTypes.func,
-
-    onInputStateChanged: PropTypes.func,
-};
