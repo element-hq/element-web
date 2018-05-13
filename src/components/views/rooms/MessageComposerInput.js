@@ -1088,9 +1088,6 @@ export default class MessageComposerInput extends React.Component {
         // selection offsets in & out of the plaintext domain.
 
         return editorState.document.getDescendant(editorState.selection.anchorKey).text;
-
-        // Don't send markdown links to the autocompleter
-        // return this.removeMDLinks(contentState, ['@', '#']);
     }
 
     getSelectionRange(editorState: Value) {
@@ -1119,43 +1116,6 @@ export default class MessageComposerInput extends React.Component {
         return range;
     }
 
-/*
-    // delinkifies any matrix.to markdown links (i.e. pills) of form
-    // [#foo:matrix.org](https://matrix.to/#/#foo:matrix.org).
-    // the prefixes is an array of sigils that will be matched on.
-    removeMDLinks(contentState: ContentState, prefixes: string[]) {
-        const plaintext = contentState.getPlainText();
-        if (!plaintext) return '';
-        return plaintext.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
-        (markdownLink, text, resource, prefix, offset) => {
-            if (!prefixes.includes(prefix)) return markdownLink;
-            // Calculate the offset relative to the current block that the offset is in
-            let sum = 0;
-            const blocks = contentState.getBlocksAsArray();
-            let block;
-            for (let i = 0; i < blocks.length; i++) {
-                block = blocks[i];
-                sum += block.getLength();
-                if (sum > offset) {
-                    sum -= block.getLength();
-                    break;
-                }
-            }
-            offset -= sum;
-
-            const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? contentState.getEntity(entityKey) : null;
-            if (entity && entity.getData().isCompletion) {
-                // This is a completed mention, so do not insert MD link, just text
-                return text;
-            } else {
-                // This is either a MD link that was typed into the composer or another
-                // type of pill (e.g. room pill)
-                return markdownLink;
-            }
-        });
-    }
-*/
     onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
