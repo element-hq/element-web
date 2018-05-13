@@ -34,7 +34,7 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_MessageComposer_row div:last-child{
+.mx_MessageComposer_row > div:last-child{
     padding-right: 0;
 }
 

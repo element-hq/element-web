@@ -169,6 +169,13 @@ export default class AppTile extends React.Component {
         this.dispatcherRef = dis.register(this._onWidgetAction);
     }
 
+    componentDidUpdate() {
+        // Allow parents to access widget messaging
+        if (this.props.collectWidgetMessaging) {
+            this.props.collectWidgetMessaging(this.widgetMessaging);
+        }
+    }
+
     componentWillUnmount() {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
@@ -274,6 +281,11 @@ export default class AppTile extends React.Component {
     }
 
     _canUserModify() {
+        // User widgets should always be modifiable by their creator
+        if (this.props.userWidget && MatrixClientPeg.get().credentials.userId === this.props.creatorUserId) {
+            return true;
+        }
+        // Check if the current user can modify widgets in the current room
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     }
 
@@ -352,6 +364,9 @@ export default class AppTile extends React.Component {
         if (!this.widgetMessaging) {
             this._onInitialLoad();
         }
+        if (this._exposeWidgetMessaging) {
+            this._exposeWidgetMessaging(this.widgetMessaging);
+        }
     }
 
     /**
@@ -389,6 +404,7 @@ export default class AppTile extends React.Component {
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
+
         this.setState({loading: false});
     }
 
@@ -529,12 +545,16 @@ export default class AppTile extends React.Component {
 
         if (this.props.show) {
             const loadingElement = (
-                <div>
+                <div className="mx_AppLoading_spinner_fadeIn">
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
             if (this.state.initialising) {
-                appTileBody = loadingElement;
+                appTileBody = (
+                    <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
+                        { loadingElement }
+                    </div>
+                );
             } else if (this.state.hasPermissionToLoad == true) {
                 if (this.isMixedContent()) {
                     appTileBody = (
@@ -698,6 +718,8 @@ AppTile.propTypes = {
     // Optional function to be called on widget capability request
     // Called with an array of the requested capabilities
     onCapabilityRequest: PropTypes.func,
+    // Is this an instance of a user widget
+    userWidget: PropTypes.bool,
 };
 
 AppTile.defaultProps = {
@@ -710,4 +732,5 @@ AppTile.defaultProps = {
     showPopout: true,
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
+    userWidget: false,
 };

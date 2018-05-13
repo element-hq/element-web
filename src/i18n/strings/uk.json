@@ -84,7 +84,7 @@
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s змінив(ла) назву кімнати на %(roomName)s.",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s видалив ім'я кімнати.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s змінив тему на %(topic)s.",
-    "Email": "е-почта",
+    "Email": "е-пошта",
     "Email address": "Адреса е-почти",
     "Email address (optional)": "Адреса е-почти (не обов'язково)",
     "Email, name or matrix ID": "Е-почта, ім'я або matrix ID",
@@ -253,5 +253,17 @@
     "Collapse panel": "Згорнути панель",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "У вашому оглядачі вигляд застосунку може бути повністю іншим, а деякі або навіть усі функції можуть не працювати. Якщо ви наполягаєте, то можете продовжити користування, але ви маєте впоратись з усіма можливими проблемами власноруч!",
     "Checking for an update...": "Перевірка оновлень…",
-    "There are advanced notifications which are not shown here": "Є додаткові сповіщення, що не показуються тут"
+    "There are advanced notifications which are not shown here": "Є додаткові сповіщення, що не показуються тут",
+    "Clear Cache": "Очистити кеш",
+    "Clear Cache and Reload": "Очистити кеш та перезавантажити",
+    "Updates": "Оновлення",
+    "Check for update": "Перевірити на наявність оновлень",
+    "Reject all %(invitedRooms)s invites": "Відхилити запрошення до усіх %(invitedRooms)s",
+    "Desktop specific": "Властиві для стільниці",
+    "Profile": "Профіль",
+    "Display name": "Відображуване ім'я",
+    "To return to your account in future you need to set a password": "Щоб мати змогу користуватись обліковкою у майбутньому, треба зазначити пароль",
+    "Logged in as:": "Ви зайшли як:",
+    "click to reveal": "натисніть щоб побачити",
+    "Homeserver is": "Домашній сервер —"
 }

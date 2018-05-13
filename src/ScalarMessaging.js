@@ -349,7 +349,7 @@ function setWidget(event, roomId) {
             userWidgets[widgetId] = {
                 content: content,
                 sender: client.getUserId(),
-                stateKey: widgetId,
+                state_key: widgetId,
                 type: 'm.widget',
                 id: widgetId,
             };
