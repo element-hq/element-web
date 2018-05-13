@@ -243,23 +243,24 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
-/*                
-            case 'insert_mention': {
-                // Pretend that we've autocompleted this user because keeping two code
-                // paths for inserting a user pill is not fun
-                const selection = this.state.editorState.getSelection();
-                const member = this.props.room.getMember(payload.user_id);
-                const completion = member ?
-                    member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
-                this.setDisplayedCompletion({
-                    completion,
-                    selection,
-                    href: makeUserPermalink(payload.user_id),
-                    suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
-                });
-            }
+            case 'insert_mention':
+                {
+                    // Pretend that we've autocompleted this user because keeping two code
+                    // paths for inserting a user pill is not fun
+                    const selection = this.getSelectionRange(this.state.editorState);
+                    const member = this.props.room.getMember(payload.user_id);
+                    const completion = member ?
+                        member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
+                    this.setDisplayedCompletion({
+                        completion,
+                        completionId: payload.user_id,
+                        selection,
+                        href: makeUserPermalink(payload.user_id),
+                        suffix: (selection.beginning && selection.start === 0) ? ': ' : ' ',
+                    });
+                }
                 break;
-
+/*
             case 'quote': { // old quoting, whilst rich quoting is in labs
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
