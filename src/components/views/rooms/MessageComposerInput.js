@@ -494,14 +494,6 @@ export default class MessageComposerInput extends React.Component {
             if (this.props.onContentChanged) {
                 this.props.onContentChanged(textContent, selection);
             }
-
-            // Scroll to the bottom of the editor if the cursor is on the last line of the
-            // composer. For some reason the editor won't scroll automatically if we paste
-            // blocks of text in or insert newlines.
-            if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
-                editorRoot.scrollTop = editorRoot.scrollHeight;
-            }
 */        
         });
     }
@@ -933,7 +925,7 @@ export default class MessageComposerInput extends React.Component {
             else {
                 const scrollCorrection =
                     editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
-                const distanceFromBottom = cursorRect.bottom - editorRect.bottom + scrollCorrection;
+                const distanceFromBottom = editorRect.bottom - cursorRect.bottom + scrollCorrection;
                 console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
                 if (distanceFromBottom < EDGE_THRESHOLD) {
                     navigateHistory = true;
@@ -1082,28 +1074,6 @@ export default class MessageComposerInput extends React.Component {
 //            this.refs.editor.focus();
         });
 
-/*
-        let selection;
-        if (range) {
-            selection = RichText.textOffsetsToSelectionState(
-                range, contentState.getBlocksAsArray(),
-            );
-        } else {
-            selection = activeEditorState.getSelection();
-        }
-
-        contentState = Modifier.replaceText(contentState, selection, completion, null, entityKey);
-
-        // Move the selection to the end of the block
-        const afterSelection = contentState.getSelectionAfter();
-        if (suffix) {
-            contentState = Modifier.replaceText(contentState, afterSelection, suffix);
-        }
-
-        let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
-        editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-        this.setState({editorState, originalEditorState: activeEditorState});
-*/
         return true;
     };
 
