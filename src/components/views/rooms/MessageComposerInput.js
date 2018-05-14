@@ -58,7 +58,7 @@ import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-m
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
-import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+import {asciiRegexp, unicodeRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort, toShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
@@ -69,12 +69,14 @@ import {ContentHelpers} from 'matrix-js-sdk';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
+const EMOJI_REGEX = new RegExp(unicodeRegexp, 'g');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
 };
+
 
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -351,12 +353,20 @@ export default class MessageComposerInput extends React.Component {
         if (this.direction !== '') {
             const focusedNode = editorState.focusInline || editorState.focusText;
             if (focusedNode.isVoid) {
-                change = change[`collapseToEndOf${ this.direction }Text`]();
+                if (editorState.isCollapsed) {
+                    change = change[`collapseToEndOf${ this.direction }Text`]();
+                }
+                else {
+                    const block = this.direction === 'Previous' ? editorState.previousText : editorState.nextText;
+                    if (block) {
+                        change = change.moveFocusToEndOf(block)
+                    }
+                }
                 editorState = change.value;
             }
         }
 
-        if (editorState.document.getFirstText().text !== '') {
+        if (!editorState.document.isEmpty) {
             this.onTypingActivity();
         } else {
             this.onFinishedTyping();
@@ -369,9 +379,33 @@ export default class MessageComposerInput extends React.Component {
         }
         */
 
-/*        
-        editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
+        // emojioneify any emoji
 
+        // deliberately lose any inlines and pills via Plain.serialize as we know
+        // they won't contain emoji
+        // XXX: is getTextsAsArray a private API?
+        editorState.document.getTextsAsArray().forEach(node => {
+            if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
+                let match;
+                while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
+                    const range = Range.create({
+                        anchorKey: node.key,
+                        anchorOffset: match.index,
+                        focusKey: node.key,
+                        focusOffset: match.index + match[0].length,
+                    });
+                    const inline = Inline.create({
+                        type: 'emoji',
+                        data: { emojiUnicode: match[0] },
+                        isVoid: true,
+                    });
+                    change = change.insertInlineAtRange(range, inline);
+                    editorState = change.value;
+                }
+            }
+        });
+
+/*        
         const currentBlock = editorState.getSelection().getStartKey();
         const currentSelection = editorState.getSelection();
         const currentStartOffset = editorState.getSelection().getStartOffset();
@@ -400,7 +434,6 @@ export default class MessageComposerInput extends React.Component {
             editorState = EditorState.forceSelection(editorState, currentSelection);
         }
 */
-
         const text = editorState.startText.text;
         const currentStartOffset = editorState.startOffset;
 
@@ -912,8 +945,12 @@ export default class MessageComposerInput extends React.Component {
 
         // Move selection to the end of the selected history
         const change = editorState.change().collapseToEndOf(editorState.document);
+
         // XXX: should we be calling this.onChange(change) now?
-        // we skip it for now given we know we're about to setState anyway
+        // Answer: yes, if we want it to do any of the fixups on stuff like emoji.
+        // however, this should already have been done and persisted in the history,
+        // so shouldn't be necessary.
+
         editorState = change.value;
 
         this.suppressAutoComplete = true;
@@ -991,11 +1028,6 @@ export default class MessageComposerInput extends React.Component {
                 // we can't put text in here otherwise the editor tries to select it
                 isVoid: true,
             });
-        } else {
-            inline = Inline.create({
-                type: 'autocompletion',
-                nodes: [Text.create(completion)]
-            });
         }
 
         let editorState = activeEditorState;
@@ -1007,13 +1039,23 @@ export default class MessageComposerInput extends React.Component {
             editorState = change.value;
         }
 
-        const change = editorState.change()
-                                  .insertInlineAtRange(editorState.selection, inline)
-                                  .insertText(suffix);
+        let change;
+        if (inline) {
+            change = editorState.change()
+                                .insertInlineAtRange(editorState.selection, inline)
+                                .insertText(suffix);
+        }
+        else {
+            change = editorState.change()
+                                .insertTextAtRange(editorState.selection, completion)
+                                .insertText(suffix);
+        }
         editorState = change.value;
 
-        this.setState({ editorState, originalEditorState: activeEditorState }, ()=>{
-//            this.refs.editor.focus();
+        this.onChange(change);
+
+        this.setState({
+            originalEditorState: activeEditorState
         });
 
         return true;
@@ -1027,7 +1069,7 @@ export default class MessageComposerInput extends React.Component {
                 return <p {...attributes}>{children}</p>
             }
             case 'pill': {
-                const { data, text } = node;
+                const { data } = node;
                 const url = data.get('url');
                 const completion = data.get('completion');
 
@@ -1039,6 +1081,7 @@ export default class MessageComposerInput extends React.Component {
                             type={Pill.TYPE_AT_ROOM_MENTION}
                             room={this.props.room}
                             shouldShowPillAvatar={shouldShowPillAvatar}
+                            isSelected={isSelected}
                             />;
                 }
                 else if (Pill.isPillUrl(url)) {
@@ -1046,13 +1089,25 @@ export default class MessageComposerInput extends React.Component {
                             url={url}
                             room={this.props.room}
                             shouldShowPillAvatar={shouldShowPillAvatar}
+                            isSelected={isSelected}
                             />;
                 }
                 else {
+                    const { text } = node;
                     return <a href={url} {...props.attributes}>
                                 { text }
                            </a>;
                 }
+            }
+            case 'emoji': {
+                const { data } = node;
+                const emojiUnicode = data.get('emojiUnicode');
+                const uri = RichText.unicodeToEmojiUri(emojiUnicode);
+                const shortname = toShort(emojiUnicode);
+                const className = classNames('mx_emojione', {
+                    mx_emojione_selected: isSelected
+                });
+                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode }/>;
             }
         }
     };

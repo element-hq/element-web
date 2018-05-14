@@ -25,6 +25,10 @@
     padding-right: 5px;
 }
 
+.mx_UserPill_selected {
+    background-color: $accent-color ! important;
+}
+
 .mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me,
 .mx_EventTile_content .mx_AtRoomPill,
 .mx_MessageComposer_input .mx_AtRoomPill {

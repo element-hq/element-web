@@ -61,6 +61,9 @@ class PlainWithPillsSerializer {
             (node.object == 'block' && Block.isBlockList(node.nodes))
         ) {
             return node.nodes.map(this._serializeNode).join('\n');
+        }
+        else if (node.type == 'emoji') {
+            return node.data.get('emojiUnicode');
         } else if (node.type == 'pill') {
             switch (this.pillFormat) {
                 case 'plain':

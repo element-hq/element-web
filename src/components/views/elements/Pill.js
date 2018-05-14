@@ -59,6 +59,8 @@ const Pill = React.createClass({
         room: PropTypes.instanceOf(Room),
         // Whether to include an avatar in the pill
         shouldShowPillAvatar: PropTypes.bool,
+        // Whether to render this pill as if it were highlit by a selection
+        isSelected: PropTypes.bool,
     },
 
 
@@ -233,6 +235,7 @@ const Pill = React.createClass({
 
         const classes = classNames(pillClass, {
             "mx_UserPill_me": userId === MatrixClientPeg.get().credentials.userId,
+            "mx_UserPill_selected": this.props.isSelected,
         });
 
         if (this.state.pillType) {

@@ -51,10 +51,6 @@ const MARKDOWN_REGEX = {
     STRIKETHROUGH: /~{2}[^~]*~{2}/g,
 };
 
-const USERNAME_REGEX = /@\S+:\S+/g;
-const ROOM_REGEX = /#\S+:\S+/g;
-const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
-
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
 
@@ -73,7 +69,7 @@ export function htmlToEditorState(html: string): Value {
     return Html.serialize(html);
 }
 
-function unicodeToEmojiUri(str) {
+export function unicodeToEmojiUri(str) {
     let replaceWith, unicode, alt;
     if ((!emojione.unicodeAlt) || (emojione.sprites)) {
         // if we are using the shortname as the alt tag then we need a reversed array to map unicode code point to shortnames
@@ -112,27 +108,6 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
         callback(start, start + matchArr[0].length);
     }
 }
-
-// Workaround for https://github.com/facebook/draft-js/issues/414
-const emojiDecorator = {
-    strategy: (contentState, contentBlock, callback) => {
-        findWithRegex(EMOJI_REGEX, contentBlock, callback);
-    },
-    component: (props) => {
-        const uri = unicodeToEmojiUri(props.children[0].props.text);
-        const shortname = emojione.toShort(props.children[0].props.text);
-        const style = {
-            display: 'inline-block',
-            width: '1em',
-            maxHeight: '1em',
-            background: `url(${uri})`,
-            backgroundSize: 'contain',
-            backgroundPosition: 'center center',
-            overflow: 'hidden',
-        };
-        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{ props.children }</span></span>);
-    },
-};
 
 /**
  * Returns a composite decorator which has access to provided scope.
@@ -221,60 +196,6 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
         start,
         end,
     };
-}
-
-// modified version of https://github.com/draft-js-plugins/draft-js-plugins/blob/master/draft-js-emoji-plugin/src/modifiers/attachImmutableEntitiesToEmojis.js
-export function attachImmutableEntitiesToEmoji(editorState: EditorState): EditorState {
-    const contentState = editorState.getCurrentContent();
-    const blocks = contentState.getBlockMap();
-    let newContentState = contentState;
-
-    blocks.forEach((block) => {
-        const plainText = block.getText();
-
-        const addEntityToEmoji = (start, end) => {
-            const existingEntityKey = block.getEntityAt(start);
-            if (existingEntityKey) {
-                // avoid manipulation in case the emoji already has an entity
-                const entity = newContentState.getEntity(existingEntityKey);
-                if (entity && entity.get('type') === 'emoji') {
-                    return;
-                }
-            }
-
-            const selection = SelectionState.createEmpty(block.getKey())
-                .set('anchorOffset', start)
-                .set('focusOffset', end);
-            const emojiText = plainText.substring(start, end);
-            newContentState = newContentState.createEntity(
-                'emoji', 'IMMUTABLE', { emojiUnicode: emojiText },
-            );
-            const entityKey = newContentState.getLastCreatedEntityKey();
-            newContentState = Modifier.replaceText(
-                newContentState,
-                selection,
-                emojiText,
-                null,
-                entityKey,
-            );
-        };
-
-        findWithRegex(EMOJI_REGEX, block, addEntityToEmoji);
-    });
-
-    if (!newContentState.equals(contentState)) {
-        const oldSelection = editorState.getSelection();
-        editorState = EditorState.push(
-            editorState,
-            newContentState,
-            'convert-to-immutable-emojis',
-        );
-        // this is somewhat of a hack, we're undoing selection changes caused above
-        // it would be better not to make those changes in the first place
-        editorState = EditorState.forceSelection(editorState, oldSelection);
-    }
-
-    return editorState;
 }
 
 export function hasMultiLineSelection(editorState: EditorState): boolean {
