@@ -208,7 +208,6 @@
     "What's new?": "Що нового?",
     "Notify me for anything else": "Сповіщати мене про будь-що інше",
     "View Source": "Переглянути джерело",
-    "<a>Click here</a> to create a GitHub issue.": "<a>Нажміть тут</a> для створення запитання по проблемі  на GitHub.",
     "Can't update user notification settings": "Неможливо оновити налаштування користувацьких сповіщень",
     "Notify for all other messages/rooms": "Сповіщати щодо всіх повідомлень/кімнат",
     "Unable to look up room ID from server": "Неможливо знайти ID кімнати на сервері",

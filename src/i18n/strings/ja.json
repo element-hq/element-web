@@ -210,7 +210,6 @@
     "Failed to send custom event.": "カスタムイベントの送信に失敗しました。",
     "What's new?": "新着",
     "Notify me for anything else": "他の場合についても通知する",
-    "<a>Click here</a> to create a GitHub issue.": "<a>ここをクリック</a> してGithubの問題を報告してください。",
     "Notify for all other messages/rooms": "他のすべてのメッセージ又は部屋について通知する",
     "Unable to look up room ID from server": "サーバから部屋IDを検索できません",
     "Couldn't find a matching Matrix room": "一致するMatrixの部屋を見つけることができませんでした",
