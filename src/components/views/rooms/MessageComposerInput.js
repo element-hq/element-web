@@ -381,8 +381,6 @@ export default class MessageComposerInput extends React.Component {
 
         // emojioneify any emoji
 
-        // deliberately lose any inlines and pills via Plain.serialize as we know
-        // they won't contain emoji
         // XXX: is getTextsAsArray a private API?
         editorState.document.getTextsAsArray().forEach(node => {
             if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
