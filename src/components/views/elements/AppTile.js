@@ -359,9 +359,6 @@ export default class AppTile extends React.Component {
         if (!this.widgetMessaging) {
             this._onInitialLoad();
         }
-        if (this._exposeWidgetMessaging) {
-            this._exposeWidgetMessaging(this.widgetMessaging);
-        }
     }
 
     /**
