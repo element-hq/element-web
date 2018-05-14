@@ -127,10 +127,19 @@ export default class Stickerpicker extends React.Component {
     }
 
     _onWidgetAction(payload) {
-        if (payload.action === "user_widget_updated") {
-            this.forceUpdate();
-        } else if (payload.action === "stickerpicker_close") {
-            this.setState({showStickers: false});
+        switch (payload.action) {
+            case "user_widget_updated":
+                this.forceUpdate();
+                break;
+            case "stickerpicker_close":
+                this.setState({showStickers: false});
+                break;
+            case "show_right_panel":
+            case "hide_right_panel":
+            case "show_left_panel":
+            case "hide_left_panel":
+                this.setState({showStickers: false});
+                break;
         }
     }
 
