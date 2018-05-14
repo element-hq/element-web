@@ -217,6 +217,7 @@
     "Enable URL previews for this room (only affects you)": "Enable URL previews for this room (only affects you)",
     "Enable URL previews by default for participants in this room": "Enable URL previews by default for participants in this room",
     "Room Colour": "Room Colour",
+    "Enable widget screenshots on supported widgets": "Enable widget screenshots on supported widgets",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading report": "Uploading report",
