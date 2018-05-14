@@ -719,8 +719,14 @@ module.exports = React.createClass({
                 }
             });
 
-            privilegedUsers.sort((a, b) => userLevels[b.key] - userLevels[a.key]);
-            mutedUsers.sort((a, b) => userLevels[a.key] - userLevels[b.key]);
+            // comparator for sorting PL users lexicographically on PL descending, MXID ascending. (case-insensitive)
+            const comparator = (a, b) => {
+                const plDiff = userLevels[b.key] - userLevels[a.key];
+                return plDiff !== 0 ? plDiff : a.key.toLocaleLowerCase().localeCompare(b.key.toLocaleLowerCase());
+            };
+
+            privilegedUsers.sort(comparator);
+            mutedUsers.sort(comparator);
 
             if (privilegedUsers.length) {
                 privilegedUsersSection =
