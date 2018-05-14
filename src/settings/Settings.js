@@ -265,4 +265,9 @@ export const SETTINGS = {
         default: true,
         controller: new AudioNotificationsEnabledController(),
     },
+    "enableWidgetScreenshots": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Enable widget screenshots on supported widgets'),
+        default: false,
+    },
 };
