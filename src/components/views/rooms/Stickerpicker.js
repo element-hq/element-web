@@ -34,6 +34,7 @@ export default class Stickerpicker extends React.Component {
         this._onHideStickersClick = this._onHideStickersClick.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
+        this._updateWidget = this._updateWidget.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
         this._onResize = this._onResize.bind(this);
         this._onFinished = this._onFinished.bind(this);
@@ -90,11 +91,12 @@ export default class Stickerpicker extends React.Component {
         if (!this.state.imError) {
             this.dispatcherRef = dis.register(this._onWidgetAction);
         }
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
-        this.setState({
-            stickerpickerWidget,
-            widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
-        });
+
+        // Track updates to widget state in account data
+        MatrixClientPeg.get().on('accountData', this._updateWidget);
+
+        // Initialise widget state from current account data
+        this._updateWidget();
     }
 
     componentWillUnmount() {
@@ -113,6 +115,14 @@ export default class Stickerpicker extends React.Component {
         this.setState({
             showStickers: false,
             imError: errorMsg,
+        });
+    }
+
+    _updateWidget() {
+        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        this.setState({
+            stickerpickerWidget,
+            widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
         });
     }
 
