@@ -116,6 +116,12 @@ export default class FromWidgetPostMessageApi {
             return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
         }
 
+        // Although the requestId is required, we don't use it. We'll be nice and process the message
+        // if the property is missing, but with a warning for widget developers.
+        if (!event.data.requestId) {
+            console.warn("fromWidget action '" + event.data.action + "' does not have a requestId");
+        }
+
         const action = event.data.action;
         const widgetId = event.data.widgetId;
         if (action === 'content_loaded') {
@@ -137,12 +143,15 @@ export default class FromWidgetPostMessageApi {
             });
         } else if (action === 'm.sticker') {
             // console.warn('Got sticker message from widget', widgetId);
-            dis.dispatch({action: 'm.sticker', data: event.data.widgetData, widgetId: event.data.widgetId});
+            // NOTE -- The widgetData field is deprecated (in favour of the 'data' field) and will be removed eventually
+            const data = event.data.data || event.data.widgetData;
+            dis.dispatch({action: 'm.sticker', data: data, widgetId: event.data.widgetId});
         } else if (action === 'integration_manager_open') {
             // Close the stickerpicker
             dis.dispatch({action: 'stickerpicker_close'});
             // Open the integration manager
-            const data = event.data.widgetData;
+            // NOTE -- The widgetData field is deprecated (in favour of the 'data' field) and will be removed eventually
+            const data = event.data.data || event.data.widgetData;
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;
             IntegrationManager.open(integType, integId);

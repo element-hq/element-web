@@ -51,11 +51,11 @@ export default class ToWidgetPostMessageApi {
         if (payload.response === undefined) {
             return;
         }
-        const promise = this._requestMap[payload._id];
+        const promise = this._requestMap[payload.requestId];
         if (!promise) {
             return;
         }
-        delete this._requestMap[payload._id];
+        delete this._requestMap[payload.requestId];
         promise.resolve(payload);
     }
 
@@ -64,21 +64,21 @@ export default class ToWidgetPostMessageApi {
         targetWindow = targetWindow || window.parent; // default to parent window
         targetOrigin = targetOrigin || "*";
         this._counter += 1;
-        action._id = Date.now() + "-" + Math.random().toString(36) + "-" + this._counter;
+        action.requestId = Date.now() + "-" + Math.random().toString(36) + "-" + this._counter;
 
         return new Promise((resolve, reject) => {
-            this._requestMap[action._id] = {resolve, reject};
+            this._requestMap[action.requestId] = {resolve, reject};
             targetWindow.postMessage(action, targetOrigin);
 
             if (this._timeoutMs > 0) {
                 setTimeout(() => {
-                    if (!this._requestMap[action._id]) {
+                    if (!this._requestMap[action.requestId]) {
                         return;
                     }
                     console.error("postMessage request timed out. Sent object: " + JSON.stringify(action),
                         this._requestMap);
-                    this._requestMap[action._id].reject(new Error("Timed out"));
-                    delete this._requestMap[action._id];
+                    this._requestMap[action.requestId].reject(new Error("Timed out"));
+                    delete this._requestMap[action.requestId];
                 }, this._timeoutMs);
             }
         });

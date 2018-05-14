@@ -186,7 +186,6 @@ const sanitizeHtmlParams = {
     ],
     allowedAttributes: {
         // custom ones first:
-        blockquote: ['data-mx-reply'], // used to allow explicit removal of a reply fallback blockquote, value ignored
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix

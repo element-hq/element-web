@@ -58,8 +58,7 @@ function getUserWidgetsArray() {
  */
 function getStickerpickerWidgets() {
     const widgets = getUserWidgetsArray();
-    const stickerpickerWidgets = widgets.filter((widget) => widget.type='m.stickerpicker');
-    return stickerpickerWidgets;
+    return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
 }
 
 /**
@@ -73,7 +72,7 @@ function removeStickerpickerWidgets() {
     }
     const userWidgets = client.getAccountData('m.widgets').getContent() || {};
     Object.entries(userWidgets).forEach(([key, widget]) => {
-        if (widget.type === 'm.stickerpicker') {
+        if (widget.content && widget.content.type === 'm.stickerpicker') {
             delete userWidgets[key];
         }
     });
