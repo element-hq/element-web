@@ -232,7 +232,6 @@ export default class Stickerpicker extends React.Component {
             );
         } else {
             // Default content to show if stickerpicker widget not added
-            console.warn("No available sticker picker widgets");
             stickersContent = this._defaultStickerpickerContent();
         }
         return stickersContent;
