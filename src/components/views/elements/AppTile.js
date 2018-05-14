@@ -364,9 +364,7 @@ export default class AppTile extends React.Component {
         if (!this.widgetMessaging) {
             this._onInitialLoad();
         }
-        if (this._exposeWidgetMessaging) {
-            this._exposeWidgetMessaging(this.widgetMessaging);
-        }
+        this.setState({loading: false});
     }
 
     /**
@@ -404,8 +402,6 @@ export default class AppTile extends React.Component {
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
-
-        this.setState({loading: false});
     }
 
     _onWidgetAction(payload) {
