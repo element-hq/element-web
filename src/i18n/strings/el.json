@@ -57,7 +57,7 @@
     "%(senderDisplayName)s removed the room name.": "Ο %(senderDisplayName)s διέγραψε το όνομα του δωματίου.",
     "Changes your display nickname": "Αλλάζει το ψευδώνυμο χρήστη",
     "Conference call failed.": "Η κλήση συνδιάσκεψης απέτυχε.",
-    "powered by Matrix": "βασισμένο στο πρωτόκολλο Matrix",
+    "powered by Matrix": "βασισμένο στο Matrix",
     "Confirm password": "Επιβεβαίωση κωδικού πρόσβασης",
     "Confirm your new password": "Επιβεβαίωση του νέου κωδικού πρόσβασης",
     "Continue": "Συνέχεια",
@@ -772,5 +772,15 @@
     "Collapse panel": "Ελαχιστοποίηση καρτέλας",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Με τον τρέχον περιηγητή, η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι εντελώς εσφαλμένη και ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν. Εάν θέλετε να το δοκιμάσετε ούτως ή άλλως μπορείτε να συνεχίσετε, αλλά είστε μόνοι σας σε ό, τι αφορά τα προβλήματα που μπορεί να αντιμετωπίσετε!",
     "Checking for an update...": "Γίνεται έλεγχος για ενημέρωση...",
-    "There are advanced notifications which are not shown here": "Υπάρχουν προχωρημένες ειδοποιήσεις οι οποίες δεν εμφανίζονται εδώ"
+    "There are advanced notifications which are not shown here": "Υπάρχουν προχωρημένες ειδοποιήσεις οι οποίες δεν εμφανίζονται εδώ",
+    "Your identity server's URL": "Το URL του διακομιστή ταυτοποίησής σας",
+    "The platform you're on": "Η πλατφόρμα στην οποία βρίσκεστε",
+    "The version of Riot.im": "Η έκδοση του Riot.im",
+    "Your language of choice": "Η γλώσσα επιλογής σας",
+    "Your homeserver's URL": "Το URL του διακομιστή σας",
+    "Every page you use in the app": "Κάθε σελίδα που χρησιμοποιείτε στην εφαρμογή",
+    "e.g. <CurrentPageURL>": "π.χ. <CurrentPageURL>",
+    "Your device resolution": "Η ανάλυση της συσκευής σας",
+    "The information being sent to us to help make Riot.im better includes:": "Οι πληροφορίες που στέλνονται σε εμάς με σκοπό την βελτίωση του Riot.im περιλαμβάνουν:",
+    "Call Failed": "Η κλήση απέτυχε"
 }
