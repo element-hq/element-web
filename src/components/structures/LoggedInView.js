@@ -266,6 +266,7 @@ const LoggedInView = React.createClass({
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        const CookieBar = sdk.getComponent('globals.CookieBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
@@ -353,7 +354,9 @@ const LoggedInView = React.createClass({
 
         let topBar;
         const isGuest = this.props.matrixClient.isGuest();
-        if (this.props.hasNewVersion) {
+        if (this.props.showCookieBar) {
+            topBar = <CookieBar />;
+        } else if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                                     releaseNotes={this.props.newVersionReleaseNotes}
             />;
