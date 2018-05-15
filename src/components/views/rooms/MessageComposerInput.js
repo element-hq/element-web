@@ -346,7 +346,7 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onChange = (change: Change) => {
+    onChange = (change: Change, originalEditorState: value) => {
 
         let editorState = change.value;
 
@@ -467,7 +467,7 @@ export default class MessageComposerInput extends React.Component {
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
-            originalEditorState: null,
+            originalEditorState: originalEditorState || null
         });
     };
 
@@ -1050,11 +1050,7 @@ export default class MessageComposerInput extends React.Component {
         }
         editorState = change.value;
 
-        this.onChange(change);
-
-        this.setState({
-            originalEditorState: activeEditorState
-        });
+        this.onChange(change, activeEditorState);
 
         return true;
     };
