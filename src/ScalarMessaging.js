@@ -403,8 +403,7 @@ function setWidget(event, roomId) {
 
             dis.dispatch({ action: "user_widget_updated" });
         }).catch((e) => {
-            console.log("Error adding widget", e);
-            sendError(event, _t('Error adding widget'));
+            sendError(event, _t('Unable to create widget.'), e);
         });
     } else { // Room widget
         if (!roomId) {
