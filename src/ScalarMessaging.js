@@ -311,13 +311,13 @@ function waitForUserWidget(widgetId, add) {
             }
         }
 
-        if (satisfiesCondition(currentAccountDataEvent)) {
+        if (eventInIntendedState(currentAccountDataEvent)) {
             resolve();
             return;
         }
 
         function onAccountData(ev) {
-            if (satisfiesCondition(currentAccountDataEvent)) {
+            if (eventInIntendedState(currentAccountDataEvent)) {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 clearTimeout(timerId);
                 resolve();
