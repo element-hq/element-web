@@ -293,13 +293,20 @@ function inviteUser(event, roomId, userId) {
  */
 function waitForUserWidget(widgetId) {
     return new Promise((resolve, reject) => {
-        if (ev.getContent() && ev.getContent()[widgetId] !== undefined) {
+        const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
+        if (
+            currentAccountDataEvent &&
+            currentAccountDataEvent.getContent() &&
+            currentAccountDataEvent.getContent()[widgetId] !== undefined
+        ) {
             resolve();
             return;
         }
 
         let timerId;
         function onAccountData(ev) {
+            if (ev.getType() != 'm.widgets') return;
+
             if (ev.getContent() && ev.getContent()[widgetId] !== undefined) {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 clearTimeout(timerId);
