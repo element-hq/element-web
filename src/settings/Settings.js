@@ -220,7 +220,6 @@ export const SETTINGS = {
     },
     "showCookieBar": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Show cookie bar'),
         default: true,
     },
     "autocompleteDelay": {
