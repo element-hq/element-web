@@ -300,7 +300,9 @@ function waitForUserWidget(widgetId, add) {
     return new Promise((resolve, reject) => {
         const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
 
-        function satisfiesCondition(ev) {
+        // Tests an account data event, returning true if it's in the state
+        // we're waiting for it to be in
+        function eventInIntendedState(ev) {
             if (!ev || !currentAccountDataEvent.getContent()) return false;
             if (add) {
                 return ev.getContent()[widgetId] !== undefined;
