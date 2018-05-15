@@ -307,9 +307,7 @@ function waitForUserWidget(widgetId) {
         }
 
         function onAccountData(ev) {
-            if (ev.getType() != 'm.widgets') return;
-
-            if (ev.getContent() && ev.getContent()[widgetId] !== undefined) {
+            if (ev.getType() === 'm.widgets' && ev.getContent() && ev.getContent()[widgetId] !== undefined) {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 clearTimeout(timerId);
                 resolve();
