@@ -406,6 +406,7 @@ function setWidget(event, roomId) {
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
             // XXX: We should probably wait for the echo of the state event to come back from the server,
+            // as we do with user widgets.
             sendResponse(event, {
                 success: true,
             });
