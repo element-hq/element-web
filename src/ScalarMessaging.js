@@ -293,18 +293,22 @@ function inviteUser(event, roomId, userId) {
  */
 function waitForUserWidget(widgetId) {
     return new Promise((resolve, reject) => {
+        if (ev.getContent() && ev.getContent()[widgetId] !== undefined) {
+            resolve();
+            return;
+        }
+
         let timerId;
         function onAccountData(ev) {
-            if (ev.getContent()[widgetId] !== undefined) {
+            if (ev.getContent() && ev.getContent()[widgetId] !== undefined) {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 clearTimeout(timerId);
                 resolve();
             }
         }
         timerId = setTimeout(() => {
-            console.log("Timed out waiting for widget ID " + widgetId + " to appear");
             MatrixClientPeg.get().removeListener('accountData', onAccountData);
-            reject();
+            reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
         }, 10000);
         MatrixClientPeg.get().on('accountData', onAccountData);
     });
@@ -383,10 +387,8 @@ function setWidget(event, roomId) {
         // since the widget won't appear added until this happens. If we don't
         // wait for this, the action will complete but if the user is fast enough,
         // the widget still won't actually be there.
-        // start listening now otherwise we could race
-        const widgetAddPromise = waitForUserWidget(widgetId);
         client.setAccountData('m.widgets', userWidgets).then(() => {
-            return widgetAddPromise;
+            return waitForUserWidget(widgetId);
         }).then(() => {
             sendResponse(event, {
                 success: true,
