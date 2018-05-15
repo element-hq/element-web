@@ -34,6 +34,7 @@ export default class Stickerpicker extends React.Component {
         this._onHideStickersClick = this._onHideStickersClick.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpickerWidgets = this._removeStickerpickerWidgets.bind(this);
+        this._updateWidget = this._updateWidget.bind(this);
         this._onWidgetAction = this._onWidgetAction.bind(this);
         this._onResize = this._onResize.bind(this);
         this._onFinished = this._onFinished.bind(this);
@@ -90,11 +91,12 @@ export default class Stickerpicker extends React.Component {
         if (!this.state.imError) {
             this.dispatcherRef = dis.register(this._onWidgetAction);
         }
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
-        this.setState({
-            stickerpickerWidget,
-            widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
-        });
+
+        // Track updates to widget state in account data
+        MatrixClientPeg.get().on('accountData', this._updateWidget);
+
+        // Initialise widget state from current account data
+        this._updateWidget();
     }
 
     componentWillUnmount() {
@@ -116,11 +118,28 @@ export default class Stickerpicker extends React.Component {
         });
     }
 
+    _updateWidget() {
+        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        this.setState({
+            stickerpickerWidget,
+            widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
+        });
+    }
+
     _onWidgetAction(payload) {
-        if (payload.action === "user_widget_updated") {
-            this.forceUpdate();
-        } else if (payload.action === "stickerpicker_close") {
-            this.setState({showStickers: false});
+        switch (payload.action) {
+            case "user_widget_updated":
+                this.forceUpdate();
+                break;
+            case "stickerpicker_close":
+                this.setState({showStickers: false});
+                break;
+            case "show_right_panel":
+            case "hide_right_panel":
+            case "show_left_panel":
+            case "hide_left_panel":
+                this.setState({showStickers: false});
+                break;
         }
     }
 
@@ -223,7 +242,6 @@ export default class Stickerpicker extends React.Component {
             );
         } else {
             // Default content to show if stickerpicker widget not added
-            console.warn("No available sticker picker widgets");
             stickersContent = this._defaultStickerpickerContent();
         }
         return stickersContent;
@@ -235,16 +253,33 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     _onShowStickersClick(e) {
+        // XXX: Simplify by using a context menu that is positioned relative to the sticker picker button
+
         const buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset - 42;
+        let x = buttonRect.right + window.pageXOffset - 41;
+
+        // Amount of horizontal space between the right of menu and the right of the viewport
+        //  (10 = amount needed to make chevron centrally aligned)
+        const rightPad = 10;
+
+        // When the sticker picker would be displayed off of the viewport, adjust x
+        //  (302 = width of context menu, including borders)
+        x = Math.min(x, document.body.clientWidth - (302 + rightPad));
+
+        // Offset the chevron location, which is relative to the left of the context menu
+        //  (10 = offset when context menu would not be displayed off viewport)
+        //  (8 = value required in practice (possibly 10 - 2 where the 2 = context menu borders)
+        const stickerPickerChevronOffset = Math.max(10, 8 + window.pageXOffset + buttonRect.left - x);
+
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
         this.setState({
             showStickers: true,
             stickerPickerX: x,
             stickerPickerY: y,
+            stickerPickerChevronOffset,
         });
     }
 
@@ -297,7 +332,7 @@ export default class Stickerpicker extends React.Component {
 
         const stickerPicker = <ContextualMenu
             elementClass={GenericElementContextMenu}
-            chevronOffset={10}
+            chevronOffset={this.state.stickerPickerChevronOffset}
             chevronFace={'bottom'}
             left={this.state.stickerPickerX}
             top={this.state.stickerPickerY}

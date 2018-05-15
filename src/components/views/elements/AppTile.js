@@ -85,7 +85,7 @@ export default class AppTile extends React.Component {
 
     /**
      * Does the widget support a given capability
-     * @param  {[type]}  capability Capability to check for
+     * @param  {string}  capability Capability to check for
      * @return {Boolean}            True if capability supported
      */
     _hasCapability(capability) {
@@ -364,9 +364,7 @@ export default class AppTile extends React.Component {
         if (!this.widgetMessaging) {
             this._onInitialLoad();
         }
-        if (this._exposeWidgetMessaging) {
-            this._exposeWidgetMessaging(this.widgetMessaging);
-        }
+        this.setState({loading: false});
     }
 
     /**
@@ -404,8 +402,6 @@ export default class AppTile extends React.Component {
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
-
-        this.setState({loading: false});
     }
 
     _onWidgetAction(payload) {
@@ -607,7 +603,7 @@ export default class AppTile extends React.Component {
         }
 
         // Picture snapshot - only show button when apps are maximised.
-        const showPictureSnapshotButton = this._hasCapability('screenshot') && this.props.show;
+        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
         const showPictureSnapshotIcon = 'img/camera_green.svg';
         const popoutWidgetIcon = 'img/button-new-window.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
@@ -711,7 +707,7 @@ AppTile.propTypes = {
     showDelete: PropTypes.bool,
     // Optionally hide the popout widget icon
     showPopout: PropTypes.bool,
-    // Widget apabilities to allow by default (without user confirmation)
+    // Widget capabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX
     // basic widget capabilities, e.g. injecting sticker message events.
     whitelistCapabilities: PropTypes.array,

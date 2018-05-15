@@ -227,6 +227,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", this.props.room.room_id);
+
         const apps = this.state.apps.map(
             (app, index, arr) => {
                 return (<AppTile
@@ -242,6 +244,7 @@ module.exports = React.createClass({
                     creatorUserId={app.creatorUserId}
                     widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
                     waitForIframeLoad={app.waitForIframeLoad}
+                    whitelistCapabilities={enableScreenshots ? ["m.capability.screenshot"] : []}
                 />);
             });
 

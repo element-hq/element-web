@@ -116,6 +116,12 @@ export default class FromWidgetPostMessageApi {
             return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
         }
 
+        // Although the requestId is required, we don't use it. We'll be nice and process the message
+        // if the property is missing, but with a warning for widget developers.
+        if (!event.data.requestId) {
+            console.warn("fromWidget action '" + event.data.action + "' does not have a requestId");
+        }
+
         const action = event.data.action;
         const widgetId = event.data.widgetId;
         if (action === 'content_loaded') {
