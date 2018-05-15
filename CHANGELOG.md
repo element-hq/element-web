@@ -1,3 +1,10 @@
+Changes in [0.12.4-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.6) (2018-05-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.5...v0.12.4-rc.6)
+
+ * Wait for deletion of widgets as well addition
+   [\#1907](https://github.com/matrix-org/matrix-react-sdk/pull/1907)
+
 Changes in [0.12.4-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.5) (2018-05-15)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.4...v0.12.4-rc.5)
