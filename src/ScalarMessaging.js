@@ -290,6 +290,9 @@ function inviteUser(event, roomId, userId) {
  * Returns a promise that resolves when a widget with the given
  * ID has been added as a user widget (ie. the accountData event
  * arrives) or rejects after a timeout
+ *
+ * @param {string} widgetId The ID of the widget to wait for
+ * @returns {Promise} that resolves when the widget is available
  */
 function waitForUserWidget(widgetId) {
     return new Promise((resolve, reject) => {
@@ -303,7 +306,6 @@ function waitForUserWidget(widgetId) {
             return;
         }
 
-        let timerId;
         function onAccountData(ev) {
             if (ev.getType() != 'm.widgets') return;
 
@@ -313,7 +315,7 @@ function waitForUserWidget(widgetId) {
                 resolve();
             }
         }
-        timerId = setTimeout(() => {
+        const timerId = setTimeout(() => {
             MatrixClientPeg.get().removeListener('accountData', onAccountData);
             reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
         }, 10000);
