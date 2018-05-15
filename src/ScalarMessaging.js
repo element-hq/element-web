@@ -286,6 +286,30 @@ function inviteUser(event, roomId, userId) {
     });
 }
 
+/**
+ * Returns a promise that resolves when a widget with the given
+ * ID has been added as a user widget (ie. the accountData event
+ * arrives) or rejects after a timeout
+ */
+function waitForUserWidget(widgetId) {
+    return new Promise((resolve, reject) => {
+        let timerId;
+        function onAccountData(ev) {
+            if (ev.getContent()[widgetId] !== undefined) {
+                MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                clearTimeout(timerId);
+                resolve();
+            }
+        }
+        timerId = setTimeout(() => {
+            console.log("Timed out waiting for widget ID " + widgetId + " to appear");
+            MatrixClientPeg.get().removeListener('accountData', onAccountData);
+            reject();
+        }, 10000);
+        MatrixClientPeg.get().on('accountData', onAccountData);
+    });
+}
+
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
     const widgetType = event.data.type;
@@ -355,7 +379,15 @@ function setWidget(event, roomId) {
             };
         }
 
+        // This starts listening for when the echo comes back from the server
+        // since the widget won't appear added until this happens. If we don't
+        // wait for this, the action will complete but if the user is fast enough,
+        // the widget still won't actually be there.
+        // start listening now otherwise we could race
+        const widgetAddPromise = waitForUserWidget(widgetId);
         client.setAccountData('m.widgets', userWidgets).then(() => {
+            return widgetAddPromise;
+        }).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -373,6 +405,7 @@ function setWidget(event, roomId) {
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
+            // XXX: We should probably wait for the echo of the state event to come back from the server,
             sendResponse(event, {
                 success: true,
             });
