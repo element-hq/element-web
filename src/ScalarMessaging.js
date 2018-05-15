@@ -292,22 +292,30 @@ function inviteUser(event, roomId, userId) {
  * arrives) or rejects after a timeout
  *
  * @param {string} widgetId The ID of the widget to wait for
+ * @param {boolean} add True to wait for the widget to be added,
+ *     false to wait for it to be deleted.
  * @returns {Promise} that resolves when the widget is available
  */
-function waitForUserWidget(widgetId) {
+function waitForUserWidget(widgetId, add) {
     return new Promise((resolve, reject) => {
         const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
-        if (
-            currentAccountDataEvent &&
-            currentAccountDataEvent.getContent() &&
-            currentAccountDataEvent.getContent()[widgetId] !== undefined
-        ) {
+
+        function satisfiesCondition(ev) {
+            if (!ev || !currentAccountDataEvent.getContent()) return false;
+            if (add) {
+                return ev.getContent()[widgetId] !== undefined;
+            } else {
+                return ev.getContent()[widgetId] === undefined;
+            }
+        }
+
+        if (satisfiesCondition(currentAccountDataEvent)) {
             resolve();
             return;
         }
 
         function onAccountData(ev) {
-            if (ev.getType() === 'm.widgets' && ev.getContent() && ev.getContent()[widgetId] !== undefined) {
+            if (satisfiesCondition(currentAccountDataEvent)) {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 clearTimeout(timerId);
                 resolve();
@@ -395,7 +403,7 @@ function setWidget(event, roomId) {
         // wait for this, the action will complete but if the user is fast enough,
         // the widget still won't actually be there.
         client.setAccountData('m.widgets', userWidgets).then(() => {
-            return waitForUserWidget(widgetId);
+            return waitForUserWidget(widgetId, widgetUrl !== null);
         }).then(() => {
             sendResponse(event, {
                 success: true,
