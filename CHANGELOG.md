@@ -1,3 +1,10 @@
+Changes in [0.15.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.1) (2018-05-16)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.0...v0.15.1)
+
+ * Fix package-lock.json which was causing errors building the Electron app
+ * Update Electron version
+
 Changes in [0.15.0](https://github.com/vector-im/riot-web/releases/tag/v0.15.0) (2018-05-16)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.0-rc.6...v0.15.0)
