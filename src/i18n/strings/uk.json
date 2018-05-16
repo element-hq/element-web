@@ -265,5 +265,11 @@
     "To return to your account in future you need to set a password": "Щоб мати змогу користуватись обліковкою у майбутньому, треба зазначити пароль",
     "Logged in as:": "Ви зайшли як:",
     "click to reveal": "натисніть щоб побачити",
-    "Homeserver is": "Домашній сервер —"
+    "Homeserver is": "Домашній сервер —",
+    "The version of Riot.im": "Версія Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Чи увійшли ви, чи ні (ми не зберігаємо ваше ім'я користувача)",
+    "Your language of choice": "Обрана мова",
+    "Which officially provided instance you are using, if any": "Яким офіційно наданим примірником ви користуєтесь (якщо користуєтесь)",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Чи використовуєте ви режим Richtext у редакторі Rich Text Editor",
+    "Your homeserver's URL": "URL адреса вашого домашнього серверу"
 }
