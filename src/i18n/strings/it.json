@@ -1151,5 +1151,21 @@
     "Collapse panel": "Riduci pannello",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Con il tuo attuale browser, l'aspetto e la sensazione generale dell'applicazione potrebbero essere completamente sbagliati e alcune delle funzionalità potrebbero non funzionare. Se vuoi provare comunque puoi continuare, ma non riceverai aiuto per qualsiasi problema tu possa riscontrare!",
     "Checking for an update...": "Controllo aggiornamenti...",
-    "There are advanced notifications which are not shown here": "Ci sono notifiche avanzate che non sono mostrate qui"
+    "There are advanced notifications which are not shown here": "Ci sono notifiche avanzate che non sono mostrate qui",
+    "Every page you use in the app": "Ogni pagina che usi nell'app",
+    "e.g. <CurrentPageURL>": "es. <CurrentPageURL>",
+    "Your User Agent": "Il tuo User Agent",
+    "Your device resolution": "La risoluzione del dispositivo",
+    "Missing roomId.": "ID stanza mancante.",
+    "Always show encryption icons": "Mostra sempre icone di cifratura",
+    "Enable widget screenshots on supported widgets": "Attiva le schermate dei widget sui widget supportati",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Al momento non è possibile rispondere con un file quindi verrà inviato senza essere una risposta.",
+    "Unable to reply": "Impossibile rispondere",
+    "At this time it is not possible to reply with an emote.": "Al momento non è possibile rispondere con una emoticon.",
+    "Picture": "Immagine",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Impossibile caricare l'evento a cui si è risposto, o non esiste o non hai il permesso di visualizzarlo.",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Gli errori di Riot sono monitorati su GitHub: <a>segnala un problema su GitHub</a>.",
+    "Log out and remove encryption keys?": "Disconnettere e rimuovere le chiavi di cifratura?",
+    "Refresh": "Aggiorna",
+    "We encountered an error trying to restore your previous session.": "Abbiamo riscontrato un errore tentando di ripristinare la tua sessione precedente."
 }
