@@ -536,11 +536,12 @@ export default class MessageComposerInput extends React.Component {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
         }
-/*
-        let newState: ?EditorState = null;
+
+        let newState: ?Value = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichtextEnabled) {
+/*
             // These are block types, not handled by RichUtils by default.
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
             const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
@@ -563,7 +564,9 @@ export default class MessageComposerInput extends React.Component {
                     newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
                 }
             }
+*/            
         } else {
+/*            
             const contentState = this.state.editorState.getCurrentContent();
             const multipleLinesSelected = RichText.hasMultiLineSelection(this.state.editorState);
 
@@ -599,16 +602,17 @@ export default class MessageComposerInput extends React.Component {
                 'blockquote': -2,
             }[command];
 
-            // Returns a function that collapses a selectionState to its end and moves it by offset
-            const collapseAndOffsetSelection = (selectionState, offset) => {
-                const key = selectionState.getEndKey();
-                return new SelectionState({
+            // Returns a function that collapses a selection to its end and moves it by offset
+            const collapseAndOffsetSelection = (selection, offset) => {
+                const key = selection.endKey();
+                return new Range({
                     anchorKey: key, anchorOffset: offset,
                     focusKey: key, focusOffset: offset,
                 });
             };
 
             if (modifyFn) {
+
                 const previousSelection = this.state.editorState.getSelection();
                 const newContentState = RichText.modifyText(contentState, previousSelection, modifyFn);
                 newState = EditorState.push(
@@ -633,15 +637,11 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        if (newState == null) {
-            newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-        }
-
         if (newState != null) {
             this.setState({editorState: newState});
             return true;
         }
-*/    
+*/        
         return false;
     };
 /*
