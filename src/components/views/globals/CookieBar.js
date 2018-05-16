@@ -15,59 +15,64 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 
-const makeLink = (href) => (sub) =>
-    <a
-        className="mx_MatrixToolbar_link"
-        target="_blank"
-        href={href}
-    >
-        { sub }
-    </a>;
+export default class CookieBar extends React.Component {
+    static propTypes = {
+        policyUrl: PropTypes.string,
+    }
 
-export default React.createClass({
-    onAccept: function() {
+    constructor() {
+        super();
+    }
+
+    onAccept() {
         dis.dispatch({
             action: 'accept_cookies',
         });
-    },
+    }
 
-    onReject: function() {
+    onReject() {
         dis.dispatch({
             action: 'reject_cookies',
         });
-    },
+    }
 
-    render: function() {
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const toolbarClasses = "mx_MatrixToolbar";
         return (
             <div className={toolbarClasses}>
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning" />
                 <div className="mx_MatrixToolbar_content">
-                    { _t(
-                        "Help us improve Riot by sending usage data. " +
-                        "This will use a cookie " +
-                        "(see our <CookieLink>cookie</CookieLink> and " +
-                        "<PrivacyLink>privacy</PrivacyLink> policies)",
+                    { this.props.policyUrl ? _t(
+                        "Help improve Riot by sending usage data? " +
+                        "This will use a cookie. " +
+                        "(See our <PolicyLink>cookie and privacy policies</PolicyLink>).",
                         {},
                         {
                             // XXX: We need to link to the page that explains our cookies
-                            'CookieLink': makeLink("https://riot.im/privacy"),
-                            'PrivacyLink': makeLink("https://riot.im/privacy"),
+                            'PolicyLink': (sub) => <a
+                                    className="mx_MatrixToolbar_link"
+                                    target="_blank"
+                                    href={this.props.policyUrl}
+                                >
+                                    { sub }
+                                </a>
+                            ,
                         },
-                    ) }
+                    ) : _t("Help improve Riot by sending usage data? This will use a cookie.") }
                 </div>
                 <AccessibleButton element='button' className="mx_MatrixToolbar_action" onClick={this.onAccept}>
-                    { _t("Send usage data") }
+                    { _t("Yes please") }
                 </AccessibleButton>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.onReject}>
                     <img src="img/cancel.svg" width="18" height="18" />
                 </AccessibleButton>
             </div>
         );
-    },
-});
+    }
+}

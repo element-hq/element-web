@@ -355,7 +355,8 @@ const LoggedInView = React.createClass({
         let topBar;
         const isGuest = this.props.matrixClient.isGuest();
         if (this.props.showCookieBar) {
-            topBar = <CookieBar />;
+            const policyUrl = this.props.config.piwik ? (this.props.config.piwik.policyUrl || null) : null;
+            topBar = <CookieBar policyUrl={policyUrl} />;
         } else if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                                     releaseNotes={this.props.newVersionReleaseNotes}
