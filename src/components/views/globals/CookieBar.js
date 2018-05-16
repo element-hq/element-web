@@ -19,11 +19,11 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 
-const PrivacyLink = (sub) =>
+const makeLink = (href) => (sub) =>
     <a
         className="mx_MatrixToolbar_link"
         target="_blank"
-        href="https://riot.im/privacy"
+        href={href}
     >
         { sub }
     </a>;
@@ -56,8 +56,8 @@ export default React.createClass({
                         {},
                         {
                             // XXX: We need to link to the page that explains our cookies
-                            'CookieLink': PrivacyLink,
-                            'PrivacyLink': PrivacyLink,
+                            'CookieLink': makeLink("https://riot.im/privacy"),
+                            'PrivacyLink': makeLink("https://riot.im/privacy"),
                         },
                     ) }
                 </div>
