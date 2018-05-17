@@ -1,3 +1,10 @@
+Changes in [0.12.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.5) (2018-05-17)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4...v0.12.5)
+
+ * Fix image size jumping regression
+   [\#1909](https://github.com/matrix-org/matrix-react-sdk/pull/1909)
+
 Changes in [0.12.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4) (2018-05-16)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.6...v0.12.4)
