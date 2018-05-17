@@ -21,14 +21,14 @@ import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 
 import MFileBody from './MFileBody';
-import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import { decryptFile } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+
+const THUMBNAIL_MAX_HEIGHT = 600;
 
 export default class extends React.Component {
     displayName: 'MImageBody'
@@ -48,14 +48,12 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onAction = this.onAction.bind(this);
         this.onImageError = this.onImageError.bind(this);
         this.onImageLoad = this.onImageLoad.bind(this);
         this.onImageEnter = this.onImageEnter.bind(this);
         this.onImageLeave = this.onImageLeave.bind(this);
         this.onClientSync = this.onClientSync.bind(this);
         this.onClick = this.onClick.bind(this);
-        this.fixupHeight = this.fixupHeight.bind(this);
         this._isGif = this._isGif.bind(this);
 
         this.state = {
@@ -140,7 +138,6 @@ export default class extends React.Component {
     }
 
     onImageLoad() {
-        this.fixupHeight();
         this.props.onWidgetLoad();
     }
 
@@ -176,7 +173,6 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        this.dispatcherRef = dis.register(this.onAction);
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -217,7 +213,6 @@ export default class extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        dis.unregister(this.dispatcherRef);
         this.context.matrixClient.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
 
@@ -234,50 +229,25 @@ export default class extends React.Component {
     _afterComponentWillUnmount() {
     }
 
-    onAction(payload) {
-        if (payload.action === "timeline_resize") {
-            this.fixupHeight();
-        }
-    }
-
-    fixupHeight() {
-        if (!this.refs.image) {
-            console.warn(`Refusing to fix up height on ${this.displayName} with no image element`);
-            return;
-        }
-
-        const content = this.props.mxEvent.getContent();
-        const timelineWidth = this.refs.body.offsetWidth;
-        const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
-        // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
-
-        // FIXME: this will break on clientside generated thumbnails (as per e2e rooms)
-        // which may well be much smaller than the 800x600 bounding box.
-
-        // FIXME: It will also break really badly for images with broken or missing thumbnails
-
-        // FIXME: Because we don't know what size of thumbnail the server's actually going to send
-        // us, we can't even really layout the page nicely for it.  Instead we have to assume
-        // it'll target 800x600 and we'll downsize if needed to make things fit.
-
-        // console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
-        let thumbHeight = null;
-        if (content.info) {
-            thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
-        }
-        this.refs.image.style.height = thumbHeight + "px";
-        // console.log("Image height now", thumbHeight);
-    }
-
     _messageContent(contentUrl, thumbUrl, content) {
+        const maxHeight = Math.min(THUMBNAIL_MAX_HEIGHT, content.info.h);
+        const maxWidth = content.info.w * maxHeight / content.info.h;
         const thumbnail = (
             <a href={contentUrl} onClick={this.onClick}>
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                    alt={content.body}
-                    onError={this.onImageError}
-                    onLoad={this.onImageLoad}
-                    onMouseEnter={this.onImageEnter}
-                    onMouseLeave={this.onImageLeave} />
+                <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
+                    { /* Calculate aspect ratio, using %padding will size _container correctly */ }
+                    <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
+
+                    { /* Thumbnail CSS class resizes to exactly container size with inline CSS
+                         to restrict width */ }
+                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                        style={{ "max-width": maxWidth + "px" }}
+                        alt={content.body}
+                        onError={this.onImageError}
+                        onLoad={this.onImageLoad}
+                        onMouseEnter={this.onImageEnter}
+                        onMouseLeave={this.onImageLeave} />
+                </div>
             </a>
         );
 

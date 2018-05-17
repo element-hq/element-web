@@ -20,5 +20,14 @@ limitations under the License.
 }
 
 .mx_MImageBody_thumbnail {
-    max-width: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.mx_MImageBody_thumbnail_container {
+    overflow: hidden;
+    position: relative;
 }
