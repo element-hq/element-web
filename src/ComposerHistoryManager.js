@@ -17,7 +17,7 @@ limitations under the License.
 
 import { Value } from 'slate';
 import Html from 'slate-html-serializer';
-import { Markdown as Md } from 'slate-md-serializer';
+import Md from 'slate-md-serializer';
 import Plain from 'slate-plain-serializer';
 import * as RichText from './RichText';
 import Markdown from './Markdown';

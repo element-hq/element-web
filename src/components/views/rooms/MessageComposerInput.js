@@ -23,7 +23,7 @@ import { Editor } from 'slate-react';
 import { Value, Document, Event, Inline, Text, Range, Node } from 'slate';
 
 import Html from 'slate-html-serializer';
-import { Markdown as Md } from 'slate-md-serializer';
+import Md from 'slate-md-serializer';
 import Plain from 'slate-plain-serializer';
 import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerializer";
 
@@ -107,43 +107,6 @@ export default class MessageComposerInput extends React.Component {
         onInputStateChanged: PropTypes.func,
     };
 
-/*
-    static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
-        // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
-        // handle this in `getDefaultKeyBinding` so we do it ourselves here.
-        //
-        // * if macOS, read second option
-        const ctrlCmdCommand = {
-            // C-m => Toggles between rich text and markdown modes
-            [KeyCode.KEY_M]: 'toggle-mode',
-            [KeyCode.KEY_B]: 'bold',
-            [KeyCode.KEY_I]: 'italic',
-            [KeyCode.KEY_U]: 'underline',
-            [KeyCode.KEY_J]: 'code',
-            [KeyCode.KEY_O]: 'split-block',
-        }[ev.keyCode];
-
-        if (ctrlCmdCommand) {
-            if (!isOnlyCtrlOrCmdKeyEvent(ev)) {
-                return null;
-            }
-            return ctrlCmdCommand;
-        }
-
-        // Handle keys such as return, left and right arrows etc.
-        return getDefaultKeyBinding(ev);
-    }
-
-    static getBlockStyle(block: ContentBlock): ?string {
-        if (block.getType() === 'strikethrough') {
-            return 'mx_Markdown_STRIKETHROUGH';
-        }
-
-        return null;
-    }
-*/    
-
     client: MatrixClient;
     autocomplete: Autocomplete;
     historyManager: ComposerHistoryManager;
@@ -181,6 +144,8 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
+        this.md                  = new Md();
+        this.html                = new Html();
 
         this.suppressAutoComplete = false;
         this.direction = '';
@@ -191,9 +156,9 @@ export default class MessageComposerInput extends React.Component {
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
-    createEditorState(richText: boolean, value: ?Value): Value {
-        if (value instanceof Value) {
-            return value;
+    createEditorState(richText: boolean, editorState: ?Value): Value {
+        if (editorState instanceof Value) {
+            return editorState;
         }
         else {
             // ...or create a new one.
@@ -275,7 +240,7 @@ export default class MessageComposerInput extends React.Component {
                 }
             }
                 break;
-*/                
+*/
         }
     };
 
@@ -403,7 +368,7 @@ export default class MessageComposerInput extends React.Component {
             }
         });
 
-/*        
+/*
         const currentBlock = editorState.getSelection().getStartKey();
         const currentSelection = editorState.getSelection();
         const currentStartOffset = editorState.getSelection().getStartOffset();
@@ -477,27 +442,54 @@ export default class MessageComposerInput extends React.Component {
         // FIXME: this conversion should be handled in the store, surely
         // i.e. "convert my current composer value into Rich or MD, as ComposerHistoryManager already does"
 
-        let value = null;
+        let editorState = null;
         if (enabled) {
-            // const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            // contentState = RichText.htmlToContentState(md.toHTML());
+            // const sourceWithPills = this.plainWithMdPills.serialize(this.state.editorState);
+            // const markdown = new Markdown(sourceWithPills);
+            // editorState = this.html.deserialize(markdown.toHTML());
 
-            value = Md.deserialize(Plain.serialize(this.state.editorState));
+            // we don't really want a custom MD parser hanging around, but the
+            // alternative would be:
+            editorState = this.md.deserialize(this.plainWithMdPills.serialize(this.state.editorState));
         } else {
             // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             // value = ContentState.createFromText(markdown);
 
-            value = Plain.deserialize(Md.serialize(this.state.editorState));
+            editorState = Plain.deserialize(this.md.serialize(this.state.editorState));
         }
 
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, value),
+            editorState: this.createEditorState(enabled, editorState),
             isRichtextEnabled: enabled,
         });
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
-    }
+    };
+
+    /**
+    * Check if the current selection has a mark with `type` in it.
+    *
+    * @param {String} type
+    * @return {Boolean}
+    */
+
+    hasMark = type => {
+        const { editorState } = this.state
+        return editorState.activeMarks.some(mark => mark.type == type)
+    };
+
+    /**
+    * Check if the any of the currently selected blocks are of `type`.
+    *
+    * @param {String} type
+    * @return {Boolean}
+    */
+
+    hasBlock = type => {
+        const { editorState } = this.state
+        return editorState.blocks.some(node => node.type == type)
+    };
 
     onKeyDown = (ev: Event, change: Change, editor: Editor) => {
 
@@ -512,6 +504,22 @@ export default class MessageComposerInput extends React.Component {
             this.direction = 'Next';
         } else {
             this.direction = '';
+        }
+
+        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
+            const ctrlCmdCommand = {
+                // C-m => Toggles between rich text and markdown modes
+                [KeyCode.KEY_M]: 'toggle-mode',
+                [KeyCode.KEY_B]: 'bold',
+                [KeyCode.KEY_I]: 'italic',
+                [KeyCode.KEY_U]: 'underline',
+                [KeyCode.KEY_J]: 'code',
+            }[ev.keyCode];
+
+            if (ctrlCmdCommand) {
+                return this.handleKeyCommand(ctrlCmdCommand);
+            }
+            return false;
         }
 
         switch (ev.keyCode) {
@@ -529,7 +537,7 @@ export default class MessageComposerInput extends React.Component {
                 // don't intercept it
                 return;
         }
-    }
+    };
 
     handleKeyCommand = (command: string): boolean => {
         if (command === 'toggle-mode') {
@@ -541,32 +549,79 @@ export default class MessageComposerInput extends React.Component {
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichtextEnabled) {
-/*
-            // These are block types, not handled by RichUtils by default.
-            const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
-            const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+            const type = command;
+            const { editorState } = this.state;
+            const change = editorState.change();
+            const { document } = editorState;
+            switch (type) {
+                // list-blocks:
+                case 'bulleted-list':
+                case 'numbered-list': {
+                    // Handle the extra wrapping required for list buttons.
+                    const isList = this.hasBlock('list-item');
+                    const isType = editorState.blocks.some(block => {
+                        return !!document.getClosest(block.key, parent => parent.type == type);
+                    });
 
-            const shouldToggleBlockFormat = (
-                command === 'backspace' ||
-                command === 'split-block'
-            ) && currentBlockType !== 'unstyled';
-
-            if (blockCommands.includes(command)) {
-                newState = RichUtils.toggleBlockType(this.state.editorState, command);
-            } else if (command === 'strike') {
-                // this is the only inline style not handled by Draft by default
-                newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
-            } else if (shouldToggleBlockFormat) {
-                const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
-                const currentEndOffset = this.state.editorState.getSelection().getEndOffset();
-                if (currentStartOffset === 0 && currentEndOffset === 0) {
-                    // Toggle current block type (setting it to 'unstyled')
-                    newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
+                    if (isList && isType) {
+                        change
+                            .setBlocks(DEFAULT_NODE)
+                            .unwrapBlock('bulleted-list')
+                            .unwrapBlock('numbered-list');
+                    } else if (isList) {
+                        change
+                            .unwrapBlock(
+                                type == 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+                            )
+                            .wrapBlock(type);
+                    } else {
+                        change.setBlocks('list-item').wrapBlock(type);
+                    }
                 }
+                break;
+
+                // simple blocks
+                case 'paragraph':
+                case 'block-quote':
+                case 'heading-one':
+                case 'heading-two':
+                case 'heading-three':
+                case 'list-item':
+                case 'code-block': {
+                    const isActive = this.hasBlock(type);
+                    const isList = this.hasBlock('list-item');
+
+                    if (isList) {
+                        change
+                            .setBlocks(isActive ? DEFAULT_NODE : type)
+                            .unwrapBlock('bulleted-list')
+                            .unwrapBlock('numbered-list');
+                    } else {
+                        change.setBlocks(isActive ? DEFAULT_NODE : type);
+                    }
+                }
+                break;
+
+                // marks:
+                case 'bold':
+                case 'italic':
+                case 'code':
+                case 'underline':
+                case 'strikethrough': {
+                    change.toggleMark(type);
+                }
+                break;
+
+                default:
+                    console.warn(`ignoring unrecognised RTE command ${type}`);
+                    return false;
             }
-*/            
+
+            this.onChange(change);
+
+            return true;
         } else {
-/*            
+/*
             const contentState = this.state.editorState.getCurrentContent();
             const multipleLinesSelected = RichText.hasMultiLineSelection(this.state.editorState);
 
@@ -641,7 +696,8 @@ export default class MessageComposerInput extends React.Component {
             this.setState({editorState: newState});
             return true;
         }
-*/        
+*/
+        }
         return false;
     };
 /*
@@ -671,19 +727,14 @@ export default class MessageComposerInput extends React.Component {
         if (ev.shiftKey) {
             return;
         }
-/*
-        const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        if (
-            ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
-            .includes(currentBlockType)
-        ) {
-            // By returning false, we allow the default draft-js key binding to occur,
-            // which in this case invokes "split-block". This creates a new block of the
-            // same type, allowing the user to delete it with backspace.
-            // See handleKeyCommand (when command === 'backspace')
-            return false;
+
+        if (this.state.editorState.blocks.some(
+            block => block in ['code-block', 'block-quote', 'bulleted-list', 'numbered-list']
+        )) {
+            // allow the user to terminate blocks by hitting return rather than sending a msg
+            return;
         }
-*/
+
         const editorState = this.state.editorState;
 
         let contentText;
@@ -989,6 +1040,17 @@ export default class MessageComposerInput extends React.Component {
         await this.setDisplayedCompletion(null); // restore originalEditorState
     };
 
+    /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
+     buttons. */
+    getSelectionInfo(editorState: Value) {
+        return {
+            marks: editorState.activeMarks,
+            // XXX: shouldn't we return all the types of blocks in the current selection,
+            // not just the anchor?
+            blockType: editorState.anchorBlock.type,
+        };
+    }
+
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
@@ -1059,9 +1121,24 @@ export default class MessageComposerInput extends React.Component {
         const { attributes, children, node, isSelected } = props;
 
         switch (node.type) {
-            case 'paragraph': {
-                return <p {...attributes}>{children}</p>
-            }
+            case 'paragraph':
+                return <p {...attributes}>{children}</p>;
+            case 'block-quote':
+                return <blockquote {...attributes}>{children}</blockquote>;
+            case 'bulleted-list':
+                return <ul {...attributes}>{children}</ul>;
+            case 'heading-one':
+                return <h1 {...attributes}>{children}</h1>;
+            case 'heading-two':
+                return <h2 {...attributes}>{children}</h2>;
+            case 'heading-three':
+                return <h3 {...attributes}>{children}</h3>;
+            case 'list-item':
+                return <li {...attributes}>{children}</li>;
+            case 'numbered-list':
+                return <ol {...attributes}>{children}</ol>;
+            case 'code-block':
+                return <p {...attributes}><code {...attributes}>{children}</code></p>;
             case 'pill': {
                 const { data } = node;
                 const url = data.get('url');
@@ -1106,28 +1183,34 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
+    renderMark = props => {
+        const { children, mark, attributes } = props;
+        switch (mark.type) {
+            case 'bold':
+                return <strong {...{ attributes }}>{children}</strong>;
+            case 'italic':
+                return <em {...{ attributes }}>{children}</em>;
+            case 'code':
+                return <code {...{ attributes }}>{children}</code>;
+            case 'underline':
+                return <u {...{ attributes }}>{children}</u>;
+            case 'strikethrough':
+                return <del {...{ attributes }}>{children}</del>;
+        }
+    };
+
     onFormatButtonClicked = (name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) => {
         e.preventDefault(); // don't steal focus from the editor!
 
         const command = {
                 code: 'code-block',
-                quote: 'blockquote',
-                bullet: 'unordered-list-item',
-                numbullet: 'ordered-list-item',
+                quote: 'block-quote',
+                bullet: 'bulleted-list',
+                numbullet: 'numbered-list',
+                strike: 'strike-through',
             }[name] || name;
         this.handleKeyCommand(command);
     };
-
-    /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
-     buttons. */
-    getSelectionInfo(editorState: Value) {
-        return {
-            marks: editorState.activeMarks,
-            // XXX: shouldn't we return all the types of blocks in the current selection,
-            // not just the anchor?
-            blockType: editorState.anchorBlock.type,
-        };
-    }
 
     getAutocompleteQuery(editorState: Value) {
         // We can just return the current block where the selection begins, which
@@ -1154,7 +1237,7 @@ export default class MessageComposerInput extends React.Component {
         const range = {
             beginning, // whether the selection is in the first block of the editor or not
             start: editorState.selection.anchorOffset,
-            end: (editorState.selection.anchorKey == editorState.selection.focusKey) ? 
+            end: (editorState.selection.anchorKey == editorState.selection.focusKey) ?
                  editorState.selection.focusOffset : editorState.selection.anchorOffset,
         }
         if (range.start > range.end) {
@@ -1203,11 +1286,9 @@ export default class MessageComposerInput extends React.Component {
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
                             renderNode={this.renderNode}
+                            renderMark={this.renderMark}
                             spellCheck={true}
                             /*
-                            blockStyleFn={MessageComposerInput.getBlockStyle}
-                            keyBindingFn={MessageComposerInput.getKeyBinding}
-                            handleKeyCommand={this.handleKeyCommand}
                             handlePastedText={this.onTextPasted}
                             handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
