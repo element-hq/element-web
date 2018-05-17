@@ -1,3 +1,9 @@
+Changes in [0.15.2](https://github.com/vector-im/riot-web/releases/tag/v0.15.2) (2018-05-17)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.1...v0.15.2)
+
+ * Update to matrix-react-sdk v0.12.5 to fix image size jumps
+
 Changes in [0.15.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.1) (2018-05-16)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.0...v0.15.1)
