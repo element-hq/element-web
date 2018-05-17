@@ -207,8 +207,8 @@ export default class extends React.Component {
                 });
             }).done();
         }
-        this._afterComponentDidMount();
         this.fixupHeight();
+        this._afterComponentDidMount();
     }
 
     // To be overridden by subclasses (e.g. MStickerBody) for further
