@@ -35,12 +35,15 @@ function onLinkContextMenu(ev, params) {
     const url = params.linkURL || params.srcURL;
 
     const popupMenu = new Menu();
-    popupMenu.append(new MenuItem({
-        label: url,
-        click() {
-            safeOpenURL(url);
-        },
-    }));
+    // No point trying to open blob: URLs in an external browser: it ain't gonna work.
+    if (!url.startsWith('blob:')) {
+        popupMenu.append(new MenuItem({
+            label: url,
+            click() {
+                safeOpenURL(url);
+            },
+        }));
+    }
 
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
         popupMenu.append(new MenuItem({
@@ -55,12 +58,15 @@ function onLinkContextMenu(ev, params) {
         }));
     }
 
-    popupMenu.append(new MenuItem({
-        label: 'Copy Link Address',
-        click() {
-            clipboard.writeText(url);
-        },
-    }));
+    // No point offerring to copy a blob: URL either
+    if (!url.startsWith('blob:')) {
+        popupMenu.append(new MenuItem({
+            label: 'Copy Link Address',
+            click() {
+                clipboard.writeText(url);
+            },
+        }));
+    }
     // popup() requires an options object even for no options
     popupMenu.popup({});
     ev.preventDefault();
