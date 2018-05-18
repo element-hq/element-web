@@ -260,8 +260,7 @@ export default class extends React.Component {
                     { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                     <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
 
-                    { /* Thumbnail CSS class resizes to exactly container size with inline CSS
-                         to restrict width */ }
+                    { /* mx_MImageBody_thumbnail resizes img to exactly container size */ }
                     { img }
                 </div>
             </a> : null;
