@@ -57,6 +57,7 @@ export function showStartChatInviteDialog() {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
         placeholder: _t("Email, name or matrix ID"),
+        validAddressTypes: ['mx-user-id', 'email'],
         button: _t("Start Chat"),
         onFinished: _onStartChatFinished,
     });
