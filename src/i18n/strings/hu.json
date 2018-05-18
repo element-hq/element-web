@@ -1178,5 +1178,8 @@
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Nem lehet betölteni azt az eseményt amire válaszoltál, mert vagy nem létezik, vagy nincs jogod megnézni.",
     "Collapse Reply Thread": "Beszélgetés szál becsukása",
     "Enable widget screenshots on supported widgets": "Ahol az a kisalkalmazásban támogatott ott képernyőkép készítés engedélyezése",
-    "Send analytics data": "Analitikai adatok küldése"
+    "Send analytics data": "Analitikai adatok küldése",
+    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ. (Nézd meg a <PolicyLink>sütikről és titoktartási irányelvekről</PolicyLink> szóló leírást).",
+    "Help improve Riot by sending usage data? This will use a cookie.": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ.",
+    "Yes please": "Igen, kérlek"
 }
