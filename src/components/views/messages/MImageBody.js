@@ -230,7 +230,10 @@ export default class extends React.Component {
     }
 
     _messageContent(contentUrl, thumbUrl, content) {
+        // The maximum height of the thumbnail as it is rendered as an <img>
         const maxHeight = Math.min(THUMBNAIL_MAX_HEIGHT, content.info.h);
+        // The maximum width of the thumbnail, as dictated by it's natural
+        // maximum height.
         const maxWidth = content.info.w * maxHeight / content.info.h;
 
         let img = null;
@@ -246,6 +249,8 @@ export default class extends React.Component {
                 }} />
             </div>;
         } else if (thumbUrl && !this.state.imgError) {
+            // Restrict the width of the thumbnail here, otherwise it will fill the container
+            // which has the same width as the timeline
             img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                 style={{ "max-width": maxWidth + "px" }}
                 alt={content.body}
