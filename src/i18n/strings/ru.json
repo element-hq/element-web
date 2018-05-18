@@ -1175,5 +1175,9 @@
     "Unable to reply": "Не удается ответить",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не удается загрузить событие, на которое был дан ответ, либо оно не существует, либо у вас нет разрешения на его просмотр.",
     "Enable widget screenshots on supported widgets": "Включить скриншоты виджета в поддерживаемых виджетах",
-    "Collapse Reply Thread": "Ответить с цитированием"
+    "Collapse Reply Thread": "Ответить с цитированием",
+    "Send analytics data": "Отправить данные аналитики",
+    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Помогите улучшить Riot, отправляя данные об использовании? Будут использоваться файлы cookie. (См. наши <PolicyLink>политики cookie и конфиденциальности</PolicyLink>).",
+    "Help improve Riot by sending usage data? This will use a cookie.": "Помогите улучшить Riot, отправляя данные об использовании? Будут использоваться файлы cookie.",
+    "Yes please": "Да, пожалуйста"
 }
