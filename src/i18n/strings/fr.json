@@ -1177,5 +1177,9 @@
     "At this time it is not possible to reply with an emote.": "Pour le moment il n'est pas possible de répondre avec un émoji.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Impossible de charger l'événement auquel il a été répondu, soit il n'existe pas, soit vous n'avez pas l'autorisation de le voir.",
     "Collapse Reply Thread": "Dévoiler le fil de réponse",
-    "Enable widget screenshots on supported widgets": "Activer les captures d'écran des widgets pris en charge"
+    "Enable widget screenshots on supported widgets": "Activer les captures d'écran des widgets pris en charge",
+    "Send analytics data": "Envoyer les données analytiques",
+    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie. (Voir nos <PolicyLink>politiques de cookie et de confidentialité</PolicyLink>).",
+    "Help improve Riot by sending usage data? This will use a cookie.": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie.",
+    "Yes please": "Oui, s'il vous plaît"
 }
