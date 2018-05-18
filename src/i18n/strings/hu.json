@@ -1174,5 +1174,6 @@
     "Send analytics data": "Analitikai adatok küldése",
     "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ. (Nézd meg a <PolicyLink>sütikről és titoktartási irányelvekről</PolicyLink> szóló leírást).",
     "Help improve Riot by sending usage data? This will use a cookie.": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ.",
-    "Yes please": "Igen, kérlek"
+    "Yes please": "Igen, kérlek",
+    "Muted Users": "Elnémított felhasználók"
 }
