@@ -239,14 +239,8 @@ export default class extends React.Component {
         let img = null;
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            img = <div className="mx_MImageBody_thumbnail" ref="image" style={{
-                "display": "flex",
-                "alignItems": "center",
-                "width": "100%",
-            }}>
-                <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
-                    "margin": "auto",
-                }} />
+            img = <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
+                <img src="img/spinner.gif" alt={content.body} width="32" height="32" />
             </div>;
         } else if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container

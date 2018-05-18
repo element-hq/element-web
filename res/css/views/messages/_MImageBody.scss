@@ -35,3 +35,13 @@ limitations under the License.
     // Make sure the _thumbnail is positioned relative to the _container
     position: relative;
 }
+
+.mx_MImageBody_thumbnail_spinner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.mx_MImageBody_thumbnail_spinner img {
+    margin: auto;
+}
