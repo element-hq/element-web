@@ -165,6 +165,8 @@ export default React.createClass({
             newVersionReleaseNotes: null,
             checkingForUpdate: null,
 
+            showCookieBar: false,
+
             // Parameters used in the registration dance with the IS
             register_client_secret: null,
             register_session_id: null,
@@ -226,8 +228,6 @@ export default React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
-
-        if (!SettingsStore.getValue("analyticsOptOut")) Analytics.enable();
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
@@ -361,6 +361,16 @@ export default React.createClass({
             // loadSession as there's logic there to ask the user if they want
             // to try logging out.
         });
+
+        if (SettingsStore.getValue("showCookieBar")) {
+            this.setState({
+                showCookieBar: true,
+            });
+        }
+
+        if (SettingsStore.getValue("analyticsOptIn")) {
+            Analytics.enable();
+        }
     },
 
     componentWillUnmount: function() {
@@ -671,6 +681,23 @@ export default React.createClass({
             case 'aria_unhide_main_app':
                 this.setState({
                     hideToSRUsers: false,
+                });
+                break;
+            case 'accept_cookies':
+                SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, true);
+                SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
+
+                this.setState({
+                    showCookieBar: false,
+                });
+                Analytics.enable();
+                break;
+            case 'reject_cookies':
+                SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
+                SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
+
+                this.setState({
+                    showCookieBar: false,
                 });
                 break;
         }
@@ -1621,6 +1648,7 @@ export default React.createClass({
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                         teamToken={this._teamToken}
+                        showCookieBar={this.state.showCookieBar}
                         {...this.props}
                         {...this.state}
                     />
