@@ -61,7 +61,8 @@ function onLinkContextMenu(ev, params) {
             clipboard.writeText(url);
         },
     }));
-    popupMenu.popup();
+    // popup() requires an options object even for no options
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
@@ -88,7 +89,8 @@ function onSelectedContextMenu(ev, params) {
     const items = _CutCopyPasteSelectContextMenus(params);
     const popupMenu = Menu.buildFromTemplate(items);
 
-    popupMenu.popup();
+    // popup() requires an options object even for no options
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
@@ -101,7 +103,8 @@ function onEditableContextMenu(ev, params) {
 
     const popupMenu = Menu.buildFromTemplate(items);
 
-    popupMenu.popup();
+    // popup() requires an options object even for no options
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
