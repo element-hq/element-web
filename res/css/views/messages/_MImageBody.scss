@@ -29,7 +29,7 @@ limitations under the License.
 
 .mx_MImageBody_thumbnail_container {
     // Prevent the padding-bottom (added inline in MImageBody.js) from
-    // effecting elements below the container.
+    // affecting elements below the container.
     overflow: hidden;
 
     // Make sure the _thumbnail is positioned relative to the _container
