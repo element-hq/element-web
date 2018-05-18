@@ -145,7 +145,7 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
         this.md                  = new Md();
-        this.html                = new Html();
+        //this.html              = new Html(); // not used atm
 
         this.suppressAutoComplete = false;
         this.direction = '';
