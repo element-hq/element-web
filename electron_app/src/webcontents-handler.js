@@ -61,7 +61,7 @@ function onLinkContextMenu(ev, params) {
             clipboard.writeText(url);
         },
     }));
-    popupMenu.popup();
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
@@ -88,7 +88,7 @@ function onSelectedContextMenu(ev, params) {
     const items = _CutCopyPasteSelectContextMenus(params);
     const popupMenu = Menu.buildFromTemplate(items);
 
-    popupMenu.popup();
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
@@ -101,7 +101,7 @@ function onEditableContextMenu(ev, params) {
 
     const popupMenu = Menu.buildFromTemplate(items);
 
-    popupMenu.popup();
+    popupMenu.popup({});
     ev.preventDefault();
 }
 
