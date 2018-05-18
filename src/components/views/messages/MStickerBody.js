@@ -40,7 +40,6 @@ export default class MStickerBody extends MImageBody {
     }
 
     _onImageLoad() {
-        this.fixupHeight();
         this.setState({
             placeholderClasses: 'mx_MStickerBody_placeholder_invisible',
         });
@@ -110,8 +109,6 @@ export default class MStickerBody extends MImageBody {
         // The pixel size of sticker images is generally larger than their intended display
         // size so they render at native reolution on HiDPI displays. We therefore need to
         // explicity set the size so they render at the intended size.
-        // XXX: This will be clobberred when we run fixupHeight(), but we need to do it
-        // here otherwise the stickers are momentarily displayed at the pixel size.
         const imageStyle = {
             height: content.info.h,
             // leave the browser the calculate the width automatically
