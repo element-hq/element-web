@@ -232,7 +232,29 @@ export default class extends React.Component {
     _messageContent(contentUrl, thumbUrl, content) {
         const maxHeight = Math.min(THUMBNAIL_MAX_HEIGHT, content.info.h);
         const maxWidth = content.info.w * maxHeight / content.info.h;
-        const thumbnail = (
+
+        let img = null;
+        // e2e image hasn't been decrypted yet
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            img = <div className="mx_MImageBody_thumbnail" ref="image" style={{
+                "display": "flex",
+                "alignItems": "center",
+                "width": "100%",
+            }}>
+                <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
+                    "margin": "auto",
+                }} />
+            </div>;
+        } else if (thumbUrl && !this.state.imgError) {
+            img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                style={{ "max-width": maxWidth + "px" }}
+                alt={content.body}
+                onError={this.onImageError}
+                onLoad={this.onImageLoad}
+                onMouseEnter={this.onImageEnter}
+                onMouseLeave={this.onImageLeave} />;
+        }
+        const thumbnail = img ?
             <a href={contentUrl} onClick={this.onClick}>
                 <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
                     { /* Calculate aspect ratio, using %padding will size _container correctly */ }
@@ -240,20 +262,13 @@ export default class extends React.Component {
 
                     { /* Thumbnail CSS class resizes to exactly container size with inline CSS
                          to restrict width */ }
-                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                        style={{ "max-width": maxWidth + "px" }}
-                        alt={content.body}
-                        onError={this.onImageError}
-                        onLoad={this.onImageLoad}
-                        onMouseEnter={this.onImageEnter}
-                        onMouseLeave={this.onImageLeave} />
+                    { img }
                 </div>
-            </a>
-        );
+            </a> : null;
 
         return (
             <span className="mx_MImageBody" ref="body">
-                { thumbUrl && !this.state.imgError ? thumbnail : '' }
+                { thumbnail }
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
       );
@@ -271,24 +286,6 @@ export default class extends React.Component {
             );
         }
 
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            // Need to decrypt the attachment
-            // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
-                        "display": "flex",
-                        "alignItems": "center",
-                        "width": "100%",
-                    }}>
-                        <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
-                            "margin": "auto",
-                        }} />
-                    </div>
-                </span>
-            );
-        }
 
         const contentUrl = this._getContentUrl();
         let thumbUrl;
