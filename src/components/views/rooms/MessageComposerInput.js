@@ -551,9 +551,9 @@ export default class MessageComposerInput extends React.Component {
 
         switch (ev.keyCode) {
             case KeyCode.ENTER:
-                return this.handleReturn(ev);
+                return this.handleReturn(ev, change);
             case KeyCode.BACKSPACE:
-                return this.onBackspace(ev);
+                return this.onBackspace(ev, change);
             case KeyCode.UP:
                 return this.onVerticalArrow(ev, true);
             case KeyCode.DOWN:
@@ -568,19 +568,27 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onBackspace = (ev: Event): boolean => {
+    onBackspace = (ev: Event, change: Change): Change => {
         if (this.state.isRichtextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
             const { editorState } = this.state;
+
             if (isList && editorState.anchorOffset == 0) {
-                const change = editorState.change();
                 change
                     .setBlocks(DEFAULT_NODE)
                     .unwrapBlock('bulleted-list')
                     .unwrapBlock('numbered-list');
-                this.onChange(change);
-                return true;
+                return change;
+            }
+            else if (editorState.anchorOffset == 0 &&
+                     (this.hasBlock('block-quote') ||
+                      this.hasBlock('heading-one') ||
+                      this.hasBlock('heading-two') ||
+                      this.hasBlock('heading-three') ||
+                      this.hasBlock('code-block')))
+            {
+                return change.setBlocks(DEFAULT_NODE);
             }
         }
         return;
@@ -770,12 +778,13 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 */
-    handleReturn = (ev) => {
+    handleReturn = (ev, change) => {
         if (ev.shiftKey) {
+
             // FIXME: we should insert a <br/> equivalent rather than letting Slate
             // split the current block, otherwise <p> will be split into two paragraphs
             // and it'll look like a double line-break.
-            return;
+            return change.insertText('\n');
         }
 
         if (this.state.editorState.blocks.some(
@@ -1235,11 +1244,11 @@ export default class MessageComposerInput extends React.Component {
         e.preventDefault(); // don't steal focus from the editor!
 
         const command = {
-                code: 'code-block',
+                // code: 'code-block', // let's have the button do inline code for now
                 quote: 'block-quote',
                 bullet: 'bulleted-list',
                 numbullet: 'numbered-list',
-                strike: 'strike-through',
+                strike: 'strikethrough',
             }[name] || name;
         this.handleKeyCommand(command);
     };
