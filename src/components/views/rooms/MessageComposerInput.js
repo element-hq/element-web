@@ -77,6 +77,10 @@ const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
 };
 
+// the Slate node type to default to for unstyled text when in RTE mode.
+// (we use 'line' for oneliners however)
+const DEFAULT_NODE = 'paragraph';
+
 
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -152,13 +156,13 @@ export default class MessageComposerInput extends React.Component {
                         if (obj.object === 'block' || obj.object === 'inline') {
                             return this.renderNode({
                                 node: obj,
-                                children: children, 
+                                children: children,
                             });
                         }
                         else if (obj.object === 'mark') {
                             return this.renderMark({
                                 mark: obj,
-                                children: children, 
+                                children: children,
                             });
                         }
                     }
@@ -548,6 +552,8 @@ export default class MessageComposerInput extends React.Component {
         switch (ev.keyCode) {
             case KeyCode.ENTER:
                 return this.handleReturn(ev);
+            case KeyCode.BACKSPACE:
+                return this.onBackspace(ev);
             case KeyCode.UP:
                 return this.onVerticalArrow(ev, true);
             case KeyCode.DOWN:
@@ -562,6 +568,23 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
+    onBackspace = (ev: Event): boolean => {
+        if (this.state.isRichtextEnabled) {
+            // let backspace exit lists
+            const isList = this.hasBlock('list-item');
+            if (isList) {
+                const change = this.state.editorState.change();
+                change
+                    .setBlocks(DEFAULT_NODE)
+                    .unwrapBlock('bulleted-list')
+                    .unwrapBlock('numbered-list');
+                this.onChange(change);
+                return true;
+            }
+        }
+        return;
+    };
+
     handleKeyCommand = (command: string): boolean => {
         if (command === 'toggle-mode') {
             this.enableRichtext(!this.state.isRichtextEnabled);
@@ -569,8 +592,6 @@ export default class MessageComposerInput extends React.Component {
         }
 
         let newState: ?Value = null;
-
-        const DEFAULT_NODE = 'paragraph';
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichtextEnabled) {
