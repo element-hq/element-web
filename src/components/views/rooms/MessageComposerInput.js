@@ -572,8 +572,9 @@ export default class MessageComposerInput extends React.Component {
         if (this.state.isRichtextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
-            if (isList) {
-                const change = this.state.editorState.change();
+            const { editorState } = this.state;
+            if (isList && editorState.anchorOffset == 0) {
+                const change = editorState.change();
                 change
                     .setBlocks(DEFAULT_NODE)
                     .unwrapBlock('bulleted-list')
