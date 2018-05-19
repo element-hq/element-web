@@ -92,7 +92,7 @@ const BLOCK_TAGS = {
     h1: 'heading-one',
     h2: 'heading-two',
     h3: 'heading-three',
-    h4: 'heading-four,
+    h4: 'heading-four',
     h5: 'heading-five',
     h6: 'heading-six',
     li: 'list-item',
