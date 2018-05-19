@@ -82,6 +82,32 @@ const ENTITY_TYPES = {
 // (we use 'line' for oneliners however)
 const DEFAULT_NODE = 'paragraph';
 
+// map HTML elements through to our Slate schema node types
+// used for the HTML deserializer.
+// (We don't use the same names so that they are closer to the MD serializer's schema)
+const BLOCK_TAGS = {
+    p: 'paragraph',
+    blockquote: 'block-quote',
+    ul: 'bulleted-list',
+    h1: 'heading-one',
+    h2: 'heading-two',
+    h3: 'heading-three',
+    li: 'list-item',
+    ol: 'numbered-list',
+    pre: 'code-block',
+};
+
+const MARK_TAGS = {
+    strong: 'bold',
+    b: 'bold', // deprecated
+    em: 'italic',
+    i: 'italic', // deprecated
+    code: 'code',
+    u: 'underline',
+    del: 'strikethrough',
+    strike: 'strikethrough', // deprecated
+    s: 'strikethrough', // deprecated
+};
 
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -153,6 +179,25 @@ export default class MessageComposerInput extends React.Component {
         this.html                = new Html({
             rules: [
                 {
+                    deserialize: (el, next) => {
+                        const tag = el.tagName.toLowerCase();
+                        let type = BLOCK_TAGS[tag];
+                        if (type) {
+                            return {
+                                object: 'block',
+                                type: type,
+                                nodes: next(el.childNodes),
+                            }
+                        }
+                        type = MARK_TAGS[tag];
+                        if (type) {
+                            return {
+                                object: 'mark',
+                                type: type,
+                                nodes: next(el.childNodes),
+                            }
+                        }
+                    },
                     serialize: (obj, children) => {
                         if (obj.object === 'block' || obj.object === 'inline') {
                             return this.renderNode({
@@ -763,34 +808,17 @@ export default class MessageComposerInput extends React.Component {
         if (transfer.type === "files") {
             return this.props.onFilesPasted(transfer.files);
         }
-        if (transfer.type === "html") {
-
+        else if (transfer.type === "html") {
+            const fragment = this.html.deserialize(transfer.html);
+            if (this.state.isRichtextEnabled) {
+                return change.insertFragment(fragment.document);
+            }
+            else {
+                return change.insertText(this.md.serialize(fragment));
+            }
         }
     };
 
-/*
-    onTextPasted = (text: string, html?: string) => {
-        const currentSelection = this.state.editorState.getSelection();
-        const currentContent = this.state.editorState.getCurrentContent();
-
-        let contentState = null;
-        if (html && this.state.isRichtextEnabled) {
-            contentState = Modifier.replaceWithFragment(
-                currentContent,
-                currentSelection,
-                RichText.htmlToContentState(html).getBlockMap(),
-            );
-        } else {
-            contentState = Modifier.replaceText(currentContent, currentSelection, text);
-        }
-
-        let newEditorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-
-        newEditorState = EditorState.forceSelection(newEditorState, contentState.getSelectionAfter());
-        this.onEditorContentChanged(newEditorState);
-        return true;
-    };
-*/
     handleReturn = (ev, change) => {
         if (ev.shiftKey) {
 
