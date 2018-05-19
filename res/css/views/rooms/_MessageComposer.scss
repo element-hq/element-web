@@ -91,6 +91,15 @@ limitations under the License.
     overflow: auto;
 }
 
+// FIXME: rather unpleasant hack to get rid of <p/> margins.
+// really we should be mixing in markdown-body from gfm.css instead
+.mx_MessageComposer_editor > :first-child {
+    margin-top: 0 ! important;
+}
+.mx_MessageComposer_editor > :last-child {
+    margin-bottom: 0 ! important;
+}
+
 @keyframes visualbell
 {
     from { background-color: #faa }

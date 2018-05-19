@@ -145,7 +145,26 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
         this.md                  = new Md();
-        //this.html              = new Html(); // not used atm
+        this.html                = new Html({
+            rules: [
+                {
+                    serialize: (obj, children) => {
+                        if (obj.object === 'block' || obj.object === 'inline') {
+                            return this.renderNode({
+                                node: obj,
+                                children: children, 
+                            });
+                        }
+                        else if (obj.object === 'mark') {
+                            return this.renderMark({
+                                mark: obj,
+                                children: children, 
+                            });
+                        }
+                    }
+                }
+            ]
+        });
 
         this.suppressAutoComplete = false;
         this.direction = '';
@@ -397,27 +416,29 @@ export default class MessageComposerInput extends React.Component {
             editorState = EditorState.forceSelection(editorState, currentSelection);
         }
 */
-        const text = editorState.startText.text;
-        const currentStartOffset = editorState.startOffset;
+        if (editorState.startText !== null) {
+            const text = editorState.startText.text;
+            const currentStartOffset = editorState.startOffset;
 
-        // Automatic replacement of plaintext emoji to Unicode emoji
-        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
-            // The first matched group includes just the matched plaintext emoji
-            const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-            if (emojiMatch) {
-                // plaintext -> hex unicode
-                const emojiUc = asciiList[emojiMatch[1]];
-                // hex unicode -> shortname -> actual unicode
-                const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+            // Automatic replacement of plaintext emoji to Unicode emoji
+            if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+                // The first matched group includes just the matched plaintext emoji
+                const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
+                if (emojiMatch) {
+                    // plaintext -> hex unicode
+                    const emojiUc = asciiList[emojiMatch[1]];
+                    // hex unicode -> shortname -> actual unicode
+                    const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
 
-                const range = Range.create({
-                    anchorKey: editorState.selection.startKey,
-                    anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
-                    focusKey: editorState.selection.startKey,
-                    focusOffset: currentStartOffset,
-                });
-                change = change.insertTextAtRange(range, unicodeEmoji);
-                editorState = change.value;
+                    const range = Range.create({
+                        anchorKey: editorState.selection.startKey,
+                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
+                        focusKey: editorState.selection.startKey,
+                        focusOffset: currentStartOffset,
+                    });
+                    change = change.insertTextAtRange(range, unicodeEmoji);
+                    editorState = change.value;
+                }
             }
         }
 
@@ -444,13 +465,15 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState = null;
         if (enabled) {
+            // for simplicity when roundtripping, we use slate-md-serializer rather than commonmark
+            editorState = this.md.deserialize(this.plainWithMdPills.serialize(this.state.editorState));
+
+            // the alternative would be something like:
+            //
             // const sourceWithPills = this.plainWithMdPills.serialize(this.state.editorState);
             // const markdown = new Markdown(sourceWithPills);
             // editorState = this.html.deserialize(markdown.toHTML());
 
-            // we don't really want a custom MD parser hanging around, but the
-            // alternative would be:
-            editorState = this.md.deserialize(this.plainWithMdPills.serialize(this.state.editorState));
         } else {
             // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             // value = ContentState.createFromText(markdown);
@@ -546,6 +569,8 @@ export default class MessageComposerInput extends React.Component {
         }
 
         let newState: ?Value = null;
+
+        const DEFAULT_NODE = 'paragraph';
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichtextEnabled) {
@@ -725,11 +750,14 @@ export default class MessageComposerInput extends React.Component {
 */
     handleReturn = (ev) => {
         if (ev.shiftKey) {
+            // FIXME: we should insert a <br/> equivalent rather than letting Slate
+            // split the current block, otherwise <p> will be split into two paragraphs
+            // and it'll look like a double line-break.
             return;
         }
 
         if (this.state.editorState.blocks.some(
-            block => block in ['code-block', 'block-quote', 'bulleted-list', 'numbered-list']
+            block => ['code-block', 'block-quote', 'list-item'].includes(block.type)
         )) {
             // allow the user to terminate blocks by hitting return rather than sending a msg
             return;
@@ -788,47 +816,25 @@ export default class MessageComposerInput extends React.Component {
         const mustSendHTML = Boolean(replyingToEv);
 
         if (this.state.isRichtextEnabled) {
-/*
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
 
             if (mustSendHTML) shouldSendHTML = true;
 
-            const blocks = contentState.getBlocksAsArray();
-            if (blocks.some((block) => block.getType() !== 'unstyled')) {
-                shouldSendHTML = true;
-            } else {
-                const characterLists = blocks.map((block) => block.getCharacterList());
-                // For each block of characters, determine if any inline styles are applied
-                // and if yes, send HTML
-                characterLists.forEach((characters) => {
-                    const numberOfStylesForCharacters = characters.map(
-                        (character) => character.getStyle().toArray().length,
-                    ).toArray();
-                    // If any character has more than 0 inline styles applied, send HTML
-                    if (numberOfStylesForCharacters.some((styles) => styles > 0)) {
-                        shouldSendHTML = true;
-                    }
-                });
-            }
             if (!shouldSendHTML) {
-                const hasLink = blocks.some((block) => {
-                    return block.getCharacterList().filter((c) => {
-                        const entityKey = c.getEntity();
-                        return entityKey && contentState.getEntity(entityKey).getType() === 'LINK';
-                    }).size > 0;
+                shouldSendHTML = !!editorState.document.findDescendant(node => {
+                    // N.B. node.getMarks() might be private?
+                    return ((node.object === 'block' && node.type !== 'line') ||
+                            (node.object === 'inline') ||
+                            (node.object === 'text' && node.getMarks().size > 0));
                 });
-                shouldSendHTML = hasLink;
             }
-*/
+
             contentText = this.plainWithPlainPills.serialize(editorState);
             if (contentText === '') return true;
 
-            let shouldSendHTML = true;
             if (shouldSendHTML) {
-                contentHTML = HtmlUtils.processHtmlForSending(
-                    RichText.editorStateToHTML(editorState),
-                );
+                contentHTML = this.html.serialize(editorState); // HtmlUtils.processHtmlForSending();
             }
         } else {
             const sourceWithPills = this.plainWithMdPills.serialize(editorState);
@@ -1047,7 +1053,7 @@ export default class MessageComposerInput extends React.Component {
             marks: editorState.activeMarks,
             // XXX: shouldn't we return all the types of blocks in the current selection,
             // not just the anchor?
-            blockType: editorState.anchorBlock.type,
+            blockType: editorState.anchorBlock ? editorState.anchorBlock.type : null,
         };
     }
 
@@ -1121,6 +1127,10 @@ export default class MessageComposerInput extends React.Component {
         const { attributes, children, node, isSelected } = props;
 
         switch (node.type) {
+            case 'line':
+                // ideally we'd return { children }<br/>, but as this isn't
+                // a valid react component, we don't have much choice.
+                return <div {...attributes}>{children}</div>;
             case 'paragraph':
                 return <p {...attributes}>{children}</p>;
             case 'block-quote':
@@ -1138,7 +1148,7 @@ export default class MessageComposerInput extends React.Component {
             case 'numbered-list':
                 return <ol {...attributes}>{children}</ol>;
             case 'code-block':
-                return <p {...attributes}><code {...attributes}>{children}</code></p>;
+                return <pre {...attributes}><code {...attributes}>{children}</code></pre>;
             case 'pill': {
                 const { data } = node;
                 const url = data.get('url');
@@ -1187,15 +1197,15 @@ export default class MessageComposerInput extends React.Component {
         const { children, mark, attributes } = props;
         switch (mark.type) {
             case 'bold':
-                return <strong {...{ attributes }}>{children}</strong>;
+                return <strong {...attributes}>{children}</strong>;
             case 'italic':
-                return <em {...{ attributes }}>{children}</em>;
+                return <em {...attributes}>{children}</em>;
             case 'code':
-                return <code {...{ attributes }}>{children}</code>;
+                return <code {...attributes}>{children}</code>;
             case 'underline':
-                return <u {...{ attributes }}>{children}</u>;
+                return <u {...attributes}>{children}</u>;
             case 'strikethrough':
-                return <del {...{ attributes }}>{children}</del>;
+                return <del {...attributes}>{children}</del>;
         }
     };
 
@@ -1219,7 +1229,12 @@ export default class MessageComposerInput extends React.Component {
         // This avoids us having to serialize the whole thing to plaintext and convert
         // selection offsets in & out of the plaintext domain.
 
-        return editorState.document.getDescendant(editorState.selection.anchorKey).text;
+        if (editorState.selection.anchorKey) {
+            return editorState.document.getDescendant(editorState.selection.anchorKey).text;
+        }
+        else {
+            return '';
+        }
     }
 
     getSelectionRange(editorState: Value) {

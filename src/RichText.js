@@ -61,14 +61,6 @@ export function stateToMarkdown(state) {
             ''); // this is *not* a zero width space, trust me :)
 }
 
-export const editorStateToHTML = (editorState: Value) => {
-    return Html.deserialize(editorState);
-}
-
-export function htmlToEditorState(html: string): Value {
-    return Html.serialize(html);
-}
-
 export function unicodeToEmojiUri(str) {
     let replaceWith, unicode, alt;
     if ((!emojione.unicodeAlt) || (emojione.sprites)) {
