@@ -32,7 +32,7 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";

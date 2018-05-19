@@ -1,3 +1,71 @@
+Changes in [0.12.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.5) (2018-05-17)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4...v0.12.5)
+
+ * Fix image size jumping regression
+   [\#1909](https://github.com/matrix-org/matrix-react-sdk/pull/1909)
+
+Changes in [0.12.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4) (2018-05-16)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.6...v0.12.4)
+
+ * No changes from rc.5
+
+Changes in [0.12.4-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.6) (2018-05-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.5...v0.12.4-rc.6)
+
+ * Wait for deletion of widgets as well addition
+   [\#1907](https://github.com/matrix-org/matrix-react-sdk/pull/1907)
+
+Changes in [0.12.4-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.5) (2018-05-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.4...v0.12.4-rc.5)
+
+ * Wait for echo from server when adding user widgets
+   [\#1905](https://github.com/matrix-org/matrix-react-sdk/pull/1905)
+
+Changes in [0.12.4-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.4) (2018-05-14)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.3...v0.12.4-rc.4)
+
+ * Update from Weblate.
+   [\#1904](https://github.com/matrix-org/matrix-react-sdk/pull/1904)
+ * Correctly identify sticker picker widgets
+   [\#1894](https://github.com/matrix-org/matrix-react-sdk/pull/1894)
+ * Quick fix for sticker picker position
+   [\#1903](https://github.com/matrix-org/matrix-react-sdk/pull/1903)
+ * Remove redundant logging (currently shown on every render when no sti…
+   [\#1901](https://github.com/matrix-org/matrix-react-sdk/pull/1901)
+ * Fix stickers briefly being 2x the size
+   [\#1899](https://github.com/matrix-org/matrix-react-sdk/pull/1899)
+ * Send required properties when making requests to widgets over postMessage
+   [\#1891](https://github.com/matrix-org/matrix-react-sdk/pull/1891)
+ * Fix room widget second load infini spinner
+   [\#1897](https://github.com/matrix-org/matrix-react-sdk/pull/1897)
+ * Update widget state when account data changes
+   [\#1896](https://github.com/matrix-org/matrix-react-sdk/pull/1896)
+ * Remove margins when in a ReplyThread to stop them taking so much space
+   [\#1882](https://github.com/matrix-org/matrix-react-sdk/pull/1882)
+ * Add setting to enable widget screenshots (if widgets declare support)
+   [\#1892](https://github.com/matrix-org/matrix-react-sdk/pull/1892)
+ * T3chguy/replies html tag
+   [\#1889](https://github.com/matrix-org/matrix-react-sdk/pull/1889)
+ * Instant Sticker Picker
+   [\#1888](https://github.com/matrix-org/matrix-react-sdk/pull/1888)
+ * Update widget 'widgetData' key to 'data' to match spec.
+   [\#1887](https://github.com/matrix-org/matrix-react-sdk/pull/1887)
+ * Fix 'state_key' field name.
+   [\#1886](https://github.com/matrix-org/matrix-react-sdk/pull/1886)
+ * Improve appearance of short-lived app loading spinner
+   [\#1885](https://github.com/matrix-org/matrix-react-sdk/pull/1885)
+ * Take feature_sticker_messagse out of labs
+   [\#1883](https://github.com/matrix-org/matrix-react-sdk/pull/1883)
+ * Fix issue incorrect positioning with widget loading indicator
+   [\#1884](https://github.com/matrix-org/matrix-react-sdk/pull/1884)
+ * Users should always be able to edit their user/non-room  widgets
+   [\#1879](https://github.com/matrix-org/matrix-react-sdk/pull/1879)
+
 Changes in [0.12.4-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.4-rc.3) (2018-05-11)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4-rc.2...v0.12.4-rc.3)

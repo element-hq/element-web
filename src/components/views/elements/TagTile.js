@@ -21,7 +21,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
-import ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextualMenu from '../../structures/ContextualMenu';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';

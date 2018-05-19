@@ -286,6 +286,51 @@ function inviteUser(event, roomId, userId) {
     });
 }
 
+/**
+ * Returns a promise that resolves when a widget with the given
+ * ID has been added as a user widget (ie. the accountData event
+ * arrives) or rejects after a timeout
+ *
+ * @param {string} widgetId The ID of the widget to wait for
+ * @param {boolean} add True to wait for the widget to be added,
+ *     false to wait for it to be deleted.
+ * @returns {Promise} that resolves when the widget is available
+ */
+function waitForUserWidget(widgetId, add) {
+    return new Promise((resolve, reject) => {
+        const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
+
+        // Tests an account data event, returning true if it's in the state
+        // we're waiting for it to be in
+        function eventInIntendedState(ev) {
+            if (!ev || !currentAccountDataEvent.getContent()) return false;
+            if (add) {
+                return ev.getContent()[widgetId] !== undefined;
+            } else {
+                return ev.getContent()[widgetId] === undefined;
+            }
+        }
+
+        if (eventInIntendedState(currentAccountDataEvent)) {
+            resolve();
+            return;
+        }
+
+        function onAccountData(ev) {
+            if (eventInIntendedState(currentAccountDataEvent)) {
+                MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                clearTimeout(timerId);
+                resolve();
+            }
+        }
+        const timerId = setTimeout(() => {
+            MatrixClientPeg.get().removeListener('accountData', onAccountData);
+            reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
+        }, 10000);
+        MatrixClientPeg.get().on('accountData', onAccountData);
+    });
+}
+
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
     const widgetType = event.data.type;
@@ -355,12 +400,20 @@ function setWidget(event, roomId) {
             };
         }
 
+        // This starts listening for when the echo comes back from the server
+        // since the widget won't appear added until this happens. If we don't
+        // wait for this, the action will complete but if the user is fast enough,
+        // the widget still won't actually be there.
         client.setAccountData('m.widgets', userWidgets).then(() => {
+            return waitForUserWidget(widgetId, widgetUrl !== null);
+        }).then(() => {
             sendResponse(event, {
                 success: true,
             });
 
             dis.dispatch({ action: "user_widget_updated" });
+        }).catch((e) => {
+            sendError(event, _t('Unable to create widget.'), e);
         });
     } else { // Room widget
         if (!roomId) {
@@ -373,6 +426,8 @@ function setWidget(event, roomId) {
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
+            // XXX: We should probably wait for the echo of the state event to come back from the server,
+            // as we do with user widgets.
             sendResponse(event, {
                 success: true,
             });
