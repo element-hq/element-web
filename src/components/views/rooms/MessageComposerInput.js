@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
+import { getEventTransfer } from 'slate-react';
 import { Value, Document, Event, Inline, Text, Range, Node } from 'slate';
 
 import Html from 'slate-html-serializer';
@@ -755,6 +756,18 @@ export default class MessageComposerInput extends React.Component {
         }
         return false;
     };
+
+    onPaste = (event: Event, change: Change, editor: Editor): Change => {
+        const transfer = getEventTransfer(event);
+
+        if (transfer.type === "files") {
+            return this.props.onFilesPasted(transfer.files);
+        }
+        if (transfer.type === "html") {
+
+        }
+    };
+
 /*
     onTextPasted = (text: string, html?: string) => {
         const currentSelection = this.state.editorState.getSelection();
@@ -1331,14 +1344,10 @@ export default class MessageComposerInput extends React.Component {
                             value={this.state.editorState}
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
+                            onPaste={this.onPaste}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             spellCheck={true}
-                            /*
-                            handlePastedText={this.onTextPasted}
-                            handlePastedFiles={this.props.onFilesPasted}
-                            stripPastedStyles={!this.state.isRichtextEnabled}
-                            */
                             />
                 </div>
             </div>
