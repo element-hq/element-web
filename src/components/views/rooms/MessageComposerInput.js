@@ -92,6 +92,9 @@ const BLOCK_TAGS = {
     h1: 'heading-one',
     h2: 'heading-two',
     h3: 'heading-three',
+    h4: 'heading-four,
+    h5: 'heading-five',
+    h6: 'heading-six',
     li: 'list-item',
     ol: 'numbered-list',
     pre: 'code-block',
@@ -632,6 +635,9 @@ export default class MessageComposerInput extends React.Component {
                       this.hasBlock('heading-one') ||
                       this.hasBlock('heading-two') ||
                       this.hasBlock('heading-three') ||
+                      this.hasBlock('heading-four') ||
+                      this.hasBlock('heading-five') ||
+                      this.hasBlock('heading-six') ||
                       this.hasBlock('code-block')))
             {
                 return change.setBlocks(DEFAULT_NODE);
@@ -687,6 +693,9 @@ export default class MessageComposerInput extends React.Component {
                 case 'heading-one':
                 case 'heading-two':
                 case 'heading-three':
+                case 'heading-four':
+                case 'heading-five':
+                case 'heading-six':
                 case 'list-item':
                 case 'code-block': {
                     const isActive = this.hasBlock(type);
@@ -1215,6 +1224,12 @@ export default class MessageComposerInput extends React.Component {
                 return <h2 {...attributes}>{children}</h2>;
             case 'heading-three':
                 return <h3 {...attributes}>{children}</h3>;
+            case 'heading-four':
+                return <h4 {...attributes}>{children}</h4>;
+            case 'heading-five':
+                return <h5 {...attributes}>{children}</h5>;
+            case 'heading-six':
+                return <h6 {...attributes}>{children}</h6>;
             case 'list-item':
                 return <li {...attributes}>{children}</li>;
             case 'numbered-list':
