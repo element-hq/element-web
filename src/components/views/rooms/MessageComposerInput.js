@@ -200,6 +200,31 @@ export default class MessageComposerInput extends React.Component {
                                 nodes: next(el.childNodes),
                             }
                         }
+                        // special case links
+                        if (tag === 'a') {
+                            const href = el.getAttribute('href');
+                            let m = href.match(MATRIXTO_URL_PATTERN);
+                            if (m) {
+                                return {
+                                    object: 'inline',
+                                    type: 'pill',
+                                    data: { 
+                                        href,
+                                        completion: el.innerText,
+                                        completionId: m[1],
+                                    },
+                                    isVoid: true,
+                                }
+                            }
+                            else {
+                                return {
+                                    object: 'inline',
+                                    type: 'link',
+                                    data: { href },
+                                    nodes: next(el.childNodes),
+                                }
+                            }
+                        }
                     },
                     serialize: (obj, children) => {
                         if (obj.object === 'block' || obj.object === 'inline') {
@@ -1161,7 +1186,7 @@ export default class MessageComposerInput extends React.Component {
         if (href) {
             inline = Inline.create({
                 type: 'pill',
-                data: { completion, completionId, url: href },
+                data: { completion, completionId, href },
                 // we can't put text in here otherwise the editor tries to select it
                 isVoid: true,
             });
@@ -1233,9 +1258,11 @@ export default class MessageComposerInput extends React.Component {
                 return <ol {...attributes}>{children}</ol>;
             case 'code-block':
                 return <pre {...attributes}><code {...attributes}>{children}</code></pre>;
+            case 'link': 
+                return <a {...attributes} href={ node.data.get('href') }>{children}</a>;
             case 'pill': {
                 const { data } = node;
-                const url = data.get('url');
+                const url = data.get('href');
                 const completion = data.get('completion');
 
                 const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
