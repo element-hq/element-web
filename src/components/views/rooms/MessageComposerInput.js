@@ -84,17 +84,17 @@ const DEFAULT_NODE = 'paragraph';
 
 // map HTML elements through to our Slate schema node types
 // used for the HTML deserializer.
-// (We don't use the same names so that they are closer to the MD serializer's schema)
+// (The names here are chosen to match the MD serializer's schema for convenience)
 const BLOCK_TAGS = {
     p: 'paragraph',
     blockquote: 'block-quote',
     ul: 'bulleted-list',
-    h1: 'heading-one',
-    h2: 'heading-two',
-    h3: 'heading-three',
-    h4: 'heading-four',
-    h5: 'heading-five',
-    h6: 'heading-six',
+    h1: 'heading1',
+    h2: 'heading2',
+    h3: 'heading3',
+    h4: 'heading4',
+    h5: 'heading5',
+    h6: 'heading6',
     li: 'list-item',
     ol: 'numbered-list',
     pre: 'code-block',
@@ -106,10 +106,10 @@ const MARK_TAGS = {
     em: 'italic',
     i: 'italic', // deprecated
     code: 'code',
-    u: 'underline',
-    del: 'strikethrough',
-    strike: 'strikethrough', // deprecated
-    s: 'strikethrough', // deprecated
+    u: 'underlined',
+    del: 'deleted',
+    strike: 'deleted', // deprecated
+    s: 'deleted', // deprecated
 };
 
 function onSendMessageFailed(err, room) {
@@ -513,8 +513,8 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichtextEnabled) return;
 
-        // FIXME: this conversion should be handled in the store, surely
-        // i.e. "convert my current composer value into Rich or MD, as ComposerHistoryManager already does"
+        // FIXME: this duplicates similar conversions which happen in the history & store.
+        // they should be factored out.
 
         let editorState = null;
         if (enabled) {
@@ -540,6 +540,7 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(enabled, editorState),
             isRichtextEnabled: enabled,
         });
+
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
     };
 
@@ -588,7 +589,7 @@ export default class MessageComposerInput extends React.Component {
                 [KeyCode.KEY_M]: 'toggle-mode',
                 [KeyCode.KEY_B]: 'bold',
                 [KeyCode.KEY_I]: 'italic',
-                [KeyCode.KEY_U]: 'underline',
+                [KeyCode.KEY_U]: 'underlined',
                 [KeyCode.KEY_J]: 'code',
             }[ev.keyCode];
 
@@ -632,12 +633,12 @@ export default class MessageComposerInput extends React.Component {
             }
             else if (editorState.anchorOffset == 0 &&
                      (this.hasBlock('block-quote') ||
-                      this.hasBlock('heading-one') ||
-                      this.hasBlock('heading-two') ||
-                      this.hasBlock('heading-three') ||
-                      this.hasBlock('heading-four') ||
-                      this.hasBlock('heading-five') ||
-                      this.hasBlock('heading-six') ||
+                      this.hasBlock('heading1') ||
+                      this.hasBlock('heading2') ||
+                      this.hasBlock('heading3') ||
+                      this.hasBlock('heading4') ||
+                      this.hasBlock('heading5') ||
+                      this.hasBlock('heading6') ||
                       this.hasBlock('code-block')))
             {
                 return change.setBlocks(DEFAULT_NODE);
@@ -690,12 +691,12 @@ export default class MessageComposerInput extends React.Component {
                 // simple blocks
                 case 'paragraph':
                 case 'block-quote':
-                case 'heading-one':
-                case 'heading-two':
-                case 'heading-three':
-                case 'heading-four':
-                case 'heading-five':
-                case 'heading-six':
+                case 'heading1':
+                case 'heading2':
+                case 'heading3':
+                case 'heading4':
+                case 'heading5':
+                case 'heading6':
                 case 'list-item':
                 case 'code-block': {
                     const isActive = this.hasBlock(type);
@@ -716,8 +717,8 @@ export default class MessageComposerInput extends React.Component {
                 case 'bold':
                 case 'italic':
                 case 'code':
-                case 'underline':
-                case 'strikethrough': {
+                case 'underlined':
+                case 'deleted': {
                     change.toggleMark(type);
                 }
                 break;
@@ -830,10 +831,6 @@ export default class MessageComposerInput extends React.Component {
 
     handleReturn = (ev, change) => {
         if (ev.shiftKey) {
-
-            // FIXME: we should insert a <br/> equivalent rather than letting Slate
-            // split the current block, otherwise <p> will be split into two paragraphs
-            // and it'll look like a double line-break.
             return change.insertText('\n');
         }
 
@@ -1218,17 +1215,17 @@ export default class MessageComposerInput extends React.Component {
                 return <blockquote {...attributes}>{children}</blockquote>;
             case 'bulleted-list':
                 return <ul {...attributes}>{children}</ul>;
-            case 'heading-one':
+            case 'heading1':
                 return <h1 {...attributes}>{children}</h1>;
-            case 'heading-two':
+            case 'heading2':
                 return <h2 {...attributes}>{children}</h2>;
-            case 'heading-three':
+            case 'heading3':
                 return <h3 {...attributes}>{children}</h3>;
-            case 'heading-four':
+            case 'heading4':
                 return <h4 {...attributes}>{children}</h4>;
-            case 'heading-five':
+            case 'heading5':
                 return <h5 {...attributes}>{children}</h5>;
-            case 'heading-six':
+            case 'heading6':
                 return <h6 {...attributes}>{children}</h6>;
             case 'list-item':
                 return <li {...attributes}>{children}</li>;
@@ -1289,9 +1286,9 @@ export default class MessageComposerInput extends React.Component {
                 return <em {...attributes}>{children}</em>;
             case 'code':
                 return <code {...attributes}>{children}</code>;
-            case 'underline':
+            case 'underlined':
                 return <u {...attributes}>{children}</u>;
-            case 'strikethrough':
+            case 'deleted':
                 return <del {...attributes}>{children}</del>;
         }
     };
@@ -1304,7 +1301,8 @@ export default class MessageComposerInput extends React.Component {
                 quote: 'block-quote',
                 bullet: 'bulleted-list',
                 numbullet: 'numbered-list',
-                strike: 'strikethrough',
+                underline: 'underlined',
+                strike: 'deleted',
             }[name] || name;
         this.handleKeyCommand(command);
     };
