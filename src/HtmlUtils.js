@@ -112,7 +112,7 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
     />;
 }
 
-
+/*
 export function processHtmlForSending(html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
@@ -146,6 +146,7 @@ export function processHtmlForSending(html: string): string {
 
     return contentHTML;
 }
+*/
 
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
