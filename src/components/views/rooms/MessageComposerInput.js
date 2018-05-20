@@ -182,11 +182,21 @@ export default class MessageComposerInput extends React.Component {
             rules: [
                 {
                     serialize: (obj, children) => {
-                        switch (obj.type) {
-                            case 'pill':
-                                return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
-                            case 'emoji':
-                                return obj.data.get('emojiUnicode');
+                        if (obj.object === 'string') {
+                            // escape any MD in it. i have no idea why the serializer doesn't
+                            // do this already.
+                            // TODO: this can probably be more robust - it doesn't consider
+                            // indenting or lists for instance.
+                            return children.replace(/([*_~`+])/g, '\\$1')
+                                           .replace(/^([>#\|])/g, '\\$1');
+                        }
+                        else if (obj.object === 'inline') {
+                            switch (obj.type) {
+                                case 'pill':
+                                    return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
+                                case 'emoji':
+                                    return obj.data.get('emojiUnicode');
+                            }
                         }
                     }
                 }
@@ -580,27 +590,29 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState = null;
         if (enabled) {
-            // for simplicity when roundtripping, we use slate-md-serializer rather than commonmark
-            const markdown = this.plainWithMdPills.serialize(this.state.editorState);
-
-            // weirdly, the Md serializer can't deserialize '' to a valid Value...
-            if (markdown !== '') {
-                // FIXME: the MD deserializer doesn't know how to deserialize pills
-                // and gives no hooks for doing so, so we should manually fix up
-                // the editorState first in order to preserve them.
-
-                editorState = this.md.deserialize(markdown);
-            }
-            else {
-                editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
-            }
-
-            // the alternative would be something like:
+            // for consistency when roundtripping, we could use slate-md-serializer rather than
+            // commonmark, but then we would lose pills as the MD deserialiser doesn't know about
+            // them and doesn't have any extensibility hooks.
             //
-            // const sourceWithPills = this.plainWithMdPills.serialize(this.state.editorState);
-            // const markdown = new Markdown(sourceWithPills);
-            // editorState = this.html.deserialize(markdown.toHTML());
+            // The code looks like this:
+            //
+            // const markdown = this.plainWithMdPills.serialize(this.state.editorState);
+            //
+            // // weirdly, the Md serializer can't deserialize '' to a valid Value...
+            // if (markdown !== '') {
+            //     editorState = this.md.deserialize(markdown);
+            // }
+            // else {
+            //     editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            // }
 
+            // so, instead, we use commonmark proper (which is arguably more logical to the user
+            // anyway, as they'll expect the RTE view to match what they'll see in the timeline,
+            // but the HTML->MD conversion is anyone's guess).
+
+            const sourceWithPills = this.plainWithMdPills.serialize(this.state.editorState);
+            const markdown = new Markdown(sourceWithPills);
+            editorState = this.html.deserialize(markdown.toHTML());
         } else {
             // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             // value = ContentState.createFromText(markdown);
