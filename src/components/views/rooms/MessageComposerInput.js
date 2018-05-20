@@ -78,8 +78,7 @@ const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
 };
 
-// the Slate node type to default to for unstyled text when in RTE mode.
-// (we use 'line' for oneliners however)
+// the Slate node type to default to for unstyled text
 const DEFAULT_NODE = 'paragraph';
 
 // map HTML elements through to our Slate schema node types
@@ -259,7 +258,7 @@ export default class MessageComposerInput extends React.Component {
         }
         else {
             // ...or create a new one.
-            return Plain.deserialize('')
+            return Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
         }
     }
 
@@ -544,7 +543,13 @@ export default class MessageComposerInput extends React.Component {
         let editorState = null;
         if (enabled) {
             // for simplicity when roundtripping, we use slate-md-serializer rather than commonmark
-            editorState = this.md.deserialize(this.plainWithMdPills.serialize(this.state.editorState));
+            const markdown = this.plainWithMdPills.serialize(this.state.editorState);
+            if (markdown !== '') {
+                editorState = this.md.deserialize(markdown);
+            }
+            else {
+                editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            }
 
             // the alternative would be something like:
             //
@@ -556,7 +561,10 @@ export default class MessageComposerInput extends React.Component {
             // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             // value = ContentState.createFromText(markdown);
 
-            editorState = Plain.deserialize(this.md.serialize(this.state.editorState));
+            editorState = Plain.deserialize(
+                this.md.serialize(this.state.editorState),
+                { defaultBlock: DEFAULT_NODE }
+            );
         }
 
         Analytics.setRichtextMode(enabled);
@@ -937,6 +945,7 @@ export default class MessageComposerInput extends React.Component {
             if (contentText === '') return true;
 
             if (shouldSendHTML) {
+                // FIXME: should we strip out the surrounding <p></p>?
                 contentHTML = this.html.serialize(editorState); // HtmlUtils.processHtmlForSending();
             }
         } else {
@@ -1230,10 +1239,6 @@ export default class MessageComposerInput extends React.Component {
         const { attributes, children, node, isSelected } = props;
 
         switch (node.type) {
-            case 'line':
-                // ideally we'd return { children }<br/>, but as this isn't
-                // a valid react component, we don't have much choice.
-                return <div {...attributes}>{children}</div>;
             case 'paragraph':
                 return <p {...attributes}>{children}</p>;
             case 'block-quote':
