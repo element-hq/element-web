@@ -215,7 +215,7 @@ export default class MessageComposer extends React.Component {
         }
     }
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", event) {
+    onFormatButtonClicked(name, event) {
         event.preventDefault();
         this.messageComposerInput.onFormatButtonClicked(name, event);
     }
@@ -303,14 +303,14 @@ export default class MessageComposer extends React.Component {
                 </div>
             );
 
-            const formattingButton = (
+            const formattingButton = this.state.inputState.isRichTextEnabled ? (
                 <img className="mx_MessageComposer_formatting"
                      title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
                      style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
-            );
+            ) : null;
 
             let placeholderText;
             if (this.state.isQuoting) {
@@ -353,31 +353,27 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const {marks, blockType} = this.state.inputState;
-        const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
-            (name) => {
-                const active = marks.includes(name) || blockType === name;
-                const suffix = active ? '-o-n' : '';
-                const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
-                return <img className={className}
-                            title={_t(name)}
-                            onMouseDown={onFormatButtonClicked}
-                            key={name}
-                            src={`img/button-text-${name}${suffix}.svg`}
-                            height="17" />;
-            },
-        );
+        let formatBar;
+        if (this.state.showFormatting) {
+            const {marks, blockType} = this.state.inputState;
+            const formatButtons = ["bold", "italic", "deleted", "underlined", "code", "block-quote", "bulleted-list", "numbered-list"].map(
+                (name) => {
+                    const active = marks.some(mark => mark.type === name) || blockType === name;
+                    const suffix = active ? '-on' : '';
+                    const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
+                    const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
+                    return <img className={className}
+                                title={_t(name)}
+                                onMouseDown={onFormatButtonClicked}
+                                key={name}
+                                src={`img/button-text-${name}${suffix}.svg`}
+                                height="17" />;
+                },
+            );
 
-        return (
-            <div className="mx_MessageComposer">
-                <div className="mx_MessageComposer_wrapper">
-                    <div className="mx_MessageComposer_row">
-                        { controls }
-                    </div>
-                </div>
+            formatBar =
                 <div className="mx_MessageComposer_formatbar_wrapper">
-                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
+                    <div className="mx_MessageComposer_formatbar">
                         { formatButtons }
                         <div style={{flex: 1}}></div>
                         <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
@@ -390,6 +386,16 @@ export default class MessageComposer extends React.Component {
                              src="img/icon-text-cancel.svg" />
                     </div>
                 </div>
+        }
+
+        return (
+            <div className="mx_MessageComposer">
+                <div className="mx_MessageComposer_wrapper">
+                    <div className="mx_MessageComposer_row">
+                        { controls }
+                    </div>
+                </div>
+                { formatBar }
             </div>
         );
     }

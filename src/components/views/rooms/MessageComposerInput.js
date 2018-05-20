@@ -132,9 +132,6 @@ export default class MessageComposerInput extends React.Component {
         // js-sdk Room object
         room: PropTypes.object.isRequired,
 
-        // called with current plaintext content (as a string) whenever it changes
-        onContentChanged: PropTypes.func,
-
         onFilesPasted: PropTypes.func,
 
         onInputStateChanged: PropTypes.func,
@@ -317,15 +314,6 @@ export default class MessageComposerInput extends React.Component {
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        // this is dirty, but moving all this state to MessageComposer is dirtier
-        if (this.props.onInputStateChanged && nextState !== this.state) {
-            const state = this.getSelectionInfo(nextState.editorState);
-            state.isRichTextEnabled = nextState.isRichTextEnabled;
-            this.props.onInputStateChanged(state);
-        }
     }
 
     onAction = (payload) => {
@@ -565,6 +553,27 @@ export default class MessageComposerInput extends React.Component {
                     editorState = change.value;
                 }
             }
+        }
+
+        if (this.props.onInputStateChanged) {
+            let blockType = editorState.blocks.first().type;
+            console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
+
+            if (blockType === 'list-item') {
+                const parent = editorState.document.getParent(editorState.blocks.first().key);
+                if (parent.type === 'numbered-list') {
+                    blockType = 'numbered-list';
+                }
+                else if (parent.type === 'bulleted-list') {
+                    blockType = 'bulleted-list';
+                }
+            }
+            const inputState = {
+                marks: editorState.activeMarks,
+                isRichTextEnabled: this.state.isRichTextEnabled,
+                blockType
+            };
+            this.props.onInputStateChanged(inputState);
         }
 
         // Record the editor state for this room so that it can be retrieved after
@@ -1239,17 +1248,6 @@ export default class MessageComposerInput extends React.Component {
         await this.setDisplayedCompletion(null); // restore originalEditorState
     };
 
-    /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
-     buttons. */
-    getSelectionInfo(editorState: Value) {
-        return {
-            marks: editorState.activeMarks,
-            // XXX: shouldn't we return all the types of blocks in the current selection,
-            // not just the anchor?
-            blockType: editorState.anchorBlock ? editorState.anchorBlock.type : null,
-        };
-    }
-
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
@@ -1406,18 +1404,22 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    onFormatButtonClicked = (name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) => {
-        e.preventDefault(); // don't steal focus from the editor!
+    onFormatButtonClicked = (name, e) => {
+        if (e) {
+            e.preventDefault(); // don't steal focus from the editor!
+        }
 
-        const command = {
-                // code: 'code-block', // let's have the button do inline code for now
-                quote: 'block-quote',
-                bullet: 'bulleted-list',
-                numbullet: 'numbered-list',
-                underline: 'underlined',
-                strike: 'deleted',
-            }[name] || name;
-        this.handleKeyCommand(command);
+        // XXX: horrible evil hack to ensure the editor is focused so the act
+        // of focusing it doesn't then cancel the format button being pressed
+        if (document.activeElement && document.activeElement.className !== 'mx_MessageComposer_editor') {
+            this.refs.editor.focus();
+            setTimeout(()=>{
+                this.handleKeyCommand(name);
+            }, 500); // can't find any callback to hook this to. onFocus and onChange and willComponentUpdate fire too early.
+            return;
+        }
+
+        this.handleKeyCommand(name);
     };
 
     getAutocompleteQuery(editorState: Value) {
