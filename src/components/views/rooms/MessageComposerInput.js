@@ -147,17 +147,17 @@ export default class MessageComposerInput extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
+        const isRichTextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
-        Analytics.setRichtextMode(isRichtextEnabled);
+        Analytics.setRichtextMode(isRichTextEnabled);
 
         this.state = {
             // whether we're in rich text or markdown mode
-            isRichtextEnabled,
+            isRichTextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
             editorState: this.createEditorState(
-                isRichtextEnabled,
+                isRichTextEnabled,
                 MessageComposerStore.getEditorState(this.props.room.roomId),
             ),
 
@@ -323,7 +323,7 @@ export default class MessageComposerInput extends React.Component {
         // this is dirty, but moving all this state to MessageComposer is dirtier
         if (this.props.onInputStateChanged && nextState !== this.state) {
             const state = this.getSelectionInfo(nextState.editorState);
-            state.isRichtextEnabled = nextState.isRichtextEnabled;
+            state.isRichTextEnabled = nextState.isRichTextEnabled;
             this.props.onInputStateChanged(state);
         }
     }
@@ -362,7 +362,7 @@ export default class MessageComposerInput extends React.Component {
                 const body = escape(payload.text);
                 if (body) {
                     let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
-                    if (!this.state.isRichtextEnabled) {
+                    if (!this.state.isRichTextEnabled) {
                         content = ContentState.createFromText(RichText.stateToMarkdown(content));
                     }
 
@@ -374,7 +374,7 @@ export default class MessageComposerInput extends React.Component {
                         startSelection,
                         blockMap);
                     startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    if (this.state.isRichtextEnabled) {
+                    if (this.state.isRichTextEnabled) {
                         contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
                     }
                     let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
@@ -582,52 +582,61 @@ export default class MessageComposerInput extends React.Component {
         });
     };
 
-    enableRichtext(enabled: boolean) {
-        if (enabled === this.state.isRichtextEnabled) return;
+    mdToRichEditorState(editorState: Value): Value {
+        // for consistency when roundtripping, we could use slate-md-serializer rather than
+        // commonmark, but then we would lose pills as the MD deserialiser doesn't know about
+        // them and doesn't have any extensibility hooks.
+        //
+        // The code looks like this:
+        //
+        // const markdown = this.plainWithMdPills.serialize(editorState);
+        //
+        // // weirdly, the Md serializer can't deserialize '' to a valid Value...
+        // if (markdown !== '') {
+        //     editorState = this.md.deserialize(markdown);
+        // }
+        // else {
+        //     editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+        // }
 
-        // FIXME: this duplicates similar conversions which happen in the history & store.
-        // they should be factored out.
+        // so, instead, we use commonmark proper (which is arguably more logical to the user
+        // anyway, as they'll expect the RTE view to match what they'll see in the timeline,
+        // but the HTML->MD conversion is anyone's guess).
+
+        const textWithMdPills = this.plainWithMdPills.serialize(editorState);
+        const markdown = new Markdown(textWithMdPills);
+        // HTML deserialize has custom rules to turn matrix.to links into pill objects.
+        return this.html.deserialize(markdown.toHTML());
+    }
+
+    richToMdEditorState(editorState: Value): Value {
+        // FIXME: this conversion loses pills (turning them into pure MD links).
+        // We need to add a pill-aware deserialize method
+        // to PlainWithPillsSerializer which recognises pills in raw MD and turns them into pills.
+        return Plain.deserialize(
+            // FIXME: we compile the MD out of the RTE state using slate-md-serializer
+            // which doesn't roundtrip symmetrically with commonmark, which we use for
+            // compiling MD out of the MD editor state above.
+            this.md.serialize(editorState),
+            { defaultBlock: DEFAULT_NODE }
+        );
+    }
+
+    enableRichtext(enabled: boolean) {
+        if (enabled === this.state.isRichTextEnabled) return;
 
         let editorState = null;
         if (enabled) {
-            // for consistency when roundtripping, we could use slate-md-serializer rather than
-            // commonmark, but then we would lose pills as the MD deserialiser doesn't know about
-            // them and doesn't have any extensibility hooks.
-            //
-            // The code looks like this:
-            //
-            // const markdown = this.plainWithMdPills.serialize(this.state.editorState);
-            //
-            // // weirdly, the Md serializer can't deserialize '' to a valid Value...
-            // if (markdown !== '') {
-            //     editorState = this.md.deserialize(markdown);
-            // }
-            // else {
-            //     editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
-            // }
-
-            // so, instead, we use commonmark proper (which is arguably more logical to the user
-            // anyway, as they'll expect the RTE view to match what they'll see in the timeline,
-            // but the HTML->MD conversion is anyone's guess).
-
-            const sourceWithPills = this.plainWithMdPills.serialize(this.state.editorState);
-            const markdown = new Markdown(sourceWithPills);
-            editorState = this.html.deserialize(markdown.toHTML());
+            editorState = this.mdToRichEditorState(this.state.editorState);
         } else {
-            // let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
-            // value = ContentState.createFromText(markdown);
-
-            editorState = Plain.deserialize(
-                this.md.serialize(this.state.editorState),
-                { defaultBlock: DEFAULT_NODE }
-            );
+            editorState = this.richToMdEditorState(this.state.editorState);
         }
 
         Analytics.setRichtextMode(enabled);
 
         this.setState({
             editorState: this.createEditorState(enabled, editorState),
-            isRichtextEnabled: enabled,
+            isRichTextEnabled: enabled,
         }, ()=>{
             this.refs.editor.focus();
         });
@@ -710,7 +719,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onBackspace = (ev: Event, change: Change): Change => {
-        if (this.state.isRichtextEnabled) {
+        if (this.state.isRichTextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
             const { editorState } = this.state;
@@ -740,14 +749,14 @@ export default class MessageComposerInput extends React.Component {
 
     handleKeyCommand = (command: string): boolean => {
         if (command === 'toggle-mode') {
-            this.enableRichtext(!this.state.isRichtextEnabled);
+            this.enableRichtext(!this.state.isRichTextEnabled);
             return true;
         }
 
         let newState: ?Value = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
-        if (this.state.isRichtextEnabled) {
+        if (this.state.isRichTextEnabled) {
             const type = command;
             const { editorState } = this.state;
             const change = editorState.change();
@@ -913,7 +922,7 @@ export default class MessageComposerInput extends React.Component {
             // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
             // that we will silently discard nested blocks (e.g. nested lists) :(
             const fragment = this.html.deserialize(transfer.html);
-            if (this.state.isRichtextEnabled) {
+            if (this.state.isRichTextEnabled) {
                 return change.insertFragment(fragment.document);
             }
             else {
@@ -954,7 +963,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (cmd) {
             if (!cmd.error) {
-                this.historyManager.save(editorState, this.state.isRichtextEnabled ? 'rich' : 'markdown');
+                this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });
@@ -986,7 +995,7 @@ export default class MessageComposerInput extends React.Component {
         const replyingToEv = RoomViewStore.getQuotingEvent();
         const mustSendHTML = Boolean(replyingToEv);
 
-        if (this.state.isRichtextEnabled) {
+        if (this.state.isRichTextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
 
@@ -1032,7 +1041,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.historyManager.save(
             editorState,
-            this.state.isRichtextEnabled ? 'rich' : 'markdown',
+            this.state.isRichTextEnabled ? 'rich' : 'markdown',
         );
 
         if (commandText && commandText.startsWith('/me')) {
@@ -1119,7 +1128,7 @@ export default class MessageComposerInput extends React.Component {
             if (up) {
                 const scrollCorrection = editorNode.scrollTop;
                 const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
-                console.log(`Cursor distance from editor top is ${distanceFromTop}`);
+                //console.log(`Cursor distance from editor top is ${distanceFromTop}`);
                 if (distanceFromTop < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }
@@ -1128,7 +1137,7 @@ export default class MessageComposerInput extends React.Component {
                 const scrollCorrection =
                     editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
                 const distanceFromBottom = editorRect.bottom - cursorRect.bottom + scrollCorrection;
-                console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
+                //console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
                 if (distanceFromBottom < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }
@@ -1168,7 +1177,19 @@ export default class MessageComposerInput extends React.Component {
             return;
         }
 
-        let editorState = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'rich' : 'markdown');
+        let editorState;
+        const historyItem = this.historyManager.getItem(delta);
+        if (historyItem) {
+            if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
+                editorState = this.richToMdEditorState(historyItem.value);
+            }
+            else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
+                editorState = this.mdToRichEditorState(historyItem.value);
+            }
+            else {
+                editorState = historyItem.value;
+            }
+        }
 
         // Move selection to the end of the selected history
         const change = editorState.change().collapseToEndOf(editorState.document);
@@ -1468,8 +1489,8 @@ export default class MessageComposerInput extends React.Component {
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
-                         title={this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
-                         src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
+                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                         src={`img/button-md-${!this.state.isRichTextEnabled}.png`} />
                     <Editor ref="editor"
                             dir="auto"
                             className="mx_MessageComposer_editor"

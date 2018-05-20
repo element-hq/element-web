@@ -46,7 +46,7 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 marks: [],
                 blockType: null,
-                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
+                isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
@@ -227,7 +227,7 @@ export default class MessageComposer extends React.Component {
 
     onToggleMarkdownClicked(e) {
         e.preventDefault(); // don't steal focus from the editor!
-        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichtextEnabled);
+        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichTextEnabled);
     }
 
     render() {
@@ -380,10 +380,10 @@ export default class MessageComposer extends React.Component {
                     <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
                         { formatButtons }
                         <div style={{flex: 1}}></div>
-                        <img title={this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
+                        <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
                              onMouseDown={this.onToggleMarkdownClicked}
                             className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
+                            src={`img/button-md-${!this.state.inputState.isRichTextEnabled}.png`} />
                         <img title={_t("Hide Text Formatting Toolbar")}
                              onClick={this.onToggleFormattingClicked}
                              className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"

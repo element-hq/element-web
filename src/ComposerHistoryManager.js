@@ -28,8 +28,8 @@ type MessageFormat = 'rich' | 'markdown';
 
 class HistoryItem {
 
-    // Keeping message for backwards-compatibility
-    message: string;
+    // We store history items in their native format to ensure history is accurate
+    // and then convert them if our RTE has subsequently changed format.
     value: Value;
     format: MessageFormat = 'rich';
 
@@ -50,32 +50,6 @@ class HistoryItem {
             value: this.value.toJSON(),
             format: this.format
         };
-    }
-
-    // FIXME: rather than supporting storing history in either format, why don't we pick
-    // one canonical form?
-    toValue(outputFormat: MessageFormat): Value {
-        if (outputFormat === 'markdown') {
-            if (this.format === 'rich') {
-                // convert a rich formatted history entry to its MD equivalent
-                return Plain.deserialize(Md.serialize(this.value));
-                // return ContentState.createFromText(RichText.stateToMarkdown(contentState));
-            }
-            else if (this.format === 'markdown') {
-                return this.value;
-            }
-        } else if (outputFormat === 'rich') {
-            if (this.format === 'markdown') {
-                // convert MD formatted string to its rich equivalent.
-                return Md.deserialize(Plain.serialize(this.value));
-                // return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
-            }
-            else if (this.format === 'rich') {
-                return this.value;
-            }
-        }
-        console.error("unknown format -> outputFormat conversion");
-        return this.value;
     }
 }
 
@@ -110,9 +84,9 @@ export default class ComposerHistoryManager {
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item.toJSON()));
     }
 
-    getItem(offset: number, format: MessageFormat): ?Value {
+    getItem(offset: number): ?HistoryItem {
         this.currentIndex = _clamp(this.currentIndex + offset, 0, this.lastIndex - 1);
         const item = this.history[this.currentIndex];
-        return item ? item.toValue(format) : null;
+        return item;
     }
 }

@@ -69,7 +69,7 @@ describe('MessageComposerInput', () => {
                 'mx_MessageComposer_input_markdownIndicator');
             ReactTestUtils.Simulate.click(indicator);
 
-            expect(mci.state.isRichtextEnabled).toEqual(false, 'should have changed mode');
+            expect(mci.state.isRichTextEnabled).toEqual(false, 'should have changed mode');
             done();
         });
     });
