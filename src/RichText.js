@@ -18,48 +18,11 @@ limitations under the License.
 
 import React from 'react';
 
-/*
-import {
-    Editor,
-    EditorState,
-    Modifier,
-    ContentState,
-    ContentBlock,
-    convertFromHTML,
-    DefaultDraftBlockRenderMap,
-    DefaultDraftInlineStyle,
-    CompositeDecorator,
-    SelectionState,
-    Entity,
-} from 'draft-js';
-import { stateToMarkdown as __stateToMarkdown } from 'draft-js-export-markdown';
-*/
-
-import Html from 'slate-html-serializer';
-
 import * as sdk from './index';
 import * as emojione from 'emojione';
 
 import { SelectionRange } from "./autocomplete/Autocompleter";
 
-const MARKDOWN_REGEX = {
-    LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
-    ITALIC: /([\*_])([\w\s]+?)\1/g,
-    BOLD: /([\*_])\1([\w\s]+?)\1\1/g,
-    HR: /(\n|^)((-|\*|_) *){3,}(\n|$)/g,
-    CODE: /`[^`]*`/g,
-    STRIKETHROUGH: /~{2}[^~]*~{2}/g,
-};
-
-const ZWS_CODE = 8203;
-const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
-
-export function stateToMarkdown(state) {
-    return __stateToMarkdown(state)
-        .replace(
-            ZWS, // draft-js-export-markdown adds these
-            ''); // this is *not* a zero width space, trust me :)
-}
 
 export function unicodeToEmojiUri(str) {
     let replaceWith, unicode, alt;
@@ -86,117 +49,4 @@ export function unicodeToEmojiUri(str) {
     });
 
     return str;
-}
-
-/**
- * Utility function that looks for regex matches within a ContentBlock and invokes {callback} with (start, end)
- * From https://facebook.github.io/draft-js/docs/advanced-topics-decorators.html
- */
-function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: number, end: number) => any) {
-    const text = contentBlock.getText();
-    let matchArr, start;
-    while ((matchArr = regex.exec(text)) !== null) {
-        start = matchArr.index;
-        callback(start, start + matchArr[0].length);
-    }
-}
-
-/**
- * Returns a composite decorator which has access to provided scope.
- */
-export function getScopedRTDecorators(scope: any): CompositeDecorator {
-    return [emojiDecorator];
-}
-
-export function getScopedMDDecorators(scope: any): CompositeDecorator {
-    const markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
-        (style) => ({
-            strategy: (contentState, contentBlock, callback) => {
-                return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
-            },
-            component: (props) => (
-                <span className={"mx_MarkdownElement mx_Markdown_" + style}>
-                    { props.children }
-                </span>
-            ),
-        }));
-
-    markdownDecorators.push({
-        strategy: (contentState, contentBlock, callback) => {
-            return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
-        },
-        component: (props) => (
-            <a href="#" className="mx_MarkdownElement mx_Markdown_LINK">
-                { props.children }
-            </a>
-        ),
-    });
-    // markdownDecorators.push(emojiDecorator);
-    // TODO Consider renabling "syntax highlighting" when we can do it properly
-    return [emojiDecorator];
-}
-
-/**
- * Passes rangeToReplace to modifyFn and replaces it in contentState with the result.
- */
-export function modifyText(contentState: ContentState, rangeToReplace: SelectionState,
-                           modifyFn: (text: string) => string, inlineStyle, entityKey): ContentState {
-    let getText = (key) => contentState.getBlockForKey(key).getText(),
-        startKey = rangeToReplace.getStartKey(),
-        startOffset = rangeToReplace.getStartOffset(),
-        endKey = rangeToReplace.getEndKey(),
-        endOffset = rangeToReplace.getEndOffset(),
-        text = "";
-
-
-    for (let currentKey = startKey;
-            currentKey && currentKey !== endKey;
-            currentKey = contentState.getKeyAfter(currentKey)) {
-        const blockText = getText(currentKey);
-        text += blockText.substring(startOffset, blockText.length);
-
-        // from now on, we'll take whole blocks
-        startOffset = 0;
-    }
-
-    // add remaining part of last block
-    text += getText(endKey).substring(startOffset, endOffset);
-
-    return Modifier.replaceText(contentState, rangeToReplace, modifyFn(text), inlineStyle, entityKey);
-}
-
-/**
- * Computes the plaintext offsets of the given SelectionState.
- * Note that this inherently means we make assumptions about what that means (no separator between ContentBlocks, etc)
- * Used by autocomplete to show completions when the current selection lies within, or at the edges of a command.
- */
-export function selectionStateToTextOffsets(selectionState: SelectionState,
-                                            contentBlocks: Array<ContentBlock>): {start: number, end: number} {
-    let offset = 0, start = 0, end = 0;
-    for (const block of contentBlocks) {
-        if (selectionState.getStartKey() === block.getKey()) {
-            start = offset + selectionState.getStartOffset();
-        }
-        if (selectionState.getEndKey() === block.getKey()) {
-            end = offset + selectionState.getEndOffset();
-            break;
-        }
-        offset += block.getLength();
-    }
-
-    return {
-        start,
-        end,
-    };
-}
-
-export function hasMultiLineSelection(editorState: EditorState): boolean {
-    const selectionState = editorState.getSelection();
-    const anchorKey = selectionState.getAnchorKey();
-    const currentContent = editorState.getCurrentContent();
-    const currentContentBlock = currentContent.getBlockForKey(anchorKey);
-    const start = selectionState.getStartOffset();
-    const end = selectionState.getEndOffset();
-    const selectedText = currentContentBlock.getText().slice(start, end);
-    return selectedText.includes('\n');
 }
