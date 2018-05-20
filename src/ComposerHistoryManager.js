@@ -16,11 +16,6 @@ limitations under the License.
 */
 
 import { Value } from 'slate';
-import Html from 'slate-html-serializer';
-import Md from 'slate-md-serializer';
-import Plain from 'slate-plain-serializer';
-import * as RichText from './RichText';
-import Markdown from './Markdown';
 
 import _clamp from 'lodash/clamp';
 
@@ -38,17 +33,17 @@ class HistoryItem {
         this.format = format;
     }
 
-    static fromJSON(obj): HistoryItem {
+    static fromJSON(obj: Object): HistoryItem {
         return new HistoryItem(
             Value.fromJSON(obj.value),
-            obj.format
+            obj.format,
         );
     }
 
     toJSON(): Object {
         return {
             value: this.value.toJSON(),
-            format: this.format
+            format: this.format,
         };
     }
 }
@@ -67,10 +62,9 @@ export default class ComposerHistoryManager {
         for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
             try {
                 this.history.push(
-                    HistoryItem.fromJSON(JSON.parse(item))
+                    HistoryItem.fromJSON(JSON.parse(item)),
                 );
-            }
-            catch (e) {
+            } catch (e) {
                 console.warn("Throwing away unserialisable history", e);
             }
         }

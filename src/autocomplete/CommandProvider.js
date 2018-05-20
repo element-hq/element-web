@@ -132,8 +132,7 @@ export default class CommandProvider extends AutocompleteProvider {
             let results;
             if (command[0] == '/') {
                 results = COMMANDS;
-            }
-            else {
+            } else {
                 results = this.matcher.match(command[0]);
             }
             completions = results.map((result) => {

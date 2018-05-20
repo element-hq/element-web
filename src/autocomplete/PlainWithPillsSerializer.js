@@ -31,7 +31,7 @@ class PlainWithPillsSerializer {
      * @param {String} options.pillFormat - either 'md', 'plain', 'id'
      */
     constructor(options = {}) {
-        let {
+        const {
             pillFormat = 'plain',
         } = options;
         this.pillFormat = pillFormat;
@@ -46,7 +46,7 @@ class PlainWithPillsSerializer {
      * @return {String}
      */
     serialize = value => {
-        return this._serializeNode(value.document)
+        return this._serializeNode(value.document);
     }
 
     /**
@@ -61,8 +61,7 @@ class PlainWithPillsSerializer {
             (node.object == 'block' && Block.isBlockList(node.nodes))
         ) {
             return node.nodes.map(this._serializeNode).join('\n');
-        }
-        else if (node.type == 'emoji') {
+        } else if (node.type == 'emoji') {
             return node.data.get('emojiUnicode');
         } else if (node.type == 'pill') {
             switch (this.pillFormat) {
@@ -73,11 +72,9 @@ class PlainWithPillsSerializer {
                 case 'id':
                     return node.data.get('completionId') || node.data.get('completion');
             }
-        }
-        else if (node.nodes) {
+        } else if (node.nodes) {
             return node.nodes.map(this._serializeNode).join('');
-        }
-        else {
+        } else {
             return node.text;
         }
     }
@@ -89,4 +86,4 @@ class PlainWithPillsSerializer {
  * @type {PlainWithPillsSerializer}
  */
 
-export default PlainWithPillsSerializer
+export default PlainWithPillsSerializer;
