@@ -69,7 +69,7 @@ class PlainWithPillsSerializer {
                 case 'plain':
                     return node.data.get('completion');
                 case 'md':
-                    return `[${ node.text }](${ node.data.get('href') })`;
+                    return `[${ node.data.get('completion') }](${ node.data.get('href') })`;
                 case 'id':
                     return node.data.get('completionId') || node.data.get('completion');
             }
