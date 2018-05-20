@@ -177,8 +177,23 @@ export default class MessageComposerInput extends React.Component {
         this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
-        this.md                  = new Md();
-        this.html                = new Html({
+
+        this.md = new Md({
+            rules: [
+                {
+                    serialize: (obj, children) => {
+                        switch (obj.type) {
+                            case 'pill':
+                                return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
+                            case 'emoji':
+                                return obj.data.get('emojiUnicode');
+                        }
+                    }
+                }
+            ]
+        });
+
+        this.html = new Html({
             rules: [
                 {
                     deserialize: (el, next) => {
@@ -567,8 +582,13 @@ export default class MessageComposerInput extends React.Component {
         if (enabled) {
             // for simplicity when roundtripping, we use slate-md-serializer rather than commonmark
             const markdown = this.plainWithMdPills.serialize(this.state.editorState);
+
+            // weirdly, the Md serializer can't deserialize '' to a valid Value...
             if (markdown !== '') {
-                // weirdly, the Md serializer can't deserialize '' to a valid Value...
+                // FIXME: the MD deserializer doesn't know how to deserialize pills
+                // and gives no hooks for doing so, so we should manually fix up
+                // the editorState first in order to preserve them.
+
                 editorState = this.md.deserialize(markdown);
             }
             else {
