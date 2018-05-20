@@ -10,6 +10,7 @@ const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput'
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import RoomMember from 'matrix-js-sdk';
 
+/*
 function addTextToDraft(text) {
     const components = document.getElementsByClassName('public-DraftEditor-content');
     if (components && components.length) {
@@ -300,3 +301,4 @@ describe('MessageComposerInput', () => {
         expect(spy.args[0][1].formatted_body).toEqual('<a href="https://some.lovely.url">Click here</a>');
     });
 });
+*/

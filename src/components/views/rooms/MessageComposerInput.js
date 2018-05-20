@@ -557,7 +557,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (this.props.onInputStateChanged) {
             let blockType = editorState.blocks.first().type;
-            console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
+            // console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
 
             if (blockType === 'list-item') {
                 const parent = editorState.document.getParent(editorState.blocks.first().key);
