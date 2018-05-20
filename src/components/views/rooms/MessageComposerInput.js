@@ -1405,9 +1405,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onFormatButtonClicked = (name, e) => {
-        if (e) {
-            e.preventDefault(); // don't steal focus from the editor!
-        }
+        e.preventDefault(); // don't steal focus from the editor!
 
         // XXX: horrible evil hack to ensure the editor is focused so the act
         // of focusing it doesn't then cancel the format button being pressed
