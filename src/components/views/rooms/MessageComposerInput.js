@@ -202,12 +202,15 @@ export default class MessageComposerInput extends React.Component {
                         // special case links
                         if (tag === 'a') {
                             const href = el.getAttribute('href');
-                            let m = href.match(MATRIXTO_URL_PATTERN);
+                            let m;
+                            if (href) {
+                                m = href.match(MATRIXTO_URL_PATTERN);
+                            }
                             if (m) {
                                 return {
                                     object: 'inline',
                                     type: 'pill',
-                                    data: { 
+                                    data: {
                                         href,
                                         completion: el.innerText,
                                         completionId: m[1],
@@ -226,7 +229,7 @@ export default class MessageComposerInput extends React.Component {
                         }
                     },
                     serialize: (obj, children) => {
-                        if (obj.object === 'block' || obj.object === 'inline') {
+                        if (obj.object === 'block') {
                             return this.renderNode({
                                 node: obj,
                                 children: children,
@@ -235,6 +238,26 @@ export default class MessageComposerInput extends React.Component {
                         else if (obj.object === 'mark') {
                             return this.renderMark({
                                 mark: obj,
+                                children: children,
+                            });
+                        }
+                        else if (obj.object === 'inline') {
+                            // special case links, pills and emoji otherwise we
+                            // end up with React components getting rendered out(!)
+                            switch (obj.type) {
+                                case 'pill':
+                                    return <a href={ obj.data.get('href') }>{ obj.data.get('completion') }</a>;
+                                case 'link':
+                                    return <a href={ obj.data.get('href') }>{ children }</a>;
+                                case 'emoji':
+                                    // XXX: apparently you can't return plain strings from serializer rules
+                                    // until https://github.com/ianstormtaylor/slate/pull/1854 is merged.
+                                    // So instead we temporarily wrap emoji from RTE in an arbitrary tag
+                                    // (<b/>).  <span/> would be nicer, but in practice it causes CSS issues.
+                                    return <b>{ obj.data.get('emojiUnicode') }</b>;
+                            }
+                            return this.renderNode({
+                                node: obj,
                                 children: children,
                             });
                         }
@@ -545,6 +568,7 @@ export default class MessageComposerInput extends React.Component {
             // for simplicity when roundtripping, we use slate-md-serializer rather than commonmark
             const markdown = this.plainWithMdPills.serialize(this.state.editorState);
             if (markdown !== '') {
+                // weirdly, the Md serializer can't deserialize '' to a valid Value...
                 editorState = this.md.deserialize(markdown);
             }
             else {
@@ -572,6 +596,8 @@ export default class MessageComposerInput extends React.Component {
         this.setState({
             editorState: this.createEditorState(enabled, editorState),
             isRichtextEnabled: enabled,
+        }, ()=>{
+            this.refs.editor.focus();
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
@@ -852,6 +878,8 @@ export default class MessageComposerInput extends React.Component {
             return this.props.onFilesPasted(transfer.files);
         }
         else if (transfer.type === "html") {
+            // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+            // that we will silently discard nested blocks (e.g. nested lists) :(
             const fragment = this.html.deserialize(transfer.html);
             if (this.state.isRichtextEnabled) {
                 return change.insertFragment(fragment.document);
@@ -1263,7 +1291,7 @@ export default class MessageComposerInput extends React.Component {
                 return <ol {...attributes}>{children}</ol>;
             case 'code-block':
                 return <pre {...attributes}><code {...attributes}>{children}</code></pre>;
-            case 'link': 
+            case 'link':
                 return <a {...attributes} href={ node.data.get('href') }>{children}</a>;
             case 'pill': {
                 const { data } = node;
