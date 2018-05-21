@@ -413,12 +413,13 @@ class TextHighlighter extends BaseHighlighter {
      * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
      */
 export function bodyToHtml(content, highlights, opts={}) {
-    let isHtml = content.format === "org.matrix.custom.html" && content.formatted_body;
+    const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
 
     let bodyHasEmoji = false;
 
     let strippedBody;
     let safeBody;
+    let isDisplayedWithHtml;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
     // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
@@ -439,17 +440,18 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = containsEmoji(isHtml ? formattedBody : content.body);
+        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
 
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
-        if (isHtml) {
+        if (isHtmlMessage) {
+            isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeHtmlParams);
         } else {
             // ... or if there are emoji, which we insert as HTML alongside the
             // escaped plaintext body.
             if (bodyHasEmoji) {
-                isHtml = true;
+                isDisplayedWithHtml = true;
                 safeBody = sanitizeHtml(escape(strippedBody), sanitizeHtmlParams);
             }
         }
@@ -475,10 +477,10 @@ export function bodyToHtml(content, highlights, opts={}) {
     const className = classNames({
         'mx_EventTile_body': true,
         'mx_EventTile_bigEmoji': emojiBody,
-        'markdown-body': isHtml,
+        'markdown-body': isHtmlMessage,
     });
 
-    return isHtml ?
+    return isDisplayedWithHtml ?
         <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
         <span className={className} dir="auto">{ strippedBody }</span>;
 }

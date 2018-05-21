@@ -86,9 +86,9 @@ const SIMPLE_SETTINGS = [
 // These settings must be defined in SettingsStore
 const ANALYTICS_SETTINGS = [
     {
-        id: 'analyticsOptOut',
+        id: 'analyticsOptIn',
         fn: function(checked) {
-            Analytics[checked ? 'disable' : 'enable']();
+            checked ? Analytics.enable() : Analytics.disable();
         },
     },
 ];
