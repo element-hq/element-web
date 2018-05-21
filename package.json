@@ -132,7 +132,6 @@
     "postcss-simple-vars": "^3.0.0",
     "postcss-strip-inline-comments": "^0.1.5",
     "react-addons-perf": "^15.4.0",
-    "react-addons-test-utils": "^15.6.0",
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.2.3",
     "webpack": "^1.12.14",

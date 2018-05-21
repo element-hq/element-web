@@ -23,7 +23,7 @@ import 'skin-sdk';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import expect from 'expect';
 import Promise from 'bluebird';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
