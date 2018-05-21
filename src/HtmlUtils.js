@@ -403,19 +403,22 @@ class TextHighlighter extends BaseHighlighter {
 }
 
 
-    /* turn a matrix event body into html
-     *
-     * content: 'content' of the MatrixEvent
-     *
-     * highlights: optional list of words to highlight, ordered by longest word first
-     *
-     * opts.highlightLink: optional href to add to highlighted words
-     * opts.disableBigEmoji: optional argument to disable the big emoji class.
-     * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
-     */
+/* turn a matrix event body into html
+ *
+ * content: 'content' of the MatrixEvent
+ *
+ * highlights: optional list of words to highlight, ordered by longest word first
+ *
+ * opts.highlightLink: optional href to add to highlighted words
+ * opts.disableBigEmoji: optional argument to disable the big emoji class.
+ * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
+ * opts.returnString: return an HTML string rather than JSX elements
+ * opts.emojiOne: optional param to do emojiOne (default true)
+ */
 export function bodyToHtml(content, highlights, opts={}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
 
+    const doEmojiOne = opts.emojiOne === undefined ? true : opts.emojiOne;
     let bodyHasEmoji = false;
 
     let strippedBody;
@@ -441,8 +444,9 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
-
+        if (doEmojiOne) {
+            bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+        }
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
@@ -465,6 +469,10 @@ export function bodyToHtml(content, highlights, opts={}) {
         }
     } finally {
         delete sanitizeHtmlParams.textFilter;
+    }
+
+    if (opts.returnString) {
+        return isDisplayedWithHtml ? safeBody : strippedBody;
     }
 
     let emojiBody = false;

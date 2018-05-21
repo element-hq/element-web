@@ -21,7 +21,7 @@ import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
 import { getEventTransfer } from 'slate-react';
-import { Value, Document, Event, Inline, Text, Range, Node } from 'slate';
+import { Value, Document, Event, Block, Inline, Text, Range, Node } from 'slate';
 
 import Html from 'slate-html-serializer';
 import Md from 'slate-md-serializer';
@@ -342,37 +342,44 @@ export default class MessageComposerInput extends React.Component {
                     });
                 }
                 break;
-/*
-            case 'quote': { // old quoting, whilst rich quoting is in labs
-                /// XXX: Not doing rich-text quoting from formatted-body because draft-js
-                /// has regressed such that when links are quoted, errors are thrown. See
-                /// https://github.com/vector-im/riot-web/issues/4756.
-                const body = escape(payload.text);
-                if (body) {
-                    let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
-                    if (!this.state.isRichTextEnabled) {
-                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
-                    }
+            case 'quote': {
+                const html = HtmlUtils.bodyToHtml(payload.event.getContent(), null, {
+                    returnString: true,
+                    emojiOne: false,
+                });
+                const fragment = this.html.deserialize(html);
+                // FIXME: do we want to put in a permalink to the original quote here?
+                // If so, what should be the format, and how do we differentiate it from replies?
 
-                    const blockMap = content.getBlockMap();
-                    let startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.splitBlock(contentState, startSelection);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.replaceWithFragment(contentState,
-                        startSelection,
-                        blockMap);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    if (this.state.isRichTextEnabled) {
-                        contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
+                const quote = Block.create('block-quote');
+                if (this.state.isRichTextEnabled) {    
+                    let change = editorState.change();
+                    if (editorState.anchorText.text === '' && editorState.anchorBlock.nodes.size === 1) {
+                        // replace the current block rather than split the block
+                        change = change.replaceNodeByKey(editorState.anchorBlock.key, quote);
                     }
-                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                    editorState = EditorState.moveSelectionToEnd(editorState);
-                    this.onEditorContentChanged(editorState);
-                    editor.focus();
+                    else {
+                        // insert it into the middle of the block (splitting it)
+                        change = change.insertBlock(quote);
+                    }
+                    change = change.insertFragmentByKey(quote.key, 0, fragment.document)
+                                   .focus();
+                    this.onChange(change);
+                }
+                else {
+                    let fragmentChange = fragment.change();
+                    fragmentChange.moveToRangeOf(fragment.document)
+                                  .wrapBlock(quote);
+
+                    // FIXME: handle pills and use commonmark rather than md-serialize
+                    const md = this.md.serialize(fragmentChange.value);
+                    let change = editorState.change()
+                                            .insertText(md + '\n\n')
+                                            .focus();
+                    this.onChange(change);
                 }
             }
                 break;
-*/
         }
     };
 
@@ -555,7 +562,7 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        if (this.props.onInputStateChanged) {
+        if (this.props.onInputStateChanged && editorState.blocks.size > 0) {
             let blockType = editorState.blocks.first().type;
             // console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
 
@@ -740,17 +747,31 @@ export default class MessageComposerInput extends React.Component {
                     .unwrapBlock('numbered-list');
                 return change;
             }
-            else if (editorState.anchorOffset == 0 &&
-                     (this.hasBlock('block-quote') ||
-                      this.hasBlock('heading1') ||
-                      this.hasBlock('heading2') ||
-                      this.hasBlock('heading3') ||
-                      this.hasBlock('heading4') ||
-                      this.hasBlock('heading5') ||
-                      this.hasBlock('heading6') ||
-                      this.hasBlock('code-block')))
-            {
-                return change.setBlocks(DEFAULT_NODE);
+            else if (editorState.anchorOffset == 0 && editorState.isCollapsed) {
+                // turn blocks back into paragraphs
+                if ((this.hasBlock('block-quote') ||
+                     this.hasBlock('heading1') ||
+                     this.hasBlock('heading2') ||
+                     this.hasBlock('heading3') ||
+                     this.hasBlock('heading4') ||
+                     this.hasBlock('heading5') ||
+                     this.hasBlock('heading6') ||
+                     this.hasBlock('code-block')))
+                {
+                    return change.setBlocks(DEFAULT_NODE);
+                }
+
+                // remove paragraphs entirely if they're nested
+                const parent = editorState.document.getParent(editorState.anchorBlock.key);
+                if (editorState.anchorOffset == 0 &&
+                    this.hasBlock('paragraph') &&
+                    parent.nodes.size == 1 &&
+                    parent.object !== 'document')
+                {
+                    return change.replaceNodeByKey(editorState.anchorBlock.key, editorState.anchorText)
+                                 .collapseToEndOf(parent)
+                                 .focus();
+                }
             }
         }
         return;
@@ -1013,7 +1034,7 @@ export default class MessageComposerInput extends React.Component {
             if (!shouldSendHTML) {
                 shouldSendHTML = !!editorState.document.findDescendant(node => {
                     // N.B. node.getMarks() might be private?
-                    return ((node.object === 'block' && node.type !== 'line') ||
+                    return ((node.object === 'block' && node.type !== 'paragraph') ||
                             (node.object === 'inline') ||
                             (node.object === 'text' && node.getMarks().size > 0));
                 });
@@ -1131,13 +1152,13 @@ export default class MessageComposerInput extends React.Component {
             // heuristic to handle tall emoji, pills, etc pushing the cursor away from the top
             // or bottom of the page.
             // XXX: is this going to break on large inline images or top-to-bottom scripts?
-            const EDGE_THRESHOLD = 8;
+            const EDGE_THRESHOLD = 15;
 
             let navigateHistory = false;
             if (up) {
                 const scrollCorrection = editorNode.scrollTop;
                 const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
-                //console.log(`Cursor distance from editor top is ${distanceFromTop}`);
+                console.log(`Cursor distance from editor top is ${distanceFromTop}`);
                 if (distanceFromTop < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }
@@ -1146,7 +1167,7 @@ export default class MessageComposerInput extends React.Component {
                 const scrollCorrection =
                     editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
                 const distanceFromBottom = editorRect.bottom - cursorRect.bottom + scrollCorrection;
-                //console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
+                console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
                 if (distanceFromBottom < EDGE_THRESHOLD) {
                     navigateHistory = true;
                 }

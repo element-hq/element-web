@@ -179,7 +179,7 @@ module.exports = React.createClass({
     onQuoteClick: function() {
         dis.dispatch({
             action: 'quote',
-            text: this.props.eventTileOps.getInnerText(),
+            event: this.props.mxEvent,
         });
         this.closeMenu();
     },
