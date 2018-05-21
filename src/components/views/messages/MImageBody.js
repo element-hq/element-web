@@ -62,6 +62,8 @@ export default class extends React.Component {
             decryptedBlob: null,
             error: null,
             imgError: false,
+            imgLoaded: false,
+            hover: false,
         };
     }
 
@@ -116,6 +118,8 @@ export default class extends React.Component {
     }
 
     onImageEnter(e) {
+        this.setState({ hover: true });
+
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
@@ -124,6 +128,8 @@ export default class extends React.Component {
     }
 
     onImageLeave(e) {
+        this.setState({ hover: false });
+
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
@@ -139,6 +145,7 @@ export default class extends React.Component {
 
     onImageLoad() {
         this.props.onWidgetLoad();
+        this.setState({ imgLoaded: true });
     }
 
     _getContentUrl() {
@@ -237,14 +244,22 @@ export default class extends React.Component {
         const maxWidth = content.info.w * maxHeight / content.info.h;
 
         let img = null;
+        let placeholder = null;
+
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            img = <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
-                <img src="img/spinner.gif" alt={content.body} width="32" height="32" />
-            </div>;
-        } else if (thumbUrl && !this.state.imgError) {
+            placeholder = <img src="img/spinner.gif" alt={content.body} width="32" height="32" />;
+        } else if (!this.state.imgLoaded) {
+            // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
+            placeholder = this.getPlaceholder();
+        }
+
+        const showPlaceholder = Boolean(placeholder);
+
+        if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
+            // mx_MImageBody_thumbnail resizes img to exactly container size
             img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                 style={{ "max-width": maxWidth + "px" }}
                 alt={content.body}
@@ -253,23 +268,54 @@ export default class extends React.Component {
                 onMouseEnter={this.onImageEnter}
                 onMouseLeave={this.onImageLeave} />;
         }
-        const thumbnail = img ?
-            <a href={contentUrl} onClick={this.onClick}>
-                <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
-                    { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                    <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
 
-                    { /* mx_MImageBody_thumbnail resizes img to exactly container size */ }
+        const thumbnail = (
+            <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
+                { /* Calculate aspect ratio, using %padding will size _container correctly */ }
+                <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
+
+                <div className="mx_MImageBody_thumbnail" style={{
+                    "display": showPlaceholder ? undefined : 'none',
+                    // Constrain width here so that spinner appears central to the loaded thumbnail
+                    "max-width": content.info.w + "px",
+                }}>
+                    <div className="mx_MImageBody_thumbnail_spinner">
+                        { placeholder }
+                    </div>
+                </div>
+
+                <div style={{display: !showPlaceholder ? undefined : 'none'}}>
                     { img }
                 </div>
-            </a> : null;
 
-        return (
-            <span className="mx_MImageBody" ref="body">
-                { thumbnail }
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
-            </span>
-      );
+                { this.state.hover && this.getTooltip() }
+            </div>
+        );
+
+        return this.wrapImage(contentUrl, thumbnail);
+    }
+
+    // Overidden by MStickerBody
+    wrapImage(contentUrl, children) {
+        return <a href={contentUrl} onClick={this.onClick}>
+            {children}
+        </a>;
+    }
+
+    // Overidden by MStickerBody
+    getPlaceholder() {
+        // MImageBody doesn't show a placeholder whilst the image loads, (but it could do)
+        return null;
+    }
+
+    // Overidden by MStickerBody
+    getTooltip() {
+        return null;
+    }
+
+    // Overidden by MStickerBody
+    getFileBody() {
+        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />;
     }
 
     render() {
@@ -284,7 +330,6 @@ export default class extends React.Component {
             );
         }
 
-
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
@@ -293,6 +338,12 @@ export default class extends React.Component {
           thumbUrl = this._getThumbUrl();
         }
 
-        return this._messageContent(contentUrl, thumbUrl, content);
+        const thumbnail = this._messageContent(contentUrl, thumbUrl, content);
+        const fileBody = this.getFileBody();
+
+        return <span className="mx_MImageBody" ref="body">
+            { thumbnail }
+            { fileBody }
+        </span>;
     }
 }
