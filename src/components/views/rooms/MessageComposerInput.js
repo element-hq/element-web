@@ -1313,7 +1313,8 @@ export default class MessageComposerInput extends React.Component {
         if (range) {
             const change = editorState.change()
                                       .collapseToAnchor()
-                                      .moveOffsetsTo(range.start, range.end);
+                                      .moveOffsetsTo(range.start, range.end)
+                                      .focus();
             editorState = change.value;
         }
 
@@ -1321,12 +1322,14 @@ export default class MessageComposerInput extends React.Component {
         if (inline) {
             change = editorState.change()
                                 .insertInlineAtRange(editorState.selection, inline)
-                                .insertText(suffix);
+                                .insertText(suffix)
+                                .focus();
         }
         else {
             change = editorState.change()
                                 .insertTextAtRange(editorState.selection, completion)
-                                .insertText(suffix);
+                                .insertText(suffix)
+                                .focus();
         }
         editorState = change.value;
 
