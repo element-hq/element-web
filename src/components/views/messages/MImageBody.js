@@ -276,15 +276,16 @@ export default class extends React.Component {
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                 <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
 
-                <div className="mx_MImageBody_thumbnail" style={{
-                    "display": showPlaceholder ? undefined : 'none',
-                    // Constrain width here so that spinner appears central to the loaded thumbnail
-                    "max-width": content.info.w + "px",
-                }}>
-                    <div className="mx_MImageBody_thumbnail_spinner">
-                        { placeholder }
+                { showPlaceholder &&
+                    <div className="mx_MImageBody_thumbnail" style={{
+                        // Constrain width here so that spinner appears central to the loaded thumbnail
+                        "max-width": content.info.w + "px",
+                    }}>
+                        <div className="mx_MImageBody_thumbnail_spinner">
+                            { placeholder }
+                        </div>
                     </div>
-                </div>
+                }
 
                 <div style={{display: !showPlaceholder ? undefined : 'none'}}>
                     { img }
