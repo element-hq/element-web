@@ -1174,5 +1174,6 @@
     "Send analytics data": "Envoyer les données analytiques",
     "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie. (Voir nos <PolicyLink>politiques de cookie et de confidentialité</PolicyLink>).",
     "Help improve Riot by sending usage data? This will use a cookie.": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie.",
-    "Yes please": "Oui, s'il vous plaît"
+    "Yes please": "Oui, s'il vous plaît",
+    "Muted Users": "Utilisateurs ignorés"
 }
