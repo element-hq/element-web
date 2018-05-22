@@ -33,7 +33,6 @@ import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerial
 //     Entity} from 'draft-js';
 
 import classNames from 'classnames';
-import escape from 'lodash/escape';
 import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -506,6 +505,15 @@ export default class MessageComposerInput extends React.Component {
                 }
             }
         });
+
+        // work around weird bug where inserting emoji via the macOS
+        // emoji picker can leave the selection stuck in the emoji's
+        // child text.  This seems to happen due to selection getting
+        // moved in the normalisation phase after calculating these changes
+        if (editorState.document.getParent(editorState.anchorKey).type === 'emoji') {
+            change = change.collapseToStartOfNextText();
+            editorState = change.value;
+        }
 
 /*
         const currentBlock = editorState.getSelection().getStartKey();
