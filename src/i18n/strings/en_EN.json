@@ -103,6 +103,7 @@
     "You need to be logged in.": "You need to be logged in.",
     "You need to be able to invite users to do that.": "You need to be able to invite users to do that.",
     "Unable to create widget.": "Unable to create widget.",
+    "Reload widget": "Reload widget",
     "Missing roomId.": "Missing roomId.",
     "Failed to send request.": "Failed to send request.",
     "This room is not recognised.": "This room is not recognised.",
