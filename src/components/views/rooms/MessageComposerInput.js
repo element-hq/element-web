@@ -482,6 +482,32 @@ export default class MessageComposerInput extends React.Component {
         }
         */
 
+        if (editorState.startText !== null) {
+            const text = editorState.startText.text;
+            const currentStartOffset = editorState.startOffset;
+
+            // Automatic replacement of plaintext emoji to Unicode emoji
+            if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+                // The first matched group includes just the matched plaintext emoji
+                const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
+                if (emojiMatch) {
+                    // plaintext -> hex unicode
+                    const emojiUc = asciiList[emojiMatch[1]];
+                    // hex unicode -> shortname -> actual unicode
+                    const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+
+                    const range = Range.create({
+                        anchorKey: editorState.selection.startKey,
+                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
+                        focusKey: editorState.selection.startKey,
+                        focusOffset: currentStartOffset - 1,
+                    });
+                    change = change.insertTextAtRange(range, unicodeEmoji);
+                    editorState = change.value;
+                }
+            }
+        }
+
         // emojioneify any emoji
 
         // XXX: is getTextsAsArray a private API?
@@ -544,31 +570,6 @@ export default class MessageComposerInput extends React.Component {
             editorState = EditorState.forceSelection(editorState, currentSelection);
         }
 */
-        if (editorState.startText !== null) {
-            const text = editorState.startText.text;
-            const currentStartOffset = editorState.startOffset;
-
-            // Automatic replacement of plaintext emoji to Unicode emoji
-            if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
-                // The first matched group includes just the matched plaintext emoji
-                const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-                if (emojiMatch) {
-                    // plaintext -> hex unicode
-                    const emojiUc = asciiList[emojiMatch[1]];
-                    // hex unicode -> shortname -> actual unicode
-                    const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
-
-                    const range = Range.create({
-                        anchorKey: editorState.selection.startKey,
-                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
-                        focusKey: editorState.selection.startKey,
-                        focusOffset: currentStartOffset,
-                    });
-                    change = change.insertTextAtRange(range, unicodeEmoji);
-                    editorState = change.value;
-                }
-            }
-        }
 
         if (this.props.onInputStateChanged && editorState.blocks.size > 0) {
             let blockType = editorState.blocks.first().type;
