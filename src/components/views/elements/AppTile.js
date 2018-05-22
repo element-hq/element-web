@@ -55,6 +55,7 @@ export default class AppTile extends React.Component {
         this._grantWidgetPermission = this._grantWidgetPermission.bind(this);
         this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
         this._onPopoutWidgetClick = this._onPopoutWidgetClick.bind(this);
+        this._onReloadWidgetClick = this._onReloadWidgetClick.bind(this);
     }
 
     /**
@@ -519,6 +520,11 @@ export default class AppTile extends React.Component {
             { target: '_blank', href: this._getSafeUrl(), rel: 'noopener noreferrer'}).click();
     }
 
+    _onReloadWidgetClick(e) {
+        // Reload iframe in this way to avoid cross-origin restrictions
+        this.refs.appFrame.src = this.refs.appFrame.src;
+    }
+
     render() {
         let appTileBody;
 
@@ -606,6 +612,7 @@ export default class AppTile extends React.Component {
         const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
         const showPictureSnapshotIcon = 'img/camera_green.svg';
         const popoutWidgetIcon = 'img/button-new-window.svg';
+        const reloadWidgetIcon = 'img/button-refresh.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
         return (
@@ -624,6 +631,16 @@ export default class AppTile extends React.Component {
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
+                        { /* Reload widget */ }
+                        { this.props.showReload && <TintableSvgButton
+                            src={reloadWidgetIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Reload widget')}
+                            onClick={this._onReloadWidgetClick}
+                            width="10"
+                            height="10"
+                        /> }
+
                         { /* Popout widget */ }
                         { this.props.showPopout && <TintableSvgButton
                             src={popoutWidgetIcon}
@@ -707,6 +724,11 @@ AppTile.propTypes = {
     showDelete: PropTypes.bool,
     // Optionally hide the popout widget icon
     showPopout: PropTypes.bool,
+    // Optionally show the reload widget icon
+    // This is not currently intended for use with production widgets. However
+    // it can be useful when developing persistent widgets in order to avoid
+    // having to reload all of riot to get new widget content.
+    showReload: PropTypes.bool,
     // Widget capabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX
     // basic widget capabilities, e.g. injecting sticker message events.
@@ -726,6 +748,7 @@ AppTile.defaultProps = {
     showMinimise: true,
     showDelete: true,
     showPopout: true,
+    showReload: false,
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
     userWidget: false,
