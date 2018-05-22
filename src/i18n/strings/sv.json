@@ -268,7 +268,6 @@
     "Once encryption is enabled for a room it cannot be turned off again (for now)": "När kryptering aktiveras i ett rum kan det inte deaktiveras (tills vidare)",
     "Only people who have been invited": "Endast inbjudna",
     "Operation failed": "Handlingen misslyckades",
-    "Otherwise, <a>click here</a> to send a bug report.": "Annars kan du <a>klicka här</a> för att skicka en buggrapport.",
     "Password": "Lösenord",
     "Password:": "Lösenord:",
     "Passwords can't be empty": "Lösenorden kan inte vara tomma",
