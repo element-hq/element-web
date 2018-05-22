@@ -1170,5 +1170,10 @@
     "We encountered an error trying to restore your previous session.": "我們在嘗試復原您先前的工作階段時遇到了一點錯誤。",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "清除您瀏覽器的儲存的東西也許可以修復問題，但會將您登出並造成任何已加密的聊天都無法讀取。",
     "Collapse Reply Thread": "摺疊回覆討論串",
-    "Enable widget screenshots on supported widgets": "在支援的小工具上啟用小工具螢幕快照"
+    "Enable widget screenshots on supported widgets": "在支援的小工具上啟用小工具螢幕快照",
+    "Send analytics data": "傳送分析資料",
+    "Muted Users": "已靜音的使用者",
+    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "透過傳送使用情形資料來協助改善 Riot？這會使用 cookie。（參見我們的 <PolicyLink>cookie 與隱私政策</PolicyLink>）。",
+    "Help improve Riot by sending usage data? This will use a cookie.": "透過傳送使用情形資料來協助改善 Riot？這會使用 cookie。",
+    "Yes please": "好的，請"
 }
