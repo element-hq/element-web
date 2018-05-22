@@ -211,7 +211,6 @@ export default class extends React.Component {
                 });
             }).done();
         }
-        this.fixupHeight();
         this._afterComponentDidMount();
     }
 
