@@ -957,6 +957,7 @@ export default React.createClass({
             if (rule !== "public") {
                 warnings.push((
                     <span className="warning" key="non_public_warning">
+                        {' '/* Whitespace, otherwise the sentences get smashed together */ }
                         { _t("This room is not public. You will not be able to rejoin without an invite.") }
                     </span>
                 ));
