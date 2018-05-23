@@ -102,6 +102,7 @@ export default class Markdown {
             // (https://github.com/vector-im/riot-web/issues/3154)
             softbreak: '<br />',
         });
+/*        
         const real_paragraph = renderer.paragraph;
 
         renderer.paragraph = function(node, entering) {
@@ -114,16 +115,21 @@ export default class Markdown {
                 real_paragraph.call(this, node, entering);
             }
         };
+*/        
 
         renderer.html_inline = html_if_tag_allowed;
+  
         renderer.html_block = function(node) {
+/*
             // as with `paragraph`, we only insert line breaks
             // if there are multiple lines in the markdown.
             const isMultiLine = is_multi_line(node);
-
             if (isMultiLine) this.cr();
+*/
             html_if_tag_allowed.call(this, node);
+/*
             if (isMultiLine) this.cr();
+*/        
         };
 
         return renderer.render(this.parsed);
@@ -150,6 +156,7 @@ export default class Markdown {
             this.lit(s);
         };
 
+/*
         renderer.paragraph = function(node, entering) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
@@ -159,10 +166,12 @@ export default class Markdown {
                 }
             }
         };
+
         renderer.html_block = function(node) {
             this.lit(node.literal);
             if (is_multi_line(node) && node.next) this.lit('\n\n');
         };
+*/        
 
         // convert MD links into console-friendly ' < http://foo >' style links
         // ...except given this function never gets called with links, it's useless.
