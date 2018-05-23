@@ -908,5 +908,19 @@
     "Device key": "Enhetsnyckel",
     "Verify device": "Verifiera enhet",
     "I verify that the keys match": "Jag verifierar att nycklarna matchar",
-    "In future this verification process will be more sophisticated.": "I framtiden kommer denna verifieringsprocess att bli mer sofistikerad."
+    "In future this verification process will be more sophisticated.": "I framtiden kommer denna verifieringsprocess att bli mer sofistikerad.",
+    "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.": "Om det matchar, tryck på verifieringsknappen nedan. Om inte så är det risk att någon annan försöker avlyssna enheten och då vill du förmodligen trycka på svartlistsknappen istället.",
+    "State Key": "Lägesnyckel",
+    "Send Account Data": "Skicka kontodata",
+    "Explore Account Data": "Utforska kontodata",
+    "Toolbox": "Verktygslåda",
+    "Developer Tools": "Utvecklarverktyg",
+    "Unverify": "Ta bort verifiering",
+    "Verify...": "Verifiera...",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Du har lagt till en ny enhet '%(displayName)s', som begär krypteringsnycklar.",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Din overifierade enhet '%(displayName)s' begär krypteringsnycklar.",
+    "Start verification": "Starta verifiering",
+    "Share without verifying": "Dela utan att verifiera",
+    "Ignore request": "Ignorera begäran",
+    "Loading device info...": "Laddar enhetsinfo..."
 }
