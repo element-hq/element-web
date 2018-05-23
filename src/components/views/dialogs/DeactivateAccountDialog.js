@@ -47,19 +47,17 @@ export default class DeactivateAccountDialog extends React.Component {
         });
     }
 
-    _onOk() {
+    async _onOk() {
         // This assumes that the HS requires password UI auth
         // for this endpoint. In reality it could be any UI auth.
         this.setState({busy: true});
-        MatrixClientPeg.get().deactivateAccount({
-            type: 'm.login.password',
-            user: MatrixClientPeg.get().credentials.userId,
-            password: this._passwordField.value,
-        }).done(() => {
-            Analytics.trackEvent('Account', 'Deactivate Account');
-            Lifecycle.onLoggedOut();
-            this.props.onFinished(false);
-        }, (err) => {
+        try {
+            await MatrixClientPeg.get().deactivateAccount({
+                type: 'm.login.password',
+                user: MatrixClientPeg.get().credentials.userId,
+                password: this._passwordField.value,
+            });
+        } catch (err) {
             let errStr = _t('Unknown error');
             // https://matrix.org/jira/browse/SYN-744
             if (err.httpStatus == 401 || err.httpStatus == 403) {
@@ -70,7 +68,11 @@ export default class DeactivateAccountDialog extends React.Component {
                 busy: false,
                 errStr: errStr,
             });
-        });
+            return;
+        }
+        Analytics.trackEvent('Account', 'Deactivate Account');
+        Lifecycle.onLoggedOut();
+        this.props.onFinished(false);
     }
 
     _onCancel() {
