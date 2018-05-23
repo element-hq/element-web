@@ -956,5 +956,6 @@
     "VoIP conference started.": "VoIP-konferens startad.",
     "VoIP conference finished.": "VoIP-konferens avslutad.",
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s gjorde framtida rumshistorik synligt för okänd (%(visibility)s).",
-    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Där denna sida innehåller identifierbar information, till exempel ett rums-, användar- eller grupp-ID, tas data bort innan den skickas till servern."
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Där denna sida innehåller identifierbar information, till exempel ett rums-, användar- eller grupp-ID, tas data bort innan den skickas till servern.",
+    "The remote side failed to pick up": "Mottagaren misslyckades med att svara"
 }
