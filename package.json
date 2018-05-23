@@ -65,7 +65,7 @@
     "flux": "2.1.1",
     "focus-trap-react": "^3.0.5",
     "fuse.js": "^2.2.0",
-    "gemini-scrollbar": "matrix-org/gemini-scrollbar#b302279",
+    "gemini-scrollbar": "matrix-org/gemini-scrollbar#926a4c7",
     "gfm.css": "^1.1.1",
     "glob": "^5.0.14",
     "highlight.js": "^9.0.0",
