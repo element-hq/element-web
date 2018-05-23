@@ -1175,5 +1175,9 @@
     "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ. (Nézd meg a <PolicyLink>sütikről és titoktartási irányelvekről</PolicyLink> szóló leírást).",
     "Help improve Riot by sending usage data? This will use a cookie.": "Szeretnél segíteni a Riot javításában analitikai adatok elküldésével? Ez sütit (cookie) használ.",
     "Yes please": "Igen, kérlek",
-    "Muted Users": "Elnémított felhasználók"
+    "Muted Users": "Elnémított felhasználók",
+    "Warning: This widget might use cookies.": "Figyelmeztetés: Ez a kisalkalmazás sütiket (cookies) használhat.",
+    "Terms and Conditions": "Általános Szerződési Feltételek",
+    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "A %(homeserverDomain)s szerver használatának folytatásához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.",
+    "Review terms and conditions": "Általános Szerződési Feltételek elolvasása"
 }
