@@ -89,6 +89,7 @@ limitations under the License.
     max-height: 120px;
     min-height: 19px;
     overflow: auto;
+    word-break: break-word;
 }
 
 // FIXME: rather unpleasant hack to get rid of <p/> margins.
@@ -110,30 +111,6 @@ limitations under the License.
     animation: 0.2s visualbell;
 }
 
-.mx_MessageComposer_input_empty .public-DraftEditorPlaceholder-root {
-    display: none;
-}
-
-/*
-.mx_MessageComposer_input .DraftEditor-root {
-    width: 100%;
-    flex: 1;
-    word-break: break-word;
-    max-height: 120px;
-    min-height: 21px;
-    overflow: auto;
-}
-*/
-
-.mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
-    /* Ensure mx_UserPill and mx_RoomPill (see _RichText) are not obscured from the top */
-    padding-top: 2px;
-}
-
-.mx_MessageComposer .public-DraftStyleDefault-block {
-    overflow-x: hidden;
-}
-
 .mx_MessageComposer_input blockquote {
     color: $blockquote-fg-color;
     margin: 0 0 16px;
@@ -141,7 +118,7 @@ limitations under the License.
     border-left: 4px solid $blockquote-bar-color;
 }
 
-.mx_MessageComposer_input pre.public-DraftStyleDefault-pre pre {
+.mx_MessageComposer_input pre {
     background-color: $rte-code-bg-color;
     border-radius: 3px;
     padding: 10px;
