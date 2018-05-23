@@ -1005,12 +1005,13 @@ export default class MessageComposerInput extends React.Component {
                 this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
+                }, ()=>{
+                    this.refs.editor.focus();
                 });
             }
             if (cmd.promise) {
                 cmd.promise.then(()=>{
                     console.log("Command success.");
-                    this.refs.editor.focus();
                 }, (err)=>{
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1499,6 +1500,18 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
+    onBlur = (e) => {
+        this.selection = this.state.editorState.selection;
+    };
+
+    onFocus = (e) => {
+        if (this.selection) {
+            const change = this.state.editorState.change().select(this.selection);
+            this.onChange(change);
+            delete this.selection;
+        }
+    };
+
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
@@ -1532,6 +1545,8 @@ export default class MessageComposerInput extends React.Component {
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
                             onPaste={this.onPaste}
+                            onBlur={this.onBlur}
+                            onFocus={this.onFocus}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             spellCheck={true}
