@@ -178,15 +178,7 @@ export default class MessageComposerInput extends React.Component {
             rules: [
                 {
                     serialize: (obj, children) => {
-                        if (obj.object === 'string') {
-                            // escape any MD in it. i have no idea why the serializer doesn't
-                            // do this already.
-                            // TODO: this can probably be more robust - it doesn't consider
-                            // indenting or lists for instance.
-                            return children.replace(/([*_~`+])/g, '\\$1')
-                                           .replace(/^([>#\|])/mg, '\\$1');
-                        }
-                        else if (obj.object === 'inline') {
+                        if (obj.object === 'inline') {
                             switch (obj.type) {
                                 case 'pill':
                                     return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
