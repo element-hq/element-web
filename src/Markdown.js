@@ -102,6 +102,15 @@ export default class Markdown {
             // (https://github.com/vector-im/riot-web/issues/3154)
             softbreak: '<br />',
         });
+
+        // Trying to strip out the wrapping <p/> causes a lot more complication
+        // than it's worth, i think.  For instance, this code will go and strip
+        // out any <p/> tag (no matter where it is in the tree) which doesn't
+        // contain \n's.
+        // On the flip side, <p/>s are quite opionated and restricted on where
+        // you can nest them.
+        //
+        // Let's try sending with <p/>s anyway for now, though.
 /*        
         const real_paragraph = renderer.paragraph;
 
