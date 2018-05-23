@@ -86,7 +86,7 @@
     "slate": "^0.33.4",
     "slate-react": "^0.12.4",
     "slate-html-serializer": "^0.6.1",
-    "slate-md-serializer": "^3.1.0",
+    "slate-md-serializer": "matrix-org/slate-md-serializer#50a133a8",
     "sanitize-html": "^1.14.1",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
