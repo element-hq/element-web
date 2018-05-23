@@ -184,7 +184,7 @@ export default class MessageComposerInput extends React.Component {
                             // TODO: this can probably be more robust - it doesn't consider
                             // indenting or lists for instance.
                             return children.replace(/([*_~`+])/g, '\\$1')
-                                           .replace(/^([>#\|])/g, '\\$1');
+                                           .replace(/^([>#\|])/mg, '\\$1');
                         }
                         else if (obj.object === 'inline') {
                             switch (obj.type) {
@@ -369,6 +369,7 @@ export default class MessageComposerInput extends React.Component {
                     let fragmentChange = fragment.change();
                     fragmentChange.moveToRangeOf(fragment.document)
                                   .wrapBlock(quote);
+                                  //.setBlocks('block-quote');
 
                     // FIXME: handle pills and use commonmark rather than md-serialize
                     const md = this.md.serialize(fragmentChange.value);
@@ -536,7 +537,9 @@ export default class MessageComposerInput extends React.Component {
         // emoji picker can leave the selection stuck in the emoji's
         // child text.  This seems to happen due to selection getting
         // moved in the normalisation phase after calculating these changes
-        if (editorState.document.getParent(editorState.anchorKey).type === 'emoji') {
+        if (editorState.anchorKey &&
+            editorState.document.getParent(editorState.anchorKey).type === 'emoji')
+        {
             change = change.collapseToStartOfNextText();
             editorState = change.value;
         }
