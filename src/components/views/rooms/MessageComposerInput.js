@@ -95,7 +95,7 @@ const BLOCK_TAGS = {
     h6: 'heading6',
     li: 'list-item',
     ol: 'numbered-list',
-    pre: 'code-block',
+    pre: 'code',
 };
 
 const MARK_TAGS = {
@@ -103,7 +103,7 @@ const MARK_TAGS = {
     b: 'bold', // deprecated
     em: 'italic',
     i: 'italic', // deprecated
-    code: 'code',
+    code: 'inline-code',
     u: 'underlined',
     del: 'deleted',
     strike: 'deleted', // deprecated
@@ -710,7 +710,7 @@ export default class MessageComposerInput extends React.Component {
                 [KeyCode.KEY_B]: 'bold',
                 [KeyCode.KEY_I]: 'italic',
                 [KeyCode.KEY_U]: 'underlined',
-                [KeyCode.KEY_J]: 'code',
+                [KeyCode.KEY_J]: 'inline-code',
             }[ev.keyCode];
 
             if (ctrlCmdCommand) {
@@ -760,7 +760,7 @@ export default class MessageComposerInput extends React.Component {
                      this.hasBlock('heading4') ||
                      this.hasBlock('heading5') ||
                      this.hasBlock('heading6') ||
-                     this.hasBlock('code-block')))
+                     this.hasBlock('code')))
                 {
                     return change.setBlocks(DEFAULT_NODE);
                 }
@@ -832,7 +832,7 @@ export default class MessageComposerInput extends React.Component {
                 case 'heading5':
                 case 'heading6':
                 case 'list-item':
-                case 'code-block': {
+                case 'code': {
                     const isActive = this.hasBlock(type);
                     const isList = this.hasBlock('list-item');
 
@@ -850,7 +850,7 @@ export default class MessageComposerInput extends React.Component {
                 // marks:
                 case 'bold':
                 case 'italic':
-                case 'code':
+                case 'inline-code':
                 case 'underlined':
                 case 'deleted': {
                     change.toggleMark(type);
@@ -885,8 +885,8 @@ export default class MessageComposerInput extends React.Component {
                 'underline': (text) => `<u>${text}</u>`,
                 'strike': (text) => `<del>${text}</del>`,
                 // ("code" is triggered by ctrl+j by draft-js by default)
-                'code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
-                'code-block': textMdCodeBlock,
+                'inline-code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
+                'code': textMdCodeBlock,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
                 'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
@@ -897,8 +897,8 @@ export default class MessageComposerInput extends React.Component {
                 'italic': -1,
                 'underline': -4,
                 'strike': -6,
-                'code': treatInlineCodeAsBlock ? -5 : -1,
-                'code-block': -5,
+                'inline-code': treatInlineCodeAsBlock ? -5 : -1,
+                'code': -5,
                 'blockquote': -2,
             }[command];
 
@@ -971,7 +971,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (this.state.editorState.blocks.some(
-            block => ['code-block', 'block-quote', 'list-item'].includes(block.type)
+            block => ['code', 'block-quote', 'list-item'].includes(block.type)
         )) {
             // allow the user to terminate blocks by hitting return rather than sending a msg
             return;
@@ -1369,7 +1369,7 @@ export default class MessageComposerInput extends React.Component {
                 return <li {...attributes}>{children}</li>;
             case 'numbered-list':
                 return <ol {...attributes}>{children}</ol>;
-            case 'code-block':
+            case 'code':
                 return <pre {...attributes}><code {...attributes}>{children}</code></pre>;
             case 'link':
                 return <a {...attributes} href={ node.data.get('href') }>{children}</a>;
@@ -1424,7 +1424,7 @@ export default class MessageComposerInput extends React.Component {
                 return <strong {...attributes}>{children}</strong>;
             case 'italic':
                 return <em {...attributes}>{children}</em>;
-            case 'code':
+            case 'inline-code':
                 return <code {...attributes}>{children}</code>;
             case 'underlined':
                 return <u {...attributes}>{children}</u>;
