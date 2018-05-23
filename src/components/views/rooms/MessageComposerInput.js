@@ -103,7 +103,7 @@ const MARK_TAGS = {
     b: 'bold', // deprecated
     em: 'italic',
     i: 'italic', // deprecated
-    code: 'inline-code',
+    code: 'code',
     u: 'underlined',
     del: 'deleted',
     strike: 'deleted', // deprecated
@@ -853,7 +853,7 @@ export default class MessageComposerInput extends React.Component {
                 case 'inline-code':
                 case 'underlined':
                 case 'deleted': {
-                    change.toggleMark(type);
+                    change.toggleMark(type === 'inline-code' ? 'code' : type);
                 }
                 break;
 
@@ -885,7 +885,7 @@ export default class MessageComposerInput extends React.Component {
                 'underline': (text) => `<u>${text}</u>`,
                 'strike': (text) => `<del>${text}</del>`,
                 // ("code" is triggered by ctrl+j by draft-js by default)
-                'inline-code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
+                'code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
                 'code': textMdCodeBlock,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
@@ -897,7 +897,7 @@ export default class MessageComposerInput extends React.Component {
                 'italic': -1,
                 'underline': -4,
                 'strike': -6,
-                'inline-code': treatInlineCodeAsBlock ? -5 : -1,
+                'code': treatInlineCodeAsBlock ? -5 : -1,
                 'code': -5,
                 'blockquote': -2,
             }[command];
@@ -1424,7 +1424,7 @@ export default class MessageComposerInput extends React.Component {
                 return <strong {...attributes}>{children}</strong>;
             case 'italic':
                 return <em {...attributes}>{children}</em>;
-            case 'inline-code':
+            case 'code':
                 return <code {...attributes}>{children}</code>;
             case 'underlined':
                 return <u {...attributes}>{children}</u>;

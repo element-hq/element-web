@@ -356,7 +356,7 @@ export default class MessageComposer extends React.Component {
         let formatBar;
         if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
             const {marks, blockType} = this.state.inputState;
-            const formatButtons = ["bold", "italic", "deleted", "underlined", "code", "block-quote", "bulleted-list", "numbered-list"].map(
+            const formatButtons = ["bold", "italic", "deleted", "underlined", "inline-code", "block-quote", "bulleted-list", "numbered-list"].map(
                 (name) => {
                     const active = marks.some(mark => mark.type === name) || blockType === name;
                     const suffix = active ? '-on' : '';
