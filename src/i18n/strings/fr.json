@@ -1175,5 +1175,9 @@
     "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie. (Voir nos <PolicyLink>politiques de cookie et de confidentialité</PolicyLink>).",
     "Help improve Riot by sending usage data? This will use a cookie.": "Aider Riot à s'améliorer en envoyant des données d'utilisation ? Ceci utilisera un cookie.",
     "Yes please": "Oui, s'il vous plaît",
-    "Muted Users": "Utilisateurs ignorés"
+    "Muted Users": "Utilisateurs ignorés",
+    "Warning: This widget might use cookies.": "Avertissement : ce widget utilise peut-être des cookies.",
+    "Terms and Conditions": "Conditions générales",
+    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Pour continuer à utiliser le serveur d'accueil %(homeserverDomain)s, vous devez lire et accepter nos conditions générales.",
+    "Review terms and conditions": "Voir les conditions générales"
 }
