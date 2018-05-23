@@ -1172,5 +1172,10 @@
     "Send analytics data": "Отправить данные аналитики",
     "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Помогите улучшить Riot, отправляя данные об использовании? Будут использоваться файлы cookie. (См. наши <PolicyLink>политики cookie и конфиденциальности</PolicyLink>).",
     "Help improve Riot by sending usage data? This will use a cookie.": "Помогите улучшить Riot, отправляя данные об использовании? Будут использоваться файлы cookie.",
-    "Yes please": "Да, пожалуйста"
+    "Yes please": "Да, пожалуйста",
+    "Muted Users": "Приглушенные пользователи",
+    "Warning: This widget might use cookies.": "Внимание: этот виджет может использовать cookie.",
+    "Terms and Conditions": "Условия и положения",
+    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Для продолжения использования сервера %(homeserverDomain)s вы должны ознакомиться и принять условия и положения.",
+    "Review terms and conditions": "Просмотр условий и положений"
 }
