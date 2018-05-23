@@ -14,8 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_DevTools_content {
+    margin: 10px 0;
+}
+
 .mx_DevTools_RoomStateExplorer_button, .mx_DevTools_RoomStateExplorer_query {
     margin-bottom: 10px;
+    max-width: 684px;
+    width: 100%;
+}
+
+.mx_DevTools_LabalCell {
+    font-weight: bold;
 }
 
 .mx_DevTools_label_left {
@@ -38,7 +48,6 @@ limitations under the License.
 
 .mx_DevTools_inputLabelCell
 {
-    padding-bottom: 21px;
     display: table-cell;
     font-weight: bold;
     padding-right: 24px;
@@ -46,7 +55,6 @@ limitations under the License.
 
 .mx_DevTools_inputCell {
     display: table-cell;
-    padding-bottom: 21px;
     width: 240px;
 }
 
@@ -60,6 +68,12 @@ limitations under the License.
     color: $input-fg-color;
     font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
     font-size: 16px;
+}
+
+.mx_DevTools_textarea {
+    font-size: 12px;
+    min-height: 250px;
+    width: 100%;
 }
 
 .mx_DevTools_tgl {
