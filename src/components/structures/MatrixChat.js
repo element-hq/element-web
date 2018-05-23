@@ -1232,6 +1232,28 @@ export default React.createClass({
                 action: 'logout',
             });
         });
+        cli.on('no_consent', function(message, consentUri) {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('No Consent Dialog', '', QuestionDialog, {
+                title: _t('Terms and Conditions'),
+                description: <div>
+                    <p> { _t(
+                            'To continue using the %(homeserverDomain)s homeserver ' +
+                            'you must review and agree to our terms and conditions.',
+                            { homeserverDomain: cli.getDomain() },
+                        ) }
+                    </p>
+                </div>,
+                button: _t('Review terms and conditions'),
+                cancelButton: _t('Dismiss'),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        window.open(consentUri, '_blank');
+                    }
+                },
+            }, null, true);
+        });
+
         cli.on("accountData", function(ev) {
             if (ev.getType() === 'im.vector.web.settings') {
                 if (ev.getContent() && ev.getContent().theme) {

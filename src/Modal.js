@@ -81,7 +81,11 @@ class ModalManager {
     constructor() {
         this._counter = 0;
 
-        /** list of the modals we have stacked up, with the most recent at [0] */
+        // The modal to prioritise over all others. If this is set, only show
+        // this modal. Remove all other modals from the stack when this modal
+        // is closed.
+        this._priorityModal = null;
+        // A list of the modals we have stacked up, with the most recent at [0]
         this._modals = [
             /* {
                elem: React component for this dialog
@@ -105,18 +109,18 @@ class ModalManager {
         return container;
     }
 
-    createTrackedDialog(analyticsAction, analyticsInfo, Element, props, className) {
+    createTrackedDialog(analyticsAction, analyticsInfo, ...rest) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialog(Element, props, className);
+        return this.createDialog(...rest);
     }
 
-    createDialog(Element, props, className) {
-        return this.createDialogAsync((cb) => {cb(Element);}, props, className);
+    createDialog(Element, ...rest) {
+        return this.createDialogAsync((cb) => {cb(Element);}, ...rest);
     }
 
-    createTrackedDialogAsync(analyticsAction, analyticsInfo, loader, props, className) {
+    createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialogAsync(loader, props, className);
+        return this.createDialogAsync(...rest);
     }
 
     /**
@@ -137,8 +141,13 @@ class ModalManager {
      *    component. (We will also pass an 'onFinished' property.)
      *
      * @param {String} className   CSS class to apply to the modal wrapper
+     *
+     * @param {boolean} isPriorityModal if true, this modal will be displayed regardless
+     *                                  of other modals that are currently in the stack.
+     *                                  Also, when closed, all modals will be removed
+     *                                  from the stack.
      */
-    createDialogAsync(loader, props, className) {
+    createDialogAsync(loader, props, className, isPriorityModal) {
         const self = this;
         const modal = {};
 
@@ -151,6 +160,14 @@ class ModalManager {
             if (i >= 0) {
                 self._modals.splice(i, 1);
             }
+
+            if (self._priorityModal === modal) {
+                self._priorityModal = null;
+
+                // XXX: This is destructive
+                self._modals = [];
+            }
+
             self._reRender();
         };
 
@@ -167,7 +184,12 @@ class ModalManager {
         modal.onFinished = props ? props.onFinished : null;
         modal.className = className;
 
-        this._modals.unshift(modal);
+        if (isPriorityModal) {
+            // XXX: This is destructive
+            this._priorityModal = modal;
+        } else {
+            this._modals.unshift(modal);
+        }
 
         this._reRender();
         return {close: closeDialog};
@@ -188,7 +210,7 @@ class ModalManager {
     }
 
     _reRender() {
-        if (this._modals.length == 0) {
+        if (this._modals.length == 0 && !this._priorityModal) {
             // If there is no modal to render, make all of Riot available
             // to screen reader users again
             dis.dispatch({
@@ -205,7 +227,7 @@ class ModalManager {
             action: 'aria_hide_main_app',
         });
 
-        const modal = this._modals[0];
+        const modal = this._priorityModal ? this._priorityModal : this._modals[0];
         const dialog = (
             <div className={"mx_Dialog_wrapper " + (modal.className ? modal.className : '')}>
                 <div className="mx_Dialog">
