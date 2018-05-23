@@ -653,6 +653,7 @@
     "Warning": "Warning",
     "Unknown Address": "Unknown Address",
     "NOTE: Apps are not end-to-end encrypted": "NOTE: Apps are not end-to-end encrypted",
+    "Warning: This widget might use cookies.": "Warning: This widget might use cookies.",
     "Do you want to load widget from URL:": "Do you want to load widget from URL:",
     "Allow": "Allow",
     "Delete Widget": "Delete Widget",
