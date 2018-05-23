@@ -138,7 +138,7 @@ class SendCustomEvent extends GenericEditor {
 
                 <br />
 
-                <div className="mx_DevTools_LabalCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
@@ -219,11 +219,11 @@ class SendAccountData extends GenericEditor {
         }
 
         return <div>
-            <div className="mx_Dialog_content">
+            <div className="mx_DevTools_content">
                 { this.textInput('eventType', _t('Event Type')) }
                 <br />
 
-                <div className="mx_UserSettings_profileLabelCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
