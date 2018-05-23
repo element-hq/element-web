@@ -156,7 +156,6 @@ export default class Markdown {
             this.lit(s);
         };
 
-/*
         renderer.paragraph = function(node, entering) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
@@ -171,7 +170,6 @@ export default class Markdown {
             this.lit(node.literal);
             if (is_multi_line(node) && node.next) this.lit('\n\n');
         };
-*/        
 
         // convert MD links into console-friendly ' < http://foo >' style links
         // ...except given this function never gets called with links, it's useless.
