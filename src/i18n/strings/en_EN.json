@@ -949,6 +949,8 @@
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Failed to leave room": "Failed to leave room",
+    "Can't leave Server Notices room": "Can't leave Server Notices room",
+    "This room is used for important messages from the Home Server, so you cannot leave it.": "This room is used for important messages from the Home Server, so you cannot leave it.",
     "Signed Out": "Signed Out",
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
     "Terms and Conditions": "Terms and Conditions",
