@@ -162,50 +162,58 @@ export default class DeactivateAccountDialog extends React.Component {
                 <div className="mx_Dialog_content">
                     <p>{ _t(
                         "This will make your account permanently unusable. " +
-                        "You will not be able to log in, and no one will be able " +
-                        "to re-register the same user ID. " +
+                        "You will not be able to log in, and no one will be able to re-register the same " +
+                        "user ID. " +
+                        "This will cause your account to leave all rooms it is participating in, and it " +
+                        "will remove your account details from your identity server. " +
                         "<b>This action is irreversible.</b>",
                         {},
                         { b: (sub) => <b> { sub } </b> },
                     ) }</p>
 
                     <p>{ _t(
-                        "Deactivating your account <b>does not by default erase messages you have sent.</b> " +
-                        "If you would like to erase your messages, please tick the box below.",
+                        "Deactivating your account <b>does not by default cause us to forget messages you " +
+                        "have sent.</b> " +
+                        "If you would like us to forget your messages, please tick the box below.",
                         {},
                         { b: (sub) => <b> { sub } </b> },
                     ) }</p>
 
                     <p>{ _t(
                         "Message visibility in Matrix is similar to email. " +
-                        "Erasing your messages means that messages have you sent will not be shared with " +
-                        "any new or unregistered users, but registered users who already had access to " +
-                        "these messages will still have access to their copy.",
+                        "Our forgetting your messages means that messages you have sent will not be shared " +
+                        "with any new or unregistered users, but registered users who already have access " +
+                        "to these messages will still have access to their copy.",
                     ) }</p>
 
-                    <p>{ _t("To continue, please enter your password:") }</p>
-                    <input
-                        type="password"
-                        placeholder={_t("password")}
-                        onChange={this._onPasswordFieldChange}
-                        ref={(e) => {this._passwordField = e;}}
-                        className={passwordBoxClass}
-                    />
+                    <div className="mx_DeactivateAccountDialog_input_section">
+                        <p>
+                            <label htmlFor="mx_DeactivateAccountDialog_erase_account_input">
+                                <input
+                                    id="mx_DeactivateAccountDialog_erase_account_input"
+                                    type="checkbox"
+                                    checked={this.state.shouldErase}
+                                    onChange={this._onEraseFieldChange}
+                                />
+                                { _t(
+                                    "Please forget all messages I have sent when my account is deactivated " +
+                                    "(<b>Warning:</b> this will cause future users to see an incomplete view " +
+                                    "of conversations)",
+                                    {},
+                                    { b: (sub) => <b>{ sub }</b> },
+                                ) }
+                            </label>
+                        </p>
 
-                    <p>
-                        <label for="mx_DeactivateAccountDialog_erase_account_input">{ _t(
-                            "Please erase all messages I have sent when my account is deactivated. " +
-                            "(Warning: this will cause future users to see an incomplete view of conversations, " +
-                            "which is a bad experience).",
-                        ) }
-                            <input
-                                id="mx_DeactivateAccountDialog_erase_account_input"
-                                type="checkbox"
-                                checked={this.state.shouldErase}
-                                onChange={this._onEraseFieldChange}
-                            />
-                        </label>
-                    </p>
+                        <p>{ _t("To continue, please enter your password:") }</p>
+                        <input
+                            type="password"
+                            placeholder={_t("password")}
+                            onChange={this._onPasswordFieldChange}
+                            ref={(e) => {this._passwordField = e;}}
+                            className={passwordBoxClass}
+                        />
+                    </div>
 
                     { error }
                 </div>
