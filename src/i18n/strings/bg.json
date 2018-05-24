@@ -1157,5 +1157,15 @@
     "At this time it is not possible to reply with a file so this will be sent without being a reply.": "В момента не може да се отговаря с файл, така че това ще се изпрати без да бъде отговор.",
     "Unable to reply": "Не може да се отговори",
     "At this time it is not possible to reply with an emote.": "В момента не може да се отговори с емотикона.",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не може да се зареди събитието, на което е отговорено. Или не съществува или нямате достъп да го видите."
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не може да се зареди събитието, на което е отговорено. Или не съществува или нямате достъп да го видите.",
+    "Popout widget": "Изкарай в нов прозорец",
+    "Log out and remove encryption keys?": "Изход и изтриване на ключовете за шифроване?",
+    "Clear Storage and Sign Out": "Изчисти запазените данни и излез",
+    "Send Logs": "Изпрати логове",
+    "Refresh": "Опресни",
+    "We encountered an error trying to restore your previous session.": "Възникна грешка при възстановяване на предишната Ви сесия.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Изчистване на запазените данни в браузъра може да поправи проблема, но ще Ви изкара от профила и ще направи шифрованите съобщения нечетими.",
+    "Collapse Reply Thread": "Свий отговорите",
+    "Enable widget screenshots on supported widgets": "Включи скрийншоти за поддържащи ги приспособления",
+    "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Бъговете по Riot се следят в GitHub: <a>създайте проблем в GitHub</a>."
 }

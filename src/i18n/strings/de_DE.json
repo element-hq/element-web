@@ -969,7 +969,7 @@
     "Did you know: you can use communities to filter your Riot.im experience!": "Wusstest du: Du kannst Communities nutzen um deine Riot.im-Erfahrung zu filtern!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Um einen Filter zu setzen, siehe einen Community-Bild auf das Filter-Panel ganz links. Du kannst jederzeit auf einen Avatar im Filter-Panel klicken um nur die Räume und Personen aus der Community zu sehen.",
     "Clear filter": "Filter zurücksetzen",
-    "Disable Community Filter Panel": "Deaktivere Community-Filter-Panel",
+    "Disable Community Filter Panel": "Deaktiviere Community-Filter-Panel",
     "Your key share request has been sent - please check your other devices for key share requests.": "Deine Schlüssel-Teil-Anfragen wurden gesendet. Bitte prüfe deine anderen Geräte auf die Schlüssel-Teil-Anfragen.",
     "Key share requests are sent to your other devices automatically. If you rejected or dismissed the key share request on your other devices, click here to request the keys for this session again.": "Schlüssel-Anfragen wurden automatisch zu den anderen Geräten gesendet. Wenn du diese Anfragen auf deinen anderen Geräten abgelehnt oder verpasst hast, klicke hier um die Schlüssel für diese Sitzung erneut anzufragen.",
     "If your other devices do not have the key for this message you will not be able to decrypt them.": "Wenn deine anderen Geräte keine Schlüssel für diese Nachricht haben, wirst du diese nicht entschlüsseln können.",
@@ -1167,5 +1167,9 @@
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Den Browser-Speicher zu löschen kann das Problem lösen, wird dich aber abmelden und verschlüsselte Chats unlesbar machen.",
     "Collapse Reply Thread": "Antwort-Thread zusammenklappen",
     "At this time it is not possible to reply with an emote.": "An dieser Stelle ist es nicht möglich mit einer Umschreibung zu antworten.",
-    "Enable widget screenshots on supported widgets": "Widget-Screenshots bei unterstützten Widgets aktivieren"
+    "Enable widget screenshots on supported widgets": "Widget-Screenshots bei unterstützten Widgets aktivieren",
+    "Send analytics data": "Analysedaten senden",
+    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Möchtest du Riot helfen indem du Nutzungsdaten sendest? Dies wird ein Cookie verwenden. (Siehe unsere <PolicyLink>Datenschutzerklärung</PolicyLink>).",
+    "Help improve Riot by sending usage data? This will use a cookie.": "Möchtest du Riot helfen indem du Nutzungsdaten sendest? Dies wird ein Cookie verwenden.",
+    "Yes please": "Ja, bitte"
 }
