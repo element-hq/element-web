@@ -278,7 +278,12 @@ export default class AppTile extends React.Component {
             event.origin = event.originalEvent.origin;
         }
 
-        if (!this.state.widgetUrl.startsWith(event.origin)) {
+        const widgetUrlObj = url.parse(this.state.widgetUrl);
+        const eventOrigin = url.parse(event.origin);
+        if (
+            eventOrigin.protocol !== widgetUrlObj.protocol ||
+            eventOrigin.host !== widgetUrlObj.host
+        ) {
             return;
         }
 
