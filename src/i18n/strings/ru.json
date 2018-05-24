@@ -1174,5 +1174,14 @@
     "Warning: This widget might use cookies.": "Внимание: этот виджет может использовать cookie.",
     "Terms and Conditions": "Условия и положения",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Для продолжения использования сервера %(homeserverDomain)s вы должны ознакомиться и принять условия и положения.",
-    "Review terms and conditions": "Просмотр условий и положений"
+    "Review terms and conditions": "Просмотр условий и положений",
+    "e.g. %(exampleValue)s": "напр. %(exampleValue)s",
+    "Help improve Riot by sending <UsageDataLink>usage data</UsageDataLink>? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Помогите улучшить Riot, отправляя <UsageDataLink>данные использования</UsageDataLink>? Будут использоваться файлы cookie. (Смотрите наши <PolicyLink>политики cookie и конфиденциальности</PolicyLink>).",
+    "Failed to indicate account erasure": "Не удается удалить учетную запись",
+    "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible.</b>": "Это навсегда сделает вашу учетную запись невозможной для использования. Вы не сможете войти в систему, и никто не сможет перерегистрировать тот же идентификатор пользователя. Это приведет к тому, что ваша учетная запись выйдет из всех комнат, в которые она входит, и будут удалены данные вашей учетной записи с сервера идентификации. <b>Это действие необратимо.</b>",
+    "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "По умолчанию деактивация вашей учетной записи <b>не приведет к удалению всех ваших сообщений.</b> Если вы хотите, чтобы мы удалили ваши сообщения, поставьте отметку в поле ниже.",
+    "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Видимость сообщений в Matrix похожа на электронную почту. Удаление ваших сообщений означает, что отправленные вами сообщения не будут видны новым или незарегистрированным пользователям, но зарегистрированные пользователи, у которых уже есть доступ к этим сообщениям, по-прежнему будут иметь доступ к своей копии.",
+    "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Пожалуйста, удалите все сообщения, которые я отправил, после деактивации учетной записи. (<b>Внимание:</b> будущие пользователи увидят неполный вид разговоров)",
+    "To continue, please enter your password:": "Чтобы продолжить, введите пароль:",
+    "password": "пароль"
 }
