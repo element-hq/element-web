@@ -76,7 +76,20 @@ export default class CookieBar extends React.Component {
                                 </a>
                             ,
                         },
-                    ) : _t("Help improve Riot by sending usage data? This will use a cookie.") }
+                    ) : _t(
+                        "Help improve Riot by sending <UsageDataLink>usage data</UsageDataLink>? " +
+                        "This will use a cookie.",
+                        {},
+                        {
+                            'UsageDataLink': (sub) => <a
+                                className="mx_MatrixToolbar_link"
+                                href="javascript:;"
+                                onClick={this.onUsageDataClicked}
+                            >
+                                { sub }
+                            </a>,
+                        },
+                    ) }
                 </div>
                 <AccessibleButton element='button' className="mx_MatrixToolbar_action" onClick={this.onAccept}>
                     { _t("Yes please") }
