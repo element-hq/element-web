@@ -1183,5 +1183,8 @@
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Видимость сообщений в Matrix похожа на электронную почту. Удаление ваших сообщений означает, что отправленные вами сообщения не будут видны новым или незарегистрированным пользователям, но зарегистрированные пользователи, у которых уже есть доступ к этим сообщениям, по-прежнему будут иметь доступ к своей копии.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Пожалуйста, удалите все сообщения, которые я отправил, после деактивации учетной записи. (<b>Внимание:</b> будущие пользователи увидят неполный вид разговоров)",
     "To continue, please enter your password:": "Чтобы продолжить, введите пароль:",
-    "password": "пароль"
+    "password": "пароль",
+    "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie (please see our <PolicyLink>Cookie Policy</PolicyLink>).": "Пожалуйста, помогите улучшить Riot.im, отправляя <UsageDataLink>анонимные данные использования</UsageDataLink>. При этом будут использоваться cookie (ознакомьтесь с нашей<PolicyLink>Политикой cookie</PolicyLink>).",
+    "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie.": "Пожалуйста, помогите улучшить Riot.im, отправляя <UsageDataLink>анонимные данные использования</UsageDataLink>. При этом будут использоваться cookie.",
+    "Yes, I want to help!": "Да, я хочу помочь!"
 }
