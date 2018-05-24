@@ -1179,5 +1179,12 @@
     "Warning: This widget might use cookies.": "Abisua: Trepeta honek cookie-ak erabili litzake.",
     "Terms and Conditions": "Termino eta baldintzak",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "%(homeserverDomain)s hasiera-zerbitzaria erabiltzen jarraitzeko gure termino eta baldintzak irakurri eta onartu behar dituzu.",
-    "Review terms and conditions": "Irakurri termino eta baldintzak"
+    "Review terms and conditions": "Irakurri termino eta baldintzak",
+    "Failed to indicate account erasure": "Ezin izan da kontuaren ezabaketa jakinarazi",
+    "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. <b>This action is irreversible.</b>": "Honek zure kontua betiko erabilgaitz bihurtuko du. Ezin izango duzu saioa hasi, eta beste inork ezin izango du erabiltzaile ID bera erabili. <b>Ez dago ekintza hau desegiterik.</b>",
+    "Deactivating your account <b>does not by default erase messages you have sent.</b> If you would like to erase your messages, please tick the box below.": "Zure kontua desaktibatzean <b>ez dira lehenetsita zuk bidalitako mezuak ezabatuko.</b> Zuk bidalitako mezuak ezabatu nahi badituzu, markatu beheko kutxa.",
+    "Message visibility in Matrix is similar to email. Erasing your messages means that messages have you sent will not be shared with any new or unregistered users, but registered users who already had access to these messages will still have access to their copy.": "Matrix-eko mezuen ikusgaitasuna, e-mail mezuen antzekoa da. Zure mezuak ezabatzeak esan nahi du bidali dituzun mezuak ez direla erabiltzaile berriekin partekatuko, baina aurretik zure mezuak jaso dituzten erabiltzaile erregistratuek bere kopia izango dute.",
+    "To continue, please enter your password:": "Jarraitzeko, sartu zure pasahitza:",
+    "password": "pasahitza",
+    "Please erase all messages I have sent when my account is deactivated. (Warning: this will cause future users to see an incomplete view of conversations, which is a bad experience).": "Ezabatu bidali ditudan mezu guztiak nire kontua desaktibatzean. (Abisua: Etorkizuneko erabiltzaileek elkarrizketa partzialak ikusiko dituzte, esperientzia kaskarra sortuz)."
 }
