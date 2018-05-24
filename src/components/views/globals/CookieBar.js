@@ -54,9 +54,9 @@ export default class CookieBar extends React.Component {
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning" />
                 <div className="mx_MatrixToolbar_content">
                     { this.props.policyUrl ? _t(
-                        "Help improve Riot by sending <UsageDataLink>usage data</UsageDataLink>? " +
-                        "This will use a cookie. " +
-                        "(See our <PolicyLink>cookie and privacy policies</PolicyLink>).",
+                        "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. " +
+                        "This will use a cookie " +
+                        "(please see our <PolicyLink>Cookie Policy</PolicyLink>).",
                         {},
                         {
                             'UsageDataLink': (sub) => <a
@@ -77,7 +77,7 @@ export default class CookieBar extends React.Component {
                             ,
                         },
                     ) : _t(
-                        "Help improve Riot by sending <UsageDataLink>usage data</UsageDataLink>? " +
+                        "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. " +
                         "This will use a cookie.",
                         {},
                         {
@@ -92,7 +92,7 @@ export default class CookieBar extends React.Component {
                     ) }
                 </div>
                 <AccessibleButton element='button' className="mx_MatrixToolbar_action" onClick={this.onAccept}>
-                    { _t("Yes please") }
+                    { _t("Yes, I want to help!") }
                 </AccessibleButton>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.onReject}>
                     <img src="img/cancel.svg" width="18" height="18" />
