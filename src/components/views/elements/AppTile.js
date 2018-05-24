@@ -122,14 +122,16 @@ export default class AppTile extends React.Component {
 
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
-     * @param  {[type]}  url URL to check
+     * @param  {[type]}  testUrlString URL to check
      * @return {Boolean} True if specified URL is a scalar URL
      */
-    isScalarUrl(url) {
-        if (!url) {
+    isScalarUrl(testUrlString) {
+        if (!testUrlString) {
             console.error('Scalar URL check failed. No URL specified');
             return false;
         }
+
+        const testUrl = url.parse(testUrlString);
 
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length == 0) {
@@ -137,8 +139,15 @@ export default class AppTile extends React.Component {
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
-            if (url.startsWith(scalarUrls[i])) {
-                return true;
+            const scalarUrl = url.parse(scalarUrls[i]);
+            if (testUrl && scalarUrl) {
+                if (
+                    testUrl.protocol === scalarUrl.protocol &&
+                    testUrl.host === scalarUrl.host &&
+                    testUrl.pathname.startsWith(scalarUrl.pathname)
+                ) {
+                    return true;
+                }
             }
         }
         return false;
