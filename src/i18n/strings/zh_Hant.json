@@ -1190,5 +1190,6 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "這個聊天室是用於發佈從家伺服器而來的重要訊息，所以您不能離開它。",
     "Terms and Conditions": "條款與細則",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "要繼續使用 %(homeserverDomain)s 家伺服器，您必須審閱並同意我們的條款與細則。",
-    "Review terms and conditions": "審閱條款與細則"
+    "Review terms and conditions": "審閱條款與細則",
+    "To notify everyone in the room, you must be a": "為了通知每個在聊天室裡的人，您必須為"
 }
