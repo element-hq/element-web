@@ -1179,5 +1179,12 @@
     "Warning: This widget might use cookies.": "Avertissement : ce widget utilise peut-être des cookies.",
     "Terms and Conditions": "Conditions générales",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Pour continuer à utiliser le serveur d'accueil %(homeserverDomain)s, vous devez lire et accepter nos conditions générales.",
-    "Review terms and conditions": "Voir les conditions générales"
+    "Review terms and conditions": "Voir les conditions générales",
+    "Failed to indicate account erasure": "Échec de notification de la suppression du compte",
+    "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. <b>This action is irreversible.</b>": "Cela rendra votre compte inutilisable de façon permanente. Vous ne pourrez plus vous connecter et ne pourrez plus vous enregistrer avec le même identifiant d'utilisateur. <b>Cette action est irréversible.</b>",
+    "Deactivating your account <b>does not by default erase messages you have sent.</b> If you would like to erase your messages, please tick the box below.": "Désactiver votre compte <b>ne supprime pas les messages que vous avez envoyés par défaut.</b> Si vous souhaitez supprimer vos messages, cochez la case ci-dessous.",
+    "Message visibility in Matrix is similar to email. Erasing your messages means that messages have you sent will not be shared with any new or unregistered users, but registered users who already had access to these messages will still have access to their copy.": "La visibilité des messages dans Matrix est la même que celle des e-mails. Supprimer vos messages signifie que les messages que vous avez envoyés ne seront pas partagés avec de nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà eu accès à vos messages continueront d'en avoir une copie.",
+    "To continue, please enter your password:": "Pour continuer, veuillez renseigner votre mot de passe :",
+    "password": "mot de passe",
+    "Please erase all messages I have sent when my account is deactivated. (Warning: this will cause future users to see an incomplete view of conversations, which is a bad experience).": "Veuillez supprimer tous les messages que j'ai envoyé quand mon compte est désactivé. (Attention : les futurs utilisateurs verront alors des conversations incomplètes, ce qui est une mauvaise expérience)."
 }
