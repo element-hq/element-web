@@ -10,6 +10,7 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Whether or not you're using the Richtext mode of the Rich Text Editor",
     "Your homeserver's URL": "Your homeserver's URL",
     "Your identity server's URL": "Your identity server's URL",
+    "e.g. %(exampleValue)s": "e.g. %(exampleValue)s",
     "Every page you use in the app": "Every page you use in the app",
     "e.g. <CurrentPageURL>": "e.g. <CurrentPageURL>",
     "Your User Agent": "Your User Agent",
