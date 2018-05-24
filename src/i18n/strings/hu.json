@@ -1179,5 +1179,12 @@
     "Warning: This widget might use cookies.": "Figyelmeztetés: Ez a kisalkalmazás sütiket (cookies) használhat.",
     "Terms and Conditions": "Általános Szerződési Feltételek",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "A %(homeserverDomain)s szerver használatának folytatásához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.",
-    "Review terms and conditions": "Általános Szerződési Feltételek elolvasása"
+    "Review terms and conditions": "Általános Szerződési Feltételek elolvasása",
+    "Failed to indicate account erasure": "A fiók törlésének jelzése sikertelen",
+    "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. <b>This action is irreversible.</b>": "Ezzel a felhasználói fiókod végleg használhatatlanná válik. Nem tudsz bejelentkezni, és senki más sem fog tudni újra regisztrálni ugyanezzel az azonosítóval. <b>Ez a művelet visszafordíthatatlan.</b>",
+    "Deactivating your account <b>does not by default erase messages you have sent.</b> If you would like to erase your messages, please tick the box below.": "A felhasználói fiók felfüggesztése <b>alapértelmezetten nem töröli semelyik általad küldött üzenetet.</b> Ha az elküldött üzeneteidet törölni szeretnéd pipáld be a jelölőnégyzetet alul.",
+    "Message visibility in Matrix is similar to email. Erasing your messages means that messages have you sent will not be shared with any new or unregistered users, but registered users who already had access to these messages will still have access to their copy.": "Az üzenetek láthatósága a Matrixban olyan mint az e-mail. Az üzeneted törlése azt jelenti, hogy amit elküldtél már nem lesz megosztva új- vagy vendég felhasználóval, de azok a regisztrált felhasználók akik már látták az üzenetet továbbra is hozzáférnek a saját példányukhoz.",
+    "To continue, please enter your password:": "Folytatáshoz add meg a jelszavad:",
+    "password": "jelszó",
+    "Please erase all messages I have sent when my account is deactivated. (Warning: this will cause future users to see an incomplete view of conversations, which is a bad experience).": "Töröld az összes üzenetet amit küldtem amikor felfüggeszted a felhasználói fiókomat. (Figyelem: ezzel a jövőbeni felhasználók csak részleges beszélgetést láthatnak majd, ami rosszul eshet)."
 }
