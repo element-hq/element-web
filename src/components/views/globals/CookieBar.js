@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
+import Analytics from '../../../Analytics';
 
 export default class CookieBar extends React.Component {
     static propTypes = {
@@ -27,6 +28,10 @@ export default class CookieBar extends React.Component {
 
     constructor() {
         super();
+    }
+
+    onUsageDataClicked() {
+        Analytics.showDetailsModal();
     }
 
     onAccept() {
@@ -49,11 +54,18 @@ export default class CookieBar extends React.Component {
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning" />
                 <div className="mx_MatrixToolbar_content">
                     { this.props.policyUrl ? _t(
-                        "Help improve Riot by sending usage data? " +
+                        "Help improve Riot by sending <UsageDataLink>usage data</UsageDataLink>? " +
                         "This will use a cookie. " +
                         "(See our <PolicyLink>cookie and privacy policies</PolicyLink>).",
                         {},
                         {
+                            'UsageDataLink': (sub) => <a
+                                className="mx_MatrixToolbar_link"
+                                href="javascript:;"
+                                onClick={this.onUsageDataClicked}
+                            >
+                                { sub }
+                            </a>,
                             // XXX: We need to link to the page that explains our cookies
                             'PolicyLink': (sub) => <a
                                     className="mx_MatrixToolbar_link"
