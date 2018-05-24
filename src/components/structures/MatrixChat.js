@@ -1001,7 +1001,7 @@ export default React.createClass({
                         if (err.errcode == 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
                             title = _t("Can't leave Server Notices room");
                             message = _t(
-                                "This room is used for important messages from the Home Server, " +
+                                "This room is used for important messages from the Homeserver, " +
                                 "so you cannot leave it.",
                             );
                         } else if (err && err.message) {
