@@ -1,3 +1,18 @@
+Changes in [0.15.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.4-rc.1) (2018-05-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.3...v0.15.4-rc.1)
+
+ * Update from Weblate.
+   [\#6792](https://github.com/vector-im/riot-web/pull/6792)
+ * Hide URL options for e2e blob: URL images
+   [\#6765](https://github.com/vector-im/riot-web/pull/6765)
+ * Fix right click menu in electron
+   [\#6763](https://github.com/vector-im/riot-web/pull/6763)
+ * Update to electron 2.0.1
+   [\#6764](https://github.com/vector-im/riot-web/pull/6764)
+ * Add instructions for changing translated strings
+   [\#6528](https://github.com/vector-im/riot-web/pull/6528)
+
 Changes in [0.15.3](https://github.com/vector-im/riot-web/releases/tag/v0.15.3) (2018-05-18)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.2...v0.15.3)
