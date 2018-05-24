@@ -270,7 +270,7 @@ module.exports = React.createClass({
 
             // console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
 
-            if (userA.currentlyActive && userB.currentlyActive) {
+            if ((userA.currentlyActive && userB.currentlyActive) || !this._showPresence) {
                 // console.log(memberA.name + " and " + memberB.name + " are both active");
                 if (memberA.powerLevel === memberB.powerLevel) {
                     // console.log(memberA + " and " + memberB + " have same power level");
