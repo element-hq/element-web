@@ -1370,7 +1370,7 @@ export default class MessageComposerInput extends React.Component {
             case 'numbered-list':
                 return <ol {...attributes}>{children}</ol>;
             case 'code':
-                return <pre {...attributes}><code {...attributes}>{children}</code></pre>;
+                return <pre {...attributes}>{children}</pre>;
             case 'link':
                 return <a {...attributes} href={ node.data.get('href') }>{children}</a>;
             case 'pill': {
