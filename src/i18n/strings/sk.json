@@ -1187,5 +1187,6 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Táto miestnosť je určená na dôležité oznamy a správy od správcov domovského servera, preto ju nie je možné opustiť.",
     "Terms and Conditions": "Zmluvné podmienky",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Ak chcete aj naďalej používať domovský server %(homeserverDomain)s, mali by ste si prečítať a odsúhlasiť naše zmluvné podmienky.",
-    "Review terms and conditions": "Prečítať zmluvné podmienky"
+    "Review terms and conditions": "Prečítať zmluvné podmienky",
+    "To notify everyone in the room, you must be a": "Aby ste mohli upozorňovať všetkých členov v miestnosti, musíte byť"
 }
