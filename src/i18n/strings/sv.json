@@ -958,5 +958,7 @@
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s gjorde framtida rumshistorik synligt för okänd (%(visibility)s).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Där denna sida innehåller identifierbar information, till exempel ett rums-, användar- eller grupp-ID, tas data bort innan den skickas till servern.",
     "The remote side failed to pick up": "Mottagaren kunde inte svara",
-    "Room name or alias": "Rumsnamn eller alias"
+    "Room name or alias": "Rumsnamn eller alias",
+    "Jump to read receipt": "Hoppa till läskvitto",
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Just nu är det inte möjligt att svara med en fil så den kommer att skickas utan att vara ett svar."
 }
