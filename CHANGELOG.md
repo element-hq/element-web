@@ -1,3 +1,9 @@
+Changes in [0.15.4](https://github.com/vector-im/riot-web/releases/tag/v0.15.4) (2018-05-25)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.4-rc.1...v0.15.4)
+
+ * Add cookie policy link to desktop app config
+
 Changes in [0.15.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.4-rc.1) (2018-05-24)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.3...v0.15.4-rc.1)
