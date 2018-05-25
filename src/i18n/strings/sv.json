@@ -589,7 +589,7 @@
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Din epostadress verkar inte vara kopplad till något Matrix-ID på den här hemservern.",
     "Restricted": "Begränsad",
     "Who would you like to communicate with?": "Vem vill du kommunicera med?",
-    "Failed to invite the following users to the %(roomName)s room:": "Misslyckades med att bjuda in följande användare till %(roomName)s-rummet:",
+    "Failed to invite the following users to the %(roomName)s room:": "Det gick inte att bjuda in följande användare till %(roomName)s-rummet:",
     "Unable to create widget.": "Det går inte att skapa widget.",
     "Ignored user": "Ignorerad användare",
     "You are now ignoring %(userId)s": "Du ignorerar nu %(userId)s",
@@ -960,5 +960,14 @@
     "The remote side failed to pick up": "Mottagaren kunde inte svara",
     "Room name or alias": "Rumsnamn eller alias",
     "Jump to read receipt": "Hoppa till läskvitto",
-    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Just nu är det inte möjligt att svara med en fil så den kommer att skickas utan att vara ett svar."
+    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "Just nu är det inte möjligt att svara med en fil så den kommer att skickas utan att vara ett svar.",
+    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Denna process låter dig exportera nycklarna för meddelanden som du har fått i krypterade rum till en lokal fil. Du kommer sedan att kunna importera filen i en annan Matrix-klient i framtiden, så att den klienten också kan dekryptera meddelandena.",
+    "Unknown for %(duration)s": "Okänt i %(duration)s",
+    "Unknown": "Okänt",
+    "Reload widget": "Ladda om widget",
+    "e.g. %(exampleValue)s": "t.ex. %(exampleValue)s",
+    "Can't leave Server Notices room": "Kan inte lämna serveraviseringsrummet",
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Detta rum används för viktiga meddelanden från hemservern, så du kan inte lämna det.",
+    "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Data från en äldre version av Riot has upptäckts. Detta ska ha orsakat att krypteringen inte fungerat i den äldre versionen. Krypterade meddelanden som nyligen har skickats medans den äldre versionen användes kanske inte kan dekrypteras i denna version. Detta kan även orsaka att meddelanden skickade med denna version inte fungerar. Om du upplever problem, logga ut och in igen. För att behålla meddelandehistoriken, exportera dina nycklar och importera dem igen.",
+    "Confirm Removal": "Bekräfta borttagning"
 }
