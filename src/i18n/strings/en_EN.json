@@ -1034,6 +1034,7 @@
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
     "Light theme": "Light theme",
     "Dark theme": "Dark theme",
+    "2018 theme": "2018 theme",
     "Status.im theme": "Status.im theme",
     "Can't load user settings": "Can't load user settings",
     "Server may be unavailable or overloaded": "Server may be unavailable or overloaded",

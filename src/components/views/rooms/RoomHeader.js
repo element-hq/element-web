@@ -302,11 +302,12 @@ module.exports = React.createClass({
         }
 
         let roomAvatar = null;
+        const avatarSize = 28;
         if (canSetRoomAvatar) {
             roomAvatar = (
                 <div className="mx_RoomHeader_avatarPicker">
                     <div onClick={this.onAvatarPickerClick}>
-                        <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
+                        <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={avatarSize} height={avatarSize} />
                     </div>
                     <div className="mx_RoomHeader_avatarPicker_edit">
                         <label htmlFor="avatarInput" ref="file_label">
@@ -327,7 +328,7 @@ module.exports = React.createClass({
             );
         } else if (this.props.room || (this.props.oobData && this.props.oobData.name)) {
             roomAvatar = (
-                <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData}
+                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} oobData={this.props.oobData}
                     viewAvatarOnClick={true} />
             );
         }

@@ -1,0 +1,64 @@
+/*
+ * Nunito.
+ * Includes extended Latin and Vietnamese character sets
+ * Current URLs are v9, derived from the contents of
+ * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&amp;subset=latin-ext,vietnamese
+ */
+
+/* the 'src' links are relative to the bundle.css, which is in a subdirectory.
+ */
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Nunito Italic'), local('Nunito-Italic'), url('../../fonts/Nunito/XRXX3I6Li01BKofIMNaDRss.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Nunito SemiBold Italic'), local('Nunito-SemiBoldItalic'), url('../../fonts/Nunito/XRXQ3I6Li01BKofIMN5cYtvKUTo.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Nunito Bold Italic'), local('Nunito-BoldItalic'), url('../../fonts/Nunito/XRXQ3I6Li01BKofIMN44Y9vKUTo.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito Regular'), local('Nunito-Regular'), url('../../fonts/Nunito/XRXV3I6Li01BKofINeaE.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Nunito SemiBold'), local('Nunito-SemiBold'), url('../../fonts/Nunito/XRXW3I6Li01BKofA6sKUYevN.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito Bold'), local('Nunito-Bold'), url('../../fonts/Nunito/XRXW3I6Li01BKofAjsOUYevN.ttf') format('truetype');
+}
+
+/*
+ * Fira Mono
+ * Used for monospace copy, i.e. code
+ */
+
+@font-face {
+    font-family: 'Fira Mono';
+    src: url('../../fonts/Fira_Mono/FiraMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fira Mono';
+    src: url('../../fonts/Fira_Mono/FiraMono-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}

@@ -58,10 +58,8 @@ limitations under the License.
 
 .mx_MatrixChat .mx_LeftPanel {
     order: 1;
-
     background-color: $secondary-accent-color;
-
-    flex: 0 0 235px;
+    flex: 0 0 260px;
 }
 
 .mx_MatrixChat .mx_LeftPanel.collapsed {
@@ -71,8 +69,6 @@ limitations under the License.
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
     order: 2;
 
-    padding-left: 20px;
-    padding-right: 22px;
     background-color: $primary-bg-color;
 
     flex: 1;

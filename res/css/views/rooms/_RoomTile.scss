@@ -17,9 +17,10 @@ limitations under the License.
 .mx_RoomTile {
     position: relative;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     display: block;
-    height: 34px;
+    height: 40px;
+    margin: 0px 9px 0px 9px;
 
     background-color: $secondary-accent-color;
 }
@@ -44,12 +45,12 @@ limitations under the License.
 
 .mx_RoomTile_avatar {
     display: inline-block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 16px;
-    padding-right: 6px;
-    width: 24px;
-    height: 24px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 14px;
+    padding-right: 12px;
+    width: 32px;
+    height: 32px;
     vertical-align: middle;
 }
 
@@ -154,7 +155,12 @@ limitations under the License.
 }
 
 .mx_RoomTile_selected {
+    border-radius: 4px;
     background-color: $roomtile-selected-bg-color;
+}
+
+.mx_RoomTile_selected .mx_RoomTile_name {
+    color: $roomtile-selected-color;
 }
 
 .mx_DNDRoomTile {

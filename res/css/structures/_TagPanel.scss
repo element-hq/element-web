@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_TagPanel {
-    flex: 0 0 60px;
-    background-color: $tertiary-accent-color;
+    flex: 0 0 70px;
+    background-color: $tagpanel-bg-color;
     cursor: pointer;
 
     display: flex;
@@ -35,6 +35,8 @@ limitations under the License.
     display: flex;
     justify-content: center;
     align-items: flex-start;
+
+    display: none;
 }
 
 .mx_TagPanel .mx_TagPanel_clearButton object {
@@ -47,6 +49,7 @@ limitations under the License.
     height: 0px;
     width: 42px;
     border-bottom: 1px solid $panel-divider-color;
+    display: none;
 }
 
 .mx_TagPanel .mx_TagPanel_scroller {
@@ -57,19 +60,21 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 5px;
 
     height: 100%;
 }
 
 .mx_TagPanel .mx_TagTile {
-    padding: 6px 3px;
-    opacity: 0.5;
+    padding-top: 9px;
+    padding-bottom: 9px;
+//  opacity: 0.5;
     position: relative;
 }
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
-    opacity: 1;
+//    opacity: 1;
 }
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
@@ -80,12 +85,12 @@ limitations under the License.
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
     border: 3px solid $accent-color;
     background-color: $accent-color;
-    border-radius: 60px;
+    border-radius: 40px;
 
     /* In case this is a "initial" avatar */
     display: block;
-    height: 35px;
-    width: 35px;
+    height: 40px;
+    width: 40px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -119,6 +124,7 @@ limitations under the License.
     margin-bottom: 17px;
     margin-top: 18px;
     height: 25px;
+    display: none;
 }
 
 .mx_TagPanel_groupsButton object {

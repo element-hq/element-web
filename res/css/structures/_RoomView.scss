@@ -27,12 +27,11 @@ limitations under the License.
 .mx_RoomView .mx_RoomHeader {
     order: 1;
 
-    flex: 0 0 70px;
+    flex: 0 0 52px;
 }
 
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
-    max-width: 960px;
     width: 100%;
     font-size: 18px;
     text-align: center;
@@ -50,7 +49,7 @@ limitations under the License.
     border: 2px #e1dddd solid;
     border-bottom: none;
     position: absolute;
-    top: 70px;
+    top: 52px;
     bottom: 0px;
     z-index: 3000;
 }
@@ -66,7 +65,6 @@ limitations under the License.
     order: 2;
 
     min-width: 0px;
-    max-width: 960px;
     width: 100%;
     margin: 0px auto;
 
@@ -115,7 +113,6 @@ limitations under the License.
 }
 
 .mx_RoomView_messageListWrapper {
-    max-width: 960px;
     margin: auto;
 
     min-height: 100%;
@@ -187,7 +184,6 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_statusAreaBox {
-    max-width: 960px;
     margin: auto;
     min-height: 50px;
 }

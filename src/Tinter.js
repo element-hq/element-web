@@ -154,6 +154,8 @@ class Tinter {
     }
 
     tint(primaryColor, secondaryColor, tertiaryColor) {
+        return;
+        
         this.currentTint[0] = primaryColor;
         this.currentTint[1] = secondaryColor;
         this.currentTint[2] = tertiaryColor;

@@ -146,7 +146,7 @@ export default React.createClass({
         const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
-        const avatarHeight = 35;
+        const avatarHeight = 40;
 
         const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",

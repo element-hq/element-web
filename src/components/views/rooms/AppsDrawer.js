@@ -248,6 +248,10 @@ module.exports = React.createClass({
                 />);
             });
 
+        if (apps.length == 0) {
+            return <div></div>;
+        }
+
         let addWidget;
         if (this.props.showApps &&
             this._canUserModify()

@@ -320,7 +320,7 @@ module.exports = React.createClass({
         return <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
-                    <RoomAvatar room={this.props.room} width={24} height={24} />
+                    <RoomAvatar room={this.props.room} width={32} height={32} />
                     { directMessageIndicator }
                 </div>
             </div>

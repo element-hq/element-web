@@ -174,10 +174,12 @@ var LeftPanel = React.createClass({
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
+        const TopLeftMenu = sdk.getComponent('structures.TopLeftMenu');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        let topBox;
+        let topBox = <TopLeftMenu collapsed={ this.props.collapsed }/>;
+/*
         if (this.context.matrixClient.isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
             topBox = <LoginBox collapsed={ this.props.collapsed }/>;
@@ -185,7 +187,7 @@ var LeftPanel = React.createClass({
             const SearchBox = sdk.getComponent('structures.SearchBox');
             topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
         }
-
+*/
         const classes = classNames(
             "mx_LeftPanel",
             {
@@ -216,10 +218,10 @@ var LeftPanel = React.createClass({
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />
-                    <BottomLeftMenu collapsed={this.props.collapsed}/>
                 </aside>
             </div>
         );
+        // <BottomLeftMenu collapsed={this.props.collapsed}/>
     }
 });
 

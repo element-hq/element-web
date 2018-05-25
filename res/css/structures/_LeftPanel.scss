@@ -19,27 +19,29 @@ limitations under the License.
 
     display: flex;
     flex-direction: column;
+
+    border-right: 1px solid $panel-divider-color;
 }
 
 .mx_LeftPanel_container {
     display: flex;
-    /* LeftPanel 235px */
-    flex: 0 0 235px;
+    /* LeftPanel 260px */
+    flex: 0 0 260px;
 }
 
 .mx_LeftPanel_container.mx_LeftPanel_container_hasTagPanel {
-    /* TagPanel 60px + LeftPanel 235px */
-    flex: 0 0 295px;
+    /* TagPanel 70px + LeftPanel 260px */
+    flex: 0 0 330px;
 }
 
 .mx_LeftPanel_container_collapsed {
-    /* Collapsed LeftPanel 60px */
-    flex: 0 0 60px;
+    /* Collapsed LeftPanel 70px */
+    flex: 0 0 70px;
 }
 
 .mx_LeftPanel_container_collapsed.mx_LeftPanel_container_hasTagPanel {
-    /* TagPanel 60px + Collapsed LeftPanel 60px */
-    flex: 0 0 120px;
+    /* TagPanel 70px + Collapsed LeftPanel 70px */
+    flex: 0 0 140px;
 }
 
 .mx_LeftPanel_hideButton {
