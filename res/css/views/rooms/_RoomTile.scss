@@ -17,7 +17,6 @@ limitations under the License.
 .mx_RoomTile {
     position: relative;
     cursor: pointer;
-    font-size: 14px;
     display: block;
     height: 40px;
     margin: 0px 9px 0px 9px;
@@ -64,6 +63,8 @@ limitations under the License.
 
 .mx_RoomTile_name {
     display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
     position: relative;
     width: 165px;
     vertical-align: middle;

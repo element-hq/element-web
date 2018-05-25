@@ -30,8 +30,6 @@ body {
     color: $primary-fg-color;
     border: 0px;
     margin: 0px;
-    /* This should render the fonts the same accross browsers */
-    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 div.error, div.warning {
