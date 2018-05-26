@@ -201,6 +201,10 @@ export const SETTINGS = {
         displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
         default: false,
     },
+    "webrtc_audiooutput": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: null,
+    },
     "webrtc_audioinput": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: null,

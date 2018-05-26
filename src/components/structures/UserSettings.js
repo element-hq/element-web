@@ -292,6 +292,7 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
+                activeAudioOutput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audiooutput'),
                 activeAudioInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audioinput'),
                 activeVideoInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_videoinput'),
             });
@@ -970,6 +971,11 @@ module.exports = React.createClass({
         return devices.map((device) => <span key={device.deviceId}>{ device.label }</span>);
     },
 
+    _setAudioOutput: function(deviceId) {
+        this.setState({activeAudioOutput: deviceId});
+        CallMediaHandler.setAudioOutput(deviceId);
+    },
+
     _setAudioInput: function(deviceId) {
         this.setState({activeAudioInput: deviceId});
         CallMediaHandler.setAudioInput(deviceId);
@@ -1010,6 +1016,7 @@ module.exports = React.createClass({
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
+        let speakerDropdown = <p>{ _t('No Audio Outputs detected') }</p>;
         let microphoneDropdown = <p>{ _t('No Microphones detected') }</p>;
         let webcamDropdown = <p>{ _t('No Webcams detected') }</p>;
 
@@ -1017,6 +1024,26 @@ module.exports = React.createClass({
             deviceId: '',
             label: _t('Default Device'),
         };
+
+        const audioOutputs = this.state.mediaDevices.audiooutput.slice(0);
+        if (audioOutputs.length > 0) {
+            let defaultOutput = '';
+            if (!audioOutputs.some((input) => input.deviceId === 'default')) {
+                audioOutputs.unshift(defaultOption);
+            } else {
+                defaultOutput = 'default';
+            }
+
+            speakerDropdown = <div>
+                <h4>{ _t('Audio Output') }</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioOutput || defaultOutput}
+                    onOptionChange={this._setAudioOutput}>
+                    { this._mapWebRtcDevicesToSpans(audioOutputs) }
+                </Dropdown>
+            </div>;
+        }
 
         const audioInputs = this.state.mediaDevices.audioinput.slice(0);
         if (audioInputs.length > 0) {
@@ -1059,8 +1086,9 @@ module.exports = React.createClass({
         }
 
         return <div>
-                { microphoneDropdown }
-                { webcamDropdown }
+            { speakerDropdown }
+            { microphoneDropdown }
+            { webcamDropdown }
         </div>;
     },
 
