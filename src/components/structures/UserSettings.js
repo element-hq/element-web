@@ -284,7 +284,12 @@ module.exports = React.createClass({
         this.setState({ electron_settings: settings });
     },
 
-    _refreshMediaDevices: function() {
+    _refreshMediaDevices: function(stream) {
+        if (stream) {
+            // kill stream so that we don't leave it lingering around with webcam enabled etc
+            stream.getTracks().forEach((track) => track.stop());
+        }
+
         Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
