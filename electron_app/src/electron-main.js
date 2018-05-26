@@ -101,6 +101,9 @@ electron.ipcMain.on('app_onAction', function(ev, payload) {
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+    // If other instance launched with --hidden then skip showing window
+    if (commandLine.includes('--hidden')) return;
+
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
         if (!mainWindow.isVisible()) mainWindow.show();
@@ -211,11 +214,17 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!argv.hidden) {
-        mainWindow.once('ready-to-show', () => {
+    mainWindow.once('ready-to-show', () => {
+        mainWindowState.manage(mainWindow);
+
+        if (!argv.hidden) {
+            console.log("Showing window");
             mainWindow.show();
-        });
-    }
+        } else {
+            // hide here explicitly because window manage above sometimes shows it
+            mainWindow.hide();
+        }
+    });
 
     mainWindow.on('closed', () => {
         mainWindow = global.mainWindow = null;
@@ -243,7 +252,6 @@ electron.app.on('ready', () => {
     }
 
     webContentsHandler(mainWindow.webContents);
-    mainWindowState.manage(mainWindow);
 });
 
 electron.app.on('window-all-closed', () => {
