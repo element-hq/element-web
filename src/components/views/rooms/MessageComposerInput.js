@@ -716,7 +716,7 @@ export default class MessageComposerInput extends React.Component {
             if (ctrlCmdCommand) {
                 return this.handleKeyCommand(ctrlCmdCommand);
             }
-            return false;
+            return;
         }
 
         switch (ev.keyCode) {
@@ -739,6 +739,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onBackspace = (ev: Event, change: Change): Change => {
+        if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey) {
+            return;
+        }
+
         if (this.state.isRichTextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
