@@ -145,7 +145,9 @@ electron.ipcMain.on('settings_get', async function(ev) {
         }));
 
         ev.sender.send('settings', data);
-    } catch(e) { console.error(e); }
+    } catch (e) {
+        console.error(e);
+    }
 });
 
 electron.ipcMain.on('settings_set', function(ev, key, value) {
@@ -156,17 +158,18 @@ electron.ipcMain.on('settings_set', function(ev, key, value) {
 });
 
 electron.app.on('ready', () => {
-
     if (argv.devtools) {
         try {
-            const { default: installExtension, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
-            installExtension(REACT_DEVELOPER_TOOLS)
+            const { default: installExt, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
+            installExt(REACT_DEVELOPER_TOOLS)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-            installExtension(REACT_PERF)
+            installExt(REACT_PERF)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-        } catch(e) {console.log(e);}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
 
