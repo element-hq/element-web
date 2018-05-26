@@ -218,7 +218,6 @@ app.on('ready', () => {
         mainWindowState.manage(mainWindow);
 
         if (!argv['hidden']) {
-            console.log("Showing window");
             mainWindow.show();
         } else {
             // hide here explicitly because window manage above sometimes shows it
