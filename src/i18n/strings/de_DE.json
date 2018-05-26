@@ -1168,8 +1168,5 @@
     "Collapse Reply Thread": "Antwort-Thread zusammenklappen",
     "At this time it is not possible to reply with an emote.": "An dieser Stelle ist es nicht möglich mit einer Umschreibung zu antworten.",
     "Enable widget screenshots on supported widgets": "Widget-Screenshots bei unterstützten Widgets aktivieren",
-    "Send analytics data": "Analysedaten senden",
-    "Help improve Riot by sending usage data? This will use a cookie. (See our <PolicyLink>cookie and privacy policies</PolicyLink>).": "Möchtest du Riot helfen indem du Nutzungsdaten sendest? Dies wird ein Cookie verwenden. (Siehe unsere <PolicyLink>Datenschutzerklärung</PolicyLink>).",
-    "Help improve Riot by sending usage data? This will use a cookie.": "Möchtest du Riot helfen indem du Nutzungsdaten sendest? Dies wird ein Cookie verwenden.",
-    "Yes please": "Ja, bitte"
+    "Send analytics data": "Analysedaten senden"
 }
