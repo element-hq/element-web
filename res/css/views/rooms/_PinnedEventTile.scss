@@ -33,13 +33,6 @@ limitations under the License.
     padding-bottom: 3px;
 }
 
-.mx_PinnedEventTile .mx_EventTile_content {
-    margin-left: 50px;
-    position: relative;
-    top: 0;
-    left: 0;
-}
-
 .mx_PinnedEventTile .mx_PinnedEventTile_senderAvatar .mx_BaseAvatar {
     float: left;
     margin-right: 10px;
@@ -64,4 +57,11 @@ limitations under the License.
 .mx_PinnedEventTile_gotoButton {
     display: inline-block;
     font-size: 0.7em; // Smaller text to avoid conflicting with the layout
+}
+
+.mx_PinnedEventTile_message {
+    margin-left: 50px;
+    position: relative;
+    top: 0;
+    left: 0;
 }

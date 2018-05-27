@@ -86,7 +86,11 @@ module.exports = React.createClass({
                 <span className="mx_PinnedEventTile_sender">
                     { sender.name }
                 </span>
-                <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" />
+                <div className="mx_PinnedEventTile_message">
+                    <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" maxImageHeight={150}
+                                  onWidgetLoad={() => {}} // we need to give this, apparently
+                    />
+                </div>
             </div>
         );
     },
