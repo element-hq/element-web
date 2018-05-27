@@ -17,6 +17,8 @@ limitations under the License.
 
 'use strict';
 
+import SettingsStore from "../../settings/SettingsStore";
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
@@ -98,8 +100,10 @@ var RoomSubList = React.createClass({
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
+        const filteredRooms = this.applySearchFilter(newProps.list, newProps.searchFilter);
+        const sortedRooms = newProps.order === "recent" ? this.applyPinnedTileRules(filteredRooms) : filteredRooms;
         this.setState({
-            sortedList: this.applySearchFilter(newProps.list, newProps.searchFilter),
+            sortedList: sortedRooms,
         });
     },
 
@@ -108,6 +112,21 @@ var RoomSubList = React.createClass({
         return list.filter((room) => {
             return room.name && room.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0
         });
+    },
+
+    applyPinnedTileRules: function(list) {
+        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
+        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
+        if (!pinUnread && !pinMentioned) {
+            return list; // Nothing to sort
+        }
+
+        const mentioned = !pinMentioned ? [] : list.filter(room => room.getUnreadNotificationCount("highlight") > 0);
+        const unread = !pinUnread ? [] : list.filter(room => Unread.doesRoomHaveUnreadMessages(room));
+
+        return mentioned
+            .concat(unread.filter(room => !mentioned.find(other => other === room)))
+            .concat(list.filter(room => !unread.find(other => other === room)));
     },
 
     // The header is collapsable if it is hidden or not stuck
