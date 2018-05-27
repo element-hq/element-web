@@ -1187,5 +1187,6 @@
     "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie (please see our <PolicyLink>Cookie Policy</PolicyLink>).": "Пожалуйста, помогите улучшить Riot.im, отправляя <UsageDataLink>анонимные данные использования</UsageDataLink>. При этом будут использоваться cookie (ознакомьтесь с нашей<PolicyLink>Политикой cookie</PolicyLink>).",
     "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie.": "Пожалуйста, помогите улучшить Riot.im, отправляя <UsageDataLink>анонимные данные использования</UsageDataLink>. При этом будут использоваться cookie.",
     "Yes, I want to help!": "Да, я хочу помочь!",
-    "Reload widget": "Перезагрузить виджет"
+    "Reload widget": "Перезагрузить виджет",
+    "To notify everyone in the room, you must be a": "Для уведомления всех в комнате, вы должны быть"
 }
