@@ -491,6 +491,7 @@
     "To kick users, you must be a": "To kick users, you must be a",
     "To ban users, you must be a": "To ban users, you must be a",
     "To remove other users' messages, you must be a": "To remove other users' messages, you must be a",
+    "To notify everyone in the room, you must be a": "To notify everyone in the room, you must be a",
     "No users have specific privileges in this room": "No users have specific privileges in this room",
     "%(user)s is a %(userRole)s": "%(user)s is a %(userRole)s",
     "Privileged Users": "Privileged Users",
