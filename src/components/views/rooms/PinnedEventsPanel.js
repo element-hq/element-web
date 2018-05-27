@@ -39,6 +39,19 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this._updatePinnedMessages();
+        MatrixClientPeg.get().on("RoomState.events", this._onEvent);
+    },
+
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("RoomState.events", this._onEvent);
+        }
+    },
+
+    _onEvent: function(ev) {
+        if (ev.getRoomId() === this.props.room.roomId && ev.getType() === "m.room.pinned_events") {
+            this._updatePinnedMessages();
+        }
     },
 
     _updatePinnedMessages: function() {
