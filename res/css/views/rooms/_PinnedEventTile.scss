@@ -25,17 +25,27 @@ limitations under the License.
     background-color: $event-selected-color;
 }
 
-.mx_PinnedEventTile .mx_PinnedEventTile_sender {
+.mx_PinnedEventTile .mx_PinnedEventTile_sender,
+.mx_PinnedEventTile .mx_PinnedEventTile_timestamp {
     color: #868686;
     font-size: 0.8em;
     vertical-align: top;
-    display: block;
+    display: inline-block;
     padding-bottom: 3px;
+}
+
+.mx_PinnedEventTile .mx_PinnedEventTile_timestamp {
+    padding-left: 15px;
+    display: none;
 }
 
 .mx_PinnedEventTile .mx_PinnedEventTile_senderAvatar .mx_BaseAvatar {
     float: left;
     margin-right: 10px;
+}
+
+.mx_PinnedEventTile:hover .mx_PinnedEventTile_timestamp {
+    display: inline-block;
 }
 
 .mx_PinnedEventTile:hover .mx_PinnedEventTile_actions {
