@@ -1195,5 +1195,6 @@
     "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie.": "Kérlek segíts javítani a Riot.im-et azzal, hogy <UsageDataLink>anonim felhasználási adatokat</UsageDataLink> küldesz. Ez szütit (cookie) fog használni.",
     "Yes, I want to help!": "Igen, segítek!",
     "Can't leave Server Notices room": "Nem lehet elhagyni a Szerver Üzenetek szobát",
-    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ez a szoba fontos szerverüzenetek közlésére jött létre, nem tudsz kilépni belőle."
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ez a szoba fontos szerverüzenetek közlésére jött létre, nem tudsz kilépni belőle.",
+    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:"
 }
