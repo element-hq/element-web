@@ -166,7 +166,6 @@
     "%(targetName)s left the room.": "%(targetName)s ha dejado la sala.",
     "Local addresses for this room:": "Direcciones locales para esta sala:",
     "Logged in as:": "Sesión iniciada como:",
-    "Login as guest": "Iniciar sesión como invitado",
     "Logout": "Cerrar Sesión",
     "Low priority": "Baja prioridad",
     "Accept": "Aceptar",
