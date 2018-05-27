@@ -1195,5 +1195,6 @@
     "Yes, I want to help!": "Igen, segítek!",
     "Can't leave Server Notices room": "Nem lehet elhagyni a Szerver Üzenetek szobát",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ez a szoba fontos szerverüzenetek közlésére jött létre, nem tudsz kilépni belőle.",
-    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:"
+    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:",
+    "Try the app first": "Először próbáld ki az alkalmazást"
 }
