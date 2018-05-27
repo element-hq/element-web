@@ -22,16 +22,32 @@ limitations under the License.
  *                    suffix determining whether it is pending, successful or
  *                    a failure.
  * @param {function} fn a function that returns a Promise.
+ * @param {function?} pendingFn a function that returns an object to assign
+ *                              to the `request` key of the ${id}.pending
+ *                              payload.
  * @returns {function} an action thunk - a function that uses its single
  *                     argument as a dispatch function to dispatch the
  *                     following actions:
  *                         `${id}.pending` and either
  *                         `${id}.success` or
  *                         `${id}.failure`.
+ *
+ *                     The shape of each are:
+ *                     { action: '${id}.pending', request }
+ *                     { action: '${id}.success', result }
+ *                     { action: '${id}.failure', err }
+ *
+ *                     where `request` is returned by `pendingFn` and
+ *                     result is the result of the promise returned by
+ *                     `fn`.
  */
-export function asyncAction(id, fn) {
+export function asyncAction(id, fn, pendingFn) {
     return (dispatch) => {
-        dispatch({action: id + '.pending'});
+        dispatch({
+            action: id + '.pending',
+            request:
+                typeof pendingFn === 'function' ? pendingFn() : undefined,
+        });
         fn().then((result) => {
             dispatch({action: id + '.success', result});
         }).catch((err) => {

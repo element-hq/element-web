@@ -147,7 +147,7 @@ module.exports = React.createClass({
             // creating/destroying large numbers of elements"
             // (https://github.com/julianshapiro/velocity/issues/47)
             const domNode = ReactDom.findDOMNode(this.nodes[k]);
-            Velocity.Utilities.removeData(domNode);
+            if (domNode) Velocity.Utilities.removeData(domNode);
         }
         this.nodes[k] = node;
     },

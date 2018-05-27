@@ -51,9 +51,11 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
-import QuotePreview from "./QuotePreview";
+import {makeUserPermalink} from "../../../matrix-to";
+import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
+import ReplyThread from "../elements/ReplyThread";
+import {ContentHelpers} from 'matrix-js-sdk';
 
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
@@ -273,7 +275,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
-            case 'quote_event':
+            case 'reply_to_event':
             case 'focus_composer':
                 editor.focus();
                 break;
@@ -723,6 +725,7 @@ export default class MessageComposerInput extends React.Component {
         const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
+                this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
                 });
@@ -750,16 +753,14 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        const quotingEv = RoomViewStore.getQuotingEvent();
+        const replyingToEv = RoomViewStore.getQuotingEvent();
+        const mustSendHTML = Boolean(replyingToEv);
 
         if (this.state.isRichtextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
 
-            // If we are quoting we need HTML Content
-            if (quotingEv) {
-                shouldSendHTML = true;
-            }
+            if (mustSendHTML) shouldSendHTML = true;
 
             const blocks = contentState.getBlocksAsArray();
             if (blocks.some((block) => block.getType() !== 'unstyled')) {
@@ -819,15 +820,15 @@ export default class MessageComposerInput extends React.Component {
 
             const md = new Markdown(pt);
             // if contains no HTML and we're not quoting (needing HTML)
-            if (md.isPlainText() && !quotingEv) {
+            if (md.isPlainText() && !mustSendHTML) {
                 contentText = md.toPlaintext();
             } else {
                 contentHTML = md.toHTML();
             }
         }
 
-        let sendHtmlFn = this.client.sendHtmlMessage;
-        let sendTextFn = this.client.sendTextMessage;
+        let sendHtmlFn = ContentHelpers.makeHtmlMessage;
+        let sendTextFn = ContentHelpers.makeTextMessage;
 
         this.historyManager.save(
             contentState,
@@ -835,45 +836,54 @@ export default class MessageComposerInput extends React.Component {
         );
 
         if (contentText.startsWith('/me')) {
+            if (replyingToEv) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Emote Reply Fail', '', ErrorDialog, {
+                    title: _t("Unable to reply"),
+                    description: _t("At this time it is not possible to reply with an emote."),
+                });
+                return false;
+            }
+
             contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
-            sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendEmoteMessage;
+            sendHtmlFn = ContentHelpers.makeHtmlEmote;
+            sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-        if (quotingEv) {
-            const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(quotingEv.getRoomId());
-            const sender = room.currentState.getMember(quotingEv.getSender());
 
-            const {body/*, formatted_body*/} = quotingEv.getContent();
+        let content = contentHTML ? sendHtmlFn(contentText, contentHTML) : sendTextFn(contentText);
 
-            const perma = makeEventPermalink(quotingEv.getRoomId(), quotingEv.getId());
-            contentText = `${sender.name}:\n> ${body}\n\n${contentText}`;
-            contentHTML = `<a href="${perma}">Quote<br></a>${contentHTML}`;
+        if (replyingToEv) {
+            const replyContent = ReplyThread.makeReplyMixIn(replyingToEv);
+            content = Object.assign(replyContent, content);
 
-            // we have finished quoting, clear the quotingEvent
+            // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            if (nestedReply) {
+                if (content.formatted_body) {
+                    content.formatted_body = nestedReply.html + content.formatted_body;
+                }
+                content.body = nestedReply.body + content.body;
+            }
+
+            // Clear reply_to_event as we put the message into the queue
+            // if the send fails, retry will handle resending.
             dis.dispatch({
-                action: 'quote_event',
+                action: 'reply_to_event',
                 event: null,
             });
         }
 
-        let sendMessagePromise;
-        if (contentHTML) {
-            sendMessagePromise = sendHtmlFn.call(
-                this.client, this.props.room.roomId, contentText, contentHTML,
-            );
-        } else {
-            sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
-        }
 
-        sendMessagePromise.done((res) => {
+        this.client.sendMessage(this.props.room.roomId, content).then((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, (e) => onSendMessageFailed(e, this.props.room));
+        }).catch((e) => {
+            onSendMessageFailed(e, this.props.room);
+        });
 
         this.setState({
             editorState: this.createEditorState(),
@@ -1172,7 +1182,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <QuotePreview /> }
+                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

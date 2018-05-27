@@ -148,10 +148,48 @@ class ScalarAuthClient {
         return defer.promise;
     }
 
-    getScalarInterfaceUrlForRoom(roomId, screen, id) {
+    /**
+     * Mark all assets associated with the specified widget as "disabled" in the
+     * integration manager database.
+     * This can be useful to temporarily prevent purchased assets from being displayed.
+     * @param  {string} widgetType [description]
+     * @param  {string} widgetId   [description]
+     * @return {Promise}           Resolves on completion
+     */
+    disableWidgetAssets(widgetType, widgetId) {
+        let url = SdkConfig.get().integrations_rest_url + '/widgets/set_assets_state';
+        url = this.getStarterLink(url);
+        return new Promise((resolve, reject) => {
+            request({
+                method: 'GET',
+                uri: url,
+                json: true,
+                qs: {
+                    'widget_type': widgetType,
+                    'widget_id': widgetId,
+                    'state': 'disable',
+                },
+            }, (err, response, body) => {
+                if (err) {
+                    reject(err);
+                } else if (response.statusCode / 100 !== 2) {
+                    reject({statusCode: response.statusCode});
+                } else if (!body) {
+                    reject(new Error("Failed to set widget assets state"));
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
+    getScalarInterfaceUrlForRoom(room, screen, id) {
+        const roomId = room.roomId;
+        const roomName = room.name;
         let url = SdkConfig.get().integrations_ui_url;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
+        url += "&room_name=" + encodeURIComponent(roomName);
         url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
         if (id) {
             url += '&integ_id=' + encodeURIComponent(id);

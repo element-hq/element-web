@@ -146,6 +146,7 @@ export default React.createClass({
     },
 
     render: function() {
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.props.devices === null) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
@@ -189,8 +190,9 @@ export default React.createClass({
             <BaseDialog className='mx_UnknownDeviceDialog'
                 onFinished={this.props.onFinished}
                 title={_t('Room contains unknown devices')}
+                contentId='mx_Dialog_content'
             >
-                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
+                <GeminiScrollbarWrapper autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
                         { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
@@ -198,7 +200,7 @@ export default React.createClass({
                     { _t("Unknown devices") }:
 
                     <UnknownDeviceList devices={this.props.devices} />
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
                 <DialogButtons primaryButton={sendButtonLabel}
                     onPrimaryButtonClick={sendButtonOnClick}
                     onCancel={this._onDismissClicked} />

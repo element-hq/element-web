@@ -53,7 +53,8 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return null; // wrong type or otherwise not set
         }
 
-        return this._getSettings()[settingName];
+        const settings = this._getSettings() || {};
+        return settings[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
@@ -74,7 +75,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return Promise.resolve();
         }
 
-        const settings = this._getSettings();
+        const settings = this._getSettings() || {};
         settings[settingName] = newValue;
         localStorage.setItem("mx_local_settings", JSON.stringify(settings));
 
@@ -91,7 +92,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     _getSettings() {
         const value = localStorage.getItem("mx_local_settings");
-        if (!value) return {};
+        if (!value) return null;
         return JSON.parse(value);
     }
 
@@ -101,7 +102,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
     _readFeature(featureName) {
         if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
             // Guests should not have any labs features enabled.
-            return {enabled: false};
+            return false;
         }
 
         const value = localStorage.getItem("mx_labs_feature_" + featureName);

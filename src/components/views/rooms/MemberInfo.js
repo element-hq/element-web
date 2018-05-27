@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
-import GeminiScrollbar from 'react-gemini-scrollbar';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import SdkConfig from '../../../SdkConfig';
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -754,6 +754,7 @@ module.exports = withMatrixClient(React.createClass({
 
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
+                            transparent={true}
                             collapsed={false}
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
@@ -857,13 +858,27 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
-        const poweLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
-        const powerLevelUsersDefault = poweLevelEvent.getContent().users_default;
+        const powerLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
+        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
+
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = this.props.matrixClient.baseUrl;
+        let showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            showPresence = enablePresenceByHsUrl[hsUrl];
+        }
+
+        let presenceLabel = null;
+        if (showPresence) {
+            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
+            presenceLabel = <PresenceLabel activeAgo={presenceLastActiveAgo}
+                currentlyActive={presenceCurrentlyActive}
+                presenceState={presenceState} />;
+        }
 
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
-            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
             roomMemberDetails = <div>
                 <div className="mx_MemberInfo_profileField">
                     { _t("Level:") } <b>
@@ -876,18 +891,17 @@ module.exports = withMatrixClient(React.createClass({
                     </b>
                 </div>
                 <div className="mx_MemberInfo_profileField">
-                    <PresenceLabel activeAgo={presenceLastActiveAgo}
-                        currentlyActive={presenceCurrentlyActive}
-                        presenceState={presenceState} />
+                    {presenceLabel}
                 </div>
             </div>;
         }
 
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbar autoshow={true}>
+                <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
@@ -911,7 +925,7 @@ module.exports = withMatrixClient(React.createClass({
                     { this._renderDevices() }
 
                     { spinner }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

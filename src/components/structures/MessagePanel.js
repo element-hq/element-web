@@ -325,7 +325,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
+                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} /></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -447,10 +447,18 @@ module.exports = React.createClass({
         // is this a continuation of the previous message?
         let continuation = false;
 
+        // Some events should appear as continuations from previous events of
+        // different types.
+        const continuedTypes = ['m.sticker', 'm.room.message'];
+        const eventTypeContinues =
+            prevEvent !== null &&
+            continuedTypes.includes(mxEv.getType()) &&
+            continuedTypes.includes(prevEvent.getType());
+
         if (prevEvent !== null
                 && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
-                && mxEv.getType() == prevEvent.getType()) {
+                && (mxEv.getType() == prevEvent.getType() || eventTypeContinues)) {
             continuation = true;
         }
 
@@ -479,7 +487,7 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
+            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
             continuation = false;
         }

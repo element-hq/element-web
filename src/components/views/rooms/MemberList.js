@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const rate_limited_func = require('../../../ratelimitedfunc');
 const CallHandler = require("../../../CallHandler");
 
@@ -59,6 +59,14 @@ module.exports = React.createClass({
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
+
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = MatrixClientPeg.get().baseUrl;
+
+        this._showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            this._showPresence = enablePresenceByHsUrl[hsUrl];
+        }
     },
 
     componentWillUnmount: function() {
@@ -262,7 +270,7 @@ module.exports = React.createClass({
 
             // console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
 
-            if (userA.currentlyActive && userB.currentlyActive) {
+            if ((userA.currentlyActive && userB.currentlyActive) || !this._showPresence) {
                 // console.log(memberA.name + " and " + memberB.name + " are both active");
                 if (memberA.powerLevel === memberB.powerLevel) {
                     // console.log(memberA + " and " + memberB + " have same power level");
@@ -315,13 +323,37 @@ module.exports = React.createClass({
         });
     },
 
+    _getPending3PidInvites: function() {
+        // include 3pid invites (m.room.third_party_invite) state events.
+        // The HS may have already converted these into m.room.member invites so
+        // we shouldn't add them if the 3pid invite state key (token) is in the
+        // member invite (content.third_party_invite.signed.token)
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+
+        if (room) {
+            return room.currentState.getStateEvents("m.room.third_party_invite").filter(function(e) {
+                // any events without these keys are not valid 3pid invites, so we ignore them
+                const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
+                for (let i = 0; i < requiredKeys.length; ++i) {
+                    if (e.getContent()[requiredKeys[i]] === undefined) return false;
+                }
+
+                // discard all invites which have a m.room.member event since we've
+                // already added them.
+                const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
+                if (memberEvent) return false;
+                return true;
+            });
+        }
+    },
+
     _makeMemberTiles: function(members, membership) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
 
         const memberList = members.map((userId) => {
             const m = this.memberDict[userId];
             return (
-                <MemberTile key={userId} member={m} ref={userId} />
+                <MemberTile key={userId} member={m} ref={userId} showPresence={this._showPresence} />
             );
         });
 
@@ -329,33 +361,16 @@ module.exports = React.createClass({
         // Double XXX: Now it's really, really not the right home for this logic:
         // we shouldn't even be passing in the 'membership' param to this function.
         // Ew, ew, and ew.
+        // Triple XXX: This violates the size constraint, the output is expected/desired
+        // to be the same length as the members input array.
         if (membership === "invite") {
-            // include 3pid invites (m.room.third_party_invite) state events.
-            // The HS may have already converted these into m.room.member invites so
-            // we shouldn't add them if the 3pid invite state key (token) is in the
-            // member invite (content.third_party_invite.signed.token)
-            const room = MatrixClientPeg.get().getRoom(this.props.roomId);
             const EntityTile = sdk.getComponent("rooms.EntityTile");
-            if (room) {
-                room.currentState.getStateEvents("m.room.third_party_invite").forEach(
-                function(e) {
-                    // any events without these keys are not valid 3pid invites, so we ignore them
-                    const required_keys = ['key_validity_url', 'public_key', 'display_name'];
-                    for (let i = 0; i < required_keys.length; ++i) {
-                        if (e.getContent()[required_keys[i]] === undefined) return;
-                    }
-
-                    // discard all invites which have a m.room.member event since we've
-                    // already added them.
-                    const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
-                    if (memberEvent) {
-                        return;
-                    }
-                    memberList.push(
-                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />,
-                    );
-                });
-            }
+            memberList.push(...this._getPending3PidInvites().map((e) => {
+                return <EntityTile key={e.getStateKey()}
+                    name={e.getContent().display_name}
+                    suppressOnHover={true}
+                />;
+            }));
         }
 
         return memberList;
@@ -374,11 +389,12 @@ module.exports = React.createClass({
     },
 
     _getChildCountInvited: function() {
-        return this.state.filteredInvitedMembers.length;
+        return this.state.filteredInvitedMembers.length + (this._getPending3PidInvites() || []).length;
     },
 
     render: function() {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         let invitedSection = null;
         if (this._getChildCountInvited() > 0) {
@@ -407,14 +423,14 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                     <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
                     { invitedSection }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

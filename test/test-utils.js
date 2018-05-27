@@ -2,7 +2,8 @@
 
 import sinon from 'sinon';
 import Promise from 'bluebird';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
@@ -67,10 +68,13 @@ export function createTestClient() {
     return {
         getHomeserverUrl: sinon.stub(),
         getIdentityServerUrl: sinon.stub(),
+        getDomain: sinon.stub().returns("matrix.rog"),
+        getUserId: sinon.stub().returns("@userId:matrix.rog"),
 
         getPushActionsForEvent: sinon.stub(),
         getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
+        getGroups: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
@@ -80,6 +84,7 @@ export function createTestClient() {
         paginateEventTimeline: sinon.stub().returns(Promise.resolve()),
         sendReadReceipt: sinon.stub().returns(Promise.resolve()),
         getRoomIdForAlias: sinon.stub().returns(Promise.resolve()),
+        getRoomDirectoryVisibility: sinon.stub().returns(Promise.resolve()),
         getProfileInfo: sinon.stub().returns(Promise.resolve({})),
         getAccountData: (type) => {
             return mkEvent({
@@ -88,10 +93,10 @@ export function createTestClient() {
                 content: {},
             });
         },
+        mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
         setAccountData: sinon.stub(),
         sendTyping: sinon.stub().returns(Promise.resolve({})),
-        sendTextMessage: () => Promise.resolve({}),
-        sendHtmlMessage: () => Promise.resolve({}),
+        sendMessage: () => Promise.resolve({}),
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
@@ -243,6 +248,7 @@ export function mkStubRoom(roomId = null) {
             roomId: roomId,
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
         }),
+        getMembersWithMembership: sinon.stub().returns([]),
         getJoinedMembers: sinon.stub().returns([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -251,8 +257,16 @@ export function mkStubRoom(roomId = null) {
         hasMembershipState: () => null,
         currentState: {
             getStateEvents: sinon.stub(),
+            mayClientSendStateEvent: sinon.stub().returns(true),
+            maySendStateEvent: sinon.stub().returns(true),
             members: [],
         },
+        tags: {
+            "m.favourite": {
+                order: 0.5,
+            },
+        },
+        setBlacklistUnverifiedDevices: sinon.stub(),
     };
 }
 
@@ -264,4 +278,47 @@ export function getDispatchForStore(store) {
         dis._callbacks[store._dispatchToken](payload);
         dis._isDispatching = false;
     };
+}
+
+export function wrapInMatrixClientContext(WrappedComponent) {
+    class Wrapper extends React.Component {
+        static childContextTypes = {
+            matrixClient: PropTypes.object,
+        }
+
+        getChildContext() {
+            return {
+                matrixClient: this._matrixClient,
+            };
+        }
+
+        componentWillMount() {
+            this._matrixClient = peg.get();
+        }
+
+        render() {
+            return <WrappedComponent ref={this.props.wrappedRef} {...this.props} />;
+        }
+    }
+    return Wrapper;
+}
+
+/**
+ * Call fn before calling componentDidUpdate on a react component instance, inst.
+ * @param {React.Component} inst an instance of a React component.
+ * @returns {Promise} promise that resolves when componentDidUpdate is called on
+ *                    given component instance.
+ */
+export function waitForUpdate(inst) {
+    return new Promise((resolve, reject) => {
+        const cdu = inst.componentDidUpdate;
+
+        inst.componentDidUpdate = (prevProps, prevState, snapshot) => {
+            resolve();
+
+            if (cdu) cdu(prevProps, prevState, snapshot);
+
+            inst.componentDidUpdate = cdu;
+        };
+    });
 }

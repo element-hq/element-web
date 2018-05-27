@@ -1,4 +1,4 @@
-/*
+/**
 Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,32 +36,26 @@ import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
+const ENABLE_REACT_PERF = false;
 
-export default React.createClass({
-    displayName: 'AppTile',
+export default class AppTile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = this._getNewState(props);
 
-    propTypes: {
-        id: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        room: PropTypes.object.isRequired,
-        type: PropTypes.string.isRequired,
-        // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
-        // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
-        fullWidth: PropTypes.bool,
-        // UserId of the current user
-        userId: PropTypes.string.isRequired,
-        // UserId of the entity that added / modified the widget
-        creatorUserId: PropTypes.string,
-        waitForIframeLoad: PropTypes.bool,
-    },
-
-    getDefaultProps() {
-        return {
-            url: "",
-            waitForIframeLoad: true,
-        };
-    },
+        this._onWidgetAction = this._onWidgetAction.bind(this);
+        this._onMessage = this._onMessage.bind(this);
+        this._onLoaded = this._onLoaded.bind(this);
+        this._onEditClick = this._onEditClick.bind(this);
+        this._onDeleteClick = this._onDeleteClick.bind(this);
+        this._onSnapshotClick = this._onSnapshotClick.bind(this);
+        this.onClickMenuBar = this.onClickMenuBar.bind(this);
+        this._onMinimiseClick = this._onMinimiseClick.bind(this);
+        this._onInitialLoad = this._onInitialLoad.bind(this);
+        this._grantWidgetPermission = this._grantWidgetPermission.bind(this);
+        this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
+        this._onPopoutWidgetClick = this._onPopoutWidgetClick.bind(this);
+    }
 
     /**
      * Set initial component state when the App wUrl (widget URL) is being updated.
@@ -73,8 +67,8 @@ export default React.createClass({
         const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
-            initialising: true,   // True while we are mangling the widget URL
-            loading: this.props.waitForIframeLoad,        // True while the iframe content is loading
+            initialising: true, // True while we are mangling the widget URL
+            loading: this.props.waitForIframeLoad, // True while the iframe content is loading
             widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
@@ -83,8 +77,20 @@ export default React.createClass({
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
+            allowedCapabilities: (this.props.whitelistCapabilities && this.props.whitelistCapabilities.length > 0) ?
+                this.props.whitelistCapabilities : [],
+            requestedCapabilities: [],
         };
-    },
+    }
+
+    /**
+     * Does the widget support a given capability
+     * @param  {string}  capability Capability to check for
+     * @return {Boolean}            True if capability supported
+     */
+    _hasCapability(capability) {
+        return this.state.allowedCapabilities.some((c) => {return c === capability;});
+    }
 
     /**
      * Add widget instance specific parameters to pass in wUrl
@@ -112,11 +118,7 @@ export default React.createClass({
         u.query = params;
 
         return u.format();
-    },
-
-    getInitialState() {
-        return this._getNewState(this.props);
-    },
+    }
 
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
@@ -140,7 +142,7 @@ export default React.createClass({
             }
         }
         return false;
-    },
+    }
 
     isMixedContent() {
         const parentContentProtocol = window.location.protocol;
@@ -152,14 +154,43 @@ export default React.createClass({
             return true;
         }
         return false;
-    },
+    }
 
     componentWillMount() {
-        WidgetMessaging.startListening();
-        WidgetMessaging.addEndpoint(this.props.id, this.props.url);
-        window.addEventListener('message', this._onMessage, false);
         this.setScalarToken();
-    },
+    }
+
+    componentDidMount() {
+        // Legacy Jitsi widget messaging -- TODO replace this with standard widget
+        // postMessaging API
+        window.addEventListener('message', this._onMessage, false);
+
+        // Widget action listeners
+        this.dispatcherRef = dis.register(this._onWidgetAction);
+    }
+
+    componentDidUpdate() {
+        // Allow parents to access widget messaging
+        if (this.props.collectWidgetMessaging) {
+            this.props.collectWidgetMessaging(this.widgetMessaging);
+        }
+    }
+
+    componentWillUnmount() {
+        // Widget action listeners
+        dis.unregister(this.dispatcherRef);
+
+        // Widget postMessage listeners
+        try {
+            if (this.widgetMessaging) {
+                this.widgetMessaging.stop();
+            }
+        } catch (e) {
+            console.error('Failed to stop listening for widgetMessaging events', e.message);
+        }
+        // Jitsi listener
+        window.removeEventListener('message', this._onMessage);
+    }
 
     /**
      * Adds a scalar token to the widget URL, if required
@@ -211,13 +242,7 @@ export default React.createClass({
                 initialising: false,
             });
         });
-    },
-
-    componentWillUnmount() {
-        WidgetMessaging.stopListening();
-        WidgetMessaging.removeEndpoint(this.props.id, this.props.url);
-        window.removeEventListener('message', this._onMessage);
-    },
+    }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
@@ -232,8 +257,10 @@ export default React.createClass({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
         }
-    },
+    }
 
+    // Legacy Jitsi widget messaging
+    // TODO -- This should be replaced with the new widget postMessaging API
     _onMessage(event) {
         if (this.props.type !== 'jitsi') {
             return;
@@ -251,63 +278,145 @@ export default React.createClass({
                 .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
             PlatformPeg.get().setupScreenSharingForIframe(iframe);
         }
-    },
+    }
 
     _canUserModify() {
+        // User widgets should always be modifiable by their creator
+        if (this.props.userWidget && MatrixClientPeg.get().credentials.userId === this.props.creatorUserId) {
+            return true;
+        }
+        // Check if the current user can modify widgets in the current room
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-    },
+    }
 
     _onEditClick(e) {
         console.log("Edit widget ID ", this.props.id);
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-            this.props.room.roomId, 'type_' + this.props.type, this.props.id);
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-            src: src,
-        }, "mx_IntegrationsManager");
-    },
+        if (this.props.onEditClick) {
+            this.props.onEditClick();
+        } else {
+            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+            const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+                this.props.room, 'type_' + this.props.type, this.props.id);
+            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                src: src,
+            }, "mx_IntegrationsManager");
+        }
+    }
+
+    _onSnapshotClick(e) {
+        console.warn("Requesting widget snapshot");
+        this.widgetMessaging.getScreenshot()
+            .catch((err) => {
+                console.error("Failed to get screenshot", err);
+            })
+            .then((screenshot) => {
+                dis.dispatch({
+                    action: 'picture_snapshot',
+                    file: screenshot,
+                }, true);
+            });
+    }
 
     /* If user has permission to modify widgets, delete the widget,
      * otherwise revoke access for the widget to load in the user's browser
     */
     _onDeleteClick() {
-        if (this._canUserModify()) {
-            // Show delete confirmation dialog
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
-                title: _t("Delete Widget"),
-                description: _t(
-                    "Deleting a widget removes it for all users in this room." +
-                    " Are you sure you want to delete this widget?"),
-                button: _t("Delete widget"),
-                onFinished: (confirmed) => {
-                    if (!confirmed) {
-                        return;
-                    }
-                    this.setState({deleting: true});
-                    MatrixClientPeg.get().sendStateEvent(
-                        this.props.room.roomId,
-                        'im.vector.modular.widgets',
-                        {}, // empty content
-                        this.props.id,
-                    ).catch((e) => {
-                        console.error('Failed to delete widget', e);
-                        this.setState({deleting: false});
-                    });
-                },
-            });
+        if (this.props.onDeleteClick) {
+            this.props.onDeleteClick();
         } else {
-            console.log("Revoke widget permissions - %s", this.props.id);
-            this._revokeWidgetPermission();
+            if (this._canUserModify()) {
+                // Show delete confirmation dialog
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                    title: _t("Delete Widget"),
+                    description: _t(
+                        "Deleting a widget removes it for all users in this room." +
+                        " Are you sure you want to delete this widget?"),
+                    button: _t("Delete widget"),
+                    onFinished: (confirmed) => {
+                        if (!confirmed) {
+                            return;
+                        }
+                        this.setState({deleting: true});
+                        MatrixClientPeg.get().sendStateEvent(
+                            this.props.room.roomId,
+                            'im.vector.modular.widgets',
+                            {}, // empty content
+                            this.props.id,
+                        ).catch((e) => {
+                            console.error('Failed to delete widget', e);
+                        }).finally(() => {
+                            this.setState({deleting: false});
+                        });
+                    },
+                });
+            } else {
+                console.log("Revoke widget permissions - %s", this.props.id);
+                this._revokeWidgetPermission();
+            }
         }
-    },
+    }
 
     /**
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
+        if (!this.widgetMessaging) {
+            this._onInitialLoad();
+        }
         this.setState({loading: false});
-    },
+    }
+
+    /**
+     * Called on initial load of the widget iframe
+     */
+    _onInitialLoad() {
+        this.widgetMessaging = new WidgetMessaging(this.props.id, this.props.url, this.refs.appFrame.contentWindow);
+        this.widgetMessaging.getCapabilities().then((requestedCapabilities) => {
+            console.log(`Widget ${this.props.id} requested capabilities:`, requestedCapabilities);
+            requestedCapabilities = requestedCapabilities || [];
+
+            // Allow whitelisted capabilities
+            let requestedWhitelistCapabilies = [];
+
+            if (this.props.whitelistCapabilities && this.props.whitelistCapabilities.length > 0) {
+                requestedWhitelistCapabilies = requestedCapabilities.filter(function(e) {
+                    return this.indexOf(e)>=0;
+                }, this.props.whitelistCapabilities);
+
+                if (requestedWhitelistCapabilies.length > 0 ) {
+                    console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties:`,
+                        requestedWhitelistCapabilies);
+                }
+            }
+
+            // TODO -- Add UI to warn about and optionally allow requested capabilities
+            this.setState({
+                requestedCapabilities,
+                allowedCapabilities: this.state.allowedCapabilities.concat(requestedWhitelistCapabilies),
+            });
+
+            if (this.props.onCapabilityRequest) {
+                this.props.onCapabilityRequest(requestedCapabilities);
+            }
+        }).catch((err) => {
+            console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
+        });
+    }
+
+    _onWidgetAction(payload) {
+        if (payload.widgetId === this.props.id) {
+            switch (payload.action) {
+                case 'm.sticker':
+                if (this._hasCapability('m.sticker')) {
+                    dis.dispatch({action: 'post_sticker_message', data: payload.data});
+                } else {
+                    console.warn('Ignoring sticker message. Invalid capability');
+                }
+                break;
+            }
+        }
+    }
 
     /**
      * Set remote content title on AppTile
@@ -321,7 +430,7 @@ export default React.createClass({
         }, (err) =>{
             console.error("Failed to get page title", err);
         });
-    },
+    }
 
     // Widget labels to render, depending upon user permissions
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
@@ -330,20 +439,20 @@ export default React.createClass({
             return _td('Delete widget');
         }
         return _td('Revoke widget access');
-    },
+    }
 
     /* TODO -- Store permission in account data so that it is persisted across multiple devices */
     _grantWidgetPermission() {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
         this.setState({hasPermissionToLoad: true});
-    },
+    }
 
     _revokeWidgetPermission() {
         console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
         localStorage.removeItem(this.state.widgetPermissionId);
         this.setState({hasPermissionToLoad: false});
-    },
+    }
 
     formatAppTileName() {
         let appTileName = "No name";
@@ -351,7 +460,7 @@ export default React.createClass({
             appTileName = this.props.name.trim();
         }
         return appTileName;
-    },
+    }
 
     onClickMenuBar(ev) {
         ev.preventDefault();
@@ -366,16 +475,49 @@ export default React.createClass({
             action: 'appsDrawer',
             show: !this.props.show,
         });
-    },
+    }
 
     _getSafeUrl() {
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+        const parsedWidgetUrl = url.parse(this.state.widgetUrl, true);
+        if (ENABLE_REACT_PERF) {
+            parsedWidgetUrl.search = null;
+            parsedWidgetUrl.query.react_perf = true;
+        }
         let safeWidgetUrl = '';
         if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
         return safeWidgetUrl;
-    },
+    }
+
+    _getTileTitle() {
+        const name = this.formatAppTileName();
+        const titleSpacer = <span>&nbsp;-&nbsp;</span>;
+        let title = '';
+        if (this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName()) {
+            title = this.state.widgetPageTitle;
+        }
+
+        return (
+            <span>
+                <b>{ name }</b>
+                <span>{ title ? titleSpacer : '' }{ title }</span>
+            </span>
+        );
+    }
+
+    _onMinimiseClick(e) {
+        if (this.props.onMinimiseClick) {
+            this.props.onMinimiseClick();
+        }
+    }
+
+    _onPopoutWidgetClick(e) {
+        // Using Object.assign workaround as the following opens in a new window instead of a new tab.
+        // window.open(this._getSafeUrl(), '_blank', 'noopener=yes,noreferrer=yes');
+        Object.assign(document.createElement('a'),
+            { target: '_blank', href: this._getSafeUrl(), rel: 'noopener noreferrer'}).click();
+    }
 
     render() {
         let appTileBody;
@@ -393,14 +535,22 @@ export default React.createClass({
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
             "allow-same-origin allow-scripts allow-presentation";
 
+        // Additional iframe feature pemissions
+        // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
+        const iframeFeatures = "microphone; camera; encrypted-media;";
+
         if (this.props.show) {
             const loadingElement = (
-                <div className='mx_AppTileBody mx_AppLoading'>
+                <div className="mx_AppLoading_spinner_fadeIn">
                     <MessageSpinner msg='Loading...' />
                 </div>
             );
             if (this.state.initialising) {
-                appTileBody = loadingElement;
+                appTileBody = (
+                    <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
+                        { loadingElement }
+                    </div>
+                );
             } else if (this.state.hasPermissionToLoad == true) {
                 if (this.isMixedContent()) {
                     appTileBody = (
@@ -410,9 +560,15 @@ export default React.createClass({
                     );
                 } else {
                     appTileBody = (
-                        <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
+                        <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
                             { this.state.loading && loadingElement }
+                            { /*
+                                The "is" attribute in the following iframe tag is needed in order to enable rendering of the
+                                "allow" attribute, which is unknown to react 15.
+                            */ }
                             <iframe
+                                is
+                                allow={iframeFeatures}
                                 ref="appFrame"
                                 src={this._getSafeUrl()}
                                 allowFullScreen="true"
@@ -446,29 +602,53 @@ export default React.createClass({
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
+        // Picture snapshot - only show button when apps are maximised.
+        const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
+        const showPictureSnapshotIcon = 'img/camera_green.svg';
+        const popoutWidgetIcon = 'img/button-new-window.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
+                { this.props.showMenubar &&
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    <span className="mx_AppTileMenuBarTitle">
-                        <TintableSvgButton
+                    <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
+                        { this.props.showMinimise && <TintableSvgButton
                             src={windowStateIcon}
                             className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Minimize apps')}
                             width="10"
                             height="10"
-                        />
-                        <b>{ this.formatAppTileName() }</b>
-                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
-                            <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
-                        ) }
+                            onClick={this._onMinimiseClick}
+                        /> }
+                        { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
+                        { /* Popout widget */ }
+                        { this.props.showPopout && <TintableSvgButton
+                            src={popoutWidgetIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Popout widget')}
+                            onClick={this._onPopoutWidgetClick}
+                            width="10"
+                            height="10"
+                        /> }
+
+                        { /* Snapshot widget */ }
+                        { showPictureSnapshotButton && <TintableSvgButton
+                            src={showPictureSnapshotIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Picture')}
+                            onClick={this._onSnapshotClick}
+                            width="10"
+                            height="10"
+                        /> }
+
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
                             src="img/edit_green.svg"
-                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            className={"mx_AppTileMenuBarWidget " +
+                              (this.props.showDelete ? "mx_AppTileMenuBarWidgetPadding" : "")}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
                             width="10"
@@ -476,18 +656,77 @@ export default React.createClass({
                         /> }
 
                         { /* Delete widget */ }
-                        <TintableSvgButton
+                        { this.props.showDelete && <TintableSvgButton
                             src={deleteIcon}
                             className={deleteClasses}
                             title={_t(deleteWidgetLabel)}
                             onClick={this._onDeleteClick}
                             width="10"
                             height="10"
-                        />
+                        /> }
                     </span>
-                </div>
+                </div> }
                 { appTileBody }
             </div>
         );
-    },
-});
+    }
+}
+
+AppTile.displayName ='AppTile';
+
+AppTile.propTypes = {
+    id: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    room: PropTypes.object.isRequired,
+    type: PropTypes.string.isRequired,
+    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
+    // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
+    fullWidth: PropTypes.bool,
+    // UserId of the current user
+    userId: PropTypes.string.isRequired,
+    // UserId of the entity that added / modified the widget
+    creatorUserId: PropTypes.string,
+    waitForIframeLoad: PropTypes.bool,
+    showMenubar: PropTypes.bool,
+    // Should the AppTile render itself
+    show: PropTypes.bool,
+    // Optional onEditClickHandler (overrides default behaviour)
+    onEditClick: PropTypes.func,
+    // Optional onDeleteClickHandler (overrides default behaviour)
+    onDeleteClick: PropTypes.func,
+    // Optional onMinimiseClickHandler
+    onMinimiseClick: PropTypes.func,
+    // Optionally hide the tile title
+    showTitle: PropTypes.bool,
+    // Optionally hide the tile minimise icon
+    showMinimise: PropTypes.bool,
+    // Optionally handle minimise button pointer events (default false)
+    handleMinimisePointerEvents: PropTypes.bool,
+    // Optionally hide the delete icon
+    showDelete: PropTypes.bool,
+    // Optionally hide the popout widget icon
+    showPopout: PropTypes.bool,
+    // Widget capabilities to allow by default (without user confirmation)
+    // NOTE -- Use with caution. This is intended to aid better integration / UX
+    // basic widget capabilities, e.g. injecting sticker message events.
+    whitelistCapabilities: PropTypes.array,
+    // Optional function to be called on widget capability request
+    // Called with an array of the requested capabilities
+    onCapabilityRequest: PropTypes.func,
+    // Is this an instance of a user widget
+    userWidget: PropTypes.bool,
+};
+
+AppTile.defaultProps = {
+    url: "",
+    waitForIframeLoad: true,
+    showMenubar: true,
+    showTitle: true,
+    showMinimise: true,
+    showDelete: true,
+    showPopout: true,
+    handleMinimisePointerEvents: false,
+    whitelistCapabilities: [],
+    userWidget: false,
+};

@@ -16,8 +16,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
-import GeminiScrollbar from 'react-gemini-scrollbar';
+import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
@@ -40,22 +39,31 @@ export default React.createClass({
         this._initGroupStore(this.props.groupId);
     },
 
+    componentWillUnmount() {
+        this._unmounted = true;
+        this._unregisterGroupStore();
+    },
+
+    _unregisterGroupStore() {
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
+    },
+
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(groupId);
-        this._groupStore.registerListener(() => {
-            this._fetchRooms();
-        });
-        this._groupStore.on('error', (err) => {
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
+        // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
+        // XXX: This is also leaked - we should remove it when unmounting
+        GroupStore.on('error', (err, errorGroupId) => {
+            if (errorGroupId !== groupId) return;
             this.setState({
                 rooms: null,
             });
         });
     },
 
-    _fetchRooms: function() {
+    onGroupStoreUpdated: function() {
         if (this._unmounted) return;
         this.setState({
-            rooms: this._groupStore.getGroupRooms(),
+            rooms: GroupStore.getGroupRooms(this.props.groupId),
         });
     },
 
@@ -120,16 +128,17 @@ export default React.createClass({
             </form>
         );
 
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_GroupRoomList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

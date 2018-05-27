@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ limitations under the License.
 
 'use strict';
 
+import ReplyThread from "./components/views/elements/ReplyThread";
+
 const React = require('react');
 const sanitizeHtml = require('sanitize-html');
 const highlight = require('highlight.js');
@@ -25,6 +27,7 @@ import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
+import url from 'url';
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -43,6 +46,8 @@ const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 // And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+
+const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
 /*
  * Return true if the given string contains emoji
@@ -152,6 +157,25 @@ export function sanitizedHtmlNode(insaneHtml) {
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
+/**
+ * Tests if a URL from an untrusted source may be safely put into the DOM
+ * The biggest threat here is javascript: URIs.
+ * Note that the HTML sanitiser library has its own internal logic for
+ * doing this, to which we pass the same list of schemes. This is used in
+ * other places we need to sanitise URLs.
+ * @return true if permitted, otherwise false
+ */
+export function isUrlPermitted(inputUrl) {
+    try {
+        const parsed = url.parse(inputUrl);
+        if (!parsed.protocol) return false;
+        // URL parser protocol includes the trailing colon
+        return PERMITTED_URL_SCHEMES.includes(parsed.protocol.slice(0, -1));
+    } catch (e) {
+        return false;
+    }
+}
+
 const sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
@@ -172,7 +196,7 @@ const sanitizeHtmlParams = {
     // Lots of these won't come up by default because we don't allow them
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
     // URL schemes we permit
-    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'magnet'],
+    allowedSchemes: PERMITTED_URL_SCHEMES,
 
     allowProtocolRelative: false,
 
@@ -386,14 +410,16 @@ class TextHighlighter extends BaseHighlighter {
      *
      * opts.highlightLink: optional href to add to highlighted words
      * opts.disableBigEmoji: optional argument to disable the big emoji class.
+     * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
      */
 export function bodyToHtml(content, highlights, opts={}) {
-    const isHtml = (content.format === "org.matrix.custom.html");
-    const body = isHtml ? content.formatted_body : escape(content.body);
+    const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
 
     let bodyHasEmoji = false;
 
+    let strippedBody;
     let safeBody;
+    let isDisplayedWithHtml;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
     // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
@@ -409,9 +435,33 @@ export function bodyToHtml(content, highlights, opts={}) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
             };
         }
-        safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        bodyHasEmoji = containsEmoji(body);
-        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
+
+        let formattedBody = content.formatted_body;
+        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
+        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
+
+        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+
+
+        // Only generate safeBody if the message was sent as org.matrix.custom.html
+        if (isHtmlMessage) {
+            isDisplayedWithHtml = true;
+            safeBody = sanitizeHtml(formattedBody, sanitizeHtmlParams);
+        } else {
+            // ... or if there are emoji, which we insert as HTML alongside the
+            // escaped plaintext body.
+            if (bodyHasEmoji) {
+                isDisplayedWithHtml = true;
+                safeBody = sanitizeHtml(escape(strippedBody), sanitizeHtmlParams);
+            }
+        }
+
+        // An HTML message with emoji
+        //  or a plaintext message with emoji that was escaped and sanitized into
+        //  HTML.
+        if (bodyHasEmoji) {
+            safeBody = unicodeToImage(safeBody);
+        }
     } finally {
         delete sanitizeHtmlParams.textFilter;
     }
@@ -419,7 +469,7 @@ export function bodyToHtml(content, highlights, opts={}) {
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
         EMOJI_REGEX.lastIndex = 0;
-        const contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        const contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
         const match = EMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
     }
@@ -427,9 +477,12 @@ export function bodyToHtml(content, highlights, opts={}) {
     const className = classNames({
         'mx_EventTile_body': true,
         'mx_EventTile_bigEmoji': emojiBody,
-        'markdown-body': isHtml,
+        'markdown-body': isHtmlMessage,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
+
+    return isDisplayedWithHtml ?
+        <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span className={className} dir="auto">{ strippedBody }</span>;
 }
 
 export function emojifyText(text) {

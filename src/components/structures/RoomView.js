@@ -264,12 +264,19 @@ module.exports = React.createClass({
                     isPeeking: true, // this will change to false if peeking fails
                 });
                 MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
+                    if (this.unmounted) {
+                        return;
+                    }
                     this.setState({
                         room: room,
                         peekLoading: false,
                     });
                     this._onRoomLoaded(room);
                 }, (err) => {
+                    if (this.unmounted) {
+                        return;
+                    }
+
                     // Stop peeking if anything went wrong
                     this.setState({
                         isPeeking: false,
@@ -286,7 +293,7 @@ module.exports = React.createClass({
                     } else {
                         throw err;
                     }
-                }).done();
+                });
             }
         } else if (room) {
             // Stop peeking because we have joined this room previously
@@ -460,6 +467,15 @@ module.exports = React.createClass({
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
                 break;
+            case 'post_sticker_message':
+              this.injectSticker(
+                  payload.data.content.url,
+                  payload.data.content.info,
+                  payload.data.description || payload.data.name);
+              break;
+            case 'picture_snapshot':
+                this.uploadFile(payload.file);
+                break;
             case 'notifier_enabled':
             case 'upload_failed':
             case 'upload_started':
@@ -620,8 +636,8 @@ module.exports = React.createClass({
         const room = this.state.room;
         if (!room) return;
 
-        const color_scheme = SettingsStore.getValue("roomColor", room.room_id);
         console.log("Tinter.tint from updateTint");
+        const color_scheme = SettingsStore.getValue("roomColor", room.roomId);
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
@@ -670,23 +686,7 @@ module.exports = React.createClass({
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
-
-        // if we are now a member of the room, where we were not before, that
-        // means we have finished joining a room we were previously peeking
-        // into.
-        const me = MatrixClientPeg.get().credentials.userId;
-        if (this.state.joining && this.state.room.hasMembershipState(me, "join")) {
-            // Having just joined a room, check to see if it looks like a DM room, and if so,
-            // mark it as one. This is to work around the fact that some clients don't support
-            // is_direct. We should remove this once they do.
-            const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-            if (Rooms.looksLikeDirectMessageRoom(this.state.room, me)) {
-                // XXX: There's not a whole lot we can really do if this fails: at best
-                // perhaps we could try a couple more times, but since it's a temporary
-                // compatability workaround, let's not bother.
-                Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender()).done();
-            }
-        }
+        this._updateDMState();
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -725,6 +725,44 @@ module.exports = React.createClass({
                 confMember.membership === "join"
             ),
         });
+    },
+
+    _updateDMState() {
+        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+        if (!me || me.membership !== "join") {
+            return;
+        }
+
+        // The user may have accepted an invite with is_direct set
+        if (me.events.member.getPrevContent().membership === "invite" &&
+            me.events.member.getPrevContent().is_direct
+        ) {
+            // This is a DM with the sender of the invite event (which we assume
+            // preceded the join event)
+            Rooms.setDMRoom(
+                this.state.room.roomId,
+                me.events.member.getUnsigned().prev_sender,
+            );
+            return;
+        }
+
+        const invitedMembers = this.state.room.getMembersWithMembership("invite");
+        const joinedMembers = this.state.room.getMembersWithMembership("join");
+
+        // There must be one invited member and one joined member
+        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
+            return;
+        }
+
+        // The user may have sent an invite with is_direct sent
+        const other = invitedMembers[0];
+        if (other &&
+            other.membership === "invite" &&
+            other.events.member.getContent().is_direct
+        ) {
+            Rooms.setDMRoom(this.state.room.roomId, other.userId);
+            return;
+        }
     },
 
     onSearchResultsResize: function() {
@@ -819,18 +857,6 @@ module.exports = React.createClass({
                 action: 'join_room',
                 opts: { inviteSignUrl: signUrl },
             });
-
-            // if this is an invite and has the 'direct' hint set, mark it as a DM room now.
-            if (this.state.room) {
-                const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-                if (me && me.membership == 'invite') {
-                    if (me.events.member.getContent().is_direct) {
-                        // The 'direct' hint is there, so declare that this is a DM room for
-                        // whoever invited us.
-                        return Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender());
-                    }
-                }
-            }
             return Promise.resolve();
         });
     },
@@ -882,26 +908,50 @@ module.exports = React.createClass({
         this.setState({ draggingFile: false });
     },
 
-    uploadFile: function(file) {
+    uploadFile: async function(file) {
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
-        ContentMessages.sendContentToRoom(
-            file, this.state.room.roomId, MatrixClientPeg.get(),
-        ).done(undefined, (error) => {
+        try {
+            await ContentMessages.sendContentToRoom(file, this.state.room.roomId, MatrixClientPeg.get());
+        } catch (error) {
             if (error.name === "UnknownDeviceError") {
-                // Let the staus bar handle this
+                // Let the status bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload file " + file + " " + error);
             Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
-                description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
+                description: ((error && error.message)
+                    ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
+
+            // bail early to avoid calling the dispatch below
+            return;
+        }
+
+        // Send message_sent callback, for things like _checkIfAlone because after all a file is still a message.
+        dis.dispatch({
+            action: 'message_sent',
         });
+    },
+
+    injectSticker: function(url, info, text) {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+
+        ContentMessages.sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
+            .done(undefined, (error) => {
+                if (error.name === "UnknownDeviceError") {
+                    // Let the staus bar handle this
+                    return;
+                }
+            });
     },
 
     onSearch: function(term, scope) {
@@ -1586,7 +1636,8 @@ module.exports = React.createClass({
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
               onResize={this.onChildResize}
-              showApps={this.state.showApps && !this.state.editingRoomSettings} >
+              showApps={this.state.showApps}
+              hideAppsDrawer={this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );

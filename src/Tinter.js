@@ -252,7 +252,6 @@ class Tinter {
 
 
     setTheme(theme) {
-        console.trace("setTheme " + theme);
         this.theme = theme;
 
         // update keyRgb from the current theme CSS itself, if it defines it
@@ -299,56 +298,66 @@ class Tinter {
 
         for (let i = 0; i < document.styleSheets.length; i++) {
             const ss = document.styleSheets[i];
-            if (!ss) continue; // well done safari >:(
-            // Chromium apparently sometimes returns null here; unsure why.
-            // see $14534907369972FRXBx:matrix.org in HQ
-            // ...ah, it's because there's a third party extension like
-            // privacybadger inserting its own stylesheet in there with a
-            // resource:// URI or something which results in a XSS error.
-            // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
-            // ...except some browsers apparently return stylesheets without
-            // hrefs, which we have no choice but ignore right now
+            try {
+                if (!ss) continue; // well done safari >:(
+                // Chromium apparently sometimes returns null here; unsure why.
+                // see $14534907369972FRXBx:matrix.org in HQ
+                // ...ah, it's because there's a third party extension like
+                // privacybadger inserting its own stylesheet in there with a
+                // resource:// URI or something which results in a XSS error.
+                // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
+                // ...except some browsers apparently return stylesheets without
+                // hrefs, which we have no choice but ignore right now
 
-            // XXX seriously? we are hardcoding the name of vector's CSS file in
-            // here?
-            //
-            // Why do we need to limit it to vector's CSS file anyway - if there
-            // are other CSS files affecting the doc don't we want to apply the
-            // same transformations to them?
-            //
-            // Iterating through the CSS looking for matches to hack on feels
-            // pretty horrible anyway. And what if the application skin doesn't use
-            // Vector Green as its primary color?
-            // --richvdh
+                // XXX seriously? we are hardcoding the name of vector's CSS file in
+                // here?
+                //
+                // Why do we need to limit it to vector's CSS file anyway - if there
+                // are other CSS files affecting the doc don't we want to apply the
+                // same transformations to them?
+                //
+                // Iterating through the CSS looking for matches to hack on feels
+                // pretty horrible anyway. And what if the application skin doesn't use
+                // Vector Green as its primary color?
+                // --richvdh
 
-            // Yes, tinting assumes that you are using the Riot skin for now.
-            // The right solution will be to move the CSS over to react-sdk.
-            // And yes, the default assets for the base skin might as well use
-            // Vector Green as any other colour.
-            // --matthew
+                // Yes, tinting assumes that you are using the Riot skin for now.
+                // The right solution will be to move the CSS over to react-sdk.
+                // And yes, the default assets for the base skin might as well use
+                // Vector Green as any other colour.
+                // --matthew
 
-            if (ss.href && !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
-            if (ss.disabled) continue;
-            if (!ss.cssRules) continue;
+                // stylesheets we don't have permission to access (eg. ones from extensions) have a null
+                // href and will throw exceptions if we try to access their rules.
+                if (!ss.href || !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
+                if (ss.disabled) continue;
+                if (!ss.cssRules) continue;
 
-            if (DEBUG) console.debug("calcCssFixups checking " + ss.cssRules.length + " rules for " + ss.href);
+                if (DEBUG) console.debug("calcCssFixups checking " + ss.cssRules.length + " rules for " + ss.href);
 
-            for (let j = 0; j < ss.cssRules.length; j++) {
-                const rule = ss.cssRules[j];
-                if (!rule.style) continue;
-                if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
-                for (let k = 0; k < this.cssAttrs.length; k++) {
-                    const attr = this.cssAttrs[k];
-                    for (let l = 0; l < this.keyRgb.length; l++) {
-                        if (rule.style[attr] === this.keyRgb[l]) {
-                            this.cssFixups[this.theme].push({
-                                style: rule.style,
-                                attr: attr,
-                                index: l,
-                            });
+                for (let j = 0; j < ss.cssRules.length; j++) {
+                    const rule = ss.cssRules[j];
+                    if (!rule.style) continue;
+                    if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
+                    for (let k = 0; k < this.cssAttrs.length; k++) {
+                        const attr = this.cssAttrs[k];
+                        for (let l = 0; l < this.keyRgb.length; l++) {
+                            if (rule.style[attr] === this.keyRgb[l]) {
+                                this.cssFixups[this.theme].push({
+                                    style: rule.style,
+                                    attr: attr,
+                                    index: l,
+                                });
+                            }
                         }
                     }
                 }
+            } catch (e) {
+                // Catch any random exceptions that happen here: all sorts of things can go
+                // wrong with this (nulls, SecurityErrors) and mostly it's for other
+                // stylesheets that we don't want to proces anyway. We should not propagate an
+                // exception out since this will cause the app to fail to start.
+                console.log("Failed to calculate CSS fixups for a stylesheet: " + ss.href, e);
             }
         }
         if (DEBUG) {

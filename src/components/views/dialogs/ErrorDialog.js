@@ -52,22 +52,18 @@ export default React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        if (this.props.focus) {
-            this.refs.button.focus();
-        }
-    },
-
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title={this.props.title || _t('Error')}>
-                <div className="mx_Dialog_content">
+                    title={this.props.title || _t('Error')}
+                    contentId='mx_Dialog_content'
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button ref="button" className="mx_Dialog_primary" onClick={this.props.onFinished}>
+                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
                         { this.props.button || _t('OK') }
                     </button>
                 </div>

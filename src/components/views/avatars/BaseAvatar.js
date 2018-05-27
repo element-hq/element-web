@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk';
 import AvatarLogic from '../../../Avatar';
 import sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -36,6 +38,10 @@ module.exports = React.createClass({
         defaultToInitialLetter: PropTypes.bool, // true to add default url
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
     getDefaultProps: function() {
         return {
             width: 40,
@@ -47,6 +53,16 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return this._getState(this.props);
+    },
+
+    componentWillMount() {
+        this.unmounted = false;
+        this.context.matrixClient.on('sync', this.onClientSync);
+    },
+
+    componentWillUnmount() {
+        this.unmounted = true;
+        this.context.matrixClient.removeListener('sync', this.onClientSync);
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -64,6 +80,23 @@ module.exports = React.createClass({
                     break;
                 }
             }
+        }
+    },
+
+    onClientSync: function(syncState, prevState) {
+        if (this.unmounted) return;
+
+        // Consider the client reconnected if there is no error with syncing.
+        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        const reconnected = syncState !== "ERROR" && prevState !== syncState;
+        if (reconnected &&
+            // Did we fall back?
+            this.state.urlsIndex > 0
+        ) {
+            // Start from the highest priority URL again
+            this.setState({
+                urlsIndex: 0,
+            });
         }
     },
 

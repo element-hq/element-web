@@ -302,6 +302,8 @@ var TimelinePanel = React.createClass({
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
+        if (!this._shouldPaginate()) return Promise.resolve(false);
+
         const dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         const canPaginateKey = backwards ? 'canBackPaginate' : 'canForwardPaginate';
         const paginatingKey = backwards ? 'backPaginating' : 'forwardPaginating';
@@ -622,6 +624,7 @@ var TimelinePanel = React.createClass({
                 this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
                 dis.dispatch({
                     action: 'on_room_read',
+                    roomId: this.props.timelineSet.room.roomId,
                 });
             }
         }
@@ -1091,6 +1094,17 @@ var TimelinePanel = React.createClass({
         }, this.props.onReadMarkerUpdated);
     },
 
+    _shouldPaginate: function() {
+        // don't try to paginate while events in the timeline are
+        // still being decrypted. We don't render events while they're
+        // being decrypted, so they don't take up space in the timeline.
+        // This means we can pull quite a lot of events into the timeline
+        // and end up trying to render a lot of events.
+        return !this.state.events.some((e) => {
+            return e.isBeingDecrypted();
+        });
+    },
+
     render: function() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -1108,9 +1122,9 @@ var TimelinePanel = React.createClass({
         // exist.
         if (this.state.timelineLoading) {
             return (
-                    <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                        <Loader />
-                    </div>
+                <div className="mx_RoomView_messagePanelSpinner">
+                    <Loader />
+                </div>
             );
         }
 

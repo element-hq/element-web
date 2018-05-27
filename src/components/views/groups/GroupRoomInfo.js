@@ -21,8 +21,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
-import GeminiScrollbar from 'react-gemini-scrollbar';
+import GroupStore from '../../../stores/GroupStore';
 
 module.exports = React.createClass({
     displayName: 'GroupRoomInfo',
@@ -51,29 +50,26 @@ module.exports = React.createClass({
 
     componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
-            this._unregisterGroupStore();
+            this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
     },
 
     componentWillUnmount() {
-        this._unregisterGroupStore();
+        this._unregisterGroupStore(this.props.groupId);
     },
 
     _initGroupStore(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
-        this._groupStore.registerListener(this.onGroupStoreUpdated);
+        GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
     },
 
-    _unregisterGroupStore() {
-        if (this._groupStore) {
-            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
-        }
+    _unregisterGroupStore(groupId) {
+        GroupStore.unregisterListener(this.onGroupStoreUpdated);
     },
 
     _updateGroupRoom() {
         this.setState({
-            groupRoom: this._groupStore.getGroupRooms().find(
+            groupRoom: GroupStore.getGroupRooms(this.props.groupId).find(
                 (r) => r.roomId === this.props.groupRoomId,
             ),
         });
@@ -81,7 +77,7 @@ module.exports = React.createClass({
 
     onGroupStoreUpdated: function() {
         this.setState({
-            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+            isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
         this._updateGroupRoom();
     },
@@ -101,7 +97,7 @@ module.exports = React.createClass({
                 this.setState({groupRoomRemoveLoading: true});
                 const groupId = this.props.groupId;
                 const roomId = this.props.groupRoomId;
-                this._groupStore.removeRoomFromGroup(roomId).then(() => {
+                GroupStore.removeRoomFromGroup(this.props.groupId, roomId).then(() => {
                     dis.dispatch({
                         action: "view_group_room_list",
                     });
@@ -135,7 +131,7 @@ module.exports = React.createClass({
         const groupId = this.props.groupId;
         const roomId = this.props.groupRoomId;
         const roomName = this.state.groupRoom.displayname;
-        this._groupStore.updateGroupRoomVisibility(roomId, isPublic).catch((err) => {
+        GroupStore.updateGroupRoomVisibility(this.props.groupId, roomId, isPublic).catch((err) => {
             console.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
@@ -157,6 +153,7 @@ module.exports = React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.groupRoomRemoveLoading || !this.state.groupRoom) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <div className="mx_MemberInfo">
@@ -216,7 +213,7 @@ module.exports = React.createClass({
         const avatar = <BaseAvatar name={groupRoomName} width={36} height={36} url={avatarUrl} />;
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbar autoshow={true}>
+                <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
@@ -233,7 +230,7 @@ module.exports = React.createClass({
                     </div>
 
                     { adminTools }
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

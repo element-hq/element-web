@@ -17,8 +17,8 @@ limitations under the License.
 import MatrixClientPeg from './MatrixClientPeg';
 
 export default class WidgetUtils {
-
     /* Returns true if user is able to send state events to modify widgets in this room
+     * (Does not apply to non-room-based / user widgets)
      * @param roomId -- The ID of the room to check
      * @return Boolean -- true if the user can modify widgets in this room
      * @throws Error -- specifies the error reason

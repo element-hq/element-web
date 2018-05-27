@@ -1,0 +1,204 @@
+
+// typical text (dark-on-white in light skin)
+$primary-fg-color: #dddddd;
+$primary-bg-color: #2d2d2d;
+
+// used for focusing form controls
+$focus-bg-color: #101010;
+
+// used for dialog box text
+$light-fg-color: #747474;
+
+// button UI (white-on-green in light skin)
+$accent-fg-color: $primary-bg-color;
+$accent-color: #76CFA6;
+
+$selection-fg-color: $primary-fg-color;
+
+$focus-brightness: 200%;
+
+// red warning colour
+$warning-color: #ff0064;
+
+// groups
+$info-plinth-bg-color: #454545;
+
+$other-user-pill-bg-color: rgba(255, 255, 255, 0.1);
+
+$preview-bar-bg-color: #333;
+
+// left-panel style muted accent color
+$secondary-accent-color: $primary-bg-color;
+$tertiary-accent-color: #454545;
+
+// stop the tinter trying to change the secondary accent color
+// by overriding the key to something untintable
+// XXX: this is a bit of a hack.
+#mx_theme_secondaryAccentColor {
+    color: #c0ffee ! important;
+}
+
+#mx_theme_tertiaryAccentColor {
+    color: #c0ffee ! important;
+}
+
+// used by RoomDirectory permissions
+$plinth-bg-color: #474747;
+
+// used by RoomDropTarget
+$droptarget-bg-color: rgba(45,45,45,0.5);
+
+// used by AddressSelector
+$selected-color: #000000;
+
+// selected for hoverover & selected event tiles
+$event-selected-color: #353535;
+
+// used for the hairline dividers in RoomView
+$primary-hairline-color: #474747;
+
+// used for the border of input text fields
+$input-border-color: #3a3a3a;
+
+// apart from login forms, which have stronger border
+$strong-input-border-color: #656565;
+
+// used for UserSettings EditableText
+$input-underline-color: $primary-fg-color;
+$input-fg-color: $primary-fg-color;
+
+// context menus
+$menu-border-color: rgba(187, 187, 187, 0.5);
+$menu-bg-color: #373737;
+
+$avatar-initial-color: #2d2d2d;
+$avatar-bg-color: #ffffff;
+
+$h3-color: $primary-fg-color;
+
+$dialog-background-bg-color: #000;
+$lightbox-background-bg-color: #000;
+
+$greyed-fg-color: #888;
+
+$neutral-badge-color: #888;
+
+$preview-widget-bar-color: $menu-bg-color;
+$preview-widget-fg-color: $greyed-fg-color;
+
+$blockquote-bar-color: #ddd;
+$blockquote-fg-color: #777;
+
+$settings-grey-fg-color: #a2a2a2;
+
+$voip-decline-color: #f48080;
+$voip-accept-color: #80f480;
+
+$rte-bg-color: #353535;
+$rte-code-bg-color: #000;
+
+// ********************
+
+$roomtile-name-color: rgba(186, 186, 186, 0.8);
+$roomtile-selected-bg-color: #333;
+$roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
+
+$roomsublist-background: rgba(0, 0, 0, 0.2);
+$roomsublist-label-fg-color: $h3-color;
+$roomsublist-label-bg-color: $tertiary-accent-color;
+$roomsublist-chevron-color: $accent-color;
+
+$panel-divider-color: rgba(118, 207, 166, 0.2);
+
+// ********************
+
+$widget-menu-bar-bg-color: $tertiary-accent-color;
+
+// ********************
+
+// event tile lifecycle
+$event-encrypting-color: rgba(171, 221, 188, 0.4);
+$event-sending-color: #888;
+$event-notsent-color: #f44;
+
+// event redaction
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
+
+// event timestamp
+$event-timestamp-color: #acacac;
+
+$edit-button-url: "../../img/icon_context_message_dark.svg";
+$copy-button-url: "../../img/icon_copy_message_dark.svg";
+
+// e2e
+$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
+$e2e-unverified-color: #e8bf37;
+$e2e-warning-color: #ba6363;
+
+/*** ImageView ***/
+$lightbox-bg-color: #454545;
+$lightbox-fg-color: #ffffff;
+$lightbox-border-color: #ffffff;
+
+// unused?
+$progressbar-color: #000;
+
+// XXX: copypasted from _base in order to pick up the right FG color...
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 36px;
+    font-family: $font-family;
+    font-size: 14px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+}
+
+// Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
+// better match the theme.  Typically applied to dark grey 'off' buttons or
+// light grey 'on' buttons.
+.mx_filterFlipColor {
+    filter: invert(1);
+}
+
+.gm-scrollbar .thumb {
+    filter: invert(1);
+}
+
+// markdown overrides:
+.mx_EventTile_content .markdown-body pre:hover {
+    border-color: #808080 !important; // inverted due to rules below
+}
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert(1);
+    }
+
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
+}
+
+// Add a line to the right side of the left panel to distinguish it from the middle panel
+.mx_LeftPanel {
+    border-right: 1px solid $tertiary-accent-color;
+}

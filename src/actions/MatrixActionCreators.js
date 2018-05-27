@@ -63,6 +63,127 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
 }
 
 /**
+ * @typedef RoomAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Room'.
+ * @property {Room} room the Room that was stored.
+ */
+
+/**
+ * Create a MatrixActions.Room action that represents a MatrixClient `Room`
+ * matrix event, emitted when a Room is stored in the client.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {Room} room the Room that was stored.
+ * @returns {RoomAction} an action of type `MatrixActions.Room`.
+ */
+function createRoomAction(matrixClient, room) {
+    return { action: 'MatrixActions.Room', room };
+}
+
+/**
+ * @typedef RoomTagsAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Room.tags'.
+ * @property {Room} room the Room whose tags changed.
+ */
+
+/**
+ * Create a MatrixActions.Room.tags action that represents a MatrixClient
+ * `Room.tags` matrix event, emitted when the m.tag room account data
+ * event is updated.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} roomTagsEvent the m.tag event.
+ * @param {Room} room the Room whose tags were changed.
+ * @returns {RoomTagsAction} an action of type `MatrixActions.Room.tags`.
+ */
+function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
+    return { action: 'MatrixActions.Room.tags', room };
+}
+
+/**
+ * @typedef RoomTimelineAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Room.timeline'.
+ * @property {boolean} isLiveEvent whether the event was attached to a
+ * live timeline.
+ * @property {boolean} isLiveUnfilteredRoomTimelineEvent whether the
+ * event was attached to a timeline in the set of unfiltered timelines.
+ * @property {Room} room the Room whose tags changed.
+ */
+
+/**
+ * Create a MatrixActions.Room.timeline action that represents a
+ * MatrixClient `Room.timeline` matrix event, emitted when an event
+ * is added to or removed from a timeline of a room.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} timelineEvent the event that was added/removed.
+ * @param {Room} room the Room that was stored.
+ * @param {boolean} toStartOfTimeline whether the event is being added
+ * to the start (and not the end) of the timeline.
+ * @param {boolean} removed whether the event was removed from the
+ * timeline.
+ * @param {Object} data
+ * @param {boolean} data.liveEvent whether the event is a live event,
+ * belonging to a live timeline.
+ * @param {EventTimeline} data.timeline the timeline being altered.
+ * @returns {RoomTimelineAction} an action of type `MatrixActions.Room.timeline`.
+ */
+function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTimeline, removed, data) {
+    return {
+        action: 'MatrixActions.Room.timeline',
+        event: timelineEvent,
+        isLiveEvent: data.liveEvent,
+        isLiveUnfilteredRoomTimelineEvent:
+            room && data.timeline.getTimelineSet() === room.getUnfilteredTimelineSet(),
+    };
+}
+
+/**
+ * @typedef RoomMembershipAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.RoomMember.membership'.
+ * @property {RoomMember} member the member whose membership was updated.
+ */
+
+/**
+ * Create a MatrixActions.RoomMember.membership action that represents
+ * a MatrixClient `RoomMember.membership` matrix event, emitted when a
+ * member's membership is updated.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} membershipEvent the m.room.member event.
+ * @param {RoomMember} member the member whose membership was updated.
+ * @param {string} oldMembership the member's previous membership.
+ * @returns {RoomMembershipAction} an action of type `MatrixActions.RoomMember.membership`.
+ */
+function createRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
+    return { action: 'MatrixActions.RoomMember.membership', member };
+}
+
+/**
+ * @typedef EventDecryptedAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Event.decrypted'.
+ * @property {MatrixEvent} event the matrix event that was decrypted.
+ */
+
+/**
+ * Create a MatrixActions.Event.decrypted action that represents
+ * a MatrixClient `Event.decrypted` matrix event, emitted when a
+ * matrix event is decrypted.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} event the matrix event that was decrypted.
+ * @returns {EventDecryptedAction} an action of type `MatrixActions.Event.decrypted`.
+ */
+function createEventDecryptedAction(matrixClient, event) {
+    return { action: 'MatrixActions.Event.decrypted', event };
+}
+
+/**
  * This object is responsible for dispatching actions when certain events are emitted by
  * the given MatrixClient.
  */
@@ -78,6 +199,11 @@ export default {
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+        this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
+        this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
+        this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
+        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
+        this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
     },
 
     /**
@@ -91,7 +217,7 @@ export default {
      */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {
-            dis.dispatch(actionCreator(matrixClient, ...args));
+            dis.dispatch(actionCreator(matrixClient, ...args), true);
         };
         matrixClient.on(eventName, listener);
         this._matrixClientListenersStop.push(() => {

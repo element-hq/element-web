@@ -58,6 +58,7 @@ module.exports = React.createClass({
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: PropTypes.func,
         onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -218,6 +219,8 @@ module.exports = React.createClass({
         if (config.isUrl !== undefined) {
             newState.enteredIdentityServerUrl = config.isUrl;
         }
+
+        this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
@@ -428,10 +431,10 @@ module.exports = React.createClass({
         // FIXME: remove status.im theme tweaks
         const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
-            header = <h2>{ _t('Sign in') }</h2>;
+            header = <h2>{ _t('Sign in') } { loader }</h2>;
         } else {
             if (!this.state.errorText) {
-                header = <h2>{ _t('Sign in to get started') }</h2>;
+                header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
             }
         }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="13" height="13" viewBox="0, 0, 13, 13">
+  <g id="Symbols">
+    <g>
+      <path d="M10.229,5.547 C10.229,8.133 8.133,10.229 5.547,10.229 C2.961,10.229 0.865,8.133 0.865,5.547 C0.865,2.961 2.961,0.865 5.547,0.865 C8.133,0.865 10.229,2.961 10.229,5.547 z" fill-opacity="0" stroke="#76CFA6" stroke-width="1" stroke-linecap="round" id="path-1" opacity="0.7"/>
+      <path d="M8.824,8.824 L12.135,12.135" fill-opacity="0" stroke="#76CFA6" stroke-width="1" stroke-linecap="round" id="Line" opacity="0.7"/>
+    </g>
+  </g>
+</svg>

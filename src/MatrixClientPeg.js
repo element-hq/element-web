@@ -98,7 +98,6 @@ class MatrixClientPeg {
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
-        opts.disablePresence = true; // we do this manually
 
         try {
             const promise = this.matrixClient.store.startup();
@@ -175,4 +174,4 @@ class MatrixClientPeg {
 if (!global.mxMatrixClientPeg) {
     global.mxMatrixClientPeg = new MatrixClientPeg();
 }
-module.exports = global.mxMatrixClientPeg;
+export default global.mxMatrixClientPeg;

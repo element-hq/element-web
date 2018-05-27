@@ -44,6 +44,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
             shouldMatchPrefix: true,
+            shouldMatchWordsOnly: false
         });
 
         this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
@@ -72,6 +73,7 @@ export default class UserProvider extends AutocompleteProvider {
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
 
+        // TODO: lazyload if we have no ev.sender room member?
         this.onUserSpoke(ev.sender);
     }
 
@@ -99,8 +101,13 @@ export default class UserProvider extends AutocompleteProvider {
 
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
-        if (command) {
-            completions = this.matcher.match(command[0]).map((user) => {
+
+        if (!command) return completions;
+
+        const fullMatch = command[0];
+        // Don't search if the query is a single "@"
+        if (fullMatch && fullMatch !== '@') {
+            completions = this.matcher.match(fullMatch).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
@@ -147,6 +154,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     onUserSpoke(user: RoomMember) {
         if (this.users === null) return;
+        if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
         // Move the user that spoke to the front of the array
@@ -158,7 +166,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
+        return <div className="mx_Autocomplete_Completion_container_pill">
             { completions }
         </div>;
     }

@@ -20,19 +20,20 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
-const Rooms = require('../../../Rooms');
+import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
+import RoomListStore from '../../../stores/RoomListStore';
+import GroupStore from '../../../stores/GroupStore';
 
 const HIDE_CONFERENCE_CHANS = true;
+const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function phraseForSection(section) {
     switch (section) {
@@ -75,19 +76,13 @@ module.exports = React.createClass({
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
-        cli.on("Room.timeline", this.onRoomTimeline);
-        cli.on("Room.name", this.onRoomName);
-        cli.on("Room.tags", this.onRoomTags);
         cli.on("Room.receipt", this.onRoomReceipt);
-        cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
         const dmRoomMap = DMRoomMap.shared();
-        this._groupStores = {};
-        this._groupStoreTokens = [];
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
         // in the room list when filtering by that tag.
         this._visibleRoomsForGroup = {
@@ -96,23 +91,27 @@ module.exports = React.createClass({
         // All rooms that should be kept in the room list when filtering.
         // By default, show all rooms.
         this._visibleRooms = MatrixClientPeg.get().getRooms();
-        // When the selected tags are changed, initialise a group store if necessary
-        this._tagStoreToken = TagOrderStore.addListener(() => {
+
+        // Listen to updates to group data. RoomList cares about members and rooms in order
+        // to filter the room list when group tags are selected.
+        this._groupStoreToken = GroupStore.registerListener(null, () => {
             (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
-                if (tag[0] !== '+' || this._groupStores[tag]) {
+                if (tag[0] !== '+') {
                     return;
                 }
-                this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
-                this._groupStoreTokens.push(
-                    this._groupStores[tag].registerListener(() => {
-                        // This group's rooms or members may have updated, update rooms for its tag
-                        this.updateVisibleRoomsForTag(dmRoomMap, tag);
-                        this.updateVisibleRooms();
-                    }),
-                );
+                // This group's rooms or members may have updated, update rooms for its tag
+                this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                this.updateVisibleRooms();
             });
-            // Filters themselves have changed, refresh the selected tags
+        });
+
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            // Filters themselves have changed
             this.updateVisibleRooms();
+        });
+
+        this._roomListStoreToken = RoomListStore.addListener(() => {
+            this._delayedRefreshRoomList();
         });
 
         this.refreshRoomList();
@@ -157,12 +156,6 @@ module.exports = React.createClass({
                     });
                 }
                 break;
-            case 'on_room_read':
-                // Force an update because the notif count state is too deep to cause
-                // an update. This forces the local echo of reading notifs to be
-                // reflected by the RoomTiles.
-                this.forceUpdate();
-                break;
         }
     },
 
@@ -173,11 +166,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
-            MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -188,9 +177,13 @@ module.exports = React.createClass({
             this._tagStoreToken.remove();
         }
 
-        if (this._groupStoreTokens.length > 0) {
-            // NB: GroupStore is not a Flux.Store
-            this._groupStoreTokens.forEach((token) => token.unregister());
+        if (this._roomListStoreToken) {
+            this._roomListStoreToken.remove();
+        }
+
+        // NB: GroupStore is not a Flux.Store
+        if (this._groupStoreToken) {
+            this._groupStoreToken.unregister();
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -229,31 +222,12 @@ module.exports = React.createClass({
         this._updateStickyHeaders(true, scrollToPosition);
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
-        this._delayedRefreshRoomList();
-    },
-
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
             this._delayedRefreshRoomList();
         }
-    },
-
-    onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomTags: function(event, room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomStateEvents: function(ev, state) {
-        this._delayedRefreshRoomList();
     },
 
     onRoomMemberName: function(ev, member) {
@@ -283,12 +257,11 @@ module.exports = React.createClass({
     updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
         // For now, only handle group tags
-        const store = this._groupStores[tag];
-        if (!store) return;
+        if (tag[0] !== '+') return;
 
         this._visibleRoomsForGroup[tag] = [];
-        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
-        store.getGroupMembers().forEach((member) => {
+        GroupStore.getGroupRooms(tag).forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
+        GroupStore.getGroupMembers(tag).forEach((member) => {
             if (member.userId === MatrixClientPeg.get().credentials.userId) return;
             dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
                 (roomId) => this._visibleRoomsForGroup[tag].push(roomId),
@@ -324,12 +297,7 @@ module.exports = React.createClass({
             // Show all rooms
             this._visibleRooms = MatrixClientPeg.get().getRooms();
         }
-
-        this.setState({
-            selectedTags,
-        }, () => {
-            this.refreshRoomList();
-        });
+        this._delayedRefreshRoomList();
     },
 
     refreshRoomList: function() {
@@ -343,78 +311,49 @@ module.exports = React.createClass({
             totalRooms += l.length;
         }
         this.setState({
-            lists: this.getRoomLists(),
+            lists,
             totalRoomCount: totalRooms,
+            // Do this here so as to not render every time the selected tags
+            // themselves change.
+            selectedTags: TagOrderStore.getSelectedTags(),
         });
 
         // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
-        const lists = {};
-        lists["im.vector.fake.invite"] = [];
-        lists["m.favourite"] = [];
-        lists["im.vector.fake.recent"] = [];
-        lists["im.vector.fake.direct"] = [];
-        lists["m.lowpriority"] = [];
-        lists["im.vector.fake.archived"] = [];
+        const lists = RoomListStore.getRoomLists();
 
-        const dmRoomMap = DMRoomMap.shared();
+        const filteredLists = {};
 
-        this._visibleRooms.forEach((room, index) => {
-            const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-            if (!me) return;
+        const isRoomVisible = {
+            // $roomId: true,
+        };
 
-            // console.log("room = " + room.name + ", me.membership = " + me.membership +
-            //             ", sender = " + me.events.member.getSender() +
-            //             ", target = " + me.events.member.getStateKey() +
-            //             ", prevMembership = " + me.events.member.getPrevContent().membership);
+        this._visibleRooms.forEach((r) => {
+            isRoomVisible[r.roomId] = true;
+        });
 
-            if (me.membership == "invite") {
-                lists["im.vector.fake.invite"].push(room);
-            } else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, this.props.ConferenceHandler)) {
-                // skip past this room & don't put it in any lists
-            } else if (me.membership == "join" || me.membership === "ban" ||
-                     (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
-                // Used to split rooms via tags
-                const tagNames = Object.keys(room.tags);
-                if (tagNames.length) {
-                    for (let i = 0; i < tagNames.length; i++) {
-                        const tagName = tagNames[i];
-                        lists[tagName] = lists[tagName] || [];
-                        lists[tagName].push(room);
-                    }
-                } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                    // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push(room);
-                } else {
-                    lists["im.vector.fake.recent"].push(room);
+        Object.keys(lists).forEach((tagName) => {
+            const filteredRooms = lists[tagName].filter((taggedRoom) => {
+                // Somewhat impossible, but guard against it anyway
+                if (!taggedRoom) {
+                    return;
                 }
-            } else if (me.membership === "leave") {
-                lists["im.vector.fake.archived"].push(room);
-            } else {
-                console.error("unrecognised membership: " + me.membership + " - this should never happen");
+                const me = taggedRoom.getMember(MatrixClientPeg.get().credentials.userId);
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, me, this.props.ConferenceHandler)) {
+                    return;
+                }
+
+                return Boolean(isRoomVisible[taggedRoom.roomId]);
+            });
+
+            if (filteredRooms.length > 0 || tagName.match(STANDARD_TAGS_REGEX)) {
+                filteredLists[tagName] = filteredRooms;
             }
         });
 
-        // we actually apply the sorting to this when receiving the prop in RoomSubLists.
-
-        // we'll need this when we get to iterating through lists programatically - e.g. ctrl-shift-up/down
-/*
-        this.listOrder = [
-            "im.vector.fake.invite",
-            "m.favourite",
-            "im.vector.fake.recent",
-            "im.vector.fake.direct",
-            Object.keys(otherTagNames).filter(tagName=>{
-                return (!tagName.match(/^m\.(favourite|lowpriority)$/));
-            }).sort(),
-            "m.lowpriority",
-            "im.vector.fake.archived"
-        ];
-*/
-
-        return lists;
+        return filteredLists;
     },
 
     _getScrollNode: function() {
@@ -565,7 +504,8 @@ module.exports = React.createClass({
     onShowMoreRooms: function() {
         // kick gemini in the balls to get it to wake up
         // XXX: uuuuuuugh.
-        this.refs.gemscroll.forceUpdate();
+        if (!this._gemScroll) return;
+        this._gemScroll.forceUpdate();
     },
 
     _getEmptyContent: function(section) {
@@ -583,17 +523,20 @@ module.exports = React.createClass({
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
 
+        let tip = null;
+
         switch (section) {
             case 'im.vector.fake.direct':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "Press <StartChatButton> to start a chat with someone",
                         {},
                         { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
                     ) }
                 </div>;
+                break;
             case 'im.vector.fake.recent':
-                return <div className="mx_RoomList_emptySubListTip">
+                tip = <div className="mx_RoomList_emptySubListTip">
                     { _t(
                         "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
                         " <RoomDirectoryButton> to browse the directory",
@@ -604,6 +547,13 @@ module.exports = React.createClass({
                         },
                     ) }
                 </div>;
+                break;
+        }
+
+        if (tip) {
+            return <div className="mx_RoomList_emptySubListTip_container">
+                { tip }
+            </div>;
         }
 
         // We don't want to display drop targets if there are no room tiles to drag'n'drop
@@ -646,13 +596,18 @@ module.exports = React.createClass({
         return ret;
     },
 
+    _collectGemini(gemScroll) {
+        this._gemScroll = gemScroll;
+    },
+
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const self = this;
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
+            <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
+                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
                              extraTiles={this._makeGroupInviteTiles()}
@@ -717,7 +672,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                    if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
                              label={tagName}
@@ -758,7 +713,7 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms} />
             </div>
-            </GeminiScrollbar>
+            </GeminiScrollbarWrapper>
         );
     },
 });

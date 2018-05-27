@@ -235,6 +235,7 @@ const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
 const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
 const dis = require("./dispatcher");
+const Widgets = require('./utils/widgets');
 import { _t } from './languageHandler';
 
 function sendResponse(event, res) {
@@ -285,12 +286,58 @@ function inviteUser(event, roomId, userId) {
     });
 }
 
+/**
+ * Returns a promise that resolves when a widget with the given
+ * ID has been added as a user widget (ie. the accountData event
+ * arrives) or rejects after a timeout
+ *
+ * @param {string} widgetId The ID of the widget to wait for
+ * @param {boolean} add True to wait for the widget to be added,
+ *     false to wait for it to be deleted.
+ * @returns {Promise} that resolves when the widget is available
+ */
+function waitForUserWidget(widgetId, add) {
+    return new Promise((resolve, reject) => {
+        const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
+
+        // Tests an account data event, returning true if it's in the state
+        // we're waiting for it to be in
+        function eventInIntendedState(ev) {
+            if (!ev || !currentAccountDataEvent.getContent()) return false;
+            if (add) {
+                return ev.getContent()[widgetId] !== undefined;
+            } else {
+                return ev.getContent()[widgetId] === undefined;
+            }
+        }
+
+        if (eventInIntendedState(currentAccountDataEvent)) {
+            resolve();
+            return;
+        }
+
+        function onAccountData(ev) {
+            if (eventInIntendedState(currentAccountDataEvent)) {
+                MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                clearTimeout(timerId);
+                resolve();
+            }
+        }
+        const timerId = setTimeout(() => {
+            MatrixClientPeg.get().removeListener('accountData', onAccountData);
+            reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
+        }, 10000);
+        MatrixClientPeg.get().on('accountData', onAccountData);
+    });
+}
+
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
     const widgetType = event.data.type;
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
+    const userWidget = event.data.userWidget;
 
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -330,17 +377,64 @@ function setWidget(event, roomId) {
         name: widgetName,
         data: widgetData,
     };
-    if (widgetUrl === null) { // widget is being deleted
-        content = {};
-    }
 
-    client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
-        sendResponse(event, {
-            success: true,
+    if (userWidget) {
+        const client = MatrixClientPeg.get();
+        const userWidgets = Widgets.getUserWidgets();
+
+        // Delete existing widget with ID
+        try {
+            delete userWidgets[widgetId];
+        } catch (e) {
+            console.error(`$widgetId is non-configurable`);
+        }
+
+        // Add new widget / update
+        if (widgetUrl !== null) {
+            userWidgets[widgetId] = {
+                content: content,
+                sender: client.getUserId(),
+                state_key: widgetId,
+                type: 'm.widget',
+                id: widgetId,
+            };
+        }
+
+        // This starts listening for when the echo comes back from the server
+        // since the widget won't appear added until this happens. If we don't
+        // wait for this, the action will complete but if the user is fast enough,
+        // the widget still won't actually be there.
+        client.setAccountData('m.widgets', userWidgets).then(() => {
+            return waitForUserWidget(widgetId, widgetUrl !== null);
+        }).then(() => {
+            sendResponse(event, {
+                success: true,
+            });
+
+            dis.dispatch({ action: "user_widget_updated" });
+        }).catch((e) => {
+            sendError(event, _t('Unable to create widget.'), e);
         });
-    }, (err) => {
-        sendError(event, _t('Failed to send request.'), err);
-    });
+    } else { // Room widget
+        if (!roomId) {
+            sendError(event, _t('Missing roomId.'), null);
+        }
+
+        if (widgetUrl === null) { // widget is being deleted
+            content = {};
+        }
+        // TODO - Room widgets need to be moved to 'm.widget' state events
+        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
+        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
+            // XXX: We should probably wait for the echo of the state event to come back from the server,
+            // as we do with user widgets.
+            sendResponse(event, {
+                success: true,
+            });
+        }, (err) => {
+            sendError(event, _t('Failed to send request.'), err);
+        });
+    }
 }
 
 function getWidgets(event, roomId) {
@@ -349,19 +443,30 @@ function getWidgets(event, roomId) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    const room = client.getRoom(roomId);
-    if (!room) {
-        sendError(event, _t('This room is not recognised.'));
-        return;
-    }
-    const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
-    // Only return widgets which have required fields
-    const widgetStateEvents = [];
-    stateEvents.forEach((ev) => {
-        if (ev.getContent().type && ev.getContent().url) {
-            widgetStateEvents.push(ev.event); // return the raw event
+    let widgetStateEvents = [];
+
+    if (roomId) {
+        const room = client.getRoom(roomId);
+        if (!room) {
+            sendError(event, _t('This room is not recognised.'));
+            return;
         }
-    });
+        // TODO - Room widgets need to be moved to 'm.widget' state events
+        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
+        const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
+        // Only return widgets which have required fields
+        if (room) {
+            stateEvents.forEach((ev) => {
+                if (ev.getContent().type && ev.getContent().url) {
+                    widgetStateEvents.push(ev.event); // return the raw event
+                }
+            });
+        }
+    }
+
+    // Add user widgets (not linked to a specific room)
+    const userWidgets = Widgets.getUserWidgetsArray();
+    widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
 }
@@ -563,7 +668,7 @@ const onMessage = function(event) {
     const url = SdkConfig.get().integrations_ui_url;
     if (
         event.origin.length === 0 ||
-        !url.startsWith(event.origin) ||
+        !url.startsWith(event.origin + '/') ||
         !event.data.action ||
         event.data.api // Ignore messages with specific API set
     ) {
@@ -578,9 +683,22 @@ const onMessage = function(event) {
 
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
+
     if (!roomId) {
-        sendError(event, _t('Missing room_id in request'));
-        return;
+        // These APIs don't require roomId
+        // Get and set user widgets (not associated with a specific room)
+        // If roomId is specified, it must be validated, so room-based widgets agreed
+        // handled further down.
+        if (event.data.action === "get_widgets") {
+            getWidgets(event, null);
+            return;
+        } else if (event.data.action === "set_widget") {
+            setWidget(event, null);
+            return;
+        } else {
+            sendError(event, _t('Missing room_id in request'));
+            return;
+        }
     }
     let promise = Promise.resolve(currentRoomId);
     if (!currentRoomId) {
@@ -601,6 +719,15 @@ const onMessage = function(event) {
             return;
         }
 
+        // Get and set room-based widgets
+        if (event.data.action === "get_widgets") {
+            getWidgets(event, roomId);
+            return;
+        } else if (event.data.action === "set_widget") {
+            setWidget(event, roomId);
+            return;
+        }
+
         // These APIs don't require userId
         if (event.data.action === "join_rules_state") {
             getJoinRules(event, roomId);
@@ -610,12 +737,6 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_membership_count") {
             getMembershipCount(event, roomId);
-            return;
-        } else if (event.data.action === "set_widget") {
-            setWidget(event, roomId);
-            return;
-        } else if (event.data.action === "get_widgets") {
-            getWidgets(event, roomId);
             return;
         } else if (event.data.action === "get_room_enc_state") {
             getRoomEncState(event, roomId);

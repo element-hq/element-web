@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,44 +36,74 @@ export default React.createClass({
         Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
     },
 
-    _continueClicked: function() {
-        this.props.onFinished(true);
+    _onClearStorageClick: function() {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('Session Restore Confirm Logout', '', QuestionDialog, {
+            title: _t("Sign out"),
+            description:
+                <div>{ _t("Log out and remove encryption keys?") }</div>,
+            button: _t("Sign out"),
+            danger: true,
+            onFinished: this.props.onFinished,
+        });
+    },
+
+    _onRefreshClick: function() {
+        // Is this likely to help? Probably not, but giving only one button
+        // that clears your storage seems awful.
+        window.location.reload(true);
     },
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        let bugreport;
 
+        const clearStorageButton = (
+            <button onClick={this._onClearStorageClick} className="danger">
+                { _t("Clear Storage and Sign Out") }
+            </button>
+        );
+
+        let dialogButtons;
         if (SdkConfig.get().bug_report_endpoint_url) {
-            bugreport = (
-                <p>
-                { _t(
-                    "Otherwise, <a>click here</a> to send a bug report.",
-                    {},
-                    { 'a': (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{ sub }</a> },
-                ) }
-                </p>
-            );
+            dialogButtons = <DialogButtons primaryButton={_t("Send Logs")}
+                onPrimaryButtonClick={this._sendBugReport}
+                focus={true}
+                hasCancel={false}
+            >
+                { clearStorageButton }
+            </DialogButtons>;
+        } else {
+            dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
+                onPrimaryButtonClick={this._onRefreshClick}
+                focus={true}
+                hasCancel={false}
+            >
+                { clearStorageButton }
+            </DialogButtons>;
         }
 
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title={_t('Unable to restore session')}>
-                <div className="mx_Dialog_content">
-                    <p>{ _t("We encountered an error trying to restore your previous session. If " +
-                    "you continue, you will need to log in again, and encrypted chat " +
-                    "history will be unreadable.") }</p>
+                title={_t('Unable to restore session')}
+                contentId='mx_Dialog_content'
+                hasCancel={false}
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    <p>{ _t("We encountered an error trying to restore your previous session.") }</p>
 
-                    <p>{ _t("If you have previously used a more recent version of Riot, your session " +
-                    "may be incompatible with this version. Close this window and return " +
-                    "to the more recent version.") }</p>
+                    <p>{ _t(
+                        "If you have previously used a more recent version of Riot, your session " +
+                        "may be incompatible with this version. Close this window and return " +
+                        "to the more recent version.",
+                     ) }</p>
 
-                    { bugreport }
+                    <p>{ _t(
+                        "Clearing your browser's storage may fix the problem, but will sign you " +
+                        "out and cause any encrypted chat history to become unreadable.",
+                    ) }</p>
                 </div>
-                <DialogButtons primaryButton={_t("Continue anyway")}
-                    onPrimaryButtonClick={this._continueClicked}
-                    onCancel={this.props.onFinished} />
+                { dialogButtons }
             </BaseDialog>
         );
     },

@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
@@ -64,6 +63,7 @@ const gHVersionLabel = function(repo, token='') {
 const SIMPLE_SETTINGS = [
     { id: "urlPreviewsEnabled" },
     { id: "autoplayGifsAndVideos" },
+    { id: "alwaysShowEncryptionIcons" },
     { id: "hideReadReceipts" },
     { id: "dontSendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
@@ -79,14 +79,16 @@ const SIMPLE_SETTINGS = [
     { id: "Pill.shouldHidePillAvatar" },
     { id: "TextualBody.disableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
+    { id: "TagPanel.disableTagPanel" },
+    { id: "enableWidgetScreenshots" },
 ];
 
 // These settings must be defined in SettingsStore
 const ANALYTICS_SETTINGS = [
     {
-        id: 'analyticsOptOut',
+        id: 'analyticsOptIn',
         fn: function(checked) {
-            Analytics[checked ? 'disable' : 'enable']();
+            checked ? Analytics.enable() : Analytics.disable();
         },
     },
 ];
@@ -794,11 +796,18 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Bug Report") }</h3>
+                <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Found a bug?") }</p>
-                    <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{ _t('Report it') }
+                    <p>{
+                        _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contain messages.",
+                        )
+                    }</p>
+                    <button className="mx_UserSettings_button"
+                        onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
             </div>
@@ -1110,6 +1119,7 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const Notifications = sdk.getComponent("settings.Notifications");
         const EditableText = sdk.getComponent('elements.EditableText');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
@@ -1205,8 +1215,9 @@ module.exports = React.createClass({
                     onCancelClick={this.props.onClose}
                 />
 
-                <GeminiScrollbar className="mx_UserSettings_body"
-                                 autoshow={true}>
+                <GeminiScrollbarWrapper
+                    className="mx_UserSettings_body"
+                    autoshow={true}>
 
                 <h3>{ _t("Profile") }</h3>
 
@@ -1319,7 +1330,7 @@ module.exports = React.createClass({
 
                 { this._renderDeactivateAccount() }
 
-                </GeminiScrollbar>
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

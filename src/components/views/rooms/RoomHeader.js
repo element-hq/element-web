@@ -327,9 +327,8 @@ module.exports = React.createClass({
             );
         } else if (this.props.room || (this.props.oobData && this.props.oobData.name)) {
             roomAvatar = (
-                <div onClick={this.props.onSettingsClick}>
-                    <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData} />
-                </div>
+                <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData}
+                    viewAvatarOnClick={true} />
             );
         }
 
@@ -392,7 +391,7 @@ module.exports = React.createClass({
         let manageIntegsButton;
         if (this.props.room && this.props.room.roomId && this.props.inRoom) {
             manageIntegsButton = <ManageIntegsButton
-                roomId={this.props.room.roomId}
+                room={this.props.room}
             />;
         }
 

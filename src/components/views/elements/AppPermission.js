@@ -52,6 +52,10 @@ export default class AppPermission extends React.Component {
             e2eWarningText =
                 <span className='mx_AppPermissionWarningTextLabel'>{ _t('NOTE: Apps are not end-to-end encrypted') }</span>;
         }
+        const cookieWarning =
+            <span className='mx_AppPermissionWarningTextLabel'>
+                { _t('Warning: This widget might use cookies.') }
+            </span>;
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarningImage'>
@@ -60,6 +64,7 @@ export default class AppPermission extends React.Component {
                 <div className='mx_AppPermissionWarningText'>
                     <span className='mx_AppPermissionWarningTextLabel'>{ _t('Do you want to load widget from URL:') }</span> <span className='mx_AppPermissionWarningTextURL'>{ this.state.curlBase }</span>
                     { e2eWarningText }
+                    { cookieWarning }
                 </div>
                 <input
                     className='mx_AppPermissionButton'

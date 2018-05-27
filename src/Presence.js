@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ class Presence {
         this.running = true;
         if (undefined === this.state) {
             this._resetTimer();
-            this.dispatcherRef = dis.register(this._onUserActivity.bind(this));
+            this.dispatcherRef = dis.register(this._onAction.bind(this));
         }
     }
 
@@ -57,26 +58,12 @@ class Presence {
     }
 
     /**
-     * Get the current status message.
-     * @returns {String} the status message, may be null
-     */
-    getStatusMessage() {
-        return this.statusMessage;
-    }
-
-    /**
      * Set the presence state.
      * If the state has changed, the Home Server will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
-     * @param {String} statusMessage an optional status message for the presence
-     * @param {boolean} maintain true to have this status maintained by this tracker
      */
-    setState(newState, statusMessage=null, maintain=false) {
-        if (this.maintain) {
-            // Don't update presence if we're maintaining a particular status
-            return;
-        }
-        if (newState === this.state && statusMessage === this.statusMessage) {
+    setState(newState) {
+        if (newState === this.state) {
             return;
         }
         if (PRESENCE_STATES.indexOf(newState) === -1) {
@@ -86,35 +73,19 @@ class Presence {
             return;
         }
         const old_state = this.state;
-        const old_message = this.statusMessage;
         this.state = newState;
-        this.statusMessage = statusMessage;
-        this.maintain = maintain;
 
         if (MatrixClientPeg.get().isGuest()) {
             return; // don't try to set presence when a guest; it won't work.
         }
 
-        const updateContent = {
-            presence: this.state,
-            status_msg: this.statusMessage ? this.statusMessage : '',
-        };
-
         const self = this;
-        MatrixClientPeg.get().setPresence(updateContent).done(function() {
+        MatrixClientPeg.get().setPresence(this.state).done(function() {
             console.log("Presence: %s", newState);
-
-            // We have to dispatch because the js-sdk is unreliable at telling us about our own presence
-            dis.dispatch({action: "self_presence_updated", statusInfo: updateContent});
         }, function(err) {
             console.error("Failed to set presence: %s", err);
             self.state = old_state;
-            self.statusMessage = old_message;
         });
-    }
-
-    stopMaintainingStatus() {
-        this.maintain = false;
     }
 
     /**
@@ -125,9 +96,10 @@ class Presence {
         this.setState("unavailable");
     }
 
-    _onUserActivity(payload) {
-        if (payload.action === "sync_state" || payload.action === "self_presence_updated") return;
-        this._resetTimer();
+    _onAction(payload) {
+        if (payload.action === "user_activity") {
+            this._resetTimer();
+        }
     }
 
     /**

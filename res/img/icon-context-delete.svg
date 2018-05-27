@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="15" height="15" viewBox="0, 0, 15, 15">
+  <g id="Extra-icons">
+    <g>
+      <path d="M3.45,3.45 L11.55,11.55" fill-opacity="0" stroke="#FF0064" stroke-width="1" stroke-linecap="round" id="Line"/>
+      <path d="M11.55,3.45 L3.45,11.55" fill-opacity="0" stroke="#FF0064" stroke-width="1" stroke-linecap="round" id="Line-Copy-2"/>
+    </g>
+  </g>
+</svg>

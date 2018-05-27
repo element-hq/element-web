@@ -32,9 +32,10 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
+import ReplyThread from "../elements/ReplyThread";
 
 linkifyMatrix(linkify);
 
@@ -182,7 +183,6 @@ module.exports = React.createClass({
 
                 // If the link is a (localised) matrix.to link, replace it with a pill
                 const Pill = sdk.getComponent('elements.Pill');
-                const Quote = sdk.getComponent('elements.Quote');
                 if (Pill.isMessagePillUrl(href)) {
                     const pillContainer = document.createElement('span');
 
@@ -201,19 +201,6 @@ module.exports = React.createClass({
 
                     // update the current node with one that's now taken its place
                     node = pillContainer;
-                } else if (SettingsStore.isFeatureEnabled("feature_rich_quoting") && Quote.isMessageUrl(href)) {
-                    // only allow this branch if we're not already in a quote, as fun as infinite nesting is.
-                    const quoteContainer = document.createElement('span');
-
-                    const quote =
-                        <Quote url={href} parentEv={this.props.mxEvent} isNested={this.props.tileShape === 'quote'} />;
-
-                    ReactDOM.render(quote, quoteContainer);
-                    node.parentNode.replaceChild(quoteContainer, node);
-
-                    pillified = true;
-
-                    node = quoteContainer;
                 }
             } else if (node.nodeType == Node.TEXT_NODE) {
                 const Pill = sdk.getComponent('elements.Pill');
@@ -331,7 +318,7 @@ module.exports = React.createClass({
 
     _addCodeCopyButton() {
         // Add 'copy' buttons to pre blocks
-        ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
+        Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
             button.onclick = (e) => {
@@ -435,8 +422,12 @@ module.exports = React.createClass({
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
+        const stripReply = SettingsStore.isFeatureEnabled("feature_rich_quoting") &&
+            ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
+            // Part of Replies fallback support
+            stripReplyFallback: stripReply,
         });
 
         if (this.props.highlightLink) {
