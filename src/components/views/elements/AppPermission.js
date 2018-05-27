@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
+import WidgetUtils from "../../../WidgetUtils";
 
 export default class AppPermission extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ export default class AppPermission extends React.Component {
 
         const searchParams = new URLSearchParams(wurl.search);
 
-        if (this.isScalarWurl(wurl) && searchParams && searchParams.get('url')) {
+        if (WidgetUtils.isScalarUrl(wurl) && searchParams && searchParams.get('url')) {
             curl = url.parse(searchParams.get('url'));
             if (curl) {
                 curl.search = curl.query = "";
@@ -32,26 +33,6 @@ export default class AppPermission extends React.Component {
             curlString = wurl.format();
         }
         return curlString;
-    }
-
-    isScalarWurl(wurl) {
-        // Exit early if we've been given bad data
-        if (!wurl) {
-            return false;
-        }
-
-        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
-        if (!scalarUrls || scalarUrls.length == 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
-        }
-
-        const url = wurl.format();
-        for (const scalarUrl of scalarUrls) {
-            if (url.startsWith(scalarUrl)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     render() {

@@ -121,39 +121,6 @@ export default class AppTile extends React.Component {
         return u.format();
     }
 
-    /**
-     * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
-     * @param  {[type]}  testUrlString URL to check
-     * @return {Boolean} True if specified URL is a scalar URL
-     */
-    isScalarUrl(testUrlString) {
-        if (!testUrlString) {
-            console.error('Scalar URL check failed. No URL specified');
-            return false;
-        }
-
-        const testUrl = url.parse(testUrlString);
-
-        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
-        if (!scalarUrls || scalarUrls.length == 0) {
-            scalarUrls = [SdkConfig.get().integrations_rest_url];
-        }
-
-        for (let i = 0; i < scalarUrls.length; i++) {
-            const scalarUrl = url.parse(scalarUrls[i]);
-            if (testUrl && scalarUrl) {
-                if (
-                    testUrl.protocol === scalarUrl.protocol &&
-                    testUrl.host === scalarUrl.host &&
-                    testUrl.pathname.startsWith(scalarUrl.pathname)
-                ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     isMixedContent() {
         const parentContentProtocol = window.location.protocol;
         const u = url.parse(this.props.url);
@@ -209,7 +176,7 @@ export default class AppTile extends React.Component {
     setScalarToken() {
         this.setState({initialising: true});
 
-        if (!this.isScalarUrl(this.props.url)) {
+        if (!WidgetUtils.isScalarUrl(this.props.url)) {
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
                 error: null,
