@@ -80,7 +80,9 @@ module.exports = React.createClass({
                     { unpinButton }
                 </div>
 
-                <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                <span className="mx_PinnedEventTile_senderAvatar">
+                    <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                </span>
                 <span className="mx_PinnedEventTile_sender">
                     { sender.name }
                 </span>
