@@ -44,7 +44,7 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
-import SettingsStore from "../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -115,6 +115,7 @@ module.exports = React.createClass({
             showApps: false,
             isAlone: false,
             isPeeking: false,
+            showingPinned: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -182,6 +183,7 @@ module.exports = React.createClass({
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
+            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
         };
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
@@ -1135,7 +1137,10 @@ module.exports = React.createClass({
     },
 
     onPinnedClick: function() {
-        this.setState({showingPinned: !this.state.showingPinned, searching: false});
+        const nowShowingPinned = !this.state.showingPinned;
+        const roomId = this.state.room.roomId;
+        this.setState({showingPinned: nowShowingPinned, searching: false});
+        SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
     },
 
     onSettingsClick: function() {
