@@ -395,7 +395,17 @@ module.exports = React.createClass({
             powerLevels["events"] = Object.assign({}, this.state.powerLevels["events"] || {});
             powerLevels["events"][powerLevelKey.slice(eventsLevelPrefix.length)] = value;
         } else {
-            powerLevels[powerLevelKey] = value;
+            const keyPath = powerLevelKey.split('.');
+            let parentObj;
+            let currentObj = powerLevels;
+            for (const key of keyPath) {
+                if (!currentObj[key]) {
+                    currentObj[key] = {};
+                }
+                parentObj = currentObj;
+                currentObj = currentObj[key];
+            }
+            parentObj[keyPath[keyPath.length - 1]] = value;
         }
         this.setState({
             powerLevels,
@@ -664,6 +674,10 @@ module.exports = React.createClass({
                 desc: _t('To remove other users\' messages, you must be a'),
                 defaultValue: 50,
             },
+            "notifications.room": {
+                desc: _t('To notify everyone in the room, you must be a'),
+                defaultValue: 50,
+            },
         };
 
         const banLevel = parseIntWithDefault(powerLevels.ban, powerLevelDescriptors.ban.defaultValue);
@@ -865,7 +879,16 @@ module.exports = React.createClass({
         const powerSelectors = Object.keys(powerLevelDescriptors).map((key, index) => {
             const descriptor = powerLevelDescriptors[key];
 
-            const value = parseIntWithDefault(powerLevels[key], descriptor.defaultValue);
+            const keyPath = key.split('.');
+            let currentObj = powerLevels;
+            for (const prop of keyPath) {
+                if (currentObj === undefined) {
+                    break;
+                }
+                currentObj = currentObj[prop];
+            }
+
+            const value = parseIntWithDefault(currentObj, descriptor.defaultValue);
             return <div key={index} className="mx_RoomSettings_powerLevel">
                 <span className="mx_RoomSettings_powerLevelKey">
                     { descriptor.desc }
