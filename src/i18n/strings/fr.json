@@ -1195,5 +1195,6 @@
     "Yes, I want to help!": "Oui, je veux aider !",
     "Can't leave Server Notices room": "Impossible de quitter le salon des Annonces du serveur",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ce salon est utilisé pour les messages importants du serveur d'accueil, donc vous ne pouvez pas en partir.",
-    "To notify everyone in the room, you must be a": "Pour notifier tout le monde dans le salon, vous devez être un(e)"
+    "To notify everyone in the room, you must be a": "Pour notifier tout le monde dans le salon, vous devez être un(e)",
+    "Try the app first": "Essayer d'abord l'application"
 }
