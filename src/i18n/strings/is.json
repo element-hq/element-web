@@ -631,7 +631,7 @@
     "Login as guest": "Skrá inn sem gestur",
     "Sign in to get started": "Skráðu þig inn til að komast í gang",
     "Failed to fetch avatar URL": "Ekki tókst að sækja slóð á auðkennismynd",
-    "Set a display name:": "Stilltu birtingarnafn",
+    "Set a display name:": "Stilltu birtingarnafn:",
     "Password too short (min %(MIN_PASSWORD_LENGTH)s).": "Lykilorð er of stutt (lágmark %(MIN_PASSWORD_LENGTH)s).",
     "You need to enter a user name.": "Þú þarft að setja inn notandanafn.",
     "I already have an account": "Ég er nú þegar með notandaaðgang",
