@@ -23,5 +23,17 @@
     "Co-ordination for Riot translators": "Yfirlit fyrir þýðendur Riot",
     "Search the room directory": "Leita í herbergisskránni",
     "Building services on Matrix": "Að byggja þjónustur á Matrix",
-    "Design and implementation of E2E in Matrix": "Hönnun og framkvæmd E2E í Matrix"
+    "Design and implementation of E2E in Matrix": "Hönnun og framkvæmd E2E í Matrix",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Þú getur notað sérsniðna valkosti til að skrá inn á aðra Matrix-vefþjóna með því að tilgreina aðra slóð á Heimavefþjón.<br/>Þetta gerir þér kleift að nota Riot með fyrirliggjandi Matrix notandaaðgangi á öðrum heimaþjóni.<br/><br/>Þú getur líka stillt sérsniðinn auðkenningarþjón, en þá getur þú ekki boðið notendum eftir tölvupóstfangi eða sjálfur fengið boð með tölvupósti.",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]",
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Margar spjallrásir eru til í Matrix, tengdar við fyrirliggjandi netkerfi (Slack, IRC, Gitter, o.s.frv.) eða óháð. Skoðaðu skráninguna!",
+    "Community-run support for Synapse": "Aðstoð frá samfélaginu fyrir Synapse",
+    "Admin support for Dendrite": "Kerfisstjórnarstuðningur fyrir Dendrite",
+    "Announcements about Synapse releases": "Tilkynningar um Synapse útgáfur",
+    "Support for those using and running matrix-appservice-irc": "Stuðningur við þá sem nota og keyra matrix-appservice-irc",
+    "Support for those using the Matrix spec": "Stuðningur við þá sem nota tæknilega Matrix eiginleika",
+    "Discussion of the Identity Service API": "Umræða um Identity Service API-kerfisviðmót",
+    "Support for those using, running and writing other bridges": "Stuðningur við þá sem nota, keyra og skrifa aðrar brýr",
+    "Dev chat for the Riot/Web dev team": "Forritaraspjall fyrir Riot/vefþróunarhópinn",
+    "Dev chat for the Dendrite dev team": "Forritaraspjall fyrir Dendrite þróunarhópinn"
 }
