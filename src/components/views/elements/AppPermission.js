@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../WidgetUtils";
 
 export default class AppPermission extends React.Component {

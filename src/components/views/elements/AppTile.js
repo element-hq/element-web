@@ -25,7 +25,6 @@ import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import TintableSvgButton from './TintableSvgButton';
-import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
