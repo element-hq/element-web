@@ -442,4 +442,10 @@ input[type=radio]:checked:after {
     background-color: $roomtile-selected-bg-color !important;
 }
 
+.mx_NetworkDropdown_networkoption img {
+    border-radius: 3px;
+    padding: 1px;
+    background-color: $avatar-bg-color;
+}
+
 // ********************
