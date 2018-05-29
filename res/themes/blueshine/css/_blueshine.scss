@@ -385,3 +385,13 @@ input[type=radio]:checked:after {
 .mx_MessageComposer_formatbar_wrapper {
     background-color: #A2AEB8 !important;
 }
+
+/*
+// Commented as webpack/scss or something else removes the !Important flag for some reason
+.mx_AppPermissionButton {
+    background-color: $accent-color !important;
+}
+
+.mx_AppPermissionButton:hover {
+    background-color: $accent-hover-color !important;
+}*/
