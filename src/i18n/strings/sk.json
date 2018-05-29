@@ -735,7 +735,7 @@
     "Enable automatic language detection for syntax highlighting": "Povoliť automatickú detegciu jazyka pre zvýrazňovanie syntaxe",
     "Automatically replace plain text Emoji": "Automaticky nahrádzať textové Emoji",
     "Disable Emoji suggestions while typing": "Zakázať návrhy Emoji počas písania",
-    "Hide avatars in user and room mentions": "Skryť avatarov pri zmienkach miestností a používateľov",
+    "Hide avatars in user and room mentions": "Skryť profilové obrázky pri zmienkach miestností a používateľov",
     "Disable big emoji in chat": "Zakázať veľké Emoji v konverzácii",
     "Mirror local video feed": "Zrkadliť lokálne video",
     "Disable Peer-to-Peer for 1:1 calls": "Zakázať P2P počas priamych volaní",
