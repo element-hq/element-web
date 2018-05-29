@@ -26,7 +26,7 @@ $primary-fg-color: #DFE0E1;
 $primary-bg-color: #18191D;
 
 // ***** Start of Status theme specifics ******
-$header-color: #49555F;
+$header-color: #96A2AC;
 $header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
 
 $footer-color: #8D99A4;
@@ -125,7 +125,7 @@ $input-fg-color: #EBECED;
 
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
-$menu-bg-color: #45A28E;
+$menu-bg-color: #49555F;
 
 $avatar-initial-color: #ffffff;
 $avatar-bg-color: #F8F9FA;
@@ -169,7 +169,7 @@ $panel-divider-color: rgba(0, 0, 0, 0.2);
 
 // ********************
 
-$widget-menu-bar-bg-color: #f7f7f7;
+$widget-menu-bar-bg-color: #7C8892;
 
 // ********************
 
@@ -364,4 +364,21 @@ input[type=radio]:checked:after {
 
 .mx_TopUnreadMessagesBar_scrollUp {
     color: #FCCD04;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+    background-color: #00968B !important;
+}
+
+.mx_Autocomplete_Completion.selected {
+    background: $menu-bg-color !important;
+    outline: none;
+}
+
+.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
+    color: #1F2833;
+}
+
+.mx_AppPermissionWarning {
+    background-color: #49555F !important;
 }
