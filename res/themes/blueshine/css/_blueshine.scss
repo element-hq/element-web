@@ -284,7 +284,7 @@ $progressbar-color: #000;
     top: 8px ! important;
 }
 
-// ***** Start of Blueshine theme Custom inputs ******
+// ***** Start of Blueshine theme Custom Thingys ******
 
 // ***** Custom Checkboxes *****
 input[type=checkbox] {
@@ -313,7 +313,6 @@ input[type=checkbox]:checked:after {
 }
 
 // ***** Custom Radio Buttons *****
-
 input[type=radio] {
     cursor: pointer;
     -webkit-appearance: none;
@@ -340,6 +339,44 @@ input[type=radio]:checked:after {
 // make Dialogs look roundish
 .mx_Dialog {
     border-radius: 10px;
+}
+
+// ***** Custom Login *****
+
+.mx_Login_box {
+    background-color: #49555F;
+    border-radius: 10px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.mx_Login_field {
+    background-color: $primary-bg-color !important;
+}
+
+.mx_Dropdown .mx_Login_language {
+    background-color: $primary-bg-color !important;
+}
+
+.mx_Dropdown .mx_Login_type_dropdown {
+    background-color: $primary-bg-color !important;
+}
+
+.mx_RightPanel {
+    background-color: $event-selected-color;
+    padding-left: 5px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.mx_RightPanel_headerButtonGroup {
+    background-color: $event-selected-color !important;
+    padding-left: 5px;
+}
+
+.mx_LeftPanel {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 // ********************
@@ -399,6 +436,10 @@ input[type=radio]:checked:after {
 
 .mx_RoomDirectory_perm {
     color: #4056A1 !important;
+}
+
+.mx_RoomSubList_moreBadge {
+    background-color: $roomtile-selected-bg-color !important;
 }
 
 // ********************
