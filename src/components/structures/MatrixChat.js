@@ -794,7 +794,6 @@ export default React.createClass({
     // @param {string=} roomInfo.room_id ID of the room to join. One of room_id or room_alias must be given.
     // @param {string=} roomInfo.room_alias Alias of the room to join. One of room_id or room_alias must be given.
     // @param {boolean=} roomInfo.auto_join If true, automatically attempt to join the room if not already a member.
-    // @param {boolean=} roomInfo.show_settings Makes RoomView show the room settings dialog.
     // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
     // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
