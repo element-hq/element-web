@@ -372,7 +372,6 @@ input[type=radio]:checked:after {
 
 .mx_Autocomplete_Completion.selected {
     background: $menu-bg-color !important;
-    outline: none;
 }
 
 .mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
@@ -381,4 +380,8 @@ input[type=radio]:checked:after {
 
 .mx_AppPermissionWarning {
     background-color: #49555F !important;
+}
+
+.mx_MessageComposer_formatbar_wrapper {
+    background-color: #A2AEB8 !important;
 }
