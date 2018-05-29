@@ -560,6 +560,27 @@ export default React.createClass({
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
+            case 'close_settings':
+                this.setState({
+                    leftDisabled: false,
+                    rightDisabled: false,
+                    middleDisabled: false,
+                });
+                if (this.state.page_type === PageTypes.UserSettings) {
+                    // We do this to get setPage and notifyNewScreen
+                    if (this.state.currentRoomId) {
+                        this._viewRoom({
+                            room_id: this.state.currentRoomId,
+                        });
+                    } else if (this.state.currentGroupId) {
+                        this._viewGroup({
+                            group_id: this.state.currentGroupId,
+                        });
+                    } else {
+                        this._viewHome();
+                    }
+                }
+                break;
             case 'view_create_room':
                 this._createRoom();
                 break;
@@ -577,19 +598,10 @@ export default React.createClass({
                 this.notifyNewScreen('groups');
                 break;
             case 'view_group':
-                {
-                    const groupId = payload.group_id;
-                    this.setState({
-                        currentGroupId: groupId,
-                        currentGroupIsNew: payload.group_is_new,
-                    });
-                    this._setPage(PageTypes.GroupView);
-                    this.notifyNewScreen('group/' + groupId);
-                }
+                this._viewGroup(payload);
                 break;
             case 'view_home_page':
-                this._setPage(PageTypes.HomePage);
-                this.notifyNewScreen('home');
+                this._viewHome();
                 break;
             case 'view_set_mxid':
                 this._setMxId(payload);
@@ -632,7 +644,8 @@ export default React.createClass({
                     middleDisabled: payload.middleDisabled || false,
                     rightDisabled: payload.rightDisabled || payload.sideDisabled || false,
                 });
-                break; }
+                break;
+            }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
@@ -846,6 +859,21 @@ export default React.createClass({
             newState.ready = true;
             this.setState(newState);
         });
+    },
+
+    _viewGroup: function(payload) {
+        const groupId = payload.group_id;
+        this.setState({
+            currentGroupId: groupId,
+            currentGroupIsNew: payload.group_is_new,
+        });
+        this._setPage(PageTypes.GroupView);
+        this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewHome: function() {
+        this._setPage(PageTypes.HomePage);
+        this.notifyNewScreen('home');
     },
 
     _setMxId: function(payload) {
@@ -1606,19 +1634,8 @@ export default React.createClass({
         this._setPageSubtitle(subtitle);
     },
 
-    onUserSettingsClose: function() {
-        // XXX: use browser history instead to find the previous room?
-        // or maintain a this.state.pageHistory in _setPage()?
-        if (this.state.currentRoomId) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: this.state.currentRoomId,
-            });
-        } else {
-            dis.dispatch({
-                action: 'view_home_page',
-            });
-        }
+    onCloseAllSettings() {
+        dis.dispatch({ action: 'close_settings' });
     },
 
     onServerConfigChange(config) {
@@ -1677,7 +1694,7 @@ export default React.createClass({
                 return (
                    <LoggedInView ref={this._collectLoggedInView} matrixClient={MatrixClientPeg.get()}
                         onRoomCreated={this.onRoomCreated}
-                        onUserSettingsClose={this.onUserSettingsClose}
+                        onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                         teamToken={this._teamToken}
