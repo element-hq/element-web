@@ -26,6 +26,7 @@ module.exports = {
         "theme-light":  "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark":   "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
         "theme-status": "./res/themes/status/css/status.scss",
+        "theme-blueshine": "./res/themes/blueshine/css/blueshine.scss",
     },
     module: {
         preLoaders: [
