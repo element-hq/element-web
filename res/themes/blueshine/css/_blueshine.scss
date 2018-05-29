@@ -21,11 +21,10 @@
 
 $font-family: PostGrotesk-Book, Arial, Helvetica, Sans-Serif;
 
-// typical text (dark-on-white in light skin)
+// ***** Start of Blueshine theme specifics ******
 $primary-fg-color: #DFE0E1;
 $primary-bg-color: #18191D;
 
-// ***** Start of Status theme specifics ******
 $header-color: #96A2AC;
 $header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
 
@@ -285,9 +284,9 @@ $progressbar-color: #000;
     top: 8px ! important;
 }
 
-//Custom inputs
+// ***** Start of Blueshine theme Custom inputs ******
 
-// Checkboxes
+// ***** Custom Checkboxes *****
 input[type=checkbox] {
     cursor: pointer;
     -webkit-appearance: none;
@@ -302,7 +301,7 @@ input[type=checkbox]:after {
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
-    //no spaces in between as it breaks the settings page
+    // no spaces in between as it breaks the settings page
     content: "[]";
     color: #45A29E;
     display:block;
@@ -313,7 +312,7 @@ input[type=checkbox]:checked:after {
     color: #45A29E;
 }
 
-// Radio Buttons
+// ***** Custom Radio Buttons *****
 
 input[type=radio] {
     cursor: pointer;
@@ -328,7 +327,7 @@ input[type=radio]:after {
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
-    //no spaces in between as it breaks the settings page
+    // no spaces in between as it breaks the settings page
     content: "()";
     color: #45A29E;
     display:block;
@@ -343,7 +342,9 @@ input[type=radio]:checked:after {
     border-radius: 10px;
 }
 
-// Fix css
+// ********************
+
+// ***** CSS Fixes needed for the blueshine theme as not all variables fit nicely *****
 .mx_UserSettings_ignoredUsersSection ul li {
     margin-bottom: 1em;
 }
@@ -395,3 +396,5 @@ input[type=radio]:checked:after {
 .mx_AppPermissionButton:hover {
     background-color: $accent-hover-color !important;
 }*/
+
+// ********************
