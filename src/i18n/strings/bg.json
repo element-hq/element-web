@@ -1187,5 +1187,6 @@
     "Terms and Conditions": "Правила и условия",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "За да продължите да ползвате %(homeserverDomain)s е необходимо да прегледате и да се съгласите с правилата и условията за ползване.",
     "Review terms and conditions": "Прегледай правилата и условията",
-    "Failed to indicate account erasure": "Неуспешно указване на желанието за изтриване на акаунта"
+    "Failed to indicate account erasure": "Неуспешно указване на желанието за изтриване на акаунта",
+    "Try the app first": "Първо пробвайте приложението"
 }
