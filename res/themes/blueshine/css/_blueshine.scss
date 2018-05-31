@@ -213,10 +213,8 @@ $progressbar-color: #000;
     color: $accent-fg-color;
     cursor: pointer;
     outline: none;
-    padding: 14px;
     box-sizing: border-box;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding: 14px 1.5em;
     display: inline-block;
     transition: background-color .2s ease;
 }
@@ -228,10 +226,7 @@ $progressbar-color: #000;
 @define-mixin mx_DialogButton_small {
     @mixin mx_DialogButton;
     height: auto;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding: 7px 1em;
 }
 
 .mx_RoomSubList_label {
@@ -261,10 +256,7 @@ $progressbar-color: #000;
     color: #fff ! important;
     background-color: transparent ! important;
     border-radius: 6px ! important;
-    margin-left: 6px ! important;
-    margin-right: 6px ! important;
-    margin-top: 8px ! important;
-    margin-bottom: 7px ! important;
+    margin: 8px 6px 7px !important;
     padding: 8px ! important;
 }
 
@@ -446,6 +438,10 @@ input[type=radio]:checked:after {
     border-radius: 3px;
     padding: 1px;
     background-color: $avatar-bg-color;
+}
+
+.mx_MemberInfo_profileField {
+    background-color: #1F2833 !important;
 }
 
 // ********************
