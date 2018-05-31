@@ -313,9 +313,13 @@ async function loadApp() {
                 // FIXME: we should probably block loading the app or even
                 // showing a spinner until the theme is loaded, to avoid
                 // flashes of unstyled content.
-                a.onload = () => {
+                if (typeof InstallTrigger !== 'undefined') {
                     Tinter.setTheme(theme);
-                };
+                } else {
+                    a.onload = () => {
+                        Tinter.setTheme(theme);
+                    };
+                }
             } else {
                 // Firefox requires this to not be done via `setAttribute`
                 // or via HTML.
