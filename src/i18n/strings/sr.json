@@ -903,7 +903,6 @@
     "Error: Problem communicating with the given homeserver.": "Грешка: проблем у комуницирању са датим кућним сервером.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не могу да се повежем на кућни сервер преко HTTP-а када се користи HTTPS адреса у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Не могу да се повежем на кућни сервер. Проверите вашу интернет везу, постарајте се да верујете <a>SSL сертификату кућног сервера</a> и да проширење прегледача не блокира захтеве.",
-    "Login as guest": "Пријави се као гост",
     "Sign in to get started": "Пријави се да почнеш",
     "Failed to fetch avatar URL": "Нисам успео да добавим адресу аватара",
     "Set a display name:": "Постави приказно име:",

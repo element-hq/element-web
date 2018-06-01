@@ -822,7 +822,6 @@
     "Error: Problem communicating with the given homeserver.": "Chyba: Nie je možné komunikovať so zadaným domovským serverom.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "K domovskému serveru nie je možné pripojiť sa použitím protokolu HTTP keďže v adresnom riadku prehliadača máte HTTPS adresu. Použite protokol HTTPS alebo <a>povolte nezabezpečené skripty</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nie je možné pripojiť sa k domovskému serveru - skontrolujte prosím funkčnosť vašeho pripojenia na internet, uistite sa že <a>certifikát  domovského servera</a> je dôverihodný, a že žiaden doplnok nainštalovaný v prehliadači nemôže blokovať požiadavky.",
-    "Login as guest": "Prihlásiť sa ako hosť",
     "Failed to fetch avatar URL": "Nepodarilo sa získať URL adresu obrázka",
     "Set a display name:": "Nastaviť zobrazované meno:",
     "Upload an avatar:": "Nahrať obrázok:",

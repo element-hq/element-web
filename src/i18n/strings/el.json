@@ -142,7 +142,6 @@
     "%(targetName)s left the room.": "Ο χρήστης %(targetName)s έφυγε από το δωμάτιο.",
     "Local addresses for this room:": "Τοπική διεύθυνση για το δωμάτιο:",
     "Logged in as:": "Συνδεθήκατε ως:",
-    "Login as guest": "Σύνδεση ως επισκέπτης",
     "Logout": "Αποσύνδεση",
     "Low priority": "Χαμηλής προτεραιότητας",
     "matrix-react-sdk version:": "Έκδοση matrix-react-sdk:",
