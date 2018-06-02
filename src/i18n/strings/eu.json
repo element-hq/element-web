@@ -1194,5 +1194,6 @@
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso dituzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)",
     "Can't leave Server Notices room": "Ezin zara Server Notices gelatik atera",
-    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Gela hau mezu hasiera zerbitzariaren garrantzitsuak bidaltzeko erabiltzen da, eta ezin zara atera."
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Gela hau mezu hasiera zerbitzariaren garrantzitsuak bidaltzeko erabiltzen da, eta ezin zara atera.",
+    "Try the app first": "Probatu aplikazioa aurretik"
 }
