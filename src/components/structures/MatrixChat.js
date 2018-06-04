@@ -398,6 +398,9 @@ export default React.createClass({
     },
 
     startPageChangeTimer() {
+        // Tor doesn't support performance
+        if (!performance || !performance.mark) return null;
+
         // This shouldn't happen because componentWillUpdate and componentDidUpdate
         // are used.
         if (this._pageChanging) {
@@ -409,6 +412,9 @@ export default React.createClass({
     },
 
     stopPageChangeTimer() {
+        // Tor doesn't support performance
+        if (!performance || !performance.mark) return null;
+
         if (!this._pageChanging) {
             console.warn('MatrixChat.stopPageChangeTimer: timer not started');
             return;
