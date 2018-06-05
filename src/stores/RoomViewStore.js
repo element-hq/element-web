@@ -44,6 +44,8 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
+
+    isEditingSettings: false,
 };
 
 /**
@@ -114,6 +116,16 @@ class RoomViewStore extends Store {
             case 'reply_to_event':
                 this._setState({
                     replyingToEvent: payload.event,
+                });
+                break;
+            case 'open_room_settings':
+                this._setState({
+                    isEditingSettings: true,
+                });
+                break;
+            case 'close_settings':
+                this._setState({
+                    isEditingSettings: false,
                 });
                 break;
         }
@@ -299,6 +311,10 @@ class RoomViewStore extends Store {
     // The mxEvent if one is currently being replied to/quoted
     getQuotingEvent() {
         return this._state.replyingToEvent;
+    }
+
+    isEditingSettings() {
+        return this._state.isEditingSettings;
     }
 
     shouldPeek() {
