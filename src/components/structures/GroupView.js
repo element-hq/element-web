@@ -432,11 +432,14 @@ export default React.createClass({
 
         this._changeAvatarComponent = null;
         this._initGroupStore(this.props.groupId, true);
+
+        this._dispatcherRef = dis.register(this._onAction);
     },
 
     componentWillUnmount: function() {
         this._unmounted = true;
         this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
+        dis.unregister(this._dispatcherRef);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -563,12 +566,22 @@ export default React.createClass({
         this._closeSettings();
     },
 
+    _onAction(payload) {
+        switch (payload.action) {
+            // NOTE: close_settings is an app-wide dispatch; as it is dispatched from MatrixChat
+            case 'close_settings':
+                this.setState({
+                    editing: false,
+                    profileForm: null,
+                });
+                break;
+            default:
+                break;
+        }
+    },
+
     _closeSettings() {
-        this.setState({
-            editing: false,
-            profileForm: null,
-        });
-        dis.dispatch({action: 'panel_disable'});
+        dis.dispatch({action: 'close_settings'});
     },
 
     _onNameChange: function(value) {
