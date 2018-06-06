@@ -234,19 +234,34 @@ async function loadApp() {
     // set the platform for react sdk (our Platform object automatically picks the right one)
     PlatformPeg.set(new Platform());
 
-    // Load the config file. First try to load up a domain-specific config of the
-    // form "config.$domain.json" and if that fails, fall back to config.json.
+    // Load `config.json` and `config.$domain.json`, with 2 overriding 1 if both exist,
+    // otherwise using whichever of the 2 exists.
     let configJson;
     let configError;
+
+    // Load both config files concurrently
+    const configDomainPromise = getConfig(`config.${document.domain}.json`);
+    const configPromise = getConfig('config.json');
+    // try and use the base `config.json`
     try {
-        try {
-            configJson = await getConfig(`config.${document.domain}.json`);
-            // 404s succeed with an empty json config, so check that there are keys
-            if (Object.keys(configJson).length === 0) {
-                throw new Error(); // throw to enter the catch
+        configJson = await configPromise;
+        if (Object.keys(configJson).length === 0) throw new Error();
+    } catch (e) {
+        configError = e;
+    }
+    // If domain-specific exists, use it to override values from `config.json` if that loaded.
+    try {
+        const config = await configDomainPromise;
+        // 404s succeed with an empty json config, so check that there are keys
+        if (Object.keys(config).length > 0) {
+            if (configError) {
+                // if configError is set at this point then we can't override fields so lets just try domain config
+                configJson = config;
+                // use the domain config as sole config, clear previous error
+                configError = undefined;
+            } else {
+                configJson = Object.assign(configJson, config);
             }
-        } catch (e) {
-            configJson = await getConfig("config.json");
         }
     } catch (e) {
         configError = e;
