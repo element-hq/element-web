@@ -17,6 +17,7 @@ limitations under the License.
 
 import TagTile from './TagTile';
 
+import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
 export default function DNDTagTile(props) {
