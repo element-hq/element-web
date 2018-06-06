@@ -264,6 +264,13 @@ async function loadApp() {
 
     const configJson = await loadConfig();
 
+    if (!configJson) {
+        window.matrixChat = ReactDOM.render(<div className="error">
+            Unable to load config file: please refresh the page to try again.
+        </div>, document.getElementById('matrixchat'));
+        return;
+    }
+
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     SdkConfig.put(configJson);
@@ -343,11 +350,7 @@ async function loadApp() {
     }
 
     console.log("Vector starting at "+window.location);
-    if (!configJson) {
-        window.matrixChat = ReactDOM.render(<div className="error">
-            Unable to load config file: please refresh the page to try again.
-        </div>, document.getElementById('matrixchat'));
-    } else if (validBrowser) {
+    if (validBrowser) {
         const platform = PlatformPeg.get();
         platform.startUpdater();
 
