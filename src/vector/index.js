@@ -225,6 +225,34 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
+// defined in order starting with base config
+const configFiles = [
+    'config.json',
+    `config.${document.domain}.json`,
+];
+
+async function loadConfig() {
+    // load all configs concurrently, await on them in order each overriding the previous if exists, error only all fail
+
+    const promises = configFiles.map((configFile) => getConfig(configFile));
+
+    let configJson = undefined;
+    for (const promise of promises) {
+        try {
+            const config = await promise;
+            // 404s succeed with an empty json config, so check that there are keys
+            if (Object.keys(config).length > 0) {
+                configJson = Object.assign(configJson || {}, config);
+            }
+        } catch (e) {
+            // ignore error here, instead error=!configJson
+            // since the error content never gets used
+        }
+    }
+
+    return configJson;
+}
+
 async function loadApp() {
     await loadLanguage();
 
@@ -234,41 +262,7 @@ async function loadApp() {
     // set the platform for react sdk (our Platform object automatically picks the right one)
     PlatformPeg.set(new Platform());
 
-    // Load `config.json` and `config.$domain.json`, with 2 overriding 1 if both exist,
-    // otherwise using whichever of the 2 exists.
-    let configJson;
-    let configError;
-
-    // Load both config files concurrently
-    const configDomainPromise = getConfig(`config.${document.domain}.json`);
-    const configPromise = getConfig('config.json');
-    // try and use the base `config.json`
-    try {
-        configJson = await configPromise;
-        if (Object.keys(configJson).length === 0) throw new Error();
-    } catch (e) {
-        configError = e;
-    }
-    // If domain-specific exists, use it to override values from `config.json` if that loaded.
-    try {
-        const config = await configDomainPromise;
-        // 404s succeed with an empty json config, so check that there are keys
-        if (Object.keys(config).length > 0) {
-            if (configError) {
-                // if configError is set at this point then we can't override fields so lets just try domain config
-                configJson = config;
-                // use the domain config as sole config, clear previous error
-                configError = undefined;
-            } else {
-                configJson = Object.assign(configJson, config);
-            }
-        }
-    } catch (e) {
-        // if base config loaded we can ignore this error
-        if (!configError) {
-            configError = e;
-        }
-    }
+    const configJson = await loadConfig();
 
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
@@ -349,7 +343,7 @@ async function loadApp() {
     }
 
     console.log("Vector starting at "+window.location);
-    if (configError) {
+    if (!configJson) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
