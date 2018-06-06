@@ -264,7 +264,10 @@ async function loadApp() {
             }
         }
     } catch (e) {
-        configError = e;
+        // if base config loaded we can ignore this error
+        if (!configError) {
+            configError = e;
+        }
     }
 
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
