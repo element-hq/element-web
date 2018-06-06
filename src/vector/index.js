@@ -231,6 +231,7 @@ const configFiles = [
     `config.${document.domain}.json`,
 ];
 
+// Loads a composite config made from applying the fields from each of the above configs in order to a common object
 async function loadConfig() {
     // load all configs concurrently, await on them in order each overriding the previous if exists, error only all fail
     const promises = configFiles.map((configFile) => getConfig(configFile));
