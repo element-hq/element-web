@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
+import SdkConfig from "./SdkConfig";
+import * as url from "url";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -54,5 +56,38 @@ export default class WidgetUtils {
         }
 
         return room.currentState.maySendStateEvent('im.vector.modular.widgets', me);
+    }
+
+    /**
+     * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
+     * @param  {[type]}  testUrlString URL to check
+     * @return {Boolean} True if specified URL is a scalar URL
+     */
+    static isScalarUrl(testUrlString) {
+        if (!testUrlString) {
+            console.error('Scalar URL check failed. No URL specified');
+            return false;
+        }
+
+        const testUrl = url.parse(testUrlString);
+
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length === 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        for (let i = 0; i < scalarUrls.length; i++) {
+            const scalarUrl = url.parse(scalarUrls[i]);
+            if (testUrl && scalarUrl) {
+                if (
+                    testUrl.protocol === scalarUrl.protocol &&
+                    testUrl.host === scalarUrl.host &&
+                    testUrl.pathname.startsWith(scalarUrl.pathname)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

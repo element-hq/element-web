@@ -398,6 +398,9 @@ export default React.createClass({
     },
 
     startPageChangeTimer() {
+        // Tor doesn't support performance
+        if (!performance || !performance.mark) return null;
+
         // This shouldn't happen because componentWillUpdate and componentDidUpdate
         // are used.
         if (this._pageChanging) {
@@ -409,6 +412,9 @@ export default React.createClass({
     },
 
     stopPageChangeTimer() {
+        // Tor doesn't support performance
+        if (!performance || !performance.mark) return null;
+
         if (!this._pageChanging) {
             console.warn('MatrixChat.stopPageChangeTimer: timer not started');
             return;
@@ -560,6 +566,27 @@ export default React.createClass({
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
+            case 'close_settings':
+                this.setState({
+                    leftDisabled: false,
+                    rightDisabled: false,
+                    middleDisabled: false,
+                });
+                if (this.state.page_type === PageTypes.UserSettings) {
+                    // We do this to get setPage and notifyNewScreen
+                    if (this.state.currentRoomId) {
+                        this._viewRoom({
+                            room_id: this.state.currentRoomId,
+                        });
+                    } else if (this.state.currentGroupId) {
+                        this._viewGroup({
+                            group_id: this.state.currentGroupId,
+                        });
+                    } else {
+                        this._viewHome();
+                    }
+                }
+                break;
             case 'view_create_room':
                 this._createRoom();
                 break;
@@ -577,19 +604,10 @@ export default React.createClass({
                 this.notifyNewScreen('groups');
                 break;
             case 'view_group':
-                {
-                    const groupId = payload.group_id;
-                    this.setState({
-                        currentGroupId: groupId,
-                        currentGroupIsNew: payload.group_is_new,
-                    });
-                    this._setPage(PageTypes.GroupView);
-                    this.notifyNewScreen('group/' + groupId);
-                }
+                this._viewGroup(payload);
                 break;
             case 'view_home_page':
-                this._setPage(PageTypes.HomePage);
-                this.notifyNewScreen('home');
+                this._viewHome();
                 break;
             case 'view_set_mxid':
                 this._setMxId(payload);
@@ -632,7 +650,8 @@ export default React.createClass({
                     middleDisabled: payload.middleDisabled || false,
                     rightDisabled: payload.rightDisabled || payload.sideDisabled || false,
                 });
-                break; }
+                break;
+            }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
@@ -781,7 +800,6 @@ export default React.createClass({
     // @param {string=} roomInfo.room_id ID of the room to join. One of room_id or room_alias must be given.
     // @param {string=} roomInfo.room_alias Alias of the room to join. One of room_id or room_alias must be given.
     // @param {boolean=} roomInfo.auto_join If true, automatically attempt to join the room if not already a member.
-    // @param {boolean=} roomInfo.show_settings Makes RoomView show the room settings dialog.
     // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
     // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
@@ -846,6 +864,21 @@ export default React.createClass({
             newState.ready = true;
             this.setState(newState);
         });
+    },
+
+    _viewGroup: function(payload) {
+        const groupId = payload.group_id;
+        this.setState({
+            currentGroupId: groupId,
+            currentGroupIsNew: payload.group_is_new,
+        });
+        this._setPage(PageTypes.GroupView);
+        this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewHome: function() {
+        this._setPage(PageTypes.HomePage);
+        this.notifyNewScreen('home');
     },
 
     _setMxId: function(payload) {
@@ -1606,19 +1639,8 @@ export default React.createClass({
         this._setPageSubtitle(subtitle);
     },
 
-    onUserSettingsClose: function() {
-        // XXX: use browser history instead to find the previous room?
-        // or maintain a this.state.pageHistory in _setPage()?
-        if (this.state.currentRoomId) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: this.state.currentRoomId,
-            });
-        } else {
-            dis.dispatch({
-                action: 'view_home_page',
-            });
-        }
+    onCloseAllSettings() {
+        dis.dispatch({ action: 'close_settings' });
     },
 
     onServerConfigChange(config) {
@@ -1677,7 +1699,7 @@ export default React.createClass({
                 return (
                    <LoggedInView ref={this._collectLoggedInView} matrixClient={MatrixClientPeg.get()}
                         onRoomCreated={this.onRoomCreated}
-                        onUserSettingsClose={this.onUserSettingsClose}
+                        onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                         teamToken={this._teamToken}
