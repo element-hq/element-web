@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ require('draft-js/dist/Draft.css');
 
 const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
-    console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
+    console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 " +
+        "to fix line numbers on Chrome.");
     rageshake.cleanup();
 }, (err) => {
     console.error("Failed to initialise rageshake: " + err);
@@ -47,14 +48,14 @@ if (process.env.NODE_ENV !== 'production') {
     global.Perf = require("react-addons-perf");
 }
 
-var RunModernizrTests = require("./modernizr"); // this side-effects a global
-var ReactDOM = require("react-dom");
-var sdk = require("matrix-react-sdk");
+require("./modernizr"); // this side-effects a global
+const ReactDOM = require("react-dom");
+const sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
-var VectorConferenceHandler = require('matrix-react-sdk/lib/VectorConferenceHandler');
+const VectorConferenceHandler = require('matrix-react-sdk/lib/VectorConferenceHandler');
 import Promise from 'bluebird';
-var request = require('browser-request');
+const request = require('browser-request');
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 // Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -65,13 +66,13 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
-var lastLocationHashSet = null;
+let lastLocationHashSet = null;
 
-var CallHandler = require("matrix-react-sdk/lib/CallHandler");
+const CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
 
 MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
@@ -81,12 +82,12 @@ function checkBrowserFeatures(featureList) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
-    var featureComplete = true;
-    for (var i = 0; i < featureList.length; i++) {
+    let featureComplete = true;
+    for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
             console.error(
                 "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i]
+                "Has it been configured correctly?", featureList[i],
             );
             return false;
         }
@@ -100,7 +101,7 @@ function checkBrowserFeatures(featureList) {
     return featureComplete;
 }
 
-var validBrowser = checkBrowserFeatures([
+let validBrowser = checkBrowserFeatures([
     "displaytable", "flexbox", "es5object", "es5function", "localstorage",
     "objectfit", "indexeddb", "webworkers",
 ]);
@@ -112,7 +113,7 @@ function getScreenFromLocation(location) {
     return {
         screen: fragparts.location.substring(1),
         params: fragparts.params,
-    }
+    };
 }
 
 // Here, we do some crude URL analysis to allow
@@ -126,7 +127,7 @@ function routeUrl(location) {
 }
 
 function onHashChange(ev) {
-    if (decodeURIComponent(window.location.hash) == lastLocationHashSet) {
+    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
         // we just set this: no need to route it!
         return;
     }
@@ -135,9 +136,9 @@ function onHashChange(ev) {
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
-var onNewScreen = function(screen) {
+const onNewScreen = function(screen) {
     console.log("newscreen "+screen);
-    var hash = '#/' + screen;
+    const hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
 };
@@ -151,7 +152,7 @@ var onNewScreen = function(screen) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
-var makeRegistrationUrl = function(params) {
+const makeRegistrationUrl = function(params) {
     let url;
     if (window.location.protocol === "file:") {
         url = 'https://riot.im/app/#/register';
@@ -166,7 +167,7 @@ var makeRegistrationUrl = function(params) {
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
-        if (i == 0) {
+        if (i === 0) {
             url += '?';
         } else {
             url += '&';
@@ -175,12 +176,12 @@ var makeRegistrationUrl = function(params) {
         url += k + '=' + encodeURIComponent(params[k]);
     }
     return url;
-}
+};
 
 window.addEventListener('hashchange', onHashChange);
 
 function getConfig(configJsonFilename) {
-    let deferred = Promise.defer();
+    const deferred = Promise.defer();
 
     request(
         { method: "GET", url: configJsonFilename },
@@ -194,7 +195,7 @@ function getConfig(configJsonFilename) {
                 // not fail if the file doesn't exist when loading
                 // from a file:// URI.
                 if (response) {
-                    if (response.status == 404 || (response.status == 0 && body == '')) {
+                    if (response.status === 404 || (response.status === 0 && body === '')) {
                         deferred.resolve({});
                     }
                 }
@@ -207,7 +208,7 @@ function getConfig(configJsonFilename) {
             // which breaks if there's no config.json and we're
             // loading from the filesystem (see above).
             deferred.resolve(JSON.parse(body));
-        }
+        },
     );
 
     return deferred.promise;
@@ -217,11 +218,10 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    var parsedUrl = url.parse(window.location.href);
+    const parsedUrl = url.parse(window.location.href);
     parsedUrl.search = "";
-    var formatted = url.format(parsedUrl);
-    console.log("Redirecting to " + formatted + " to drop loginToken " +
-                "from queryparams");
+    const formatted = url.format(parsedUrl);
+    console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
     window.location.href = formatted;
 }
 
@@ -233,7 +233,6 @@ const configFiles = [
 
 async function loadConfig() {
     // load all configs concurrently, await on them in order each overriding the previous if exists, error only all fail
-
     const promises = configFiles.map((configFile) => getConfig(configFile));
 
     let configJson = undefined;
@@ -285,21 +284,18 @@ async function loadApp() {
             if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
-            }
-            else {
+            } else {
                 if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
                     window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
                     return;
                 }
             }
-        }
-        else if (/Android/.test(navigator.userAgent)) {
+        } else if (/Android/.test(navigator.userAgent)) {
             // FIXME: ugly status hardcoding
             if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
-            }
-            else {
+            } else {
                 if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
                     window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
                     return;
@@ -309,7 +305,6 @@ async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
-    const styleElements = Object.create(null);
     let a;
     const theme = SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
@@ -368,22 +363,24 @@ async function loadApp() {
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
-            document.getElementById('matrixchat')
+            document.getElementById('matrixchat'),
         );
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
-        var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
+        const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
-            <CompatibilityPage onAccept={function() {
-                if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-                validBrowser = true;
-                console.log("User accepts the compatibility risks.");
-                loadApp();
-            }} />,
-            document.getElementById('matrixchat')
+            <CompatibilityPage onAccept={acceptInvalidBrowser} />,
+            document.getElementById('matrixchat'),
         );
     }
+}
+
+function acceptInvalidBrowser() {
+    if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
+    validBrowser = true;
+    console.log("User accepts the compatibility risks.");
+    loadApp();
 }
 
 async function loadLanguage() {
