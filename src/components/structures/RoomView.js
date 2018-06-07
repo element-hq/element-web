@@ -182,6 +182,7 @@ module.exports = React.createClass({
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
+            editingRoomSettings: RoomViewStore.isEditingSettings(),
         };
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
@@ -1139,7 +1140,7 @@ module.exports = React.createClass({
     },
 
     onSettingsClick: function() {
-        this.showSettings(true);
+        dis.dispatch({ action: 'open_room_settings' });
     },
 
     onSettingsSaveClick: function() {
@@ -1172,24 +1173,20 @@ module.exports = React.createClass({
                 });
                 // still editing room settings
             } else {
-                this.setState({
-                    editingRoomSettings: false,
-                });
+                dis.dispatch({ action: 'close_settings' });
             }
         }).finally(() => {
             this.setState({
                 uploadingRoomSettings: false,
-                editingRoomSettings: false,
             });
+            dis.dispatch({ action: 'close_settings' });
         }).done();
     },
 
     onCancelClick: function() {
         console.log("updateTint from onCancelClick");
         this.updateTint();
-        this.setState({
-            editingRoomSettings: false,
-        });
+        dis.dispatch({ action: 'close_settings' });
         if (this.state.forwardingEvent) {
             dis.dispatch({
                 action: 'forward_event',
@@ -1404,13 +1401,6 @@ module.exports = React.createClass({
         this.setState({
             statusBarVisible: false,
         });*/
-    },
-
-    showSettings: function(show) {
-        // XXX: this is a bit naughty; we should be doing this via props
-        if (show) {
-            this.setState({editingRoomSettings: true});
-        }
     },
 
     /**
