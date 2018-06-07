@@ -672,6 +672,7 @@ module.exports = React.createClass({
         }
 
         this._updateRoomMembers();
+        this._checkIfAlone(this.state.room);
     },
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
