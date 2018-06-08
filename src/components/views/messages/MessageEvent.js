@@ -39,8 +39,11 @@ module.exports = React.createClass({
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: PropTypes.func,
 
-        /* the shsape of the tile, used */
+        /* the shape of the tile, used */
         tileShape: PropTypes.string,
+
+        /* the maximum image height to use, if the event is an image */
+        maxImageHeight: PropTypes.number,
     },
 
     getEventTileOps: function() {
@@ -78,6 +81,7 @@ module.exports = React.createClass({
             highlightLink={this.props.highlightLink}
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
+            maxImageHeight={this.props.maxImageHeight}
             onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });

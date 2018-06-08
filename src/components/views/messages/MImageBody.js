@@ -40,6 +40,9 @@ export default class extends React.Component {
 
         /* called when the image has loaded */
         onWidgetLoad: PropTypes.func.isRequired,
+
+        /* the maximum image height to use */
+        maxImageHeight: PropTypes.number,
     }
 
     static contextTypes = {
@@ -249,8 +252,9 @@ export default class extends React.Component {
 
         const content = this.props.mxEvent.getContent();
         const timelineWidth = this.refs.body.offsetWidth;
-        const maxHeight = 600; // let images take up as much width as they can so long as the height doesn't exceed 600px.
-        // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
+        const maxHeight = this.props.maxImageHeight || 600; // let images take up as much width as they can so long
+        // as the height doesn't exceed 600px. The alternative here would be 600*timelineWidth/800; to scale them down
+        // to fit inside a 4:3 bounding box
 
         // FIXME: this will break on clientside generated thumbnails (as per e2e rooms)
         // which may well be much smaller than the 800x600 bounding box.
