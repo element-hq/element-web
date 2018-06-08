@@ -22,6 +22,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
+import {formatFullDate} from '../../../DateUtils';
 
 module.exports = React.createClass({
     displayName: 'PinnedEventTile',
@@ -80,11 +81,20 @@ module.exports = React.createClass({
                     { unpinButton }
                 </div>
 
-                <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                <span className="mx_PinnedEventTile_senderAvatar">
+                    <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                </span>
                 <span className="mx_PinnedEventTile_sender">
                     { sender.name }
                 </span>
-                <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" />
+                <span className="mx_PinnedEventTile_timestamp">
+                    { formatFullDate(new Date(this.props.mxEvent.getTs())) }
+                </span>
+                <div className="mx_PinnedEventTile_message">
+                    <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" maxImageHeight={150}
+                                  onWidgetLoad={() => {}} // we need to give this, apparently
+                    />
+                </div>
             </div>
         );
     },
