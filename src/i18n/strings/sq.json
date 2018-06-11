@@ -246,7 +246,6 @@
     "Can't update user notification settings": "S’përditësohen dot rregullime njoftimi të përdoruesit",
     "Notify for all other messages/rooms": "Njoftim për krejt mesazhet/dhomat e tjera",
     "Unable to look up room ID from server": "S’arrihet të kërkohet ID dhome nga shërbyesi",
-    "<a>Click here</a> to create a GitHub issue.": "<a>Klikoni këtu</a> që të hapni një çështje në GitHub.",
     "Couldn't find a matching Matrix room": "S’u gjet dot një dhomë Matrix me përputhje",
     "Invite to this room": "Ftoje te kjo dhomë",
     "You cannot delete this message. (%(code)s)": "S’mund ta fshini këtë mesazh. (%(code)s)",

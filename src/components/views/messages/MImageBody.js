@@ -29,8 +29,6 @@ import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
-const THUMBNAIL_MAX_HEIGHT = 600;
-
 export default class extends React.Component {
     displayName: 'MImageBody'
 
@@ -40,6 +38,9 @@ export default class extends React.Component {
 
         /* called when the image has loaded */
         onWidgetLoad: PropTypes.func.isRequired,
+
+        /* the maximum image height to use */
+        maxImageHeight: PropTypes.number,
     }
 
     static contextTypes = {
@@ -239,7 +240,7 @@ export default class extends React.Component {
 
     _messageContent(contentUrl, thumbUrl, content) {
         // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = Math.min(THUMBNAIL_MAX_HEIGHT, content.info.h);
+        const maxHeight = Math.min(this.props.maxImageHeight || 600, content.info.h);
         // The maximum width of the thumbnail, as dictated by its natural
         // maximum height.
         const maxWidth = content.info.w * maxHeight / content.info.h;

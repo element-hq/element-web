@@ -67,6 +67,7 @@ export default React.createClass({
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
+                    cancelButton={this.props.cancelButton}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={primaryButtonClass}
                     focus={this.props.focus}

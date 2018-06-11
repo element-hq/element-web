@@ -1,3 +1,48 @@
+Changes in [0.12.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.6) (2018-05-25)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.6-rc.1...v0.12.6)
+
+ * No changes since v0.12.6-rc.1
+
+Changes in [0.12.6-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.6-rc.1) (2018-05-24)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.5...v0.12.6-rc.1)
+
+ * Add a "reload widget" button.
+   [\#1920](https://github.com/matrix-org/matrix-react-sdk/pull/1920)
+ * Make devTools styling more consistent and easier to edit event data.
+   [\#1923](https://github.com/matrix-org/matrix-react-sdk/pull/1923)
+ * Update from Weblate.
+   [\#1930](https://github.com/matrix-org/matrix-react-sdk/pull/1930)
+ * Cookie bar update
+   [\#1929](https://github.com/matrix-org/matrix-react-sdk/pull/1929)
+ * Message for leaving server notices room
+   [\#1928](https://github.com/matrix-org/matrix-react-sdk/pull/1928)
+ * More thorough check of IM URL validity.
+   [\#1927](https://github.com/matrix-org/matrix-react-sdk/pull/1927)
+ * Add usage data link to cookie bar
+   [\#1926](https://github.com/matrix-org/matrix-react-sdk/pull/1926)
+ * Change wording and appearance of Deactivate Account dialog
+   [\#1925](https://github.com/matrix-org/matrix-react-sdk/pull/1925)
+ * fix membership list ordering when presence is disabled.
+   [\#1924](https://github.com/matrix-org/matrix-react-sdk/pull/1924)
+ * Implement erasure option upon deactivation
+   [\#1922](https://github.com/matrix-org/matrix-react-sdk/pull/1922)
+ * Add cookie warning to widget warning (AppPermission)
+   [\#1921](https://github.com/matrix-org/matrix-react-sdk/pull/1921)
+ * Terms and Conditions dialog
+   [\#1919](https://github.com/matrix-org/matrix-react-sdk/pull/1919)
+ * improve privileged section users in room settings
+   [\#1902](https://github.com/matrix-org/matrix-react-sdk/pull/1902)
+ * Space between sentences in 'leave room' warning
+   [\#1918](https://github.com/matrix-org/matrix-react-sdk/pull/1918)
+ * Specify valid address types to "Start a chat" dialog
+   [\#1908](https://github.com/matrix-org/matrix-react-sdk/pull/1908)
+ * Implement opt-in analytics with cookie bar
+   [\#1906](https://github.com/matrix-org/matrix-react-sdk/pull/1906)
+ * Fix vector-im/riot-web#6523 Emoji rendering destroys paragraphs
+   [\#1910](https://github.com/matrix-org/matrix-react-sdk/pull/1910)
+
 Changes in [0.12.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.5) (2018-05-17)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.4...v0.12.5)

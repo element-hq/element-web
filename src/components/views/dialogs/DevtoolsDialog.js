@@ -132,17 +132,17 @@ class SendCustomEvent extends GenericEditor {
         }
 
         return <div>
-            <div className="mx_Dialog_content">
+            <div className="mx_DevTools_content">
                 { this.textInput('eventType', _t('Event Type')) }
                 { this.state.isStateEvent && this.textInput('stateKey', _t('State Key')) }
 
                 <br />
 
-                <div className="mx_UserSettings_profileLabelCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_DevTools_textarea" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
@@ -219,15 +219,15 @@ class SendAccountData extends GenericEditor {
         }
 
         return <div>
-            <div className="mx_Dialog_content">
+            <div className="mx_DevTools_content">
                 { this.textInput('eventType', _t('Event Type')) }
                 <br />
 
-                <div className="mx_UserSettings_profileLabelCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_DevTools_textarea" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
@@ -485,7 +485,7 @@ class AccountDataExplorer extends DevtoolsComponent {
             }
 
             return <div className="mx_ViewSource">
-                <div className="mx_Dialog_content">
+                <div className="mx_DevTools_content">
                     <SyntaxHighlight className="json">
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>

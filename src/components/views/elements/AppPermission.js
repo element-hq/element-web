@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
+import WidgetUtils from "../../../WidgetUtils";
 
 export default class AppPermission extends React.Component {
     constructor(props) {
@@ -19,7 +20,7 @@ export default class AppPermission extends React.Component {
 
         const searchParams = new URLSearchParams(wurl.search);
 
-        if (this.isScalarWurl(wurl) && searchParams && searchParams.get('url')) {
+        if (WidgetUtils.isScalarUrl(wurl) && searchParams && searchParams.get('url')) {
             curl = url.parse(searchParams.get('url'));
             if (curl) {
                 curl.search = curl.query = "";
@@ -33,25 +34,16 @@ export default class AppPermission extends React.Component {
         return curlString;
     }
 
-    isScalarWurl(wurl) {
-        if (wurl && wurl.hostname && (
-            wurl.hostname === 'scalar.vector.im' ||
-            wurl.hostname === 'scalar-staging.riot.im' ||
-            wurl.hostname === 'scalar-develop.riot.im' ||
-            wurl.hostname === 'demo.riot.im' ||
-            wurl.hostname === 'localhost'
-        )) {
-            return true;
-        }
-        return false;
-    }
-
     render() {
         let e2eWarningText;
         if (this.props.isRoomEncrypted) {
             e2eWarningText =
                 <span className='mx_AppPermissionWarningTextLabel'>{ _t('NOTE: Apps are not end-to-end encrypted') }</span>;
         }
+        const cookieWarning =
+            <span className='mx_AppPermissionWarningTextLabel'>
+                { _t('Warning: This widget might use cookies.') }
+            </span>;
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarningImage'>
@@ -60,6 +52,7 @@ export default class AppPermission extends React.Component {
                 <div className='mx_AppPermissionWarningText'>
                     <span className='mx_AppPermissionWarningTextLabel'>{ _t('Do you want to load widget from URL:') }</span> <span className='mx_AppPermissionWarningTextURL'>{ this.state.curlBase }</span>
                     { e2eWarningText }
+                    { cookieWarning }
                 </div>
                 <input
                     className='mx_AppPermissionButton'
