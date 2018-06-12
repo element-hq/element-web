@@ -901,8 +901,6 @@
     "This setting cannot be changed later!": "Den här inställningen kan inte ändras senare!",
     "Unknown error": "Okänt fel",
     "Incorrect password": "Felaktigt lösenord",
-    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte att kunna registrera samma användar-ID igen.",
-    "This action is irreversible.": "Denna åtgärd går inte att ångra.",
     "To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:": "För att verifiera att denna enhet kan litas på, vänligen kontakta ägaren på annat sätt (t ex personligen eller med ett telefonsamtal) och fråga om nyckeln ägaren har i sina användarinställningar för enheten matchar nyckeln nedan:",
     "Device name": "Enhetsnamn",
     "Device key": "Enhetsnyckel",
