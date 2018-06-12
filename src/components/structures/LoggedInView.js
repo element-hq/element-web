@@ -255,6 +255,22 @@ const LoggedInView = React.createClass({
         ), true);
     },
 
+    _onClick: function(ev) {
+        // When the panels are disabled, clicking on them results in a mouse event
+        // which bubbles to certain elements in the tree. When this happens, close
+        // any settings page that is currently open (user/room/group).
+        if (this.props.leftDisabled &&
+            this.props.rightDisabled &&
+            (
+                ev.target.className === 'mx_MatrixChat' ||
+                ev.target.className === 'mx_MatrixChat_middlePanel' ||
+                ev.target.className === 'mx_RoomView'
+            )
+        ) {
+            dis.dispatch({ action: 'close_settings' });
+        }
+    },
+
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
@@ -295,7 +311,7 @@ const LoggedInView = React.createClass({
 
             case PageTypes.UserSettings:
                 page_element = <UserSettings
-                    onClose={this.props.onUserSettingsClose}
+                    onClose={this.props.onCloseAllSettings}
                     brand={this.props.config.brand}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
@@ -380,7 +396,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers}>
+            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onClick={this._onClick}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div className={bodyClasses}>
