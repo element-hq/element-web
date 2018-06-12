@@ -186,7 +186,7 @@ export default class ShareDialog extends React.Component {
                     <div className="mx_ShareDialog_left">
                         <h3>QR Code</h3>
                         <div className="mx_ShareDialog_qrcode_container">
-                            <QRCode value={matrixToUrl} size={256} logo="img/matrix-m.svg" />
+                            <QRCode value={matrixToUrl} size={256} logoWidth={48} logo="img/matrix-m.svg" />
                         </div>
                     </div>
                     <div className="mx_ShareDialog_right">
