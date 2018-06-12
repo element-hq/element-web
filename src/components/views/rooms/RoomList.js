@@ -589,8 +589,7 @@ module.exports = React.createClass({
         const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
         for (const group of MatrixClientPeg.get().getGroups()) {
             if (group.myMembership !== 'invite') continue;
-
-            ret.push(<GroupInviteTile key={group.groupId} group={group} />);
+            ret.push(<GroupInviteTile key={group.groupId} group={group} collapsed={this.props.collapsed} />);
         }
 
         return ret;
