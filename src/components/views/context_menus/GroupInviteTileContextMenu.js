@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import {Group} from 'matrix-js-sdk';
 import GroupStore from "../../../stores/GroupStore";
