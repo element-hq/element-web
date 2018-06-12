@@ -123,7 +123,6 @@
     "Jump to first unread message.": "跳到第一則未讀訊息。",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s 把 %(targetName)s 踢出了聊天室。.",
     "Leave room": "離開聊天室",
-    "Login as guest": "以游客的身份登錄",
     "New password": "新密碼",
     "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "重設密碼目前會把所有裝置上的端到端加密金鑰重設，讓已加密的聊天歷史不可讀，除非您先匯出您的聊天室金鑰並在稍後重新匯入。這會在未來改進。",
     "Return to login screen": "返回到登入畫面",

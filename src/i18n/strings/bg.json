@@ -888,7 +888,6 @@
     "This homeserver doesn't offer any login flows which are supported by this client.": "Този Home сървър не предлага методи за влизане, които се поддържат от този клиент.",
     "Error: Problem communicating with the given homeserver.": "Грешка: Проблем при комуникацията с дадения Home сървър.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не е възможно свързване към Home сървъра чрез HTTP, когато има HTTPS адрес в лентата на браузъра Ви. Или използвайте HTTPS или <a>включете функция небезопасни скриптове</a>.",
-    "Login as guest": "Влез като гост",
     "Sign in to get started": "Влезте в профила си, за да започнете",
     "Set a display name:": "Задаване на име:",
     "Upload an avatar:": "Качване на профилна снимка:",

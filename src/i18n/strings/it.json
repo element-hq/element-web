@@ -909,7 +909,6 @@
     "Error: Problem communicating with the given homeserver.": "Errore: problema di comunicazione con l'homeserver dato.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Impossibile connettersi all'homeserver via HTTP quando c'è un URL HTTPS nella barra del tuo browser. Usa HTTPS o <a>attiva gli script non sicuri</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Impossibile connettersi all'homeserver - controlla la tua connessione, assicurati che il <a>certificato SSL dell'homeserver</a> sia fidato e che un'estensione del browser non stia bloccando le richieste.",
-    "Login as guest": "Accedi come ospite",
     "Sign in to get started": "Accedi per iniziare",
     "Failed to fetch avatar URL": "Ricezione URL dell'avatar fallita",
     "Set a display name:": "Imposta un nome visualizzato:",

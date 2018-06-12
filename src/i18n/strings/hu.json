@@ -238,7 +238,6 @@
     "Level:": "Szint:",
     "Local addresses for this room:": "A szoba helyi címe:",
     "Logged in as:": "Bejelentkezve mint:",
-    "Login as guest": "Belépés vendégként",
     "Logout": "Kilép",
     "Low priority": "Alacsony prioritás",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s elérhetővé tette a szoba új üzeneteit nekik minden résztvevő a szobában, amióta meg van hívva.",

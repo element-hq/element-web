@@ -166,7 +166,6 @@
     "%(targetName)s left the room.": "%(targetName)s a quitté le salon.",
     "Local addresses for this room:": "Adresses locales pour ce salon :",
     "Logged in as:": "Identifié en tant que :",
-    "Login as guest": "Se connecter en tant que visiteur",
     "Logout": "Se déconnecter",
     "Low priority": "Priorité basse",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s a rendu l'historique visible à tous les membres du salon, depuis le moment où ils ont été invités.",
