@@ -178,7 +178,6 @@
     "Leave room": "ออกจากห้อง",
     "%(targetName)s left the room.": "%(targetName)s ออกจากห้องแล้ว",
     "Logged in as:": "เข้าสู่ระบบในชื่อ:",
-    "Login as guest": "เข้าสู่ระบบในฐานะแขก",
     "Logout": "ออกจากระบบ",
     "Markdown is disabled": "ปิดใช้งาน Markdown แล้ว",
     "Markdown is enabled": "เปิดใช้งาน Markdown แล้ว",

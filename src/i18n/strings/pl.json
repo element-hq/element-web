@@ -303,7 +303,6 @@
     "Publish this room to the public in %(domain)s's room directory?": "Czy opublikować ten pokój dla ogółu w spisie pokojów domeny %(domain)s?",
     "Local addresses for this room:": "Lokalne adresy dla tego pokoju:",
     "Logged in as:": "Zalogowany jako:",
-    "Login as guest": "Zaloguj jako gość",
     "Logout": "Wyloguj",
     "Low priority": "Niski priorytet",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s uczynił przyszłą historię pokoju widoczną dla wszyscy członkowie pokoju, od momentu ich zaproszenia.",

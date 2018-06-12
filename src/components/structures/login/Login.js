@@ -399,7 +399,7 @@ module.exports = React.createClass({
         if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
-                    { _t('Login as guest') }
+                    { _t('Try the app first') }
                 </a>;
         }
 
