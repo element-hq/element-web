@@ -80,6 +80,7 @@
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
+    "qrcode-react": "^0.1.16",
     "querystring": "^0.2.0",
     "react": "^15.6.0",
     "react-addons-css-transition-group": "15.3.2",
