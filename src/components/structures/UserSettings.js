@@ -1074,6 +1074,14 @@ module.exports = React.createClass({
         </div>;
     },
 
+    onSelfShareClick: function() {
+        const cli = MatrixClientPeg.get();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share self dialog', '', ShareDialog, {
+            target: cli.getUser(this._me),
+        });
+    },
+
     _showSpoiler: function(event) {
         const target = event.target;
         target.innerHTML = target.getAttribute('data-spoiler');
@@ -1295,10 +1303,13 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        { _t("Logged in as:") } { this._me }
+                        { _t("Logged in as:") + ' ' }
+                        <span onClick={this.onSelfShareClick} className="mx_UserSettings_link">
+                            { this._me }
+                        </span>
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        { _t('Access Token:') }
+                        { _t('Access Token:') + ' ' }
                         <span className="mx_UserSettings_advanced_spoiler"
                                 onClick={this._showSpoiler}
                                 data-spoiler={MatrixClientPeg.get().getAccessToken()}>

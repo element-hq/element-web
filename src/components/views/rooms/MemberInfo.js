@@ -632,6 +632,13 @@ module.exports = withMatrixClient(React.createClass({
         );
     },
 
+    onShareUserClick: function() {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room member dialog', '', ShareDialog, {
+            target: this.props.member,
+        });
+    },
+
     _renderUserOptions: function() {
         const cli = this.props.matrixClient;
         const member = this.props.member;
@@ -705,13 +712,18 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (!ignoreButton && !readReceiptButton && !insertPillButton && !inviteUserButton) return null;
+        const shareUserButton = (
+            <AccessibleButton onClick={this.onShareUserClick} className="mx_MemberInfo_field">
+                { _t('Share Link to User') }
+            </AccessibleButton>
+        );
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { shareUserButton }
                     { insertPillButton }
                     { ignoreButton }
                     { inviteUserButton }
