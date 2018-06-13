@@ -75,7 +75,7 @@ $focus-brightness: 125%;
 
 // red warning colour
 $warning-color: #B23850;
-$mention-user-pill-bg-color: #45A29E;
+$mention-user-pill-bg-color: #66FCF1;
 $other-user-pill-bg-color: #0DA398;
 
 $group-alert-color: #774f7e;
@@ -442,6 +442,30 @@ input[type=radio]:checked:after {
 
 .mx_MemberInfo_profileField {
     background-color: #1F2833 !important;
+}
+
+// markdown overrides:
+.mx_EventTile_content .markdown-body pre:hover {
+    border-color: #070707 !important; // inverted due to rules below
+}
+.mx_EventTile_content .markdown-body {
+    code, pre {
+        background-color: #D2D3D4 !important;
+    }
+
+    code a {
+        color: #1AB0A5;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
 }
 
 // ********************
