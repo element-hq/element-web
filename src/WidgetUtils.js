@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -89,5 +90,50 @@ export default class WidgetUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns a promise that resolves when a widget with the given
+     * ID has been added as a user widget (ie. the accountData event
+     * arrives) or rejects after a timeout
+     *
+     * @param {string} widgetId The ID of the widget to wait for
+     * @param {boolean} add True to wait for the widget to be added,
+     *     false to wait for it to be deleted.
+     * @returns {Promise} that resolves when the widget is available
+     */
+    static waitForUserWidget(widgetId, add) {
+        return new Promise((resolve, reject) => {
+            const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
+
+            // Tests an account data event, returning true if it's in the state
+            // we're waiting for it to be in
+            function eventInIntendedState(ev) {
+                if (!ev || !currentAccountDataEvent.getContent()) return false;
+                if (add) {
+                    return ev.getContent()[widgetId] !== undefined;
+                } else {
+                    return ev.getContent()[widgetId] === undefined;
+                }
+            }
+
+            if (eventInIntendedState(currentAccountDataEvent)) {
+                resolve();
+                return;
+            }
+
+            function onAccountData(ev) {
+                if (eventInIntendedState(currentAccountDataEvent)) {
+                    MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                    clearTimeout(timerId);
+                    resolve();
+                }
+            }
+            const timerId = setTimeout(() => {
+                MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
+            }, 10000);
+            MatrixClientPeg.get().on('accountData', onAccountData);
+        });
     }
 }

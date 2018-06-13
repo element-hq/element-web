@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -231,11 +232,12 @@ Example:
 }
 */
 
-const SdkConfig = require('./SdkConfig');
-const MatrixClientPeg = require("./MatrixClientPeg");
-const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
-const dis = require("./dispatcher");
-const Widgets = require('./utils/widgets');
+import SdkConfig from './SdkConfig';
+import MatrixClientPeg from './MatrixClientPeg';
+import { MatrixEvent } from 'matrix-js-sdk';
+import dis from './dispatcher';
+import Widgets from './utils/widgets';
+import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 
 function sendResponse(event, res) {
@@ -283,51 +285,6 @@ function inviteUser(event, roomId, userId) {
         });
     }, function(err) {
         sendError(event, _t('You need to be able to invite users to do that.'), err);
-    });
-}
-
-/**
- * Returns a promise that resolves when a widget with the given
- * ID has been added as a user widget (ie. the accountData event
- * arrives) or rejects after a timeout
- *
- * @param {string} widgetId The ID of the widget to wait for
- * @param {boolean} add True to wait for the widget to be added,
- *     false to wait for it to be deleted.
- * @returns {Promise} that resolves when the widget is available
- */
-function waitForUserWidget(widgetId, add) {
-    return new Promise((resolve, reject) => {
-        const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
-
-        // Tests an account data event, returning true if it's in the state
-        // we're waiting for it to be in
-        function eventInIntendedState(ev) {
-            if (!ev || !currentAccountDataEvent.getContent()) return false;
-            if (add) {
-                return ev.getContent()[widgetId] !== undefined;
-            } else {
-                return ev.getContent()[widgetId] === undefined;
-            }
-        }
-
-        if (eventInIntendedState(currentAccountDataEvent)) {
-            resolve();
-            return;
-        }
-
-        function onAccountData(ev) {
-            if (eventInIntendedState(currentAccountDataEvent)) {
-                MatrixClientPeg.get().removeListener('accountData', onAccountData);
-                clearTimeout(timerId);
-                resolve();
-            }
-        }
-        const timerId = setTimeout(() => {
-            MatrixClientPeg.get().removeListener('accountData', onAccountData);
-            reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
-        }, 10000);
-        MatrixClientPeg.get().on('accountData', onAccountData);
     });
 }
 
@@ -637,19 +594,6 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
     sendResponse(event, stateEvent.getContent());
 }
 
-let currentRoomId = null;
-let currentRoomAlias = null;
-
-// Listen for when a room is viewed
-dis.register(onAction);
-function onAction(payload) {
-    if (payload.action !== "view_room") {
-        return;
-    }
-    currentRoomId = payload.room_id;
-    currentRoomAlias = payload.room_alias;
-}
-
 const onMessage = function(event) {
     if (!event.origin) { // stupid chrome
         event.origin = event.originalEvent.origin;
@@ -700,80 +644,63 @@ const onMessage = function(event) {
             return;
         }
     }
-    let promise = Promise.resolve(currentRoomId);
-    if (!currentRoomId) {
-        if (!currentRoomAlias) {
-            sendError(event, _t('Must be viewing a room'));
-            return;
-        }
-        // no room ID but there is an alias, look it up.
-        console.log("Looking up alias " + currentRoomAlias);
-        promise = MatrixClientPeg.get().getRoomIdForAlias(currentRoomAlias).then((res) => {
-            return res.room_id;
-        });
+
+    if (roomId !== RoomViewStore.getRoomId()) {
+        sendError(event, _t('Room %(roomId)s not visible', {roomId: roomId}));
+        return;
     }
 
-    promise.then((viewingRoomId) => {
-        if (roomId !== viewingRoomId) {
-            sendError(event, _t('Room %(roomId)s not visible', {roomId: roomId}));
-            return;
-        }
+    // Get and set room-based widgets
+    if (event.data.action === "get_widgets") {
+        getWidgets(event, roomId);
+        return;
+    } else if (event.data.action === "set_widget") {
+        setWidget(event, roomId);
+        return;
+    }
 
-        // Get and set room-based widgets
-        if (event.data.action === "get_widgets") {
-            getWidgets(event, roomId);
-            return;
-        } else if (event.data.action === "set_widget") {
-            setWidget(event, roomId);
-            return;
-        }
+    // These APIs don't require userId
+    if (event.data.action === "join_rules_state") {
+        getJoinRules(event, roomId);
+        return;
+    } else if (event.data.action === "set_plumbing_state") {
+        setPlumbingState(event, roomId, event.data.status);
+        return;
+    } else if (event.data.action === "get_membership_count") {
+        getMembershipCount(event, roomId);
+        return;
+    } else if (event.data.action === "get_room_enc_state") {
+        getRoomEncState(event, roomId);
+        return;
+    } else if (event.data.action === "can_send_event") {
+        canSendEvent(event, roomId);
+        return;
+    }
 
-        // These APIs don't require userId
-        if (event.data.action === "join_rules_state") {
-            getJoinRules(event, roomId);
-            return;
-        } else if (event.data.action === "set_plumbing_state") {
-            setPlumbingState(event, roomId, event.data.status);
-            return;
-        } else if (event.data.action === "get_membership_count") {
-            getMembershipCount(event, roomId);
-            return;
-        } else if (event.data.action === "get_room_enc_state") {
-            getRoomEncState(event, roomId);
-            return;
-        } else if (event.data.action === "can_send_event") {
-            canSendEvent(event, roomId);
-            return;
-        }
-
-        if (!userId) {
-            sendError(event, _t('Missing user_id in request'));
-            return;
-        }
-        switch (event.data.action) {
-            case "membership_state":
-                getMembershipState(event, roomId, userId);
-                break;
-            case "invite":
-                inviteUser(event, roomId, userId);
-                break;
-            case "bot_options":
-                botOptions(event, roomId, userId);
-                break;
-            case "set_bot_options":
-                setBotOptions(event, roomId, userId);
-                break;
-            case "set_bot_power":
-                setBotPower(event, roomId, userId, event.data.level);
-                break;
-            default:
-                console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
-                break;
-        }
-    }, (err) => {
-        console.error(err);
-        sendError(event, _t('Failed to lookup current room') + '.');
-    });
+    if (!userId) {
+        sendError(event, _t('Missing user_id in request'));
+        return;
+    }
+    switch (event.data.action) {
+        case "membership_state":
+            getMembershipState(event, roomId, userId);
+            break;
+        case "invite":
+            inviteUser(event, roomId, userId);
+            break;
+        case "bot_options":
+            botOptions(event, roomId, userId);
+            break;
+        case "set_bot_options":
+            setBotOptions(event, roomId, userId);
+            break;
+        case "set_bot_power":
+            setBotPower(event, roomId, userId, event.data.level);
+            break;
+        default:
+            console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
+            break;
+    }
 };
 
 let listenerCount = 0;
