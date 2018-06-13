@@ -244,12 +244,14 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState = null;
         if (contentState) {
-            editorState = EditorState.createWithContent(contentState, compositeDecorator);
+            editorState = EditorState.moveFocusToEnd(
+                EditorState.createWithContent(contentState, compositeDecorator)
+            );
         } else {
             editorState = EditorState.createEmpty(compositeDecorator);
         }
 
-        return EditorState.moveFocusToEnd(editorState);
+        return editorState;
     }
 
     componentDidMount() {
