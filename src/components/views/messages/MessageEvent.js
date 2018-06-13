@@ -62,18 +62,24 @@ module.exports = React.createClass({
             'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
         };
+        const evTypes = {
+            'm.sticker': sdk.getComponent('messages.MStickerBody'),
+        };
 
         const content = this.props.mxEvent.getContent();
+        const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
         let BodyType = UnknownBody;
-        if (msgtype && bodyTypes[msgtype]) {
-            BodyType = bodyTypes[msgtype];
-        } else if (this.props.mxEvent.getType() === 'm.sticker') {
-            // if sticker is redacted, show UnknownBody otherwise it'll fall through to elif
-            BodyType = this.props.mxEvent.isRedacted() ? UnknownBody : sdk.getComponent('messages.MStickerBody');
-        } else if (content.url) {
-            // Fallback to MFileBody if there's a content URL
-            BodyType = bodyTypes['m.file'];
+        if (!this.props.mxEvent.isRedacted()) {
+            // only resolve BodyType if event is not redacted
+            if (msgtype && bodyTypes[msgtype]) {
+                BodyType = bodyTypes[msgtype];
+            } else if (type && evTypes[type]) {
+                BodyType = evTypes[type];
+            } else if (content.url) {
+                // Fallback to MFileBody if there's a content URL
+                BodyType = bodyTypes['m.file'];
+            }
         }
 
         return <BodyType
