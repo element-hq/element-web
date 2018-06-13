@@ -237,6 +237,7 @@ import MatrixClientPeg from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
 import Widgets from './utils/widgets';
+import WidgetUtils from './WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 
@@ -362,7 +363,7 @@ function setWidget(event, roomId) {
         // wait for this, the action will complete but if the user is fast enough,
         // the widget still won't actually be there.
         client.setAccountData('m.widgets', userWidgets).then(() => {
-            return waitForUserWidget(widgetId, widgetUrl !== null);
+            return WidgetUtils.waitForUserWidget(widgetId, widgetUrl !== null);
         }).then(() => {
             sendResponse(event, {
                 success: true,
@@ -382,9 +383,9 @@ function setWidget(event, roomId) {
         }
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
-        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
-            // XXX: We should probably wait for the echo of the state event to come back from the server,
-            // as we do with user widgets.
+        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
+            return WidgetUtils.waitForRoomWidget(widgetId, roomId, widgetUrl !== null);
+        }).then(() => {
             sendResponse(event, {
                 success: true,
             });
