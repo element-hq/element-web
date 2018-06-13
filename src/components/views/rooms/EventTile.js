@@ -34,6 +34,7 @@ const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
 import {makeEventPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
+import {EventStatus} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -442,7 +443,6 @@ module.exports = withMatrixClient(React.createClass({
         const ev = this.props.mxEvent;
         const props = {onClick: this.onCryptoClicked};
 
-
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
             return <E2ePadlockUndecryptable {...props} />;
         } else if (ev.isEncrypted()) {
@@ -451,15 +451,15 @@ module.exports = withMatrixClient(React.createClass({
             } else {
                 return <E2ePadlockUnverified {...props} />;
             }
-        } else {
-            // XXX: if the event is being encrypted (ie eventSendStatus ===
-            // encrypting), it might be nice to show something other than the
-            // open padlock?
-
-            // if the event is not encrypted, but it's an e2e room, show the
-            // open padlock
-            const e2eEnabled = this.props.matrixClient.isRoomEncrypted(ev.getRoomId());
-            if (e2eEnabled) {
+        } else if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+            // else if room is encrypted
+            // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
+            if (ev.status === EventStatus.ENCRYPTING || ev.status === EventStatus.NOT_SENT) {
+                // XXX: if the event is being encrypted (ie eventSendStatus === encrypting),
+                // it might be nice to show something other than the open padlock?
+                return <E2ePadlockPending {...props} />;
+            } else {
+                // if the event is not encrypted, but it's an e2e room, show the open padlock
                 return <E2ePadlockUnencrypted {...props} />;
             }
         }
@@ -734,6 +734,10 @@ function E2ePadlockUndecryptable(props) {
             src="img/e2e-blocked.svg" width="12" height="12"
             style={{ marginLeft: "-1px" }} {...props} />
     );
+}
+
+function E2ePadlockPending(props) {
+    return <E2ePadlock alt={_t('Encrypting')} src="img/e2e-pending.svg" width="10" height="12" {...props} />;
 }
 
 function E2ePadlockVerified(props) {
