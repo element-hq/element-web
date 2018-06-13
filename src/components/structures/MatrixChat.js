@@ -1312,7 +1312,7 @@ export default React.createClass({
         // if the decryption was a failure
         cli.on("Event.decrypted", (e) => {
             if (e.isDecryptionFailure()) {
-                Analytics.trackEvent('E2E', 'Decryption failure');
+                Analytics.trackEvent('E2E', 'Decryption failure', 'ev.content.body: ' + e.getContent().body);
             }
         });
 
