@@ -586,7 +586,7 @@
     "Please enter the code it contains:": "Sartu dakarren kodea:",
     "If you don't specify an email address, you won't be able to reset your password. Are you sure?": "Ez baduzu e-mail helbide bat zehazten, ezin izango duzu zure pasahitza berrezarri. Ziur zaude?",
     "You are registering with %(SelectedTeamName)s": "%(SelectedTeamName)s erabiliz erregistratzen ari zara",
-    "Default server": "Zerbitzari lenetetsia",
+    "Default server": "Zerbitzari lehenetsia",
     "Custom server": "Zerbitzari aukeratua",
     "Home server URL": "Hasiera zerbitzariaren URLa",
     "Identity server URL": "Identitate zerbitzariaren URLa",
