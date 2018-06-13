@@ -1309,6 +1309,7 @@ export default React.createClass({
         });
 
         // XXX: This will do a HTTP request for each Event.decrypted event
+        // if the decryption was a failure
         cli.on("Event.decrypted", (e) => {
             if (e.isDecryptionFailure()) {
                 Analytics.trackEvent('E2E', 'Decryption failure');
