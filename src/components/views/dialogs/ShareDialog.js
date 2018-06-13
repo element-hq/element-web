@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ const socials = [
         img: 'img/social/',
         url: (url) => `https://plus.google.com/share?url=${url}`,
     },*/ {
-        name: 'Linked In',
+        name: 'LinkedIn',
         img: 'img/social/linkedin.png',
         url: (url) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
     }, {
@@ -193,13 +193,14 @@ export default class ShareDialog extends React.Component {
                         <h3>Social</h3>
                         <div className="mx_ShareDialog_social_container">
                             {
-                                socials.map((social) => <a target="_blank"
+                                socials.map((social) => <a rel="noopener"
+                                                           target="_blank"
                                                            key={social.name}
                                                            name={social.name}
                                                            href={social.url(encodedUrl)}
                                                            className="mx_ShareDialog_social_icon"
                                 >
-                                    <img src={social.img} height={64} width={64} />
+                                    <img src={social.img} alt={social.name} height={64} width={64} />
                                 </a>)
                             }
                         </div>
