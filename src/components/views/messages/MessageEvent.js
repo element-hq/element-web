@@ -69,7 +69,8 @@ module.exports = React.createClass({
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
         } else if (this.props.mxEvent.getType() === 'm.sticker') {
-            BodyType = sdk.getComponent('messages.MStickerBody');
+            // if sticker is redacted, show UnknownBody otherwise it'll fall through to elif
+            BodyType = this.props.mxEvent.isRedacted() ? UnknownBody : sdk.getComponent('messages.MStickerBody');
         } else if (content.url) {
             // Fallback to MFileBody if there's a content URL
             BodyType = bodyTypes['m.file'];
