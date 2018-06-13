@@ -443,25 +443,27 @@ module.exports = withMatrixClient(React.createClass({
         const ev = this.props.mxEvent;
         const props = {onClick: this.onCryptoClicked};
 
+        // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
             return <E2ePadlockUndecryptable {...props} />;
-        } else if (ev.isEncrypted()) {
-            if (this.state.verified) {
-                return <E2ePadlockVerified {...props} />;
-            } else {
-                return <E2ePadlockUnverified {...props} />;
-            }
-        } else if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+        }
+
+        // event is encrypted, display padlock corresponding to whether or not it is verified
+        if (ev.isEncrypted()) {
+            return this.state.verified ? <E2ePadlockVerified {...props} /> : <E2ePadlockUnverified {...props} />;
+        }
+
+        if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
-            if (ev.status === EventStatus.ENCRYPTING || ev.status === EventStatus.NOT_SENT) {
-                // XXX: if the event is being encrypted (ie eventSendStatus === encrypting),
-                // it might be nice to show something other than the open padlock?
-                return <E2ePadlockPending {...props} />;
-            } else {
-                // if the event is not encrypted, but it's an e2e room, show the open padlock
-                return <E2ePadlockUnencrypted {...props} />;
+            if (ev.status === EventStatus.ENCRYPTING) {
+                return <E2ePadlockEncrypting {...props} />;
             }
+            if (ev.status === EventStatus.NOT_SENT) {
+                return <E2ePadlockNotSent {...props} />;
+            }
+            // if the event is not encrypted, but it's an e2e room, show the open padlock
+            return <E2ePadlockUnencrypted {...props} />;
         }
 
         // no padlock needed
@@ -736,8 +738,12 @@ function E2ePadlockUndecryptable(props) {
     );
 }
 
-function E2ePadlockPending(props) {
-    return <E2ePadlock alt={_t('Encrypting')} src="img/e2e-pending.svg" width="10" height="12" {...props} />;
+function E2ePadlockEncrypting(props) {
+    return <E2ePadlock alt={_t("Encrypting")} src="img/e2e-encrypting.svg" width="10" height="12" {...props} />;
+}
+
+function E2ePadlockNotSent(props) {
+    return <E2ePadlock alt={_t("Encrypted, not sent")} src="img/e2e-not_sent.svg" width="10" height="12" {...props} />;
 }
 
 function E2ePadlockVerified(props) {
