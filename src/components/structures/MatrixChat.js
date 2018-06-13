@@ -1143,11 +1143,6 @@ export default React.createClass({
         } else if (this._is_registered) {
             this._is_registered = false;
 
-            // Set the display name = user ID localpart
-            MatrixClientPeg.get().setDisplayName(
-                MatrixClientPeg.get().getUserIdLocalpart(),
-            );
-
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
                 createRoom({
                     dmUserId: this.props.config.welcomeUserId,
