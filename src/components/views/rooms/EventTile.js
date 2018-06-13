@@ -490,7 +490,7 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
-        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
+        const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
         const classes = classNames({
@@ -715,9 +715,15 @@ module.exports = withMatrixClient(React.createClass({
     },
 }));
 
+// XXX this'll eventually be dynamic based on the fields once we have extensible event types
+const messageTypes = ['m.room.message', 'm.sticker'];
+function isMessageEvent(ev) {
+    return (messageTypes.includes(ev.getType()));
+}
+
 module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
-    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
+    if (e.isRedacted() && !isMessageEvent(e)) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
