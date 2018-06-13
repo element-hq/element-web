@@ -52,8 +52,8 @@ export default React.createClass({
                         <div className="mx_CreateRoomDialog_label">
                             <label htmlFor="textinput"> { _t('Room name (optional)') } </label>
                         </div>
-                        <div>
-                            <input id="textinput" ref="textinput" className="mx_CreateRoomDialog_input" autoFocus={true} size="64" />
+                        <div className="mx_CreateRoomDialog_input_container">
+                            <input id="textinput" ref="textinput" className="mx_CreateRoomDialog_input" autoFocus={true} />
                         </div>
                         <br />
 
