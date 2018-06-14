@@ -589,12 +589,12 @@ module.exports = React.createClass({
 
         const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
         for (const group of MatrixClientPeg.get().getGroups()) {
-            const {groupId: id, name, myMembership: membership} = group;
+            const {groupId, name, myMembership} = group;
             // filter to only groups in invite state and group_id starts with filter or group name includes it
-            if (membership !== 'invite') continue;
-            if (lcFilter && !id.toLowerCase().startsWith(lcFilter) &&
+            if (myMembership !== 'invite') continue;
+            if (lcFilter && !groupId.toLowerCase().startsWith(lcFilter) &&
                 !(name && name.toLowerCase().includes(lcFilter))) continue;
-            ret.push(<GroupInviteTile key={id} group={group} collapsed={this.props.collapsed} />);
+            ret.push(<GroupInviteTile key={groupId} group={group} collapsed={this.props.collapsed} />);
         }
 
         return ret;
