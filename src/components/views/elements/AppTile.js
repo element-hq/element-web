@@ -324,7 +324,9 @@ export default class AppTile extends React.Component {
                             'im.vector.modular.widgets',
                             {}, // empty content
                             this.props.id,
-                        ).catch((e) => {
+                        ).then(() => {
+                            return WidgetUtils.waitForRoomWidget(this.props.id, this.props.room.roomId, false);
+                        }).catch((e) => {
                             console.error('Failed to delete widget', e);
                         }).finally(() => {
                             this.setState({deleting: false});
