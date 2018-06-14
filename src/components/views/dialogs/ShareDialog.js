@@ -169,9 +169,9 @@ export default class ShareDialog extends React.Component {
             </div>;
 
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = makeEventPermalink(this.props.target.roomId, this.props.target.eventId);
+                matrixToUrl = makeEventPermalink(this.props.target.getRoomId(), this.props.target.getId());
             } else {
-                matrixToUrl = makeRoomPermalink(this.props.target.roomId);
+                matrixToUrl = makeRoomPermalink(this.props.target.getRoomId());
             }
         }
 
