@@ -1188,5 +1188,7 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Эта комната используется для важных сообщений от сервера, поэтому вы не можете ее покинуть.",
     "Try the app first": "Сначала попробуйте приложение",
     "Encrypting": "Шифрование",
-    "Encrypted, not sent": "Зашифровано, не отправлено"
+    "Encrypted, not sent": "Зашифровано, не отправлено",
+    "No Audio Outputs detected": "Аудиовыход не обнаружен",
+    "Audio Output": "Аудиовыход"
 }
