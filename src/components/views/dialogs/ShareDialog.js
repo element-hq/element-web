@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Room, User, Group, RoomMember} from 'matrix-js-sdk';
+import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
@@ -59,7 +59,7 @@ export default class ShareDialog extends React.Component {
             PropTypes.instanceOf(User),
             PropTypes.instanceOf(Group),
             PropTypes.instanceOf(RoomMember),
-            // PropTypes.instanceOf(MatrixEvent),
+            PropTypes.instanceOf(MatrixEvent),
         ]).isRequired,
     };
 
@@ -155,6 +155,9 @@ export default class ShareDialog extends React.Component {
         } else if (this.props.target instanceof Group) {
             title = _t('Share Community');
             matrixToUrl = makeGroupPermalink(this.props.target.groupId);
+        } else if (this.props.target instanceof MatrixEvent) {
+            title = _t('Share Room Message');
+            matrixToUrl = makeEventPermalink(this.props.target.roomId, this.props.target.eventId);
         }
 
         const encodedUrl = encodeURIComponent(matrixToUrl);

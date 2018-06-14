@@ -438,6 +438,17 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
+    onPermalinkShareClicked: function(e) {
+        // These permalinks are like above, can be opened in new tab/window to matrix.to
+        // but otherwise fire the ShareDialog as it makes little sense to click permalink
+        // whilst it is in the current room
+        e.preventDefault();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room event dialog', '', ShareDialog, {
+            target: this.props.mxEvent,
+        });
+    },
+
     _renderE2EPadlock: function() {
         const ev = this.props.mxEvent;
         const props = {onClick: this.onCryptoClicked};
@@ -667,7 +678,7 @@ module.exports = withMatrixClient(React.createClass({
                         { avatar }
                         { sender }
                         <div className="mx_EventTile_reply">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <a href={permalink} onClick={this.onPermalinkShareClicked}>
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
@@ -694,7 +705,7 @@ module.exports = withMatrixClient(React.createClass({
                         { avatar }
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <a href={permalink} onClick={this.onPermalinkShareClicked}>
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
