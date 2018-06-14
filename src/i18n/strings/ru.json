@@ -1186,5 +1186,7 @@
     "To notify everyone in the room, you must be a": "Для уведомления всех в комнате, вы должны быть",
     "Can't leave Server Notices room": "Невозможно покинуть комнату сервера уведомлений",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Эта комната используется для важных сообщений от сервера, поэтому вы не можете ее покинуть.",
-    "Try the app first": "Сначала попробуйте приложение"
+    "Try the app first": "Сначала попробуйте приложение",
+    "Encrypting": "Шифрование",
+    "Encrypted, not sent": "Зашифровано, не отправлено"
 }
