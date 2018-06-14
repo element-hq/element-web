@@ -1190,5 +1190,7 @@
     "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:",
     "Try the app first": "Először próbáld ki az alkalmazást",
     "Encrypting": "Titkosít",
-    "Encrypted, not sent": "Titkosítva, de nincs elküldve"
+    "Encrypted, not sent": "Titkosítva, de nincs elküldve",
+    "No Audio Outputs detected": "Nem található hang kimenet",
+    "Audio Output": "Hang kimenet"
 }
