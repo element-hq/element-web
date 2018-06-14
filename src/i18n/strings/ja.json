@@ -223,7 +223,6 @@
     "Event Type": "イベントの形式",
     "What's New": "新着",
     "Enable audible notifications in web client": "ウェブクライアントで音による通知を有効化",
-    "Permalink": "パーマリンク",
     "remove %(name)s from the directory.": "ディレクトリから %(name)s を消去する。",
     "Riot does not know how to join a room on this network": "Riotはこのネットワークで部屋に参加する方法を知りません",
     "You can now return to your account after signing out, and sign in on other devices.": "サインアウト後にあなたの\nアカウントに戻る、また、他の端末でサインインすることができます。",

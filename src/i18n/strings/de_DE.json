@@ -1126,7 +1126,6 @@
     "Unable to fetch notification target list": "Liste der Benachrichtigungsempfänger konnte nicht abgerufen werden",
     "Set Password": "Passwort einrichten",
     "Enable audible notifications in web client": "Audio-Benachrichtigungen im Web-Client aktivieren",
-    "Permalink": "Permanenter Link",
     "Off": "Aus",
     "Riot does not know how to join a room on this network": "Riot weiß nicht, wie es einem Raum auf diesem Netzwerk beitreten soll",
     "Mentions only": "Nur, wenn du erwähnt wirst",

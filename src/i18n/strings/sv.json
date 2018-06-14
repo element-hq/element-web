@@ -547,7 +547,6 @@
     "Unable to fetch notification target list": "Det gick inte att hämta aviseringsmållistan",
     "Set Password": "Välj lösenord",
     "Enable audible notifications in web client": "Sätt på högljudda aviseringar i webbklienten",
-    "Permalink": "Permanent länk",
     "Off": "Av",
     "Riot does not know how to join a room on this network": "Riot kan inte gå med i ett rum på det här nätverket",
     "Mentions only": "Endast omnämnande",

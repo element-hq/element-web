@@ -1126,7 +1126,6 @@
     "Unable to fetch notification target list": "Nem sikerült letölteni az értesítési célok listáját",
     "Set Password": "Jelszó beállítása",
     "Enable audible notifications in web client": "Hangértesítések engedélyezése a webkliensben",
-    "Permalink": "Állandó hivatkozás",
     "Off": "Ki",
     "Riot does not know how to join a room on this network": "A Riot nem tud csatlakozni szobához ezen a hálózaton",
     "Mentions only": "Csak ha megemlítenek",
