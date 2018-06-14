@@ -1187,5 +1187,10 @@
     "Terms and Conditions": "條款與細則",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "要繼續使用 %(homeserverDomain)s 家伺服器，您必須審閱並同意我們的條款與細則。",
     "Review terms and conditions": "審閱條款與細則",
-    "To notify everyone in the room, you must be a": "為了通知每個在聊天室裡的人，您必須為"
+    "To notify everyone in the room, you must be a": "為了通知每個在聊天室裡的人，您必須為",
+    "Encrypting": "正在加密",
+    "Encrypted, not sent": "已加密，未傳送",
+    "No Audio Outputs detected": "未偵測到音訊輸出",
+    "Audio Output": "音訊輸出",
+    "Try the app first": "先試試看應用程式"
 }
