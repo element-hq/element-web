@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2018 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import dis from '../../dispatcher';
 import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
+import classNames from 'classnames';
 
 const TagPanel = React.createClass({
     displayName: 'TagPanel',
@@ -116,8 +117,10 @@ const TagPanel = React.createClass({
             />;
         });
 
+        const itemsSelected = this.state.selectedTags.length > 0;
+
         let clearButton;
-        if (this.state.selectedTags.length > 0) {
+        if (itemsSelected) {
             clearButton = <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
                 <TintableSvg src="img/icons-close.svg" width="24" height="24"
                              alt={_t("Clear filter")}
@@ -126,7 +129,11 @@ const TagPanel = React.createClass({
             </AccessibleButton>;
         }
 
-        return <div className="mx_TagPanel">
+        const classes = classNames('mx_TagPanel', {
+            mx_TagPanel_items_selected: itemsSelected,
+        });
+
+        return <div className={classes}>
             <div className="mx_TagPanel_clearButton_container">
                 { clearButton }
             </div>

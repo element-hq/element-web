@@ -17,12 +17,15 @@ limitations under the License.
 .mx_TagPanel {
     flex: 0 0 60px;
     background-color: $tertiary-accent-color;
-    cursor: pointer;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+}
+
+.mx_TagPanel_items_selected {
+    cursor: pointer;
 }
 
 .mx_TagPanel .mx_TagPanel_clearButton_container {
