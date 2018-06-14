@@ -583,13 +583,18 @@ module.exports = React.createClass({
         }
     },
 
-    _makeGroupInviteTiles() {
+    _makeGroupInviteTiles(filter) {
         const ret = [];
+        const lcFilter = filter && filter.toLowerCase();
 
         const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
         for (const group of MatrixClientPeg.get().getGroups()) {
-            if (group.myMembership !== 'invite') continue;
-            ret.push(<GroupInviteTile key={group.groupId} group={group} collapsed={this.props.collapsed} />);
+            const {groupId: id, name, myMembership: membership} = group;
+            // filter to only groups in invite state and group_id starts with filter or group name includes it
+            if (membership !== 'invite') continue;
+            if (lcFilter && !id.toLowerCase().startsWith(lcFilter) &&
+                !(name && name.toLowerCase().includes(lcFilter))) continue;
+            ret.push(<GroupInviteTile key={id} group={group} collapsed={this.props.collapsed} />);
         }
 
         return ret;
@@ -609,7 +614,7 @@ module.exports = React.createClass({
                 autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
-                             extraTiles={this._makeGroupInviteTiles()}
+                             extraTiles={this._makeGroupInviteTiles(self.props.searchFilter)}
                              label={_t('Community Invites')}
                              editable={false}
                              order="recent"
