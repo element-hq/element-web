@@ -185,7 +185,7 @@ export default class extends React.Component {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
-            if (content.info.thumbnail_file) {
+            if (content.info && content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file,
                 ).then(function(blob) {
@@ -239,11 +239,20 @@ export default class extends React.Component {
     }
 
     _messageContent(contentUrl, thumbUrl, content) {
+        // If unspecifide in the thumbnail info, assume width x height to be 800 x 600.
+        let infoHeight = 600;
+        let infoWidth = 800;
+
+        if (content.info && content.info.h && content.info.w) {
+            infoHeight = content.info.h;
+            infoWidth = content.info.w;
+        }
+
         // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = Math.min(this.props.maxImageHeight || 600, content.info.h);
+        const maxHeight = Math.min(this.props.maxImageHeight || 600, infoHeight);
         // The maximum width of the thumbnail, as dictated by its natural
         // maximum height.
-        const maxWidth = content.info.w * maxHeight / content.info.h;
+        const maxWidth = infoWidth * maxHeight / infoHeight;
 
         let img = null;
         let placeholder = null;
@@ -274,12 +283,12 @@ export default class extends React.Component {
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
+                <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }}></div>
 
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
-                        "max-width": content.info.w + "px",
+                        "max-width": infoWidth + "px",
                     }}>
                         <div className="mx_MImageBody_thumbnail_spinner">
                             { placeholder }
