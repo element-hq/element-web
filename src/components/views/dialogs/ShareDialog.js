@@ -67,10 +67,11 @@ export default class ShareDialog extends React.Component {
         super(props);
 
         this.onCopyClick = this.onCopyClick.bind(this);
-        this.onLinkRecentCheckboxClick = this.onLinkRecentCheckboxClick.bind(this);
+        this.onLinkSpecificEventCheckboxClick = this.onLinkSpecificEventCheckboxClick.bind(this);
 
         this.state = {
-            linkRecentTicked: false,
+            // MatrixEvent defaults to share linkSpecificEvent
+            linkSpecificEvent: this.props.target instanceof MatrixEvent,
         };
     }
 
@@ -116,9 +117,9 @@ export default class ShareDialog extends React.Component {
         e.target.onmouseleave = close;
     }
 
-    onLinkRecentCheckboxClick() {
+    onLinkSpecificEventCheckboxClick() {
         this.setState({
-            linkRecentTicked: !this.state.linkRecentTicked,
+            linkSpecificEvent: !this.state.linkSpecificEvent,
         });
     }
 
@@ -135,16 +136,16 @@ export default class ShareDialog extends React.Component {
             if (events.length > 0) {
                 checkbox = <div>
                     <input type="checkbox"
-                           value={this.state.linkRecentTicked}
+                           value={this.state.linkSpecificEvent}
                            id="mx_ShareDialog_checkbox"
-                           onClick={this.onLinkRecentCheckboxClick} />
+                           onClick={this.onLinkSpecificEventCheckboxClick} />
                     <label htmlFor="mx_ShareDialog_checkbox">
                         { _t('Link to most recent message') }
                     </label>
                 </div>;
             }
 
-            if (this.state.linkRecentTicked) {
+            if (this.state.linkSpecificEvent) {
                 matrixToUrl = makeEventPermalink(this.props.target.roomId, events[events.length - 1].getId());
             } else {
                 matrixToUrl = makeRoomPermalink(this.props.target.roomId);
@@ -157,7 +158,21 @@ export default class ShareDialog extends React.Component {
             matrixToUrl = makeGroupPermalink(this.props.target.groupId);
         } else if (this.props.target instanceof MatrixEvent) {
             title = _t('Share Room Message');
-            matrixToUrl = makeEventPermalink(this.props.target.roomId, this.props.target.eventId);
+            checkbox = <div>
+                <input type="checkbox"
+                       value={this.state.linkSpecificEvent}
+                       id="mx_ShareDialog_checkbox"
+                       onClick={this.onLinkSpecificEventCheckboxClick} />
+                <label htmlFor="mx_ShareDialog_checkbox">
+                    { _t('Link to selected message') }
+                </label>
+            </div>;
+
+            if (this.state.linkSpecificEvent) {
+                matrixToUrl = makeEventPermalink(this.props.target.roomId, this.props.target.eventId);
+            } else {
+                matrixToUrl = makeRoomPermalink(this.props.target.roomId);
+            }
         }
 
         const encodedUrl = encodeURIComponent(matrixToUrl);
