@@ -67,10 +67,10 @@ export default class ShareDialog extends React.Component {
         super(props);
 
         this.onCopyClick = this.onCopyClick.bind(this);
-        this.onCheckboxClick = this.onCheckboxClick.bind(this);
+        this.onLinkRecentCheckboxClick = this.onLinkRecentCheckboxClick.bind(this);
 
         this.state = {
-            ticked: false,
+            linkRecentTicked: false,
         };
     }
 
@@ -116,9 +116,9 @@ export default class ShareDialog extends React.Component {
         e.target.onmouseleave = close;
     }
 
-    onCheckboxClick() {
+    onLinkRecentCheckboxClick() {
         this.setState({
-            ticked: !this.state.ticked,
+            linkRecentTicked: !this.state.linkRecentTicked,
         });
     }
 
@@ -135,16 +135,16 @@ export default class ShareDialog extends React.Component {
             if (events.length > 0) {
                 checkbox = <div>
                     <input type="checkbox"
-                           value={this.state.ticked}
+                           value={this.state.linkRecentTicked}
                            id="mx_ShareDialog_checkbox"
-                           onClick={this.onCheckboxClick} />
+                           onClick={this.onLinkRecentCheckboxClick} />
                     <label htmlFor="mx_ShareDialog_checkbox">
                         { _t('Link to most recent message') }
                     </label>
                 </div>;
             }
 
-            if (this.state.ticked) {
+            if (this.state.linkRecentTicked) {
                 matrixToUrl = makeEventPermalink(this.props.target.roomId, events[events.length - 1].getId());
             } else {
                 matrixToUrl = makeRoomPermalink(this.props.target.roomId);
