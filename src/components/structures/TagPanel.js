@@ -84,7 +84,10 @@ const TagPanel = React.createClass({
     },
 
     onMouseDown(e) {
-        dis.dispatch({action: 'deselect_tags'});
+        // only dispatch if its not a no-op
+        if (this.state.selectedTags.length > 0) {
+            dis.dispatch({action: 'deselect_tags'});
+        }
     },
 
     onCreateGroupClick(ev) {
@@ -113,17 +116,18 @@ const TagPanel = React.createClass({
             />;
         });
 
-        const clearButton = this.state.selectedTags.length > 0 ?
-            <TintableSvg src="img/icons-close.svg" width="24" height="24"
-                alt={_t("Clear filter")}
-                title={_t("Clear filter")}
-            /> :
-            <div />;
+        let clearButton;
+        if (this.state.selectedTags.length > 0) {
+            clearButton = <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
+                <TintableSvg src="img/icons-close.svg" width="24" height="24"
+                             alt={_t("Clear filter")}
+                             title={_t("Clear filter")}
+                />
+            </AccessibleButton>;
+        }
 
         return <div className="mx_TagPanel">
-            <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
-                { clearButton }
-            </AccessibleButton>
+            { clearButton }
             <div className="mx_TagPanel_divider" />
             <GeminiScrollbarWrapper
                 className="mx_TagPanel_scroller"
