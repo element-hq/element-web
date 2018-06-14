@@ -94,7 +94,6 @@ export default React.createClass({
             group: this.props.group,
             onFinished: () => {
                 this.setState({ menuDisplayed: false });
-                // this.props.refreshSubList();
             },
         });
         this.setState({ menuDisplayed: true });

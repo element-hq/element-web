@@ -58,14 +58,15 @@ export default class GroupInviteTileContextMenu extends React.Component {
                 try {
                     await GroupStore.leaveGroup(this.props.group.groupId);
                 } catch (e) {
-                    console.error(e);
+                    console.error("Error rejecting community invite: ", e);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Error rejecting invite', '', ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Unable to reject invite"),
                     });
+                } finally {
+                    modal.close();
                 }
-                modal.close();
             },
         });
 
