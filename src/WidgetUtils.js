@@ -100,7 +100,7 @@ export default class WidgetUtils {
      * @param {string} widgetId The ID of the widget to wait for
      * @param {boolean} add True to wait for the widget to be added,
      *     false to wait for it to be deleted.
-     * @returns {Promise} that resolves when the widget is the the
+     * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
     static waitForUserWidget(widgetId, add) {
@@ -147,7 +147,7 @@ export default class WidgetUtils {
      * @param {string} roomId The ID of the room to wait for the widget in
      * @param {boolean} add True to wait for the widget to be added,
      *     false to wait for it to be deleted.
-     * @returns {Promise} that resolves when the widget is the the
+     * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
     static waitForRoomWidget(widgetId, roomId, add) {
