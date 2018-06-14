@@ -127,7 +127,9 @@ const TagPanel = React.createClass({
         }
 
         return <div className="mx_TagPanel">
-            { clearButton }
+            <div className="mx_TagPanel_clearButton_container">
+                { clearButton }
+            </div>
             <div className="mx_TagPanel_divider" />
             <GeminiScrollbarWrapper
                 className="mx_TagPanel_scroller"
