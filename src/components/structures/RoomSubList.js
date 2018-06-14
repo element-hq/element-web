@@ -106,15 +106,10 @@ var RoomSubList = React.createClass({
     applySearchFilter: function(list, filter) {
         if (filter === "") return list;
         const lcFilter = filter.toLowerCase();
-        return list.filter((room) => {
-            if (room.name && room.name.toLowerCase().includes(lcFilter)) return true;
-            // only apply search filter to aliases if it looks like an alias (starts with `#`)
-            // to prevent loads of false positives with server names, e.g `matrix`
-            if (filter[0] === '#' && room.getAliases().some((alias) => {
-                return alias.toLowerCase().startsWith(lcFilter);
-            })) return true;
-            return false;
-        });
+        // case insensitive if room name includes filter,
+        // or if starts with `#` and one of room's aliases starts with filter
+        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
+            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
     },
 
     // The header is collapsable if it is hidden or not stuck
