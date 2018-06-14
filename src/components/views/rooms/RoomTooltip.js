@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var dis = require('../../../dispatcher');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import dis from '../../../dispatcher';
 import classNames from 'classnames';
 
 const MIN_TOOLTIP_HEIGHT = 25;
@@ -77,25 +76,21 @@ module.exports = React.createClass({
     },
 
     _renderTooltip: function() {
-        var label = this.props.room ? this.props.room.name : this.props.label;
-
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        var parent = ReactDOM.findDOMNode(this).parentNode;
-        var style = {};
+        const parent = ReactDOM.findDOMNode(this).parentNode;
+        let style = {};
         style = this._updatePosition(style);
         style.display = "block";
 
-        const tooltipClasses = classNames(
-            "mx_RoomTooltip", this.props.tooltipClassName,
-        );
+        const tooltipClasses = classNames("mx_RoomTooltip", this.props.tooltipClassName);
 
-        var tooltip = (
-            <div className={tooltipClasses} style={style} >
-                <div className="mx_RoomTooltip_chevron"></div>
-                { label }
+        const tooltip = (
+            <div className={tooltipClasses} style={style}>
+                <div className="mx_RoomTooltip_chevron" />
+                { this.props.label }
             </div>
         );
 
