@@ -147,7 +147,16 @@ export default class extends React.Component {
 
     onImageLoad() {
         this.props.onWidgetLoad();
-        this.setState({ imgLoaded: true });
+
+        let loadedImageDimensions;
+
+        if (this.refs.image) {
+            const { naturalWidth, naturalHeight } = this.refs.image;
+
+            loadedImageDimensions = { naturalWidth, naturalHeight };
+        }
+
+        this.setState({ imgLoaded: true, loadedImageDimensions });
     }
 
     _getContentUrl() {
@@ -239,13 +248,30 @@ export default class extends React.Component {
     }
 
     _messageContent(contentUrl, thumbUrl, content) {
-        // If unspecifide in the thumbnail info, assume width x height to be 800 x 600.
-        let infoHeight = 600;
-        let infoWidth = 800;
+        let infoWidth;
+        let infoHeight;
 
-        if (content.info && content.info.h && content.info.w) {
-            infoHeight = content.info.h;
+        if (content && content.info && content.info.w && content.info.h) {
             infoWidth = content.info.w;
+            infoHeight = content.info.h;
+        } else {
+            // Whilst the image loads, display nothing.
+            //
+            // Once loaded, use the loaded image dimensions stored in `loadedImageDimensions`.
+            //
+            // By doing this, the image "pops" into the timeline, but is still restricted
+            // by the same width and height logic below.
+            if (!this.state.loadedImageDimensions) {
+                return this.wrapImage(contentUrl,
+                    <img style={{display: 'none'}} src={thumbUrl} ref="image"
+                        alt={content.body}
+                        onError={this.onImageError}
+                        onLoad={this.onImageLoad}
+                    />,
+                );
+            }
+            infoWidth = this.state.loadedImageDimensions.naturalWidth;
+            infoHeight = this.state.loadedImageDimensions.naturalHeight;
         }
 
         // The maximum height of the thumbnail as it is rendered as an <img>
