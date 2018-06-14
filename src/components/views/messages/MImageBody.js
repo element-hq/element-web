@@ -22,10 +22,8 @@ import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 
 import MFileBody from './MFileBody';
-import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import { decryptFile } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
@@ -52,14 +50,12 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onAction = this.onAction.bind(this);
         this.onImageError = this.onImageError.bind(this);
         this.onImageLoad = this.onImageLoad.bind(this);
         this.onImageEnter = this.onImageEnter.bind(this);
         this.onImageLeave = this.onImageLeave.bind(this);
         this.onClientSync = this.onClientSync.bind(this);
         this.onClick = this.onClick.bind(this);
-        this.fixupHeight = this.fixupHeight.bind(this);
         this._isGif = this._isGif.bind(this);
 
         this.state = {
@@ -68,6 +64,8 @@ export default class extends React.Component {
             decryptedBlob: null,
             error: null,
             imgError: false,
+            imgLoaded: false,
+            hover: false,
         };
     }
 
@@ -122,6 +120,8 @@ export default class extends React.Component {
     }
 
     onImageEnter(e) {
+        this.setState({ hover: true });
+
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
@@ -130,6 +130,8 @@ export default class extends React.Component {
     }
 
     onImageLeave(e) {
+        this.setState({ hover: false });
+
         if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
@@ -145,6 +147,7 @@ export default class extends React.Component {
 
     onImageLoad() {
         this.props.onWidgetLoad();
+        this.setState({ imgLoaded: true });
     }
 
     _getContentUrl() {
@@ -179,7 +182,6 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        this.dispatcherRef = dis.register(this.onAction);
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -210,7 +212,6 @@ export default class extends React.Component {
                 });
             }).done();
         }
-        this.fixupHeight();
         this._afterComponentDidMount();
     }
 
@@ -221,7 +222,6 @@ export default class extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        dis.unregister(this.dispatcherRef);
         this.context.matrixClient.removeListener('sync', this.onClientSync);
         this._afterComponentWillUnmount();
 
@@ -238,60 +238,87 @@ export default class extends React.Component {
     _afterComponentWillUnmount() {
     }
 
-    onAction(payload) {
-        if (payload.action === "timeline_resize") {
-            this.fixupHeight();
-        }
-    }
-
-    fixupHeight() {
-        if (!this.refs.image) {
-            console.warn(`Refusing to fix up height on ${this.displayName} with no image element`);
-            return;
-        }
-
-        const content = this.props.mxEvent.getContent();
-        const timelineWidth = this.refs.body.offsetWidth;
-        const maxHeight = this.props.maxImageHeight || 600; // let images take up as much width as they can so long
-        // as the height doesn't exceed 600px. The alternative here would be 600*timelineWidth/800; to scale them down
-        // to fit inside a 4:3 bounding box
-
-        // FIXME: this will break on clientside generated thumbnails (as per e2e rooms)
-        // which may well be much smaller than the 800x600 bounding box.
-
-        // FIXME: It will also break really badly for images with broken or missing thumbnails
-
-        // FIXME: Because we don't know what size of thumbnail the server's actually going to send
-        // us, we can't even really layout the page nicely for it.  Instead we have to assume
-        // it'll target 800x600 and we'll downsize if needed to make things fit.
-
-        // console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
-        let thumbHeight = null;
-        if (content.info) {
-            thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
-        }
-        this.refs.image.style.height = thumbHeight + "px";
-        // console.log("Image height now", thumbHeight);
-    }
-
     _messageContent(contentUrl, thumbUrl, content) {
+        // The maximum height of the thumbnail as it is rendered as an <img>
+        const maxHeight = Math.min(this.props.maxImageHeight || 600, content.info.h);
+        // The maximum width of the thumbnail, as dictated by its natural
+        // maximum height.
+        const maxWidth = content.info.w * maxHeight / content.info.h;
+
+        let img = null;
+        let placeholder = null;
+
+        // e2e image hasn't been decrypted yet
+        if (content.file !== undefined && this.state.decryptedUrl === null) {
+            placeholder = <img src="img/spinner.gif" alt={content.body} width="32" height="32" />;
+        } else if (!this.state.imgLoaded) {
+            // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
+            placeholder = this.getPlaceholder();
+        }
+
+        const showPlaceholder = Boolean(placeholder);
+
+        if (thumbUrl && !this.state.imgError) {
+            // Restrict the width of the thumbnail here, otherwise it will fill the container
+            // which has the same width as the timeline
+            // mx_MImageBody_thumbnail resizes img to exactly container size
+            img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                style={{ "max-width": maxWidth + "px" }}
+                alt={content.body}
+                onError={this.onImageError}
+                onLoad={this.onImageLoad}
+                onMouseEnter={this.onImageEnter}
+                onMouseLeave={this.onImageLeave} />;
+        }
+
         const thumbnail = (
-            <a href={contentUrl} onClick={this.onClick}>
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                    alt={content.body}
-                    onError={this.onImageError}
-                    onLoad={this.onImageLoad}
-                    onMouseEnter={this.onImageEnter}
-                    onMouseLeave={this.onImageLeave} />
-            </a>
+            <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
+                { /* Calculate aspect ratio, using %padding will size _container correctly */ }
+                <div style={{ paddingBottom: (100 * content.info.h / content.info.w) + '%' }}></div>
+
+                { showPlaceholder &&
+                    <div className="mx_MImageBody_thumbnail" style={{
+                        // Constrain width here so that spinner appears central to the loaded thumbnail
+                        "max-width": content.info.w + "px",
+                    }}>
+                        <div className="mx_MImageBody_thumbnail_spinner">
+                            { placeholder }
+                        </div>
+                    </div>
+                }
+
+                <div style={{display: !showPlaceholder ? undefined : 'none'}}>
+                    { img }
+                </div>
+
+                { this.state.hover && this.getTooltip() }
+            </div>
         );
 
-        return (
-            <span className="mx_MImageBody" ref="body">
-                { thumbUrl && !this.state.imgError ? thumbnail : '' }
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
-            </span>
-      );
+        return this.wrapImage(contentUrl, thumbnail);
+    }
+
+    // Overidden by MStickerBody
+    wrapImage(contentUrl, children) {
+        return <a href={contentUrl} onClick={this.onClick}>
+            {children}
+        </a>;
+    }
+
+    // Overidden by MStickerBody
+    getPlaceholder() {
+        // MImageBody doesn't show a placeholder whilst the image loads, (but it could do)
+        return null;
+    }
+
+    // Overidden by MStickerBody
+    getTooltip() {
+        return null;
+    }
+
+    // Overidden by MStickerBody
+    getFileBody() {
+        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />;
     }
 
     render() {
@@ -306,25 +333,6 @@ export default class extends React.Component {
             );
         }
 
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            // Need to decrypt the attachment
-            // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
-            return (
-                <span className="mx_MImageBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
-                        "display": "flex",
-                        "alignItems": "center",
-                        "width": "100%",
-                    }}>
-                        <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
-                            "margin": "auto",
-                        }} />
-                    </div>
-                </span>
-            );
-        }
-
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
@@ -333,6 +341,12 @@ export default class extends React.Component {
           thumbUrl = this._getThumbUrl();
         }
 
-        return this._messageContent(contentUrl, thumbUrl, content);
+        const thumbnail = this._messageContent(contentUrl, thumbUrl, content);
+        const fileBody = this.getFileBody();
+
+        return <span className="mx_MImageBody" ref="body">
+            { thumbnail }
+            { fileBody }
+        </span>;
     }
 }
