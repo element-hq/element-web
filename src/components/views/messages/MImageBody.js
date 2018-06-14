@@ -65,6 +65,7 @@ export default class extends React.Component {
             error: null,
             imgError: false,
             imgLoaded: false,
+            loadedImageDimensions: null,
             hover: false,
         };
     }
