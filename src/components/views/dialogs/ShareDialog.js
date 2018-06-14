@@ -201,27 +201,21 @@ export default class ShareDialog extends React.Component {
                 <hr />
 
                 <div className="mx_ShareDialog_split">
-                    <div className="mx_ShareDialog_left">
-                        <h3>QR Code</h3>
-                        <div className="mx_ShareDialog_qrcode_container">
-                            <QRCode value={matrixToUrl} size={256} logoWidth={48} logo="img/matrix-m.svg" />
-                        </div>
+                    <div className="mx_ShareDialog_qrcode_container">
+                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo="img/matrix-m.svg" />
                     </div>
-                    <div className="mx_ShareDialog_right">
-                        <h3>Social</h3>
-                        <div className="mx_ShareDialog_social_container">
-                            {
-                                socials.map((social) => <a rel="noopener"
-                                                           target="_blank"
-                                                           key={social.name}
-                                                           name={social.name}
-                                                           href={social.url(encodedUrl)}
-                                                           className="mx_ShareDialog_social_icon"
-                                >
-                                    <img src={social.img} alt={social.name} height={64} width={64} />
-                                </a>)
-                            }
-                        </div>
+                    <div className="mx_ShareDialog_social_container">
+                        {
+                            socials.map((social) => <a rel="noopener"
+                                                       target="_blank"
+                                                       key={social.name}
+                                                       name={social.name}
+                                                       href={social.url(encodedUrl)}
+                                                       className="mx_ShareDialog_social_icon"
+                            >
+                                <img src={social.img} alt={social.name} height={64} width={64} />
+                            </a>)
+                        }
                     </div>
                 </div>
             </div>

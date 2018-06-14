@@ -21,7 +21,7 @@ limitations under the License.
 
 .mx_ShareDialog hr {
     margin-top: 25px;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     border-color: $light-fg-color;
 }
 
@@ -78,12 +78,12 @@ limitations under the License.
 }
 
 .mx_ShareDialog_social_container {
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-block;
     width: 299px;
 }
 
 .mx_ShareDialog_social_icon {
+    display: inline-grid;
     margin-right: 10px;
     margin-bottom: 10px;
 }
