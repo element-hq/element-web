@@ -238,7 +238,6 @@
     "Level:": "Szint:",
     "Local addresses for this room:": "A szoba helyi címe:",
     "Logged in as:": "Bejelentkezve mint:",
-    "Login as guest": "Belépés vendégként",
     "Logout": "Kilép",
     "Low priority": "Alacsony prioritás",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s elérhetővé tette a szoba új üzeneteit nekik minden résztvevő a szobában, amióta meg van hívva.",
@@ -1181,5 +1180,12 @@
     "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "A fiókod felfüggesztése <b>nem jelenti alapértelmezetten azt, hogy az általad küldött üzenetek elfelejtődnek.</b> Ha törölni szeretnéd az általad küldött üzeneteket, pipáld be a jelölőnégyzetet alul.",
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Az üzenetek láthatósága a Matrixban hasonlít az emailhez. Az általad küldött üzenet törlése azt jelenti, hogy nem osztjuk meg új-, vagy vendég felhasználóval de a már regisztrált felhasználók akik már hozzáfértek az üzenethez továbbra is elérik a saját másolatukat.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Kérlek töröld az összes általam küldött üzenetet amikor a fiókomat felfüggesztem (<b>Figyelem:</b> ez azt eredményezheti, hogy a jövőbeni felhasználók csak részleges beszélgetést látnak majd)",
-    "e.g. %(exampleValue)s": "pl. %(exampleValue)s"
+    "e.g. %(exampleValue)s": "pl. %(exampleValue)s",
+    "Reload widget": "Kisalkalmazás újratöltése",
+    "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie (please see our <PolicyLink>Cookie Policy</PolicyLink>).": "Kérlek segíts javítani a Riot.im-et azzal, hogy <UsageDataLink>anonim felhasználási adatokat</UsageDataLink> küldesz. Ez szütit (cookie) fog használni (lásd a <PolicyLink>sütire vonatkozó szabályozásunkat</PolicyLink>).",
+    "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. This will use a cookie.": "Kérlek segíts javítani a Riot.im-et azzal, hogy <UsageDataLink>anonim felhasználási adatokat</UsageDataLink> küldesz. Ez szütit (cookie) fog használni.",
+    "Yes, I want to help!": "Igen, segítek!",
+    "Can't leave Server Notices room": "Nem lehet elhagyni a Szerver Üzenetek szobát",
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ez a szoba fontos szerverüzenetek közlésére jött létre, nem tudsz kilépni belőle.",
+    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:"
 }

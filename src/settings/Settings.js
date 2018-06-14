@@ -278,4 +278,8 @@ export const SETTINGS = {
         displayName: _td('Enable widget screenshots on supported widgets'),
         default: false,
     },
+    "PinnedEvents.isOpen": {
+        supportedLevels: ['room-device'],
+        default: false,
+    },
 };

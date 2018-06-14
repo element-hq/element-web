@@ -862,7 +862,6 @@
     "Error: Problem communicating with the given homeserver.": "Eraro: Estas problemo en komunikado kun la hejmservilo.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Hejmservilo ne alkonekteblas per HTTP kun HTTPS URL en via adresbreto. Aŭ uzu HTTPS aŭ <a>ŝaltu malsekurajn skriptojn</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ne eblas konekti al hejmservilo – bonvolu kontroli vian konekton, certigi ke <a>la SSL-atestilo de via hejmservilo</a> estas fidata, kaj ke neniu foliumila kromprogramo baras petojn.",
-    "Login as guest": "Saluti kiel gasto",
     "Sign in to get started": "Komencu per saluto",
     "Failed to fetch avatar URL": "Malsukcesis venigi adreson de profilbildo",
     "Set a display name:": "Agordi vidigan nomon:",

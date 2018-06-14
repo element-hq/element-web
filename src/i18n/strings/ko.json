@@ -240,7 +240,6 @@
     "Level:": "등급:",
     "Local addresses for this room:": "이 방의 로컬 주소:",
     "Logged in as:": "로그인:",
-    "Login as guest": "손님으로 로그인",
     "Logout": "로그아웃",
     "Low priority": "낮은 우선순위",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s님이 이후 방의 기록을 볼 수 있게 하셨어요 방 구성원 모두, 초대받은 시점부터.",

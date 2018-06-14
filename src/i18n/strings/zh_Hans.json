@@ -153,7 +153,6 @@
     "Jump to first unread message.": "跳到第一条未读消息。",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s 把 %(targetName)s 踢出了聊天室。.",
     "Leave room": "退出聊天室",
-    "Login as guest": "以游客的身份登录",
     "New password": "新密码",
     "Add a topic": "添加一个主题",
     "Admin": "管理员",

@@ -34,6 +34,7 @@ const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
 import {makeEventPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
+import {EventStatus} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -442,26 +443,27 @@ module.exports = withMatrixClient(React.createClass({
         const ev = this.props.mxEvent;
         const props = {onClick: this.onCryptoClicked};
 
-
+        // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
             return <E2ePadlockUndecryptable {...props} />;
-        } else if (ev.isEncrypted()) {
-            if (this.state.verified) {
-                return <E2ePadlockVerified {...props} />;
-            } else {
-                return <E2ePadlockUnverified {...props} />;
-            }
-        } else {
-            // XXX: if the event is being encrypted (ie eventSendStatus ===
-            // encrypting), it might be nice to show something other than the
-            // open padlock?
+        }
 
-            // if the event is not encrypted, but it's an e2e room, show the
-            // open padlock
-            const e2eEnabled = this.props.matrixClient.isRoomEncrypted(ev.getRoomId());
-            if (e2eEnabled) {
-                return <E2ePadlockUnencrypted {...props} />;
+        // event is encrypted, display padlock corresponding to whether or not it is verified
+        if (ev.isEncrypted()) {
+            return this.state.verified ? <E2ePadlockVerified {...props} /> : <E2ePadlockUnverified {...props} />;
+        }
+
+        if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+            // else if room is encrypted
+            // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
+            if (ev.status === EventStatus.ENCRYPTING) {
+                return <E2ePadlockEncrypting {...props} />;
             }
+            if (ev.status === EventStatus.NOT_SENT) {
+                return <E2ePadlockNotSent {...props} />;
+            }
+            // if the event is not encrypted, but it's an e2e room, show the open padlock
+            return <E2ePadlockUnencrypted {...props} />;
         }
 
         // no padlock needed
@@ -490,7 +492,7 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
-        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
+        const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
         const classes = classNames({
@@ -715,9 +717,15 @@ module.exports = withMatrixClient(React.createClass({
     },
 }));
 
+// XXX this'll eventually be dynamic based on the fields once we have extensible event types
+const messageTypes = ['m.room.message', 'm.sticker'];
+function isMessageEvent(ev) {
+    return (messageTypes.includes(ev.getType()));
+}
+
 module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
-    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
+    if (e.isRedacted() && !isMessageEvent(e)) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
@@ -734,6 +742,14 @@ function E2ePadlockUndecryptable(props) {
             src="img/e2e-blocked.svg" width="12" height="12"
             style={{ marginLeft: "-1px" }} {...props} />
     );
+}
+
+function E2ePadlockEncrypting(props) {
+    return <E2ePadlock alt={_t("Encrypting")} src="img/e2e-encrypting.svg" width="10" height="12" {...props} />;
+}
+
+function E2ePadlockNotSent(props) {
+    return <E2ePadlock alt={_t("Encrypted, not sent")} src="img/e2e-not_sent.svg" width="10" height="12" {...props} />;
 }
 
 function E2ePadlockVerified(props) {

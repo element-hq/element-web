@@ -63,6 +63,24 @@ export default class ContextualMenu extends React.Component {
         hasBackground: PropTypes.bool,
     }
 
+    constructor() {
+        super();
+        this.state = {
+            contextMenuRect: null,
+        };
+
+        this.collectContextMenuRect = this.collectContextMenuRect.bind(this);
+    }
+
+    collectContextMenuRect(element) {
+        // We don't need to clean up when unmounting, so ignore
+        if (!element) return;
+
+        this.setState({
+            contextMenuRect: element.getBoundingClientRect(),
+        });
+    }
+
     render() {
         const position = {};
         let chevronFace = null;
@@ -83,6 +101,9 @@ export default class ContextualMenu extends React.Component {
             chevronFace = 'right';
         }
 
+        const contextMenuRect = this.state.contextMenuRect || null;
+        const padding = 10;
+
         const chevronOffset = {};
         if (props.chevronFace) {
             chevronFace = props.chevronFace;
@@ -90,7 +111,19 @@ export default class ContextualMenu extends React.Component {
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
         } else {
-            chevronOffset.top = props.chevronOffset;
+            const target = position.top;
+
+            // By default, no adjustment is made
+            let adjusted = target;
+
+            // If we know the dimensions of the context menu, adjust its position
+            // such that it does not leave the (padded) window.
+            if (contextMenuRect) {
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
+            }
+
+            position.top = adjusted;
+            chevronOffset.top = Math.max(props.chevronOffset, props.chevronOffset + target - adjusted);
         }
 
         // To override the default chevron colour, if it's been set
@@ -154,7 +187,7 @@ export default class ContextualMenu extends React.Component {
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         return <div className={className} style={position}>
-            <div className={menuClasses} style={menuStyle}>
+            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>

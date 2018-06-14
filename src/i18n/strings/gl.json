@@ -879,7 +879,6 @@
     "Error: Problem communicating with the given homeserver.": "Fallo: problema ao comunicarse con servidor proporcionado.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Non se pode conectar ao servidor vía HTTP cando na barra de enderezos do navegador está HTTPS. Utilice HTTPS ou <a>active scripts non seguros</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Non se conectou ao servidor - por favor comprobe a conexión, asegúrese de o <a>certificado SSL do servidor</a> é de confianza, e que ningún engadido do navegador está bloqueando as peticións.",
-    "Login as guest": "Conexión como convidado",
     "Sign in to get started": "Conéctese para iniciar",
     "Failed to fetch avatar URL": "Fallo ao obter o URL do avatar",
     "Set a display name:": "Establecer nome público:",

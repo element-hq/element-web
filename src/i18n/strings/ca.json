@@ -579,7 +579,6 @@
     "%(nameList)s %(transitionList)s": "%(transitionList)s%(nameList)s",
     "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s han entrat",
     "Guest access is disabled on this Home Server.": "L'accés a usuaris d'altres xarxes no està permès en aquest servidor.",
-    "Login as guest": "Inicia sessió com a convidat",
     "Unblacklist": "Treure de la llista negre",
     "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s s'ha unit",
     "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s han sortit",
