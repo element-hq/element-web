@@ -391,6 +391,7 @@ limitations under the License.
 .mx_EventTile_content .markdown-body pre {
     overflow-x: overlay;
     overflow-y: visible;
+    max-height: 30vh;
 }
 
 .mx_EventTile_content .markdown-body code {
