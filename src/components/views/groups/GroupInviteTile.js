@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import * as ContextualMenu from "../../structures/ContextualMenu";
+import classNames from 'classnames';
 
 export default React.createClass({
     displayName: 'GroupInviteTile',
@@ -32,11 +34,69 @@ export default React.createClass({
         matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
+    getInitialState: function() {
+        return ({
+            hover: false,
+            badgeHover: false,
+            menuDisplayed: false,
+            selected: this.props.group.groupId === null, // XXX: this needs linking to LoggedInView/GroupView state
+        });
+    },
+
     onClick: function(e) {
         dis.dispatch({
             action: 'view_group',
             group_id: this.props.group.groupId,
         });
+    },
+
+    onMouseEnter: function() {
+        const state = {hover: true};
+        // Only allow non-guests to access the context menu
+        if (!this.context.matrixClient.isGuest()) {
+            state.badgeHover = true;
+        }
+        this.setState(state);
+    },
+
+    onMouseLeave: function() {
+        this.setState({
+            badgeHover: false,
+            hover: false,
+        });
+    },
+
+    onBadgeClicked: function(e) {
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
+
+        // Only allow none guests to access the context menu
+        if (this.context.matrixClient.isGuest()) return;
+
+        // If the badge is clicked, then no longer show tooltip
+        if (this.props.collapsed) {
+            this.setState({ hover: false });
+        }
+
+        const RoomTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
+        const elementRect = e.target.getBoundingClientRect();
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const x = elementRect.right + window.pageXOffset + 3;
+        const chevronOffset = 12;
+        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
+
+        ContextualMenu.createMenu(RoomTileContextMenu, {
+            chevronOffset: chevronOffset,
+            left: x,
+            top: y,
+            group: this.props.group,
+            onFinished: () => {
+                this.setState({ menuDisplayed: false });
+            },
+        });
+        this.setState({ menuDisplayed: true });
     },
 
     render: function() {
@@ -49,19 +109,37 @@ export default React.createClass({
 
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 
-        const label = <EmojiText
-            element="div"
-            title={this.props.group.groupId}
-            className="mx_RoomTile_name mx_RoomTile_badgeShown"
-            dir="auto"
-        >
+        const nameClasses = classNames({
+            'mx_RoomTile_name': true,
+            'mx_RoomTile_invite': this.props.isInvite,
+            'mx_RoomTile_badgeShown': this.state.badgeHover || this.state.menuDisplayed,
+        });
+
+        const label = <EmojiText element="div" title={this.props.group.groupId} className={nameClasses} dir="auto">
             { groupName }
         </EmojiText>;
 
-        const badge = <div className="mx_RoomSubList_badge mx_RoomSubList_badgeHighlight">!</div>;
+        const badgeEllipsis = this.state.badgeHover || this.state.menuDisplayed;
+        const badgeClasses = classNames('mx_RoomSubList_badge mx_RoomSubList_badgeHighlight', {
+            'mx_RoomTile_badgeButton': badgeEllipsis,
+        });
+
+        const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
+        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+
+        let tooltip;
+        if (this.props.collapsed && this.state.hover) {
+            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
+            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={groupName} dir="auto" />;
+        }
+
+        const classes = classNames('mx_RoomTile mx_RoomTile_highlight', {
+            'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
+            'mx_RoomTile_selected': this.state.selected,
+        });
 
         return (
-            <AccessibleButton className="mx_RoomTile mx_RoomTile_highlight" onClick={this.onClick}>
+            <AccessibleButton className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className="mx_RoomTile_avatar">
                     { av }
                 </div>
@@ -69,6 +147,7 @@ export default React.createClass({
                     { label }
                     { badge }
                 </div>
+                { tooltip }
             </AccessibleButton>
         );
     },

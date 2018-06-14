@@ -301,7 +301,7 @@ module.exports = React.createClass({
             }
         } else if (this.state.hover) {
             const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} dir="auto" />;
+            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
         }
 
         //var incomingCallBox;
@@ -314,7 +314,7 @@ module.exports = React.createClass({
 
         let directMessageIndicator;
         if (this._isDirectMessageRoom(this.props.room.roomId)) {
-         directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
+            directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
         }
 
         return <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
