@@ -98,9 +98,17 @@ export default class DecryptionFailureTracker {
      * @param {number} nowTs the timestamp that represents the time now.
      */
     checkFailures(nowTs) {
-        const failuresGivenGrace = this.failures.filter(
-            (f) => nowTs > f.ts + DecryptionFailureTracker.GRACE_PERIOD_MS,
-        );
+        const failuresGivenGrace = [];
+        const failuresNotReady = [];
+        while (this.failures.length > 0) {
+            const f = this.failures.shift();
+            if (nowTs > f.ts + DecryptionFailureTracker.GRACE_PERIOD_MS) {
+                failuresGivenGrace.push(f);
+            } else {
+                failuresNotReady.push(f);
+            }
+        }
+        this.failures = failuresNotReady;
 
         // Only track one failure per event
         const dedupedFailuresMap = failuresGivenGrace.reduce(
