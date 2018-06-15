@@ -72,10 +72,10 @@ module.exports = React.createClass({
         let BodyType = UnknownBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
-            if (msgtype && bodyTypes[msgtype]) {
-                BodyType = bodyTypes[msgtype];
-            } else if (type && evTypes[type]) {
+            if (type && evTypes[type]) {
                 BodyType = evTypes[type];
+            } else if (msgtype && bodyTypes[msgtype]) {
+                BodyType = bodyTypes[msgtype];
             } else if (content.url) {
                 // Fallback to MFileBody if there's a content URL
                 BodyType = bodyTypes['m.file'];
