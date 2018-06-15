@@ -120,6 +120,7 @@ describe.only('DecryptionFailureTracker', function() {
         tracker.trackFailure();
         tracker.trackFailure();
 
+        expect(failures.length).toBe(2, 'expected 2 failures to be tracked, got ' + failures.length);
         expect(failures[0].failedEventId).toBe(decryptedEvent.getId(), 'the first failure should be tracked first');
         expect(failures[1].failedEventId).toBe(decryptedEvent2.getId(), 'the second failure should be tracked second');
 
