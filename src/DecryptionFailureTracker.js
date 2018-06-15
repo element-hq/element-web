@@ -21,10 +21,6 @@ class DecryptionFailure {
     }
 }
 
-function eventIdHash(eventId) {
-    return crypto.subtle.digest('SHA-256', eventId);
-}
-
 export default class DecryptionFailureTracker {
     // Array of items of type DecryptionFailure. Every `CHECK_INTERVAL_MS`, this list
     // is checked for failures that happened > `GRACE_PERIOD_MS` ago. Those that did
@@ -37,7 +33,7 @@ export default class DecryptionFailureTracker {
 
     // Event IDs of failures that were tracked previously
     trackedEventHashMap = {
-        // [eventIdHash(eventId)]: true
+        // [eventId]: true
     };
 
     // Spread the load on `Analytics` by sending at most 1 event per
@@ -130,7 +126,7 @@ export default class DecryptionFailureTracker {
         // Only track one failure per event
         const dedupedFailuresMap = failuresGivenGrace.reduce(
             (map, failure) => {
-                if (!this.trackedEventHashMap[eventIdHash(failure.failedEventId)]) {
+                if (!this.trackedEventHashMap[failure.failedEventId]) {
                     return map.set(failure.failedEventId, failure);
                 } else {
                     return map;
@@ -143,7 +139,7 @@ export default class DecryptionFailureTracker {
         const trackedEventIds = [...dedupedFailuresMap.keys()];
 
         this.trackedEventHashMap = trackedEventIds.reduce(
-            (result, eventId) => ({...result, [eventIdHash(eventId)]: true}),
+            (result, eventId) => ({...result, [eventId]: true}),
             this.trackedEventHashMap,
         );
 
