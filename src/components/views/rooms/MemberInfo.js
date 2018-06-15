@@ -332,12 +332,41 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onMuteToggle: function() {
+    _warnSelfDemote: function() {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        return new Promise((resolve) => {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, " +
+                            "if you are the last privileged user in the room it will be impossible " +
+                            "to regain privileges.") }
+                        <br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: resolve,
+            });
+        });
+    },
+
+    onMuteToggle: async function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
         if (!room) return;
+
+        // if muting self, warn as it may be irreversible
+        if (target === this.props.matrixClient.getUserId()) {
+            try {
+                if (!await this._warnSelfDemote()) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+                return;
+            }
+        }
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
@@ -436,7 +465,7 @@ module.exports = withMatrixClient(React.createClass({
         }).done();
     },
 
-    onPowerChange: function(powerLevel) {
+    onPowerChange: async function(powerLevel) {
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
@@ -455,20 +484,12 @@ module.exports = withMatrixClient(React.createClass({
 
         // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
         if (myUserId === target) {
-            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
-                title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
-                        { _t("Are you sure?") }
-                    </div>,
-                button: _t("Continue"),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                    }
-                },
-            });
+            try {
+                if (!await this._warnSelfDemote()) return;
+                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+            }
             return;
         }
 
