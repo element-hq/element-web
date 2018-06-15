@@ -1052,7 +1052,7 @@ export default React.createClass({
                     <input type="radio"
                         value={GROUP_JOINPOLICY_INVITE}
                         checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_INVITE}
-                        onClick={this._onJoinableChange}
+                        onChange={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
                         { _t('Only people who have been invited') }
@@ -1064,7 +1064,7 @@ export default React.createClass({
                     <input type="radio"
                         value={GROUP_JOINPOLICY_OPEN}
                         checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_OPEN}
-                        onClick={this._onJoinableChange}
+                        onChange={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
                         { _t('Everyone') }
