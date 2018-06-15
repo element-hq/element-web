@@ -1191,5 +1191,15 @@
     "Encrypting": "Chiffrement en cours",
     "Encrypted, not sent": "Chiffré, pas envoyé",
     "No Audio Outputs detected": "Aucune sortie audio détectée",
-    "Audio Output": "Sortie audio"
+    "Audio Output": "Sortie audio",
+    "Share Link to User": "Partager le lien à l'utilisateur",
+    "Share room": "Partager le salon",
+    "Share Room": "Partager le salon",
+    "Link to most recent message": "Lien vers le message le plus récent",
+    "Share User": "Partager l'utilisateur",
+    "Share Community": "Partager la communauté",
+    "Share Room Message": "Partager le message du salon",
+    "Link to selected message": "Lien vers le message sélectionné",
+    "COPY": "COPIER",
+    "Share Message": "Partager le message"
 }
