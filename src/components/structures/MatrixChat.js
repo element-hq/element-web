@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import Matrix from "matrix-js-sdk";
 
 import Analytics from "../../Analytics";
+import DecryptionFailureTracker from "../../DecryptionFailureTracker";
 import MatrixClientPeg from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
@@ -1308,13 +1309,16 @@ export default React.createClass({
             }
         });
 
-        // XXX: This will do a HTTP request for each Event.decrypted event
-        // if the decryption was a failure
-        cli.on("Event.decrypted", (e) => {
-            if (e.isDecryptionFailure()) {
-                Analytics.trackEvent('E2E', 'Decryption failure', 'ev.content.body: ' + e.getContent().body);
-            }
+        const dft = new DecryptionFailureTracker((failure) => {
+            // TODO: Pass reason for failure as third argument to trackEvent
+            Analytics.trackEvent('E2E', 'Decryption failure');
         });
+
+        const stopDft = dft.start();
+
+        // When logging out, stop tracking failures and destroy state
+        cli.on("Session.logged_out", stopDft);
+        cli.on("Event.decrypted", dft.eventDecrypted);
 
         const krh = new KeyRequestHandler(cli);
         cli.on("crypto.roomKeyRequest", (req) => {
