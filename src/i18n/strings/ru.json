@@ -1189,5 +1189,13 @@
     "Encrypting": "Шифрование",
     "Encrypted, not sent": "Зашифровано, не отправлено",
     "No Audio Outputs detected": "Аудиовыход не обнаружен",
-    "Audio Output": "Аудиовыход"
+    "Audio Output": "Аудиовыход",
+    "Share Link to User": "Поделиться ссылкой с пользователем",
+    "Share room": "Поделиться комнатой",
+    "Share Room": "Поделиться комнатой",
+    "Link to most recent message": "Ссылка на последнее сообщение",
+    "Share User": "Поделиться пользователем",
+    "Share Community": "Поделиться сообществом",
+    "Link to selected message": "Ссылка на выбранное сообщение",
+    "COPY": "КОПИРОВАТЬ"
 }
