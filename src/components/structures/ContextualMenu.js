@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +16,10 @@ limitations under the License.
 */
 
 
-'use strict';
-
-const classNames = require('classnames');
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -61,7 +60,12 @@ export default class ContextualMenu extends React.Component {
         // If true, insert an invisible screen-sized element behind the
         // menu that when clicked will close it.
         hasBackground: PropTypes.bool,
-    }
+
+        // The component to render as the context menu
+        elementClass: PropTypes.element.isRequired,
+        // on resize callback
+        windowResize: PropTypes.func
+    };
 
     constructor() {
         super();
@@ -145,7 +149,7 @@ export default class ContextualMenu extends React.Component {
             `;
         }
 
-        const chevron = <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace}></div>;
+        const chevron = <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} />;
         const className = 'mx_ContextualMenu_wrapper';
 
         const menuClasses = classNames({
@@ -191,13 +195,13 @@ export default class ContextualMenu extends React.Component {
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu}></div> }
+            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu} /> }
             <style>{ chevronCSS }</style>
         </div>;
     }
 }
 
-export function createMenu(ElementClass, props) {
+export function createMenu(ElementClass, props, hasBackground=true) {
     const closeMenu = function(...args) {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
 
@@ -208,8 +212,8 @@ export function createMenu(ElementClass, props) {
 
     // We only reference closeMenu once per call to createMenu
     const menu = <ContextualMenu
+        hasBackground={hasBackground}
         {...props}
-        hasBackground={true}
         elementClass={ElementClass}
         closeMenu={closeMenu} // eslint-disable-line react/jsx-no-bind
         windowResize={closeMenu} // eslint-disable-line react/jsx-no-bind

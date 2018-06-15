@@ -562,6 +562,13 @@ export default React.createClass({
         });
     },
 
+    _onShareClick: function() {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share community dialog', '', ShareDialog, {
+            target: this._matrixClient.getGroup(this.props.groupId),
+        });
+    },
+
     _onCancelClick: function() {
         this._closeSettings();
     },
@@ -1207,6 +1214,7 @@ export default React.createClass({
                     shortDescNode = <span onClick={onGroupHeaderItemClick}>{ summary.profile.short_description }</span>;
                 }
             }
+
             if (this.state.editing) {
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
@@ -1231,6 +1239,11 @@ export default React.createClass({
                         </AccessibleButton>,
                     );
                 }
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupHeader_button" onClick={this._onShareClick} title={_t('Share Community')} key="_shareButton">
+                        <TintableSvg src="img/icons-share.svg" width="16" height="16" />
+                    </AccessibleButton>,
+                );
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"

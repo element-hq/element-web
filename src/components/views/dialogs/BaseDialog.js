@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { MatrixClient } from 'matrix-js-sdk';
 
@@ -64,7 +65,10 @@ export default React.createClass({
 
         // Id of content element
         // If provided, this is used to add a aria-describedby attribute
-        contentId: React.PropTypes.string,
+        contentId: PropTypes.string,
+
+        // optional additional class for the title element
+        titleClass: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -105,25 +109,28 @@ export default React.createClass({
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
+        let cancelButton;
+        if (this.props.hasCancel) {
+            cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
+                <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
+            </AccessibleButton>;
+        }
+
         return (
             <FocusTrap onKeyDown={this._onKeyDown}
                 className={this.props.className}
                 role="dialog"
                 aria-labelledby='mx_BaseDialog_title'
                 // This should point to a node describing the dialog.
-                // If we were about to completelly follow this recommendation we'd need to
+                // If we were about to completely follow this recommendation we'd need to
                 // make all the components relying on BaseDialog to be aware of it.
                 // So instead we will use the whole content as the description.
                 // Description comes first and if the content contains more text,
                 // AT users can skip its presentation.
                 aria-describedby={this.props.contentId}
             >
-                { this.props.hasCancel ? <AccessibleButton onClick={this._onCancelClick}
-                    className="mx_Dialog_cancelButton"
-                >
-                    <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
-                </AccessibleButton> : null }
-                <div className={'mx_Dialog_title ' + this.props.titleClass} id='mx_BaseDialog_title'>
+                { cancelButton }
+                <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
                     { this.props.title }
                 </div>
                 { this.props.children }
