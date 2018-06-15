@@ -55,13 +55,13 @@ export default class DecryptionFailureTracker {
         this.trackDecryptionFailure = fn;
     }
 
-    loadTrackedEventHashMap() {
-        this.trackedEventHashMap = JSON.parse(localStorage.getItem('mx-decryption-failure-event-id-hashes')) || {};
-    }
+    // loadTrackedEventHashMap() {
+    //     this.trackedEventHashMap = JSON.parse(localStorage.getItem('mx-decryption-failure-event-id-hashes')) || {};
+    // }
 
-    saveTrackedEventHashMap() {
-        localStorage.setItem('mx-decryption-failure-event-id-hashes', JSON.stringify(this.trackedEventHashMap));
-    }
+    // saveTrackedEventHashMap() {
+    //     localStorage.setItem('mx-decryption-failure-event-id-hashes', JSON.stringify(this.trackedEventHashMap));
+    // }
 
     eventDecrypted(e) {
         if (e.isDecryptionFailure()) {
@@ -143,7 +143,9 @@ export default class DecryptionFailureTracker {
             this.trackedEventHashMap,
         );
 
-        this.saveTrackedEventHashMap();
+        // Commented out for now for expediency, we need to consider unbound nature of storing
+        // this in localStorage
+        // this.saveTrackedEventHashMap();
 
         const dedupedFailures = dedupedFailuresMap.values();
 
