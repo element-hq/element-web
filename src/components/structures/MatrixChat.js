@@ -1318,7 +1318,7 @@ export default React.createClass({
 
         // When logging out, stop tracking failures and destroy state
         cli.on("Session.logged_out", stopDft);
-        cli.on("Event.decrypted", dft.eventDecrypted);
+        cli.on("Event.decrypted", (e) => dft.eventDecrypted(e));
 
         const krh = new KeyRequestHandler(cli);
         cli.on("crypto.roomKeyRequest", (req) => {
