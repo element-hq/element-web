@@ -36,6 +36,10 @@ export default class DecryptionFailureTracker {
         // [eventId]: true
     };
 
+    // Set to an interval ID when `start` is called
+    checkInterval = null;
+    trackInterval = null;
+
     // Spread the load on `Analytics` by sending at most 1 event per
     // `TRACK_INTERVAL_MS`.
     static TRACK_INTERVAL_MS = 1000;
@@ -82,27 +86,28 @@ export default class DecryptionFailureTracker {
 
     /**
      * Start checking for and tracking failures.
-     * @return {function} a function that clears state and causes DFT to stop checking for
-     * and tracking failures.
      */
     start() {
-        const checkInterval = setInterval(
+        this.checkInterval = setInterval(
             () => this.checkFailures(Date.now()),
             DecryptionFailureTracker.CHECK_INTERVAL_MS,
         );
 
-        const trackInterval = setInterval(
+        this.trackInterval = setInterval(
             () => this.trackFailure(),
             DecryptionFailureTracker.TRACK_INTERVAL_MS,
         );
+    }
 
-        return () => {
-            clearInterval(checkInterval);
-            clearInterval(trackInterval);
+    /**
+     * Clear state and stop checking for and tracking failures.
+     */
+    stop() {
+        clearInterval(this.checkInterval);
+        clearInterval(this.trackInterval);
 
-            this.failures = [];
-            this.failuresToTrack = [];
-        };
+        this.failures = [];
+        this.failuresToTrack = [];
     }
 
     /**

@@ -1318,10 +1318,10 @@ export default React.createClass({
         // tracked events across sessions.
         // dft.loadTrackedEventHashMap();
 
-        const stopDft = dft.start();
+        dft.start();
 
         // When logging out, stop tracking failures and destroy state
-        cli.on("Session.logged_out", stopDft);
+        cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e) => dft.eventDecrypted(e));
 
         const krh = new KeyRequestHandler(cli);
