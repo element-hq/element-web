@@ -129,17 +129,18 @@ export default class DecryptionFailureTracker {
 
         // Only track one failure per event
         const dedupedFailuresMap = failuresGivenGrace.reduce(
-            (result, failure) => {
+            (map, failure) => {
                 if (!this.trackedEventHashMap[eventIdHash(failure.failedEventId)]) {
-                    return {...result, [failure.failedEventId]: failure};
+                    return map.set(failure.failedEventId, failure);
                 } else {
-                    return result;
+                    return map;
                 }
             },
-            {},
+            // Use a map to preseve key ordering
+            new Map(),
         );
 
-        const trackedEventIds = Object.keys(dedupedFailuresMap);
+        const trackedEventIds = [...dedupedFailuresMap.keys()];
 
         this.trackedEventHashMap = trackedEventIds.reduce(
             (result, eventId) => ({...result, [eventIdHash(eventId)]: true}),
@@ -148,7 +149,7 @@ export default class DecryptionFailureTracker {
 
         this.saveTrackedEventHashMap();
 
-        const dedupedFailures = trackedEventIds.map((k) => dedupedFailuresMap[k]);
+        const dedupedFailures = dedupedFailuresMap.values();
 
         this.failuresToTrack = [...this.failuresToTrack, ...dedupedFailures];
     }
