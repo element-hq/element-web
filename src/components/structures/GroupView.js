@@ -1127,10 +1127,6 @@ export default React.createClass({
             let avatarNode;
             let nameNode;
             let shortDescNode;
-            const bodyNodes = [
-                this._getMembershipSection(),
-                this._getGroupSection(),
-            ];
             const rightButtons = [];
             if (this.state.editing && this.state.isUserPrivileged) {
                 let avatarImage;
@@ -1269,7 +1265,8 @@ export default React.createClass({
                         </div>
                     </div>
                     <GeminiScrollbarWrapper className="mx_GroupView_body">
-                        { bodyNodes }
+                        { this._getMembershipSection() }
+                        { this._getGroupSection() }
                     </GeminiScrollbarWrapper>
                 </div>
             );
