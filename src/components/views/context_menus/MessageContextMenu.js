@@ -184,6 +184,15 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onPermalinkClick: function(e: Event) {
+        e.preventDefault();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
+            target: this.props.mxEvent,
+        });
+        this.closeMenu();
+    },
+
     onReplyClick: function() {
         dis.dispatch({
             action: 'reply_to_event',
@@ -290,7 +299,7 @@ module.exports = React.createClass({
         const permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId())}
-                  target="_blank" rel="noopener" onClick={this.closeMenu}>{ _t('Permalink') }</a>
+                  target="_blank" rel="noopener" onClick={this.onPermalinkClick}>{ _t('Share Message') }</a>
             </div>
         );
 

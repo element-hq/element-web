@@ -740,7 +740,6 @@
     "Unable to fetch notification target list": "Bildirim hedef listesi çekilemedi",
     "An error occurred whilst saving your email notification preferences.": "E-posta bildirim tercihlerinizi kaydetme işlemi sırasında bir hata oluştu.",
     "Enable audible notifications in web client": "Web istemcisinde sesli bildirimleri etkinleştir",
-    "Permalink": "Kalıcı Bağlantı(permalink)",
     "Off": "Kapalı",
     "Riot does not know how to join a room on this network": "Riot bu ağdaki bir odaya nasıl gireceğini bilmiyor",
     "Mentions only": "Sadece Mention'lar",

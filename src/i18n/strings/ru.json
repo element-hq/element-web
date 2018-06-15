@@ -1124,7 +1124,6 @@
     "Unable to fetch notification target list": "Не удалось получить список устройств для уведомлений",
     "Set Password": "Задать пароль",
     "Enable audible notifications in web client": "Включить звуковые уведомления в веб-клиенте",
-    "Permalink": "Постоянная ссылка",
     "Off": "Выключить",
     "Riot does not know how to join a room on this network": "Riot не знает, как присоединиться к комнате, принадлежащей к этой сети",
     "Mentions only": "Только при упоминаниях",

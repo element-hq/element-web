@@ -336,8 +336,8 @@ module.exports = React.createClass({
                     left: x,
                     top: y,
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
-                });
-                e.target.onmouseout = close;
+                }, false);
+                e.target.onmouseleave = close;
             };
             p.appendChild(button);
         });

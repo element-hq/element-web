@@ -1049,7 +1049,6 @@
     "Set Password": "Aseta salasana",
     "An error occurred whilst saving your email notification preferences.": "Sähköposti-ilmoitusasetuksia tallettaessa tapahtui virhe.",
     "Enable audible notifications in web client": "Ota käyttöön äänelliset ilmoitukset",
-    "Permalink": "Pysyvä linkki",
     "remove %(name)s from the directory.": "poista %(name)s hakemistosta.",
     "Off": "Pois päältä",
     "Riot does not know how to join a room on this network": "Riot ei tiedä miten liittya huoneeseen tässä verkossa",
