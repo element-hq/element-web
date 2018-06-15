@@ -1191,5 +1191,15 @@
     "Encrypted, not sent": "已加密，未傳送",
     "No Audio Outputs detected": "未偵測到音訊輸出",
     "Audio Output": "音訊輸出",
-    "Try the app first": "先試試看應用程式"
+    "Try the app first": "先試試看應用程式",
+    "Share Link to User": "分享連結給使用者",
+    "Share room": "分享聊天室",
+    "Share Room": "分享聊天室",
+    "Link to most recent message": "連結到最近的訊息",
+    "Share User": "分享使用者",
+    "Share Community": "分享社群",
+    "Share Room Message": "分享聊天室訊息",
+    "Link to selected message": "連結到選定的訊息",
+    "COPY": "複製",
+    "Share Message": "分享訊息"
 }
