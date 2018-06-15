@@ -56,7 +56,7 @@ export default class DecryptionFailureTracker {
     }
 
     loadTrackedEventHashMap() {
-        this.trackedEventHashMap = JSON.parse(localStorage.getItem('mx-decryption-failure-event-id-hashes'));
+        this.trackedEventHashMap = JSON.parse(localStorage.getItem('mx-decryption-failure-event-id-hashes')) || {};
     }
 
     saveTrackedEventHashMap() {
