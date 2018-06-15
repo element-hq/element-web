@@ -70,7 +70,7 @@ export default withMatrixClient(React.createClass({
         if (this.state.groups) {
             const groupNodes = [];
             this.state.groups.forEach((g) => {
-                groupNodes.push(<GroupTile groupId={g} />);
+                groupNodes.push(<GroupTile key={g} groupId={g} />);
             });
             contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
             content = groupNodes.length > 0 ?
