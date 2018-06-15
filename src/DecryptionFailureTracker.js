@@ -21,6 +21,10 @@ class DecryptionFailure {
     }
 }
 
+function eventIdHash(eventId) {
+    return crypto.subtle.digest('SHA-256', eventId);
+}
+
 export default class DecryptionFailureTracker {
     // Array of items of type DecryptionFailure. Every `CHECK_INTERVAL_MS`, this list
     // is checked for failures that happened > `GRACE_PERIOD_MS` ago. Those that did
@@ -30,6 +34,11 @@ export default class DecryptionFailureTracker {
     // Every TRACK_INTERVAL_MS (so as to spread the number of hits done on Analytics),
     // one DecryptionFailure of this FIFO is removed and tracked.
     failuresToTrack = [];
+
+    // Event IDs of failures that were tracked previously
+    eventTrackedPreviously = {
+        // [eventIdHash(eventId)]: true
+    };
 
     // Spread the load on `Analytics` by sending at most 1 event per
     // `TRACK_INTERVAL_MS`.
@@ -112,10 +121,24 @@ export default class DecryptionFailureTracker {
 
         // Only track one failure per event
         const dedupedFailuresMap = failuresGivenGrace.reduce(
-            (result, failure) => ({...result, [failure.failedEventId]: failure}),
+            (result, failure) => {
+                if (!this.eventTrackedPreviously[eventIdHash(failure.failedEventId)]) {
+                    return {...result, [failure.failedEventId]: failure};
+                } else {
+                    return result;
+                }
+            },
             {},
         );
-        const dedupedFailures = Object.keys(dedupedFailuresMap).map((k) => dedupedFailuresMap[k]);
+
+        const trackedEventIds = Object.keys(dedupedFailuresMap);
+
+        this.eventTrackedPreviously = trackedEventIds.reduce(
+            (result, eventId) => ({...result, [eventIdHash(eventId)]: true}),
+            this.eventTrackedPreviously,
+        );
+
+        const dedupedFailures = trackedEventIds.map((k) => dedupedFailuresMap[k]);
 
         this.failuresToTrack = [...this.failuresToTrack, ...dedupedFailures];
     }

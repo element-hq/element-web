@@ -125,4 +125,28 @@ describe.only('DecryptionFailureTracker', function() {
 
         done();
     });
+
+    it('should not track a failure for an event that was tracked previously', (done) => {
+        const decryptedEvent = createFailedDecryptionEvent();
+
+        const failures = [];
+        const tracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+
+        // Indicate decryption
+        tracker.eventDecrypted(decryptedEvent);
+
+        // Pretend "now" is Infinity
+        tracker.checkFailures(Infinity);
+
+        tracker.trackFailure();
+
+        // Indicate a second decryption, after having tracked the failure
+        tracker.eventDecrypted(decryptedEvent);
+
+        tracker.trackFailure();
+
+        expect(failures.length).toBe(1, 'should only track a single failure per event');
+
+        done();
+    });
 });
