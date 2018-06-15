@@ -150,4 +150,34 @@ describe.only('DecryptionFailureTracker', function() {
 
         done();
     });
+
+    it('should not track a failure for an event that was tracked in a previous session', (done) => {
+        // This test uses localStorage, clear it beforehand
+        localStorage.clear();
+
+        const decryptedEvent = createFailedDecryptionEvent();
+
+        const failures = [];
+        const tracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+
+        // Indicate decryption
+        tracker.eventDecrypted(decryptedEvent);
+
+        // Pretend "now" is Infinity
+        // NB: This saves to localStorage specific to DFT
+        tracker.checkFailures(Infinity);
+
+        tracker.trackFailure();
+
+        // Simulate the browser refreshing by destroying tracker and creating a new tracker
+        const secondTracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+        secondTracker.loadTrackedEventHashMap();
+        secondTracker.eventDecrypted(decryptedEvent);
+        secondTracker.checkFailures(Infinity);
+        secondTracker.trackFailure();
+
+        expect(failures.length).toBe(1, 'should track a single failure per event per session, got ' + failures.length);
+
+        done();
+    });
 });

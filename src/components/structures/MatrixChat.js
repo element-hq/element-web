@@ -1313,6 +1313,7 @@ export default React.createClass({
             // TODO: Pass reason for failure as third argument to trackEvent
             Analytics.trackEvent('E2E', 'Decryption failure');
         });
+        dft.loadEventTrackedPreviously();
 
         const stopDft = dft.start();
 

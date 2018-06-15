@@ -36,7 +36,7 @@ export default class DecryptionFailureTracker {
     failuresToTrack = [];
 
     // Event IDs of failures that were tracked previously
-    eventTrackedPreviously = {
+    trackedEventHashMap = {
         // [eventIdHash(eventId)]: true
     };
 
@@ -57,6 +57,14 @@ export default class DecryptionFailureTracker {
         }
 
         this.trackDecryptionFailure = fn;
+    }
+
+    loadTrackedEventHashMap() {
+        this.trackedEventHashMap = JSON.parse(localStorage.getItem('mx-decryption-failure-event-id-hashes'));
+    }
+
+    saveTrackedEventHashMap() {
+        localStorage.setItem('mx-decryption-failure-event-id-hashes', JSON.stringify(this.trackedEventHashMap));
     }
 
     eventDecrypted(e) {
@@ -122,7 +130,7 @@ export default class DecryptionFailureTracker {
         // Only track one failure per event
         const dedupedFailuresMap = failuresGivenGrace.reduce(
             (result, failure) => {
-                if (!this.eventTrackedPreviously[eventIdHash(failure.failedEventId)]) {
+                if (!this.trackedEventHashMap[eventIdHash(failure.failedEventId)]) {
                     return {...result, [failure.failedEventId]: failure};
                 } else {
                     return result;
@@ -133,10 +141,12 @@ export default class DecryptionFailureTracker {
 
         const trackedEventIds = Object.keys(dedupedFailuresMap);
 
-        this.eventTrackedPreviously = trackedEventIds.reduce(
+        this.trackedEventHashMap = trackedEventIds.reduce(
             (result, eventId) => ({...result, [eventIdHash(eventId)]: true}),
-            this.eventTrackedPreviously,
+            this.trackedEventHashMap,
         );
+
+        this.saveTrackedEventHashMap();
 
         const dedupedFailures = trackedEventIds.map((k) => dedupedFailuresMap[k]);
 
