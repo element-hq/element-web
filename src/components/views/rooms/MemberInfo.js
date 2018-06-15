@@ -499,7 +499,8 @@ module.exports = withMatrixClient(React.createClass({
                 title: _t("Warning!"),
                 description:
                     <div>
-                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("You will not be able to undo this change as you are promoting the user " +
+                            "to have the same power level as yourself.") }<br />
                         { _t("Are you sure?") }
                     </div>,
                 button: _t("Continue"),
