@@ -30,7 +30,7 @@ function createFailedDecryptionEvent() {
     return event;
 }
 
-describe.only('DecryptionFailureTracker', function() {
+describe('DecryptionFailureTracker', function() {
     it('tracks a failed decryption', function(done) {
         const failedDecryptionEvent = createFailedDecryptionEvent();
         let trackedFailure = null;
