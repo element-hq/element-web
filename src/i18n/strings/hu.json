@@ -1191,5 +1191,15 @@
     "Encrypting": "Titkosít",
     "Encrypted, not sent": "Titkosítva, de nincs elküldve",
     "No Audio Outputs detected": "Nem található hang kimenet",
-    "Audio Output": "Hang kimenet"
+    "Audio Output": "Hang kimenet",
+    "Share Link to User": "Hivatkozás megosztása felhasználóval",
+    "Share room": "Szoba megosztása",
+    "Share Room": "Szoba megosztása",
+    "Link to most recent message": "A legfrissebb üzenetre hivatkozás",
+    "Share User": "Felhasználó megosztás",
+    "Share Community": "Közösség megosztás",
+    "Share Room Message": "Szoba üzenet megosztás",
+    "Link to selected message": "Hivatkozás a kijelölt üzenetre",
+    "COPY": "Másol",
+    "Share Message": "Üzenet megosztása"
 }
