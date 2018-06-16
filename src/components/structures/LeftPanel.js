@@ -85,6 +85,10 @@ var LeftPanel = React.createClass({
         let handled = false;
 
         switch (ev.keyCode) {
+            case KeyCode.TAB:
+                this._onMoveFocus(ev.shiftKey);
+                handled = true;
+                break;
             case KeyCode.UP:
                 this._onMoveFocus(true);
                 handled = true;
