@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,19 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
 
-const React = require('react');
-const ReactDOM = require("react-dom");
+import React from 'react';
 import PropTypes from 'prop-types';
-const classNames = require('classnames');
+import classNames from 'classnames';
 import dis from '../../../dispatcher';
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-const sdk = require('../../../index');
-const ContextualMenu = require('../../structures/ContextualMenu');
-const RoomNotifs = require('../../../RoomNotifs');
-const FormattingUtils = require('../../../utils/FormattingUtils');
+import sdk from '../../../index';
+import ContextualMenu from '../../structures/ContextualMenu';
+import * as RoomNotifs from '../../../RoomNotifs';
+import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -72,16 +71,12 @@ module.exports = React.createClass({
     },
 
     _shouldShowMentionBadge: function() {
-        return this.state.notifState != RoomNotifs.MUTE;
+        return this.state.notifState !== RoomNotifs.MUTE;
     },
 
     _isDirectMessageRoom: function(roomId) {
         const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        if (dmRooms) {
-            return true;
-        } else {
-            return false;
-        }
+        return Boolean(dmRooms);
     },
 
     onRoomTimeline: function(ev, room) {
@@ -99,7 +94,7 @@ module.exports = React.createClass({
     },
 
     onAccountData: function(accountDataEvent) {
-        if (accountDataEvent.getType() == 'm.push_rules') {
+        if (accountDataEvent.getType() === 'm.push_rules') {
             this.setState({
                 notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             });
@@ -255,7 +250,7 @@ module.exports = React.createClass({
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
-            'mx_RoomTile_invited': (me && me.membership == 'invite'),
+            'mx_RoomTile_invited': (me && me.membership === 'invite'),
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
@@ -273,7 +268,6 @@ module.exports = React.createClass({
         let name = this.state.roomName;
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
-        let badge;
         let badgeContent;
 
         if (this.state.badgeHover || this.state.menuDisplayed) {
@@ -285,7 +279,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        badge = <div className={badgeClasses} ref="badge" onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        const badge = <div className={badgeClasses} ref="badge" onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
@@ -317,9 +311,9 @@ module.exports = React.createClass({
 
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
-        let directMessageIndicator;
+        let dmIndicator;
         if (this._isDirectMessageRoom(this.props.room.roomId)) {
-            directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
+            dmIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
         }
 
         return <AccessibleButton tabIndex="0"
@@ -332,7 +326,7 @@ module.exports = React.createClass({
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
                     <RoomAvatar room={this.props.room} width={24} height={24} />
-                    { directMessageIndicator }
+                    { dmIndicator }
                 </div>
             </div>
             <div className="mx_RoomTile_nameContainer">
