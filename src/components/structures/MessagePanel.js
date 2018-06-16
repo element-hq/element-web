@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,9 @@ import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
+
+const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const continuedTypes = ['m.sticker', 'm.room.message'];
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -449,16 +453,17 @@ module.exports = React.createClass({
 
         // Some events should appear as continuations from previous events of
         // different types.
-        const continuedTypes = ['m.sticker', 'm.room.message'];
+
         const eventTypeContinues =
             prevEvent !== null &&
             continuedTypes.includes(mxEv.getType()) &&
             continuedTypes.includes(prevEvent.getType());
 
-        if (prevEvent !== null
-                && prevEvent.sender && mxEv.sender
-                && mxEv.sender.userId === prevEvent.sender.userId
-                && (mxEv.getType() == prevEvent.getType() || eventTypeContinues)) {
+        // if there is a previous event and it has the same sender as this event
+        // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
+        if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
+            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
+            (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
             continuation = true;
         }
 
