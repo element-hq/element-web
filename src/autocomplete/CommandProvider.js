@@ -2,6 +2,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import { _t, _td } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
+import type {SelectionRange} from "./Autocompleter";
 
 // TODO merge this with the factory mechanics of SlashCommands?
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
@@ -110,10 +112,9 @@ const COMMANDS = [
         args: '',
         description: _td('Opens the Developer Tools dialog'),
     },
-    // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 
-const COMMAND_RE = /(^\/\w*)/g;
+const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
@@ -123,23 +124,24 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}) {
-        let completions = [];
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean) {
         const {command, range} = this.getCurrentCommand(query, selection);
-        if (command) {
-            completions = this.matcher.match(command[0]).map((result) => {
-                return {
-                    completion: result.command + ' ',
-                    component: (<TextualCompletion
-                        title={result.command}
-                        subtitle={result.args}
-                        description={_t(result.description)}
-                        />),
-                    range,
-                };
-            });
-        }
-        return completions;
+        if (!command) return [];
+
+        // if the query is just `/` and the user hit TAB, show them all COMMANDS otherwise FuzzyMatch them
+        const matches = query === '/' && force ? COMMANDS : this.matcher.match(command[1]);
+        return matches.map((result) => {
+            return {
+                // If the command is the same as the one they entered, we don't want to discard their arguments
+                completion: result.command === command[1] ? command[0] : (result.command + ' '),
+                component: (<TextualCompletion
+                    title={result.command}
+                    subtitle={result.args}
+                    description={_t(result.description)}
+                />),
+                range,
+            };
+        });
     }
 
     getName() {
