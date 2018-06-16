@@ -284,3 +284,7 @@ $progressbar-color: #000;
 .mx_RoomSubList_chevron {
     top: 8px ! important;
 }
+
+.mx_MemberInfo .mx_RoomTile_name {
+    color: $primary-fg-color ! important;
+}
