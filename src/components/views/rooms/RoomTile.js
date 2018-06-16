@@ -187,6 +187,11 @@ module.exports = React.createClass({
         this.badgeOnMouseLeave();
     },
 
+    onContextMenu: function(e) {
+        this.onBadgeClicked(e);
+        e.preventDefault();
+    },
+
     badgeOnMouseEnter: function() {
         // Only allow non-guests to access the context menu
         // and only change it if it needs to change
@@ -208,7 +213,7 @@ module.exports = React.createClass({
             }
 
             const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
-            const elementRect = e.target.getBoundingClientRect();
+            const elementRect = this.refs.badge.getBoundingClientRect();
 
             // The window X and Y offsets are to adjust position when zoomed in to page
             const x = elementRect.right + window.pageXOffset + 3;
@@ -280,7 +285,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        badge = <div className={badgeClasses} ref="badge" onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
@@ -317,7 +322,13 @@ module.exports = React.createClass({
             directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
         }
 
-        return <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        return <AccessibleButton tabIndex="0"
+                                 className={classes}
+                                 onClick={this.onClick}
+                                 onMouseEnter={this.onMouseEnter}
+                                 onMouseLeave={this.onMouseLeave}
+                                 onContextMenu={this.onContextMenu}
+        >
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
                     <RoomAvatar room={this.props.room} width={24} height={24} />

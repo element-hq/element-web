@@ -66,6 +66,11 @@ export default React.createClass({
         });
     },
 
+    onContextMenu: function(e) {
+        this.onBadgeClicked(e);
+        e.preventDefault();
+    },
+
     onBadgeClicked: function(e) {
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
@@ -79,7 +84,7 @@ export default React.createClass({
         }
 
         const RoomTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
-        const elementRect = e.target.getBoundingClientRect();
+        const elementRect = this.refs.badge.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
         const x = elementRect.right + window.pageXOffset + 3;
@@ -125,7 +130,7 @@ export default React.createClass({
         });
 
         const badgeContent = badgeEllipsis ? '\u00B7\u00B7\u00B7' : '!';
-        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        const badge = <div className={badgeClasses} ref="badge" onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         let tooltip;
         if (this.props.collapsed && this.state.hover) {
@@ -139,7 +144,12 @@ export default React.createClass({
         });
 
         return (
-            <AccessibleButton className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <AccessibleButton className={classes}
+                              onClick={this.onClick}
+                              onMouseEnter={this.onMouseEnter}
+                              onMouseLeave={this.onMouseLeave}
+                              onContextMenu={this.onContextMenu}
+            >
                 <div className="mx_RoomTile_avatar">
                     { av }
                 </div>
