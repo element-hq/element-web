@@ -128,8 +128,8 @@ export default class CommandProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
-        // if the query is just `/` and the user hit TAB, show them all COMMANDS otherwise FuzzyMatch them
-        const matches = query === '/' && force ? COMMANDS : this.matcher.match(command[1]);
+        // if the query is just `/` (and the user hit TAB or waits), show them all COMMANDS otherwise FuzzyMatch them
+        const matches = query === '/' ? COMMANDS : this.matcher.match(command[1]);
         return matches.map((result) => {
             return {
                 // If the command is the same as the one they entered, we don't want to discard their arguments
