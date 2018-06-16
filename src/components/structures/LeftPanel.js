@@ -95,7 +95,9 @@ var LeftPanel = React.createClass({
                 break;
             case KeyCode.ENTER:
                 this._onMoveFocus(false);
-                this.focusedElement.click();
+                if (this.focusedElement) {
+                    this.focusedElement.click();
+                }
                 handled = true;
                 break;
         }
