@@ -1187,5 +1187,19 @@
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)",
     "Can't leave Server Notices room": "Ezin zara Server Notices gelatik atera",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Gela hau mezu hasiera zerbitzariaren garrantzitsuak bidaltzeko erabiltzen da, eta ezin zara atera.",
-    "Try the app first": "Probatu aplikazioa aurretik"
+    "Try the app first": "Probatu aplikazioa aurretik",
+    "Encrypting": "Zifratzen",
+    "Encrypted, not sent": "Zifratua, bidali gabe",
+    "Share Link to User": "Partekatu esteka erabiltzailearekin",
+    "Share room": "Partekatu gela",
+    "Share Room": "Partekatu gela",
+    "Link to most recent message": "Esteka azken mezura",
+    "Share User": "Partekatu erabiltzailea",
+    "Share Community": "Partekatu komunitatea",
+    "Share Room Message": "Partekatu gelako mezua",
+    "Link to selected message": "Esteka hautatutako mezura",
+    "COPY": "KOPIATU",
+    "Share Message": "Partekatu mezua",
+    "No Audio Outputs detected": "Ez da audio irteerarik antzeman",
+    "Audio Output": "Audio irteera"
 }
