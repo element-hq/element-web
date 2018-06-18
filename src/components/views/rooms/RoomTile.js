@@ -182,9 +182,30 @@ module.exports = React.createClass({
         this.badgeOnMouseLeave();
     },
 
+    _showContextMenu: function(x, y, chevronOffset) {
+        const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
+
+        createMenu(RoomTileContextMenu, {
+            chevronOffset,
+            left: x,
+            top: y,
+            room: this.props.room,
+            onFinished: () => {
+                this.setState({ menuDisplayed: false });
+                this.props.refreshSubList();
+            },
+        });
+        this.setState({ menuDisplayed: true });
+    },
+
     onContextMenu: function(e) {
-        this.onBadgeClicked(e);
+        // Prevent the RoomTile onClick event firing as well
         e.preventDefault();
+        // Only allow non-guests to access the context menu
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        const chevronOffset = 12;
+        this._showContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
     },
 
     badgeOnMouseEnter: function() {
@@ -200,37 +221,25 @@ module.exports = React.createClass({
     },
 
     onBadgeClicked: function(e) {
-        // Only allow none guests to access the context menu
-        if (!MatrixClientPeg.get().isGuest()) {
-            // If the badge is clicked, then no longer show tooltip
-            if (this.props.collapsed) {
-                this.setState({ hover: false });
-            }
-
-            const RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
-            const elementRect = this.refs.badge.getBoundingClientRect();
-
-            // The window X and Y offsets are to adjust position when zoomed in to page
-            const x = elementRect.right + window.pageXOffset + 3;
-            const chevronOffset = 12;
-            let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-            y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
-
-            const self = this;
-            createMenu(RoomTileContextMenu, {
-                chevronOffset: chevronOffset,
-                left: x,
-                top: y,
-                room: this.props.room,
-                onFinished: function() {
-                    self.setState({ menuDisplayed: false });
-                    self.props.refreshSubList();
-                },
-            });
-            this.setState({ menuDisplayed: true });
-        }
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
+        // Only allow non-guests to access the context menu
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        // If the badge is clicked, then no longer show tooltip
+        if (this.props.collapsed) {
+            this.setState({ hover: false });
+        }
+
+        const elementRect = e.target.getBoundingClientRect();
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const x = elementRect.right + window.pageXOffset + 3;
+        const chevronOffset = 12;
+        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
+
+        this._showContextMenu(x, y, chevronOffset);
     },
 
     render: function() {
@@ -279,7 +288,7 @@ module.exports = React.createClass({
             badgeContent = '\u200B';
         }
 
-        const badge = <div className={badgeClasses} ref="badge" onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
