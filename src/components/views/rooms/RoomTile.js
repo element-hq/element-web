@@ -24,7 +24,7 @@ import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import sdk from '../../../index';
-import ContextualMenu from '../../structures/ContextualMenu';
+import {createMenu} from '../../structures/ContextualMenu';
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -217,7 +217,7 @@ module.exports = React.createClass({
             y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
 
             const self = this;
-            ContextualMenu.createMenu(RoomTileContextMenu, {
+            createMenu(RoomTileContextMenu, {
                 chevronOffset: chevronOffset,
                 left: x,
                 top: y,
