@@ -1186,5 +1186,10 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Du kannst diesen Raum nicht verlassen, da dieser Raum für wichtige Nachrichten vom Heimserver verwendet wird.",
     "Terms and Conditions": "Geschäftsbedingungen",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Um den %(homeserverDomain)s -Heimserver weiter zu verwenden, musst du die Geschäftsbedingungen sichten und ihnen zustimmen.",
-    "Review terms and conditions": "Geschäftsbedingungen anzeigen"
+    "Review terms and conditions": "Geschäftsbedingungen anzeigen",
+    "Encrypting": "Verschlüssele",
+    "Encrypted, not sent": "Verschlüsselt, nicht gesendet",
+    "Share Link to User": "Sende Link an Benutzer",
+    "Share room": "Teile Raum",
+    "Share Room": "Teile Raum"
 }
