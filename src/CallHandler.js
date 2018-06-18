@@ -124,7 +124,7 @@ function _setCallListeners(call) {
                 description: _t(
                     "There are unknown devices in this room: "+
                     "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call."
+                    "possible for someone to eavesdrop on your call.",
                 ),
                 button: _t('Review Devices'),
                 onFinished: function(confirmed) {
@@ -247,50 +247,52 @@ function _onAction(payload) {
 
     switch (payload.action) {
         case 'place_call':
-            if (module.exports.getAnyActiveCall()) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
-                    title: _t('Existing Call'),
-                    description: _t('You are already in a call.'),
-                });
-                return; // don't allow >1 call to be placed.
-            }
+            {
+                if (module.exports.getAnyActiveCall()) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
+                        title: _t('Existing Call'),
+                        description: _t('You are already in a call.'),
+                    });
+                    return; // don't allow >1 call to be placed.
+                }
 
-            // if the runtime env doesn't do VoIP, whine.
-            if (!MatrixClientPeg.get().supportsVoip()) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
-                    title: _t('VoIP is unsupported'),
-                    description: _t('You cannot place VoIP calls in this browser.'),
-                });
-                return;
-            }
+                // if the runtime env doesn't do VoIP, whine.
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
+                        title: _t('VoIP is unsupported'),
+                        description: _t('You cannot place VoIP calls in this browser.'),
+                    });
+                    return;
+                }
 
-            var room = MatrixClientPeg.get().getRoom(payload.room_id);
-            if (!room) {
-                console.error("Room %s does not exist.", payload.room_id);
-                return;
-            }
+                const room = MatrixClientPeg.get().getRoom(payload.room_id);
+                if (!room) {
+                    console.error("Room %s does not exist.", payload.room_id);
+                    return;
+                }
 
-            var members = room.getJoinedMembers();
-            if (members.length <= 1) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
-                    description: _t('You cannot place a call with yourself.'),
-                });
-                return;
-            } else if (members.length === 2) {
-                console.log("Place %s call in %s", payload.type, payload.room_id);
-                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
-                placeCall(call);
-            } else { // > 2
-                dis.dispatch({
-                    action: "place_conference_call",
-                    room_id: payload.room_id,
-                    type: payload.type,
-                    remote_element: payload.remote_element,
-                    local_element: payload.local_element,
-                });
+                const members = room.getJoinedMembers();
+                if (members.length <= 1) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
+                        description: _t('You cannot place a call with yourself.'),
+                    });
+                    return;
+                } else if (members.length === 2) {
+                    console.log("Place %s call in %s", payload.type, payload.room_id);
+                    const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
+                    placeCall(call);
+                } else { // > 2
+                    dis.dispatch({
+                        action: "place_conference_call",
+                        room_id: payload.room_id,
+                        type: payload.type,
+                        remote_element: payload.remote_element,
+                        local_element: payload.local_element,
+                    });
+                }
             }
             break;
         case 'place_conference_call':
@@ -338,10 +340,18 @@ function _onAction(payload) {
                                 }, function(err) {
                                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                                     console.error("Conference call failed: " + err);
-                                    Modal.createTrackedDialog('Call Handler', 'Failed to set up conference call', ErrorDialog, {
-                                        title: _t('Failed to set up conference call'),
-                                        description: _t('Conference call failed.') + ' ' + ((err && err.message) ? err.message : ''),
-                                    });
+                                    Modal.createTrackedDialog(
+                                        'Call Handler',
+                                        'Failed to set up conference call',
+                                        ErrorDialog,
+                                        {
+                                            title: _t('Failed to set up conference call'),
+                                            description: (
+                                                _t('Conference call failed.') +
+                                                ' ' + ((err && err.message) ? err.message : '')
+                                            ),
+                                        },
+                                    );
                                 });
                             }
                         },
@@ -350,22 +360,24 @@ function _onAction(payload) {
             }
             break;
         case 'incoming_call':
-            if (module.exports.getAnyActiveCall()) {
-                // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
-                // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
-                // in future we could signal a "local busy" as a warning to the caller.
-                // see https://github.com/vector-im/vector-web/issues/1964
-                return;
-            }
+            {
+                if (module.exports.getAnyActiveCall()) {
+                    // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
+                    // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
+                    // in future we could signal a "local busy" as a warning to the caller.
+                    // see https://github.com/vector-im/vector-web/issues/1964
+                    return;
+                }
 
-            // if the runtime env doesn't do VoIP, stop here.
-            if (!MatrixClientPeg.get().supportsVoip()) {
-                return;
-            }
+                // if the runtime env doesn't do VoIP, stop here.
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    return;
+                }
 
-            var call = payload.call;
-            _setCallListeners(call);
-            _setCallState(call, call.roomId, "ringing");
+                const call = payload.call;
+                _setCallListeners(call);
+                _setCallState(call, call.roomId, "ringing");
+            }
             break;
         case 'hangup':
             if (!calls[payload.room_id]) {
