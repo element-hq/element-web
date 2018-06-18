@@ -36,7 +36,7 @@ function getOrCreateContainer() {
 }
 
 // Greater than that of the ContextualMenu
-const PE_Z_INDEX = 3000;
+const PE_Z_INDEX = 5000;
 
 /*
  * Class of component that renders its children in a separate ReactDOM virtual tree

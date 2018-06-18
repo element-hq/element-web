@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const baseUrl = "https://matrix.to";
+export const host = "matrix.to";
+export const baseUrl = `https://${host}`;
 
 export function makeEventPermalink(roomId, eventId) {
     return `${baseUrl}/#/${roomId}/${eventId}`;
