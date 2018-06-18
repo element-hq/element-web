@@ -169,7 +169,7 @@ matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
     + "(?:www\\.)?(?:riot|vector)\\.im/(?:app|beta|staging|develop)/"
     + ")(#.*)";
 
-matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/([#@!+].*)";
+matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/(([#@!+]).*)";
 matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
     '\\[([^\\]]*)\\]\\((?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/([#@!+][^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
