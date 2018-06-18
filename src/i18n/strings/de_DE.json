@@ -1191,5 +1191,15 @@
     "Encrypted, not sent": "Verschlüsselt, nicht gesendet",
     "Share Link to User": "Sende Link an Benutzer",
     "Share room": "Teile Raum",
-    "Share Room": "Teile Raum"
+    "Share Room": "Teile Raum",
+    "Link to most recent message": "Link zur aktuellsten Nachricht",
+    "Share User": "Teile Benutzer",
+    "Share Community": "Teile Community",
+    "Share Room Message": "Teile Raumnachricht",
+    "Link to selected message": "Link zur ausgewählten Nachricht",
+    "COPY": "KOPIEREN",
+    "Share Message": "Teile Nachricht",
+    "No Audio Outputs detected": "Keine Ton-Ausgabe erkannt",
+    "Audio Output": "Ton-Ausgabe",
+    "Try the app first": "App erst ausprobieren"
 }
