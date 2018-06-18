@@ -243,7 +243,7 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
             const blob = new Blob([encryptResult.data]);
             return matrixClient.uploadContent(blob, {
                 progressHandler: progressHandler,
-                omitFilename: true,
+                includeFilename: false,
             }).then(function(url) {
                 // If the attachment is encrypted then bundle the URL along
                 // with the information needed to decrypt the attachment and
