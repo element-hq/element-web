@@ -52,7 +52,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
     "Who would you like to add to this community?": "A quen quere engadir a esta comunidade?",
     "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID": "Aviso: calquera persoa que engada a unha comunidade estará publicamente visible para calquera que coñeza a ID da comunidade",
-    "Invite new community members": "Convidará comunidade a novos participantes ",
+    "Invite new community members": "Convidará comunidade a novos participantes",
     "Name or matrix ID": "Nome ou ID matrix",
     "Invite to Community": "Convidar á comunidade",
     "Which rooms would you like to add to this community?": "Que salas desexaría engadir a esta comunidade?",
