@@ -170,7 +170,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                     { profile }
                 </div>
                 <DialogButtons primaryButton={_t('Start Chatting')}
-                    onPrimaryButtonClick={this.props.onNewDMClick} focus="true" />
+                    onPrimaryButtonClick={this.props.onNewDMClick} focus={true} />
             </div>;
         }
 

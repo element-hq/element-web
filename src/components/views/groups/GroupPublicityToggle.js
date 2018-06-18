@@ -69,7 +69,7 @@ export default React.createClass({
     render() {
         const GroupTile = sdk.getComponent('groups.GroupTile');
         const input = <input type="checkbox"
-            onClick={this._onPublicityToggle}
+            onChange={this._onPublicityToggle}
             checked={this.state.isGroupPublicised}
         />;
         const labelText = !this.state.ready ? _t("Loading...") :
