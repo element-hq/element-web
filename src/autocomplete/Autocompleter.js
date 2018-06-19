@@ -18,6 +18,7 @@ limitations under the License.
 // @flow
 
 import type {Component} from 'react';
+import {Room} from 'matrix-js-sdk';
 import CommandProvider from './CommandProvider';
 import CommunityProvider from './CommunityProvider';
 import DuckDuckGoProvider from './DuckDuckGoProvider';
@@ -56,7 +57,7 @@ const PROVIDERS = [
 const PROVIDER_COMPLETION_TIMEOUT = 3000;
 
 export default class Autocompleter {
-    constructor(room) {
+    constructor(room: Room) {
         this.room = room;
         this.providers = PROVIDERS.map((p) => {
             return new p(room);

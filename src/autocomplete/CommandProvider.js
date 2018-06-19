@@ -22,7 +22,7 @@ import { _t, _td } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
-import type {SelectionRange} from "./Autocompleter";
+import type {Completion, SelectionRange} from "./Autocompleter";
 
 // TODO merge this with the factory mechanics of SlashCommands?
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
@@ -124,7 +124,7 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 

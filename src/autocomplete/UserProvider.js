@@ -2,7 +2,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
 import sdk from '../index';
 import FuzzyMatcher from './FuzzyMatcher';
-import _pull from 'lodash/pull';
 import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';
 
 import type {Room, RoomMember} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
+import type {SelectionRange} from "./Autocompleter";
 
 const USER_REGEX = /@\S*/g;
 
@@ -36,7 +36,7 @@ export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
-    constructor(room) {
+    constructor(room: Room) {
         super(USER_REGEX, {
             keys: ['name'],
         });
@@ -87,7 +87,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // Disable autocompletions when composing commands because of various issues
