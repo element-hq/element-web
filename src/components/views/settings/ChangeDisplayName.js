@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-const React = require('react');
-const sdk = require('../../../index');
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -34,10 +33,10 @@ module.exports = React.createClass({
         }
     },
 
-    _changeDisplayName: function(new_displayname) {
+    _changeDisplayName: function(newDisplayname) {
         const cli = MatrixClientPeg.get();
-        return cli.setDisplayName(new_displayname).catch(function(e) {
-            throw new Error("Failed to set display name");
+        return cli.setDisplayName(newDisplayname).catch(function(e) {
+            throw new Error("Failed to set display name", e);
         });
     },
 
