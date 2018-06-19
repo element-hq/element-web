@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,21 +24,14 @@ import { _t } from '../../../languageHandler';
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
 
-    _getDisplayName: function() {
+    _getDisplayName: async function() {
         const cli = MatrixClientPeg.get();
-        return cli.getProfileInfo(cli.credentials.userId).then(function(result) {
-            let displayname = result.displayname;
-            if (!displayname) {
-                if (MatrixClientPeg.get().isGuest()) {
-                    displayname = "Guest " + MatrixClientPeg.get().getUserIdLocalpart();
-                } else {
-                    displayname = MatrixClientPeg.get().getUserIdLocalpart();
-                }
-            }
-            return displayname;
-        }, function(error) {
+        try {
+            const res = await cli.getProfileInfo(cli.getUserId());
+            return res.displayname;
+        } catch (e) {
             throw new Error("Failed to fetch display name");
-        });
+        }
     },
 
     _changeDisplayName: function(new_displayname) {
