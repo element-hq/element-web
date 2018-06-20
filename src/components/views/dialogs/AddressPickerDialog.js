@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -510,6 +510,10 @@ module.exports = React.createClass({
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
+        // Use set to avoid O(n*m) operation
+        const selectedAddresses = new Set(this.state.userList.map(({address}) => address));
+        const queryList = this.state.queryList.filter(({address}) => !selectedAddresses.has(address));
+
         const query = [];
         // create the invite list
         if (this.state.userList.length > 0) {
@@ -561,16 +565,12 @@ module.exports = React.createClass({
             </div>;
         } else if (this.state.searchError) {
             error = <div className="mx_ChatInviteDialog_error">{ this.state.searchError }</div>;
-        } else if (
-            this.state.query.length > 0 &&
-            this.state.queryList.length === 0 &&
-            !this.state.busy
-        ) {
+        } else if (this.state.query.length > 0 && queryList.length === 0 && !this.state.busy) {
             error = <div className="mx_ChatInviteDialog_error">{ _t("No results") }</div>;
         } else {
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
-                    addressList={this.state.queryList}
+                    addressList={queryList}
                     showAddress={this.props.pickerType === 'user'}
                     onSelected={this.onSelected}
                     truncateAt={TRUNCATE_QUERY_LIST}
