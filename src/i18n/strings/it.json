@@ -1174,5 +1174,12 @@
     "Terms and Conditions": "Termini e condizioni",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Per continuare a usare l'homeserver %(homeserverDomain)s devi leggere e accettare i nostri termini e condizioni.",
     "Review terms and conditions": "Leggi i termini e condizioni",
-    "Muted Users": "Utenti silenziati"
+    "Muted Users": "Utenti silenziati",
+    "Message Replies": "Risposte",
+    "Message Pinning": "Messaggi appuntati",
+    "Mirror local video feed": "Feed video dai ripetitori locali",
+    "Replying": "Rispondere",
+    "Popout widget": "Oggetto a comparsa",
+    "Failed to indicate account erasure": "Impossibile indicare la cancellazione dell'account",
+    "Bulk Options": "Opzioni applicate in massa"
 }

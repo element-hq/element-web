@@ -1180,5 +1180,20 @@
     "Yes, I want to help!": "Igen, segítek!",
     "Can't leave Server Notices room": "Nem lehet elhagyni a Szerver Üzenetek szobát",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ez a szoba fontos szerverüzenetek közlésére jött létre, nem tudsz kilépni belőle.",
-    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:"
+    "To notify everyone in the room, you must be a": "Hogy mindenkinek tudj üzenni ahhoz ilyen szinten kell lenned:",
+    "Try the app first": "Először próbáld ki az alkalmazást",
+    "Encrypting": "Titkosít",
+    "Encrypted, not sent": "Titkosítva, de nincs elküldve",
+    "No Audio Outputs detected": "Nem található hang kimenet",
+    "Audio Output": "Hang kimenet",
+    "Share Link to User": "Hivatkozás megosztása felhasználóval",
+    "Share room": "Szoba megosztása",
+    "Share Room": "Szoba megosztása",
+    "Link to most recent message": "A legfrissebb üzenetre hivatkozás",
+    "Share User": "Felhasználó megosztás",
+    "Share Community": "Közösség megosztás",
+    "Share Room Message": "Szoba üzenet megosztás",
+    "Link to selected message": "Hivatkozás a kijelölt üzenetre",
+    "COPY": "Másol",
+    "Share Message": "Üzenet megosztása"
 }
