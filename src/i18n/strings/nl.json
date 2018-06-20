@@ -705,7 +705,6 @@
     "%(names)s and %(count)s others are typing|one": "%(names)s en iemand anders is aan het typen",
     "Send": "Verstuur",
     "Message Pinning": "Boodschap vastpinnen",
-    "Message Replies": "Antwoorden op bericht",
     "Disable Emoji suggestions while typing": "Emoji suggesties tijdens het typen uitzetten",
     "Hide avatar changes": "Avatar veranderingen verbergen",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",

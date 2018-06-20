@@ -932,7 +932,6 @@
     "%(count)s of your messages have not been sent.|one": "Az üzeneted nem lett elküldve.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Újraküldöd mind</resendText> vagy <cancelText>elveted mind</cancelText>. Az üzeneteket egyenként is elküldheted vagy elvetheted.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Üzenet újraküldése</resendText> vagy <cancelText>üzenet elvetése</cancelText> most.",
-    "Message Replies": "Üzenet válaszok",
     "Send an encrypted reply…": "Titkosított válasz küldése…",
     "Send a reply (unencrypted)…": "Válasz küldése (titkosítatlanul)…",
     "Send an encrypted message…": "Titkosított üzenet küldése…",

@@ -932,7 +932,6 @@
     "%(count)s of your messages have not been sent.|one": "Zure mezua ez da bidali.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Birbidali guztiak</resendText> edo <cancelText>baztertu guztiak</cancelText> orain. Mezuak banaka birbidali edo baztertu ditzakezu ere.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Birbidali mezua</resendText> edo <cancelText>baztertu mezua</cancelText> orain.",
-    "Message Replies": "Mezuei erantzunak",
     "Send an encrypted reply…": "Bidali zifratutako erantzun bat…",
     "Send a reply (unencrypted)…": "Bidali erantzun bat (zifratu gabea)…",
     "Send an encrypted message…": "Bidali zifratutako mezu bat…",

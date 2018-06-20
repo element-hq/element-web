@@ -717,7 +717,6 @@
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s vidžets, kuru mainīja %(senderName)s",
     "%(names)s and %(count)s others are typing|other": "%(names)s un %(count)s citi raksta",
     "%(names)s and %(count)s others are typing|one": "%(names)s un vēl kāds raksta",
-    "Message Replies": "Atbildes uz ziņām",
     "Message Pinning": "Ziņu piekabināšana",
     "Disable Emoji suggestions while typing": "Atspējot Emoji ieteikumus teksta rakstīšanas laikā",
     "Hide avatar changes": "Slēpt avatara izmaiņas",

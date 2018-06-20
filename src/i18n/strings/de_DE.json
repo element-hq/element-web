@@ -946,7 +946,6 @@
     "Your homeserver's URL": "Die URL deines Homeservers",
     "Your identity server's URL": "Die URL deines Identitätsservers",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
-    "Message Replies": "Antworten auf Nachrichten",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Du wirst nicht in der Lage sein, die Änderung zurückzusetzen, da du dich degradierst. Wenn du der letze Nutzer mit Berechtigungen bist, wird es unmöglich sein die Privilegien zurückzubekommen.",
     "Community IDs cannot not be empty.": "Community-IDs können nicht leer sein.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Geräte anzeigen</showDevicesText>, <sendAnywayText>trotzdem senden</sendAnywayText> oder <cancelText>abbrechen</cancelText>.",
