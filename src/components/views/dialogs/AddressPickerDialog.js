@@ -517,9 +517,16 @@ module.exports = React.createClass({
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
-        // Use set to avoid O(n*m) operation
-        const selectedAddresses = new Set(this.state.userList.map(({address}) => address));
-        const queryList = this.state.queryList.filter(({address}) => !selectedAddresses.has(address));
+        // map addressType => set of addresses to avoid O(n*m) operation
+        const selectedAddresses = {};
+        this.state.userList.forEach(({address, addressType}) => {
+            if (!selectedAddresses[addressType]) selectedAddresses[addressType] = new Set();
+            selectedAddresses[addressType].add(address);
+        });
+
+        const queryList = this.state.queryList.filter(({address, addressType}) => {
+            return !selectedAddresses[addressType] || !selectedAddresses[addressType].has(address);
+        });
 
         const query = [];
         // create the invite list
