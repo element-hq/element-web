@@ -91,20 +91,21 @@ export default class ContextualMenu extends React.Component {
     onContextMenu(e) {
         if (this.props.closeMenu) {
             this.props.closeMenu();
-        }
-        e.preventDefault();
-        const x = e.clientX;
-        const y = e.clientY;
 
-        setImmediate(() => {
-            const clickEvent = document.createEvent('MouseEvents');
-            clickEvent.initMouseEvent(
-                'contextmenu', true, true, window, 0,
-                0, 0, x, y, false, false,
-                false, false, 0, null,
-            );
-            document.elementFromPoint(x, y).dispatchEvent(clickEvent);
-        });
+            e.preventDefault();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            setImmediate(() => {
+                const clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent(
+                    'contextmenu', true, true, window, 0,
+                    0, 0, x, y, false, false,
+                    false, false, 0, null,
+                );
+                document.elementFromPoint(x, y).dispatchEvent(clickEvent);
+            });
+        }
     }
 
     render() {
