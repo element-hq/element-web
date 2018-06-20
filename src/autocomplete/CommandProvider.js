@@ -44,9 +44,9 @@ export default class CommandProvider extends AutocompleteProvider {
         let matches = [];
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
-            const match = COMMANDS.find((o) => o.command === command[1]);
-            if (match) {
-                matches = [match];
+            const name = command[1].substr(1); // strip leading `/`
+            if (CommandMap[name]) {
+                matches = [CommandMap[name]];
             }
         } else {
             if (query === '/') {
