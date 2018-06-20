@@ -1180,5 +1180,20 @@
     "Terms and Conditions": "Zmluvné podmienky",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "Ak chcete aj naďalej používať domovský server %(homeserverDomain)s, mali by ste si prečítať a odsúhlasiť naše zmluvné podmienky.",
     "Review terms and conditions": "Prečítať zmluvné podmienky",
-    "To notify everyone in the room, you must be a": "Aby ste mohli upozorňovať všetkých členov v miestnosti, musíte byť"
+    "To notify everyone in the room, you must be a": "Aby ste mohli upozorňovať všetkých členov v miestnosti, musíte byť",
+    "Encrypting": "Enkriptovanie",
+    "Encrypted, not sent": "Zakódované, ale neposlané",
+    "Share Link to User": "Pošli link užívateľovi",
+    "Share room": "Zdieľaj miestnosť",
+    "Share Room": "Zdieľaj miestnosť",
+    "Link to most recent message": "Link na najnovšiu správu",
+    "Share User": "Zdieľaj užívateľa",
+    "Share Community": "Zdieľaj komunitu",
+    "Link to selected message": "Link na vybranú správu",
+    "COPY": "Kopíruj",
+    "Share Message": "Zdieľaj správu",
+    "No Audio Outputs detected": "Neboli rozpoznané žiadne zvukové výstupy",
+    "Audio Output": "Zvukový výstup",
+    "Try the app first": "Najskôr aplikáciu vyskúšaj",
+    "Share Room Message": "Správa o zdieľaní miestnosti"
 }
