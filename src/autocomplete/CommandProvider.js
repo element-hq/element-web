@@ -41,17 +41,14 @@ export default class CommandProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
-        let matches;
+        let matches = [];
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const match = COMMANDS.find((o) => o.command === command[1]);
             if (match) {
                 matches = [match];
             }
-        }
-
-        // If we don't yet have matches
-        if (!matches) {
+        } else {
             if (query === '/') {
                 // If they have just entered `/` show everything
                 matches = COMMANDS;
