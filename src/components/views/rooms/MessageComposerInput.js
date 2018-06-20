@@ -1181,7 +1181,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
+                    <ReplyPreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}
