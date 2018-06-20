@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Promise from 'bluebird';
@@ -26,6 +26,13 @@ import GroupStore from '../../../stores/GroupStore';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
+
+const addressTypeName = {
+    'mx-user-id': _td("Matrix ID"),
+    'mx-room-id': _td("Matrix Room ID"),
+    'email': _td("email address"),
+};
+
 
 module.exports = React.createClass({
     displayName: "AddressPickerDialog",
@@ -129,7 +136,7 @@ module.exports = React.createClass({
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
-            if (this.refs.textinput.value == '') {
+            if (this.refs.textinput.value === '') {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
@@ -148,7 +155,7 @@ module.exports = React.createClass({
             clearTimeout(this.queryChangedDebouncer);
         }
         // Only do search if there is something to search
-        if (query.length > 0 && query != '@' && query.length >= 2) {
+        if (query.length > 0 && query !== '@' && query.length >= 2) {
             this.queryChangedDebouncer = setTimeout(() => {
                 if (this.props.pickerType === 'user') {
                     if (this.props.groupId) {
@@ -419,7 +426,7 @@ module.exports = React.createClass({
                 isKnown: false,
             });
             if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-            if (addrType == 'email') {
+            if (addrType === 'email') {
                 this._lookupThreepid(addrType, query).done();
             }
         }
@@ -442,14 +449,14 @@ module.exports = React.createClass({
         if (!this.props.validAddressTypes.includes(addrType)) {
             this.setState({ error: true });
             return null;
-        } else if (addrType == 'mx-user-id') {
+        } else if (addrType === 'mx-user-id') {
             const user = MatrixClientPeg.get().getUser(addrObj.address);
             if (user) {
                 addrObj.displayName = user.displayName;
                 addrObj.avatarMxc = user.avatarUrl;
                 addrObj.isKnown = true;
             }
-        } else if (addrType == 'mx-room-id') {
+        } else if (addrType === 'mx-room-id') {
             const room = MatrixClientPeg.get().getRoom(addrObj.address);
             if (room) {
                 addrObj.displayName = room.name;
@@ -547,21 +554,13 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.error) {
-            let tryUsing = '';
-            const validTypeDescriptions = this.props.validAddressTypes.map((t) => {
-                return {
-                    'mx-user-id': _t("Matrix ID"),
-                    'mx-room-id': _t("Matrix Room ID"),
-                    'email': _t("email address"),
-                }[t];
-            });
-            tryUsing = _t("Try using one of the following valid address types: %(validTypesList)s.", {
-                validTypesList: validTypeDescriptions.join(", "),
-            });
+            const validTypeDescriptions = this.props.validAddressTypes.map((t) => _t(addressTypeName[t]));
             error = <div className="mx_ChatInviteDialog_error">
                 { _t("You have entered an invalid address.") }
                 <br />
-                { tryUsing }
+                { _t("Try using one of the following valid address types: %(validTypesList)s.", {
+                    validTypesList: validTypeDescriptions.join(", "),
+                }) }
             </div>;
         } else if (this.state.searchError) {
             error = <div className="mx_ChatInviteDialog_error">{ this.state.searchError }</div>;
