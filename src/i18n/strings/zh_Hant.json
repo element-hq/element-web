@@ -700,7 +700,6 @@
     "%(names)s and %(count)s others are typing|other": "%(names)s 與其他 %(count)s 個人正在輸入",
     "%(names)s and %(count)s others are typing|one": "%(names)s 與另一個人正在輸入",
     "Send": "傳送",
-    "Message Replies": "訊息回覆",
     "Message Pinning": "訊息釘選",
     "Disable Emoji suggestions while typing": "在輸入時停用繪文字建議",
     "Hide avatar changes": "隱藏大頭貼變更",

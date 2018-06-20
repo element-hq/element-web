@@ -932,7 +932,6 @@
     "%(count)s of your messages have not been sent.|one": "Ваше сообщение не было отправлено.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Отправить все</resendText> или <cancelText>отменить все</cancelText> сейчас. Можно также выбрать отдельные сообщения для отправки или отмены.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Отправить</resendText> или <cancelText>отменить</cancelText> сообщение сейчас.",
-    "Message Replies": "Сообщения-ответы",
     "Send an encrypted reply…": "Отправить зашифрованный ответ…",
     "Send a reply (unencrypted)…": "Отправить ответ (нешифрованный)…",
     "Send an encrypted message…": "Отправить зашифрованное сообщение…",

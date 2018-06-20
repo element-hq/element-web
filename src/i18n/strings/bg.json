@@ -203,7 +203,6 @@
     "Not a valid Riot keyfile": "Невалиден файл с ключ за Riot",
     "Authentication check failed: incorrect password?": "Неуспешна автентикация: неправилна парола?",
     "Failed to join room": "Неуспешно присъединяване към стаята",
-    "Message Replies": "Отговори на съобщението",
     "Message Pinning": "Функция за закачане на съобщения",
     "Disable Emoji suggestions while typing": "Изключване на предложенията за емотиконите при писане",
     "Use compact timeline layout": "Използване на компактно оформление за списъка със съобщения",

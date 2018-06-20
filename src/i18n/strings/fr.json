@@ -932,7 +932,6 @@
     "%(count)s of your messages have not been sent.|one": "Votre message n'a pas été envoyé.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Tout renvoyer</resendText> ou <cancelText>tout annuler</cancelText> maintenant. Vous pouvez aussi choisir des messages individuels à renvoyer ou annuler.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Renvoyer le message</resendText> ou <cancelText>annuler le message</cancelText> maintenant.",
-    "Message Replies": "Réponses",
     "Send an encrypted reply…": "Envoyer une réponse chiffrée…",
     "Send a reply (unencrypted)…": "Envoyer une réponse (non chiffrée)…",
     "Send an encrypted message…": "Envoyer un message chiffré…",

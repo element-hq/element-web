@@ -929,7 +929,6 @@
     "Flair will not appear": "Príslušnosť ku komunite nebude zobrazená",
     "Display your community flair in rooms configured to show it.": "Zobrazovať vašu príslušnosť ku komunite v miestnostiach, ktoré sú nastavené na zobrazovanie tejto príslušnosti.",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "Message Replies": "Odpovede na správy",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Túto zmenu nebudete môcť vrátiť späť pretože  znižujete vašu vlastnú úroveň moci. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.",
     "Send an encrypted reply…": "Odoslať šifrovanú odpoveď…",
     "Send a reply (unencrypted)…": "Odoslať odpoveď (nešifrovanú)…",
