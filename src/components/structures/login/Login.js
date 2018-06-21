@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,12 +21,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
-import PlatformPeg from '../../../PlatformPeg';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import makeLanguageSelector from "./LanguageSelector";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
@@ -370,23 +370,6 @@ module.exports = React.createClass({
         );
     },
 
-    _onLanguageChange: function(newLang) {
-        if (languageHandler.getCurrentLanguage() !== newLang) {
-            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
-            PlatformPeg.get().reload();
-        }
-    },
-
-    _renderLanguageSetting: function() {
-        const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
-        return <div className="mx_Login_language_div">
-            <LanguageDropdown onOptionChange={this._onLanguageChange}
-                          className="mx_Login_language"
-                          value={languageHandler.getCurrentLanguage()}
-            />
-        </div>;
-    },
-
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
         const LoginPage = sdk.getComponent("login.LoginPage");
@@ -461,7 +444,7 @@ module.exports = React.createClass({
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
-                        { !SdkConfig.get().disable_login_language_selector ? this._renderLanguageSetting() : '' }
+                        { makeLanguageSelector() }
                         <LoginFooter />
                     </div>
                 </div>

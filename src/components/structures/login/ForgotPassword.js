@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 
 import PasswordReset from "../../../PasswordReset";
+import makeLanguageSelector from "./LanguageSelector";
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
@@ -233,6 +234,7 @@ module.exports = React.createClass({
                     <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                         { _t('Create an account') }
                     </a>
+                    { makeLanguageSelector() }
                     <LoginFooter />
                 </div>
             </div>

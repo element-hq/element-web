@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
+import makeLanguageSelector from "./LanguageSelector";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -432,6 +434,7 @@ module.exports = React.createClass({
                     { signIn }
                     { errorText }
                     { returnToAppJsx }
+                    { makeLanguageSelector() }
                     <LoginFooter />
                 </div>
             </LoginPage>
