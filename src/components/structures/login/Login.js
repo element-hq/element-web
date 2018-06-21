@@ -28,7 +28,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import makeLanguageSelector from "./LanguageSelector";
 
 // For validating phone numbers without country codes
-const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
+const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
 /**
  * A wire component which glues together login UI components and Login logic
@@ -113,10 +113,10 @@ module.exports = React.createClass({
 
             // Some error strings only apply for logging in
             const usingEmail = username.indexOf("@") > 0;
-            if (error.httpStatus == 400 && usingEmail) {
+            if (error.httpStatus === 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
-                if (SdkConfig.get().disable_custom_urls) {
+                if (SdkConfig.get()['disable_custom_urls']) {
                     errorText = (
                         <div>
                             <div>{ _t('Incorrect username and/or password.') }</div>
@@ -143,7 +143,7 @@ module.exports = React.createClass({
                 // but the login API gives a 403 https://matrix.org/jira/browse/SYN-744
                 // mentions this (although the bug is for UI auth which is not this)
                 // We treat both as an incorrect password
-                loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
+                loginIncorrect: error.httpStatus === 401 || error.httpStatus === 403,
             });
         }).finally(() => {
             if (this._unmounted) {
@@ -231,7 +231,7 @@ module.exports = React.createClass({
         hsUrl = hsUrl || this.state.enteredHomeserverUrl;
         isUrl = isUrl || this.state.enteredIdentityServerUrl;
 
-        const fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
+        const fallbackHsUrl = hsUrl === this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
 
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
@@ -310,19 +310,27 @@ module.exports = React.createClass({
                  !this.state.enteredHomeserverUrl.startsWith("http"))
             ) {
                 errorText = <span>
-                    {
-                        _t("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
-                            "Either use HTTPS or <a>enable unsafe scripts</a>.",
-                            {},
-                            { 'a': (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; } },
+                    { _t("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
+                        "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
+                        {
+                            'a': (sub) => {
+                                return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">
+                                    { sub }
+                                </a>;
+                            },
+                        },
                     ) }
                 </span>;
             } else {
                 errorText = <span>
-                    {
-                        _t("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
-                            {},
-                            { 'a': (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; } },
+                    { _t("Can't connect to homeserver - please check your connectivity, ensure your " +
+                        "<a>homeserver's SSL certificate</a> is trusted, and that a browser extension " +
+                        "is not blocking requests.", {},
+                        {
+                            'a': (sub) => {
+                                return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>;
+                            },
+                        },
                     ) }
                 </span>;
             }
@@ -386,21 +394,10 @@ module.exports = React.createClass({
                 </a>;
         }
 
-        let returnToAppJsx;
-        /*
-        // with the advent of ILAG I don't think we need this any more
-        if (this.props.onCancelClick) {
-            returnToAppJsx =
-                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    { _t('Return to app') }
-                </a>;
-        }
-        */
-
         let serverConfig;
         let header;
 
-        if (!SdkConfig.get().disable_custom_urls) {
+        if (!SdkConfig.get()['disable_custom_urls']) {
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
                 customHsUrl={this.props.customHsUrl}
@@ -443,7 +440,6 @@ module.exports = React.createClass({
                             { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
-                        { returnToAppJsx }
                         { makeLanguageSelector() }
                         <LoginFooter />
                     </div>
