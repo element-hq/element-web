@@ -377,9 +377,9 @@ class ContentMessages {
                 }
             }
             if (error) {
-                dis.dispatch({action: 'upload_failed', upload: upload});
+                dis.dispatch({action: 'upload_failed', upload, error});
             } else {
-                dis.dispatch({action: 'upload_finished', upload: upload});
+                dis.dispatch({action: 'upload_finished', upload});
             }
         });
     }

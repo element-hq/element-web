@@ -500,7 +500,10 @@ module.exports = React.createClass({
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
-                this._fetchMediaLimits(true);
+                // 413: File was too big or upset the server in some way.
+                if(payload.data.error.http_status === 413) {
+                    this._fetchMediaLimits(true);
+                }
             case 'upload_started':
             case 'upload_finished':
                 this.forceUpdate();
