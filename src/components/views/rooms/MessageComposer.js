@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import filesize from "filesize";
+import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -110,13 +110,13 @@ export default class MessageComposer extends React.Component {
     }
 
     isFileUploadAllowed(file) {
-        if (this._uploadLimits.upload_size != null && file.size > this._uploadLimits.upload_size) {
+        if (this._uploadLimits.upload_size !== undefined && file.size > this._uploadLimits.upload_size) {
             return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this._uploadLimits.upload_size)});
         }
         return true;
     }
 
-    uploadFiles(files, limits) {
+    uploadFiles(files) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
