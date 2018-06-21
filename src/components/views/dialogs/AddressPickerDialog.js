@@ -523,8 +523,9 @@ module.exports = React.createClass({
             selectedAddresses[addressType].add(address);
         });
 
+        // Filter out any addresses in the above already selected addresses (matching both type and address)
         const filteredSuggestedList = this.state.suggestedList.filter(({address, addressType}) => {
-            return !selectedAddresses[addressType] || !selectedAddresses[addressType].has(address);
+            return !(selectedAddresses[addressType] && selectedAddresses[addressType].has(address));
         });
 
         const query = [];
