@@ -88,8 +88,9 @@ module.exports = React.createClass({
             }
         } else {
             previewsForAccount = (
-                _t("URL Previews default to off in End-to-End Encrypted rooms to protect your privacy. " +
-                    "They are requested through your homeserver which could infer links which are otherwise encrypted")
+                _t("In encrypted rooms, like this one, URL previews are disabled by default to ensure that your " +
+                    "homeserver (where the previews are generated) cannot gather information about links you see in " +
+                    "this room.")
             );
         }
 
@@ -105,8 +106,13 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomSettings_toggles">
                 <h3>{ _t("URL Previews") }</h3>
-
-                <label>{ previewsForAccount }</label>
+                <div>
+                    { _t('When someone puts a URL in their message, a URL preview can be shown to give more ' +
+                        'information about that link such as the title, description, and an image from the website.') }
+                </div>
+                <div>
+                    { previewsForAccount }
+                </div>
                 { previewsForRoom }
                 <label>{ previewsForRoomAccount }</label>
             </div>
