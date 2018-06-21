@@ -429,7 +429,6 @@ module.exports = React.createClass({
                 "push notifications on other devices until you log back in to them",
             ) + ".",
         });
-        dis.dispatch({action: 'password_changed'});
     },
 
     _onAddEmailEditFinished: function(value, shouldSubmit) {
