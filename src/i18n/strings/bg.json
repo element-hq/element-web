@@ -1195,5 +1195,6 @@
     "COPY": "КОПИРАЙ",
     "Share Message": "Сподели съобщението",
     "No Audio Outputs detected": "Не са открити аудио изходи",
-    "Audio Output": "Аудио изходи"
+    "Audio Output": "Аудио изходи",
+    "Jitsi Conference Calling": "Jitsi конферентни разговори"
 }
