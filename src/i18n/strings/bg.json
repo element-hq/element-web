@@ -1181,5 +1181,19 @@
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "За да продължите да ползвате %(homeserverDomain)s е необходимо да прегледате и да се съгласите с правилата и условията за ползване.",
     "Review terms and conditions": "Прегледай правилата и условията",
     "Failed to indicate account erasure": "Неуспешно указване на желанието за изтриване на акаунта",
-    "Try the app first": "Първо пробвайте приложението"
+    "Try the app first": "Първо пробвайте приложението",
+    "Encrypting": "Шифроване",
+    "Encrypted, not sent": "Шифровано, неизпратено",
+    "Share Link to User": "Сподели връзка с потребител",
+    "Share room": "Сподели стая",
+    "Share Room": "Споделяне на стая",
+    "Link to most recent message": "Създай връзка към най-новото съобщение",
+    "Share User": "Споделяне на потребител",
+    "Share Community": "Споделяне на общност",
+    "Share Room Message": "Споделяне на съобщение от стая",
+    "Link to selected message": "Създай връзка към избраното съобщение",
+    "COPY": "КОПИРАЙ",
+    "Share Message": "Сподели съобщението",
+    "No Audio Outputs detected": "Не са открити аудио изходи",
+    "Audio Output": "Аудио изходи"
 }
