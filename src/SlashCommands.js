@@ -27,14 +27,14 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 class Command {
     constructor({name, args='', description, runFn}) {
-        this.command = name;
+        this.command = '/' + name;
         this.args = args;
         this.description = description;
         this.runFn = runFn;
     }
 
     getCommand() {
-        return "/" + this.command;
+        return this.command;
     }
 
     getCommandWithArgs() {
