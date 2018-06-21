@@ -625,6 +625,7 @@ module.exports = React.createClass({
             SettingLevel.ROOM_ACCOUNT,
         ];
         let showUrlPreview;
+        // in e2ee rooms only care about room-device and room-account, so that user has to explicitly enable previews
         if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
             for (const level of levels) {
                 const value = SettingsStore.getValueAt(level, "urlPreviewsEnabled", roomId, true, true);
