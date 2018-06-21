@@ -618,10 +618,26 @@ module.exports = React.createClass({
         }
     },
 
-    _updatePreviewUrlVisibility: function(room) {
-        this.setState({
-            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
-        });
+    _updatePreviewUrlVisibility: function({roomId}) {
+        const levels = [
+            SettingLevel.ROOM_DEVICE,
+            SettingLevel.ROOM_ACCOUNT,
+        ];
+        let showUrlPreview;
+        if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
+            for (const level of levels) {
+                const value = SettingsStore.getValueAt(level, "urlPreviewsEnabled", roomId, true, true);
+                if (value === Boolean(value)) { // if is Boolean
+                    showUrlPreview = value;
+                    break;
+                }
+            }
+
+            showUrlPreview = showUrlPreview || false;
+        } else {
+            showUrlPreview = SettingsStore.getValue("urlPreviewsEnabled", roomId);
+        }
+        this.setState({showUrlPreview});
     },
 
     onRoom: function(room) {

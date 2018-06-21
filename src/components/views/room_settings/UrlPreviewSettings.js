@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Travis Ralston
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from "matrix-js-sdk";
 const React = require('react');
 import PropTypes from 'prop-types';
 const sdk = require("../../../index");
@@ -29,6 +31,10 @@ module.exports = React.createClass({
         room: PropTypes.object,
     },
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    },
+
     saveSettings: function() {
         const promises = [];
         if (this.refs.urlPreviewsRoom) promises.push(this.refs.urlPreviewsRoom.save());
@@ -39,36 +45,52 @@ module.exports = React.createClass({
     render: function() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const roomId = this.props.room.roomId;
+        const isEncrypted = this.context.matrixClient.isRoomEncrypted(roomId);
 
         let previewsForAccount = null;
-        if (SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled")) {
-            previewsForAccount = (
-                _t("You have <a>enabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
-            );
-        } else {
-            previewsForAccount = (
-                _t("You have <a>disabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
-            );
-        }
-
         let previewsForRoom = null;
-        if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
-            previewsForRoom = (
-                <label>
-                    <SettingsFlag name="urlPreviewsEnabled"
-                                  level={SettingLevel.ROOM}
-                                  roomId={this.props.room.roomId}
-                                  isExplicit={true}
-                                  manualSave={true}
-                                  ref="urlPreviewsRoom" />
-                </label>
-            );
-        } else {
-            let str = _td("URL previews are enabled by default for participants in this room.");
-            if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled", roomId, /*explicit=*/true)) {
-                str = _td("URL previews are disabled by default for participants in this room.");
+
+
+        if (!isEncrypted) {
+            // Only show account setting state and room state setting state in non-e2ee rooms where they apply
+            const accountEnabled = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled");
+            if (accountEnabled) {
+                previewsForAccount = (
+                    _t("You have <a>enabled</a> URL previews by default.", {}, {
+                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                    })
+                );
+            } else if (accountEnabled) {
+                previewsForAccount = (
+                    _t("You have <a>disabled</a> URL previews by default.", {}, {
+                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                    })
+                );
             }
-            previewsForRoom = (<label>{ _t(str) }</label>);
+
+            if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
+                previewsForRoom = (
+                    <label>
+                        <SettingsFlag name="urlPreviewsEnabled"
+                                      level={SettingLevel.ROOM}
+                                      roomId={this.props.room.roomId}
+                                      isExplicit={true}
+                                      manualSave={true}
+                                      ref="urlPreviewsRoom" />
+                    </label>
+                );
+            } else {
+                let str = _td("URL previews are enabled by default for participants in this room.");
+                if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled", roomId, /*explicit=*/true)) {
+                    str = _td("URL previews are disabled by default for participants in this room.");
+                }
+                previewsForRoom = (<label>{ _t(str) }</label>);
+            }
+        } else {
+            previewsForAccount = (
+                _t("URL Previews default to off in End-to-End Encrypted rooms to protect your privacy. " +
+                    "They are requested through your homeserver which could infer links which are otherwise encrypted")
+            );
         }
 
         const previewsForRoomAccount = (
