@@ -65,13 +65,6 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
-
-        MatrixClientPeg.get().getMediaLimits().then((limits) => {
-            this._uploadLimits = limits;
-        }).catch(() => {
-            // HS can't or won't provide limits, so don't give any.
-            this._uploadLimits = {};
-        })
     }
 
     componentWillUnmount() {
@@ -110,8 +103,10 @@ export default class MessageComposer extends React.Component {
     }
 
     isFileUploadAllowed(file) {
-        if (this._uploadLimits.upload_size !== undefined && file.size > this._uploadLimits.upload_size) {
-            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this._uploadLimits.upload_size)});
+        if (this.props.mediaLimits !== undefined &&
+            this.props.mediaLimits.upload_size !== undefined &&
+            file.size > this.props.mediaLimits.upload_size) {
+            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this.mediaLimits.upload_size)});
         }
         return true;
     }
@@ -430,6 +425,8 @@ MessageComposer.propTypes = {
     // callback when a file to upload is chosen
     uploadFile: PropTypes.func.isRequired,
 
+    mediaLimits: PropTypes.object,
+
     // string representing the current room app drawer state
-    showApps: PropTypes.bool,
+    showApps: PropTypes.bool
 };

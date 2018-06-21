@@ -49,6 +49,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 const DEBUG = false;
 let debuglog = function() {};
 
+let mediaLimitCache = null;
+
 const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
 
 if (DEBUG) {
@@ -94,6 +96,9 @@ module.exports = React.createClass({
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
+            
+            // Media limits for uploading, this may change.
+            mediaLimits: {},
 
             // The event to be scrolled to initially
             initialEventId: null,
@@ -147,10 +152,24 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
+        this._fetchMediaLimits();
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
+    },
+
+    _fetchMediaLimits: function(invalidateCache: boolean = false) {
+        let limits;
+        if(invalidateCache || mediaLimitCache == null) {
+            MatrixClientPeg.get().getMediaLimits().then((_limits) => {
+                limits = _limits;
+            }).catch(() => {
+                // Media repo can't or won't report limits, so provide an empty object (no limits).
+                limits = {};
+            });
+            mediaLimitCache = limits;
+        }
+        this.state.mediaLimits = limits;
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -481,6 +500,7 @@ module.exports = React.createClass({
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
+                this._fetchMediaLimits(true);
             case 'upload_started':
             case 'upload_finished':
                 this.forceUpdate();
@@ -1654,6 +1674,7 @@ module.exports = React.createClass({
                     callState={this.state.callState}
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
+                    mediaLimits={this.state.mediaLimits}
                 />;
         }
 
