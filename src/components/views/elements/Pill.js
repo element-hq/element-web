@@ -152,8 +152,12 @@ const Pill = React.createClass({
 
                 try {
                     group = await FlairStore.getGroupProfileCached(cli, resourceId);
-                } catch (e) { // if FlairStore failed, rely on js-sdk's store which lacks info
-                    group = cli.getGroup(resourceId);
+                } catch (e) { // if FlairStore failed, fall back to just groupId
+                    group = {
+                        groupId: resourceId,
+                        avatarUrl: null,
+                        name: null,
+                    };
                 }
             }
         }
