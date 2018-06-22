@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,15 +77,15 @@ export const SETTINGS = {
     //     // level is always appended to the end.
     //     supportedLevelsAreOrdered: false,
     // },
-    "feature_rich_quoting": {
-        isFeature: true,
-        displayName: _td("Message Replies"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_jitsi": {
+        isFeature: true,
+        displayName: _td("Jitsi Conference Calling"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

@@ -913,6 +913,8 @@ module.exports = React.createClass({
     },
 
     uploadFile: async function(file) {
+        dis.dispatch({action: 'focus_composer'});
+
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'view_set_mxid'});
             return;

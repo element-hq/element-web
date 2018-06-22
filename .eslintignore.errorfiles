@@ -4,7 +4,6 @@ src/autocomplete/AutocompleteProvider.js
 src/autocomplete/Autocompleter.js
 src/autocomplete/EmojiProvider.js
 src/autocomplete/UserProvider.js
-src/CallHandler.js
 src/component-index.js
 src/components/structures/BottomLeftMenu.js
 src/components/structures/CompatibilityPage.js

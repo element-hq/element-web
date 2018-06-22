@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
+import SettingsStore from "./settings/SettingsStore";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -123,7 +124,7 @@ function _setCallListeners(call) {
                 description: _t(
                     "There are unknown devices in this room: "+
                     "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call."
+                    "possible for someone to eavesdrop on your call.",
                 ),
                 button: _t('Review Devices'),
                 onFinished: function(confirmed) {
@@ -246,66 +247,58 @@ function _onAction(payload) {
 
     switch (payload.action) {
         case 'place_call':
-            if (module.exports.getAnyActiveCall()) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
-                    title: _t('Existing Call'),
-                    description: _t('You are already in a call.'),
-                });
-                return; // don't allow >1 call to be placed.
-            }
+            {
+                if (module.exports.getAnyActiveCall()) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
+                        title: _t('Existing Call'),
+                        description: _t('You are already in a call.'),
+                    });
+                    return; // don't allow >1 call to be placed.
+                }
 
-            // if the runtime env doesn't do VoIP, whine.
-            if (!MatrixClientPeg.get().supportsVoip()) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
-                    title: _t('VoIP is unsupported'),
-                    description: _t('You cannot place VoIP calls in this browser.'),
-                });
-                return;
-            }
+                // if the runtime env doesn't do VoIP, whine.
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
+                        title: _t('VoIP is unsupported'),
+                        description: _t('You cannot place VoIP calls in this browser.'),
+                    });
+                    return;
+                }
 
-            var room = MatrixClientPeg.get().getRoom(payload.room_id);
-            if (!room) {
-                console.error("Room %s does not exist.", payload.room_id);
-                return;
-            }
+                const room = MatrixClientPeg.get().getRoom(payload.room_id);
+                if (!room) {
+                    console.error("Room %s does not exist.", payload.room_id);
+                    return;
+                }
 
-            var members = room.getJoinedMembers();
-            if (members.length <= 1) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
-                    description: _t('You cannot place a call with yourself.'),
-                });
-                return;
-            } else if (members.length === 2) {
-                console.log("Place %s call in %s", payload.type, payload.room_id);
-                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
-                placeCall(call);
-            } else { // > 2
-                dis.dispatch({
-                    action: "place_conference_call",
-                    room_id: payload.room_id,
-                    type: payload.type,
-                    remote_element: payload.remote_element,
-                    local_element: payload.local_element,
-                });
+                const members = room.getJoinedMembers();
+                if (members.length <= 1) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
+                        description: _t('You cannot place a call with yourself.'),
+                    });
+                    return;
+                } else if (members.length === 2) {
+                    console.log("Place %s call in %s", payload.type, payload.room_id);
+                    const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
+                    placeCall(call);
+                } else { // > 2
+                    dis.dispatch({
+                        action: "place_conference_call",
+                        room_id: payload.room_id,
+                        type: payload.type,
+                        remote_element: payload.remote_element,
+                        local_element: payload.local_element,
+                    });
+                }
             }
             break;
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
-            if (!ConferenceHandler) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
-                    description: _t('Conference calls are not supported in this client'),
-                });
-            } else if (!MatrixClientPeg.get().supportsVoip()) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
-                    title: _t('VoIP is unsupported'),
-                    description: _t('You cannot place VoIP calls in this browser.'),
-                });
-            } else if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
+
+            if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
                 // Conference calls are implemented by sending the media to central
                 // server which combines the audio from all the participants together
                 // into a single stream. This is incompatible with end-to-end encryption
@@ -316,47 +309,75 @@ function _onAction(payload) {
                 Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
                     description: _t('Conference calls are not supported in encrypted rooms'),
                 });
+                return;
+            }
+
+            if (SettingsStore.isFeatureEnabled('feature_jitsi')) {
+                _startCallApp(payload.room_id, payload.type);
             } else {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
-                    title: _t('Warning!'),
-                    description: _t('Conference calling is in development and may not be reliable.'),
-                    onFinished: (confirm)=>{
-                        if (confirm) {
-                            ConferenceHandler.createNewMatrixCall(
-                                MatrixClientPeg.get(), payload.room_id,
-                            ).done(function(call) {
-                                placeCall(call);
-                            }, function(err) {
-                                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                                console.error("Conference call failed: " + err);
-                                Modal.createTrackedDialog('Call Handler', 'Failed to set up conference call', ErrorDialog, {
-                                    title: _t('Failed to set up conference call'),
-                                    description: _t('Conference call failed.') + ' ' + ((err && err.message) ? err.message : ''),
+                if (!ConferenceHandler) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
+                        description: _t('Conference calls are not supported in this client'),
+                    });
+                } else if (!MatrixClientPeg.get().supportsVoip()) {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
+                        title: _t('VoIP is unsupported'),
+                        description: _t('You cannot place VoIP calls in this browser.'),
+                    });
+                } else {
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
+                        title: _t('Warning!'),
+                        description: _t('Conference calling is in development and may not be reliable.'),
+                        onFinished: (confirm)=>{
+                            if (confirm) {
+                                ConferenceHandler.createNewMatrixCall(
+                                    MatrixClientPeg.get(), payload.room_id,
+                                ).done(function(call) {
+                                    placeCall(call);
+                                }, function(err) {
+                                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                                    console.error("Conference call failed: " + err);
+                                    Modal.createTrackedDialog(
+                                        'Call Handler',
+                                        'Failed to set up conference call',
+                                        ErrorDialog,
+                                        {
+                                            title: _t('Failed to set up conference call'),
+                                            description: (
+                                                _t('Conference call failed.') +
+                                                ' ' + ((err && err.message) ? err.message : '')
+                                            ),
+                                        },
+                                    );
                                 });
-                            });
-                        }
-                    },
-                });
+                            }
+                        },
+                    });
+                }
             }
             break;
         case 'incoming_call':
-            if (module.exports.getAnyActiveCall()) {
-                // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
-                // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
-                // in future we could signal a "local busy" as a warning to the caller.
-                // see https://github.com/vector-im/vector-web/issues/1964
-                return;
-            }
+            {
+                if (module.exports.getAnyActiveCall()) {
+                    // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
+                    // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
+                    // in future we could signal a "local busy" as a warning to the caller.
+                    // see https://github.com/vector-im/vector-web/issues/1964
+                    return;
+                }
 
-            // if the runtime env doesn't do VoIP, stop here.
-            if (!MatrixClientPeg.get().supportsVoip()) {
-                return;
-            }
+                // if the runtime env doesn't do VoIP, stop here.
+                if (!MatrixClientPeg.get().supportsVoip()) {
+                    return;
+                }
 
-            var call = payload.call;
-            _setCallListeners(call);
-            _setCallState(call, call.roomId, "ringing");
+                const call = payload.call;
+                _setCallListeners(call);
+                _setCallState(call, call.roomId, "ringing");
+            }
             break;
         case 'hangup':
             if (!calls[payload.room_id]) {
@@ -378,6 +399,71 @@ function _onAction(payload) {
             break;
     }
 }
+
+function _startCallApp(roomId, type) {
+    dis.dispatch({
+        action: 'appsDrawer',
+        show: true,
+    });
+
+    const room = MatrixClientPeg.get().getRoom(roomId);
+    if (!room) {
+        console.error("Attempted to start conference call widget in unknown room: " + roomId);
+        return;
+    }
+
+    const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
+    const currentJitsiWidgets = appsStateEvents.filter((ev) => {
+        ev.getContent().type == 'jitsi';
+    });
+    if (currentJitsiWidgets.length > 0) {
+        console.warn(
+            "Refusing to start conference call widget in " + roomId +
+            " a conference call widget is already present",
+        );
+        return;
+    }
+
+    // This inherits its poor naming from the field of the same name that goes into
+    // the event. It's just a random string to make the Jitsi URLs unique.
+    const widgetSessionId = Math.random().toString(36).substring(2);
+    const confId = room.roomId.replace(/[^A-Za-z0-9]/g, '') + widgetSessionId;
+    // NB. we can't just encodeURICompoent all of these because the $ signs need to be there
+    // (but currently the only thing that needs encoding is the confId)
+    const queryString = [
+        'confId='+encodeURIComponent(confId),
+        'isAudioConf='+(type === 'voice' ? 'true' : 'false'),
+        'displayName=$matrix_display_name',
+        'avatarUrl=$matrix_avatar_url',
+        'email=$matrix_user_id',
+    ].join('&');
+    const widgetUrl = (
+        'https://scalar.vector.im/api/widgets' +
+        '/jitsi.html?' +
+        queryString
+    );
+
+    const jitsiEvent = {
+        type: 'jitsi',
+        url: widgetUrl,
+        data: {
+            widgetSessionId: widgetSessionId,
+        },
+    };
+    const widgetId = (
+        'jitsi_' +
+        MatrixClientPeg.get().credentials.userId +
+        '_' +
+        Date.now()
+    );
+    MatrixClientPeg.get().sendStateEvent(
+        roomId,
+        'im.vector.modular.widgets',
+        jitsiEvent,
+        widgetId,
+    ).then(() => console.log('Sent jitsi widget state event'), (e) => console.error(e));
+}
+
 // FIXME: Nasty way of making sure we only register
 // with the dispatcher once
 if (!global.mxCallHandler) {
