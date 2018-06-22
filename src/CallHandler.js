@@ -429,6 +429,7 @@ function _startCallApp(roomId, type) {
     const widgetSessionId = Math.random().toString(36).substring(2);
     const confId = room.roomId.replace(/[^A-Za-z0-9]/g, '') + widgetSessionId;
     // NB. we can't just encodeURICompoent all of these because the $ signs need to be there
+    // (but currently the only thing that needs encoding is the confId)
     const queryString = [
         'confId='+encodeURIComponent(confId),
         'isAudioConf='+(type === 'voice' ? 'true' : 'false'),
@@ -460,7 +461,7 @@ function _startCallApp(roomId, type) {
         'im.vector.modular.widgets',
         jitsiEvent,
         widgetId,
-    ).then(() => console.log('Sent state'), (e) => console.error(e));
+    ).then(() => console.log('Sent jitsi widget state event'), (e) => console.error(e));
 }
 
 // FIXME: Nasty way of making sure we only register
