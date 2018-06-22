@@ -96,6 +96,8 @@ export default class ContextualMenu extends React.Component {
             const x = e.clientX;
             const y = e.clientY;
 
+            // XXX: This isn't pretty but the only way to allow opening a different context menu on right click whilst
+            // a context menu and its click-guard are up without completely rewriting how the context menus work.
             setImmediate(() => {
                 const clickEvent = document.createEvent('MouseEvents');
                 clickEvent.initMouseEvent(
