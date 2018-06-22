@@ -74,7 +74,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         return cli !== undefined && cli !== null;
     }
 
-    _getSettings(roomId, eventType = "im.vector.settings") {
+    _getSettings(roomId, eventType = "im.vector.web.settings") {
         const room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) return null;
 
