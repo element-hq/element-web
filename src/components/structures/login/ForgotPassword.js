@@ -24,7 +24,6 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 
 import PasswordReset from "../../../PasswordReset";
-import makeLanguageSelector from "./LanguageSelector";
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
@@ -202,6 +201,8 @@ module.exports = React.createClass({
                 );
             }
 
+            const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+
             resetPasswordJsx = (
             <div>
                 <div className="mx_Login_prompt">
@@ -236,7 +237,7 @@ module.exports = React.createClass({
                     <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                         { _t('Create an account') }
                     </a>
-                    { makeLanguageSelector() }
+                    <LanguageSelector />
                     <LoginFooter />
                 </div>
             </div>

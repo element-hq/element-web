@@ -29,7 +29,6 @@ import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
-import makeLanguageSelector from "./LanguageSelector";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -413,6 +412,8 @@ module.exports = React.createClass({
             );
         }
 
+        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
@@ -426,7 +427,7 @@ module.exports = React.createClass({
                     { registerBody }
                     { signIn }
                     { errorText }
-                    { makeLanguageSelector() }
+                    <LanguageSelector />
                     <LoginFooter />
                 </div>
             </LoginPage>

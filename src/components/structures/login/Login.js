@@ -25,7 +25,6 @@ import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
-import makeLanguageSelector from "./LanguageSelector";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -427,6 +426,8 @@ module.exports = React.createClass({
             );
         }
 
+        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
@@ -440,7 +441,7 @@ module.exports = React.createClass({
                             { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
-                        { makeLanguageSelector() }
+                        <LanguageSelector />
                         <LoginFooter />
                     </div>
                 </div>
