@@ -392,6 +392,7 @@ limitations under the License.
     overflow-x: overlay;
     overflow-y: visible;
     max-height: 30vh;
+    position: static;
 }
 
 .mx_EventTile_content .markdown-body code {
@@ -406,7 +407,7 @@ limitations under the License.
     visibility: hidden;
     cursor: pointer;
     top: 6px;
-    right: 6px;
+    right: 36px;
     width: 19px;
     height: 19px;
     background-image: url($copy-button-url);

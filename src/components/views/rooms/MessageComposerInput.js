@@ -28,7 +28,7 @@ import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
-import SlashCommands from '../../../SlashCommands';
+import {processCommandInput} from '../../../SlashCommands';
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -45,8 +45,7 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
-import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
@@ -722,7 +721,7 @@ export default class MessageComposerInput extends React.Component {
 
         // Some commands (/join) require pills to be replaced with their text content
         const commandText = this.removeMDLinks(contentState, ['#']);
-        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
+        const cmd = processCommandInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
                 this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
@@ -1182,7 +1181,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
+                    <ReplyPreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

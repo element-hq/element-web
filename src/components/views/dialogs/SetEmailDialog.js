@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            emailAddress: null,
+            emailAddress: '',
             emailBusy: false,
         };
     },
@@ -127,6 +128,7 @@ export default React.createClass({
         const EditableText = sdk.getComponent('elements.EditableText');
 
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
+            initialValue={this.state.emailAddress}
             className="mx_SetEmailDialog_email_input"
             autoFocus="true"
             placeholder={_t("Email address")}

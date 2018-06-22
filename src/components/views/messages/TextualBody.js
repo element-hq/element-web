@@ -36,6 +36,7 @@ import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";
+import {host as matrixtoHost} from '../../../matrix-to';
 
 linkifyMatrix(linkify);
 
@@ -304,7 +305,7 @@ module.exports = React.createClass({
             // never preview matrix.to links (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
-            if (host == 'matrix.to') return false;
+            if (host === matrixtoHost) return false;
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
@@ -422,8 +423,7 @@ module.exports = React.createClass({
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
-        const stripReply = SettingsStore.isFeatureEnabled("feature_rich_quoting") &&
-            ReplyThread.getParentEventId(mxEvent);
+        const stripReply = ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
             // Part of Replies fallback support

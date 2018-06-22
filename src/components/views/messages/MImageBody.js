@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
@@ -29,9 +28,7 @@ import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
-export default class extends React.Component {
-    displayName: 'MImageBody'
-
+export default class MImageBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
@@ -41,11 +38,11 @@ export default class extends React.Component {
 
         /* the maximum image height to use */
         maxImageHeight: PropTypes.number,
-    }
+    };
 
     static contextTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient),
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -90,7 +87,7 @@ export default class extends React.Component {
     }
 
     onClick(ev) {
-        if (ev.button == 0 && !ev.metaKey) {
+        if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
             const content = this.props.mxEvent.getContent();
             const httpUrl = this._getContentUrl();
@@ -177,9 +174,7 @@ export default class extends React.Component {
                 return this.state.decryptedThumbnailUrl;
             }
             return this.state.decryptedUrl;
-        } else if (content.info &&
-                   content.info.mimetype == "image/svg+xml" &&
-                   content.info.thumbnail_url) {
+        } else if (content.info && content.info.mimetype === "image/svg+xml" && content.info.thumbnail_url) {
             // special case to return client-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
@@ -299,7 +294,7 @@ export default class extends React.Component {
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                style={{ "max-width": maxWidth + "px" }}
+                style={{ maxWidth: maxWidth + "px" }}
                 alt={content.body}
                 onError={this.onImageError}
                 onLoad={this.onImageLoad}
@@ -308,14 +303,14 @@ export default class extends React.Component {
         }
 
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ "max-height": maxHeight + "px" }} >
+            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }}></div>
+                <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
 
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
-                        "max-width": infoWidth + "px",
+                        maxWidth: infoWidth + "px",
                     }}>
                         <div className="mx_MImageBody_thumbnail_spinner">
                             { placeholder }

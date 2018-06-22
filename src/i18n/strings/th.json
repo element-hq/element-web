@@ -132,7 +132,6 @@
     "Failed to join room": "การเข้าร่วมห้องล้มเหลว",
     "Failed to kick": "การเตะล้มเหลว",
     "Failed to leave room": "การออกจากห้องล้มเหลว",
-    "Failed to lookup current room": "การหาห้องปัจจุบันล้มเหลว",
     "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
     "Failed to reject invitation": "การปฏิเสธคำเชิญล้มเหลว",
     "Failed to save settings": "การบันทึกการตั้งค่าล้มเหลว",

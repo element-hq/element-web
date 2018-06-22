@@ -1,5 +1,6 @@
 /*
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +21,9 @@ import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
-import * as ContextualMenu from "../../structures/ContextualMenu";
 import classNames from 'classnames';
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import {createMenu} from "../../structures/ContextualMenu";
 
 export default React.createClass({
     displayName: 'GroupInviteTile',
@@ -66,29 +68,11 @@ export default React.createClass({
         });
     },
 
-    onBadgeClicked: function(e) {
-        // Prevent the RoomTile onClick event firing as well
-        e.stopPropagation();
+    _showContextMenu: function(x, y, chevronOffset) {
+        const GroupInviteTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
 
-        // Only allow none guests to access the context menu
-        if (this.context.matrixClient.isGuest()) return;
-
-        // If the badge is clicked, then no longer show tooltip
-        if (this.props.collapsed) {
-            this.setState({ hover: false });
-        }
-
-        const RoomTileContextMenu = sdk.getComponent('context_menus.GroupInviteTileContextMenu');
-        const elementRect = e.target.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = elementRect.right + window.pageXOffset + 3;
-        const chevronOffset = 12;
-        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
-        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
-
-        ContextualMenu.createMenu(RoomTileContextMenu, {
-            chevronOffset: chevronOffset,
+        createMenu(GroupInviteTileContextMenu, {
+            chevronOffset,
             left: x,
             top: y,
             group: this.props.group,
@@ -97,6 +81,38 @@ export default React.createClass({
             },
         });
         this.setState({ menuDisplayed: true });
+    },
+
+    onContextMenu: function(e) {
+        // Prevent the RoomTile onClick event firing as well
+        e.preventDefault();
+        // Only allow non-guests to access the context menu
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        const chevronOffset = 12;
+        this._showContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
+    },
+
+    onBadgeClicked: function(e) {
+        // Prevent the RoomTile onClick event firing as well
+        e.stopPropagation();
+        // Only allow non-guests to access the context menu
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        // If the badge is clicked, then no longer show tooltip
+        if (this.props.collapsed) {
+            this.setState({ hover: false });
+        }
+
+        const elementRect = e.target.getBoundingClientRect();
+
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const x = elementRect.right + window.pageXOffset + 3;
+        const chevronOffset = 12;
+        let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+        y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
+
+        this._showContextMenu(x, y, chevronOffset);
     },
 
     render: function() {
@@ -139,7 +155,12 @@ export default React.createClass({
         });
 
         return (
-            <AccessibleButton className={classes} onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <AccessibleButton className={classes}
+                              onClick={this.onClick}
+                              onMouseEnter={this.onMouseEnter}
+                              onMouseLeave={this.onMouseLeave}
+                              onContextMenu={this.onContextMenu}
+            >
                 <div className="mx_RoomTile_avatar">
                     { av }
                 </div>
