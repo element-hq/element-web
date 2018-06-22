@@ -94,15 +94,7 @@ module.exports = React.createClass({
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
-                // When opening the app drawer when there aren't any apps,
-                // auto-launch the integrations manager to skip the awkward
-                // click on "Add widget"
                 if (action.show) {
-                    const apps = this._getApps();
-                    if (apps.length === 0) {
-                        this._launchManageIntegrations();
-                    }
-
                     localStorage.removeItem(hideWidgetKey);
                 } else {
                     // Store hidden state of widget
