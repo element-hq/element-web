@@ -82,24 +82,26 @@ var LeftPanel = React.createClass({
 
     _onKeyDown: function(ev) {
         if (!this.focusedElement) return;
-        let handled = false;
+        let handled = true;
 
         switch (ev.keyCode) {
+            case KeyCode.TAB:
+                this._onMoveFocus(ev.shiftKey);
+                break;
             case KeyCode.UP:
                 this._onMoveFocus(true);
-                handled = true;
                 break;
             case KeyCode.DOWN:
                 this._onMoveFocus(false);
-                handled = true;
                 break;
             case KeyCode.ENTER:
                 this._onMoveFocus(false);
                 if (this.focusedElement) {
                     this.focusedElement.click();
                 }
-                handled = true;
                 break;
+            default:
+                handled = false;
         }
 
         if (handled) {
