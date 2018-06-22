@@ -260,7 +260,7 @@ const Pill = React.createClass({
                         avatar = <BaseAvatar name={name || groupId} width={16} height={16}
                                              url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
                     }
-                    pillClass = 'mx_RoomPill' || 'mx_GroupPill';
+                    pillClass = 'mx_GroupPill';
                 }
             }
                 break;

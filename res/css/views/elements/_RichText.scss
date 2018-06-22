@@ -37,9 +37,19 @@
 
 /* More specific to override `.markdown-body a` color */
 .mx_EventTile_content .markdown-body a.mx_RoomPill,
-.mx_RoomPill {
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_RoomPill,
+.mx_GroupPill {
     color: $accent-fg-color;
     background-color: $rte-room-pill-color;
+    padding-right: 5px;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_GroupPill {
+    color: $accent-fg-color;
+    background-color: $rte-group-pill-color;
     padding-right: 5px;
 }
 
