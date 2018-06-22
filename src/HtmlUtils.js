@@ -223,7 +223,8 @@ const sanitizeHtmlParams = {
                             case '+':
                                 attribs.href = '#/group/' + entity;
                                 break;
-                            case '#': case '!':
+                            case '#':
+                            case '!':
                                 attribs.href = '#/room/' + entity;
                                 break;
                         }

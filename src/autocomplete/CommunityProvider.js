@@ -58,33 +58,22 @@ export default class CommunityProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            const joinedGroups = cli.getGroups().filter(({myMembership}) => myMembership !== 'invite');
+            const joinedGroups = cli.getGroups().filter(({myMembership}) => myMembership === 'join');
 
-            const groups = (await Promise.all(joinedGroups.map(async ({avatarUrl, groupId, name=''}) => {
+            const groups = (await Promise.all(joinedGroups.map(async ({groupId}) => {
                 try {
                     return FlairStore.getGroupProfileCached(cli, groupId);
-                } catch (e) { // if FlairStore failed, rely on js-sdk's store which lacks info
+                } catch (e) { // if FlairStore failed, fall back to just groupId
                     return Promise.resolve({
-                        name,
+                        name: '',
                         groupId,
-                        avatarUrl,
-                        shortDescription: '', // js-sdk doesn't store this
+                        avatarUrl: '',
+                        shortDescription: '',
                     });
                 }
             })));
 
             this.matcher.setObjects(groups);
-            // this.matcher.setObjects(joinedGroups);
-            // this.matcher.setObjects(joinedGroups.map(({groupId}) => {
-            //     const groupProfile = GroupStore.getSummary(groupId).profile;
-            //     if (groupProfile) {
-            //         return {
-            //             groupId,
-            //             name: groupProfile.name || '',
-            //             avatarUrl: groupProfile.avatar_url,
-            //         };
-            //     }
-            // })).filter(Boolean);
 
             const matchedString = command[0];
             completions = this.matcher.match(matchedString);
@@ -104,7 +93,6 @@ export default class CommunityProvider extends AutocompleteProvider {
                 ),
                 range,
             }))
-            .filter((completion) => !!completion.completion && completion.completion.length > 0)
             .slice(0, 4);
         }
         return completions;
