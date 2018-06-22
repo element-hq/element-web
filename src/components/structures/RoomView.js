@@ -648,19 +648,23 @@ module.exports = React.createClass({
     },
 
     onAccountData: function(event) {
-        if (event.getType() === "org.matrix.preview_urls" && this.state.room) {
+        const type = event.getType();
+        if ((type === "org.matrix.preview_urls" || type === "im.vector.web.settings") && this.state.room) {
+            // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
             this._updatePreviewUrlVisibility(this.state.room);
         }
     },
 
     onRoomAccountData: function(event, room) {
         if (room.roomId == this.state.roomId) {
-            if (event.getType() === "org.matrix.room.color_scheme") {
+            const type = event.getType();
+            if (type === "org.matrix.room.color_scheme") {
                 const color_scheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
-            } else if (event.getType() === "org.matrix.room.preview_urls") {
+            } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
+                // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this._updatePreviewUrlVisibility(room);
             }
         }
