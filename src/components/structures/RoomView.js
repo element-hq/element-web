@@ -620,26 +620,11 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function({roomId}) {
-        const levels = [
-            SettingLevel.ROOM_DEVICE,
-            SettingLevel.ROOM_ACCOUNT,
-        ];
-        let showUrlPreview;
-        // in e2ee rooms only care about room-device and room-account, so that user has to explicitly enable previews
-        if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
-            for (const level of levels) {
-                const value = SettingsStore.getValueAt(level, "urlPreviewsEnabled", roomId, true, true);
-                if (value === Boolean(value)) { // if is Boolean
-                    showUrlPreview = value;
-                    break;
-                }
-            }
-
-            showUrlPreview = showUrlPreview || false;
-        } else {
-            showUrlPreview = SettingsStore.getValue("urlPreviewsEnabled", roomId);
-        }
-        this.setState({showUrlPreview});
+        // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
+        const key = MatrixClientPeg.get().isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
+        this.setState({
+            showUrlPreview: SettingsStore.getValue(key, roomId),
+        });
     },
 
     onRoom: function(room) {

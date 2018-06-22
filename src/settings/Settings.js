@@ -238,6 +238,13 @@ export const SETTINGS = {
         },
         default: true,
     },
+    "urlPreviewsEnabled_e2ee": {
+        supportedLevels: ['room-device', 'room-account'],
+        displayName: {
+            "room-account": _td("Enable URL previews for this room (only affects you)"),
+        },
+        default: false,
+    },
     "roomColor": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("Room Colour"),

@@ -50,7 +50,6 @@ module.exports = React.createClass({
         let previewsForAccount = null;
         let previewsForRoom = null;
 
-
         if (!isEncrypted) {
             // Only show account setting state and room state setting state in non-e2ee rooms where they apply
             const accountEnabled = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled");
@@ -73,7 +72,7 @@ module.exports = React.createClass({
                     <label>
                         <SettingsFlag name="urlPreviewsEnabled"
                                       level={SettingLevel.ROOM}
-                                      roomId={this.props.room.roomId}
+                                      roomId={roomId}
                                       isExplicit={true}
                                       manualSave={true}
                                       ref="urlPreviewsRoom" />
@@ -94,10 +93,10 @@ module.exports = React.createClass({
             );
         }
 
-        const previewsForRoomAccount = (
-            <SettingsFlag name="urlPreviewsEnabled"
+        const previewsForRoomAccount = ( // in an e2ee room we use a special key to enforce per-room opt-in
+            <SettingsFlag name={isEncrypted ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled'}
                           level={SettingLevel.ROOM_ACCOUNT}
-                          roomId={this.props.room.roomId}
+                          roomId={roomId}
                           manualSave={true}
                           ref="urlPreviewsSelf"
             />
