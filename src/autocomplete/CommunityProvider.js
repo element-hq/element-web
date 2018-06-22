@@ -1,7 +1,5 @@
 /*
-Copyright 2016 Aviral Dasgupta
-Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,13 +20,13 @@ import AutocompleteProvider from './AutocompleteProvider';
 import MatrixClientPeg from '../MatrixClientPeg';
 import FuzzyMatcher from './FuzzyMatcher';
 import {PillCompletion} from './Components';
-import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
-import {makeRoomPermalink} from "../matrix-to";
+import {makeGroupPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
+import FlairStore from "../stores/FlairStore";
 
-const ROOM_REGEX = /(?=#)(\S*)/g;
+const COMMUNITY_REGEX = /(?=\+)(\S*)/g;
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -39,16 +37,16 @@ function score(query, space) {
     }
 }
 
-export default class RoomProvider extends AutocompleteProvider {
+export default class CommunityProvider extends AutocompleteProvider {
     constructor() {
-        super(ROOM_REGEX);
+        super(COMMUNITY_REGEX);
         this.matcher = new FuzzyMatcher([], {
-            keys: ['displayedAlias', 'name'],
+            keys: ['groupId', 'name', 'shortDescription'],
         });
     }
 
     async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
-        const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
+        const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
         // (see https://github.com/vector-im/riot-web/issues/4762)
@@ -56,45 +54,52 @@ export default class RoomProvider extends AutocompleteProvider {
             return [];
         }
 
-        const client = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            // the only reason we need to do this is because Fuse only matches on properties
-            this.matcher.setObjects(client.getRooms().filter(
-                (room) => !!room && !!getDisplayAliasForRoom(room),
-            ).map((room) => {
-                return {
-                    room: room,
-                    name: room.name,
-                    displayedAlias: getDisplayAliasForRoom(room),
-                };
-            }));
+            const joinedGroups = cli.getGroups().filter(({myMembership}) => myMembership === 'join');
+
+            const groups = (await Promise.all(joinedGroups.map(async ({groupId}) => {
+                try {
+                    return FlairStore.getGroupProfileCached(cli, groupId);
+                } catch (e) { // if FlairStore failed, fall back to just groupId
+                    return Promise.resolve({
+                        name: '',
+                        groupId,
+                        avatarUrl: '',
+                        shortDescription: '',
+                    });
+                }
+            })));
+
+            this.matcher.setObjects(groups);
+
             const matchedString = command[0];
             completions = this.matcher.match(matchedString);
             completions = _sortBy(completions, [
-                (c) => score(matchedString, c.displayedAlias),
-                (c) => c.displayedAlias.length,
-            ]).map((room) => {
-                const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
-                return {
-                    completion: displayAlias,
-                    suffix: ' ',
-                    href: makeRoomPermalink(displayAlias),
-                    component: (
-                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
-                    ),
-                    range,
-                };
-            })
-            .filter((completion) => !!completion.completion && completion.completion.length > 0)
+                (c) => score(matchedString, c.groupId),
+                (c) => c.groupId.length,
+            ]).map(({avatarUrl, groupId, name}) => ({
+                completion: groupId,
+                suffix: ' ',
+                href: makeGroupPermalink(groupId),
+                component: (
+                    <PillCompletion initialComponent={
+                        <BaseAvatar name={name || groupId}
+                                    width={24} height={24}
+                                    url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
+                    } title={name} description={groupId} />
+                ),
+                range,
+            }))
             .slice(0, 4);
         }
         return completions;
     }
 
     getName() {
-        return '💬 ' + _t('Rooms');
+        return '💬 ' + _t('Communities');
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

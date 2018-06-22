@@ -22,8 +22,8 @@ import {_t} from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
+import type {Completion, SelectionRange} from "./Autocompleter";
 import {CommandMap} from '../SlashCommands';
-import type {SelectionRange} from "./Autocompleter";
 
 const COMMANDS = Object.values(CommandMap);
 
@@ -37,7 +37,7 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
