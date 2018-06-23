@@ -72,7 +72,7 @@ export default React.createClass({
 
     _updateRelatedGroups() {
         if (this.unmounted) return;
-        const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId())
+        const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
         if (!room) return;
 
         const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
