@@ -30,7 +30,6 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
-import {stripDiacritics} from "./Autocompleter";
 
 const USER_REGEX = /@\S*/g;
 
@@ -40,11 +39,11 @@ export default class UserProvider extends AutocompleteProvider {
 
     constructor(room: Room) {
         super(USER_REGEX, {
-            keys: ['_name'],
+            keys: ['name'],
         });
         this.room = room;
         this.matcher = new FuzzyMatcher([], {
-            keys: ['_name', 'userId'],
+            keys: ['name', 'userId'],
             shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
@@ -109,7 +108,7 @@ export default class UserProvider extends AutocompleteProvider {
         const fullMatch = command[0];
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== '@') {
-            completions = this.matcher.match(stripDiacritics(fullMatch)).map((user) => {
+            completions = this.matcher.match(fullMatch).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
@@ -143,21 +142,9 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
+        this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
 
-        this.users = [];
-        this.room.getJoinedMembers().forEach(({userId, name, ...rest}) => {
-            if (userId === currentUserId) return; // skip self
-            this.users.push({
-                userId,
-                name,
-                _name: stripDiacritics(name),
-                ...rest,
-            });
-        });
-
-        this.users = _sortBy(this.users, (member) =>
-            1E20 - lastSpoken[member.userId] || 1E20,
-        );
+        this.users = _sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 
         this.matcher.setObjects(this.users);
     }
