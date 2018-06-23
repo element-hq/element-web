@@ -30,12 +30,9 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
+import {stripDiacritics} from "./Autocompleter";
 
 const USER_REGEX = /@\S*/g;
-
-function stripDiacritics(str: string): string {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
 
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;

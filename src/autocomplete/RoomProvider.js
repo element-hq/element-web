@@ -2,6 +2,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
+import {stripDiacritics} from "./Autocompleter";
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
 
@@ -71,7 +73,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 };
             }));
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(stripDiacritics(matchedString));
             completions = _sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
