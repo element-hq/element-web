@@ -70,6 +70,8 @@ function matrixLinkify(linkify) {
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_HASH_NAME_COLON_DOMAIN);
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
 
+    S_ROOMALIAS.on(TT.DOT, S_HASH_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+
 
     const USERID = function(value) {
         MultiToken.call(this, value);
@@ -111,6 +113,8 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 
+    S_USERID.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+
 
     const GROUPID = function(value) {
         MultiToken.call(this, value);
@@ -151,6 +155,8 @@ function matrixLinkify(linkify) {
     S_PLUS_NAME_COLON_DOMAIN.on(TT.DOT, S_PLUS_NAME_COLON_DOMAIN_DOT);
     S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_PLUS_NAME_COLON_DOMAIN);
     S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_GROUPID);
+
+    S_GROUPID.on(TT.DOT, S_PLUS_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
