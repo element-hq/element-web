@@ -123,6 +123,7 @@ class PasswordLogin extends React.Component {
     }
 
     onLoginTypeChange(loginType) {
+        this.props.onError(null); // send a null error to clear any error messages
         this.setState({
             loginType: loginType,
             username: "", // Reset because email and username use the same state
