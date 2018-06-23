@@ -16,6 +16,7 @@ limitations under the License.
 
 import Resend from './Resend';
 import sdk from './index';
+import dis from './dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 
@@ -65,6 +66,10 @@ export function getUnknownDevicesForRoom(matrixClient, room) {
     });
 }
 
+function focusComposer() {
+    dis.dispatch({action: 'focus_composer'});
+}
+
 /**
  * Show the UnknownDeviceDialog for a given room. The dialog will inform the user
  * that messages they sent to this room have not been sent due to unknown devices
@@ -86,6 +91,7 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
             sendAnywayLabel: _t("Send anyway"),
             sendLabel: _t("Send"),
             onSend: onSendClicked,
+            onFinished: focusComposer,
         }, 'mx_Dialog_unknownDevice');
     });
 }
