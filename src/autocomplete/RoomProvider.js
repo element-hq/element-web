@@ -45,7 +45,7 @@ export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super(ROOM_REGEX);
         this.matcher = new FuzzyMatcher([], {
-            keys: ['displayedAlias', 'name'],
+            keys: ['displayedAlias', '_name'],
         });
     }
 
@@ -69,6 +69,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 return {
                     room: room,
                     name: room.name,
+                    _name: stripDiacritics(room.name),
                     displayedAlias: getDisplayAliasForRoom(room),
                 };
             }));

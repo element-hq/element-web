@@ -40,11 +40,11 @@ export default class UserProvider extends AutocompleteProvider {
 
     constructor(room: Room) {
         super(USER_REGEX, {
-            keys: ['name'],
+            keys: ['_name'],
         });
         this.room = room;
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name', 'userId'],
+            keys: ['_name', 'userId'],
             shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
@@ -149,7 +149,8 @@ export default class UserProvider extends AutocompleteProvider {
             if (userId === currentUserId) return; // skip self
             this.users.push({
                 userId,
-                name: stripDiacritics(name),
+                name,
+                _name: stripDiacritics(name),
                 ...rest,
             });
         });
