@@ -93,6 +93,13 @@ module.exports = React.createClass({
         this._unmounted = true;
     },
 
+    onPasswordLoginError: function(errorText) {
+        this.setState({
+            errorText,
+            loginIncorrect: Boolean(errorText),
+        });
+    },
+
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         this.setState({
             busy: true,
@@ -357,6 +364,7 @@ module.exports = React.createClass({
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
+               onError={this.onPasswordLoginError}
                initialUsername={this.state.username}
                initialPhoneCountry={this.state.phoneCountry}
                initialPhoneNumber={this.state.phoneNumber}

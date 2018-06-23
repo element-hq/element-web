@@ -28,6 +28,7 @@ import SdkConfig from '../../../SdkConfig';
  */
 class PasswordLogin extends React.Component {
     static defaultProps = {
+        onError: function() {},
         onUsernameChanged: function() {},
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
@@ -70,19 +71,48 @@ class PasswordLogin extends React.Component {
 
     onSubmitForm(ev) {
         ev.preventDefault();
-        if (this.state.loginType === PasswordLogin.LOGIN_FIELD_PHONE) {
-            this.props.onSubmit(
-                '', // XXX: Synapse breaks if you send null here:
-                this.state.phoneCountry,
-                this.state.phoneNumber,
-                this.state.password,
-            );
+
+        let username = ''; // XXX: Synapse breaks if you send null here:
+        let phoneCountry = null;
+        let phoneNumber = null;
+        let error;
+
+        switch (this.state.loginType) {
+            case PasswordLogin.LOGIN_FIELD_EMAIL:
+                username = this.state.username;
+                if (!username) {
+                    error = _t('The email field must not be blank.');
+                }
+                break;
+            case PasswordLogin.LOGIN_FIELD_MXID:
+                username = this.state.username;
+                if (!username) {
+                    error = _t('The user name field must not be blank.');
+                }
+                break;
+            case PasswordLogin.LOGIN_FIELD_PHONE:
+                phoneCountry = this.state.phoneCountry;
+                phoneNumber = this.state.phoneNumber;
+                if (!phoneNumber) {
+                    error = _t('The phone number field must not be blank.');
+                }
+                break;
+        }
+
+        if (error) {
+            this.props.onError(error);
             return;
         }
+
+        if (!this.state.password) {
+            this.props.onError(_t('The password field must not be blank.'));
+            return;
+        }
+
         this.props.onSubmit(
-            this.state.username,
-            null,
-            null,
+            username,
+            phoneCountry,
+            phoneNumber,
             this.state.password,
         );
     }
@@ -258,6 +288,7 @@ PasswordLogin.LOGIN_FIELD_PHONE = "login_field_phone";
 
 PasswordLogin.propTypes = {
     onSubmit: PropTypes.func.isRequired, // fn(username, password)
+    onError: PropTypes.func,
     onForgotPasswordClick: PropTypes.func, // fn()
     initialUsername: PropTypes.string,
     initialPhoneCountry: PropTypes.string,
