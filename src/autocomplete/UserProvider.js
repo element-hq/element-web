@@ -3,6 +3,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +32,10 @@ import {makeUserPermalink} from "../matrix-to";
 import type {SelectionRange} from "./Autocompleter";
 
 const USER_REGEX = /@\S*/g;
+
+function stripDiacritics(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
@@ -107,7 +112,7 @@ export default class UserProvider extends AutocompleteProvider {
         const fullMatch = command[0];
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== '@') {
-            completions = this.matcher.match(fullMatch).map((user) => {
+            completions = this.matcher.match(stripDiacritics(fullMatch)).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
@@ -141,8 +146,15 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
-        this.users = this.room.getJoinedMembers().filter((member) => {
-            if (member.userId !== currentUserId) return true;
+
+        this.users = [];
+        this.room.getJoinedMembers().forEach(({userId, name, ...rest}) => {
+            if (userId === currentUserId) return; // skip self
+            this.users.push({
+                userId,
+                name: stripDiacritics(name),
+                ...rest,
+            });
         });
 
         this.users = _sortBy(this.users, (member) =>
