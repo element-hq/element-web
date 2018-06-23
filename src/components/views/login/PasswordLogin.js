@@ -57,15 +57,17 @@ class PasswordLogin extends React.Component {
         this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
         this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
         this.onPasswordChanged = this.onPasswordChanged.bind(this);
+        this.isLoginEmpty = this.isLoginEmpty.bind(this);
     }
 
     componentWillMount() {
         this._passwordField = null;
+        this._loginField = null;
     }
 
     componentWillReceiveProps(nextProps) {
         if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
-            field_input_incorrect(this._passwordField);
+            field_input_incorrect(this.isLoginEmpty() ? this._loginField : this._passwordField);
         }
     }
 
@@ -157,8 +159,10 @@ class PasswordLogin extends React.Component {
         switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
                 classes.mx_Login_email = true;
+                classes.error = this.props.loginIncorrect && !this.state.username;
                 return <input
                     className={classNames(classes)}
+                    ref={(e) => {this._loginField = e;}}
                     key="email_input"
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
@@ -170,8 +174,10 @@ class PasswordLogin extends React.Component {
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.mx_Login_username = true;
+                classes.error = this.props.loginIncorrect && !this.state.username;
                 return <input
                     className={classNames(classes)}
+                    ref={(e) => {this._loginField = e;}}
                     key="username_input"
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
@@ -184,14 +190,14 @@ class PasswordLogin extends React.Component {
                     autoFocus
                     disabled={disabled}
                 />;
-            case PasswordLogin.LOGIN_FIELD_PHONE:
+            case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
                 classes.mx_Login_phoneNumberField = true;
                 classes.mx_Login_field_has_prefix = true;
+                classes.error = this.props.loginIncorrect && !this.state.phoneNumber;
                 return <div className="mx_Login_phoneSection">
                     <CountryDropdown
                         className="mx_Login_phoneCountry mx_Login_field_prefix"
-                        ref="phone_country"
                         onOptionChange={this.onPhoneCountryChanged}
                         value={this.state.phoneCountry}
                         isSmall={true}
@@ -200,7 +206,7 @@ class PasswordLogin extends React.Component {
                     />
                     <input
                         className={classNames(classes)}
-                        ref="phoneNumber"
+                        ref={(e) => {this._loginField = e;}}
                         key="phone_input"
                         type="text"
                         name="phoneNumber"
@@ -211,6 +217,17 @@ class PasswordLogin extends React.Component {
                         disabled={disabled}
                     />
                 </div>;
+            }
+        }
+    }
+
+    isLoginEmpty() {
+        switch (this.state.loginType) {
+            case PasswordLogin.LOGIN_FIELD_EMAIL:
+            case PasswordLogin.LOGIN_FIELD_MXID:
+                return !this.state.username;
+            case PasswordLogin.LOGIN_FIELD_PHONE:
+                return !this.state.phoneCountry || !this.state.phoneNumber;
         }
     }
 
@@ -238,7 +255,7 @@ class PasswordLogin extends React.Component {
         const pwFieldClass = classNames({
             mx_Login_field: true,
             mx_Login_field_disabled: matrixIdText === '',
-            error: this.props.loginIncorrect,
+            error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
