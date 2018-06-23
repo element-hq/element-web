@@ -157,6 +157,7 @@ export default class MessageComposerInput extends React.Component {
         this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
         this.onTextPasted = this.onTextPasted.bind(this);
+        this.focusComposer = this.focusComposer.bind(this);
 
         const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
@@ -270,13 +271,12 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onAction = (payload) => {
-        const editor = this.refs.editor;
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
             case 'reply_to_event':
             case 'focus_composer':
-                editor.focus();
+                this.focusComposer();
                 break;
             case 'insert_mention': {
                 // Pretend that we've autocompleted this user because keeping two code
@@ -319,7 +319,7 @@ export default class MessageComposerInput extends React.Component {
                     let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                     editorState = EditorState.moveSelectionToEnd(editorState);
                     this.onEditorContentChanged(editorState);
-                    editor.focus();
+                    this.focusComposer();
                 }
             }
                 break;
@@ -1155,6 +1155,10 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
+    focusComposer() {
+        this.refs.editor.focus();
+    }
+
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
@@ -1179,7 +1183,7 @@ export default class MessageComposerInput extends React.Component {
             activeEditorState.getCurrentContent().getBlocksAsArray());
 
         return (
-            <div className="mx_MessageComposer_input_wrapper">
+            <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
                     <ReplyPreview />
                     <Autocomplete
