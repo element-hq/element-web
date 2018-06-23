@@ -16,7 +16,6 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -102,15 +101,6 @@ export default class MessageComposer extends React.Component {
         this.uploadFiles(tfiles);
     }
 
-    isFileUploadAllowed(file) {
-        if (this.props.mediaLimits !== undefined &&
-            this.props.mediaLimits.upload_size !== undefined &&
-            file.size > this.props.mediaLimits.upload_size) {
-            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this.mediaLimits.upload_size)});
-        }
-        return true;
-    }
-
     uploadFiles(files) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -120,7 +110,7 @@ export default class MessageComposer extends React.Component {
         const failedFiles = [];
 
         for (let i=0; i<files.length; i++) {
-            const fileAcceptedOrError = this.isFileUploadAllowed(files[i]);
+            const fileAcceptedOrError = this.props.uploadAllowed(files[i]);
             if (fileAcceptedOrError === true) {
                 acceptedFiles.push(<li key={i}>
                     <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
@@ -128,7 +118,7 @@ export default class MessageComposer extends React.Component {
                 fileList.push(files[i]);
             } else {
                 failedFiles.push(<li key={i}>
-                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') } <b>{ _t('Reason') + ": " + fileAcceptedOrError}</b>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') } <p>{ _t('Reason') + ": " + fileAcceptedOrError}</p>
                 </li>);
             }
         }
@@ -158,6 +148,12 @@ export default class MessageComposer extends React.Component {
                 </ul>
             </div>
         );
+        let buttonText;
+        if (acceptedFiles.length > 0 && failedFiles.length > 0) {
+            buttonText = "Upload selected"
+        } else if (failedFiles.length > 0) {
+            buttonText = "Close"
+        }
 
         Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
@@ -168,6 +164,8 @@ export default class MessageComposer extends React.Component {
                     { replyToWarning }
                 </div>
             ),
+            hasCancelButton: acceptedFiles.length > 0,
+            button: buttonText,
             onFinished: (shouldUpload) => {
                 if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
@@ -425,7 +423,8 @@ MessageComposer.propTypes = {
     // callback when a file to upload is chosen
     uploadFile: PropTypes.func.isRequired,
 
-    mediaLimits: PropTypes.object,
+    // function to test whether a file should be allowed to be uploaded.
+    uploadAllowed: PropTypes.func.isRequired,
 
     // string representing the current room app drawer state
     showApps: PropTypes.bool
