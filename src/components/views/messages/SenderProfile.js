@@ -72,14 +72,12 @@ export default React.createClass({
 
     _updateRelatedGroups() {
         if (this.unmounted) return;
-        const relatedGroupsEvent = this.context.matrixClient
-            .getRoom(this.props.mxEvent.getRoomId())
-            .currentState
-            .getStateEvents('m.room.related_groups', '');
+        const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId())
+        if (!room) return;
+
+        const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
         this.setState({
-            relatedGroups: relatedGroupsEvent ?
-                relatedGroupsEvent.getContent().groups || []
-                : [],
+            relatedGroups: relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [],
         });
     },
 
