@@ -1,0 +1,66 @@
+#===============================================================================
+# aloha-talk-web Development Configuration
+#
+# This collection of yaml documents is for use within a local minikube
+# deployment context. You can modify them and safely reconfigure kubernetes at
+# any time with the command:
+#   kubectl apply --context=my_context --namespace=namespace -f ./deployment.yml
+#===============================================================================
+---
+# aloha-talk-web Service
+# https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: aloha-talk-web
+  name: aloha-talk-web
+  selfLink: /api/v1/namespaces/default/services/aloha-talk-web
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    targetPort: http # named container port
+    port: 8080       # external service port
+    nodePort: 30080  # external node (host) port
+  - name: https
+    targetPort: https # named container port
+    port: 8443        # external service port
+    nodePort: 30443   # external node (host) port
+  selector:
+    app: aloha-talk-web
+  sessionAffinity: None
+  type: NodePort
+---
+# aloha-talk-web Deployment
+# https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aloha-talk-web
+spec:
+  selector:
+    matchLabels:
+      app: aloha-talk-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: aloha-talk-web
+    spec:
+      imagePullSecrets:
+      - name: aloha-gcr-io
+      containers:
+      - name: aloha-talk-web
+        ## Use the container registry image by default
+        image: gcr.io/aloha-internal/aloha-talk-web:latest
+        imagePullPolicy: Always
+        ## Use the local image when developing
+        # image: aloha-talk-web:latest
+        # imagePullPolicy: Never
+        env:
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
