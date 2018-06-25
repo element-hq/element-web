@@ -1,6 +1,7 @@
 /*
-Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -349,8 +350,14 @@ var RoomSubList = React.createClass({
         var label = this.props.collapsed ? null : this.props.label;
 
         let content;
-        if (this.state.sortedList.length === 0 && !this.props.searchFilter && this.props.extraTiles.length === 0) {
-            content = this.props.emptyContent;
+        if (this.state.sortedList.length === 0 && this.props.extraTiles.length === 0) {
+            // if no search filter is applied and there is a placeholder defined then show it, otherwise show nothing
+            if (!this.props.searchFilter && this.props.emptyContent) {
+                content = this.props.emptyContent;
+            } else {
+                // don't show an empty sublist
+                return null;
+            }
         } else {
             content = this.makeRoomTiles();
             content.push(...this.props.extraTiles);
