@@ -27,9 +27,9 @@ import FuzzyMatcher from './FuzzyMatcher';
 import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';
 
-import type {Room, RoomMember} from 'matrix-js-sdk';
+import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
-import type {SelectionRange} from "./Autocompleter";
+import type {Completion, SelectionRange} from "./Autocompleter";
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -45,7 +45,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
             shouldMatchPrefix: true,
-            shouldMatchWordsOnly: false
+            shouldMatchWordsOnly: false,
         });
 
         this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
@@ -62,7 +62,7 @@ export default class UserProvider extends AutocompleteProvider {
         }
     }
 
-    _onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+    _onRoomTimeline(ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean, data: Object) {
         if (!room) return;
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
@@ -78,7 +78,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.onUserSpoke(ev.sender);
     }
 
-    _onRoomStateMember(ev, state, member) {
+    _onRoomStateMember(ev: MatrixEvent, state: RoomState, member: RoomMember) {
         // ignore members in other rooms
         if (member.roomId !== this.room.roomId) {
             return;
@@ -88,7 +88,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // Disable autocompletions when composing commands because of various issues
@@ -129,7 +129,7 @@ export default class UserProvider extends AutocompleteProvider {
         return completions;
     }
 
-    getName() {
+    getName(): string {
         return '👥 ' + _t('Users');
     }
 
@@ -142,13 +142,9 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
-        this.users = this.room.getJoinedMembers().filter((member) => {
-            if (member.userId !== currentUserId) return true;
-        });
+        this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
 
-        this.users = _sortBy(this.users, (member) =>
-            1E20 - lastSpoken[member.userId] || 1E20,
-        );
+        this.users = _sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 
         this.matcher.setObjects(this.users);
     }
