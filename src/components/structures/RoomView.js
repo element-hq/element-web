@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -618,9 +619,11 @@ module.exports = React.createClass({
         }
     },
 
-    _updatePreviewUrlVisibility: function(room) {
+    _updatePreviewUrlVisibility: function({roomId}) {
+        // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
+        const key = MatrixClientPeg.get().isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
         this.setState({
-            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
+            showUrlPreview: SettingsStore.getValue(key, roomId),
         });
     },
 
@@ -645,19 +648,23 @@ module.exports = React.createClass({
     },
 
     onAccountData: function(event) {
-        if (event.getType() === "org.matrix.preview_urls" && this.state.room) {
+        const type = event.getType();
+        if ((type === "org.matrix.preview_urls" || type === "im.vector.web.settings") && this.state.room) {
+            // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
             this._updatePreviewUrlVisibility(this.state.room);
         }
     },
 
     onRoomAccountData: function(event, room) {
         if (room.roomId == this.state.roomId) {
-            if (event.getType() === "org.matrix.room.color_scheme") {
+            const type = event.getType();
+            if (type === "org.matrix.room.color_scheme") {
                 const color_scheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
-            } else if (event.getType() === "org.matrix.room.preview_urls") {
+            } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
+                // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this._updatePreviewUrlVisibility(room);
             }
         }
