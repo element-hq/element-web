@@ -1191,5 +1191,12 @@
     "Share User": "Поделиться пользователем",
     "Share Community": "Поделиться сообществом",
     "Link to selected message": "Ссылка на выбранное сообщение",
-    "COPY": "КОПИРОВАТЬ"
+    "COPY": "КОПИРОВАТЬ",
+    "Jitsi Conference Calling": "Конференц-связь Jitsi",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "В зашифрованных комнатах, подобных этой, предварительный просмотр URL-адресов отключен по умолчанию, чтобы гарантировать, что ваш сервер (где создаются предварительные просмотры) не может собирать информацию о ссылках, которые вы видите в этой комнате.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Когда кто-то вставляет URL-адрес в свое сообщение, может быть отображен предварительный просмотр URL-адреса, чтобы предоставить дополнительную информацию об этой ссылке, такую как название, описание и изображение с веб-сайта.",
+    "The email field must not be blank.": "Поле email не должно быть пустым.",
+    "The user name field must not be blank.": "Поле имени пользователя не должно быть пустым.",
+    "The phone number field must not be blank.": "Поле номера телефона не должно быть пустым.",
+    "The password field must not be blank.": "Поле пароля не должно быть пустым."
 }
