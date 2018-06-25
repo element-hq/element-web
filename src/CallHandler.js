@@ -61,6 +61,8 @@ import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
+import WidgetUtils from './WidgetUtils';
+import { getRoomWidgets } from './utils/widgets';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -412,15 +414,20 @@ function _startCallApp(roomId, type) {
         return;
     }
 
-    const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
-    const currentJitsiWidgets = appsStateEvents.filter((ev) => {
-        ev.getContent().type == 'jitsi';
+    const currentJitsiWidgets = getRoomWidgets(room).filter((ev) => {
+        return ev.getContent().type == 'jitsi';
     });
     if (currentJitsiWidgets.length > 0) {
         console.warn(
             "Refusing to start conference call widget in " + roomId +
             " a conference call widget is already present",
         );
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
+            title: _t('Call in Progress'),
+            description: _t('A call is already in progress!'),
+        });
         return;
     }
 
@@ -443,25 +450,22 @@ function _startCallApp(roomId, type) {
         queryString
     );
 
-    const jitsiEvent = {
-        type: 'jitsi',
-        url: widgetUrl,
-        data: {
-            widgetSessionId: widgetSessionId,
-        },
+    const widgetData = {
+        widgetSessionId: widgetSessionId,
     };
+
     const widgetId = (
         'jitsi_' +
         MatrixClientPeg.get().credentials.userId +
         '_' +
         Date.now()
     );
-    MatrixClientPeg.get().sendStateEvent(
-        roomId,
-        'im.vector.modular.widgets',
-        jitsiEvent,
-        widgetId,
-    ).then(() => console.log('Sent jitsi widget state event'), (e) => console.error(e));
+
+    WidgetUtils.setRoomWidget(widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData, roomId).then(() => {
+        console.log('Jitsi widget added');
+    }).catch((e) => {
+        console.error(e);
+    });
 }
 
 // FIXME: Nasty way of making sure we only register

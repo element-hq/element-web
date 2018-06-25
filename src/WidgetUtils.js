@@ -17,6 +17,8 @@ limitations under the License.
 
 import MatrixClientPeg from './MatrixClientPeg';
 import SdkConfig from "./SdkConfig";
+import Widgets from './utils/widgets';
+import dis from './dispatcher';
 import * as url from "url";
 
 export default class WidgetUtils {
@@ -188,6 +190,68 @@ export default class WidgetUtils {
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
             }, 10000);
             MatrixClientPeg.get().on('RoomState.events', onRoomStateEvents);
+        });
+    }
+
+    static setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+        const content = {
+            type: widgetType,
+            url: widgetUrl,
+            name: widgetName,
+            data: widgetData,
+        };
+
+        const client = MatrixClientPeg.get();
+        const userWidgets = Widgets.getUserWidgets();
+
+        // Delete existing widget with ID
+        try {
+            delete userWidgets[widgetId];
+        } catch (e) {
+            console.error(`$widgetId is non-configurable`);
+        }
+
+        // Add new widget / update
+        if (widgetUrl !== null) {
+            userWidgets[widgetId] = {
+                content: content,
+                sender: client.getUserId(),
+                state_key: widgetId,
+                type: 'm.widget',
+                id: widgetId,
+            };
+        }
+
+        // This starts listening for when the echo comes back from the server
+        // since the widget won't appear added until this happens. If we don't
+        // wait for this, the action will complete but if the user is fast enough,
+        // the widget still won't actually be there.
+        return client.setAccountData('m.widgets', userWidgets).then(() => {
+            return WidgetUtils.waitForUserWidget(widgetId, widgetUrl !== null);
+        }).then(() => {
+            dis.dispatch({ action: "user_widget_updated" });
+        });
+    }
+
+    static setRoomWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData, roomId) {
+        let content;
+
+        if (widgetUrl === null) { // widget is being deleted
+            content = {};
+        } else {
+            content = {
+                type: widgetType,
+                url: widgetUrl,
+                name: widgetName,
+                data: widgetData,
+            };
+        }
+
+        const client = MatrixClientPeg.get();
+        // TODO - Room widgets need to be moved to 'm.widget' state events
+        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
+        return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
+            return WidgetUtils.waitForRoomWidget(widgetId, roomId, widgetUrl !== null);
         });
     }
 }

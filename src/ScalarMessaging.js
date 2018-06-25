@@ -297,12 +297,6 @@ function setWidget(event, roomId) {
     const widgetData = event.data.data; // optional
     const userWidget = event.data.userWidget;
 
-    const client = MatrixClientPeg.get();
-    if (!client) {
-        sendError(event, _t('You need to be logged in.'));
-        return;
-    }
-
     // both adding/removing widgets need these checks
     if (!widgetId || widgetUrl === undefined) {
         sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
@@ -337,34 +331,7 @@ function setWidget(event, roomId) {
     };
 
     if (userWidget) {
-        const client = MatrixClientPeg.get();
-        const userWidgets = Widgets.getUserWidgets();
-
-        // Delete existing widget with ID
-        try {
-            delete userWidgets[widgetId];
-        } catch (e) {
-            console.error(`$widgetId is non-configurable`);
-        }
-
-        // Add new widget / update
-        if (widgetUrl !== null) {
-            userWidgets[widgetId] = {
-                content: content,
-                sender: client.getUserId(),
-                state_key: widgetId,
-                type: 'm.widget',
-                id: widgetId,
-            };
-        }
-
-        // This starts listening for when the echo comes back from the server
-        // since the widget won't appear added until this happens. If we don't
-        // wait for this, the action will complete but if the user is fast enough,
-        // the widget still won't actually be there.
-        client.setAccountData('m.widgets', userWidgets).then(() => {
-            return WidgetUtils.waitForUserWidget(widgetId, widgetUrl !== null);
-        }).then(() => {
+        WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -377,15 +344,7 @@ function setWidget(event, roomId) {
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
         }
-
-        if (widgetUrl === null) { // widget is being deleted
-            content = {};
-        }
-        // TODO - Room widgets need to be moved to 'm.widget' state events
-        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
-        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
-            return WidgetUtils.waitForRoomWidget(widgetId, roomId, widgetUrl !== null);
-        }).then(() => {
+        WidgetUtils.setRoomWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData, roomId).then(() => {
             sendResponse(event, {
                 success: true,
             });
