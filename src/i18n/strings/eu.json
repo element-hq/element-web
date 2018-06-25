@@ -1196,5 +1196,7 @@
     "Share Message": "Partekatu mezua",
     "No Audio Outputs detected": "Ez da audio irteerarik antzeman",
     "Audio Output": "Audio irteera",
-    "Jitsi Conference Calling": "Jitsi konferentzia deia"
+    "Jitsi Conference Calling": "Jitsi konferentzia deia",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Zifratutako gelatan, honetan esaterako, URL-en aurrebistak lehenetsita desgaituta daude zure hasiera-zerbitzariak gela honetan ikusten dituzun estekei buruzko informaziorik jaso ez dezan, hasiera-zerbitzarian sortzen baitira aurrebistak.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Norbaitek mezu batean URL bat jartzen duenean, URL aurrebista bat erakutsi daiteke estekaren informazio gehiago erakusteko, adibidez webgunearen izenburua, deskripzioa eta irudi bat."
 }
