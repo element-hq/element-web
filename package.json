@@ -75,7 +75,7 @@
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
-    "lolex": "2.3.2",
+    "lolex": "^2.7.0",
     "matrix-js-sdk": "0.10.4",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
