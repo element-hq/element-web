@@ -64,7 +64,9 @@ export default class ContextualMenu extends React.Component {
         // The component to render as the context menu
         elementClass: PropTypes.element.isRequired,
         // on resize callback
-        windowResize: PropTypes.func
+        windowResize: PropTypes.func,
+        // method to close menu
+        closeMenu: PropTypes.func,
     };
 
     constructor() {
@@ -73,6 +75,7 @@ export default class ContextualMenu extends React.Component {
             contextMenuRect: null,
         };
 
+        this.onContextMenu = this.onContextMenu.bind(this);
         this.collectContextMenuRect = this.collectContextMenuRect.bind(this);
     }
 
@@ -83,6 +86,28 @@ export default class ContextualMenu extends React.Component {
         this.setState({
             contextMenuRect: element.getBoundingClientRect(),
         });
+    }
+
+    onContextMenu(e) {
+        if (this.props.closeMenu) {
+            this.props.closeMenu();
+
+            e.preventDefault();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            // XXX: This isn't pretty but the only way to allow opening a different context menu on right click whilst
+            // a context menu and its click-guard are up without completely rewriting how the context menus work.
+            setImmediate(() => {
+                const clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent(
+                    'contextmenu', true, true, window, 0,
+                    0, 0, x, y, false, false,
+                    false, false, 0, null,
+                );
+                document.elementFromPoint(x, y).dispatchEvent(clickEvent);
+            });
+        }
     }
 
     render() {
@@ -195,7 +220,7 @@ export default class ContextualMenu extends React.Component {
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu} /> }
+            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
             <style>{ chevronCSS }</style>
         </div>;
     }
