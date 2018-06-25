@@ -3,6 +3,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ import type {Room, RoomMember} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
 import type {SelectionRange} from "./Autocompleter";
 
-const USER_REGEX = /@\S*/g;
+const USER_REGEX = /\B@\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
