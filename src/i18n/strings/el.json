@@ -810,7 +810,6 @@
     "%(widgetName)s widget removed by %(senderName)s": "Το widget %(widgetName)s αφαιρέθηκε από τον/την %(senderName)s",
     "%(names)s and %(count)s others are typing|other": "Ο/Η %(names)s και άλλοι/ες %(count)s πληκτρολογούν",
     "%(names)s and %(count)s others are typing|one": "Ο/Η %(names)s και άλλος ένας πληκτρολογούν",
-    "Message Replies": "Απαντήσεις",
     "Message Pinning": "Καρφίτσωμα Μηνυμάτων",
     "Hide avatar changes": "Απόκρυψη αλλαγών εικονιδίων χρηστών",
     "Hide display name changes": "Απόκρυψη αλλαγών εμφανιζόμενων ονομάτων",
