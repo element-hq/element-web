@@ -1195,5 +1195,9 @@
     "No Audio Outputs detected": "Neboli rozpoznané žiadne zvukové výstupy",
     "Audio Output": "Zvukový výstup",
     "Try the app first": "Najskôr aplikáciu vyskúšaj",
-    "Share Room Message": "Správa o zdieľaní miestnosti"
+    "Share Room Message": "Správa o zdieľaní miestnosti",
+    "The email field must not be blank.": "Položka emailu nemôže byť prázdna.",
+    "The user name field must not be blank.": "Položka užívateľovej prezývky nemôže byť prázdna.",
+    "The phone number field must not be blank.": "Telefonné číslo nemôže ostať nevyplnené.",
+    "The password field must not be blank.": "Položka s heslom nemôže ostať nevyplnená."
 }
