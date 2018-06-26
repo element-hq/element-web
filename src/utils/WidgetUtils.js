@@ -295,7 +295,7 @@ export default class WidgetUtils {
      * @return {[object]} Array containing current / active user widgets
      */
     static getUserWidgetsArray() {
-      return Object.values(WidgetUtils.getUserWidgets());
+        return Object.values(WidgetUtils.getUserWidgets());
     }
 
     /**
