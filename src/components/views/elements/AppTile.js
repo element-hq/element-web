@@ -31,7 +31,7 @@ import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
-import WidgetUtils from '../../../WidgetUtils';
+import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];

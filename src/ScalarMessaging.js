@@ -236,7 +236,7 @@ import SdkConfig from './SdkConfig';
 import MatrixClientPeg from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
-import WidgetUtils from './WidgetUtils';
+import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 

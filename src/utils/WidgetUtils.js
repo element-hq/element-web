@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
-import SdkConfig from "./SdkConfig";
-import dis from './dispatcher';
+import MatrixClientPeg from '../MatrixClientPeg';
+import SdkConfig from "../SdkConfig";
+import dis from '../dispatcher';
 import * as url from "url";
 
 export default class WidgetUtils {

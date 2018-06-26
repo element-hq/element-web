@@ -61,7 +61,7 @@ import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
-import WidgetUtils from './WidgetUtils';
+import WidgetUtils from './utils/WidgetUtils';
 
 global.mxCalls = {
     //room_id: MatrixCall
