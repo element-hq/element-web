@@ -360,17 +360,9 @@ function getWidgets(event, roomId) {
             sendError(event, _t('This room is not recognised.'));
             return;
         }
-        // TODO - Room widgets need to be moved to 'm.widget' state events
-        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
-        const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
-        // Only return widgets which have required fields
-        if (room) {
-            stateEvents.forEach((ev) => {
-                if (ev.getContent().type && ev.getContent().url) {
-                    widgetStateEvents.push(ev.event); // return the raw event
-                }
-            });
-        }
+        // XXX: This gets the raw event object (I think because we can't
+        // send the MatrixEvent over postMessage?)
+        widgetStateEvents = WidgetUtils.getRoomWidgets(room).map((ev) => ev.event);
     }
 
     // Add user widgets (not linked to a specific room)
