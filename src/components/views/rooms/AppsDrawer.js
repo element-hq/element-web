@@ -163,14 +163,7 @@ module.exports = React.createClass({
     },
 
     _getApps: function() {
-        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets');
-        if (!appsStateEvents) {
-            return [];
-        }
-
-        return appsStateEvents.filter((ev) => {
-            return ev.getContent().type && ev.getContent().url;
-        }).map((ev) => {
+        return WidgetUtils.getRoomWidgets(this.props.room).map((ev) => {
             return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },
