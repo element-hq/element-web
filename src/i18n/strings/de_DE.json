@@ -1195,5 +1195,12 @@
     "Share Message": "Teile Nachricht",
     "No Audio Outputs detected": "Keine Ton-Ausgabe erkannt",
     "Audio Output": "Ton-Ausgabe",
-    "Try the app first": "App erst ausprobieren"
+    "Try the app first": "App erst ausprobieren",
+    "Jitsi Conference Calling": "Jitsi-Konferenz Anruf",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "In verschlüsselten Räumen, wie diesem, ist die Link-Vorschau standardmäßig deaktiviert damit dein Heimserver (auf dem die Vorschau erzeugt wird) keine Informationen über Links in diesem Raum bekommt.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Wenn jemand eine Nachricht mit einem Link schickt, kann die Link-Vorschau mehr Informationen, wie Titel, Beschreibung und Bild der Webseite, über den Link anzeigen.",
+    "The email field must not be blank.": "Das E-Mail-Feld darf nicht leer sein.",
+    "The user name field must not be blank.": "Das Benutzername-Feld darf nicht leer sein.",
+    "The phone number field must not be blank.": "Das Telefonnummern-Feld darf nicht leer sein.",
+    "The password field must not be blank.": "Das Passwort-Feld darf nicht leer sein."
 }
