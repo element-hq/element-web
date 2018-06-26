@@ -611,7 +611,7 @@ module.exports = React.createClass({
         const self = this;
         return (
             <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
+                autoshow={true} onScroll={self._whenScrolling} onResize={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
                              extraTiles={this._makeGroupInviteTiles(self.props.searchFilter)}
