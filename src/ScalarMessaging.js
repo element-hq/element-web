@@ -323,13 +323,6 @@ function setWidget(event, roomId) {
         }
     }
 
-    let content = {
-        type: widgetType,
-        url: widgetUrl,
-        name: widgetName,
-        data: widgetData,
-    };
-
     if (userWidget) {
         WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
             sendResponse(event, {
