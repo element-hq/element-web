@@ -1200,5 +1200,6 @@
     "The user name field must not be blank.": "Položka užívateľovej prezývky nemôže byť prázdna.",
     "The phone number field must not be blank.": "Telefonné číslo nemôže ostať nevyplnené.",
     "The password field must not be blank.": "Položka s heslom nemôže ostať nevyplnená.",
-    "Jitsi Conference Calling": "Konferenčné hovory Jitsi"
+    "Jitsi Conference Calling": "Konferenčné hovory Jitsi",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania."
 }
