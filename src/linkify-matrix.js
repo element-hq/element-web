@@ -41,6 +41,7 @@ function matrixLinkify(linkify) {
     const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
+    const S_ROOMALIAS_COLON = new linkify.parser.State();
 
     const roomname_tokens = [
         TT.DOT,
@@ -72,6 +73,8 @@ function matrixLinkify(linkify) {
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
 
     S_ROOMALIAS.on(TT.DOT, S_HASH_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_ROOMALIAS.on(TT.COLON, S_ROOMALIAS_COLON); // do not accept trailing `:`
+    S_ROOMALIAS_COLON.on(TT.NUM, S_ROOMALIAS); // but do accept :NUM (port specifier)
 
 
     const USERID = function(value) {
@@ -87,6 +90,7 @@ function matrixLinkify(linkify) {
     const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_USERID = new linkify.parser.State(USERID);
+    const S_USERID_COLON = new linkify.parser.State();
 
     const username_tokens = [
         TT.DOT,
@@ -116,6 +120,8 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 
     S_USERID.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_USERID.on(TT.COLON, S_USERID_COLON); // do not accept trailing `:`
+    S_USERID_COLON.on(TT.NUM, S_USERID); // but do accept :NUM (port specifier)
 
 
     const GROUPID = function(value) {
@@ -131,6 +137,7 @@ function matrixLinkify(linkify) {
     const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_GROUPID = new linkify.parser.State(GROUPID);
+    const S_GROUPID_COLON = new linkify.parser.State();
 
     const groupid_tokens = [
         TT.DOT,
@@ -160,6 +167,8 @@ function matrixLinkify(linkify) {
     S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_GROUPID);
 
     S_GROUPID.on(TT.DOT, S_PLUS_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_GROUPID.on(TT.COLON, S_GROUPID_COLON); // do not accept trailing `:`
+    S_GROUPID_COLON.on(TT.NUM, S_GROUPID); // but do accept :NUM (port specifier)
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
