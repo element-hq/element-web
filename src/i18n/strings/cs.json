@@ -1078,5 +1078,7 @@
     "Checking for an update...": "Kontrola aktualizací...",
     "There are advanced notifications which are not shown here": "Jsou k dispozici pokročilá upozornění, která zde nejsou zobrazena",
     "The platform you're on": "Platforma na které jsi",
-    "The version of Riot.im": "Verze Riot.im"
+    "The version of Riot.im": "Verze Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Jestli jsi, nebo nejsi přihlášen (tvou přezdívku neukládáme)",
+    "Your language of choice": "Tvá jazyková volba"
 }
