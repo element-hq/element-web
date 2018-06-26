@@ -1196,5 +1196,11 @@
     "Link to selected message": "連結到選定的訊息",
     "COPY": "複製",
     "Share Message": "分享訊息",
-    "Jitsi Conference Calling": "Jitsi 會議通話"
+    "Jitsi Conference Calling": "Jitsi 會議通話",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "在加密的聊天室中（這個就是），URL 預覽會預設停用以確保您的家伺服器（預覽生成的地方）無法在這個聊天室中收集關於您看到的連結的資訊。",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "當某人在他們的訊息中放置 URL 時，URL 預覽可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
+    "The email field must not be blank.": "電子郵件欄不能留空。",
+    "The user name field must not be blank.": "使用者名稱欄不能留空。",
+    "The phone number field must not be blank.": "電話號碼欄不能留空。",
+    "The password field must not be blank.": "密碼欄不能留空。"
 }
