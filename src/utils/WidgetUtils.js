@@ -210,8 +210,10 @@ export default class WidgetUtils {
             console.error(`$widgetId is non-configurable`);
         }
 
+        const addingWidget = widgetUrl !== null;
+
         // Add new widget / update
-        if (widgetUrl !== null) {
+        if (addingWidget) {
             userWidgets[widgetId] = {
                 content: content,
                 sender: client.getUserId(),
@@ -226,7 +228,7 @@ export default class WidgetUtils {
         // wait for this, the action will complete but if the user is fast enough,
         // the widget still won't actually be there.
         return client.setAccountData('m.widgets', userWidgets).then(() => {
-            return WidgetUtils.waitForUserWidget(widgetId, widgetUrl !== null);
+            return WidgetUtils.waitForUserWidget(widgetId, addingWidget);
         }).then(() => {
             dis.dispatch({ action: "user_widget_updated" });
         });
@@ -235,22 +237,24 @@ export default class WidgetUtils {
     static setRoomWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData, roomId) {
         let content;
 
-        if (widgetUrl === null) { // widget is being deleted
-            content = {};
-        } else {
+        const addingWidget = widgetUrl !== null;
+
+        if (addingWidget) {
             content = {
                 type: widgetType,
                 url: widgetUrl,
                 name: widgetName,
                 data: widgetData,
             };
+        } else {
+            content = {};
         }
 
         const client = MatrixClientPeg.get();
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
-            return WidgetUtils.waitForRoomWidget(widgetId, roomId, widgetUrl !== null);
+            return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
         });
     }
 

@@ -414,7 +414,7 @@ function _startCallApp(roomId, type) {
     }
 
     const currentJitsiWidgets = WidgetUtils.getRoomWidgets(room).filter((ev) => {
-        return ev.getContent().type == 'jitsi';
+        return ev.getContent().type === 'jitsi';
     });
     if (currentJitsiWidgets.length > 0) {
         console.warn(
@@ -449,9 +449,7 @@ function _startCallApp(roomId, type) {
         queryString
     );
 
-    const widgetData = {
-        widgetSessionId: widgetSessionId,
-    };
+    const widgetData = { widgetSessionId };
 
     const widgetId = (
         'jitsi_' +
