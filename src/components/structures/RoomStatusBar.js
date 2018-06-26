@@ -25,6 +25,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
+import dis from '../../dispatcher';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -157,10 +158,12 @@ module.exports = React.createClass({
 
     _onResendAllClick: function() {
         Resend.resendUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onCancelAllClick: function() {
         Resend.cancelUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onShowDevicesClick: function() {

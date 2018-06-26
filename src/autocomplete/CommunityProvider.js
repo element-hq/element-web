@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ import {makeGroupPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 
-const COMMUNITY_REGEX = /(?=\+)(\S*)/g;
+const COMMUNITY_REGEX = /\B\+\S*/g;
 
 function score(query, space) {
     const index = space.indexOf(query);

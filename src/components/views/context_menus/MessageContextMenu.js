@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import {EventStatus} from 'matrix-js-sdk';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
@@ -220,7 +219,10 @@ module.exports = React.createClass({
         let replyButton;
         let collapseReplyThread;
 
-        if (eventStatus === 'not_sent') {
+        // status is SENT before remote-echo, null after
+        const isSent = !eventStatus || eventStatus === EventStatus.SENT;
+
+        if (eventStatus === EventStatus.NOT_SENT) {
             resendButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
                     { _t('Resend') }
@@ -228,7 +230,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && this.state.canRedact) {
+        if (isSent && this.state.canRedact) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }
@@ -236,7 +238,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (eventStatus === "queued" || eventStatus === "not_sent") {
+        if (eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT) {
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     { _t('Cancel Sending') }
@@ -244,7 +246,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && this.props.mxEvent.getType() === 'm.room.message') {
+        if (isSent && this.props.mxEvent.getType() === 'm.room.message') {
             const content = this.props.mxEvent.getContent();
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
                 forwardButton = (
