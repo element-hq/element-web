@@ -35,7 +35,7 @@ function matrixLinkify(linkify) {
     };
     ROOMALIAS.prototype = new MultiToken();
 
-    const S_HASH = new linkify.parser.State();
+    const S_HASH = S_START.jump(TT.POUND);
     const S_HASH_NAME = new linkify.parser.State();
     const S_HASH_NAME_COLON = new linkify.parser.State();
     const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
@@ -56,8 +56,6 @@ function matrixLinkify(linkify) {
         // usernames @localhost:foo.com are otherwise not matched!
         TT.LOCALHOST,
     ];
-
-    S_START.on(TT.POUND, S_HASH);
 
     S_HASH.on(roomname_tokens, S_HASH_NAME);
     S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
@@ -84,7 +82,7 @@ function matrixLinkify(linkify) {
     };
     USERID.prototype = new MultiToken();
 
-    const S_AT = new linkify.parser.State();
+    const S_AT = S_START.jump(TT.AT);
     const S_AT_NAME = new linkify.parser.State();
     const S_AT_NAME_COLON = new linkify.parser.State();
     const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
@@ -103,8 +101,6 @@ function matrixLinkify(linkify) {
         // as in roomname_tokens
         TT.LOCALHOST,
     ];
-
-    S_START.on(TT.AT, S_AT);
 
     S_AT.on(username_tokens, S_AT_NAME);
     S_AT_NAME.on(username_tokens, S_AT_NAME);
@@ -131,7 +127,7 @@ function matrixLinkify(linkify) {
     };
     GROUPID.prototype = new MultiToken();
 
-    const S_PLUS = new linkify.parser.State();
+    const S_PLUS = S_START.jump(TT.PLUS);
     const S_PLUS_NAME = new linkify.parser.State();
     const S_PLUS_NAME_COLON = new linkify.parser.State();
     const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
@@ -150,8 +146,6 @@ function matrixLinkify(linkify) {
         // as in roomname_tokens
         TT.LOCALHOST,
     ];
-
-    S_START.on(TT.PLUS, S_PLUS);
 
     S_PLUS.on(groupid_tokens, S_PLUS_NAME);
     S_PLUS_NAME.on(groupid_tokens, S_PLUS_NAME);
