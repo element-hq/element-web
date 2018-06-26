@@ -255,17 +255,6 @@ export default class WidgetUtils {
     }
 
     /**
-     * Get all widgets (user and room) for the current user
-     * @param  {object} room The room to get widgets for
-     * @return {[object]} Array containing current / active room and user widget state events
-     */
-    static getWidgets(room) {
-        const widgets = getRoomWidgets(room);
-        widgets.concat(getUserWidgetsArray());
-        return widgets;
-    }
-
-    /**
      * Get room specific widgets
      * @param  {object} room The room to get widgets force
      * @return {[object]} Array containing current / active room widgets
