@@ -62,7 +62,6 @@ import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './WidgetUtils';
-import { getRoomWidgets } from './utils/widgets';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -414,7 +413,7 @@ function _startCallApp(roomId, type) {
         return;
     }
 
-    const currentJitsiWidgets = getRoomWidgets(room).filter((ev) => {
+    const currentJitsiWidgets = WidgetUtils.getRoomWidgets(room).filter((ev) => {
         return ev.getContent().type == 'jitsi';
     });
     if (currentJitsiWidgets.length > 0) {

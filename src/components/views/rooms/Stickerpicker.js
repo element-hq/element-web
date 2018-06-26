@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import Widgets from '../../../utils/widgets';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -24,6 +23,7 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import WidgetUtils from '../../../WidgetUtils';
 
 const widgetType = 'm.stickerpicker';
 
@@ -67,7 +67,7 @@ export default class Stickerpicker extends React.Component {
         }
 
         this.setState({showStickers: false});
-        Widgets.removeStickerpickerWidgets().then(() => {
+        WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
             console.error('Failed to remove sticker picker widget', e);
@@ -119,7 +119,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _updateWidget() {
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,

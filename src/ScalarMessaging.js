@@ -236,7 +236,6 @@ import SdkConfig from './SdkConfig';
 import MatrixClientPeg from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
-import Widgets from './utils/widgets';
 import WidgetUtils from './WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
@@ -375,7 +374,7 @@ function getWidgets(event, roomId) {
     }
 
     // Add user widgets (not linked to a specific room)
-    const userWidgets = Widgets.getUserWidgetsArray();
+    const userWidgets = WidgetUtils.getUserWidgetsArray();
     widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
