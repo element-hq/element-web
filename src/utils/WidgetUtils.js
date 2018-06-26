@@ -284,11 +284,10 @@ export default class WidgetUtils {
             throw new Error('User not logged in');
         }
         const userWidgets = client.getAccountData('m.widgets');
-        let userWidgetContent = {};
         if (userWidgets && userWidgets.getContent()) {
-          userWidgetContent = userWidgets.getContent();
+            return userWidgets.getContent();
         }
-        return userWidgetContent;
+        return {};
     }
 
     /**
