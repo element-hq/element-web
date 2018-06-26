@@ -389,10 +389,14 @@ const RoomSubList = React.createClass({
                 </Droppable> : subListContent;
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
+            if (this.props.showSpinner) {
+                content = <Loader />;
+            }
+
             return (
                 <div className="mx_RoomSubList">
                     {this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined}
-                    {(this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined}
+                    { this.state.hidden ? undefined : content }
                 </div>
             );
         }
