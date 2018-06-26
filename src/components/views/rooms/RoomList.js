@@ -705,6 +705,13 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.archived']}
+                             emptyContent={self.props.collapsed ? null :
+                                 <div className="mx_RoomList_emptySubListTip_container">
+                                     <div className="mx_RoomList_emptySubListTip">
+                                         { _t('You have no historical rooms') }
+                                     </div>
+                                 </div>
+                             }
                              label={_t('Historical')}
                              editable={false}
                              order="recent"
@@ -712,7 +719,7 @@ module.exports = React.createClass({
                              alwaysShowHeader={true}
                              startAsHidden={true}
                              showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick= {self.onArchivedHeaderClick}
+                             onHeaderClick={self.onArchivedHeaderClick}
                              incomingCall={self.state.incomingCall}
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms} />
