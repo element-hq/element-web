@@ -147,6 +147,8 @@ class RoomViewStore extends Store {
                 joining: payload.joining || false,
                 // Reset replyingToEvent because we don't want cross-room because bad UX
                 replyingToEvent: null,
+                // pull the user out of Room Settings
+                isEditingSettings: false,
             };
 
             if (this._state.forwardingEvent) {
