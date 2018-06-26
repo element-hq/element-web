@@ -46,6 +46,7 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import WidgetUtils from '../../utils/WidgetUtils';
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -318,14 +319,7 @@ module.exports = React.createClass({
             return false;
         }
 
-        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
-        // any valid widget = show apps
-        for (let i = 0; i < appsStateEvents.length; i++) {
-            if (appsStateEvents[i].getContent().type && appsStateEvents[i].getContent().url) {
-                return true;
-            }
-        }
-        return false;
+        return WidgetUtils.getRoomWidgets(room).length > 0;
     },
 
     componentDidMount: function() {

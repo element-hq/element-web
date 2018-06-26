@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
-import SdkConfig from "./SdkConfig";
+import MatrixClientPeg from '../MatrixClientPeg';
+import SdkConfig from "../SdkConfig";
+import dis from '../dispatcher';
 import * as url from "url";
 
 export default class WidgetUtils {
@@ -189,5 +190,138 @@ export default class WidgetUtils {
             }, 10000);
             MatrixClientPeg.get().on('RoomState.events', onRoomStateEvents);
         });
+    }
+
+    static setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+        const content = {
+            type: widgetType,
+            url: widgetUrl,
+            name: widgetName,
+            data: widgetData,
+        };
+
+        const client = MatrixClientPeg.get();
+        const userWidgets = WidgetUtils.getUserWidgets();
+
+        // Delete existing widget with ID
+        try {
+            delete userWidgets[widgetId];
+        } catch (e) {
+            console.error(`$widgetId is non-configurable`);
+        }
+
+        const addingWidget = Boolean(widgetUrl);
+
+        // Add new widget / update
+        if (addingWidget) {
+            userWidgets[widgetId] = {
+                content: content,
+                sender: client.getUserId(),
+                state_key: widgetId,
+                type: 'm.widget',
+                id: widgetId,
+            };
+        }
+
+        // This starts listening for when the echo comes back from the server
+        // since the widget won't appear added until this happens. If we don't
+        // wait for this, the action will complete but if the user is fast enough,
+        // the widget still won't actually be there.
+        return client.setAccountData('m.widgets', userWidgets).then(() => {
+            return WidgetUtils.waitForUserWidget(widgetId, addingWidget);
+        }).then(() => {
+            dis.dispatch({ action: "user_widget_updated" });
+        });
+    }
+
+    static setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+        let content;
+
+        const addingWidget = Boolean(widgetUrl);
+
+        if (addingWidget) {
+            content = {
+                type: widgetType,
+                url: widgetUrl,
+                name: widgetName,
+                data: widgetData,
+            };
+        } else {
+            content = {};
+        }
+
+        const client = MatrixClientPeg.get();
+        // TODO - Room widgets need to be moved to 'm.widget' state events
+        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
+        return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
+            return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
+        });
+    }
+
+    /**
+     * Get room specific widgets
+     * @param  {object} room The room to get widgets force
+     * @return {[object]} Array containing current / active room widgets
+     */
+    static getRoomWidgets(room) {
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
+        if (!appsStateEvents) {
+            return [];
+        }
+
+        return appsStateEvents.filter((ev) => {
+            return ev.getContent().type && ev.getContent().url;
+        });
+    }
+
+    /**
+     * Get user specific widgets (not linked to a specific room)
+     * @return {object} Event content object containing current / active user widgets
+     */
+    static getUserWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const userWidgets = client.getAccountData('m.widgets');
+        if (userWidgets && userWidgets.getContent()) {
+            return userWidgets.getContent();
+        }
+        return {};
+    }
+
+    /**
+     * Get user specific widgets (not linked to a specific room) as an array
+     * @return {[object]} Array containing current / active user widgets
+     */
+    static getUserWidgetsArray() {
+        return Object.values(WidgetUtils.getUserWidgets());
+    }
+
+    /**
+     * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
+     * @return {[object]} Array containing current / active stickerpicker widgets
+     */
+    static getStickerpickerWidgets() {
+        const widgets = WidgetUtils.getUserWidgetsArray();
+        return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
+    }
+
+    /**
+     * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
+     * @return {Promise} Resolves on account data updated
+     */
+    static removeStickerpickerWidgets() {
+        const client = MatrixClientPeg.get();
+        if (!client) {
+            throw new Error('User not logged in');
+        }
+        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+        Object.entries(userWidgets).forEach(([key, widget]) => {
+            if (widget.content && widget.content.type === 'm.stickerpicker') {
+                delete userWidgets[key];
+            }
+        });
+        return client.setAccountData('m.widgets', userWidgets);
     }
 }
