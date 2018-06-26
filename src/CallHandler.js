@@ -458,7 +458,7 @@ function _startCallApp(roomId, type) {
         Date.now()
     );
 
-    WidgetUtils.setRoomWidget(widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData, roomId).then(() => {
+    WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
         console.log('Jitsi widget added');
     }).catch((e) => {
         console.error(e);

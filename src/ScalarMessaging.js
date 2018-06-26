@@ -336,7 +336,7 @@ function setWidget(event, roomId) {
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
         }
-        WidgetUtils.setRoomWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData, roomId).then(() => {
+        WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
             sendResponse(event, {
                 success: true,
             });

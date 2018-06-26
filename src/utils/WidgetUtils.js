@@ -210,7 +210,7 @@ export default class WidgetUtils {
             console.error(`$widgetId is non-configurable`);
         }
 
-        const addingWidget = widgetUrl !== null;
+        const addingWidget = Boolean(widgetUrl);
 
         // Add new widget / update
         if (addingWidget) {
@@ -234,10 +234,10 @@ export default class WidgetUtils {
         });
     }
 
-    static setRoomWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData, roomId) {
+    static setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData) {
         let content;
 
-        const addingWidget = widgetUrl !== null;
+        const addingWidget = Boolean(widgetUrl);
 
         if (addingWidget) {
             content = {

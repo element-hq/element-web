@@ -321,12 +321,8 @@ export default class AppTile extends React.Component {
                         this.setState({deleting: true});
 
                         WidgetUtils.setRoomWidget(
-                            this.props.id,
-                            null,
-                            null,
-                            null,
-                            null,
                             this.props.room.roomId,
+                            this.props.id,
                         ).catch((e) => {
                             console.error('Failed to delete widget', e);
                         }).finally(() => {
