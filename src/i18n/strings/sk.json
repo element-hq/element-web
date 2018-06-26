@@ -1202,5 +1202,8 @@
     "The password field must not be blank.": "Položka s heslom nemôže ostať nevyplnená.",
     "Jitsi Conference Calling": "Konferenčné hovory Jitsi",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania.",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky."
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
+    "Call in Progress": "Prebiehajúci hovor",
+    "A call is already in progress!": "Jeden hovor už prebieha!",
+    "You have no historical rooms": "Nemáte žiadne historické miestnosti"
 }
