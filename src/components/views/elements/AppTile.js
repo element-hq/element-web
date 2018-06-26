@@ -319,14 +319,15 @@ export default class AppTile extends React.Component {
                             return;
                         }
                         this.setState({deleting: true});
-                        MatrixClientPeg.get().sendStateEvent(
-                            this.props.room.roomId,
-                            'im.vector.modular.widgets',
-                            {}, // empty content
+
+                        WidgetUtils.setRoomWidget(
                             this.props.id,
-                        ).then(() => {
-                            return WidgetUtils.waitForRoomWidget(this.props.id, this.props.room.roomId, false);
-                        }).catch((e) => {
+                            null,
+                            null,
+                            null,
+                            null,
+                            this.props.room.roomId,
+                        ).catch((e) => {
                             console.error('Failed to delete widget', e);
                         }).finally(() => {
                             this.setState({deleting: false});
