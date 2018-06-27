@@ -26,6 +26,7 @@ import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import { KeyCode } from '../../Keyboard';
+import { Group } from 'matrix-js-sdk';
 
 
 // turn this on for drop & drag console debugging galore
@@ -237,6 +238,51 @@ const RoomSubList = React.createClass({
         });
     },
 
+    _onNotifBadgeClick: function(e) {
+        // prevent the roomsublist collapsing
+        e.preventDefault();
+        e.stopPropagation();
+        // find first room which has notifications and switch to it
+        for (const room of this.state.sortedList) {
+            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+            const highlight = room.getUnreadNotificationCount('highlight') > 0;
+            const notificationCount = room.getUnreadNotificationCount();
+
+            const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge(roomNotifState);
+            const mentionBadges = highlight && this._shouldShowMentionBadge(roomNotifState);
+
+            if (notifBadges || mentionBadges) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: room.roomId,
+                });
+                return;
+            }
+        }
+    },
+
+    _onInviteBadgeClick: function(e) {
+        // prevent the roomsublist collapsing
+        e.preventDefault();
+        e.stopPropagation();
+        // switch to first room in sortedList as that'll be the top of the list for the user
+        if (this.state.sortedList && this.state.sortedList.length > 0) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.sortedList[0].roomId,
+            });
+        } else if (this.props.extraTiles && this.props.extraTiles.length > 0) {
+            // Group Invites are different in that they are all extra tiles and not rooms
+            // XXX: this is a horrible special case because Group Invite sublist is a hack
+            if (this.props.extraTiles[0].props && this.props.extraTiles[0].props.group instanceof Group) {
+                dis.dispatch({
+                    action: 'view_group',
+                    group_id: this.props.extraTiles[0].props.group.groupId,
+                });
+            }
+        }
+    },
+
     _getHeaderJsx: function() {
         const subListNotifications = this.roomNotificationCount();
         const subListNotifCount = subListNotifications[0];
@@ -258,10 +304,12 @@ const RoomSubList = React.createClass({
 
         let badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{FormattingUtils.formatCount(subListNotifCount)}</div>;
+            badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
+                { FormattingUtils.formatCount(subListNotifCount) }
+            </div>;
         } else if (this.props.isInvite) {
             // no notifications but highlight anyway because this is an invite badge
-            badge = <div className={badgeClasses}>!</div>;
+            badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>!</div>;
         }
 
         // When collapsed, allow a long hover on the header to show user
