@@ -35,12 +35,14 @@ function matrixLinkify(linkify) {
     };
     ROOMALIAS.prototype = new MultiToken();
 
-    const S_HASH = new linkify.parser.State();
+    const S_HASH = S_START.jump(TT.POUND);
     const S_HASH_NAME = new linkify.parser.State();
     const S_HASH_NAME_COLON = new linkify.parser.State();
     const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
+    const S_ROOMALIAS_COLON = new linkify.parser.State();
+    const S_ROOMALIAS_COLON_NUM = new linkify.parser.State(ROOMALIAS);
 
     const roomname_tokens = [
         TT.DOT,
@@ -56,8 +58,6 @@ function matrixLinkify(linkify) {
         TT.LOCALHOST,
     ];
 
-    S_START.on(TT.POUND, S_HASH);
-
     S_HASH.on(roomname_tokens, S_HASH_NAME);
     S_HASH_NAME.on(roomname_tokens, S_HASH_NAME);
     S_HASH_NAME.on(TT.DOMAIN, S_HASH_NAME);
@@ -72,6 +72,8 @@ function matrixLinkify(linkify) {
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
 
     S_ROOMALIAS.on(TT.DOT, S_HASH_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_ROOMALIAS.on(TT.COLON, S_ROOMALIAS_COLON); // do not accept trailing `:`
+    S_ROOMALIAS_COLON.on(TT.NUM, S_ROOMALIAS_COLON_NUM); // but do accept :NUM (port specifier)
 
 
     const USERID = function(value) {
@@ -81,12 +83,14 @@ function matrixLinkify(linkify) {
     };
     USERID.prototype = new MultiToken();
 
-    const S_AT = new linkify.parser.State();
+    const S_AT = S_START.jump(TT.AT);
     const S_AT_NAME = new linkify.parser.State();
     const S_AT_NAME_COLON = new linkify.parser.State();
     const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_USERID = new linkify.parser.State(USERID);
+    const S_USERID_COLON = new linkify.parser.State();
+    const S_USERID_COLON_NUM = new linkify.parser.State(USERID);
 
     const username_tokens = [
         TT.DOT,
@@ -99,8 +103,6 @@ function matrixLinkify(linkify) {
         // as in roomname_tokens
         TT.LOCALHOST,
     ];
-
-    S_START.on(TT.AT, S_AT);
 
     S_AT.on(username_tokens, S_AT_NAME);
     S_AT_NAME.on(username_tokens, S_AT_NAME);
@@ -116,6 +118,8 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 
     S_USERID.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_USERID.on(TT.COLON, S_USERID_COLON); // do not accept trailing `:`
+    S_USERID_COLON.on(TT.NUM, S_USERID_COLON_NUM); // but do accept :NUM (port specifier)
 
 
     const GROUPID = function(value) {
@@ -125,12 +129,14 @@ function matrixLinkify(linkify) {
     };
     GROUPID.prototype = new MultiToken();
 
-    const S_PLUS = new linkify.parser.State();
+    const S_PLUS = S_START.jump(TT.PLUS);
     const S_PLUS_NAME = new linkify.parser.State();
     const S_PLUS_NAME_COLON = new linkify.parser.State();
     const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
     const S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_GROUPID = new linkify.parser.State(GROUPID);
+    const S_GROUPID_COLON = new linkify.parser.State();
+    const S_GROUPID_COLON_NUM = new linkify.parser.State(GROUPID);
 
     const groupid_tokens = [
         TT.DOT,
@@ -143,8 +149,6 @@ function matrixLinkify(linkify) {
         // as in roomname_tokens
         TT.LOCALHOST,
     ];
-
-    S_START.on(TT.PLUS, S_PLUS);
 
     S_PLUS.on(groupid_tokens, S_PLUS_NAME);
     S_PLUS_NAME.on(groupid_tokens, S_PLUS_NAME);
@@ -160,6 +164,8 @@ function matrixLinkify(linkify) {
     S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_GROUPID);
 
     S_GROUPID.on(TT.DOT, S_PLUS_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
+    S_GROUPID.on(TT.COLON, S_GROUPID_COLON); // do not accept trailing `:`
+    S_GROUPID_COLON.on(TT.NUM, S_GROUPID_COLON_NUM); // but do accept :NUM (port specifier)
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
