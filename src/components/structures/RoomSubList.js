@@ -237,6 +237,29 @@ const RoomSubList = React.createClass({
         });
     },
 
+    _onNotifBadgeClick: function(e) {
+        // prevent the roomsublist collapsing
+        e.preventDefault();
+        e.stopPropagation();
+        // find first room which has notifications and switch to it
+        for (const room of this.state.sortedList) {
+            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+            const highlight = room.getUnreadNotificationCount('highlight') > 0;
+            const notificationCount = room.getUnreadNotificationCount();
+
+            const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge(roomNotifState);
+            const mentionBadges = highlight && this._shouldShowMentionBadge(roomNotifState);
+
+            if (notifBadges || mentionBadges) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: room.roomId,
+                });
+                return;
+            }
+        }
+    },
+
     _getHeaderJsx: function() {
         const subListNotifications = this.roomNotificationCount();
         const subListNotifCount = subListNotifications[0];
@@ -258,7 +281,9 @@ const RoomSubList = React.createClass({
 
         let badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{FormattingUtils.formatCount(subListNotifCount)}</div>;
+            badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
+                { FormattingUtils.formatCount(subListNotifCount) }
+            </div>;
         } else if (this.props.isInvite) {
             // no notifications but highlight anyway because this is an invite badge
             badge = <div className={badgeClasses}>!</div>;
