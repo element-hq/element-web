@@ -1030,6 +1030,7 @@
     "Scroll to bottom of page": "Scroll to bottom of page",
     "Message not sent due to unknown devices being present": "Message not sent due to unknown devices being present",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
     "%(count)s of your messages have not been sent.|other": "Some of your messages have not been sent.",
     "%(count)s of your messages have not been sent.|one": "Your message was not sent.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.",
