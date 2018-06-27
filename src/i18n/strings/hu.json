@@ -1202,5 +1202,8 @@
     "The email field must not be blank.": "Az e-mail mező nem lehet üres.",
     "The user name field must not be blank.": "A felhasználói név mező nem lehet üres.",
     "The phone number field must not be blank.": "A telefonszám mező nem lehet üres.",
-    "The password field must not be blank.": "A jelszó mező nem lehet üres."
+    "The password field must not be blank.": "A jelszó mező nem lehet üres.",
+    "Call in Progress": "Hívás folyamatban",
+    "A call is already in progress!": "A hívás már folyamatban van!",
+    "You have no historical rooms": "Nincsenek archív szobáid"
 }
