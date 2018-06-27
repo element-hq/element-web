@@ -1202,5 +1202,9 @@
     "The email field must not be blank.": "Le champ de l'adresse e-mail ne doit pas être vide.",
     "The user name field must not be blank.": "Le champ du nom d'utilisateur ne doit pas être vide.",
     "The phone number field must not be blank.": "Le champ du numéro de téléphone ne doit pas être vide.",
-    "The password field must not be blank.": "Le champ du mot de passe ne doit pas être vide."
+    "The password field must not be blank.": "Le champ du mot de passe ne doit pas être vide.",
+    "Call in Progress": "Appel en cours",
+    "A call is already in progress!": "Un appel est déjà en cours !",
+    "You have no historical rooms": "Vous n'avez aucun salon historique",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Vous ne pouvez voir aucun message tant que vous ne lisez et n'acceptez pas nos <consentLink>conditions générales</consentLink>."
 }
