@@ -42,7 +42,8 @@ function getRedactedHash(hash) {
 // Return the current origin, path and hash separated with a `/`. This does
 // not include query parameters.
 function getRedactedUrl() {
-    const { origin, pathname, hash } = window.location;
+    const { origin, hash } = window.location;
+    let { pathname } = window.location;
 
     // Redact paths which could contain unexpected PII
     if (origin.startsWith('file://')) {
