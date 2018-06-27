@@ -340,7 +340,18 @@ module.exports = React.createClass({
                 }, false);
                 e.target.onmouseleave = close;
             };
-            p.appendChild(button);
+
+            // Wrap a div around <pre> so that the copy button can be correctly positioned
+            // when the <pre> overflows and is scrolled horizontally.
+            const div = document.createElement("div");
+            div.className = "mx_EventTile_pre_container";
+
+            // Insert containing div in place of <pre> block
+            p.parentNode.replaceChild(div, p);
+
+            // Append <pre> block and copy button to container
+            div.appendChild(p);
+            div.appendChild(button);
         });
     },
 
