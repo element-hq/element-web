@@ -1202,5 +1202,8 @@
     "The email field must not be blank.": "E-mail eremua ezin da hutsik laga.",
     "The user name field must not be blank.": "Erabiltzaile-izen eremua ezin da hutsik laga.",
     "The phone number field must not be blank.": "Telefono zenbakia eremua ezin da hutsik laga.",
-    "The password field must not be blank.": "Pasahitza eremua ezin da hutsik laga."
+    "The password field must not be blank.": "Pasahitza eremua ezin da hutsik laga.",
+    "Call in Progress": "Deia abian",
+    "A call is already in progress!": "Badago dei bat abian!",
+    "You have no historical rooms": "Ez duzu gelen historialik"
 }
