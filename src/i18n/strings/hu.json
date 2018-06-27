@@ -1205,5 +1205,6 @@
     "The password field must not be blank.": "A jelszó mező nem lehet üres.",
     "Call in Progress": "Hívás folyamatban",
     "A call is already in progress!": "A hívás már folyamatban van!",
-    "You have no historical rooms": "Nincsenek archív szobáid"
+    "You have no historical rooms": "Nincsenek archív szobáid",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Nem tudsz üzenetet küldeni amíg nem olvasod el és nem fogadod el a <consentLink>felhasználási feltételeket</consentLink>."
 }
