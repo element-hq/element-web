@@ -1205,5 +1205,6 @@
     "The password field must not be blank.": "Pasahitza eremua ezin da hutsik laga.",
     "Call in Progress": "Deia abian",
     "A call is already in progress!": "Badago dei bat abian!",
-    "You have no historical rooms": "Ez duzu gelen historialik"
+    "You have no historical rooms": "Ez duzu gelen historialik",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte."
 }
