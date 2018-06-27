@@ -1198,5 +1198,10 @@
     "The email field must not be blank.": "Поле email не должно быть пустым.",
     "The user name field must not be blank.": "Поле имени пользователя не должно быть пустым.",
     "The phone number field must not be blank.": "Поле номера телефона не должно быть пустым.",
-    "The password field must not be blank.": "Поле пароля не должно быть пустым."
+    "The password field must not be blank.": "Поле пароля не должно быть пустым.",
+    "Call in Progress": "Выполнение вызова",
+    "A call is already in progress!": "Вызов выполняется!",
+    "You have no historical rooms": "У вас нет архивных комнат",
+    "Share Room Message": "Обмен сообщениями в комнате",
+    "Share Message": "Обмен сообщениями"
 }
