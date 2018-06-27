@@ -308,7 +308,26 @@ module.exports = React.createClass({
                 },
             );
         } else {
-            if (
+            let consentError = null;
+            for (const m of unsentMessages) {
+                if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
+                    consentError = m.error;
+                    break;
+                }
+            }
+            if (consentError) {
+                title = _t(
+                    "You can't send any messages until you review and agree to " +
+                    "<consentLink>our terms and conditions</consentLink>.",
+                    {},
+                    {
+                        'consentLink': (sub) =>
+                            <a href={consentError.data && consentError.data.consent_uri} target="_blank">
+                                { sub }
+                            </a>,
+                    },
+                );
+            } else if (
                 unsentMessages.length === 1 &&
                 unsentMessages[0].error &&
                 unsentMessages[0].error.data &&
@@ -332,11 +351,13 @@ module.exports = React.createClass({
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
             <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
-            <div className="mx_RoomStatusBar_connectionLostBar_title">
-                { title }
-            </div>
-            <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                { content }
+            <div>
+                <div className="mx_RoomStatusBar_connectionLostBar_title">
+                    { title }
+                </div>
+                <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                    { content }
+                </div>
             </div>
         </div>;
     },
