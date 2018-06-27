@@ -351,11 +351,13 @@ module.exports = React.createClass({
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
             <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
-            <div className="mx_RoomStatusBar_connectionLostBar_title">
-                { title }
-            </div>
-            <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                { content }
+            <div>
+                <div className="mx_RoomStatusBar_connectionLostBar_title">
+                    { title }
+                </div>
+                <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                    { content }
+                </div>
             </div>
         </div>;
     },
