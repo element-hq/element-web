@@ -134,7 +134,7 @@ export default React.createClass({
         </EmojiText>;
 
         const badgeEllipsis = this.state.badgeHover || this.state.menuDisplayed;
-        const badgeClasses = classNames('mx_RoomSubList_badge mx_RoomSubList_badgeHighlight', {
+        const badgeClasses = classNames('mx_RoomTile_badge mx_RoomTile_highlight', {
             'mx_RoomTile_badgeButton': badgeEllipsis,
         });
 
