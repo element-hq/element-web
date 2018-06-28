@@ -48,7 +48,7 @@ export default class DecryptionFailureTracker {
 
     // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before moving
     // the failure to `failuresToTrack`.
-    static GRACE_PERIOD_MS = 5000;
+    static GRACE_PERIOD_MS = 60000;
 
     constructor(fn) {
         if (!fn || typeof fn !== 'function') {
