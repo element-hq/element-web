@@ -33,10 +33,9 @@ function createFailedDecryptionEvent() {
 describe('DecryptionFailureTracker', function() {
     it('tracks a failed decryption', function(done) {
         const failedDecryptionEvent = createFailedDecryptionEvent();
-        let trackedFailure = null;
-        const tracker = new DecryptionFailureTracker((failure) => {
-            trackedFailure = failure;
-        });
+
+        let count = 0;
+        const tracker = new DecryptionFailureTracker((total) => count += total);
 
         tracker.eventDecrypted(failedDecryptionEvent);
 
@@ -46,14 +45,14 @@ describe('DecryptionFailureTracker', function() {
         // Immediately track the newest failure, if there is one
         tracker.trackFailure();
 
-        expect(trackedFailure).toNotBe(null, 'should track a failure for an event that failed decryption');
+        expect(count).toNotBe(0, 'should track a failure for an event that failed decryption');
 
         done();
     });
 
     it('does not track a failed decryption where the event is subsequently successfully decrypted', (done) => {
         const decryptedEvent = createFailedDecryptionEvent();
-        const tracker = new DecryptionFailureTracker((failure) => {
+        const tracker = new DecryptionFailureTracker((total) => {
             expect(true).toBe(false, 'should not track an event that has since been decrypted correctly');
         });
 
@@ -76,7 +75,7 @@ describe('DecryptionFailureTracker', function() {
         const decryptedEvent2 = createFailedDecryptionEvent();
 
         let count = 0;
-        const tracker = new DecryptionFailureTracker((failure) => count++);
+        const tracker = new DecryptionFailureTracker((total) => count += total);
 
         // Arbitrary number of failed decryptions for both events
         tracker.eventDecrypted(decryptedEvent);
@@ -102,36 +101,11 @@ describe('DecryptionFailureTracker', function() {
         done();
     });
 
-    it('track failures in the order they occured', (done) => {
-        const decryptedEvent = createFailedDecryptionEvent();
-        const decryptedEvent2 = createFailedDecryptionEvent();
-
-        const failures = [];
-        const tracker = new DecryptionFailureTracker((failure) => failures.push(failure));
-
-        // Indicate decryption
-        tracker.eventDecrypted(decryptedEvent);
-        tracker.eventDecrypted(decryptedEvent2);
-
-        // Pretend "now" is Infinity
-        tracker.checkFailures(Infinity);
-
-        // Simulated polling of `trackFailure`, an arbitrary number ( > 2 ) times
-        tracker.trackFailure();
-        tracker.trackFailure();
-
-        expect(failures.length).toBe(2, 'expected 2 failures to be tracked, got ' + failures.length);
-        expect(failures[0].failedEventId).toBe(decryptedEvent.getId(), 'the first failure should be tracked first');
-        expect(failures[1].failedEventId).toBe(decryptedEvent2.getId(), 'the second failure should be tracked second');
-
-        done();
-    });
-
     it('should not track a failure for an event that was tracked previously', (done) => {
         const decryptedEvent = createFailedDecryptionEvent();
 
-        const failures = [];
-        const tracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+        let count = 0;
+        const tracker = new DecryptionFailureTracker((total) => count += total);
 
         // Indicate decryption
         tracker.eventDecrypted(decryptedEvent);
@@ -146,7 +120,7 @@ describe('DecryptionFailureTracker', function() {
 
         tracker.trackFailure();
 
-        expect(failures.length).toBe(1, 'should only track a single failure per event');
+        expect(count).toBe(1, 'should only track a single failure per event');
 
         done();
     });
@@ -157,8 +131,8 @@ describe('DecryptionFailureTracker', function() {
 
         const decryptedEvent = createFailedDecryptionEvent();
 
-        const failures = [];
-        const tracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+        let count = 0;
+        const tracker = new DecryptionFailureTracker((total) => count += total);
 
         // Indicate decryption
         tracker.eventDecrypted(decryptedEvent);
@@ -170,7 +144,7 @@ describe('DecryptionFailureTracker', function() {
         tracker.trackFailure();
 
         // Simulate the browser refreshing by destroying tracker and creating a new tracker
-        const secondTracker = new DecryptionFailureTracker((failure) => failures.push(failure));
+        const secondTracker = new DecryptionFailureTracker((total) => count += total);
 
         //secondTracker.loadTrackedEventHashMap();
 
@@ -178,7 +152,7 @@ describe('DecryptionFailureTracker', function() {
         secondTracker.checkFailures(Infinity);
         secondTracker.trackFailure();
 
-        expect(failures.length).toBe(1, 'should track a single failure per event per session, got ' + failures.length);
+        expect(count).toBe(1, count + ' failures tracked, should only track a single failure per event');
 
         done();
     });

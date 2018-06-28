@@ -40,9 +40,8 @@ export default class DecryptionFailureTracker {
     checkInterval = null;
     trackInterval = null;
 
-    // Spread the load on `Analytics` by sending at most 1 event per
-    // `TRACK_INTERVAL_MS`.
-    static TRACK_INTERVAL_MS = 1000;
+    // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
+    static TRACK_INTERVAL_MS = 60000;
 
     // Call `checkFailures` every `CHECK_INTERVAL_MS`.
     static CHECK_INTERVAL_MS = 5000;
@@ -163,7 +162,8 @@ export default class DecryptionFailureTracker {
      */
     trackFailure() {
         if (this.failuresToTrack.length > 0) {
-            this.trackDecryptionFailure(this.failuresToTrack.shift());
+            // Remove all failures, and expose the number of failures
+            this.trackDecryptionFailure(this.failuresToTrack.splice(0).length);
         }
     }
 }
