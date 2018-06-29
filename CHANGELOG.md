@@ -1,3 +1,24 @@
+Changes in [0.15.6](https://github.com/vector-im/riot-web/releases/tag/v0.15.6) (2018-06-29)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.6-rc.2...v0.15.6)
+
+ * Pull in bug fixes from react-sdk
+
+Changes in [0.15.6-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.15.6-rc.2) (2018-06-22)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.6-rc.1...v0.15.6-rc.2)
+
+ * Update to react-sdk rc.2 for fix to slash commands
+
+Changes in [0.15.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.6-rc.1) (2018-06-21)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.5...v0.15.6-rc.1)
+
+ * Update from Weblate.
+   [\#6915](https://github.com/vector-im/riot-web/pull/6915)
+ * [electron] Fix desktop app --hidden flag
+   [\#6805](https://github.com/vector-im/riot-web/pull/6805)
+
 Changes in [0.15.5](https://github.com/vector-im/riot-web/releases/tag/v0.15.5) (2018-06-12)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.5-rc.1...v0.15.5)
