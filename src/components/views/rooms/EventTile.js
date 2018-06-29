@@ -489,7 +489,12 @@ module.exports = withMatrixClient(React.createClass({
         // before trying to instantiate us
         if (!tileHandler) {
             const {mxEvent} = this.props;
-            throw new Error(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
+                <div className="mx_EventTile_line">
+                    { _t('This event could not be displayed') }
+                </div>
+            </div>;
         }
         const EventTileType = sdk.getComponent(tileHandler);
 
