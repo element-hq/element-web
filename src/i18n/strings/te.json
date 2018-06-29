@@ -1,7 +1,6 @@
 {
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "ఒక టెక్స్ట్ సందేశం +%(msisdn)s కు పంపబడింది. దయచేసి దీనిలో ఉన్న ధృవీకరణ కోడ్ను నమోదు చేయండి",
     "Accept": "అంగీకరించు",
-    "%(targetName)s accepted an invitation.": "%(targetName)s ఆహ్వానాన్ని అంగీకరించింది.",
     "Account": "ఖాతా",
     "Access Token:": "యాక్సెస్ టోకెన్:",
     "Add": "చేర్చు",
@@ -29,7 +28,6 @@
     "You have been invited to join this room by %(inviterName)s": "%(inviterName)s ఈ గదిలో చేరడానికి మీరు ఆహ్వానించబడ్డారు",
     "Active call (%(roomName)s)": "క్రియాశీల కాల్ల్ (%(roomName)s)",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
-    "%(senderName)s answered the call.": "%(senderName)s కు సమాధానం ఇచ్చారు.",
     "An error has occurred.": "ఒక లోపము సంభవించినది.",
     "Anyone": "ఎవరైనా",
     "Anyone who knows the room's link, apart from guests": "అతిథులు కాకుండా గది యొక్క లింక్ తెలిసిన వారు ఎవరైనా",
@@ -49,8 +47,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి.",
     "Can't load user settings": "వినియోగదారు సెట్టింగ్లను లోడ్ చేయలేరు",
     "Change Password": "పాస్వర్డ్ మార్చండి",
-    "%(senderName)s changed their profile picture.": "%(senderName)s వారి ప్రొఫైల్ చిత్రాన్ని మార్చారు.",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s గది పేరు తొలగించబడింది.",
     "Changes to who can read history will only apply to future messages in this room": "చరిత్ర చదివేవారికి మార్పులు ఈ గదిలో భవిష్య సందేశాలకు మాత్రమే వర్తిస్తాయి",
     "Changes your display nickname": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
     "You cannot place a call with yourself.": "మీరు మీతో కాల్ చేయలేరు.",
@@ -275,5 +271,9 @@
     "#example": "#ఉదాహరణ",
     "Collapse panel": "ప్యానెల్ కుదించు",
     "Checking for an update...": "నవీకరణ కోసం చూస్తోంది...",
-    "Saturday": "శనివారం"
+    "Saturday": "శనివారం",
+    "<target> accepted an invitation.": "<target> ఆహ్వానాన్ని అంగీకరించింది.",
+    "<sender> changed their profile picture.": "<sender> వారి ప్రొఫైల్ చిత్రాన్ని మార్చారు.",
+    "<sender> removed the room name.": "<sender> గది పేరు తొలగించబడింది.",
+    "<sender> answered the call.": "<sender> కు సమాధానం ఇచ్చారు."
 }
