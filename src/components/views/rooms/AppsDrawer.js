@@ -27,7 +27,7 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
-import WidgetUtils from '../../../WidgetUtils';
+import WidgetUtils from '../../../utils/WidgetUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
@@ -94,15 +94,7 @@ module.exports = React.createClass({
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
-                // When opening the app drawer when there aren't any apps,
-                // auto-launch the integrations manager to skip the awkward
-                // click on "Add widget"
                 if (action.show) {
-                    const apps = this._getApps();
-                    if (apps.length === 0) {
-                        this._launchManageIntegrations();
-                    }
-
                     localStorage.removeItem(hideWidgetKey);
                 } else {
                     // Store hidden state of widget
@@ -171,14 +163,7 @@ module.exports = React.createClass({
     },
 
     _getApps: function() {
-        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets');
-        if (!appsStateEvents) {
-            return [];
-        }
-
-        return appsStateEvents.filter((ev) => {
-            return ev.getContent().type && ev.getContent().url;
-        }).map((ev) => {
+        return WidgetUtils.getRoomWidgets(this.props.room).map((ev) => {
             return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },

@@ -14,33 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MStickerBody {
-  display: block;
-  margin-right: 34px;
-  min-height: 110px;
-  padding: 20px 0;
+.mx_MStickerBody_wrapper {
+    padding: 20px 0px;
 }
 
-.mx_MStickerBody_image_container {
-  display: inline-block;
-  position: relative;
-}
-
-.mx_MStickerBody_image {
-  max-width: 100%;
-  opacity: 0;
-}
-
-.mx_MStickerBody_image_visible {
-  opacity: 1;
-}
-
-.mx_MStickerBody_placeholder {
-  position: absolute;
-  opacity: 1;
-}
-
-.mx_MStickerBody_placeholder_invisible {
-  transition: 500ms;
-  opacity: 0;
+.mx_MStickerBody_tooltip {
+    position: absolute;
+    top: 50%;
 }

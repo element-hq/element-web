@@ -1,6 +1,7 @@
 //@flow
 /*
 Copyright 2017 Aviral Dasgupta
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,10 @@ class KeyMap {
     priorityMap = new Map();
 }
 
+function stripDiacritics(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 export default class QueryMatcher {
     /**
      * @param {object[]} objects the objects to perform a match on
@@ -46,10 +51,11 @@ export default class QueryMatcher {
         objects.forEach((object, i) => {
             const keyValues = _at(object, keys);
             for (const keyValue of keyValues) {
-                if (!map.hasOwnProperty(keyValue)) {
-                    map[keyValue] = [];
+                const key = stripDiacritics(keyValue).toLowerCase();
+                if (!map.hasOwnProperty(key)) {
+                    map[key] = [];
                 }
-                map[keyValue].push(object);
+                map[key].push(object);
             }
             keyMap.priorityMap.set(object, i);
         });
@@ -82,7 +88,7 @@ export default class QueryMatcher {
     }
 
     match(query: String): Array<Object> {
-        query = query.toLowerCase();
+        query = stripDiacritics(query).toLowerCase();
         if (this.options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
         }
@@ -91,7 +97,7 @@ export default class QueryMatcher {
         }
         const results = [];
         this.keyMap.keys.forEach((key) => {
-            let resultKey = key.toLowerCase();
+            let resultKey = key;
             if (this.options.shouldMatchWordsOnly) {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }

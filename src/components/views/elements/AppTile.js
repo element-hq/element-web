@@ -31,7 +31,7 @@ import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
-import WidgetUtils from '../../../WidgetUtils';
+import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
@@ -319,10 +319,9 @@ export default class AppTile extends React.Component {
                             return;
                         }
                         this.setState({deleting: true});
-                        MatrixClientPeg.get().sendStateEvent(
+
+                        WidgetUtils.setRoomWidget(
                             this.props.room.roomId,
-                            'im.vector.modular.widgets',
-                            {}, // empty content
                             this.props.id,
                         ).catch((e) => {
                             console.error('Failed to delete widget', e);

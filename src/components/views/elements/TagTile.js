@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd.
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -103,14 +104,27 @@ export default React.createClass({
         }
     },
 
-    onContextButtonClick: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
+    _openContextMenu: function(x, y, chevronOffset) {
         // Hide the (...) immediately
         this.setState({ hover: false });
 
         const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
+        ContextualMenu.createMenu(TagTileContextMenu, {
+            chevronOffset: chevronOffset,
+            left: x,
+            top: y,
+            tag: this.props.tag,
+            onFinished: () => {
+                this.setState({ menuDisplayed: false });
+            },
+        });
+        this.setState({ menuDisplayed: true });
+    },
+
+    onContextButtonClick: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
         const elementRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
@@ -119,17 +133,14 @@ export default React.createClass({
         let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
         y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
 
-        const self = this;
-        ContextualMenu.createMenu(TagTileContextMenu, {
-            chevronOffset: chevronOffset,
-            left: x,
-            top: y,
-            tag: this.props.tag,
-            onFinished: function() {
-                self.setState({ menuDisplayed: false });
-            },
-        });
-        this.setState({ menuDisplayed: true });
+        this._openContextMenu(x, y, chevronOffset);
+    },
+
+    onContextMenu: function(e) {
+        e.preventDefault();
+
+        const chevronOffset = 12;
+        this._openContextMenu(e.clientX, e.clientY - (chevronOffset + 8), chevronOffset);
     },
 
     onMouseOver: function() {
@@ -164,7 +175,7 @@ export default React.createClass({
             <div className="mx_TagTile_context_button" onClick={this.onContextButtonClick}>
                 { "\u00B7\u00B7\u00B7" }
             </div> : <div />;
-        return <AccessibleButton className={className} onClick={this.onClick}>
+        return <AccessibleButton className={className} onClick={this.onClick} onContextMenu={this.onContextMenu}>
             <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                 <BaseAvatar
                     name={name}

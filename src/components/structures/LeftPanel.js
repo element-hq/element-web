@@ -82,17 +82,26 @@ var LeftPanel = React.createClass({
 
     _onKeyDown: function(ev) {
         if (!this.focusedElement) return;
-        let handled = false;
+        let handled = true;
 
         switch (ev.keyCode) {
+            case KeyCode.TAB:
+                this._onMoveFocus(ev.shiftKey);
+                break;
             case KeyCode.UP:
                 this._onMoveFocus(true);
-                handled = true;
                 break;
             case KeyCode.DOWN:
                 this._onMoveFocus(false);
-                handled = true;
                 break;
+            case KeyCode.ENTER:
+                this._onMoveFocus(false);
+                if (this.focusedElement) {
+                    this.focusedElement.click();
+                }
+                break;
+            default:
+                handled = false;
         }
 
         if (handled) {
@@ -102,37 +111,33 @@ var LeftPanel = React.createClass({
     },
 
     _onMoveFocus: function(up) {
-        var element = this.focusedElement;
+        let element = this.focusedElement;
 
         // unclear why this isn't needed
         // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
         // this.focusDirection = up;
 
-        var descending = false; // are we currently descending or ascending through the DOM tree?
-        var classes;
+        let descending = false; // are we currently descending or ascending through the DOM tree?
+        let classes;
 
         do {
-            var child = up ? element.lastElementChild : element.firstElementChild;
-            var sibling = up ? element.previousElementSibling : element.nextElementSibling;
+            const child = up ? element.lastElementChild : element.firstElementChild;
+            const sibling = up ? element.previousElementSibling : element.nextElementSibling;
 
             if (descending) {
                 if (child) {
                     element = child;
-                }
-                else if (sibling) {
+                } else if (sibling) {
                     element = sibling;
-                }
-                else {
+                } else {
                     descending = false;
                     element = element.parentElement;
                 }
-            }
-            else {
+            } else {
                 if (sibling) {
                     element = sibling;
                     descending = true;
-                }
-                else {
+                } else {
                     element = element.parentElement;
                 }
             }
@@ -144,8 +149,7 @@ var LeftPanel = React.createClass({
                     descending = true;
                 }
             }
-
-        } while(element && !(
+        } while (element && !(
             classes.contains("mx_RoomTile") ||
             classes.contains("mx_SearchBox_search") ||
             classes.contains("mx_RoomSubList_ellipsis")));

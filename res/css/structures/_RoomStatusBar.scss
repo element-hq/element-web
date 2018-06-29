@@ -113,6 +113,8 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_connectionLostBar {
+    display: flex;
+
     margin-top: 19px;
     min-height: 58px;
 }
@@ -132,6 +134,7 @@ limitations under the License.
     color: $primary-fg-color;
     font-size: 13px;
     opacity: 0.5;
+    padding-bottom: 20px;
 }
 
 .mx_RoomStatusBar_resend_link {

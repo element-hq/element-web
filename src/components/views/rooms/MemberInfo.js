@@ -652,6 +652,13 @@ module.exports = withMatrixClient(React.createClass({
         );
     },
 
+    onShareUserClick: function() {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room member dialog', '', ShareDialog, {
+            target: this.props.member,
+        });
+    },
+
     _renderUserOptions: function() {
         const cli = this.props.matrixClient;
         const member = this.props.member;
@@ -725,13 +732,18 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (!ignoreButton && !readReceiptButton && !insertPillButton && !inviteUserButton) return null;
+        const shareUserButton = (
+            <AccessibleButton onClick={this.onShareUserClick} className="mx_MemberInfo_field">
+                { _t('Share Link to User') }
+            </AccessibleButton>
+        );
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { shareUserButton }
                     { insertPillButton }
                     { ignoreButton }
                     { inviteUserButton }
@@ -922,7 +934,9 @@ module.exports = withMatrixClient(React.createClass({
         return (
             <div className="mx_MemberInfo">
                 <GeminiScrollbarWrapper autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
+                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
+                    </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                     </div>
