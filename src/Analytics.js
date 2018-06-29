@@ -199,9 +199,9 @@ class Analytics {
         this._paq.push(['trackPageView']);
     }
 
-    trackEvent(category, action, name) {
+    trackEvent(category, action, name, value) {
         if (this.disabled) return;
-        this._paq.push(['trackEvent', category, action, name]);
+        this._paq.push(['trackEvent', category, action, name, value]);
     }
 
     logout() {

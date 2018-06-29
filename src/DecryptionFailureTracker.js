@@ -40,16 +40,15 @@ export default class DecryptionFailureTracker {
     checkInterval = null;
     trackInterval = null;
 
-    // Spread the load on `Analytics` by sending at most 1 event per
-    // `TRACK_INTERVAL_MS`.
-    static TRACK_INTERVAL_MS = 1000;
+    // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
+    static TRACK_INTERVAL_MS = 60000;
 
     // Call `checkFailures` every `CHECK_INTERVAL_MS`.
     static CHECK_INTERVAL_MS = 5000;
 
     // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before moving
     // the failure to `failuresToTrack`.
-    static GRACE_PERIOD_MS = 5000;
+    static GRACE_PERIOD_MS = 60000;
 
     constructor(fn) {
         if (!fn || typeof fn !== 'function') {
@@ -158,12 +157,16 @@ export default class DecryptionFailureTracker {
     }
 
     /**
-     * If there is a failure that should be tracked, call the given trackDecryptionFailure
-     * function with the first failure in the FIFO of failures that should be tracked.
+     * If there are failures that should be tracked, call the given trackDecryptionFailure
+     * function with the number of failures that should be tracked.
      */
     trackFailure() {
         if (this.failuresToTrack.length > 0) {
-            this.trackDecryptionFailure(this.failuresToTrack.shift());
+            // Remove all failures, and expose the number of failures for now.
+            //
+            // TODO: Track a histogram of error types to cardinailty to allow for
+            // aggregation by error type.
+            this.trackDecryptionFailure(this.failuresToTrack.splice(0).length);
         }
     }
 }
