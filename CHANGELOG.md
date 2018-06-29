@@ -1,3 +1,14 @@
+Changes in [0.12.8](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.8) (2018-06-29)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.8-rc.2...v0.12.8)
+
+ * Revert "affix copyButton so that it doesn't get scrolled horizontally"
+   [\#2013](https://github.com/matrix-org/matrix-react-sdk/pull/2013)
+ * don't fire share dialog when clicking timestamp of event
+   [\#2017](https://github.com/matrix-org/matrix-react-sdk/pull/2017)
+ * when the user switches room, close room settings
+   [\#2019](https://github.com/matrix-org/matrix-react-sdk/pull/2019)
+
 Changes in [0.12.8-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.8-rc.2) (2018-06-22)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.8-rc.1...v0.12.8-rc.2)
