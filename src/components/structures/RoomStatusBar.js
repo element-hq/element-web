@@ -374,11 +374,13 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
-                    <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        { _t('Connectivity to the server has been lost.') }
-                    </div>
-                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        { _t('Sent messages will be stored until your connection has returned.') }
+                    <div>
+                        <div className="mx_RoomStatusBar_connectionLostBar_title">
+                            { _t('Connectivity to the server has been lost.') }
+                        </div>
+                        <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                            { _t('Sent messages will be stored until your connection has returned.') }
+                        </div>
                     </div>
                 </div>
             );
