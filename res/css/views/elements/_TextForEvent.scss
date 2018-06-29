@@ -17,3 +17,8 @@ limitations under the License.
 .mx_TextForEvent_username {
     cursor: pointer;
 }
+
+.mx_TextForEvent_username:hover {
+    text-decoration: none;
+    color: inherit;
+}
