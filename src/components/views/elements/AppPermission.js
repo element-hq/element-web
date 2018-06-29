@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
-import WidgetUtils from "../../../WidgetUtils";
+import WidgetUtils from "../../../utils/WidgetUtils";
 
 export default class AppPermission extends React.Component {
     constructor(props) {

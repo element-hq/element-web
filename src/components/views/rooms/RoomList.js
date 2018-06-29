@@ -583,14 +583,18 @@ module.exports = React.createClass({
         }
     },
 
-    _makeGroupInviteTiles() {
+    _makeGroupInviteTiles(filter) {
         const ret = [];
+        const lcFilter = filter && filter.toLowerCase();
 
         const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
         for (const group of MatrixClientPeg.get().getGroups()) {
-            if (group.myMembership !== 'invite') continue;
-
-            ret.push(<GroupInviteTile key={group.groupId} group={group} />);
+            const {groupId, name, myMembership} = group;
+            // filter to only groups in invite state and group_id starts with filter or group name includes it
+            if (myMembership !== 'invite') continue;
+            if (lcFilter && !groupId.toLowerCase().startsWith(lcFilter) &&
+                !(name && name.toLowerCase().includes(lcFilter))) continue;
+            ret.push(<GroupInviteTile key={groupId} group={group} collapsed={this.props.collapsed} />);
         }
 
         return ret;
@@ -607,10 +611,10 @@ module.exports = React.createClass({
         const self = this;
         return (
             <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
+                autoshow={true} onScroll={self._whenScrolling} onResize={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
-                             extraTiles={this._makeGroupInviteTiles()}
+                             extraTiles={this._makeGroupInviteTiles(self.props.searchFilter)}
                              label={_t('Community Invites')}
                              editable={false}
                              order="recent"
@@ -701,6 +705,13 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.archived']}
+                             emptyContent={self.props.collapsed ? null :
+                                 <div className="mx_RoomList_emptySubListTip_container">
+                                     <div className="mx_RoomList_emptySubListTip">
+                                         { _t('You have no historical rooms') }
+                                     </div>
+                                 </div>
+                             }
                              label={_t('Historical')}
                              editable={false}
                              order="recent"
@@ -708,7 +719,7 @@ module.exports = React.createClass({
                              alwaysShowHeader={true}
                              startAsHidden={true}
                              showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick= {self.onArchivedHeaderClick}
+                             onHeaderClick={self.onArchivedHeaderClick}
                              incomingCall={self.state.incomingCall}
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms} />

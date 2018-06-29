@@ -28,7 +28,7 @@ import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
-import SlashCommands from '../../../SlashCommands';
+import {processCommandInput} from '../../../SlashCommands';
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -45,8 +45,7 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
-import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
@@ -158,6 +157,7 @@ export default class MessageComposerInput extends React.Component {
         this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
         this.onTextPasted = this.onTextPasted.bind(this);
+        this.focusComposer = this.focusComposer.bind(this);
 
         const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
@@ -271,13 +271,12 @@ export default class MessageComposerInput extends React.Component {
     }
 
     onAction = (payload) => {
-        const editor = this.refs.editor;
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
             case 'reply_to_event':
             case 'focus_composer':
-                editor.focus();
+                this.focusComposer();
                 break;
             case 'insert_mention': {
                 // Pretend that we've autocompleted this user because keeping two code
@@ -320,7 +319,7 @@ export default class MessageComposerInput extends React.Component {
                     let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                     editorState = EditorState.moveSelectionToEnd(editorState);
                     this.onEditorContentChanged(editorState);
-                    editor.focus();
+                    this.focusComposer();
                 }
             }
                 break;
@@ -722,7 +721,7 @@ export default class MessageComposerInput extends React.Component {
 
         // Some commands (/join) require pills to be replaced with their text content
         const commandText = this.removeMDLinks(contentState, ['#']);
-        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
+        const cmd = processCommandInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
                 this.historyManager.save(contentState, this.state.isRichtextEnabled ? 'html' : 'markdown');
@@ -1156,6 +1155,10 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
+    focusComposer() {
+        this.refs.editor.focus();
+    }
+
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
@@ -1180,9 +1183,9 @@ export default class MessageComposerInput extends React.Component {
             activeEditorState.getCurrentContent().getBlocksAsArray());
 
         return (
-            <div className="mx_MessageComposer_input_wrapper">
+            <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
+                    <ReplyPreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

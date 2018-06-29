@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import {EventStatus} from 'matrix-js-sdk';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
@@ -184,6 +183,15 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onPermalinkClick: function(e: Event) {
+        e.preventDefault();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
+            target: this.props.mxEvent,
+        });
+        this.closeMenu();
+    },
+
     onReplyClick: function() {
         dis.dispatch({
             action: 'reply_to_event',
@@ -211,7 +219,10 @@ module.exports = React.createClass({
         let replyButton;
         let collapseReplyThread;
 
-        if (eventStatus === 'not_sent') {
+        // status is SENT before remote-echo, null after
+        const isSent = !eventStatus || eventStatus === EventStatus.SENT;
+
+        if (eventStatus === EventStatus.NOT_SENT) {
             resendButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
                     { _t('Resend') }
@@ -219,7 +230,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && this.state.canRedact) {
+        if (isSent && this.state.canRedact) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }
@@ -227,7 +238,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (eventStatus === "queued" || eventStatus === "not_sent") {
+        if (eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT) {
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
                     { _t('Cancel Sending') }
@@ -235,7 +246,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && this.props.mxEvent.getType() === 'm.room.message') {
+        if (isSent && this.props.mxEvent.getType() === 'm.room.message') {
             const content = this.props.mxEvent.getContent();
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
                 forwardButton = (
@@ -244,13 +255,11 @@ module.exports = React.createClass({
                     </div>
                 );
 
-                if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
-                    replyButton = (
-                        <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
-                            { _t('Reply') }
-                        </div>
-                    );
-                }
+                replyButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
+                        { _t('Reply') }
+                    </div>
+                );
 
                 if (this.state.canPin) {
                     pinButton = (
@@ -290,7 +299,7 @@ module.exports = React.createClass({
         const permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId())}
-                  target="_blank" rel="noopener" onClick={this.closeMenu}>{ _t('Permalink') }</a>
+                  target="_blank" rel="noopener" onClick={this.onPermalinkClick}>{ _t('Share Message') }</a>
             </div>
         );
 

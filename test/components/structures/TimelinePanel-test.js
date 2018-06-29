@@ -235,7 +235,7 @@ describe('TimelinePanel', function() {
 
             // now, if we update the events, there shouldn't be any
             // more requests.
-            client.paginateEventTimeline.reset();
+            client.paginateEventTimeline.resetHistory();
             panel.forceUpdate();
             expect(messagePanel.props.backPaginating).toBe(false);
             setTimeout(() => {

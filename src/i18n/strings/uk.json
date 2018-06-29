@@ -94,7 +94,7 @@
     "Register": "Зарегіструватись",
     "Rooms": "Кімнати",
     "Add rooms to this community": "Добавити кімнати в це суспільство",
-    "This email address is already in use": "Ця адреса елект. почти вже використовується",
+    "This email address is already in use": "Ця е-пошта вже використовується",
     "This phone number is already in use": "Цей телефонний номер вже використовується",
     "Fetching third party location failed": "Не вдалось отримати стороннє місцеперебування",
     "Messages in one-to-one chats": "Повідомлення у чатах \"сам на сам\"",
@@ -232,7 +232,6 @@
     "Unable to fetch notification target list": "Неможливо отримати перелік цілей сповіщення",
     "Set Password": "Задати пароль",
     "Enable audible notifications in web client": "Увімкнути звукові сповіщення у мережевому застосунку",
-    "Permalink": "Постійне посилання",
     "Off": "Вимкнено",
     "Riot does not know how to join a room on this network": "Riot не знає як приєднатись до кімнати у цій мережі",
     "Mentions only": "Тільки згадки",
@@ -270,5 +269,15 @@
     "Your language of choice": "Обрана мова",
     "Which officially provided instance you are using, if any": "Яким офіційно наданим примірником ви користуєтесь (якщо користуєтесь)",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Чи використовуєте ви режим Richtext у редакторі Rich Text Editor",
-    "Your homeserver's URL": "URL адреса вашого домашнього серверу"
+    "Your homeserver's URL": "URL адреса вашого домашнього серверу",
+    "Failed to verify email address: make sure you clicked the link in the email": "Не вдалось перевірити адресу е-пошти: переконайтесь, що ви перейшли за посиланням у листі",
+    "The platform you're on": "Використовувана платформа",
+    "Your identity server's URL": "URL адреса серверу ідентифікації",
+    "e.g. %(exampleValue)s": "напр. %(exampleValue)s",
+    "Every page you use in the app": "Кожна використовувана у застосунку сторінка",
+    "e.g. <CurrentPageURL>": "напр. <CurrentPageURL>",
+    "Your User Agent": "Ваш користувацький агент",
+    "Your device resolution": "Роздільність вашого пристрою",
+    "Analytics": "Аналітика",
+    "The information being sent to us to help make Riot.im better includes:": "Надсилана інформація, що допомагає нам покращити Riot.im, вміщує:"
 }
