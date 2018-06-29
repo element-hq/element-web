@@ -1304,9 +1304,9 @@ export default React.createClass({
             }
         });
 
-        const dft = new DecryptionFailureTracker((failure) => {
+        const dft = new DecryptionFailureTracker((total) => {
             // TODO: Pass reason for failure as third argument to trackEvent
-            Analytics.trackEvent('E2E', 'Decryption failure');
+            Analytics.trackEvent('E2E', 'Decryption failure', null, total);
         });
 
         // Shelved for later date when we have time to think about persisting history of
