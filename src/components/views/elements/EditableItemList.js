@@ -139,8 +139,11 @@ module.exports = React.createClass({
             </div>
             { editableItems }
             { this.props.canEdit ?
+                // This is slightly evil; we want a new instance of
+                // EditableItem when the list grows. To make sure it's
+                // reset to its initial state.
                 <EditableItem
-                    key={-1}
+                    key={editableItems.length}
                     initialValue={this.props.newItem}
                     onAdd={this.onItemAdded}
                     onChange={this.onNewItemChanged}
