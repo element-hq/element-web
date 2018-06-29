@@ -19,16 +19,30 @@ import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import dis from "./dispatcher";
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function onUsernameClick(e) {
-    dis.dispatch({
-        action: 'insert_mention',
-        user_id: e.target.id,
-    });
-}
+class ClickableUsername extends React.PureComponent {
+    static propTypes = {
+        mxid: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+    };
 
-function makeUsernameSpan(mxid, text) {
-    return <span className="mx_TextForEvent_username" dir="auto" onClick={onUsernameClick} id={mxid}>{ text }</span>;
+    constructor(props) {
+        super(props);
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick() {
+        dis.dispatch({
+            action: 'insert_mention',
+            user_id: this.props.mxid,
+        });
+    }
+
+    render() {
+        const {mxid, text} = this.props;
+        return <a className="mx_TextForEvent_username" dir="auto" onClick={this.onClick} data-mxid={mxid}>{ text }</a>;
+    }
 }
 
 function textForMemberEvent(ev) {
@@ -36,8 +50,8 @@ function textForMemberEvent(ev) {
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
 
-    const sender = makeUsernameSpan(ev.getSender(), senderName);
-    const target = makeUsernameSpan(ev.getStateKey(), targetName);
+    const sender = <ClickableUsername mxid={ev.getSender()} text={senderName} />;
+    const target = <ClickableUsername mxid={ev.getStateKey()} text={targetName} />;
 
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
@@ -71,18 +85,18 @@ function textForMemberEvent(ev) {
             if (prevContent && prevContent.membership === 'join') {
                 if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
                     return _t('<oldDisplayName> changed their display name to <displayName>.', {}, {
-                        oldDisplayName: makeUsernameSpan(ev.getStateKey(), prevContent.displayname),
-                        displayName: makeUsernameSpan(ev.getStateKey(), content.displayname),
+                        oldDisplayName: <ClickableUsername mxid={ev.getStateKey()} text={prevContent.displayname} />,
+                        displayName: <ClickableUsername mxid={ev.getStateKey()} text={content.displayname} />,
                     });
                 } else if (!prevContent.displayname && content.displayname) {
                     return _t('<sender> set their display name to <displayName>.', {}, {
                         sender,
-                        displayName: makeUsernameSpan(ev.getSender(), content.displayname),
+                        displayName: <ClickableUsername mxid={ev.getSender()} text={content.displayname} />,
                     });
                 } else if (prevContent.displayname && !content.displayname) {
                     return _t('<sender> removed their display name (<oldDisplayName>).', {
                         sender,
-                        oldDisplayName: makeUsernameSpan(ev.getSender(), prevContent.displayname),
+                        oldDisplayName: <ClickableUsername mxid={ev.getSender()} text={prevContent.displayname} />,
                     });
                 } else if (prevContent.avatar_url && !content.avatar_url) {
                     return _t('<sender> removed their profile picture.', {}, {sender});
@@ -129,13 +143,13 @@ function textForTopicEvent(ev) {
     return _t('<sender> changed the topic to "%(topic)s".', {
         topic: ev.getContent().topic,
     }, {
-        sender: makeUsernameSpan(ev.getSender(), senderDisplayName),
+        sender: <ClickableUsername mxid={ev.getSender()} text={senderDisplayName} />,
     });
 }
 
 function textForRoomNameEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const sender = makeUsernameSpan(ev.getSender(), senderDisplayName);
+    const sender = <ClickableUsername mxid={ev.getSender()} text={senderDisplayName} />;
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
         return _t('<sender> removed the room name.', {}, {sender});
@@ -154,7 +168,7 @@ function textForMessageEvent(ev) {
         message = "* " + senderDisplayName + " " + message;
     } else if (ev.getContent().msgtype === "m.image") {
         message = _t('<sender> sent an image.', {}, {
-            sender: makeUsernameSpan(ev.getSender(), senderDisplayName),
+            sender: <ClickableUsername mxid={ev.getSender()} text={senderDisplayName} />,
         });
     }
     return message;
@@ -164,7 +178,7 @@ function textForCallAnswerEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
     return _t('<sender> answered the call.', {}, {
-        sender: makeUsernameSpan(event.getSender(), senderName),
+        sender: <ClickableUsername mxid={event.getSender()} text={senderName} />,
     }) + ' ' + supported;
 }
 
@@ -184,13 +198,13 @@ function textForCallHangupEvent(event) {
         }
     }
     return _t('<sender> ended the call.', {}, {
-        sender: makeUsernameSpan(event.getSender(), senderName),
+        sender: <ClickableUsername mxid={event.getSender()} text={senderName} />,
     }) + ' ' + reason;
 }
 
 function textForCallInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
-    const sender = makeUsernameSpan(event.getSender(), senderName);
+    const sender = <ClickableUsername mxid={event.getSender()} text={senderName} />;
     // FIXME: Find a better way to determine this from the event?
     let callType = "voice";
     if (event.getContent().offer && event.getContent().offer.sdp &&
@@ -206,13 +220,13 @@ function textForThreePidInviteEvent(event) {
     return _t('<sender> sent an invitation to %(targetDisplayName)s to join the room.', {
         targetDisplayName: event.getContent().display_name,
     }, {
-        sender: makeUsernameSpan(event.getSender(), senderName),
+        sender: <ClickableUsername mxid={event.getSender()} text={senderName} />,
     });
 }
 
 function textForHistoryVisibilityEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    const sender = makeUsernameSpan(event.getSender(), senderName);
+    const sender = <ClickableUsername mxid={event.getSender()} text={senderName} />;
     switch (event.getContent().history_visibility) {
         case 'invited':
             return _t('<sender> made future room history visible to all room members, '
@@ -238,7 +252,7 @@ function textForEncryptionEvent(event) {
     return _t('<sender> turned on end-to-end encryption (algorithm %(algorithm)s).', {
         algorithm: event.getContent().algorithm,
     }, {
-        sender: makeUsernameSpan(event.getSender(), senderName),
+        sender: <ClickableUsername mxid={event.getSender()} text={senderName} />,
     });
 }
 
@@ -274,7 +288,7 @@ function textForPowerEvent(event) {
                     fromPowerLevel: Roles.textualPowerLevel(from, userDefault),
                     toPowerLevel: Roles.textualPowerLevel(to, userDefault),
                 }, {
-                    user: makeUsernameSpan(userId, userId),
+                    user: <ClickableUsername mxid={userId} text={userId} />,
                 }),
             );
         }
@@ -285,19 +299,19 @@ function textForPowerEvent(event) {
     return _t('<sender> changed the power level of %(powerLevelDiffText)s.', {
         powerLevelDiffText: diff.join(", "),
     }, {
-        sender: makeUsernameSpan(event.getSender(), senderName),
+        sender: <ClickableUsername mxid={event.getSender()} text={senderName} />,
     });
 }
 
 function textForPinnedEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    const sender = makeUsernameSpan(event.getSender(), senderName);
+    const sender = <ClickableUsername mxid={event.getSender()} text={senderName} />;
     return _t("<sender> changed the pinned messages for the room.", {}, {sender});
 }
 
 function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    const sender = makeUsernameSpan(event.getSender(), senderName);
+    const sender = <ClickableUsername mxid={event.getSender()} text={senderName} />;
 
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
