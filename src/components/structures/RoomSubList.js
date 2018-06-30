@@ -27,6 +27,7 @@ import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import { KeyCode } from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
+import PropTypes from 'prop-types';
 
 
 // turn this on for drop & drag console debugging galore
@@ -40,27 +41,28 @@ const RoomSubList = React.createClass({
     debug: debug,
 
     propTypes: {
-        list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        label: React.PropTypes.string.isRequired,
-        tagName: React.PropTypes.string,
-        editable: React.PropTypes.bool,
+        list: PropTypes.arrayOf(PropTypes.object).isRequired,
+        label: PropTypes.string.isRequired,
+        tagName: PropTypes.string,
+        editable: PropTypes.bool,
 
-        order: React.PropTypes.string.isRequired,
+        order: PropTypes.string.isRequired,
 
         // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
-        isInvite: React.PropTypes.bool,
+        isInvite: PropTypes.bool,
 
-        startAsHidden: React.PropTypes.bool,
-        showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
-        collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
-        onHeaderClick: React.PropTypes.func,
-        alwaysShowHeader: React.PropTypes.bool,
-        incomingCall: React.PropTypes.object,
-        onShowMoreRooms: React.PropTypes.func,
-        searchFilter: React.PropTypes.string,
-        emptyContent: React.PropTypes.node, // content shown if the list is empty
-        headerItems: React.PropTypes.node, // content shown in the sublist header
-        extraTiles: React.PropTypes.arrayOf(React.PropTypes.node), // extra elements added beneath tiles
+        startAsHidden: PropTypes.bool,
+        showSpinner: PropTypes.bool, // true to show a spinner if 0 elements when expanded
+        collapsed: PropTypes.bool.isRequired, // is LeftPanel collapsed?
+        onHeaderClick: PropTypes.func,
+        alwaysShowHeader: PropTypes.bool,
+        incomingCall: PropTypes.object,
+        onShowMoreRooms: PropTypes.func,
+        searchFilter: PropTypes.string,
+        emptyContent: PropTypes.node, // content shown if the list is empty
+        headerItems: PropTypes.node, // content shown in the sublist header
+        extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
+        showEmpty: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -79,6 +81,7 @@ const RoomSubList = React.createClass({
             }, // NOP
             extraTiles: [],
             isInvite: false,
+            showEmpty: true,
         };
     },
 
@@ -392,17 +395,29 @@ const RoomSubList = React.createClass({
         const TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         let content;
-        if (this.state.sortedList.length === 0 && this.props.extraTiles.length === 0) {
-            // if no search filter is applied and there is a placeholder defined then show it, otherwise show nothing
-            if (!this.props.searchFilter && this.props.emptyContent) {
+
+        if (this.props.showEmpty) {
+            // this is new behaviour with still controversial UX in that in hiding RoomSubLists the drop zones for DnD
+            // are also gone so when filtering users can't DnD rooms to some tags but is a lot cleaner otherwise.
+            if (this.state.sortedList.length === 0 && !this.props.searchFilter && this.props.extraTiles.length === 0) {
                 content = this.props.emptyContent;
             } else {
-                // don't show an empty sublist
-                return null;
+                content = this.makeRoomTiles();
+                content.push(...this.props.extraTiles);
             }
         } else {
-            content = this.makeRoomTiles();
-            content.push(...this.props.extraTiles);
+            if (this.state.sortedList.length === 0 && this.props.extraTiles.length === 0) {
+                // if no search filter is applied and there is a placeholder defined then show it, otherwise show nothing
+                if (!this.props.searchFilter && this.props.emptyContent) {
+                    content = this.props.emptyContent;
+                } else {
+                    // don't show an empty sublist
+                    return null;
+                }
+            } else {
+                content = this.makeRoomTiles();
+                content.push(...this.props.extraTiles);
+            }
         }
 
         if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0 || this.props.editable) {
