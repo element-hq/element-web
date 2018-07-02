@@ -535,11 +535,7 @@
     "Device already verified!": "Tæki er þegar sannreynt!",
     "Verified key": "Staðfestur dulritunarlykill",
     "Unrecognised command:": "Óþekkt skipun:",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s fjarlægði heiti spjallrásarinnar.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s breytti heiti spjallrásarinnar í %(roomName)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendi mynd.",
-    "%(senderName)s answered the call.": "%(senderName)s svaraði símtalinu.",
     "Disinvite": "Taka boð til baka",
     "Unknown Address": "Óþekkt vistfang",
     "Delete Widget": "Eyða viðmótshluta",
@@ -641,5 +637,9 @@
     "Notify the whole room": "Tilkynna öllum á spjallrásinni",
     "Room Notification": "Tilkynning á spjallrás",
     "Passphrases must match": "Lykilfrasar verða að stemma",
-    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður"
+    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður",
+    "<sender> changed the topic to \"%(topic)s\".": "<sender> breytti umræðuefninu í \"%(topic)s\".",
+    "<sender> changed the room name to %(roomName)s.": "<sender> breytti heiti spjallrásarinnar í %(roomName)s.",
+    "<sender> removed the room name.": "<sender> fjarlægði heiti spjallrásarinnar.",
+    "<sender> answered the call.": "<sender> svaraði símtalinu."
 }

@@ -17,7 +17,6 @@
     "Hide read receipts": "発言を読んでも既読状態にしない",
     "Invited": "招待中",
     "%(displayName)s is typing": "%(displayName)s 文字入力中",
-    "%(targetName)s joined the room.": "%(targetName)s 部屋に参加しました。",
     "Low priority": "低優先度",
     "Mute": "通知しない",
     "New password": "新しいパスワード",
@@ -240,5 +239,6 @@
     "Checking for an update...": "アップデートを確認しています…",
     "There are advanced notifications which are not shown here": "ここに表示されない詳細な通知があります",
     "Call": "通話",
-    "Answer": "応答"
+    "Answer": "応答",
+    "<target> joined the room.": "<target> 部屋に参加しました。"
 }
