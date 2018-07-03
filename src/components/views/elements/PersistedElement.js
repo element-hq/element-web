@@ -49,6 +49,14 @@ const PE_Z_INDEX = 5000;
  * bounding rect as the parent of PE.
  */
 export default class PersistedElement extends React.Component {
+
+    static propTypes = {
+        // Unique identifier for this PersistedElement instance
+        // Any PersistedElements with the same persistKey will use
+        // the same DOM container.
+        persistKey: PropTypes.string.isRequired,
+    };
+
     constructor() {
         super();
         this.collectChildContainer = this.collectChildContainer.bind(this);
@@ -110,10 +118,3 @@ export default class PersistedElement extends React.Component {
         return <div ref={this.collectChildContainer}></div>;
     }
 }
-
-PersistedElement.propTypes = {
-    // Unique identifier for this PersistedElement instance
-    // Any PersistedElements with the same persistKey will use
-    // the same DOM container.
-    persistKey: PropTypes.string.isRequired,
-};
