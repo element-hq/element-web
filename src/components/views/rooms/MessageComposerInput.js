@@ -22,6 +22,7 @@ import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 import { Editor } from 'slate-react';
 import { getEventTransfer } from 'slate-react';
 import { Value, Document, Event, Block, Inline, Text, Range, Node } from 'slate';
+import type { Change } from 'slate';
 
 import Html from 'slate-html-serializer';
 import Md from 'slate-md-serializer';
