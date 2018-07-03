@@ -34,9 +34,6 @@ function getOrCreateContainer(containerId) {
     return container;
 }
 
-// Greater than that of the ContextualMenu
-const PE_Z_INDEX = 5000;
-
 /*
  * Class of component that renders its children in a separate ReactDOM virtual tree
  * in a container element appended to document.body.
@@ -104,12 +101,11 @@ export default class PersistedElement extends React.Component {
             left: parentRect.left + 'px',
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
-            zIndex: PE_Z_INDEX,
         });
     }
 
     render() {
-        const content = <div ref={this.collectChild}>
+        const content = <div ref={this.collectChild} style={this.props.style}>
             {this.props.children}
         </div>;
 
