@@ -19,6 +19,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher';
 import * as url from "url";
+import WidgetEchoStore from '../stores/WidgetEchoStore';
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -250,11 +251,16 @@ export default class WidgetUtils {
             content = {};
         }
 
+        const room = MatrixClientPeg.get().getRoom(roomId);
+        WidgetEchoStore.setRoomWidgetEcho(room, widgetId, content);
+
         const client = MatrixClientPeg.get();
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
             return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
+        }).finally(() => {
+            WidgetEchoStore.removeRoomWidgetEcho(room, widgetId);
         });
     }
 

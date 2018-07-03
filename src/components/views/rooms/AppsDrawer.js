@@ -29,6 +29,7 @@ import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -57,6 +58,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
+        WidgetEchoStore.on('updateRoomWidgetEcho', this._updateApps);
     },
 
     componentDidMount: function() {
@@ -82,6 +84,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
+        WidgetEchoStore.removeListener('updateRoomWidgetEcho', this._updateApps);
         dis.unregister(this.dispatcherRef);
     },
 
@@ -163,7 +166,10 @@ module.exports = React.createClass({
     },
 
     _getApps: function() {
-        return WidgetUtils.getRoomWidgets(this.props.room).map((ev) => {
+        const widgets = WidgetEchoStore.getEchoedRoomWidgets(
+            this.props.room, WidgetUtils.getRoomWidgets(this.props.room),
+        );
+        return widgets.map((ev) => {
             return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },
@@ -231,7 +237,8 @@ module.exports = React.createClass({
                     waitForIframeLoad={app.waitForIframeLoad}
                     whitelistCapabilities={enableScreenshots ? ["m.capability.screenshot"] : []}
                 />);
-            });
+            },
+        );
 
         let addWidget;
         if (this.props.showApps &&
@@ -250,10 +257,22 @@ module.exports = React.createClass({
             </div>;
         }
 
+        let spinner;
+        if (
+            apps.length === 0 && WidgetEchoStore.roomHasPendingWidgets(
+                this.props.room,
+                WidgetUtils.getRoomWidgets(this.props.room),
+            )
+        ) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            spinner = <Loader />;
+        }
+
         return (
             <div className={'mx_AppsDrawer' + (this.props.hide ? ' mx_AppsDrawer_hidden' : '')}>
                 <div id='apps' className='mx_AppsContainer'>
                     { apps }
+                    { spinner }
                 </div>
                 { this._canUserModify() && addWidget }
             </div>
