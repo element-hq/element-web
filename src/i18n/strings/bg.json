@@ -1206,5 +1206,7 @@
     "The user name field must not be blank.": "Полето за потребителско име не може да е празно.",
     "The phone number field must not be blank.": "Полето за телефонен номер не може да е празно.",
     "The password field must not be blank.": "Полето за парола не може да е празно.",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Не можете да изпращате съобщения докато не прегледате и се съгласите с <consentLink>нашите правила и условия</consentLink>."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Не можете да изпращате съобщения докато не прегледате и се съгласите с <consentLink>нашите правила и условия</consentLink>.",
+    "Demote yourself?": "Понижете себе си?",
+    "Demote": "Понижение"
 }
