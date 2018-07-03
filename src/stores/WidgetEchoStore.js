@@ -16,9 +16,6 @@ limitations under the License.
 
 import EventEmitter from 'events';
 
-import WidgetUtils from '../utils/WidgetUtils';
-import MatrixClientPeg from '../MatrixClientPeg';
-
 /**
  * Acts as a place to get & set widget state, storing local echo state and
  * proxying through state from the js-sdk.
@@ -40,6 +37,10 @@ class WidgetEchoStore extends EventEmitter {
      * represted as MatrixEvents, so to do this we'd have to create fake MatrixEvents,
      * and we don't really need the actual widget events anyway since we just want to
      * show a spinner / prevent widgets being added twice.
+     *
+     * @param {Room} room The room object to get widgets for
+     * @param {MatrixEvent[]} currentRoomWidgets Current widgets for the room
+     * @returns {MatrixEvent[]} List of widgets in the room, minus any pending removal
      */
     getEchoedRoomWidgets(room, currentRoomWidgets) {
         const echoedWidgets = [];
@@ -82,7 +83,7 @@ class WidgetEchoStore extends EventEmitter {
             return Object.keys(roomEchoState).length > 0;
         } else {
             return Object.values(roomEchoState).some((widget) => {
-                return widget.type === type; 
+                return widget.type === type;
             });
         }
     }
