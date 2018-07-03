@@ -643,7 +643,6 @@ export default class MessageComposerInput extends React.Component {
         // FIXME: this conversion loses pills (turning them into pure MD links).
         // We need to add a pill-aware deserialize method
         // to PlainWithPillsSerializer which recognises pills in raw MD and turns them into pills.
-        debugger;
         return Plain.deserialize(
             // FIXME: we compile the MD out of the RTE state using slate-md-serializer
             // which doesn't roundtrip symmetrically with commonmark, which we use for
