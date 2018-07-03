@@ -1206,5 +1206,7 @@
     "Call in Progress": "Appel en cours",
     "A call is already in progress!": "Un appel est déjà en cours !",
     "You have no historical rooms": "Vous n'avez aucun salon historique",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Vous ne pouvez voir aucun message tant que vous ne lisez et n'acceptez pas nos <consentLink>conditions générales</consentLink>."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Vous ne pouvez voir aucun message tant que vous ne lisez et n'acceptez pas nos <consentLink>conditions générales</consentLink>.",
+    "Demote yourself?": "Vous rétrograder ?",
+    "Demote": "Rétrograder"
 }
