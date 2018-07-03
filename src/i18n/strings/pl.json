@@ -650,7 +650,7 @@
     "Automatically replace plain text Emoji": "Automatycznie zastępuj tekstowe emotikony",
     "Failed to upload image": "Przesyłanie obrazka nie powiodło się",
     "%(count)s new messages|one": "%(count)s nowa wiadomość",
-    "%(count)s new messages|other": "%(count)s nowe wiadomości",
+    "%(count)s new messages|other": "%(count)s nowych wiadomości",
     "We recommend you go through the verification process for each device to confirm they belong to their legitimate owner, but you can resend the message without verifying if you prefer.": "Zalecamy Ci przejście przez proces weryfikacyjny dla każdego urządzenia aby potwierdzić, że należy ono do ich prawdziwego właściciela. Możesz jednak wysłać tę wiadomość bez potwierdzania.",
     "Unblacklist": "Usuń z czarnej listy",
     "Blacklist": "Dodaj do czarnej listy",
