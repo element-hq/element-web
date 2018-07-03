@@ -1204,5 +1204,7 @@
     "You have no historical rooms": "У вас нет архивных комнат",
     "Share Room Message": "Обмен сообщениями в комнате",
     "Share Message": "Обмен сообщениями",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Вы не можете отправлять сообщения до тех пор, пока вы не примете <consentLink>наши правила и положения</consentLink>."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Вы не можете отправлять сообщения до тех пор, пока вы не примете <consentLink>наши правила и положения</consentLink>.",
+    "Demote": "Понижение",
+    "Demote yourself?": "Понизить самого себя?"
 }
