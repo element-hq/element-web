@@ -16,19 +16,18 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const PropTypes = require('prop-types');
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
-const ContainerId = "mx_PersistedElement";
-
-function getOrCreateContainer() {
-    let container = document.getElementById(ContainerId);
+function getOrCreateContainer(containerId) {
+    let container = document.getElementById(containerId);
 
     if (!container) {
         container = document.createElement("div");
-        container.id = ContainerId;
+        container.id = containerId;
         document.body.appendChild(container);
     }
 
@@ -106,9 +105,15 @@ export default class PersistedElement extends React.Component {
             {this.props.children}
         </div>;
 
-        ReactDOM.render(content, getOrCreateContainer());
+        ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
 
         return <div ref={this.collectChildContainer}></div>;
     }
 }
 
+PersistedElement.propTypes = {
+    // Unique identifier for this PersistedElement instance
+    // Any PersistedElements with the same persistKey will use
+    // the same DOM container.
+    persistKey: PropTypes.string.isRequired,
+};

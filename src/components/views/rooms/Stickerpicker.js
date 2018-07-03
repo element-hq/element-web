@@ -211,7 +211,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement>
+                    <PersistedElement persistKey="stickerPicker">
                         <AppTile
                             collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}
