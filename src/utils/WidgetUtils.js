@@ -21,6 +21,9 @@ import dis from '../dispatcher';
 import * as url from "url";
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 
+// How long we wait for the state event echo to come back from the server
+const WIDGET_WAIT_TIME = 20000;
+
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
      * (Does not apply to non-room-based / user widgets)
@@ -135,7 +138,7 @@ export default class WidgetUtils {
             const timerId = setTimeout(() => {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
-            }, 10000);
+            }, WIDGET_WAIT_TIME);
             MatrixClientPeg.get().on('accountData', onAccountData);
         });
     }
@@ -188,7 +191,7 @@ export default class WidgetUtils {
             const timerId = setTimeout(() => {
                 MatrixClientPeg.get().removeListener('RoomState.events', onRoomStateEvents);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
-            }, 10000);
+            }, WIDGET_WAIT_TIME);
             MatrixClientPeg.get().on('RoomState.events', onRoomStateEvents);
         });
     }

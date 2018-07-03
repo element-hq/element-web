@@ -325,6 +325,12 @@ export default class AppTile extends React.Component {
                             this.props.id,
                         ).catch((e) => {
                             console.error('Failed to delete widget', e);
+                            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+                            Modal.createTrackedDialog('Failed to remove widget', '', ErrorDialog, {
+                                title: _t('Failed to remove widget'),
+                                description: _t('An error ocurred whilst trying to remove the widget from the room'),
+                            });
                         }).finally(() => {
                             this.setState({deleting: false});
                         });

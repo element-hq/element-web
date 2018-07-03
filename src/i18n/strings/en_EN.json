@@ -205,6 +205,8 @@
     "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
     "Not a valid Riot keyfile": "Not a valid Riot keyfile",
     "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
+    "Failed to remove widget": "Failed to remove widget",
+    "An error ocurred whilst trying to remove the widget from the room": "An error ocurred whilst trying to remove the widget from the room",
     "Failed to join room": "Failed to join room",
     "Message Pinning": "Message Pinning",
     "Jitsi Conference Calling": "Jitsi Conference Calling",
