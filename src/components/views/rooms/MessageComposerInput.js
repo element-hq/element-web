@@ -178,17 +178,27 @@ export default class MessageComposerInput extends React.Component {
             rules: [
                 {
                     serialize: (obj, children) => {
-                        if (obj.object === 'inline') {
-                            switch (obj.type) {
-                                case 'pill':
-                                    return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
-                                case 'emoji':
-                                    return obj.data.get('emojiUnicode');
-                            }
+                        if (obj.object !== 'inline') return;
+                        switch (obj.type) {
+                            case 'pill':
+                                return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
+                            case 'emoji':
+                                return obj.data.get('emojiUnicode');
                         }
-                    }
-                }
-            ]
+                    },
+                }, {
+                    serialize: (obj, children) => {
+                        if (obj.object !== 'mark') return;
+                        // XXX: slate-md-serializer consumes marks other than bold, italic, code, inserted, deleted
+                        switch (obj.type) {
+                            case 'underlined':
+                                return `<u>${ children }</u>`;
+                            case 'deleted':
+                                return `<del>${ children }</del>`;
+                        }
+                    },
+                },
+            ],
         });
 
         this.html = new Html({
@@ -633,6 +643,7 @@ export default class MessageComposerInput extends React.Component {
         // FIXME: this conversion loses pills (turning them into pure MD links).
         // We need to add a pill-aware deserialize method
         // to PlainWithPillsSerializer which recognises pills in raw MD and turns them into pills.
+        debugger;
         return Plain.deserialize(
             // FIXME: we compile the MD out of the RTE state using slate-md-serializer
             // which doesn't roundtrip symmetrically with commonmark, which we use for
@@ -688,7 +699,7 @@ export default class MessageComposerInput extends React.Component {
         return editorState.blocks.some(node => node.type == type)
     };
 
-    onKeyDown = (ev: Event, change: Change, editor: Editor) => {
+    onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
 
         this.suppressAutoComplete = false;
 
@@ -732,10 +743,19 @@ export default class MessageComposerInput extends React.Component {
                 return this.onTab(ev);
             case KeyCode.ESCAPE:
                 return this.onEscape(ev);
+            case KeyCode.SPACE:
+                return this.onSpace(ev, change);
             default:
                 // don't intercept it
                 return;
         }
+    };
+
+    onSpace = (ev: KeyboardEvent, change: Change): Change => {
+        // drop a point in history so the user can undo a word
+        // XXX: this seems nasty but adding to history manually seems a no-go
+        ev.preventDefault();
+        return change.setOperationFlag("skip", false).setOperationFlag("merge", false).insertText(ev.key);
     };
 
     onBackspace = (ev: Event, change: Change): Change => {
