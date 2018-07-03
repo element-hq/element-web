@@ -449,13 +449,13 @@ export default class MessageComposerInput extends React.Component {
         if (this.direction !== '') {
             const focusedNode = editorState.focusInline || editorState.focusText;
             if (focusedNode.isVoid) {
+                const edge = this.direction === 'Previous' ? 'End' : 'Start';
                 if (editorState.isCollapsed) {
-                    change = change[`collapseToEndOf${ this.direction }Text`]();
-                }
-                else {
+                    change = change[`collapseTo${ edge }Of${ this.direction }Text`]();
+                } else {
                     const block = this.direction === 'Previous' ? editorState.previousText : editorState.nextText;
                     if (block) {
-                        change = change.moveFocusToEndOf(block)
+                        change = change[`moveFocusTo${ edge }Of`](block);
                     }
                 }
                 editorState = change.value;
