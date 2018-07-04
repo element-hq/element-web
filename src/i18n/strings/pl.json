@@ -1122,5 +1122,15 @@
     "Try the app first": "Najpierw wypróbuj aplikację",
     "Sign in to get started": "Zaloguj się, aby rozpocząć",
     "Notify the whole room": "Powiadom cały pokój",
-    "Room Notification": "Powiadomienia pokoju"
+    "Room Notification": "Powiadomienia pokoju",
+    "Call Anyway": "Zadzwoń mimo to",
+    "Answer Anyway": "Odpowiedz mimo to",
+    "Demote yourself?": "Zdegradować siebie?",
+    "Demote": "Zdegraduj",
+    "Hide Stickers": "Ukryj Naklejki",
+    "Show Stickers": "Pokaż Naklejki",
+    "The email field must not be blank.": "Pole email nie może być puste.",
+    "The user name field must not be blank.": "Pole nazwy użytkownika nie może być puste.",
+    "The phone number field must not be blank.": "Pole numeru telefonu nie może być puste.",
+    "The password field must not be blank.": "Pole hasła nie może być puste."
 }
