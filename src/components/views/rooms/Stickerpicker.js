@@ -27,6 +27,10 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 
 const widgetType = 'm.stickerpicker';
 
+// We sit in a context menu, so the persisted element container needs to float
+// above it, so it needs a greater z-index than the ContextMenu
+const STICKERPICKER_Z_INDEX = 5000;
+
 export default class Stickerpicker extends React.Component {
     constructor(props) {
         super(props);
@@ -211,7 +215,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement>
+                    <PersistedElement containerId="mx_persisted_stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
                             collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}
