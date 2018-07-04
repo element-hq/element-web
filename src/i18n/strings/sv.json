@@ -1180,5 +1180,21 @@
     "This room is not showing flair for any communities": "Detta rum visar inte emblem för några communityn",
     "Flair will appear if enabled in room settings": "Emblem kommer visas om det är aktiverat i rumsinställningarna",
     "Flair will not appear": "Emblem kommer inte att visas",
-    "Display your community flair in rooms configured to show it.": "Visa ditt community-emblem i rum som är konfigurerade för att visa det."
+    "Display your community flair in rooms configured to show it.": "Visa ditt community-emblem i rum som är konfigurerade för att visa det.",
+    "Jitsi Conference Calling": "Jitsi konferenssamtal",
+    "Encrypting": "Krypterar",
+    "Encrypted, not sent": "Krypterat, inte skickat",
+    "Share Link to User": "Dela länk till användare",
+    "Share room": "Dela rum",
+    "Share Room": "Dela rum",
+    "Link to most recent message": "Länk till senaste meddelandet",
+    "Share User": "Dela användare",
+    "Share Community": "Dela community",
+    "Share Room Message": "Dela rumsmeddelande",
+    "Link to selected message": "Länk till valt meddelande",
+    "COPY": "KOPIERA",
+    "Share Message": "Dela meddelande",
+    "No Audio Outputs detected": "Inga ljudutgångar hittades",
+    "Audio Output": "Ljudutgång",
+    "Try the app first": "Testa appen först"
 }

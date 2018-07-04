@@ -1180,5 +1180,20 @@
     "Replying": "Rispondere",
     "Popout widget": "Oggetto a comparsa",
     "Failed to indicate account erasure": "Impossibile indicare la cancellazione dell'account",
-    "Bulk Options": "Opzioni applicate in massa"
+    "Bulk Options": "Opzioni applicate in massa",
+    "Encrypting": "Cifratura...",
+    "Encrypted, not sent": "Cifrato, non inviato",
+    "Share Link to User": "Condividi link con utente",
+    "Share room": "Condividi stanza",
+    "Share Room": "Condividi stanza",
+    "Link to most recent message": "Link al messaggio più recente",
+    "Share User": "Condividi utente",
+    "Share Community": "Condividi comunità",
+    "Share Room Message": "Condividi messaggio stanza",
+    "Link to selected message": "Link al messaggio selezionato",
+    "COPY": "COPIA",
+    "Share Message": "Condividi messaggio",
+    "No Audio Outputs detected": "Nessuna uscita audio rilevata",
+    "Audio Output": "Uscita audio",
+    "Try the app first": "Prova prima l'app"
 }

@@ -1076,5 +1076,9 @@
     "Collapse panel": "Sbalit panel",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Vzhled a chování aplikace může být ve vašem aktuální prohlížeči nesprávné a některé nebo všechny funkce mohou být chybné. Chcete-li i přes to pokračovat, nebudeme vám bránit, ale se všemi problémy, na které narazíte, si musíte poradit sami!",
     "Checking for an update...": "Kontrola aktualizací...",
-    "There are advanced notifications which are not shown here": "Jsou k dispozici pokročilá upozornění, která zde nejsou zobrazena"
+    "There are advanced notifications which are not shown here": "Jsou k dispozici pokročilá upozornění, která zde nejsou zobrazena",
+    "The platform you're on": "Platforma na které jsi",
+    "The version of Riot.im": "Verze Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Jestli jsi, nebo nejsi přihlášen (tvou přezdívku neukládáme)",
+    "Your language of choice": "Tvá jazyková volba"
 }

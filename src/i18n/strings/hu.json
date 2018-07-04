@@ -1195,5 +1195,18 @@
     "Share Room Message": "Szoba üzenet megosztás",
     "Link to selected message": "Hivatkozás a kijelölt üzenetre",
     "COPY": "Másol",
-    "Share Message": "Üzenet megosztása"
+    "Share Message": "Üzenet megosztása",
+    "Jitsi Conference Calling": "Jitsi konferencia hívás",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Az olyan titkosított szobákban, mint ez is, az URL előnézet alapértelmezetten ki van kapcsolva, hogy biztosított legyen, hogy a matrix szerver (ahol az előnézet készül) ne tudjon információt gyűjteni arról, hogy milyen linkeket látsz ebben a szobában.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Ha valaki URL linket helyez az üzenetébe, lehetőség van egy előnézet megjelenítésére amivel további információt kaphatunk a linkről, mint cím, leírás és a weboldal képe.",
+    "The email field must not be blank.": "Az e-mail mező nem lehet üres.",
+    "The user name field must not be blank.": "A felhasználói név mező nem lehet üres.",
+    "The phone number field must not be blank.": "A telefonszám mező nem lehet üres.",
+    "The password field must not be blank.": "A jelszó mező nem lehet üres.",
+    "Call in Progress": "Hívás folyamatban",
+    "A call is already in progress!": "A hívás már folyamatban van!",
+    "You have no historical rooms": "Nincsenek archív szobáid",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Nem tudsz üzenetet küldeni amíg nem olvasod el és nem fogadod el a <consentLink>felhasználási feltételeket</consentLink>.",
+    "Demote yourself?": "Lefokozod magad?",
+    "Demote": "Lefokozás"
 }
