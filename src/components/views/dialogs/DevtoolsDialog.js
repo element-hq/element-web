@@ -243,6 +243,7 @@ class SendAccountData extends GenericEditor {
 }
 
 const INITIAL_LOAD_TILES = 20;
+const LOAD_TILES_STEP_SIZE = 50;
 
 class FilteredList extends React.Component {
     static propTypes = {
@@ -276,7 +277,7 @@ class FilteredList extends React.Component {
 
     showAll = () => {
         this.setState({
-            truncateAt: -1,
+            truncateAt: this.state.truncateAt + LOAD_TILES_STEP_SIZE,
         });
     };
 
