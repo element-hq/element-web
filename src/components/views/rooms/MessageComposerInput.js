@@ -713,22 +713,6 @@ export default class MessageComposerInput extends React.Component {
             this.direction = '';
         }
 
-        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
-            const ctrlCmdCommand = {
-                // C-m => Toggles between rich text and markdown modes
-                [KeyCode.KEY_M]: 'toggle-mode',
-                [KeyCode.KEY_B]: 'bold',
-                [KeyCode.KEY_I]: 'italic',
-                [KeyCode.KEY_U]: 'underlined',
-                [KeyCode.KEY_J]: 'inline-code',
-            }[ev.keyCode];
-
-            if (ctrlCmdCommand) {
-                return this.handleKeyCommand(ctrlCmdCommand);
-            }
-            return;
-        }
-
         switch (ev.keyCode) {
             case KeyCode.ENTER:
                 return this.handleReturn(ev, change);
@@ -744,9 +728,21 @@ export default class MessageComposerInput extends React.Component {
                 return this.onEscape(ev);
             case KeyCode.SPACE:
                 return this.onSpace(ev, change);
-            default:
-                // don't intercept it
-                return;
+        }
+
+        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
+            const ctrlCmdCommand = {
+                // C-m => Toggles between rich text and markdown modes
+                [KeyCode.KEY_M]: 'toggle-mode',
+                [KeyCode.KEY_B]: 'bold',
+                [KeyCode.KEY_I]: 'italic',
+                [KeyCode.KEY_U]: 'underlined',
+                [KeyCode.KEY_J]: 'inline-code',
+            }[ev.keyCode];
+
+            if (ctrlCmdCommand) {
+                return this.handleKeyCommand(ctrlCmdCommand);
+            }
         }
     };
 
@@ -757,15 +753,22 @@ export default class MessageComposerInput extends React.Component {
         return change.setOperationFlag("skip", false).setOperationFlag("merge", false).insertText(ev.key);
     };
 
-    onBackspace = (ev: Event, change: Change): Change => {
-        if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey) {
+    onBackspace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey) {
             return;
+        }
+
+        const { editorState } = this.state;
+
+        // Allow Ctrl/Cmd-Backspace when focus starts at the start of the composer (e.g select-all)
+        // for some reason if slate sees you Ctrl-backspace and your anchorOffset=0 it just resets your focus
+        if (!editorState.isCollapsed && editorState.anchorOffset === 0) {
+            return change.delete();
         }
 
         if (this.state.isRichTextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
-            const { editorState } = this.state;
 
             if (isList && editorState.anchorOffset == 0) {
                 change
