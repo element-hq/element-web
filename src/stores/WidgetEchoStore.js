@@ -25,6 +25,7 @@ class WidgetEchoStore extends EventEmitter {
         super();
 
         this._roomWidgetEcho = {
+            // Map as below. For widgets that have been deleted locally, the object is empty.
             // roomId: {
             //     widgetId: [object]
             // }
@@ -49,7 +50,7 @@ class WidgetEchoStore extends EventEmitter {
 
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
-            if (roomEchoState && roomEchoState[widgetId] && Object.keys(roomEchoState[widgetId]).length === 0) {
+            if (roomEchoState[widgetId] && Object.keys(roomEchoState[widgetId]).length === 0) {
                 // delete locally so don't copy it
             // we don't include widgets that have changed for the same rason we don't include new ones,
             // so fall into the 'else' case and use the old one
@@ -101,7 +102,7 @@ class WidgetEchoStore extends EventEmitter {
 
     removeRoomWidgetEcho(roomId, widgetId) {
         delete this._roomWidgetEcho[roomId][widgetId];
-        if (this._roomWidgetEcho[roomId] === {}) delete this._roomWidgetEcho[roomId];
+        if (Object.keys(this._roomWidgetEcho[roomId]).length === 0) delete this._roomWidgetEcho[roomId];
         this.emit('updateRoomWidgetEcho');
     }
 }
