@@ -25,7 +25,8 @@ class WidgetEchoStore extends EventEmitter {
         super();
 
         this._roomWidgetEcho = {
-            // Map as below. For widgets that have been deleted locally, the object is empty.
+            // Map as below. Object is the content of the widget state event,
+            // so for widgets that have been deleted locally, the object is empty.
             // roomId: {
             //     widgetId: [object]
             // }
