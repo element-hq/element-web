@@ -184,20 +184,6 @@ function createEventDecryptedAction(matrixClient, event) {
 }
 
 /**
- * Create a MatrixActions.RoomState.vents action that represents
- * a MatrixClient `RoomState.events` matrix event, emitted when the
- * state events in a room change.
- *
- * @param {MatrixClient} matrixClient the matrix client.
- * @param {MatrixEvent} event matrix event which caused this event to fire.
- * @param {RoomState} state room state whose RoomState.events dictionary was updated.
- * @returns {EventDecryptedAction} an action of type `MatrixActions.Event.decrypted`.
- */
-function createRoomStateEventsAction(matrixClient, event, state) {
-    return { action: 'MatrixActions.RoomState.events', event, state };
-}
-
-/**
  * This object is responsible for dispatching actions when certain events are emitted by
  * the given MatrixClient.
  */
@@ -218,7 +204,6 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
         this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
         this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
-        this._addMatrixClientListener(matrixClient, 'RoomState.events', createRoomStateEventsAction);
     },
 
     /**
