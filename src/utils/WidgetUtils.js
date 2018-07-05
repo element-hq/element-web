@@ -22,6 +22,7 @@ import * as url from "url";
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 
 // How long we wait for the state event echo to come back from the server
+// before the promise is rejected
 const WIDGET_WAIT_TIME = 20000;
 
 export default class WidgetUtils {
