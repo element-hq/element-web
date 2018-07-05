@@ -60,12 +60,6 @@ class WidgetEchoStore extends EventEmitter {
             delete roomEchoState[widgetId];
         }
 
-        // any remining in roomEchoState are extra that need to be added
-        // We don't do this for the reasons above
-        /*for (const widgetId of Object.keys(roomEchoState)) {
-            echoedWidgets.push(roomEchoState[widgetId]);
-        }*/
-
         return echoedWidgets;
     }
 
