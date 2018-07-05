@@ -14,22 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-class DecryptionFailure {
-    constructor(failedEventId) {
+export class DecryptionFailure {
+    constructor(failedEventId, errorCode) {
         this.failedEventId = failedEventId;
+        this.errorCode = errorCode;
         this.ts = Date.now();
     }
 }
 
-export default class DecryptionFailureTracker {
+export class DecryptionFailureTracker {
     // Array of items of type DecryptionFailure. Every `CHECK_INTERVAL_MS`, this list
     // is checked for failures that happened > `GRACE_PERIOD_MS` ago. Those that did
-    // are added to `failuresToTrack`.
+    // are accumulated in `failureCounts`.
     failures = [];
 
-    // Every TRACK_INTERVAL_MS (so as to spread the number of hits done on Analytics),
-    // one DecryptionFailure of this FIFO is removed and tracked.
-    failuresToTrack = [];
+    // A histogram of the number of failures that will be tracked at the next tracking
+    // interval, split by failure error code.
+    failureCounts = {
+        // [errorCode]: 42
+    };
 
     // Event IDs of failures that were tracked previously
     trackedEventHashMap = {
@@ -46,16 +49,35 @@ export default class DecryptionFailureTracker {
     // Call `checkFailures` every `CHECK_INTERVAL_MS`.
     static CHECK_INTERVAL_MS = 5000;
 
-    // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before moving
-    // the failure to `failuresToTrack`.
+    // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before counting
+    // the failure in `failureCounts`.
     static GRACE_PERIOD_MS = 60000;
 
-    constructor(fn) {
+    /**
+     * Create a new DecryptionFailureTracker.
+     *
+     * Call `eventDecrypted(event, err)` on this instance when an event is decrypted.
+     *
+     * Call `start()` to start the tracker, and `stop()` to stop tracking.
+     *
+     * @param {function} fn The tracking function, which will be called when failures
+     * are tracked. The function should have a signature `(count, trackedErrorCode) => {...}`,
+     * where `count` is the number of failures and `errorCode` matches the `.code` of
+     * provided DecryptionError errors (by default, unless `errorCodeMapFn` is specified.
+     * @param {function?} errorCodeMapFn The function used to map error codes to the
+     * trackedErrorCode. If not provided, the `.code` of errors will be used.
+     */
+    constructor(fn, errorCodeMapFn) {
         if (!fn || typeof fn !== 'function') {
             throw new Error('DecryptionFailureTracker requires tracking function');
         }
 
-        this.trackDecryptionFailure = fn;
+        if (errorCodeMapFn && typeof errorCodeMapFn !== 'function') {
+            throw new Error('DecryptionFailureTracker second constructor argument should be a function');
+        }
+
+        this._trackDecryptionFailure = fn;
+        this._mapErrorCode = errorCodeMapFn;
     }
 
     // loadTrackedEventHashMap() {
@@ -66,17 +88,17 @@ export default class DecryptionFailureTracker {
     //     localStorage.setItem('mx-decryption-failure-event-id-hashes', JSON.stringify(this.trackedEventHashMap));
     // }
 
-    eventDecrypted(e) {
-        if (e.isDecryptionFailure()) {
-            this.addDecryptionFailureForEvent(e);
+    eventDecrypted(e, err) {
+        if (err) {
+            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.code));
         } else {
             // Could be an event in the failures, remove it
             this.removeDecryptionFailuresForEvent(e);
         }
     }
 
-    addDecryptionFailureForEvent(e) {
-        this.failures.push(new DecryptionFailure(e.getId()));
+    addDecryptionFailure(failure) {
+        this.failures.push(failure);
     }
 
     removeDecryptionFailuresForEvent(e) {
@@ -93,7 +115,7 @@ export default class DecryptionFailureTracker {
         );
 
         this.trackInterval = setInterval(
-            () => this.trackFailure(),
+            () => this.trackFailures(),
             DecryptionFailureTracker.TRACK_INTERVAL_MS,
         );
     }
@@ -106,7 +128,7 @@ export default class DecryptionFailureTracker {
         clearInterval(this.trackInterval);
 
         this.failures = [];
-        this.failuresToTrack = [];
+        this.failureCounts = {};
     }
 
     /**
@@ -153,20 +175,28 @@ export default class DecryptionFailureTracker {
 
         const dedupedFailures = dedupedFailuresMap.values();
 
-        this.failuresToTrack = [...this.failuresToTrack, ...dedupedFailures];
+        this._aggregateFailures(dedupedFailures);
+    }
+
+    _aggregateFailures(failures) {
+        for (const failure of failures) {
+            const errorCode = failure.errorCode;
+            this.failureCounts[errorCode] = (this.failureCounts[errorCode] || 0) + 1;
+        }
     }
 
     /**
      * If there are failures that should be tracked, call the given trackDecryptionFailure
      * function with the number of failures that should be tracked.
      */
-    trackFailure() {
-        if (this.failuresToTrack.length > 0) {
-            // Remove all failures, and expose the number of failures for now.
-            //
-            // TODO: Track a histogram of error types to cardinailty to allow for
-            // aggregation by error type.
-            this.trackDecryptionFailure(this.failuresToTrack.splice(0).length);
+    trackFailures() {
+        for (const errorCode of Object.keys(this.failureCounts)) {
+            if (this.failureCounts[errorCode] > 0) {
+                const trackedErrorCode = this._mapErrorCode ? this._mapErrorCode(errorCode) : errorCode;
+
+                this._trackDecryptionFailure(this.failureCounts[errorCode], trackedErrorCode);
+                this.failureCounts[errorCode] = 0;
+            }
         }
     }
 }
