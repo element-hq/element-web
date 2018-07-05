@@ -66,11 +66,14 @@ class WidgetEchoStore extends EventEmitter {
     roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type) {
         const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
 
+        // any widget IDs that are already in the room are not pending, so
+        // echoes for them don't count as pending.
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
             delete roomEchoState[widgetId];
         }
 
+        // if there's anything left then there are pending widgets.
         if (type === undefined) {
             return Object.keys(roomEchoState).length > 0;
         } else {
