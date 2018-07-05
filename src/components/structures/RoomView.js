@@ -155,7 +155,7 @@ module.exports = React.createClass({
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
 
-        WidgetEchoStore.on('updateRoomWidgetEcho', this._onWidgetEchoStoreUpdate);
+        WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -425,7 +425,7 @@ module.exports = React.createClass({
             this._roomStoreToken.remove();
         }
 
-        WidgetEchoStore.removeListener('updateRoomWidgetEcho', this._onWidgetEchoStoreUpdate);
+        WidgetEchoStore.removeListener('update', this._onWidgetEchoStoreUpdate);
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();

@@ -58,7 +58,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
-        WidgetEchoStore.on('updateRoomWidgetEcho', this._updateApps);
+        WidgetEchoStore.on('update', this._updateApps);
     },
 
     componentDidMount: function() {
@@ -84,7 +84,7 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
-        WidgetEchoStore.removeListener('updateRoomWidgetEcho', this._updateApps);
+        WidgetEchoStore.removeListener('update', this._updateApps);
         dis.unregister(this.dispatcherRef);
     },
 
