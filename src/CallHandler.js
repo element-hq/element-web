@@ -416,7 +416,7 @@ function _startCallApp(roomId, type) {
 
     const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
 
-    if (WidgetEchoStore.roomHasPendingWidgetsOfType(room, currentRoomWidgets, 'jitsi')) {
+    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         Modal.createTrackedDialog('Already have pending Jitsi Widget', '', ErrorDialog, {

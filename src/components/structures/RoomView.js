@@ -328,9 +328,9 @@ module.exports = React.createClass({
             return false;
         }
 
-        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room, WidgetUtils.getRoomWidgets(room));
+        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
 
-        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room, WidgetUtils.getRoomWidgets(room));
+        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
     },
 
     componentDidMount: function() {

@@ -255,7 +255,7 @@ export default class WidgetUtils {
         }
 
         const room = MatrixClientPeg.get().getRoom(roomId);
-        WidgetEchoStore.setRoomWidgetEcho(room, widgetId, content);
+        WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
 
         const client = MatrixClientPeg.get();
         // TODO - Room widgets need to be moved to 'm.widget' state events
@@ -263,7 +263,7 @@ export default class WidgetUtils {
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
             return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
         }).finally(() => {
-            WidgetEchoStore.removeRoomWidgetEcho(room, widgetId);
+            WidgetEchoStore.removeRoomWidgetEcho(roomId, widgetId);
         });
     }
 

@@ -167,7 +167,7 @@ module.exports = React.createClass({
 
     _getApps: function() {
         const widgets = WidgetEchoStore.getEchoedRoomWidgets(
-            this.props.room, WidgetUtils.getRoomWidgets(this.props.room),
+            this.props.room.roomId, WidgetUtils.getRoomWidgets(this.props.room),
         );
         return widgets.map((ev) => {
             return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
@@ -260,7 +260,7 @@ module.exports = React.createClass({
         let spinner;
         if (
             apps.length === 0 && WidgetEchoStore.roomHasPendingWidgets(
-                this.props.room,
+                this.props.room.roomId,
                 WidgetUtils.getRoomWidgets(this.props.room),
             )
         ) {

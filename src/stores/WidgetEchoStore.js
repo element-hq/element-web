@@ -38,14 +38,14 @@ class WidgetEchoStore extends EventEmitter {
      * and we don't really need the actual widget events anyway since we just want to
      * show a spinner / prevent widgets being added twice.
      *
-     * @param {Room} room The room object to get widgets for
+     * @param {Room} roomId The ID of the room to get widgets for
      * @param {MatrixEvent[]} currentRoomWidgets Current widgets for the room
      * @returns {MatrixEvent[]} List of widgets in the room, minus any pending removal
      */
-    getEchoedRoomWidgets(room, currentRoomWidgets) {
+    getEchoedRoomWidgets(roomId, currentRoomWidgets) {
         const echoedWidgets = [];
 
-        const roomEchoState = Object.assign({}, this._roomWidgetEcho[room.roomId]);
+        const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
 
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
@@ -70,8 +70,8 @@ class WidgetEchoStore extends EventEmitter {
         return echoedWidgets;
     }
 
-    roomHasPendingWidgetsOfType(room, currentRoomWidgets, type) {
-        const roomEchoState = Object.assign({}, this._roomWidgetEcho[room.roomId]);
+    roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type) {
+        const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
         if (roomEchoState === undefined) return false;
 
         for (const w of currentRoomWidgets) {
@@ -88,20 +88,20 @@ class WidgetEchoStore extends EventEmitter {
         }
     }
 
-    roomHasPendingWidgets(room, currentRoomWidgets) {
-        return this.roomHasPendingWidgetsOfType(room, currentRoomWidgets);
+    roomHasPendingWidgets(roomId, currentRoomWidgets) {
+        return this.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets);
     }
 
-    setRoomWidgetEcho(room, widgetId, state) {
-        if (this._roomWidgetEcho[room.roomId] === undefined) this._roomWidgetEcho[room.roomId] = {};
+    setRoomWidgetEcho(roomId, widgetId, state) {
+        if (this._roomWidgetEcho[roomId] === undefined) this._roomWidgetEcho[roomId] = {};
 
-        this._roomWidgetEcho[room.roomId][widgetId] = state;
+        this._roomWidgetEcho[roomId][widgetId] = state;
         this.emit('updateRoomWidgetEcho');
     }
 
-    removeRoomWidgetEcho(room, widgetId) {
-        delete this._roomWidgetEcho[room.roomId][widgetId];
-        if (this._roomWidgetEcho[room.roomId] === {}) delete this._roomWidgetEcho[room.roomId];
+    removeRoomWidgetEcho(roomId, widgetId) {
+        delete this._roomWidgetEcho[roomId][widgetId];
+        if (this._roomWidgetEcho[roomId] === {}) delete this._roomWidgetEcho[roomId];
         this.emit('updateRoomWidgetEcho');
     }
 }
