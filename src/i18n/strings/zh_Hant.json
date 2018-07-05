@@ -1206,5 +1206,8 @@
     "Call in Progress": "進行中的通話",
     "A call is already in progress!": "已有一通電話進行中！",
     "You have no historical rooms": "您沒有過去的聊天室",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "您在審閱並同意<consentLink>我們的條款與條件</consentLink>前無法傳送訊息。"
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "您在審閱並同意<consentLink>我們的條款與條件</consentLink>前無法傳送訊息。",
+    "Show empty room list headings": "顯示空聊天室清單標題",
+    "Demote yourself?": "將自己降級？",
+    "Demote": "降級"
 }
