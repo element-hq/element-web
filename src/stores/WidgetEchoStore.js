@@ -65,7 +65,6 @@ class WidgetEchoStore extends EventEmitter {
 
     roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type) {
         const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
-        if (roomEchoState === undefined) return false;
 
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
