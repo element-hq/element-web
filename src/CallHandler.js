@@ -419,7 +419,7 @@ function _startCallApp(roomId, type) {
     if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-        Modal.createTrackedDialog('Already have pending Jitsi Widget', '', ErrorDialog, {
+        Modal.createTrackedDialog('Call being placed', '', ErrorDialog, {
             title: _t('Call in Progress'),
             description: _t('A call is currently being placed!'),
         });
