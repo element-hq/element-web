@@ -1209,5 +1209,6 @@
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Vous ne pouvez voir aucun message tant que vous ne lisez et n'acceptez pas nos <consentLink>conditions générales</consentLink>.",
     "Demote yourself?": "Vous rétrograder ?",
     "Demote": "Rétrograder",
-    "Show empty room list headings": "Afficher les en-têtes de la liste des salons vides"
+    "Show empty room list headings": "Afficher les en-têtes de la liste des salons vides",
+    "This event could not be displayed": "Cet événement n'a pas pu être affiché"
 }
