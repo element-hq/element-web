@@ -146,13 +146,12 @@ function textForServerACLEvent(ev) {
         text = `${senderDisplayName} changed the server ACLs for this room: `;
     }
 
+    if (!Array.isArray(current.allow)) {
+        current.allow = [];
+    }
     /* If we know for sure everyone is banned, don't bother showing the diff view */
     if (current.allow.length === 0) {
         return text + "🎉 All servers are banned from participating! This room can no longer be used.";
-    }
-
-    if (!Array.isArray(current.allow)) {
-        current.allow = [];
     }
 
     if (!Array.isArray(current.deny)) {
