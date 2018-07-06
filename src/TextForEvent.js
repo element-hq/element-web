@@ -131,15 +131,15 @@ function textForRoomNameEvent(ev) {
 
 function textForServerACLEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const prev_content = ev.getPrevContent();
+    const prevContent = ev.getPrevContent();
     const changes = [];
+    const current = ev.getContent();
+    const prev = {
+        deny: Array.isArray(prevContent.deny) ? prevContent.deny : [],
+        allow: Array.isArray(prevContent.allow) ? prevContent.allow : [],
+        allow_ip_literals: !(prevContent.allow_ip_literals === false),
+    };
     let text = "";
-    let current = ev.getContent();
-    let prev = {
-        deny: Array.isArray(prev_content.deny) ? prev_content.deny : [],
-        allow: Array.isArray(prev_content.allow) ? prev_content.allow : [],
-        allow_ip_literals: !(prev_content.allow_ip_literals === false)
-    }
     if (prev.deny.length === 0 && prev.allow.length === 0) {
         text = `${senderDisplayName} set server ACLs for this room: `;
     } else {
@@ -147,15 +147,15 @@ function textForServerACLEvent(ev) {
     }
 
     /* If we know for sure everyone is banned, don't bother showing the diff view */
-    if (current.allow.length  === 0) {
+    if (current.allow.length === 0) {
         return text + "🎉 All servers are banned from participating! This room can no longer be used.";
     }
 
-    if (!Array.isArray(current.allow)){
+    if (!Array.isArray(current.allow)) {
         current.allow = [];
     }
 
-    if (!Array.isArray(current.deny)){
+    if (!Array.isArray(current.deny)) {
         current.deny = [];
     }
 
