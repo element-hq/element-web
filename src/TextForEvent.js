@@ -187,6 +187,7 @@ function textForServerACLEvent(ev) {
         changes.push(`Participating from a server using an IP literal hostname is now ${allowban}.`);
     }
 
+    return text + changes.join(" ");
 }
 
 function textForMessageEvent(ev) {
