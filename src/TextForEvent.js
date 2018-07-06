@@ -130,11 +130,11 @@ function textForRoomNameEvent(ev) {
 }
 
 function textForServerACLEvent(ev) {
-    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    let prev_content = ev.getPrevContent();
-    let current = ev.getContent();
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const prev_content = ev.getPrevContent();
+    const changes = [];
     let text = "";
-    let changes = [];
+    let current = ev.getContent();
     let prev = {
         deny: Array.isArray(prev_content.deny) ? prev_content.deny : [],
         allow: Array.isArray(prev_content.allow) ? prev_content.allow : [],
