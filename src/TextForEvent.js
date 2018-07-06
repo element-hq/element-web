@@ -129,6 +129,67 @@ function textForRoomNameEvent(ev) {
     });
 }
 
+function textForServerACLEvent(ev) {
+    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    let prev = ev.getPrevContent();
+    let current = ev.getContent();
+    let text = "";
+    let changes = [];
+    if (prev == undefined) {
+        text = `${senderDisplayName} set server ACLs for this room:`;
+        prev = {
+            deny: [],
+            allow: [],
+            allow_ip_literals: true
+        }
+    } else {
+        text = `${senderDisplayName} changed the server ACLs for this room:`
+        if (!Array.isArray(prev.allow)){
+            prev.allow = []
+        }
+    
+        if (!Array.isArray(prev.deny)){
+            prev.deny = []
+        }
+    }
+
+    if (!Array.isArray(current.allow)){
+        current.allow = []
+    }
+
+    if (!Array.isArray(current.deny)){
+        current.deny = []
+    }
+
+    const bannedServers = current.deny.filter((bannedSrv) => !prev.deny.includes(bannedSrv));
+    const unbannedServers = prev.deny.filter((bannedSrv) => !current.deny.includes(bannedSrv));
+    const allowedServers = current.allow.filter((bannedSrv) => !prev.allow.includes(bannedSrv));
+    const unallowedServers = prev.allow.filter((bannedSrv) => !current.allow.includes(bannedSrv));
+
+    if (bannedServers.length > 0) {
+        changes.push(`servers matching ${bannedServers.join(",")} are now banned`);
+    }
+
+    if (unbannedServers.length > 0) {
+        changes.push(`servers matching ${unbannedServers.join(",")} are no longer banned`);
+    }
+
+    if (allowedServers.length > 0) {
+        changes.push(`servers matching ${allowedServers.join(",")} are now allowed`);
+    }
+
+    if (unallowedServers.length > 0) {
+        changes.push(`servers matching ${unallowedServers.join(",")} are no longer allowed`);
+    }
+
+    if (prev.allow_ip_literals !== current.allow_ip_literals) {
+        const allowban = current.allow_ip_literals ? "allowed" : "banned";
+        changes.push(`Participating from a server using ip literals is now ${allowban}`);
+    }
+
+    return text + changes.join("\n");
+}
+
 function textForMessageEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     let message = senderDisplayName + ': ' + ev.getContent().body;
@@ -309,6 +370,7 @@ const stateHandlers = {
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
+    'm.room.server_acl': textForServerACLEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };
