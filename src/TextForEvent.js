@@ -165,19 +165,19 @@ function textForServerACLEvent(ev) {
     const unallowedServers = prev.allow.filter((srv) => typeof(srv) === 'string' && !current.allow.includes(srv));
 
     if (bannedServers.length > 0) {
-        changes.push(`Servers matching ${bannedServers.join(",")} are now banned.`);
+        changes.push(`Servers matching ${bannedServers.join(", ")} are now banned.`);
     }
 
     if (unbannedServers.length > 0) {
-        changes.push(`Servers matching ${unbannedServers.join(",")} were removed from the ban list.`);
+        changes.push(`Servers matching ${unbannedServers.join(", ")} were removed from the ban list.`);
     }
 
     if (allowedServers.length > 0) {
-        changes.push(`Servers matching ${allowedServers.join(",")} are now allowed.`);
+        changes.push(`Servers matching ${allowedServers.join(", ")} are now allowed.`);
     }
 
     if (unallowedServers.length > 0) {
-        changes.push(`Servers matching ${unallowedServers.join(",")} were removed from the allowed list.`);
+        changes.push(`Servers matching ${unallowedServers.join(", ")} were removed from the allowed list.`);
     }
 
     if (prev.allow_ip_literals !== current.allow_ip_literals) {
