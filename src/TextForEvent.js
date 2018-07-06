@@ -152,11 +152,11 @@ function textForServerACLEvent(ev) {
     }
 
     if (!Array.isArray(current.allow)){
-        current.allow = []
+        current.allow = [];
     }
 
     if (!Array.isArray(current.deny)){
-        current.deny = []
+        current.deny = [];
     }
 
     const bannedServers = current.deny.filter((srv) => typeof(srv) === 'string' && !prev.deny.includes(srv));
