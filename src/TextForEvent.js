@@ -164,8 +164,6 @@ function textForServerACLEvent(ev) {
     const allowedServers = current.allow.filter((srv) => typeof(srv) === 'string' && !prev.allow.includes(srv));
     const unallowedServers = prev.allow.filter((srv) => typeof(srv) === 'string' && !current.allow.includes(srv));
 
-    console.log(bannedServers,unbannedServers,allowedServers,unallowedServers);
-
     if (bannedServers.length > 0) {
         changes.push(`Servers matching ${bannedServers.join(",")} are now banned.`);
     }
