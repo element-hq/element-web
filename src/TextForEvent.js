@@ -131,26 +131,19 @@ function textForRoomNameEvent(ev) {
 
 function textForServerACLEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    let prev = ev.getPrevContent();
+    let prev_content = ev.getPrevContent();
     let current = ev.getContent();
     let text = "";
     let changes = [];
-    if (prev == undefined) {
-        text = `${senderDisplayName} set server ACLs for this room:`;
-        prev = {
-            deny: [],
-            allow: [],
-            allow_ip_literals: true
-        }
+    let prev = {
+        deny: Array.isArray(prev_content.deny) ? prev_content.deny : [],
+        allow: Array.isArray(prev_content.allow) ? prev_content.allow : [],
+        allow_ip_literals: !(prev_content.allow_ip_literals === false)
+    }
+    if (prev.deny.length === 0 && prev.allow.length === 0) {
+        text = `${senderDisplayName} set server ACLs for this room: `;
     } else {
-        text = `${senderDisplayName} changed the server ACLs for this room:`
-        if (!Array.isArray(prev.allow)){
-            prev.allow = []
-        }
-    
-        if (!Array.isArray(prev.deny)){
-            prev.deny = []
-        }
+        text = `${senderDisplayName} changed the server ACLs for this room: `;
     }
 
     if (!Array.isArray(current.allow)){
@@ -161,30 +154,36 @@ function textForServerACLEvent(ev) {
         current.deny = []
     }
 
-    const bannedServers = current.deny.filter((bannedSrv) => !prev.deny.includes(bannedSrv));
-    const unbannedServers = prev.deny.filter((bannedSrv) => !current.deny.includes(bannedSrv));
-    const allowedServers = current.allow.filter((bannedSrv) => !prev.allow.includes(bannedSrv));
-    const unallowedServers = prev.allow.filter((bannedSrv) => !current.allow.includes(bannedSrv));
+    const bannedServers = current.deny.filter((srv) => typeof(srv) === 'string' && !prev.deny.includes(srv));
+    const unbannedServers = prev.deny.filter((srv) => typeof(srv) === 'string' && !current.deny.includes(srv));
+    const allowedServers = current.allow.filter((srv) => typeof(srv) === 'string' && !prev.allow.includes(srv));
+    const unallowedServers = prev.allow.filter((srv) => typeof(srv) === 'string' && !current.allow.includes(srv));
+
+    console.log(bannedServers,unbannedServers,allowedServers,unallowedServers);
 
     if (bannedServers.length > 0) {
-        changes.push(`Servers matching ${bannedServers.join(",")} are now banned`);
+        changes.push(`Servers matching ${bannedServers.join(",")} are now banned.`);
     }
 
     if (unbannedServers.length > 0) {
-        changes.push(`Servers matching ${unbannedServers.join(",")} are no longer banned`);
+        changes.push(`Servers matching ${unbannedServers.join(",")} were removed from the ban list.`);
     }
 
     if (allowedServers.length > 0) {
-        changes.push(`Servers matching ${allowedServers.join(",")} are now allowed`);
+        changes.push(`Servers matching ${allowedServers.join(",")} are now allowed.`);
     }
 
     if (unallowedServers.length > 0) {
-        changes.push(`Servers matching ${unallowedServers.join(",")} are no longer allowed`);
+        changes.push(`Servers matching ${unallowedServers.join(",")} were removed from the allowed list.`);
     }
 
     if (prev.allow_ip_literals !== current.allow_ip_literals) {
         const allowban = current.allow_ip_literals ? "allowed" : "banned";
-        changes.push(`Participating from a server using ip literals is now ${allowban}`);
+        changes.push(`Participating from a server using an IP literal hostname is now ${allowban}.`);
+    }
+
+    if (current.allow.length  === 0) {
+        changes = ["Everyone is banned! 🎉"];
     }
 
     return text + changes.join("\n");
