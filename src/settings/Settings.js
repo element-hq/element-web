@@ -284,4 +284,9 @@ export const SETTINGS = {
         supportedLevels: ['room-device'],
         default: false,
     },
+    "RoomSubList.showEmpty": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show empty room list headings'),
+        default: true,
+    },
 };
