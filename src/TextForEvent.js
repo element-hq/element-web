@@ -146,6 +146,11 @@ function textForServerACLEvent(ev) {
         text = `${senderDisplayName} changed the server ACLs for this room: `;
     }
 
+    /* If we know for sure everyone is banned, don't bother showing the diff view */
+    if (current.allow.length  === 0) {
+        return text + "🎉 All servers are banned from participating! This room can no longer be used.";
+    }
+
     if (!Array.isArray(current.allow)){
         current.allow = []
     }
@@ -182,11 +187,6 @@ function textForServerACLEvent(ev) {
         changes.push(`Participating from a server using an IP literal hostname is now ${allowban}.`);
     }
 
-    if (current.allow.length  === 0) {
-        changes = ["Everyone is banned! 🎉"];
-    }
-
-    return text + changes.join("\n");
 }
 
 function textForMessageEvent(ev) {
