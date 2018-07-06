@@ -10,6 +10,7 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
 - get rid of jest, as a test framework won't be helpful to have a continuous flow going from one use case to another (think: do login, create a room, invite a user, ...). a test framework usually assumes the tests are semi-indepedent.
 - better error reporting (show console.log, XHR requests, partial DOM, screenshot) on error
 - cleanup helper methods
+- add more css id's/classes to riot web to make css selectors in test less brittle.
 - avoid delay when waiting for location.hash to change
 - more tests!
 - setup installing & running riot and synapse as part of the tests 
