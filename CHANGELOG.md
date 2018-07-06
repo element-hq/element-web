@@ -1,3 +1,16 @@
+Changes in [0.12.9-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.9-rc.2) (2018-07-06)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.9-rc.1...v0.12.9-rc.2)
+
+ * Implement aggregation by error type for tracked decryption failures
+   [\#2045](https://github.com/matrix-org/matrix-react-sdk/pull/2045)
+ * make new hiding of roomsublist behaviour opt-in
+   [\#2044](https://github.com/matrix-org/matrix-react-sdk/pull/2044)
+ * Implement aggregation by error type for tracked decryption failures
+   [\#2043](https://github.com/matrix-org/matrix-react-sdk/pull/2043)
+ * make new hiding of roomsublist behaviour opt-in
+   [\#2030](https://github.com/matrix-org/matrix-react-sdk/pull/2030)
+
 Changes in [0.12.9-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.9-rc.1) (2018-07-04)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.8...v0.12.9-rc.1)
