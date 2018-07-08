@@ -1206,5 +1206,8 @@
     "Call in Progress": "Deia abian",
     "A call is already in progress!": "Badago dei bat abian!",
     "You have no historical rooms": "Ez duzu gelen historialik",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte.",
+    "Show empty room list headings": "Erakutsi gela hutsen zerrenda-goiburuak",
+    "Demote yourself?": "Jaitsi zure burua mailaz?",
+    "Demote": "Jaitzi mailaz"
 }
