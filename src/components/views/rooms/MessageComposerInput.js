@@ -713,6 +713,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onSpace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey || ev.ctrlKey) {
+            return;
+        }
+
         // drop a point in history so the user can undo a word
         // XXX: this seems nasty but adding to history manually seems a no-go
         ev.preventDefault();
