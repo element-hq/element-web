@@ -113,42 +113,6 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
 }
 
 /*
-export function processHtmlForSending(html: string): string {
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = html;
-
-    if (contentDiv.children.length === 0) {
-        return contentDiv.innerHTML;
-    }
-
-    let contentHTML = "";
-    for (let i=0; i < contentDiv.children.length; i++) {
-        const element = contentDiv.children[i];
-        if (element.tagName.toLowerCase() === 'p') {
-            contentHTML += element.innerHTML;
-            // Don't add a <br /> for the last <p>
-            if (i !== contentDiv.children.length - 1) {
-                contentHTML += '<br />';
-            }
-        } else if (element.tagName.toLowerCase() === 'pre') {
-            // Replace "<br>\n" with "\n" within `<pre>` tags because the <br> is
-            // redundant. This is a workaround for a bug in draft-js-export-html:
-            //   https://github.com/sstur/draft-js-export-html/issues/62
-            contentHTML += '<pre>' +
-                element.innerHTML.replace(/<br>\n/g, '\n').trim() +
-                '</pre>';
-        } else {
-            const temp = document.createElement('div');
-            temp.appendChild(element.cloneNode(true));
-            contentHTML += temp.innerHTML;
-        }
-    }
-
-    return contentHTML;
-}
-*/
-
-/*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
  */

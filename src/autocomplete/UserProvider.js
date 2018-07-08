@@ -111,7 +111,7 @@ export default class UserProvider extends AutocompleteProvider {
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName.replace(' (IRC)', ''),
                     completionId: user.userId,
-                    suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
+                    suffix: (selection.beginning && selection.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion

@@ -29,9 +29,9 @@ import NotifProvider from './NotifProvider';
 import Promise from 'bluebird';
 
 export type SelectionRange = {
-    beginning: boolean,
-    start: number,
-    end: number
+    beginning: boolean, // whether the selection is in the first block of the editor or not
+    start: number, // byte offset relative to the start anchor of the current editor selection.
+    end: number, // byte offset relative to the end anchor of the current editor selection.
 };
 
 export type Completion = {
