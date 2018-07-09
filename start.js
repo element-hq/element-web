@@ -19,6 +19,7 @@ const helpers = require('./helpers');
 const assert = require('assert');
 const do_signup = require('./tests/signup');
 const test_title = require('./tests/loads');
+const join_room = require('./tests/join_room');
 
 global.riotserver = 'http://localhost:8080';
 global.homeserver = 'http://localhost:8008';
@@ -31,11 +32,20 @@ async function run_tests() {
   await test_title();
   process.stdout.write('done\n');
 
+
+
+  const page = await helpers.new_page();
   const username = 'bruno-' + helpers.rnd_int(10000);
   const password = 'testtest';
   process.stdout.write(`* signing up as ${username} ... `);
-  await do_signup(username, password, homeserver);
+  await do_signup(page, username, password, homeserver);
   process.stdout.write('done\n');
+
+  const room = 'test';
+  process.stdout.write(`* joining room ${room} ... `);
+  await join_room(page, room);
+  process.stdout.write('done\n');
+
   await end_session();
 }
 

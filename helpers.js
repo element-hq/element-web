@@ -82,6 +82,11 @@ async function replace_input_text(input, text) {
   await input.type(text);
 }
 
+async function wait_and_query_selector(page, selector, timeout = 500) {
+  await page.waitForSelector(selector, {visible: true, timeout});
+  return await page.$(selector);
+}
+
 // other helpers
 
 function rnd_int(max) {
@@ -104,6 +109,7 @@ module.exports = {
   get_outer_html,
   print_elements,
   replace_input_text,
+  wait_and_query_selector,
   rnd_int,
   riot_url,
   delay,

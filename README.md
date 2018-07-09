@@ -5,6 +5,7 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
 ## Current tests
  - test riot loads (check title)
  - signup with custom homeserver
+ - join preexisting room
 
 ## Roadmap
 - get rid of jest, as a test framework won't be helpful to have a continuous flow going from one use case to another (think: do login, create a room, invite a user, ...). a test framework usually assumes the tests are semi-indepedent.

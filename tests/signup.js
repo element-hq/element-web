@@ -17,8 +17,7 @@ limitations under the License.
 const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function do_signup(username, password, homeserver) {
-  const page = await helpers.new_page();
+module.exports = async function do_signup(page, username, password, homeserver) {
   const console_logs = helpers.log_console(page);
   const xhr_logs = helpers.log_xhr_requests(page);
   await page.goto(helpers.riot_url('/#/register'));
