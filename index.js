@@ -16,28 +16,53 @@ limitations under the License.
 
 const puppeteer = require('puppeteer');
 const helpers = require('./helpers');
+const assert = require('assert');
+
 global.riotserver = 'http://localhost:8080';
 global.homeserver = 'http://localhost:8008';
 global.browser = null;
 
-jest.setTimeout(10000);
+async function run_tests() {
+  await start_session();
 
-beforeAll(async () => {
+  process.stdout.write(`* testing riot loads ... `);
+  await test_title();
+  process.stdout.write('done\n');
+
+  const username = 'bruno-' + helpers.rnd_int(10000);
+  const password = 'testtest';
+  process.stdout.write(`* signing up as ${username} ... `);
+  await do_signup(username, password, homeserver);
+  process.stdout.write('done\n');
+  await end_session();
+}
+
+async function start_session() {
   global.browser = await puppeteer.launch();
-});
+}
 
-afterAll(() => {
+function end_session() {
   return browser.close();
-})
+}
 
-test('test page loads', async () => {
+function on_success() {
+  console.log('all tests finished successfully');
+}
+
+function on_failure(err) {
+  console.log('failure: ', err);
+  process.exit(-1);
+}
+
+
+async function test_title() {
   const page = await browser.newPage();
   await page.goto(helpers.riot_url('/'));
   const title = await page.title();
-  expect(title).toBe("Riot");
-});
+  assert.strictEqual(title, "Riot");
+};
 
-test('test signup', async () => {
+async function do_signup(username, password, homeserver) {
   const page = await helpers.new_page();
   const console_logs = helpers.log_console(page);
   const xhr_logs = helpers.log_xhr_requests(page);
@@ -46,12 +71,10 @@ test('test signup', async () => {
   await page.waitForSelector('#advanced', {visible: true, timeout: 500});
   await page.click('#advanced');
 
-  const username = 'bruno-' + helpers.rnd_int(10000);
-  const password = 'testtest';
   //fill out form
   await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
   const login_fields = await page.$$('.mx_Login_field');
-  expect(login_fields.length).toBe(7);
+  assert.strictEqual(login_fields.length, 7);
   const username_field = login_fields[2];
   const password_field = login_fields[3];
   const password_repeat_field = login_fields[4];
@@ -70,7 +93,7 @@ test('test signup', async () => {
   await register_button.focus();
   //check no errors
   const error_text = await helpers.try_get_innertext(page, '.mx_Login_error');
-  expect(error_text).toBeFalsy();
+  assert.strictEqual(!!error_text, false);
   //submit form
   await page.screenshot({path: "beforesubmit.png", fullPage: true});
   await register_button.click();
@@ -78,7 +101,7 @@ test('test signup', async () => {
   //confirm dialog saying you cant log back in without e-mail
   await page.waitForSelector('.mx_QuestionDialog', {visible: true, timeout: 500});
   const continue_button = await page.$('.mx_QuestionDialog button.mx_Dialog_primary');
-  await helpers.print_elements('continue_button', [continue_button]);
+  //await helpers.print_elements('continue_button', [continue_button]);
   await continue_button.click();
   //wait for registration to finish so the hash gets set
   //onhashchange better?
@@ -97,5 +120,7 @@ test('test signup', async () => {
 
   //await page.waitForSelector('.mx_MatrixChat', {visible: true, timeout: 3000});
   const url = page.url();
-  expect(url).toBe(helpers.riot_url('/#/home'));
-});
+  assert.strictEqual(url, helpers.riot_url('/#/home'));
+};
+
+run_tests().then(on_success, on_failure);
