@@ -1,3 +1,22 @@
+Changes in [0.15.7](https://github.com/vector-im/riot-web/releases/tag/v0.15.7) (2018-07-09)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7-rc.2...v0.15.7)
+
+ * No changes since rc.2
+
+Changes in [0.15.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.15.7-rc.2) (2018-07-06)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7-rc.1...v0.15.7-rc.2)
+
+ * Update react-sdk and js-sdk
+
+Changes in [0.15.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.7-rc.1) (2018-07-04)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.6...v0.15.7-rc.1)
+
+ * add override for colour of room tile text within memberinfo (unreadable)
+   [\#6889](https://github.com/vector-im/riot-web/pull/6889)
+
 Changes in [0.15.6](https://github.com/vector-im/riot-web/releases/tag/v0.15.6) (2018-06-29)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.6-rc.2...v0.15.6)
