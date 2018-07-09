@@ -220,7 +220,8 @@ export default class ContextualMenu extends React.Component {
                 { chevron }
                 <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-            { props.hasBackground && <div className="mx_ContextualMenu_background" onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
+            { props.hasBackground && <div className="mx_ContextualMenu_background"
+                                          onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
             <style>{ chevronCSS }</style>
         </div>;
     }
