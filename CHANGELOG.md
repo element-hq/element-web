@@ -1,3 +1,9 @@
+Changes in [0.12.9](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.9) (2018-07-09)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.9-rc.2...v0.12.9)
+
+ * No changes since rc.1
+
 Changes in [0.12.9-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.9-rc.2) (2018-07-06)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.9-rc.1...v0.12.9-rc.2)
