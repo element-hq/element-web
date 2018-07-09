@@ -43,7 +43,7 @@ export default class CommandProvider extends AutocompleteProvider {
 
         let matches = [];
         // check if the full match differs from the first word (i.e. returns false if the command has args)
-        if (command[0] !== command[1]) { 
+        if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
             if (CommandMap[name]) {
