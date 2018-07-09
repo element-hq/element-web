@@ -14,55 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const puppeteer = require('puppeteer');
-const helpers = require('./helpers');
+const helpers = require('../helpers');
 const assert = require('assert');
 
-global.riotserver = 'http://localhost:8080';
-global.homeserver = 'http://localhost:8008';
-global.browser = null;
-
-async function run_tests() {
-  await start_session();
-
-  process.stdout.write(`* testing riot loads ... `);
-  await test_title();
-  process.stdout.write('done\n');
-
-  const username = 'bruno-' + helpers.rnd_int(10000);
-  const password = 'testtest';
-  process.stdout.write(`* signing up as ${username} ... `);
-  await do_signup(username, password, homeserver);
-  process.stdout.write('done\n');
-  await end_session();
-}
-
-async function start_session() {
-  global.browser = await puppeteer.launch();
-}
-
-function end_session() {
-  return browser.close();
-}
-
-function on_success() {
-  console.log('all tests finished successfully');
-}
-
-function on_failure(err) {
-  console.log('failure: ', err);
-  process.exit(-1);
-}
-
-
-async function test_title() {
-  const page = await browser.newPage();
-  await page.goto(helpers.riot_url('/'));
-  const title = await page.title();
-  assert.strictEqual(title, "Riot");
-};
-
-async function do_signup(username, password, homeserver) {
+module.exports = async function do_signup(username, password, homeserver) {
   const page = await helpers.new_page();
   const console_logs = helpers.log_console(page);
   const xhr_logs = helpers.log_xhr_requests(page);
@@ -121,6 +76,4 @@ async function do_signup(username, password, homeserver) {
   //await page.waitForSelector('.mx_MatrixChat', {visible: true, timeout: 3000});
   const url = page.url();
   assert.strictEqual(url, helpers.riot_url('/#/home'));
-};
-
-run_tests().then(on_success, on_failure);
+}

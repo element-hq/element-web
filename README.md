@@ -27,4 +27,4 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
  - have a local synapse running at `localhost:8008`
 
 ### Run tests
- - run tests with `./node_modules/jest/bin/jest.js`
+ - run tests with `node start.js`
