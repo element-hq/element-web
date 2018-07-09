@@ -23,7 +23,7 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
 
 ### Setup
 
- - install dependencies with `npm install`
+ - install dependencies with `npm install` (will download copy of chrome)
  - have riot-web running on `localhost:8080`
  - have a local synapse running at `localhost:8008`
 
