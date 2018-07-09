@@ -13,7 +13,9 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
 - add more css id's/classes to riot web to make css selectors in test less brittle.
 - avoid delay when waiting for location.hash to change
 - more tests!
-- setup installing & running riot and synapse as part of the tests 
+- setup installing & running riot and synapse as part of the tests.
+   - Run 2 synapse instances to test federation use cases.
+   - start synapse with clean config/database on every test run
 - look into CI(Travis) integration
 
 ## How to run
