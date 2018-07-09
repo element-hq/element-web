@@ -22,8 +22,8 @@ module.exports = async function signup(page, username, password, homeserver) {
   const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
   //click 'Custom server' radio button
-  await page.waitForSelector('#advanced', {visible: true, timeout: 500});
-  await page.click('#advanced');
+  const advancedRadioButton = await helpers.waitAndQuerySelector(page, '#advanced');
+  await advancedRadioButton.click();
 
   //fill out form
   await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
@@ -53,9 +53,7 @@ module.exports = async function signup(page, username, password, homeserver) {
   await registerButton.click();
 
   //confirm dialog saying you cant log back in without e-mail
-  await page.waitForSelector('.mx_QuestionDialog', {visible: true, timeout: 500});
-  const continueButton = await page.$('.mx_QuestionDialog button.mx_Dialog_primary');
-  //await helpers.printElements('continueButton', [continueButton]);
+  const continueButton = await helpers.waitAndQuerySelector(page, '.mx_QuestionDialog button.mx_Dialog_primary');
   await continueButton.click();
   //wait for registration to finish so the hash gets set
   //onhashchange better?

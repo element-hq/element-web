@@ -26,8 +26,9 @@ global.homeserver = 'http://localhost:8008';
 global.browser = null;
 
 async function runTests() {
-  await startSession();
+  global.browser = await puppeteer.launch();
   const page = await helpers.newPage();
+  
   const username = 'bruno-' + helpers.randomInt(10000);
   const password = 'testtest';
   process.stdout.write(`* signing up as ${username} ... `);
@@ -39,15 +40,7 @@ async function runTests() {
   await join(page, room);
   process.stdout.write('done\n');
 
-  await endSession();
-}
-
-async function startSession() {
-  global.browser = await puppeteer.launch();
-}
-
-function endSession() {
-  return browser.close();
+  await browser.close();
 }
 
 function onSuccess() {
