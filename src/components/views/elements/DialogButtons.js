@@ -29,6 +29,9 @@ module.exports = React.createClass({
         // The primary button which is styled differently and has default focus.
         primaryButton: PropTypes.node.isRequired,
 
+        // A node to insert into the cancel button instead of default "Cancel"
+        cancelButton: PropTypes.node,
+
         // onClick handler for the primary button.
         onPrimaryButtonClick: PropTypes.func.isRequired,
 
@@ -60,9 +63,9 @@ module.exports = React.createClass({
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
         let cancelButton;
-        if (this.props.hasCancel) {
+        if (this.props.cancelButton || this.props.hasCancel) {
             cancelButton = <button onClick={this._onCancelClick} disabled={this.props.disabled}>
-                { _t("Cancel") }
+                { this.props.cancelButton || _t("Cancel") }
             </button>;
         }
         return (

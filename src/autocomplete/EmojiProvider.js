@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp, unicodeRegexp} from 'emojione';
+import {shortnameToUnicode, asciiRegexp, unicodeRegexp} from 'emojione';
 import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
-import type {SelectionRange, Completion} from './Autocompleter';
+import type {Completion, SelectionRange} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
@@ -95,7 +95,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
         if (SettingsStore.getValue("MessageComposerInput.dontSuggestEmoji")) {
             return []; // don't give any suggestions if the user doesn't want them
         }

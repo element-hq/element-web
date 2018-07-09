@@ -217,10 +217,17 @@ const sanitizeHtmlParams = {
                     m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
                     if (m) {
                         const entity = m[1];
-                        if (entity[0] === '@') {
-                            attribs.href = '#/user/' + entity;
-                        } else if (entity[0] === '#' || entity[0] === '!') {
-                            attribs.href = '#/room/' + entity;
+                        switch (entity[0]) {
+                            case '@':
+                                attribs.href = '#/user/' + entity;
+                                break;
+                            case '+':
+                                attribs.href = '#/group/' + entity;
+                                break;
+                            case '#':
+                            case '!':
+                                attribs.href = '#/room/' + entity;
+                                break;
                         }
                         delete attribs.target;
                     }

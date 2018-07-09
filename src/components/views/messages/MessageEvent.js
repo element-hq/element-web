@@ -39,8 +39,11 @@ module.exports = React.createClass({
         /* callback called when dynamic content in events are loaded */
         onWidgetLoad: PropTypes.func,
 
-        /* the shsape of the tile, used */
+        /* the shape of the tile, used */
         tileShape: PropTypes.string,
+
+        /* the maximum image height to use, if the event is an image */
+        maxImageHeight: PropTypes.number,
     },
 
     getEventTileOps: function() {
@@ -59,17 +62,24 @@ module.exports = React.createClass({
             'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
         };
+        const evTypes = {
+            'm.sticker': sdk.getComponent('messages.MStickerBody'),
+        };
 
         const content = this.props.mxEvent.getContent();
+        const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
         let BodyType = UnknownBody;
-        if (msgtype && bodyTypes[msgtype]) {
-            BodyType = bodyTypes[msgtype];
-        } else if (this.props.mxEvent.getType() === 'm.sticker') {
-            BodyType = sdk.getComponent('messages.MStickerBody');
-        } else if (content.url) {
-            // Fallback to MFileBody if there's a content URL
-            BodyType = bodyTypes['m.file'];
+        if (!this.props.mxEvent.isRedacted()) {
+            // only resolve BodyType if event is not redacted
+            if (type && evTypes[type]) {
+                BodyType = evTypes[type];
+            } else if (msgtype && bodyTypes[msgtype]) {
+                BodyType = bodyTypes[msgtype];
+            } else if (content.url) {
+                // Fallback to MFileBody if there's a content URL
+                BodyType = bodyTypes['m.file'];
+            }
         }
 
         return <BodyType
@@ -78,6 +88,7 @@ module.exports = React.createClass({
             highlightLink={this.props.highlightLink}
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
+            maxImageHeight={this.props.maxImageHeight}
             onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });

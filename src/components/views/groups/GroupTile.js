@@ -22,6 +22,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 
+function nop() {}
 
 const GroupTile = React.createClass({
     displayName: 'GroupTile',
@@ -81,7 +82,7 @@ const GroupTile = React.createClass({
         ) : null;
         // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
         // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6156
-        return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown}>
+        return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown} onClick={nop}>
             <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
                 { (droppableProvided, droppableSnapshot) => (
                     <div ref={droppableProvided.innerRef}>

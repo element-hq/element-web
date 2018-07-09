@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
-import SlashCommands from '../../../SlashCommands';
+import {processCommandInput} from '../../../SlashCommands';
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
@@ -54,8 +54,7 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
-import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, unicodeRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort, toShort} from 'emojione';
@@ -314,7 +313,7 @@ export default class MessageComposerInput extends React.Component {
         switch (payload.action) {
             case 'reply_to_event':
             case 'focus_composer':
-                editor.focus();
+                this.focusComposer();
                 break;
             case 'insert_mention':
                 {
@@ -1511,6 +1510,10 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
+    focusComposer = () => {
+        this.refs.editor.focus();
+    };
+
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
@@ -1519,9 +1522,9 @@ export default class MessageComposerInput extends React.Component {
         });
 
         return (
-            <div className="mx_MessageComposer_input_wrapper">
+            <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
+                    <ReplyPreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

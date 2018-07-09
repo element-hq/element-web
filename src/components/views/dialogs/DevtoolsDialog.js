@@ -132,17 +132,17 @@ class SendCustomEvent extends GenericEditor {
         }
 
         return <div>
-            <div className="mx_Dialog_content">
+            <div className="mx_DevTools_content">
                 { this.textInput('eventType', _t('Event Type')) }
                 { this.state.isStateEvent && this.textInput('stateKey', _t('State Key')) }
 
                 <br />
 
-                <div className="mx_UserSettings_profileLabelCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_DevTools_textarea" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
@@ -219,15 +219,15 @@ class SendAccountData extends GenericEditor {
         }
 
         return <div>
-            <div className="mx_Dialog_content">
+            <div className="mx_DevTools_content">
                 { this.textInput('eventType', _t('Event Type')) }
                 <br />
 
-                <div className="mx_UserSettings_profileLabelCell">
+                <div className="mx_DevTools_inputLabelCell">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_DevTools_textarea" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
@@ -242,6 +242,9 @@ class SendAccountData extends GenericEditor {
     }
 }
 
+const INITIAL_LOAD_TILES = 20;
+const LOAD_TILES_STEP_SIZE = 50;
+
 class FilteredList extends React.Component {
     static propTypes = {
         children: PropTypes.any,
@@ -249,31 +252,65 @@ class FilteredList extends React.Component {
         onChange: PropTypes.func,
     };
 
+    static filterChildren(children, query) {
+        if (!query) return children;
+        const lcQuery = query.toLowerCase();
+        return children.filter((child) => child.key.toLowerCase().includes(lcQuery));
+    }
+
     constructor(props, context) {
         super(props, context);
-        this.onQuery = this.onQuery.bind(this);
+
+        this.state = {
+            filteredChildren: FilteredList.filterChildren(this.props.children, this.props.query),
+            truncateAt: INITIAL_LOAD_TILES,
+        };
     }
 
-    onQuery(ev) {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
+        this.setState({
+            filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),
+            truncateAt: INITIAL_LOAD_TILES,
+        });
+    }
+
+    showAll = () => {
+        this.setState({
+            truncateAt: this.state.truncateAt + LOAD_TILES_STEP_SIZE,
+        });
+    };
+
+    createOverflowElement = (overflowCount: number, totalCount: number) => {
+        return <button className="mx_DevTools_RoomStateExplorer_button" onClick={this.showAll}>
+            { _t("and %(count)s others...", { count: overflowCount }) }
+        </button>;
+    };
+
+    onQuery = (ev) => {
         if (this.props.onChange) this.props.onChange(ev.target.value);
-    }
+    };
 
-    filterChildren() {
-        if (this.props.query) {
-            const lowerQuery = this.props.query.toLowerCase();
-            return this.props.children.filter((child) => child.key.toLowerCase().includes(lowerQuery));
-        }
-        return this.props.children;
-    }
+    getChildren = (start: number, end: number) => {
+        return this.state.filteredChildren.slice(start, end);
+    };
+
+    getChildCount = (): number => {
+        return this.state.filteredChildren.length;
+    };
 
     render() {
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
             <input size="64"
                    onChange={this.onQuery}
                    value={this.props.query}
                    placeholder={_t('Filter results')}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" />
-            { this.filterChildren() }
+            <TruncatedList getChildren={this.getChildren}
+                           getChildCount={this.getChildCount}
+                           truncateAt={this.state.truncateAt}
+                           createOverflowElement={this.createOverflowElement} />
         </div>;
     }
 }
@@ -485,7 +522,7 @@ class AccountDataExplorer extends DevtoolsComponent {
             }
 
             return <div className="mx_ViewSource">
-                <div className="mx_Dialog_content">
+                <div className="mx_DevTools_content">
                     <SyntaxHighlight className="json">
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>

@@ -36,6 +36,7 @@ import * as ContextualMenu from '../../structures/ContextualMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";
+import {host as matrixtoHost} from '../../../matrix-to';
 
 linkifyMatrix(linkify);
 
@@ -304,7 +305,7 @@ module.exports = React.createClass({
             // never preview matrix.to links (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
-            if (host == 'matrix.to') return false;
+            if (host === matrixtoHost) return false;
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
@@ -336,10 +337,21 @@ module.exports = React.createClass({
                     left: x,
                     top: y,
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
-                });
-                e.target.onmouseout = close;
+                }, false);
+                e.target.onmouseleave = close;
             };
-            p.appendChild(button);
+
+            // Wrap a div around <pre> so that the copy button can be correctly positioned
+            // when the <pre> overflows and is scrolled horizontally.
+            const div = document.createElement("div");
+            div.className = "mx_EventTile_pre_container";
+
+            // Insert containing div in place of <pre> block
+            p.parentNode.replaceChild(div, p);
+
+            // Append <pre> block and copy button to container
+            div.appendChild(p);
+            div.appendChild(button);
         });
     },
 
@@ -422,8 +434,7 @@ module.exports = React.createClass({
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
-        const stripReply = SettingsStore.isFeatureEnabled("feature_rich_quoting") &&
-            ReplyThread.getParentEventId(mxEvent);
+        const stripReply = ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
             // Part of Replies fallback support

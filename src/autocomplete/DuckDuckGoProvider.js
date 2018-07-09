@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import 'whatwg-fetch';
 
 import {TextualCompletion} from './Components';
-import type {SelectionRange} from './Autocompleter';
+import type {SelectionRange} from "./Autocompleter";
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
@@ -37,7 +37,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: SelectionRange) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];

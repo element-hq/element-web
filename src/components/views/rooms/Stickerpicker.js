@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import Widgets from '../../../utils/widgets';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -24,8 +23,13 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import WidgetUtils from '../../../utils/WidgetUtils';
 
 const widgetType = 'm.stickerpicker';
+
+// We sit in a context menu, so the persisted element container needs to float
+// above it, so it needs a greater z-index than the ContextMenu
+const STICKERPICKER_Z_INDEX = 5000;
 
 export default class Stickerpicker extends React.Component {
     constructor(props) {
@@ -67,7 +71,7 @@ export default class Stickerpicker extends React.Component {
         }
 
         this.setState({showStickers: false});
-        Widgets.removeStickerpickerWidgets().then(() => {
+        WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
             console.error('Failed to remove sticker picker widget', e);
@@ -119,7 +123,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _updateWidget() {
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
@@ -211,7 +215,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement>
+                    <PersistedElement containerId="mx_persisted_stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
                             collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}

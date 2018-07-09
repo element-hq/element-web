@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,14 +57,14 @@ export default class AutocompleteProvider {
 
         let match;
         while ((match = commandRegex.exec(query)) != null) {
-            let matchStart = match.index,
-                matchEnd = matchStart + match[0].length;
-            if (selection.start <= matchEnd && selection.end >= matchStart) {
+            const start = match.index;
+            const end = start + match[0].length;
+            if (selection.start <= end && selection.end >= start) {
                 return {
                     command: match,
                     range: {
-                        start: matchStart,
-                        end: matchEnd,
+                        start,
+                        end,
                     },
                 };
             }

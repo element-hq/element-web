@@ -17,7 +17,6 @@ limitations under the License.
 .mx_TagPanel {
     flex: 0 0 60px;
     background-color: $tertiary-accent-color;
-    cursor: pointer;
 
     display: flex;
     flex-direction: column;
@@ -25,7 +24,11 @@ limitations under the License.
     justify-content: space-between;
 }
 
-.mx_TagPanel .mx_TagPanel_clearButton {
+.mx_TagPanel_items_selected {
+    cursor: pointer;
+}
+
+.mx_TagPanel .mx_TagPanel_clearButton_container {
     /* Constant height within flex mx_TagPanel */
     height: 70px;
     width: 60px;

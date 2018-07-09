@@ -391,6 +391,7 @@ limitations under the License.
 .mx_EventTile_content .markdown-body pre {
     overflow-x: overlay;
     overflow-y: visible;
+    max-height: 30vh;
 }
 
 .mx_EventTile_content .markdown-body code {
@@ -399,6 +400,12 @@ limitations under the License.
     color: #333;
 }
 
+.mx_EventTile_pre_container {
+    // For correct positioning of _copyButton (See TextualBody)
+    position: relative;
+}
+
+// Inserted adjacent to <pre> blocks, (See TextualBody)
 .mx_EventTile_copyButton {
     position: absolute;
     display: inline-block;
@@ -412,7 +419,6 @@ limitations under the License.
 }
 
 .mx_EventTile_body pre {
-    position: relative;
     border: 1px solid transparent;
 }
 
@@ -421,7 +427,7 @@ limitations under the License.
     border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
-.mx_EventTile_body pre:hover .mx_EventTile_copyButton
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton
 {
     visibility: visible;
 }

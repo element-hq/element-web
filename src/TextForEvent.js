@@ -129,6 +129,64 @@ function textForRoomNameEvent(ev) {
     });
 }
 
+function textForServerACLEvent(ev) {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const prevContent = ev.getPrevContent();
+    const changes = [];
+    const current = ev.getContent();
+    const prev = {
+        deny: Array.isArray(prevContent.deny) ? prevContent.deny : [],
+        allow: Array.isArray(prevContent.allow) ? prevContent.allow : [],
+        allow_ip_literals: !(prevContent.allow_ip_literals === false),
+    };
+    let text = "";
+    if (prev.deny.length === 0 && prev.allow.length === 0) {
+        text = `${senderDisplayName} set server ACLs for this room: `;
+    } else {
+        text = `${senderDisplayName} changed the server ACLs for this room: `;
+    }
+
+    if (!Array.isArray(current.allow)) {
+        current.allow = [];
+    }
+    /* If we know for sure everyone is banned, don't bother showing the diff view */
+    if (current.allow.length === 0) {
+        return text + "🎉 All servers are banned from participating! This room can no longer be used.";
+    }
+
+    if (!Array.isArray(current.deny)) {
+        current.deny = [];
+    }
+
+    const bannedServers = current.deny.filter((srv) => typeof(srv) === 'string' && !prev.deny.includes(srv));
+    const unbannedServers = prev.deny.filter((srv) => typeof(srv) === 'string' && !current.deny.includes(srv));
+    const allowedServers = current.allow.filter((srv) => typeof(srv) === 'string' && !prev.allow.includes(srv));
+    const unallowedServers = prev.allow.filter((srv) => typeof(srv) === 'string' && !current.allow.includes(srv));
+
+    if (bannedServers.length > 0) {
+        changes.push(`Servers matching ${bannedServers.join(", ")} are now banned.`);
+    }
+
+    if (unbannedServers.length > 0) {
+        changes.push(`Servers matching ${unbannedServers.join(", ")} were removed from the ban list.`);
+    }
+
+    if (allowedServers.length > 0) {
+        changes.push(`Servers matching ${allowedServers.join(", ")} are now allowed.`);
+    }
+
+    if (unallowedServers.length > 0) {
+        changes.push(`Servers matching ${unallowedServers.join(", ")} were removed from the allowed list.`);
+    }
+
+    if (prev.allow_ip_literals !== current.allow_ip_literals) {
+        const allowban = current.allow_ip_literals ? "allowed" : "banned";
+        changes.push(`Participating from a server using an IP literal hostname is now ${allowban}.`);
+    }
+
+    return text + changes.join(" ");
+}
+
 function textForMessageEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     let message = senderDisplayName + ': ' + ev.getContent().body;
@@ -309,6 +367,7 @@ const stateHandlers = {
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
+    'm.room.server_acl': textForServerACLEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.12.5",
+  "version": "0.12.8",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -70,13 +70,14 @@
     "glob": "^5.0.14",
     "highlight.js": "^9.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "linkifyjs": "^2.1.3",
+    "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
-    "matrix-js-sdk": "0.10.2",
+    "matrix-js-sdk": "0.10.5",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
+    "qrcode-react": "^0.1.16",
     "querystring": "^0.2.0",
     "react": "^15.6.0",
     "react-addons-css-transition-group": "15.3.2",
@@ -135,7 +136,7 @@
     "react-addons-test-utils": "^15.4.0",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
-    "sinon": "^1.17.3",
+    "sinon": "^5.0.7",
     "source-map-loader": "^0.2.3",
     "walk": "^2.3.9",
     "webpack": "^1.12.14"
