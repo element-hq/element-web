@@ -17,53 +17,46 @@ limitations under the License.
 const puppeteer = require('puppeteer');
 const helpers = require('./helpers');
 const assert = require('assert');
-const do_signup = require('./tests/signup');
-const test_title = require('./tests/loads');
-const join_room = require('./tests/join_room');
+
+const signup = require('./tests/signup');
+const join = require('./tests/join');
 
 global.riotserver = 'http://localhost:8080';
 global.homeserver = 'http://localhost:8008';
 global.browser = null;
 
-async function run_tests() {
-  await start_session();
-
-  process.stdout.write(`* testing riot loads ... `);
-  await test_title();
-  process.stdout.write('done\n');
-
-
-
-  const page = await helpers.new_page();
-  const username = 'bruno-' + helpers.rnd_int(10000);
+async function runTests() {
+  await startSession();
+  const page = await helpers.newPage();
+  const username = 'bruno-' + helpers.randomInt(10000);
   const password = 'testtest';
   process.stdout.write(`* signing up as ${username} ... `);
-  await do_signup(page, username, password, homeserver);
+  await signup(page, username, password, homeserver);
   process.stdout.write('done\n');
 
   const room = 'test';
   process.stdout.write(`* joining room ${room} ... `);
-  await join_room(page, room);
+  await join(page, room);
   process.stdout.write('done\n');
 
-  await end_session();
+  await endSession();
 }
 
-async function start_session() {
+async function startSession() {
   global.browser = await puppeteer.launch();
 }
 
-function end_session() {
+function endSession() {
   return browser.close();
 }
 
-function on_success() {
+function onSuccess() {
   console.log('all tests finished successfully');
 }
 
-function on_failure(err) {
+function onFailure(err) {
   console.log('failure: ', err);
   process.exit(-1);
 }
 
-run_tests().then(on_success, on_failure);
+runTests().then(onSuccess, onFailure);

@@ -16,7 +16,7 @@ limitations under the License.
 
 // puppeteer helpers
 
-async function try_get_innertext(page, selector) {
+async function tryGetInnertext(page, selector) {
   const field = await page.$(selector);
   if (field != null) {
     const text_handle = await field.getProperty('innerText');
@@ -25,7 +25,7 @@ async function try_get_innertext(page, selector) {
   return null;
 }
 
-async function new_page() {
+async function newPage() {
   const page = await browser.newPage();
   await page.setViewport({
     width: 1280,
@@ -34,7 +34,7 @@ async function new_page() {
   return page;
 }
 
-function log_console(page) {
+function logConsole(page) {
   let buffer = "";
   page.on('console', msg => {
     buffer += msg.text() + '\n';
@@ -46,7 +46,7 @@ function log_console(page) {
   }
 }
 
-function log_xhr_requests(page) {
+function logXHRRequests(page) {
   let buffer = "";
   page.on('request', req => {
     const type = req.resourceType();
@@ -64,16 +64,16 @@ function log_xhr_requests(page) {
   }
 }
 
-async function get_outer_html(element_handle) {
+async function getOuterHTML(element_handle) {
   const html_handle = await element_handle.getProperty('outerHTML');
   return await html_handle.jsonValue();
 }
 
-async function print_elements(label, elements) {
-  console.log(label, await Promise.all(elements.map(get_outer_html)));
+async function printElements(label, elements) {
+  console.log(label, await Promise.all(elements.map(getOuterHTML)));
 }
 
-async function replace_input_text(input, text) {
+async function replaceInputText(input, text) {
   // click 3 times to select all text
   await input.click({clickCount: 3});
   // then remove it with backspace
@@ -82,18 +82,18 @@ async function replace_input_text(input, text) {
   await input.type(text);
 }
 
-async function wait_and_query_selector(page, selector, timeout = 500) {
+async function waitAndQuerySelector(page, selector, timeout = 500) {
   await page.waitForSelector(selector, {visible: true, timeout});
   return await page.$(selector);
 }
 
 // other helpers
 
-function rnd_int(max) {
+function randomInt(max) {
   return Math.ceil(Math.random()*max);
 }
 
-function riot_url(path) {
+function riotUrl(path) {
   return riotserver + path;
 }
 
@@ -102,15 +102,15 @@ function delay(ms) {
 }
 
 module.exports = {
-  try_get_innertext,
-  new_page,
-  log_console,
-  log_xhr_requests,
-  get_outer_html,
-  print_elements,
-  replace_input_text,
-  wait_and_query_selector,
-  rnd_int,
-  riot_url,
+  tryGetInnertext,
+  newPage,
+  logConsole,
+  logXHRRequests,
+  getOuterHTML,
+  printElements,
+  replaceInputText,
+  waitAndQuerySelector,
+  randomInt,
+  riotUrl,
   delay,
 }

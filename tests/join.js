@@ -17,19 +17,19 @@ limitations under the License.
 const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function join_room(page, room_name) {
+module.exports = async function join(page, roomName) {
   //TODO: brittle selector
-  const directory_button = await helpers.wait_and_query_selector(page, '.mx_RoleButton[aria-label="Room directory"]');
-  await directory_button.click();
+  const directoryButton = await helpers.waitAndQuerySelector(page, '.mx_RoleButton[aria-label="Room directory"]');
+  await directoryButton.click();
 
-  const room_input = await helpers.wait_and_query_selector(page, '.mx_DirectorySearchBox_input');
-  await helpers.replace_input_text(room_input, room_name);
+  const roomInput = await helpers.waitAndQuerySelector(page, '.mx_DirectorySearchBox_input');
+  await helpers.replaceInputText(roomInput, roomName);
 
-  const first_room_label = await helpers.wait_and_query_selector(page, '.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child');
-  await first_room_label.click();
+  const firstRoomLabel = await helpers.waitAndQuerySelector(page, '.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child');
+  await firstRoomLabel.click();
 
-  const join_link = await helpers.wait_and_query_selector(page, '.mx_RoomPreviewBar_join_text a');
-  await join_link.click();
+  const joinLink = await helpers.waitAndQuerySelector(page, '.mx_RoomPreviewBar_join_text a');
+  await joinLink.click();
 
   await page.waitForSelector('.mx_MessageComposer');
 }
