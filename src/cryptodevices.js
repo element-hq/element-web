@@ -44,7 +44,7 @@ export function markAllDevicesKnown(matrixClient, devices) {
  * module:crypto~DeviceInfo|DeviceInfo}.
  */
 export function getUnknownDevicesForRoom(matrixClient, room) {
-    const roomMembers = room.getJoinedMembers().map((m) => {
+    const roomMembers = room.getEncryptionTargetMembers().map((m) => {
         return m.userId;
     });
     return matrixClient.downloadKeys(roomMembers, false).then((devices) => {
