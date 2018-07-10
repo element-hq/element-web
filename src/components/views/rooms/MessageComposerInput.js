@@ -1140,41 +1140,18 @@ export default class MessageComposerInput extends React.Component {
 
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
+            const selection = this.state.editorState.selection;
 
-            // determine whether our cursor is at the top or bottom of the multiline
-            // input box by just looking at the position of the plain old DOM selection.
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const cursorRect = range.getBoundingClientRect();
+            // selection must be collapsed
+            if (!selection.isCollapsed) return;
+            const document = this.state.editorState.document;
 
-            const editorNode = ReactDOM.findDOMNode(this.refs.editor);
-            const editorRect = editorNode.getBoundingClientRect();
-
-            // heuristic to handle tall emoji, pills, etc pushing the cursor away from the top
-            // or bottom of the page.
-            // XXX: is this going to break on large inline images or top-to-bottom scripts?
-            const EDGE_THRESHOLD = 15;
-
-            let navigateHistory = false;
+            // and we must be at the edge of the document (up=start, down=end)
             if (up) {
-                const scrollCorrection = editorNode.scrollTop;
-                const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
-                console.log(`Cursor distance from editor top is ${distanceFromTop}`);
-                if (distanceFromTop < EDGE_THRESHOLD) {
-                    navigateHistory = true;
-                }
+                if (!selection.isAtStartOf(document)) return;
+            } else {
+                if (!selection.isAtEndOf(document)) return;
             }
-            else {
-                const scrollCorrection =
-                    editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
-                const distanceFromBottom = editorRect.bottom - cursorRect.bottom + scrollCorrection;
-                console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
-                if (distanceFromBottom < EDGE_THRESHOLD) {
-                    navigateHistory = true;
-                }
-            }
-
-            if (!navigateHistory) return;
 
             const selected = this.selectHistory(up);
             if (selected) {
