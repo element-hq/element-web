@@ -183,7 +183,7 @@ export default class MessageComposerInput extends React.Component {
         this.md = new Md({
             rules: [
                 {
-                    // if serialize returns undefined it falls through to the default hardcoded 
+                    // if serialize returns undefined it falls through to the default hardcoded
                     // serialization rules
                     serialize: (obj, children) => {
                         if (obj.object !== 'inline') return;
@@ -304,7 +304,7 @@ export default class MessageComposerInput extends React.Component {
      * - contentState was passed in
      */
     createEditorState(richText: boolean, // eslint-disable-line no-unused-vars
-                      editorState: ?Value): Value { 
+                      editorState: ?Value): Value {
         if (editorState instanceof Value) {
             return editorState;
         }
@@ -359,7 +359,7 @@ export default class MessageComposerInput extends React.Component {
                 // If so, what should be the format, and how do we differentiate it from replies?
 
                 const quote = Block.create('block-quote');
-                if (this.state.isRichTextEnabled) {    
+                if (this.state.isRichTextEnabled) {
                     let change = editorState.change();
                     if (editorState.anchorText.text === '' && editorState.anchorBlock.nodes.size === 1) {
                         // replace the current block rather than split the block
