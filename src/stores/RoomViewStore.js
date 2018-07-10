@@ -133,6 +133,7 @@ class RoomViewStore extends Store {
 
     _viewRoom(payload) {
         if (payload.room_id) {
+            MatrixClientPeg.get().loadRoomMembersIfNeeded(payload.room_id);
             const newState = {
                 roomId: payload.room_id,
                 roomAlias: payload.room_alias,
