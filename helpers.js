@@ -87,6 +87,23 @@ async function waitAndQuerySelector(page, selector, timeout = 500) {
   return await page.$(selector);
 }
 
+function waitForNewPage(timeout = 500) {
+  return new Promise((resolve, reject) => {
+    const timeoutHandle = setTimeout(() => {
+      browser.removeEventListener('targetcreated', callback);
+      reject(new Error(`timeout of ${timeout}ms for waitForNewPage elapsed`));
+    }, timeout);
+
+    const callback = async (target) => {
+      clearTimeout(timeoutHandle);
+      const page = await target.page();
+      resolve(page);
+    };
+
+    browser.once('targetcreated', callback);
+  });
+} 
+
 // other helpers
 
 function randomInt(max) {
@@ -110,6 +127,7 @@ module.exports = {
   printElements,
   replaceInputText,
   waitAndQuerySelector,
+  waitForNewPage,
   randomInt,
   riotUrl,
   delay,

@@ -37,7 +37,7 @@ async function runTests() {
 
   const room = 'test';
   process.stdout.write(`* joining room ${room} ... `);
-  await join(page, room);
+  await join(page, room, true);
   process.stdout.write('done\n');
 
   await browser.close();
