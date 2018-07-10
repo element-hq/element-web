@@ -952,7 +952,7 @@
     "Your identity server's URL": "您的驗證伺服器 URL",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "This room is not public. You will not be able to rejoin without an invite.": "這個聊天室並未公開。您在沒有邀請的情況下將無法重新加入。",
-    "Community IDs cannot not be empty.": "社群 ID 不能為空。",
+    "Community IDs cannot be empty.": "社群 ID 不能為空。",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>顯示裝置</showDevicesText>、<sendAnywayText>無論如何都要傳送</sendAnywayText>或<cancelText>取消</cancelText>。",
     "<a>In reply to</a> <pill>": "<a>回覆給</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s 變更了他的顯示名稱為 %(displayName)s 。",

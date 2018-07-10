@@ -1025,7 +1025,7 @@
     "You have entered an invalid address.": "Podałeś nieprawidłowy adres.",
     "Try using one of the following valid address types: %(validTypesList)s.": "Spróbuj użyć jednego z następujących poprawnych typów adresów: %(validTypesList)s.",
     "Riot bugs are tracked on GitHub: <a>create a GitHub issue</a>.": "Błędy Riot śledzone są na GitHubie: <a>utwórz nowe zgłoszenie</a>.",
-    "Community IDs cannot not be empty.": "ID społeczności nie może być puste.",
+    "Community IDs cannot be empty.": "ID społeczności nie może być puste.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "ID społeczności może zawierać tylko znaki a-z, 0-9 lub '=_-./'",
     "Something went wrong whilst creating your community": "Coś poszło nie tak podczas tworzenia Twojej społeczności",
     "Create Community": "Utwórz społeczność",

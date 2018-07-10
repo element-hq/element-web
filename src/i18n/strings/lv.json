@@ -862,7 +862,7 @@
     "email address": "e-pasta adrese",
     "Try using one of the following valid address types: %(validTypesList)s.": "Mēģiniet izmantot vienu no sekojošiem pieļautajiem adrešu tipiem: %(validTypesList)s.",
     "You have entered an invalid address.": "Ievadīta nederīga adrese.",
-    "Community IDs cannot not be empty.": "Kopienu IDs nevar būt tukši.",
+    "Community IDs cannot be empty.": "Kopienu IDs nevar būt tukši.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Kopienas ID var saturēt tikai simbolus a-z, 0-9, or '=_-./'",
     "Something went wrong whilst creating your community": "Radot Tavu kopienu kaut kas nogāja greizi",
     "Create Community": "Radīt kopienu",

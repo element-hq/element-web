@@ -498,7 +498,7 @@
     "Failed to remove room from community": "Неуспешно премахване на стаята от общността",
     "Only visible to community members": "Видимо само за членове на общността",
     "Filter community rooms": "Филтрирай стаи на общността",
-    "Community IDs cannot not be empty.": "Идентификаторите на общността не могат да бъдат празни.",
+    "Community IDs cannot be empty.": "Идентификаторите на общността не могат да бъдат празни.",
     "Create Community": "Създай общност",
     "Community Name": "Име на общност",
     "Community ID": "Идентификатор на общност",

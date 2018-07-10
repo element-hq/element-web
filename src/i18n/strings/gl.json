@@ -633,7 +633,7 @@
     "Confirm Removal": "Confirme a retirada",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Está certa de que quere quitar (eliminar) este evento? Saiba que si elimina un nome de sala ou cambia o asunto, podería desfacer o cambio.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Os ID de comunidade só poden conter caracteres a-z, 0-9, or '=_-./'",
-    "Community IDs cannot not be empty.": "O ID de comunidade non pode quedar baldeiro.",
+    "Community IDs cannot be empty.": "O ID de comunidade non pode quedar baldeiro.",
     "Something went wrong whilst creating your community": "Algo fallou mentres se creaba a súa comunidade",
     "Create Community": "Crear comunidade",
     "Community Name": "Nome da comunidade",

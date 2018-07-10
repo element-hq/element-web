@@ -800,7 +800,7 @@
     "Start Chatting": "Start Chatting",
     "Confirm Removal": "Confirm Removal",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.",
-    "Community IDs cannot not be empty.": "Community IDs cannot not be empty.",
+    "Community IDs cannot be empty.": "Community IDs cannot be empty.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Community IDs may only contain characters a-z, 0-9, or '=_-./'",
     "Something went wrong whilst creating your community": "Something went wrong whilst creating your community",
     "Create Community": "Create Community",

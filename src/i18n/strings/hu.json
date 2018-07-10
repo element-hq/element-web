@@ -953,7 +953,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s. %(monthName)s %(day)s, %(weekDayName)s",
     "This room is not public. You will not be able to rejoin without an invite.": "Ez a szoba nem nyilvános. Kilépés után csak újabb meghívóval tudsz újra belépni a szobába.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Eszközök listája</showDevicesText>, <sendAnywayText>mindenképpen küld</sendAnywayText> vagy <cancelText>szakítsd meg</cancelText>.",
-    "Community IDs cannot not be empty.": "A közösségi azonosító nem lehet üres.",
+    "Community IDs cannot be empty.": "A közösségi azonosító nem lehet üres.",
     "<a>In reply to</a> <pill>": "<a>Válaszolva neki</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s megváltoztatta a nevét erre: %(displayName)s.",
     "Failed to set direct chat tag": "Nem sikerült a közvetlen beszélgetés jelzést beállítani",

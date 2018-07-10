@@ -873,7 +873,7 @@
     "email address": "endereço de e-mail",
     "Try using one of the following valid address types: %(validTypesList)s.": "Tente usar um dos seguintes tipos de endereço válidos: %(validTypesList)s.",
     "You have entered an invalid address.": "Você entrou com um endereço inválido.",
-    "Community IDs cannot not be empty.": "IDs de comunidades não podem estar em branco.",
+    "Community IDs cannot be empty.": "IDs de comunidades não podem estar em branco.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "IDs de comunidade podem apenas ter os seguintes caracteres: a-z, 0-9, ou '=_-./'",
     "Something went wrong whilst creating your community": "Algo deu errado ao criar sua comunidade",
     "Create Community": "Criar comunidade",
