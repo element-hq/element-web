@@ -988,7 +988,7 @@ export default class MessageComposerInput extends React.Component {
             firstGrandChild.text[0] === '/')
         {
             commandText = this.plainWithIdPills.serialize(editorState);
-            cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
+            cmd = processCommandInput(this.props.room.roomId, commandText);
         }
 
         if (cmd) {
