@@ -641,7 +641,7 @@
     "Confirm Removal": "Потврди уклањање",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Да ли сте сигурни да желите уклонити (обрисати) овај догађај? Знајте да брисање назива собе или мењање теме може опозвати измену.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "ИБ-јеви заједнице могу садржати само знакове a-z, 0-9, или '=_-./'",
-    "Community IDs cannot not be empty.": "ИБ-јеви заједнице не могу бити празни.",
+    "Community IDs cannot be empty.": "ИБ-јеви заједнице не могу бити празни.",
     "Something went wrong whilst creating your community": "Нешто је пошло наопако приликом стварања ваше заједнице",
     "Create Community": "Направи заједницу",
     "Community Name": "Назив заједнице",

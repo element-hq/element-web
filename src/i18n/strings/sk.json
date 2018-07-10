@@ -957,7 +957,7 @@
     "Failed to remove tag %(tagName)s from room": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
     "Failed to add tag %(tagName)s to room": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
     "<a>In reply to</a> <pill>": "<a>Odpoveď na</a> <pill>",
-    "Community IDs cannot not be empty.": "ID komunity nemôže ostať prázdne.",
+    "Community IDs cannot be empty.": "ID komunity nemôže ostať prázdne.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Zobraziť zariadenia</showDevicesText>, <sendAnywayText>napriek tomu odoslať</sendAnywayText> alebo <cancelText>zrušiť</cancelText>.",
     "Disable Community Filter Panel": "Zakázať panel Filter komunity",
     "Your key share request has been sent - please check your other devices for key share requests.": "Žiadosť o zdieľanie kľúčov bola odoslaná - Overte si zobrazenie žiadosti o zdieľanie kľúčov na vašich ostatných zariadeniach.",

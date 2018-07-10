@@ -877,7 +877,7 @@
     "Try using one of the following valid address types: %(validTypesList)s.": "Probeer één van de volgende geldige adrestypes: %(validTypesList)s.",
     "You have entered an invalid address.": "Je hebt een ongeldig adres ingevoerd.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Een gemeenschaps-ID mag alleen de karakters a-z, 0-9, of '=_-./' bevatten.",
-    "Community IDs cannot not be empty.": "Een gemeenschaps-ID kan niet leeg zijn.",
+    "Community IDs cannot be empty.": "Een gemeenschaps-ID kan niet leeg zijn.",
     "Something went wrong whilst creating your community": "Er is iets fout gegaan tijdens het aanmaken van je gemeenschap",
     "Create Community": "Gemeenschap Aanmaken",
     "Community Name": "Gemeenschapsnaam",

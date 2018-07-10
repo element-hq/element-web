@@ -674,7 +674,7 @@
     "Start Chatting": "Inizia a chattare",
     "Confirm Removal": "Conferma la rimozione",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Sei sicuro di volere rimuovere (eliminare) questo evento? Nota che se elimini il nome di una stanza o la modifica di un argomento, potrebbe annullare la modifica.",
-    "Community IDs cannot not be empty.": "Gli ID della comunità non possono essere vuoti.",
+    "Community IDs cannot be empty.": "Gli ID della comunità non possono essere vuoti.",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Gli ID della comunità devono contenere solo caratteri a-z, 0-9, or '=_-./'",
     "Something went wrong whilst creating your community": "Qualcosa è andato storto nella creazione della tua comunità",
     "Create Community": "Crea una comunità",

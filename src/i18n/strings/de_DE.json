@@ -947,7 +947,7 @@
     "Your identity server's URL": "Die URL deines Identitätsservers",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Du wirst nicht in der Lage sein, die Änderung zurückzusetzen, da du dich degradierst. Wenn du der letze Nutzer mit Berechtigungen bist, wird es unmöglich sein die Privilegien zurückzubekommen.",
-    "Community IDs cannot not be empty.": "Community-IDs können nicht leer sein.",
+    "Community IDs cannot be empty.": "Community-IDs können nicht leer sein.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Geräte anzeigen</showDevicesText>, <sendAnywayText>trotzdem senden</sendAnywayText> oder <cancelText>abbrechen</cancelText>.",
     "Learn more about how we use analytics.": "Lerne mehr darüber, wie wir die Analysedaten nutzen.",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Wenn diese Seite identifizierbare Informationen sowie Raum, Nutzer oder Gruppen-ID enthalten, werden diese Daten entfernt bevor sie an den Server gesendet werden.",

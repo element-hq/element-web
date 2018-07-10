@@ -952,7 +952,7 @@
     "Your identity server's URL": "L'URL de votre serveur d'identité",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
     "This room is not public. You will not be able to rejoin without an invite.": "Ce salon n'est pas public. Vous ne pourrez pas y revenir sans invitation.",
-    "Community IDs cannot not be empty.": "Les identifiants de communauté ne peuvent pas être vides.",
+    "Community IDs cannot be empty.": "Les identifiants de communauté ne peuvent pas être vides.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Afficher les appareils</showDevicesText>, <sendAnywayText>envoyer quand même</sendAnywayText> ou <cancelText>annuler</cancelText>.",
     "<a>In reply to</a> <pill>": "<a>En réponse à</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s a changé son nom affiché en %(displayName)s.",
