@@ -182,6 +182,11 @@ export default class MessageComposerInput extends React.Component {
                                 return `<u>${ children }</u>`;
                             case 'deleted':
                                 return `<del>${ children }</del>`;
+                            case 'code':
+                                // XXX: we only ever get given `code` regardless of whether it was inline or block
+                                // XXX: workaround for https://github.com/tommoor/slate-md-serializer/issues/14
+                                // strip single backslashes from children, as they would have been escaped here
+                                return `\`${ children.split('\\').map((v) => v ? v : '\\').join('') }\``;
                         }
                     },
                 },
