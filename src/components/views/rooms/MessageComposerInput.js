@@ -298,8 +298,8 @@ export default class MessageComposerInput extends React.Component {
             // the currently displayed editor state (note: this is always what is modified on input)
             editorState: this.createEditorState(
                 isRichTextEnabled,
-                savedState.editor_state,
-                savedState.rich_text,
+                savedState ? savedState.editor_state : undefined,
+                savedState ? savedState.rich_text : undefined,
             ),
 
             // the original editor state, before we started tabbing through completions
