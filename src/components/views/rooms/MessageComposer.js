@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -25,6 +25,17 @@ import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
+
+const formatButtonList = [
+    _td("bold"),
+    _td("italic"),
+    _td("deleted"),
+    _td("underlined"),
+    _td("inline-code"),
+    _td("block-quote"),
+    _td("bulleted-list"),
+    _td("numbered-list"),
+];
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -322,18 +333,17 @@ export default class MessageComposer extends React.Component {
         let formatBar;
         if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
             const {marks, blockType} = this.state.inputState;
-            const formatButtons = ["bold", "italic", "deleted", "underlined", "inline-code", "block-quote", "bulleted-list", "numbered-list"].map(
-                (name) => {
-                    const active = marks.some(mark => mark.type === name) || blockType === name;
-                    const suffix = active ? '-on' : '';
-                    const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                    const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
-                    return <img className={className}
-                                title={_t(name)}
-                                onMouseDown={onFormatButtonClicked}
-                                key={name}
-                                src={`img/button-text-${name}${suffix}.svg`}
-                                height="17" />;
+            const formatButtons = formatButtonList.map((name) => {
+                const active = marks.some(mark => mark.type === name) || blockType === name;
+                const suffix = active ? '-on' : '';
+                const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
+                const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
+                return <img className={className}
+                            title={_t(name)}
+                            onMouseDown={onFormatButtonClicked}
+                            key={name}
+                            src={`img/button-text-${name}${suffix}.svg`}
+                            height="17" />;
                 },
             );
 
