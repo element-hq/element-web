@@ -115,6 +115,15 @@ function onSendMessageFailed(err, room) {
     });
 }
 
+function rangeEquals(a: Range, b: Range): boolean {
+    return (a.anchorKey === b.anchorKey
+        && a.anchorOffset === b.anchorOffset
+        && a.focusKey === b.focusKey
+        && a.focusOffset === b.focusOffset
+        && a.isFocused === b.isFocused
+        && a.isBackward === b.isBackward);
+}
+
 /*
  * The textInput part of the MessageComposer
  */
@@ -469,8 +478,7 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onChange = (change: Change, originalEditorState: value) => {
-
+    onChange = (change: Change, originalEditorState?: Value) => {
         let editorState = change.value;
 
         if (this.direction !== '') {
@@ -488,6 +496,11 @@ export default class MessageComposerInput extends React.Component {
                 }
                 editorState = change.value;
             }
+        }
+
+        // when selection changes hide the autocomplete
+        if (!rangeEquals(this.state.editorState.selection, editorState.selection)) {
+            this.autocomplete.hide();
         }
 
         if (!editorState.document.isEmpty) {
