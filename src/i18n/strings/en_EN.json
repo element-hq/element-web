@@ -347,6 +347,7 @@
     " (unsupported)": " (unsupported)",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
     "Ongoing conference call%(supportedText)s.": "Ongoing conference call%(supportedText)s.",
+    "This event could not be displayed": "This event could not be displayed",
     "%(senderName)s sent an image": "%(senderName)s sent an image",
     "%(senderName)s sent a video": "%(senderName)s sent a video",
     "%(senderName)s uploaded a file": "%(senderName)s uploaded a file",
