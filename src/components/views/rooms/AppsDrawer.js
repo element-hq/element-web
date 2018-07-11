@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -214,24 +215,30 @@ module.exports = React.createClass({
     render: function() {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", this.props.room.room_id);
 
-        const apps = this.state.apps.map(
-            (app, index, arr) => {
-                return (<AppTile
-                    key={app.id}
-                    id={app.id}
-                    url={app.url}
-                    name={app.name}
-                    type={app.type}
-                    fullWidth={arr.length<2 ? true : false}
-                    room={this.props.room}
-                    userId={this.props.userId}
-                    show={this.props.showApps}
-                    creatorUserId={app.creatorUserId}
-                    widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
-                    waitForIframeLoad={app.waitForIframeLoad}
-                    whitelistCapabilities={enableScreenshots ? ["m.capability.screenshot"] : []}
-                />);
-            });
+        const apps = this.state.apps.map((app, index, arr) => {
+            const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
+
+            // Obviously anyone that can add a widget can claim it's a jitsi widget,
+            // so this doesn't really offer much over the set of domains we load
+            // widgets from at all, but it probably makes sense for sanity.
+            if (app.type == 'jitsi') capWhitelist.push("m.always_on_screen");
+
+            return (<AppTile
+                key={app.id}
+                id={app.id}
+                url={app.url}
+                name={app.name}
+                type={app.type}
+                fullWidth={arr.length<2 ? true : false}
+                room={this.props.room}
+                userId={this.props.userId}
+                show={this.props.showApps}
+                creatorUserId={app.creatorUserId}
+                widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                waitForIframeLoad={app.waitForIframeLoad}
+                whitelistCapabilities={capWhitelist}
+            />);
+        });
 
         let addWidget;
         if (this.props.showApps &&

@@ -444,7 +444,8 @@ function _startCallApp(roomId, type) {
         'email=$matrix_user_id',
     ].join('&');
     const widgetUrl = (
-        'https://scalar.vector.im/api/widgets' +
+        //'https://scalar.vector.im/api/widgets' +
+        'http://localhost:8620' +
         '/jitsi.html?' +
         queryString
     );

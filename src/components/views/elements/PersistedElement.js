@@ -22,8 +22,12 @@ const PropTypes = require('prop-types');
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
+function getContainer(containerId) {
+    return document.getElementById(containerId);
+}
+
 function getOrCreateContainer(containerId) {
-    let container = document.getElementById(containerId);
+    let container = getContainer(containerId);
 
     if (!container) {
         container = document.createElement("div");
@@ -58,6 +62,24 @@ export default class PersistedElement extends React.Component {
         super();
         this.collectChildContainer = this.collectChildContainer.bind(this);
         this.collectChild = this.collectChild.bind(this);
+    }
+
+    /**
+     * Removes the DOM elements created when a PersistedElement with the given
+     * persistKey was mounted. The DOM elements will be re-added if another
+     * PeristedElement is mounted in the future.
+     *
+     * @param {string} persistKey Key used to uniquely identify this PersistedElement
+     */
+    static destroyElement(persistKey) {
+        const container = getContainer('mx_persistedElement_' + persistKey);
+        if (container) {
+            container.remove();
+        }
+    }
+
+    static isMounted(persistKey) {
+        return Boolean(getContainer('mx_persistedElement_' + persistKey));
     }
 
     collectChildContainer(ref) {
