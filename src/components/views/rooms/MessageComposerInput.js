@@ -143,27 +143,6 @@ export default class MessageComposerInput extends React.Component {
 
         Analytics.setRichtextMode(isRichTextEnabled);
 
-        this.state = {
-            // whether we're in rich text or markdown mode
-            isRichTextEnabled,
-
-            // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: this.createEditorState(
-                isRichTextEnabled,
-                MessageComposerStore.getEditorState(this.props.room.roomId),
-            ),
-
-            // the original editor state, before we started tabbing through completions
-            originalEditorState: null,
-
-            // the virtual state "above" the history stack, the message currently being composed that
-            // we want to persist whilst browsing history
-            currentlyComposedEditorState: null,
-
-            // whether there were any completions
-            someCompletions: null,
-        };
-
         this.client = MatrixClientPeg.get();
 
         // track whether we should be trying to show autocomplete suggestions on the current editor
@@ -296,19 +275,47 @@ export default class MessageComposerInput extends React.Component {
                 }
             ]
         });
+
+        const savedState = MessageComposerStore.getEditorState(this.props.room.roomId);
+        this.state = {
+            // whether we're in rich text or markdown mode
+            isRichTextEnabled,
+
+            // the currently displayed editor state (note: this is always what is modified on input)
+            editorState: this.createEditorState(
+                isRichTextEnabled,
+                savedState.editor_state,
+                savedState.rich_text,
+            ),
+
+            // the original editor state, before we started tabbing through completions
+            originalEditorState: null,
+
+            // the virtual state "above" the history stack, the message currently being composed that
+            // we want to persist whilst browsing history
+            currentlyComposedEditorState: null,
+
+            // whether there were any completions
+            someCompletions: null,
+        };
     }
 
     /*
      * "Does the right thing" to create an Editor value, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
+     * - whether the contentState that was passed in was rich text
      */
-    createEditorState(richText: boolean, // eslint-disable-line no-unused-vars
-                      editorState: ?Value): Value {
+    createEditorState(wantRichText: boolean, editorState: ?Value, wasRichText: ?boolean): Value {
         if (editorState instanceof Value) {
+            if (wantRichText && !wasRichText) {
+                return this.mdToRichEditorState(editorState);
+            }
+            if (wasRichText && !wantRichText) {
+                return this.richToMdEditorState(editorState);
+            }
             return editorState;
-        }
-        else {
+        } else {
             // ...or create a new one.
             return Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
         }
@@ -569,6 +576,7 @@ export default class MessageComposerInput extends React.Component {
         dis.dispatch({
             action: 'editor_state',
             room_id: this.props.room.roomId,
+            rich_text: this.state.isRichTextEnabled,
             editor_state: editorState,
         });
 
