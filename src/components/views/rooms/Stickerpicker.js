@@ -215,7 +215,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement containerId="mx_persisted_stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
+                    <PersistedElement persistKey="stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
                             collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}
