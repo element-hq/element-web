@@ -299,11 +299,11 @@ module.exports = React.createClass({
                         throw err;
                     }
                 });
+            } else if (room) {
+                // Stop peeking because we have joined this room previously
+                MatrixClientPeg.get().stopPeeking();
+                this.setState({isPeeking: false});
             }
-        } else if (room) {
-            // Stop peeking because we have joined this room previously
-            MatrixClientPeg.get().stopPeeking();
-            this.setState({isPeeking: false});
         }
     },
 
