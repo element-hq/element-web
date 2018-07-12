@@ -749,21 +749,15 @@ module.exports = React.createClass({
     },
 
     _updateDMState() {
-        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+        const me = this.state.room.getMember(MatrixClientPeg.get().getUserId());
         if (!me || me.membership !== "join") {
             return;
         }
+        const roomId = this.state.room.roomId;
+        const dmInviter = me.getDirectChatInviter();
 
-        // The user may have accepted an invite with is_direct set
-        if (me.events.member.getPrevContent().membership === "invite" &&
-            me.events.member.getPrevContent().is_direct
-        ) {
-            // This is a DM with the sender of the invite event (which we assume
-            // preceded the join event)
-            Rooms.setDMRoom(
-                this.state.room.roomId,
-                me.events.member.getUnsigned().prev_sender,
-            );
+        if (dmInviter) {
+            Rooms.setDMRoom(roomId, dmInviter);
             return;
         }
 
@@ -777,11 +771,8 @@ module.exports = React.createClass({
 
         // The user may have sent an invite with is_direct sent
         const other = invitedMembers[0];
-        if (other &&
-            other.membership === "invite" &&
-            other.events.member.getContent().is_direct
-        ) {
-            Rooms.setDMRoom(this.state.room.roomId, other.userId);
+        if (other && !!other.getDirectChatInviter()) {
+            Rooms.setDMRoom(roomId, other.userId);
             return;
         }
     },
