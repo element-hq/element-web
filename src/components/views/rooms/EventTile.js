@@ -695,7 +695,6 @@ module.exports = withMatrixClient(React.createClass({
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
-                        { avatar }
                         { sender }
                         <div className="mx_EventTile_line">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
@@ -712,6 +711,12 @@ module.exports = withMatrixClient(React.createClass({
                             { keyRequestInfo }
                             { editButton }
                         </div>
+                        {
+                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // event tile line, so needs to be later in the DOM so it appears on top (this avoids
+                            // the need for further z-indexing chaos)
+                        }
+                        { avatar }
                     </div>
                 );
             }
