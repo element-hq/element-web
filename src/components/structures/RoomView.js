@@ -312,6 +312,9 @@ module.exports = React.createClass({
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
+
+                //viewing a previously joined room, try to lazy load members
+                MatrixClientPeg.get().loadRoomMembersIfNeeded(room.roomId);
             }
         }
     },
