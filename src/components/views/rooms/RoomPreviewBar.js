@@ -101,11 +101,7 @@ module.exports = React.createClass({
         const myMember = this.props.room ? this.props.room.currentState.members[
             MatrixClientPeg.get().credentials.userId
         ] : null;
-        const kicked = (
-            myMember &&
-            myMember.membership == 'leave' &&
-            myMember.events.member.getSender() != MatrixClientPeg.get().credentials.userId
-        );
+        const kicked = myMember.isKicked();
         const banned = myMember && myMember.membership == 'ban';
 
         if (this.props.inviterName) {
