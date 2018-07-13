@@ -1,5 +1,6 @@
 /**
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher';
+import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -40,9 +42,13 @@ const ENABLE_REACT_PERF = false;
 export default class AppTile extends React.Component {
     constructor(props) {
         super(props);
+
+        // The key used for PersistedElement
+        this._persistKey = 'widget_' + this.props.id;
+
         this.state = this._getNewState(props);
 
-        this._onWidgetAction = this._onWidgetAction.bind(this);
+        this._onAction = this._onAction.bind(this);
         this._onMessage = this._onMessage.bind(this);
         this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
@@ -50,7 +56,6 @@ export default class AppTile extends React.Component {
         this._onSnapshotClick = this._onSnapshotClick.bind(this);
         this.onClickMenuBar = this.onClickMenuBar.bind(this);
         this._onMinimiseClick = this._onMinimiseClick.bind(this);
-        this._onInitialLoad = this._onInitialLoad.bind(this);
         this._grantWidgetPermission = this._grantWidgetPermission.bind(this);
         this._revokeWidgetPermission = this._revokeWidgetPermission.bind(this);
         this._onPopoutWidgetClick = this._onPopoutWidgetClick.bind(this);
@@ -66,9 +71,12 @@ export default class AppTile extends React.Component {
     _getNewState(newProps) {
         const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
+
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
         return {
             initialising: true, // True while we are mangling the widget URL
-            loading: this.props.waitForIframeLoad, // True while the iframe content is loading
+            // True while the iframe content is loading
+            loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
             widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
@@ -77,9 +85,6 @@ export default class AppTile extends React.Component {
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
-            allowedCapabilities: (this.props.whitelistCapabilities && this.props.whitelistCapabilities.length > 0) ?
-                this.props.whitelistCapabilities : [],
-            requestedCapabilities: [],
         };
     }
 
@@ -89,7 +94,7 @@ export default class AppTile extends React.Component {
      * @return {Boolean}            True if capability supported
      */
     _hasCapability(capability) {
-        return this.state.allowedCapabilities.some((c) => {return c === capability;});
+        return ActiveWidgetStore.widgetHasCapability(this.props.id, capability);
     }
 
     /**
@@ -142,30 +147,24 @@ export default class AppTile extends React.Component {
         window.addEventListener('message', this._onMessage, false);
 
         // Widget action listeners
-        this.dispatcherRef = dis.register(this._onWidgetAction);
-    }
-
-    componentDidUpdate() {
-        // Allow parents to access widget messaging
-        if (this.props.collectWidgetMessaging) {
-            this.props.collectWidgetMessaging(this.widgetMessaging);
-        }
+        this.dispatcherRef = dis.register(this._onAction);
     }
 
     componentWillUnmount() {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
 
-        // Widget postMessage listeners
-        try {
-            if (this.widgetMessaging) {
-                this.widgetMessaging.stop();
-            }
-        } catch (e) {
-            console.error('Failed to stop listening for widgetMessaging events', e.message);
-        }
         // Jitsi listener
         window.removeEventListener('message', this._onMessage);
+
+        // if it's not remaining on screen, get rid of the PersistedElement container
+        if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
+            // FIXME: ActiveWidgetStore should probably worry about this?
+            const PersistedElement = sdk.getComponent("elements.PersistedElement");
+            PersistedElement.destroyElement(this._persistKey);
+            ActiveWidgetStore.delWidgetMessaging(this.props.id);
+            ActiveWidgetStore.delWidgetCapabilities(this.props.id);
+        }
     }
 
     /**
@@ -286,7 +285,7 @@ export default class AppTile extends React.Component {
 
     _onSnapshotClick(e) {
         console.warn("Requesting widget snapshot");
-        this.widgetMessaging.getScreenshot()
+        ActiveWidgetStore.getWidgetMessaging(this.props.id).getScreenshot()
             .catch((err) => {
                 console.error("Failed to get screenshot", err);
             })
@@ -341,19 +340,19 @@ export default class AppTile extends React.Component {
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        if (!this.widgetMessaging) {
-            this._onInitialLoad();
+        if (!ActiveWidgetStore.getWidgetMessaging(this.props.id)) {
+            this._setupWidgetMessaging();
         }
         this.setState({loading: false});
     }
 
-    /**
-     * Called on initial load of the widget iframe
-     */
-    _onInitialLoad() {
-        this.widgetMessaging = new WidgetMessaging(this.props.id, this.props.url, this.refs.appFrame.contentWindow);
-        this.widgetMessaging.getCapabilities().then((requestedCapabilities) => {
-            console.log(`Widget ${this.props.id} requested capabilities:`, requestedCapabilities);
+    _setupWidgetMessaging() {
+        // FIXME: There's probably no reason to do this here: it should probably be done entirely
+        // in ActiveWidgetStore.
+        const widgetMessaging = new WidgetMessaging(this.props.id, this.props.url, this.refs.appFrame.contentWindow);
+        ActiveWidgetStore.setWidgetMessaging(this.props.id, widgetMessaging);
+        widgetMessaging.getCapabilities().then((requestedCapabilities) => {
+            console.log(`Widget ${this.props.id} requested capabilities: ` + requestedCapabilities);
             requestedCapabilities = requestedCapabilities || [];
 
             // Allow whitelisted capabilities
@@ -365,16 +364,15 @@ export default class AppTile extends React.Component {
                 }, this.props.whitelistCapabilities);
 
                 if (requestedWhitelistCapabilies.length > 0 ) {
-                    console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties:`,
-                        requestedWhitelistCapabilies);
+                    console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties: ` +
+                        requestedWhitelistCapabilies,
+                    );
                 }
             }
 
             // TODO -- Add UI to warn about and optionally allow requested capabilities
-            this.setState({
-                requestedCapabilities,
-                allowedCapabilities: this.state.allowedCapabilities.concat(requestedWhitelistCapabilies),
-            });
+
+            ActiveWidgetStore.setWidgetCapabilities(this.props.id, requestedWhitelistCapabilies);
 
             if (this.props.onCapabilityRequest) {
                 this.props.onCapabilityRequest(requestedCapabilities);
@@ -384,7 +382,7 @@ export default class AppTile extends React.Component {
         });
     }
 
-    _onWidgetAction(payload) {
+    _onAction(payload) {
         if (payload.widgetId === this.props.id) {
             switch (payload.action) {
                 case 'm.sticker':
@@ -562,6 +560,15 @@ export default class AppTile extends React.Component {
                             ></iframe>
                         </div>
                     );
+                    // if the widget would be allowed to remian on screen, we must put it in
+                    // a PersistedElement from the get-go, otherwise the iframe will be
+                    // re-mounted later when we do.
+                    if (this.props.whitelistCapabilities.includes('m.always_on_screen')) {
+                        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+                        appTileBody = <PersistedElement persistKey={this._persistKey}>
+                            {appTileBody}
+                        </PersistedElement>;
+                    }
                 }
             } else {
                 const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
