@@ -360,7 +360,7 @@
     "Drop here to demote": "Demeti tien ĉi por malpligravigi",
     "Drop here to tag %(section)s": "Demeti tien ĉi por marki %(section)s",
     "Press <StartChatButton> to start a chat with someone": "Premu <StartChatButton> por komenci babilon kun iu",
-    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Vi ankoraŭ estas en neniuj ĉambroj! Premu <CreateRoomButton> por fari ĉambron aŭ <RoomDirectoryButton> por esplori la ĉambrujon",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Vi ankoraŭ estas en neniu ĉambro! Premu <CreateRoomButton> por krei ĉambron aŭ <RoomDirectoryButton> por esplori la ĉambrujon",
     "Community Invites": "Komunumaj invitoj",
     "Invites": "Invitoj",
     "Favourites": "Ŝatataj",
@@ -1096,5 +1096,12 @@
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Sencimigaj protokoloj enhavas informojn pri uzo de aplikaĵo, inkluzive vian salutnomon, la identigilojn aŭ nomojn de la ĉambroj aŭ grupoj kiujn vi vizitis, kaj la salutnomojn de aliaj uzantoj. Ili ne enhavas mesaĝojn.",
     "Failed to send logs: ": "Malsukcesis sendi protokolon: ",
     "Notes:": "Rimarkoj:",
-    "Preparing to send logs": "Pretiganta sendon de protokolo"
+    "Preparing to send logs": "Pretiganta sendon de protokolo",
+    "e.g. %(exampleValue)s": "ekz. %(exampleValue)s",
+    "Every page you use in the app": "Ĉiu paĝo kiun vi uzas en la aplikaĵo",
+    "e.g. <CurrentPageURL>": "ekz. <CurrentPageURL>",
+    "Your User Agent": "Via klienta aplikaĵo",
+    "Your device resolution": "La distingivo de via aparato",
+    "Call in Progress": "Voko farata",
+    "A call is already in progress!": "Voko estas jam farata!"
 }
