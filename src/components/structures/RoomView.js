@@ -754,7 +754,7 @@ module.exports = React.createClass({
             return;
         }
         const roomId = this.state.room.roomId;
-        const dmInviter = me.getDirectChatInviter();
+        const dmInviter = me.getDMInviter();
 
         if (dmInviter) {
             Rooms.setDMRoom(roomId, dmInviter);

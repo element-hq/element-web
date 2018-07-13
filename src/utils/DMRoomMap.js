@@ -98,7 +98,7 @@ export default class DMRoomMap {
             const room = this.matrixClient.getRoom(roomId);
             if (room) {
                 const me = room.getMember(this.matrixClient.getUserId());
-                return me.getDirectChatInviter();
+                return me.getDMInviter();
             }
         }
         return this.roomToUser[roomId];
