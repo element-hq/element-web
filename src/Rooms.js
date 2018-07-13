@@ -81,8 +81,7 @@ export function isConfCallRoom(room, me, conferenceHandler) {
 }
 
 export function looksLikeDirectMessageRoom(room, me) {
-    if (me.membership == "join" || me.membership === "ban" ||
-        (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
+    if (me.membership == "join" || me.membership === "ban" || me.isKicked()) {
         // Used to split rooms via tags
         const tagNames = Object.keys(room.tags);
         // Used for 1:1 direct chats

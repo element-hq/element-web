@@ -178,8 +178,7 @@ class RoomListStore extends Store {
 
             if (me.membership == "invite") {
                 lists["im.vector.fake.invite"].push(room);
-            } else if (me.membership == "join" || me.membership === "ban" ||
-                     (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
+            } else if (me.membership == "join" || me.membership === "ban" || me.isKicked()) {
                 // Used to split rooms via tags
                 let tagNames = Object.keys(room.tags);
 
