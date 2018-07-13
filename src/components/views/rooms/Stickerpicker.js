@@ -166,6 +166,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _sendVisibilityToWidget(visible) {
+        if (!this.state.stickerpickerWidget) return;
         const widgetMessaging = ActiveWidgetStore.getWidgetMessaging(this.state.stickerpickerWidget.id);
         if (widgetMessaging && visible !== this._prevSentVisibility) {
             widgetMessaging.sendVisibility(visible);
