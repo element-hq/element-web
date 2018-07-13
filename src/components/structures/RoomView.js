@@ -758,22 +758,6 @@ module.exports = React.createClass({
 
         if (dmInviter) {
             Rooms.setDMRoom(roomId, dmInviter);
-            return;
-        }
-
-        const invitedMembers = this.state.room.getMembersWithMembership("invite");
-        const joinedMembers = this.state.room.getMembersWithMembership("join");
-
-        // There must be one invited member and one joined member
-        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
-            return;
-        }
-
-        // The user may have sent an invite with is_direct sent
-        const other = invitedMembers[0];
-        if (other && !!other.getDirectChatInviter()) {
-            Rooms.setDMRoom(roomId, other.userId);
-            return;
         }
     },
 
