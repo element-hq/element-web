@@ -97,14 +97,8 @@ export default class DMRoomMap {
             // no entry? if the room is an invite, look for the is_direct hint.
             const room = this.matrixClient.getRoom(roomId);
             if (room) {
-                const me = room.getMember(this.matrixClient.credentials.userId);
-                if (me.membership == 'invite') {
-                    // The 'direct' hihnt is there, so declare that this is a DM room for
-                    // whoever invited us.
-                    if (me.events.member.getContent().is_direct) {
-                        return me.events.member.getSender();
-                    }
-                }
+                const me = room.getMember(this.matrixClient.getUserId());
+                return me.getDirectChatInviter();
             }
         }
         return this.roomToUser[roomId];
