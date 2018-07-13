@@ -166,7 +166,7 @@ export function guessDMRoomTarget(room, me) {
     for (const user of room.getJoinedMembers()) {
         if (user.userId == me.userId) continue;
 
-        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+        if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
             oldestTs = user.events.member.getTs();
         }
@@ -177,7 +177,7 @@ export function guessDMRoomTarget(room, me) {
     for (const user of room.currentState.getMembers()) {
         if (user.userId == me.userId) continue;
 
-        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+        if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
             oldestTs = user.events.member.getTs();
         }
