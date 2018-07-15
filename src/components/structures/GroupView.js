@@ -723,6 +723,11 @@ export default React.createClass({
     },
 
     _onJoinClick: async function() {
+        if (this._matrixClient.isGuest()) {
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+
         this.setState({membershipBusy: true});
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
