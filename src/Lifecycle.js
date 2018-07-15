@@ -385,6 +385,8 @@ function _persistCredentialsToLocalStorage(credentials) {
     console.log(`Session persisted for ${credentials.userId}`);
 }
 
+let _isLoggingOut = false;
+
 /**
  * Logs the current session out and transitions to the logged-out state
  */
@@ -404,6 +406,7 @@ export function logout() {
         return;
     }
 
+    _isLoggingOut = true;
     MatrixClientPeg.get().logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
@@ -417,6 +420,10 @@ export function logout() {
             onLoggedOut();
         },
     ).done();
+}
+
+export function isLoggingOut() {
+    return _isLoggingOut;
 }
 
 /**
@@ -449,6 +456,7 @@ async function startMatrixClient() {
  * storage. Used after a session has been logged out.
  */
 export function onLoggedOut() {
+    _isLoggingOut = false;
     stopMatrixClient();
     _clearStorage().done();
     dis.dispatch({action: 'on_logged_out'});
