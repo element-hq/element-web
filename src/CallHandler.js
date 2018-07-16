@@ -62,6 +62,7 @@ import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './utils/WidgetUtils';
+import ScalarAuthClient from './ScalarAuthClient';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -401,7 +402,29 @@ function _onAction(payload) {
     }
 }
 
-function _startCallApp(roomId, type) {
+async function _startCallApp(roomId, type) {
+    // check for a working intgrations manager. Technically we could put
+    // the state event in anyway, but the resulting widget would then not
+    // work for us. Better that the user knows before everyone else in the
+    // room sees it.
+    const scalarClient = new ScalarAuthClient();
+    let haveScalar = false;
+    try {
+        await scalarClient.connect();
+        haveScalar = scalarClient.hasCredentials();
+    } catch (e) {
+        // fall through
+    }
+    if (!haveScalar) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Could not connect to the integration server', '', ErrorDialog, {
+            title: _t('Could not connect to the integration server'),
+            description: _t('A conference call could not be started because the intgrations server is not available'),
+        });
+        return;
+    }
+
     dis.dispatch({
         action: 'appsDrawer',
         show: true,
