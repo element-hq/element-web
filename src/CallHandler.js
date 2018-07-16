@@ -461,6 +461,14 @@ function _startCallApp(roomId, type) {
     WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
         console.log('Jitsi widget added');
     }).catch((e) => {
+        if (e.errcode === 'M_FORBIDDEN') {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+                title: _t('Permission Required'),
+                description: _t("You do not have permission to start a conference call in this room"),
+            });
+        }
         console.error(e);
     });
 }
