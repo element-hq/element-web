@@ -309,11 +309,11 @@ module.exports = React.createClass({
                     }
                 });
             } else if (room) {
+                //viewing a previously joined room, try to lazy load members
+                
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
-
-                //viewing a previously joined room, try to lazy load members
 
                 // lazy load members if enabled
                 if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
