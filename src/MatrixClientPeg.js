@@ -107,7 +107,9 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
-        opts.filter = await this.matrixClient.createFilter(FILTER_CONTENT);
+        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+            opts.filter = await this.matrixClient.createFilter(FILTER_CONTENT);
+        }
 
         try {
             const promise = this.matrixClient.store.startup();
