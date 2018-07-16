@@ -52,9 +52,9 @@ class WidgetEchoStore extends EventEmitter {
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
             // If there's no echo, or the echo still has a widget present, show the *old* widget
-            // we don't include widgets that have changed for the same rason we don't include new ones
+            // we don't include widgets that have changed for the same reason we don't include new ones,
+            // ie. we'd need to fake matrix events to do so and therte's currently no need.
             if (!roomEchoState[widgetId] || Object.keys(roomEchoState[widgetId]).length !== 0) {
-            } else {
                 echoedWidgets.push(w);
             }
             delete roomEchoState[widgetId];
