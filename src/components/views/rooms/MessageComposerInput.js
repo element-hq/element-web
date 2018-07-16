@@ -498,8 +498,10 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        // when selection changes hide the autocomplete
-        if (!rangeEquals(this.state.editorState.selection, editorState.selection)) {
+        // when selection changes hide the autocomplete.
+        // Selection changes when we enter text so use a heuristic to compare documents without doing it recursively
+        const documentChanged = this.state.editorState.document.text !== editorState.document.text;
+        if (!documentChanged && !rangeEquals(this.state.editorState.selection, editorState.selection)) {
             this.autocomplete.hide();
         }
 
