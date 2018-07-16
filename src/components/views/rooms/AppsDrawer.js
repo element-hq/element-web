@@ -29,7 +29,6 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;

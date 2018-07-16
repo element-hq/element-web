@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
