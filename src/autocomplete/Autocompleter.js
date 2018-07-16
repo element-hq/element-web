@@ -29,8 +29,9 @@ import NotifProvider from './NotifProvider';
 import Promise from 'bluebird';
 
 export type SelectionRange = {
-    start: number,
-    end: number
+    beginning: boolean, // whether the selection is in the first block of the editor or not
+    start: number, // byte offset relative to the start anchor of the current editor selection.
+    end: number, // byte offset relative to the end anchor of the current editor selection.
 };
 
 export type Completion = {
@@ -80,12 +81,12 @@ export default class Autocompleter {
             // Array of inspections of promises that might timeout. Instead of allowing a
             // single timeout to reject the Promise.all, reflect each one and once they've all
             // settled, filter for the fulfilled ones
-            this.providers.map((provider) => {
-                return provider
+            this.providers.map(provider =>
+                provider
                     .getCompletions(query, selection, force)
                     .timeout(PROVIDER_COMPLETION_TIMEOUT)
-                    .reflect();
-            }),
+                    .reflect()
+            ),
         );
 
         return completionsList.filter(

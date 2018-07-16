@@ -166,6 +166,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _sendVisibilityToWidget(visible) {
+        if (!this.state.stickerpickerWidget) return;
         const widgetMessaging = ActiveWidgetStore.getWidgetMessaging(this.state.stickerpickerWidget.id);
         if (widgetMessaging && visible !== this._prevSentVisibility) {
             widgetMessaging.sendVisibility(visible);
@@ -207,7 +208,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement containerId="mx_persisted_stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
+                    <PersistedElement persistKey="stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
                             id={stickerpickerWidget.id}
                             url={stickerpickerWidget.content.url}
