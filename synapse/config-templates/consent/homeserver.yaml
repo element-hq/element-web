@@ -1,0 +1,697 @@
+# vim:ft=yaml
+# PEM encoded X509 certificate for TLS.
+# You can replace the self-signed certificate that synapse
+# autogenerates on launch with your own SSL certificate + key pair
+# if you like.  Any required intermediary certificates can be
+# appended after the primary certificate in hierarchical order.
+tls_certificate_path: "{{SYNAPSE_ROOT}}localhost.tls.crt"
+
+# PEM encoded private key for TLS
+tls_private_key_path: "{{SYNAPSE_ROOT}}localhost.tls.key"
+
+# PEM dh parameters for ephemeral keys
+tls_dh_params_path: "{{SYNAPSE_ROOT}}localhost.tls.dh"
+
+# Don't bind to the https port
+no_tls: True
+
+# List of allowed TLS fingerprints for this server to publish along
+# with the signing keys for this server. Other matrix servers that
+# make HTTPS requests to this server will check that the TLS
+# certificates returned by this server match one of the fingerprints.
+#
+# Synapse automatically adds the fingerprint of its own certificate
+# to the list. So if federation traffic is handled directly by synapse
+# then no modification to the list is required.
+#
+# If synapse is run behind a load balancer that handles the TLS then it
+# will be necessary to add the fingerprints of the certificates used by
+# the loadbalancers to this list if they are different to the one
+# synapse is using.
+#
+# Homeservers are permitted to cache the list of TLS fingerprints
+# returned in the key responses up to the "valid_until_ts" returned in
+# key. It may be necessary to publish the fingerprints of a new
+# certificate and wait until the "valid_until_ts" of the previous key
+# responses have passed before deploying it.
+#
+# You can calculate a fingerprint from a given TLS listener via:
+# openssl s_client -connect $host:$port < /dev/null 2> /dev/null |
+#   openssl x509 -outform DER | openssl sha256 -binary | base64 | tr -d '='
+# or by checking matrix.org/federationtester/api/report?server_name=$host
+#
+tls_fingerprints: []
+# tls_fingerprints: [{"sha256": "<base64_encoded_sha256_fingerprint>"}]
+
+
+## Server ##
+
+# The domain name of the server, with optional explicit port.
+# This is used by remote servers to connect to this server,
+# e.g. matrix.org, localhost:8080, etc.
+# This is also the last part of your UserID.
+server_name: "localhost"
+
+# When running as a daemon, the file to store the pid in
+pid_file: {{SYNAPSE_ROOT}}homeserver.pid
+
+# CPU affinity mask. Setting this restricts the CPUs on which the
+# process will be scheduled. It is represented as a bitmask, with the
+# lowest order bit corresponding to the first logical CPU and the
+# highest order bit corresponding to the last logical CPU. Not all CPUs
+# may exist on a given system but a mask may specify more CPUs than are
+# present.
+#
+# For example:
+#    0x00000001  is processor #0,
+#    0x00000003  is processors #0 and #1,
+#    0xFFFFFFFF  is all processors (#0 through #31).
+#
+# Pinning a Python process to a single CPU is desirable, because Python
+# is inherently single-threaded due to the GIL, and can suffer a
+# 30-40% slowdown due to cache blow-out and thread context switching
+# if the scheduler happens to schedule the underlying threads across
+# different cores. See
+# https://www.mirantis.com/blog/improve-performance-python-programs-restricting-single-cpu/.
+#
+# cpu_affinity: 0xFFFFFFFF
+
+# Whether to serve a web client from the HTTP/HTTPS root resource.
+web_client: True
+
+# The root directory to server for the above web client.
+# If left undefined, synapse will serve the matrix-angular-sdk web client.
+# Make sure matrix-angular-sdk is installed with pip if web_client is True
+# and web_client_location is undefined
+# web_client_location: "/path/to/web/root"
+
+# The public-facing base URL for the client API (not including _matrix/...)
+public_baseurl: http://localhost:8008/
+
+# Set the soft limit on the number of file descriptors synapse can use
+# Zero is used to indicate synapse should set the soft limit to the
+# hard limit.
+soft_file_limit: 0
+
+# The GC threshold parameters to pass to `gc.set_threshold`, if defined
+# gc_thresholds: [700, 10, 10]
+
+# Set the limit on the returned events in the timeline in the get
+# and sync operations. The default value is -1, means no upper limit.
+# filter_timeline_limit: 5000
+
+# Whether room invites to users on this server should be blocked
+# (except those sent by local server admins). The default is False.
+# block_non_admin_invites: True
+
+# Restrict federation to the following whitelist of domains.
+# N.B. we recommend also firewalling your federation listener to limit
+# inbound federation traffic as early as possible, rather than relying
+# purely on this application-layer restriction.  If not specified, the
+# default is to whitelist everything.
+#
+# federation_domain_whitelist:
+#  - lon.example.com
+#  - nyc.example.com
+#  - syd.example.com
+
+# List of ports that Synapse should listen on, their purpose and their
+# configuration.
+listeners:
+  # Main HTTPS listener
+  # For when matrix traffic is sent directly to synapse.
+  -
+    # The port to listen for HTTPS requests on.
+    port: 8448
+
+    # Local addresses to listen on.
+    # On Linux and Mac OS, `::` will listen on all IPv4 and IPv6
+    # addresses by default. For most other OSes, this will only listen
+    # on IPv6.
+    bind_addresses:
+      - '::'
+      - '0.0.0.0'
+
+    # This is a 'http' listener, allows us to specify 'resources'.
+    type: http
+
+    tls: true
+
+    # Use the X-Forwarded-For (XFF) header as the client IP and not the
+    # actual client IP.
+    x_forwarded: false
+
+    # List of HTTP resources to serve on this listener.
+    resources:
+      -
+        # List of resources to host on this listener.
+        names:
+          - client     # The client-server APIs, both v1 and v2
+          - webclient  # The bundled webclient.
+
+        # Should synapse compress HTTP responses to clients that support it?
+        # This should be disabled if running synapse behind a load balancer
+        # that can do automatic compression.
+        compress: true
+
+      - names: [federation]  # Federation APIs
+        compress: false
+
+    # optional list of additional endpoints which can be loaded via
+    # dynamic modules
+    # additional_resources:
+    #   "/_matrix/my/custom/endpoint":
+    #     module: my_module.CustomRequestHandler
+    #     config: {}
+
+  # Unsecure HTTP listener,
+  # For when matrix traffic passes through loadbalancer that unwraps TLS.
+  - port: 8008
+    tls: false
+    bind_addresses: ['::', '0.0.0.0']
+    type: http
+
+    x_forwarded: false
+
+    resources:
+      - names: [client, webclient, consent]
+        compress: true
+      - names: [federation]
+        compress: false
+
+  # Turn on the twisted ssh manhole service on localhost on the given
+  # port.
+  # - port: 9000
+  #   bind_addresses: ['::1', '127.0.0.1']
+  #   type: manhole
+
+
+# Database configuration
+database:
+  # The database engine name
+  name: "sqlite3"
+  # Arguments to pass to the engine
+  args:
+    # Path to the database
+    database: "{{SYNAPSE_ROOT}}homeserver.db"
+
+# Number of events to cache in memory.
+event_cache_size: "10K"
+
+
+
+# A yaml python logging config file
+log_config: "{{SYNAPSE_ROOT}}localhost.log.config"
+
+
+## Ratelimiting ##
+
+# Number of messages a client can send per second
+rc_messages_per_second: 0.2
+
+# Number of message a client can send before being throttled
+rc_message_burst_count: 10.0
+
+# The federation window size in milliseconds
+federation_rc_window_size: 1000
+
+# The number of federation requests from a single server in a window
+# before the server will delay processing the request.
+federation_rc_sleep_limit: 10
+
+# The duration in milliseconds to delay processing events from
+# remote servers by if they go over the sleep limit.
+federation_rc_sleep_delay: 500
+
+# The maximum number of concurrent federation requests allowed
+# from a single server
+federation_rc_reject_limit: 50
+
+# The number of federation requests to concurrently process from a
+# single server
+federation_rc_concurrent: 3
+
+
+
+# Directory where uploaded images and attachments are stored.
+media_store_path: "{{SYNAPSE_ROOT}}media_store"
+
+# Media storage providers allow media to be stored in different
+# locations.
+# media_storage_providers:
+# - module: file_system
+#   # Whether to write new local files.
+#   store_local: false
+#   # Whether to write new remote media
+#   store_remote: false
+#   # Whether to block upload requests waiting for write to this
+#   # provider to complete
+#   store_synchronous: false
+#   config:
+#     directory: /mnt/some/other/directory
+
+# Directory where in-progress uploads are stored.
+uploads_path: "{{SYNAPSE_ROOT}}uploads"
+
+# The largest allowed upload size in bytes
+max_upload_size: "10M"
+
+# Maximum number of pixels that will be thumbnailed
+max_image_pixels: "32M"
+
+# Whether to generate new thumbnails on the fly to precisely match
+# the resolution requested by the client. If true then whenever
+# a new resolution is requested by the client the server will
+# generate a new thumbnail. If false the server will pick a thumbnail
+# from a precalculated list.
+dynamic_thumbnails: false
+
+# List of thumbnail to precalculate when an image is uploaded.
+thumbnail_sizes:
+- width: 32
+  height: 32
+  method: crop
+- width: 96
+  height: 96
+  method: crop
+- width: 320
+  height: 240
+  method: scale
+- width: 640
+  height: 480
+  method: scale
+- width: 800
+  height: 600
+  method: scale
+
+# Is the preview URL API enabled?  If enabled, you *must* specify
+# an explicit url_preview_ip_range_blacklist of IPs that the spider is
+# denied from accessing.
+url_preview_enabled: False
+
+# List of IP address CIDR ranges that the URL preview spider is denied
+# from accessing.  There are no defaults: you must explicitly
+# specify a list for URL previewing to work.  You should specify any
+# internal services in your network that you do not want synapse to try
+# to connect to, otherwise anyone in any Matrix room could cause your
+# synapse to issue arbitrary GET requests to your internal services,
+# causing serious security issues.
+#
+# url_preview_ip_range_blacklist:
+# - '127.0.0.0/8'
+# - '10.0.0.0/8'
+# - '172.16.0.0/12'
+# - '192.168.0.0/16'
+# - '100.64.0.0/10'
+# - '169.254.0.0/16'
+# - '::1/128'
+# - 'fe80::/64'
+# - 'fc00::/7'
+#
+# List of IP address CIDR ranges that the URL preview spider is allowed
+# to access even if they are specified in url_preview_ip_range_blacklist.
+# This is useful for specifying exceptions to wide-ranging blacklisted
+# target IP ranges - e.g. for enabling URL previews for a specific private
+# website only visible in your network.
+#
+# url_preview_ip_range_whitelist:
+# - '192.168.1.1'
+
+# Optional list of URL matches that the URL preview spider is
+# denied from accessing.  You should use url_preview_ip_range_blacklist
+# in preference to this, otherwise someone could define a public DNS
+# entry that points to a private IP address and circumvent the blacklist.
+# This is more useful if you know there is an entire shape of URL that
+# you know that will never want synapse to try to spider.
+#
+# Each list entry is a dictionary of url component attributes as returned
+# by urlparse.urlsplit as applied to the absolute form of the URL.  See
+# https://docs.python.org/2/library/urlparse.html#urlparse.urlsplit
+# The values of the dictionary are treated as an filename match pattern
+# applied to that component of URLs, unless they start with a ^ in which
+# case they are treated as a regular expression match.  If all the
+# specified component matches for a given list item succeed, the URL is
+# blacklisted.
+#
+# url_preview_url_blacklist:
+# # blacklist any URL with a username in its URI
+# - username: '*'
+#
+# # blacklist all *.google.com URLs
+# - netloc: 'google.com'
+# - netloc: '*.google.com'
+#
+# # blacklist all plain HTTP URLs
+# - scheme: 'http'
+#
+# # blacklist http(s)://www.acme.com/foo
+# - netloc: 'www.acme.com'
+#   path: '/foo'
+#
+# # blacklist any URL with a literal IPv4 address
+# - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+
+# The largest allowed URL preview spidering size in bytes
+max_spider_size: "10M"
+
+
+
+
+## Captcha ##
+# See docs/CAPTCHA_SETUP for full details of configuring this.
+
+# This Home Server's ReCAPTCHA public key.
+recaptcha_public_key: "YOUR_PUBLIC_KEY"
+
+# This Home Server's ReCAPTCHA private key.
+recaptcha_private_key: "YOUR_PRIVATE_KEY"
+
+# Enables ReCaptcha checks when registering, preventing signup
+# unless a captcha is answered. Requires a valid ReCaptcha
+# public/private key.
+enable_registration_captcha: False
+
+# A secret key used to bypass the captcha test entirely.
+#captcha_bypass_secret: "YOUR_SECRET_HERE"
+
+# The API endpoint to use for verifying m.login.recaptcha responses.
+recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
+
+
+## Turn ##
+
+# The public URIs of the TURN server to give to clients
+turn_uris: []
+
+# The shared secret used to compute passwords for the TURN server
+turn_shared_secret: "YOUR_SHARED_SECRET"
+
+# The Username and password if the TURN server needs them and
+# does not use a token
+#turn_username: "TURNSERVER_USERNAME"
+#turn_password: "TURNSERVER_PASSWORD"
+
+# How long generated TURN credentials last
+turn_user_lifetime: "1h"
+
+# Whether guests should be allowed to use the TURN server.
+# This defaults to True, otherwise VoIP will be unreliable for guests.
+# However, it does introduce a slight security risk as it allows users to
+# connect to arbitrary endpoints without having first signed up for a
+# valid account (e.g. by passing a CAPTCHA).
+turn_allow_guests: True
+
+
+## Registration ##
+
+# Enable registration for new users.
+enable_registration: True
+
+# The user must provide all of the below types of 3PID when registering.
+#
+# registrations_require_3pid:
+#     - email
+#     - msisdn
+
+# Mandate that users are only allowed to associate certain formats of
+# 3PIDs with accounts on this server.
+#
+# allowed_local_3pids:
+#     - medium: email
+#       pattern: ".*@matrix\.org"
+#     - medium: email
+#       pattern: ".*@vector\.im"
+#     - medium: msisdn
+#       pattern: "\+44"
+
+# If set, allows registration by anyone who also has the shared
+# secret, even if registration is otherwise disabled.
+registration_shared_secret: "{{REGISTRATION_SHARED_SECRET}}"
+
+# Set the number of bcrypt rounds used to generate password hash.
+# Larger numbers increase the work factor needed to generate the hash.
+# The default number is 12 (which equates to 2^12 rounds).
+# N.B. that increasing this will exponentially increase the time required
+# to register or login - e.g. 24 => 2^24 rounds which will take >20 mins.
+bcrypt_rounds: 12
+
+# Allows users to register as guests without a password/email/etc, and
+# participate in rooms hosted on this server which have been made
+# accessible to anonymous users.
+allow_guest_access: False
+
+# The list of identity servers trusted to verify third party
+# identifiers by this server.
+trusted_third_party_id_servers:
+    - matrix.org
+    - vector.im
+    - riot.im
+
+# Users who register on this homeserver will automatically be joined
+# to these roomsS
+#auto_join_rooms:
+#    - "#example:example.com"
+
+
+## Metrics ###
+
+# Enable collection and rendering of performance metrics
+enable_metrics: False
+report_stats: False
+
+
+## API Configuration ##
+
+# A list of event types that will be included in the room_invite_state
+room_invite_state_types:
+    - "m.room.join_rules"
+    - "m.room.canonical_alias"
+    - "m.room.avatar"
+    - "m.room.name"
+
+
+# A list of application service config file to use
+app_service_config_files: []
+
+
+macaroon_secret_key: "{{MACAROON_SECRET_KEY}}"
+
+# Used to enable access token expiration.
+expire_access_token: False
+
+# a secret which is used to calculate HMACs for form values, to stop
+# falsification of values
+form_secret: "{{FORM_SECRET}}"
+
+## Signing Keys ##
+
+# Path to the signing key to sign messages with
+signing_key_path: "{{SYNAPSE_ROOT}}localhost.signing.key"
+
+# The keys that the server used to sign messages with but won't use
+# to sign new messages. E.g. it has lost its private key
+old_signing_keys: {}
+#  "ed25519:auto":
+#    # Base64 encoded public key
+#    key: "The public part of your old signing key."
+#    # Millisecond POSIX timestamp when the key expired.
+#    expired_ts: 123456789123
+
+# How long key response published by this server is valid for.
+# Used to set the valid_until_ts in /key/v2 APIs.
+# Determines how quickly servers will query to check which keys
+# are still valid.
+key_refresh_interval: "1d" # 1 Day.block_non_admin_invites
+
+# The trusted servers to download signing keys from.
+perspectives:
+  servers:
+    "matrix.org":
+      verify_keys:
+        "ed25519:auto":
+          key: "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw"
+
+
+
+# Enable SAML2 for registration and login. Uses pysaml2
+# config_path:      Path to the sp_conf.py configuration file
+# idp_redirect_url: Identity provider URL which will redirect
+#                   the user back to /login/saml2 with proper info.
+# See pysaml2 docs for format of config.
+#saml2_config:
+#   enabled: true
+#   config_path: "{{SYNAPSE_ROOT}}sp_conf.py"
+#   idp_redirect_url: "http://localhost/idp"
+
+
+
+# Enable CAS for registration and login.
+#cas_config:
+#   enabled: true
+#   server_url: "https://cas-server.com"
+#   service_url: "https://homeserver.domain.com:8448"
+#   #required_attributes:
+#   #    name: value
+
+
+# The JWT needs to contain a globally unique "sub" (subject) claim.
+#
+# jwt_config:
+#    enabled: true
+#    secret: "a secret"
+#    algorithm: "HS256"
+
+
+
+# Enable password for login.
+password_config:
+   enabled: true
+   # Uncomment and change to a secret random string for extra security.
+   # DO NOT CHANGE THIS AFTER INITIAL SETUP!
+   #pepper: ""
+
+
+
+# Enable sending emails for notification events
+# Defining a custom URL for Riot is only needed if email notifications
+# should contain links to a self-hosted installation of Riot; when set
+# the "app_name" setting is ignored.
+#
+# If your SMTP server requires authentication, the optional smtp_user &
+# smtp_pass variables should be used
+#
+#email:
+#   enable_notifs: false
+#   smtp_host: "localhost"
+#   smtp_port: 25
+#   smtp_user: "exampleusername"
+#   smtp_pass: "examplepassword"
+#   require_transport_security: False
+#   notif_from: "Your Friendly %(app)s Home Server <noreply@example.com>"
+#   app_name: Matrix
+#   template_dir: res/templates
+#   notif_template_html: notif_mail.html
+#   notif_template_text: notif_mail.txt
+#   notif_for_new_users: True
+#   riot_base_url: "http://localhost/riot"
+
+
+# password_providers:
+#     - module: "ldap_auth_provider.LdapAuthProvider"
+#       config:
+#         enabled: true
+#         uri: "ldap://ldap.example.com:389"
+#         start_tls: true
+#         base: "ou=users,dc=example,dc=com"
+#         attributes:
+#            uid: "cn"
+#            mail: "email"
+#            name: "givenName"
+#         #bind_dn:
+#         #bind_password:
+#         #filter: "(objectClass=posixAccount)"
+
+
+
+# Clients requesting push notifications can either have the body of
+# the message sent in the notification poke along with other details
+# like the sender, or just the event ID and room ID (`event_id_only`).
+# If clients choose the former, this option controls whether the
+# notification request includes the content of the event (other details
+# like the sender are still included). For `event_id_only` push, it
+# has no effect.
+
+# For modern android devices the notification content will still appear
+# because it is loaded by the app. iPhone, however will send a
+# notification saying only that a message arrived and who it came from.
+#
+#push:
+#   include_content: true
+
+
+# spam_checker:
+#     module: "my_custom_project.SuperSpamChecker"
+#     config:
+#         example_option: 'things'
+
+
+# Whether to allow non server admins to create groups on this server
+enable_group_creation: false
+
+# If enabled, non server admins can only create groups with local parts
+# starting with this prefix
+# group_creation_prefix: "unofficial/"
+
+
+
+# User Directory configuration
+#
+# 'search_all_users' defines whether to search all users visible to your HS
+# when searching the user directory, rather than limiting to users visible
+# in public rooms.  Defaults to false.  If you set it True, you'll have to run
+# UPDATE user_directory_stream_pos SET stream_id = NULL;
+# on your database to tell it to rebuild the user_directory search indexes.
+#
+#user_directory:
+#   search_all_users: false
+
+
+# User Consent configuration
+#
+# for detailed instructions, see
+# https://github.com/matrix-org/synapse/blob/master/docs/consent_tracking.md
+#
+# Parts of this section are required if enabling the 'consent' resource under
+# 'listeners', in particular 'template_dir' and 'version'.
+#
+# 'template_dir' gives the location of the templates for the HTML forms.
+# This directory should contain one subdirectory per language (eg, 'en', 'fr'),
+# and each language directory should contain the policy document (named as
+# '<version>.html') and a success page (success.html).
+#
+# 'version' specifies the 'current' version of the policy document. It defines
+# the version to be served by the consent resource if there is no 'v'
+# parameter.
+#
+# 'server_notice_content', if enabled, will send a user a "Server Notice"
+# asking them to consent to the privacy policy. The 'server_notices' section
+# must also be configured for this to work. Notices will *not* be sent to
+# guest users unless 'send_server_notice_to_guests' is set to true.
+#
+# 'block_events_error', if set, will block any attempts to send events
+# until the user consents to the privacy policy. The value of the setting is
+# used as the text of the error.
+#
+user_consent:
+  template_dir: res/templates/privacy
+  version: 1.0
+  server_notice_content:
+    msgtype: m.text
+    body: >-
+      To continue using this homeserver you must review and agree to the
+      terms and conditions at %(consent_uri)s
+  send_server_notice_to_guests: True
+  block_events_error: >-
+    To continue using this homeserver you must review and agree to the
+    terms and conditions at %(consent_uri)s
+
+
+
+# Server Notices room configuration
+#
+# Uncomment this section to enable a room which can be used to send notices
+# from the server to users. It is a special room which cannot be left; notices
+# come from a special "notices" user id.
+#
+# If you uncomment this section, you *must* define the system_mxid_localpart
+# setting, which defines the id of the user which will be used to send the
+# notices.
+#
+# It's also possible to override the room name, the display name of the
+# "notices" user, and the avatar for the user.
+#
+server_notices:
+  system_mxid_localpart: notices
+  system_mxid_display_name: "Server Notices"
+  system_mxid_avatar_url: "mxc://localhost:8008/oumMVlgDnLYFaPVkExemNVVZ"
+  room_name: "Server Notices"
