@@ -952,7 +952,7 @@
     "Your identity server's URL": "您的驗證伺服器 URL",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "This room is not public. You will not be able to rejoin without an invite.": "這個聊天室並未公開。您在沒有邀請的情況下將無法重新加入。",
-    "Community IDs cannot not be empty.": "社群 ID 不能為空。",
+    "Community IDs cannot be empty.": "社群 ID 不能為空。",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>顯示裝置</showDevicesText>、<sendAnywayText>無論如何都要傳送</sendAnywayText>或<cancelText>取消</cancelText>。",
     "<a>In reply to</a> <pill>": "<a>回覆給</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s 變更了他的顯示名稱為 %(displayName)s 。",
@@ -1195,5 +1195,16 @@
     "Share Room Message": "分享聊天室訊息",
     "Link to selected message": "連結到選定的訊息",
     "COPY": "複製",
-    "Share Message": "分享訊息"
+    "Share Message": "分享訊息",
+    "Jitsi Conference Calling": "Jitsi 會議通話",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "在加密的聊天室中（這個就是），URL 預覽會預設停用以確保您的家伺服器（預覽生成的地方）無法在這個聊天室中收集關於您看到的連結的資訊。",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "當某人在他們的訊息中放置 URL 時，URL 預覽可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
+    "The email field must not be blank.": "電子郵件欄不能留空。",
+    "The user name field must not be blank.": "使用者名稱欄不能留空。",
+    "The phone number field must not be blank.": "電話號碼欄不能留空。",
+    "The password field must not be blank.": "密碼欄不能留空。",
+    "Call in Progress": "進行中的通話",
+    "A call is already in progress!": "已有一通電話進行中！",
+    "You have no historical rooms": "您沒有過去的聊天室",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "您在審閱並同意<consentLink>我們的條款與條件</consentLink>前無法傳送訊息。"
 }

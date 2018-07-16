@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 
+import React from 'react';
 import MImageBody from './MImageBody';
 import sdk from '../../../index';
 

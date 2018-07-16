@@ -56,6 +56,7 @@ const stateEventTileTypes = {
     'm.room.topic': 'messages.TextualEvent',
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
+    'm.room.server_acl': 'messages.TextualEvent',
 
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
@@ -484,12 +485,19 @@ module.exports = withMatrixClient(React.createClass({
         // Info messages are basically information about commands processed on a room
         const isInfoMessage = (eventType !== 'm.room.message' && eventType !== 'm.sticker');
 
-        const EventTileType = sdk.getComponent(getHandlerTile(this.props.mxEvent));
+        const tileHandler = getHandlerTile(this.props.mxEvent);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
-        if (!EventTileType) {
-            throw new Error("Event type not supported");
+        if (!tileHandler) {
+            const {mxEvent} = this.props;
+            console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
+                <div className="mx_EventTile_line">
+                    { _t('This event could not be displayed') }
+                </div>
+            </div>;
         }
+        const EventTileType = sdk.getComponent(tileHandler);
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
@@ -694,7 +702,6 @@ module.exports = withMatrixClient(React.createClass({
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
-                        { avatar }
                         { sender }
                         <div className="mx_EventTile_line">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
@@ -711,6 +718,12 @@ module.exports = withMatrixClient(React.createClass({
                             { keyRequestInfo }
                             { editButton }
                         </div>
+                        {
+                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // event tile line, so needs to be later in the DOM so it appears on top (this avoids
+                            // the need for further z-indexing chaos)
+                        }
+                        { avatar }
                     </div>
                 );
             }

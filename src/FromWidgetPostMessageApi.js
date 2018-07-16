@@ -18,6 +18,7 @@ import URL from 'url';
 import dis from './dispatcher';
 import IntegrationManager from './IntegrationManager';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
+import ActiveWidgetStore from './stores/ActiveWidgetStore';
 
 const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -155,6 +156,14 @@ export default class FromWidgetPostMessageApi {
             const integType = (data && data.integType) ? data.integType : null;
             const integId = (data && data.integId) ? data.integId : null;
             IntegrationManager.open(integType, integId);
+        } else if (action === 'set_always_on_screen') {
+            // This is a new message: there is no reason to support the deprecated widgetData here
+            const data = event.data.data;
+            const val = data.value;
+
+            if (ActiveWidgetStore.widgetHasCapability(widgetId, 'm.always_on_screen')) {
+                ActiveWidgetStore.setWidgetPersistence(widgetId, val);
+            }
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});

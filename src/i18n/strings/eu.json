@@ -952,7 +952,7 @@
     "Your identity server's URL": "Zure identitate zerbitzariaren URL-a",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)s(e)ko %(monthName)sk %(day)sa",
     "This room is not public. You will not be able to rejoin without an invite.": "Gela hau ez da publikoa. Ezin izango zara berriro elkartu gonbidapenik gabe.",
-    "Community IDs cannot not be empty.": "Komunitate ID-ak ezin dira hutsik egon.",
+    "Community IDs cannot be empty.": "Komunitate ID-ak ezin dira hutsik egon.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Erakutsi gailuak</showDevicesText>, <sendAnywayText>bidali hala ere</sendAnywayText> edo <cancelText>ezeztatu</cancelText>.",
     "<a>In reply to</a> <pill>": "<a>honi erantzunez:</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s erabiltzaileak bere pantaila izena aldatu du %(displayName)s izatera.",
@@ -1195,5 +1195,16 @@
     "COPY": "KOPIATU",
     "Share Message": "Partekatu mezua",
     "No Audio Outputs detected": "Ez da audio irteerarik antzeman",
-    "Audio Output": "Audio irteera"
+    "Audio Output": "Audio irteera",
+    "Jitsi Conference Calling": "Jitsi konferentzia deia",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Zifratutako gelatan, honetan esaterako, URL-en aurrebistak lehenetsita desgaituta daude zure hasiera-zerbitzariak gela honetan ikusten dituzun estekei buruzko informaziorik jaso ez dezan, hasiera-zerbitzarian sortzen baitira aurrebistak.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Norbaitek mezu batean URL bat jartzen duenean, URL aurrebista bat erakutsi daiteke estekaren informazio gehiago erakusteko, adibidez webgunearen izenburua, deskripzioa eta irudi bat.",
+    "The email field must not be blank.": "E-mail eremua ezin da hutsik laga.",
+    "The user name field must not be blank.": "Erabiltzaile-izen eremua ezin da hutsik laga.",
+    "The phone number field must not be blank.": "Telefono zenbakia eremua ezin da hutsik laga.",
+    "The password field must not be blank.": "Pasahitza eremua ezin da hutsik laga.",
+    "Call in Progress": "Deia abian",
+    "A call is already in progress!": "Badago dei bat abian!",
+    "You have no historical rooms": "Ez duzu gelen historialik",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte."
 }

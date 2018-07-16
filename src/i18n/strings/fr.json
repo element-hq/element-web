@@ -952,7 +952,7 @@
     "Your identity server's URL": "L'URL de votre serveur d'identité",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
     "This room is not public. You will not be able to rejoin without an invite.": "Ce salon n'est pas public. Vous ne pourrez pas y revenir sans invitation.",
-    "Community IDs cannot not be empty.": "Les identifiants de communauté ne peuvent pas être vides.",
+    "Community IDs cannot be empty.": "Les identifiants de communauté ne peuvent pas être vides.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Afficher les appareils</showDevicesText>, <sendAnywayText>envoyer quand même</sendAnywayText> ou <cancelText>annuler</cancelText>.",
     "<a>In reply to</a> <pill>": "<a>En réponse à</a> <pill>",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s a changé son nom affiché en %(displayName)s.",
@@ -1195,5 +1195,18 @@
     "Share Room Message": "Partager le message du salon",
     "Link to selected message": "Lien vers le message sélectionné",
     "COPY": "COPIER",
-    "Share Message": "Partager le message"
+    "Share Message": "Partager le message",
+    "Jitsi Conference Calling": "Appel en téléconférence Jitsi",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "Dans les salons chiffrés, comme celui-ci, l'aperçu des liens est désactivé par défaut pour s'assurer que le serveur d'accueil (où sont générés les aperçus) ne puisse pas collecter d'informations sur les liens qui apparaissent dans ce salon.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Quand quelqu'un met un lien dans son message, un aperçu du lien peut être affiché afin de fournir plus d'informations sur ce lien comme le titre, la description et une image du site.",
+    "The email field must not be blank.": "Le champ de l'adresse e-mail ne doit pas être vide.",
+    "The user name field must not be blank.": "Le champ du nom d'utilisateur ne doit pas être vide.",
+    "The phone number field must not be blank.": "Le champ du numéro de téléphone ne doit pas être vide.",
+    "The password field must not be blank.": "Le champ du mot de passe ne doit pas être vide.",
+    "Call in Progress": "Appel en cours",
+    "A call is already in progress!": "Un appel est déjà en cours !",
+    "You have no historical rooms": "Vous n'avez aucun salon historique",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Vous ne pouvez voir aucun message tant que vous ne lisez et n'acceptez pas nos <consentLink>conditions générales</consentLink>.",
+    "Demote yourself?": "Vous rétrograder ?",
+    "Demote": "Rétrograder"
 }

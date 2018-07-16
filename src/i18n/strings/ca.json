@@ -654,7 +654,7 @@
     "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s han sortit %(count)s vegades",
     "%(oneUser)sleft %(count)s times|other": "%(oneUser)s ha sortit %(count)s vegades",
     "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "Les ID de les comunitats només poden contendre caràcters a-z, 0-9, o '=_-./'",
-    "Community IDs cannot not be empty.": "Les ID de les comunitats no poden estar buides.",
+    "Community IDs cannot be empty.": "Les ID de les comunitats no poden estar buides.",
     "Something went wrong whilst creating your community": "S'ha produït un error al crear la vostra comunitat",
     "Create Community": "Crea una comunitat",
     "Community Name": "Nom de la comunitat",
