@@ -32,6 +32,9 @@ class ActiveWidgetStore {
 
         // A WidgetMessaging instance for each widget ID
         this._widgetMessagingByWidgetId = {};
+
+        // What room ID each widget is associated with (if it's a room widget)
+        this._roomIdByWidgetId = {};
     }
 
     setWidgetPersistence(widgetId, val) {
@@ -44,6 +47,10 @@ class ActiveWidgetStore {
 
     getWidgetPersistence(widgetId) {
         return this._persistentWidgetId === widgetId;
+    }
+
+    getPersistentWidgetId() {
+        return this._persistentWidgetId;
     }
 
     setWidgetCapabilities(widgetId, caps) {
@@ -75,6 +82,18 @@ class ActiveWidgetStore {
             }
             delete this._widgetMessagingByWidgetId[widgetId];
         }
+    }
+
+    getRoomId(widgetId) {
+        return this._roomIdByWidgetId[widgetId];
+    }
+
+    setRoomId(widgetId, roomId) {
+        this._roomIdByWidgetId[widgetId] = roomId;
+    }
+
+    delRoomId(widgetId) {
+        delete this._roomIdByWidgetId[widgetId];
     }
 }
 

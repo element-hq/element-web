@@ -29,7 +29,6 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -107,55 +106,6 @@ module.exports = React.createClass({
         }
     },
 
-    /**
-     * Encodes a URI according to a set of template variables. Variables will be
-     * passed through encodeURIComponent.
-     * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
-     * @param {Object} variables The key/value pairs to replace the template
-     * variables with. E.g. { '$bar': 'baz' }.
-     * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
-     */
-    encodeUri: function(pathTemplate, variables) {
-        for (const key in variables) {
-            if (!variables.hasOwnProperty(key)) {
-                continue;
-            }
-            pathTemplate = pathTemplate.replace(
-                key, encodeURIComponent(variables[key]),
-            );
-        }
-        return pathTemplate;
-    },
-
-    _initAppConfig: function(appId, app, sender) {
-        const user = MatrixClientPeg.get().getUser(this.props.userId);
-        const params = {
-            '$matrix_user_id': this.props.userId,
-            '$matrix_room_id': this.props.room.roomId,
-            '$matrix_display_name': user ? user.displayName : this.props.userId,
-            '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
-
-            // TODO: Namespace themes through some standard
-            '$theme': SettingsStore.getValue("theme"),
-        };
-
-        app.id = appId;
-        app.name = app.name || app.type;
-
-        if (app.data) {
-            Object.keys(app.data).forEach((key) => {
-                params['$' + key] = app.data[key];
-            });
-
-            app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
-        }
-
-        app.url = this.encodeUri(app.url, params);
-        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
-
-        return app;
-    },
-
     onRoomStateEvents: function(ev, state) {
         if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'im.vector.modular.widgets') {
             return;
@@ -165,7 +115,7 @@ module.exports = React.createClass({
 
     _getApps: function() {
         return WidgetUtils.getRoomWidgets(this.props.room).map((ev) => {
-            return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
+            return WidgetUtils.makeAppConfig(ev.getStateKey(), ev.getContent(), ev.sender, this.props.room.roomId);
         });
     },
 
@@ -213,15 +163,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", this.props.room.room_id);
-
         const apps = this.state.apps.map((app, index, arr) => {
-            const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
-
-            // Obviously anyone that can add a widget can claim it's a jitsi widget,
-            // so this doesn't really offer much over the set of domains we load
-            // widgets from at all, but it probably makes sense for sanity.
-            if (app.type == 'jitsi') capWhitelist.push("m.always_on_screen");
+            const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
 
             return (<AppTile
                 key={app.id}

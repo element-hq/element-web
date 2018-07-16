@@ -164,6 +164,7 @@ export default class AppTile extends React.Component {
             PersistedElement.destroyElement(this._persistKey);
             ActiveWidgetStore.delWidgetMessaging(this.props.id);
             ActiveWidgetStore.delWidgetCapabilities(this.props.id);
+            ActiveWidgetStore.delRoomId(this.props.id);
         }
     }
 
@@ -343,6 +344,7 @@ export default class AppTile extends React.Component {
         if (!ActiveWidgetStore.getWidgetMessaging(this.props.id)) {
             this._setupWidgetMessaging();
         }
+        ActiveWidgetStore.setRoomId(this.props.id, this.props.room.roomId);
         this.setState({loading: false});
     }
 
@@ -522,6 +524,8 @@ export default class AppTile extends React.Component {
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
         const iframeFeatures = "microphone; camera; encrypted-media;";
 
+        const appTileBodyClass = 'mx_AppTileBody' + (this.props.miniMode ? '_mini  ' : ' ');
+
         if (this.props.show) {
             const loadingElement = (
                 <div className="mx_AppLoading_spinner_fadeIn">
@@ -530,20 +534,20 @@ export default class AppTile extends React.Component {
             );
             if (this.state.initialising) {
                 appTileBody = (
-                    <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
+                    <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                         { loadingElement }
                     </div>
                 );
             } else if (this.state.hasPermissionToLoad == true) {
                 if (this.isMixedContent()) {
                     appTileBody = (
-                        <div className="mx_AppTileBody">
+                        <div className={appTileBodyClass}>
                             <AppWarning errorMsg="Error - Mixed content" />
                         </div>
                     );
                 } else {
                     appTileBody = (
-                        <div className={'mx_AppTileBody ' + (this.state.loading ? 'mx_AppLoading' : '')}>
+                        <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
                             { this.state.loading && loadingElement }
                             { /*
                                 The "is" attribute in the following iframe tag is needed in order to enable rendering of the
@@ -573,7 +577,7 @@ export default class AppTile extends React.Component {
             } else {
                 const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
-                    <div className="mx_AppTileBody">
+                    <div className={appTileBodyClass}>
                         <AppPermission
                             isRoomEncrypted={isRoomEncrypted}
                             url={this.state.widgetUrl}
@@ -686,6 +690,8 @@ AppTile.propTypes = {
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth: PropTypes.bool,
+    // Optional. If set, renders a smaller view of the widget
+    miniMode: PropTypes.bool,
     // UserId of the current user
     userId: PropTypes.string.isRequired,
     // UserId of the entity that added / modified the widget
@@ -738,4 +744,5 @@ AppTile.defaultProps = {
     handleMinimisePointerEvents: false,
     whitelistCapabilities: [],
     userWidget: false,
+    miniMode: false,
 };

@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
-const ReactDOM = require('react-dom');
-const PropTypes = require('prop-types');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+import ResizeObserver from 'resize-observer-polyfill';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -62,6 +64,9 @@ export default class PersistedElement extends React.Component {
         super();
         this.collectChildContainer = this.collectChildContainer.bind(this);
         this.collectChild = this.collectChild.bind(this);
+        this._onContainerResize = this._onContainerResize.bind(this);
+
+        this.resizeObserver = new ResizeObserver(this._onContainerResize);
     }
 
     /**
@@ -83,7 +88,13 @@ export default class PersistedElement extends React.Component {
     }
 
     collectChildContainer(ref) {
+        if (this.childContainer) {
+            this.resizeObserver.unobserve(this.childContainer);
+        }
         this.childContainer = ref;
+        if (ref) {
+            this.resizeObserver.observe(ref);
+        }
     }
 
     collectChild(ref) {
@@ -101,6 +112,11 @@ export default class PersistedElement extends React.Component {
 
     componentWillUnmount() {
         this.updateChildVisibility(this.child, false);
+        this.resizeObserver.disconnect();
+    }
+
+    _onContainerResize() {
+        this.updateChildPosition(this.child, this.childContainer);
     }
 
     updateChild() {
