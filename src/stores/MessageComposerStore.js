@@ -34,7 +34,8 @@ class MessageComposerStore {
         localStorage.setItem(this._getKey(roomId), JSON.stringify({
             editor_state: editorState.toJSON({
                 preserveSelection: true,
-                preserveHistory: true,
+                // XXX: re-hydrating history is not currently supported by fromJSON
+                // preserveHistory: true,
                 // XXX: this seems like a workaround for selection.isSet being based on anchorKey instead of anchorPath
                 preserveKeys: true,
             }),
