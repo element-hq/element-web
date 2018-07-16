@@ -1210,5 +1210,11 @@
     "Demote yourself?": "Vous rétrograder ?",
     "Demote": "Rétrograder",
     "Show empty room list headings": "Afficher les en-têtes de la liste des salons vides",
-    "This event could not be displayed": "Cet événement n'a pas pu être affiché"
+    "This event could not be displayed": "Cet événement n'a pas pu être affiché",
+    "deleted": "supprimé",
+    "underlined": "souligné",
+    "inline-code": "code en ligne",
+    "block-quote": "citation",
+    "bulleted-list": "liste à puces",
+    "numbered-list": "liste à numéros"
 }
