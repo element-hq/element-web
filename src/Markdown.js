@@ -180,14 +180,6 @@ export default class Markdown {
             if (is_multi_line(node) && node.next) this.lit('\n\n');
         };
 
-        // convert MD links into console-friendly ' < http://foo >' style links
-        // ...except given this function never gets called with links, it's useless.
-        // renderer.link = function(node, entering) {
-        //     if (!entering) {
-        //         this.lit(` < ${node.destination} >`);
-        //     }
-        // };
-
         return renderer.render(this.parsed);
     }
 }

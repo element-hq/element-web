@@ -21,16 +21,13 @@ import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import { Editor } from 'slate-react';
 import { getEventTransfer } from 'slate-react';
-import { Value, Document, Event, Block, Inline, Text, Range, Node } from 'slate';
+import { Value, Document, Block, Inline, Text, Range, Node } from 'slate';
+import type { Change } from 'slate';
 
 import Html from 'slate-html-serializer';
 import Md from 'slate-md-serializer';
 import Plain from 'slate-plain-serializer';
 import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerializer";
-
-// import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
-//     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
-//     Entity} from 'draft-js';
 
 import classNames from 'classnames';
 import Promise from 'bluebird';
@@ -54,7 +51,7 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
-import {MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
+import {MATRIXTO_MD_LINK_PATTERN, MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, unicodeRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort, toShort} from 'emojione';
@@ -118,6 +115,15 @@ function onSendMessageFailed(err, room) {
     });
 }
 
+function rangeEquals(a: Range, b: Range): boolean {
+    return (a.anchorKey === b.anchorKey
+        && a.anchorOffset === b.anchorOffset
+        && a.focusKey === b.focusKey
+        && a.focusOffset === b.focusOffset
+        && a.isFocused === b.isFocused
+        && a.isBackward === b.isBackward);
+}
+
 /*
  * The textInput part of the MessageComposer
  */
@@ -146,28 +152,17 @@ export default class MessageComposerInput extends React.Component {
 
         Analytics.setRichtextMode(isRichTextEnabled);
 
-        this.state = {
-            // whether we're in rich text or markdown mode
-            isRichTextEnabled,
-
-            // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: this.createEditorState(
-                isRichTextEnabled,
-                MessageComposerStore.getEditorState(this.props.room.roomId),
-            ),
-
-            // the original editor state, before we started tabbing through completions
-            originalEditorState: null,
-
-            // the virtual state "above" the history stack, the message currently being composed that
-            // we want to persist whilst browsing history
-            currentlyComposedEditorState: null,
-
-            // whether there were any completions
-            someCompletions: null,
-        };
-
         this.client = MatrixClientPeg.get();
+
+        // track whether we should be trying to show autocomplete suggestions on the current editor
+        // contents. currently it's only suppressed when navigating history to avoid ugly flashes
+        // of unexpected corrections as you navigate.
+        // XXX: should this be in state?
+        this.suppressAutoComplete = false;
+
+        // track whether we've just pressed an arrowkey left or right in order to skip void nodes.
+        // see https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
+        this.direction = '';
 
         this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
         this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
@@ -176,18 +171,35 @@ export default class MessageComposerInput extends React.Component {
         this.md = new Md({
             rules: [
                 {
+                    // if serialize returns undefined it falls through to the default hardcoded
+                    // serialization rules
                     serialize: (obj, children) => {
-                        if (obj.object === 'inline') {
-                            switch (obj.type) {
-                                case 'pill':
-                                    return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
-                                case 'emoji':
-                                    return obj.data.get('emojiUnicode');
-                            }
+                        if (obj.object !== 'inline') return;
+                        switch (obj.type) {
+                            case 'pill':
+                                return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
+                            case 'emoji':
+                                return obj.data.get('emojiUnicode');
                         }
-                    }
-                }
-            ]
+                    },
+                }, {
+                    serialize: (obj, children) => {
+                        if (obj.object !== 'mark') return;
+                        // XXX: slate-md-serializer consumes marks other than bold, italic, code, inserted, deleted
+                        switch (obj.type) {
+                            case 'underlined':
+                                return `<u>${ children }</u>`;
+                            case 'deleted':
+                                return `<del>${ children }</del>`;
+                            case 'code':
+                                // XXX: we only ever get given `code` regardless of whether it was inline or block
+                                // XXX: workaround for https://github.com/tommoor/slate-md-serializer/issues/14
+                                // strip single backslashes from children, as they would have been escaped here
+                                return `\`${ children.split('\\').map((v) => v ? v : '\\').join('') }\``;
+                        }
+                    },
+                },
+            ],
         });
 
         this.html = new Html({
@@ -278,20 +290,46 @@ export default class MessageComposerInput extends React.Component {
             ]
         });
 
-        this.suppressAutoComplete = false;
-        this.direction = '';
+        const savedState = MessageComposerStore.getEditorState(this.props.room.roomId);
+        this.state = {
+            // whether we're in rich text or markdown mode
+            isRichTextEnabled,
+
+            // the currently displayed editor state (note: this is always what is modified on input)
+            editorState: this.createEditorState(
+                isRichTextEnabled,
+                savedState ? savedState.editor_state : undefined,
+                savedState ? savedState.rich_text : undefined,
+            ),
+
+            // the original editor state, before we started tabbing through completions
+            originalEditorState: null,
+
+            // the virtual state "above" the history stack, the message currently being composed that
+            // we want to persist whilst browsing history
+            currentlyComposedEditorState: null,
+
+            // whether there were any completions
+            someCompletions: null,
+        };
     }
 
     /*
      * "Does the right thing" to create an Editor value, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
+     * - whether the contentState that was passed in was rich text
      */
-    createEditorState(richText: boolean, editorState: ?Value): Value {
+    createEditorState(wantRichText: boolean, editorState: ?Value, wasRichText: ?boolean): Value {
         if (editorState instanceof Value) {
+            if (wantRichText && !wasRichText) {
+                return this.mdToRichEditorState(editorState);
+            }
+            if (wasRichText && !wantRichText) {
+                return this.richToMdEditorState(editorState);
+            }
             return editorState;
-        }
-        else {
+        } else {
             // ...or create a new one.
             return Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
         }
@@ -299,7 +337,7 @@ export default class MessageComposerInput extends React.Component {
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
@@ -342,7 +380,7 @@ export default class MessageComposerInput extends React.Component {
                 // If so, what should be the format, and how do we differentiate it from replies?
 
                 const quote = Block.create('block-quote');
-                if (this.state.isRichTextEnabled) {    
+                if (this.state.isRichTextEnabled) {
                     let change = editorState.change();
                     if (editorState.anchorText.text === '' && editorState.anchorBlock.nodes.size === 1) {
                         // replace the current block rather than split the block
@@ -360,7 +398,6 @@ export default class MessageComposerInput extends React.Component {
                     let fragmentChange = fragment.change();
                     fragmentChange.moveToRangeOf(fragment.document)
                                   .wrapBlock(quote);
-                                  //.setBlocks('block-quote');
 
                     // FIXME: handle pills and use commonmark rather than md-serialize
                     const md = this.md.serialize(fragmentChange.value);
@@ -441,24 +478,29 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onChange = (change: Change, originalEditorState: value) => {
-
+    onChange = (change: Change, originalEditorState?: Value) => {
         let editorState = change.value;
 
         if (this.direction !== '') {
             const focusedNode = editorState.focusInline || editorState.focusText;
             if (focusedNode.isVoid) {
+                // XXX: does this work in RTL?
+                const edge = this.direction === 'Previous' ? 'End' : 'Start';
                 if (editorState.isCollapsed) {
-                    change = change[`collapseToEndOf${ this.direction }Text`]();
-                }
-                else {
+                    change = change[`collapseTo${ edge }Of${ this.direction }Text`]();
+                } else {
                     const block = this.direction === 'Previous' ? editorState.previousText : editorState.nextText;
                     if (block) {
-                        change = change.moveFocusToEndOf(block)
+                        change = change[`moveFocusTo${ edge }Of`](block);
                     }
                 }
                 editorState = change.value;
             }
+        }
+
+        // when selection changes hide the autocomplete
+        if (!rangeEquals(this.state.editorState.selection, editorState.selection)) {
+            this.autocomplete.hide();
         }
 
         if (!editorState.document.isEmpty) {
@@ -466,13 +508,6 @@ export default class MessageComposerInput extends React.Component {
         } else {
             this.onFinishedTyping();
         }
-
-        /*
-        // XXX: what was this ever doing?
-        if (!state.hasOwnProperty('originalEditorState')) {
-            state.originalEditorState = null;
-        }
-        */
 
         if (editorState.startText !== null) {
             const text = editorState.startText.text;
@@ -501,9 +536,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // emojioneify any emoji
-
-        // XXX: is getTextsAsArray a private API?
-        editorState.document.getTextsAsArray().forEach(node => {
+        editorState.document.getTexts().forEach(node => {
             if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
                 let match;
                 while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
@@ -535,36 +568,6 @@ export default class MessageComposerInput extends React.Component {
             editorState = change.value;
         }
 
-/*
-        const currentBlock = editorState.getSelection().getStartKey();
-        const currentSelection = editorState.getSelection();
-        const currentStartOffset = editorState.getSelection().getStartOffset();
-
-        const block = editorState.getCurrentContent().getBlockForKey(currentBlock);
-        const text = block.getText();
-
-        const entityBeforeCurrentOffset = block.getEntityAt(currentStartOffset - 1);
-        const entityAtCurrentOffset = block.getEntityAt(currentStartOffset);
-
-        // If the cursor is on the boundary between an entity and a non-entity and the
-        // text before the cursor has whitespace at the end, set the entity state of the
-        // character before the cursor (the whitespace) to null. This allows the user to
-        // stop editing the link.
-        if (entityBeforeCurrentOffset && !entityAtCurrentOffset &&
-            /\s$/.test(text.slice(0, currentStartOffset))) {
-            editorState = RichUtils.toggleLink(
-                editorState,
-                currentSelection.merge({
-                    anchorOffset: currentStartOffset - 1,
-                    focusOffset: currentStartOffset,
-                }),
-                null,
-            );
-            // Reset selection
-            editorState = EditorState.forceSelection(editorState, currentSelection);
-        }
-*/
-
         if (this.props.onInputStateChanged && editorState.blocks.size > 0) {
             let blockType = editorState.blocks.first().type;
             // console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
@@ -591,10 +594,10 @@ export default class MessageComposerInput extends React.Component {
         dis.dispatch({
             action: 'editor_state',
             room_id: this.props.room.roomId,
+            rich_text: this.state.isRichTextEnabled,
             editor_state: editorState,
         });
 
-        /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
             originalEditorState: originalEditorState || null
@@ -672,7 +675,7 @@ export default class MessageComposerInput extends React.Component {
 
     hasMark = type => {
         const { editorState } = this.state
-        return editorState.activeMarks.some(mark => mark.type == type)
+        return editorState.activeMarks.some(mark => mark.type === type)
     };
 
     /**
@@ -684,10 +687,10 @@ export default class MessageComposerInput extends React.Component {
 
     hasBlock = type => {
         const { editorState } = this.state
-        return editorState.blocks.some(node => node.type == type)
+        return editorState.blocks.some(node => node.type === type)
     };
 
-    onKeyDown = (ev: Event, change: Change, editor: Editor) => {
+    onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
 
         this.suppressAutoComplete = false;
 
@@ -700,22 +703,6 @@ export default class MessageComposerInput extends React.Component {
             this.direction = 'Next';
         } else {
             this.direction = '';
-        }
-
-        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
-            const ctrlCmdCommand = {
-                // C-m => Toggles between rich text and markdown modes
-                [KeyCode.KEY_M]: 'toggle-mode',
-                [KeyCode.KEY_B]: 'bold',
-                [KeyCode.KEY_I]: 'italic',
-                [KeyCode.KEY_U]: 'underlined',
-                [KeyCode.KEY_J]: 'inline-code',
-            }[ev.keyCode];
-
-            if (ctrlCmdCommand) {
-                return this.handleKeyCommand(ctrlCmdCommand);
-            }
-            return;
         }
 
         switch (ev.keyCode) {
@@ -731,21 +718,53 @@ export default class MessageComposerInput extends React.Component {
                 return this.onTab(ev);
             case KeyCode.ESCAPE:
                 return this.onEscape(ev);
-            default:
-                // don't intercept it
-                return;
+            case KeyCode.SPACE:
+                return this.onSpace(ev, change);
+        }
+
+        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
+            const ctrlCmdCommand = {
+                // C-m => Toggles between rich text and markdown modes
+                [KeyCode.KEY_M]: 'toggle-mode',
+                [KeyCode.KEY_B]: 'bold',
+                [KeyCode.KEY_I]: 'italic',
+                [KeyCode.KEY_U]: 'underlined',
+                [KeyCode.KEY_J]: 'inline-code',
+            }[ev.keyCode];
+
+            if (ctrlCmdCommand) {
+                return this.handleKeyCommand(ctrlCmdCommand);
+            }
         }
     };
 
-    onBackspace = (ev: Event, change: Change): Change => {
-        if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey) {
+    onSpace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey || ev.ctrlKey) {
             return;
+        }
+
+        // drop a point in history so the user can undo a word
+        // XXX: this seems nasty but adding to history manually seems a no-go
+        ev.preventDefault();
+        return change.setOperationFlag("skip", false).setOperationFlag("merge", false).insertText(ev.key);
+    };
+
+    onBackspace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey) {
+            return;
+        }
+
+        const { editorState } = this.state;
+
+        // Allow Ctrl/Cmd-Backspace when focus starts at the start of the composer (e.g select-all)
+        // for some reason if slate sees you Ctrl-backspace and your anchorOffset=0 it just resets your focus
+        if (!editorState.isCollapsed && editorState.anchorOffset === 0) {
+            return change.delete();
         }
 
         if (this.state.isRichTextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
-            const { editorState } = this.state;
 
             if (isList && editorState.anchorOffset == 0) {
                 change
@@ -805,7 +824,7 @@ export default class MessageComposerInput extends React.Component {
                     // Handle the extra wrapping required for list buttons.
                     const isList = this.hasBlock('list-item');
                     const isType = editorState.blocks.some(block => {
-                        return !!document.getClosest(block.key, parent => parent.type == type);
+                        return !!document.getClosest(block.key, parent => parent.type === type);
                     });
 
                     if (isList && isType) {
@@ -816,7 +835,7 @@ export default class MessageComposerInput extends React.Component {
                     } else if (isList) {
                         change
                             .unwrapBlock(
-                                type == 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
                             )
                             .wrapBlock(type);
                     } else {
@@ -986,7 +1005,7 @@ export default class MessageComposerInput extends React.Component {
         let contentHTML;
 
         // only look for commands if the first block contains simple unformatted text
-        // i.e. no pills or rich-text formatting.
+        // i.e. no pills or rich-text formatting and begins with a /.
         let cmd, commandText;
         const firstChild = editorState.document.nodes.get(0);
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
@@ -995,7 +1014,7 @@ export default class MessageComposerInput extends React.Component {
             firstGrandChild.text[0] === '/')
         {
             commandText = this.plainWithIdPills.serialize(editorState);
-            cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
+            cmd = processCommandInput(this.props.room.roomId, commandText);
         }
 
         if (cmd) {
@@ -1067,8 +1086,8 @@ export default class MessageComposerInput extends React.Component {
                 // didn't contain any formatting in the first place...
                 contentText = mdWithPills.toPlaintext();
             } else {
-                // to avoid ugliness clients which can't parse HTML we don't send pills
-                // in the plaintext body.
+                // to avoid ugliness on clients which ignore the HTML body we don't
+                // send pills in the plaintext body.
                 contentText = this.plainWithPlainPills.serialize(editorState);
                 contentHTML = mdWithPills.toHTML();
             }
@@ -1147,41 +1166,18 @@ export default class MessageComposerInput extends React.Component {
 
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
+            const selection = this.state.editorState.selection;
 
-            // determine whether our cursor is at the top or bottom of the multiline
-            // input box by just looking at the position of the plain old DOM selection.
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const cursorRect = range.getBoundingClientRect();
+            // selection must be collapsed
+            if (!selection.isCollapsed) return;
+            const document = this.state.editorState.document;
 
-            const editorNode = ReactDOM.findDOMNode(this.refs.editor);
-            const editorRect = editorNode.getBoundingClientRect();
-
-            // heuristic to handle tall emoji, pills, etc pushing the cursor away from the top
-            // or bottom of the page.
-            // XXX: is this going to break on large inline images or top-to-bottom scripts?
-            const EDGE_THRESHOLD = 15;
-
-            let navigateHistory = false;
+            // and we must be at the edge of the document (up=start, down=end)
             if (up) {
-                const scrollCorrection = editorNode.scrollTop;
-                const distanceFromTop = cursorRect.top - editorRect.top + scrollCorrection;
-                console.log(`Cursor distance from editor top is ${distanceFromTop}`);
-                if (distanceFromTop < EDGE_THRESHOLD) {
-                    navigateHistory = true;
-                }
+                if (!selection.isAtStartOf(document)) return;
+            } else {
+                if (!selection.isAtEndOf(document)) return;
             }
-            else {
-                const scrollCorrection =
-                    editorNode.scrollHeight - editorNode.clientHeight - editorNode.scrollTop;
-                const distanceFromBottom = editorRect.bottom - cursorRect.bottom + scrollCorrection;
-                console.log(`Cursor distance from editor bottom is ${distanceFromBottom}`);
-                if (distanceFromBottom < EDGE_THRESHOLD) {
-                    navigateHistory = true;
-                }
-            }
-
-            if (!navigateHistory) return;
 
             const selected = this.selectHistory(up);
             if (selected) {
@@ -1232,11 +1228,8 @@ export default class MessageComposerInput extends React.Component {
         // Move selection to the end of the selected history
         const change = editorState.change().collapseToEndOf(editorState.document);
 
-        // XXX: should we be calling this.onChange(change) now?
-        // Answer: yes, if we want it to do any of the fixups on stuff like emoji.
-        // however, this should already have been done and persisted in the history,
-        // so shouldn't be necessary.
-
+        // We don't call this.onChange(change) now, as fixups on stuff like emoji
+        // should already have been done and persisted in the history.
         editorState = change.value;
 
         this.suppressAutoComplete = true;
@@ -1339,6 +1332,8 @@ export default class MessageComposerInput extends React.Component {
                                 .insertText(suffix)
                                 .focus();
         }
+        // for good hygiene, keep editorState updated to track the result of the change
+        // even though we don't do anything subsequently with it
         editorState = change.value;
 
         this.onChange(change, activeEditorState);
@@ -1437,10 +1432,11 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onFormatButtonClicked = (name, e) => {
-        e.preventDefault(); // don't steal focus from the editor!
+        e.preventDefault();
 
         // XXX: horrible evil hack to ensure the editor is focused so the act
         // of focusing it doesn't then cancel the format button being pressed
+        // FIXME: can we just tell handleKeyCommand's change to invoke .focus()?
         if (document.activeElement && document.activeElement.className !== 'mx_MessageComposer_editor') {
             this.refs.editor.focus();
             setTimeout(()=>{

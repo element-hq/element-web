@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import { Store } from 'flux/utils';
+import { Value } from 'slate';
 
 const INITIAL_STATE = {
     // a map of room_id to rich text editor composer state
@@ -54,7 +55,10 @@ class MessageComposerStore extends Store {
 
     _editorState(payload) {
         const editorStateMap = this._state.editorStateMap;
-        editorStateMap[payload.room_id] = payload.editor_state;
+        editorStateMap[payload.room_id] = {
+            editor_state: payload.editor_state,
+            rich_text: payload.rich_text,
+        };
         localStorage.setItem('editor_state', JSON.stringify(editorStateMap));
         this._setState({
             editorStateMap: editorStateMap,
@@ -62,7 +66,15 @@ class MessageComposerStore extends Store {
     }
 
     getEditorState(roomId) {
-        return this._state.editorStateMap[roomId];
+        const editorStateMap = this._state.editorStateMap;
+        // const entry = this._state.editorStateMap[roomId];
+        if (editorStateMap[roomId] && !Value.isValue(editorStateMap[roomId].editor_state)) {
+            // rehydrate lazily to prevent massive churn at launch and cache it
+            editorStateMap[roomId].editor_state = Value.fromJSON(editorStateMap[roomId].editor_state);
+        }
+        // explicitly don't setState here because the value didn't actually change, we just hydrated it,
+        // if a listener received an update they too would call this method and have a hydrated Value
+        return editorStateMap[roomId];
     }
 
     reset() {

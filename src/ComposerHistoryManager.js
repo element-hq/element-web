@@ -51,8 +51,8 @@ class HistoryItem {
 export default class ComposerHistoryManager {
     history: Array<HistoryItem> = [];
     prefix: string;
-    lastIndex: number = 0;
-    currentIndex: number = 0;
+    lastIndex: number = 0; // used for indexing the storage
+    currentIndex: number = 0; // used for indexing the loaded validated history Array
 
     constructor(roomId: string, prefix: string = 'mx_composer_history_') {
         this.prefix = prefix + roomId;
@@ -69,18 +69,19 @@ export default class ComposerHistoryManager {
             }
         }
         this.lastIndex = this.currentIndex;
+        // reset currentIndex to account for any unserialisable history
+        this.currentIndex = this.history.length;
     }
 
     save(value: Value, format: MessageFormat) {
         const item = new HistoryItem(value, format);
         this.history.push(item);
-        this.currentIndex = this.lastIndex + 1;
+        this.currentIndex = this.history.length;
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item.toJSON()));
     }
 
     getItem(offset: number): ?HistoryItem {
-        this.currentIndex = _clamp(this.currentIndex + offset, 0, this.lastIndex - 1);
-        const item = this.history[this.currentIndex];
-        return item;
+        this.currentIndex = _clamp(this.currentIndex + offset, 0, this.history.length - 1);
+        return this.history[this.currentIndex];
     }
 }
