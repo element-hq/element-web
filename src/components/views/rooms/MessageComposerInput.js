@@ -498,8 +498,12 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        // when selection changes hide the autocomplete
-        if (!rangeEquals(this.state.editorState.selection, editorState.selection)) {
+        // when in autocomplete mode and selection changes hide the autocomplete.
+        // Selection changes when we enter text so use a heuristic to compare documents without doing it recursively
+        if (this.autocomplete.state.completionList.length >= 0 && !this.autocomplete.state.hide &&
+            this.state.editorState.document.text !== editorState.document.text &&
+            !rangeEquals(this.state.editorState.selection, editorState.selection))
+        {
             this.autocomplete.hide();
         }
 
@@ -1541,7 +1545,8 @@ export default class MessageComposerInput extends React.Component {
                             onFocus={this.onFocus}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
-                            spellCheck={true}
+                            // disable spell check for the placeholder because browsers don't like "unencrypted"
+                            spellCheck={!this.state.editorState.document.isEmpty}
                             />
                 </div>
             </div>
