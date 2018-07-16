@@ -59,6 +59,7 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
+import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './utils/WidgetUtils';
@@ -444,8 +445,8 @@ function _startCallApp(roomId, type) {
         'email=$matrix_user_id',
     ].join('&');
     const widgetUrl = (
-        'https://scalar.vector.im/api/widgets' +
-        '/jitsi.html?' +
+        SdkConfig.get().integrations_rest_url +
+        '/widgets/jitsi.html?' +
         queryString
     );
 
