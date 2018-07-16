@@ -291,6 +291,10 @@ textarea {
     vertical-align: middle;
 }
 
+.mx_emojione_selected {
+    background-color: $accent-color;
+}
+
 ::-moz-selection {
     background-color: $accent-color;
     color: $selection-fg-color;

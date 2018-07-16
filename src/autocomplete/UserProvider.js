@@ -33,14 +33,16 @@ import type {Completion, SelectionRange} from "./Autocompleter";
 
 const USER_REGEX = /\B@\S*/g;
 
+// used when you hit 'tab' - we allow some separator chars at the beginning
+// to allow you to tab-complete /mat into /(matthew)
+const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
+
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
-    constructor(room: Room) {
-        super(USER_REGEX, {
-            keys: ['name'],
-        });
+    constructor(room) {
+        super(USER_REGEX, FORCED_USER_REGEX);
         this.room = room;
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
@@ -91,12 +93,6 @@ export default class UserProvider extends AutocompleteProvider {
     async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
-        // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
-        if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
-            return [];
-        }
-
         // lazy-load user list into matcher
         if (this.users === null) this._makeUsers();
 
@@ -114,7 +110,8 @@ export default class UserProvider extends AutocompleteProvider {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName.replace(' (IRC)', ''),
-                    suffix: range.start === 0 ? ': ' : ' ',
+                    completionId: user.userId,
+                    suffix: (selection.beginning && selection.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion

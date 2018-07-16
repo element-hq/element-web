@@ -20,12 +20,18 @@ import React from 'react';
 import type {Completion, SelectionRange} from './Autocompleter';
 
 export default class AutocompleteProvider {
-    constructor(commandRegex?: RegExp) {
+    constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
         if (commandRegex) {
             if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');
             }
             this.commandRegex = commandRegex;
+        }
+        if (forcedCommandRegex) {
+            if (!forcedCommandRegex.global) {
+                throw new Error('forcedCommandRegex must have global flag set');
+            }
+            this.forcedCommandRegex = forcedCommandRegex;
         }
     }
 
@@ -40,7 +46,7 @@ export default class AutocompleteProvider {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
-            commandRegex = /\S+/g;
+            commandRegex = this.forcedCommandRegex || /\S+/g;
         }
 
         if (commandRegex == null) {

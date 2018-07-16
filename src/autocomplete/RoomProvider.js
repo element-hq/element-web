@@ -51,12 +51,6 @@ export default class RoomProvider extends AutocompleteProvider {
     async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
-        // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
-        if (/^(\/join|\/leave)/.test(query)) {
-            return [];
-        }
-
         const client = MatrixClientPeg.get();
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
@@ -80,6 +74,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
                     completion: displayAlias,
+                    completionId: displayAlias,
                     suffix: ' ',
                     href: makeRoomPermalink(displayAlias),
                     component: (

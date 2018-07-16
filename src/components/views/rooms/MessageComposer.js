@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -25,6 +25,17 @@ import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
+
+const formatButtonList = [
+    _td("bold"),
+    _td("italic"),
+    _td("deleted"),
+    _td("underlined"),
+    _td("inline-code"),
+    _td("block-quote"),
+    _td("bulleted-list"),
+    _td("numbered-list"),
+];
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -35,7 +46,6 @@ export default class MessageComposer extends React.Component {
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
-        this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -44,13 +54,10 @@ export default class MessageComposer extends React.Component {
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
-            autocompleteQuery: '',
-            selection: null,
             inputState: {
-                style: [],
+                marks: [],
                 blockType: null,
-                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
-                wordCount: 0,
+                isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
@@ -175,13 +182,6 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onInputContentChanged(content: string, selection: {start: number, end: number}) {
-        this.setState({
-            autocompleteQuery: content,
-            selection,
-        });
-    }
-
     onInputStateChanged(inputState) {
         this.setState({inputState});
     }
@@ -192,7 +192,7 @@ export default class MessageComposer extends React.Component {
         }
     }
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", event) {
+    onFormatButtonClicked(name, event) {
         event.preventDefault();
         this.messageComposerInput.onFormatButtonClicked(name, event);
     }
@@ -204,7 +204,7 @@ export default class MessageComposer extends React.Component {
 
     onToggleMarkdownClicked(e) {
         e.preventDefault(); // don't steal focus from the editor!
-        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichtextEnabled);
+        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichTextEnabled);
     }
 
     render() {
@@ -280,14 +280,14 @@ export default class MessageComposer extends React.Component {
                 </div>
             );
 
-            const formattingButton = (
+            const formattingButton = this.state.inputState.isRichTextEnabled ? (
                 <img className="mx_MessageComposer_formatting"
                      title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
                      style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
-            );
+            ) : null;
 
             let placeholderText;
             if (this.state.isQuoting) {
@@ -314,7 +314,6 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
-                    onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
                 stickerpickerButton,
@@ -331,11 +330,12 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const {style, blockType} = this.state.inputState;
-        const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
-            (name) => {
-                const active = style.includes(name) || blockType === name;
-                const suffix = active ? '-o-n' : '';
+        let formatBar;
+        if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
+            const {marks, blockType} = this.state.inputState;
+            const formatButtons = formatButtonList.map((name) => {
+                const active = marks.some(mark => mark.type === name) || blockType === name;
+                const suffix = active ? '-on' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
                 const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
                 return <img className={className}
@@ -344,8 +344,25 @@ export default class MessageComposer extends React.Component {
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
                             height="17" />;
-            },
-        );
+                },
+            );
+
+            formatBar =
+                <div className="mx_MessageComposer_formatbar_wrapper">
+                    <div className="mx_MessageComposer_formatbar">
+                        { formatButtons }
+                        <div style={{flex: 1}}></div>
+                        <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
+                             onMouseDown={this.onToggleMarkdownClicked}
+                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
+                            src={`img/button-md-${!this.state.inputState.isRichTextEnabled}.png`} />
+                        <img title={_t("Hide Text Formatting Toolbar")}
+                             onClick={this.onToggleFormattingClicked}
+                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                             src="img/icon-text-cancel.svg" />
+                    </div>
+                </div>
+        }
 
         return (
             <div className="mx_MessageComposer">
@@ -354,20 +371,7 @@ export default class MessageComposer extends React.Component {
                         { controls }
                     </div>
                 </div>
-                <div className="mx_MessageComposer_formatbar_wrapper">
-                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
-                        { formatButtons }
-                        <div style={{flex: 1}}></div>
-                        <img title={this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
-                             onMouseDown={this.onToggleMarkdownClicked}
-                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                        <img title={_t("Hide Text Formatting Toolbar")}
-                             onClick={this.onToggleFormattingClicked}
-                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                             src="img/icon-text-cancel.svg" />
-                    </div>
-                </div>
+                { formatBar }
             </div>
         );
     }
