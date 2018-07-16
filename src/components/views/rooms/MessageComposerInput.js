@@ -589,14 +589,8 @@ export default class MessageComposerInput extends React.Component {
             this.props.onInputStateChanged(inputState);
         }
 
-        // Record the editor state for this room so that it can be retrieved after
-        // switching to another room and back
-        dis.dispatch({
-            action: 'editor_state',
-            room_id: this.props.room.roomId,
-            rich_text: this.state.isRichTextEnabled,
-            editor_state: editorState,
-        });
+        // Record the editor state for this room so that it can be retrieved after switching to another room and back
+        MessageComposerStore.setEditorState(this.props.room.roomId, editorState, this.state.isRichTextEnabled);
 
         this.setState({
             editorState,
