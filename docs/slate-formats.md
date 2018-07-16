@@ -84,5 +84,5 @@ The actual conversion transitions are:
    * In RT mode, insert it straight into the editor as a fragment
    * In MD mode, serialise it to an MD string via slate-md-serializer and then insert the string into the editor as a fragment.
 
-The various scenarios and transitions could be drawn into a pretty diagram if one felt the urge, but hopefully the enough
+The various scenarios and transitions could be drawn into a pretty diagram if one felt the urge, but hopefully the above
 gives sufficient detail on how it's all meant to work.
