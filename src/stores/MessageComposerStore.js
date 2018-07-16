@@ -13,72 +13,43 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher';
-import { Store } from 'flux/utils';
 import { Value } from 'slate';
 
-const INITIAL_STATE = {
-    // a map of room_id to rich text editor composer state
-    editorStateMap: localStorage.getItem('editor_state') ?
-        JSON.parse(localStorage.getItem('editor_state')) : {},
-};
+const localStoragePrefix = 'editor_state_';
 
 /**
- * A class for storing application state to do with the message composer (specifically
- * in-progress message drafts). This is a simple
- * flux store that listens for actions and updates its state accordingly, informing any
- * listeners (views) of state changes.
+ * A class for storing application state to do with the message composer (specifically in-progress message drafts).
+ * It does not worry about cleaning up on log out as this is handled in Lifecycle.js by localStorage.clear()
  */
-class MessageComposerStore extends Store {
+class MessageComposerStore {
     constructor() {
-        super(dis);
-
-        // Initialise state
-        this._state = Object.assign({}, INITIAL_STATE);
+        this.prefix = localStoragePrefix;
     }
 
-    _setState(newState) {
-        this._state = Object.assign(this._state, newState);
-        this.__emitChange();
+    _getKey(roomId: string): string {
+        return this.prefix + roomId;
     }
 
-    __onDispatch(payload) {
-        switch (payload.action) {
-            case 'editor_state':
-                this._editorState(payload);
-                break;
-            case 'on_logged_out':
-                this.reset();
-                break;
+    setEditorState(roomId: string, editorState: Value, richText: boolean) {
+        localStorage.setItem(this._getKey(roomId), JSON.stringify({
+            editor_state: editorState,
+            rich_text: richText,
+        }));
+    }
+
+    getEditorState(roomId): {editor_state: Value, rich_text: boolean} {
+        const stateStr = localStorage.getItem(this._getKey(roomId));
+
+        let state;
+        if (stateStr) {
+            state = JSON.parse(stateStr);
+
+            // if it does not have the fields we expect then bail
+            if (!state || state.rich_text === undefined || state.editor_state === undefined) return;
+            state.editor_state = Value.fromJSON(state.editor_state);
         }
-    }
 
-    _editorState(payload) {
-        const editorStateMap = this._state.editorStateMap;
-        editorStateMap[payload.room_id] = {
-            editor_state: payload.editor_state,
-            rich_text: payload.rich_text,
-        };
-        localStorage.setItem('editor_state', JSON.stringify(editorStateMap));
-        this._setState({
-            editorStateMap: editorStateMap,
-        });
-    }
-
-    getEditorState(roomId) {
-        const editorStateMap = this._state.editorStateMap;
-        // const entry = this._state.editorStateMap[roomId];
-        if (editorStateMap[roomId] && !Value.isValue(editorStateMap[roomId].editor_state)) {
-            // rehydrate lazily to prevent massive churn at launch and cache it
-            editorStateMap[roomId].editor_state = Value.fromJSON(editorStateMap[roomId].editor_state);
-        }
-        // explicitly don't setState here because the value didn't actually change, we just hydrated it,
-        // if a listener received an update they too would call this method and have a hydrated Value
-        return editorStateMap[roomId];
-    }
-
-    reset() {
-        this._state = Object.assign({}, INITIAL_STATE);
+        return state;
     }
 }
 
