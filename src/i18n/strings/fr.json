@@ -1211,9 +1211,9 @@
     "Demote": "Rétrograder",
     "Show empty room list headings": "Afficher les en-têtes de la liste des salons vides",
     "This event could not be displayed": "Cet événement n'a pas pu être affiché",
-    "deleted": "supprimé",
+    "deleted": "barré",
     "underlined": "souligné",
-    "inline-code": "code en ligne",
+    "inline-code": "code",
     "block-quote": "citation",
     "bulleted-list": "liste à puces",
     "numbered-list": "liste à numéros"
