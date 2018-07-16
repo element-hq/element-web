@@ -1543,7 +1543,8 @@ export default class MessageComposerInput extends React.Component {
                             onFocus={this.onFocus}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
-                            spellCheck={true}
+                            // disable spell check for the placeholder because browsers don't like "unencrypted"
+                            spellCheck={!this.state.editorState.document.isEmpty}
                             />
                 </div>
             </div>
