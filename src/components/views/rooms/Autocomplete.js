@@ -114,7 +114,7 @@ export default class Autocomplete extends React.Component {
 
     processQuery(query, selection) {
         return this.autocompleter.getCompletions(
-            query, selection, this.state.forceComplete,
+            query, selection, this.state.forceComplete
         ).then((completions) => {
             // Only ever process the completions for the most recent query being processed
             if (query !== this.queryRequested) {
@@ -263,7 +263,6 @@ export default class Autocomplete extends React.Component {
                 const componentPosition = position;
                 position++;
 
-                const onMouseMove = () => this.setSelection(componentPosition);
                 const onClick = () => {
                     this.setSelection(componentPosition);
                     this.onCompletionClicked();
@@ -273,7 +272,6 @@ export default class Autocomplete extends React.Component {
                     key: i,
                     ref: `completion${position - 1}`,
                     className,
-                    onMouseMove,
                     onClick,
                 });
             });

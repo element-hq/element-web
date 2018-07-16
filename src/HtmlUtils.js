@@ -112,41 +112,6 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
     />;
 }
 
-
-export function processHtmlForSending(html: string): string {
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = html;
-
-    if (contentDiv.children.length === 0) {
-        return contentDiv.innerHTML;
-    }
-
-    let contentHTML = "";
-    for (let i=0; i < contentDiv.children.length; i++) {
-        const element = contentDiv.children[i];
-        if (element.tagName.toLowerCase() === 'p') {
-            contentHTML += element.innerHTML;
-            // Don't add a <br /> for the last <p>
-            if (i !== contentDiv.children.length - 1) {
-                contentHTML += '<br />';
-            }
-        } else if (element.tagName.toLowerCase() === 'pre') {
-            // Replace "<br>\n" with "\n" within `<pre>` tags because the <br> is
-            // redundant. This is a workaround for a bug in draft-js-export-html:
-            //   https://github.com/sstur/draft-js-export-html/issues/62
-            contentHTML += '<pre>' +
-                element.innerHTML.replace(/<br>\n/g, '\n').trim() +
-                '</pre>';
-        } else {
-            const temp = document.createElement('div');
-            temp.appendChild(element.cloneNode(true));
-            contentHTML += temp.innerHTML;
-        }
-    }
-
-    return contentHTML;
-}
-
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
@@ -409,19 +374,22 @@ class TextHighlighter extends BaseHighlighter {
 }
 
 
-    /* turn a matrix event body into html
-     *
-     * content: 'content' of the MatrixEvent
-     *
-     * highlights: optional list of words to highlight, ordered by longest word first
-     *
-     * opts.highlightLink: optional href to add to highlighted words
-     * opts.disableBigEmoji: optional argument to disable the big emoji class.
-     * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
-     */
+/* turn a matrix event body into html
+ *
+ * content: 'content' of the MatrixEvent
+ *
+ * highlights: optional list of words to highlight, ordered by longest word first
+ *
+ * opts.highlightLink: optional href to add to highlighted words
+ * opts.disableBigEmoji: optional argument to disable the big emoji class.
+ * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
+ * opts.returnString: return an HTML string rather than JSX elements
+ * opts.emojiOne: optional param to do emojiOne (default true)
+ */
 export function bodyToHtml(content, highlights, opts={}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
 
+    const doEmojiOne = opts.emojiOne === undefined ? true : opts.emojiOne;
     let bodyHasEmoji = false;
 
     let strippedBody;
@@ -447,8 +415,9 @@ export function bodyToHtml(content, highlights, opts={}) {
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
 
-        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
-
+        if (doEmojiOne) {
+            bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+        }
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
@@ -471,6 +440,10 @@ export function bodyToHtml(content, highlights, opts={}) {
         }
     } finally {
         delete sanitizeHtmlParams.textFilter;
+    }
+
+    if (opts.returnString) {
+        return isDisplayedWithHtml ? safeBody : strippedBody;
     }
 
     let emojiBody = false;
