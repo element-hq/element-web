@@ -255,7 +255,6 @@ export default class WidgetUtils {
             content = {};
         }
 
-        const room = MatrixClientPeg.get().getRoom(roomId);
         WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
 
         const client = MatrixClientPeg.get();
