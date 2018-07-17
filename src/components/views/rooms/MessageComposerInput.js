@@ -382,7 +382,8 @@ export default class MessageComposerInput extends React.Component {
                 const quote = Block.create('block-quote');
                 if (this.state.isRichTextEnabled) {
                     let change = editorState.change();
-                    if (editorState.anchorText.text === '' && editorState.anchorBlock.nodes.size === 1) {
+                    const anchorText = editorState.anchorText;
+                    if ((!anchorText || anchorText.text === '') && editorState.anchorBlock.nodes.size === 1) {
                         // replace the current block rather than split the block
                         change = change.replaceNodeByKey(editorState.anchorBlock.key, quote);
                     }
