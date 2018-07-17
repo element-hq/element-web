@@ -17,7 +17,7 @@ limitations under the License.
 const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function join(page, roomName, acceptTerms = false) {
+module.exports = async function join(page, roomName) {
   //TODO: brittle selector
   const directoryButton = await helpers.waitAndQuerySelector(page, '.mx_RoleButton[aria-label="Room directory"]');
   await directoryButton.click();
@@ -30,22 +30,6 @@ module.exports = async function join(page, roomName, acceptTerms = false) {
 
   const joinLink = await helpers.waitAndQuerySelector(page, '.mx_RoomPreviewBar_join_text a');
   await joinLink.click();
-
-  if (acceptTerms) {
-    const reviewTermsButton = await helpers.waitAndQuerySelector(page, '.mx_QuestionDialog button.mx_Dialog_primary');
-    const termsPagePromise = helpers.waitForNewPage();
-    await reviewTermsButton.click();
-    const termsPage = await termsPagePromise;
-    const acceptButton = await termsPage.$('input[type=submit]');
-    await acceptButton.click();
-    await helpers.delay(500); //TODO yuck, timers
-    //try to join again after accepting the terms
-
-    //TODO need to do this because joinLink is detached after switching target
-    const joinLink2 = await helpers.waitAndQuerySelector(page, '.mx_RoomPreviewBar_join_text a');
-    await joinLink2.click();
-  }
-
 
   await page.waitForSelector('.mx_MessageComposer');
 }
