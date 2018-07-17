@@ -1210,5 +1210,11 @@
     "Demote yourself?": "Lefokozod magad?",
     "Demote": "Lefokozás",
     "Show empty room list headings": "Üres szobalista fejléc mutatása",
-    "This event could not be displayed": "Az eseményt nem lehet megjeleníteni"
+    "This event could not be displayed": "Az eseményt nem lehet megjeleníteni",
+    "deleted": "törölt",
+    "underlined": "aláhúzott",
+    "inline-code": "kód",
+    "block-quote": "idézet",
+    "bulleted-list": "rendezetlen lista",
+    "numbered-list": "rendezett lista"
 }
