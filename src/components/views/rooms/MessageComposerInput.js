@@ -1533,6 +1533,14 @@ export default class MessageComposerInput extends React.Component {
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
+        const isEmpty = this.state.editorState.document.isEmpty;
+
+        let {placeholder} = this.props;
+        // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
+        if (isEmpty && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
+            placeholder = undefined;
+        }
+
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
@@ -1554,7 +1562,7 @@ export default class MessageComposerInput extends React.Component {
                     <Editor ref="editor"
                             dir="auto"
                             className="mx_MessageComposer_editor"
-                            placeholder={this.props.placeholder}
+                            placeholder={placeholder}
                             value={this.state.editorState}
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
@@ -1564,7 +1572,7 @@ export default class MessageComposerInput extends React.Component {
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             // disable spell check for the placeholder because browsers don't like "unencrypted"
-                            spellCheck={!this.state.editorState.document.isEmpty}
+                            spellCheck={!isEmpty}
                             />
                 </div>
             </div>
