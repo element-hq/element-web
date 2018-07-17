@@ -992,24 +992,25 @@ export default class MessageComposerInput extends React.Component {
 
         const editorState = this.state.editorState;
 
-        let inBlock = false;
-        let inEmptyBlock = false;
-
-        for (const block of editorState.blocks) {
-            if (['code', 'block-quote', 'list-item'].includes(block.type)) {
-                inBlock = true;
-                if (block.text === '') {
-                    inEmptyBlock = true;
-                }
-                break;
+        const lastBlock = editorState.blocks.last();
+        if (['code', 'block-quote', 'list-item'].includes(lastBlock.type)) {
+            const text = lastBlock.text;
+            if (text === '') {
+                // allow the user to cancel empty block by hitting return, useful in conjunction with below `inBlock`
+                return change
+                    .setBlocks(DEFAULT_NODE)
+                    .unwrapBlock('bulleted-list')
+                    .unwrapBlock('numbered-list');
             }
-        }
 
-        if (inEmptyBlock) {
-            // allow the user to cancel empty block by hitting return, useful in conjunction with below `inBlock`
-            return change.setBlocks(DEFAULT_NODE);
-        } else if (inBlock) {
-            // allow the user to terminate blocks by hitting return rather than sending a msg
+            // TODO strip trailing lines from blockquotes/list entries
+            // the below code seemingly works but doesn't account for edge cases like return with caret not at end
+            /* const trailingNewlines = text.match(/\n*$/);
+            if (trailingNewlines && trailingNewlines[0]) {
+                remove trailing newlines at the end of this block before making a new one
+                return change.deleteBackward(trailingNewlines[0].length);
+            }*/
+
             return;
         }
 
