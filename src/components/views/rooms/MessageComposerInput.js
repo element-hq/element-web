@@ -970,19 +970,21 @@ export default class MessageComposerInput extends React.Component {
     onPaste = (event: Event, change: Change, editor: Editor): Change => {
         const transfer = getEventTransfer(event);
 
-        if (transfer.type === "files") {
-            return this.props.onFilesPasted(transfer.files);
-        }
-        else if (transfer.type === "html") {
-            // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
-            // that we will silently discard nested blocks (e.g. nested lists) :(
-            const fragment = this.html.deserialize(transfer.html);
-            if (this.state.isRichTextEnabled) {
-                return change.insertFragment(fragment.document);
+        switch (transfer.type) {
+            case 'files':
+                return this.props.onFilesPasted(transfer.files);
+            case 'html': {
+                // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+                // that we will silently discard nested blocks (e.g. nested lists) :(
+                const fragment = this.html.deserialize(transfer.html);
+                if (this.state.isRichTextEnabled) {
+                    return change.insertFragment(fragment.document);
+                } else {
+                    return change.insertText(this.md.serialize(fragment));
+                }
             }
-            else {
-                return change.insertText(this.md.serialize(fragment));
-            }
+            case 'text':
+                return change.insertText(transfer.text);
         }
     };
 
