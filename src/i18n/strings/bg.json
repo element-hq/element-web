@@ -1209,5 +1209,7 @@
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Не можете да изпращате съобщения докато не прегледате и се съгласите с <consentLink>нашите правила и условия</consentLink>.",
     "Demote yourself?": "Понижете себе си?",
     "Demote": "Понижение",
-    "This event could not be displayed": "Това събитие не може да бъде показано"
+    "This event could not be displayed": "Това събитие не може да бъде показано",
+    "A conference call could not be started because the intgrations server is not available": "Не може да бъде започнат конферентен разговор, защото сървърът с интеграции не е достъпен",
+    "Permission Required": "Необходимо е разрешение"
 }
