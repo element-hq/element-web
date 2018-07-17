@@ -32,7 +32,13 @@ class MessageComposerStore {
 
     setEditorState(roomId: string, editorState: Value, richText: boolean) {
         localStorage.setItem(this._getKey(roomId), JSON.stringify({
-            editor_state: editorState,
+            editor_state: editorState.toJSON({
+                preserveSelection: true,
+                // XXX: re-hydrating history is not currently supported by fromJSON
+                // preserveHistory: true,
+                // XXX: this seems like a workaround for selection.isSet being based on anchorKey instead of anchorPath
+                preserveKeys: true,
+            }),
             rich_text: richText,
         }));
     }

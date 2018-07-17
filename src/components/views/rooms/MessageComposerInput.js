@@ -382,7 +382,8 @@ export default class MessageComposerInput extends React.Component {
                 const quote = Block.create('block-quote');
                 if (this.state.isRichTextEnabled) {
                     let change = editorState.change();
-                    if (editorState.anchorText.text === '' && editorState.anchorBlock.nodes.size === 1) {
+                    const anchorText = editorState.anchorText;
+                    if ((!anchorText || anchorText.text === '') && editorState.anchorBlock.nodes.size === 1) {
                         // replace the current block rather than split the block
                         change = change.replaceNodeByKey(editorState.anchorBlock.key, quote);
                     }
@@ -969,19 +970,21 @@ export default class MessageComposerInput extends React.Component {
     onPaste = (event: Event, change: Change, editor: Editor): Change => {
         const transfer = getEventTransfer(event);
 
-        if (transfer.type === "files") {
-            return this.props.onFilesPasted(transfer.files);
-        }
-        else if (transfer.type === "html") {
-            // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
-            // that we will silently discard nested blocks (e.g. nested lists) :(
-            const fragment = this.html.deserialize(transfer.html);
-            if (this.state.isRichTextEnabled) {
-                return change.insertFragment(fragment.document);
+        switch (transfer.type) {
+            case 'files':
+                return this.props.onFilesPasted(transfer.files);
+            case 'html': {
+                // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+                // that we will silently discard nested blocks (e.g. nested lists) :(
+                const fragment = this.html.deserialize(transfer.html);
+                if (this.state.isRichTextEnabled) {
+                    return change.insertFragment(fragment.document);
+                } else {
+                    return change.insertText(this.md.serialize(fragment));
+                }
             }
-            else {
-                return change.insertText(this.md.serialize(fragment));
-            }
+            case 'text':
+                return change.insertText(transfer.text);
         }
     };
 
@@ -990,14 +993,29 @@ export default class MessageComposerInput extends React.Component {
             return change.insertText('\n');
         }
 
-        if (this.state.editorState.blocks.some(
-            block => ['code', 'block-quote', 'list-item'].includes(block.type)
-        )) {
-            // allow the user to terminate blocks by hitting return rather than sending a msg
+        const editorState = this.state.editorState;
+
+        const lastBlock = editorState.blocks.last();
+        if (['code', 'block-quote', 'list-item'].includes(lastBlock.type)) {
+            const text = lastBlock.text;
+            if (text === '') {
+                // allow the user to cancel empty block by hitting return, useful in conjunction with below `inBlock`
+                return change
+                    .setBlocks(DEFAULT_NODE)
+                    .unwrapBlock('bulleted-list')
+                    .unwrapBlock('numbered-list');
+            }
+
+            // TODO strip trailing lines from blockquotes/list entries
+            // the below code seemingly works but doesn't account for edge cases like return with caret not at end
+            /* const trailingNewlines = text.match(/\n*$/);
+            if (trailingNewlines && trailingNewlines[0]) {
+                remove trailing newlines at the end of this block before making a new one
+                return change.deleteBackward(trailingNewlines[0].length);
+            }*/
+
             return;
         }
-
-        const editorState = this.state.editorState;
 
         let contentText;
         let contentHTML;
@@ -1515,6 +1533,14 @@ export default class MessageComposerInput extends React.Component {
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
+        const isEmpty = this.state.editorState.document.isEmpty;
+
+        let {placeholder} = this.props;
+        // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
+        if (isEmpty && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
+            placeholder = undefined;
+        }
+
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
@@ -1536,7 +1562,7 @@ export default class MessageComposerInput extends React.Component {
                     <Editor ref="editor"
                             dir="auto"
                             className="mx_MessageComposer_editor"
-                            placeholder={this.props.placeholder}
+                            placeholder={placeholder}
                             value={this.state.editorState}
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
@@ -1546,7 +1572,7 @@ export default class MessageComposerInput extends React.Component {
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             // disable spell check for the placeholder because browsers don't like "unencrypted"
-                            spellCheck={!this.state.editorState.document.isEmpty}
+                            spellCheck={!isEmpty}
                             />
                 </div>
             </div>
