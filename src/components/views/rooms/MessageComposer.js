@@ -334,7 +334,9 @@ export default class MessageComposer extends React.Component {
         if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
             const {marks, blockType} = this.state.inputState;
             const formatButtons = formatButtonList.map((name) => {
-                const active = marks.some(mark => mark.type === name) || blockType === name;
+                // special-case to match the md serializer and the special-case in MessageComposerInput.js
+                const markName = name === 'inline-code' ? 'code' : name;
+                const active = marks.some(mark => mark.type === markName) || blockType === name;
                 const suffix = active ? '-on' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
                 const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
