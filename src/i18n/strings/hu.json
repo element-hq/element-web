@@ -1216,5 +1216,8 @@
     "inline-code": "kód",
     "block-quote": "idézet",
     "bulleted-list": "rendezetlen lista",
-    "numbered-list": "rendezett lista"
+    "numbered-list": "rendezett lista",
+    "A conference call could not be started because the intgrations server is not available": "A konferencia hívást nem lehet elkezdeni mert az integrációs szerver nem érhető el",
+    "Permission Required": "Engedély szükséges",
+    "You do not have permission to start a conference call in this room": "Nincs jogosultságod konferencia hívást kezdeményezni ebben a szobában"
 }
