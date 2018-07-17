@@ -990,14 +990,28 @@ export default class MessageComposerInput extends React.Component {
             return change.insertText('\n');
         }
 
-        if (this.state.editorState.blocks.some(
-            block => ['code', 'block-quote', 'list-item'].includes(block.type)
-        )) {
+        const editorState = this.state.editorState;
+
+        let inBlock = false;
+        let inEmptyBlock = false;
+
+        for (const block of editorState.blocks) {
+            if (['code', 'block-quote', 'list-item'].includes(block.type)) {
+                inBlock = true;
+                if (block.text === '') {
+                    inEmptyBlock = true;
+                }
+                break;
+            }
+        }
+
+        if (inEmptyBlock) {
+            // allow the user to cancel empty block by hitting return, useful in conjunction with below `inBlock`
+            return change.setBlocks(DEFAULT_NODE);
+        } else if (inBlock) {
             // allow the user to terminate blocks by hitting return rather than sending a msg
             return;
         }
-
-        const editorState = this.state.editorState;
 
         let contentText;
         let contentHTML;
