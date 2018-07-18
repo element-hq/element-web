@@ -8,6 +8,7 @@
     "brand": "Riot",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
         "feature_groups": "labs",
