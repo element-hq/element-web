@@ -330,8 +330,9 @@ export default class MessageComposerInput extends React.Component {
             }
             return editorState;
         } else {
-            // ...or create a new one.
-            return Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            // ...or create a new one. and explicitly focus it otherwise tab in-out issues
+            const base = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            return base.change().focus().value;
         }
     }
 
