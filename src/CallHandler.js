@@ -444,11 +444,15 @@ function _startCallApp(roomId, type) {
         'avatarUrl=$matrix_avatar_url',
         'email=$matrix_user_id',
     ].join('&');
-    const widgetUrl = (
-        SdkConfig.get().integrations_rest_url +
-        '/widgets/jitsi.html?' +
-        queryString
-    );
+
+    let widgetUrl;
+    if (SdkConfig.get().integrations_jitsi_widget_url) {
+        // Try this config key. This probably isn't ideal as a way of discovering this
+        // URL, but this will at least allow the integration manager to not be hardcoded.
+        widgetUrl = SdkConfig.get().integrations_jitsi_widget_url + '?' + queryString;
+    } else {
+        widgetUrl = SdkConfig.get().integrations_rest_url + '/widgets/jitsi.html?' + queryString;
+    }
 
     const widgetData = { widgetSessionId };
 
