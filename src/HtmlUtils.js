@@ -112,6 +112,33 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
     />;
 }
 
+export function processHtmlForSending(html: string): string {
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = html;
+
+    if (contentDiv.children.length === 0) {
+        return contentDiv.innerHTML;
+    }
+
+    let contentHTML = "";
+    for (let i=0; i < contentDiv.children.length; i++) {
+        const element = contentDiv.children[i];
+        if (element.tagName.toLowerCase() === 'p') {
+            contentHTML += element.innerHTML;
+            // Don't add a <br /> for the last <p>
+            if (i !== contentDiv.children.length - 1) {
+                contentHTML += '<br />';
+            }
+        } else {
+            const temp = document.createElement('div');
+            temp.appendChild(element.cloneNode(true));
+            contentHTML += temp.innerHTML;
+        }
+    }
+
+    return contentHTML;
+}
+
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.

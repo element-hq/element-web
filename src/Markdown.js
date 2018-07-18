@@ -111,7 +111,7 @@ export default class Markdown {
         // you can nest them.
         //
         // Let's try sending with <p/>s anyway for now, though.
-/*        
+
         const real_paragraph = renderer.paragraph;
 
         renderer.paragraph = function(node, entering) {
@@ -124,10 +124,10 @@ export default class Markdown {
                 real_paragraph.call(this, node, entering);
             }
         };
-*/        
+
 
         renderer.html_inline = html_if_tag_allowed;
-  
+
         renderer.html_block = function(node) {
 /*
             // as with `paragraph`, we only insert line breaks
@@ -138,7 +138,7 @@ export default class Markdown {
             html_if_tag_allowed.call(this, node);
 /*
             if (isMultiLine) this.cr();
-*/        
+*/
         };
 
         return renderer.render(this.parsed);

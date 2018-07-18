@@ -1089,8 +1089,7 @@ export default class MessageComposerInput extends React.Component {
             if (contentText === '') return true;
 
             if (shouldSendHTML) {
-                // FIXME: should we strip out the surrounding <p></p>?
-                contentHTML = this.html.serialize(editorState); // HtmlUtils.processHtmlForSending();
+                contentHTML = HtmlUtils.processHtmlForSending(this.html.serialize(editorState));
             }
         } else {
             const sourceWithPills = this.plainWithMdPills.serialize(editorState);
