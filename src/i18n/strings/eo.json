@@ -658,7 +658,7 @@
     "I verify that the keys match": "Mi kontrolas, ke la ŝlosiloj kongruas",
     "An error has occurred.": "Eraro okazis.",
     "OK": "Bone",
-    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Vi aldonis novan aparaton ‹%(displayName)s›, kiu petas ĉifrajn ŝlasilojn.",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Vi aldonis novan aparaton “%(displayName)s”, kiu petas ĉifrajn ŝlosilojn.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Via nekontrolita aparato ‹%(displayName)s› petas ĉifrajn ŝlosilojn.",
     "Start verification": "Komenci kontrolon",
     "Share without verifying": "Kunhavigi sen kontrolo",
@@ -1103,5 +1103,12 @@
     "Your User Agent": "Via klienta aplikaĵo",
     "Your device resolution": "La distingivo de via aparato",
     "Call in Progress": "Voko farata",
-    "A call is already in progress!": "Voko estas jam farata!"
+    "A call is already in progress!": "Voko estas jam farata!",
+    "Always show encryption icons": "Ĉiam montri bildetojn de ĉifrado",
+    "Send analytics data": "Sendi statistikajn datumojn",
+    "Key request sent.": "Demando de ŝlosilo sendita.",
+    "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Redemandi ĉifroŝlosilojn</requestLink> el viaj aliaj aparatoj.",
+    "Encrypting": "Ĉifranta",
+    "Encrypted, not sent": "Ĉifrita, ne sendita",
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Se viaj aliaj aparatoj ne havas la ŝlosilon por ĉi tiu mesaĝo, vi ne povos malĉifri ĝin."
 }
