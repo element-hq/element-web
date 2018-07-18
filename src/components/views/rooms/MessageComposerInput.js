@@ -986,7 +986,11 @@ export default class MessageComposerInput extends React.Component {
                 }
             }
             case 'text':
-                return change.insertText(transfer.text);
+                // don't skip/merge so that multiple consecutive pastes can be undone individually
+                return change
+                    .setOperationFlag("skip", false)
+                    .setOperationFlag("merge", false)
+                    .insertText(transfer.text);
         }
     };
 
@@ -1538,7 +1542,7 @@ export default class MessageComposerInput extends React.Component {
 
         let {placeholder} = this.props;
         // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
-        if (isEmpty && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
+        if (isEmpty && this.state.editorState.startBlock && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
             placeholder = undefined;
         }
 
