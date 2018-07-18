@@ -977,19 +977,20 @@ export default class MessageComposerInput extends React.Component {
             case 'files':
                 return this.props.onFilesPasted(transfer.files);
             case 'html': {
-                // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
-                // that we will silently discard nested blocks (e.g. nested lists) :(
-                const fragment = this.html.deserialize(transfer.html);
                 if (this.state.isRichTextEnabled) {
+                    // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+                    // that we will silently discard nested blocks (e.g. nested lists) :(
+                    const fragment = this.html.deserialize(transfer.html);
                     return change
                         .setOperationFlag("skip", false)
                         .setOperationFlag("merge", false)
                         .insertFragment(fragment.document);
                 } else {
+                    // in MD mode we don't want the rich content pasted as the magic was annoying people so paste plain
                     return change
                         .setOperationFlag("skip", false)
                         .setOperationFlag("merge", false)
-                        .insertText(this.md.serialize(fragment));
+                        .insertText(transfer.text);
                 }
             }
             case 'text':
