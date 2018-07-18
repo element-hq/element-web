@@ -1209,5 +1209,8 @@
     "Demote yourself?": "Понизить самого себя?",
     "This event could not be displayed": "Это событие отобразить невозможно",
     "deleted": "удален",
-    "underlined": "подчеркнут"
+    "underlined": "подчеркнут",
+    "A conference call could not be started because the intgrations server is not available": "Запуск конференции невозможен из-за недоступности сервера интеграции",
+    "Permission Required": "Требуется разрешение",
+    "You do not have permission to start a conference call in this room": "У вас нет разрешения на запуск конференции в этой комнате"
 }
