@@ -980,9 +980,15 @@ export default class MessageComposerInput extends React.Component {
                 // that we will silently discard nested blocks (e.g. nested lists) :(
                 const fragment = this.html.deserialize(transfer.html);
                 if (this.state.isRichTextEnabled) {
-                    return change.insertFragment(fragment.document);
+                    return change
+                        .setOperationFlag("skip", false)
+                        .setOperationFlag("merge", false)
+                        .insertFragment(fragment.document);
                 } else {
-                    return change.insertText(this.md.serialize(fragment));
+                    return change
+                        .setOperationFlag("skip", false)
+                        .setOperationFlag("merge", false)
+                        .insertText(this.md.serialize(fragment));
                 }
             }
             case 'text':
