@@ -734,6 +734,7 @@ export default class MessageComposerInput extends React.Component {
             }[ev.keyCode];
 
             if (ctrlCmdCommand) {
+                ev.preventDefault(); // to prevent clashing with Mac's minimize window
                 return this.handleKeyCommand(ctrlCmdCommand);
             }
         }
