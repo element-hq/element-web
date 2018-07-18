@@ -373,6 +373,7 @@ export default class MessageComposerInput extends React.Component {
                 break;
             case 'quote': {
                 const html = HtmlUtils.bodyToHtml(payload.event.getContent(), null, {
+                    forComposerQuote: true,
                     returnString: true,
                     emojiOne: false,
                 });
