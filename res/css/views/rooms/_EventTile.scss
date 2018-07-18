@@ -186,7 +186,6 @@ limitations under the License.
 .mx_EventTile_msgOption {
     float: right;
     text-align: right;
-    z-index: 1;
     position: relative;
     width: 90px;
 
@@ -448,6 +447,7 @@ limitations under the License.
 .mx_EventTile_content .markdown-body h2
 {
     font-size: 1.5em;
+    border-bottom: none ! important; // override GFM
 }
 
 .mx_EventTile_content .markdown-body a {

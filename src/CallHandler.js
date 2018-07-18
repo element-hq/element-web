@@ -63,6 +63,7 @@ import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
+import ScalarAuthClient from './ScalarAuthClient';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -402,10 +403,26 @@ function _onAction(payload) {
     }
 }
 
-function _startCallApp(roomId, type) {
-    const room = MatrixClientPeg.get().getRoom(roomId);
-    if (!room) {
-        console.error("Attempted to start conference call widget in unknown room: " + roomId);
+async function _startCallApp(roomId, type) {
+    // check for a working intgrations manager. Technically we could put
+    // the state event in anyway, but the resulting widget would then not
+    // work for us. Better that the user knows before everyone else in the
+    // room sees it.
+    const scalarClient = new ScalarAuthClient();
+    let haveScalar = false;
+    try {
+        await scalarClient.connect();
+        haveScalar = scalarClient.hasCredentials();
+    } catch (e) {
+        // fall through
+    }
+    if (!haveScalar) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Could not connect to the integration server', '', ErrorDialog, {
+            title: _t('Could not connect to the integration server'),
+            description: _t('A conference call could not be started because the intgrations server is not available'),
+        });
         return;
     }
 
@@ -414,6 +431,7 @@ function _startCallApp(roomId, type) {
         show: true,
     });
 
+    const room = MatrixClientPeg.get().getRoom(roomId);
     const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
 
     if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
@@ -474,6 +492,14 @@ function _startCallApp(roomId, type) {
     WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
         console.log('Jitsi widget added');
     }).catch((e) => {
+        if (e.errcode === 'M_FORBIDDEN') {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+                title: _t('Permission Required'),
+                description: _t("You do not have permission to start a conference call in this room"),
+            });
+        }
         console.error(e);
     });
 }
