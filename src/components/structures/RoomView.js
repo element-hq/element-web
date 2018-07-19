@@ -45,6 +45,7 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
 
@@ -153,6 +154,8 @@ module.exports = React.createClass({
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
+
+        WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -243,6 +246,12 @@ module.exports = React.createClass({
         }
     },
 
+    _onWidgetEchoStoreUpdate: function() {
+        this.setState({
+            showApps: this._shouldShowApps(this.state.room),
+        });
+    },
+
     _setupRoom: function(room, roomId, joining, shouldPeek) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
@@ -319,7 +328,9 @@ module.exports = React.createClass({
             return false;
         }
 
-        return WidgetUtils.getRoomWidgets(room).length > 0;
+        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
+
+        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
     },
 
     componentDidMount: function() {
@@ -413,6 +424,8 @@ module.exports = React.createClass({
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+
+        WidgetEchoStore.removeListener('update', this._onWidgetEchoStoreUpdate);
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();
