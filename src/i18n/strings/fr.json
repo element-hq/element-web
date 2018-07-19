@@ -1219,5 +1219,8 @@
     "numbered-list": "liste à numéros",
     "A conference call could not be started because the intgrations server is not available": "L'appel en téléconférence n'a pas pu aboutir car le serveur d'intégrations n'est pas disponible",
     "Permission Required": "Permission requise",
-    "You do not have permission to start a conference call in this room": "Vous n'avez pas la permission de lancer un appel en téléconférence dans ce salon"
+    "You do not have permission to start a conference call in this room": "Vous n'avez pas la permission de lancer un appel en téléconférence dans ce salon",
+    "A call is currently being placed!": "Un appel est en cours !",
+    "Failed to remove widget": "Échec de la suppression du widget",
+    "An error ocurred whilst trying to remove the widget from the room": "Une erreur est survenue lors de la suppression du widget du salon"
 }
