@@ -19,6 +19,11 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher';
 import * as url from "url";
+import WidgetEchoStore from '../stores/WidgetEchoStore';
+
+// How long we wait for the state event echo to come back from the server
+// before waitFor[Room/User]Widget rejects its promise
+const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 
 /**
@@ -155,7 +160,7 @@ export default class WidgetUtils {
             const timerId = setTimeout(() => {
                 MatrixClientPeg.get().removeListener('accountData', onAccountData);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
-            }, 10000);
+            }, WIDGET_WAIT_TIME);
             MatrixClientPeg.get().on('accountData', onAccountData);
         });
     }
@@ -208,7 +213,7 @@ export default class WidgetUtils {
             const timerId = setTimeout(() => {
                 MatrixClientPeg.get().removeListener('RoomState.events', onRoomStateEvents);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
-            }, 10000);
+            }, WIDGET_WAIT_TIME);
             MatrixClientPeg.get().on('RoomState.events', onRoomStateEvents);
         });
     }
@@ -271,11 +276,15 @@ export default class WidgetUtils {
             content = {};
         }
 
+        WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
+
         const client = MatrixClientPeg.get();
         // TODO - Room widgets need to be moved to 'm.widget' state events
         // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
             return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
+        }).finally(() => {
+            WidgetEchoStore.removeRoomWidgetEcho(roomId, widgetId);
         });
     }
 

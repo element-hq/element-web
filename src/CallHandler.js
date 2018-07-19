@@ -62,6 +62,7 @@ import dis from './dispatcher';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './utils/WidgetUtils';
+import WidgetEchoStore from './stores/WidgetEchoStore';
 import ScalarAuthClient from './ScalarAuthClient';
 
 global.mxCalls = {
@@ -431,12 +432,19 @@ async function _startCallApp(roomId, type) {
     });
 
     const room = MatrixClientPeg.get().getRoom(roomId);
-    if (!room) {
-        console.error("Attempted to start conference call widget in unknown room: " + roomId);
+    const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
+
+    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
+            title: _t('Call in Progress'),
+            description: _t('A call is currently being placed!'),
+        });
         return;
     }
 
-    const currentJitsiWidgets = WidgetUtils.getRoomWidgets(room).filter((ev) => {
+    const currentJitsiWidgets = currentRoomWidgets.filter((ev) => {
         return ev.getContent().type === 'jitsi';
     });
     if (currentJitsiWidgets.length > 0) {
