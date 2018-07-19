@@ -330,8 +330,9 @@ export default class MessageComposerInput extends React.Component {
             }
             return editorState;
         } else {
-            // ...or create a new one.
-            return Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            // ...or create a new one. and explicitly focus it otherwise tab in-out issues
+            const base = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            return base.change().focus().value;
         }
     }
 
@@ -372,6 +373,7 @@ export default class MessageComposerInput extends React.Component {
                 break;
             case 'quote': {
                 const html = HtmlUtils.bodyToHtml(payload.event.getContent(), null, {
+                    forComposerQuote: true,
                     returnString: true,
                     emojiOne: false,
                 });
@@ -502,8 +504,9 @@ export default class MessageComposerInput extends React.Component {
         // when in autocomplete mode and selection changes hide the autocomplete.
         // Selection changes when we enter text so use a heuristic to compare documents without doing it recursively
         if (this.autocomplete.state.completionList.length > 0 && !this.autocomplete.state.hide &&
-            this.state.editorState.document.text === editorState.document.text &&
-            !rangeEquals(this.state.editorState.selection, editorState.selection))
+            !rangeEquals(this.state.editorState.selection, editorState.selection) &&
+            // XXX: the heuristic failed when inlines like pills weren't taken into account. This is inideal
+            this.state.editorState.document.toJSON() === editorState.document.toJSON())
         {
             this.autocomplete.hide();
         }
@@ -732,6 +735,7 @@ export default class MessageComposerInput extends React.Component {
             }[ev.keyCode];
 
             if (ctrlCmdCommand) {
+                ev.preventDefault(); // to prevent clashing with Mac's minimize window
                 return this.handleKeyCommand(ctrlCmdCommand);
             }
         }
@@ -974,17 +978,28 @@ export default class MessageComposerInput extends React.Component {
             case 'files':
                 return this.props.onFilesPasted(transfer.files);
             case 'html': {
-                // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
-                // that we will silently discard nested blocks (e.g. nested lists) :(
-                const fragment = this.html.deserialize(transfer.html);
                 if (this.state.isRichTextEnabled) {
-                    return change.insertFragment(fragment.document);
+                    // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+                    // that we will silently discard nested blocks (e.g. nested lists) :(
+                    const fragment = this.html.deserialize(transfer.html);
+                    return change
+                        .setOperationFlag("skip", false)
+                        .setOperationFlag("merge", false)
+                        .insertFragment(fragment.document);
                 } else {
-                    return change.insertText(this.md.serialize(fragment));
+                    // in MD mode we don't want the rich content pasted as the magic was annoying people so paste plain
+                    return change
+                        .setOperationFlag("skip", false)
+                        .setOperationFlag("merge", false)
+                        .insertText(transfer.text);
                 }
             }
             case 'text':
-                return change.insertText(transfer.text);
+                // don't skip/merge so that multiple consecutive pastes can be undone individually
+                return change
+                    .setOperationFlag("skip", false)
+                    .setOperationFlag("merge", false)
+                    .insertText(transfer.text);
         }
     };
 
@@ -1087,8 +1102,7 @@ export default class MessageComposerInput extends React.Component {
             if (contentText === '') return true;
 
             if (shouldSendHTML) {
-                // FIXME: should we strip out the surrounding <p></p>?
-                contentHTML = this.html.serialize(editorState); // HtmlUtils.processHtmlForSending();
+                contentHTML = HtmlUtils.processHtmlForSending(this.html.serialize(editorState));
             }
         } else {
             const sourceWithPills = this.plainWithMdPills.serialize(editorState);
@@ -1537,7 +1551,7 @@ export default class MessageComposerInput extends React.Component {
 
         let {placeholder} = this.props;
         // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
-        if (isEmpty && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
+        if (isEmpty && this.state.editorState.startBlock && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
             placeholder = undefined;
         }
 
