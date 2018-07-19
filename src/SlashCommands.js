@@ -26,11 +26,12 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 
 class Command {
-    constructor({name, args='', description, runFn}) {
+    constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
         this.command = '/' + name;
         this.args = args;
         this.description = description;
         this.runFn = runFn;
+        this.hideCompletionAfterSpace = hideCompletionAfterSpace;
     }
 
     getCommand() {
@@ -78,6 +79,7 @@ export const CommandMap = {
             });
             return success();
         },
+        hideCompletionAfterSpace: true,
     }),
 
     nick: new Command({
@@ -466,6 +468,7 @@ export const CommandMap = {
         name: 'me',
         args: '<message>',
         description: _td('Displays action'),
+        hideCompletionAfterSpace: true,
     }),
 };
 /* eslint-enable babel/no-invalid-this */
