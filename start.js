@@ -29,7 +29,7 @@ global.riotserver = 'http://localhost:8080';
 global.browser = null;
 
 async function runTests() {
-  global.browser = await puppeteer.launch({headless: false});
+  global.browser = await puppeteer.launch();
   const page = await helpers.newPage();
   
   const username = 'bruno-' + helpers.randomInt(10000);
