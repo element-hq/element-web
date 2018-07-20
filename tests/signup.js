@@ -65,23 +65,13 @@ module.exports = async function signup(page, username, password, homeserver) {
   console.log(xhrLogs.logs());
 */
 
-  await acceptTerms(page);
+  //await acceptTerms(page);
 
-  await helpers.delay(10000);
+  await helpers.delay(2000);
   //printElements('page', await page.$('#matrixchat'));
 //  await navigation_promise;
 
   //await page.waitForSelector('.mx_MatrixChat', {visible: true, timeout: 3000});
   const url = page.url();
   assert.strictEqual(url, helpers.riotUrl('/#/home'));
-}
-
-async function acceptTerms(page) {
-  const reviewTermsButton = await helpers.waitAndQuerySelector(page, '.mx_QuestionDialog button.mx_Dialog_primary');
-  const termsPagePromise = helpers.waitForNewPage();
-  await reviewTermsButton.click();
-  const termsPage = await termsPagePromise;
-  const acceptButton = await termsPage.$('input[type=submit]');
-  await acceptButton.click();
-  await helpers.delay(500); //TODO yuck, timers
 }

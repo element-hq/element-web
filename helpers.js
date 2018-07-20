@@ -16,6 +16,7 @@ limitations under the License.
 
 // puppeteer helpers
 
+// TODO: rename to queryAndInnertext?
 async function tryGetInnertext(page, selector) {
   const field = await page.$(selector);
   if (field != null) {
@@ -23,6 +24,11 @@ async function tryGetInnertext(page, selector) {
     return await text_handle.jsonValue();
   }
   return null;
+}
+
+async function innerText(page, field) {
+  const text_handle = await field.getProperty('innerText');
+  return await text_handle.jsonValue();
 }
 
 async function newPage() {
@@ -82,9 +88,15 @@ async function replaceInputText(input, text) {
   await input.type(text);
 }
 
+// TODO: rename to waitAndQuery(Single)?
 async function waitAndQuerySelector(page, selector, timeout = 500) {
   await page.waitForSelector(selector, {visible: true, timeout});
   return await page.$(selector);
+}
+
+async function waitAndQueryAll(page, selector, timeout = 500) {
+  await page.waitForSelector(selector, {visible: true, timeout});
+  return await page.$$(selector);
 }
 
 function waitForNewPage(timeout = 500) {
@@ -120,6 +132,7 @@ function delay(ms) {
 
 module.exports = {
   tryGetInnertext,
+  innerText,
   newPage,
   logConsole,
   logXHRRequests,
@@ -127,6 +140,7 @@ module.exports = {
   printElements,
   replaceInputText,
   waitAndQuerySelector,
+  waitAndQueryAll,
   waitForNewPage,
   randomInt,
   riotUrl,
