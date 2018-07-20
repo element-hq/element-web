@@ -33,7 +33,7 @@ puppeteer.launch({headless: false});
 ## How to run
 
 ### Setup
- - install synapse with `sh synapse/install.sh`, this fetches the master branch at the moment.
+ - install synapse with `sh synapse/install.sh`, this fetches the master branch at the moment. If anything fails here, please refer to the synapse README to see if you're missing one of the prerequisites.
  - install riot with `sh riot/install.sh`, this fetches the master branch at the moment.
  - install dependencies with `npm install` (will download copy of chrome)
  - have riot-web running on `localhost:8080`
