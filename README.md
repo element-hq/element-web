@@ -19,13 +19,28 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
    - start synapse with clean config/database on every test run
 - look into CI(Travis) integration
 
+## It's broken! How do I see what's happening in the browser?
+
+Look for this line:
+```
+puppeteer.launch();
+```
+Now change it to:
+```
+puppeteer.launch({headless: false});
+```
+
 ## How to run
 
 ### Setup
-
+ - install synapse with `sh synapse/install.sh`, this fetches the master branch at the moment.
+ - install riot with `sh riot/install.sh`, this fetches the master branch at the moment.
  - install dependencies with `npm install` (will download copy of chrome)
  - have riot-web running on `localhost:8080`
  - have a local synapse running at `localhost:8008`
 
 ### Run tests
- - run tests with `node start.js`
+ 
+Run tests with `sh run.sh`.
+
+You should see the terminal split with on top the server output (both riot static server, and synapse), and on the bottom the tests running.
