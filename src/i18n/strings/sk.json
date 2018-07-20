@@ -1205,5 +1205,22 @@
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
     "Call in Progress": "Prebiehajúci hovor",
     "A call is already in progress!": "Jeden hovor už prebieha!",
-    "You have no historical rooms": "Nemáte žiadne historické miestnosti"
+    "You have no historical rooms": "Nemáte žiadne historické miestnosti",
+    "A conference call could not be started because the intgrations server is not available": "Nie je možné uskutočniť konferenčný hovor, integračný server nie je k dispozícii",
+    "A call is currently being placed!": "Práve prebieha iný hovor!",
+    "Permission Required": "Vyžaduje sa oprávnenie",
+    "You do not have permission to start a conference call in this room": "V tejto miestnosti nemáte oprávnenie začať konferenčný hovor",
+    "Show empty room list headings": "Zobrazovať nadpisy prázdnych zoznamov miestností",
+    "This event could not be displayed": "Nie je možné zobraziť túto udalosť",
+    "Demote yourself?": "Znížiť vlastnú úroveň moci?",
+    "Demote": "Znížiť",
+    "deleted": "Odstránené",
+    "underlined": "Podčiarknuté",
+    "inline-code": "Vnorený kód",
+    "block-quote": "Citácia",
+    "bulleted-list": "Odrážkový zoznam",
+    "numbered-list": "Číselný zoznam",
+    "Failed to remove widget": "Nepodarilo sa odstrániť widget",
+    "An error ocurred whilst trying to remove the widget from the room": "Pri odstraňovaní widgetu z  miestnosti sa vyskytla chyba",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Nemôžete posielať žiadne správy, kým si neprečítate a neodsúhlasíte <consentLink>naše zmluvné podmienky</consentLink>."
 }
