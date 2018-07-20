@@ -301,23 +301,23 @@ function _onAction(payload) {
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
 
-            if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
-                // Conference calls are implemented by sending the media to central
-                // server which combines the audio from all the participants together
-                // into a single stream. This is incompatible with end-to-end encryption
-                // because a central server would be decrypting the audio for each
-                // participant.
-                // Therefore we disable conference calling in E2E rooms.
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
-                    description: _t('Conference calls are not supported in encrypted rooms'),
-                });
-                return;
-            }
-
             if (SettingsStore.isFeatureEnabled('feature_jitsi')) {
                 _startCallApp(payload.room_id, payload.type);
             } else {
+                if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
+                    // Conference calls are implemented by sending the media to central
+                    // server which combines the audio from all the participants together
+                    // into a single stream. This is incompatible with end-to-end encryption
+                    // because a central server would be decrypting the audio for each
+                    // participant.
+                    // Therefore we disable conference calling in E2E rooms.
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
+                        description: _t('Conference calls are not supported in encrypted rooms'),
+                    });
+                    return;
+                }
+
                 if (!ConferenceHandler) {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
