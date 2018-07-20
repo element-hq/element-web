@@ -61,6 +61,10 @@ limitations under the License.
     background-color: $dialog-background-bg-color;
 }
 
+.mx_AppTile_persistedWrapper {
+    height: 280px;
+}
+
 .mx_AppTile:last-child {
     margin-right: 1px;
 }
