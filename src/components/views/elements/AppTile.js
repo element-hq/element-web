@@ -618,7 +618,7 @@ export default class AppTile extends React.Component {
 
         let appTileClass;
         if (this.props.miniMode) {
-            appTileClass = 'mx_AppTileMini';
+            appTileClass = 'mx_AppTile_mini';
         } else if (this.props.fullWidth) {
             appTileClass = 'mx_AppTileFullWidth';
         } else {
