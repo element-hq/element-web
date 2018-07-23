@@ -32,7 +32,7 @@ async function runTests() {
   global.browser = await puppeteer.launch();
   const page = await helpers.newPage();
   
-  const username = 'bruno-' + helpers.randomInt(10000);
+  const username = 'user-' + helpers.randomInt(10000);
   const password = 'testtest';
   process.stdout.write(`* signing up as ${username} ... `);
   await signup(page, username, password, homeserver);
