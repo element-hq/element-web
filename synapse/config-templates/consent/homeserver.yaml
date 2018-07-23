@@ -193,7 +193,7 @@ database:
   # Arguments to pass to the engine
   args:
     # Path to the database
-    database: "{{SYNAPSE_ROOT}}homeserver.db"
+    database: ":memory:"
 
 # Number of events to cache in memory.
 event_cache_size: "10K"
