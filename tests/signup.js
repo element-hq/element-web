@@ -28,7 +28,7 @@ module.exports = async function signup(page, username, password, homeserver) {
     await advancedRadioButton.click();
   }
   // wait until register button is visible
-  await page.waitForSelector('.mx_Login_submit[value=Register]');
+  await page.waitForSelector('.mx_Login_submit[value=Register]', {visible: true, timeout: 500});
   //fill out form
   const loginFields = await page.$$('.mx_Login_field');
   assert.strictEqual(loginFields.length, 7);
