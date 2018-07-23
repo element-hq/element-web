@@ -616,8 +616,17 @@ export default class AppTile extends React.Component {
         const reloadWidgetIcon = 'img/button-refresh.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
+        let appTileClass;
+        if (this.props.miniMode) {
+            appTileClass = 'mx_AppTileMini';
+        } else if (this.props.fullWidth) {
+            appTileClass = 'mx_AppTileFullWidth';
+        } else {
+            appTileClass = 'mx_AppTile';
+        }
+
         return (
-            <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
+            <div className={appTileClass} id={this.props.id}>
                 { this.props.showMenubar &&
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
