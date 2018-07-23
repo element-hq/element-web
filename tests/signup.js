@@ -18,16 +18,18 @@ const helpers = require('../helpers');
 const acceptTerms = require('./consent');
 const assert = require('assert');
 
-module.exports = async function signup(page, username, password, homeserver, options) {
+module.exports = async function signup(page, username, password, homeserver) {
   const consoleLogs = helpers.logConsole(page);
   const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
   //click 'Custom server' radio button
-  const advancedRadioButton = await helpers.waitAndQuerySelector(page, '#advanced');
-  await advancedRadioButton.click();
-
+  if (homeserver) {
+    const advancedRadioButton = await helpers.waitAndQuerySelector(page, '#advanced');
+    await advancedRadioButton.click();
+  }
+  // wait until register button is visible
+  await page.waitForSelector('.mx_Login_submit[value=Register]');
   //fill out form
-  await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
   const loginFields = await page.$$('.mx_Login_field');
   assert.strictEqual(loginFields.length, 7);
   const usernameField = loginFields[2];
@@ -37,7 +39,10 @@ module.exports = async function signup(page, username, password, homeserver, opt
   await helpers.replaceInputText(usernameField, username);
   await helpers.replaceInputText(passwordField, password);
   await helpers.replaceInputText(passwordRepeatField, password);
-  await helpers.replaceInputText(hsurlField, homeserver);
+  if (homeserver) {
+    await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
+    await helpers.replaceInputText(hsurlField, homeserver);
+  }
   //wait over a second because Registration/ServerConfig have a 1000ms
   //delay to internally set the homeserver url
   //see Registration::render and ServerConfig::props::delayTimeMs

@@ -35,7 +35,7 @@ async function runTests() {
   const username = 'user-' + helpers.randomInt(10000);
   const password = 'testtest';
   process.stdout.write(`* signing up as ${username} ... `);
-  await signup(page, username, password, homeserver);
+  await signup(page, username, password);
   process.stdout.write('done\n');
 
   const noticesName = "Server Notices";
