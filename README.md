@@ -18,6 +18,7 @@ This repository contains tests for the matrix-react-sdk web app. The tests fire 
    - Run 2 synapse instances to test federation use cases.
    - start synapse with clean config/database on every test run
 - look into CI(Travis) integration
+- create interactive mode, where window is opened, and browser is kept open until Ctrl^C, for easy test debugging.
 
 ## It's broken! How do I see what's happening in the browser?
 
