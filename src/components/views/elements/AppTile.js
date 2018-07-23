@@ -161,12 +161,16 @@ export default class AppTile extends React.Component {
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
             // FIXME: ActiveWidgetStore should probably worry about this?
-            const PersistedElement = sdk.getComponent("elements.PersistedElement");
-            PersistedElement.destroyElement(this._persistKey);
-            ActiveWidgetStore.delWidgetMessaging(this.props.id);
-            ActiveWidgetStore.delWidgetCapabilities(this.props.id);
-            ActiveWidgetStore.delRoomId(this.props.id);
+            this._destroyPersistentWidget();
         }
+    }
+
+    _destroyPersistentWidget() {
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+        PersistedElement.destroyElement(this._persistKey);
+        ActiveWidgetStore.delWidgetMessaging(this.props.id);
+        ActiveWidgetStore.delWidgetCapabilities(this.props.id);
+        ActiveWidgetStore.delRoomId(this.props.id);
     }
 
     /**
@@ -439,6 +443,10 @@ export default class AppTile extends React.Component {
         console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
         localStorage.removeItem(this.state.widgetPermissionId);
         this.setState({hasPermissionToLoad: false});
+
+        // Force the widget to be non-persistent
+        ActiveWidgetStore.setWidgetPersistence(this.props.id, false);
+        this._destroyPersistentWidget();
     }
 
     formatAppTileName() {
