@@ -21,7 +21,6 @@
             "localhost:8008"
         ]
     },
-    "welcomeUserId": "@someuser:localhost",
     "piwik": {
         "url": "https://piwik.riot.im/",
         "whitelistedHSUrls": ["http://localhost:8008"],
