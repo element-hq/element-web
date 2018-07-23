@@ -117,8 +117,9 @@ export default class AppTile extends React.Component {
         const params = qs.parse(u.query);
         // Append widget ID to query parameters
         params.widgetId = this.props.id;
-        // Append current / parent URL
-        params.parentUrl = window.location.href;
+        // Append current / parent URL, minus the hash because that will change when
+        // we view a different room (ie. may change for persistent widgets)
+        params.parentUrl = window.location.href.split('#', 2)[0];
         u.search = undefined;
         u.query = params;
 
