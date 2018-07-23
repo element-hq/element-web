@@ -45,3 +45,12 @@ puppeteer.launch({headless: false});
 Run tests with `sh run.sh`.
 
 You should see the terminal split with on top the server output (both riot static server, and synapse), and on the bottom the tests running.
+
+Developer Guide
+===============
+
+Please follow the standard Matrix contributor's guide:
+https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
+
+Please follow the Matrix JS/React code style as per:
+https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
