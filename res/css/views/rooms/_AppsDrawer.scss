@@ -61,10 +61,6 @@ limitations under the License.
     background-color: $dialog-background-bg-color;
 }
 
-.mx_AppTile_persistedWrapper {
-    height: 280px;
-}
-
 .mx_AppTile:last-child {
     margin-right: 1px;
 }
@@ -77,6 +73,22 @@ limitations under the License.
     padding: 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
+}
+
+.mx_AppTile_mini {
+    max-width: 960px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.mx_AppTile_persistedWrapper {
+    height: 280px;
+}
+
+.mx_AppTile_mini .mx_AppTile_persistedWrapper {
+    height: 114px;
 }
 
 .mx_AppTileMenuBar {
@@ -131,9 +143,15 @@ limitations under the License.
 }
 
 .mx_AppTileBody_mini {
-    height: 132px;
+    height: 112px;
     width: 100%;
     overflow: hidden;
+}
+
+.mx_AppTileBody_mini iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
 }
 
 .mx_AppTileBody iframe {
