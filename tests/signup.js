@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 const helpers = require('../helpers');
+const acceptTerms = require('./consent');
 const assert = require('assert');
 
-module.exports = async function signup(page, username, password, homeserver) {
+module.exports = async function signup(page, username, password, homeserver, options) {
   const consoleLogs = helpers.logConsole(page);
   const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
@@ -57,21 +58,8 @@ module.exports = async function signup(page, username, password, homeserver) {
   await continueButton.click();
   //wait for registration to finish so the hash gets set
   //onhashchange better?
-/*
-  await page.screenshot({path: "afterlogin.png", fullPage: true});
-  console.log('browser console logs:');
-  console.log(consoleLogs.logs());
-  console.log('xhr logs:');
-  console.log(xhrLogs.logs());
-*/
-
-  //await acceptTerms(page);
-
   await helpers.delay(2000);
-  //printElements('page', await page.$('#matrixchat'));
-//  await navigation_promise;
 
-  //await page.waitForSelector('.mx_MatrixChat', {visible: true, timeout: 3000});
   const url = page.url();
   assert.strictEqual(url, helpers.riotUrl('/#/home'));
 }
