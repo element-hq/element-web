@@ -983,8 +983,9 @@ export default class MessageComposerInput extends React.Component {
                     // that we will silently discard nested blocks (e.g. nested lists) :(
                     const fragment = this.html.deserialize(transfer.html);
                     return change
-                        .setOperationFlag("skip", false)
-                        .setOperationFlag("merge", false)
+                    // XXX: this somehow makes Slate barf on undo and get too empty and break entirely
+                    // .setOperationFlag("skip", false)
+                    // .setOperationFlag("merge", false)
                         .insertFragment(fragment.document);
                 } else {
                     // in MD mode we don't want the rich content pasted as the magic was annoying people so paste plain
