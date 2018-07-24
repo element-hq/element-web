@@ -310,12 +310,19 @@ async function loadApp() {
                 // in case the Tinter.tint() in MatrixChat fires before the
                 // CSS has actually loaded (which in practice happens)...
 
-                // FIXME: we should probably block loading the app or even
-                // showing a spinner until the theme is loaded, to avoid
-                // flashes of unstyled content.
+                // This if fixes Tinter.setTheme to not fire on Firefox
+                // in case it is the first time loading Riot.
+                // `InstallTrigger` is a Object which only exists on Firefox
+                // (it is used for their Plugins) and can be used as a
+                // feature check. 
+                // Firefox loads css always before js. This is why we dont use
+                // onload or it's EventListener as thoose will never trigger.
                 if (typeof InstallTrigger !== 'undefined') {
                     Tinter.setTheme(theme);
                 } else {
+                    // FIXME: we should probably block loading the app or even
+                    // showing a spinner until the theme is loaded, to avoid
+                    // flashes of unstyled content.
                     a.onload = () => {
                         Tinter.setTheme(theme);
                     };
