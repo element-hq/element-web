@@ -14,14 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EventEmitter from 'events';
+
+import MatrixClientPeg from '../MatrixClientPeg';
+import sdk from '../index';
+
 /**
  * Stores information about the widgets active in the app right now:
  *  * What widget is set to remain always-on-screen, if any
  *    Only one widget may be 'always on screen' at any one time.
  *  * Negotiated capabilities for active apps
  */
-class ActiveWidgetStore {
+class ActiveWidgetStore extends EventEmitter {
     constructor() {
+        super();
         this._persistentWidgetId = null;
 
         // A list of negotiated capabilities for each widget, by ID
@@ -35,6 +41,46 @@ class ActiveWidgetStore {
 
         // What room ID each widget is associated with (if it's a room widget)
         this._roomIdByWidgetId = {};
+
+        this.onRoomStateEvents = this.onRoomStateEvents.bind(this);
+
+        this.dispatcherRef = null;
+    }
+
+    start() {
+        MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
+    }
+
+    stop() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
+        }
+        this._capsByWidgetId = {};
+        this._widgetMessagingByWidgetId = {};
+        this._roomIdByWidgetId = {};
+    }
+
+    onRoomStateEvents(ev, state) {
+        // XXX: This listens for state events in order to remove the active widget.
+        // Everything else relies on views listening for events and calling setters
+        // on this class which is terrible. This store should just listen for events
+        // and keep itself up to date.
+        if (ev.getType() !== 'im.vector.modular.widgets') return;
+
+        if (ev.getStateKey() === this._persistentWidgetId) {
+            this.destroyPersistentWidget();
+        }
+    }
+
+    destroyPersistentWidget() {
+        const toDeleteId = this._persistentWidgetId;
+
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+        PersistedElement.destroyElement('widget_' + toDeleteId);
+        this.setWidgetPersistence(toDeleteId, false);
+        this.delWidgetMessaging(toDeleteId);
+        this.delWidgetCapabilities(toDeleteId);
+        this.delRoomId(toDeleteId);
     }
 
     setWidgetPersistence(widgetId, val) {
@@ -43,6 +89,7 @@ class ActiveWidgetStore {
         } else if (this._persistentWidgetId !== widgetId && val) {
             this._persistentWidgetId = widgetId;
         }
+        this.emit('update');
     }
 
     getWidgetPersistence(widgetId) {
@@ -55,6 +102,7 @@ class ActiveWidgetStore {
 
     setWidgetCapabilities(widgetId, caps) {
         this._capsByWidgetId[widgetId] = caps;
+        this.emit('update');
     }
 
     widgetHasCapability(widgetId, cap) {
@@ -63,10 +111,12 @@ class ActiveWidgetStore {
 
     delWidgetCapabilities(widgetId) {
         delete this._capsByWidgetId[widgetId];
+        this.emit('update');
     }
 
     setWidgetMessaging(widgetId, wm) {
         this._widgetMessagingByWidgetId[widgetId] = wm;
+        this.emit('update');
     }
 
     getWidgetMessaging(widgetId) {
@@ -81,6 +131,7 @@ class ActiveWidgetStore {
                 console.error('Failed to stop listening for widgetMessaging events', e.message);
             }
             delete this._widgetMessagingByWidgetId[widgetId];
+            this.emit('update');
         }
     }
 
@@ -90,10 +141,12 @@ class ActiveWidgetStore {
 
     setRoomId(widgetId, roomId) {
         this._roomIdByWidgetId[widgetId] = roomId;
+        this.emit('update');
     }
 
     delRoomId(widgetId) {
         delete this._roomIdByWidgetId[widgetId];
+        this.emit('update');
     }
 }
 
