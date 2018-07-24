@@ -1,3 +1,12 @@
+Changes in [0.16.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.0-rc.1) (2018-07-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7...v0.16.0-rc.1)
+
+ * Update from Weblate.
+   [\#7082](https://github.com/vector-im/riot-web/pull/7082)
+ * Sample config for jitsi integration URL
+   [\#7055](https://github.com/vector-im/riot-web/pull/7055)
+
 Changes in [0.15.7](https://github.com/vector-im/riot-web/releases/tag/v0.15.7) (2018-07-09)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7-rc.2...v0.15.7)
