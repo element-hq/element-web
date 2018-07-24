@@ -1,3 +1,82 @@
+Changes in [0.13.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.0-rc.1) (2018-07-24)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.9...v0.13.0-rc.1)
+
+ * Update from Weblate.
+   [\#2086](https://github.com/matrix-org/matrix-react-sdk/pull/2086)
+ * Moar Slate Fixes
+   [\#2082](https://github.com/matrix-org/matrix-react-sdk/pull/2082)
+ * Destroy the widget when its permission is revoked
+   [\#2081](https://github.com/matrix-org/matrix-react-sdk/pull/2081)
+ * Make ActiveWidgetStore clear persistent widgets
+   [\#2084](https://github.com/matrix-org/matrix-react-sdk/pull/2084)
+ * CreateRoomDialog is rendered before getting the config default_federate
+   [\#2078](https://github.com/matrix-org/matrix-react-sdk/pull/2078)
+ * Slate Fixes
+   [\#2076](https://github.com/matrix-org/matrix-react-sdk/pull/2076)
+ * FIX: Don't error on rooms the user has left already
+   [\#2077](https://github.com/matrix-org/matrix-react-sdk/pull/2077)
+ * Fix persistent apps being the wrong size
+   [\#2080](https://github.com/matrix-org/matrix-react-sdk/pull/2080)
+ * Fix widgets resetting when going to the top-left
+   [\#2079](https://github.com/matrix-org/matrix-react-sdk/pull/2079)
+ * Jitsi: Use integrations URL from config
+   [\#2062](https://github.com/matrix-org/matrix-react-sdk/pull/2062)
+ * Allow jitsi in e2e rooms
+   [\#2075](https://github.com/matrix-org/matrix-react-sdk/pull/2075)
+ * Fix border around persisted widgets
+   [\#2071](https://github.com/matrix-org/matrix-react-sdk/pull/2071)
+ * Fix e2e icons floating above jitsi
+   [\#2073](https://github.com/matrix-org/matrix-react-sdk/pull/2073)
+ * hide some commands after space as they have special semantics
+   [\#2074](https://github.com/matrix-org/matrix-react-sdk/pull/2074)
+ * Even More Slate Fixes :D
+   [\#2070](https://github.com/matrix-org/matrix-react-sdk/pull/2070)
+ * Improve UX for Jitsi by adding local echo for widgets
+   [\#2035](https://github.com/matrix-org/matrix-react-sdk/pull/2035)
+ * Jitsi: Check integrations server before call
+   [\#2063](https://github.com/matrix-org/matrix-react-sdk/pull/2063)
+ * Jitsi: Error message on no permission
+   [\#2061](https://github.com/matrix-org/matrix-react-sdk/pull/2061)
+ * Fix read receipts on top of Jitsi
+   [\#2065](https://github.com/matrix-org/matrix-react-sdk/pull/2065)
+ * Moar Slate Fixes
+   [\#2069](https://github.com/matrix-org/matrix-react-sdk/pull/2069)
+ * fix 2nd typo in one PR :(
+   [\#2068](https://github.com/matrix-org/matrix-react-sdk/pull/2068)
+ * check if has some completions, not if >=0
+   [\#2067](https://github.com/matrix-org/matrix-react-sdk/pull/2067)
+ * Slate fixes
+   [\#2066](https://github.com/matrix-org/matrix-react-sdk/pull/2066)
+ *  Implement always-on-screen capability for widgets
+   [\#2056](https://github.com/matrix-org/matrix-react-sdk/pull/2056)
+ * simplify MessageComposerStore and improve its performance
+   [\#2064](https://github.com/matrix-org/matrix-react-sdk/pull/2064)
+ * Replace Draft with Slate
+   [\#1890](https://github.com/matrix-org/matrix-react-sdk/pull/1890)
+ * Fix not stopping to peek when navigating away from peeked room
+   [\#2055](https://github.com/matrix-org/matrix-react-sdk/pull/2055)
+ * T3chguy/slate cont2
+   [\#2049](https://github.com/matrix-org/matrix-react-sdk/pull/2049)
+ * add null-guard for stickerpickerWidget in StickerPicker
+   [\#2057](https://github.com/matrix-org/matrix-react-sdk/pull/2057)
+ * Implement always-on-screen capability for widgets
+   [\#2053](https://github.com/matrix-org/matrix-react-sdk/pull/2053)
+ * fix nullguard on EventTile, getComponent never returns falsey, it throws
+   [\#2024](https://github.com/matrix-org/matrix-react-sdk/pull/2024)
+ * Fix stickerpicker PersistedElement usage
+   [\#2051](https://github.com/matrix-org/matrix-react-sdk/pull/2051)
+ * encrypt for invited users if history visibility allows.
+   [\#2042](https://github.com/matrix-org/matrix-react-sdk/pull/2042)
+ * move nag bar clear statement to any desktop notif toggle not just 0->1
+   [\#2031](https://github.com/matrix-org/matrix-react-sdk/pull/2031)
+ * use TruncatedList to prevent rendering hundreds/thousands of DOM nodes
+   [\#2041](https://github.com/matrix-org/matrix-react-sdk/pull/2041)
+ * Fix stuff
+   [\#2047](https://github.com/matrix-org/matrix-react-sdk/pull/2047)
+ * Show m.room.server_acl
+   [\#2046](https://github.com/matrix-org/matrix-react-sdk/pull/2046)
+
 Changes in [0.12.9](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.9) (2018-07-09)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.12.9-rc.2...v0.12.9)
