@@ -52,7 +52,9 @@ class ActiveWidgetStore extends EventEmitter {
     }
 
     stop() {
-        MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
+        }
         this._capsByWidgetId = {};
         this._widgetMessagingByWidgetId = {};
         this._roomIdByWidgetId = {};
