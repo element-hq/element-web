@@ -85,7 +85,7 @@
     "react-dom": "^15.6.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "resize-observer-polyfill": "^1.5.0",
-    "slate": "0.33.4",
+    "slate": "0.34.7",
     "slate-react": "^0.12.4",
     "slate-html-serializer": "^0.6.1",
     "slate-md-serializer": "matrix-org/slate-md-serializer#f7c4ad3",
