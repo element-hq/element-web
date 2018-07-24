@@ -64,13 +64,17 @@ class PlainWithPillsSerializer {
         } else if (node.type == 'emoji') {
             return node.data.get('emojiUnicode');
         } else if (node.type == 'pill') {
+            const completion = node.data.get('completion');
+            // over the wire the @room pill is just plaintext
+            if (completion === '@room') return completion;
+
             switch (this.pillFormat) {
                 case 'plain':
-                    return node.data.get('completion');
+                    return completion;
                 case 'md':
-                    return `[${ node.data.get('completion') }](${ node.data.get('href') })`;
+                    return `[${ completion }](${ node.data.get('href') })`;
                 case 'id':
-                    return node.data.get('completionId') || node.data.get('completion');
+                    return node.data.get('completionId') || completion;
             }
         } else if (node.nodes) {
             return node.nodes.map(this._serializeNode).join('');

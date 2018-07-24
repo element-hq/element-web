@@ -387,17 +387,28 @@ export default class MessageComposerInput extends React.Component {
                     const anchorText = editorState.anchorText;
                     if ((!anchorText || anchorText.text === '') && editorState.anchorBlock.nodes.size === 1) {
                         // replace the current block rather than split the block
+                        // XXX: this destroys our focus by deleting the thing we are anchored/focused on
                         change = change.replaceNodeByKey(editorState.anchorBlock.key, quote);
-                    }
-                    else {
+                    } else {
                         // insert it into the middle of the block (splitting it)
                         change = change.insertBlock(quote);
                     }
-                    change = change.insertFragmentByKey(quote.key, 0, fragment.document)
-                                   .focus();
+
+                    // XXX: heuristic to strip out wrapping <p> which breaks quoting in RT mode
+                    if (fragment.document.nodes.size && fragment.document.nodes.get(0).type === DEFAULT_NODE) {
+                        change = change.insertFragmentByKey(quote.key, 0, fragment.document.nodes.get(0));
+                    } else {
+                        change = change.insertFragmentByKey(quote.key, 0, fragment.document);
+                    }
+
+                    // XXX: this is to bring back the focus in a sane place and add a paragraph after it
+                    change = change.select({
+                        anchorKey: quote.key,
+                        focusKey: quote.key,
+                    }).collapseToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
+
                     this.onChange(change);
-                }
-                else {
+                } else {
                     let fragmentChange = fragment.change();
                     fragmentChange.moveToRangeOf(fragment.document)
                                   .wrapBlock(quote);
@@ -1301,6 +1312,14 @@ export default class MessageComposerInput extends React.Component {
         await this.setDisplayedCompletion(null); // restore originalEditorState
     };
 
+    onAutocompleteConfirm = (displayedCompletion: ?Completion) => {
+        this.focusComposer();
+        // XXX: this fails if the composer isn't focused so focus it and delay the completion until next tick
+        setImmediate(() => {
+            this.setDisplayedCompletion(displayedCompletion);
+        });
+    };
+
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
@@ -1563,7 +1582,7 @@ export default class MessageComposerInput extends React.Component {
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}
-                        onConfirm={this.setDisplayedCompletion}
+                        onConfirm={this.onAutocompleteConfirm}
                         onSelectionChange={this.setDisplayedCompletion}
                         query={ this.suppressAutoComplete ? '' : this.getAutocompleteQuery(activeEditorState) }
                         selection={this.getSelectionRange(activeEditorState)}
