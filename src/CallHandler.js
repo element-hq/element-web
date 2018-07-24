@@ -301,67 +301,7 @@ function _onAction(payload) {
             break;
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
-
-            if (SettingsStore.isFeatureEnabled('feature_jitsi')) {
-                _startCallApp(payload.room_id, payload.type);
-            } else {
-                if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
-                    // Conference calls are implemented by sending the media to central
-                    // server which combines the audio from all the participants together
-                    // into a single stream. This is incompatible with end-to-end encryption
-                    // because a central server would be decrypting the audio for each
-                    // participant.
-                    // Therefore we disable conference calling in E2E rooms.
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
-                        description: _t('Conference calls are not supported in encrypted rooms'),
-                    });
-                    return;
-                }
-
-                if (!ConferenceHandler) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
-                        description: _t('Conference calls are not supported in this client'),
-                    });
-                } else if (!MatrixClientPeg.get().supportsVoip()) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
-                        title: _t('VoIP is unsupported'),
-                        description: _t('You cannot place VoIP calls in this browser.'),
-                    });
-                } else {
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
-                        title: _t('Warning!'),
-                        description: _t('Conference calling is in development and may not be reliable.'),
-                        onFinished: (confirm)=>{
-                            if (confirm) {
-                                ConferenceHandler.createNewMatrixCall(
-                                    MatrixClientPeg.get(), payload.room_id,
-                                ).done(function(call) {
-                                    placeCall(call);
-                                }, function(err) {
-                                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                                    console.error("Conference call failed: " + err);
-                                    Modal.createTrackedDialog(
-                                        'Call Handler',
-                                        'Failed to set up conference call',
-                                        ErrorDialog,
-                                        {
-                                            title: _t('Failed to set up conference call'),
-                                            description: (
-                                                _t('Conference call failed.') +
-                                                ' ' + ((err && err.message) ? err.message : '')
-                                            ),
-                                        },
-                                    );
-                                });
-                            }
-                        },
-                    });
-                }
-            }
+            _startCallApp(payload.room_id, payload.type);
             break;
         case 'incoming_call':
             {
@@ -543,6 +483,22 @@ const callHandler = {
         return null;
     },
 
+    /**
+     * The conference handler is a module that deals with implementation-specific
+     * multi-party calling implementations. Riot passes in its own which creates
+     * a one-to-one call with a freeswitch conference bridge. As of July 2018,
+     * the de-facto way of conference calling is a Jitsi widget, so this is
+     * deprecated. It reamins here for two reasons:
+     *  1. So Riot still supports joining existing freeswitch conference calls
+     *     (but doesn't support creating them). After a transition period, we can
+     *     remove support for joining them too.
+     *  2. To hide the one-to-one rooms that old-style conferencing creates. This
+     *     is much harder to remove: probably either we make Riot leave & forget these
+     *     rooms after we remove support for joining freeswitch conferences, or we
+     *     accept that random rooms with cryptic users will suddently appear for
+     *     anyone who's ever used conference calling, or we are stuck with this
+     *     code forever.
+     */
     setConferenceHandler: function(confHandler) {
         ConferenceHandler = confHandler;
     },
