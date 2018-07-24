@@ -497,6 +497,8 @@ const callHandler = {
      *     accept that random rooms with cryptic users will suddently appear for
      *     anyone who's ever used conference calling, or we are stuck with this
      *     code forever.
+     *
+     * @param {object} confHandler The conference handler object
      */
     setConferenceHandler: function(confHandler) {
         ConferenceHandler = confHandler;
