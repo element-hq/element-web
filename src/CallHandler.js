@@ -61,7 +61,6 @@ import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
 import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
-import SettingsStore from "./settings/SettingsStore";
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import ScalarAuthClient from './ScalarAuthClient';
