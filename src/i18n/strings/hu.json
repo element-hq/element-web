@@ -1208,5 +1208,19 @@
     "You have no historical rooms": "Nincsenek archív szobáid",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Nem tudsz üzenetet küldeni amíg nem olvasod el és nem fogadod el a <consentLink>felhasználási feltételeket</consentLink>.",
     "Demote yourself?": "Lefokozod magad?",
-    "Demote": "Lefokozás"
+    "Demote": "Lefokozás",
+    "Show empty room list headings": "Üres szobalista fejléc mutatása",
+    "This event could not be displayed": "Az eseményt nem lehet megjeleníteni",
+    "deleted": "törölt",
+    "underlined": "aláhúzott",
+    "inline-code": "kód",
+    "block-quote": "idézet",
+    "bulleted-list": "rendezetlen lista",
+    "numbered-list": "rendezett lista",
+    "A conference call could not be started because the intgrations server is not available": "A konferencia hívást nem lehet elkezdeni mert az integrációs szerver nem érhető el",
+    "Permission Required": "Engedély szükséges",
+    "You do not have permission to start a conference call in this room": "Nincs jogosultságod konferencia hívást kezdeményezni ebben a szobában",
+    "A call is currently being placed!": "A hívás indítás alatt!",
+    "Failed to remove widget": "A kisalkalmazás törlése sikertelen",
+    "An error ocurred whilst trying to remove the widget from the room": "A kisalkalmazás szobából való törlése közben hiba történt"
 }

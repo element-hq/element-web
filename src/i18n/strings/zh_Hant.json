@@ -1206,5 +1206,21 @@
     "Call in Progress": "進行中的通話",
     "A call is already in progress!": "已有一通電話進行中！",
     "You have no historical rooms": "您沒有過去的聊天室",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "您在審閱並同意<consentLink>我們的條款與條件</consentLink>前無法傳送訊息。"
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "您在審閱並同意<consentLink>我們的條款與條件</consentLink>前無法傳送訊息。",
+    "Show empty room list headings": "顯示空聊天室清單標題",
+    "Demote yourself?": "將自己降級？",
+    "Demote": "降級",
+    "A conference call could not be started because the intgrations server is not available": "會議通話無法啟動，因為整合伺服器不可用",
+    "Permission Required": "需要權限",
+    "You do not have permission to start a conference call in this room": "您沒有在此聊天室啟動會議通話的權限",
+    "This event could not be displayed": "此活動無法顯示",
+    "deleted": "刪除線",
+    "underlined": "底線",
+    "inline-code": "內嵌程式碼",
+    "block-quote": "區塊引用",
+    "bulleted-list": "項目符號清單",
+    "numbered-list": "編號清單",
+    "A call is currently being placed!": "目前正在撥打電話！",
+    "Failed to remove widget": "移除小工具失敗",
+    "An error ocurred whilst trying to remove the widget from the room": "嘗試從聊天室移除小工具時發生錯誤"
 }

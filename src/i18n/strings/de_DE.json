@@ -125,7 +125,7 @@
     "Return to login screen": "Zur Anmeldemaske zurückkehren",
     "Room Colour": "Raumfarbe",
     "Room name (optional)": "Raumname (optional)",
-    "Scroll to unread messages": "Zu den ungelesenen Nachrichten scrollen",
+    "Scroll to unread messages": "Zu den ungelesenen Nachrichten springen",
     "Send Invites": "Einladungen senden",
     "Send Reset Email": "E-Mail zum Zurücksetzen senden",
     "Server may be unavailable or overloaded": "Server ist eventuell nicht verfügbar oder überlastet",
@@ -935,7 +935,7 @@
     "Replying": "Antwortet",
     "Minimize apps": "Apps minimieren",
     "%(count)s of your messages have not been sent.|one": "Deine Nachricht wurde nicht gesendet.",
-    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Jetzt alle erneut senden</resendText> oder <cancelText>alle abbrechen</cancelText>. Du kannst auch einzelne Nachrichten auswählen und erneut senden oder abbrechen.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Alle erneut senden</resendText> oder <cancelText>alle abbrechen</cancelText>. Du kannst auch einzelne Nachrichten erneut senden oder abbrechen.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Nachricht jetzt erneut senden</resendText> oder <cancelText>senden abbrechen</cancelText> now.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privatsphäre ist uns wichtig, deshalb sammeln wir keine persönlichen oder identifizierbaren Daten für unsere Analysen.",
     "The information being sent to us to help make Riot.im better includes:": "Die Informationen, die an uns gesendet werden um Riot.im zu verbessern enthalten:",
@@ -953,7 +953,7 @@
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Wenn diese Seite identifizierbare Informationen sowie Raum, Nutzer oder Gruppen-ID enthalten, werden diese Daten entfernt bevor sie an den Server gesendet werden.",
     "Whether or not you're logged in (we don't record your user name)": "Ob oder ob du nicht angemeldet bist (wir zeichnen deinen Benutzernamen nicht auf)",
     "Which officially provided instance you are using, if any": "Welche offiziell angebotene Instanz du nutzt, wenn es der Fall ist",
-    "<a>In reply to</a> <pill>": "<a>Antwort zu</a> <pill>",
+    "<a>In reply to</a> <pill>": "<a>Als Antwort auf</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Dies ist kein öffentlicher Raum. Du wirst diesen nicht ohne Einladung wieder beitreten können.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s änderte den Anzeigenamen auf %(displayName)s.",
     "Failed to set direct chat tag": "Fehler beim Setzen der Direkt-Chat-Markierung",
@@ -1206,5 +1206,9 @@
     "Call in Progress": "Gespräch läuft",
     "A call is already in progress!": "Ein Gespräch läuft bereits!",
     "You have no historical rooms": "Du hast keine historischen Räume",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kannst keine Nachrichten senden bis du die <consentLink>unsere Geschläftsbedingungen</consentLink> gelesen und akzeptiert hast."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kannst keine Nachrichten senden bis du die <consentLink>unsere Geschläftsbedingungen</consentLink> gelesen und akzeptiert hast.",
+    "Show empty room list headings": "Zeite leere Raumlist-Köpfe",
+    "Demote yourself?": "Selbst zurückstufen?",
+    "Demote": "Zurückstufen",
+    "This event could not be displayed": "Dieses Ereignis konnte nicht angezeigt werden"
 }
