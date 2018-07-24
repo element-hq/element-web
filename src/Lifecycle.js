@@ -30,6 +30,7 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
+import ActiveWidgetStore from './stores/ActiveWidgetStore';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -436,6 +437,7 @@ async function startMatrixClient() {
     UserActivity.start();
     Presence.start();
     DMRoomMap.makeShared().start();
+    ActiveWidgetStore.start();
 
     await MatrixClientPeg.start();
 
@@ -488,6 +490,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
+    ActiveWidgetStore.start();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     const cli = MatrixClientPeg.get();
     if (cli) {
