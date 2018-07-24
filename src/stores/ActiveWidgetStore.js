@@ -66,13 +66,19 @@ class ActiveWidgetStore extends EventEmitter {
         if (ev.getType() !== 'im.vector.modular.widgets') return;
 
         if (ev.getStateKey() === this._persistentWidgetId) {
-            const PersistedElement = sdk.getComponent("elements.PersistedElement");
-            PersistedElement.destroyElement('widget_' + ev.getStateKey());
-            this.setWidgetPersistence(ev.getStateKey(), false);
-            this.delWidgetMessaging(ev.getStateKey());
-            this.delWidgetCapabilities(ev.getStateKey());
-            this.delRoomId(ev.getStateKey());
+            this.destroyPersistentWidget();
         }
+    }
+
+    destroyPersistentWidget() {
+        const toDeleteId = this._persistentWidgetId;
+
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+        PersistedElement.destroyElement('widget_' + toDeleteId);
+        this.setWidgetPersistence(toDeleteId, false);
+        this.delWidgetMessaging(toDeleteId);
+        this.delWidgetCapabilities(toDeleteId);
+        this.delRoomId(toDeleteId);
     }
 
     setWidgetPersistence(widgetId, val) {
