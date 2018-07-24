@@ -16,37 +16,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-
-import * as sdk from './index';
 import * as emojione from 'emojione';
-
-import { SelectionRange } from "./autocomplete/Autocompleter";
 
 
 export function unicodeToEmojiUri(str) {
-    let replaceWith, unicode, alt;
-    if ((!emojione.unicodeAlt) || (emojione.sprites)) {
-        // if we are using the shortname as the alt tag then we need a reversed array to map unicode code point to shortnames
-        const mappedUnicode = emojione.mapUnicodeToShort();
-    }
+    const mappedUnicode = emojione.mapUnicodeToShort();
 
-    str = str.replace(emojione.regUnicode, function(unicodeChar) {
-        if ( (typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap)) ) {
-            // if the unicodeChar doesnt exist just return the entire match
+    // remove any zero width joiners/spaces used in conjugate emojis as the emojione URIs don't contain them
+    return str.replace(emojione.regUnicode, function(unicodeChar) {
+        if ((typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap))) {
+            // if the unicodeChar doesn't exist just return the entire match
             return unicodeChar;
         } else {
-            // Remove variant selector VS16 (explicitly emoji) as it is unnecessary and leads to an incorrect URL below
-            if (unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
-                unicodeChar = unicodeChar[0];
-            }
-
             // get the unicode codepoint from the actual char
-            unicode = emojione.jsEscapeMap[unicodeChar];
+            const unicode = emojione.jsEscapeMap[unicodeChar];
 
-            return emojione.imagePathSVG+unicode+'.svg'+emojione.cacheBustParam;
+            const short = mappedUnicode[unicode];
+            const fname = emojione.emojioneList[short].fname;
+
+            return emojione.imagePathSVG+fname+'.svg'+emojione.cacheBustParam;
         }
     });
-
-    return str;
 }
