@@ -27,17 +27,20 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             roomId: RoomViewStore.getRoomId(),
+            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
         };
     },
 
     componentWillMount: function() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
     },
 
     componentWillUnmount: function() {
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+        ActiveWidgetStore.removeListener('update', this._onActiveWidgetStoreUpdate);
     },
 
     _onRoomViewStoreUpdate: function(payload) {
@@ -47,9 +50,15 @@ module.exports = React.createClass({
         });
     },
 
+    _onActiveWidgetStoreUpdate: function() {
+        this.setState({
+            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
+        });
+    },
+
     render: function() {
-        if (ActiveWidgetStore.getPersistentWidgetId()) {
-            const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(ActiveWidgetStore.getPersistentWidgetId());
+        if (this.state.persistentWidgetId) {
+            const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
             if (this.state.roomId !== persistentWidgetInRoomId) {
                 const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
                 // get the widget data
