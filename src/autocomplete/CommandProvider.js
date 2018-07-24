@@ -48,7 +48,7 @@ export default class CommandProvider extends AutocompleteProvider {
             const name = command[1].substr(1); // strip leading `/`
             if (CommandMap[name]) {
                 // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
-                if (!CommandMap[name].hideCompletionAfterSpace) return [];
+                if (CommandMap[name].hideCompletionAfterSpace) return [];
                 matches = [CommandMap[name]];
             }
         } else {
