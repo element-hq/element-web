@@ -48,7 +48,7 @@ const CATEGORY_ORDER = [
 // (^|\s|(emojiUnicode)) to make sure we're either at the start of the string or there's a
 // whitespace character or an emoji before the emoji. The reason for unicodeRegexp is
 // that we need to support inputting multiple emoji with no space between them.
-const EMOJI_REGEX = new RegExp('(?:^|\\s|' + unicodeRegexp + ')(' + asciiRegexp + '|:\\w*:?)$', 'g');
+const EMOJI_REGEX = new RegExp('(?:^|\\s|' + unicodeRegexp + ')(' + asciiRegexp + '|:[+-\\w]*:?)$', 'g');
 
 // We also need to match the non-zero-length prefixes to remove them from the final match,
 // and update the range so that we don't replace the whitespace or the previous emoji.
@@ -65,6 +65,7 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
     return {
         name: a.name,
         shortname: a.shortname,
+        aliases: a.aliases ? a.aliases.join(' ') : '',
         aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
         // Include the index so that we can preserve the original order
         _orderBy: index,
@@ -84,7 +85,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: ['aliases_ascii', 'shortname'],
+            keys: ['aliases_ascii', 'shortname', 'aliases'],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
