@@ -173,11 +173,13 @@ class RoomListStore extends Store {
         if (!this._matrixClient) return;
 
         this._matrixClient.getRooms().forEach((room, index) => {
-            const membership = room.getMyMembership(this._matrixClient.getUserId());
+            const myUserId = this._matrixClient.getUserId();
+            const membership = room.getMyMembership(myUserId);
+            const me = room.getMember(myUserId);
 
             if (membership == "invite") {
                 lists["im.vector.fake.invite"].push(room);
-            } else if (membership == "join" || membership === "ban" || me.isKicked()) {
+            } else if (membership == "join" || membership === "ban" || (me && me.isKicked())) {
                 // Used to split rooms via tags
                 let tagNames = Object.keys(room.tags);
 
