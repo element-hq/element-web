@@ -173,8 +173,7 @@ class RoomListStore extends Store {
         if (!this._matrixClient) return;
 
         this._matrixClient.getRooms().forEach((room, index) => {
-            const me = room.getMember(this._matrixClient.credentials.userId);
-            const membership = me ? me.membership : room.getSyncedMembership();
+            const membership = room.getMyMembership(this._matrixClient.getUserId());
 
             if (membership == "invite") {
                 lists["im.vector.fake.invite"].push(room);

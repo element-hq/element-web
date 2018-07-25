@@ -96,9 +96,10 @@ export default class DMRoomMap {
         if (this.roomToUser[roomId] === undefined) {
             // no entry? if the room is an invite, look for the is_direct hint.
             const room = this.matrixClient.getRoom(roomId);
+            // TODO Use SUMMARYAPI to fix DM detection?
             if (room) {
                 const me = room.getMember(this.matrixClient.getUserId());
-                return me.getDMInviter();
+                return me && me.getDMInviter();
             }
         }
         return this.roomToUser[roomId];

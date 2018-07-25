@@ -342,8 +342,8 @@ module.exports = React.createClass({
                 if (!taggedRoom) {
                     return;
                 }
-                const me = taggedRoom.getMember(MatrixClientPeg.get().credentials.userId);
-                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, me, this.props.ConferenceHandler)) {
+                const myUserId = MatrixClientPeg.get().getUserId();
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, myUserId, this.props.ConferenceHandler)) {
                     return;
                 }
 
