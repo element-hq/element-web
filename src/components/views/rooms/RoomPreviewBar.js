@@ -98,11 +98,11 @@ module.exports = React.createClass({
             </div>);
         }
 
-        const myMember = this.props.room ? this.props.room.currentState.members[
-            MatrixClientPeg.get().credentials.userId
-        ] : null;
-        const kicked = myMember.isKicked();
-        const banned = myMember && myMember.membership == 'ban';
+        const myMember = this.props.room ?
+            this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
+            null;
+        const kicked = myMember && myMember.isKicked();
+        const banned = myMember && myMember && myMember.membership == 'ban';
 
         if (this.props.inviterName) {
             let emailMatchBlock;
