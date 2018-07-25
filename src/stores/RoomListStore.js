@@ -174,11 +174,11 @@ class RoomListStore extends Store {
 
         this._matrixClient.getRooms().forEach((room, index) => {
             const me = room.getMember(this._matrixClient.credentials.userId);
-            if (!me) return;
+            const membership = me ? me.membership : room.getSyncedMembership();
 
-            if (me.membership == "invite") {
+            if (membership == "invite") {
                 lists["im.vector.fake.invite"].push(room);
-            } else if (me.membership == "join" || me.membership === "ban" || me.isKicked()) {
+            } else if (membership == "join" || membership === "ban" || me.isKicked()) {
                 // Used to split rooms via tags
                 let tagNames = Object.keys(room.tags);
 
@@ -205,10 +205,10 @@ class RoomListStore extends Store {
                 } else {
                     lists["im.vector.fake.recent"].push(room);
                 }
-            } else if (me.membership === "leave") {
+            } else if (membership === "leave") {
                 lists["im.vector.fake.archived"].push(room);
             } else {
-                console.error("unrecognised membership: " + me.membership + " - this should never happen");
+                console.error("unrecognised membership: " + membership + " - this should never happen");
             }
         });
 
