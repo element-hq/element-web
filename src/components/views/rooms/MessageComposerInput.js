@@ -1255,16 +1255,14 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState;
         const historyItem = this.historyManager.getItem(delta);
-        if (historyItem) {
-            if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
-                editorState = this.richToMdEditorState(historyItem.value);
-            }
-            else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
-                editorState = this.mdToRichEditorState(historyItem.value);
-            }
-            else {
-                editorState = historyItem.value;
-            }
+        if (!historyItem) return;
+
+        if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
+            editorState = this.richToMdEditorState(historyItem.value);
+        } else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
+            editorState = this.mdToRichEditorState(historyItem.value);
+        } else {
+            editorState = historyItem.value;
         }
 
         // Move selection to the end of the selected history
