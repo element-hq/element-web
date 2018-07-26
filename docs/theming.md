@@ -2,7 +2,7 @@ Theming Riot
 ============
 
 Themes are a very basic way of providing simple alternative look & feels to the
-riot-web app via CSS & custom imagery.
+riot-web app via CSS & custom imagery.  
 
 They are *NOT* co be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Riot itself is a react-sdk skin.
