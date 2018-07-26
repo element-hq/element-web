@@ -1544,18 +1544,6 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
-    onBlur = (e) => {
-        this.selection = this.state.editorState.selection;
-    };
-
-    onFocus = (e) => {
-        if (this.selection) {
-            const change = this.state.editorState.change().select(this.selection);
-            this.onChange(change);
-            delete this.selection;
-        }
-    };
-
     focusComposer = () => {
         this.refs.editor.focus();
     };
@@ -1601,8 +1589,6 @@ export default class MessageComposerInput extends React.Component {
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
                             onPaste={this.onPaste}
-                            onBlur={this.onBlur}
-                            onFocus={this.onFocus}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             // disable spell check for the placeholder because browsers don't like "unencrypted"
