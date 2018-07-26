@@ -61,7 +61,7 @@ class GenericEditor extends DevtoolsComponent {
                 <label htmlFor={id}>{ label }</label>
             </div>
             <div className="mx_DevTools_inputCell">
-                <input id={id} className="mx_TextInputDialog_input" onChange={this._onChange} value={this.state[id]} size="32" />
+                <input id={id} className="mx_TextInputDialog_input" onChange={this._onChange} value={this.state[id]} size="32" autoFocus={true} />
             </div>
         </div>;
     }
@@ -303,10 +303,13 @@ class FilteredList extends React.Component {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
             <input size="64"
+                   autoFocus={true}
                    onChange={this.onQuery}
                    value={this.props.query}
                    placeholder={_t('Filter results')}
-                   className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" />
+                   className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
+                   // force re-render so that autoFocus is applied when this component is re-used
+                   key={this.props.children[0] ? this.props.children[0].key : ''} />
             <TruncatedList getChildren={this.getChildren}
                            getChildCount={this.getChildCount}
                            truncateAt={this.state.truncateAt}
@@ -414,10 +417,10 @@ class RoomStateExplorer extends DevtoolsComponent {
                         const stateKeys = Object.keys(stateGroup);
 
                         let onClickFn;
-                        if (stateKeys.length > 1) {
-                            onClickFn = this.browseEventType(evType);
-                        } else if (stateKeys.length === 1) {
+                        if (stateKeys.length === 1 && stateKeys[0] === '') {
                             onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
+                        } else {
+                            onClickFn = this.browseEventType(evType);
                         }
 
                         return <button className={classes} key={evType} onClick={onClickFn}>
