@@ -83,6 +83,11 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_lazyloading": {
+        isFeature: true,
+        displayName: _td("Increase performance by loading room members on first view"),
+        supportedLevels: LEVELS_FEATURE,
+    },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Disable Emoji suggestions while typing'),

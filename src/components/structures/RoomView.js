@@ -309,9 +309,21 @@ module.exports = React.createClass({
                     }
                 });
             } else if (room) {
+                //viewing a previously joined room, try to lazy load members
+                
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
+
+                // lazy load members if enabled
+                if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+                    MatrixClientPeg.get().loadRoomMembersIfNeeded(room.roomId).catch((err) => {
+                        const errorMessage = `Fetching room members for ${this.roomId} failed.` +
+                            " Room members will appear incomplete.";
+                        console.error(errorMessage);
+                        console.error(err);
+                    });
+                }
             }
         }
     },
@@ -746,40 +758,15 @@ module.exports = React.createClass({
     },
 
     _updateDMState() {
-        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
+        const me = this.state.room.getMember(MatrixClientPeg.get().getUserId());
         if (!me || me.membership !== "join") {
             return;
         }
+        const roomId = this.state.room.roomId;
+        const dmInviter = me.getDMInviter();
 
-        // The user may have accepted an invite with is_direct set
-        if (me.events.member.getPrevContent().membership === "invite" &&
-            me.events.member.getPrevContent().is_direct
-        ) {
-            // This is a DM with the sender of the invite event (which we assume
-            // preceded the join event)
-            Rooms.setDMRoom(
-                this.state.room.roomId,
-                me.events.member.getUnsigned().prev_sender,
-            );
-            return;
-        }
-
-        const invitedMembers = this.state.room.getMembersWithMembership("invite");
-        const joinedMembers = this.state.room.getMembersWithMembership("join");
-
-        // There must be one invited member and one joined member
-        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
-            return;
-        }
-
-        // The user may have sent an invite with is_direct sent
-        const other = invitedMembers[0];
-        if (other &&
-            other.membership === "invite" &&
-            other.events.member.getContent().is_direct
-        ) {
-            Rooms.setDMRoom(this.state.room.roomId, other.userId);
-            return;
+        if (dmInviter) {
+            Rooms.setDMRoom(roomId, dmInviter);
         }
     },
 

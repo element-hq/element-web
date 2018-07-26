@@ -598,7 +598,7 @@ module.exports = withMatrixClient(React.createClass({
 
     onMemberAvatarClick: function() {
         const member = this.props.member;
-        const avatarUrl = member.user ? member.user.avatarUrl : member.events.member.getContent().avatar_url;
+        const avatarUrl = member.getMxcAvatarUrl();
         if (!avatarUrl) return;
 
         const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);

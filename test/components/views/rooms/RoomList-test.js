@@ -14,7 +14,7 @@ import dis from '../../../../src/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
 import GroupStore from '../../../../src/stores/GroupStore.js';
 
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -48,6 +48,8 @@ describe('RoomList', () => {
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
+        //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
+        client.getUserId = MatrixClient.prototype.getUserId;
 
         clock = lolex.install();
 
