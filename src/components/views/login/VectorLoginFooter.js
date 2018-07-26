@@ -30,13 +30,12 @@ module.exports = React.createClass({
         // FIXME: replace this with a proper Status skin
         // ...except then we wouldn't be able to switch to the Status theme at runtime.
         if (SettingsStore.getValue("theme") === 'status') return <div/>;
-        
+
         return (
             <div className="mx_Login_links">
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://github.com/vector-im/riot-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://matrix.org">{ _t('powered by Matrix') }</a>
+                <a href="http://dev-aloha-www.pantheonsite.io/">{ _t('powered by Aloha Health Network') }</a>
             </div>
         );
     }

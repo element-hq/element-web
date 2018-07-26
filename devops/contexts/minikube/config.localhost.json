@@ -14,7 +14,7 @@
     },
     "default_federate": true,
     "welcomePageUrl": "home.html",
-    "default_theme": "light",
+    "default_theme": "blue",
     "roomDirectory": {
         "servers": ["localhost"]
     },
