@@ -29,6 +29,7 @@ global.riotserver = 'http://localhost:8080';
 global.browser = null;
 
 async function runTests() {
+  process.exit(-1);
   console.log("running tests ...");
   const options = {};
   if (process.env.CHROME_PATH) {

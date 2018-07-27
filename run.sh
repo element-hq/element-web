@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 ./synapse/start.sh
 ./riot/start.sh
 node start.js
