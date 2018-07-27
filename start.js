@@ -30,7 +30,11 @@ global.browser = null;
 
 async function runTests() {
   console.log("running tests ...");
-  global.browser = await puppeteer.launch();
+  const options = {};
+  if (process.env.CHROME_PATH) {
+    options.executablePath = process.env.CHROME_PATH;
+  }
+  global.browser = await puppeteer.launch(options);
   const page = await helpers.newPage();
   
   const username = 'user-' + helpers.randomInt(10000);
