@@ -35,14 +35,14 @@ puppeteer.launch({headless: false});
 
 ### Setup
 
-Run `sh install.sh`. This will:
+Run `./install.sh`. This will:
  - install synapse, fetches the master branch at the moment. If anything fails here, please refer to the synapse README to see if you're missing one of the prerequisites.
  - install riot, this fetches the master branch at the moment.
  - install dependencies (will download copy of chrome)
 
 ### Run tests
  
-Run tests with `sh run.sh`.
+Run tests with `./run.sh`.
 
 Developer Guide
 ===============

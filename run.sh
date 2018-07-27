@@ -1,6 +1,6 @@
 #!/bin/bash
-sh synapse/start.sh
-sh riot/start.sh
+./synapse/start.sh
+./riot/start.sh
 node start.js
-sh riot/stop.sh
-sh synapse/stop.sh
+./riot/stop.sh
+./synapse/stop.sh
