@@ -23,6 +23,7 @@ ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
 rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
+npm run build
 npm run test
 popd
 
