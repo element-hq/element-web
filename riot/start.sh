@@ -1,5 +1,5 @@
 #!/bin/bash
-PORT=8080
+PORT=5000
 echo "running riot on http://localhost:$PORT..."
 BASE_DIR=$(readlink -f $(dirname $0))
 cd $BASE_DIR/

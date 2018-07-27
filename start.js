@@ -25,11 +25,10 @@ const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-cons
 
 const homeserver = 'http://localhost:8008';
 
-global.riotserver = 'http://localhost:8080';
+global.riotserver = 'http://localhost:5000';
 global.browser = null;
 
 async function runTests() {
-  process.exit(-1);
   console.log("running tests ...");
   const options = {};
   if (process.env.CHROME_PATH) {
