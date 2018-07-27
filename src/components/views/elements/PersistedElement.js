@@ -20,6 +20,8 @@ import PropTypes from 'prop-types';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
+import dis from '../../../dispatcher';
+
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
@@ -64,9 +66,17 @@ export default class PersistedElement extends React.Component {
         super();
         this.collectChildContainer = this.collectChildContainer.bind(this);
         this.collectChild = this.collectChild.bind(this);
-        this._onContainerResize = this._onContainerResize.bind(this);
+        this._repositionChild = this._repositionChild.bind(this);
+        this._onAction = this._onAction.bind(this);
 
-        this.resizeObserver = new ResizeObserver(this._onContainerResize);
+        this.resizeObserver = new ResizeObserver(this._repositionChild);
+        // Annoyingly, a resize observer is insufficient, since we also care
+        // about when the element moves on the screen without changing its
+        // dimensions. Doesn't look like there's a ResizeObserver equivalent
+        // for this, so we bodge it by listening for document resize and
+        // the timeline_resize action.
+        window.addEventListener('resize', this._repositionChild);
+        this._dispatcherRef = dis.register(this._onAction);
     }
 
     /**
@@ -113,9 +123,17 @@ export default class PersistedElement extends React.Component {
     componentWillUnmount() {
         this.updateChildVisibility(this.child, false);
         this.resizeObserver.disconnect();
+        window.removeEventListener('resize', this._repositionChild);
+        dis.unregister(this._dispatcherRef);
     }
 
-    _onContainerResize() {
+    _onAction(payload) {
+        if (payload.action === 'timeline_resize') {
+            this._repositionChild();
+        }
+    }
+
+    _repositionChild() {
         this.updateChildPosition(this.child, this.childContainer);
     }
 
