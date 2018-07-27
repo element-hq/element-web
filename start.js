@@ -30,6 +30,7 @@ global.browser = null;
 
 let consoleLogs = null;
 let xhrLogs = null;
+let globalPage = null;
 
 async function runTests() {
   console.log("running tests ...");
@@ -39,6 +40,7 @@ async function runTests() {
   }
   global.browser = await puppeteer.launch(options);
   const page = await helpers.newPage();
+  globalPage = page;
 
   consoleLogs = helpers.logConsole(page);
   xhrLogs = helpers.logXHRRequests(page);
@@ -66,12 +68,21 @@ function onSuccess() {
   console.log('all tests finished successfully');
 }
 
-function onFailure(err) {
+async function onFailure(err) {
+
+  let documentHtml = "no page";
+  if (globalPage) {
+    documentHtml = await globalPage.content();
+  }
+
   console.log('failure: ', err);
   console.log('console.log output:');
   console.log(consoleLogs.logs());
   console.log('XHR requests:');
   console.log(xhrLogs.logs());
+  console.log('document html:');
+  console.log(documentHtml);
+  
   process.exit(-1);
 }
 
