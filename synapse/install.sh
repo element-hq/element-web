@@ -6,7 +6,14 @@ CONFIG_TEMPLATE=consent
 PORT=8008
 # set current directory to script directory
 BASE_DIR=$(realpath $(dirname $0))
-pushd $BASE_DIR
+
+if [[ -d $BASE_DIR/$SERVER_DIR ]]; then
+	echo "synapse is already installed"
+	exit
+fi
+
+pushd $BASE_DIR > /dev/null
+
 mkdir -p installations/
 curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output synapse.zip
 unzip synapse.zip
