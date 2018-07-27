@@ -12,6 +12,13 @@ fi
 
 echo "running riot on http://localhost:$PORT ..."
 pushd riot-web/webapp/ > /dev/null
+
+# backup config file before we copy template
+if [ -f config.json ]; then
+	mv config.json $CONFIG_BACKUP
+fi
+cp $BASE_DIR/config-template/config.json .
+
 python -m SimpleHTTPServer $PORT > /dev/null 2>&1 &
 PID=$!
 popd > /dev/null
