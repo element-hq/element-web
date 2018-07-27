@@ -29,6 +29,7 @@ global.riotserver = 'http://localhost:8080';
 global.browser = null;
 
 async function runTests() {
+  console.log("running tests ...");
   global.browser = await puppeteer.launch();
   const page = await helpers.newPage();
   
