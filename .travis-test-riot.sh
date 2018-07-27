@@ -31,7 +31,7 @@ popd
 git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch bwindels/ci_script
 pushd matrix-react-end-to-end-tests
 ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true sh ./install.sh
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 
-CHROME_PATH=$(which google-chrome-stable) sh ./run.sh
+CHROME_PATH=$(which google-chrome-stable) ./run.sh
 popd
