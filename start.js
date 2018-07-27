@@ -54,8 +54,6 @@ async function runTests() {
   await acceptServerNoticesInviteAndConsent(page, noticesName);
   process.stdout.write('done\n');
 
-  throw new Error('blubby');
-
   const room = 'test';
   process.stdout.write(`* creating room ${room} ... `);
   await createRoom(page, room);
