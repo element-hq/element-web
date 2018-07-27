@@ -6,15 +6,12 @@ if [[ -d $BASE_DIR/riot-web ]]; then
 	exit
 fi
 
-
-pushd $BASE_DIR > /dev/null
+cd $BASE_DIR
 curl -L https://github.com/vector-im/riot-web/archive/${RIOT_BRANCH}.zip --output riot.zip
 unzip riot.zip
 rm riot.zip
 mv riot-web-${RIOT_BRANCH} riot-web
 cp config-template/config.json riot-web/
-pushd riot-web > /dev/null
+cd riot-web
 npm install
 npm run build
-popd > /dev/null
-popd > /dev/null

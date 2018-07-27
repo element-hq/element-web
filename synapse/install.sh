@@ -12,13 +12,13 @@ if [[ -d $BASE_DIR/$SERVER_DIR ]]; then
 	exit
 fi
 
-pushd $BASE_DIR > /dev/null
+cd $BASE_DIR
 
 mkdir -p installations/
 curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output synapse.zip
 unzip synapse.zip
 mv synapse-$SYNAPSE_BRANCH $SERVER_DIR
-pushd $SERVER_DIR
+cd $SERVER_DIR
 virtualenv -p python2.7 env
 source env/bin/activate
 pip install --upgrade pip
@@ -36,5 +36,3 @@ sed -i "s#{{SYNAPSE_PORT}}#${PORT}/#g" homeserver.yaml
 sed -i "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
-popd	#back to synapse root dir
-popd	#back to wherever we were
