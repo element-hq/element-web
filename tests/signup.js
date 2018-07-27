@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 const helpers = require('../helpers');
+const acceptTerms = require('./consent');
 const assert = require('assert');
 
 module.exports = async function signup(page, username, password, homeserver) {
@@ -22,11 +23,13 @@ module.exports = async function signup(page, username, password, homeserver) {
   const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
   //click 'Custom server' radio button
-  const advancedRadioButton = await helpers.waitAndQuerySelector(page, '#advanced');
-  await advancedRadioButton.click();
-
+  if (homeserver) {
+    const advancedRadioButton = await helpers.waitAndQuerySelector(page, '#advanced');
+    await advancedRadioButton.click();
+  }
+  // wait until register button is visible
+  await page.waitForSelector('.mx_Login_submit[value=Register]', {visible: true, timeout: 500});
   //fill out form
-  await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
   const loginFields = await page.$$('.mx_Login_field');
   assert.strictEqual(loginFields.length, 7);
   const usernameField = loginFields[2];
@@ -36,7 +39,10 @@ module.exports = async function signup(page, username, password, homeserver) {
   await helpers.replaceInputText(usernameField, username);
   await helpers.replaceInputText(passwordField, password);
   await helpers.replaceInputText(passwordRepeatField, password);
-  await helpers.replaceInputText(hsurlField, homeserver);
+  if (homeserver) {
+    await page.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
+    await helpers.replaceInputText(hsurlField, homeserver);
+  }
   //wait over a second because Registration/ServerConfig have a 1000ms
   //delay to internally set the homeserver url
   //see Registration::render and ServerConfig::props::delayTimeMs
@@ -57,20 +63,8 @@ module.exports = async function signup(page, username, password, homeserver) {
   await continueButton.click();
   //wait for registration to finish so the hash gets set
   //onhashchange better?
-  await helpers.delay(1000);
-/*
-  await page.screenshot({path: "afterlogin.png", fullPage: true});
-  console.log('browser console logs:');
-  console.log(consoleLogs.logs());
-  console.log('xhr logs:');
-  console.log(xhrLogs.logs());
-*/
+  await helpers.delay(2000);
 
-
-  //printElements('page', await page.$('#matrixchat'));
-//  await navigation_promise;
-
-  //await page.waitForSelector('.mx_MatrixChat', {visible: true, timeout: 3000});
   const url = page.url();
   assert.strictEqual(url, helpers.riotUrl('/#/home'));
 }
