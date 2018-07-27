@@ -5,7 +5,7 @@ SERVER_DIR=installations/$INSTALLATION_NAME
 CONFIG_TEMPLATE=consent
 PORT=8008
 # set current directory to script directory
-BASE_DIR=$(realpath $(dirname $0))
+BASE_DIR=$(readlink -f $(dirname $0))
 
 if [[ -d $BASE_DIR/$SERVER_DIR ]]; then
 	echo "synapse is already installed"

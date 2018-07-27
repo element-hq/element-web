@@ -1,6 +1,6 @@
 RIOT_BRANCH=master
 
-BASE_DIR=$(realpath $(dirname $0))
+BASE_DIR=$(readlink -f $(dirname $0))
 if [[ -d $BASE_DIR/riot-web ]]; then
 	echo "riot is already installed"
 	exit
