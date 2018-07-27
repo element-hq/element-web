@@ -28,6 +28,9 @@ const homeserver = 'http://localhost:8008';
 global.riotserver = 'http://localhost:5000';
 global.browser = null;
 
+let consoleLogs = null;
+let xhrLogs = null;
+
 async function runTests() {
   console.log("running tests ...");
   const options = {};
@@ -36,6 +39,9 @@ async function runTests() {
   }
   global.browser = await puppeteer.launch(options);
   const page = await helpers.newPage();
+
+  consoleLogs = helpers.logConsole(page);
+  xhrLogs = helpers.logXHRRequests(page);
   
   const username = 'user-' + helpers.randomInt(10000);
   const password = 'testtest';
@@ -44,9 +50,11 @@ async function runTests() {
   process.stdout.write('done\n');
 
   const noticesName = "Server Notices";
-  process.stdout.write(`* accepting "${noticesName}" and accepting terms & conditions ...`);
+  process.stdout.write(`* accepting "${noticesName}" and accepting terms & conditions ... `);
   await acceptServerNoticesInviteAndConsent(page, noticesName);
   process.stdout.write('done\n');
+
+  throw new Error('blubby');
 
   const room = 'test';
   process.stdout.write(`* creating room ${room} ... `);
@@ -62,6 +70,10 @@ function onSuccess() {
 
 function onFailure(err) {
   console.log('failure: ', err);
+  console.log('console.log output:');
+  console.log(consoleLogs.logs());
+  console.log('XHR requests:');
+  console.log(xhrLogs.logs());
   process.exit(-1);
 }
 

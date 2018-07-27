@@ -58,9 +58,9 @@ function logXHRRequests(page) {
     const type = req.resourceType();
     if (type === 'xhr' || type === 'fetch') {
       buffer += `${req.method()} ${req.url()} \n`;
-      if (req.method() === "POST") {
-        buffer += "  Post data: " + req.postData();
-      }
+      // if (req.method() === "POST") {
+      //   buffer += "  Post data: " + req.postData();
+      // }
     }
   });
   return {
