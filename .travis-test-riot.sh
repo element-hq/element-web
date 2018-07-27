@@ -10,7 +10,7 @@ RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
 scripts/fetchdep.sh vector-im riot-web
-cd "$RIOT_WEB_DIR"
+pushd "$RIOT_WEB_DIR"
 
 mkdir node_modules
 npm install
@@ -24,3 +24,12 @@ rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
 npm run test
+popd
+
+# run end to end tests
+git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch bwindels/ci_script
+pushd matrix-react-end-to-end-tests
+ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true sh ./install.sh
+sh ./run.sh
+popd
