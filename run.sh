@@ -1,3 +1,4 @@
+#!/bin/bash
 sh synapse/start.sh
 sh riot/start.sh
 node start.js

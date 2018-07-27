@@ -1,3 +1,4 @@
+#!/bin/bash
 # config
 SYNAPSE_BRANCH=master
 INSTALLATION_NAME=consent
@@ -7,7 +8,7 @@ PORT=8008
 # set current directory to script directory
 BASE_DIR=$(readlink -f $(dirname $0))
 
-if [[ -d $BASE_DIR/$SERVER_DIR ]]; then
+if [ -d $BASE_DIR/$SERVER_DIR ]; then
 	echo "synapse is already installed"
 	exit
 fi
