@@ -1255,16 +1255,14 @@ export default class MessageComposerInput extends React.Component {
 
         let editorState;
         const historyItem = this.historyManager.getItem(delta);
-        if (historyItem) {
-            if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
-                editorState = this.richToMdEditorState(historyItem.value);
-            }
-            else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
-                editorState = this.mdToRichEditorState(historyItem.value);
-            }
-            else {
-                editorState = historyItem.value;
-            }
+        if (!historyItem) return;
+
+        if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
+            editorState = this.richToMdEditorState(historyItem.value);
+        } else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
+            editorState = this.mdToRichEditorState(historyItem.value);
+        } else {
+            editorState = historyItem.value;
         }
 
         // Move selection to the end of the selected history
@@ -1544,18 +1542,6 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
-    onBlur = (e) => {
-        this.selection = this.state.editorState.selection;
-    };
-
-    onFocus = (e) => {
-        if (this.selection) {
-            const change = this.state.editorState.change().select(this.selection);
-            this.onChange(change);
-            delete this.selection;
-        }
-    };
-
     focusComposer = () => {
         this.refs.editor.focus();
     };
@@ -1601,8 +1587,6 @@ export default class MessageComposerInput extends React.Component {
                             onChange={this.onChange}
                             onKeyDown={this.onKeyDown}
                             onPaste={this.onPaste}
-                            onBlur={this.onBlur}
-                            onFocus={this.onFocus}
                             renderNode={this.renderNode}
                             renderMark={this.renderMark}
                             // disable spell check for the placeholder because browsers don't like "unencrypted"
