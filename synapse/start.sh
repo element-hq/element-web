@@ -1,7 +1,7 @@
 BASE_DIR=$(realpath $(dirname $0))
-pushd $BASE_DIR
-pushd installations/consent
+pushd $BASE_DIR > /dev/null
+pushd installations/consent > /dev/null
 source env/bin/activate
-./synctl start
-popd
-popd
+./synctl start 2> /dev/null
+popd > /dev/null
+popd > /dev/null
