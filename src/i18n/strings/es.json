@@ -379,7 +379,7 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostrar el tiempo en formato 12h (am/pm)",
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "La clave de firma que usted ha proporcionado coincide con la recibida del dispositivo %(deviceId)s de %(userId)s. Dispositivo verificado.",
     "This email address is already in use": "Dirección e-mail en uso",
-    "This email address was not found": "Esta dirección e-mail no se encontró",
+    "This email address was not found": "Esta dirección de correo electrónico no se encontró",
     "The email address linked to your account must be entered.": "Debe introducir el e-mail asociado a su cuenta.",
     "The file '%(fileName)s' exceeds this home server's size limit for uploads": "El fichero '%(fileName)s' supera el tamaño máximo permitido en este servidor",
     "The file '%(fileName)s' failed to upload": "No se pudo subir '%(fileName)s'",
@@ -482,7 +482,7 @@
     "Who can access this room?": "¿Quién puede acceder a esta sala?",
     "Who can read history?": "¿Quién puede leer el historial?",
     "Who would you like to add to this room?": "¿A quién quiere añadir a esta sala?",
-    "Who would you like to communicate with?": "¿Con quién quiere comunicar?",
+    "Who would you like to communicate with?": "¿Con quién quiere comunicarse?",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s ha retirado la invitación de %(targetName)s.",
     "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "¿Quiere <acceptText>aceptar</acceptText> o <declineText>rechazar</declineText> esta invitación?",
     "You already have existing direct chats with this user:": "Ya tiene chats directos con este usuario:",
@@ -523,7 +523,7 @@
     "You need to be able to invite users to do that.": "Usted debe ser capaz de invitar usuarios para hacer eso.",
     "You need to be logged in.": "Necesita estar autenticado.",
     "You need to enter a user name.": "Tiene que ingresar un nombre de usuario.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Su e-mail parece no estar asociado con una Id Matrix en este Homeserver.",
+    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Su correo electrónico parece no estar asociado con una ID de Matrix en este Homeserver.",
     "Your password has been reset": "Su contraseña ha sido restablecida",
     "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "Su contraseña a sido cambiada exitosamente. No recibirá notificaciones en otros dispositivos hasta que ingrese de nuevo en ellos",
     "You seem to be in a call, are you sure you want to quit?": "Parece estar en medio de una llamada, ¿esta seguro que desea salir?",
@@ -762,5 +762,6 @@
     "Failed to invite the following users to %(groupId)s:": "No se pudo invitar a los usuarios siguientes a %(groupId)s:",
     "Failed to invite users to community": "Falló la invitación de usuarios a la comunidad",
     "Failed to invite users to %(groupId)s": "Falló la invitación de usuarios a %(groupId)s",
-    "Failed to add the following rooms to %(groupId)s:": "Falló la a agregación de las salas siguientes a %(groupId)s:"
+    "Failed to add the following rooms to %(groupId)s:": "Falló la a agregación de las salas siguientes a %(groupId)s:",
+    "Restricted": "Restringido"
 }
