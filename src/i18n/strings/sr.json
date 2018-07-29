@@ -1196,5 +1196,18 @@
     "COPY": "КОПИРАЈ",
     "Share Message": "Подели поруку",
     "No Audio Outputs detected": "Нема уочених излаза звука",
-    "Audio Output": "Излаз звука"
+    "Audio Output": "Излаз звука",
+    "A conference call could not be started because the intgrations server is not available": "Конференцијски позив не може почети зато што интеграцијски сервер није доступан",
+    "Call in Progress": "Позив је у току",
+    "A call is currently being placed!": "Успостављамо позив!",
+    "A call is already in progress!": "Позив је у току!",
+    "Permission Required": "Неопходна је дозвола",
+    "You do not have permission to start a conference call in this room": "Немате дозволу да започињете конференцијски позив у овој соби",
+    "Show empty room list headings": "Прикажи листу наслова празних соба",
+    "This event could not be displayed": "Овај догађај не може бити приказан",
+    "Demote yourself?": "Снизите чин себи?",
+    "Demote": "Снизите чин",
+    "deleted": "обрисано",
+    "underlined": "подвучено",
+    "You have no historical rooms": "Ваша историја соба је празна"
 }
