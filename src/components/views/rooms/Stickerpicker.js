@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import Widgets from '../../../utils/widgets';
 import AppTile from '../elements/AppTile';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -24,8 +23,14 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import WidgetUtils from '../../../utils/WidgetUtils';
+import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 
 const widgetType = 'm.stickerpicker';
+
+// We sit in a context menu, so the persisted element container needs to float
+// above it, so it needs a greater z-index than the ContextMenu
+const STICKERPICKER_Z_INDEX = 5000;
 
 export default class Stickerpicker extends React.Component {
     constructor(props) {
@@ -38,8 +43,6 @@ export default class Stickerpicker extends React.Component {
         this._onWidgetAction = this._onWidgetAction.bind(this);
         this._onResize = this._onResize.bind(this);
         this._onFinished = this._onFinished.bind(this);
-
-        this._collectWidgetMessaging = this._collectWidgetMessaging.bind(this);
 
         this.popoverWidth = 300;
         this.popoverHeight = 300;
@@ -67,7 +70,7 @@ export default class Stickerpicker extends React.Component {
         }
 
         this.setState({showStickers: false});
-        Widgets.removeStickerpickerWidgets().then(() => {
+        WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
             console.error('Failed to remove sticker picker widget', e);
@@ -119,7 +122,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _updateWidget() {
-        const stickerpickerWidget = Widgets.getStickerpickerWidgets()[0];
+        const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
@@ -162,17 +165,11 @@ export default class Stickerpicker extends React.Component {
         );
     }
 
-    _collectWidgetMessaging(widgetMessaging) {
-        this._appWidgetMessaging = widgetMessaging;
-
-        // Do this now instead of in componentDidMount because we might not have had the
-        // reference to widgetMessaging when mounting
-        this._sendVisibilityToWidget(true);
-    }
-
     _sendVisibilityToWidget(visible) {
-        if (this._appWidgetMessaging && visible !== this._prevSentVisibility) {
-            this._appWidgetMessaging.sendVisibility(visible);
+        if (!this.state.stickerpickerWidget) return;
+        const widgetMessaging = ActiveWidgetStore.getWidgetMessaging(this.state.stickerpickerWidget.id);
+        if (widgetMessaging && visible !== this._prevSentVisibility) {
+            widgetMessaging.sendVisibility(visible);
             this._prevSentVisibility = visible;
         }
     }
@@ -211,9 +208,8 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement>
+                    <PersistedElement persistKey="stickerPicker" style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
-                            collectWidgetMessaging={this._collectWidgetMessaging}
                             id={stickerpickerWidget.id}
                             url={stickerpickerWidget.content.url}
                             name={stickerpickerWidget.content.name}

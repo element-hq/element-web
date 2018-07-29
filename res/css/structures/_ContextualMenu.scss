@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_ContextualMenu_wrapper {
     position: fixed;
-    z-index: 2000;
+    z-index: 5000;
 }
 
 .mx_ContextualMenu_background {
@@ -26,7 +26,7 @@ limitations under the License.
     width: 100%;
     height: 100%;
     opacity: 1.0;
-    z-index: 2000;
+    z-index: 5000;
 }
 
 .mx_ContextualMenu {
@@ -37,7 +37,7 @@ limitations under the License.
     position: absolute;
     padding: 6px;
 	font-size: 14px;
-    z-index: 2001;
+    z-index: 5001;
 }
 
 .mx_ContextualMenu.mx_ContextualMenu_right {

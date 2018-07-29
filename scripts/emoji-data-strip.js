@@ -12,6 +12,9 @@ const output = Object.keys(EMOJI_DATA).map(
             category: datum.category,
             emoji_order: datum.emoji_order,
         };
+        if (datum.aliases.length > 0) {
+            newDatum.aliases = datum.aliases;
+        }
         if (datum.aliases_ascii.length > 0) {
             newDatum.aliases_ascii = datum.aliases_ascii;
         }

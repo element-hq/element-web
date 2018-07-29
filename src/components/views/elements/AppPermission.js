@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
+import WidgetUtils from "../../../utils/WidgetUtils";
 
 export default class AppPermission extends React.Component {
     constructor(props) {
@@ -19,7 +20,7 @@ export default class AppPermission extends React.Component {
 
         const searchParams = new URLSearchParams(wurl.search);
 
-        if (this.isScalarWurl(wurl) && searchParams && searchParams.get('url')) {
+        if (WidgetUtils.isScalarUrl(wurl) && searchParams && searchParams.get('url')) {
             curl = url.parse(searchParams.get('url'));
             if (curl) {
                 curl.search = curl.query = "";
@@ -31,19 +32,6 @@ export default class AppPermission extends React.Component {
             curlString = wurl.format();
         }
         return curlString;
-    }
-
-    isScalarWurl(wurl) {
-        if (wurl && wurl.hostname && (
-            wurl.hostname === 'scalar.vector.im' ||
-            wurl.hostname === 'scalar-staging.riot.im' ||
-            wurl.hostname === 'scalar-develop.riot.im' ||
-            wurl.hostname === 'demo.riot.im' ||
-            wurl.hostname === 'localhost'
-        )) {
-            return true;
-        }
-        return false;
     }
 
     render() {

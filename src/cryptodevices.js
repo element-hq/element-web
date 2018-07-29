@@ -16,6 +16,7 @@ limitations under the License.
 
 import Resend from './Resend';
 import sdk from './index';
+import dis from './dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 
@@ -43,7 +44,7 @@ export function markAllDevicesKnown(matrixClient, devices) {
  * module:crypto~DeviceInfo|DeviceInfo}.
  */
 export function getUnknownDevicesForRoom(matrixClient, room) {
-    const roomMembers = room.getJoinedMembers().map((m) => {
+    const roomMembers = room.getEncryptionTargetMembers().map((m) => {
         return m.userId;
     });
     return matrixClient.downloadKeys(roomMembers, false).then((devices) => {
@@ -63,6 +64,10 @@ export function getUnknownDevicesForRoom(matrixClient, room) {
         });
         return unknownDevices;
     });
+}
+
+function focusComposer() {
+    dis.dispatch({action: 'focus_composer'});
 }
 
 /**
@@ -86,6 +91,7 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
             sendAnywayLabel: _t("Send anyway"),
             sendLabel: _t("Send"),
             onSend: onSendClicked,
+            onFinished: focusComposer,
         }, 'mx_Dialog_unknownDevice');
     });
 }

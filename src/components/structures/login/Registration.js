@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +23,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
-import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
@@ -62,6 +62,12 @@ module.exports = React.createClass({
         onLoginClick: PropTypes.func.isRequired,
         onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
+
+        rtsClient: PropTypes.shape({
+            getTeamsConfig: PropTypes.func.isRequired,
+            trackReferral: PropTypes.func.isRequired,
+            getTeam: PropTypes.func.isRequired,
+        }),
     },
 
     getInitialState: function() {
@@ -133,7 +139,7 @@ module.exports = React.createClass({
             newState.isUrl = config.isUrl;
         }
         this.props.onServerConfigChange(config);
-        this.setState(newState, function() {
+        this.setState(newState, () => {
             this._replaceClient();
         });
     },
@@ -159,11 +165,11 @@ module.exports = React.createClass({
             let msg = response.message || response.toString();
             // can we give a better error message?
             if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
-                let msisdn_available = false;
+                let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
-                    msisdn_available |= flow.stages.indexOf('m.login.msisdn') > -1;
+                    msisdnAvailable |= flow.stages.indexOf('m.login.msisdn') > -1;
                 }
-                if (!msisdn_available) {
+                if (!msisdnAvailable) {
                     msg = _t('This server does not support authentication with a phone number.');
                 }
             }
@@ -242,7 +248,7 @@ module.exports = React.createClass({
         return matrixClient.getPushers().then((resp)=>{
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
-                if (pushers[i].kind == 'email') {
+                if (pushers[i].kind === 'email') {
                     const emailPusher = pushers[i];
                     emailPusher.data = { brand: this.props.brand };
                     matrixClient.setPusher(emailPusher).done(() => {
@@ -267,7 +273,7 @@ module.exports = React.createClass({
                 errMsg = _t('Passwords don\'t match.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: MIN_PASSWORD_LENGTH});
+                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH});
                 break;
             case "RegistrationForm.ERR_EMAIL_INVALID":
                 errMsg = _t('This doesn\'t look like a valid email address.');
@@ -353,7 +359,7 @@ module.exports = React.createClass({
             registerBody = <Spinner />;
         } else {
             let serverConfigSection;
-            if (!SdkConfig.get().disable_custom_urls) {
+            if (!SdkConfig.get()['disable_custom_urls']) {
                 serverConfigSection = (
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}
@@ -385,18 +391,6 @@ module.exports = React.createClass({
             );
         }
 
-        let returnToAppJsx;
-        /*
-        // with the advent of ILAG I don't think we need this any more
-        if (this.props.onCancelClick) {
-            returnToAppJsx = (
-                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    { _t('Return to app') }
-                </a>
-            );
-        }
-        */
-
         let header;
         let errorText;
         // FIXME: remove hardcoded Status team tweaks at some point
@@ -418,6 +412,8 @@ module.exports = React.createClass({
             );
         }
 
+        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
@@ -431,7 +427,7 @@ module.exports = React.createClass({
                     { registerBody }
                     { signIn }
                     { errorText }
-                    { returnToAppJsx }
+                    <LanguageSelector />
                     <LoginFooter />
                 </div>
             </LoginPage>

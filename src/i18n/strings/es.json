@@ -108,7 +108,6 @@
     "Failed to kick": "Falló al expulsar",
     "Failed to leave room": "Falló al dejar la sala",
     "Failed to load timeline position": "Falló al cargar el historico",
-    "Failed to lookup current room": "Falló al buscar la actual sala",
     "Failed to mute user": "Falló al silenciar el usuario",
     "Failed to reject invite": "Falló al rechazar invitación",
     "Failed to reject invitation": "Falló al rechazar la invitación",
@@ -166,7 +165,6 @@
     "%(targetName)s left the room.": "%(targetName)s ha dejado la sala.",
     "Local addresses for this room:": "Direcciones locales para esta sala:",
     "Logged in as:": "Sesión iniciada como:",
-    "Login as guest": "Iniciar sesión como invitado",
     "Logout": "Cerrar Sesión",
     "Low priority": "Baja prioridad",
     "Accept": "Aceptar",
@@ -314,7 +312,6 @@
     "Mobile phone number": "Número de teléfono móvil",
     "Mobile phone number (optional)": "Número de teléfono móvil (opcional)",
     "Moderator": "Moderador",
-    "Must be viewing a room": "Debe estar viendo una sala",
     "Mute": "Silenciar",
     "%(serverName)s Matrix ID": "%(serverName)s ID de Matrix",
     "Name": "Nombre",
@@ -717,7 +714,6 @@
     "Riot does not know how to join a room on this network": "Riot no sabe cómo unirse a una sala en esta red",
     "Set Password": "Establecer contraseña",
     "Enable audible notifications in web client": "Habilitar notificaciones audibles en el cliente web",
-    "Permalink": "Enlace permanente",
     "Off": "Apagado",
     "#example": "#ejemplo",
     "Mentions only": "Sólo menciones",
@@ -740,5 +736,9 @@
     "Collapse panel": "Colapsar panel",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "En su navegador actual, la apariencia y comportamiento de la aplicación puede ser completamente incorrecta, y algunas de las características podrían no funcionar. Si aún desea probarlo puede continuar, pero ¡no podremos ofrecer soporte por cualquier problema que pudiese tener!",
     "Checking for an update...": "Comprobando actualizaciones...",
-    "There are advanced notifications which are not shown here": "Hay notificaciones avanzadas que no se muestran aquí"
+    "There are advanced notifications which are not shown here": "Hay notificaciones avanzadas que no se muestran aquí",
+    "Every page you use in the app": "Cada página  que usas en la aplicación",
+    "Your User Agent": "Tu Agente de Usuario",
+    "Your device resolution": "La resolución de tu dispositivo",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Hay dispositivos desconocidos en esta sala: si procedes sin verificarlos, será posible que alguien escuche tu llamada."
 }

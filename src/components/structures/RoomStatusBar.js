@@ -25,6 +25,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
+import dis from '../../dispatcher';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -157,10 +158,12 @@ module.exports = React.createClass({
 
     _onResendAllClick: function() {
         Resend.resendUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onCancelAllClick: function() {
         Resend.cancelUnsentEvents(this.props.room);
+        dis.dispatch({action: 'focus_composer'});
     },
 
     _onShowDevicesClick: function() {
@@ -305,7 +308,26 @@ module.exports = React.createClass({
                 },
             );
         } else {
-            if (
+            let consentError = null;
+            for (const m of unsentMessages) {
+                if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
+                    consentError = m.error;
+                    break;
+                }
+            }
+            if (consentError) {
+                title = _t(
+                    "You can't send any messages until you review and agree to " +
+                    "<consentLink>our terms and conditions</consentLink>.",
+                    {},
+                    {
+                        'consentLink': (sub) =>
+                            <a href={consentError.data && consentError.data.consent_uri} target="_blank">
+                                { sub }
+                            </a>,
+                    },
+                );
+            } else if (
                 unsentMessages.length === 1 &&
                 unsentMessages[0].error &&
                 unsentMessages[0].error.data &&
@@ -329,11 +351,13 @@ module.exports = React.createClass({
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
             <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
-            <div className="mx_RoomStatusBar_connectionLostBar_title">
-                { title }
-            </div>
-            <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                { content }
+            <div>
+                <div className="mx_RoomStatusBar_connectionLostBar_title">
+                    { title }
+                </div>
+                <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                    { content }
+                </div>
             </div>
         </div>;
     },
@@ -350,11 +374,13 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
-                    <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        { _t('Connectivity to the server has been lost.') }
-                    </div>
-                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        { _t('Sent messages will be stored until your connection has returned.') }
+                    <div>
+                        <div className="mx_RoomStatusBar_connectionLostBar_title">
+                            { _t('Connectivity to the server has been lost.') }
+                        </div>
+                        <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                            { _t('Sent messages will be stored until your connection has returned.') }
+                        </div>
                     </div>
                 </div>
             );

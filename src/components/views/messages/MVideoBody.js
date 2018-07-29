@@ -147,12 +147,7 @@ module.exports = React.createClass({
             // For now add an img tag with a spinner.
             return (
                 <span className="mx_MVideoBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail" ref="image" style={{
-                        "display": "flex",
-                        "align-items": "center",
-                        "justify-items": "center",
-                        "width": "100%",
-                    }}>
+                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
                         <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
                     </div>
                 </span>

@@ -332,12 +332,39 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onMuteToggle: function() {
+    _warnSelfDemote: function() {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        return new Promise((resolve) => {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Demote yourself?"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, " +
+                            "if you are the last privileged user in the room it will be impossible " +
+                            "to regain privileges.") }
+                    </div>,
+                button: _t("Demote"),
+                onFinished: resolve,
+            });
+        });
+    },
+
+    onMuteToggle: async function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
         if (!room) return;
+
+        // if muting self, warn as it may be irreversible
+        if (target === this.props.matrixClient.getUserId()) {
+            try {
+                if (!(await this._warnSelfDemote())) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+                return;
+            }
+        }
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
@@ -436,7 +463,7 @@ module.exports = withMatrixClient(React.createClass({
         }).done();
     },
 
-    onPowerChange: function(powerLevel) {
+    onPowerChange: async function(powerLevel) {
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
@@ -455,20 +482,12 @@ module.exports = withMatrixClient(React.createClass({
 
         // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
         if (myUserId === target) {
-            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
-                title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
-                        { _t("Are you sure?") }
-                    </div>,
-                button: _t("Continue"),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                    }
-                },
-            });
+            try {
+                if (!(await this._warnSelfDemote())) return;
+                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+            }
             return;
         }
 
@@ -478,7 +497,8 @@ module.exports = withMatrixClient(React.createClass({
                 title: _t("Warning!"),
                 description:
                     <div>
-                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("You will not be able to undo this change as you are promoting the user " +
+                            "to have the same power level as yourself.") }<br />
                         { _t("Are you sure?") }
                     </div>,
                 button: _t("Continue"),
@@ -632,6 +652,13 @@ module.exports = withMatrixClient(React.createClass({
         );
     },
 
+    onShareUserClick: function() {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room member dialog', '', ShareDialog, {
+            target: this.props.member,
+        });
+    },
+
     _renderUserOptions: function() {
         const cli = this.props.matrixClient;
         const member = this.props.member;
@@ -705,13 +732,18 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (!ignoreButton && !readReceiptButton && !insertPillButton && !inviteUserButton) return null;
+        const shareUserButton = (
+            <AccessibleButton onClick={this.onShareUserClick} className="mx_MemberInfo_field">
+                { _t('Share Link to User') }
+            </AccessibleButton>
+        );
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { shareUserButton }
                     { insertPillButton }
                     { ignoreButton }
                     { inviteUserButton }
@@ -902,7 +934,9 @@ module.exports = withMatrixClient(React.createClass({
         return (
             <div className="mx_MemberInfo">
                 <GeminiScrollbarWrapper autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
+                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
+                    </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                     </div>

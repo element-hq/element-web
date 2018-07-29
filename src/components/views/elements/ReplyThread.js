@@ -160,7 +160,7 @@ export default class ReplyThread extends React.Component {
     }
 
     static makeThread(parentEv, onWidgetLoad, ref) {
-        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !ReplyThread.getParentEventId(parentEv)) {
+        if (!ReplyThread.getParentEventId(parentEv)) {
             return <div />;
         }
         return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} ref={ref} />;

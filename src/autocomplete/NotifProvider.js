@@ -20,6 +20,7 @@ import { _t } from '../languageHandler';
 import MatrixClientPeg from '../MatrixClientPeg';
 import {PillCompletion} from './Components';
 import sdk from '../index';
+import type {Completion, SelectionRange} from "./Autocompleter";
 
 const AT_ROOM_REGEX = /@\S*/g;
 
@@ -29,7 +30,7 @@ export default class NotifProvider extends AutocompleteProvider {
         this.room = room;
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
+    async getCompletions(query: string, selection: SelectionRange, force?:boolean = false): Array<Completion> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();
@@ -40,6 +41,7 @@ export default class NotifProvider extends AutocompleteProvider {
         if (command && command[0] && '@room'.startsWith(command[0]) && command[0].length > 1) {
             return [{
                 completion: '@room',
+                completionId: '@room',
                 suffix: ' ',
                 component: (
                     <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={this.room} />} title="@room" description={_t("Notify the whole room")} />

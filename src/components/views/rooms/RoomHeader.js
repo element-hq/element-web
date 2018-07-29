@@ -149,6 +149,13 @@ module.exports = React.createClass({
         dis.dispatch({ action: 'show_right_panel' });
     },
 
+    onShareRoomClick: function(ev) {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
+            target: this.props.room,
+        });
+    },
+
     _hasUnreadPins: function() {
         const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
         if (!currentPinEvent) return false;
@@ -380,6 +387,14 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
+        let shareRoomButton;
+        if (this.props.inRoom) {
+            shareRoomButton =
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShareRoomClick} title={_t('Share room')}>
+                    <TintableSvg src="img/icons-share.svg" width="16" height="16" />
+                </AccessibleButton>;
+        }
+
         let rightPanelButtons;
         if (this.props.collapsedRhs) {
             rightPanelButtons =
@@ -401,6 +416,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
                     { pinnedEventsButton }
+                    { shareRoomButton }
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
