@@ -1,3 +1,14 @@
+Changes in [0.13.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.0) (2018-07-30)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0-rc.2...v0.13.0)
+
+ * Fix composer bug where cursor position would change when Riot regained focus
+   [\#2093](https://github.com/matrix-org/matrix-react-sdk/pull/2093)
+ * Fix persistend element location not updating
+   [\#2094](https://github.com/matrix-org/matrix-react-sdk/pull/2094)
+ * Slate Fixes 42?
+   [\#2089](https://github.com/matrix-org/matrix-react-sdk/pull/2089)
+
 Changes in [0.13.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.0-rc.2) (2018-07-24)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0-rc.1...v0.13.0-rc.2)
