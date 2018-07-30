@@ -1,3 +1,24 @@
+Changes in [0.16.0](https://github.com/vector-im/riot-web/releases/tag/v0.16.0) (2018-07-30)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0-rc.2...v0.16.0)
+
+* Update react-sdk version for bugfixes with Jitsi widgets and the new composer
+
+Changes in [0.16.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.0-rc.2) (2018-07-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0-rc.1...v0.16.0-rc.2)
+
+ * Update to react-sdk rc.2 to remove Jitsi conference calling from labs
+
+Changes in [0.16.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.0-rc.1) (2018-07-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7...v0.16.0-rc.1)
+
+ * Update from Weblate.
+   [\#7082](https://github.com/vector-im/riot-web/pull/7082)
+ * Sample config for jitsi integration URL
+   [\#7055](https://github.com/vector-im/riot-web/pull/7055)
+
 Changes in [0.15.7](https://github.com/vector-im/riot-web/releases/tag/v0.15.7) (2018-07-09)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.7-rc.2...v0.15.7)
