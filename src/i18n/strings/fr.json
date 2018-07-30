@@ -1158,7 +1158,7 @@
     "Unable to reply": "Impossible de répondre",
     "At this time it is not possible to reply with an emote.": "Pour le moment il n'est pas possible de répondre avec un émoji.",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Impossible de charger l'événement auquel il a été répondu, soit il n'existe pas, soit vous n'avez pas l'autorisation de le voir.",
-    "Collapse Reply Thread": "Dévoiler le fil de réponse",
+    "Collapse Reply Thread": "Masquer le fil de réponse",
     "Enable widget screenshots on supported widgets": "Activer les captures d'écran des widgets pris en charge",
     "Send analytics data": "Envoyer les données analytiques",
     "Muted Users": "Utilisateurs ignorés",
