@@ -1,3 +1,9 @@
+Changes in [0.16.0](https://github.com/vector-im/riot-web/releases/tag/v0.16.0) (2018-07-30)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0-rc.2...v0.16.0)
+
+* Update react-sdk version for bugfixes with Jitsi widgets and the new composer
+
 Changes in [0.16.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.0-rc.2) (2018-07-24)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0-rc.1...v0.16.0-rc.2)
