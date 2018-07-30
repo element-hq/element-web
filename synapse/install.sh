@@ -17,7 +17,7 @@ cd $BASE_DIR
 
 mkdir -p installations/
 curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output synapse.zip
-unzip synapse.zip
+unzip -q synapse.zip
 mv synapse-$SYNAPSE_BRANCH $SERVER_DIR
 cd $SERVER_DIR
 virtualenv -p python2.7 env

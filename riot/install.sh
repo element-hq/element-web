@@ -9,7 +9,7 @@ fi
 
 cd $BASE_DIR
 curl -L https://github.com/vector-im/riot-web/archive/${RIOT_BRANCH}.zip --output riot.zip
-unzip riot.zip
+unzip -q riot.zip
 rm riot.zip
 mv riot-web-${RIOT_BRANCH} riot-web
 cd riot-web
