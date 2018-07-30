@@ -1210,5 +1210,17 @@
     "Show empty room list headings": "Zeite leere Raumlist-Köpfe",
     "Demote yourself?": "Selbst zurückstufen?",
     "Demote": "Zurückstufen",
-    "This event could not be displayed": "Dieses Ereignis konnte nicht angezeigt werden"
+    "This event could not be displayed": "Dieses Ereignis konnte nicht angezeigt werden",
+    "A conference call could not be started because the intgrations server is not available": "Ein Konferenzgespräch konnte nicht gestartet werden, da der Integrations-Server nicht verfügbar ist",
+    "A call is currently being placed!": "Ein Anruf wurde schon gestartet!",
+    "Permission Required": "Berechtigung benötigt",
+    "You do not have permission to start a conference call in this room": "Du hast keine Berechtigung um ein Konferenzgespräch in diesem Raum zu starten",
+    "deleted": "gelöscht",
+    "underlined": "unterstrichen",
+    "bulleted-list": "Liste mit Punkten",
+    "numbered-list": "Liste mit Nummern",
+    "Failed to remove widget": "Widget konnte nicht entfernt werden",
+    "An error ocurred whilst trying to remove the widget from the room": "Ein Fehler trat auf, während versucht wurde das Widget aus diesem Raum zu entfernen",
+    "inline-code": "Quellcode im Satz",
+    "block-quote": "Quellcode im Block"
 }
