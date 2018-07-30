@@ -68,7 +68,7 @@ const RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            truncateAt: TRUNCATE_AT,
+            truncateAt: -1, // TRUNCATE_AT,
             sortedList: [],
         };
     },
@@ -346,8 +346,8 @@ const RoomSubList = React.createClass({
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
-                    { this.props.collapsed ? '' : this.props.label }
                     <div className={chevronClasses}></div>
+                    { this.props.collapsed ? '' : this.props.label }
                     { badge }
                     { incomingCall }
                 </AccessibleButton>
@@ -460,6 +460,7 @@ const RoomSubList = React.createClass({
                 <div className="mx_RoomSubList">
                     {this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined}
                     { this.state.hidden ? undefined : content }
+                    <div className="mx_RoomSubList_resizer"></div>
                 </div>
             );
         }

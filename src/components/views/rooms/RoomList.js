@@ -489,6 +489,8 @@ module.exports = React.createClass({
     },
 
     _updateStickyHeaders: function(initialise, scrollToPosition) {
+        return;
+
         const self = this;
 
         if (initialise) {

@@ -19,6 +19,11 @@ limitations under the License.
     table-layout: fixed;
     width: 100%;
 
+}
+
+.mx_RoomSubList_resizer {
+    width: 100%;
+    height: 3px;
     background-color: $roomsublist-background;
 }
 
@@ -36,6 +41,7 @@ limitations under the License.
     font-size: 12px;
     width: 203px; /* padding + width = LHS Panel width */
     height: 19px; /* height + padding = 31px = mx_RoomSubList_label height */
+    margin-left: 16px;
     padding-left: 16px; /* gutter */
     padding-right: 16px; /* gutter */
     padding-top: 6px;
@@ -123,34 +129,28 @@ limitations under the License.
 }
 
 .mx_RoomSubList_chevron {
+    left: 0px;
     pointer-events: none;
     position: absolute;
-    right: 41px;
     top: 11px;
+    width: 9px;
+    height: 4px;
+    background-image: url('../../img/topleft-chevron.svg');
+    background-size: cover;
+    // the transition doesn't work as the chevron gets remounted
+    transition: rotateZ 0.2s ease-in;
 }
 
 .mx_RoomSubList_chevronDown {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 6px solid $roomsublist-chevron-color;
+    transform: rotateZ(0deg);
 }
 
 .mx_RoomSubList_chevronUp {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 6px solid $roomsublist-chevron-color;
+    transform: rotateZ(180deg);
 }
 
 .mx_RoomSubList_chevronRight {
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-left: 6px solid $roomsublist-chevron-color;
-    border-bottom: 5px solid transparent;
+    transform: rotateZ(-90deg);
 }
 
 /* The overflow section */
