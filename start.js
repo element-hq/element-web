@@ -36,7 +36,9 @@ async function runTests() {
   console.log("running tests ...");
   const options = {};
   if (process.env.CHROME_PATH) {
-    options.executablePath = process.env.CHROME_PATH;
+    const path = process.env.CHROME_PATH;
+    console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
+    options.executablePath = path;
   }
   global.browser = await puppeteer.launch(options);
   const page = await helpers.newPage();
