@@ -1,16 +1,15 @@
 #!/bin/bash
 PORT=5000
 BASE_DIR=$(readlink -f $(dirname $0))
-PIDFILE=riot.pid
+PIDFILE=$BASE_DIR/riot.pid
 CONFIG_BACKUP=config.e2etests_backup.json
-
-cd $BASE_DIR/
 
 if [ -f $PIDFILE ]; then
 	exit
 fi
 
-echo "running riot on http://localhost:$PORT ..."
+cd $BASE_DIR/
+echo -n "starting riot on http://localhost:$PORT ... "
 pushd riot-web/webapp/ > /dev/null
 
 # backup config file before we copy template
@@ -19,7 +18,34 @@ if [ -f config.json ]; then
 fi
 cp $BASE_DIR/config-template/config.json .
 
-python -m SimpleHTTPServer $PORT > /dev/null 2>&1 &
-PID=$!
-popd > /dev/null
-echo $PID > $PIDFILE
+LOGFILE=$(mktemp)
+# run web server in the background, showing output on error
+(
+	python -m SimpleHTTPServer $PORT > $LOGFILE 2>&1 &
+	PID=$!
+	echo $PID > $PIDFILE
+	# wait so subshell does not exit
+	# otherwise sleep below would not work
+	wait $PID; RESULT=$?
+
+	# NOT expected SIGTERM (128 + 15)
+	# from stop.sh?
+	if [ $RESULT -ne 143 ]; then
+		echo "failed"
+		cat $LOGFILE
+		rm $PIDFILE 2> /dev/null
+	fi
+	rm $LOGFILE
+	exit $RESULT
+)&
+# to be able to return the exit code for immediate errors (like address already in use)
+# we wait for a short amount of time in the background and exit when the first
+# child process exists
+sleep 0.5 &
+# wait the first child process to exit (python or sleep)
+wait -n; RESULT=$?
+# return exit code of first child to exit
+if [ $RESULT -eq 0 ]; then
+	echo "running"
+fi
+exit $RESULT

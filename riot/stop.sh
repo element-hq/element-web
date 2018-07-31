@@ -7,8 +7,9 @@ cd $BASE_DIR
 
 if [ -f $PIDFILE ]; then
 	echo "stopping riot server ..."
-	kill $(cat $PIDFILE)
+	PID=$(cat $PIDFILE)
 	rm $PIDFILE
+	kill $PID
 
 	# revert config file
 	cd riot-web/webapp
