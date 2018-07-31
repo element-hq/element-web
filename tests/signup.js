@@ -19,8 +19,6 @@ const acceptTerms = require('./consent');
 const assert = require('assert');
 
 module.exports = async function signup(page, username, password, homeserver) {
-  const consoleLogs = helpers.logConsole(page);
-  const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
   //click 'Custom server' radio button
   if (homeserver) {
