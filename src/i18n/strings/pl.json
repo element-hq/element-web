@@ -1132,5 +1132,6 @@
     "The email field must not be blank.": "Pole email nie może być puste.",
     "The user name field must not be blank.": "Pole nazwy użytkownika nie może być puste.",
     "The phone number field must not be blank.": "Pole numeru telefonu nie może być puste.",
-    "The password field must not be blank.": "Pole hasła nie może być puste."
+    "The password field must not be blank.": "Pole hasła nie może być puste.",
+    "Call Failed": "Nieudane połączenie"
 }
