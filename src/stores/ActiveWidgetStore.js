@@ -75,8 +75,6 @@ class ActiveWidgetStore extends EventEmitter {
     destroyPersistentWidget() {
         const toDeleteId = this._persistentWidgetId;
 
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
-        PersistedElement.destroyElement('widget_' + toDeleteId);
         this.setWidgetPersistence(toDeleteId, false);
         this.delWidgetMessaging(toDeleteId);
         this.delWidgetCapabilities(toDeleteId);
