@@ -243,9 +243,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const me = this.props.room.currentState.members[myUserId];
-
+        const isInvite = this.props.room.getMyMembership() === "invite";
         const notificationCount = this.state.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
@@ -259,7 +257,7 @@ module.exports = React.createClass({
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
-            'mx_RoomTile_invited': (me && me.membership === 'invite'),
+            'mx_RoomTile_invited': isInvite,
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
