@@ -89,7 +89,7 @@
     "slate-react": "^0.12.4",
     "slate-html-serializer": "^0.6.1",
     "slate-md-serializer": "matrix-org/slate-md-serializer#f7c4ad3",
-    "sanitize-html": "^1.14.1",
+    "sanitize-html": "1.18.2",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-vector": "vector-im/velocity#059e3b2",
