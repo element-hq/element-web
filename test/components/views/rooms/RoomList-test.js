@@ -20,15 +20,16 @@ function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
 
-function createRoom(opts) {
-    const room = new Room(generateRoomId());
-    if (opts) {
-        Object.assign(room, opts);
-    }
-    return room;
-}
 
 describe('RoomList', () => {
+    function createRoom(opts) {
+        const room = new Room(generateRoomId(), client.getUserId());
+        if (opts) {
+            Object.assign(room, opts);
+        }
+        return room;
+    }
+
     let parentDiv = null;
     let sandbox = null;
     let client = null;
