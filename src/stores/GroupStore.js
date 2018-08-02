@@ -147,7 +147,7 @@ class GroupStore extends EventEmitter {
                 return;
             }
 
-            console.error(`Failed to get resource ${stateKey} for ${groupId}`, err.stack);
+            console.error(`Failed to get resource ${stateKey} for ${groupId}`, err);
             this.emit('error', err, groupId);
         }).finally(() => {
             // Indicate finished request, allow for future fetches
