@@ -309,9 +309,13 @@ module.exports = React.createClass({
             );
         } else {
             let consentError = null;
+            let mauError = null;
             for (const m of unsentMessages) {
                 if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
                     consentError = m.error;
+                    break;
+                } else if (m.error && m.error.errcode === 'M_MAU_LIMIT_EXCEEDED') {
+                    mauError = m.error;
                     break;
                 }
             }
@@ -327,6 +331,8 @@ module.exports = React.createClass({
                             </a>,
                     },
                 );
+            } else if (mauError) {
+                title = _t("Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.");
             } else if (
                 unsentMessages.length === 1 &&
                 unsentMessages[0].error &&
