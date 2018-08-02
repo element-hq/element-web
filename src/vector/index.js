@@ -25,13 +25,13 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
-/*const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
+const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
 rageshake.init().then(() => {
     console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
     rageshake.cleanup();
 }, (err) => {
     console.error("Failed to initialise rageshake: " + err);
-});*/
+});
 
 window.addEventListener('beforeunload', (e) => {
     console.log('riot-web closing');

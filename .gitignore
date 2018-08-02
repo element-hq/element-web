@@ -19,6 +19,3 @@ electron/pub
 /config.json.*
 /config.local*.json
 /src/component-index.js
-
-# https://github.com/vector-im/riot-web/issues/7083
-package-lock.json
