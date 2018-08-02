@@ -19,8 +19,6 @@ const acceptTerms = require('./consent');
 const assert = require('assert');
 
 module.exports = async function signup(page, username, password, homeserver) {
-  const consoleLogs = helpers.logConsole(page);
-  const xhrLogs = helpers.logXHRRequests(page);
   await page.goto(helpers.riotUrl('/#/register'));
   //click 'Custom server' radio button
   if (homeserver) {
@@ -55,7 +53,7 @@ module.exports = async function signup(page, username, password, homeserver) {
   const error_text = await helpers.tryGetInnertext(page, '.mx_Login_error');
   assert.strictEqual(!!error_text, false);
   //submit form
-  await page.screenshot({path: "beforesubmit.png", fullPage: true});
+  //await page.screenshot({path: "beforesubmit.png", fullPage: true});
   await registerButton.click();
 
   //confirm dialog saying you cant log back in without e-mail

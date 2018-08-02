@@ -34,17 +34,15 @@ puppeteer.launch({headless: false});
 ## How to run
 
 ### Setup
- - install synapse with `sh synapse/install.sh`, this fetches the master branch at the moment. If anything fails here, please refer to the synapse README to see if you're missing one of the prerequisites.
- - install riot with `sh riot/install.sh`, this fetches the master branch at the moment.
- - install dependencies with `npm install` (will download copy of chrome)
- - have riot-web running on `localhost:8080`
- - have a local synapse running at `localhost:8008`
+
+Run `./install.sh`. This will:
+ - install synapse, fetches the master branch at the moment. If anything fails here, please refer to the synapse README to see if you're missing one of the prerequisites.
+ - install riot, this fetches the master branch at the moment.
+ - install dependencies (will download copy of chrome)
 
 ### Run tests
  
-Run tests with `sh run.sh`.
-
-You should see the terminal split with on top the server output (both riot static server, and synapse), and on the bottom the tests running.
+Run tests with `./run.sh`.
 
 Developer Guide
 ===============

@@ -1,4 +1,19 @@
-tmux \
-	new-session "sh riot/stop.sh; sh synapse/stop.sh; sh synapse/start.sh; sh riot/start.sh; read"\; \
-	split-window "sleep 5; node start.js; sh riot/stop.sh; sh synapse/stop.sh; read"\; \
-	select-layout even-vertical
+#!/bin/bash
+
+stop_servers() {
+	./riot/stop.sh
+	./synapse/stop.sh
+}
+
+handle_error() {
+	EXIT_CODE=$?
+	stop_servers
+	exit $EXIT_CODE
+}
+
+trap 'handle_error' ERR
+
+./synapse/start.sh
+./riot/start.sh
+node start.js
+stop_servers

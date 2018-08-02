@@ -54,14 +54,15 @@ function logConsole(page) {
 
 function logXHRRequests(page) {
   let buffer = "";
-  page.on('request', req => {
+  page.on('requestfinished', async (req) => {
     const type = req.resourceType();
-    if (type === 'xhr' || type === 'fetch') {
-      buffer += `${req.method()} ${req.url()} \n`;
-      if (req.method() === "POST") {
-        buffer += "  Post data: " + req.postData();
-      }
-    }
+    const response = await req.response();
+    //if (type === 'xhr' || type === 'fetch') {
+      buffer += `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
+      // if (req.method() === "POST") {
+      //   buffer += "  Post data: " + req.postData();
+      // }
+    //}
   });
   return {
     logs() {
