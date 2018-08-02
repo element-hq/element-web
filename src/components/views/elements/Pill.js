@@ -189,7 +189,7 @@ const Pill = React.createClass({
                 },
                 getDirectionalContent: function() {
                     return this.getContent();
-                }
+                },
             };
             this.setState({member});
         }).catch((err) => {
