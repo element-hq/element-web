@@ -1209,5 +1209,18 @@
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ezin duzu mezurik bidali <consentLink>gure termino eta baldintzak</consentLink> irakurri eta onartu arte.",
     "Show empty room list headings": "Erakutsi gela hutsen zerrenda-goiburuak",
     "Demote yourself?": "Jaitsi zure burua mailaz?",
-    "Demote": "Jaitzi mailaz"
+    "Demote": "Jaitzi mailaz",
+    "A conference call could not be started because the intgrations server is not available": "Ezin izan da konferentzia dei bat hasi integrazio zerbitzaria ez dagoelako eskuragarri",
+    "A call is currently being placed!": "Dei bat ezartzen ari da orain!",
+    "Permission Required": "Baimena beharrezkoa",
+    "You do not have permission to start a conference call in this room": "Ez duzu baimenik konferentzia dei bat hasteko gela honetan",
+    "This event could not be displayed": "Ezin izan da gertakari hau bistaratu",
+    "deleted": "ezabatuta",
+    "underlined": "azpimarratuta",
+    "inline-code": "lineako kodea",
+    "block-quote": "aipamen blokea",
+    "bulleted-list": "buletdun zerrenda",
+    "numbered-list": "zenbakidun zerrenda",
+    "Failed to remove widget": "Huts egin du trepeta kentzean",
+    "An error ocurred whilst trying to remove the widget from the room": "Trepeta gelatik kentzen saiatzean errore bat gertatu da"
 }
