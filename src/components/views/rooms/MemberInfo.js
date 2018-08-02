@@ -775,15 +775,14 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const myMembership = room.getMyMembership();
+                    // not a DM room if we have are not joined
                     if (myMembership !== 'join') continue;
                     
-                    const isInvite = myMembership === "invite";
-                    // not a DM room if we have are not joined
-                    // not a DM room if they are not joined
                     const them = this.props.member;
+                    // not a DM room if they are not joined
                     if (!them.membership || them.membership !== 'join') continue;
 
-                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || isInvite;
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0;
 
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
@@ -792,7 +791,7 @@ module.exports = withMatrixClient(React.createClass({
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
-                            isInvite={isInvite}
+                            isInvite={false}
                             onClick={this.onRoomTileClick}
                         />,
                     );
