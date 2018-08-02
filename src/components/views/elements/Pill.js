@@ -187,6 +187,9 @@ const Pill = React.createClass({
                 getContent: () => {
                     return {avatar_url: resp.avatar_url};
                 },
+                getDirectionalContent: function() {
+                    return this.getContent();
+                }
             };
             this.setState({member});
         }).catch((err) => {
