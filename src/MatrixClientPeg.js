@@ -108,6 +108,7 @@ class MatrixClientPeg {
         opts.pendingEventOrdering = "detached";
 
         if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+            opts.lazyLoadMembers = true;
             opts.filter = await this.matrixClient.createFilter(FILTER_CONTENT);
         }
 
