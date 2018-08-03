@@ -1223,6 +1223,6 @@
     "An error ocurred whilst trying to remove the widget from the room": "Ein Fehler trat auf, während versucht wurde das Widget aus diesem Raum zu entfernen",
     "inline-code": "Quellcode im Satz",
     "block-quote": "Quellcode im Block",
-    "This homeserver has hit its Monthly Active User limit": "Dieser Heimserver hat sein \"Monatlich aktive Nutzer\"-Limit erreicht",
+    "This homeserver has hit its Monthly Active User limit": "Dieser Heimserver hat sein Limit für monatlich aktive Nutzer erreicht",
     "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen."
 }
