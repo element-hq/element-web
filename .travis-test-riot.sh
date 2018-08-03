@@ -28,7 +28,7 @@ npm run test
 popd
 
 # run end to end tests
-git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch bwindels/ci_script
+git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch master
 pushd matrix-react-end-to-end-tests
 ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
