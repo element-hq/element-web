@@ -758,15 +758,13 @@ module.exports = React.createClass({
     },
 
     _updateDMState() {
-        const me = this.state.room.getMember(MatrixClientPeg.get().getUserId());
-        if (!me || me.membership !== "join") {
+        const room = this.state.room;
+        if (room.getMyMembership() != "join") {
             return;
         }
-        const roomId = this.state.room.roomId;
-        const dmInviter = me.getDMInviter();
-
+        const dmInviter = room.getDMInviter();
         if (dmInviter) {
-            Rooms.setDMRoom(roomId, dmInviter);
+            Rooms.setDMRoom(room.roomId, dmInviter);
         }
     },
 
