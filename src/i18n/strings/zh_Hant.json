@@ -1225,5 +1225,6 @@
     "An error ocurred whilst trying to remove the widget from the room": "嘗試從聊天室移除小工具時發生錯誤",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "您的訊息因為這個家伺服器到達了它的每月活躍使用者限制而沒有傳送出去。請聯絡您的服務管理員以繼續使用服務。",
     "This homeserver has hit its Monthly Active User limit": "此家伺服器達到了其每月活躍使用者限制",
-    "Please contact your service administrator to continue using this service.": "請聯絡您的服務管理員以繼續使用此服務。"
+    "Please contact your service administrator to continue using this service.": "請聯絡您的服務管理員以繼續使用此服務。",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "您的訊息因為這個家伺服器到達了它的每月活躍使用者限制而沒有傳送出去。請聯絡您的服務管理員以繼續使用服務。"
 }
