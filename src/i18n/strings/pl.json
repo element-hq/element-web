@@ -1133,5 +1133,18 @@
     "The user name field must not be blank.": "Pole nazwy użytkownika nie może być puste.",
     "The phone number field must not be blank.": "Pole numeru telefonu nie może być puste.",
     "The password field must not be blank.": "Pole hasła nie może być puste.",
-    "Call Failed": "Nieudane połączenie"
+    "Call Failed": "Nieudane połączenie",
+    "You have no historical rooms": "Nie masz żadnych historycznych pokoi",
+    "Flair": "Wyróżnik społeczności",
+    "Showing flair for these communities:": "Wyświetlanie wyróżników dla tych społeczności:",
+    "This room is not showing flair for any communities": "Ten pokój nie wyświetla wyróżników dla żadnych społeczności",
+    "Flair will appear if enabled in room settings": "Wyróżnik pojawi się, jeśli został włączony w ustawieniach pokoju",
+    "Flair will not appear": "Wyróżnik nie wyświetli się",
+    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sdołączył",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Wyślij ponownie wiadomość</resendText> lub <cancelText>anuluj wiadomość</cancelText>.",
+    "was invited %(count)s times|other": "został zaproszony %(count)s razy",
+    "was invited %(count)s times|one": "został zaproszony",
+    "was banned %(count)s times|one": "został zablokowany",
+    "was kicked %(count)s times|one": "został wyrzucony",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": ""
 }
