@@ -1224,5 +1224,6 @@
     "Failed to remove widget": "Échec de la suppression du widget",
     "An error ocurred whilst trying to remove the widget from the room": "Une erreur est survenue lors de la suppression du widget du salon",
     "This homeserver has hit its Monthly Active User limit": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs",
-    "Please contact your service administrator to continue using this service.": "Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser."
+    "Please contact your service administrator to continue using this service.": "Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Votre message n'a pas été envoyé car ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser."
 }
