@@ -677,6 +677,7 @@
     "A new version of Riot is available.": "A new version of Riot is available.",
     "To return to your account in future you need to <u>set a password</u>": "To return to your account in future you need to <u>set a password</u>",
     "Set Password": "Set Password",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.",
     "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
     "Checking for an update...": "Checking for an update...",
     "No update available.": "No update available.",

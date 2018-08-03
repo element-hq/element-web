@@ -98,6 +98,7 @@ const LoggedInView = React.createClass({
         this._setStateFromSessionStore();
 
         this._matrixClient.on("accountData", this.onAccountData);
+        this._matrixClient.on("sync", this.onSync);
     },
 
     componentWillUnmount: function() {
@@ -139,6 +140,20 @@ const LoggedInView = React.createClass({
         }
         if (event.getType() === "m.ignored_user_list") {
             dis.dispatch({action: "ignore_state_changed"});
+        }
+    },
+
+    onSync: function(syncState, oldSyncState, data) {
+        if (syncState === oldSyncState) return;
+
+        if (syncState === 'ERROR') {
+            this.setState({
+                syncErrorData: data,
+            });
+        } else {
+            this.setState({
+                syncErrorData: null,
+            });
         }
     },
 
@@ -286,6 +301,7 @@ const LoggedInView = React.createClass({
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
+        const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
         let page_element;
         let right_panel = '';
@@ -370,7 +386,9 @@ const LoggedInView = React.createClass({
 
         let topBar;
         const isGuest = this.props.matrixClient.isGuest();
-        if (this.props.showCookieBar &&
+        if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_MAU_LIMIT_EXCEEDED') {
+            topBar = <ServerLimitBar />;
+        } else if (this.props.showCookieBar &&
             this.props.config.piwik
         ) {
             const policyUrl = this.props.config.piwik.policyUrl || null;
