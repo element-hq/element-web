@@ -1222,5 +1222,7 @@
     "You do not have permission to start a conference call in this room": "Vous n'avez pas la permission de lancer un appel en téléconférence dans ce salon",
     "A call is currently being placed!": "Un appel est en cours !",
     "Failed to remove widget": "Échec de la suppression du widget",
-    "An error ocurred whilst trying to remove the widget from the room": "Une erreur est survenue lors de la suppression du widget du salon"
+    "An error ocurred whilst trying to remove the widget from the room": "Une erreur est survenue lors de la suppression du widget du salon",
+    "This homeserver has hit its Monthly Active User limit": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs",
+    "Please contact your service administrator to continue using this service.": "Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser."
 }
