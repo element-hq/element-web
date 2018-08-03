@@ -1222,5 +1222,7 @@
     "bulleted-list": "списък (с тирета)",
     "numbered-list": "номериран списък",
     "Failed to remove widget": "Неуспешно премахване на приспособление",
-    "An error ocurred whilst trying to remove the widget from the room": "Възникна грешка при премахването на приспособлението от стаята"
+    "An error ocurred whilst trying to remove the widget from the room": "Възникна грешка при премахването на приспособлението от стаята",
+    "This homeserver has hit its Monthly Active User limit": "Този сървър достигна своя лимит за активни потребители на месец",
+    "Please contact your service administrator to continue using this service.": "Моля, свържете се с администратора на услугата за да продължите да я използвате."
 }
