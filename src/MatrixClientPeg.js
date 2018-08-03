@@ -34,14 +34,6 @@ interface MatrixClientCreds {
     guest: boolean,
 }
 
-const FILTER_CONTENT = {
-    room: {
-        state: {
-            lazy_load_members: true,
-        },
-    },
-};
-
 /**
  * Wrapper object for handling the js-sdk Matrix Client object in the react-sdk
  * Handles the creation/initialisation of client objects.
@@ -108,7 +100,7 @@ class MatrixClientPeg {
         opts.pendingEventOrdering = "detached";
 
         if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-            opts.filter = await this.matrixClient.createFilter(FILTER_CONTENT);
+            opts.lazyLoadMembers = true;
         }
 
         try {
@@ -127,7 +119,7 @@ class MatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
-        this.get().startClient(opts);
+        await this.get().startClient(opts);
         console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
