@@ -164,7 +164,12 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+            if (response.errcode == 'M_MAU_LIMIT_EXCEEDED') {
+                msg = <div>
+                    <p>{_t("This homeserver has hit its Monthly Active User limit")}</p>
+                    <p>{_t("Please contact your service administrator to continue using this service.")}</p>
+                </div>;
+            } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
                     msisdnAvailable |= flow.stages.indexOf('m.login.msisdn') > -1;
