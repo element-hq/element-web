@@ -1212,5 +1212,8 @@
     "underlined": "подчеркнут",
     "A conference call could not be started because the intgrations server is not available": "Запуск конференции невозможен из-за недоступности сервера интеграции",
     "Permission Required": "Требуется разрешение",
-    "You do not have permission to start a conference call in this room": "У вас нет разрешения на запуск конференции в этой комнате"
+    "You do not have permission to start a conference call in this room": "У вас нет разрешения на запуск конференции в этой комнате",
+    "A call is currently being placed!": "Есть активный вызов!",
+    "Failed to remove widget": "Не удалось удалить виджет",
+    "An error ocurred whilst trying to remove the widget from the room": "Произошла ошибка при удалении виджета из комнаты"
 }
