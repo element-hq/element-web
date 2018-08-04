@@ -121,6 +121,15 @@ module.exports = React.createClass({
             const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus === 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
+            } else if (error.errcode == 'M_MAU_LIMIT_EXCEEDED') {
+                errorText = (
+                    <div>
+                        <div>{ _t('This homeserver has hit its Monthly Active User limit') }</div>
+                        <div className="mx_Login_smallError">
+                            { _t('Please contact your service administrator to continue using this service.') }
+                        </div>
+                    </div>
+                );
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
                 if (SdkConfig.get()['disable_custom_urls']) {
                     errorText = (
