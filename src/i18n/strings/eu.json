@@ -1222,5 +1222,9 @@
     "bulleted-list": "buletdun zerrenda",
     "numbered-list": "zenbakidun zerrenda",
     "Failed to remove widget": "Huts egin du trepeta kentzean",
-    "An error ocurred whilst trying to remove the widget from the room": "Trepeta gelatik kentzen saiatzean errore bat gertatu da"
+    "An error ocurred whilst trying to remove the widget from the room": "Trepeta gelatik kentzen saiatzean errore bat gertatu da",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo du. Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Zure mezua ez da bidali hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo duelako. Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko.",
+    "This homeserver has hit its Monthly Active User limit": "Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo du",
+    "Please contact your service administrator to continue using this service.": "Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko."
 }
