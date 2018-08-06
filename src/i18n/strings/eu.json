@@ -1226,5 +1226,6 @@
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo du. Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko.",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Zure mezua ez da bidali hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo duelako. Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko.",
     "This homeserver has hit its Monthly Active User limit": "Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga jo du",
-    "Please contact your service administrator to continue using this service.": "Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko."
+    "Please contact your service administrator to continue using this service.": "Jarri kontaktuan zerbitzuaren administratzailearekin zerbitzua erabiltzen jarraitzeko.",
+    "System Alerts": "Sistemaren alertak"
 }
