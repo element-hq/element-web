@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -107,6 +107,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
+            syncStateData: MatrixClientPeg.get().getSyncStateData(),
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
             unsentMessages: getUnsentMessages(this.props.room),
         };
@@ -134,12 +135,13 @@ module.exports = React.createClass({
         }
     },
 
-    onSyncStateChange: function(state, prevState) {
+    onSyncStateChange: function(state, prevState, data) {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
         this.setState({
             syncState: state,
+            syncStateData: data,
         });
     },
 
@@ -191,7 +193,7 @@ module.exports = React.createClass({
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
     _getSize: function() {
-        if (this.state.syncState === "ERROR" ||
+        if (this._shouldShowConnectionError() ||
             (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
@@ -238,7 +240,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.state.syncState === "ERROR") {
+        if (this._shouldShowConnectionError()) {
             return null;
         }
 
@@ -283,6 +285,21 @@ module.exports = React.createClass({
         }
 
         return avatars;
+    },
+
+    _shouldShowConnectionError: function() {
+        // no conn bar trumps unread count since you can't get unread messages
+        // without a connection! (technically may already have some but meh)
+        // It also trumps the "some not sent" msg since you can't resend without
+        // a connection!
+        // There's one situation in which we don't show this 'no connection' bar, and that's
+        // if it's a monthly-active-user limit error: those are shown in the top bar.
+        const errorIsMauError = Boolean(
+            this.state.syncStateData &&
+            this.state.syncStateData.error &&
+            this.state.syncStateData.error.errcode === 'M_MAU_LIMIT_EXCEEDED'
+        );
+        return this.state.syncState === "ERROR" && !errorIsMauError;
     },
 
     _getUnsentMessageContent: function() {
@@ -372,11 +389,7 @@ module.exports = React.createClass({
     _getContent: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
-        // no conn bar trumps unread count since you can't get unread messages
-        // without a connection! (technically may already have some but meh)
-        // It also trumps the "some not sent" msg since you can't resend without
-        // a connection!
-        if (this.state.syncState === "ERROR") {
+        if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
