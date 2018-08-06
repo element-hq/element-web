@@ -45,6 +45,7 @@ class RoomListStore extends Store {
         // Initialise state
         this._state = {
             lists: {
+                "m.server_notice": [],
                 "im.vector.fake.invite": [],
                 "m.favourite": [],
                 "im.vector.fake.recent": [],
@@ -158,6 +159,7 @@ class RoomListStore extends Store {
 
     _generateRoomLists(optimisticRequest) {
         const lists = {
+            "m.server_notice": [],
             "im.vector.fake.invite": [],
             "m.favourite": [],
             "im.vector.fake.recent": [],
