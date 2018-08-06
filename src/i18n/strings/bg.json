@@ -1224,5 +1224,7 @@
     "Failed to remove widget": "Неуспешно премахване на приспособление",
     "An error ocurred whilst trying to remove the widget from the room": "Възникна грешка при премахването на приспособлението от стаята",
     "This homeserver has hit its Monthly Active User limit": "Този сървър достигна своя лимит за активни потребители на месец",
-    "Please contact your service administrator to continue using this service.": "Моля, свържете се с администратора на услугата за да продължите да я използвате."
+    "Please contact your service administrator to continue using this service.": "Моля, свържете се с администратора на услугата за да продължите да я използвате.",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Този сървър достигна лимита си за активни потребители на месец. Моля, свържете се с администратора на услугата, за да продължите да я използвате.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Съобщението Ви не бе изпратено, защото този сървър достигна лимита си за активни потребители на месец. Моля, свържете се с администратора на услугата, за да продължите да я използвате."
 }
