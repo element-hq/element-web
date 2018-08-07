@@ -25,9 +25,7 @@ const acceptServerNoticesInviteAndConsent = require('./src/tests/server-notices-
 const homeserver = 'http://localhost:8008';
 const riotserver = 'http://localhost:5000';
 
-let consoleLogs = null;
-let xhrLogs = null;
-let globalPage = null;
+let sessions = [];
 
 async function runTests() {
   console.log("running tests ...");
@@ -39,9 +37,7 @@ async function runTests() {
   }
 
   const alice = await RiotSession.create("alice", options, riotserver);
-
-  consoleLogs = alice.logConsole();
-  xhrLogs = alice.logXHRRequests();
+  sessions.push(alice);
   
   process.stdout.write(`* signing up as ${alice.username} ... `);
   await signup(alice, alice.username, 'testtest');
@@ -65,19 +61,19 @@ function onSuccess() {
 }
 
 async function onFailure(err) {
-
-  let documentHtml = "no page";
-  if (globalPage) {
-    documentHtml = await globalPage.content();
-  }
-
   console.log('failure: ', err);
-  console.log('console.log output:');
-  console.log(consoleLogs.logs());
-  console.log('XHR requests:');
-  console.log(xhrLogs.logs());
-  console.log('document html:');
-  console.log(documentHtml);
+  for(var i = 0; i < sessions.length; ++i) {
+    const session = sessions[i];
+    documentHtml = await session.page.content();
+    console.log(`---------------- START OF ${session.username} LOGS ----------------`);
+    console.log('---------------- console.log output:');
+    console.log(session.consoleLogs());
+    console.log('---------------- network requests:');
+    console.log(session.networkLogs());
+    console.log('---------------- document html:');
+    console.log(documentHtml);
+    console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+  }
   
   process.exit(-1);
 }

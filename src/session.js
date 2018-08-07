@@ -16,12 +16,33 @@ limitations under the License.
 
 const puppeteer = require('puppeteer');
 
+class LogBuffer {
+  constructor(page, eventName, eventMapper, reduceAsync=false, initialValue = "") {
+    this.buffer = initialValue;
+    page.on(eventName, (arg) => {
+      const result = eventMapper(arg);
+      if (reduceAsync) {
+        result.then((r) => this.buffer += r);
+      }
+      else {
+        this.buffer += result;
+      }
+    });
+  }
+}
+
 module.exports = class RiotSession {
   constructor(browser, page, username, riotserver) {
     this.browser = browser;
     this.page = page;
     this.riotserver = riotserver;
     this.username = username;
+    this.consoleLog = new LogBuffer(page, "console", (msg) => `${msg.text()}\n`);
+    this.networkLog = new LogBuffer(page, "requestfinished", async (req) => {
+      const type = req.resourceType();
+      const response = await req.response();
+      return `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
+    }, true);
   }
 
   static async create(username, puppeteerOptions, riotserver) {
@@ -48,16 +69,12 @@ module.exports = class RiotSession {
     return await text_handle.jsonValue();
   }
 
-  logConsole() {
-    let buffer = "";
-    this.page.on('console', msg => {
-      buffer += msg.text() + '\n';
-    });
-    return {
-      logs() {
-        return buffer;
-      }
-    }
+  consoleLogs() {
+    return this.consoleLog.buffer;
+  }
+
+  networkLogs() {
+    return this.networkLog.buffer;
   }
 
   logXHRRequests() {
