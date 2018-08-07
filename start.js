@@ -27,6 +27,21 @@ const riotserver = 'http://localhost:5000';
 
 let sessions = [];
 
+async function createUser(username, options, riotserver) {
+  const session = await RiotSession.create(username, options, riotserver);
+  sessions.push(session);
+  
+  session.log.step("signs up");
+  await signup(session, session.username, 'testtest');
+  session.log.done();
+  
+  const noticesName = "Server Notices";
+  session.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
+  await acceptServerNoticesInviteAndConsent(session, noticesName);
+  session.log.done();
+  return session;
+}
+
 async function runTests() {
   console.log("running tests ...");
   const options = {};
@@ -36,24 +51,21 @@ async function runTests() {
     options.executablePath = path;
   }
 
-  const alice = await RiotSession.create("alice", options, riotserver);
-  sessions.push(alice);
-  
-  alice.log.step("signs up");
-  await signup(alice, alice.username, 'testtest');
-  alice.log.done();
-  
-  const noticesName = "Server Notices";
-  alice.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
-  await acceptServerNoticesInviteAndConsent(alice, noticesName);
-  alice.log.done();
+  const alice = await createUser("alice", options, riotserver);
+  const bob = await createUser("bob", options, riotserver);
 
   const room = 'test';
   alice.log.step(`creates room ${room}`);
   await createRoom(alice, room);
   alice.log.done();
 
+  bob.log.step(`joins room ${room}`);
+  await createRoom(bob, room);
+  bob.log.done();
+
+
   await alice.close();
+  await bob.close();
 }
 
 function onSuccess() {
