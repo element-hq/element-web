@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function createRoom(page, roomName) {
+module.exports = async function createRoom(session, roomName) {
   //TODO: brittle selector
-  const createRoomButton = await helpers.waitAndQuerySelector(page, '.mx_RoleButton[aria-label="Create new room"]');
+  const createRoomButton = await session.waitAndQuerySelector('.mx_RoleButton[aria-label="Create new room"]');
   await createRoomButton.click();
 
-  const roomNameInput = await helpers.waitAndQuerySelector(page, '.mx_CreateRoomDialog_input');
-  await helpers.replaceInputText(roomNameInput, roomName);
+  const roomNameInput = await session.waitAndQuerySelector('.mx_CreateRoomDialog_input');
+  await session.replaceInputText(roomNameInput, roomName);
 
-  const createButton = await helpers.waitAndQuerySelector(page, '.mx_Dialog_primary');
+  const createButton = await session.waitAndQuerySelector('.mx_Dialog_primary');
   await createButton.click();
 
-  await page.waitForSelector('.mx_MessageComposer');
+  await session.waitForSelector('.mx_MessageComposer');
 }

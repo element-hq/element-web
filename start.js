@@ -14,19 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const puppeteer = require('puppeteer');
-const helpers = require('./helpers');
 const assert = require('assert');
+const RiotSession = require('./src/session');
 
-const signup = require('./tests/signup');
-const join = require('./tests/join');
-const createRoom = require('./tests/create-room');
-const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
+const signup = require('./src/tests/signup');
+const join = require('./src/tests/join');
+const createRoom = require('./src/tests/create-room');
+const acceptServerNoticesInviteAndConsent = require('./src/tests/server-notices-consent');
 
 const homeserver = 'http://localhost:8008';
-
-global.riotserver = 'http://localhost:5000';
-global.browser = null;
+const riotserver = 'http://localhost:5000';
 
 let consoleLogs = null;
 let xhrLogs = null;
@@ -40,30 +37,27 @@ async function runTests() {
     console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
     options.executablePath = path;
   }
-  global.browser = await puppeteer.launch(options);
-  const page = await helpers.newPage();
-  globalPage = page;
 
-  consoleLogs = helpers.logConsole(page);
-  xhrLogs = helpers.logXHRRequests(page);
+  const alice = await RiotSession.create("alice", options, riotserver);
+
+  consoleLogs = alice.logConsole();
+  xhrLogs = alice.logXHRRequests();
   
-  const username = 'user-' + helpers.randomInt(10000);
-  const password = 'testtest';
-  process.stdout.write(`* signing up as ${username} ... `);
-  await signup(page, username, password);
+  process.stdout.write(`* signing up as ${alice.username} ... `);
+  await signup(alice, alice.username, 'testtest');
   process.stdout.write('done\n');
 
   const noticesName = "Server Notices";
   process.stdout.write(`* accepting "${noticesName}" and accepting terms & conditions ... `);
-  await acceptServerNoticesInviteAndConsent(page, noticesName);
+  await acceptServerNoticesInviteAndConsent(alice, noticesName);
   process.stdout.write('done\n');
 
   const room = 'test';
   process.stdout.write(`* creating room ${room} ... `);
-  await createRoom(page, room);
+  await createRoom(alice, room);
   process.stdout.write('done\n');
 
-  await browser.close();
+  await alice.close();
 }
 
 function onSuccess() {
