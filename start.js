@@ -39,19 +39,19 @@ async function runTests() {
   const alice = await RiotSession.create("alice", options, riotserver);
   sessions.push(alice);
   
-  process.stdout.write(`* signing up as ${alice.username} ... `);
+  alice.log.step("signs up");
   await signup(alice, alice.username, 'testtest');
-  process.stdout.write('done\n');
-
+  alice.log.done();
+  
   const noticesName = "Server Notices";
-  process.stdout.write(`* accepting "${noticesName}" and accepting terms & conditions ... `);
+  alice.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
   await acceptServerNoticesInviteAndConsent(alice, noticesName);
-  process.stdout.write('done\n');
+  alice.log.done();
 
   const room = 'test';
-  process.stdout.write(`* creating room ${room} ... `);
+  alice.log.step(`creates room ${room}`);
   await createRoom(alice, room);
-  process.stdout.write('done\n');
+  alice.log.done();
 
   await alice.close();
 }

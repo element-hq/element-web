@@ -31,6 +31,20 @@ class LogBuffer {
   }
 }
 
+class Logger {
+  constructor(username) {
+    this.username = username;
+  }
+
+  step(description) {
+    process.stdout.write(` * ${this.username} ${description} ... `);
+  }
+
+  done() {
+    process.stdout.write("done\n");
+  }
+}
+
 module.exports = class RiotSession {
   constructor(browser, page, username, riotserver) {
     this.browser = browser;
@@ -43,6 +57,7 @@ module.exports = class RiotSession {
       const response = await req.response();
       return `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
     }, true);
+    this.log = new Logger(this.username);
   }
 
   static async create(username, puppeteerOptions, riotserver) {
