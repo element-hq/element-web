@@ -1218,5 +1218,6 @@
     "The password field must not be blank.": "Lösenords-fältet får inte vara tomt.",
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Hemservern har nått sin månatliga gräns för användaraktivitet. Kontakta din serviceadministratör för att fortsätta använda servicen.",
     "Failed to remove widget": "Det gick inte att ta bort widget",
-    "An error ocurred whilst trying to remove the widget from the room": "Ett fel uppstod vid borttagning av widget från rummet"
+    "An error ocurred whilst trying to remove the widget from the room": "Ett fel uppstod vid borttagning av widget från rummet",
+    "Demote yourself?": "Sänk egen behörighetsnivå?"
 }
