@@ -1224,5 +1224,6 @@
     "inline-code": "Quellcode im Satz",
     "block-quote": "Quellcode im Block",
     "This homeserver has hit its Monthly Active User limit": "Dieser Heimserver hat sein Limit für monatlich aktive Nutzer erreicht",
-    "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen."
+    "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen.",
+    "System Alerts": "System-Benachrichtigung"
 }
