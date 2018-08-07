@@ -1226,5 +1226,6 @@
     "This homeserver has hit its Monthly Active User limit": "Dieser Heimserver hat sein Limit für monatlich aktive Nutzer erreicht",
     "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen.",
     "System Alerts": "System-Benachrichtigung",
-    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Der Server hat sein monatliches Nutzerlimit erreicht. Bitte kontaktiere deinen Administrator, um den Service weiter nutzen zu können."
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Der Server hat sein monatliches Nutzerlimit erreicht. Bitte kontaktiere deinen Administrator, um den Service weiter nutzen zu können.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Deine Nachricht konnte nicht verschickt werden, weil der Homeserver sein Monatliches Nutzerlimit erreicht hat. Bitte kontaktiere deine Administrator, um den Service weiter nutzen zu können."
 }
