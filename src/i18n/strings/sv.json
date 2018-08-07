@@ -1219,5 +1219,11 @@
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Hemservern har nått sin månatliga gräns för användaraktivitet. Kontakta din serviceadministratör för att fortsätta använda servicen.",
     "Failed to remove widget": "Det gick inte att ta bort widget",
     "An error ocurred whilst trying to remove the widget from the room": "Ett fel uppstod vid borttagning av widget från rummet",
-    "Demote yourself?": "Sänk egen behörighetsnivå?"
+    "Demote yourself?": "Sänk egen behörighetsnivå?",
+    "Demote": "Degradera",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "När någon postar en URL i sitt meddelande, kan URL-förhandsvisning ge mer information om länken, såsom titel, beskrivning, och en bild från webbplatsen.",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kan inte skicka några meddelanden innan du granskar och godkänner <consentLink>våra villkor</consentLink>.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Ditt meddelande skickades inte för hemservern har nått sin månatliga gräns för användaraktivitet. Kontakta din serviceadministratör för att fortsätta använda servicen.",
+    "This homeserver has hit its Monthly Active User limit": "Hemservern har nått sin månatliga gräns för användaraktivitet",
+    "Please contact your service administrator to continue using this service.": "Kontakta din serviceadministratör för att fortsätta använda servicen."
 }
