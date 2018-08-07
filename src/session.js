@@ -133,9 +133,8 @@ module.exports = class RiotSession {
     return this.page.$(selector);  
   }
   
-  async waitAndQuery(selector, timeout = 500) {
-    await this.page.waitForSelector(selector, {visible: true, timeout});
-    return await this.query(selector);
+  waitAndQuery(selector, timeout = 500) {
+    return this.page.waitForSelector(selector, {visible: true, timeout});
   }
 
   queryAll(selector) {
@@ -143,7 +142,7 @@ module.exports = class RiotSession {
   }
 
   async waitAndQueryAll(selector, timeout = 500) {
-    await this.page.waitForSelector(selector, {visible: true, timeout});
+    await this.waitAndQuery(selector, timeout);
     return await this.queryAll(selector);
   }
 
