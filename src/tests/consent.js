@@ -17,7 +17,7 @@ limitations under the License.
 const assert = require('assert');
 
 module.exports = async function acceptTerms(session) {
-  const reviewTermsButton = await session.waitAndQuerySelector('.mx_QuestionDialog button.mx_Dialog_primary', 5000);
+  const reviewTermsButton = await session.waitAndQuery('.mx_QuestionDialog button.mx_Dialog_primary', 5000);
   const termsPagePromise = session.waitForNewPage();
   await reviewTermsButton.click();
   const termsPage = await termsPagePromise;

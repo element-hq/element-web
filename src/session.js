@@ -129,15 +129,22 @@ module.exports = class RiotSession {
     await input.type(text);
   }
 
-  // TODO: rename to waitAndQuery(Single)?
-  async waitAndQuerySelector(selector, timeout = 500) {
+  query(selector) {
+    return this.page.$(selector);  
+  }
+  
+  async waitAndQuery(selector, timeout = 500) {
     await this.page.waitForSelector(selector, {visible: true, timeout});
-    return await this.page.$(selector);
+    return await this.query(selector);
+  }
+
+  queryAll(selector) {
+    return this.page.$$(selector);  
   }
 
   async waitAndQueryAll(selector, timeout = 500) {
     await this.page.waitForSelector(selector, {visible: true, timeout});
-    return await this.page.$$(selector);
+    return await this.queryAll(selector);
   }
 
   waitForNewPage(timeout = 500) {
@@ -157,15 +164,11 @@ module.exports = class RiotSession {
     });
   }
 
-  waitForSelector(selector) {
-    return this.page.waitForSelector(selector);
-  }
-
   goto(url) {
     return this.page.goto(url);
   }
 
-  riotUrl(path) {
+  url(path) {
     return this.riotserver + path;
   }
 

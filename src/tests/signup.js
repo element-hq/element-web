@@ -19,16 +19,16 @@ const assert = require('assert');
 
 module.exports = async function signup(session, username, password, homeserver) {
   session.log.step("signs up");
-  await session.goto(session.riotUrl('/#/register'));
+  await session.goto(session.url('/#/register'));
   //click 'Custom server' radio button
   if (homeserver) {
-    const advancedRadioButton = await session.waitAndQuerySelector('#advanced');
+    const advancedRadioButton = await session.waitAndQuery('#advanced');
     await advancedRadioButton.click();
   }
   // wait until register button is visible
-  await session.waitForSelector('.mx_Login_submit[value=Register]', {visible: true, timeout: 500});
+  await session.waitAndQuery('.mx_Login_submit[value=Register]');
   //fill out form
-  const loginFields = await session.page.$$('.mx_Login_field');
+  const loginFields = await session.queryAll('.mx_Login_field');
   assert.strictEqual(loginFields.length, 7);
   const usernameField = loginFields[2];
   const passwordField = loginFields[3];
@@ -38,7 +38,7 @@ module.exports = async function signup(session, username, password, homeserver) 
   await session.replaceInputText(passwordField, password);
   await session.replaceInputText(passwordRepeatField, password);
   if (homeserver) {
-    await session.waitForSelector('.mx_ServerConfig', {visible: true, timeout: 500});
+    await session.waitAndQuery('.mx_ServerConfig');
     await session.replaceInputText(hsurlField, homeserver);
   }
   //wait over a second because Registration/ServerConfig have a 1000ms
@@ -47,7 +47,7 @@ module.exports = async function signup(session, username, password, homeserver) 
   await session.delay(1200);
   /// focus on the button to make sure error validation
   /// has happened before checking the form is good to go
-  const registerButton = await session.page.$('.mx_Login_submit');
+  const registerButton = await session.query('.mx_Login_submit');
   await registerButton.focus();
   //check no errors
   const error_text = await session.tryGetInnertext('.mx_Login_error');
@@ -57,13 +57,13 @@ module.exports = async function signup(session, username, password, homeserver) 
   await registerButton.click();
 
   //confirm dialog saying you cant log back in without e-mail
-  const continueButton = await session.waitAndQuerySelector('.mx_QuestionDialog button.mx_Dialog_primary');
+  const continueButton = await session.waitAndQuery('.mx_QuestionDialog button.mx_Dialog_primary');
   await continueButton.click();
   //wait for registration to finish so the hash gets set
   //onhashchange better?
   await session.delay(2000);
 
   const url = session.page.url();
-  assert.strictEqual(url, session.riotUrl('/#/home'));
+  assert.strictEqual(url, session.url('/#/home'));
   session.log.done();
 }

@@ -30,10 +30,10 @@ module.exports = async function acceptServerNoticesInviteAndConsent(session, not
 
   await inviteHandle.click();
 
-  const acceptInvitationLink = await session.waitAndQuerySelector(".mx_RoomPreviewBar_join_text a:first-child");
+  const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
   await acceptInvitationLink.click();
 
-  const consentLink = await session.waitAndQuerySelector(".mx_EventTile_body a", 1000);
+  const consentLink = await session.waitAndQuery(".mx_EventTile_body a", 1000);
 
   const termsPagePromise = session.waitForNewPage();
   await consentLink.click();
