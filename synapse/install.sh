@@ -4,7 +4,7 @@ SYNAPSE_BRANCH=master
 INSTALLATION_NAME=consent
 SERVER_DIR=installations/$INSTALLATION_NAME
 CONFIG_TEMPLATE=consent
-PORT=8008
+PORT=5005
 # set current directory to script directory
 BASE_DIR=$(readlink -f $(dirname $0))
 
@@ -33,7 +33,7 @@ python -m synapse.app.homeserver \
 # apply configuration
 cp -r $BASE_DIR/config-templates/$CONFIG_TEMPLATE/. ./
 sed -i "s#{{SYNAPSE_ROOT}}#$(pwd)/#g" homeserver.yaml
-sed -i "s#{{SYNAPSE_PORT}}#${PORT}/#g" homeserver.yaml
+sed -i "s#{{SYNAPSE_PORT}}#${PORT}#g" homeserver.yaml
 sed -i "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml
 sed -i "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
