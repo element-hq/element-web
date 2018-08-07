@@ -435,8 +435,8 @@ const LoggedInView = React.createClass({
 
         const mauLimitEvent = this.state.serverNoticeEvents.find((e) => {
             return e && e.getType() === 'm.server_notice.usage_limit_reached' &&
-                e.getContent().limit &&
-                e.getContent().limit === 'monthly_active_user'
+                e.getContent().limit_type &&
+                e.getContent().limit_type === 'monthly_active_user'
         });
 
         let topBar;
