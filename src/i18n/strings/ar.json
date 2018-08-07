@@ -3,5 +3,6 @@
     "Dismiss": "تجاهل",
     "Riot is not supported on mobile web. Install the app?": "رايوت غير مدعوم في وضعية الويب على الهاتف. هل تريد تثبيت التطبيق ؟",
     "Riot Desktop on %(platformName)s": "الواجهة المكتبية لرايوت على %(platformName)s",
-    "Unknown device": "جهاز مجهول"
+    "Unknown device": "جهاز مجهول",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s عبر %(browserName)s على %(osName)s"
 }
