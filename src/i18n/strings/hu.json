@@ -1222,5 +1222,10 @@
     "You do not have permission to start a conference call in this room": "Nincs jogosultságod konferencia hívást kezdeményezni ebben a szobában",
     "A call is currently being placed!": "A hívás indítás alatt!",
     "Failed to remove widget": "A kisalkalmazás törlése sikertelen",
-    "An error ocurred whilst trying to remove the widget from the room": "A kisalkalmazás szobából való törlése közben hiba történt"
+    "An error ocurred whilst trying to remove the widget from the room": "A kisalkalmazás szobából való törlése közben hiba történt",
+    "System Alerts": "Rendszer figyelmeztetések",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Ez a matrix szerver elérte a havi aktív felhasználói korlátot. Kérlek vedd fel a kapcsolatot a szolgáltatás adminisztrátorával ha a továbbiakban is igénybe szeretnéd venni a szolgáltatást.",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Az üzeneted nem lett elküldve mert a Matrix szerver elérte a havi aktív felhasználói korlátot. Kérlek vedd fel a kapcsolatot a szolgáltatás adminisztrátorával ha a továbbiakban is igénybe szeretnéd venni a szolgáltatást.",
+    "This homeserver has hit its Monthly Active User limit": "Ez a Matrix szerver elérte a havi aktív felhasználói korlátot",
+    "Please contact your service administrator to continue using this service.": "Kérlek vedd fel a kapcsolatot a szolgáltatás adminisztrátorával ha a továbbiakban is igénybe szeretnéd venni a szolgáltatást."
 }
