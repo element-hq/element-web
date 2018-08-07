@@ -16,7 +16,8 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function acceptServerNoticesInviteAndConsent(session, name) {
+module.exports = async function acceptServerNoticesInviteAndConsent(session, noticesName) {
+  session.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
   //TODO: brittle selector
   const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite');
   const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
@@ -24,7 +25,7 @@ module.exports = async function acceptServerNoticesInviteAndConsent(session, nam
   	return {inviteHandle, text};
   }));
   const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-	return text.trim() === name;
+	return text.trim() === noticesName;
   }).inviteHandle;
 
   await inviteHandle.click();
@@ -40,4 +41,5 @@ module.exports = async function acceptServerNoticesInviteAndConsent(session, nam
   const acceptButton = await termsPage.$('input[type=submit]');
   await acceptButton.click();
   await session.delay(500); //TODO yuck, timers
-} 
+  session.log.done();
+}

@@ -18,6 +18,7 @@ const acceptTerms = require('./consent');
 const assert = require('assert');
 
 module.exports = async function signup(session, username, password, homeserver) {
+  session.log.step("signs up");
   await session.goto(session.riotUrl('/#/register'));
   //click 'Custom server' radio button
   if (homeserver) {
@@ -64,4 +65,5 @@ module.exports = async function signup(session, username, password, homeserver) 
 
   const url = session.page.url();
   assert.strictEqual(url, session.riotUrl('/#/home'));
+  session.log.done();
 }

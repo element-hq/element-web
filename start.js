@@ -16,33 +16,13 @@ limitations under the License.
 
 const assert = require('assert');
 const RiotSession = require('./src/session');
+const scenario = require('./src/scenario');
 
-const signup = require('./src/tests/signup');
-const join = require('./src/tests/join');
-const createRoom = require('./src/tests/create-room');
-const acceptServerNoticesInviteAndConsent = require('./src/tests/server-notices-consent');
-
-const homeserver = 'http://localhost:8008';
 const riotserver = 'http://localhost:5000';
 
-let sessions = [];
-
-async function createUser(username, options, riotserver) {
-  const session = await RiotSession.create(username, options, riotserver);
-  sessions.push(session);
-  
-  session.log.step("signs up");
-  await signup(session, session.username, 'testtest');
-  session.log.done();
-  
-  const noticesName = "Server Notices";
-  session.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
-  await acceptServerNoticesInviteAndConsent(session, noticesName);
-  session.log.done();
-  return session;
-}
-
 async function runTests() {
+  let sessions = [];
+
   console.log("running tests ...");
   const options = {};
   if (process.env.CHROME_PATH) {
@@ -51,43 +31,45 @@ async function runTests() {
     options.executablePath = path;
   }
 
-  const alice = await createUser("alice", options, riotserver);
-  const bob = await createUser("bob", options, riotserver);
-
-  const room = 'test';
-  alice.log.step(`creates room ${room}`);
-  await createRoom(alice, room);
-  alice.log.done();
-
-  bob.log.step(`joins room ${room}`);
-  await createRoom(bob, room);
-  bob.log.done();
-
-
-  await alice.close();
-  await bob.close();
-}
-
-function onSuccess() {
-  console.log('all tests finished successfully');
-}
-
-async function onFailure(err) {
-  console.log('failure: ', err);
-  for(var i = 0; i < sessions.length; ++i) {
-    const session = sessions[i];
-    documentHtml = await session.page.content();
-    console.log(`---------------- START OF ${session.username} LOGS ----------------`);
-    console.log('---------------- console.log output:');
-    console.log(session.consoleLogs());
-    console.log('---------------- network requests:');
-    console.log(session.networkLogs());
-    console.log('---------------- document html:');
-    console.log(documentHtml);
-    console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+  async function createSession(username) {
+    const session = await RiotSession.create(username, options, riotserver);
+    sessions.push(session);
+    return session;
   }
-  
-  process.exit(-1);
+
+  let failure = false;
+  try {
+    await scenario(createSession);
+  } catch(err) {
+    console.log('failure: ', err);
+    for(let i = 0; i < sessions.length; ++i) {
+      const session = sessions[i];
+      documentHtml = await session.page.content();
+      console.log(`---------------- START OF ${session.username} LOGS ----------------`);
+      console.log('---------------- console.log output:');
+      console.log(session.consoleLogs());
+      console.log('---------------- network requests:');
+      console.log(session.networkLogs());
+      console.log('---------------- document html:');
+      console.log(documentHtml);
+      console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+    }
+    failure = true;
+  }
+
+  for(let i = 0; i < sessions.length; ++i) {
+    const session = sessions[i];
+    await session.close();
+  }
+
+  if (failure) {
+    process.exit(-1);
+  } else {
+    console.log('all tests finished successfully');
+  }
 }
 
-runTests().then(onSuccess, onFailure);
+runTests().catch(function(err) {
+  console.log(err);
+  process.exit(-1);
+});

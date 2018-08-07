@@ -17,6 +17,7 @@ limitations under the License.
 const assert = require('assert');
 
 module.exports = async function createRoom(session, roomName) {
+  session.log.step(`creates room ${roomName}`);
   //TODO: brittle selector
   const createRoomButton = await session.waitAndQuerySelector('.mx_RoleButton[aria-label="Create new room"]');
   await createRoomButton.click();
@@ -28,4 +29,5 @@ module.exports = async function createRoom(session, roomName) {
   await createButton.click();
 
   await session.waitForSelector('.mx_MessageComposer');
+  session.log.done();
 }
