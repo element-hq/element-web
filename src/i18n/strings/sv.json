@@ -1225,5 +1225,7 @@
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Du kan inte skicka några meddelanden innan du granskar och godkänner <consentLink>våra villkor</consentLink>.",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Ditt meddelande skickades inte för hemservern har nått sin månatliga gräns för användaraktivitet. Kontakta din serviceadministratör för att fortsätta använda servicen.",
     "This homeserver has hit its Monthly Active User limit": "Hemservern har nått sin månatliga gräns för användaraktivitet",
-    "Please contact your service administrator to continue using this service.": "Kontakta din serviceadministratör för att fortsätta använda servicen."
+    "Please contact your service administrator to continue using this service.": "Kontakta din serviceadministratör för att fortsätta använda servicen.",
+    "Show empty room list headings": "Visa tomma rumsrubriker",
+    "System Alerts": "Systemvarningar"
 }
