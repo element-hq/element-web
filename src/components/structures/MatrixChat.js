@@ -1262,6 +1262,7 @@ export default React.createClass({
             }, true);
         });
         cli.on('Session.logged_out', function(call) {
+            if (Lifecycle.isLoggingOut()) return;
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
