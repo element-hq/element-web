@@ -194,6 +194,11 @@ class RoomListStore extends Store {
                     }
                 }
 
+                // ignore any m. tag names we don't know about
+                tagNames = tagNames.filter((t) => {
+                    return !t.startsWith('m.') || lists[t] !== undefined;
+                });
+
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
