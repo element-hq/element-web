@@ -37,6 +37,11 @@ import GroupStore from '../../../stores/GroupStore';
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
+function labelForTagName(tagName) {
+    if (tagName.startsWith('u.')) return tagName.slice(2);
+    return tagName;
+}
+
 function phraseForSection(section) {
     switch (section) {
         case 'm.favourite':
@@ -690,7 +695,7 @@ module.exports = React.createClass({
                     if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
-                             label={tagName}
+                             label={labelForTagName(tagName)}
                              tagName={tagName}
                              emptyContent={this._getEmptyContent(tagName)}
                              editable={true}
