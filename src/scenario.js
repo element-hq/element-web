@@ -18,6 +18,7 @@ limitations under the License.
 const signup = require('./tests/signup');
 const join = require('./tests/join');
 const createRoom = require('./tests/create-room');
+const changeRoomSettings = require('./tests/room-settings');
 const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
 
 module.exports = async function scenario(createSession) {
@@ -33,5 +34,6 @@ module.exports = async function scenario(createSession) {
   const bob = await createUser("bob");
   const room = 'test';
   await createRoom(alice, room);
-  // await join(bob, room);
+  await changeRoomSettings(alice, {directory: true, visibility: "public_no_guests"});
+  await join(bob, room);
 }

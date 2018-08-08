@@ -33,15 +33,27 @@ class LogBuffer {
 
 class Logger {
   constructor(username) {
+    this.indent = 0;
     this.username = username;
   }
 
-  step(description) {
-    process.stdout.write(` * ${this.username} ${description} ... `);
+  startGroup(description) {
+    const indent = " ".repeat(this.indent * 2);
+    console.log(`${indent} * ${this.username} ${description}:`);
+    this.indent += 1;
   }
 
-  done() {
-    process.stdout.write("done\n");
+  endGroup() {
+    this.indent -= 1;
+  }
+
+  step(description) {
+    const indent = " ".repeat(this.indent * 2);
+    process.stdout.write(`${indent} * ${this.username} ${description} ... `);
+  }
+
+  done(status = "done") {
+    process.stdout.write(status + "\n");
   }
 }
 
@@ -79,9 +91,17 @@ module.exports = class RiotSession {
     return null;
   }
 
-  async innerText(field) {
-    const text_handle = await field.getProperty('innerText');
-    return await text_handle.jsonValue();
+  async getElementProperty(handle, property) {
+    const propHandle = await handle.getProperty(property);
+    return await propHandle.jsonValue();
+  }
+
+  innerText(field) {
+    return this.getElementProperty(field, 'innerText');
+  }
+
+  getOuterHTML(element_handle) {
+    return this.getElementProperty(field, 'outerHTML');
   }
 
   consoleLogs() {
@@ -109,11 +129,6 @@ module.exports = class RiotSession {
         return buffer;
       }
     }
-  }
-
-  async getOuterHTML(element_handle) {
-    const html_handle = await element_handle.getProperty('outerHTML');
-    return await html_handle.jsonValue();
   }
 
   async printElements(label, elements) {

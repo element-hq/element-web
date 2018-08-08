@@ -25,6 +25,7 @@ async function runTests() {
 
   console.log("running tests ...");
   const options = {};
+  // options.headless = false;
   if (process.env.CHROME_PATH) {
     const path = process.env.CHROME_PATH;
     console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
@@ -41,6 +42,7 @@ async function runTests() {
   try {
     await scenario(createSession);
   } catch(err) {
+    failure = true;
     console.log('failure: ', err);
     for(let i = 0; i < sessions.length; ++i) {
       const session = sessions[i];
@@ -54,13 +56,9 @@ async function runTests() {
       console.log(documentHtml);
       console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
     }
-    failure = true;
   }
 
-  for(let i = 0; i < sessions.length; ++i) {
-    const session = sessions[i];
-    await session.close();
-  }
+  await Promise.all(sessions.map((session) => session.close()));
 
   if (failure) {
     process.exit(-1);
