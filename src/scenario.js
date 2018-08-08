@@ -41,10 +41,17 @@ module.exports = async function scenario(createSession) {
 async function createDirectoryRoomAndTalk(alice, bob) {
   console.log(" creating a public room and join through directory:");
   const room = 'test';
+  const message = "hi Alice!";
   await createRoom(alice, room);
   await changeRoomSettings(alice, {directory: true, visibility: "public_no_guests"});
   await join(bob, room);
-  await sendMessage(bob, "hi Alice!");
-  await receiveMessage(alice, {sender: "bob", body: "hi Alice!"});
+  await sendMessage(bob, message);
+  await receiveMessage(alice, {sender: "bob", body: message});
 } 
 
+async function createE2ERoomAndTalk(alice, bob) {
+  await createRoom(bob, "secrets");
+  await changeRoomSettings(bob, {encryption: true});
+  await invite(bob, "@alice:localhost");
+  await acceptInvite(alice, "secrets");
+}
