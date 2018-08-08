@@ -32,7 +32,7 @@ module.exports = async function changeRoomSettings(session, settings) {
 	if (typeof settings.directory === "boolean") {
 		session.log.step(`sets directory listing to ${settings.directory}`);
 		const checked = await session.getElementProperty(isDirectory, "checked");
-		assert(typeof checked, "boolean");
+		assert.equal(typeof checked, "boolean");
 		if (checked !== settings.directory) {
 			await isDirectory.click();
 			session.log.done();
