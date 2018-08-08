@@ -34,10 +34,17 @@ module.exports = async function scenario(createSession) {
 
   const alice = await createUser("alice");
   const bob = await createUser("bob");
+
+  await createDirectoryRoomAndTalk(alice, bob);
+}
+
+async function createDirectoryRoomAndTalk(alice, bob) {
+  console.log(" creating a public room and join through directory:");
   const room = 'test';
   await createRoom(alice, room);
   await changeRoomSettings(alice, {directory: true, visibility: "public_no_guests"});
   await join(bob, room);
   await sendMessage(bob, "hi Alice!");
   await receiveMessage(alice, {sender: "bob", body: "hi Alice!"});
-}
+} 
+
