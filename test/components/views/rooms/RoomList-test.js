@@ -23,7 +23,7 @@ function generateRoomId() {
 
 describe('RoomList', () => {
     function createRoom(opts) {
-        const room = new Room(generateRoomId(), client.getUserId());
+        const room = new Room(generateRoomId(), null, client.getUserId());
         if (opts) {
             Object.assign(room, opts);
         }

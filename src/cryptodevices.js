@@ -43,27 +43,26 @@ export function markAllDevicesKnown(matrixClient, devices) {
  * @return {Promise} A promise which resolves to a map userId->deviceId->{@link
  * module:crypto~DeviceInfo|DeviceInfo}.
  */
-export function getUnknownDevicesForRoom(matrixClient, room) {
-    const roomMembers = room.getEncryptionTargetMembers().map((m) => {
+export async function getUnknownDevicesForRoom(matrixClient, room) {
+    const roomMembers = await room.getEncryptionTargetMembers().map((m) => {
         return m.userId;
     });
-    return matrixClient.downloadKeys(roomMembers, false).then((devices) => {
-        const unknownDevices = {};
-        // This is all devices in this room, so find the unknown ones.
-        Object.keys(devices).forEach((userId) => {
-            Object.keys(devices[userId]).map((deviceId) => {
-                const device = devices[userId][deviceId];
+    const devices = await matrixClient.downloadKeys(roomMembers, false);
+    const unknownDevices = {};
+    // This is all devices in this room, so find the unknown ones.
+    Object.keys(devices).forEach((userId) => {
+        Object.keys(devices[userId]).map((deviceId) => {
+            const device = devices[userId][deviceId];
 
-                if (device.isUnverified() && !device.isKnown()) {
-                    if (unknownDevices[userId] === undefined) {
-                        unknownDevices[userId] = {};
-                    }
-                    unknownDevices[userId][deviceId] = device;
+            if (device.isUnverified() && !device.isKnown()) {
+                if (unknownDevices[userId] === undefined) {
+                    unknownDevices[userId] = {};
                 }
-            });
+                unknownDevices[userId][deviceId] = device;
+            }
         });
-        return unknownDevices;
     });
+    return unknownDevices;
 }
 
 function focusComposer() {
