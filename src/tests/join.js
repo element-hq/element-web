@@ -17,7 +17,7 @@ limitations under the License.
 const assert = require('assert');
 
 module.exports = async function join(session, roomName) {
-  session.log.step(`joins room ${roomName}`);
+  session.log.step(`joins room "${roomName}"`);
   //TODO: brittle selector
   const directoryButton = await session.waitAndQuery('.mx_RoleButton[aria-label="Room directory"]');
   await directoryButton.click();

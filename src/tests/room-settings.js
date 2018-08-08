@@ -15,6 +15,19 @@ limitations under the License.
 */
 
 const assert = require('assert');
+const {acceptDialog} = require('./dialog');
+
+async function setCheckboxSetting(session, checkbox, enabled) {
+	const checked = await session.getElementProperty(checkbox, "checked");
+	assert.equal(typeof checked, "boolean");
+	if (checked !== enabled) {
+		await checkbox.click();
+		session.log.done();
+		return true;
+	} else {
+		session.log.done("already set");
+	}
+}
 
 module.exports = async function changeRoomSettings(session, settings) {
 	session.log.startGroup(`changes the room settings`);
@@ -31,13 +44,15 @@ module.exports = async function changeRoomSettings(session, settings) {
 
 	if (typeof settings.directory === "boolean") {
 		session.log.step(`sets directory listing to ${settings.directory}`);
-		const checked = await session.getElementProperty(isDirectory, "checked");
-		assert.equal(typeof checked, "boolean");
-		if (checked !== settings.directory) {
-			await isDirectory.click();
-			session.log.done();
-		} else {
-			session.log.done("already set");
+		await setCheckboxSetting(session, isDirectory, settings.directory);
+	}
+
+	if (typeof settings.encryption === "boolean") {
+		session.log.step(`sets room e2e encryption to ${settings.encryption}`);
+		const clicked = await setCheckboxSetting(session, e2eEncryptionCheck, settings.encryption);
+		// if enabling, accept beta warning dialog
+		if (clicked && settings.encryption) {
+			await acceptDialog(session, "encryption");
 		}
 	}
 
@@ -63,5 +78,6 @@ module.exports = async function changeRoomSettings(session, settings) {
 
 	const saveButton = await session.query(".mx_RoomHeader_wrapper .mx_RoomHeader_textButton");
 	await saveButton.click();
+
 	session.log.endGroup();
 }

@@ -16,18 +16,15 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function createRoom(session, roomName) {
-  session.log.step(`creates room "${roomName}"`);
-  //TODO: brittle selector
-  const createRoomButton = await session.waitAndQuery('.mx_RoleButton[aria-label="Create new room"]');
-  await createRoomButton.click();
-
-  const roomNameInput = await session.waitAndQuery('.mx_CreateRoomDialog_input');
-  await session.replaceInputText(roomNameInput, roomName);
-
-  const createButton = await session.waitAndQuery('.mx_Dialog_primary');
-  await createButton.click();
-
-  await session.waitAndQuery('.mx_MessageComposer');
+module.exports = async function invite(session, userId) {
+  session.log.step(`invites "${userId}" to room`);
+  await session.delay(200);
+  const inviteButton = await session.waitAndQuery(".mx_RightPanel_invite");
+  await inviteButton.click();
+  const inviteTextArea = await session.waitAndQuery(".mx_ChatInviteDialog textarea");
+  await inviteTextArea.type(userId);
+  await inviteTextArea.press("Enter");
+  const confirmButton = await session.query(".mx_Dialog_primary");
+  await confirmButton.click();
   session.log.done();
 }

@@ -18,10 +18,14 @@ limitations under the License.
 const signup = require('./tests/signup');
 const join = require('./tests/join');
 const sendMessage = require('./tests/send-message');
+const acceptInvite = require('./tests/accept-invite');
+const invite = require('./tests/invite');
 const receiveMessage = require('./tests/receive-message');
 const createRoom = require('./tests/create-room');
 const changeRoomSettings = require('./tests/room-settings');
 const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
+const getE2EDeviceFromSettings = require('./tests/e2e-device');
+const verifyDeviceForUser = require("./tests/verify-device");
 
 module.exports = async function scenario(createSession) {
   async function createUser(username) {
@@ -36,6 +40,7 @@ module.exports = async function scenario(createSession) {
   const bob = await createUser("bob");
 
   await createDirectoryRoomAndTalk(alice, bob);
+  await createE2ERoomAndTalk(alice, bob);
 }
 
 async function createDirectoryRoomAndTalk(alice, bob) {
@@ -47,11 +52,20 @@ async function createDirectoryRoomAndTalk(alice, bob) {
   await join(bob, room);
   await sendMessage(bob, message);
   await receiveMessage(alice, {sender: "bob", body: message});
-} 
+}
 
 async function createE2ERoomAndTalk(alice, bob) {
-  await createRoom(bob, "secrets");
+  console.log(" creating an e2e encrypted room and join through invite:");
+  const room = "secrets";
+  const message = "Guess what I just heard?!"
+  await createRoom(bob, room);
   await changeRoomSettings(bob, {encryption: true});
   await invite(bob, "@alice:localhost");
-  await acceptInvite(alice, "secrets");
+  await acceptInvite(alice, room);
+  const bobDevice = await getE2EDeviceFromSettings(bob);
+  const aliceDevice = await getE2EDeviceFromSettings(alice);
+  await verifyDeviceForUser(bob, "alice", aliceDevice);
+  await verifyDeviceForUser(alice, "bob", bobDevice);
+  await sendMessage(alice, message);
+  await receiveMessage(bob, {sender: "alice", body: message, encrypted: true});
 }
