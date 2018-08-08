@@ -18,25 +18,25 @@ const assert = require('assert');
 
 
 async function getMessageFromTile(eventTile) {
-  const senderElement = await eventTile.$(".mx_SenderProfile_name");
-  const bodyElement = await eventTile.$(".mx_EventTile_body");
-  const sender = await(await senderElement.getProperty("innerText")).jsonValue();
-  const body = await(await bodyElement.getProperty("innerText")).jsonValue();
-  return {sender, body};
 }
 
 module.exports = async function receiveMessage(session, message) {
-  session.log.step(`waits to receive message from ${message.sender} in room`);
+  session.log.step(`receives message "${message.body}" from ${message.sender} in room`);
   // wait for a response to come in that contains the message
   // crude, but effective
   await session.page.waitForResponse(async (response) => {
     const body = await response.text();
     return body.indexOf(message.body) !== -1;
   });
-
-  let lastTile = await session.waitAndQuery(".mx_EventTile_last");
-  let lastMessage = await getMessageFromTile(lastTile);
-  assert.equal(lastMessage.body, message.body);
-  assert.equal(lastMessage.sender, message.sender);
+  // wait a bit for the incoming event to be rendered
+  await session.delay(100);
+  let lastTile = await session.query(".mx_EventTile_last");
+  const senderElement = await lastTile.$(".mx_SenderProfile_name");
+  const bodyElement = await lastTile.$(".mx_EventTile_body");
+  const sender = await(await senderElement.getProperty("innerText")).jsonValue();
+  const body = await(await bodyElement.getProperty("innerText")).jsonValue();
+  
+  assert.equal(body, message.body);
+  assert.equal(sender, message.sender);
   session.log.done();
 }
