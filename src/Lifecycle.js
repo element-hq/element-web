@@ -499,3 +499,32 @@ export function stopMatrixClient() {
         MatrixClientPeg.unset();
     }
 }
+/**
+ * Clears indexeddb storage and reloads the session
+ * localStorage is preserved.
+ */
+export async function flushStorageAndReload() {
+    // gather the credentials from localStorage as
+    // MatrixClient.credentials only contains the userId
+    // (gets cleared somewhere probably)
+    // this just does the reverse of _persistCredentialsToLocalStorage
+    const credentials = {
+        homeserverUrl: localStorage.getItem("mx_hs_url"),
+        identityServerUrl: localStorage.getItem("mx_is_url"),
+        userId: localStorage.getItem("mx_user_id"),
+        accessToken: localStorage.getItem("mx_access_token"),
+        guest: JSON.parse(localStorage.getItem("mx_is_guest")),
+        deviceId: localStorage.getItem("mx_device_id"),
+    };
+    // stop the client so it's not running anymore
+    stopMatrixClient();
+    // create a temporary client to clear out the persistent stores.
+    const cli = createMatrixClient({
+        // we'll never make any requests, so can pass a bogus HS URL
+        baseUrl: "",
+    });
+    // clear indexeddb
+    await cli.clearStores();
+    // start the session again without clearing storage
+    _doSetLoggedIn(credentials, false);
+}
