@@ -260,7 +260,7 @@ export default class SettingsStore {
      * @param {*} value The new value of the setting, may be null.
      * @return {Promise} Resolves when the setting has been changed.
      */
-    static setValue(settingName, roomId, level, value) {
+    static async setValue(settingName, roomId, level, value) {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -275,11 +275,21 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        return handler.setValue(settingName, roomId, value).then(() => {
-            const controller = SETTINGS[settingName].controller;
-            if (!controller) return;
+        const controller = SETTINGS[settingName].controller;
+        if (controller) {
+            const changeAllowed = await controller.canChangeTo(level, roomId, value);
+            if (!changeAllowed) {
+                return false;
+            }
+        }
+
+        await handler.setValue(settingName, roomId, value);
+
+        if (controller) {
             controller.onChange(level, roomId, value);
-        });
+        }
+
+        return true;
     }
 
     /**

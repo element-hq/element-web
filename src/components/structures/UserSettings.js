@@ -844,8 +844,8 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = (e) => {
-                SettingsStore.setFeatureEnabled(featureId, e.target.checked);
+            const onChange = async (e) => {
+                await SettingsStore.setFeatureEnabled(featureId, e.target.checked);
                 this.forceUpdate();
             };
 
@@ -855,7 +855,7 @@ module.exports = React.createClass({
                         type="checkbox"
                         id={featureId}
                         name={featureId}
-                        defaultChecked={SettingsStore.isFeatureEnabled(featureId)}
+                        checked={SettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
                     <label htmlFor={featureId}>{ SettingsStore.getDisplayName(featureId) }</label>
