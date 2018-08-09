@@ -21,13 +21,17 @@ const scenario = require('./src/scenario');
 const riotserver = 'http://localhost:5000';
 
 const noLogs = process.argv.indexOf("--no-logs") !== -1;
+const debug = process.argv.indexOf("--debug") !== -1;
 
 async function runTests() {
   let sessions = [];
 
   console.log("running tests ...");
   const options = {};
-  options.headless = false;
+  if (debug) {
+    // options.slowMo = 10;
+    options.headless = false;
+  }
   if (process.env.CHROME_PATH) {
     const path = process.env.CHROME_PATH;
     console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);

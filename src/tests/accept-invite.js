@@ -35,9 +35,7 @@ module.exports = async function acceptInvite(session, name) {
   await acceptInvitationLink.click();
 
   // accept e2e warning dialog
-  try {
-    acceptDialogMaybe(session, "encryption");
-  } catch(err) {}
+  acceptDialogMaybe(session, "encryption");
 
   session.log.done();
 }

@@ -16,8 +16,8 @@ limitations under the License.
 
 const assert = require('assert');
 const acceptInvite = require("./accept-invite")
-module.exports = async function acceptServerNoticesInviteAndConsent(session, noticesName) {
-  await acceptInvite(session, noticesName);
+module.exports = async function acceptServerNoticesInviteAndConsent(session) {
+  await acceptInvite(session, "Server Notices");
   session.log.step(`accepts terms & conditions`);
   const consentLink = await session.waitAndQuery(".mx_EventTile_body a", 1000);
   const termsPagePromise = session.waitForNewPage();
