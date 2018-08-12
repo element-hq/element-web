@@ -1,6 +1,6 @@
 {
     "Unknown device": "Nežinomas įrenginys",
-    "powered by Matrix": "palaikomas Matrix",
+    "powered by Matrix": "veikia su Matrix",
     "Welcome to Riot.im": "Sveiki atvykę į Riot.im",
     "Chat with Riot Bot": "Kalbėtis su Riot robotu",
     "General discussion about Matrix and Riot": "Bendros diskusijos apie Matrix ir Riot",
@@ -34,5 +34,6 @@
     "Support for those using, running and writing other bridges": "Palaikymas skirtas tiems kas naudoja kitus tiltus",
     "Contributing code to Matrix and Riot": "Contributing code to Matrix and Riot",
     "Dev chat for the Riot/Web dev team": "Kūrėjų čatas Riot/Web dev team",
-    "Dev chat for the Dendrite dev team": "Kūrėjų čatas Dendrite dev team"
+    "Dev chat for the Dendrite dev team": "Kūrėjų čatas Dendrite dev team",
+    "Co-ordination for Riot translators": "Koordinavimas Riot vertėjams"
 }
