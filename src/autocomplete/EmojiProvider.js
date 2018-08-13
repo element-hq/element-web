@@ -20,7 +20,7 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {shortnameToUnicode, asciiRegexp, unicodeRegexp} from 'emojione';
-import FuzzyMatcher from './FuzzyMatcher';
+import QueryMatcher from './QueryMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {Completion, SelectionRange} from './Autocompleter';
@@ -84,12 +84,12 @@ function score(query, space) {
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
-        this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
+        this.matcher = new QueryMatcher(EMOJI_SHORTNAMES, {
             keys: ['aliases_ascii', 'shortname', 'aliases'],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
-        this.nameMatcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
+        this.nameMatcher = new QueryMatcher(EMOJI_SHORTNAMES, {
             keys: ['name'],
             // For removing punctuation
             shouldMatchWordsOnly: true,
