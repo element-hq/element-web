@@ -15,15 +15,63 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 
 export default React.createClass({
+    propTypes: {
+        // 'hard' if the logged in user has been locked out, 'soft' if they haven't
+        kind: PropTypes.string,
+        adminContent: PropTypes.string,
+    },
+
+    getDefaultProps: function() {
+        return {
+            kind: 'hard',
+        };
+    },
+
     render: function() {
-        const toolbarClasses = "mx_MatrixToolbar mx_MatrixToolbar_error";
+        const toolbarClasses = {
+            'mx_MatrixToolbar': true,
+        };
+        let content;
+
+        const translateLink = (sub) => {
+            if (this.props.adminContent) {
+                return <a href={this.props.adminContent}>{sub}</a>;
+            } else {
+                return sub;
+            }
+        };
+
+        if (this.props.kind === 'hard') {
+            toolbarClasses['mx_MatrixToolbar_error'] = true;
+            content = _t(
+                "This homeserver has hit its Monthly Active User limit. " +
+                "Please <a>contact your service administrator</a> to continue using the service.",
+                {},
+                {
+                    'a': translateLink,
+                },
+            );
+        } else {
+            toolbarClasses['mx_MatrixToolbar_info'] = true;
+            content = _t(
+                "This homeserver has hit its Monthly Active User " +
+                "limit so some users will not be able to log in. " +
+                "Please <a>contact your service administrator</a> to get this limit increased.",
+                {},
+                {
+                    'a': translateLink,
+                },
+            );
+        }
         return (
-            <div className={toolbarClasses}>
+            <div className={classNames(toolbarClasses)}>
                 <div className="mx_MatrixToolbar_content">
-                    { _t("This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.") }
+                    { content }
                 </div>
             </div>
         );

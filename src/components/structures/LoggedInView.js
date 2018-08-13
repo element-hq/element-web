@@ -30,9 +30,15 @@ import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
+import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
+
+// We need to fetch each pinned message individually (if we don't already have it)
+// so each pinned message may trigger a request. Limit the number per room for sanity.
+// NB. this is just for server notices rather than pinned messages in general.
+const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -80,6 +86,8 @@ const LoggedInView = React.createClass({
         return {
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
+            // any currently active server notice events
+            serverNoticeEvents: [],
         };
     },
 
@@ -97,13 +105,18 @@ const LoggedInView = React.createClass({
         );
         this._setStateFromSessionStore();
 
+        this._updateServerNoticeEvents();
+
         this._matrixClient.on("accountData", this.onAccountData);
         this._matrixClient.on("sync", this.onSync);
+        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
         this._matrixClient.removeListener("accountData", this.onAccountData);
+        this._matrixClient.removeListener("sync", this.onSync);
+        this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
@@ -157,7 +170,41 @@ const LoggedInView = React.createClass({
                 syncErrorData: null,
             });
         }
+
+        if (oldSyncState === 'PREPARED' && syncState === 'SYNCING') {
+            this._updateServerNoticeEvents();
+        }
     },
+
+    onRoomStateEvents: function(ev, state) {
+        const roomLists = RoomListStore.getRoomLists();
+        if (roomLists['m.server_notice'] && roomLists['m.server_notice'].some(r => r.roomId === ev.getRoomId())) {
+            this._updateServerNoticeEvents();
+        }
+    },
+
+    _updateServerNoticeEvents: async function() {
+        const roomLists = RoomListStore.getRoomLists();
+        if (!roomLists['m.server_notice']) return [];
+        
+        const pinnedEvents = [];
+        for (const room of roomLists['m.server_notice']) {
+            const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
+
+            if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
+            
+            const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
+            for (const eventId of pinnedEventIds) {
+                const timeline = await this._matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId, 0);
+                const ev = timeline.getEvents().find(ev => ev.getId() === eventId);
+                if (ev) pinnedEvents.push(ev);
+            }
+        }
+        this.setState({
+            serverNoticeEvents: pinnedEvents,
+        });
+    },
+    
 
     _onKeyDown: function(ev) {
             /*
@@ -386,10 +433,18 @@ const LoggedInView = React.createClass({
                 break;
         }
 
+        const mauLimitEvent = this.state.serverNoticeEvents.find((e) => {
+            return e && e.getType() === 'm.server_notice.usage_limit_reached' &&
+                e.getContent().limit_type &&
+                e.getContent().limit_type === 'monthly_active_user'
+        });
+
         let topBar;
         const isGuest = this.props.matrixClient.isGuest();
         if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_MAU_LIMIT_EXCEEDED') {
-            topBar = <ServerLimitBar />;
+            topBar = <ServerLimitBar kind='hard' />;
+        } else if (mauLimitEvent) {
+            topBar = <ServerLimitBar kind='soft' adminContact={mauLimitEvent.getContent().admin_contact} />;
         } else if (this.props.showCookieBar &&
             this.props.config.piwik
         ) {
