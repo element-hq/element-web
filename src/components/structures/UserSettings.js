@@ -845,7 +845,15 @@ module.exports = React.createClass({
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = async (e) => {
-                await SettingsStore.setFeatureEnabled(featureId, e.target.checked);
+                const checked = e.target.checked;
+                if (featureId === "feature_lazyloading") {
+                    const confirmed = await this._onLazyLoadChanging();
+                    if (!confirmed) {
+                        e.preventDefault();
+                        return;
+                    }
+                }
+                await SettingsStore.setFeatureEnabled(featureId, checked);
                 this.forceUpdate();
             };
 
@@ -876,6 +884,31 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _onLazyLoadChanging: function() {
+        return new Promise((resolve) => {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createDialog(QuestionDialog, {
+                title: _t("Turn on/off lazy load members"),
+                description:
+                    <div>
+                 { _t("To enable or disable the lazy loading of members, " + 
+                    "the current synced state needs to be cleared out. " + 
+                    "This also includes your end-to-end encryption keys, " +
+                    "so to keep being able to decrypt all your existing encrypted messages, " +
+                    "you'll need to export your E2E room keys and import them again afterwards.") }
+                    </div>,
+                button: _t("Clear sync state and reload"),
+                extraButtons: [
+                    <button key="export" className="mx_Dialog_primary"
+                            onClick={this._onExportE2eKeysClicked}>
+                       { _t("Export E2E room keys") }
+                    </button>,
+                ],
+                onFinished: resolve,
+            });
+        });
     },
 
     _renderDeactivateAccount: function() {

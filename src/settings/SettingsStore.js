@@ -275,21 +275,12 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        const controller = SETTINGS[settingName].controller;
-        if (controller) {
-            const changeAllowed = await controller.canChangeTo(level, roomId, value);
-            if (!changeAllowed) {
-                return false;
-            }
-        }
-
         await handler.setValue(settingName, roomId, value);
 
+        const controller = SETTINGS[settingName].controller;
         if (controller) {
             controller.onChange(level, roomId, value);
         }
-
-        return true;
     }
 
     /**
