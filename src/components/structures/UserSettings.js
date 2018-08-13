@@ -887,12 +887,12 @@ module.exports = React.createClass({
     },
 
     _onLazyLoadChanging: async function(enabling) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         // don't prevent turning LL off when not supported
         if (enabling) {
             const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
             if (!supported) {
                 await new Promise((resolve) => {
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                     Modal.createDialog(QuestionDialog, {
                         title: _t("Lazy loading members not supported"),
                         description:
@@ -907,28 +907,7 @@ module.exports = React.createClass({
                 return false;
             }
         }
-        const confirmed = await new Promise((resolve) => {
-            Modal.createDialog(QuestionDialog, {
-                title: _t("Turn on/off lazy load members"),
-                description:
-                    <div>
-                 { _t("To enable or disable the lazy loading of members, " + 
-                    "the current synced state needs to be cleared out. " + 
-                    "This also includes your end-to-end encryption keys, " +
-                    "so to keep being able to decrypt all your existing encrypted messages, " +
-                    "you'll need to export your E2E room keys and import them again afterwards.") }
-                    </div>,
-                button: _t("Clear sync state and reload"),
-                extraButtons: [
-                    <button key="export" className="mx_Dialog_primary"
-                            onClick={this._onExportE2eKeysClicked}>
-                       { _t("Export E2E room keys") }
-                    </button>,
-                ],
-                onFinished: resolve,
-            });
-        });
-        return confirmed;
+        return true;
     },
 
     _renderDeactivateAccount: function() {

@@ -15,10 +15,15 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import dis from "../../dispatcher";
+import MatrixClientPeg from "../../MatrixClientPeg";
+import PlatformPeg from "../../PlatformPeg";
 
 export default class LazyLoadingController extends SettingController {
-    onChange(level, roomId, newValue) {
-        dis.dispatch({action: 'flush_storage_reload'});
+    async onChange(level, roomId, newValue) {
+        if (!PlatformPeg.get()) return;
+
+        MatrixClientPeg.get().stopClient();
+        await MatrixClientPeg.get().store.deleteAllData();
+        PlatformPeg.get().reload();
     }
 }
