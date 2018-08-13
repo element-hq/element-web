@@ -178,7 +178,7 @@ const LoggedInView = React.createClass({
 
     onRoomStateEvents: function(ev, state) {
         const roomLists = RoomListStore.getRoomLists();
-        if (roomLists['m.server_notices'] && roomLists['m.server_notices'].includes(ev.getRoomId())) {
+        if (roomLists['m.server_notice'] && roomLists['m.server_notice'].some(r => r.roomId === ev.getRoomId())) {
             this._updateServerNoticeEvents();
         }
     },
