@@ -1220,5 +1220,7 @@
     "Increase performance by only loading room members on first view": "Increase performance by only loading room members on first view",
     "Turn on/off lazy load members": "Turn on/off lazy load members",
     "To enable or disable the lazy loading of members, the current synced state needs to be cleared out. This also includes your end-to-end encryption keys, so to keep being able to decrypt all your existing encrypted messages, you'll need to export your E2E room keys and import them again afterwards.": "To enable or disable the lazy loading of members, the current synced state needs to be cleared out. This also includes your end-to-end encryption keys, so to keep being able to decrypt all your existing encrypted messages, you'll need to export your E2E room keys and import them again afterwards.",
-    "Clear sync state and reload": "Clear sync state and reload"
+    "Clear sync state and reload": "Clear sync state and reload",
+    "Lazy loading members not supported": "Lazy load members not supported",
+    "Lazy loading is not supported by your current homeserver.": "Lazy loading is not supported by your current homeserver."
 }

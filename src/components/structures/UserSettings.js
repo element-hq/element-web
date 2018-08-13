@@ -847,7 +847,7 @@ module.exports = React.createClass({
             const onChange = async (e) => {
                 const checked = e.target.checked;
                 if (featureId === "feature_lazyloading") {
-                    const confirmed = await this._onLazyLoadChanging();
+                    const confirmed = await this._onLazyLoadChanging(checked);
                     if (!confirmed) {
                         e.preventDefault();
                         return;
@@ -886,9 +886,28 @@ module.exports = React.createClass({
         );
     },
 
-    _onLazyLoadChanging: function() {
-        return new Promise((resolve) => {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    _onLazyLoadChanging: async function(enabling) {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        // don't prevent turning LL off when not supported
+        if (enabling) {
+            const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
+            if (!supported) {
+                await new Promise((resolve) => {
+                    Modal.createDialog(QuestionDialog, {
+                        title: _t("Lazy loading members not supported"),
+                        description:
+                            <div>
+                         { _t("Lazy loading is not supported by your " +
+                            "current homeserver.") }
+                            </div>,
+                        button: _t("OK"),
+                        onFinished: resolve,
+                    });
+                });
+                return false;
+            }
+        }
+        const confirmed = await new Promise((resolve) => {
             Modal.createDialog(QuestionDialog, {
                 title: _t("Turn on/off lazy load members"),
                 description:
@@ -909,6 +928,7 @@ module.exports = React.createClass({
                 onFinished: resolve,
             });
         });
+        return confirmed;
     },
 
     _renderDeactivateAccount: function() {
