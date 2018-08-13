@@ -38,6 +38,7 @@ export default class SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         return null; // no override
     }
+
     /**
      * Called when the setting value has been changed.
      * @param {string} level The level at which the setting has been modified.
