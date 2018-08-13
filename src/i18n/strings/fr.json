@@ -1227,5 +1227,7 @@
     "Please contact your service administrator to continue using this service.": "Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser.",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Votre message n'a pas été envoyé car ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser.",
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser.",
-    "System Alerts": "Alertes système"
+    "System Alerts": "Alertes système",
+    "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez <a>contacter l'administrateur de votre service</a> pour continuer à l'utiliser.",
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs donc certains utilisateurs ne pourront pas se connecter. Veuillez <a>contacter l'administrateur de votre service</a> pour augmenter cette limite."
 }
