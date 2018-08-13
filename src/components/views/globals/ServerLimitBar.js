@@ -29,7 +29,7 @@ export default React.createClass({
     getDefaultProps: function() {
         return {
             kind: 'hard',
-        }
+        };
     },
 
     render: function() {
@@ -44,12 +44,13 @@ export default React.createClass({
             } else {
                 return sub;
             }
-        }
+        };
 
         if (this.props.kind === 'hard') {
             toolbarClasses['mx_MatrixToolbar_error'] = true;
             content = _t(
-                "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.",
+                "This homeserver has hit its Monthly Active User limit. " +
+                "Please <a>contact your service administrator</a> to continue using the service.",
                 {},
                 {
                     'a': translateLink,
@@ -58,7 +59,9 @@ export default React.createClass({
         } else {
             toolbarClasses['mx_MatrixToolbar_info'] = true;
             content = _t(
-                "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.",
+                "This homeserver has hit its Monthly Active User " +
+                "limit so some users will not be able to log in. " +
+                "Please <a>contact your service administrator</a> to get this limit increased.",
                 {},
                 {
                     'a': translateLink,
