@@ -248,7 +248,7 @@ export default class SettingsStore {
         if (actualValue !== undefined && actualValue !== null) return actualValue;
         return calculatedValue;
     }
-
+    /* eslint-disable valid-jsdoc */
     /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
      * set for a particular room, otherwise it should be supplied. The value may be null
@@ -260,6 +260,7 @@ export default class SettingsStore {
      * @param {*} value The new value of the setting, may be null.
      * @return {Promise} Resolves when the setting has been changed.
      */
+    /* eslint-enable valid-jsdoc */
     static async setValue(settingName, roomId, level, value) {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
