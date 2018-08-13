@@ -14,13 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsStore from "../SettingsStore";
 import SettingController from "./SettingController";
-import Modal from "../../Modal";
-import sdk from "../../index";
-import MatrixClientPeg  from "../../MatrixClientPeg";
 import dis from "../../dispatcher";
-import { _t } from "../../languageHandler";
 
 export default class LazyLoadingController extends SettingController {
     onChange(level, roomId, newValue) {
