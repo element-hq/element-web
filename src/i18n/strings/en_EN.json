@@ -1216,5 +1216,9 @@
     "Import": "Import",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Increase performance by only loading room members on first view": "Increase performance by only loading room members on first view",
+    "Turn on/off lazy load members": "Turn on/off lazy load members",
+    "To enable or disable the lazy loading of members, the current synced state needs to be cleared out. This also includes your end-to-end encryption keys, so to keep being able to decrypt all your existing encrypted messages, you'll need to export your E2E room keys and import them again afterwards.": "To enable or disable the lazy loading of members, the current synced state needs to be cleared out. This also includes your end-to-end encryption keys, so to keep being able to decrypt all your existing encrypted messages, you'll need to export your E2E room keys and import them again afterwards.",
+    "Clear sync state and reload": "Clear sync state and reload"
 }

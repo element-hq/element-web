@@ -85,7 +85,7 @@ export const SETTINGS = {
     },
     "feature_lazyloading": {
         isFeature: true,
-        displayName: _td("Increase performance by loading room members on first view"),
+        displayName: _td("Increase performance by only loading room members on first view"),
         supportedLevels: LEVELS_FEATURE,
         controller: new LazyLoadingController(),
         default: false,
