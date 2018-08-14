@@ -86,7 +86,7 @@ web_client: True
 # web_client_location: "/path/to/web/root"
 
 # The public-facing base URL for the client API (not including _matrix/...)
-public_baseurl: http://localhost:8008/
+public_baseurl: http://localhost:{{SYNAPSE_PORT}}/
 
 # Set the soft limit on the number of file descriptors synapse can use
 # Zero is used to indicate synapse should set the soft limit to the
@@ -166,7 +166,7 @@ listeners:
 
   # Unsecure HTTP listener,
   # For when matrix traffic passes through loadbalancer that unwraps TLS.
-  - port: 8008
+  - port: {{SYNAPSE_PORT}}
     tls: false
     bind_addresses: ['::', '0.0.0.0']
     type: http
@@ -693,5 +693,5 @@ user_consent:
 server_notices:
   system_mxid_localpart: notices
   system_mxid_display_name: "Server Notices"
-  system_mxid_avatar_url: "mxc://localhost:8008/oumMVlgDnLYFaPVkExemNVVZ"
+  system_mxid_avatar_url: "mxc://localhost:{{SYNAPSE_PORT}}/oumMVlgDnLYFaPVkExemNVVZ"
   room_name: "Server Notices"

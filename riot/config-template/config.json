@@ -1,5 +1,5 @@
 {
-    "default_hs_url": "http://localhost:8008",
+    "default_hs_url": "http://localhost:5005",
     "default_is_url": "https://vector.im",
     "disable_custom_urls": false,
     "disable_guests": false,
@@ -18,12 +18,12 @@
     "default_theme": "light",
     "roomDirectory": {
         "servers": [
-            "localhost:8008"
+            "localhost:5005"
         ]
     },
     "piwik": {
         "url": "https://piwik.riot.im/",
-        "whitelistedHSUrls": ["http://localhost:8008"],
+        "whitelistedHSUrls": ["http://localhost:5005"],
         "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
         "siteId": 1
     },

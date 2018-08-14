@@ -14,15 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function acceptTerms(page) {
-  const reviewTermsButton = await helpers.waitAndQuerySelector(page, '.mx_QuestionDialog button.mx_Dialog_primary', 5000);
-  const termsPagePromise = helpers.waitForNewPage();
-  await reviewTermsButton.click();
-  const termsPage = await termsPagePromise;
-  const acceptButton = await termsPage.$('input[type=submit]');
-  await acceptButton.click();
-  await helpers.delay(500); //TODO yuck, timers
+module.exports = async function sendMessage(session, message) {
+  session.log.step(`writes "${message}" in room`);
+  const composer = await session.waitAndQuery('.mx_MessageComposer');
+  await composer.type(message);
+  await composer.press("Enter");
+  session.log.done();
 }

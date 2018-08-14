@@ -14,31 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const helpers = require('../helpers');
 const assert = require('assert');
 
-module.exports = async function acceptServerNoticesInviteAndConsent(page, name) {
+module.exports = async function acceptServerNoticesInviteAndConsent(session, noticesName) {
+  session.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
   //TODO: brittle selector
-  const invitesHandles = await helpers.waitAndQueryAll(page, '.mx_RoomTile_name.mx_RoomTile_invite');
+  const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite');
   const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
-  	const text = await helpers.innerText(page, inviteHandle);
+  	const text = await session.innerText(inviteHandle);
   	return {inviteHandle, text};
   }));
   const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-	return text.trim() === name;
+	return text.trim() === noticesName;
   }).inviteHandle;
 
   await inviteHandle.click();
 
-  const acceptInvitationLink = await helpers.waitAndQuerySelector(page, ".mx_RoomPreviewBar_join_text a:first-child");
+  const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
   await acceptInvitationLink.click();
 
-  const consentLink = await helpers.waitAndQuerySelector(page, ".mx_EventTile_body a", 1000);
+  const consentLink = await session.waitAndQuery(".mx_EventTile_body a", 1000);
 
-  const termsPagePromise = helpers.waitForNewPage();
+  const termsPagePromise = session.waitForNewPage();
   await consentLink.click();
   const termsPage = await termsPagePromise;
   const acceptButton = await termsPage.$('input[type=submit]');
   await acceptButton.click();
-  await helpers.delay(500); //TODO yuck, timers
-} 
+  await session.delay(500); //TODO yuck, timers
+  await termsPage.close();
+  session.log.done();
+}

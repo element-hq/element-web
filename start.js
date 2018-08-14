@@ -14,78 +14,60 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const puppeteer = require('puppeteer');
-const helpers = require('./helpers');
 const assert = require('assert');
+const RiotSession = require('./src/session');
+const scenario = require('./src/scenario');
 
-const signup = require('./tests/signup');
-const join = require('./tests/join');
-const createRoom = require('./tests/create-room');
-const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
-
-const homeserver = 'http://localhost:8008';
-
-global.riotserver = 'http://localhost:5000';
-global.browser = null;
-
-let consoleLogs = null;
-let xhrLogs = null;
-let globalPage = null;
+const riotserver = 'http://localhost:5000';
 
 async function runTests() {
+  let sessions = [];
+
   console.log("running tests ...");
   const options = {};
+  // options.headless = false;
   if (process.env.CHROME_PATH) {
     const path = process.env.CHROME_PATH;
     console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
     options.executablePath = path;
   }
-  global.browser = await puppeteer.launch(options);
-  const page = await helpers.newPage();
-  globalPage = page;
 
-  consoleLogs = helpers.logConsole(page);
-  xhrLogs = helpers.logXHRRequests(page);
-  
-  const username = 'user-' + helpers.randomInt(10000);
-  const password = 'testtest';
-  process.stdout.write(`* signing up as ${username} ... `);
-  await signup(page, username, password);
-  process.stdout.write('done\n');
-
-  const noticesName = "Server Notices";
-  process.stdout.write(`* accepting "${noticesName}" and accepting terms & conditions ... `);
-  await acceptServerNoticesInviteAndConsent(page, noticesName);
-  process.stdout.write('done\n');
-
-  const room = 'test';
-  process.stdout.write(`* creating room ${room} ... `);
-  await createRoom(page, room);
-  process.stdout.write('done\n');
-
-  await browser.close();
-}
-
-function onSuccess() {
-  console.log('all tests finished successfully');
-}
-
-async function onFailure(err) {
-
-  let documentHtml = "no page";
-  if (globalPage) {
-    documentHtml = await globalPage.content();
+  async function createSession(username) {
+    const session = await RiotSession.create(username, options, riotserver);
+    sessions.push(session);
+    return session;
   }
 
-  console.log('failure: ', err);
-  console.log('console.log output:');
-  console.log(consoleLogs.logs());
-  console.log('XHR requests:');
-  console.log(xhrLogs.logs());
-  console.log('document html:');
-  console.log(documentHtml);
-  
-  process.exit(-1);
+  let failure = false;
+  try {
+    await scenario(createSession);
+  } catch(err) {
+    failure = true;
+    console.log('failure: ', err);
+    for(let i = 0; i < sessions.length; ++i) {
+      const session = sessions[i];
+      documentHtml = await session.page.content();
+      console.log(`---------------- START OF ${session.username} LOGS ----------------`);
+      console.log('---------------- console.log output:');
+      console.log(session.consoleLogs());
+      console.log('---------------- network requests:');
+      console.log(session.networkLogs());
+      console.log('---------------- document html:');
+      console.log(documentHtml);
+      console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+    }
+  }
+
+  await Promise.all(sessions.map((session) => session.close()));
+
+  if (failure) {
+    process.exit(-1);
+  } else {
+    console.log('all tests finished successfully');
+  }
 }
 
-runTests().then(onSuccess, onFailure);
+runTests().catch(function(err) {
+  console.log(err);
+  process.exit(-1);
+});
