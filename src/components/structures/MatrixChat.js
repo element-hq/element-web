@@ -479,14 +479,6 @@ export default React.createClass({
             case 'logout':
                 Lifecycle.logout();
                 break;
-            case 'flush_storage_reload':
-                // flushStorageAndReload will dispatch actions
-                // which we can't do in a dispatch handler
-                // so yield first
-                setTimeout(() => {
-                    Lifecycle.flushStorageAndReload();
-                }, 0);
-                break;
             case 'start_registration':
                 this._startRegistration(payload.params || {});
                 break;
