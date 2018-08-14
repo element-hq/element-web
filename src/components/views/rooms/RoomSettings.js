@@ -1039,7 +1039,8 @@ module.exports = React.createClass({
 
                 <h3>{ _t('Advanced') }</h3>
                 <div className="mx_RoomSettings_settings">
-                    { _t('This room\'s internal ID is') } <code>{ this.props.room.roomId }</code>
+                    { _t('Internal room ID: ') } <code>{ this.props.room.roomId }</code><br />
+                    { _t('Room version number: ') } <code>{ this.props.room.getVersion() }</code>
                 </div>
             </div>
         );
