@@ -90,8 +90,9 @@ export function looksLikeDirectMessageRoom(room, myUserId) {
         // Used for 1:1 direct chats
         // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
         // been moved to a different tag section
-        // TODO: Use SUMMARYAPI to take invited users into account 
-        if (room.currentState.getJoinedMemberCount() === 2 && !tagNames.length) {
+        const totalMemberCount = room.currentState.getJoinedMemberCount() +
+            room.currentState.getInvitedMemberCount();
+        if (totalMemberCount === 2 && !tagNames.length) {
             return true;
         }
     }
