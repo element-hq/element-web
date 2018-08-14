@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,26 +17,26 @@ limitations under the License.
 const assert = require('assert');
 
 module.exports = async function verifyDeviceForUser(session, name, expectedDevice) {
-  session.log.step(`verifies e2e device for ${name}`);
-  const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
-  const membersAndNames = await Promise.all(memberNameElements.map(async (el) => {
-  	return [el, await session.innerText(el)];
-  }));
-  const matchingMember = membersAndNames.filter(([el, text]) => {
-  	return text === name;
-  }).map(([el]) => el)[0];
-  await matchingMember.click();
-  const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
-  await firstVerifyButton.click();
-  const dialogCodeFields = await session.waitAndQueryAll(".mx_QuestionDialog code");
-  assert.equal(dialogCodeFields.length, 2);
-  const deviceId = await session.innerText(dialogCodeFields[0]);
-  const deviceKey = await session.innerText(dialogCodeFields[1]);
-  assert.equal(expectedDevice.id, deviceId);
-  assert.equal(expectedDevice.key, deviceKey);
-  const confirmButton = await session.query(".mx_Dialog_primary");
-  await confirmButton.click();
-  const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
-  await closeMemberInfo.click();
-  session.log.done();
+    session.log.step(`verifies e2e device for ${name}`);
+    const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
+    const membersAndNames = await Promise.all(memberNameElements.map(async (el) => {
+        return [el, await session.innerText(el)];
+    }));
+    const matchingMember = membersAndNames.filter(([el, text]) => {
+        return text === name;
+    }).map(([el]) => el)[0];
+    await matchingMember.click();
+    const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
+    await firstVerifyButton.click();
+    const dialogCodeFields = await session.waitAndQueryAll(".mx_QuestionDialog code");
+    assert.equal(dialogCodeFields.length, 2);
+    const deviceId = await session.innerText(dialogCodeFields[0]);
+    const deviceKey = await session.innerText(dialogCodeFields[1]);
+    assert.equal(expectedDevice.id, deviceId);
+    assert.equal(expectedDevice.key, deviceKey);
+    const confirmButton = await session.query(".mx_Dialog_primary");
+    await confirmButton.click();
+    const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
+    await closeMemberInfo.click();
+    session.log.done();
 }

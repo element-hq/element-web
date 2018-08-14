@@ -9,8 +9,8 @@ PORT=5005
 BASE_DIR=$(readlink -f $(dirname $0))
 
 if [ -d $BASE_DIR/$SERVER_DIR ]; then
-	echo "synapse is already installed"
-	exit
+    echo "synapse is already installed"
+    exit
 fi
 
 cd $BASE_DIR
