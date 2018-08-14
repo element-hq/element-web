@@ -15,26 +15,11 @@ limitations under the License.
 */
 
 const assert = require('assert');
-
-module.exports = async function acceptServerNoticesInviteAndConsent(session, noticesName) {
-  session.log.step(`accepts "${noticesName}" invite and accepting terms & conditions`);
-  //TODO: brittle selector
-  const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite');
-  const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
-  	const text = await session.innerText(inviteHandle);
-  	return {inviteHandle, text};
-  }));
-  const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-	return text.trim() === noticesName;
-  }).inviteHandle;
-
-  await inviteHandle.click();
-
-  const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
-  await acceptInvitationLink.click();
-
+const acceptInvite = require("./accept-invite")
+module.exports = async function acceptServerNoticesInviteAndConsent(session) {
+  await acceptInvite(session, "Server Notices");
+  session.log.step(`accepts terms & conditions`);
   const consentLink = await session.waitAndQuery(".mx_EventTile_body a", 1000);
-
   const termsPagePromise = session.waitForNewPage();
   await consentLink.click();
   const termsPage = await termsPagePromise;

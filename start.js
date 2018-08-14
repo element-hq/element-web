@@ -20,12 +20,18 @@ const scenario = require('./src/scenario');
 
 const riotserver = 'http://localhost:5000';
 
+const noLogs = process.argv.indexOf("--no-logs") !== -1;
+const debug = process.argv.indexOf("--debug") !== -1;
+
 async function runTests() {
   let sessions = [];
 
   console.log("running tests ...");
   const options = {};
-  // options.headless = false;
+  if (debug) {
+    // options.slowMo = 10;
+    options.headless = false;
+  }
   if (process.env.CHROME_PATH) {
     const path = process.env.CHROME_PATH;
     console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
@@ -44,18 +50,26 @@ async function runTests() {
   } catch(err) {
     failure = true;
     console.log('failure: ', err);
-    for(let i = 0; i < sessions.length; ++i) {
-      const session = sessions[i];
-      documentHtml = await session.page.content();
-      console.log(`---------------- START OF ${session.username} LOGS ----------------`);
-      console.log('---------------- console.log output:');
-      console.log(session.consoleLogs());
-      console.log('---------------- network requests:');
-      console.log(session.networkLogs());
-      console.log('---------------- document html:');
-      console.log(documentHtml);
-      console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+    if (!noLogs) {
+      for(let i = 0; i < sessions.length; ++i) {
+        const session = sessions[i];
+        documentHtml = await session.page.content();
+        console.log(`---------------- START OF ${session.username} LOGS ----------------`);
+        console.log('---------------- console.log output:');
+        console.log(session.consoleLogs());
+        console.log('---------------- network requests:');
+        console.log(session.networkLogs());
+        console.log('---------------- document html:');
+        console.log(documentHtml);
+        console.log(`---------------- END OF ${session.username} LOGS   ----------------`);
+      }
     }
+  }
+
+  // wait 5 minutes on failure if not running headless
+  // to inspect what went wrong
+  if (failure && options.headless === false) {
+    await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
   }
 
   await Promise.all(sessions.map((session) => session.close()));
