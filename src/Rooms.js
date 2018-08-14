@@ -45,7 +45,7 @@ export function getOnlyOtherMember(room, myUserId) {
 function _isConfCallRoom(room, myUserId, conferenceHandler) {
     if (!conferenceHandler) return false;
 
-    const myMembership = room.getMyMembership(myUserId);
+    const myMembership = room.getMyMembership();
     if (myMembership != "join") {
         return false;
     }
@@ -81,7 +81,7 @@ export function isConfCallRoom(room, myUserId, conferenceHandler) {
 }
 
 export function looksLikeDirectMessageRoom(room, myUserId) {
-    const myMembership = room.getMyMembership(myUserId);
+    const myMembership = room.getMyMembership();
     const me = room.getMember(myUserId);
 
     if (myMembership == "join" || myMembership === "ban" || (me && me.isKicked())) {
@@ -90,8 +90,9 @@ export function looksLikeDirectMessageRoom(room, myUserId) {
         // Used for 1:1 direct chats
         // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
         // been moved to a different tag section
-        // TODO: Use SUMMARYAPI to take invited users into account 
-        if (room.currentState.getJoinedMemberCount() === 2 && !tagNames.length) {
+        const totalMemberCount = room.currentState.getJoinedMemberCount() +
+            room.currentState.getInvitedMemberCount();
+        if (totalMemberCount === 2 && !tagNames.length) {
             return true;
         }
     }
