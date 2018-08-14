@@ -1219,5 +1219,14 @@
     "The user name field must not be blank.": "Il campo nome utente non deve essere vuoto.",
     "The phone number field must not be blank.": "Il campo telefono non deve essere vuoto.",
     "The password field must not be blank.": "Il campo passwordl non deve essere vuoto.",
-    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Non è possibile inviare alcun messaggio fino a quando non si esaminano e si accettano <consentLink> i nostri termini e condizioni </ permissionLink>."
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Non è possibile inviare alcun messaggio fino a quando non si esaminano e si accettano <consentLink> i nostri termini e condizioni </ permissionLink>.",
+    "A call is currently being placed!": "Attualmente è in corso una chiamata!",
+    "System Alerts": "Avvisi di sistema",
+    "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "L'homeserver ha raggiunto il suo limite di utenti attivi mensili. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili, perciò alcuni utenti non potranno accedere. <a>Contatta l'amministratore del servizio</a> per fare aumentare questo limite.",
+    "Failed to remove widget": "Rimozione del widget fallita",
+    "An error ocurred whilst trying to remove the widget from the room": "Si è verificato un errore tentando di rimuovere il widget dalla stanza",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha raggiunto il suo limite di utenti attivi mensili. Contatta l'amministratore del servizio per continuare ad usarlo.",
+    "This homeserver has hit its Monthly Active User limit": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili",
+    "Please contact your service administrator to continue using this service.": "Contatta l'amministratore del servizio per continuare ad usarlo."
 }
