@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,13 +17,13 @@ limitations under the License.
 const assert = require('assert');
 
 module.exports = async function sendMessage(session, message) {
-  session.log.step(`writes "${message}" in room`);
-  // this selector needs to be the element that has contenteditable=true,
-  // not any if its parents, otherwise it behaves flaky at best.
-  const composer = await session.waitAndQuery('.mx_MessageComposer_editor');
-  await composer.type(message);
-  const text = await session.innerText(composer);
-  assert.equal(text.trim(), message.trim());
-  await composer.press("Enter");
-  session.log.done();
+    session.log.step(`writes "${message}" in room`);
+    // this selector needs to be the element that has contenteditable=true,
+    // not any if its parents, otherwise it behaves flaky at best.
+    const composer = await session.waitAndQuery('.mx_MessageComposer_editor');
+    await composer.type(message);
+    const text = await session.innerText(composer);
+    assert.equal(text.trim(), message.trim());
+    await composer.press("Enter");
+    session.log.done();
 }

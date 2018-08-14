@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,24 +18,24 @@ const assert = require('assert');
 const {acceptDialogMaybe} = require('./dialog');
 
 module.exports = async function acceptInvite(session, name) {
-  session.log.step(`accepts "${name}" invite`);
-  //TODO: brittle selector
-  const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite', 1000);
-  const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
-  	const text = await session.innerText(inviteHandle);
-  	return {inviteHandle, text};
-  }));
-  const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
-	return text.trim() === name;
-  }).inviteHandle;
+    session.log.step(`accepts "${name}" invite`);
+    //TODO: brittle selector
+    const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite', 1000);
+    const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
+        const text = await session.innerText(inviteHandle);
+        return {inviteHandle, text};
+    }));
+    const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
+    return text.trim() === name;
+    }).inviteHandle;
 
-  await inviteHandle.click();
+    await inviteHandle.click();
 
-  const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
-  await acceptInvitationLink.click();
+    const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
+    await acceptInvitationLink.click();
 
-  // accept e2e warning dialog
-  acceptDialogMaybe(session, "encryption");
+    // accept e2e warning dialog
+    acceptDialogMaybe(session, "encryption");
 
-  session.log.done();
+    session.log.done();
 }

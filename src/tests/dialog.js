@@ -18,30 +18,30 @@ const assert = require('assert');
 
 
 async function acceptDialog(session, expectedContent) {
-	const foundDialog = await acceptDialogMaybe(session, expectedContent);
-	if (!foundDialog) {
-		throw new Error("could not find a dialog");
-	}
+    const foundDialog = await acceptDialogMaybe(session, expectedContent);
+    if (!foundDialog) {
+        throw new Error("could not find a dialog");
+    }
 }
 
 async function acceptDialogMaybe(session, expectedContent) {
-	let dialog = null;
-	try {
-		dialog = await session.waitAndQuery(".mx_QuestionDialog", 100);
-	} catch(err) {
-		return false;
-	}
-	if (expectedContent) {
-		const contentElement = await dialog.$(".mx_Dialog_content");
-		const content = await (await contentElement.getProperty("innerText")).jsonValue();
-		assert.ok(content.indexOf(expectedContent) !== -1);
-	}
-	const primaryButton = await dialog.$(".mx_Dialog_primary");
-	await primaryButton.click();
-	return true;
+    let dialog = null;
+    try {
+        dialog = await session.waitAndQuery(".mx_QuestionDialog", 100);
+    } catch(err) {
+        return false;
+    }
+    if (expectedContent) {
+        const contentElement = await dialog.$(".mx_Dialog_content");
+        const content = await (await contentElement.getProperty("innerText")).jsonValue();
+        assert.ok(content.indexOf(expectedContent) !== -1);
+    }
+    const primaryButton = await dialog.$(".mx_Dialog_primary");
+    await primaryButton.click();
+    return true;
 }
 
 module.exports = {
-	acceptDialog,
-	acceptDialogMaybe,
+    acceptDialog,
+    acceptDialogMaybe,
 };
