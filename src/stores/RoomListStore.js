@@ -174,7 +174,7 @@ class RoomListStore extends Store {
 
         this._matrixClient.getRooms().forEach((room, index) => {
             const myUserId = this._matrixClient.getUserId();
-            const membership = room.getMyMembership(myUserId);
+            const membership = room.getMyMembership();
             const me = room.getMember(myUserId);
 
             if (membership == "invite") {

@@ -45,7 +45,7 @@ export function getOnlyOtherMember(room, myUserId) {
 function _isConfCallRoom(room, myUserId, conferenceHandler) {
     if (!conferenceHandler) return false;
 
-    const myMembership = room.getMyMembership(myUserId);
+    const myMembership = room.getMyMembership();
     if (myMembership != "join") {
         return false;
     }
@@ -81,7 +81,7 @@ export function isConfCallRoom(room, myUserId, conferenceHandler) {
 }
 
 export function looksLikeDirectMessageRoom(room, myUserId) {
-    const myMembership = room.getMyMembership(myUserId);
+    const myMembership = room.getMyMembership();
     const me = room.getMember(myUserId);
 
     if (myMembership == "join" || myMembership === "ban" || (me && me.isKicked())) {
