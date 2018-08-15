@@ -27,8 +27,6 @@ program
 
 async function runTests() {
     let sessions = [];
-
-    console.log("program.riotUrl", program.riotUrl);
     console.log("running tests ...");
     const options = {};
     if (program.debug) {
