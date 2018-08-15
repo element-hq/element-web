@@ -164,10 +164,22 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.errcode == 'M_MAU_LIMIT_EXCEEDED') {
+            if (response.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
                 msg = <div>
-                    <p>{_t("This homeserver has hit its Monthly Active User limit")}</p>
-                    <p>{_t("Please contact your service administrator to continue using this service.")}</p>
+                    <p>{response.data.error ? response.data.error : _t("This server has exceeded its available resources")}</p>
+                    <p>{_t(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                        {},
+                        {
+                            a: (sub) => {
+                                if (response.data.admin_contact) {
+                                    return <a rel="noopener" target="_blank" href={response.data.admin_contact}>{sub}</a>;
+                                } else {
+                                    return sub;
+                                }
+                            },
+                        },
+                    )}</p>
                 </div>;
             } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;

@@ -121,12 +121,24 @@ module.exports = React.createClass({
             const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus === 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
-            } else if (error.errcode == 'M_MAU_LIMIT_EXCEEDED') {
+            } else if (error.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
                 errorText = (
                     <div>
-                        <div>{ _t('This homeserver has hit its Monthly Active User limit') }</div>
+                        <div>{error.data.error ? error.data.error : _t("This server has exceeded its available resources")}</div>
                         <div className="mx_Login_smallError">
-                            { _t('Please contact your service administrator to continue using this service.') }
+                            {_t(
+                                "Please <a>contact your service administrator</a> to continue using this service.",
+                                {},
+                                {
+                                    a: (sub) => {
+                                        if (error.data.admin_contact) {
+                                            return <a rel="noopener" target="_blank" href={error.data.admin_contact}>{sub}</a>;
+                                        } else {
+                                            return sub;
+                                        }
+                                    },
+                                },
+                            )}
                         </div>
                     </div>
                 );

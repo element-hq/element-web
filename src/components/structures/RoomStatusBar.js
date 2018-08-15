@@ -293,11 +293,11 @@ module.exports = React.createClass({
         // It also trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
-        // if it's a monthly-active-user limit error: those are shown in the top bar.
+        // if it's a resource limit exceeded error: those are shown in the top bar.
         const errorIsMauError = Boolean(
             this.state.syncStateData &&
             this.state.syncStateData.error &&
-            this.state.syncStateData.error.errcode === 'M_MAU_LIMIT_EXCEEDED'
+            this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED'
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
     },
@@ -327,11 +327,18 @@ module.exports = React.createClass({
         } else {
             let consentError = null;
             let mauError = null;
+            const translateMauError = sub => {
+                if (mauError.data.admin_contact) {
+                    return <a href={mauError.data.admin_contact} target="_blank" rel="noopener">{sub}</a>;
+                } else {
+                    return sub;
+                }
+            };
             for (const m of unsentMessages) {
                 if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
                     consentError = m.error;
                     break;
-                } else if (m.error && m.error.errcode === 'M_MAU_LIMIT_EXCEEDED') {
+                } else if (m.error && m.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                     mauError = m.error;
                     break;
                 }
@@ -348,8 +355,18 @@ module.exports = React.createClass({
                             </a>,
                     },
                 );
+            } else if (mauError && mauError.data.limit_type === 'monthly_active_user') {
+                title = _t(
+                    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                    "Please <a>contact your service administrator</a> to continue using the service.",
+                    {}, { 'a' : translateMauError },
+                );
             } else if (mauError) {
-                title = _t("Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.");
+                title = _t(
+                    "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
+                    "Please <a>contact your service administrator</a> to continue using the service.",
+                    {}, { 'a' : translateMauError },
+                );
             } else if (
                 unsentMessages.length === 1 &&
                 unsentMessages[0].error &&

@@ -434,17 +434,21 @@ const LoggedInView = React.createClass({
         }
 
         const mauLimitEvent = this.state.serverNoticeEvents.find((e) => {
-            return e && e.getType() === 'm.server_notice.usage_limit_reached' &&
-                e.getContent().limit_type &&
-                e.getContent().limit_type === 'monthly_active_user'
+            return e && e.getType() === 'm.server_notice.usage_limit_reached';
         });
 
         let topBar;
         const isGuest = this.props.matrixClient.isGuest();
-        if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_MAU_LIMIT_EXCEEDED') {
-            topBar = <ServerLimitBar kind='hard' />;
+        if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
+            topBar = <ServerLimitBar kind='hard'
+                adminContact={this.state.syncErrorData.error.data.admin_contact}
+                limitType={this.state.syncErrorData.error.data.limit_type}
+            />;
         } else if (mauLimitEvent) {
-            topBar = <ServerLimitBar kind='soft' adminContact={mauLimitEvent.getContent().admin_contact} />;
+            topBar = <ServerLimitBar kind='soft'
+                adminContact={mauLimitEvent.getContent().admin_contact}
+                limitType={mauLimitEvent.getContent().limit_type}
+            />;
         } else if (this.props.showCookieBar &&
             this.props.config.piwik
         ) {
