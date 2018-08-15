@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "commander": "^2.17.1",
         "puppeteer": "^1.6.0"
     }
 }

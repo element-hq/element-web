@@ -18,18 +18,22 @@ const assert = require('assert');
 const RiotSession = require('./src/session');
 const scenario = require('./src/scenario');
 
-const riotserver = 'http://localhost:5000';
-
-const noLogs = process.argv.indexOf("--no-logs") !== -1;
-const debug = process.argv.indexOf("--debug") !== -1;
+const program = require('commander');
+program
+    .option('--no-logs', "don't output logs, document html on error", false)
+    .option('--debug', "open browser window and slow down interactions", false)
+    .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
+    .parse(process.argv);
 
 async function runTests() {
     let sessions = [];
 
+    console.log("program.riotUrl", program.riotUrl);
     console.log("running tests ...");
     const options = {};
-    if (debug) {
+    if (program.debug) {
         options.slowMo = 20;
+        options.devtools = true;
         options.headless = false;
     }
     if (process.env.CHROME_PATH) {
@@ -39,7 +43,7 @@ async function runTests() {
     }
 
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, riotserver);
+        const session = await RiotSession.create(username, options, program.riotUrl);
         sessions.push(session);
         return session;
     }
@@ -50,7 +54,7 @@ async function runTests() {
     } catch(err) {
         failure = true;
         console.log('failure: ', err);
-        if (!noLogs) {
+        if (!program.noLogs) {
             for(let i = 0; i < sessions.length; ++i) {
                 const session = sessions[i];
                 documentHtml = await session.page.content();
