@@ -1216,5 +1216,8 @@
     "Import": "Import",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Increase performance by only loading room members on first view": "Increase performance by only loading room members on first view",
+    "Lazy loading members not supported": "Lazy load members not supported",
+    "Lazy loading is not supported by your current homeserver.": "Lazy loading is not supported by your current homeserver."
 }
