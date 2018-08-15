@@ -1217,5 +1217,6 @@
     "Failed to remove widget": "Не удалось удалить виджет",
     "An error ocurred whilst trying to remove the widget from the room": "Произошла ошибка при удалении виджета из комнаты",
     "System Alerts": "Системные оповещения",
-    "Please contact your service administrator to continue using this service.": "Для продолжения использования этого сервиса обратитесь к администратору."
+    "Please contact your service administrator to continue using this service.": "Для продолжения использования этого сервиса обратитесь к администратору.",
+    "Room version number: ": "Номер версии комнаты: "
 }
