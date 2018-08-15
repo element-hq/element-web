@@ -1227,5 +1227,9 @@
     "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen.",
     "System Alerts": "System-Benachrichtigung",
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Der Server hat sein monatliches Nutzerlimit erreicht. Bitte kontaktiere deinen Administrator, um den Service weiter nutzen zu können.",
-    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Deine Nachricht konnte nicht verschickt werden, weil der Homeserver sein monatliches Nutzerlimit erreicht hat. Bitte kontaktiere deine Administrator, um den Service weiter nutzen zu können."
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Deine Nachricht konnte nicht verschickt werden, weil der Homeserver sein monatliches Nutzerlimit erreicht hat. Bitte kontaktiere deine Administrator, um den Service weiter nutzen zu können.",
+    "Internal room ID: ": "Interne Raum-ID: ",
+    "Room version number: ": "Raum-Versionsnummer: ",
+    "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "Dieser Heimserver hat sein monatliches Limit an aktiven Benutzern erreicht. Bitte <a>kontaktiere deinen Systemadministrator</a> um mit der Nutzung dieses Services fortzufahren.",
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Dieser Heimserver hat sein monatliches Limit an aktiven Benutzern erreicht. Bitte <a>kontaktiere deinen Systemadministrator</a> um dieses Limit zu erhöhen."
 }
