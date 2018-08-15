@@ -1227,5 +1227,9 @@
     "Please contact your service administrator to continue using this service.": "Моля, свържете се с администратора на услугата за да продължите да я използвате.",
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Този сървър достигна лимита си за активни потребители на месец. Моля, свържете се с администратора на услугата, за да продължите да я използвате.",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Съобщението Ви не бе изпратено, защото този сървър достигна лимита си за активни потребители на месец. Моля, свържете се с администратора на услугата, за да продължите да я използвате.",
-    "System Alerts": "Системни уведомления"
+    "System Alerts": "Системни уведомления",
+    "Internal room ID: ": "Вътрешен идентификатор на стаята: ",
+    "Room version number: ": "Версия на стаята: ",
+    "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "Този сървър достигна лимита си за активни потребители на месец. Моля, <a>свържете се с администратора на услугата</a>, за да продължите да я използвате.",
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Този сървър достигна лимита си за активни потребители на месец и някои потребители няма да успеят да влязат в профила си. Моля, <a>свържете се с администратора на услугата</a> за да се увеличи този лимит."
 }
