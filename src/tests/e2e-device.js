@@ -20,7 +20,7 @@ module.exports = async function getE2EDeviceFromSettings(session) {
     session.log.step(`gets e2e device/key from settings`);
     const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
     await settingsButton.click();
-    const deviceAndKey = await session.waitAndQueryAll(".mx_UserSettings_section.mx_UserSettings_cryptoSection code");
+    const deviceAndKey = await session.waitAndQueryAll(".mx_UserSettings_section.mx_UserSettings_cryptoSection code", 1000);
     assert.equal(deviceAndKey.length, 2);
     const id = await (await deviceAndKey[0].getProperty("innerText")).jsonValue();
     const key = await (await deviceAndKey[1].getProperty("innerText")).jsonValue();
