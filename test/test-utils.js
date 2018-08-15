@@ -255,6 +255,7 @@ export function mkStubRoom(roomId = null) {
         getUnfilteredTimelineSet: () => null,
         getAccountData: () => null,
         hasMembershipState: () => null,
+        getVersion: () => '1',
         currentState: {
             getStateEvents: sinon.stub(),
             mayClientSendStateEvent: sinon.stub().returns(true),
