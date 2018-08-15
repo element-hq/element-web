@@ -1229,5 +1229,7 @@
     "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez contacter l'administrateur de votre service pour continuer à l'utiliser.",
     "System Alerts": "Alertes système",
     "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs. Veuillez <a>contacter l'administrateur de votre service</a> pour continuer à l'utiliser.",
-    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs donc certains utilisateurs ne pourront pas se connecter. Veuillez <a>contacter l'administrateur de votre service</a> pour augmenter cette limite."
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs donc certains utilisateurs ne pourront pas se connecter. Veuillez <a>contacter l'administrateur de votre service</a> pour augmenter cette limite.",
+    "Internal room ID: ": "Identifiant interne du salon : ",
+    "Room version number: ": "Numéro de version du salon : "
 }
