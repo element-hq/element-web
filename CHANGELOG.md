@@ -1,3 +1,48 @@
+Changes in [0.13.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.1-rc.1) (2018-08-16)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0...v0.13.1-rc.1)
+
+ * Update from Weblate.
+   [\#2121](https://github.com/matrix-org/matrix-react-sdk/pull/2121)
+ * Shift to M_RESOURCE_LIMIT_EXCEEDED errors
+   [\#2120](https://github.com/matrix-org/matrix-react-sdk/pull/2120)
+ * Fix RoomSettings test
+   [\#2119](https://github.com/matrix-org/matrix-react-sdk/pull/2119)
+ * Show room version number in room settings
+   [\#2117](https://github.com/matrix-org/matrix-react-sdk/pull/2117)
+ * Warning bar for MAU limit hit
+   [\#2114](https://github.com/matrix-org/matrix-react-sdk/pull/2114)
+ * Recognise server notices room(s)
+   [\#2112](https://github.com/matrix-org/matrix-react-sdk/pull/2112)
+ * Update room tags behaviour to match spec more
+   [\#2111](https://github.com/matrix-org/matrix-react-sdk/pull/2111)
+ * while logging out ignore `Session.logged_out` as it is intentional
+   [\#2058](https://github.com/matrix-org/matrix-react-sdk/pull/2058)
+ * Don't show 'connection lost' bar on MAU error
+   [\#2110](https://github.com/matrix-org/matrix-react-sdk/pull/2110)
+ * Support MAU error on sync
+   [\#2108](https://github.com/matrix-org/matrix-react-sdk/pull/2108)
+ * Support active user limit on message send
+   [\#2106](https://github.com/matrix-org/matrix-react-sdk/pull/2106)
+ * Run end to end tests as part of Travis build
+   [\#2091](https://github.com/matrix-org/matrix-react-sdk/pull/2091)
+ * Remove package-lock.json for now
+   [\#2097](https://github.com/matrix-org/matrix-react-sdk/pull/2097)
+ * Support montly active user limit error on /login
+   [\#2103](https://github.com/matrix-org/matrix-react-sdk/pull/2103)
+ * Unpin sanitize-html
+   [\#2105](https://github.com/matrix-org/matrix-react-sdk/pull/2105)
+ * Pin sanitize-html to 0.18.2
+   [\#2101](https://github.com/matrix-org/matrix-react-sdk/pull/2101)
+ * Make clicking on side panels close settings (mk 3)
+   [\#2096](https://github.com/matrix-org/matrix-react-sdk/pull/2096)
+ * Fix persistent element location not updating
+   [\#2092](https://github.com/matrix-org/matrix-react-sdk/pull/2092)
+ * fix Devtools input autofocus && state traversal when len === 1 && key=""
+   [\#2090](https://github.com/matrix-org/matrix-react-sdk/pull/2090)
+ * allow autocompleting Emoji by common aliases, e.g :+1: to :thumbsup:
+   [\#2085](https://github.com/matrix-org/matrix-react-sdk/pull/2085)
+
 Changes in [0.13.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.0) (2018-07-30)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0-rc.2...v0.13.0)
