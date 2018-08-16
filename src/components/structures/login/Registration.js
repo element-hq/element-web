@@ -26,9 +26,10 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -164,10 +165,27 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.errcode == 'M_MAU_LIMIT_EXCEEDED') {
+            if (response.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+                const errorTop = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits.",
+                    ),
+                });
+                const errorDetail = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    '': _td(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                    ),
+                });
                 msg = <div>
-                    <p>{_t("This homeserver has hit its Monthly Active User limit")}</p>
-                    <p>{_t("Please contact your service administrator to continue using this service.")}</p>
+                    <p>{errorTop}</p>
+                    <p>{errorDetail}</p>
                 </div>;
             } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
