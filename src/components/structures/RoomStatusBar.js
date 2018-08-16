@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
-import { _t } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import sdk from '../../index';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -26,6 +26,7 @@ import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher';
+import { messageForResourceLimitError } from '../../utils/ErrorUtils';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -326,20 +327,13 @@ module.exports = React.createClass({
             );
         } else {
             let consentError = null;
-            let mauError = null;
-            const translateMauError = sub => {
-                if (mauError.data.admin_contact) {
-                    return <a href={mauError.data.admin_contact} target="_blank" rel="noopener">{sub}</a>;
-                } else {
-                    return sub;
-                }
-            };
+            let resourceLimitError = null;
             for (const m of unsentMessages) {
                 if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
                     consentError = m.error;
                     break;
                 } else if (m.error && m.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
-                    mauError = m.error;
+                    resourceLimitError = m.error;
                     break;
                 }
             }
@@ -355,18 +349,19 @@ module.exports = React.createClass({
                             </a>,
                     },
                 );
-            } else if (mauError && mauError.data.limit_type === 'monthly_active_user') {
-                title = _t(
-                    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                    {}, { 'a' : translateMauError },
-                );
-            } else if (mauError) {
-                title = _t(
-                    "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                    {}, { 'a' : translateMauError },
-                );
+            } else if (resourceLimitError) {
+                title = messageForResourceLimitError(
+                    resourceLimitError.data.limit_type,
+                    resourceLimitError.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    '': _td(
+                        "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                });
             } else if (
                 unsentMessages.length === 1 &&
                 unsentMessages[0].error &&

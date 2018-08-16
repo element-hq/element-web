@@ -17,7 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { _t } from '../../../languageHandler';
+import { _td } from '../../../languageHandler';
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 export default React.createClass({
     propTypes: {
@@ -39,52 +40,50 @@ export default React.createClass({
             'mx_MatrixToolbar': true,
         };
 
-        const translateLink = (sub) => {
-            if (this.props.adminContact) {
-                return <a rel="noopener" target="_blank" href={this.props.adminContact}>{sub}</a>;
-            } else {
-                return sub;
-            }
-        };
-
         let adminContact;
         let limitError;
         if (this.props.kind === 'hard') {
             toolbarClasses['mx_MatrixToolbar_error'] = true;
-            adminContact = _t(
-                "Please <a>contact your service administrator</a> to continue using the service.",
-                {},
+
+            adminContact = messageForResourceLimitError(
+                this.props.limitType,
+                this.props.adminContact,
                 {
-                    'a': translateLink,
+                    '': _td("Please <a>contact your service administrator</a> to continue using the service."),
                 },
             );
-            if (this.props.limitType === 'monthly_active_user') {
-                limitError = _t("This homeserver has hit its Monthly Active User limit.");
-            } else {
-                limitError = _t("This homeserver has exceeded one of its resource limits.");
-            }
+            limitError = messageForResourceLimitError(
+                this.props.limitType,
+                this.props.adminContact,
+                {
+                    'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
+                    '': _td("This homeserver has exceeded one of its resource limits."),
+                },
+            );
         } else {
             toolbarClasses['mx_MatrixToolbar_info'] = true;
-            adminContact = _t(
-                "Please <a>contact your service administrator</a> to get this limit increased.",
-                {},
+            adminContact = messageForResourceLimitError(
+                this.props.limitType,
+                this.props.adminContact,
                 {
-                    'a': translateLink,
+                    '': _td("Please <a>contact your service administrator</a> to get this limit increased."),
                 },
             );
-            if (this.props.limitType === 'monthly_active_user') {
-                limitError = _t(
-                    "This homeserver has hit its Monthly Active User limit so " +
-                    "<b>some users will not be able to log in</b>.", {},
-                    {'b': sub => <b>{sub}</b>},
-                );
-            } else {
-                limitError = _t(
-                    "This homeserver has exceeded one of its resource limits so " +
-                    "<b>some users will not be able to log in</b>.", {},
-                    {'b': sub => <b>{sub}</b>},
-                );
-            }
+            limitError = messageForResourceLimitError(
+                this.props.limitType,
+                this.props.adminContact,
+                {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit so " +
+                        "<b>some users will not be able to log in</b>.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits so " +
+                        "<b>some users will not be able to log in</b>.",
+                    ),
+                },
+                {'b': sub => <b>{sub}</b>},
+            );
         }
         return (
             <div className={classNames(toolbarClasses)}>

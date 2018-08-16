@@ -1171,7 +1171,6 @@
     "Send Reset Email": "Send Reset Email",
     "Create an account": "Create an account",
     "This Home Server does not support login using email address.": "This Home Server does not support login using email address.",
-    "This server has exceeded its available resources": "This server has exceeded its available resources",
     "Please <a>contact your service administrator</a> to continue using this service.": "Please <a>contact your service administrator</a> to continue using this service.",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Please note you are logging into the %(hs)s server, not matrix.org.",

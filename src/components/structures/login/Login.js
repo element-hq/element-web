@@ -20,11 +20,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -122,24 +123,27 @@ module.exports = React.createClass({
             if (error.httpStatus === 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+                const errorTop = messageForResourceLimitError(
+                    error.data.limit_type,
+                    error.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits.",
+                    ),
+                });
+                const errorDetail = messageForResourceLimitError(
+                    error.data.limit_type,
+                    error.data.admin_contact, {
+                    '': _td(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                    ),
+                });
                 errorText = (
                     <div>
-                        <div>{error.data.error ? error.data.error : _t("This server has exceeded its available resources")}</div>
-                        <div className="mx_Login_smallError">
-                            {_t(
-                                "Please <a>contact your service administrator</a> to continue using this service.",
-                                {},
-                                {
-                                    a: (sub) => {
-                                        if (error.data.admin_contact) {
-                                            return <a rel="noopener" target="_blank" href={error.data.admin_contact}>{sub}</a>;
-                                        } else {
-                                            return sub;
-                                        }
-                                    },
-                                },
-                            )}
-                        </div>
+                        <div>{errorTop}</div>
+                        <div className="mx_Login_smallError">{errorDetail}</div>
                     </div>
                 );
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
