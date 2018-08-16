@@ -1222,5 +1222,14 @@
     "numbered-list": "編號清單",
     "A call is currently being placed!": "目前正在撥打電話！",
     "Failed to remove widget": "移除小工具失敗",
-    "An error ocurred whilst trying to remove the widget from the room": "嘗試從聊天室移除小工具時發生錯誤"
+    "An error ocurred whilst trying to remove the widget from the room": "嘗試從聊天室移除小工具時發生錯誤",
+    "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "您的訊息因為這個家伺服器到達了它的每月活躍使用者限制而沒有傳送出去。請聯絡您的服務管理員以繼續使用服務。",
+    "This homeserver has hit its Monthly Active User limit": "此家伺服器達到了其每月活躍使用者限制",
+    "Please contact your service administrator to continue using this service.": "請聯絡您的服務管理員以繼續使用此服務。",
+    "This homeserver has hit its Monthly Active User limit. Please contact your service administrator to continue using the service.": "您的訊息因為這個家伺服器到達了它的每月活躍使用者限制而沒有傳送出去。請聯絡您的服務管理員以繼續使用服務。",
+    "System Alerts": "系統警告",
+    "Internal room ID: ": "內部聊天室 ID： ",
+    "Room version number: ": "聊天室版本號： ",
+    "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "這個家伺服器已經達到了其每月活躍使用者限制。請<a>聯絡您的服務管理員</a>以繼續使用服務。",
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "此家伺服器已達到其每月活躍使用者限制，所以其部份使用者將會無法登入。請<a>聯絡您的服務管理員</a>以讓此限制增加。"
 }

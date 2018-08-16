@@ -1155,7 +1155,7 @@
     "We encountered an error trying to restore your previous session.": "Произошла ошибка при попытке восстановить предыдущий сеанс.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очистка хранилища вашего браузера может устранить проблему, но при этом ваша сессия будет завершена и зашифрованная история чата станет нечитаемой.",
     "Unable to reply": "Не удается ответить",
-    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не удается загрузить событие, на которое был дан ответ, либо оно не существует, либо у вас нет разрешения на его просмотр.",
+    "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Не удается загрузить событие, на которое был дан ответ. Либо оно не существует, либо у вас нет разрешения на его просмотр.",
     "Enable widget screenshots on supported widgets": "Включить скриншоты виджета в поддерживаемых виджетах",
     "Collapse Reply Thread": "Ответить с цитированием",
     "Send analytics data": "Отправить данные аналитики",
@@ -1209,8 +1209,14 @@
     "Demote yourself?": "Понизить самого себя?",
     "This event could not be displayed": "Это событие отобразить невозможно",
     "deleted": "удален",
-    "underlined": "подчеркнут",
+    "underlined": "подчеркнутый",
     "A conference call could not be started because the intgrations server is not available": "Запуск конференции невозможен из-за недоступности сервера интеграции",
     "Permission Required": "Требуется разрешение",
-    "You do not have permission to start a conference call in this room": "У вас нет разрешения на запуск конференции в этой комнате"
+    "You do not have permission to start a conference call in this room": "У вас нет разрешения на запуск конференции в этой комнате",
+    "A call is currently being placed!": "Есть активный вызов!",
+    "Failed to remove widget": "Не удалось удалить виджет",
+    "An error ocurred whilst trying to remove the widget from the room": "Произошла ошибка при удалении виджета из комнаты",
+    "System Alerts": "Системные оповещения",
+    "Please contact your service administrator to continue using this service.": "Для продолжения использования этого сервиса обратитесь к администратору.",
+    "Room version number: ": "Номер версии комнаты: "
 }
