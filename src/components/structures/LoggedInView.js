@@ -433,7 +433,7 @@ const LoggedInView = React.createClass({
                 break;
         }
 
-        const mauLimitEvent = this.state.serverNoticeEvents.find((e) => {
+        const usageLimitEvent = this.state.serverNoticeEvents.find((e) => {
             return e && e.getType() === 'm.server_notice.usage_limit_reached';
         });
 
@@ -444,10 +444,10 @@ const LoggedInView = React.createClass({
                 adminContact={this.state.syncErrorData.error.data.admin_contact}
                 limitType={this.state.syncErrorData.error.data.limit_type}
             />;
-        } else if (mauLimitEvent) {
+        } else if (usageLimitEvent) {
             topBar = <ServerLimitBar kind='soft'
-                adminContact={mauLimitEvent.getContent().admin_contact}
-                limitType={mauLimitEvent.getContent().limit_type}
+                adminContact={usageLimitEvent.getContent().admin_contact}
+                limitType={usageLimitEvent.getContent().limit_type}
             />;
         } else if (this.props.showCookieBar &&
             this.props.config.piwik
