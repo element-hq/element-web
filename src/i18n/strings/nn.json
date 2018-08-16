@@ -200,7 +200,7 @@
     "Unnamed Room": "Rom utan Namn",
     "Your browser does not support the required cryptography extensions": "Nettlesaren din støttar ikkje dei naudsynte kryptografiske utvidingane",
     "Not a valid Riot keyfile": "Ikkje ei gyldig Riot-nykelfil",
-    "Authentication check failed: incorrect password?": "Autentifiseringssjekk mislukkast: urett passord?",
+    "Authentication check failed: incorrect password?": "Godkjenningssjekk mislukkast: urett passord?",
     "Failed to join room": "Fekk ikkje til å gå inn i rom",
     "Message Pinning": "Meldingsfesting",
     "Disable Emoji suggestions while typing": "Skru emojiframlegg av mens ein skriv",
