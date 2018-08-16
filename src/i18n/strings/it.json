@@ -1228,5 +1228,7 @@
     "An error ocurred whilst trying to remove the widget from the room": "Si è verificato un errore tentando di rimuovere il widget dalla stanza",
     "Your message wasn’t sent because this homeserver has hit its Monthly Active User Limit. Please contact your service administrator to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha raggiunto il suo limite di utenti attivi mensili. Contatta l'amministratore del servizio per continuare ad usarlo.",
     "This homeserver has hit its Monthly Active User limit": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili",
-    "Please contact your service administrator to continue using this service.": "Contatta l'amministratore del servizio per continuare ad usarlo."
+    "Please contact your service administrator to continue using this service.": "Contatta l'amministratore del servizio per continuare ad usarlo.",
+    "Internal room ID: ": "ID interno della stanza: ",
+    "Room version number: ": "Numero di versione della stanza: "
 }
