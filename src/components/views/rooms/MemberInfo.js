@@ -598,7 +598,7 @@ module.exports = withMatrixClient(React.createClass({
 
     onMemberAvatarClick: function() {
         const member = this.props.member;
-        const avatarUrl = member.user ? member.user.avatarUrl : member.events.member.getContent().avatar_url;
+        const avatarUrl = member.getMxcAvatarUrl();
         if (!avatarUrl) return;
 
         const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
@@ -774,15 +774,15 @@ module.exports = withMatrixClient(React.createClass({
             for (const roomId of dmRooms) {
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
-                    const me = room.getMember(this.props.matrixClient.credentials.userId);
-
+                    const myMembership = room.getMyMembership();
                     // not a DM room if we have are not joined
-                    if (!me.membership || me.membership !== 'join') continue;
-                    // not a DM room if they are not joined
+                    if (myMembership !== 'join') continue;
+                    
                     const them = this.props.member;
+                    // not a DM room if they are not joined
                     if (!them.membership || them.membership !== 'join') continue;
 
-                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0;
 
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
@@ -791,7 +791,7 @@ module.exports = withMatrixClient(React.createClass({
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
-                            isInvite={me.membership === "invite"}
+                            isInvite={false}
                             onClick={this.onRoomTileClick}
                         />,
                     );

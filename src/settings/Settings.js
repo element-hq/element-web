@@ -21,7 +21,7 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-
+import LazyLoadingController from "./controllers/LazyLoadingController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -81,6 +81,13 @@ export const SETTINGS = {
         isFeature: true,
         displayName: _td("Message Pinning"),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_lazyloading": {
+        isFeature: true,
+        displayName: _td("Increase performance by only loading room members on first view"),
+        supportedLevels: LEVELS_FEATURE,
+        controller: new LazyLoadingController(),
         default: false,
     },
     "MessageComposerInput.dontSuggestEmoji": {

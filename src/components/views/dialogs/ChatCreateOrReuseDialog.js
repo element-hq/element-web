@@ -54,8 +54,8 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         for (const roomId of dmRooms) {
             const room = client.getRoom(roomId);
             if (room) {
-                const me = room.getMember(client.credentials.userId);
-                const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === "invite";
+                const isInvite = room.getMyMembership() === "invite";
+                const highlight = room.getUnreadNotificationCount('highlight') > 0 || isInvite;
                 tiles.push(
                     <RoomTile key={room.roomId} room={room}
                         transparent={true}
@@ -63,7 +63,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                         selected={false}
                         unread={Unread.doesRoomHaveUnreadMessages(room)}
                         highlight={highlight}
-                        isInvite={me.membership === "invite"}
+                        isInvite={isInvite}
                         onClick={this.onRoomTileClick}
                     />,
                 );
