@@ -51,7 +51,7 @@ function _isConfCallRoom(room, myUserId, conferenceHandler) {
     }
 
     const otherMember = getOnlyOtherMember(room, myUserId);
-    if (otherMember === null) {
+    if (!otherMember) {
         return false;
     }
 
