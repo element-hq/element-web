@@ -439,6 +439,7 @@ export default class AppTile extends React.Component {
 
         // Force the widget to be non-persistent
         ActiveWidgetStore.destroyPersistentWidget();
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
         PersistedElement.destroyElement(this._persistKey);
     }
 

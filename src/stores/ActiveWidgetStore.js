@@ -17,7 +17,6 @@ limitations under the License.
 import EventEmitter from 'events';
 
 import MatrixClientPeg from '../MatrixClientPeg';
-import sdk from '../index';
 
 /**
  * Stores information about the widgets active in the app right now:
