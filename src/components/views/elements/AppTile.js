@@ -161,6 +161,8 @@ export default class AppTile extends React.Component {
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
             ActiveWidgetStore.destroyPersistentWidget();
+            const PersistedElement = sdk.getComponent("elements.PersistedElement");
+            PersistedElement.destroyElement(this._persistKey);
         }
     }
 
@@ -437,6 +439,8 @@ export default class AppTile extends React.Component {
 
         // Force the widget to be non-persistent
         ActiveWidgetStore.destroyPersistentWidget();
+        const PersistedElement = sdk.getComponent("elements.PersistedElement");
+        PersistedElement.destroyElement(this._persistKey);
     }
 
     formatAppTileName() {
