@@ -1218,5 +1218,21 @@
     "An error ocurred whilst trying to remove the widget from the room": "Произошла ошибка при удалении виджета из комнаты",
     "System Alerts": "Системные оповещения",
     "Please contact your service administrator to continue using this service.": "Для продолжения использования этого сервиса обратитесь к администратору.",
-    "Room version number: ": "Номер версии комнаты: "
+    "Room version number: ": "Номер версии комнаты: ",
+    "Internal room ID: ": "Внутренний ID комнаты: ",
+    "There is a known vulnerability affecting this room.": "В этой комнате есть известная уязвимость.",
+    "This room version is vulnerable to malicious modification of room state.": "Эта версия комнаты уязвима для злонамеренной модификации состояния.",
+    "Click here to upgrade to the latest room version and ensure room integrity is protected.": "Нажмите здесь, чтобы перейти к последней версии комнаты и обеспечить ее целостность.",
+    "Only room administrators will see this warning": "Только администраторы комнат увидят это предупреждение",
+    "Please <a>contact your service administrator</a> to continue using the service.": "Пожалуйста, <a>обратитесь к вашему администратору</a>, чтобы продолжить использование сервиса.",
+    "Please <a>contact your service administrator</a> to get this limit increased.": "Пожалуйста, <a>обратитесь к вашему администратору</a>, чтобы увеличить этот лимит.",
+    "Upgrade Room Version": "Обновление версии комнаты",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:": "Обновление этой комнаты требует закрытия текущей комнаты и создания новой. Чтобы предоставить участникам комнаты наилучший опыт, мы:",
+    "Create a new room with the same name, description and avatar": "Создадим новую комнату с тем же именем, описанием и аватаром",
+    "Update any local room aliases to point to the new room": "Обновим локальные псевдонимы комнат",
+    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Остановим общение пользователей в старой версии комнаты и опубликуем сообщение, в котором пользователям рекомендуется перейти в новую комнату",
+    "Put a link back to the old room at the start of the new room so people can see old messages": "Разместим ссылку на старую комнату, чтобы люди могли видеть старые сообщения",
+    "Please <a>contact your service administrator</a> to continue using this service.": "Пожалуйста, <a>обратитесь к вашему администратору</a>, чтобы продолжить использовать этот сервис.",
+    "Increase performance by only loading room members on first view": "Увеличьте производительность, загрузив только список участников комнаты",
+    "Lazy loading members not supported": "Задержка загрузки элементов не поддерживается"
 }
