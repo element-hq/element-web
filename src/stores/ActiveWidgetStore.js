@@ -17,7 +17,6 @@ limitations under the License.
 import EventEmitter from 'events';
 
 import MatrixClientPeg from '../MatrixClientPeg';
-import sdk from '../index';
 
 /**
  * Stores information about the widgets active in the app right now:
@@ -75,8 +74,6 @@ class ActiveWidgetStore extends EventEmitter {
     destroyPersistentWidget() {
         const toDeleteId = this._persistentWidgetId;
 
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
-        PersistedElement.destroyElement('widget_' + toDeleteId);
         this.setWidgetPersistence(toDeleteId, false);
         this.delWidgetMessaging(toDeleteId);
         this.delWidgetCapabilities(toDeleteId);
