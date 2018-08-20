@@ -23,7 +23,7 @@
     "Admin support for Dendrite": "Dendrite için yönetici desteği",
     "Announcements about Synapse releases": "Synapse sürümleri hakkında duyurular",
     "Support for those using and running matrix-appservice-irc": "matrix-appservice-irc kullanan ve çalıştıran kullanıcılar için destek",
-    "Building services on Matrix": "Matrix üzerinde Yapı hizmetleri",
+    "Building services on Matrix": "Matrix üzerinde yapı hizmetleri",
     "Support for those using the Matrix spec": "Matrix teknik özelliklerini kullananlar için destek",
     "Design and implementation of E2E in Matrix": "Matrix'te E2E ' nin Tasarımı ve uyglamanması",
     "Implementing VR services with Matrix": "Matrix'te VR hizmetlerini uygulamak",
@@ -32,7 +32,7 @@
     "Support for those using, running and writing other bridges": "Diğer köprüleri kullanan , çalıştıran ve yazanlar için destek",
     "Contributing code to Matrix and Riot": "Matrix ve Riot'a kod katkısı sağlama",
     "Dev chat for the Riot/Web dev team": "Riot/Web Geliştirici takımı için geliştirici sohbeti",
-    "Dev chat for the Dendrite dev team": "Dendrite geliştir takımı için geliştirici sohbeti",
+    "Dev chat for the Dendrite dev team": "Dendrite geliştirici takımı için geliştirici sohbeti",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix'te var olan ağalara bağlı (Slack , IRC , Gitter vb.) birçok oda var. Dizini kontrol edin!",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Farklı bir ev sunucusu URL'sini belirterek diğer Matrix sunucularına oturum açmak için özel sunucu seçeneklerini kullanabilirsiniz.<br />Bu, Riot'u başka bir ev sunucusu üzerinde var olan Matrix hesabını kullanmanıza olanak sağlar. <br/><br/> Ayrıca özelleştirilebilir bir kimlik de ayarlayabilirsiniz, ama kullanıcılırı ve kendinizi e-posta adreslerinden davet edemeyeceksiniz.",
     "Co-ordination for Riot translators": "Riot çeviricileri için iş güdüm (koordinasyon)"
