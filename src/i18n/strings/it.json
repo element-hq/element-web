@@ -1111,7 +1111,7 @@
     "Messages in group chats": "Messaggi nelle chat di gruppo",
     "Yesterday": "Ieri",
     "Error encountered (%(errorDetail)s).": "Errore riscontrato (%(errorDetail)s).",
-    "Login": "Entra",
+    "Login": "Accedi",
     "Low Priority": "Priorità bassa",
     "What's New": "Novità",
     "Set Password": "Imposta Password",
@@ -1249,5 +1249,6 @@
     "Put a link back to the old room at the start of the new room so people can see old messages": "Inseriremo un link alla vecchia stanza all'inizio della di quella nuova in modo che la gente possa vedere i messaggi precedenti",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha raggiunto il suo limite di utenti attivi mensili. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha oltrepassato un limite di risorse. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-    "Please <a>contact your service administrator</a> to continue using this service.": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo."
+    "Please <a>contact your service administrator</a> to continue using this service.": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
+    "Increase performance by only loading room members on first view": "Aumenta le prestazioni caricando solo i membri della stanza alla prima occhiata"
 }
