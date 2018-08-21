@@ -861,7 +861,7 @@
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Сообщение отправлено на %(emailAddress)s. После перехода по ссылке в отправленном вам письме, щелкните ниже.",
     "Room Notification": "Уведомления комнаты",
     "Drop here to tag direct chat": "Перетащите сюда, чтобы пометить как личный чат",
-    "Drop here to restore": "Перетащиет сюда, чтобы вернуть",
+    "Drop here to restore": "Перетащите сюда, чтобы вернуть",
     "Drop here to demote": "Перетащите сюда, чтобы понизить",
     "Community Invites": "Приглашения в сообщества",
     "Notify the whole room": "Уведомить всю комнату",
