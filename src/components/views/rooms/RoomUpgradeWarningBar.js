@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
-    displayName: 'RoomUpgardeWarningBar',
+    displayName: 'RoomUpgradeWarningBar',
 
     propTypes: {
         room: PropTypes.object.isRequired,
