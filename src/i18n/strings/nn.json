@@ -950,7 +950,7 @@
     "Review terms and conditions": "Sjå over Vilkår og Føresetnader",
     "Old cryptography data detected": "Gamal kryptografidata vart oppdagen",
     "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Data frå ei eldre utgåve av Riot vart oppdagen. I den eldre utgåva hadde dette gjort at ende-til-ende-kryptografi ikkje verkar som det skal. Ende-til-ende-enkrypterte meldingar som vert utveksla nyleg med den gamle utgåva er det kanskje ikkje mogeleg å dekryptera i denne utgåva. Dette fører kanskje òg til at meldingar som vart utveksla med denne utgåva ikkje verkar. Viss du opplever vansker, logg ut og inn att. For å spara på meldingshistoria, hent nyklane dine ut og inn at.",
-    "Logout": "Utlogging",
+    "Logout": "Loggar ut",
     "Your Communities": "Dine Samfunn",
     "Error whilst fetching joined communities": "Noko gjekk gale med innhentinga av samfunna du er i",
     "Create a new community": "Lag eit nytt samfunn",
@@ -1223,5 +1223,7 @@
     "There is a known vulnerability affecting this room.": "Ein kjend sårbarheit påverkar dette rommet.",
     "This room version is vulnerable to malicious modification of room state.": "Denne romutgåva er sårbar til vondsinna endring på romtilstanden.",
     "Only room administrators will see this warning": "Berre romadministratorar vil sjå denne åtvaringa",
-    "Please <a>contact your service administrator</a> to continue using the service.": "Ver venleg og <a>tak kontakt med tenesteadministratoren</a> for å halda fram med å bruka tenesten."
+    "Please <a>contact your service administrator</a> to continue using the service.": "Ver venleg og <a>tak kontakt med tenesteadministratoren</a> for å halda fram med å bruka tenesten.",
+    "This homeserver has hit its Monthly Active User limit.": "Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.",
+    "This homeserver has exceeded one of its resource limits.": "Heimtenaren har gått over ei av ressursgrensene sine."
 }
