@@ -393,6 +393,8 @@
     "At this time it is not possible to reply with a file so this will be sent without being a reply.": "At this time it is not possible to reply with a file so this will be sent without being a reply.",
     "Upload Files": "Upload Files",
     "Are you sure you want to upload the following files?": "Are you sure you want to upload the following files?",
+    "This room has been replaced and is no longer active.": "This room has been replaced and is no longer active.",
+    "The conversation continues here.": "The conversation continues here.",
     "Encrypted room": "Encrypted room",
     "Unencrypted room": "Unencrypted room",
     "Hangup": "Hangup",
