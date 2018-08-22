@@ -1231,5 +1231,7 @@
     "Internal room ID: ": "Вътрешен идентификатор на стаята: ",
     "Room version number: ": "Версия на стаята: ",
     "This homeserver has hit its Monthly Active User limit. Please <a>contact your service administrator</a> to continue using the service.": "Този сървър достигна лимита си за активни потребители на месец. Моля, <a>свържете се с администратора на услугата</a>, за да продължите да я използвате.",
-    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Този сървър достигна лимита си за активни потребители на месец и някои потребители няма да успеят да влязат в профила си. Моля, <a>свържете се с администратора на услугата</a> за да се увеличи този лимит."
+    "This homeserver has hit its Monthly Active User limit so some users will not be able to log in. Please <a>contact your service administrator</a> to get this limit increased.": "Този сървър достигна лимита си за активни потребители на месец и някои потребители няма да успеят да влязат в профила си. Моля, <a>свържете се с администратора на услугата</a> за да се увеличи този лимит.",
+    "There is a known vulnerability affecting this room.": "Има пропуск в сигурността засягащ тази стая.",
+    "This room version is vulnerable to malicious modification of room state.": "Тази версия на стаята е уязвима към злонамерена модификация на състоянието й."
 }
