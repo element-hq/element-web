@@ -27,7 +27,7 @@ async function acceptDialog(session, expectedContent) {
 async function acceptDialogMaybe(session, expectedContent) {
     let dialog = null;
     try {
-        dialog = await session.waitAndQuery(".mx_QuestionDialog", 100);
+        dialog = await session.waitAndQuery(".mx_QuestionDialog");
     } catch(err) {
         return false;
     }
