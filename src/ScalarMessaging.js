@@ -497,12 +497,11 @@ function canSendEvent(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    const me = client.credentials.userId;
-    const member = room.getMember(me);
-    if (!member || member.membership !== "join") {
+    if (room.getMyMembership() !== "join") {
         sendError(event, _t('You are not in this room.'));
         return;
     }
+    const me = client.credentials.userId;
 
     let canSend = false;
     if (isState) {
