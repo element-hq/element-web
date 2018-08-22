@@ -1601,7 +1601,7 @@ module.exports = React.createClass({
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
             aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
-        } else if (!myMembership || myMembership !== "join") {
+        } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
             var inviterName = undefined;
