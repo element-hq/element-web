@@ -25,7 +25,7 @@ module.exports = async function acceptServerNoticesInviteAndConsent(session) {
     const termsPage = await termsPagePromise;
     const acceptButton = await termsPage.$('input[type=submit]');
     await acceptButton.click();
-    await session.delay(500); //TODO yuck, timers
+    await session.delay(1000); //TODO yuck, timers
     await termsPage.close();
     session.log.done();
 }

@@ -33,7 +33,7 @@ module.exports = async function receiveMessage(session, message) {
         }
     });
     // wait a bit for the incoming event to be rendered
-    await session.delay(500);
+    await session.delay(1000);
     let lastTile = await session.query(".mx_EventTile_last");
     const senderElement = await lastTile.$(".mx_SenderProfile_name");
     const bodyElement = await lastTile.$(".mx_EventTile_body");

@@ -33,7 +33,7 @@ module.exports = async function changeRoomSettings(session, settings) {
     session.log.startGroup(`changes the room settings`);
     /// XXX delay is needed here, possible because the header is being rerendered
     /// click doesn't do anything otherwise
-    await session.delay(500);
+    await session.delay(1000);
     const settingsButton = await session.query(".mx_RoomHeader .mx_AccessibleButton[title=Settings]");
     await settingsButton.click();
     const checks = await session.waitAndQueryAll(".mx_RoomSettings_settings input[type=checkbox]");
@@ -63,7 +63,7 @@ module.exports = async function changeRoomSettings(session, settings) {
         const inviteOnly = radios[0];
         const publicNoGuests = radios[1];
         const publicWithGuests = radios[2];
-        
+
         if (settings.visibility === "invite_only") {
             await inviteOnly.click();
         } else if (settings.visibility === "public_no_guests") {

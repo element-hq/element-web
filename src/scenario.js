@@ -67,12 +67,12 @@ async function createE2ERoomAndTalk(alice, bob) {
     const bobDevice = await getE2EDeviceFromSettings(bob);
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
-    await bob.delay(500);
+    await bob.delay(1000);
     await acceptDialog(bob, "encryption");
     const aliceDevice = await getE2EDeviceFromSettings(alice);
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
-    await alice.delay(500);
+    await alice.delay(1000);
     await acceptDialog(alice, "encryption");
     await verifyDeviceForUser(bob, "alice", aliceDevice);
     await verifyDeviceForUser(alice, "bob", bobDevice);
