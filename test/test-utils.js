@@ -256,7 +256,6 @@ export function mkStubRoom(roomId = null) {
         getAccountData: () => null,
         hasMembershipState: () => null,
         getVersion: () => '1',
-        getMyMembership: () => "join",
         currentState: {
             getStateEvents: sinon.stub(),
             mayClientSendStateEvent: sinon.stub().returns(true),

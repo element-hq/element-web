@@ -72,7 +72,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
     for (var i = 0; i < rooms.length; i++) {
         var confUser = rooms[i].getMember(this.confUserId);
         if (confUser && confUser.membership === "join" &&
-                rooms[i].getJoinedMemberCount() === 2) {
+                rooms[i].getJoinedMembers().length === 2) {
             confRoom = rooms[i];
             break;
         }

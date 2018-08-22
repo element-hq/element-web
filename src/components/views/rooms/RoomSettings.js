@@ -794,15 +794,15 @@ module.exports = React.createClass({
         }
 
         let leaveButton = null;
-        const myMemberShip = this.props.room.getMyMembership();
-        if (myMemberShip) {
-            if (myMemberShip === "join") {
+        const myMember = this.props.room.getMember(myUserId);
+        if (myMember) {
+            if (myMember.membership === "join") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={this.onLeaveClick}>
                         { _t('Leave room') }
                     </AccessibleButton>
                 );
-            } else if (myMemberShip === "leave") {
+            } else if (myMember.membership === "leave") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={this.onForgetClick}>
                         { _t('Forget room') }

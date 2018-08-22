@@ -480,7 +480,7 @@ function getMembershipCount(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    const count = room.getJoinedMemberCount();
+    const count = room.getJoinedMembers().length;
     sendResponse(event, count);
 }
 
@@ -497,11 +497,12 @@ function canSendEvent(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    if (room.getMyMembership() !== "join") {
+    const me = client.credentials.userId;
+    const member = room.getMember(me);
+    if (!member || member.membership !== "join") {
         sendError(event, _t('You are not in this room.'));
         return;
     }
-    const me = client.credentials.userId;
 
     let canSend = false;
     if (isState) {

@@ -280,7 +280,7 @@ module.exports = React.createClass({
             const room = cli.getRoom(this.props.roomId);
             let isUserInRoom;
             if (room) {
-                const numMembers = room.getJoinedMemberCount();
+                const numMembers = room.getJoinedMembers().length;
                 membersTitle = _t('%(count)s Members', { count: numMembers });
                 membersBadge = <div title={membersTitle}>{ formatCount(numMembers) }</div>;
                 isUserInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
