@@ -480,7 +480,7 @@ function getMembershipCount(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    const count = room.getJoinedMembers().length;
+    const count = room.getJoinedMemberCount();
     sendResponse(event, count);
 }
 

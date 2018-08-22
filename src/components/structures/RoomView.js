@@ -363,7 +363,7 @@ module.exports = React.createClass({
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
         if (this.state.room &&
-            this.state.room.getJoinedMembers().length == 1 &&
+            this.state.room.getJoinedMemberCount() == 1 &&
             this.state.room.getLiveTimeline() &&
             this.state.room.getLiveTimeline().getEvents() &&
             this.state.room.getLiveTimeline().getEvents().length <= 6) {
