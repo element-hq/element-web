@@ -701,7 +701,6 @@ module.exports = React.createClass({
         }
 
         this._updateRoomMembers();
-        this._checkIfAlone(this.state.room);
     },
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
@@ -717,6 +716,7 @@ module.exports = React.createClass({
         // refresh the conf call notification state
         this._updateConfCallNotification();
         this._updateDMState();
+        this._checkIfAlone(this.state.room);
     }, 500),
 
     _checkIfAlone: function(room) {
