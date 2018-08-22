@@ -346,18 +346,20 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const myMembership = this.props.room.getMyMembership();
+        const myMember = this.props.room.getMember(
+            MatrixClientPeg.get().credentials.userId,
+        );
 
         // Can't set notif level or tags on non-join rooms
-        if (myMembership !== 'join') {
-            return this._renderLeaveMenu(myMembership);
+        if (myMember.membership !== 'join') {
+            return this._renderLeaveMenu(myMember.membership);
         }
 
         return (
             <div>
                 { this._renderNotifMenu() }
                 <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderLeaveMenu(myMembership) }
+                { this._renderLeaveMenu(myMember.membership) }
                 <hr className="mx_RoomTileContextMenu_separator" />
                 { this._renderRoomTagMenu() }
             </div>
