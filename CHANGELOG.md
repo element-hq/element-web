@@ -1,3 +1,30 @@
+Changes in [0.16.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.2) (2018-08-23)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1...v0.16.2)
+
+ * Support new server notices format
+
+Changes in [0.16.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.1) (2018-08-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1-rc.1...v0.16.1)
+
+ * No changes since rc.1
+
+Changes in [0.16.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.1-rc.1) (2018-08-16)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0...v0.16.1-rc.1)
+
+ * Update from Weblate.
+   [\#7178](https://github.com/vector-im/riot-web/pull/7178)
+ * CSS for MAU warning bar
+   [\#7152](https://github.com/vector-im/riot-web/pull/7152)
+ * CSS for user limit error
+   [\#7139](https://github.com/vector-im/riot-web/pull/7139)
+ * Unpin sanitize-html
+   [\#7132](https://github.com/vector-im/riot-web/pull/7132)
+ * Pin sanitize-html to 0.18.2
+   [\#7129](https://github.com/vector-im/riot-web/pull/7129)
+
 Changes in [0.16.0](https://github.com/vector-im/riot-web/releases/tag/v0.16.0) (2018-07-30)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.0-rc.2...v0.16.0)
