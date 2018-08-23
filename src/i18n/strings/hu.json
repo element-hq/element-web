@@ -1255,5 +1255,6 @@
     "Lazy loading members not supported": "A tagok késleltetett betöltése nem támogatott",
     "Lazy loading is not supported by your current homeserver.": "A késleltetett betöltés nem támogatott ennél a Matrix szervernél.",
     "Sorry, your homeserver is too old to participate in this room.": "Sajnáljuk, a Matrix szervered nem elég friss ahhoz, hogy részt vegyen ebben a szobában.",
-    "Please contact your homeserver administrator.": "Kérlek vedd fel a kapcsolatot a Matrix szerver adminisztrátorával."
+    "Please contact your homeserver administrator.": "Kérlek vedd fel a kapcsolatot a Matrix szerver adminisztrátorával.",
+    "Legal": "Jogi"
 }
