@@ -1252,6 +1252,8 @@
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "您的訊息未傳送，因為其家伺服器已超過一項資源限制。請<a>聯絡您的服務管理員</a>以繼序使用服務。",
     "Please <a>contact your service administrator</a> to continue using this service.": "請<a>聯絡您的服務管理員</a>以繼續使用此服務。",
     "Increase performance by only loading room members on first view": "透過僅在第一次檢視時載入聊天室成員來增加效能",
-    "Lazy loading members not supported": "不支援延持載入成員",
-    "Lazy loading is not supported by your current homeserver.": "您目前的家伺服器不支援延遲載入。"
+    "Lazy loading members not supported": "不支援延遲載入成員",
+    "Lazy loading is not supported by your current homeserver.": "您目前的家伺服器不支援延遲載入。",
+    "Sorry, your homeserver is too old to participate in this room.": "抱歉，您的家伺服器太舊了，所以無法參與此聊天室。",
+    "Please contact your homeserver administrator.": "請聯絡您的家伺服器的管理員。"
 }
