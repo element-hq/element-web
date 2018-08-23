@@ -44,7 +44,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     //wait over a second because Registration/ServerConfig have a 1000ms
     //delay to internally set the homeserver url
     //see Registration::render and ServerConfig::props::delayTimeMs
-    await session.delay(1200);
+    await session.delay(1500);
     /// focus on the button to make sure error validation
     /// has happened before checking the form is good to go
     const registerButton = await session.query('.mx_Login_submit');

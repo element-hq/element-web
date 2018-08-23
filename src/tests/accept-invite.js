@@ -20,7 +20,7 @@ const {acceptDialogMaybe} = require('./dialog');
 module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
     //TODO: brittle selector
-    const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite', 1000);
+    const invitesHandles = await session.waitAndQueryAll('.mx_RoomTile_name.mx_RoomTile_invite');
     const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
         const text = await session.innerText(inviteHandle);
         return {inviteHandle, text};
