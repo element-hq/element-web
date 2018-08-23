@@ -284,8 +284,8 @@ class RoomListStore extends Store {
             if (optimisticRequest && roomB === optimisticRequest.room) metaB = optimisticRequest.metaData;
 
             // Make sure the room tag has an order element, if not set it to be the bottom
-            const a = metaA.order;
-            const b = metaB.order;
+            const a = metaA ? metaA.order : undefined;
+            const b = metaB ? metaB.order : undefined;
 
             // Order undefined room tag orders to the bottom
             if (a === undefined && b !== undefined) {
