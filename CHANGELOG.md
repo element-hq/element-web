@@ -1,3 +1,9 @@
+Changes in [0.16.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.2) (2018-08-23)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1...v0.16.2)
+
+ * Support new server notices format
+
 Changes in [0.16.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.1) (2018-08-20)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1-rc.1...v0.16.1)
