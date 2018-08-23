@@ -1253,5 +1253,7 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "Veuillez <a>contacter l'administrateur de votre service</a> pour continuer à l'utiliser.",
     "Increase performance by only loading room members on first view": "Améliorer les performances en ne chargeant les participants des salons qu'au premier affichage",
     "Lazy loading members not supported": "La chargement différé des participants n'est pas pris en charge",
-    "Lazy loading is not supported by your current homeserver.": "Le chargement différé n'est pas pris en charge par votre serveur d'accueil actuel."
+    "Lazy loading is not supported by your current homeserver.": "Le chargement différé n'est pas pris en charge par votre serveur d'accueil actuel.",
+    "Sorry, your homeserver is too old to participate in this room.": "Désolé, votre serveur d'accueil est trop vieux pour participer à ce salon.",
+    "Please contact your homeserver administrator.": "Veuillez contacter l'administrateur de votre serveur d'accueil."
 }
