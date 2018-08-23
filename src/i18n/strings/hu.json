@@ -1253,5 +1253,7 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "A szolgáltatás további használatához kérlek <a>vedd fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
     "Increase performance by only loading room members on first view": "A teljesítmény növelése érdekében a szoba tagsága csak az első megtekintéskor töltődik be",
     "Lazy loading members not supported": "A tagok késleltetett betöltése nem támogatott",
-    "Lazy loading is not supported by your current homeserver.": "A késleltetett betöltés nem támogatott ennél a Matrix szervernél."
+    "Lazy loading is not supported by your current homeserver.": "A késleltetett betöltés nem támogatott ennél a Matrix szervernél.",
+    "Sorry, your homeserver is too old to participate in this room.": "Sajnáljuk, a Matrix szervered nem elég friss ahhoz, hogy részt vegyen ebben a szobában.",
+    "Please contact your homeserver administrator.": "Kérlek vedd fel a kapcsolatot a Matrix szerver adminisztrátorával."
 }
