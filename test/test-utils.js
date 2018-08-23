@@ -74,6 +74,7 @@ export function createTestClient() {
         getPushActionsForEvent: sinon.stub(),
         getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
+        getVisibleRooms: sinon.stub().returns([]),
         getGroups: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
