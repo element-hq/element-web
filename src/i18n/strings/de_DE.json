@@ -442,7 +442,7 @@
     "You can also set a custom identity server but this will typically prevent interaction with users based on email address.": "Du kannst auch einen angepassten Idantitätsserver angeben aber dies wird typischerweise Interaktionen mit anderen Nutzern auf Basis der E-Mail-Adresse verhindern.",
     "Please check your email to continue registration.": "Bitte prüfe deine E-Mails, um mit der Registrierung fortzufahren.",
     "Token incorrect": "Token fehlerhaft",
-    "Please enter the code it contains:": "Bitte gebe den Code ein, den sie enthält:",
+    "Please enter the code it contains:": "Bitte gib den darin enthaltenen Code ein:",
     "powered by Matrix": "betrieben mit Matrix",
     "If you don't specify an email address, you won't be able to reset your password. Are you sure?": "Wenn du keine E-Mail-Adresse angibst, wirst du nicht in der Lage sein, dein Passwort zurückzusetzen. Bist du sicher?",
     "You are registering with %(SelectedTeamName)s": "Du registrierst dich mit %(SelectedTeamName)s",
@@ -1221,7 +1221,7 @@
     "numbered-list": "Liste mit Nummern",
     "Failed to remove widget": "Widget konnte nicht entfernt werden",
     "An error ocurred whilst trying to remove the widget from the room": "Ein Fehler trat auf, während versucht wurde das Widget aus diesem Raum zu entfernen",
-    "inline-code": "Quellcode im Satz",
+    "inline-code": "Quellcode in der Zeile",
     "block-quote": "Quellcode im Block",
     "This homeserver has hit its Monthly Active User limit": "Dieser Heimserver hat sein Limit für monatlich aktive Nutzer erreicht",
     "Please contact your service administrator to continue using this service.": "Bitte kontaktiere deinen Administrator um diesen Dienst weiter zu nutzen.",
@@ -1253,5 +1253,7 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "Bitte <a>kontaktiere deinen Systemadministrator</a> um diesen Dienst weiter zu nutzen.",
     "Increase performance by only loading room members on first view": "Verbessere Performanz, indem Raum-Mitglieder erst beim ersten Ansehen geladen werden",
     "Lazy loading members not supported": "Verzögertes Laden von Mitgliedern nicht unterstützt",
-    "Lazy loading is not supported by your current homeserver.": "Verzögertes Laden wird von deinem aktuellen Heimserver."
+    "Lazy loading is not supported by your current homeserver.": "Verzögertes Laden wird von deinem aktuellen Heimserver.",
+    "Sorry, your homeserver is too old to participate in this room.": "Sorry, dein Homeserver ist zu alt, um an diesem Raum teilzunehmen.",
+    "Please contact your homeserver administrator.": "Bitte setze dich mit dem Administrator deines Homeservers in Verbindung."
 }
