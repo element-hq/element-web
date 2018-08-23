@@ -71,6 +71,23 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._waitForOwnMember();
+    }
+
+    _waitForOwnMember() {
+        // if we have the member already, do that
+        const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
+        if (me) {
+            this.setState({me});
+            return;
+        }
+        // Otherwise, wait for member loading to finish and then update the member for the avatar.
+        // The members should already be loading, and loadMembersIfNeeded
+        // will return the promise for the existing operation
+        this.props.room.loadMembersIfNeeded().then(() => {
+            const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
+            this.setState({me});
+        });
     }
 
     componentWillUnmount() {
@@ -208,7 +225,6 @@ export default class MessageComposer extends React.Component {
     }
 
     render() {
-        const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         const uploadInputStyle = {display: 'none'};
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -216,11 +232,13 @@ export default class MessageComposer extends React.Component {
 
         const controls = [];
 
-        controls.push(
-            <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberAvatar member={me} width={24} height={24} />
-            </div>,
-        );
+        if (this.state.me) {
+            controls.push(
+                <div key="controls_avatar" className="mx_MessageComposer_avatar">
+                    <MemberAvatar member={this.state.me} width={24} height={24} />
+                </div>,
+            );
+        }
 
         let e2eImg, e2eTitle, e2eClass;
         const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
