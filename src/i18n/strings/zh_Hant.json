@@ -1255,5 +1255,6 @@
     "Lazy loading members not supported": "不支援延遲載入成員",
     "Lazy loading is not supported by your current homeserver.": "您目前的家伺服器不支援延遲載入。",
     "Sorry, your homeserver is too old to participate in this room.": "抱歉，您的家伺服器太舊了，所以無法參與此聊天室。",
-    "Please contact your homeserver administrator.": "請聯絡您的家伺服器的管理員。"
+    "Please contact your homeserver administrator.": "請聯絡您的家伺服器的管理員。",
+    "Legal": "法律"
 }
