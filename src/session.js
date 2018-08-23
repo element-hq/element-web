@@ -164,17 +164,21 @@ module.exports = class RiotSession {
     waitForNewPage(timeout = 5000) {
         return new Promise((resolve, reject) => {
             const timeoutHandle = setTimeout(() => {
-                this.browser.removeEventListener('targetcreated', callback);
+                this.browser.removeListener('targetcreated', callback);
                 reject(new Error(`timeout of ${timeout}ms for waitForNewPage elapsed`));
             }, timeout);
 
             const callback = async (target) => {
+                if (target.type() !== 'page') {
+                    return;
+                }
+                this.browser.removeListener('targetcreated', callback);
                 clearTimeout(timeoutHandle);
                 const page = await target.page();
                 resolve(page);
             };
 
-            this.browser.once('targetcreated', callback);
+            this.browser.on('targetcreated', callback);
         });
     }
 
