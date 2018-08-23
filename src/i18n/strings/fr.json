@@ -1255,5 +1255,6 @@
     "Lazy loading members not supported": "La chargement différé des participants n'est pas pris en charge",
     "Lazy loading is not supported by your current homeserver.": "Le chargement différé n'est pas pris en charge par votre serveur d'accueil actuel.",
     "Sorry, your homeserver is too old to participate in this room.": "Désolé, votre serveur d'accueil est trop vieux pour participer à ce salon.",
-    "Please contact your homeserver administrator.": "Veuillez contacter l'administrateur de votre serveur d'accueil."
+    "Please contact your homeserver administrator.": "Veuillez contacter l'administrateur de votre serveur d'accueil.",
+    "Legal": "Légal"
 }
