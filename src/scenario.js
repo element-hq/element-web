@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-const {acceptDialog} = require('./tests/dialog');
+const {acceptDialogMaybe} = require('./tests/dialog');
 const signup = require('./tests/signup');
 const join = require('./tests/join');
 const sendMessage = require('./tests/send-message');
@@ -68,12 +68,12 @@ async function createE2ERoomAndTalk(alice, bob) {
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
     await bob.delay(1000);
-    await acceptDialog(bob, "encryption");
+    await acceptDialogMaybe(bob, "encryption");
     const aliceDevice = await getE2EDeviceFromSettings(alice);
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
     await alice.delay(1000);
-    await acceptDialog(alice, "encryption");
+    await acceptDialogMaybe(alice, "encryption");
     await verifyDeviceForUser(bob, "alice", aliceDevice);
     await verifyDeviceForUser(alice, "bob", bobDevice);
     const aliceMessage = "Guess what I just heard?!"
