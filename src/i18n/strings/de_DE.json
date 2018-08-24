@@ -839,7 +839,7 @@
     "%(severalUsers)schanged their avatar %(count)s times|one": "%(severalUsers)shaben das Profilbild geändert",
     "%(oneUser)schanged their avatar %(count)s times|other": "%(oneUser)shat das Profilbild %(count)s-mal geändert",
     "%(oneUser)schanged their avatar %(count)s times|one": "%(oneUser)shat das Profilbild geändert",
-    "%(names)s and %(count)s others are typing|one": "%(names)s und eine weitere Person schreiben",
+    "%(names)s and %(count)s others are typing|one": "%(names)s und noch jemand schreiben",
     "Disinvite this user?": "Einladung für diesen Benutzer zurückziehen?",
     "Kick this user?": "Diesen Benutzer kicken?",
     "Unban this user?": "Verbannung für diesen Benutzer aufheben?",
