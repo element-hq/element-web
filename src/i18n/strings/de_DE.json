@@ -1255,5 +1255,6 @@
     "Lazy loading members not supported": "Verzögertes Laden von Mitgliedern nicht unterstützt",
     "Lazy loading is not supported by your current homeserver.": "Verzögertes Laden wird von deinem aktuellen Heimserver.",
     "Sorry, your homeserver is too old to participate in this room.": "Sorry, dein Homeserver ist zu alt, um an diesem Raum teilzunehmen.",
-    "Please contact your homeserver administrator.": "Bitte setze dich mit dem Administrator deines Homeservers in Verbindung."
+    "Please contact your homeserver administrator.": "Bitte setze dich mit dem Administrator deines Homeservers in Verbindung.",
+    "Legal": "Rechte"
 }
