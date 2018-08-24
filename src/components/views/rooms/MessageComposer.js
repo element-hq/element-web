@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -25,6 +25,17 @@ import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
+
+const formatButtonList = [
+    _td("bold"),
+    _td("italic"),
+    _td("deleted"),
+    _td("underlined"),
+    _td("inline-code"),
+    _td("block-quote"),
+    _td("bulleted-list"),
+    _td("numbered-list"),
+];
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -35,7 +46,6 @@ export default class MessageComposer extends React.Component {
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
-        this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -44,13 +54,10 @@ export default class MessageComposer extends React.Component {
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
-            autocompleteQuery: '',
-            selection: null,
             inputState: {
-                style: [],
+                marks: [],
                 blockType: null,
-                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
-                wordCount: 0,
+                isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
@@ -64,6 +71,23 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._waitForOwnMember();
+    }
+
+    _waitForOwnMember() {
+        // if we have the member already, do that
+        const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
+        if (me) {
+            this.setState({me});
+            return;
+        }
+        // Otherwise, wait for member loading to finish and then update the member for the avatar.
+        // The members should already be loading, and loadMembersIfNeeded
+        // will return the promise for the existing operation
+        this.props.room.loadMembersIfNeeded().then(() => {
+            const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
+            this.setState({me});
+        });
     }
 
     componentWillUnmount() {
@@ -159,60 +183,19 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    // _startCallApp(isAudioConf) {
-        // dis.dispatch({
-        //     action: 'appsDrawer',
-        //     show: true,
-        // });
-
-        // const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
-        // let appsStateEvent = {};
-        // if (appsStateEvents) {
-        //     appsStateEvent = appsStateEvents.getContent();
-        // }
-        // if (!appsStateEvent.videoConf) {
-        //     appsStateEvent.videoConf = {
-        //         type: 'jitsi',
-        //         // FIXME -- This should not be localhost
-        //         url: 'http://localhost:8000/jitsi.html',
-        //         data: {
-        //             confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
-        //             isAudioConf: isAudioConf,
-        //         },
-        //     };
-        //     MatrixClientPeg.get().sendStateEvent(
-        //         this.props.room.roomId,
-        //         'im.vector.modular.widgets',
-        //         appsStateEvent,
-        //         '',
-        //     ).then(() => console.log('Sent state'), (e) => console.error(e));
-        // }
-    // }
-
     onCallClick(ev) {
-        // NOTE -- Will be replaced by Jitsi code (currently commented)
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId,
         });
-        // this._startCallApp(false);
     }
 
     onVoiceCallClick(ev) {
-        // NOTE -- Will be replaced by Jitsi code (currently commented)
         dis.dispatch({
             action: 'place_call',
             type: "voice",
             room_id: this.props.room.roomId,
-        });
-        // this._startCallApp(true);
-    }
-
-    onInputContentChanged(content: string, selection: {start: number, end: number}) {
-        this.setState({
-            autocompleteQuery: content,
-            selection,
         });
     }
 
@@ -226,7 +209,7 @@ export default class MessageComposer extends React.Component {
         }
     }
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", event) {
+    onFormatButtonClicked(name, event) {
         event.preventDefault();
         this.messageComposerInput.onFormatButtonClicked(name, event);
     }
@@ -238,11 +221,10 @@ export default class MessageComposer extends React.Component {
 
     onToggleMarkdownClicked(e) {
         e.preventDefault(); // don't steal focus from the editor!
-        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichtextEnabled);
+        this.messageComposerInput.enableRichtext(!this.state.inputState.isRichTextEnabled);
     }
 
     render() {
-        const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         const uploadInputStyle = {display: 'none'};
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -250,11 +232,13 @@ export default class MessageComposer extends React.Component {
 
         const controls = [];
 
-        controls.push(
-            <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberAvatar member={me} width={24} height={24} />
-            </div>,
-        );
+        if (this.state.me) {
+            controls.push(
+                <div key="controls_avatar" className="mx_MessageComposer_avatar">
+                    <MemberAvatar member={this.state.me} width={24} height={24} />
+                </div>,
+            );
+        }
 
         let e2eImg, e2eTitle, e2eClass;
         const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
@@ -314,14 +298,14 @@ export default class MessageComposer extends React.Component {
                 </div>
             );
 
-            const formattingButton = (
+            const formattingButton = this.state.inputState.isRichTextEnabled ? (
                 <img className="mx_MessageComposer_formatting"
                      title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
                      style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
-            );
+            ) : null;
 
             let placeholderText;
             if (this.state.isQuoting) {
@@ -348,7 +332,6 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
-                    onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
                 stickerpickerButton,
@@ -365,11 +348,14 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        const {style, blockType} = this.state.inputState;
-        const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
-            (name) => {
-                const active = style.includes(name) || blockType === name;
-                const suffix = active ? '-o-n' : '';
+        let formatBar;
+        if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
+            const {marks, blockType} = this.state.inputState;
+            const formatButtons = formatButtonList.map((name) => {
+                // special-case to match the md serializer and the special-case in MessageComposerInput.js
+                const markName = name === 'inline-code' ? 'code' : name;
+                const active = marks.some(mark => mark.type === markName) || blockType === name;
+                const suffix = active ? '-on' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
                 const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
                 return <img className={className}
@@ -378,8 +364,25 @@ export default class MessageComposer extends React.Component {
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
                             height="17" />;
-            },
-        );
+                },
+            );
+
+            formatBar =
+                <div className="mx_MessageComposer_formatbar_wrapper">
+                    <div className="mx_MessageComposer_formatbar">
+                        { formatButtons }
+                        <div style={{flex: 1}}></div>
+                        <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
+                             onMouseDown={this.onToggleMarkdownClicked}
+                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
+                            src={`img/button-md-${!this.state.inputState.isRichTextEnabled}.png`} />
+                        <img title={_t("Hide Text Formatting Toolbar")}
+                             onClick={this.onToggleFormattingClicked}
+                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                             src="img/icon-text-cancel.svg" />
+                    </div>
+                </div>
+        }
 
         return (
             <div className="mx_MessageComposer">
@@ -388,20 +391,7 @@ export default class MessageComposer extends React.Component {
                         { controls }
                     </div>
                 </div>
-                <div className="mx_MessageComposer_formatbar_wrapper">
-                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
-                        { formatButtons }
-                        <div style={{flex: 1}}></div>
-                        <img title={this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
-                             onMouseDown={this.onToggleMarkdownClicked}
-                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                        <img title={_t("Hide Text Formatting Toolbar")}
-                             onClick={this.onToggleFormattingClicked}
-                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                             src="img/icon-text-cancel.svg" />
-                    </div>
-                </div>
+                { formatBar }
             </div>
         );
     }

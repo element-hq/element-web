@@ -23,6 +23,10 @@ limitations under the License.
     padding-bottom: 12px;
 }
 
+.mx_CreateRoomDialog_input_container {
+    padding-right: 20px;
+}
+
 .mx_CreateRoomDialog_input {
     font-size: 15px;
     border-radius: 3px;
@@ -30,4 +34,5 @@ limitations under the License.
     padding: 9px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
+    width: 100%;
 }

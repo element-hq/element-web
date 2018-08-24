@@ -14,21 +14,22 @@ import dis from '../../../../src/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
 import GroupStore from '../../../../src/stores/GroupStore.js';
 
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
 
-function createRoom(opts) {
-    const room = new Room(generateRoomId());
-    if (opts) {
-        Object.assign(room, opts);
-    }
-    return room;
-}
 
 describe('RoomList', () => {
+    function createRoom(opts) {
+        const room = new Room(generateRoomId(), null, client.getUserId());
+        if (opts) {
+            Object.assign(room, opts);
+        }
+        return room;
+    }
+
     let parentDiv = null;
     let sandbox = null;
     let client = null;
@@ -48,6 +49,8 @@ describe('RoomList', () => {
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
+        //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
+        client.getUserId = MatrixClient.prototype.getUserId;
 
         clock = lolex.install();
 
@@ -91,6 +94,7 @@ describe('RoomList', () => {
             createRoom({tags: {'m.lowpriority': {}}, name: 'Some unimportant room'}),
             createRoom({tags: {'custom.tag': {}}, name: 'Some room customly tagged'}),
         ];
+        client.getVisibleRooms = client.getRooms;
 
         const roomMap = {};
         client.getRooms().forEach((r) => {

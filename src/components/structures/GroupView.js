@@ -432,11 +432,14 @@ export default React.createClass({
 
         this._changeAvatarComponent = null;
         this._initGroupStore(this.props.groupId, true);
+
+        this._dispatcherRef = dis.register(this._onAction);
     },
 
     componentWillUnmount: function() {
         this._unmounted = true;
         this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
+        dis.unregister(this._dispatcherRef);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -559,16 +562,33 @@ export default React.createClass({
         });
     },
 
+    _onShareClick: function() {
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share community dialog', '', ShareDialog, {
+            target: this._matrixClient.getGroup(this.props.groupId),
+        });
+    },
+
     _onCancelClick: function() {
         this._closeSettings();
     },
 
+    _onAction(payload) {
+        switch (payload.action) {
+            // NOTE: close_settings is an app-wide dispatch; as it is dispatched from MatrixChat
+            case 'close_settings':
+                this.setState({
+                    editing: false,
+                    profileForm: null,
+                });
+                break;
+            default:
+                break;
+        }
+    },
+
     _closeSettings() {
-        this.setState({
-            editing: false,
-            profileForm: null,
-        });
-        dis.dispatch({action: 'panel_disable'});
+        dis.dispatch({action: 'close_settings'});
     },
 
     _onNameChange: function(value) {
@@ -1039,7 +1059,7 @@ export default React.createClass({
                     <input type="radio"
                         value={GROUP_JOINPOLICY_INVITE}
                         checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_INVITE}
-                        onClick={this._onJoinableChange}
+                        onChange={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
                         { _t('Only people who have been invited') }
@@ -1051,7 +1071,7 @@ export default React.createClass({
                     <input type="radio"
                         value={GROUP_JOINPOLICY_OPEN}
                         checked={this.state.joinableForm.policyType === GROUP_JOINPOLICY_OPEN}
-                        onClick={this._onJoinableChange}
+                        onChange={this._onJoinableChange}
                     />
                     <div className="mx_GroupView_label_text">
                         { _t('Everyone') }
@@ -1114,10 +1134,6 @@ export default React.createClass({
             let avatarNode;
             let nameNode;
             let shortDescNode;
-            const bodyNodes = [
-                this._getMembershipSection(),
-                this._getGroupSection(),
-            ];
             const rightButtons = [];
             if (this.state.editing && this.state.isUserPrivileged) {
                 let avatarImage;
@@ -1194,6 +1210,7 @@ export default React.createClass({
                     shortDescNode = <span onClick={onGroupHeaderItemClick}>{ summary.profile.short_description }</span>;
                 }
             }
+
             if (this.state.editing) {
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
@@ -1218,6 +1235,11 @@ export default React.createClass({
                         </AccessibleButton>,
                     );
                 }
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupHeader_button" onClick={this._onShareClick} title={_t('Share Community')} key="_shareButton">
+                        <TintableSvg src="img/icons-share.svg" width="16" height="16" />
+                    </AccessibleButton>,
+                );
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
@@ -1256,7 +1278,8 @@ export default React.createClass({
                         </div>
                     </div>
                     <GeminiScrollbarWrapper className="mx_GroupView_body">
-                        { bodyNodes }
+                        { this._getMembershipSection() }
+                        { this._getGroupSection() }
                     </GeminiScrollbarWrapper>
                 </div>
             );

@@ -39,9 +39,17 @@ function getRedactedHash(hash) {
     return hash.replace(hashRegex, "#/$1");
 }
 
-// Return the current origin and hash separated with a `/`. This does not include query parameters.
+// Return the current origin, path and hash separated with a `/`. This does
+// not include query parameters.
 function getRedactedUrl() {
-    const { origin, pathname, hash } = window.location;
+    const { origin, hash } = window.location;
+    let { pathname } = window.location;
+
+    // Redact paths which could contain unexpected PII
+    if (origin.startsWith('file://')) {
+        pathname = "/<redacted>/";
+    }
+
     return origin + pathname + getRedactedHash(hash);
 }
 
@@ -191,9 +199,9 @@ class Analytics {
         this._paq.push(['trackPageView']);
     }
 
-    trackEvent(category, action, name) {
+    trackEvent(category, action, name, value) {
         if (this.disabled) return;
-        this._paq.push(['trackEvent', category, action, name]);
+        this._paq.push(['trackEvent', category, action, name, value]);
     }
 
     logout() {

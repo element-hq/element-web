@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,7 +45,9 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
-import SettingsStore from "../../settings/SettingsStore";
+import WidgetEchoStore from '../../stores/WidgetEchoStore';
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import WidgetUtils from '../../utils/WidgetUtils';
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -115,6 +118,7 @@ module.exports = React.createClass({
             showApps: false,
             isAlone: false,
             isPeeking: false,
+            showingPinned: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -150,6 +154,8 @@ module.exports = React.createClass({
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
+
+        WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -182,6 +188,8 @@ module.exports = React.createClass({
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
+            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
+            editingRoomSettings: RoomViewStore.isEditingSettings(),
         };
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
@@ -236,6 +244,12 @@ module.exports = React.createClass({
         if (initial) {
             this._setupRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
         }
+    },
+
+    _onWidgetEchoStoreUpdate: function() {
+        this.setState({
+            showApps: this._shouldShowApps(this.state.room),
+        });
     },
 
     _setupRoom: function(room, roomId, joining, shouldPeek) {
@@ -294,11 +308,23 @@ module.exports = React.createClass({
                         throw err;
                     }
                 });
+            } else if (room) {
+                //viewing a previously joined room, try to lazy load members
+
+                // Stop peeking because we have joined this room previously
+                MatrixClientPeg.get().stopPeeking();
+                this.setState({isPeeking: false});
+
+                // lazy load members if enabled
+                if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+                    room.loadMembersIfNeeded().catch((err) => {
+                        const errorMessage = `Fetching room members for ${this.roomId} failed.` +
+                            " Room members will appear incomplete.";
+                        console.error(errorMessage);
+                        console.error(err);
+                    });
+                }
             }
-        } else if (room) {
-            // Stop peeking because we have joined this room previously
-            MatrixClientPeg.get().stopPeeking();
-            this.setState({isPeeking: false});
         }
     },
 
@@ -314,14 +340,9 @@ module.exports = React.createClass({
             return false;
         }
 
-        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
-        // any valid widget = show apps
-        for (let i = 0; i < appsStateEvents.length; i++) {
-            if (appsStateEvents[i].getContent().type && appsStateEvents[i].getContent().url) {
-                return true;
-            }
-        }
-        return false;
+        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
+
+        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
     },
 
     componentDidMount: function() {
@@ -342,7 +363,7 @@ module.exports = React.createClass({
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
         if (this.state.room &&
-            this.state.room.getJoinedMembers().length == 1 &&
+            this.state.room.getJoinedMemberCount() == 1 &&
             this.state.room.getLiveTimeline() &&
             this.state.room.getLiveTimeline().getEvents() &&
             this.state.room.getLiveTimeline().getEvents().length <= 6) {
@@ -415,6 +436,8 @@ module.exports = React.createClass({
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+
+        WidgetEchoStore.removeListener('update', this._onWidgetEchoStoreUpdate);
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();
@@ -615,9 +638,11 @@ module.exports = React.createClass({
         }
     },
 
-    _updatePreviewUrlVisibility: function(room) {
+    _updatePreviewUrlVisibility: function({roomId}) {
+        // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
+        const key = MatrixClientPeg.get().isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
         this.setState({
-            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
+            showUrlPreview: SettingsStore.getValue(key, roomId),
         });
     },
 
@@ -642,19 +667,23 @@ module.exports = React.createClass({
     },
 
     onAccountData: function(event) {
-        if (event.getType() === "org.matrix.preview_urls" && this.state.room) {
+        const type = event.getType();
+        if ((type === "org.matrix.preview_urls" || type === "im.vector.web.settings") && this.state.room) {
+            // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
             this._updatePreviewUrlVisibility(this.state.room);
         }
     },
 
     onRoomAccountData: function(event, room) {
         if (room.roomId == this.state.roomId) {
-            if (event.getType() === "org.matrix.room.color_scheme") {
+            const type = event.getType();
+            if (type === "org.matrix.room.color_scheme") {
                 const color_scheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
                 Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
-            } else if (event.getType() === "org.matrix.room.preview_urls") {
+            } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
+                // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this._updatePreviewUrlVisibility(room);
             }
         }
@@ -687,6 +716,7 @@ module.exports = React.createClass({
         // refresh the conf call notification state
         this._updateConfCallNotification();
         this._updateDMState();
+        this._checkIfAlone(this.state.room);
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -699,8 +729,8 @@ module.exports = React.createClass({
             return;
         }
 
-        const joinedMembers = room.currentState.getMembers().filter((m) => m.membership === "join" || m.membership === "invite");
-        this.setState({isAlone: joinedMembers.length === 1});
+        const joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
+        this.setState({isAlone: joinedOrInvitedMemberCount === 1});
     },
 
     _updateConfCallNotification: function() {
@@ -728,40 +758,13 @@ module.exports = React.createClass({
     },
 
     _updateDMState() {
-        const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
-        if (!me || me.membership !== "join") {
+        const room = this.state.room;
+        if (room.getMyMembership() != "join") {
             return;
         }
-
-        // The user may have accepted an invite with is_direct set
-        if (me.events.member.getPrevContent().membership === "invite" &&
-            me.events.member.getPrevContent().is_direct
-        ) {
-            // This is a DM with the sender of the invite event (which we assume
-            // preceded the join event)
-            Rooms.setDMRoom(
-                this.state.room.roomId,
-                me.events.member.getUnsigned().prev_sender,
-            );
-            return;
-        }
-
-        const invitedMembers = this.state.room.getMembersWithMembership("invite");
-        const joinedMembers = this.state.room.getMembersWithMembership("join");
-
-        // There must be one invited member and one joined member
-        if (invitedMembers.length !== 1 || joinedMembers.length !== 1) {
-            return;
-        }
-
-        // The user may have sent an invite with is_direct sent
-        const other = invitedMembers[0];
-        if (other &&
-            other.membership === "invite" &&
-            other.events.member.getContent().is_direct
-        ) {
-            Rooms.setDMRoom(this.state.room.roomId, other.userId);
-            return;
+        const dmInviter = room.getDMInviter();
+        if (dmInviter) {
+            Rooms.setDMRoom(room.roomId, dmInviter);
         }
     },
 
@@ -909,6 +912,8 @@ module.exports = React.createClass({
     },
 
     uploadFile: async function(file) {
+        dis.dispatch({action: 'focus_composer'});
+
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'view_set_mxid'});
             return;
@@ -1135,11 +1140,14 @@ module.exports = React.createClass({
     },
 
     onPinnedClick: function() {
-        this.setState({showingPinned: !this.state.showingPinned, searching: false});
+        const nowShowingPinned = !this.state.showingPinned;
+        const roomId = this.state.room.roomId;
+        this.setState({showingPinned: nowShowingPinned, searching: false});
+        SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
     },
 
     onSettingsClick: function() {
-        this.showSettings(true);
+        dis.dispatch({ action: 'open_room_settings' });
     },
 
     onSettingsSaveClick: function() {
@@ -1172,24 +1180,20 @@ module.exports = React.createClass({
                 });
                 // still editing room settings
             } else {
-                this.setState({
-                    editingRoomSettings: false,
-                });
+                dis.dispatch({ action: 'close_settings' });
             }
         }).finally(() => {
             this.setState({
                 uploadingRoomSettings: false,
-                editingRoomSettings: false,
             });
+            dis.dispatch({ action: 'close_settings' });
         }).done();
     },
 
     onCancelClick: function() {
         console.log("updateTint from onCancelClick");
         this.updateTint();
-        this.setState({
-            editingRoomSettings: false,
-        });
+        dis.dispatch({ action: 'close_settings' });
         if (this.state.forwardingEvent) {
             dis.dispatch({
                 action: 'forward_event',
@@ -1406,13 +1410,6 @@ module.exports = React.createClass({
         });*/
     },
 
-    showSettings: function(show) {
-        // XXX: this is a bit naughty; we should be doing this via props
-        if (show) {
-            this.setState({editingRoomSettings: true});
-        }
-    },
-
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
@@ -1510,9 +1507,8 @@ module.exports = React.createClass({
             }
         }
 
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const myMember = this.state.room.getMember(myUserId);
-        if (myMember && myMember.membership == 'invite') {
+        const myMembership = this.state.room.getMyMembership();
+        if (myMembership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <div className="mx_RoomView">
@@ -1520,6 +1516,8 @@ module.exports = React.createClass({
                     </div>
                 );
             } else {
+                const myUserId = MatrixClientPeg.get().credentials.userId;
+                const myMember = this.state.room.getMember(myUserId);
                 const inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
 
@@ -1603,7 +1601,7 @@ module.exports = React.createClass({
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
             aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
-        } else if (!myMember || myMember.membership !== "join") {
+        } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
             var inviterName = undefined;
@@ -1645,7 +1643,7 @@ module.exports = React.createClass({
         let messageComposer, searchInfo;
         const canSpeak = (
             // joined and not showing search results
-            myMember && (myMember.membership == 'join') && !this.state.searchResults
+            myMembership == 'join' && !this.state.searchResults
         );
         if (canSpeak) {
             messageComposer =
@@ -1780,15 +1778,15 @@ module.exports = React.createClass({
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}
-                    inRoom={myMember && myMember.membership === 'join'}
+                    inRoom={myMembership === 'join'}
                     collapsedRhs={this.props.collapsedRhs}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onPinnedClick={this.onPinnedClick}
                     onSaveClick={this.onSettingsSaveClick}
                     onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
-                    onForgetClick={(myMember && myMember.membership === "leave") ? this.onForgetClick : null}
-                    onLeaveClick={(myMember && myMember.membership === "join") ? this.onLeaveClick : null}
+                    onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
+                    onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
                 { auxPanel }
                 <div className={fadableSectionClasses}>

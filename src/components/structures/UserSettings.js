@@ -81,6 +81,7 @@ const SIMPLE_SETTINGS = [
     { id: "VideoView.flipVideoHorizontally" },
     { id: "TagPanel.disableTagPanel" },
     { id: "enableWidgetScreenshots" },
+    { id: "RoomSubList.showEmpty" },
 ];
 
 // These settings must be defined in SettingsStore
@@ -284,7 +285,13 @@ module.exports = React.createClass({
         this.setState({ electron_settings: settings });
     },
 
-    _refreshMediaDevices: function() {
+    _refreshMediaDevices: function(stream) {
+        if (stream) {
+            // kill stream so that we don't leave it lingering around with webcam enabled etc
+            // as here we called gUM to ask user for permission to their device names only
+            stream.getTracks().forEach((track) => track.stop());
+        }
+
         Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
@@ -292,6 +299,7 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
+                activeAudioOutput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audiooutput'),
                 activeAudioInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audioinput'),
                 activeVideoInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_videoinput'),
             });
@@ -422,7 +430,6 @@ module.exports = React.createClass({
                 "push notifications on other devices until you log back in to them",
             ) + ".",
         });
-        dis.dispatch({action: 'password_changed'});
     },
 
     _onAddEmailEditFinished: function(value, shouldSubmit) {
@@ -837,8 +844,16 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = (e) => {
-                SettingsStore.setFeatureEnabled(featureId, e.target.checked);
+            const onChange = async (e) => {
+                const checked = e.target.checked;
+                if (featureId === "feature_lazyloading") {
+                    const confirmed = await this._onLazyLoadChanging(checked);
+                    if (!confirmed) {
+                        e.preventDefault();
+                        return;
+                    }
+                }
+                await SettingsStore.setFeatureEnabled(featureId, checked);
                 this.forceUpdate();
             };
 
@@ -848,7 +863,7 @@ module.exports = React.createClass({
                         type="checkbox"
                         id={featureId}
                         name={featureId}
-                        defaultChecked={SettingsStore.isFeatureEnabled(featureId)}
+                        checked={SettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
                     <label htmlFor={featureId}>{ SettingsStore.getDisplayName(featureId) }</label>
@@ -869,6 +884,30 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _onLazyLoadChanging: async function(enabling) {
+        // don't prevent turning LL off when not supported
+        if (enabling) {
+            const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
+            if (!supported) {
+                await new Promise((resolve) => {
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    Modal.createDialog(QuestionDialog, {
+                        title: _t("Lazy loading members not supported"),
+                        description:
+                            <div>
+                         { _t("Lazy loading is not supported by your " +
+                            "current homeserver.") }
+                            </div>,
+                        button: _t("OK"),
+                        onFinished: resolve,
+                    });
+                });
+                return false;
+            }
+        }
+        return true;
     },
 
     _renderDeactivateAccount: function() {
@@ -970,6 +1009,11 @@ module.exports = React.createClass({
         return devices.map((device) => <span key={device.deviceId}>{ device.label }</span>);
     },
 
+    _setAudioOutput: function(deviceId) {
+        this.setState({activeAudioOutput: deviceId});
+        CallMediaHandler.setAudioOutput(deviceId);
+    },
+
     _setAudioInput: function(deviceId) {
         this.setState({activeAudioInput: deviceId});
         CallMediaHandler.setAudioInput(deviceId);
@@ -1010,6 +1054,7 @@ module.exports = React.createClass({
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
+        let speakerDropdown = <p>{ _t('No Audio Outputs detected') }</p>;
         let microphoneDropdown = <p>{ _t('No Microphones detected') }</p>;
         let webcamDropdown = <p>{ _t('No Webcams detected') }</p>;
 
@@ -1017,6 +1062,26 @@ module.exports = React.createClass({
             deviceId: '',
             label: _t('Default Device'),
         };
+
+        const audioOutputs = this.state.mediaDevices.audiooutput.slice(0);
+        if (audioOutputs.length > 0) {
+            let defaultOutput = '';
+            if (!audioOutputs.some((input) => input.deviceId === 'default')) {
+                audioOutputs.unshift(defaultOption);
+            } else {
+                defaultOutput = 'default';
+            }
+
+            speakerDropdown = <div>
+                <h4>{ _t('Audio Output') }</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioOutput || defaultOutput}
+                    onOptionChange={this._setAudioOutput}>
+                    { this._mapWebRtcDevicesToSpans(audioOutputs) }
+                </Dropdown>
+            </div>;
+        }
 
         const audioInputs = this.state.mediaDevices.audioinput.slice(0);
         if (audioInputs.length > 0) {
@@ -1059,8 +1124,9 @@ module.exports = React.createClass({
         }
 
         return <div>
-                { microphoneDropdown }
-                { webcamDropdown }
+            { speakerDropdown }
+            { microphoneDropdown }
+            { webcamDropdown }
         </div>;
     },
 
@@ -1072,6 +1138,14 @@ module.exports = React.createClass({
                 { this._renderWebRtcDeviceSettings() }
             </div>
         </div>;
+    },
+
+    onSelfShareClick: function() {
+        const cli = MatrixClientPeg.get();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share self dialog', '', ShareDialog, {
+            target: cli.getUser(this._me),
+        });
     },
 
     _showSpoiler: function(event) {
@@ -1295,10 +1369,13 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        { _t("Logged in as:") } { this._me }
+                        { _t("Logged in as:") + ' ' }
+                        <a onClick={this.onSelfShareClick} className="mx_UserSettings_link">
+                            { this._me }
+                        </a>
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        { _t('Access Token:') }
+                        { _t('Access Token:') + ' ' }
                         <span className="mx_UserSettings_advanced_spoiler"
                                 onClick={this._showSpoiler}
                                 data-spoiler={MatrixClientPeg.get().getAccessToken()}>
