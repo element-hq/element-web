@@ -1255,5 +1255,6 @@
     "Lazy loading members not supported": "Отложеното зареждане на членове не се поддържа",
     "Lazy loading is not supported by your current homeserver.": "Отложеното зареждане не се поддържа от текущия сървър.",
     "Sorry, your homeserver is too old to participate in this room.": "Съжаляваме, вашият сървър е прекалено стар за да участва в тази стая.",
-    "Please contact your homeserver administrator.": "Моля, свържете се се със сървърния администратор."
+    "Please contact your homeserver administrator.": "Моля, свържете се се със сървърния администратор.",
+    "Legal": "Юридически"
 }
