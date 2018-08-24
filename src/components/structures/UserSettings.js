@@ -921,6 +921,25 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _renderTermsAndConditionsLinks: function() {
+        if (SdkConfig.get().terms_and_conditions_links) {
+            const tncLinks = [];
+            for (const tncEntry of SdkConfig.get().terms_and_conditions_links) {
+                tncLinks.push(<div key={tncEntry.url}>
+                    <a href={tncEntry.url} rel="noopener" target="_blank">{tncEntry.text}</a>
+                </div>);
+            }
+            return <div>
+                <h3>{ _t("Terms and Conditions") }</h3>
+                <div className="mx_UserSettings_section">
+                    {tncLinks}
+                </div>
+            </div>;
+        } else {
+            return null;
+        }
+    },
+
     _renderClearCache: function() {
         return <div>
             <h3>{ _t("Clear Cache") }</h3>
@@ -1406,6 +1425,8 @@ module.exports = React.createClass({
                 { this._renderClearCache() }
 
                 { this._renderDeactivateAccount() }
+
+                { this._renderTermsAndConditionsLinks() }
 
                 </GeminiScrollbarWrapper>
             </div>
