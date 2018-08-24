@@ -930,7 +930,7 @@ module.exports = React.createClass({
                 </div>);
             }
             return <div>
-                <h3>{ _t("Terms and Conditions") }</h3>
+                <h3>{ _t("Legal") }</h3>
                 <div className="mx_UserSettings_section">
                     {tncLinks}
                 </div>
