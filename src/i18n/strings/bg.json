@@ -1252,6 +1252,8 @@
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Съобщението Ви не бе изпратено, защото този сървър е някой от лимитите си. Моля, <a>свържете се с администратора на услугата</a> за да продължите да я използвате.",
     "Please <a>contact your service administrator</a> to continue using this service.": "Моля, <a>свържете се с администратора на услугата</a> за да продължите да я използвате.",
     "Increase performance by only loading room members on first view": "Повишаване на бързодействието чрез отложено зареждане на членовете в стаите",
-    "Lazy loading members not supported": "Отложеното зареждане на членовете не се поддържа",
-    "Lazy loading is not supported by your current homeserver.": "Отложеното зареждане на членовете не се поддържа от текущия сървър."
+    "Lazy loading members not supported": "Отложеното зареждане на членове не се поддържа",
+    "Lazy loading is not supported by your current homeserver.": "Отложеното зареждане на членовете не се поддържа от текущия сървър.",
+    "Sorry, your homeserver is too old to participate in this room.": "Съжаляваме, вашият сървър е прекалено стар за да участва в тази стая.",
+    "Please contact your homeserver administrator.": "Моля, свържете се се със сървърния администратор."
 }
