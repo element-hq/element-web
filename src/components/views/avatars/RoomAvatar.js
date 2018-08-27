@@ -108,23 +108,38 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
-        if (!props.room) return null;
+        const room = props.room;
+        if (!room) {
+            return null;
+        }
+        let otherMember = null;
+        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        if (otherUserId) {
+            otherMember = room.getMember(otherUserId);
+        } else {
+            // if the room is not marked as a 1:1, but only has max 2 members
+            // then still try to show any avatar (pref. other member)
+            const totalMemberCount = room.getJoinedMemberCount() +
+                room.getInvitedMemberCount();
+            const members = room.currentState.getMembers();
+            if (totalMemberCount == 2) {
+                const myUserId = MatrixClientPeg.get().getUserId();
+                otherMember = members.find(m => m.userId !== myUserId);
+            } else if(totalMemberCount == 1) {
+                otherMember = members[0];
+            }
 
-        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(props.room.roomId);
-        if (!otherUserId) {
-            return null;
         }
-        const otherMember = props.room.getMember(otherUserId);
-        if (!otherMember) {
-            return null;
+        if (otherMember) {
+            return otherMember.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
+                false,
+            );
         }
-        return otherMember.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            Math.floor(props.width * window.devicePixelRatio),
-            Math.floor(props.height * window.devicePixelRatio),
-            props.resizeMethod,
-            false,
-        );
+        return null;
     },
 
     onRoomAvatarClick: function() {
