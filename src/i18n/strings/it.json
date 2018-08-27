@@ -1250,5 +1250,10 @@
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha raggiunto il suo limite di utenti attivi mensili. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Il tuo messaggio non è stato inviato perchè questo homeserver ha oltrepassato un limite di risorse. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
     "Please <a>contact your service administrator</a> to continue using this service.": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-    "Increase performance by only loading room members on first view": "Aumenta le prestazioni caricando solo i membri della stanza alla prima occhiata"
+    "Increase performance by only loading room members on first view": "Aumenta le prestazioni caricando solo i membri della stanza alla prima occhiata",
+    "Sorry, your homeserver is too old to participate in this room.": "Spiacenti, il tuo homeserver è troppo vecchio per partecipare a questa stanza.",
+    "Please contact your homeserver administrator.": "Contatta l'amministratore del tuo homeserver.",
+    "Lazy loading members not supported": "Il caricamento pigro dei membri non è supportato",
+    "Lazy loading is not supported by your current homeserver.": "Il caricamento pigro non è supportato dal tuo attuale homeserver.",
+    "Legal": "Informazioni legali"
 }
