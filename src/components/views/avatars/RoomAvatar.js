@@ -125,10 +125,9 @@ module.exports = React.createClass({
             if (totalMemberCount == 2) {
                 const myUserId = MatrixClientPeg.get().getUserId();
                 otherMember = members.find(m => m.userId !== myUserId);
-            } else if(totalMemberCount == 1) {
+            } else if (totalMemberCount == 1) {
                 otherMember = members[0];
             }
-
         }
         if (otherMember) {
             return otherMember.getAvatarUrl(
