@@ -1253,7 +1253,7 @@
     "Increase performance by only loading room members on first view": "Aumenta le prestazioni caricando solo i membri della stanza alla prima occhiata",
     "Sorry, your homeserver is too old to participate in this room.": "Spiacenti, il tuo homeserver è troppo vecchio per partecipare a questa stanza.",
     "Please contact your homeserver administrator.": "Contatta l'amministratore del tuo homeserver.",
-    "Lazy loading members not supported": "Il caricamento pigro dei membri non è supportato",
-    "Lazy loading is not supported by your current homeserver.": "Il caricamento pigro non è supportato dal tuo attuale homeserver.",
+    "Lazy loading members not supported": "Il caricamento lento dei membri non è supportato",
+    "Lazy loading is not supported by your current homeserver.": "Il caricamento lento non è supportato dal tuo attuale homeserver.",
     "Legal": "Informazioni legali"
 }
