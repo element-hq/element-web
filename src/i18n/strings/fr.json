@@ -1259,7 +1259,7 @@
     "Legal": "Légal",
     "This room has been replaced and is no longer active.": "Ce salon a été remplacé et n'est plus actif.",
     "The conversation continues here.": "La discussion continue ici.",
-    "Upgrade room to version %(ver)s": "Mettre à jour le salon vers la version %(ver)s",
+    "Upgrade room to version %(ver)s": "Mettre à niveau le salon vers la version %(ver)s",
     "This room is a continuation of another conversation.": "Ce salon est la suite d'une autre discussion.",
     "Click here to see older messages.": "Cliquer ici pour voir les vieux messages.",
     "Failed to upgrade room": "Échec de la mise à niveau du salon",
