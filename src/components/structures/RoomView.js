@@ -310,7 +310,7 @@ module.exports = React.createClass({
                 });
             } else if (room) {
                 //viewing a previously joined room, try to lazy load members
-                
+
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
@@ -363,7 +363,7 @@ module.exports = React.createClass({
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
         if (this.state.room &&
-            this.state.room.getJoinedMembers().length == 1 &&
+            this.state.room.getJoinedMemberCount() == 1 &&
             this.state.room.getLiveTimeline() &&
             this.state.room.getLiveTimeline().getEvents() &&
             this.state.room.getLiveTimeline().getEvents().length <= 6) {
@@ -701,7 +701,6 @@ module.exports = React.createClass({
         }
 
         this._updateRoomMembers();
-        this._checkIfAlone(this.state.room);
     },
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
@@ -717,6 +716,7 @@ module.exports = React.createClass({
         // refresh the conf call notification state
         this._updateConfCallNotification();
         this._updateDMState();
+        this._checkIfAlone(this.state.room);
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -729,8 +729,8 @@ module.exports = React.createClass({
             return;
         }
 
-        const joinedMembers = room.currentState.getMembers().filter((m) => m.membership === "join" || m.membership === "invite");
-        this.setState({isAlone: joinedMembers.length === 1});
+        const joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
+        this.setState({isAlone: joinedOrInvitedMemberCount === 1});
     },
 
     _updateConfCallNotification: function() {
@@ -1508,9 +1508,8 @@ module.exports = React.createClass({
             }
         }
 
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const myMember = this.state.room.getMember(myUserId);
-        if (myMember && myMember.membership == 'invite') {
+        const myMembership = this.state.room.getMyMembership();
+        if (myMembership == 'invite') {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <div className="mx_RoomView">
@@ -1518,6 +1517,8 @@ module.exports = React.createClass({
                     </div>
                 );
             } else {
+                const myUserId = MatrixClientPeg.get().credentials.userId;
+                const myMember = this.state.room.getMember(myUserId);
                 const inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
 
@@ -1609,7 +1610,7 @@ module.exports = React.createClass({
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
             aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
-        } else if (!myMember || myMember.membership !== "join") {
+        } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
             var inviterName = undefined;
@@ -1651,7 +1652,7 @@ module.exports = React.createClass({
         let messageComposer, searchInfo;
         const canSpeak = (
             // joined and not showing search results
-            myMember && (myMember.membership == 'join') && !this.state.searchResults
+            myMembership == 'join' && !this.state.searchResults
         );
         if (canSpeak) {
             messageComposer =
@@ -1786,15 +1787,15 @@ module.exports = React.createClass({
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}
-                    inRoom={myMember && myMember.membership === 'join'}
+                    inRoom={myMembership === 'join'}
                     collapsedRhs={this.props.collapsedRhs}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onPinnedClick={this.onPinnedClick}
                     onSaveClick={this.onSettingsSaveClick}
                     onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
-                    onForgetClick={(myMember && myMember.membership === "leave") ? this.onForgetClick : null}
-                    onLeaveClick={(myMember && myMember.membership === "join") ? this.onLeaveClick : null}
+                    onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
+                    onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
                 { auxPanel }
                 <div className={fadableSectionClasses}>

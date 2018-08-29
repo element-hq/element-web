@@ -94,6 +94,7 @@ describe('RoomList', () => {
             createRoom({tags: {'m.lowpriority': {}}, name: 'Some unimportant room'}),
             createRoom({tags: {'custom.tag': {}}, name: 'Some room customly tagged'}),
         ];
+        client.getVisibleRooms = client.getRooms;
 
         const roomMap = {};
         client.getRooms().forEach((r) => {

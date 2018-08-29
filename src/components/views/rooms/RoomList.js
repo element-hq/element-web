@@ -97,7 +97,7 @@ module.exports = React.createClass({
         };
         // All rooms that should be kept in the room list when filtering.
         // By default, show all rooms.
-        this._visibleRooms = MatrixClientPeg.get().getRooms();
+        this._visibleRooms = MatrixClientPeg.get().getVisibleRooms();
 
         // Listen to updates to group data. RoomList cares about members and rooms in order
         // to filter the room list when group tags are selected.
@@ -302,7 +302,7 @@ module.exports = React.createClass({
             this._visibleRooms = Array.from(roomSet);
         } else {
             // Show all rooms
-            this._visibleRooms = MatrixClientPeg.get().getRooms();
+            this._visibleRooms = MatrixClientPeg.get().getVisibleRooms();
         }
         this._delayedRefreshRoomList();
     },
