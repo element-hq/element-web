@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import dis from '../../../dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
+import { makeRoomPermalink } from '../../../matrix-to';
 
 const formatButtonList = [
     _td("bold"),
@@ -51,7 +52,9 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
+        this._onTombstoneClick = this._onTombstoneClick.bind(this);
 
         this.state = {
             inputState: {
@@ -61,6 +64,7 @@ export default class MessageComposer extends React.Component {
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
+            tombstone: this._getRoomTombstone(),
         };
     }
 
@@ -70,6 +74,7 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
+        MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
     }
@@ -93,6 +98,7 @@ export default class MessageComposer extends React.Component {
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
+            MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
@@ -103,6 +109,18 @@ export default class MessageComposer extends React.Component {
         if (event.getType() !== 'm.room.encryption') return;
         if (event.getRoomId() !== this.props.room.roomId) return;
         this.forceUpdate();
+    }
+
+    _onRoomStateEvents(ev, state) {
+        if (ev.getRoomId() !== this.props.room.roomId) return;
+
+        if (ev.getType() === 'm.room.tombstone') {
+            this.setState({tombstone: this._getRoomTombstone()});
+        }
+    }
+
+    _getRoomTombstone() {
+        return this.props.room.currentState.getStateEvents('m.room.tombstone', '');
     }
 
     _onRoomViewStoreUpdate() {
@@ -224,6 +242,17 @@ export default class MessageComposer extends React.Component {
         this.messageComposerInput.enableRichtext(!this.state.inputState.isRichTextEnabled);
     }
 
+    _onTombstoneClick(ev) {
+        ev.preventDefault();
+
+        const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
+        dis.dispatch({
+            action: 'view_room',
+            highlighted: true,
+            room_id: replacementRoomId,
+        });
+    }
+
     render() {
         const uploadInputStyle = {display: 'none'};
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
@@ -280,7 +309,7 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
-        const canSendMessages = this.props.room.currentState.maySendMessage(
+        const canSendMessages = !this.state.tombstone && this.props.room.currentState.maySendMessage(
             MatrixClientPeg.get().credentials.userId);
 
         if (canSendMessages) {
@@ -340,6 +369,24 @@ export default class MessageComposer extends React.Component {
                 callButton,
                 videoCallButton,
             );
+        } else if (this.state.tombstone) {
+            const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
+
+            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+            controls.push(<div className="mx_MessageComposer_replaced_wrapper">
+                <div className="mx_MessageComposer_replaced_valign">
+                    <img className="mx_MessageComposer_roomReplaced_icon" src="img/room_replaced.svg" />
+                    <span className="mx_MessageComposer_roomReplaced_header">
+                        {_t("This room has been replaced and is no longer active.")}
+                    </span><br />
+                    <a href={makeRoomPermalink(replacementRoomId)}
+                        className="mx_MessageComposer_roomReplaced_link"
+                        onClick={this._onTombstoneClick}
+                    >
+                        {_t("The conversation continues here.")}
+                    </a>
+                </div>
+            </div>);
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
