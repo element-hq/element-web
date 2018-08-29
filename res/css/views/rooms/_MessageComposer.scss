@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +21,29 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
+}
+
+.mx_MessageComposer_replaced_wrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_MessageComposer_replaced_valign {
+    height: 60px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.mx_MessageComposer_roomReplaced_icon {
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px;
+    width: 31px;
+    height: 31px;
+}
+
+.mx_MessageComposer_roomReplaced_header {
+    font-weight: bold;
 }
 
 .mx_MessageComposer_autocomplete_wrapper {
