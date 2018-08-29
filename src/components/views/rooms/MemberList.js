@@ -35,7 +35,16 @@ module.exports = React.createClass({
         this.memberDict = this.getMemberDict();
         const members = this.roomMembers();
 
-        return {
+        return {loading: true};
+    },
+
+    componentDidMount: async function() {
+        await this._waitForMembersToLoad();
+        this.memberDict = this.getMemberDict();
+        const members = this.roomMembers();
+
+        this.setState({
+            loading: false,
             members: members,
             filteredJoinedMembers: this._filterMembers(members, 'join'),
             filteredInvitedMembers: this._filterMembers(members, 'invite'),
@@ -45,10 +54,8 @@ module.exports = React.createClass({
             truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
             searchQuery: "",
-        };
-    },
+        });
 
-    componentWillMount: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -82,6 +89,15 @@ module.exports = React.createClass({
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateList.cancelPendingCall();
+    },
+
+    _waitForMembersToLoad: async function() {
+        if (!this.props.roomId) return {};
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        if (room) {
+            await room.loadMembersIfNeeded();
+        }
     },
 
 /*
@@ -393,6 +409,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (this.state.loading) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <div className="mx_MemberList"><Spinner /></div>;
+        }
+
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
