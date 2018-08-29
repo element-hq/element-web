@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dis from '../../../dispatcher';
-import sdk from '../../../index';
 import { makeEventPermalink } from '../../../matrix-to';
 import { _t } from '../../../languageHandler';
 
