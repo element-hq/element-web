@@ -434,7 +434,10 @@ const LoggedInView = React.createClass({
         }
 
         const usageLimitEvent = this.state.serverNoticeEvents.find((e) => {
-            return e && e.getType() === 'm.server_notice.usage_limit_reached';
+            return (
+                e && e.getType() === 'm.room.message' &&
+                e.getContent()['server_notice_type'] === 'm.server_notice.usage_limit_reached'
+            );
         });
 
         let topBar;

@@ -171,6 +171,10 @@ $progressbar-color: #000;
     outline: none;
 }
 
+@define-mixin mx_DialogButton_danger {
+    background-color: $warning-color;
+}
+
 @define-mixin mx_DialogButton_hover {
 }
 

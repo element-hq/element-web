@@ -572,6 +572,11 @@ module.exports = React.createClass({
         });
     },
 
+    _onRoomUpgradeClick: function() {
+        const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
+        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: this.props.room});
+    },
+
     _onRoomMemberMembership: function() {
         // Update, since our banned user list may have changed
         this.forceUpdate();
@@ -794,15 +799,15 @@ module.exports = React.createClass({
         }
 
         let leaveButton = null;
-        const myMember = this.props.room.getMember(myUserId);
-        if (myMember) {
-            if (myMember.membership === "join") {
+        const myMemberShip = this.props.room.getMyMembership();
+        if (myMemberShip) {
+            if (myMemberShip === "join") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={this.onLeaveClick}>
                         { _t('Leave room') }
                     </AccessibleButton>
                 );
-            } else if (myMember.membership === "leave") {
+            } else if (myMemberShip === "leave") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={this.onForgetClick}>
                         { _t('Forget room') }
@@ -930,6 +935,13 @@ module.exports = React.createClass({
             );
         });
 
+        let roomUpgradeButton = null;
+        if (this.props.room.shouldUpgradeToVersion() && this.props.room.userMayUpgradeRoom(myUserId)) {
+            roomUpgradeButton = <AccessibleButton className="mx_RoomSettings_upgradeButton danger" onClick={this._onRoomUpgradeClick}>
+                { _t("Upgrade room to version %(ver)s", {ver: this.props.room.shouldUpgradeToVersion()}) }
+            </AccessibleButton>;
+        }
+
         return (
             <div className="mx_RoomSettings">
 
@@ -1041,7 +1053,8 @@ module.exports = React.createClass({
                 <h3>{ _t('Advanced') }</h3>
                 <div className="mx_RoomSettings_settings">
                     { _t('Internal room ID: ') } <code>{ this.props.room.roomId }</code><br />
-                    { _t('Room version number: ') } <code>{ this.props.room.getVersion() }</code>
+                    { _t('Room version number: ') } <code>{ this.props.room.getVersion() }</code><br />
+                    { roomUpgradeButton }
                 </div>
             </div>
         );
