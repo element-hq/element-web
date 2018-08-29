@@ -1256,5 +1256,13 @@
     "Lazy loading is not supported by your current homeserver.": "Le chargement différé n'est pas pris en charge par votre serveur d'accueil actuel.",
     "Sorry, your homeserver is too old to participate in this room.": "Désolé, votre serveur d'accueil est trop vieux pour participer à ce salon.",
     "Please contact your homeserver administrator.": "Veuillez contacter l'administrateur de votre serveur d'accueil.",
-    "Legal": "Légal"
+    "Legal": "Légal",
+    "This room has been replaced and is no longer active.": "Ce salon a été remplacé et n'est plus actif.",
+    "The conversation continues here.": "La discussion continue ici.",
+    "Upgrade room to version %(ver)s": "Mettre à jour le salon vers la version %(ver)s",
+    "This room is a continuation of another conversation.": "Ce salon est la suite d'une autre discussion.",
+    "Click here to see older messages.": "Cliquer ici pour voir les vieux messages.",
+    "Failed to upgrade room": "Échec de la mise à niveau du salon",
+    "The room upgrade could not be completed": "La mise à niveau du salon n'a pas pu être effectuée",
+    "Upgrade this room to version %(version)s": "Mettre à niveau ce salon vers la version %(version)s"
 }
