@@ -145,6 +145,8 @@
     "Verified key": "Verified key",
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.",
     "Displays action": "Displays action",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
+    "Error Discarding Session": "Error Discarding Session",
     "Unrecognised command:": "Unrecognised command:",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
