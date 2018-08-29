@@ -1256,5 +1256,13 @@
     "Lazy loading is not supported by your current homeserver.": "A késleltetett betöltés nem támogatott ennél a Matrix szervernél.",
     "Sorry, your homeserver is too old to participate in this room.": "Sajnáljuk, a Matrix szervered nem elég friss ahhoz, hogy részt vegyen ebben a szobában.",
     "Please contact your homeserver administrator.": "Kérlek vedd fel a kapcsolatot a Matrix szerver adminisztrátorával.",
-    "Legal": "Jogi"
+    "Legal": "Jogi",
+    "This room has been replaced and is no longer active.": "Ezt a szobát lecseréltük és nem aktív többé.",
+    "The conversation continues here.": "A beszélgetés itt folytatódik.",
+    "Upgrade room to version %(ver)s": "A szoba frissítése %(ver)s verzióra",
+    "This room is a continuation of another conversation.": "Ebben a szobában folytatódik egy másik beszélgetés.",
+    "Click here to see older messages.": "Ide kattintva megnézheted a régi üzeneteket.",
+    "Failed to upgrade room": "A szoba frissítése sikertelen",
+    "The room upgrade could not be completed": "A szoba frissítését nem sikerült befejezni",
+    "Upgrade this room to version %(version)s": "A szoba frissítése %(version)s verzióra"
 }
