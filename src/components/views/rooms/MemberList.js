@@ -43,19 +43,6 @@ module.exports = React.createClass({
         this.memberDict = this.getMemberDict();
         const members = this.roomMembers();
 
-        this.setState({
-            loading: false,
-            members: members,
-            filteredJoinedMembers: this._filterMembers(members, 'join'),
-            filteredInvitedMembers: this._filterMembers(members, 'invite'),
-
-            // ideally we'd size this to the page height, but
-            // in practice I find that a little constraining
-            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
-            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: "",
-        });
-
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -74,6 +61,20 @@ module.exports = React.createClass({
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
             this._showPresence = enablePresenceByHsUrl[hsUrl];
         }
+        // set the state after determining _showPresence to make sure it's
+        // taken into account while rerendering
+        this.setState({
+            loading: false,
+            members: members,
+            filteredJoinedMembers: this._filterMembers(members, 'join'),
+            filteredInvitedMembers: this._filterMembers(members, 'invite'),
+
+            // ideally we'd size this to the page height, but
+            // in practice I find that a little constraining
+            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
+            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
+            searchQuery: "",
+        });
     },
 
     componentWillUnmount: function() {
