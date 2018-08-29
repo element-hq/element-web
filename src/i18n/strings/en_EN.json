@@ -607,6 +607,8 @@
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s changed the room avatar to <img/>",
+    "This room is a continuation of another conversation.": "This room is a continuation of another conversation.",
+    "Click here to see older messages.": "Click here to see older messages.",
     "Copied!": "Copied!",
     "Failed to copy": "Failed to copy",
     "Add an Integration": "Add an Integration",
