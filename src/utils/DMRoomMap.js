@@ -27,6 +27,8 @@ export default class DMRoomMap {
     constructor(matrixClient) {
         this.matrixClient = matrixClient;
         this.roomToUser = null;
+        // see _onAccountData
+        this._hasSentOutPatchDirectAccountDataPatch = false;
 
         // XXX: Force-bind the event handler method because it
         // doesn't call it with our object as the 'this'
@@ -70,8 +72,66 @@ export default class DMRoomMap {
 
     _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
-            this.userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
+            const userToRooms = this.matrixClient.getAccountData('m.direct').getContent() || {};
+            const myUserId = this.matrixClient.getUserId();
+            const selfDMs = userToRooms[myUserId];
+            if (selfDMs && selfDMs.length) {
+                const neededPatching = this._patchUpSelfDMs(userToRooms);
+                // to avoid multiple devices fighting to correct
+                // the account data, only try to send the corrected
+                // version once.
+                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
+                    this._hasSentOutPatchDirectAccountDataPatch = true;
+                    this.matrixClient.setAccountData('m.direct', userToRooms);
+                }
+            }
+            this.userToRooms = userToRooms;
             this._populateRoomToUser();
+        }
+    }
+    /**
+     * some client bug somewhere is causing some DMs to be marked
+     * with ourself, not the other user. Fix it by guessing the other user and
+     * modifying userToRooms
+     */
+    _patchUpSelfDMs(userToRooms) {
+        const myUserId = this.matrixClient.getUserId();
+        const selfRoomIds = userToRooms[myUserId];
+        if (selfRoomIds) {
+            // any self-chats that should not be self-chats?
+            const guessedUserIdsThatChanged = selfRoomIds.map((roomId) => {
+                const room = this.matrixClient.getRoom(roomId);
+                if (room) {
+                    const userId = room.guessDMUserId();
+                    if (userId && userId !== myUserId) {
+                        return {userId, roomId};
+                    }
+                }
+            }).filter((ids) => !!ids);  //filter out
+            // these are actually all legit self-chats
+            // bail out
+            if (!guessedUserIdsThatChanged.length) {
+                return false;
+            }
+            userToRooms[myUserId] = selfRoomIds.filter((roomId) => {
+                return guessedUserIdsThatChanged
+                    .some((ids) => ids.roomId === roomId);
+            });
+
+            guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
+                if (!userId) {
+                    // if not able to guess the other user (unlikely)
+                    // still put it in the map so the room stays marked
+                    // as a DM, we just wont be able to show an avatar.
+                    userId = "";
+                }
+                let roomIds = userToRooms[userId];
+                if (!roomIds) {
+                    roomIds = userToRooms[userId] = [];
+                }
+                roomIds.push(roomId);
+            });
+            return true;
         }
     }
 
