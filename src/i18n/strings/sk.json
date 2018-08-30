@@ -1239,5 +1239,17 @@
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Vaša správa nebola odoslaná, pretože bol prekročený limit prostriedkov tohoto domovského servera. Prosím, <a>kontaktujte správcu služieb</a> aby ste službu mohli naďalej používať.",
     "Lazy loading members not supported": "Načítanie zoznamu členov pri prvom zobrazení nie je podporované",
     "Lazy loading is not supported by your current homeserver.": "Oneskorené načítanie nepodporuje váš domovský server.",
-    "Please <a>contact your service administrator</a> to continue using this service.": "Prosím, <a>kontaktujte správcu služieb</a> aby ste mohli službu ďalej používať."
+    "Please <a>contact your service administrator</a> to continue using this service.": "Prosím, <a>kontaktujte správcu služieb</a> aby ste mohli službu ďalej používať.",
+    "This room has been replaced and is no longer active.": "Táto miestnosť bola nahradená a nie je viac aktívna.",
+    "The conversation continues here.": "Konverzácia pokračuje tu.",
+    "Upgrade room to version %(ver)s": "Aktualizácia miestnosti na verziu %(ver)s",
+    "There is a known vulnerability affecting this room.": "Existuje známa zraniteľnosť, ktorú je možné zneužiť v tejto miestnosti.",
+    "This room version is vulnerable to malicious modification of room state.": "Táto verzia miestnosti je zraniteľná proti zlomyseľným zmenám jej stavu.",
+    "Click here to upgrade to the latest room version and ensure room integrity is protected.": "Kliknutím sem aktualizujete miestnosť na najnovšiu verziu a uistíte sa, že jej integrita je bezpečne zachovaná.",
+    "Only room administrators will see this warning": "Toto upozornenie sa zobrazuje len správcom miestnosti",
+    "This room is a continuation of another conversation.": "Táto miestnosť je pokračovaním staršej konverzácii.",
+    "Click here to see older messages.": "Kliknutím sem zobrazíte staršie správy.",
+    "Failed to upgrade room": "Nepodarilo sa aktualizovať miestnosť",
+    "The room upgrade could not be completed": "Nie je možné dokončiť aktualizáciu miestnosti na jej najnovšiu verziu",
+    "Upgrade this room to version %(version)s": "Aktualizácia tejto miestnosti na verziu %(version)s"
 }
