@@ -1255,5 +1255,7 @@
     "Upgrade Room Version": "Aktualizovať verziu miestnosti",
     "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:": "Aktualizácia verzii tejto miestnosti si vyžaduje jej uzatvorenie a vytvorenie novej miestnosti na jej pôvodnom mieste. Aby bol prechod pre členov miestnosti čo najplynulejší, nasledovné kroky sa vykonajú automaticky:",
     "Create a new room with the same name, description and avatar": "Vznikne nová miestnosť s rovnakým názvom, témou a obrázkom",
-    "Update any local room aliases to point to the new room": "Všetky lokálne aliasy pôvodnej miestnosti sa aktualizujú tak, aby ukazovali na novú miestnosť"
+    "Update any local room aliases to point to the new room": "Všetky lokálne aliasy pôvodnej miestnosti sa aktualizujú tak, aby ukazovali na novú miestnosť",
+    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "V pôvodnej miestnosti bude zverejnené odporúčanie prejsť do novej miestnosti a posielanie do pôvodnej miestnosti bude zakázané pre všetkých používateľov",
+    "Put a link back to the old room at the start of the new room so people can see old messages": "História novej miestnosti sa začne odkazom do pôvodnej miestnosti, aby si členovia vedeli zobraziť staršie správy"
 }
