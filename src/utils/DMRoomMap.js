@@ -102,7 +102,7 @@ export default class DMRoomMap {
                     userId = "";
                 }
                 const roomId = selfRoomIds[i];
-                const roomIds = userToRooms[userId];
+                let roomIds = userToRooms[userId];
                 if (!roomIds) {
                     roomIds = userToRooms[userId] = [];
                 }
