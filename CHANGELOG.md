@@ -1,3 +1,14 @@
+Changes in [0.16.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.1) (2018-08-30)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.2...v0.16.3-rc.1)
+
+ * Update from Weblate.
+   [\#7245](https://github.com/vector-im/riot-web/pull/7245)
+ * Revert "Remove package-lock.json for now"
+   [\#7128](https://github.com/vector-im/riot-web/pull/7128)
+ * Remove package-lock.json for now
+   [\#7115](https://github.com/vector-im/riot-web/pull/7115)
+
 Changes in [0.16.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.2) (2018-08-23)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1...v0.16.2)
