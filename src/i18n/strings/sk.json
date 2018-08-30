@@ -1251,5 +1251,9 @@
     "Click here to see older messages.": "Kliknutím sem zobrazíte staršie správy.",
     "Failed to upgrade room": "Nepodarilo sa aktualizovať miestnosť",
     "The room upgrade could not be completed": "Nie je možné dokončiť aktualizáciu miestnosti na jej najnovšiu verziu",
-    "Upgrade this room to version %(version)s": "Aktualizácia tejto miestnosti na verziu %(version)s"
+    "Upgrade this room to version %(version)s": "Aktualizácia tejto miestnosti na verziu %(version)s",
+    "Upgrade Room Version": "Aktualizovať verziu miestnosti",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:": "Aktualizácia verzii tejto miestnosti si vyžaduje jej uzatvorenie a vytvorenie novej miestnosti na jej pôvodnom mieste. Aby bol prechod pre členov miestnosti čo najplynulejší, nasledovné kroky sa vykonajú automaticky:",
+    "Create a new room with the same name, description and avatar": "Vznikne nová miestnosť s rovnakým názvom, témou a obrázkom",
+    "Update any local room aliases to point to the new room": "Všetky lokálne aliasy pôvodnej miestnosti sa aktualizujú tak, aby ukazovali na novú miestnosť"
 }
