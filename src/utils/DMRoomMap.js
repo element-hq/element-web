@@ -72,15 +72,15 @@ export default class DMRoomMap {
 
     _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
-            let userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
+            const userToRooms = this.matrixClient.getAccountData('m.direct').getContent() || {};
             const myUserId = this.matrixClient.getUserId();
             const selfDMs = userToRooms[myUserId];
             if (selfDMs && selfDMs.length) {
-                this._patchUpSelfDMs(userToRooms);
+                const neededPatching = this._patchUpSelfDMs(userToRooms);
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
-                if (!this._hasSentOutPatchDirectAccountDataPatch) {
+                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
                     this._hasSentOutPatchDirectAccountDataPatch = true;
                     this.matrixClient.setAccountData('m.direct', userToRooms);
                 }
@@ -98,25 +98,40 @@ export default class DMRoomMap {
         const myUserId = this.matrixClient.getUserId();
         const selfRoomIds = userToRooms[myUserId];
         if (selfRoomIds) {
-            const guessedUserIds = selfRoomIds.map((roomId) => {
+            // any self-chats that should not be self-chats?
+            const guessedUserIdsThatChanged = selfRoomIds.map((roomId) => {
                 const room = this.matrixClient.getRoom(roomId);
-                return room && room.guessDMUserId();
+                if (room) {
+                    const userId = room.guessDMUserId();
+                    if (userId && userId !== myUserId) {
+                        return {userId, roomId};
+                    }
+                }
+            }).filter((ids) => !!ids);  //filter out
+            // these are actually all legit self-chats
+            // bail out
+            if (!guessedUserIdsThatChanged.length) {
+                return false;
+            }
+            userToRooms[myUserId] = selfRoomIds.filter((roomId) => {
+                return guessedUserIdsThatChanged
+                    .some((ids) => ids.roomId === roomId);
             });
-            delete userToRooms[myUserId];
-            guessedUserIds.forEach((userId, i) => {
+
+            guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
                 if (!userId) {
                     // if not able to guess the other user (unlikely)
                     // still put it in the map so the room stays marked
                     // as a DM, we just wont be able to show an avatar.
                     userId = "";
                 }
-                const roomId = selfRoomIds[i];
                 let roomIds = userToRooms[userId];
                 if (!roomIds) {
                     roomIds = userToRooms[userId] = [];
                 }
                 roomIds.push(roomId);
             });
+            return true;
         }
     }
 
