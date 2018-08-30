@@ -72,8 +72,9 @@ export default class DMRoomMap {
         if (ev.getType() == 'm.direct') {
             let userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
             const myUserId = this.matrixClient.getUserId();
-            if (userToRooms[myUserId]) {
-                userToRooms = this._patchUpSelfDMs(userToRooms);
+            const selfDMs = userToRooms[myUserId];
+            if (selfDMs && selfDMs.length) {
+                this._patchUpSelfDMs(userToRooms);
                 this.matrixClient.setAccountData('m.direct', userToRooms);
             }
             this.userToRooms = userToRooms;
