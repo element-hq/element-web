@@ -119,15 +119,7 @@ module.exports = React.createClass({
         } else {
             // if the room is not marked as a 1:1, but only has max 2 members
             // then still try to show any avatar (pref. other member)
-            const totalMemberCount = room.getJoinedMemberCount() +
-                room.getInvitedMemberCount();
-            const members = room.currentState.getMembers();
-            if (totalMemberCount == 2) {
-                const myUserId = MatrixClientPeg.get().getUserId();
-                otherMember = members.find(m => m.userId !== myUserId);
-            } else if (totalMemberCount == 1) {
-                otherMember = members[0];
-            }
+            otherMember = room.getAvatarFallbackMember();
         }
         if (otherMember) {
             return otherMember.getAvatarUrl(
