@@ -70,8 +70,44 @@ export default class DMRoomMap {
 
     _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
-            this.userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
+            let userToRooms = this.matrixClient.getAccountData('m.direct').getContent();
+            const myUserId = this.matrixClient.getUserId();
+            if (userToRooms[myUserId]) {
+                userToRooms = this._patchUpSelfDMs(userToRooms);
+                this.matrixClient.setAccountData('m.direct', userToRooms);
+            }
+            this.userToRooms = userToRooms;
             this._populateRoomToUser();
+        }
+    }
+    /**
+     * some client bug somewhere is causing some DMs to be marked
+     * with ourself, not the other user. Fix it by guessing the other user and
+     * modifying userToRooms
+     */
+    _patchUpSelfDMs(userToRooms) {
+        const myUserId = this.matrixClient.getUserId();
+        const selfRoomIds = userToRooms[myUserId];
+        if (selfRoomIds) {
+            const guessedUserIds = selfRoomIds.map((roomId) => {
+                const room = this.matrixClient.getRoom(roomId);
+                return room.guessDMUserId();
+            });
+            delete userToRooms[myUserId];
+            guessedUserIds.forEach((userId, i) => {
+                if (!userId) {
+                    // if not able to guess the other user (unlikely)
+                    // still put it in the map so the room stays marked
+                    // as a DM, we just wont be able to show an avatar.
+                    userId = "";
+                }
+                const roomId = selfRoomIds[i];
+                const roomIds = userToRooms[userId];
+                if (!roomIds) {
+                    roomIds = userToRooms[userId] = [];
+                }
+                roomIds.push(roomId);
+            });
         }
     }
 
