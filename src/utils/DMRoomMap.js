@@ -27,6 +27,8 @@ export default class DMRoomMap {
     constructor(matrixClient) {
         this.matrixClient = matrixClient;
         this.roomToUser = null;
+        // see _onAccountData
+        this._hasSentOutPatchDirectAccountDataPatch = false;
 
         // XXX: Force-bind the event handler method because it
         // doesn't call it with our object as the 'this'
@@ -75,7 +77,13 @@ export default class DMRoomMap {
             const selfDMs = userToRooms[myUserId];
             if (selfDMs && selfDMs.length) {
                 this._patchUpSelfDMs(userToRooms);
-                this.matrixClient.setAccountData('m.direct', userToRooms);
+                // to avoid multiple devices fighting to correct
+                // the account data, only try to send the corrected
+                // version once.
+                if (!this._hasSentOutPatchDirectAccountDataPatch) {
+                    this._hasSentOutPatchDirectAccountDataPatch = true;
+                    this.matrixClient.setAccountData('m.direct', userToRooms);
+                }
             }
             this.userToRooms = userToRooms;
             this._populateRoomToUser();
