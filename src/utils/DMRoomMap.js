@@ -100,7 +100,7 @@ export default class DMRoomMap {
         if (selfRoomIds) {
             const guessedUserIds = selfRoomIds.map((roomId) => {
                 const room = this.matrixClient.getRoom(roomId);
-                return room.guessDMUserId();
+                return room && room.guessDMUserId();
             });
             delete userToRooms[myUserId];
             guessedUserIds.forEach((userId, i) => {
