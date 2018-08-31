@@ -1264,5 +1264,7 @@
     "Click here to see older messages.": "Cliquer ici pour voir les vieux messages.",
     "Failed to upgrade room": "Échec de la mise à niveau du salon",
     "The room upgrade could not be completed": "La mise à niveau du salon n'a pas pu être effectuée",
-    "Upgrade this room to version %(version)s": "Mettre à niveau ce salon vers la version %(version)s"
+    "Upgrade this room to version %(version)s": "Mettre à niveau ce salon vers la version %(version)s",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Force la session de groupe sortante actuelle dans un salon chiffré à être rejetée",
+    "Error Discarding Session": "Erreur lors du rejet de la session"
 }
