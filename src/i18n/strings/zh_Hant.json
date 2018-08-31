@@ -1264,5 +1264,7 @@
     "Click here to see older messages.": "點選這裡以檢視較舊的訊息。",
     "Failed to upgrade room": "升級聊天室失敗",
     "The room upgrade could not be completed": "聊天室升級可能不完整",
-    "Upgrade this room to version %(version)s": "升級此聊天室到版本 %(version)s"
+    "Upgrade this room to version %(version)s": "升級此聊天室到版本 %(version)s",
+    "Forces the current outbound group session in an encrypted room to be discarded": "強制目前在已加密的聊天室中的外發群組工作階段丟棄",
+    "Error Discarding Session": "丟棄工作階段錯誤"
 }
