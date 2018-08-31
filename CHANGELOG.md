@@ -1,3 +1,9 @@
+Changes in [0.16.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.2) (2018-08-31)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.3-rc.1...v0.16.3-rc.2)
+
+ * Update js-sdk to fix an exception causing the room list to become unresponsive.
+
 Changes in [0.16.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.1) (2018-08-30)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.2...v0.16.3-rc.1)
