@@ -1,3 +1,71 @@
+Changes in [0.13.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3) (2018-09-03)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3-rc.2...v0.13.3)
+
+ * No changes since rc.2
+
+Changes in [0.13.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3-rc.2) (2018-08-31)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3-rc.1...v0.13.3-rc.2)
+
+ * Update js-sdk to fix exception
+
+Changes in [0.13.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3-rc.1) (2018-08-30)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.2...v0.13.3-rc.1)
+
+ * Fix DM avatar
+   [\#2141](https://github.com/matrix-org/matrix-react-sdk/pull/2141)
+ * Update from Weblate.
+   [\#2142](https://github.com/matrix-org/matrix-react-sdk/pull/2142)
+ * Support m.room.tombstone events
+   [\#2124](https://github.com/matrix-org/matrix-react-sdk/pull/2124)
+ * Support room creation events
+   [\#2123](https://github.com/matrix-org/matrix-react-sdk/pull/2123)
+ * Support for room upgrades
+   [\#2122](https://github.com/matrix-org/matrix-react-sdk/pull/2122)
+ * Fix: dont show 1:1 avatar for rooms +2 members but only <=2 members loaded
+   [\#2137](https://github.com/matrix-org/matrix-react-sdk/pull/2137)
+ * Render terms & conditions in settings
+   [\#2136](https://github.com/matrix-org/matrix-react-sdk/pull/2136)
+ * Don't crash if the value of a room tag is null
+   [\#2133](https://github.com/matrix-org/matrix-react-sdk/pull/2133)
+ * Add stub for getVisibleRooms()
+   [\#2134](https://github.com/matrix-org/matrix-react-sdk/pull/2134)
+ * Fix LL crash trying to render own avatar in composer when member isn't
+   available yet
+   [\#2132](https://github.com/matrix-org/matrix-react-sdk/pull/2132)
+ * Support M_INCOMPATIBLE_ROOM_VERSION
+   [\#2125](https://github.com/matrix-org/matrix-react-sdk/pull/2125)
+ * Hide replaced rooms
+   [\#2127](https://github.com/matrix-org/matrix-react-sdk/pull/2127)
+ * Fix CPU spin on joining large room
+   [\#2128](https://github.com/matrix-org/matrix-react-sdk/pull/2128)
+ * Change format of server usage limit message
+   [\#2131](https://github.com/matrix-org/matrix-react-sdk/pull/2131)
+ * Re-apply "Fix showing peek preview while LL members are loading""
+   [\#2130](https://github.com/matrix-org/matrix-react-sdk/pull/2130)
+ * Revert "Fix showing peek preview while LL members are loading"
+   [\#2129](https://github.com/matrix-org/matrix-react-sdk/pull/2129)
+ * Fix showing peek preview while LL members are loading
+   [\#2126](https://github.com/matrix-org/matrix-react-sdk/pull/2126)
+ * Destroy non-persistent widgets when switching room
+   [\#2098](https://github.com/matrix-org/matrix-react-sdk/pull/2098)
+ * Lazy loading of room members
+   [\#2118](https://github.com/matrix-org/matrix-react-sdk/pull/2118)
+ * Lazy loading: feature toggle
+   [\#2115](https://github.com/matrix-org/matrix-react-sdk/pull/2115)
+ * Lazy loading: cleanup
+   [\#2116](https://github.com/matrix-org/matrix-react-sdk/pull/2116)
+ * Lazy loading: fix end-to-end encryption rooms
+   [\#2113](https://github.com/matrix-org/matrix-react-sdk/pull/2113)
+ * Lazy loading: Lazy load members while backpaginating
+   [\#2104](https://github.com/matrix-org/matrix-react-sdk/pull/2104)
+ * Lazy loading: don't assume we have our own member available
+   [\#2102](https://github.com/matrix-org/matrix-react-sdk/pull/2102)
+ * Lazy load room members - Part I
+   [\#2072](https://github.com/matrix-org/matrix-react-sdk/pull/2072)
+
 Changes in [0.13.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.2) (2018-08-23)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.1...v0.13.2)
