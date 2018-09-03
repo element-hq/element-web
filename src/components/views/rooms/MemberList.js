@@ -33,16 +33,16 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         this.memberDict = this.getMemberDict();
-        const members = this.roomMembers();
 
-        return {loading: true};
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
+            return {loading: true};
+        } else {
+            return this._getMembersState();
+        }
     },
 
-    componentDidMount: async function() {
-        await this._waitForMembersToLoad();
-        this.memberDict = this.getMemberDict();
-        const members = this.roomMembers();
-
+    componentWillMount: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -61,20 +61,14 @@ module.exports = React.createClass({
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
             this._showPresence = enablePresenceByHsUrl[hsUrl];
         }
-        // set the state after determining _showPresence to make sure it's
-        // taken into account while rerendering
-        this.setState({
-            loading: false,
-            members: members,
-            filteredJoinedMembers: this._filterMembers(members, 'join'),
-            filteredInvitedMembers: this._filterMembers(members, 'invite'),
+    },
 
-            // ideally we'd size this to the page height, but
-            // in practice I find that a little constraining
-            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
-            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: "",
-        });
+    componentDidMount: async function() {
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
+            await this._waitForMembersToLoad();
+            this.setState(this._getMembersState());
+        }
     },
 
     componentWillUnmount: function() {
@@ -99,6 +93,24 @@ module.exports = React.createClass({
         if (room) {
             await room.loadMembersIfNeeded();
         }
+    },
+
+    _getMembersState: function() {
+        const members = this.roomMembers();
+        // set the state after determining _showPresence to make sure it's
+        // taken into account while rerendering
+        return {
+            loading: false,
+            members: members,
+            filteredJoinedMembers: this._filterMembers(members, 'join'),
+            filteredInvitedMembers: this._filterMembers(members, 'invite'),
+
+            // ideally we'd size this to the page height, but
+            // in practice I find that a little constraining
+            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
+            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
+            searchQuery: "",
+        };
     },
 
 /*
