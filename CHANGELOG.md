@@ -1,3 +1,28 @@
+Changes in [0.16.3](https://github.com/vector-im/riot-web/releases/tag/v0.16.3) (2018-09-03)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.3-rc.2...v0.16.3)
+
+ * SECURITY FIX: This version (and release candidates) pull in an upstream security
+   fix from electron to fix CVE-2018-15685. Electron users should update as soon as
+   possible. Riot-web run outsiude of Electron is unaffected.
+
+Changes in [0.16.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.2) (2018-08-31)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.3-rc.1...v0.16.3-rc.2)
+
+ * Update js-sdk to fix an exception causing the room list to become unresponsive.
+
+Changes in [0.16.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.1) (2018-08-30)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.2...v0.16.3-rc.1)
+
+ * Update from Weblate.
+   [\#7245](https://github.com/vector-im/riot-web/pull/7245)
+ * Revert "Remove package-lock.json for now"
+   [\#7128](https://github.com/vector-im/riot-web/pull/7128)
+ * Remove package-lock.json for now
+   [\#7115](https://github.com/vector-im/riot-web/pull/7115)
+
 Changes in [0.16.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.2) (2018-08-23)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.1...v0.16.2)
