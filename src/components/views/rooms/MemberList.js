@@ -33,19 +33,13 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         this.memberDict = this.getMemberDict();
-        const members = this.roomMembers();
 
-        return {
-            members: members,
-            filteredJoinedMembers: this._filterMembers(members, 'join'),
-            filteredInvitedMembers: this._filterMembers(members, 'invite'),
-
-            // ideally we'd size this to the page height, but
-            // in practice I find that a little constraining
-            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
-            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: "",
-        };
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
+            return {loading: true};
+        } else {
+            return this._getMembersState();
+        }
     },
 
     componentWillMount: function() {
@@ -69,6 +63,14 @@ module.exports = React.createClass({
         }
     },
 
+    componentDidMount: async function() {
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
+            await this._waitForMembersToLoad();
+            this.setState(this._getMembersState());
+        }
+    },
+
     componentWillUnmount: function() {
         const cli = MatrixClientPeg.get();
         if (cli) {
@@ -82,6 +84,33 @@ module.exports = React.createClass({
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateList.cancelPendingCall();
+    },
+
+    _waitForMembersToLoad: async function() {
+        if (!this.props.roomId) return {};
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        if (room) {
+            await room.loadMembersIfNeeded();
+        }
+    },
+
+    _getMembersState: function() {
+        const members = this.roomMembers();
+        // set the state after determining _showPresence to make sure it's
+        // taken into account while rerendering
+        return {
+            loading: false,
+            members: members,
+            filteredJoinedMembers: this._filterMembers(members, 'join'),
+            filteredInvitedMembers: this._filterMembers(members, 'invite'),
+
+            // ideally we'd size this to the page height, but
+            // in practice I find that a little constraining
+            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
+            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
+            searchQuery: "",
+        };
     },
 
 /*
@@ -393,6 +422,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (this.state.loading) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <div className="mx_MemberList"><Spinner /></div>;
+        }
+
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
