@@ -132,6 +132,10 @@ module.exports = {
                 og_image_url: og_image_url,
             },
         }),
+        new HtmlWebpackPlugin({
+            template: './src/vector/mobile_guide/index.html',
+            filename: 'mobile_guide/index.html',
+        }),
     ],
     devtool: 'source-map',
 
