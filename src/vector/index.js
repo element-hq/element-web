@@ -58,6 +58,8 @@ import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
 
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
+import {getVectorConfig} from './getconfig';
+
 let lastLocationHashSet = null;
 
 function initRageshake() {
@@ -238,15 +240,7 @@ async function loadApp() {
     let configJson;
     let configError;
     try {
-        try {
-            configJson = await getConfig(`config.${document.domain}.json`);
-            // 404s succeed with an empty json config, so check that there are keys
-            if (Object.keys(configJson).length === 0) {
-                throw new Error(); // throw to enter the catch
-            }
-        } catch (e) {
-            configJson = await getConfig("config.json");
-        }
+        configJson = getVectorConfig();
     } catch (e) {
         configError = e;
     }
@@ -260,30 +254,12 @@ async function loadApp() {
     const preventRedirect = Boolean(fragparts.params.client_secret);
 
     if (!preventRedirect) {
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            // FIXME: ugly status hardcoding
-            if (SettingsStore.getValue("theme") === 'status') {
-                window.location = "https://status.im/join-riot.html";
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isAndroid = /Android/.test(navigator.userAgent);
+        if (isIos || isAndroid) {
+            if (!document.cookie.split(';').some((c) => c.startsWith('mobile_redirect_to_guide'))) {
+                window.location = "mobile_guide/";
                 return;
-            }
-            else {
-                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                    window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
-                    return;
-                }
-            }
-        }
-        else if (/Android/.test(navigator.userAgent)) {
-            // FIXME: ugly status hardcoding
-            if (SettingsStore.getValue("theme") === 'status') {
-                window.location = "https://status.im/join-riot.html";
-                return;
-            }
-            else {
-                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                    window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
-                    return;
-                }
             }
         }
     }
