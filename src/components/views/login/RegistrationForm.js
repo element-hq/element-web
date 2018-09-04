@@ -61,7 +61,7 @@ module.exports = React.createClass({
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
-        flows: PropTypes.arrayOf(PropTypes.object),
+        flows: PropTypes.arrayOf(PropTypes.object).isRequired,
     },
 
     getDefaultProps: function() {
