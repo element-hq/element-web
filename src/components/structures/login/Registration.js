@@ -93,6 +93,7 @@ module.exports = React.createClass({
             doingUIAuth: Boolean(this.props.sessionId),
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
+            flows: null,
         };
     },
 
@@ -145,11 +146,27 @@ module.exports = React.createClass({
         });
     },
 
-    _replaceClient: function() {
+    _replaceClient: async function() {
         this._matrixClient = Matrix.createClient({
             baseUrl: this.state.hsUrl,
             idBaseUrl: this.state.isUrl,
         });
+        try {
+            const result = await this._makeRegisterRequest({});
+            // This should never succeed since we specified an empty
+            // auth object.
+            console.log("Expecting 401 from register request but got success!");
+        } catch (e) {
+            if (e.httpStatus === 401) {
+                this.setState({
+                    flows: e.data.flows,
+                });
+            } else {
+                this.setState({
+                    errorText: _t("Unable to query for supported registration methods"),
+                });
+            }
+        }
     },
 
     onFormSubmit: function(formVals) {
@@ -378,7 +395,7 @@ module.exports = React.createClass({
                     poll={true}
                 />
             );
-        } else if (this.state.busy || this.state.teamServerBusy) {
+        } else if (this.state.busy || this.state.teamServerBusy || !this.state.flows) {
             registerBody = <Spinner />;
         } else {
             let serverConfigSection;
@@ -408,6 +425,7 @@ module.exports = React.createClass({
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
+                        flows={this.state.flows}
                     />
                     { serverConfigSection }
                 </div>
