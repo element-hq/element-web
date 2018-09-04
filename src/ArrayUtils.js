@@ -16,6 +16,7 @@ limitations under the License.
 
 /**
  * creates a new array with only the unique values of the given array
+ * @param {array} arr the array to deduplicate
  * @return {array} the deduplicated array
  */
 export function unique(arr) {
@@ -26,4 +27,4 @@ export function unique(arr) {
         }
     });
     return cpy;
-};
+}
