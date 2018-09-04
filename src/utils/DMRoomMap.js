@@ -117,7 +117,7 @@ export default class DMRoomMap {
                 return false;
             }
             userToRooms[myUserId] = selfRoomIds.filter((roomId) => {
-                return guessedUserIdsThatChanged
+                return !guessedUserIdsThatChanged
                     .some((ids) => ids.roomId === roomId);
             });
 
