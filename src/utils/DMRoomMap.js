@@ -119,7 +119,7 @@ export default class DMRoomMap {
     getDMRoomsForUserId(userId) {
         // Here, we return the empty list if there are no rooms,
         // since the number of conversations you have with this user is zero.
-        return this.userToRooms[userId] || [];
+        return this._getUserToRooms()[userId] || [];
     }
 
     getUserIdForRoomId(roomId) {
