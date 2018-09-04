@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from '../MatrixClientPeg';
-import {unique} from '../ArrayUtils';
+import _uniq from 'lodash/uniq';
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -109,7 +109,7 @@ export default class DMRoomMap {
                     userToRooms[userId] = [roomId];
                 } else {
                     roomIds.push(roomId);
-                    userToRooms[userId] = unique(roomIds);
+                    userToRooms[userId] = _uniq(roomIds);
                 }
             });
             return true;
