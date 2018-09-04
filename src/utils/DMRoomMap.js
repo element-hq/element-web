@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from '../MatrixClientPeg';
+import {unique} from '../ArrayUtils';
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -120,19 +121,14 @@ export default class DMRoomMap {
                 return !guessedUserIdsThatChanged
                     .some((ids) => ids.roomId === roomId);
             });
-
             guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
-                if (!userId) {
-                    // if not able to guess the other user (unlikely)
-                    // still put it in the map so the room stays marked
-                    // as a DM, we just wont be able to show an avatar.
-                    userId = "";
-                }
                 let roomIds = userToRooms[userId];
                 if (!roomIds) {
-                    roomIds = userToRooms[userId] = [];
+                    userToRooms[userId] = [roomId];
+                } else {
+                    roomIds.push(roomId);
+                    userToRooms[userId] = unique(roomIds);
                 }
-                roomIds.push(roomId);
             });
             return true;
         }
