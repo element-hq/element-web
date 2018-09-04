@@ -70,13 +70,13 @@ export default class DMRoomMap {
         this.matrixClient.removeListener("accountData", this._onAccountData);
     }
 
-    _onAccountData(ev) {
+    async _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
             const userToRooms = this.matrixClient.getAccountData('m.direct').getContent() || {};
             const myUserId = this.matrixClient.getUserId();
             const selfDMs = userToRooms[myUserId];
             if (selfDMs && selfDMs.length) {
-                const neededPatching = this._patchUpSelfDMs(userToRooms);
+                const neededPatching = await this._patchUpSelfDMs(userToRooms);
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
@@ -94,10 +94,13 @@ export default class DMRoomMap {
      * with ourself, not the other user. Fix it by guessing the other user and
      * modifying userToRooms
      */
-    _patchUpSelfDMs(userToRooms) {
+    async _patchUpSelfDMs(userToRooms) {
         const myUserId = this.matrixClient.getUserId();
         const selfRoomIds = userToRooms[myUserId];
         if (selfRoomIds) {
+            // account data gets emitted before the rooms are available
+            // so wait for the sync to be ready and then read the rooms.
+            await this._waitForSyncReady();
             // any self-chats that should not be self-chats?
             const guessedUserIdsThatChanged = selfRoomIds.map((roomId) => {
                 const room = this.matrixClient.getRoom(roomId);
@@ -133,6 +136,19 @@ export default class DMRoomMap {
             });
             return true;
         }
+    }
+
+    _waitForSyncReady() {
+        return new Promise((resolve) => {
+            const syncState = this.matrixClient.getSyncState();
+            if (syncState === 'PREPARED' || syncState === 'SYNCING') {
+                resolve();
+            } else {
+                // if we already got an accountData event,
+                // next sync should not be ERROR, so just resolve
+                this.matrixClient.once('sync', () => resolve());
+            }
+        });
     }
 
     getDMRoomsForUserId(userId) {
