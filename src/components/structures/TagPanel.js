@@ -76,7 +76,7 @@ const TagPanel = React.createClass({
 
     _onClientSync(syncState, prevState) {
         // Consider the client reconnected if there is no error with syncing.
-        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
         if (reconnected) {
             // Load joined groups
