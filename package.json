@@ -122,7 +122,7 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
-    "parallelshell": "^3.0.2",
+    "parallelshell": "3.0.1",
     "postcss-extend": "^1.0.5",
     "postcss-import": "^9.0.0",
     "postcss-loader": "^1.2.2",
