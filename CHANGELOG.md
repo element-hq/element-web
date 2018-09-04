@@ -4,7 +4,7 @@ Changes in [0.16.3](https://github.com/vector-im/riot-web/releases/tag/v0.16.3) 
 
  * SECURITY FIX: This version (and release candidates) pull in an upstream security
    fix from electron to fix CVE-2018-15685. Electron users should update as soon as
-   possible. Riot-web run outsiude of Electron is unaffected.
+   possible. Riot-web run outside of Electron is unaffected.
 
 Changes in [0.16.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.16.3-rc.2) (2018-08-31)
 ======================================================================================================
