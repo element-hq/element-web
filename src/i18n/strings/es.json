@@ -1239,7 +1239,20 @@
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Su mensaje no se envió porque este servidor doméstico ha excedido un límite de recursos. Por favor <a>contacte con su administrador del servicio</a> para continuar usando el servicio.",
     "Please <a>contact your service administrator</a> to continue using this service.": "Por favor <a>contacte con su administrador del servicio</a> para continuar usando este servicio.",
     "Increase performance by only loading room members on first view": "Incrementar el rendimiento cargando sólo los miembros de la sala en la primera vista",
-    "Lazy loading members not supported": "La carga lenta de los miembros no está soportada",
+    "Lazy loading members not supported": "No se admite la carga diferida de miembros",
     "Lazy loading is not supported by your current homeserver.": "La carga lenta no está soportada por su servidor doméstico actual.",
-    "System Alerts": "Alertas de Sistema"
+    "System Alerts": "Alertas de Sistema",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Obliga a que la sesión de salida grupal actual en una sala cifrada se descarte",
+    "Error Discarding Session": "Error al Descartar la Sesión",
+    "Sorry, your homeserver is too old to participate in this room.": "Lo sentimos, tu servidor doméstico es demasiado antiguo para participar en esta sala.",
+    "Please contact your homeserver administrator.": "Por favor contacta al administrador de tu servidor doméstico.",
+    "This room has been replaced and is no longer active.": "Esta sala ha sido reemplazada y ya no está activa.",
+    "The conversation continues here.": "La conversación continúa aquí.",
+    "Upgrade room to version %(ver)s": "Actualiza la sala a la versión %(ver)s",
+    "This room is a continuation of another conversation.": "Esta sala es la continuación de otra conversación.",
+    "Click here to see older messages.": "Haz clic aquí para ver mensajes más antiguos.",
+    "Failed to upgrade room": "No se pudo actualizar la sala",
+    "The room upgrade could not be completed": "La actualización de la sala no pudo ser completada",
+    "Upgrade this room to version %(version)s": "Actualiza esta sala a la versión %(version)s",
+    "Legal": "Legal"
 }
