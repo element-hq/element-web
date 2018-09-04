@@ -37,11 +37,8 @@ export default class DMRoomMap {
         this._onAccountData = this._onAccountData.bind(this);
 
         const mDirectEvent = matrixClient.getAccountData('m.direct');
-        if (!mDirectEvent) {
-            this.userToRooms = {};
-        } else {
-            this.userToRooms = mDirectEvent.getContent();
-        }
+        this.mDirectEvent = mDirectEvent ? mDirectEvent.getContent() : {};
+        this.userToRooms = null;
     }
 
     /**
@@ -71,25 +68,11 @@ export default class DMRoomMap {
         this.matrixClient.removeListener("accountData", this._onAccountData);
     }
 
-    async _onAccountData(ev) {
+    _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
-            const userToRooms = this.matrixClient.getAccountData('m.direct').getContent() || {};
-            const myUserId = this.matrixClient.getUserId();
-            const selfDMs = userToRooms[myUserId];
-            if (selfDMs && selfDMs.length) {
-                const neededPatching = await this._patchUpSelfDMs(userToRooms);
-                // to avoid multiple devices fighting to correct
-                // the account data, only try to send the corrected
-                // version once.
-                console.warn(`Invalid m.direct account data detected ` +
-                    `(self-chats that shouldn't be), patching it up.`);
-                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
-                    this._hasSentOutPatchDirectAccountDataPatch = true;
-                    this.matrixClient.setAccountData('m.direct', userToRooms);
-                }
-            }
-            this.userToRooms = userToRooms;
-            this._populateRoomToUser();
+            this.mDirectEvent = this.matrixClient.getAccountData('m.direct').getContent() || {};
+            this.userToRooms = null;
+            this.roomToUser = null;
         }
     }
     /**
@@ -97,13 +80,10 @@ export default class DMRoomMap {
      * with ourself, not the other user. Fix it by guessing the other user and
      * modifying userToRooms
      */
-    async _patchUpSelfDMs(userToRooms) {
+    _patchUpSelfDMs(userToRooms) {
         const myUserId = this.matrixClient.getUserId();
         const selfRoomIds = userToRooms[myUserId];
         if (selfRoomIds) {
-            // account data gets emitted before the rooms are available
-            // so wait for the sync to be ready and then read the rooms.
-            await this._waitForSyncReady();
             // any self-chats that should not be self-chats?
             const guessedUserIdsThatChanged = selfRoomIds.map((roomId) => {
                 const room = this.matrixClient.getRoom(roomId);
@@ -136,19 +116,6 @@ export default class DMRoomMap {
         }
     }
 
-    _waitForSyncReady() {
-        return new Promise((resolve) => {
-            const syncState = this.matrixClient.getSyncState();
-            if (syncState === 'PREPARED' || syncState === 'SYNCING') {
-                resolve();
-            } else {
-                // if we already got an accountData event,
-                // next sync should not be ERROR, so just resolve
-                this.matrixClient.once('sync', () => resolve());
-            }
-        });
-    }
-
     getDMRoomsForUserId(userId) {
         // Here, we return the empty list if there are no rooms,
         // since the number of conversations you have with this user is zero.
@@ -177,9 +144,31 @@ export default class DMRoomMap {
         return this.roomToUser[roomId];
     }
 
+    _getUserToRooms() {
+        if (!this.userToRooms) {
+            const userToRooms = this.mDirectEvent;
+            const myUserId = this.matrixClient.getUserId();
+            const selfDMs = userToRooms[myUserId];
+            if (selfDMs && selfDMs.length) {
+                const neededPatching = this._patchUpSelfDMs(userToRooms);
+                // to avoid multiple devices fighting to correct
+                // the account data, only try to send the corrected
+                // version once.
+                console.warn(`Invalid m.direct account data detected ` +
+                    `(self-chats that shouldn't be), patching it up.`);
+                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
+                    this._hasSentOutPatchDirectAccountDataPatch = true;
+                    this.matrixClient.setAccountData('m.direct', userToRooms);
+                }
+            }
+            this.userToRooms = userToRooms;
+        }
+        return this.userToRooms;
+    }
+
     _populateRoomToUser() {
         this.roomToUser = {};
-        for (const user of Object.keys(this.userToRooms)) {
+        for (const user of Object.keys(this._getUserToRooms())) {
             for (const roomId of this.userToRooms[user]) {
                 this.roomToUser[roomId] = user;
             }
