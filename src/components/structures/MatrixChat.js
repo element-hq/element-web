@@ -1132,7 +1132,7 @@ export default React.createClass({
      *
      * @param {string} teamToken
      */
-    _onLoggedIn: function(teamToken) {
+    _onLoggedIn: async function(teamToken) {
         this.setState({
             view: VIEWS.LOGGED_IN,
         });
@@ -1145,12 +1145,17 @@ export default React.createClass({
             this._is_registered = false;
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
-                createRoom({
+                const roomId = await createRoom({
                     dmUserId: this.props.config.welcomeUserId,
                     // Only view the welcome user if we're NOT looking at a room
                     andView: !this.state.currentRoomId,
                 });
-                return;
+                // if successful, return because we're already
+                // viewing the welcomeUserId room
+                // else, if failed, fall through to view_home_page
+                if (roomId) {
+                    return;
+                }
             }
             // The user has just logged in after registering
             dis.dispatch({action: 'view_home_page'});
