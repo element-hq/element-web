@@ -152,7 +152,7 @@ module.exports = React.createClass({
             idBaseUrl: this.state.isUrl,
         });
         try {
-            const result = await this._makeRegisterRequest({});
+            await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
             // auth object.
             console.log("Expecting 401 from register request but got success!");
