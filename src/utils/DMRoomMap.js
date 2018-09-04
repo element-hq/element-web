@@ -81,6 +81,8 @@ export default class DMRoomMap {
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
+                console.warn(`Invalid m.direct account data detected ` +
+                    `(self-chats that shouldn't be), patching it up.`);
                 if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
                     this._hasSentOutPatchDirectAccountDataPatch = true;
                     this.matrixClient.setAccountData('m.direct', userToRooms);
