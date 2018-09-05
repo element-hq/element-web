@@ -29,6 +29,10 @@ import { _t } from './languageHandler';
 /**
  * Starts either the ILAG or full registration flow, depending
  * on what the HS supports
+ *
+ * @param {object} options
+ * @param {bool} options.go_home_on_cancel If true, goes to
+ *     the hame page if the user cancels the action
  */
 export async function startAnyRegistrationFlow(options) {
     if (options === undefined) options = {};
@@ -70,7 +74,7 @@ export async function startAnyRegistrationFlow(options) {
                 } else if (options.go_home_on_cancel) {
                     dis.dispatch({action: 'view_home_page'});
                 }
-            }
+            },
         });
     }
 }
