@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
@@ -25,36 +24,22 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
-const rageshake = require("matrix-react-sdk/lib/rageshake/rageshake");
-rageshake.init().then(() => {
-    console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
-    rageshake.cleanup();
-}, (err) => {
-    console.error("Failed to initialise rageshake: " + err);
-});
-
-window.addEventListener('beforeunload', (e) => {
-    console.log('riot-web closing');
-    // try to flush the logs to indexeddb
-    rageshake.flush();
-});
-
-
- // add React and ReactPerf to the global namespace, to make them easier to
- // access via the console
-global.React = require("react");
+import React from 'react';
+// add React and ReactPerf to the global namespace, to make them easier to
+// access via the console
+global.React = React;
 if (process.env.NODE_ENV !== 'production') {
-    global.Perf = require("react-addons-perf");
+    global.Perf = require('react-addons-perf');
 }
 
-var RunModernizrTests = require("./modernizr"); // this side-effects a global
-var ReactDOM = require("react-dom");
-var sdk = require("matrix-react-sdk");
-const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+import RunModernizrTests from './modernizr'; // this side-effects a global
+import ReactDOM from 'react-dom';
+import sdk from 'matrix-react-sdk';
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
-var VectorConferenceHandler = require('matrix-react-sdk/lib/VectorConferenceHandler');
+import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
 import Promise from 'bluebird';
-var request = require('browser-request');
+import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 // Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -69,12 +54,27 @@ import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/Setting
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
-var lastLocationHashSet = null;
+import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
 
-var CallHandler = require("matrix-react-sdk/lib/CallHandler");
-CallHandler.setConferenceHandler(VectorConferenceHandler);
+import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
-MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
+let lastLocationHashSet = null;
+
+function initRageshake() {
+    rageshake.init().then(() => {
+        console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
+
+        window.addEventListener('beforeunload', (e) => {
+            console.log('riot-web closing');
+            // try to flush the logs to indexeddb
+            rageshake.flush();
+        });
+
+        rageshake.cleanup();
+    }, (err) => {
+        console.error("Failed to initialise rageshake: " + err);
+    });
+}
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -99,11 +99,6 @@ function checkBrowserFeatures(featureList) {
     }
     return featureComplete;
 }
-
-var validBrowser = checkBrowserFeatures([
-    "displaytable", "flexbox", "es5object", "es5function", "localstorage",
-    "objectfit", "indexeddb", "webworkers",
-]);
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
@@ -135,7 +130,7 @@ function onHashChange(ev) {
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
-var onNewScreen = function(screen) {
+function onNewScreen(screen) {
     console.log("newscreen "+screen);
     var hash = '#/' + screen;
     lastLocationHashSet = hash;
@@ -151,7 +146,7 @@ var onNewScreen = function(screen) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
-var makeRegistrationUrl = function(params) {
+function makeRegistrationUrl(params) {
     let url;
     if (window.location.protocol === "file:") {
         url = 'https://riot.im/app/#/register';
@@ -176,8 +171,6 @@ var makeRegistrationUrl = function(params) {
     }
     return url;
 }
-
-window.addEventListener('hashchange', onHashChange);
 
 function getConfig(configJsonFilename) {
     let deferred = Promise.defer();
@@ -226,6 +219,12 @@ function onTokenLoginCompleted() {
 }
 
 async function loadApp() {
+    initRageshake();
+    MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
+    CallHandler.setConferenceHandler(VectorConferenceHandler);
+
+    window.addEventListener('hashchange', onHashChange);
+
     await loadLanguage();
 
     const fragparts = parseQsFromFragment(window.location);
@@ -325,17 +324,19 @@ async function loadApp() {
         }
     }
 
-    if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
-        console.log('User has previously accepted risks in using an unsupported browser');
-        validBrowser = true;
-    }
+    const validBrowser = checkBrowserFeatures([
+        "displaytable", "flexbox", "es5object", "es5function", "localstorage",
+        "objectfit", "indexeddb", "webworkers",
+    ]);
+
+    const acceptInvalidBrowser = window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser');
 
     console.log("Vector starting at "+window.location);
     if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
-    } else if (validBrowser) {
+    } else if (validBrowser || acceptInvalidBrowser) {
         const platform = PlatformPeg.get();
         platform.startUpdater();
 
@@ -362,7 +363,6 @@ async function loadApp() {
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-                validBrowser = true;
                 console.log("User accepts the compatibility risks.");
                 loadApp();
             }} />,
