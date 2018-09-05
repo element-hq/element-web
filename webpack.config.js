@@ -130,6 +130,7 @@ module.exports = {
             // bottom of <head> or the bottom of <body>, and I'm a bit scared
             // about moving them.
             inject: false,
+            excludeChunks: ['mobileguide'],
             vars: {
                 og_image_url: og_image_url,
             },
