@@ -309,8 +309,8 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
-        const canSendMessages = !this.state.tombstone &&
-            this.props.room.maySendMessage();
+        const canSendMessages = !this.state.tombstone && this.props.room.currentState.maySendMessage(
+            MatrixClientPeg.get().credentials.userId);
 
         if (canSendMessages) {
             // This also currently includes the call buttons. Really we should
