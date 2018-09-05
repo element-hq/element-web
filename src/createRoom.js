@@ -42,7 +42,7 @@ function createRoom(opts) {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'view_set_mxid'});
+        dis.dispatch({action: 'require_registration'});
         return Promise.resolve(null);
     }
 

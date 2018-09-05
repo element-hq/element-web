@@ -131,7 +131,7 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 

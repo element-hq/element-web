@@ -1428,7 +1428,7 @@ export default React.createClass({
         } else if (screen == 'start') {
             this.showScreen('home');
             dis.dispatch({
-                action: 'view_set_mxid',
+                action: 'require_registration',
             });
         } else if (screen == 'directory') {
             dis.dispatch({
