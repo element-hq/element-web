@@ -1,31 +1,39 @@
 {
-    "default_hs_url": "https://matrix.org",
+    "default_hs_url": "https://neocrypto.io",
     "default_is_url": "https://vector.im",
     "disable_custom_urls": false,
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
     "brand": "Riot",
-    "integrations_ui_url": "https://scalar.vector.im/",
-    "integrations_rest_url": "https://scalar.vector.im/api",
-    "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
+    "integrations_ui_url": "https://dimension.neocrypto.io/riot",
+    "integrations_rest_url": "https://dimension.neocrypto.io/api/v1/scalar",
+    "integrations_widgets_urls": ["https://dimension.neocrypto.io/widgets"],
+    "integrations_jitsi_widget_url": "https://dimension.vector.im/api/widgets/jitsi.html",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
         "feature_groups": "labs",
-        "feature_pinning": "labs"
+        "feature_pinning": "labs",
+        "feature_presence_management": "labs",
+        "feature_rich_quoting": "labs",
+        "feature_sticker_messages": "labs",
+        "feature_jitsi": "labs",
+        "feature_tag_panel": "labs"
     },
     "default_federate": true,
     "welcomePageUrl": "home.html",
     "default_theme": "light",
     "roomDirectory": {
         "servers": [
+            "psyberia.im",
+            "neocrypto.io",
             "matrix.org"
         ]
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
-        "url": "https://piwik.riot.im/",
-        "whitelistedHSUrls": ["https://matrix.org"],
+        "url": "https://piwik.neocrypto.io/",
+        "whitelistedHSUrls": ["https://matrix.org", "https://psyberia.im", "https://neocrypto.io"],
         "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
         "siteId": 1
     },
