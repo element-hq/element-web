@@ -43,20 +43,12 @@ export async function startAnyRegistrationFlow(options) {
     // ones like email & msisdn which require the user to supply
     // the relevant details in advance. We err on the side of
     // caution though.
-    let hasIlagFlow = false;
-    for (const flow of flows) {
-        let flowSuitable = true;
-        for (const stage of flow.stages) {
-            if (!['m.login.dummy', 'm.login.recaptcha'].includes(stage)) {
-                flowSuitable = false;
-                break;
-            }
-        }
-        if (flowSuitable) {
-            hasIlagFlow = true;
-            break;
-        }
-    }
+    const hasIlagFlow = flows.some((flow) => {
+        return flow.stages.every((stage) => {
+            return ['m.login.dummy', 'm.login.recaptcha'].includes(stage);
+        });
+    });
+
     if (hasIlagFlow) {
         dis.dispatch({
             action: 'view_set_mxid',
