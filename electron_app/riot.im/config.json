@@ -1,25 +1,34 @@
 {
-    "update_base_url": "https://riot.im/download/desktop/update/",
-    "default_hs_url": "https://matrix.org",
+    "update_base_url": "https://riot.neocrypto.io/download/desktop/update/",
+    "default_hs_url": "https://neocrypto.io",
     "default_is_url": "https://vector.im",
     "brand": "Riot",
-    "integrations_ui_url": "https://scalar.vector.im/",
-    "integrations_rest_url": "https://scalar.vector.im/api",
-    "integrations_widgets_urls": [
-        "https://scalar-staging.riot.im/scalar/api",
-        "https://scalar.vector.im/api"
-    ],
+    "integrations_ui_url": "https://dimension.neocrypto.io/riot",
+    "integrations_rest_url": "https://dimension.neocrypto.io/api/v1/scalar",
+    "integrations_widgets_urls": ["https://dimension.neocrypto.io/widgets"],
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
-    "welcomeUserId": "@riot-bot:matrix.org",
+    "welcomeUserId": "@riot-bot:neocrypto.io",
+    "default_theme": "dark",
     "roomDirectory": {
         "servers": [
+            "psyberia.im",
+            "neocrypto.io",
             "matrix.org"
         ]
     },
+    "features": {
+        "feature_groups": "labs",
+        "feature_pinning": "labs",
+        "feature_presence_management": "labs",
+        "feature_rich_quoting": "labs",
+        "feature_sticker_messages": "labs",
+        "feature_jitsi": "labs",
+        "feature_tag_panel": "labs"
+    },
     "piwik": {
-        "url": "https://piwik.riot.im/",
+        "url": "https://piwik.neocrypto.io/",
         "siteId": 1,
-        "policyUrl": "https://matrix.org/docs/guides/riot_im_cookie_policy"
+        "policyUrl": "https://riot.neocrypto.io/docs/guides/riot_im_cookie_policy"
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false
