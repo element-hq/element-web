@@ -45,6 +45,7 @@ import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import { startAnyRegistrationFlow } from "../../Registration.js";
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -471,7 +472,7 @@ export default React.createClass({
                 action: 'do_after_sync_prepared',
                 deferred_action: payload,
             });
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -479,7 +480,11 @@ export default React.createClass({
             case 'logout':
                 Lifecycle.logout();
                 break;
+            case 'require_registration':
+                startAnyRegistrationFlow(payload);
+                break;
             case 'start_registration':
+                // This starts the full registration flow
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
@@ -945,7 +950,7 @@ export default React.createClass({
                 });
             }
             dis.dispatch({
-                action: 'view_set_mxid',
+                action: 'require_registration',
                 // If the set_mxid dialog is cancelled, view /home because if the browser
                 // was pointing at /user/@someone:domain?action=chat, the URL needs to be
                 // reset so that they can revisit /user/.. // (and trigger
@@ -1423,7 +1428,7 @@ export default React.createClass({
         } else if (screen == 'start') {
             this.showScreen('home');
             dis.dispatch({
-                action: 'view_set_mxid',
+                action: 'require_registration',
             });
         } else if (screen == 'directory') {
             dis.dispatch({
