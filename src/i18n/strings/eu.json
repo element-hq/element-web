@@ -1264,5 +1264,7 @@
     "Lazy loading members not supported": "Kideen karga alferrerako euskarririk ez",
     "Lazy loading is not supported by your current homeserver.": "Zure hasiera zerbitzariak ez du onartzen karga alferra.",
     "Legal": "Legezkoa",
-    "Please <a>contact your service administrator</a> to continue using this service.": "<a>Jarri kontaktuan zerbitzuaren administratzailearekin</a> zerbitzu hau erabiltzen jarraitzeko."
+    "Please <a>contact your service administrator</a> to continue using this service.": "<a>Jarri kontaktuan zerbitzuaren administratzailearekin</a> zerbitzu hau erabiltzen jarraitzeko.",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du",
+    "Error Discarding Session": "Errorea saioa baztertzean"
 }
