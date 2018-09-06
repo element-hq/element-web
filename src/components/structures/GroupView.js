@@ -480,7 +480,7 @@ export default React.createClass({
                         group_id: groupId,
                     },
                 });
-                dis.dispatch({action: 'view_set_mxid'});
+                dis.dispatch({action: 'require_registration'});
                 willDoOnboarding = true;
             }
             this.setState({
@@ -724,7 +724,7 @@ export default React.createClass({
 
     _onJoinClick: async function() {
         if (this._matrixClient.isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 

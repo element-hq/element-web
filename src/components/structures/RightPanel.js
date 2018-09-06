@@ -160,7 +160,7 @@ module.exports = React.createClass({
 
     onInviteButtonClick: function() {
         if (this.context.matrixClient.isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 

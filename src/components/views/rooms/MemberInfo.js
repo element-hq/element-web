@@ -429,7 +429,7 @@ module.exports = withMatrixClient(React.createClass({
                 console.log("Mod toggle success");
             }, function(err) {
                 if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
-                    dis.dispatch({action: 'view_set_mxid'});
+                    dis.dispatch({action: 'require_registration'});
                 } else {
                     console.error("Toggle moderator error:" + err);
                     Modal.createTrackedDialog('Failed to toggle moderator status', '', ErrorDialog, {
