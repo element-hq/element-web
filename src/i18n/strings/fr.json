@@ -1269,5 +1269,6 @@
     "Error Discarding Session": "Erreur lors du rejet de la session",
     "Registration Required": "Enregistrement nécessaire",
     "You need to register to do this. Would you like to register now?": "Vous devez vous enregistrer pour faire cela. Voulez-vous créer un compte maintenant ?",
-    "Unable to query for supported registration methods": "Impossible de demander les méthodes d'enregistrement prises en charge"
+    "Unable to query for supported registration methods": "Impossible de demander les méthodes d'enregistrement prises en charge",
+    "Unable to connect to Homeserver. Retrying...": "Impossible de se connecter au serveur d'accueil. Reconnexion..."
 }
