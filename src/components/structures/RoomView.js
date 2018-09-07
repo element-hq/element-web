@@ -915,7 +915,7 @@ module.exports = React.createClass({
         dis.dispatch({action: 'focus_composer'});
 
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -946,7 +946,7 @@ module.exports = React.createClass({
 
     injectSticker: function(url, info, text) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 

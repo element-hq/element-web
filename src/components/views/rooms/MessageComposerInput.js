@@ -336,7 +336,7 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }

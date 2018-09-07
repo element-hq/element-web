@@ -163,15 +163,22 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId !== this.props.roomId) {
+            return;
+        }
         this._updateList();
     },
 
     onRoomMemberName: function(ev, member) {
+        if (member.roomId !== this.props.roomId) {
+            return;
+        }
         this._updateList();
     },
 
     onRoomStateEvent: function(event, state) {
-        if (event.getType() === "m.room.third_party_invite") {
+        if (event.getRoomId() === this.props.roomId &&
+            event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
     },

@@ -45,6 +45,8 @@ import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import { startAnyRegistrationFlow } from "../../Registration.js";
+import { messageForSyncError } from '../../utils/ErrorUtils';
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -178,6 +180,8 @@ export default React.createClass({
             // When showing Modal dialogs we need to set aria-hidden on the root app element
             // and disable it when there are no dialogs
             hideToSRUsers: false,
+
+            syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
         };
         return s;
     },
@@ -471,7 +475,7 @@ export default React.createClass({
                 action: 'do_after_sync_prepared',
                 deferred_action: payload,
             });
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -479,7 +483,11 @@ export default React.createClass({
             case 'logout':
                 Lifecycle.logout();
                 break;
+            case 'require_registration':
+                startAnyRegistrationFlow(payload);
+                break;
             case 'start_registration':
+                // This starts the full registration flow
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
@@ -945,7 +953,7 @@ export default React.createClass({
                 });
             }
             dis.dispatch({
-                action: 'view_set_mxid',
+                action: 'require_registration',
                 // If the set_mxid dialog is cancelled, view /home because if the browser
                 // was pointing at /user/@someone:domain?action=chat, the URL needs to be
                 // reset so that they can revisit /user/.. // (and trigger
@@ -1237,13 +1245,20 @@ export default React.createClass({
             return self._loggedInView.child.canResetTimelineInRoom(roomId);
         });
 
-        cli.on('sync', function(state, prevState) {
+        cli.on('sync', function(state, prevState, data) {
             // LifecycleStore and others cannot directly subscribe to matrix client for
             // events because flux only allows store state changes during flux dispatches.
             // So dispatch directly from here. Ideally we'd use a SyncStateStore that
             // would do this dispatch and expose the sync state itself (by listening to
             // its own dispatch).
             dis.dispatch({action: 'sync_state', prevState, state});
+
+            if (state === "ERROR") {
+                self.setState({syncError: data.error});
+            } else if (self.state.syncError) {
+                self.setState({syncError: null});
+            }
+
             self.updateStatusIndicator(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
@@ -1423,7 +1438,7 @@ export default React.createClass({
         } else if (screen == 'start') {
             this.showScreen('home');
             dis.dispatch({
-                action: 'view_set_mxid',
+                action: 'require_registration',
             });
         } else if (screen == 'directory') {
             dis.dispatch({
@@ -1739,8 +1754,15 @@ export default React.createClass({
             } else {
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');
+                let errorBox;
+                if (this.state.syncError) {
+                    errorBox = <div className="mx_MatrixChat_syncError">
+                        {messageForSyncError(this.state.syncError)}
+                    </div>;
+                }
                 return (
                     <div className="mx_MatrixChat_splash">
+                        {errorBox}
                         <Spinner />
                         <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
                         { _t('Logout') }
