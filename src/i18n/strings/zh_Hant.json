@@ -1269,5 +1269,6 @@
     "Error Discarding Session": "丟棄工作階段錯誤",
     "Registration Required": "需要註冊",
     "You need to register to do this. Would you like to register now?": "您必須註冊以繼續。您想要現在註冊嗎？",
-    "Unable to query for supported registration methods": "無法查詢支援的註冊方式"
+    "Unable to query for supported registration methods": "無法查詢支援的註冊方式",
+    "Unable to connect to Homeserver. Retrying...": "無法連線到家伺服器。正在重試……"
 }
