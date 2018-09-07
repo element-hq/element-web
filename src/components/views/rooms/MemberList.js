@@ -33,6 +33,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         this.memberDict = this.getMemberDict();
+        this._mounted = false;
 
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
@@ -44,6 +45,19 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         const cli = MatrixClientPeg.get();
+        if (!cli.hasLazyLoadMembersEnabled()) {
+            this._listenForMembersChanges();
+        }
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = MatrixClientPeg.get().baseUrl;
+        this._showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            this._showPresence = enablePresenceByHsUrl[hsUrl];
+        }
+    },
+
+    _listenForMembersChanges: function() {
+        const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
@@ -53,25 +67,22 @@ module.exports = React.createClass({
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
-
-        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
-        const hsUrl = MatrixClientPeg.get().baseUrl;
-
-        this._showPresence = true;
-        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
-            this._showPresence = enablePresenceByHsUrl[hsUrl];
-        }
     },
 
     componentDidMount: async function() {
+        this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             await this._waitForMembersToLoad();
-            this.setState(this._getMembersState());
+            if (this._mounted) {
+                this.setState(this._getMembersState());
+                this._listenForMembersChanges();
+            }
         }
     },
 
     componentWillUnmount: function() {
+        this._mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
