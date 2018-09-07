@@ -203,12 +203,12 @@ module.exports = React.createClass({
 
         const all_members = room.currentState.members;
 
-        Object.keys(all_members).map(function(userId) {
+        Object.values(all_members).forEach(function(member) {
             // work around a race where you might have a room member object
             // before the user object exists.  This may or may not cause
             // https://github.com/vector-im/vector-web/issues/186
-            if (all_members[userId].user === null) {
-                all_members[userId].user = MatrixClientPeg.get().getUser(userId);
+            if (member.user === null) {
+                member.user = cli.getUser(member.userId);
             }
 
             // XXX: this user may have no lastPresenceTs value!
@@ -219,26 +219,20 @@ module.exports = React.createClass({
     },
 
     roomMembers: function() {
-        const all_members = this.memberDict || {};
-        const all_user_ids = Object.keys(all_members);
         const ConferenceHandler = CallHandler.getConferenceHandler();
 
-        all_user_ids.sort(this.memberSort);
-
-        const to_display = [];
-        let count = 0;
-        for (let i = 0; i < all_user_ids.length; ++i) {
-            const user_id = all_user_ids[i];
-            const m = all_members[user_id];
-
-            if (m.membership === 'join' || m.membership === 'invite') {
-                if ((ConferenceHandler && !ConferenceHandler.isConferenceUser(user_id)) || !ConferenceHandler) {
-                    to_display.push(user_id);
-                    ++count;
-                }
-            }
-        }
-        return to_display;
+        const allMembersDict = this.memberDict || {};
+        const allMembers = Object.values(allMembersDict);
+        const filteredAndSortedMembers = allMembers.filter((m) => {
+            return (
+                m.membership === 'join' || m.membership === 'invite'
+            ) && (
+                !ConferenceHandler ||
+                (ConferenceHandler && !ConferenceHandler.isConferenceUser(m.userId))
+            );
+        });
+        filteredAndSortedMembers.sort(this.memberSort);
+        return filteredAndSortedMembers;
     },
 
     _createOverflowTileJoined: function(overflowCount, totalCount) {
@@ -285,14 +279,12 @@ module.exports = React.createClass({
     // returns negative if a comes before b,
     // returns 0 if a and b are equivalent in ordering
     // returns positive if a comes after b.
-    memberSort: function(userIdA, userIdB) {
+    memberSort: function(memberA, memberB) {
             // order by last active, with "active now" first.
             // ...and then by power
             // ...and then alphabetically.
             // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-            const memberA = this.memberDict[userIdA];
-            const memberB = this.memberDict[userIdB];
             const userA = memberA.user;
             const userB = memberB.user;
 
@@ -342,9 +334,7 @@ module.exports = React.createClass({
     },
 
     _filterMembers: function(members, membership, query) {
-        return members.filter((userId) => {
-            const m = this.memberDict[userId];
-
+        return members.filter((m) => {
             if (query) {
                 query = query.toLowerCase();
                 const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
@@ -386,10 +376,9 @@ module.exports = React.createClass({
     _makeMemberTiles: function(members, membership) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
 
-        const memberList = members.map((userId) => {
-            const m = this.memberDict[userId];
+        const memberList = members.map((m) => {
             return (
-                <MemberTile key={userId} member={m} ref={userId} showPresence={this._showPresence} />
+                <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this._showPresence} />
             );
         });
 
