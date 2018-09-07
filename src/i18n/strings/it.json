@@ -1255,5 +1255,15 @@
     "Please contact your homeserver administrator.": "Contatta l'amministratore del tuo homeserver.",
     "Lazy loading members not supported": "Il caricamento lento dei membri non è supportato",
     "Lazy loading is not supported by your current homeserver.": "Il caricamento lento non è supportato dal tuo attuale homeserver.",
-    "Legal": "Informazioni legali"
+    "Legal": "Informazioni legali",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Forza l'eliminazione dell'attuale sessione di gruppo in uscita in una stanza criptata",
+    "Error Discarding Session": "Errore nell'eliminazione della sessione",
+    "This room has been replaced and is no longer active.": "Questa stanza è stata sostituita e non è più attiva.",
+    "The conversation continues here.": "La conversazione continua qui.",
+    "Upgrade room to version %(ver)s": "Aggiorna la stanza alla versione %(ver)s",
+    "This room is a continuation of another conversation.": "Questa stanza è la continuazione di un'altra conversazione.",
+    "Click here to see older messages.": "Clicca qui per vedere i messaggi precedenti.",
+    "Failed to upgrade room": "Aggiornamento stanza fallito",
+    "The room upgrade could not be completed": "Non è stato possibile completare l'aggiornamento della stanza",
+    "Upgrade this room to version %(version)s": "Aggiorna questa stanza alla versione %(version)s"
 }
