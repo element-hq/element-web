@@ -1264,5 +1264,10 @@
     "Click here to see older messages.": "Ide kattintva megnézheted a régi üzeneteket.",
     "Failed to upgrade room": "A szoba frissítése sikertelen",
     "The room upgrade could not be completed": "A szoba frissítését nem sikerült befejezni",
-    "Upgrade this room to version %(version)s": "A szoba frissítése %(version)s verzióra"
+    "Upgrade this room to version %(version)s": "A szoba frissítése %(version)s verzióra",
+    "Error Discarding Session": "Hiba a munkamenet törlésénél",
+    "Forces the current outbound group session in an encrypted room to be discarded": "A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában",
+    "Registration Required": "Regisztrációt igényel",
+    "You need to register to do this. Would you like to register now?": "Hogy ezt megtedd regisztrálnod kell. Szeretnél regisztrálni?",
+    "Unable to query for supported registration methods": "A támogatott regisztrációs folyamatok listáját nem sikerült lekérdezni"
 }
