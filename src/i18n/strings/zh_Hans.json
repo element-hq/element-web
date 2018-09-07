@@ -1268,5 +1268,5 @@
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "您的消息未被发送，因为本主服务器已达到其每月活跃用户限制。请 <a>联系您的服务管理员</a> 以继续使用本服务。",
     "Please <a>contact your service administrator</a> to continue using the service.": "请 <a>联系您的服务管理员</a> 以继续使用本服务。",
     "Please contact your homeserver administrator.": "请 联系您主服务器的管理员。",
-    "Please <a>contact your service administrator</a> to get this limit increased.": "请 <a>联系您的服务管理员</a> 以。"
+    "Please <a>contact your service administrator</a> to get this limit increased.": "请 <a>联系您的服务管理员</a> 以增加此限制的额度。"
 }
