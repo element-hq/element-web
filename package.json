@@ -133,7 +133,7 @@
     "matrix-mock-request": "^1.2.1",
     "matrix-react-test-utils": "^0.1.1",
     "mocha": "^5.0.5",
-    "parallelshell": "^3.0.2",
+    "parallelshell": "3.0.1",
     "react-addons-test-utils": "^15.4.0",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
