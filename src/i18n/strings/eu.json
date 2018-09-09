@@ -1266,5 +1266,9 @@
     "Legal": "Legezkoa",
     "Please <a>contact your service administrator</a> to continue using this service.": "<a>Jarri kontaktuan zerbitzuaren administratzailearekin</a> zerbitzu hau erabiltzen jarraitzeko.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du",
-    "Error Discarding Session": "Errorea saioa baztertzean"
+    "Error Discarding Session": "Errorea saioa baztertzean",
+    "Registration Required": "Erregistratzea ezinbestekoa da",
+    "You need to register to do this. Would you like to register now?": "Hau egiteko erregistratu egin behar zara. Orain erregistratu nahi duzu?",
+    "Unable to connect to Homeserver. Retrying...": "Ezin izan da hasiera zerbitzarira konektatu. Berriro saiatzen...",
+    "Unable to query for supported registration methods": "Ezin izan da onartutako erregistratze metodoei buruz itaundu"
 }
