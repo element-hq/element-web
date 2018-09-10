@@ -32,8 +32,6 @@ module.exports = React.createClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
-        this._mounted = false;
-
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             return {loading: true};
@@ -43,6 +41,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._mounted = false;
         const cli = MatrixClientPeg.get();
         if (!cli.hasLazyLoadMembersEnabled()) {
             this._listenForMembersChanges();
