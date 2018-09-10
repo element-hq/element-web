@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from '../MatrixClientPeg';
+import _uniq from 'lodash/uniq';
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -36,11 +37,8 @@ export default class DMRoomMap {
         this._onAccountData = this._onAccountData.bind(this);
 
         const mDirectEvent = matrixClient.getAccountData('m.direct');
-        if (!mDirectEvent) {
-            this.userToRooms = {};
-        } else {
-            this.userToRooms = mDirectEvent.getContent();
-        }
+        this.mDirectEvent = mDirectEvent ? mDirectEvent.getContent() : {};
+        this.userToRooms = null;
     }
 
     /**
@@ -72,21 +70,9 @@ export default class DMRoomMap {
 
     _onAccountData(ev) {
         if (ev.getType() == 'm.direct') {
-            const userToRooms = this.matrixClient.getAccountData('m.direct').getContent() || {};
-            const myUserId = this.matrixClient.getUserId();
-            const selfDMs = userToRooms[myUserId];
-            if (selfDMs && selfDMs.length) {
-                const neededPatching = this._patchUpSelfDMs(userToRooms);
-                // to avoid multiple devices fighting to correct
-                // the account data, only try to send the corrected
-                // version once.
-                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
-                    this._hasSentOutPatchDirectAccountDataPatch = true;
-                    this.matrixClient.setAccountData('m.direct', userToRooms);
-                }
-            }
-            this.userToRooms = userToRooms;
-            this._populateRoomToUser();
+            this.mDirectEvent = this.matrixClient.getAccountData('m.direct').getContent() || {};
+            this.userToRooms = null;
+            this.roomToUser = null;
         }
     }
     /**
@@ -114,22 +100,17 @@ export default class DMRoomMap {
                 return false;
             }
             userToRooms[myUserId] = selfRoomIds.filter((roomId) => {
-                return guessedUserIdsThatChanged
+                return !guessedUserIdsThatChanged
                     .some((ids) => ids.roomId === roomId);
             });
-
             guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
-                if (!userId) {
-                    // if not able to guess the other user (unlikely)
-                    // still put it in the map so the room stays marked
-                    // as a DM, we just wont be able to show an avatar.
-                    userId = "";
-                }
                 let roomIds = userToRooms[userId];
                 if (!roomIds) {
-                    roomIds = userToRooms[userId] = [];
+                    userToRooms[userId] = [roomId];
+                } else {
+                    roomIds.push(roomId);
+                    userToRooms[userId] = _uniq(roomIds);
                 }
-                roomIds.push(roomId);
             });
             return true;
         }
@@ -138,7 +119,7 @@ export default class DMRoomMap {
     getDMRoomsForUserId(userId) {
         // Here, we return the empty list if there are no rooms,
         // since the number of conversations you have with this user is zero.
-        return this.userToRooms[userId] || [];
+        return this._getUserToRooms()[userId] || [];
     }
 
     getUserIdForRoomId(roomId) {
@@ -163,9 +144,31 @@ export default class DMRoomMap {
         return this.roomToUser[roomId];
     }
 
+    _getUserToRooms() {
+        if (!this.userToRooms) {
+            const userToRooms = this.mDirectEvent;
+            const myUserId = this.matrixClient.getUserId();
+            const selfDMs = userToRooms[myUserId];
+            if (selfDMs && selfDMs.length) {
+                const neededPatching = this._patchUpSelfDMs(userToRooms);
+                // to avoid multiple devices fighting to correct
+                // the account data, only try to send the corrected
+                // version once.
+                console.warn(`Invalid m.direct account data detected ` +
+                    `(self-chats that shouldn't be), patching it up.`);
+                if (neededPatching && !this._hasSentOutPatchDirectAccountDataPatch) {
+                    this._hasSentOutPatchDirectAccountDataPatch = true;
+                    this.matrixClient.setAccountData('m.direct', userToRooms);
+                }
+            }
+            this.userToRooms = userToRooms;
+        }
+        return this.userToRooms;
+    }
+
     _populateRoomToUser() {
         this.roomToUser = {};
-        for (const user of Object.keys(this.userToRooms)) {
+        for (const user of Object.keys(this._getUserToRooms())) {
             for (const roomId of this.userToRooms[user]) {
                 this.roomToUser[roomId] = user;
             }

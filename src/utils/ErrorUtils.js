@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from '../languageHandler';
+import { _t, _td } from '../languageHandler';
 
 /**
  * Produce a translated error message for a
@@ -46,5 +46,33 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
         return _t(errString, {}, Object.assign({ 'a': linkSub }, extraTranslations));
     } else {
         return _t(errString, {}, extraTranslations);
+    }
+}
+
+export function messageForSyncError(err) {
+    if (err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
+        const limitError = messageForResourceLimitError(
+            err.data.limit_type,
+            err.data.admin_contact,
+            {
+                'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
+                '': _td("This homeserver has exceeded one of its resource limits."),
+            },
+        );
+        const adminContact = messageForResourceLimitError(
+            err.data.limit_type,
+            err.data.admin_contact,
+            {
+                '': _td("Please <a>contact your service administrator</a> to continue using the service."),
+            },
+        );
+        return <div>
+            <div>{limitError}</div>
+            <div>{adminContact}</div>
+        </div>;
+    } else {
+        return <div>
+            {_t("Unable to connect to Homeserver. Retrying...")}
+        </div>;
     }
 }

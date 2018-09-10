@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -470,6 +471,19 @@ export const CommandMap = {
         description: _td('Displays action'),
         hideCompletionAfterSpace: true,
     }),
+
+    discardsession: new Command({
+        name: 'discardsession',
+        description: _td('Forces the current outbound group session in an encrypted room to be discarded'),
+        runFn: function(roomId) {
+            try {
+                MatrixClientPeg.get().forceDiscardSession(roomId);
+            } catch (e) {
+                return reject(e.message);
+            }
+            return success();
+        },
+    }),
 };
 /* eslint-enable babel/no-invalid-this */
 
@@ -477,6 +491,7 @@ export const CommandMap = {
 // helpful aliases
 const aliases = {
     j: "join",
+    newballsplease: "discardsession",
 };
 
 

@@ -131,7 +131,7 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -309,8 +309,8 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
-        const canSendMessages = !this.state.tombstone && this.props.room.currentState.maySendMessage(
-            MatrixClientPeg.get().credentials.userId);
+        const canSendMessages = !this.state.tombstone &&
+            this.props.room.maySendMessage();
 
         if (canSendMessages) {
             // This also currently includes the call buttons. Really we should
