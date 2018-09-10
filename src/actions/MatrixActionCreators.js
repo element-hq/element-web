@@ -149,9 +149,9 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
  */
 
 /**
- * Create a MatrixActions.RoomMember.membership action that represents
- * a MatrixClient `RoomMember.membership` matrix event, emitted when a
- * member's membership is updated.
+ * Create a MatrixActions.Room.selfMembership action that represents
+ * a MatrixClient `RoomMember.membership` matrix event for the syncing user,
+ * emitted when the member's membership is updated.
  *
  * @param {MatrixClient} matrixClient the matrix client.
  * @param {MatrixEvent} membershipEvent the m.room.member event.
@@ -159,8 +159,11 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
  * @param {string} oldMembership the member's previous membership.
  * @returns {RoomMembershipAction} an action of type `MatrixActions.RoomMember.membership`.
  */
-function createRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
-    return { action: 'MatrixActions.RoomMember.membership', member };
+function createSelfRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
+    if (member.userId === matrixClient.getUserId()) {
+        return { action: 'MatrixActions.Room.selfMembership', member };
+    }
+    return null;
 }
 
 /**
@@ -202,7 +205,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
-        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createRoomMembershipAction);
+        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createSelfRoomMembershipAction);
         this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
     },
 
@@ -217,7 +220,10 @@ export default {
      */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {
-            dis.dispatch(actionCreator(matrixClient, ...args), true);
+            const payload = actionCreator(matrixClient, ...args);
+            if (payload) {
+                dis.dispatch(payload, true);
+            }
         };
         matrixClient.on(eventName, listener);
         this._matrixClientListenersStop.push(() => {
