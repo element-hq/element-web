@@ -1,3 +1,9 @@
+Changes in [0.16.4](https://github.com/vector-im/riot-web/releases/tag/v0.16.4) (2018-09-10)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.4-rc.1...v0.16.4)
+
+ * No changes since rc.1
+
 Changes in [0.16.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.4-rc.1) (2018-09-07)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.3...v0.16.4-rc.1)
