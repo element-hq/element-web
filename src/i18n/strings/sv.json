@@ -1262,5 +1262,10 @@
     "Create a new room with the same name, description and avatar": "Skapa ett nytt rum med samma namn, beskrivning och avatar",
     "Update any local room aliases to point to the new room": "Uppdatera lokala rumsalias att peka på det nya rummet",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Hindra användare från att prata i den gamla rumsversionen och posta ett meddelande som rekommenderar användare att flytta till det nya rummet",
-    "Put a link back to the old room at the start of the new room so people can see old messages": "Sätta en länk tillbaka till det gamla rummet i början av det nya rummet så att folk kan se gamla meddelanden"
+    "Put a link back to the old room at the start of the new room so people can see old messages": "Sätta en länk tillbaka till det gamla rummet i början av det nya rummet så att folk kan se gamla meddelanden",
+    "Registration Required": "Registrering krävs",
+    "You need to register to do this. Would you like to register now?": "Du måste registrera dig för att göra detta. Vill du registrera dig nu?",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar den aktuella utgående gruppsessionen i ett krypterat rum att överges",
+    "Unable to connect to Homeserver. Retrying...": "Det gick inte att ansluta till hemserver. Försöker igen ...",
+    "Unable to query for supported registration methods": "Det gick inte att hämta stödda registreringsmetoder"
 }
