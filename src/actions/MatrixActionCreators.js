@@ -163,6 +163,7 @@ function createSelfRoomMembershipAction(matrixClient, membershipEvent, member, o
     if (member.userId === matrixClient.getUserId()) {
         return { action: 'MatrixActions.Room.selfMembership', member };
     }
+    return null;
 }
 
 /**
