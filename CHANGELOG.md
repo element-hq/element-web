@@ -1,3 +1,40 @@
+Changes in [0.13.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.4) (2018-09-10)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.4-rc.1...v0.13.4)
+
+ * No changes since rc.1
+
+Changes in [0.13.4-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.4-rc.1) (2018-09-07)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3...v0.13.4-rc.1)
+
+ * Error on splash screen if sync is failing
+   [\#2155](https://github.com/matrix-org/matrix-react-sdk/pull/2155)
+ *  Do full registration if HS doesn't support ILAG
+   [\#2150](https://github.com/matrix-org/matrix-react-sdk/pull/2150)
+ * Re-apply "Don't rely on room members to query power levels"
+   [\#2152](https://github.com/matrix-org/matrix-react-sdk/pull/2152)
+ * s/DidMount/WillMount/ in MessageComposerInput
+   [\#2151](https://github.com/matrix-org/matrix-react-sdk/pull/2151)
+ * Revert "Don't rely on room members to query power levels"
+   [\#2149](https://github.com/matrix-org/matrix-react-sdk/pull/2149)
+ * Don't rely on room members to query power levels
+   [\#2145](https://github.com/matrix-org/matrix-react-sdk/pull/2145)
+ * Correctly mark email as optional
+   [\#2148](https://github.com/matrix-org/matrix-react-sdk/pull/2148)
+ * guests trying to join communities should fire the ILAG flow.
+   [\#2059](https://github.com/matrix-org/matrix-react-sdk/pull/2059)
+ * Fix DM avatars, part 3
+   [\#2146](https://github.com/matrix-org/matrix-react-sdk/pull/2146)
+ * Fix: show spinner again while recovering from connection error
+   [\#2143](https://github.com/matrix-org/matrix-react-sdk/pull/2143)
+ * Fix: infinite spinner on trying to create welcomeUserId room without consent
+   [\#2147](https://github.com/matrix-org/matrix-react-sdk/pull/2147)
+ * Show spinner in member list while loading members
+   [\#2139](https://github.com/matrix-org/matrix-react-sdk/pull/2139)
+ * Slash command to discard megolm session
+   [\#2140](https://github.com/matrix-org/matrix-react-sdk/pull/2140)
+
 Changes in [0.13.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3) (2018-09-03)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3-rc.2...v0.13.3)
