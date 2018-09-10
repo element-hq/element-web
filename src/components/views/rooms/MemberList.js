@@ -207,7 +207,7 @@ module.exports = React.createClass({
         if (!this.props.roomId) return [];
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
-        if (!room) return {};
+        if (!room) return [];
 
         const allMembers = Object.values(room.currentState.members);
 
