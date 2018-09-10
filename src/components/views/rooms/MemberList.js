@@ -91,7 +91,9 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
         if (room) {
-            await room.loadMembersIfNeeded();
+            try {
+                await room.loadMembersIfNeeded();
+            } catch(ex) {/* already logged in RoomView */}
         }
     },
 
