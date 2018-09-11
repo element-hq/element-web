@@ -148,7 +148,7 @@ module.exports = class RiotSession {
         return this.page.$(selector);
     }
 
-    waitAndQuery(selector, timeout = 500) {
+    waitAndQuery(selector, timeout = 5000) {
         return this.page.waitForSelector(selector, {visible: true, timeout});
     }
 
@@ -156,25 +156,29 @@ module.exports = class RiotSession {
         return this.page.$$(selector);
     }
 
-    async waitAndQueryAll(selector, timeout = 500) {
+    async waitAndQueryAll(selector, timeout = 5000) {
         await this.waitAndQuery(selector, timeout);
         return await this.queryAll(selector);
     }
 
-    waitForNewPage(timeout = 500) {
+    waitForNewPage(timeout = 5000) {
         return new Promise((resolve, reject) => {
             const timeoutHandle = setTimeout(() => {
-                this.browser.removeEventListener('targetcreated', callback);
+                this.browser.removeListener('targetcreated', callback);
                 reject(new Error(`timeout of ${timeout}ms for waitForNewPage elapsed`));
             }, timeout);
 
             const callback = async (target) => {
+                if (target.type() !== 'page') {
+                    return;
+                }
+                this.browser.removeListener('targetcreated', callback);
                 clearTimeout(timeoutHandle);
                 const page = await target.page();
                 resolve(page);
             };
 
-            this.browser.once('targetcreated', callback);
+            this.browser.on('targetcreated', callback);
         });
     }
 

@@ -63,7 +63,7 @@ async function runTests() {
     } catch(err) {
         failure = true;
         console.log('failure: ', err);
-        if (!program.noLogs) {
+        if (program.logs) {
             for(let i = 0; i < sessions.length; ++i) {
                 const session = sessions[i];
                 documentHtml = await session.page.content();
