@@ -28,7 +28,7 @@ const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-cons
 const getE2EDeviceFromSettings = require('./tests/e2e-device');
 const verifyDeviceForUser = require("./tests/verify-device");
 
-module.exports = async function scenario(createSession) {
+module.exports = async function scenario(createSession, createRestSession) {
     async function createUser(username) {
         const session = await createSession(username);
         await signup(session, session.username, 'testtest');
