@@ -37,8 +37,8 @@ module.exports = class RestSession {
         });
     }
 
-    async join(roomId) {
-        const {room_id} = await this._post(`/rooms/${roomId}/join`);
+    async join(roomIdOrAlias) {
+        const {room_id} = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`);
         return new RestRoom(this, room_id);
     }
 
