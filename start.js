@@ -49,10 +49,6 @@ async function runTests() {
         __dirname
     );
 
-    function createRestSession(username, password) {
-        return restCreator.createSession(username, password);
-    }
-
     async function createSession(username) {
         const session = await RiotSession.create(username, options, program.riotUrl, hsUrl);
         sessions.push(session);
@@ -61,7 +57,7 @@ async function runTests() {
 
     let failure = false;
     try {
-        await scenario(createSession, createRestSession);
+        await scenario(createSession, restCreator);
     } catch(err) {
         failure = true;
         console.log('failure: ', err);
