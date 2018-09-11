@@ -57,11 +57,16 @@ module.exports = class RestSession {
         }
     }
 
+    async setDisplayName(displayName) {
+        await this._put(`/profile/${this.credentials.userId}/displayname`, {
+            displayname: displayName
+        });
+    }
+
     async join(roomId) {
         const {room_id} = await this._post(`/rooms/${roomId}/join`);
         return new RestRoom(this, room_id);
     }
-
 
     async createRoom(name, options) {
         const body = {
