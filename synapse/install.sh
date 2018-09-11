@@ -31,9 +31,11 @@ python -m synapse.app.homeserver \
     --generate-config \
     --report-stats=no
 # apply configuration
+REGISTRATION_SHARED_SECRET=$(uuidgen)
 cp -r $BASE_DIR/config-templates/$CONFIG_TEMPLATE/. ./
 sed -i "s#{{SYNAPSE_ROOT}}#$(pwd)/#g" homeserver.yaml
 sed -i "s#{{SYNAPSE_PORT}}#${PORT}#g" homeserver.yaml
 sed -i "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml
-sed -i "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml
+sed -i "s#{{REGISTRATION_SHARED_SECRET}}#${REGISTRATION_SHARED_SECRET}#g" homeserver.yaml
 sed -i "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
+echo REGISTRATION_SHARED_SECRET=$REGISTRATION_SHARED_SECRET=

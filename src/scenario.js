@@ -25,13 +25,13 @@ const receiveMessage = require('./tests/receive-message');
 const createRoom = require('./tests/create-room');
 const changeRoomSettings = require('./tests/room-settings');
 const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
-const getE2EDeviceFromSettings = require('./tests/e2e-device');
+const {enableLazyLoading, getE2EDeviceFromSettings} = require('./tests/settings');
 const verifyDeviceForUser = require("./tests/verify-device");
 
 module.exports = async function scenario(createSession, createRestSession) {
     async function createUser(username) {
         const session = await createSession(username);
-        await signup(session, session.username, 'testtest');
+        await signup(session, session.username, 'testtest', session.hsUrl);
         await acceptServerNoticesInviteAndConsent(session);
         return session;
     }
@@ -82,4 +82,9 @@ async function createE2ERoomAndTalk(alice, bob) {
     const bobMessage = "You've got to tell me!";
     await sendMessage(bob, bobMessage);
     await receiveMessage(alice, {sender: "bob", body: bobMessage, encrypted: true});
+}
+
+async function aLLtest(alice, bob) {
+    await enableLazyLoading(alice);
+
 }

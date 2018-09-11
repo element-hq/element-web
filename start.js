@@ -26,6 +26,8 @@ program
     .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
     .parse(process.argv);
 
+const hsUrl = 'http://localhost:5005';
+
 async function runTests() {
     let sessions = [];
     console.log("running tests ...");
@@ -43,7 +45,7 @@ async function runTests() {
 
     const restCreator = new RestSessionCreator(
         'synapse/installations/consent',
-        'http://localhost:5005',
+        hsUrl,
         __dirname
     );
 
@@ -52,7 +54,7 @@ async function runTests() {
     }
 
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, program.riotUrl);
+        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl);
         sessions.push(session);
         return session;
     }
