@@ -19,7 +19,7 @@ const exec = util.promisify(require('child_process').exec);
 const request = require('request-promise-native');
 const RestSession = require('./session');
 
-module.exports = class RestSessionFactory {
+module.exports = class RestSessionCreator {
     constructor(synapseSubdir, hsUrl, cwd) {
         this.synapseSubdir = synapseSubdir;
         this.hsUrl = hsUrl;

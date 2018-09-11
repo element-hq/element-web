@@ -17,7 +17,7 @@ limitations under the License.
 const assert = require('assert');
 const RiotSession = require('./src/session');
 const scenario = require('./src/scenario');
-const RestSessionFactory = require('./src/rest/factory');
+const RestSessionCreator = require('./src/rest/creator');
 
 const program = require('commander');
 program
@@ -41,14 +41,14 @@ async function runTests() {
         options.executablePath = path;
     }
 
-    const restFactory = new RestSessionFactory(
+    const restCreator = new RestSessionCreator(
         'synapse/installations/consent',
         'http://localhost:5005',
         __dirname
     );
 
     function createRestSession(username, password) {
-        return restFactory.createSession(username, password);
+        return restCreator.createSession(username, password);
     }
 
     async function createSession(username) {
