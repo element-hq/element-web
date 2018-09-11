@@ -318,7 +318,7 @@ module.exports = React.createClass({
                 // lazy load members if enabled
                 if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
                     room.loadMembersIfNeeded().catch((err) => {
-                        const errorMessage = `Fetching room members for ${this.roomId} failed.` +
+                        const errorMessage = `Fetching room members for ${room.roomId} failed.` +
                             " Room members will appear incomplete.";
                         console.error(errorMessage);
                         console.error(err);
