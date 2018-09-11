@@ -28,7 +28,7 @@ const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-cons
 const {enableLazyLoading, getE2EDeviceFromSettings} = require('./tests/settings');
 const verifyDeviceForUser = require("./tests/verify-device");
 
-module.exports = async function scenario(createSession, createRestSession) {
+module.exports = async function scenario(createSession, restCreator) {
     async function createUser(username) {
         const session = await createSession(username);
         await signup(session, session.username, 'testtest', session.hsUrl);
@@ -38,9 +38,26 @@ module.exports = async function scenario(createSession, createRestSession) {
 
     const alice = await createUser("alice");
     const bob = await createUser("bob");
+    const charlies = await createRestUsers(restCreator);
 
-    await createDirectoryRoomAndTalk(alice, bob);
-    await createE2ERoomAndTalk(alice, bob);
+    // await createDirectoryRoomAndTalk(alice, bob);
+    // await createE2ERoomAndTalk(alice, bob);
+    await aLazyLoadingTest(alice, bob, charlies);
+}
+
+function range(start, amount, step = 1) {
+    const r = [];
+    for (let i = 0; i < amount; ++i) {
+        r.push(start + (i * step));
+    }
+    return r;
+}
+
+async function createRestUsers(restCreator) {
+    const usernames = range(1, 10).map((i) => `charly-${i}`);
+    const charlies = await restCreator.createSessionRange(usernames, 'testtest');
+    await charlies.setDisplayName((s) => `Charly #${s.userName().split('-')[1]}`);
+    return charlies;
 }
 
 async function createDirectoryRoomAndTalk(alice, bob) {
@@ -84,7 +101,18 @@ async function createE2ERoomAndTalk(alice, bob) {
     await receiveMessage(alice, {sender: "bob", body: bobMessage, encrypted: true});
 }
 
-async function aLLtest(alice, bob) {
+async function aLazyLoadingTest(alice, bob, charlies) {
     await enableLazyLoading(alice);
-
+    const room = "Lazy Loading Test";
+    const alias = "#lltest:localhost";
+    await createRoom(bob, room);
+    await changeRoomSettings(bob, {directory: true, visibility: "public_no_guests", alias});
+    // wait for alias to be set by server after clicking "save"
+    await bob.delay(500);
+    await charlies.join(alias);
+    const messageRange = range(1, 20);
+    for(let i = 20; i >= 1; --i) {
+        await sendMessage(bob, `I will only say this ${i} time(s)!`);
+    }
+    await join(alice, room);
 }
