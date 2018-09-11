@@ -20,12 +20,12 @@ const uuidv4 = require('uuid/v4');
 module.exports = class RestRoom {
     constructor(session, roomId) {
         this.session = session;
-        this.roomId = roomId;
+        this._roomId = roomId;
     }
 
     async talk(message) {
         const txId = uuidv4();
-        await this.session._put(`/rooms/${this.roomId}/send/m.room.message/${txId}`, {
+        await this.session._put(`/rooms/${this._roomId}/send/m.room.message/${txId}`, {
             "msgtype": "m.text",
             "body": message
         });
@@ -33,10 +33,10 @@ module.exports = class RestRoom {
     }
 
     async leave() {
-        await this.session._post(`/rooms/${this.roomId}/leave`);
+        await this.session._post(`/rooms/${this._roomId}/leave`);
     }
 
-    id() {
-        return this.roomId;
+    roomId() {
+        return this._roomId;
     }
 }

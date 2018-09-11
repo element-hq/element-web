@@ -23,38 +23,12 @@ module.exports = class RestSession {
         this.credentials = credentials;
     }
 
-    _post(csApiPath, body) {
-        return this._request("POST", csApiPath, body);
+    userId() {
+        return this.credentials.userId;
     }
 
-    _put(csApiPath, body) {
-        return this._request("PUT", csApiPath, body);
-    }
-
-    async _request(method, csApiPath, body) {
-        try {
-            const responseBody = await request({
-                url: `${this.credentials.hsUrl}/_matrix/client/r0${csApiPath}`,
-                method,
-                headers: {
-                    "Authorization": `Bearer ${this.credentials.accessToken}`
-                },
-                json: true,
-                body
-            });
-            return responseBody;
-
-        } catch(err) {
-            const responseBody = err.response.body;
-            if (responseBody.errcode === 'M_CONSENT_NOT_GIVEN') {
-                await approveConsent(responseBody.consent_uri);
-                return this._request(method, csApiPath, body);
-            } else if(responseBody && responseBody.error) {
-                throw new Error(`${method} ${csApiPath}: ${responseBody.error}`);
-            } else {
-                throw new Error(`${method} ${csApiPath}: ${err.response.statusCode}`);
-            }
-        }
+    userName() {
+        return this.credentials.userId.split(":")[0].substr(1);
     }
 
     async setDisplayName(displayName) {
@@ -89,5 +63,39 @@ module.exports = class RestSession {
 
         const {room_id} = await this._post(`/createRoom`, body);
         return new RestRoom(this, room_id);
+    }
+
+    _post(csApiPath, body) {
+        return this._request("POST", csApiPath, body);
+    }
+
+    _put(csApiPath, body) {
+        return this._request("PUT", csApiPath, body);
+    }
+
+    async _request(method, csApiPath, body) {
+        try {
+            const responseBody = await request({
+                url: `${this.credentials.hsUrl}/_matrix/client/r0${csApiPath}`,
+                method,
+                headers: {
+                    "Authorization": `Bearer ${this.credentials.accessToken}`
+                },
+                json: true,
+                body
+            });
+            return responseBody;
+
+        } catch(err) {
+            const responseBody = err.response.body;
+            if (responseBody.errcode === 'M_CONSENT_NOT_GIVEN') {
+                await approveConsent(responseBody.consent_uri);
+                return this._request(method, csApiPath, body);
+            } else if(responseBody && responseBody.error) {
+                throw new Error(`${method} ${csApiPath}: ${responseBody.error}`);
+            } else {
+                throw new Error(`${method} ${csApiPath}: ${err.response.statusCode}`);
+            }
+        }
     }
 }

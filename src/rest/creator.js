@@ -18,12 +18,19 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const request = require('request-promise-native');
 const RestSession = require('./session');
+const RestMultiSession = require('./multi');
 
 module.exports = class RestSessionCreator {
     constructor(synapseSubdir, hsUrl, cwd) {
         this.synapseSubdir = synapseSubdir;
         this.hsUrl = hsUrl;
         this.cwd = cwd;
+    }
+
+    async createSessionRange(usernames, password) {
+        const sessionPromises = usernames.map((username) => this.createSession(username, password));
+        const sessions = await Promise.all(sessionPromises);
+        return new RestMultiSession(sessions);
     }
 
     async createSession(username, password) {
