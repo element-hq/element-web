@@ -90,7 +90,7 @@ module.exports = React.createClass({
                 secondary_color: this.state.secondary_color,
             }).catch(function(err) {
                 if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
-                    dis.dispatch({action: 'view_set_mxid'});
+                    dis.dispatch({action: 'require_registration'});
                 }
             });
         }

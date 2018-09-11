@@ -354,7 +354,7 @@ module.exports = React.createClass({
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    dis.dispatch({action: 'view_set_mxid'});
+                    dis.dispatch({action: 'require_registration'});
                     return;
                 }
             }

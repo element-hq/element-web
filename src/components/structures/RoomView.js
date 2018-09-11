@@ -318,7 +318,7 @@ module.exports = React.createClass({
                 // lazy load members if enabled
                 if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
                     room.loadMembersIfNeeded().catch((err) => {
-                        const errorMessage = `Fetching room members for ${this.roomId} failed.` +
+                        const errorMessage = `Fetching room members for ${room.roomId} failed.` +
                             " Room members will appear incomplete.";
                         console.error(errorMessage);
                         console.error(err);
@@ -915,7 +915,7 @@ module.exports = React.createClass({
         dis.dispatch({action: 'focus_composer'});
 
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -946,7 +946,7 @@ module.exports = React.createClass({
 
     injectSticker: function(url, info, text) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -1461,6 +1461,7 @@ module.exports = React.createClass({
         const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        const RoomUpgradeWarningBar = sdk.getComponent("rooms.RoomUpgradeWarningBar");
 
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
@@ -1587,6 +1588,11 @@ module.exports = React.createClass({
             />;
         }
 
+        const showRoomUpgradeBar = (
+            this.state.room.shouldUpgradeToVersion() &&
+            this.state.room.userMayUpgradeRoom(MatrixClientPeg.get().credentials.userId)
+        );
+
         let aux = null;
         let hideCancel = false;
         if (this.state.editingRoomSettings) {
@@ -1598,6 +1604,9 @@ module.exports = React.createClass({
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
+        } else if (showRoomUpgradeBar) {
+            aux = <RoomUpgradeWarningBar room={this.state.room} />;
+            hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
             aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;

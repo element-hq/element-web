@@ -160,7 +160,7 @@ module.exports = React.createClass({
 
     onInviteButtonClick: function() {
         if (this.context.matrixClient.isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            dis.dispatch({action: 'require_registration'});
             return;
         }
 
@@ -186,6 +186,9 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
+        if (member.roomId !== this.props.roomId) {
+            return;
+        }
         // redraw the badge on the membership list
         if (this.state.phase === this.Phase.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
