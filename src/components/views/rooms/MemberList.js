@@ -32,8 +32,6 @@ module.exports = React.createClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
-        this.memberDict = this.getMemberDict();
-
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             return {loading: true};
@@ -43,6 +41,20 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._mounted = false;
+        const cli = MatrixClientPeg.get();
+        if (!cli.hasLazyLoadMembersEnabled()) {
+            this._listenForMembersChanges();
+        }
+        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+        const hsUrl = MatrixClientPeg.get().baseUrl;
+        this._showPresence = true;
+        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
+            this._showPresence = enablePresenceByHsUrl[hsUrl];
+        }
+    },
+
+    _listenForMembersChanges: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -53,25 +65,22 @@ module.exports = React.createClass({
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
-
-        const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
-        const hsUrl = MatrixClientPeg.get().baseUrl;
-
-        this._showPresence = true;
-        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
-            this._showPresence = enablePresenceByHsUrl[hsUrl];
-        }
     },
 
     componentDidMount: async function() {
+        this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             await this._waitForMembersToLoad();
-            this.setState(this._getMembersState());
+            if (this._mounted) {
+                this.setState(this._getMembersState());
+                this._listenForMembersChanges();
+            }
         }
     },
 
     componentWillUnmount: function() {
+        this._mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
@@ -187,8 +196,6 @@ module.exports = React.createClass({
 
     _updateList: new rate_limited_func(function() {
         // console.log("Updating memberlist");
-        this.memberDict = this.getMemberDict();
-
         const newState = {
             members: this.roomMembers(),
         };
@@ -197,15 +204,15 @@ module.exports = React.createClass({
         this.setState(newState);
     }, 500),
 
-    getMemberDict: function() {
-        if (!this.props.roomId) return {};
+    getMembersWithUser: function() {
+        if (!this.props.roomId) return [];
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
-        if (!room) return {};
+        if (!room) return [];
 
-        const all_members = room.currentState.members;
+        const allMembers = Object.values(room.currentState.members);
 
-        Object.values(all_members).forEach(function(member) {
+        allMembers.forEach(function(member) {
             // work around a race where you might have a room member object
             // before the user object exists.  This may or may not cause
             // https://github.com/vector-im/vector-web/issues/186
@@ -217,14 +224,13 @@ module.exports = React.createClass({
             // the right solution here is to fix the race rather than leave it as 0
         });
 
-        return all_members;
+        return allMembers;
     },
 
     roomMembers: function() {
         const ConferenceHandler = CallHandler.getConferenceHandler();
 
-        const allMembersDict = this.memberDict || {};
-        const allMembers = Object.values(allMembersDict);
+        const allMembers = this.getMembersWithUser();
         const filteredAndSortedMembers = allMembers.filter((m) => {
             return (
                 m.membership === 'join' || m.membership === 'invite'
