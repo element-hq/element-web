@@ -76,6 +76,13 @@ module.exports = async function changeRoomSettings(session, settings) {
         session.log.done();
     }
 
+    if (settings.alias) {
+        session.log.step(`sets alias to ${settings.alias}`);
+        const aliasField = await session.waitAndQuery(".mx_RoomSettings .mx_EditableItemList .mx_EditableItem_editable");
+        await session.replaceInputText(aliasField, settings.alias);
+        session.log.done();
+    }
+
     const saveButton = await session.query(".mx_RoomHeader_wrapper .mx_RoomHeader_textButton");
     await saveButton.click();
 
