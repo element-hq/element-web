@@ -20,19 +20,25 @@ const {approveConsent} = require('./consent');
 
 module.exports = class RestSession {
     constructor(credentials) {
-        this.credentials = credentials;
+        this._credentials = credentials;
+        this._displayName = null;
     }
 
     userId() {
-        return this.credentials.userId;
+        return this._credentials.userId;
     }
 
     userName() {
-        return this.credentials.userId.split(":")[0].substr(1);
+        return this._credentials.userId.split(":")[0].substr(1);
+    }
+
+    displayName() {
+        return this._displayName;
     }
 
     async setDisplayName(displayName) {
-        await this._put(`/profile/${this.credentials.userId}/displayname`, {
+        this._displayName = displayName;
+        await this._put(`/profile/${this._credentials.userId}/displayname`, {
             displayname: displayName
         });
     }
@@ -76,10 +82,10 @@ module.exports = class RestSession {
     async _request(method, csApiPath, body) {
         try {
             const responseBody = await request({
-                url: `${this.credentials.hsUrl}/_matrix/client/r0${csApiPath}`,
+                url: `${this._credentials.hsUrl}/_matrix/client/r0${csApiPath}`,
                 method,
                 headers: {
-                    "Authorization": `Bearer ${this.credentials.accessToken}`
+                    "Authorization": `Bearer ${this._credentials.accessToken}`
                 },
                 json: true,
                 body
