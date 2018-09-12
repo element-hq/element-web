@@ -21,6 +21,7 @@ const join = require('./tests/join');
 const sendMessage = require('./tests/send-message');
 const acceptInvite = require('./tests/accept-invite');
 const invite = require('./tests/invite');
+const {delay, range} = require('./util');
 const {
     receiveMessage,
     checkTimelineContains,
@@ -47,14 +48,6 @@ module.exports = async function scenario(createSession, restCreator) {
     await createDirectoryRoomAndTalk(alice, bob);
     await createE2ERoomAndTalk(alice, bob);
     await aLazyLoadingTest(alice, bob, charlies);
-}
-
-function range(start, amount, step = 1) {
-    const r = [];
-    for (let i = 0; i < amount; ++i) {
-        r.push(start + (i * step));
-    }
-    return r;
 }
 
 async function createRestUsers(restCreator) {
@@ -88,12 +81,12 @@ async function createE2ERoomAndTalk(alice, bob) {
     const bobDevice = await getE2EDeviceFromSettings(bob);
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
-    await bob.delay(1000);
+    await delay(1000);
     await acceptDialogMaybe(bob, "encryption");
     const aliceDevice = await getE2EDeviceFromSettings(alice);
     // wait some time for the encryption warning dialog
     // to appear after closing the settings
-    await alice.delay(1000);
+    await delay(1000);
     await acceptDialogMaybe(alice, "encryption");
     await verifyDeviceForUser(bob, "alice", aliceDevice);
     await verifyDeviceForUser(alice, "bob", bobDevice);
