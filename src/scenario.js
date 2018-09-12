@@ -21,7 +21,11 @@ const join = require('./tests/join');
 const sendMessage = require('./tests/send-message');
 const acceptInvite = require('./tests/accept-invite');
 const invite = require('./tests/invite');
-const receiveMessage = require('./tests/receive-message');
+const {
+    receiveMessage,
+    checkTimelineContains,
+    scrollToTimelineTop
+} = require('./tests/timeline');
 const createRoom = require('./tests/create-room');
 const changeRoomSettings = require('./tests/room-settings');
 const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
