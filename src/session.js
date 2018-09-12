@@ -15,68 +15,8 @@ limitations under the License.
 */
 
 const puppeteer = require('puppeteer');
-
-class LogBuffer {
-    constructor(page, eventName, eventMapper, reduceAsync=false, initialValue = "") {
-        this.buffer = initialValue;
-        page.on(eventName, (arg) => {
-            const result = eventMapper(arg);
-            if (reduceAsync) {
-                result.then((r) => this.buffer += r);
-            }
-            else {
-                this.buffer += result;
-            }
-        });
-    }
-}
-
-class Logger {
-    constructor(username) {
-        this.indent = 0;
-        this.username = username;
-        this.muted = false;
-    }
-
-    startGroup(description) {
-        if (!this.muted) {
-            const indent = " ".repeat(this.indent * 2);
-            console.log(`${indent} * ${this.username} ${description}:`);
-        }
-        this.indent += 1;
-        return this;
-    }
-
-    endGroup() {
-        this.indent -= 1;
-        return this;
-    }
-
-    step(description) {
-        if (!this.muted) {
-            const indent = " ".repeat(this.indent * 2);
-            process.stdout.write(`${indent} * ${this.username} ${description} ... `);
-        }
-        return this;
-    }
-
-    done(status = "done") {
-        if (!this.muted) {
-            process.stdout.write(status + "\n");
-        }
-        return this;
-    }
-
-    mute() {
-        this.muted = true;
-        return this;
-    }
-
-    unmute() {
-        this.muted = false;
-        return this;
-    }
-}
+const Logger = require('./logger');
+const LogBuffer = require('./logbuffer');
 
 module.exports = class RiotSession {
     constructor(browser, page, username, riotserver, hsUrl) {
