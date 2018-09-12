@@ -44,8 +44,8 @@ module.exports = async function scenario(createSession, restCreator) {
     const bob = await createUser("bob");
     const charlies = await createRestUsers(restCreator);
 
-    // await createDirectoryRoomAndTalk(alice, bob);
-    // await createE2ERoomAndTalk(alice, bob);
+    await createDirectoryRoomAndTalk(alice, bob);
+    await createE2ERoomAndTalk(alice, bob);
     await aLazyLoadingTest(alice, bob, charlies);
 }
 
@@ -106,20 +106,36 @@ async function createE2ERoomAndTalk(alice, bob) {
 }
 
 async function aLazyLoadingTest(alice, bob, charlies) {
+    console.log(" creating a room for lazy loading member scenarios:");
     await enableLazyLoading(alice);
     const room = "Lazy Loading Test";
     const alias = "#lltest:localhost";
+    const charlyMsg1 = "hi bob!";
+    const charlyMsg2 = "how's it going??";
     await createRoom(bob, room);
     await changeRoomSettings(bob, {directory: true, visibility: "public_no_guests", alias});
     // wait for alias to be set by server after clicking "save"
+    // so the charlies can join it.
     await bob.delay(500);
-    await charlies.join(alias);
-    const messageRange = range(1, 20);
+    const charlyMembers = await charlies.join(alias);
+    await charlyMembers.talk(charlyMsg1);
+    await charlyMembers.talk(charlyMsg2);
     bob.log.step("sends 20 messages").mute();
     for(let i = 20; i >= 1; --i) {
         await sendMessage(bob, `I will only say this ${i} time(s)!`);
     }
     bob.log.unmute().done();
-    await join(alice, room);
-
+    await join(alice, alias);
+    await scrollToTimelineTop(alice);
+    //alice should see 2 messages from every charly with
+    //the correct display name
+    const expectedMessages = [charlyMsg1, charlyMsg2].reduce((messages, msgText) => {
+        return charlies.sessions.reduce((messages, charly) => {
+            return messages.concat({
+                sender: charly.displayName(),
+                body: msgText,
+            });
+        }, messages);
+    }, []);
+    await checkTimelineContains(alice, expectedMessages, "Charly #1-10");
 }
