@@ -21,19 +21,20 @@ const scenario = require('./src/scenario');
 const program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
-    .option('--debug', "open browser window and slow down interactions", false)
     .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
+    .option('--windowed', "dont run tests headless", false)
+    .option('--slow-mo', "run tests slower to follow whats going on", false)
+    .option('--dev-tools', "open chrome devtools in browser window", false)
     .parse(process.argv);
 
 async function runTests() {
     let sessions = [];
     console.log("running tests ...");
-    const options = {};
-    if (program.debug) {
-        options.slowMo = 20;
-        options.devtools = true;
-        options.headless = false;
-    }
+    const options = {
+        slowMo: program.slowMo ? 20 : undefined,
+        devtools: program.devTools,
+        headless: !program.windowed,
+    };
     if (process.env.CHROME_PATH) {
         const path = process.env.CHROME_PATH;
         console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
