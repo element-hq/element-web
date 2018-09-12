@@ -15,23 +15,23 @@ limitations under the License.
 */
 
 
-const {acceptDialogMaybe} = require('./tests/dialog');
-const signup = require('./tests/signup');
-const join = require('./tests/join');
-const sendMessage = require('./tests/send-message');
-const acceptInvite = require('./tests/accept-invite');
-const invite = require('./tests/invite');
 const {delay, range} = require('./util');
+const {acceptDialogMaybe} = require('./usecases/dialog');
+const signup = require('./usecases/signup');
+const join = require('./usecases/join');
+const sendMessage = require('./usecases/send-message');
+const acceptInvite = require('./usecases/accept-invite');
+const invite = require('./usecases/invite');
 const {
     receiveMessage,
     checkTimelineContains,
     scrollToTimelineTop
-} = require('./tests/timeline');
-const createRoom = require('./tests/create-room');
-const changeRoomSettings = require('./tests/room-settings');
-const acceptServerNoticesInviteAndConsent = require('./tests/server-notices-consent');
-const {enableLazyLoading, getE2EDeviceFromSettings} = require('./tests/settings');
-const verifyDeviceForUser = require("./tests/verify-device");
+} = require('./usecases/timeline');
+const createRoom = require('./usecases/create-room');
+const changeRoomSettings = require('./usecases/room-settings');
+const acceptServerNoticesInviteAndConsent = require('./usecases/server-notices-consent');
+const {enableLazyLoading, getE2EDeviceFromSettings} = require('./usecases/settings');
+const verifyDeviceForUser = require("./usecases/verify-device");
 
 module.exports = async function scenario(createSession, restCreator) {
     async function createUser(username) {
