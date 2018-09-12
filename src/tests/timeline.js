@@ -25,13 +25,13 @@ module.exports.scrollToTimelineTop = async function(session) {
             let timeoutHandle = null;
             // set scrollTop to 0 in a loop and check every 50ms
             // if content became available (scrollTop not being 0 anymore),
-            // assume everything is loaded after 1000ms
+            // assume everything is loaded after 3s
             do {
                 if (timelineScrollView.scrollTop !== 0) {
                     if (timeoutHandle) {
                         clearTimeout(timeoutHandle);
                     }
-                    timeoutHandle = setTimeout(() => timedOut = true, 1000);
+                    timeoutHandle = setTimeout(() => timedOut = true, 3000);
                     timelineScrollView.scrollTop = 0;
                 } else {
                     await new Promise((resolve) => setTimeout(resolve, 50));
