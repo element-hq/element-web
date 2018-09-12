@@ -111,8 +111,11 @@ async function aLazyLoadingTest(alice, bob, charlies) {
     await bob.delay(500);
     await charlies.join(alias);
     const messageRange = range(1, 20);
+    bob.log.step("sends 20 messages").mute();
     for(let i = 20; i >= 1; --i) {
         await sendMessage(bob, `I will only say this ${i} time(s)!`);
     }
+    bob.log.unmute().done();
     await join(alice, room);
+
 }
