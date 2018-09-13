@@ -736,6 +736,16 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        let keyBackupSection;
+        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
+            const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
+            keyBackupSection = <div className="mx_UserSettings_section">
+                <h3>{ _t("Key Backup") }</h3>
+                <KeyBackupPanel />
+            </div>;
+        }
+
         return (
             <div>
                 <h3>{ _t("Cryptography") }</h3>
@@ -751,6 +761,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
+                {keyBackupSection}
             </div>
         );
     },

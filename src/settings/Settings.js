@@ -90,6 +90,12 @@ export const SETTINGS = {
         controller: new LazyLoadingController(),
         default: false,
     },
+    "feature_keybackup": {
+        isFeature: true,
+        displayName: _td("Backup of encryption keys to server"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Disable Emoji suggestions while typing'),

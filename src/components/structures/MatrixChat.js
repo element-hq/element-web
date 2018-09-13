@@ -48,6 +48,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 
+import SuggestKeyRestoreHandler from "../../SuggestKeyRestoreHandler";
+
 /** constants for MatrixChat.state.view */
 const VIEWS = {
     // a special initial state which is only used at startup, while we are
