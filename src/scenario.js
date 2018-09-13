@@ -15,23 +15,12 @@ limitations under the License.
 */
 
 
-const {delay, range} = require('./util');
-const {acceptDialogMaybe} = require('./usecases/dialog');
+const {range} = require('./util');
 const signup = require('./usecases/signup');
-const join = require('./usecases/join');
-const sendMessage = require('./usecases/send-message');
-const acceptInvite = require('./usecases/accept-invite');
-const invite = require('./usecases/invite');
-const {
-    receiveMessage,
-    checkTimelineContains,
-    scrollToTimelineTop
-} = require('./usecases/timeline');
-const createRoom = require('./usecases/create-room');
-const changeRoomSettings = require('./usecases/room-settings');
 const acceptServerNoticesInviteAndConsent = require('./usecases/server-notices-consent');
-const {enableLazyLoading, getE2EDeviceFromSettings} = require('./usecases/settings');
-const verifyDeviceForUser = require("./usecases/verify-device");
+const roomDirectoryScenarios = require('./scenarios/directory');
+const lazyLoadingScenarios = require('./scenarios/lazy-loading');
+const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
 
 module.exports = async function scenario(createSession, restCreator) {
     async function createUser(username) {
@@ -45,9 +34,9 @@ module.exports = async function scenario(createSession, restCreator) {
     const bob = await createUser("bob");
     const charlies = await createRestUsers(restCreator);
 
-    await createDirectoryRoomAndTalk(alice, bob);
-    await createE2ERoomAndTalk(alice, bob);
-    await aLazyLoadingTest(alice, bob, charlies);
+    await roomDirectoryScenarios(alice, bob);
+    await e2eEncryptionScenarios(alice, bob);
+    await lazyLoadingScenarios(alice, bob, charlies);
 }
 
 async function createRestUsers(restCreator) {
@@ -55,80 +44,4 @@ async function createRestUsers(restCreator) {
     const charlies = await restCreator.createSessionRange(usernames, 'testtest');
     await charlies.setDisplayName((s) => `Charly #${s.userName().split('-')[1]}`);
     return charlies;
-}
-
-async function createDirectoryRoomAndTalk(alice, bob) {
-    console.log(" creating a public room and join through directory:");
-    const room = 'test';
-    await createRoom(alice, room);
-    await changeRoomSettings(alice, {directory: true, visibility: "public_no_guests"});
-    await join(bob, room);
-    const bobMessage = "hi Alice!";
-    await sendMessage(bob, bobMessage);
-    await receiveMessage(alice, {sender: "bob", body: bobMessage});
-    const aliceMessage = "hi Bob, welcome!"
-    await sendMessage(alice, aliceMessage);
-    await receiveMessage(bob, {sender: "alice", body: aliceMessage});
-}
-
-async function createE2ERoomAndTalk(alice, bob) {
-    console.log(" creating an e2e encrypted room and join through invite:");
-    const room = "secrets";
-    await createRoom(bob, room);
-    await changeRoomSettings(bob, {encryption: true});
-    await invite(bob, "@alice:localhost");
-    await acceptInvite(alice, room);
-    const bobDevice = await getE2EDeviceFromSettings(bob);
-    // wait some time for the encryption warning dialog
-    // to appear after closing the settings
-    await delay(1000);
-    await acceptDialogMaybe(bob, "encryption");
-    const aliceDevice = await getE2EDeviceFromSettings(alice);
-    // wait some time for the encryption warning dialog
-    // to appear after closing the settings
-    await delay(1000);
-    await acceptDialogMaybe(alice, "encryption");
-    await verifyDeviceForUser(bob, "alice", aliceDevice);
-    await verifyDeviceForUser(alice, "bob", bobDevice);
-    const aliceMessage = "Guess what I just heard?!"
-    await sendMessage(alice, aliceMessage);
-    await receiveMessage(bob, {sender: "alice", body: aliceMessage, encrypted: true});
-    const bobMessage = "You've got to tell me!";
-    await sendMessage(bob, bobMessage);
-    await receiveMessage(alice, {sender: "bob", body: bobMessage, encrypted: true});
-}
-
-async function aLazyLoadingTest(alice, bob, charlies) {
-    console.log(" creating a room for lazy loading member scenarios:");
-    await enableLazyLoading(alice);
-    const room = "Lazy Loading Test";
-    const alias = "#lltest:localhost";
-    const charlyMsg1 = "hi bob!";
-    const charlyMsg2 = "how's it going??";
-    await createRoom(bob, room);
-    await changeRoomSettings(bob, {directory: true, visibility: "public_no_guests", alias});
-    // wait for alias to be set by server after clicking "save"
-    // so the charlies can join it.
-    await bob.delay(500);
-    const charlyMembers = await charlies.join(alias);
-    await charlyMembers.talk(charlyMsg1);
-    await charlyMembers.talk(charlyMsg2);
-    bob.log.step("sends 20 messages").mute();
-    for(let i = 20; i >= 1; --i) {
-        await sendMessage(bob, `I will only say this ${i} time(s)!`);
-    }
-    bob.log.unmute().done();
-    await join(alice, alias);
-    await scrollToTimelineTop(alice);
-    //alice should see 2 messages from every charly with
-    //the correct display name
-    const expectedMessages = [charlyMsg1, charlyMsg2].reduce((messages, msgText) => {
-        return charlies.sessions.reduce((messages, charly) => {
-            return messages.concat({
-                sender: charly.displayName(),
-                body: msgText,
-            });
-        }, messages);
-    }, []);
-    await checkTimelineContains(alice, expectedMessages, "Charly #1-10");
 }

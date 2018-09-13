@@ -124,7 +124,7 @@ module.exports = class RiotSession {
         return await this.queryAll(selector);
     }
 
-    waitForReload(timeout = 5000) {
+    waitForReload(timeout = 10000) {
         return new Promise((resolve, reject) => {
             const timeoutHandle = setTimeout(() => {
                 this.browser.removeEventListener('domcontentloaded', callback);
