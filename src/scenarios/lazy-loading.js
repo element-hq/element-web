@@ -29,10 +29,16 @@ const {enableLazyLoading} = require('../usecases/settings');
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
     await enableLazyLoading(alice);
-    const room = "Lazy Loading Test";
-    const alias = "#lltest:localhost";
-    const charlyMsg1 = "hi bob!";
-    const charlyMsg2 = "how's it going??";
+    await setupRoomWithBobAliceAndCharlies(alice, bob, charlies);
+    await checkPaginatedDisplayNames(alice, charlies);
+}
+
+const room = "Lazy Loading Test";
+const alias = "#lltest:localhost";
+const charlyMsg1 = "hi bob!";
+const charlyMsg2 = "how's it going??";
+
+async function setupRoomWithBobAliceAndCharlies(alice, bob, charlies) {
     await createRoom(bob, room);
     await changeRoomSettings(bob, {directory: true, visibility: "public_no_guests", alias});
     // wait for alias to be set by server after clicking "save"
@@ -47,6 +53,9 @@ module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     }
     bob.log.unmute().done();
     await join(alice, alias);
+}
+
+async function checkPaginatedDisplayNames(alice, charlies) {
     await scrollToTimelineTop(alice);
     //alice should see 2 messages from every charly with
     //the correct display name
