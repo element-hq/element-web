@@ -25,7 +25,7 @@ const {receiveMessage} = require('../usecases/timeline');
 const createRoom = require('../usecases/create-room');
 const changeRoomSettings = require('../usecases/room-settings');
 const {getE2EDeviceFromSettings} = require('../usecases/settings');
-const verifyDeviceForUser = require('../usecases/verify-device');
+const {verifyDeviceForUser} = require('../usecases/memberlist');
 
 module.exports = async function e2eEncryptionScenarios(alice, bob) {
     console.log(" creating an e2e encrypted room and join through invite:");

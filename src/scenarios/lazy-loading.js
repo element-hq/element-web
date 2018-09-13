@@ -23,14 +23,17 @@ const {
     scrollToTimelineTop
 } = require('../usecases/timeline');
 const createRoom = require('../usecases/create-room');
+const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
 const {enableLazyLoading} = require('../usecases/settings');
+const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
     await enableLazyLoading(alice);
     await setupRoomWithBobAliceAndCharlies(alice, bob, charlies);
     await checkPaginatedDisplayNames(alice, charlies);
+    await checkMemberList(alice, charlies);
 }
 
 const room = "Lazy Loading Test";
@@ -68,4 +71,17 @@ async function checkPaginatedDisplayNames(alice, charlies) {
         }, messages);
     }, []);
     await checkTimelineContains(alice, expectedMessages, "Charly #1-10");
+}
+
+async function checkMemberList(alice, charlies) {
+    alice.log.step("checks the memberlist contains herself, bob and all charlies");
+    const displayNames = (await getMembersInMemberlist(alice)).map((m) => m.displayName);
+    assert(displayNames.includes("alice"));
+    assert(displayNames.includes("bob"));
+    charlies.sessions.forEach((charly) => {
+        assert(displayNames.includes(charly.displayName()),
+            `${charly.displayName()} should be in the member list, ` +
+            `only have ${displayNames}`);
+    });
+    alice.log.done();
 }
