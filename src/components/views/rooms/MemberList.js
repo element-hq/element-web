@@ -46,6 +46,8 @@ module.exports = React.createClass({
         if (!cli.hasLazyLoadMembersEnabled()) {
             this._listenForMembersChanges();
         }
+        cli.on("Room", this.onRoom); // invites & joining after peek
+        cli.on("RoomMember.membership", this.onRoomMembership); // update when accepting an invite
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
         this._showPresence = true;
@@ -59,7 +61,6 @@ module.exports = React.createClass({
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
-        cli.on("Room", this.onRoom); // invites
         // We listen for changes to the lastPresenceTs which is essentially
         // listening for all presence events (we display most of not all of
         // the information contained in presence events).
@@ -69,14 +70,7 @@ module.exports = React.createClass({
 
     componentDidMount: async function() {
         this._mounted = true;
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
-            await this._waitForMembersToLoad();
-            if (this._mounted) {
-                this.setState(this._getMembersState());
-                this._listenForMembersChanges();
-            }
-        }
+        this._loadMembersIfNeeded(true);
     },
 
     componentWillUnmount: function() {
@@ -85,6 +79,7 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
+            cli.removeListener("RoomMember.membership", this.onRoomMembership);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
             cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
@@ -95,14 +90,24 @@ module.exports = React.createClass({
         this._updateList.cancelPendingCall();
     },
 
-    _waitForMembersToLoad: async function() {
-        if (!this.props.roomId) return {};
+    _loadMembersIfNeeded: async function(initial) {
         const cli = MatrixClientPeg.get();
-        const room = cli.getRoom(this.props.roomId);
-        if (room) {
-            try {
-                await room.loadMembersIfNeeded();
-            } catch(ex) {/* already logged in RoomView */}
+        if (cli.hasLazyLoadMembersEnabled()) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(this.props.roomId);
+            if (room && room.getMyMembership() === 'join') {
+                this.setState({loading: true});
+                try {
+                    await room.loadMembersIfNeeded();
+                } catch(ex) {/* already logged in RoomView */}
+                if (this._mounted) {
+                    this.setState(this._getMembersState());
+                    this._listenForMembersChanges();
+                }
+            } else if(initial) {
+                // show the members we've got
+                this.setState(this._getMembersState());
+            }
         }
     },
 
@@ -163,14 +168,28 @@ module.exports = React.createClass({
         }
     },
 
-    onRoom: function(room) {
+    onRoom: async function(room) {
         if (room.roomId !== this.props.roomId) {
             return;
         }
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        this._updateList();
+
+        // also when peeking, we need to await the members being loaded
+        // before showing them.
+
+        this._loadMembersIfNeeded();
+    },
+
+    onRoomMembership: async function(ev, member, oldMembership) {
+        const cli = MatrixClientPeg.get();
+        const myId = cli.getUserId();
+        if (member.userId === myId && oldMembership !== "join" && member.membership === "join") {
+            // once we've joined, no need to listen for membership anymore
+            cli.removeListener("RoomMember.membership", this.onRoomMembership);
+            this._loadMembersIfNeeded();
+        }
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -197,6 +216,7 @@ module.exports = React.createClass({
     _updateList: new rate_limited_func(function() {
         // console.log("Updating memberlist");
         const newState = {
+            loading: false,
             members: this.roomMembers(),
         };
         newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
