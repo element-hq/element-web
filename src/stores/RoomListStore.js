@@ -214,8 +214,6 @@ class RoomListStore extends Store {
                 }
             } else if (membership === "leave") {
                 lists["im.vector.fake.archived"].push(room);
-            } else {
-                console.error("unrecognised membership: " + membership + " - this should never happen");
             }
         });
 
