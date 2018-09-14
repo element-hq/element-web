@@ -25,5 +25,7 @@ module.exports = async function sendMessage(session, message) {
     const text = await session.innerText(composer);
     assert.equal(text.trim(), message.trim());
     await composer.press("Enter");
+    // wait for the message to appear sent
+    await session.waitAndQuery(".mx_EventTile_last:not(.mx_EventTile_sending)");
     session.log.done();
 }

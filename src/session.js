@@ -35,32 +35,54 @@ class Logger {
     constructor(username) {
         this.indent = 0;
         this.username = username;
+        this.muted = false;
     }
 
     startGroup(description) {
-        const indent = " ".repeat(this.indent * 2);
-        console.log(`${indent} * ${this.username} ${description}:`);
+        if (!this.muted) {
+            const indent = " ".repeat(this.indent * 2);
+            console.log(`${indent} * ${this.username} ${description}:`);
+        }
         this.indent += 1;
+        return this;
     }
 
     endGroup() {
         this.indent -= 1;
+        return this;
     }
 
     step(description) {
-        const indent = " ".repeat(this.indent * 2);
-        process.stdout.write(`${indent} * ${this.username} ${description} ... `);
+        if (!this.muted) {
+            const indent = " ".repeat(this.indent * 2);
+            process.stdout.write(`${indent} * ${this.username} ${description} ... `);
+        }
+        return this;
     }
 
     done(status = "done") {
-        process.stdout.write(status + "\n");
+        if (!this.muted) {
+            process.stdout.write(status + "\n");
+        }
+        return this;
+    }
+
+    mute() {
+        this.muted = true;
+        return this;
+    }
+
+    unmute() {
+        this.muted = false;
+        return this;
     }
 }
 
 module.exports = class RiotSession {
-    constructor(browser, page, username, riotserver) {
+    constructor(browser, page, username, riotserver, hsUrl) {
         this.browser = browser;
         this.page = page;
+        this.hsUrl = hsUrl;
         this.riotserver = riotserver;
         this.username = username;
         this.consoleLog = new LogBuffer(page, "console", (msg) => `${msg.text()}\n`);
@@ -72,14 +94,14 @@ module.exports = class RiotSession {
         this.log = new Logger(this.username);
     }
 
-    static async create(username, puppeteerOptions, riotserver) {
+    static async create(username, puppeteerOptions, riotserver, hsUrl) {
         const browser = await puppeteer.launch(puppeteerOptions);
         const page = await browser.newPage();
         await page.setViewport({
             width: 1280,
             height: 800
         });
-        return new RiotSession(browser, page, username, riotserver);
+        return new RiotSession(browser, page, username, riotserver, hsUrl);
     }
 
     async tryGetInnertext(selector) {
@@ -159,6 +181,22 @@ module.exports = class RiotSession {
     async waitAndQueryAll(selector, timeout = 5000) {
         await this.waitAndQuery(selector, timeout);
         return await this.queryAll(selector);
+    }
+
+    waitForReload(timeout = 5000) {
+        return new Promise((resolve, reject) => {
+            const timeoutHandle = setTimeout(() => {
+                this.browser.removeEventListener('domcontentloaded', callback);
+                reject(new Error(`timeout of ${timeout}ms for waitForReload elapsed`));
+            }, timeout);
+
+            const callback = async () => {
+                clearTimeout(timeoutHandle);
+                resolve();
+            };
+
+            this.page.once('domcontentloaded', callback);
+        });
     }
 
     waitForNewPage(timeout = 5000) {

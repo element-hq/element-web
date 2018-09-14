@@ -17,6 +17,7 @@ limitations under the License.
 const assert = require('assert');
 const RiotSession = require('./src/session');
 const scenario = require('./src/scenario');
+const RestSessionCreator = require('./src/rest/creator');
 
 const program = require('commander');
 program
@@ -26,6 +27,8 @@ program
     .option('--slow-mo', "run tests slower to follow whats going on", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
     .parse(process.argv);
+
+const hsUrl = 'http://localhost:5005';
 
 async function runTests() {
     let sessions = [];
@@ -41,15 +44,21 @@ async function runTests() {
         options.executablePath = path;
     }
 
+    const restCreator = new RestSessionCreator(
+        'synapse/installations/consent',
+        hsUrl,
+        __dirname
+    );
+
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, program.riotUrl);
+        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl);
         sessions.push(session);
         return session;
     }
 
     let failure = false;
     try {
-        await scenario(createSession);
+        await scenario(createSession, restCreator);
     } catch(err) {
         failure = true;
         console.log('failure: ', err);

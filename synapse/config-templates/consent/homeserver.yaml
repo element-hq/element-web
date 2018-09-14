@@ -207,10 +207,10 @@ log_config: "{{SYNAPSE_ROOT}}localhost.log.config"
 ## Ratelimiting ##
 
 # Number of messages a client can send per second
-rc_messages_per_second: 0.2
+rc_messages_per_second: 100
 
 # Number of message a client can send before being throttled
-rc_message_burst_count: 10.0
+rc_message_burst_count: 20.0
 
 # The federation window size in milliseconds
 federation_rc_window_size: 1000

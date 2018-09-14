@@ -16,11 +16,23 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function getE2EDeviceFromSettings(session) {
+module.exports.enableLazyLoading = async function(session) {
+    session.log.step(`enables lazy loading of members in the lab settings`);
+    const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
+    await settingsButton.click();
+    const llCheckbox = await session.waitAndQuery("#feature_lazyloading");
+    await llCheckbox.click();
+    await session.waitForReload();
+    const closeButton = await session.waitAndQuery(".mx_RoomHeader_cancelButton");
+    await closeButton.click();
+    session.log.done();
+}
+
+module.exports.getE2EDeviceFromSettings = async function(session) {
     session.log.step(`gets e2e device/key from settings`);
     const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
     await settingsButton.click();
-    const deviceAndKey = await session.waitAndQueryAll(".mx_UserSettings_section.mx_UserSettings_cryptoSection code", 1000);
+    const deviceAndKey = await session.waitAndQueryAll(".mx_UserSettings_section.mx_UserSettings_cryptoSection code");
     assert.equal(deviceAndKey.length, 2);
     const id = await (await deviceAndKey[0].getProperty("innerText")).jsonValue();
     const key = await (await deviceAndKey[1].getProperty("innerText")).jsonValue();
