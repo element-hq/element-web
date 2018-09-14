@@ -585,18 +585,23 @@ module.exports = React.createClass({
         this._loadMembersIfJoined();
     },
 
-    _loadMembersIfJoined: function() {
+    _loadMembersIfJoined: async function() {
         // lazy load members if enabled
         if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
             const cli = MatrixClientPeg.get();
             const room = cli.getRoom(this.state.roomId);
             if (room && room.getMyMembership() === 'join') {
-                room.loadMembersIfNeeded().catch((err) => {
+                try {
+                    await room.loadMembersIfNeeded();
+                    if (!this.unmounted) {
+                        this.forceUpdate();
+                    }
+                } catch(err) {
                     const errorMessage = `Fetching room members for ${room.roomId} failed.` +
                         " Room members will appear incomplete.";
                     console.error(errorMessage);
                     console.error(err);
-                });
+                }
             }
         }
     },
