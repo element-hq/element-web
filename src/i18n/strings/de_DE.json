@@ -1266,5 +1266,6 @@
     "The room upgrade could not be completed": "Die Raum-Aufrüstung konnte nicht fertiggestellt werden",
     "Upgrade this room to version %(version)s": "Diesen Raum zur Version %(version)s aufrüsten",
     "Forces the current outbound group session in an encrypted room to be discarded": "Erzwingt, dass die aktuell ausgehende Gruppen-Sitzung in einem verschlüsseltem Raum verworfen wird",
-    "Error Discarding Session": "Sitzung konnte nicht verworfen werden"
+    "Error Discarding Session": "Sitzung konnte nicht verworfen werden",
+    "Registration Required": ""
 }
