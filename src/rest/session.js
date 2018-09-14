@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 const request = require('request-promise-native');
+const Logger = require('../logger');
 const RestRoom = require('./room');
 const {approveConsent} = require('./consent');
 
 module.exports = class RestSession {
     constructor(credentials) {
+        this.log = new Logger(credentials.userId);
         this._credentials = credentials;
         this._displayName = null;
     }
@@ -37,18 +39,23 @@ module.exports = class RestSession {
     }
 
     async setDisplayName(displayName) {
+        this.log.step(`sets their display name to ${displayName}`);
         this._displayName = displayName;
         await this._put(`/profile/${this._credentials.userId}/displayname`, {
             displayname: displayName
         });
+        this.log.done();
     }
 
     async join(roomIdOrAlias) {
+        this.log.step(`joins ${roomIdOrAlias}`);
         const {room_id} = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`);
-        return new RestRoom(this, room_id);
+        this.log.done();
+        return new RestRoom(this, room_id, this.log);
     }
 
     async createRoom(name, options) {
+        this.log.step(`creates room ${name}`);
         const body = {
             name,
         };
@@ -68,7 +75,8 @@ module.exports = class RestSession {
         }
 
         const {room_id} = await this._post(`/createRoom`, body);
-        return new RestRoom(this, room_id);
+        this.log.done();
+        return new RestRoom(this, room_id, this.log);
     }
 
     _post(csApiPath, body) {
