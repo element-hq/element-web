@@ -1265,5 +1265,9 @@
     "Click here to see older messages.": "Clicca qui per vedere i messaggi precedenti.",
     "Failed to upgrade room": "Aggiornamento stanza fallito",
     "The room upgrade could not be completed": "Non è stato possibile completare l'aggiornamento della stanza",
-    "Upgrade this room to version %(version)s": "Aggiorna questa stanza alla versione %(version)s"
+    "Upgrade this room to version %(version)s": "Aggiorna questa stanza alla versione %(version)s",
+    "Registration Required": "Registrazione necessaria",
+    "You need to register to do this. Would you like to register now?": "Devi registrarti per eseguire questa azione. Vuoi registrarti ora?",
+    "Unable to connect to Homeserver. Retrying...": "Impossibile connettersi all'homeserver. Riprovo...",
+    "Unable to query for supported registration methods": "Impossibile richiedere i metodi di registrazione supportati"
 }
