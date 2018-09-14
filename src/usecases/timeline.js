@@ -46,23 +46,42 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     session.log.step(`receives message "${expectedMessage.body}" from ${expectedMessage.sender}`);
     // wait for a response to come in that contains the message
     // crude, but effective
-    await session.page.waitForResponse(async (response) => {
-        if (response.request().url().indexOf("/sync") === -1) {
-            return false;
-        }
-        const body = await response.text();
-        if (expectedMessage.encrypted) {
-            return body.indexOf(expectedMessage.sender) !== -1 &&
-                         body.indexOf("m.room.encrypted") !== -1;
-        } else {
-            return body.indexOf(expectedMessage.body) !== -1;
-        }
-    });
-    // wait a bit for the incoming event to be rendered
-    await session.delay(1000);
-    const lastTile = await getLastEventTile(session);
-    const foundMessage = await getMessageFromEventTile(lastTile);
-    assertMessage(foundMessage, expectedMessage);
+
+    async function getLastMessage() {
+        const lastTile = await getLastEventTile(session);
+        return getMessageFromEventTile(lastTile);
+    }
+
+    let lastMessage = null;
+    let isExpectedMessage = false;
+    try {
+        lastMessage = await getLastMessage();
+        isExpectedMessage = lastMessage &&
+            lastMessage.body === expectedMessage.body &&
+            lastMessage.sender === expectedMessage.sender;
+    } catch(ex) {}
+    // first try to see if the message is already the last message in the timeline
+    if (isExpectedMessage) {
+        assertMessage(lastMessage, expectedMessage);
+    } else {
+        await session.page.waitForResponse(async (response) => {
+            if (response.request().url().indexOf("/sync") === -1) {
+                return false;
+            }
+            const body = await response.text();
+            if (expectedMessage.encrypted) {
+                return body.indexOf(expectedMessage.sender) !== -1 &&
+                             body.indexOf("m.room.encrypted") !== -1;
+            } else {
+                return body.indexOf(expectedMessage.body) !== -1;
+            }
+        });
+        // wait a bit for the incoming event to be rendered
+        await session.delay(1000);
+        lastMessage = await getLastMessage();
+        assertMessage(lastMessage, expectedMessage);
+    }
+
     session.log.done();
 }
 

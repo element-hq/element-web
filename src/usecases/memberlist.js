@@ -16,16 +16,13 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function verifyDeviceForUser(session, name, expectedDevice) {
+module.exports.verifyDeviceForUser = async function(session, name, expectedDevice) {
     session.log.step(`verifies e2e device for ${name}`);
-    const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
-    const membersAndNames = await Promise.all(memberNameElements.map(async (el) => {
-        return [el, await session.innerText(el)];
-    }));
-    const matchingMember = membersAndNames.filter(([el, text]) => {
-        return text === name;
-    }).map(([el]) => el)[0];
-    await matchingMember.click();
+    const membersAndNames = await getMembersInMemberlist(session);
+    const matchingLabel = membersAndNames.filter((m) => {
+        return m.displayName === name;
+    }).map((m) => m.label)[0];
+    await matchingLabel.click();
     const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
     await firstVerifyButton.click();
     const dialogCodeFields = await session.waitAndQueryAll(".mx_QuestionDialog code");
@@ -40,3 +37,12 @@ module.exports = async function verifyDeviceForUser(session, name, expectedDevic
     await closeMemberInfo.click();
     session.log.done();
 }
+
+async function getMembersInMemberlist(session) {
+    const memberNameElements = await session.waitAndQueryAll(".mx_MemberList .mx_EntityTile_name");
+    return Promise.all(memberNameElements.map(async (el) => {
+        return {label: el, displayName: await session.innerText(el)};
+    }));
+}
+
+module.exports.getMembersInMemberlist = getMembersInMemberlist;
