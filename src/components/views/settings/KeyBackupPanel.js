@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -92,7 +91,7 @@ export default class KeyBackupPanel extends React.Component {
             title: _t("Delete Backup"),
             description: _t(
                 "Delete your backed up encryption keys from the server? " +
-                "You will no longer be able to use your recovery key to read encrypted message history"
+                "You will no longer be able to use your recovery key to read encrypted message history",
             ),
             button: _t('Delete backup'),
             danger: true,
@@ -104,7 +103,6 @@ export default class KeyBackupPanel extends React.Component {
                 });
             },
         });
-        
     }
 
     _verifyDevice(e) {
@@ -138,24 +136,49 @@ export default class KeyBackupPanel extends React.Component {
                 clientBackupStatus = _t("This device is uploading keys to this backup");
             } else {
                 // XXX: display why and how to fix it
-                clientBackupStatus = _t("This device is <b>not</b> uploading keys to this backup", {}, {b: x => <b>{x}</b>});
+                clientBackupStatus = _t(
+                    "This device is <b>not</b> uploading keys to this backup", {},
+                    {b: x => <b>{x}</b>},
+                );
             }
 
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
                 const sigStatSub = {
-                    validity: sub => <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>{sub}</span>,
-                    verify: sub => <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>{sub}</span>,
+                    validity: sub =>
+                        <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>
+                            {sub}
+                        </span>,
+                    verify: sub =>
+                        <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
+                            {sub}
+                        </span>,
                     device: sub => <span className="mx_KeyBackupPanel_deviceName">{sig.device.getDisplayName()}</span>,
                 };
                 let sigStat;
                 if (sig.valid && sig.device.isVerified()) {
-                    sigStat = _t("Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device>x</device>", {}, sigStatSub);
+                    sigStat = _t(
+                        "Backup has a <validity>valid</validity> signature from " +
+                        "<verify>verified</verify> device <device>x</device>",
+                        {}, sigStatSub,
+                    );
                 } else if (sig.valid && !sig.device.isVerified()) {
-                    sigStat = _t("Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>", {}, sigStatSub);
+                    sigStat = _t(
+                        "Backup has a <validity>valid</validity> signature from " +
+                        "<verify>unverified</verify> device <device></device>",
+                        {}, sigStatSub,
+                    );
                 } else if (!sig.valid && sig.device.isVerified()) {
-                    sigStat = _t("Backup has an <validity>invalid</validity> signature from <verify>verified</verify> device <device></device>", {}, sigStatSub);
+                    sigStat = _t(
+                        "Backup has an <validity>invalid</validity> signature from " +
+                        "<verify>verified</verify> device <device></device>",
+                        {}, sigStatSub,
+                    );
                 } else if (!sig.valid && !sig.device.isVerified()) {
-                    sigStat = _t("Backup has an <validity>invalid</validity> signature from <verify>unverified</verify> device <device></device>", {}, sigStatSub);
+                    sigStat = _t(
+                        "Backup has an <validity>invalid</validity> signature from " +
+                        "<verify>unverified</verify> device <device></device>",
+                        {}, sigStatSub,
+                    );
                 }
 
                 let verifyButton;

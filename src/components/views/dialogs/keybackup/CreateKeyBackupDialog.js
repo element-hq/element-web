@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Modal from '../../../../Modal';
 import React from 'react';
-import PropTypes from 'prop-types';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import { formatCryptoKey } from '../../../../utils/FormattingUtils';
@@ -146,7 +144,7 @@ export default React.createClass({
             <p>{_t("This key can decrypt your full message history.")}</p>
             <p>{_t(
                 "When you've saved it somewhere safe, proceed to the next step where the key will be used to "+
-                "create an encrypted backup of your message keys and then destroyed."
+                "create an encrypted backup of your message keys and then destroyed.",
             )}</p>
             <div className="mx_Dialog_buttons">
                 <button onClick={this._copyRecoveryKey}>

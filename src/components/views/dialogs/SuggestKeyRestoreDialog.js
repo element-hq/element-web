@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Modal from '../../../Modal';
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 
 /**
  * Dialog which asks the user whether they want to restore megolm keys
