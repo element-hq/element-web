@@ -143,7 +143,7 @@ function getTranslationsJs(file) {
                         // Validate tag replacements
                         if (node.arguments.length > 2) {
                             const tagMap = node.arguments[2];
-                            for (const prop of tagMap.properties) {
+                            for (const prop of tagMap.properties || []) {
                                 if (prop.key.type === 'Literal') {
                                     const tag = prop.key.value;
                                     // RegExp same as in src/languageHandler.js
