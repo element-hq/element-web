@@ -173,6 +173,13 @@ module.exports = class RiotSession {
         return delay(ms);
     }
 
+    async setOffline(enabled) {
+        const description = enabled ? "offline" : "back online";
+        this.log.step(`goes ${description}`);
+        await this.page.setOfflineMode(enabled);
+        this.log.done();
+    }
+
     close() {
         return this.browser.close();
     }

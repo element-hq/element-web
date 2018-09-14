@@ -31,9 +31,15 @@ const assert = require('assert');
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
     await enableLazyLoading(alice);
-    await setupRoomWithBobAliceAndCharlies(alice, bob, charlies);
-    await checkPaginatedDisplayNames(alice, charlies);
-    await checkMemberList(alice, charlies);
+    const charly1to5 = charlies.slice("charly-1..5", 0, 5);
+    const charly6to10 = charlies.slice("charly-6..10", 5);
+    assert(charly1to5.sessions.length, 5);
+    assert(charly6to10.sessions.length, 5);
+    await setupRoomWithBobAliceAndCharlies(alice, bob, charly1to5);
+    await checkPaginatedDisplayNames(alice, charly1to5);
+    await checkMemberList(alice, charly1to5);
+    await joinCharliesWhileAliceIsOffline(alice, charly6to10);
+    await checkMemberList(alice, charly6to10);
 }
 
 const room = "Lazy Loading Test";
@@ -70,7 +76,7 @@ async function checkPaginatedDisplayNames(alice, charlies) {
             });
         }, messages);
     }, []);
-    await checkTimelineContains(alice, expectedMessages, "Charly #1-10");
+    await checkTimelineContains(alice, expectedMessages, "Charly #1-5");
 }
 
 async function checkMemberList(alice, charlies) {
@@ -84,4 +90,19 @@ async function checkMemberList(alice, charlies) {
             `only have ${displayNames}`);
     });
     alice.log.done();
+}
+
+async function joinCharliesWhileAliceIsOffline(alice, charly6to10) {
+    await alice.setOffline(true);
+    await delay(1000);
+    const members6to10 = await charly6to10.join(alias);
+    const member6 = members6to10.rooms[0];
+    member6.log.step("sends 20 messages").mute();
+    for(let i = 20; i >= 1; --i) {
+        await member6.talk("where is charly?");
+    }
+    member6.log.unmute().done();
+    await delay(1000);
+    await alice.setOffline(false);
+    await delay(1000);
 }

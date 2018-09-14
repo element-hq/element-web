@@ -25,7 +25,7 @@ module.exports = class RestMultiSession {
         this.sessions = sessions;
     }
 
-    slice(start, end, groupName) {
+    slice(groupName, start, end) {
         return new RestMultiSession(this.sessions.slice(start, end), groupName);
     }
 
