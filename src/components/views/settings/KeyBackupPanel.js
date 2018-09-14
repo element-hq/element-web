@@ -28,6 +28,8 @@ export default class KeyBackupPanel extends React.Component {
 
         this._startNewBackup = this._startNewBackup.bind(this);
         this._deleteBackup = this._deleteBackup.bind(this);
+        this._verifyDevice = this._verifyDevice.bind(this);
+        this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
 
         this._unmounted = false;
         this.state = {
@@ -35,20 +37,33 @@ export default class KeyBackupPanel extends React.Component {
             error: null,
             backupInfo: null,
         };
+    }
+
+    componentWillMount() {
         this._loadBackupStatus();
+
+        MatrixClientPeg.get().on('keyBackupStatus', this._onKeyBackupStatus);
     }
 
     componentWillUnmount() {
         this._unmounted = true;
+
+        MatrixClientPeg.get().removeListener('keyBackupStatus', this._onKeyBackupStatus);
+    }
+
+    _onKeyBackupStatus() {
+        this._loadBackupStatus();
     }
 
     async _loadBackupStatus() {
         this.setState({loading: true});
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+            const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
             if (this._unmounted) return;
             this.setState({
                 backupInfo,
+                backupSigStatus,
                 loading: false,
             });
         } catch (e) {
@@ -92,6 +107,19 @@ export default class KeyBackupPanel extends React.Component {
         
     }
 
+    _verifyDevice(e) {
+        const device = this.state.backupSigStatus.sigs[e.target.getAttribute('data-sigindex')].device;
+
+        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
+        Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
+            userId: MatrixClientPeg.get().credentials.userId,
+            device: device,
+            onFinished: () => {
+                this._loadBackupStatus();
+            },
+        });
+    }
+
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -112,10 +140,47 @@ export default class KeyBackupPanel extends React.Component {
                 // XXX: display why and how to fix it
                 clientBackupStatus = _t("This device is <b>not</b> uploading keys to this backup", {}, {b: x => <b>{x}</b>});
             }
+
+            let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
+                const sigStatSub = {
+                    validity: sub => <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>{sub}</span>,
+                    verify: sub => <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>{sub}</span>,
+                    device: sub => <span className="mx_KeyBackupPanel_deviceName">{sig.device.getDisplayName()}</span>,
+                };
+                let sigStat;
+                if (sig.valid && sig.device.isVerified()) {
+                    sigStat = _t("Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device>x</device>", {}, sigStatSub);
+                } else if (sig.valid && !sig.device.isVerified()) {
+                    sigStat = _t("Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>", {}, sigStatSub);
+                } else if (!sig.valid && sig.device.isVerified()) {
+                    sigStat = _t("Backup has an <validity>invalid</validity> signature from <verify>verified</verify> device <device></device>", {}, sigStatSub);
+                } else if (!sig.valid && !sig.device.isVerified()) {
+                    sigStat = _t("Backup has an <validity>invalid</validity> signature from <verify>unverified</verify> device <device></device>", {}, sigStatSub);
+                }
+
+                let verifyButton;
+                if (!sig.device.isVerified()) {
+                    verifyButton = <div><br /><AccessibleButton className="mx_UserSettings_button"
+                            onClick={this._verifyDevice} data-sigindex={i}>
+                        { _t("Verify...") }
+                    </AccessibleButton></div>;
+                }
+
+                return <div key={i}>
+                    {sigStat}
+                    {verifyButton}
+                </div>;
+            });
+            if (this.state.backupSigStatus.sigs.length === 0) {
+                backupSigStatuses = _t("Backup is not signed by any of your devices");
+            }
+
             return <div>
                 {_t("Backup version: ")}{this.state.backupInfo.version}<br />
                 {_t("Algorithm: ")}{this.state.backupInfo.algorithm}<br />
-                {clientBackupStatus}<br /><br />
+                {clientBackupStatus}<br />
+                <div>{backupSigStatuses}</div><br />
+                <br />
                 <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._deleteBackup}>
                     { _t("Delete backup") }
