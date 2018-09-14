@@ -76,11 +76,11 @@ async function checkPaginatedDisplayNames(alice, charlies) {
             });
         }, messages);
     }, []);
-    await checkTimelineContains(alice, expectedMessages, "Charly #1-5");
+    await checkTimelineContains(alice, expectedMessages, charlies.log.username);
 }
 
 async function checkMemberList(alice, charlies) {
-    alice.log.step("checks the memberlist contains herself, bob and all charlies");
+    alice.log.step(`checks the memberlist contains herself, bob and ${charlies.log.username}`);
     const displayNames = (await getMembersInMemberlist(alice)).map((m) => m.displayName);
     assert(displayNames.includes("alice"));
     assert(displayNames.includes("bob"));
