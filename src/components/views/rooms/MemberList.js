@@ -168,7 +168,7 @@ module.exports = React.createClass({
         }
     },
 
-    onRoom: async function(room) {
+    onRoom: function(room) {
         if (room.roomId !== this.props.roomId) {
             return;
         }
@@ -182,7 +182,7 @@ module.exports = React.createClass({
         this._loadMembersIfNeeded();
     },
 
-    onRoomMembership: async function(ev, member, oldMembership) {
+    onRoomMembership: function(ev, member, oldMembership) {
         const cli = MatrixClientPeg.get();
         const myId = cli.getUserId();
         if (member.userId === myId && oldMembership !== "join" && member.membership === "join") {
