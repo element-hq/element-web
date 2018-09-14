@@ -102,7 +102,8 @@ async function joinCharliesWhileAliceIsOffline(alice, charly6to10) {
         await member6.talk("where is charly?");
     }
     member6.log.unmute().done();
-    await delay(1000);
+    const catchupPromise = alice.waitForNextSuccessfulSync();
     await alice.setOffline(false);
-    await delay(1000);
+    await catchupPromise;
+    await delay(2000);
 }

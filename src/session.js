@@ -161,6 +161,33 @@ module.exports = class RiotSession {
         });
     }
 
+    waitForSyncResponseWith(predicate) {
+        return this.page.waitForResponse(async (response) => {
+            if (response.request().url().indexOf("/sync") === -1) {
+                return false;
+            }
+            return predicate(response);
+        });
+    }
+
+    /** wait for a /sync request started after this call that gets a 200 response */
+    async waitForNextSuccessfulSync() {
+        const syncUrls = [];
+        function onRequest(request) {
+            if (request.url().indexOf("/sync") !== -1) {
+                syncUrls.push(request.url());
+            }
+        }
+
+        this.page.on('request', onRequest);
+
+        await this.page.waitForResponse((response) => {
+            return syncUrls.includes(response.request().url()) && response.status() === 200;
+        });
+
+        this.page.removeListener('request', onRequest);
+    }
+
     goto(url) {
         return this.page.goto(url);
     }
