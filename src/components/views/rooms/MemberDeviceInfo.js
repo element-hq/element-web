@@ -15,35 +15,36 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default class MemberDeviceInfo extends React.Component {
     render() {
-        var indicator = null;
-        var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+        let indicator = null;
+        const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
 
         if (this.props.device.isBlocked()) {
             indicator = (
                     <div className="mx_MemberDeviceInfo_blacklisted">
-                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt={_t("Blacklisted")}/>
+                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt={_t("Blacklisted")} />
                     </div>
             );
         } else if (this.props.device.isVerified()) {
             indicator = (
                     <div className="mx_MemberDeviceInfo_verified">
-                    <img src="img/e2e-verified.svg" width="10" height="12" alt={_t("Verified")}/>
+                    <img src="img/e2e-verified.svg" width="10" height="12" alt={_t("Verified")} />
                     </div>
             );
         } else {
             indicator = (
                     <div className="mx_MemberDeviceInfo_unverified">
-                    <img src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt={_t("Unverified")}/>
+                    <img src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt={_t("Unverified")} />
                     </div>
             );
         }
 
-        var deviceName = this.props.device.ambiguous ?
+        const deviceName = this.props.device.ambiguous ?
             (this.props.device.getDisplayName() ? this.props.device.getDisplayName() : "") + " (" + this.props.device.deviceId + ")" :
             this.props.device.getDisplayName();
 
@@ -53,8 +54,8 @@ export default class MemberDeviceInfo extends React.Component {
                     title={_t("device id: ") + this.props.device.deviceId} >
                 <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">
-                        {deviceName}
-                        {indicator}
+                        { deviceName }
+                        { indicator }
                     </div>
                 </div>
                 <DeviceVerifyButtons userId={this.props.userId} device={this.props.device} />
@@ -65,6 +66,6 @@ export default class MemberDeviceInfo extends React.Component {
 
 MemberDeviceInfo.displayName = 'MemberDeviceInfo';
 MemberDeviceInfo.propTypes = {
-    userId: React.PropTypes.string.isRequired,
-    device: React.PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
 };

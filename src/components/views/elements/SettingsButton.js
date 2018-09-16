@@ -23,7 +23,7 @@ const SettingsButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_user_settings"
-            label={ _t("Settings") }
+            label={_t("Settings")}
             iconPath="img/icons-settings.svg"
             size={props.size}
             tooltip={props.tooltip}

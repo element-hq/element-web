@@ -1,0 +1,19 @@
+{
+    "A new version of Riot is available.": "रायट के एक नया वर्शन उपलब्ध है।",
+    "All messages": "सारे संदेश",
+    "All Rooms": "सारे कमरे",
+    "Please set a password!": "कृपया एक पासवर्ड सेट करें!",
+    "Continue": "आगे बढ़ें",
+    "You have successfully set a password and an email address!": "आपने सफलतापूर्वक एक पासवर्ड और एक ईमेल एड्रेस सेट कर लिया है!",
+    "This email address is already in use": "यह ईमेल आईडी पहले से इस्तेमाल में है",
+    "This phone number is already in use": "यह फ़ोन नंबर पहले से इस्तेमाल में है",
+    "Failed to verify email address: make sure you clicked the link in the email": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
+    "The platform you're on": "आप जिस प्लेटफार्म पर हैं",
+    "The version of Riot.im": "रायट.आई एम का जो संस्करण",
+    "Whether or not you're logged in (we don't record your user name)": "चाहे आप लॉग इन हों या ना हों( हम आपका खाता नाम दर्ज नहीं करते )",
+    "Your language of choice": "आपकी चयन की भाषा",
+    "Which officially provided instance you are using, if any": "क्या आप कोई अधिकृत संस्करण इस्तेमाल कर रहे हैं? अगर हां, तो कौन सा",
+    "Your homeserver's URL": "आपके होमसर्वर का यू. आर. एल.",
+    "Every page you use in the app": "हर पृष्ठ जिसका आप इस एप में इस्तेमाल करते हैं",
+    "Your User Agent": "आपका उपभोक्ता प्रतिनिधि"
+}

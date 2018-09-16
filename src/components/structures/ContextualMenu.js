@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,90 +16,176 @@ limitations under the License.
 */
 
 
-'use strict';
-
-var classNames = require('classnames');
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
-module.exports = {
-    ContextualMenuContainerId: "mx_ContextualMenu_Container",
+const ContextualMenuContainerId = "mx_ContextualMenu_Container";
 
+function getOrCreateContainer() {
+    let container = document.getElementById(ContextualMenuContainerId);
+
+    if (!container) {
+        container = document.createElement("div");
+        container.id = ContextualMenuContainerId;
+        document.body.appendChild(container);
+    }
+
+    return container;
+}
+
+export default class ContextualMenu extends React.Component {
     propTypes: {
-        menuWidth: React.PropTypes.number,
-        menuHeight: React.PropTypes.number,
-        chevronOffset: React.PropTypes.number,
-        menuColour: React.PropTypes.string,
-    },
+        top: PropTypes.number,
+        bottom: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number,
+        menuWidth: PropTypes.number,
+        menuHeight: PropTypes.number,
+        chevronOffset: PropTypes.number,
+        menuColour: PropTypes.string,
+        chevronFace: PropTypes.string, // top, bottom, left, right
+        // Function to be called on menu close
+        onFinished: PropTypes.func,
+        menuPaddingTop: PropTypes.number,
+        menuPaddingRight: PropTypes.number,
+        menuPaddingBottom: PropTypes.number,
+        menuPaddingLeft: PropTypes.number,
 
-    getOrCreateContainer: function() {
-        var container = document.getElementById(this.ContextualMenuContainerId);
+        // If true, insert an invisible screen-sized element behind the
+        // menu that when clicked will close it.
+        hasBackground: PropTypes.bool,
 
-        if (!container) {
-            container = document.createElement("div");
-            container.id = this.ContextualMenuContainerId;
-            document.body.appendChild(container);
+        // The component to render as the context menu
+        elementClass: PropTypes.element.isRequired,
+        // on resize callback
+        windowResize: PropTypes.func,
+        // method to close menu
+        closeMenu: PropTypes.func,
+    };
+
+    constructor() {
+        super();
+        this.state = {
+            contextMenuRect: null,
+        };
+
+        this.onContextMenu = this.onContextMenu.bind(this);
+        this.collectContextMenuRect = this.collectContextMenuRect.bind(this);
+    }
+
+    collectContextMenuRect(element) {
+        // We don't need to clean up when unmounting, so ignore
+        if (!element) return;
+
+        this.setState({
+            contextMenuRect: element.getBoundingClientRect(),
+        });
+    }
+
+    onContextMenu(e) {
+        if (this.props.closeMenu) {
+            this.props.closeMenu();
+
+            e.preventDefault();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            // XXX: This isn't pretty but the only way to allow opening a different context menu on right click whilst
+            // a context menu and its click-guard are up without completely rewriting how the context menus work.
+            setImmediate(() => {
+                const clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent(
+                    'contextmenu', true, true, window, 0,
+                    0, 0, x, y, false, false,
+                    false, false, 0, null,
+                );
+                document.elementFromPoint(x, y).dispatchEvent(clickEvent);
+            });
+        }
+    }
+
+    render() {
+        const position = {};
+        let chevronFace = null;
+
+        const props = this.props;
+
+        if (props.top) {
+            position.top = props.top;
+        } else {
+            position.bottom = props.bottom;
         }
 
-        return container;
-    },
+        if (props.left) {
+            position.left = props.left;
+            chevronFace = 'left';
+        } else {
+            position.right = props.right;
+            chevronFace = 'right';
+        }
 
-    createMenu: function(Element, props) {
-        var self = this;
+        const contextMenuRect = this.state.contextMenuRect || null;
+        const padding = 10;
 
-        var closeMenu = function() {
-            ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
+        const chevronOffset = {};
+        if (props.chevronFace) {
+            chevronFace = props.chevronFace;
+        }
+        if (chevronFace === 'top' || chevronFace === 'bottom') {
+            chevronOffset.left = props.chevronOffset;
+        } else {
+            const target = position.top;
 
-            if (props && props.onFinished) {
-                props.onFinished.apply(null, arguments);
+            // By default, no adjustment is made
+            let adjusted = target;
+
+            // If we know the dimensions of the context menu, adjust its position
+            // such that it does not leave the (padded) window.
+            if (contextMenuRect) {
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
             }
-        };
 
-        var position = {
-            top: props.top,
-        };
-
-        var chevronOffset = {};
-        if (props.chevronOffset) {
-            chevronOffset.top = props.chevronOffset;
+            position.top = adjusted;
+            chevronOffset.top = Math.max(props.chevronOffset, props.chevronOffset + target - adjusted);
         }
 
         // To override the default chevron colour, if it's been set
-        var chevronCSS = "";
+        let chevronCSS = "";
         if (props.menuColour) {
             chevronCSS = `
                 .mx_ContextualMenu_chevron_left:after {
                     border-right-color: ${props.menuColour};
                 }
-
                 .mx_ContextualMenu_chevron_right:after {
+                    border-left-color: ${props.menuColour};
+                }
+                .mx_ContextualMenu_chevron_top:after {
+                    border-left-color: ${props.menuColour};
+                }
+                .mx_ContextualMenu_chevron_bottom:after {
                     border-left-color: ${props.menuColour};
                 }
             `;
         }
 
-        var chevron = null;
-        if (props.left) {
-            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_left"></div>;
-            position.left = props.left;
-        } else {
-            chevron = <div style={chevronOffset} className="mx_ContextualMenu_chevron_right"></div>;
-            position.right = props.right;
-        }
+        const chevron = <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} />;
+        const className = 'mx_ContextualMenu_wrapper';
 
-        var className = 'mx_ContextualMenu_wrapper';
-
-        var menuClasses = classNames({
+        const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            'mx_ContextualMenu_left': props.left,
-            'mx_ContextualMenu_right': !props.left,
+            'mx_ContextualMenu_left': chevronFace === 'left',
+            'mx_ContextualMenu_right': chevronFace === 'right',
+            'mx_ContextualMenu_top': chevronFace === 'top',
+            'mx_ContextualMenu_bottom': chevronFace === 'bottom',
         });
 
-        var menuStyle = {};
+        const menuStyle = {};
         if (props.menuWidth) {
             menuStyle.width = props.menuWidth;
         }
@@ -111,21 +198,54 @@ module.exports = {
             menuStyle["backgroundColor"] = props.menuColour;
         }
 
+        if (!isNaN(Number(props.menuPaddingTop))) {
+            menuStyle["paddingTop"] = props.menuPaddingTop;
+        }
+        if (!isNaN(Number(props.menuPaddingLeft))) {
+            menuStyle["paddingLeft"] = props.menuPaddingLeft;
+        }
+        if (!isNaN(Number(props.menuPaddingBottom))) {
+            menuStyle["paddingBottom"] = props.menuPaddingBottom;
+        }
+        if (!isNaN(Number(props.menuPaddingRight))) {
+            menuStyle["paddingRight"] = props.menuPaddingRight;
+        }
+
+        const ElementClass = props.elementClass;
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
-        var menu = (
-            <div className={className} style={position}>
-                <div className={menuClasses} style={menuStyle}>
-                    {chevron}
-                    <Element {...props} onFinished={closeMenu}/>
-                </div>
-                <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
-                <style>{chevronCSS}</style>
+        return <div className={className} style={position}>
+            <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect}>
+                { chevron }
+                <ElementClass {...props} onFinished={props.closeMenu} onResize={props.windowResize} />
             </div>
-        );
+            { props.hasBackground && <div className="mx_ContextualMenu_background"
+                                          onClick={props.closeMenu} onContextMenu={this.onContextMenu} /> }
+            <style>{ chevronCSS }</style>
+        </div>;
+    }
+}
 
-        ReactDOM.render(menu, this.getOrCreateContainer());
+export function createMenu(ElementClass, props, hasBackground=true) {
+    const closeMenu = function(...args) {
+        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
 
-        return {close: closeMenu};
-    },
-};
+        if (props && props.onFinished) {
+            props.onFinished.apply(null, args);
+        }
+    };
+
+    // We only reference closeMenu once per call to createMenu
+    const menu = <ContextualMenu
+        hasBackground={hasBackground}
+        {...props}
+        elementClass={ElementClass}
+        closeMenu={closeMenu} // eslint-disable-line react/jsx-no-bind
+        windowResize={closeMenu} // eslint-disable-line react/jsx-no-bind
+    />;
+
+    ReactDOM.render(menu, getOrCreateContainer());
+
+    return {close: closeMenu};
+}

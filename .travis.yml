@@ -3,7 +3,10 @@ dist: trusty
 
 # we don't need sudo, so can run in a container, which makes startup much
 # quicker.
-sudo: false
+#
+# unfortunately we do temporarily require sudo as a workaround for
+# https://github.com/travis-ci/travis-ci/issues/8836
+sudo: required
 
 language: node_js
 node_js:
@@ -12,6 +15,7 @@ addons:
     chrome: stable
 install:
     - npm install
-    - (cd node_modules/matrix-js-sdk && npm install)
+# install synapse prerequisites for end to end tests
+    - sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev
 script:
     ./scripts/travis.sh

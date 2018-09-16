@@ -16,24 +16,24 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import KeyCode from '../../../KeyCode';
+import { KeyCode } from '../../../Keyboard';
 
 
 module.exports = React.createClass({
     displayName: 'ForwardMessage',
 
     propTypes: {
-        onCancelClick: React.PropTypes.func.isRequired,
+        onCancelClick: PropTypes.func.isRequired,
     },
 
     componentWillMount: function() {
         dis.dispatch({
-            action: 'ui_opacity',
-            leftOpacity: 1.0,
-            rightOpacity: 0.3,
-            middleOpacity: 0.5,
+            action: 'panel_disable',
+            rightDisabled: true,
+            middleDisabled: true,
         });
     },
 
@@ -43,9 +43,9 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 1.0,
+            action: 'panel_disable',
+            sideDisabled: false,
+            middleDisabled: false,
         });
         document.removeEventListener('keydown', this._onKeyDown);
     },
@@ -61,7 +61,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ForwardMessage">
-                <h1>{_t('Please select the destination room for this message')}</h1>
+                <h1>{ _t('Please select the destination room for this message') }</h1>
             </div>
         );
     },

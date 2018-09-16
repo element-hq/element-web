@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -27,6 +29,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
 
     constructor(props) {
         super(props);
+        this.onFinished = this.onFinished.bind(this);
         this.onRoomTileClick = this.onRoomTileClick.bind(this);
 
         this.state = {
@@ -51,18 +54,16 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         for (const roomId of dmRooms) {
             const room = client.getRoom(roomId);
             if (room) {
-                const me = room.getMember(client.credentials.userId);
-                const highlight = (
-                    room.getUnreadNotificationCount('highlight') > 0 ||
-                    me.membership == "invite"
-                );
+                const isInvite = room.getMyMembership() === "invite";
+                const highlight = room.getUnreadNotificationCount('highlight') > 0 || isInvite;
                 tiles.push(
                     <RoomTile key={room.roomId} room={room}
+                        transparent={true}
                         collapsed={false}
                         selected={false}
                         unread={Unread.doesRoomHaveUnreadMessages(room)}
                         highlight={highlight}
-                        isInvite={me.membership == "invite"}
+                        isInvite={isInvite}
                         onClick={this.onRoomTileClick}
                     />,
                 );
@@ -108,6 +109,10 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         this.props.onExistingRoomSelected(roomId);
     }
 
+    onFinished() {
+        this.props.onFinished(false);
+    }
+
     render() {
         let title = '';
         let content = null;
@@ -127,7 +132,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 </div>
                 <div className={labelClasses}><i>{ _t("Start new chat") }</i></div>
             </AccessibleButton>;
-            content = <div className="mx_Dialog_content">
+            content = <div className="mx_Dialog_content" id='mx_Dialog_content'>
                 { _t('You already have existing direct chats with this user:') }
                 <div className="mx_ChatCreateOrReuseDialog_tiles">
                     { this.state.tiles }
@@ -137,6 +142,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         } else {
             // Show the avatar, name and a button to confirm that a new chat is requested
             const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const Spinner = sdk.getComponent('elements.Spinner');
             title = _t('Start chatting');
 
@@ -144,7 +150,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             if (this.state.busyProfile) {
                 profile = <Spinner />;
             } else if (this.state.profileError) {
-                profile = <div className="error">
+                profile = <div className="error" role="alert">
                     Unable to load profile information for { this.props.userId }
                 </div>;
             } else {
@@ -155,30 +161,28 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                         width={48} height={48}
                     />
                     <div className="mx_ChatCreateOrReuseDialog_profile_name">
-                        {this.state.profile.displayName || this.props.userId}
+                        { this.state.profile.displayName || this.props.userId }
                     </div>
                 </div>;
             }
             content = <div>
-                <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>
                         { _t('Click on the button below to start chatting!') }
                     </p>
                     { profile }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onNewDMClick}>
-                        { _t('Start Chatting') }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={_t('Start Chatting')}
+                    onPrimaryButtonClick={this.props.onNewDMClick} focus={true} />
             </div>;
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_ChatCreateOrReuseDialog'
-                onFinished={ this.props.onFinished.bind(false) }
+                onFinished={this.onFinished}
                 title={title}
+                contentId='mx_Dialog_content'
             >
                 { content }
             </BaseDialog>
@@ -186,10 +190,10 @@ export default class ChatCreateOrReuseDialog extends React.Component {
     }
 }
 
-ChatCreateOrReuseDialog.propTyps = {
-    userId: React.PropTypes.string.isRequired,
+ChatCreateOrReuseDialog.propTypes = {
+    userId: PropTypes.string.isRequired,
     // Called when clicking outside of the dialog
-    onFinished: React.PropTypes.func.isRequired,
-    onNewDMClick: React.PropTypes.func.isRequired,
-    onExistingRoomSelected: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
+    onNewDMClick: PropTypes.func.isRequired,
+    onExistingRoomSelected: PropTypes.func.isRequired,
 };

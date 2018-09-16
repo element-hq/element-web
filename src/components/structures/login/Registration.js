@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,13 +20,16 @@ import Matrix from 'matrix-js-sdk';
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
-import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
+import SettingsStore from "../../../settings/SettingsStore";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -33,31 +37,38 @@ module.exports = React.createClass({
     displayName: 'Registration',
 
     propTypes: {
-        onLoggedIn: React.PropTypes.func.isRequired,
-        clientSecret: React.PropTypes.string,
-        sessionId: React.PropTypes.string,
-        makeRegistrationUrl: React.PropTypes.func.isRequired,
-        idSid: React.PropTypes.string,
-        customHsUrl: React.PropTypes.string,
-        customIsUrl: React.PropTypes.string,
-        defaultHsUrl: React.PropTypes.string,
-        defaultIsUrl: React.PropTypes.string,
-        brand: React.PropTypes.string,
-        email: React.PropTypes.string,
-        referrer: React.PropTypes.string,
-        teamServerConfig: React.PropTypes.shape({
+        onLoggedIn: PropTypes.func.isRequired,
+        clientSecret: PropTypes.string,
+        sessionId: PropTypes.string,
+        makeRegistrationUrl: PropTypes.func.isRequired,
+        idSid: PropTypes.string,
+        customHsUrl: PropTypes.string,
+        customIsUrl: PropTypes.string,
+        defaultHsUrl: PropTypes.string,
+        defaultIsUrl: PropTypes.string,
+        brand: PropTypes.string,
+        email: PropTypes.string,
+        referrer: PropTypes.string,
+        teamServerConfig: PropTypes.shape({
             // Email address to request new teams
-            supportEmail: React.PropTypes.string.isRequired,
+            supportEmail: PropTypes.string.isRequired,
             // URL of the riot-team-server to get team configurations and track referrals
-            teamServerURL: React.PropTypes.string.isRequired,
+            teamServerURL: PropTypes.string.isRequired,
         }),
-        teamSelected: React.PropTypes.object,
+        teamSelected: PropTypes.object,
 
-        defaultDeviceDisplayName: React.PropTypes.string,
+        defaultDeviceDisplayName: PropTypes.string,
 
         // registration shouldn't know or care how login is done.
-        onLoginClick: React.PropTypes.func.isRequired,
-        onCancelClick: React.PropTypes.func
+        onLoginClick: PropTypes.func.isRequired,
+        onCancelClick: PropTypes.func,
+        onServerConfigChange: PropTypes.func.isRequired,
+
+        rtsClient: PropTypes.shape({
+            getTeamsConfig: PropTypes.func.isRequired,
+            trackReferral: PropTypes.func.isRequired,
+            getTeam: PropTypes.func.isRequired,
+        }),
     },
 
     getInitialState: function() {
@@ -82,6 +93,7 @@ module.exports = React.createClass({
             doingUIAuth: Boolean(this.props.sessionId),
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
+            flows: null,
         };
     },
 
@@ -121,23 +133,40 @@ module.exports = React.createClass({
     },
 
     onServerConfigChange: function(config) {
-        let newState = {};
+        const newState = {};
         if (config.hsUrl !== undefined) {
             newState.hsUrl = config.hsUrl;
         }
         if (config.isUrl !== undefined) {
             newState.isUrl = config.isUrl;
         }
-        this.setState(newState, function() {
+        this.props.onServerConfigChange(config);
+        this.setState(newState, () => {
             this._replaceClient();
         });
     },
 
-    _replaceClient: function() {
+    _replaceClient: async function() {
         this._matrixClient = Matrix.createClient({
             baseUrl: this.state.hsUrl,
             idBaseUrl: this.state.isUrl,
         });
+        try {
+            await this._makeRegisterRequest({});
+            // This should never succeed since we specified an empty
+            // auth object.
+            console.log("Expecting 401 from register request but got success!");
+        } catch (e) {
+            if (e.httpStatus === 401) {
+                this.setState({
+                    flows: e.data.flows,
+                });
+            } else {
+                this.setState({
+                    errorText: _t("Unable to query for supported registration methods"),
+                });
+            }
+        }
     },
 
     onFormSubmit: function(formVals) {
@@ -153,12 +182,34 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
-                let msisdn_available = false;
+            if (response.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+                const errorTop = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits.",
+                    ),
+                });
+                const errorDetail = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    '': _td(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                    ),
+                });
+                msg = <div>
+                    <p>{errorTop}</p>
+                    <p>{errorDetail}</p>
+                </div>;
+            } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+                let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
-                    msisdn_available |= flow.stages.indexOf('m.login.msisdn') > -1;
+                    msisdnAvailable |= flow.stages.indexOf('m.login.msisdn') > -1;
                 }
-                if (!msisdn_available) {
+                if (!msisdnAvailable) {
                     msg = _t('This server does not support authentication with a phone number.');
                 }
             }
@@ -195,7 +246,7 @@ module.exports = React.createClass({
 
                 this._rtsClient.getTeam(teamToken).then((team) => {
                     console.log(
-                        `User successfully registered with team ${team.name}`
+                        `User successfully registered with team ${team.name}`,
                     );
                     if (!team.rooms) {
                         return;
@@ -223,7 +274,7 @@ module.exports = React.createClass({
                 deviceId: response.device_id,
                 homeserverUrl: this._matrixClient.getHomeserverUrl(),
                 identityServerUrl: this._matrixClient.getIdentityServerUrl(),
-                accessToken: response.access_token
+                accessToken: response.access_token,
             }, teamToken);
         }).then((cli) => {
             return this._setupPushers(cli);
@@ -237,7 +288,7 @@ module.exports = React.createClass({
         return matrixClient.getPushers().then((resp)=>{
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
-                if (pushers[i].kind == 'email') {
+                if (pushers[i].kind === 'email') {
                     const emailPusher = pushers[i];
                     emailPusher.data = { brand: this.props.brand };
                     matrixClient.setPusher(emailPusher).done(() => {
@@ -253,7 +304,7 @@ module.exports = React.createClass({
     },
 
     onFormValidationFailed: function(errCode) {
-        var errMsg;
+        let errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
                 errMsg = _t('Missing password.');
@@ -262,7 +313,7 @@ module.exports = React.createClass({
                 errMsg = _t('Passwords don\'t match.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: MIN_PASSWORD_LENGTH});
+                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH});
                 break;
             case "RegistrationForm.ERR_EMAIL_INVALID":
                 errMsg = _t('This doesn\'t look like a valid email address.');
@@ -282,7 +333,7 @@ module.exports = React.createClass({
                 break;
         }
         this.setState({
-            errorText: errMsg
+            errorText: errMsg,
         });
     },
 
@@ -316,15 +367,18 @@ module.exports = React.createClass({
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
-        }
+        };
     },
 
     render: function() {
         const LoginHeader = sdk.getComponent('login.LoginHeader');
         const LoginFooter = sdk.getComponent('login.LoginFooter');
+        const LoginPage = sdk.getComponent('login.LoginPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
+
+        const theme = SettingsStore.getValue("theme");
 
         let registerBody;
         if (this.state.doingUIAuth) {
@@ -341,12 +395,22 @@ module.exports = React.createClass({
                     poll={true}
                 />
             );
-        } else if (this.state.busy || this.state.teamServerBusy) {
+        } else if (this.state.busy || this.state.teamServerBusy || !this.state.flows) {
             registerBody = <Spinner />;
         } else {
-            let errorSection;
-            if (this.state.errorText) {
-                errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
+            let serverConfigSection;
+            if (!SdkConfig.get()['disable_custom_urls']) {
+                serverConfigSection = (
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        onServerConfigChange={this.onServerConfigChange}
+                        delayTimeMs={1000}
+                    />
+                );
             }
             registerBody = (
                 <div>
@@ -361,31 +425,38 @@ module.exports = React.createClass({
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
+                        flows={this.state.flows}
                     />
-                    {errorSection}
-                    <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={1000}
-                    />
+                    { serverConfigSection }
                 </div>
             );
         }
 
-        let returnToAppJsx;
-        if (this.props.onCancelClick) {
-            returnToAppJsx = (
-                <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    {_t('Return to app')}
+        let header;
+        let errorText;
+        // FIXME: remove hardcoded Status team tweaks at some point
+        if (theme === 'status' && this.state.errorText) {
+            header = <div className="mx_Login_error">{ this.state.errorText }</div>;
+        } else {
+            header = <h2>{ _t('Create an account') }</h2>;
+            if (this.state.errorText) {
+                errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            }
+        }
+
+        let signIn;
+        if (!this.state.doingUIAuth) {
+            signIn = (
+                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                    { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
                 </a>
             );
         }
+
+        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader
                         icon={this.state.teamSelected ?
@@ -393,15 +464,14 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    <h2>{_t('Create an account')}</h2>
-                    {registerBody}
-                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        {_t('I already have an account')}
-                    </a>
-                    {returnToAppJsx}
+                    { header }
+                    { registerBody }
+                    { signIn }
+                    { errorText }
+                    <LanguageSelector />
                     <LoginFooter />
                 </div>
-            </div>
+            </LoginPage>
         );
-    }
+    },
 });

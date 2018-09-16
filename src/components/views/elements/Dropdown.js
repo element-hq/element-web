@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -25,6 +26,10 @@ class MenuOption extends React.Component {
         this._onMouseEnter = this._onMouseEnter.bind(this);
         this._onClick = this._onClick.bind(this);
     }
+
+    static defaultProps = {
+        disabled: false,
+    };
 
     _onMouseEnter() {
         this.props.onMouseEnter(this.props.dropdownKey);
@@ -46,20 +51,20 @@ class MenuOption extends React.Component {
             onClick={this._onClick} onKeyPress={this._onKeyPress}
             onMouseEnter={this._onMouseEnter}
         >
-            {this.props.children}
-        </div>
+            { this.props.children }
+        </div>;
     }
-};
+}
 
 MenuOption.propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(React.PropTypes.node),
+      PropTypes.node,
     ]),
-    highlighted: React.PropTypes.bool,
-    dropdownKey: React.PropTypes.string,
-    onClick: React.PropTypes.func.isRequired,
-    onMouseEnter: React.PropTypes.func.isRequired,
+    highlighted: PropTypes.bool,
+    dropdownKey: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
+    onMouseEnter: PropTypes.func.isRequired,
 };
 
 /*
@@ -153,6 +158,8 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputClick(ev) {
+        if (this.props.disabled) return;
+
         if (!this.state.expanded) {
             this.setState({
                 expanded: true,
@@ -250,13 +257,13 @@ export default class Dropdown extends React.Component {
                     onMouseEnter={this._setHighlightedOption}
                     onClick={this._onMenuOptionClick}
                 >
-                    {child}
+                    { child }
                 </MenuOption>
             );
         });
         if (options.length === 0) {
             return [<div key="0" className="mx_Dropdown_option">
-                {_t("No results")}
+                { _t("No results") }
             </div>];
         }
         return options;
@@ -279,7 +286,7 @@ export default class Dropdown extends React.Component {
                 />;
             }
             menu = <div className="mx_Dropdown_menu" style={menuStyle}>
-                {this._getMenuOptions()}
+                { this._getMenuOptions() }
             </div>;
         }
 
@@ -288,12 +295,13 @@ export default class Dropdown extends React.Component {
                 this.props.getShortOption(this.props.value) :
                 this.childrenByKey[this.props.value];
             currentValue = <div className="mx_Dropdown_option">
-                {selectedChild}
-            </div>
+                { selectedChild }
+            </div>;
         }
 
         const dropdownClasses = {
             mx_Dropdown: true,
+            mx_Dropdown_disabled: this.props.disabled,
         };
         if (this.props.className) {
             dropdownClasses[this.props.className] = true;
@@ -303,9 +311,9 @@ export default class Dropdown extends React.Component {
         // to the input, but overflows below it. The root contains both.
         return <div className={classnames(dropdownClasses)} ref={this._collectRoot}>
             <AccessibleButton className="mx_Dropdown_input" onClick={this._onInputClick}>
-                {currentValue}
+                { currentValue }
                 <span className="mx_Dropdown_arrow"></span>
-                {menu}
+                { menu }
             </AccessibleButton>
         </div>;
     }
@@ -315,18 +323,20 @@ Dropdown.propTypes = {
     // The width that the dropdown should be. If specified,
     // the dropped-down part of the menu will be set to this
     // width.
-    menuWidth: React.PropTypes.number,
+    menuWidth: PropTypes.number,
     // Called when the selected option changes
-    onOptionChange: React.PropTypes.func.isRequired,
+    onOptionChange: PropTypes.func.isRequired,
     // Called when the value of the search field changes
-    onSearchChange: React.PropTypes.func,
-    searchEnabled: React.PropTypes.bool,
+    onSearchChange: PropTypes.func,
+    searchEnabled: PropTypes.bool,
     // Function that, given the key of an option, returns
     // a node representing that option to be displayed in the
     // box itself as the currently-selected option (ie. as
     // opposed to in the actual dropped-down part). If
     // unspecified, the appropriate child element is used as
     // in the dropped-down menu.
-    getShortOption: React.PropTypes.func,
-    value: React.PropTypes.string,
-}
+    getShortOption: PropTypes.func,
+    value: PropTypes.string,
+    // negative for consistency with HTML
+    disabled: PropTypes.bool,
+};

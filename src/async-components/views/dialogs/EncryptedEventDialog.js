@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
+const React = require("react");
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-var sdk = require('../../../index');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+const sdk = require('../../../index');
+const MatrixClientPeg = require("../../../MatrixClientPeg");
 
 module.exports = React.createClass({
     displayName: 'EncryptedEventDialog',
 
     propTypes: {
-        event: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        event: PropTypes.object.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -33,7 +34,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
 
         // first try to load the device from our store.
         //
@@ -60,7 +61,7 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         this._unmounted = true;
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }
@@ -89,12 +90,12 @@ module.exports = React.createClass({
     },
 
     _renderDeviceInfo: function() {
-        var device = this.state.device;
+        const device = this.state.device;
         if (!device) {
             return (<i>{ _t('unknown device') }</i>);
         }
 
-        var verificationStatus = (<b>{ _t('NOT verified') }</b>);
+        let verificationStatus = (<b>{ _t('NOT verified') }</b>);
         if (device.isBlocked()) {
             verificationStatus = (<b>{ _t('Blacklisted') }</b>);
         } else if (device.isVerified()) {
@@ -118,7 +119,7 @@ module.exports = React.createClass({
                     </tr>
                     <tr>
                         <td>{ _t('Ed25519 fingerprint') }</td>
-                        <td><code>{device.getFingerprint()}</code></td>
+                        <td><code>{ device.getFingerprint() }</code></td>
                     </tr>
                 </tbody>
             </table>
@@ -126,7 +127,7 @@ module.exports = React.createClass({
     },
 
     _renderEventInfo: function() {
-        var event = this.props.event;
+        const event = this.props.event;
 
         return (
             <table>
@@ -165,36 +166,36 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
+        const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
 
-        var buttons = null;
+        let buttons = null;
         if (this.state.device) {
             buttons = (
-                <DeviceVerifyButtons device={ this.state.device }
-                    userId={ this.props.event.getSender() }
+                <DeviceVerifyButtons device={this.state.device}
+                    userId={this.props.event.getSender()}
                 />
             );
         }
 
         return (
-            <div className="mx_EncryptedEventDialog" onKeyDown={ this.onKeyDown }>
+            <div className="mx_EncryptedEventDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
                     { _t('End-to-end encryption information') }
                 </div>
                 <div className="mx_Dialog_content">
                     <h4>{ _t('Event information') }</h4>
-                    {this._renderEventInfo()}
+                    { this._renderEventInfo() }
 
                     <h4>{ _t('Sender device information') }</h4>
-                    {this._renderDeviceInfo()}
+                    { this._renderDeviceInfo() }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={ this.props.onFinished } autoFocus={ true }>
+                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={true}>
                         { _t('OK') }
                     </button>
-                    {buttons}
+                    { buttons }
                 </div>
             </div>
         );
-    }
+    },
 });

@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +15,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import MatrixClientPeg from '../MatrixClientPeg';
 import {getAddressType} from '../UserAddress';
-import {inviteToRoom} from '../Invite';
+import {inviteToRoom} from '../RoomInvite';
+import GroupStore from '../stores/GroupStore';
 import Promise from 'bluebird';
 
 /**
- * Invites multiple addresses to a room, handling rate limiting from the server
+ * Invites multiple addresses to a room or group, handling rate limiting from the server
  */
 export default class MultiInviter {
-    constructor(roomId) {
-        this.roomId = roomId;
+    /**
+     * @param {string} targetId The ID of the room or group to invite to
+     */
+    constructor(targetId) {
+        if (targetId[0] === '+') {
+            this.roomId = null;
+            this.groupId = targetId;
+        } else {
+            this.roomId = targetId;
+            this.groupId = null;
+        }
 
         this.canceled = false;
         this.addrs = [];
@@ -104,7 +116,14 @@ export default class MultiInviter {
             return;
         }
 
-        inviteToRoom(this.roomId, addr).then(() => {
+        let doInvite;
+        if (this.groupId !== null) {
+            doInvite = GroupStore.inviteUserToGroup(this.groupId, addr);
+        } else {
+            doInvite = inviteToRoom(this.roomId, addr);
+        }
+
+        doInvite.then(() => {
             if (this._canceled) { return; }
 
             this.completionStates[addr] = 'invited';

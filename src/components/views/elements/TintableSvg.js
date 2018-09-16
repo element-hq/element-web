@@ -16,18 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require("react-dom");
-var Tinter = require("../../../Tinter");
+const React = require('react');
+const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
+const Tinter = require("../../../Tinter");
 
 var TintableSvg = React.createClass({
     displayName: 'TintableSvg',
 
     propTypes: {
-        src: React.PropTypes.string.isRequired,
-        width: React.PropTypes.string.isRequired,
-        height: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string,
+        src: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired,
+        height: PropTypes.string.isRequired,
+        className: PropTypes.string,
     },
 
     statics: {
@@ -63,16 +64,16 @@ var TintableSvg = React.createClass({
 
     render: function() {
         return (
-            <object className={ "mx_TintableSvg " + (this.props.className ? this.props.className : "") }
+            <object className={"mx_TintableSvg " + (this.props.className ? this.props.className : "")}
                     type="image/svg+xml"
-                    data={ this.props.src }
-                    width={ this.props.width }
-                    height={ this.props.height }
-                    onLoad={ this.onLoad }
+                    data={this.props.src}
+                    width={this.props.width}
+                    height={this.props.height}
+                    onLoad={this.onLoad}
                     tabIndex="-1"
                 />
         );
-    }
+    },
 });
 
 // Register with the Tinter so that we will be told if the tint changes

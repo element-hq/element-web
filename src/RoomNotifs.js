@@ -34,7 +34,14 @@ export function getRoomNotifsState(roomId) {
     }
 
     // for everything else, look at the room rule.
-    const roomRule = MatrixClientPeg.get().getRoomPushRule('global', roomId);
+    let roomRule = null;
+    try {
+        roomRule = MatrixClientPeg.get().getRoomPushRule('global', roomId);
+    } catch (err) {
+        // Possible that the client doesn't have pushRules yet. If so, it
+        // hasn't started eiher, so indicate that this room is not notifying.
+        return null;
+    }
 
     // XXX: We have to assume the default is to notify for all messages
     // (in particular this will be 'wrong' for one to one rooms because
@@ -130,6 +137,11 @@ function setRoomNotifsStateUnmuted(roomId, newState) {
 }
 
 function findOverrideMuteRule(roomId) {
+    if (!MatrixClientPeg.get().pushRules ||
+        !MatrixClientPeg.get().pushRules['global'] ||
+        !MatrixClientPeg.get().pushRules['global'].override) {
+        return null;
+    }
     for (const rule of MatrixClientPeg.get().pushRules['global'].override) {
         if (isRuleForRoom(roomId, rule)) {
             if (isMuteRule(rule) && rule.enabled) {

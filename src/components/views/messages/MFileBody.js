@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -28,10 +30,10 @@ import Modal from '../../../Modal';
 
 
 // A cached tinted copy of "img/download.svg"
-var tintedDownloadImageURL;
+let tintedDownloadImageURL;
 // Track a list of mounted MFileBody instances so that we can update
 // the "img/download.svg" when the tint changes.
-var nextMountId = 0;
+let nextMountId = 0;
 const mounts = {};
 
 /**
@@ -81,7 +83,7 @@ Tinter.registerTintable(updateTintedDownloadImage);
 // downloaded. This limit does not seem to apply when the url is used as
 // the source attribute of an image tag.
 //
-// Blob URLs are generated using window.URL.createObjectURL and unforuntately
+// Blob URLs are generated using window.URL.createObjectURL and unfortunately
 // for our purposes they inherit the origin of the page that created them.
 // This means that any scripts that run when the URL is viewed will be able
 // to access local storage.
@@ -98,16 +100,27 @@ Tinter.registerTintable(updateTintedDownloadImage);
 // overridable so that people running their own version of the client can
 // choose a different renderer.
 //
-// To that end the first version of the blob generation will be the following
+// To that end the current version of the blob generation is the following
 // html:
 //
 //      <html><head><script>
-//      window.onmessage=function(e){eval("("+e.data.code+")")(e)}
+//      var params = window.location.search.substring(1).split('&');
+//      var lockOrigin;
+//      for (var i = 0; i < params.length; ++i) {
+//          var parts = params[i].split('=');
+//          if (parts[0] == 'origin') lockOrigin = decodeURIComponent(parts[1]);
+//      }
+//      window.onmessage=function(e){
+//          if (lockOrigin === undefined || e.origin === lockOrigin) eval("("+e.data.code+")")(e);
+//      }
 //      </script></head><body></body></html>
 //
 // This waits to receive a message event sent using the window.postMessage API.
 // When it receives the event it evals a javascript function in data.code and
-// runs the function passing the event as an argument.
+// runs the function passing the event as an argument. This version adds
+// support for a query parameter controlling the origin from which messages
+// will be processed as an extra layer of security (note that the default URL
+// is still 'v1' since it is backwards compatible).
 //
 // In particular it means that the rendering function can be written as a
 // ordinary javascript function which then is turned into a string using
@@ -169,11 +182,11 @@ function computedStyle(element) {
         return "";
     }
     const style = window.getComputedStyle(element, null);
-    var cssText = style.cssText;
+    let cssText = style.cssText;
     if (cssText == "") {
         // Firefox doesn't implement ".cssText" for computed styles.
         // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
-        for (var i = 0; i < style.length; i++) {
+        for (let i = 0; i < style.length; i++) {
             cssText += style[i] + ":";
             cssText += style.getPropertyValue(style[i]) + ";";
         }
@@ -191,7 +204,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        appConfig: React.PropTypes.object,
+        appConfig: PropTypes.object,
     },
 
     /**
@@ -202,7 +215,7 @@ module.exports = React.createClass({
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile: function(content) {
-        var linkText = _t("Attachment");
+        let linkText = _t("Attachment");
         if (content.body && content.body.length > 0) {
             // The content body should be the name of the file including a
             // file extension.
@@ -270,7 +283,7 @@ module.exports = React.createClass({
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
-                var decrypting = false;
+                let decrypting = false;
                 const decrypt = () => {
                     if (decrypting) {
                         return false;
@@ -294,7 +307,7 @@ module.exports = React.createClass({
 
                 return (
                     <span className="mx_MFileBody" ref="body">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
                             </a>
@@ -314,6 +327,7 @@ module.exports = React.createClass({
                     // will have the correct name when the user tries to download it.
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
+                    rel: "noopener",
                     target: "_blank",
                     textContent: _t("Download %(text)s", { text: text }),
                 }, "*");
@@ -324,18 +338,19 @@ module.exports = React.createClass({
             if (this.context.appConfig && this.context.appConfig.cross_origin_renderer_url) {
                 renderer_url = this.context.appConfig.cross_origin_renderer_url;
             }
+            renderer_url += "?origin=" + encodeURIComponent(window.location.origin);
             return (
                 <span className="mx_MFileBody">
-                    <div className="mx_MImageBody_download">
+                    <div className="mx_MFileBody_download">
                         <div style={{display: "none"}}>
-                            {/*
+                            { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
-                              */}
-                            <a ref="dummyLink"/>
+                              */ }
+                            <a ref="dummyLink" />
                         </div>
-                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe"/>
+                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe" />
                     </div>
                 </span>
             );
@@ -346,8 +361,8 @@ module.exports = React.createClass({
             if (this.props.tileShape === "file_grid") {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
-                            <a className="mx_ImageBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
+                        <div className="mx_MFileBody_download">
+                            <a className="mx_MFileBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
                                 { fileName }
                             </a>
                             <div className="mx_MImageBody_size">
@@ -356,13 +371,12 @@ module.exports = React.createClass({
                         </div>
                     </span>
                 );
-            }
-            else {
+            } else {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
-                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage"/>
+                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
                                 { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>
@@ -370,7 +384,7 @@ module.exports = React.createClass({
                 );
             }
         } else {
-            var extra = text ? (': ' + text) : '';
+            const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;

@@ -20,7 +20,7 @@ import React from 'react';
 import MFileBody from './MFileBody';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 
 export default class MAudioBody extends React.Component {
@@ -35,7 +35,7 @@ export default class MAudioBody extends React.Component {
     }
     onPlayToggle() {
         this.setState({
-            playing: !this.state.playing
+            playing: !this.state.playing,
         });
     }
 
@@ -49,12 +49,12 @@ export default class MAudioBody extends React.Component {
     }
 
     componentDidMount() {
-        var content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var decryptedBlob;
+            let decryptedBlob;
             decryptFile(content.file).then(function(blob) {
                 decryptedBlob = blob;
-                return readBlobAsDataUri(decryptedBlob);
+                return URL.createObjectURL(decryptedBlob);
             }).done((url) => {
                 this.setState({
                     decryptedUrl: url,
@@ -69,15 +69,20 @@ export default class MAudioBody extends React.Component {
         }
     }
 
-    render() {
+    componentWillUnmount() {
+        if (this.state.decryptedUrl) {
+            URL.revokeObjectURL(this.state.decryptedUrl);
+        }
+    }
 
+    render() {
         const content = this.props.mxEvent.getContent();
 
         if (this.state.error !== null) {
             return (
                 <span className="mx_MAudioBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16"/>
-                    {_t("Error decrypting audio")}
+                    <img src="img/warning.svg" width="16" height="16" />
+                    { _t("Error decrypting audio") }
                 </span>
             );
         }
@@ -89,7 +94,7 @@ export default class MAudioBody extends React.Component {
             // Not sure how tall the audio player is so not sure how tall it should actually be.
             return (
                 <span className="mx_MAudioBody">
-                    <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
+                    <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
                 </span>
             );
         }

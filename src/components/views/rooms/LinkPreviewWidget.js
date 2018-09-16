@@ -16,31 +16,32 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var ImageUtils = require('../../../ImageUtils');
-var Modal = require('../../../Modal');
+const sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const ImageUtils = require('../../../ImageUtils');
+const Modal = require('../../../Modal');
 
-var linkify = require('linkifyjs');
-var linkifyElement = require('linkifyjs/element');
-var linkifyMatrix = require('../../../linkify-matrix');
+const linkify = require('linkifyjs');
+const linkifyElement = require('linkifyjs/element');
+const linkifyMatrix = require('../../../linkify-matrix');
 linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
-        link: React.PropTypes.string.isRequired, // the URL being previewed
-        mxEvent: React.PropTypes.object.isRequired, // the Event associated with the preview
-        onCancelClick: React.PropTypes.func, // called when the preview's cancel ('hide') button is clicked
-        onWidgetLoad: React.PropTypes.func, // called when the preview's contents has loaded
+        link: PropTypes.string.isRequired, // the URL being previewed
+        mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
+        onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
+        onWidgetLoad: PropTypes.func, // called when the preview's contents has loaded
     },
 
     getInitialState: function() {
         return {
-            preview: null
+            preview: null,
         };
     },
 
@@ -52,7 +53,7 @@ module.exports = React.createClass({
             }
             this.setState(
                 { preview: res },
-                this.props.onWidgetLoad
+                this.props.onWidgetLoad,
             );
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
@@ -76,17 +77,17 @@ module.exports = React.createClass({
     },
 
     onImageClick: function(ev) {
-        var p = this.state.preview;
+        const p = this.state.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
-        var ImageView = sdk.getComponent("elements.ImageView");
+        const ImageView = sdk.getComponent("elements.ImageView");
 
-        var src = p["og:image"];
+        let src = p["og:image"];
         if (src && src.startsWith("mxc://")) {
             src = MatrixClientPeg.get().mxcUrlToHttp(src);
         }
 
-        var params = {
+        const params = {
             src: src,
             width: p["og:image:width"],
             height: p["og:image:height"],
@@ -99,27 +100,27 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var p = this.state.preview;
+        const p = this.state.preview;
         if (!p || Object.keys(p).length === 0) {
-            return <div/>;
+            return <div />;
         }
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
-        var image = p["og:image"];
-        var imageMaxWidth = 100, imageMaxHeight = 100;
+        let image = p["og:image"];
+        let imageMaxWidth = 100, imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
         }
 
-        var thumbHeight = imageMaxHeight;
+        let thumbHeight = imageMaxHeight;
         if (p["og:image:width"] && p["og:image:height"]) {
             thumbHeight = ImageUtils.thumbHeight(p["og:image:width"], p["og:image:height"], imageMaxWidth, imageMaxHeight);
         }
 
-        var img;
+        let img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={ image } onClick={ this.onImageClick }/>
+                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
                   </div>;
         }
 
@@ -127,15 +128,16 @@ module.exports = React.createClass({
             <div className="mx_LinkPreviewWidget" >
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
-                    <div className="mx_LinkPreviewWidget_title"><a href={ this.props.link } target="_blank" rel="noopener">{ p["og:title"] }</a></div>
+                    <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noopener">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
                     <div className="mx_LinkPreviewWidget_description" ref="description">
                         { p["og:description"] }
                     </div>
                 </div>
-                <img className="mx_LinkPreviewWidget_cancel" src="img/cancel.svg" width="18" height="18"
-                     onClick={ this.props.onCancelClick }/>
+                <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
+                    src="img/cancel.svg" width="18" height="18"
+                    onClick={this.props.onCancelClick} />
             </div>
         );
-    }
+    },
 });

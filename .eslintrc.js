@@ -29,16 +29,41 @@ module.exports = {
         // so we replace it with a version that is class property aware
         "babel/no-invalid-this": "error",
 
+        // We appear to follow this most of the time, so let's enforce it instead
+        // of occasionally following it (or catching it in review)
+        "keyword-spacing": "error",
+
         /** react **/
         // This just uses the react plugin to help eslint known when
         // variables have been used in JSX
         "react/jsx-uses-vars": "error",
+        // Don't mark React as unused if we're using JSX
+        "react/jsx-uses-react": "error",
 
         // bind or arrow function in props causes performance issues
-        "react/jsx-no-bind": ["error", {
+        // (but we currently use them in some places)
+        "react/jsx-no-bind": ["warn", {
             "ignoreRefs": true,
         }],
         "react/jsx-key": ["error"],
+
+        // Assert no spacing in JSX curly brackets
+        // <Element prop={ consideredError} prop={notConsideredError} />
+        //
+        // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-curly-spacing.md
+        //
+        // Disabled for now - if anything we'd like to *enforce* spacing in JSX
+        // curly brackets for legibility, but in practice it's not clear that the
+        // consistency particularly improves legibility here. --Matthew
+        //
+        // "react/jsx-curly-spacing": ["error", {"when": "never", "children": {"when": "always"}}],
+
+        // Assert spacing before self-closing JSX tags, and no spacing before or
+        // after the closing slash, and no spacing after the opening bracket of
+        // the opening tag or closing tag.
+        //
+        // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-tag-spacing.md
+        "react/jsx-tag-spacing": ["error"],
 
         /** flowtype **/
         "flowtype/require-parameter-type": ["warn", {
@@ -69,8 +94,8 @@ module.exports = {
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
-        "arrow-parens": ["warn"],
         "prefer-const": ["warn"],
+        "arrow-parens": "off",
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",

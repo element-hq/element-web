@@ -9,15 +9,8 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
-curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-echo "Determined branch to be $curbranch"
-
-git clone https://github.com/vector-im/riot-web.git \
-    "$RIOT_WEB_DIR"
-
-cd "$RIOT_WEB_DIR"
-
-git checkout "$curbranch" || git checkout develop
+scripts/fetchdep.sh vector-im riot-web
+pushd "$RIOT_WEB_DIR"
 
 mkdir node_modules
 npm install
@@ -30,4 +23,16 @@ ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
 rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
+npm run build
 npm run test
+popd
+
+# run end to end tests
+git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch master
+pushd matrix-react-end-to-end-tests
+ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
+# PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
+# CHROME_PATH=$(which google-chrome-stable) ./run.sh
+./install.sh
+./run.sh
+popd

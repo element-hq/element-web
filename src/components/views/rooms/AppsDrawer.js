@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
@@ -26,7 +28,8 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
-import WidgetUtils from '../../../WidgetUtils';
+import WidgetUtils from '../../../utils/WidgetUtils';
+import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -35,7 +38,15 @@ module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        room: PropTypes.object.isRequired,
+        showApps: PropTypes.bool, // Should apps be rendered
+        hide: PropTypes.bool, // If rendered, should apps drawer be visible
+    },
+
+    defaultProps: {
+        showApps: true,
+        hide: false,
     },
 
     getInitialState: function() {
@@ -46,7 +57,8 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         ScalarMessaging.startListening();
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
+        WidgetEchoStore.on('update', this._updateApps);
     },
 
     componentDidMount: function() {
@@ -56,7 +68,7 @@ module.exports = React.createClass({
             this.scalarClient.connect().then(() => {
                 this.forceUpdate();
             }).catch((e) => {
-                console.log("Failed to connect to integrations server");
+                console.log('Failed to connect to integrations server');
                 // TODO -- Handle Scalar errors
                 //     this.setState({
                 //         scalar_error: err,
@@ -70,8 +82,9 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
+        WidgetEchoStore.removeListener('update', this._updateApps);
         dis.unregister(this.dispatcherRef);
     },
 
@@ -81,61 +94,19 @@ module.exports = React.createClass({
     },
 
     onAction: function(action) {
+        const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
-                // When opening the app draw when there aren't any apps, auto-launch the
-                // integrations manager to skip the awkward click on "Add widget"
                 if (action.show) {
-                    const apps = this._getApps();
-                    if (apps.length === 0) {
-                        this._launchManageIntegrations();
-                    }
+                    localStorage.removeItem(hideWidgetKey);
+                } else {
+                    // Store hidden state of widget
+                    // Don't show if previously hidden
+                    localStorage.setItem(hideWidgetKey, true);
                 }
+
                 break;
         }
-    },
-
-    /**
-     * Encodes a URI according to a set of template variables. Variables will be
-     * passed through encodeURIComponent.
-     * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
-     * @param {Object} variables The key/value pairs to replace the template
-     * variables with. E.g. { "$bar": "baz" }.
-     * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
-     */
-    encodeUri: function(pathTemplate, variables) {
-        for (const key in variables) {
-            if (!variables.hasOwnProperty(key)) {
-                continue;
-            }
-            pathTemplate = pathTemplate.replace(
-                key, encodeURIComponent(variables[key]),
-            );
-        }
-        return pathTemplate;
-    },
-
-    _initAppConfig: function(appId, app, sender) {
-        const user = MatrixClientPeg.get().getUser(this.props.userId);
-        const params = {
-            '$matrix_user_id': this.props.userId,
-            '$matrix_room_id': this.props.room.roomId,
-            '$matrix_display_name': user ? user.displayName : this.props.userId,
-            '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
-        };
-
-        if(app.data) {
-            Object.keys(app.data).forEach((key) => {
-                params['$' + key] = app.data[key];
-            });
-        }
-
-        app.id = appId;
-        app.name = app.name || app.type;
-        app.url = this.encodeUri(app.url, params);
-        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
-
-        return app;
     },
 
     onRoomStateEvents: function(ev, state) {
@@ -146,15 +117,11 @@ module.exports = React.createClass({
     },
 
     _getApps: function() {
-        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets');
-        if (!appsStateEvents) {
-            return [];
-        }
-
-        return appsStateEvents.filter((ev) => {
-            return ev.getContent().type && ev.getContent().url;
-        }).map((ev) => {
-            return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
+        const widgets = WidgetEchoStore.getEchoedRoomWidgets(
+            this.props.room.roomId, WidgetUtils.getRoomWidgets(this.props.room),
+        );
+        return widgets.map((ev) => {
+            return WidgetUtils.makeAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },
 
@@ -168,20 +135,20 @@ module.exports = React.createClass({
     _canUserModify: function() {
         try {
             return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             return false;
         }
     },
 
     _launchManageIntegrations: function() {
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const IntegrationsManager = sdk.getComponent('views.settings.IntegrationsManager');
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room, 'add_integ') :
                 null;
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
-        }, "mx_IntegrationsManager");
+        }, 'mx_IntegrationsManager');
     },
 
     onClickAddWidget: function(e) {
@@ -189,12 +156,12 @@ module.exports = React.createClass({
         // Display a warning dialog if the max number of widgets have already been added to the room
         const apps = this._getApps();
         if (apps && apps.length >= MAX_WIDGETS) {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             const errorMsg = `The maximum number of ${MAX_WIDGETS} widgets have already been added to this room.`;
             console.error(errorMsg);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Cannot add any more widgets"),
-                description: _t("The maximum permitted number of widgets have already been added to this room."),
+                title: _t('Cannot add any more widgets'),
+                description: _t('The maximum permitted number of widgets have already been added to this room.'),
             });
             return;
         }
@@ -202,21 +169,25 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const apps = this.state.apps.map(
-            (app, index, arr) => {
-                return (<AppTile
-                    key={app.id}
-                    id={app.id}
-                    url={app.url}
-                    name={app.name}
-                    type={app.type}
-                    fullWidth={arr.length<2 ? true : false}
-                    room={this.props.room}
-                    userId={this.props.userId}
-                    show={this.props.showApps}
-                    creatorUserId={app.creatorUserId}
-                />);
-            });
+        const apps = this.state.apps.map((app, index, arr) => {
+            const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
+
+            return (<AppTile
+                key={app.id}
+                id={app.id}
+                url={app.url}
+                name={app.name}
+                type={app.type}
+                fullWidth={arr.length<2 ? true : false}
+                room={this.props.room}
+                userId={this.props.userId}
+                show={this.props.showApps}
+                creatorUserId={app.creatorUserId}
+                widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                waitForIframeLoad={app.waitForIframeLoad}
+                whitelistCapabilities={capWhitelist}
+            />);
+        });
 
         let addWidget;
         if (this.props.showApps &&
@@ -224,23 +195,35 @@ module.exports = React.createClass({
         ) {
             addWidget = <div
                 onClick={this.onClickAddWidget}
-                role="button"
-                tabIndex="0"
+                role='button'
+                tabIndex='0'
                 className={this.state.apps.length<2 ?
-                    "mx_AddWidget_button mx_AddWidget_button_full_width" :
-                    "mx_AddWidget_button"
+                    'mx_AddWidget_button mx_AddWidget_button_full_width' :
+                    'mx_AddWidget_button'
                 }
                 title={_t('Add a widget')}>
-                [+] {_t('Add a widget')}
+                [+] { _t('Add a widget') }
             </div>;
         }
 
+        let spinner;
+        if (
+            apps.length === 0 && WidgetEchoStore.roomHasPendingWidgets(
+                this.props.room.roomId,
+                WidgetUtils.getRoomWidgets(this.props.room),
+            )
+        ) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            spinner = <Loader />;
+        }
+
         return (
-            <div className="mx_AppsDrawer">
-                <div id="apps" className="mx_AppsContainer">
-                    {apps}
+            <div className={'mx_AppsDrawer' + (this.props.hide ? ' mx_AppsDrawer_hidden' : '')}>
+                <div id='apps' className='mx_AppsContainer'>
+                    { apps }
+                    { spinner }
                 </div>
-                {this._canUserModify() && addWidget}
+                { this._canUserModify() && addWidget }
             </div>
         );
     },

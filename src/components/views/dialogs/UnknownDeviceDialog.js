@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +16,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
+import { markAllDevicesKnown } from '../../../cryptodevices';
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
@@ -28,19 +32,19 @@ function DeviceListEntry(props) {
 
     return (
         <li>
-            <DeviceVerifyButtons device={ device } userId={ userId } />
+            <DeviceVerifyButtons device={device} userId={userId} />
             { device.deviceId }
-            <br/>
+            <br />
             { device.getDisplayName() }
         </li>
     );
 }
 
 DeviceListEntry.propTypes = {
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
 
     // deviceinfo
-    device: React.PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired,
 };
 
 
@@ -48,22 +52,22 @@ function UserUnknownDeviceList(props) {
     const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-       <DeviceListEntry key={ deviceId } userId={ userId }
-           device={ userDevices[deviceId] } />,
+       <DeviceListEntry key={deviceId} userId={userId}
+           device={userDevices[deviceId]} />,
     );
 
     return (
         <ul className="mx_UnknownDeviceDialog_deviceList">
-            {deviceListEntries}
+            { deviceListEntries }
         </ul>
     );
 }
 
 UserUnknownDeviceList.propTypes = {
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
 
     // map from deviceid -> deviceinfo
-    userDevices: React.PropTypes.object.isRequired,
+    userDevices: PropTypes.object.isRequired,
 };
 
 
@@ -71,18 +75,18 @@ function UnknownDeviceList(props) {
     const {devices} = props;
 
     const userListEntries = Object.keys(devices).map((userId) =>
-        <li key={ userId }>
+        <li key={userId}>
             <p>{ userId }:</p>
-            <UserUnknownDeviceList userId={ userId } userDevices={ devices[userId] } />
+            <UserUnknownDeviceList userId={userId} userDevices={devices[userId]} />
         </li>,
     );
 
-    return <ul>{userListEntries}</ul>;
+    return <ul>{ userListEntries }</ul>;
 }
 
 UnknownDeviceList.propTypes = {
     // map from userid -> deviceid -> deviceinfo
-    devices: React.PropTypes.object.isRequired,
+    devices: PropTypes.object.isRequired,
 };
 
 
@@ -90,90 +94,116 @@ export default React.createClass({
     displayName: 'UnknownDeviceDialog',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
-        // map from userid -> deviceid -> deviceinfo
-        devices: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        // map from userid -> deviceid -> deviceinfo or null if devices are not yet loaded
+        devices: PropTypes.object,
+
+        onFinished: PropTypes.func.isRequired,
+
+        // Label for the button that marks all devices known and tries the send again
+        sendAnywayLabel: PropTypes.string.isRequired,
+
+        // Label for the button that to send the event if you've verified all devices
+        sendLabel: PropTypes.string.isRequired,
+
+        // function to retry the request once all devices are verified / known
+        onSend: PropTypes.func.isRequired,
     },
 
-    componentDidMount: function() {
-        // Given we've now shown the user the unknown device, it is no longer
-        // unknown to them. Therefore mark it as 'known'.
-        Object.keys(this.props.devices).forEach((userId) => {
-            Object.keys(this.props.devices[userId]).map((deviceId) => {
-                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
-            });
-        });
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("deviceVerificationChanged", this._onDeviceVerificationChanged);
+    },
 
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('Opening UnknownDeviceDialog');
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("deviceVerificationChanged", this._onDeviceVerificationChanged);
+        }
+    },
+
+    _onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
+        if (this.props.devices[userId] && this.props.devices[userId][deviceId]) {
+            // XXX: Mutating props :/
+            this.props.devices[userId][deviceId] = deviceInfo;
+            this.forceUpdate();
+        }
+    },
+
+    _onDismissClicked: function() {
+        this.props.onFinished();
+    },
+
+    _onSendAnywayClicked: function() {
+        markAllDevicesKnown(MatrixClientPeg.get(), this.props.devices);
+
+        this.props.onFinished();
+        this.props.onSend();
+    },
+
+    _onSendClicked: function() {
+        this.props.onFinished();
+        this.props.onSend();
     },
 
     render: function() {
-        const client = MatrixClientPeg.get();
-        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
-              this.props.room.getBlacklistUnverifiedDevices();
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+        if (this.props.devices === null) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
+        }
 
         let warning;
-        if (blacklistUnverified) {
+        if (SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId)) {
             warning = (
                 <h4>
-                    {_t("You are currently blacklisting unverified devices; to send " +
-                    "messages to these devices you must verify them.")}
+                    { _t("You are currently blacklisting unverified devices; to send " +
+                    "messages to these devices you must verify them.") }
                 </h4>
             );
         } else {
             warning = (
                 <div>
                     <p>
-                        {_t("We recommend you go through the verification process " +
+                        { _t("We recommend you go through the verification process " +
                             "for each device to confirm they belong to their legitimate owner, " +
-                            "but you can resend the message without verifying if you prefer.")}
+                            "but you can resend the message without verifying if you prefer.") }
                     </p>
                 </div>
             );
         }
 
+        let haveUnknownDevices = false;
+        Object.keys(this.props.devices).forEach((userId) => {
+            Object.keys(this.props.devices[userId]).map((deviceId) => {
+                const device = this.props.devices[userId][deviceId];
+                if (device.isUnverified() && !device.isKnown()) {
+                    haveUnknownDevices = true;
+                }
+            });
+        });
+        const sendButtonOnClick = haveUnknownDevices ? this._onSendAnywayClicked : this._onSendClicked;
+        const sendButtonLabel = haveUnknownDevices ? this.props.sendAnywayLabel : this.props.sendAnywayLabel;
+
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
-                onFinished={() => {
-                            // XXX: temporary logging to try to diagnose
-                            // https://github.com/vector-im/riot-web/issues/3148
-                            console.log("UnknownDeviceDialog closed by escape");
-                            this.props.onFinished();
-                }}
+                onFinished={this.props.onFinished}
                 title={_t('Room contains unknown devices')}
+                contentId='mx_Dialog_content'
             >
-                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
+                <GeminiScrollbarWrapper autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
-                        {_t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name})}
+                        { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
                     { warning }
-                    {_t("Unknown devices")}:
+                    { _t("Unknown devices") }:
 
                     <UnknownDeviceList devices={this.props.devices} />
-                </GeminiScrollbar>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" autoFocus={ true }
-                            onClick={() => {
-                                this.props.onFinished();
-                                Resend.resendUnsentEvents(this.props.room);
-                            }}>
-                        {_t("Send anyway")}
-                    </button>
-                    <button className="mx_Dialog_primary" autoFocus={ true }
-                            onClick={() => {
-                                // XXX: temporary logging to try to diagnose
-                                // https://github.com/vector-im/riot-web/issues/3148
-                                console.log("UnknownDeviceDialog closed by OK");
-                                this.props.onFinished();
-                            }}>
-                        OK
-                    </button>
-                </div>
+                </GeminiScrollbarWrapper>
+                <DialogButtons primaryButton={sendButtonLabel}
+                    onPrimaryButtonClick={sendButtonOnClick}
+                    onCancel={this._onDismissClicked} />
             </BaseDialog>
         );
         // XXX: do we want to give the user the option to enable blacklistUnverifiedDevices for this room (or globally) at this point?

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import CallHandler from '../../../CallHandler';
 import sdk from '../../../index';
@@ -26,25 +27,25 @@ module.exports = React.createClass({
     propTypes: {
         // js-sdk room object. If set, we will only show calls for the given
         // room; if not, we will show any active call.
-        room: React.PropTypes.object,
+        room: PropTypes.object,
 
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: React.PropTypes.object,
+        ConferenceHandler: PropTypes.object,
 
         // maxHeight style attribute for the video panel
-        maxVideoHeight: React.PropTypes.number,
+        maxVideoHeight: PropTypes.number,
 
         // a callback which is called when the user clicks on the video div
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
 
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // render ongoing audio call details - useful when in LeftPanel
-        showVoice: React.PropTypes.bool,
+        showVoice: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -129,17 +130,17 @@ module.exports = React.createClass({
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
             const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
             voice = (
-                <div className="mx_CallView_voice" onClick={ this.props.onClick }>
-                {_t("Active call (%(roomName)s)", {roomName: callRoom.name})}
+                <div className="mx_CallView_voice" onClick={this.props.onClick}>
+                { _t("Active call (%(roomName)s)", {roomName: callRoom.name}) }
                 </div>
             );
         }
 
         return (
             <div>
-                <VideoView ref="video" onClick={ this.props.onClick }
-                    onResize={ this.props.onResize }
-                    maxHeight={ this.props.maxVideoHeight }
+                <VideoView ref="video" onClick={this.props.onClick}
+                    onResize={this.props.onResize}
+                    maxHeight={this.props.maxVideoHeight}
                 />
                 { voice }
             </div>

@@ -24,7 +24,7 @@ const StartChatButton = function(props) {
     return (
         <ActionButton action="view_create_chat"
             mouseOverAction={props.callout ? "callout_start_chat" : null}
-            label={ _t("Start chat") }
+            label={_t("Start chat")}
             iconPath="img/icons-people.svg"
             size={props.size}
             tooltip={props.tooltip}

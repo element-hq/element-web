@@ -20,9 +20,9 @@ limitations under the License.
  * receipt exists.
  */
 export function findReadReceiptFromUserId(receiptEvent, userId) {
-    var receiptKeys = Object.keys(receiptEvent.getContent());
-    for (var i = 0; i < receiptKeys.length; ++i) {
-        var rcpt = receiptEvent.getContent()[receiptKeys[i]];
+    const receiptKeys = Object.keys(receiptEvent.getContent());
+    for (let i = 0; i < receiptKeys.length; ++i) {
+        const rcpt = receiptEvent.getContent()[receiptKeys[i]];
         if (rcpt['m.read'] && rcpt['m.read'][userId]) {
             return rcpt;
         }

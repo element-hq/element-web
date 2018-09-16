@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4.4 (17249) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_newmessages</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="02-Chat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="02_7-Chat-new-messages" sketch:type="MSArtboardGroup" transform="translate(-244.000000, -665.000000)">
+            <g id="icon_newmessages" sketch:type="MSLayerGroup" transform="translate(244.000000, 665.000000)">
+                <circle id="Oval-1909" fill="#FF0064" sketch:type="MSShapeGroup" cx="12" cy="12" r="12"></circle>
+                <path d="M16.3400426,11.526774 C16.4870048,11.526774 16.633967,11.4708978 16.7464849,11.3583798 C16.9699899,11.1341094 16.9699899,10.7712964 16.7464849,10.547026 L12.3659396,6.16801148 C12.1424345,5.94374103 11.7788562,5.94450646 11.5545857,6.16724605 L7.16868234,10.5401371 C6.94441188,10.7644076 6.94364646,11.127986 7.16715148,11.3522564 C7.3906565,11.5772923 7.75423488,11.5772923 7.97850533,11.3537873 L11.3915495,7.95069367 L11.3930804,17.4259289 C11.3930804,17.7428161 11.6510296,18 11.9671515,18 C12.2848042,18 12.5412226,17.7428161 12.5412226,17.4259289 L12.5396917,7.9652368 L15.9343656,11.3583798 C16.0461182,11.4708978 16.1930804,11.526774 16.3400426,11.526774 L16.3400426,11.526774 Z" fill="#FFFFFF" sketch:type="MSShapeGroup" transform="translate(11.957057, 12.000000) rotate(-180.000000) translate(-11.957057, -12.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

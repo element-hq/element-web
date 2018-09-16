@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
 import { _t } from '../../../languageHandler';
@@ -23,22 +24,24 @@ module.exports = React.createClass({
 
     propTypes: {
         // An array of member events to summarise
-        events: React.PropTypes.array.isRequired,
+        events: PropTypes.array.isRequired,
         // An array of EventTiles to render when expanded
-        children: React.PropTypes.array.isRequired,
+        children: PropTypes.array.isRequired,
         // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
-        summaryLength: React.PropTypes.number,
+        summaryLength: PropTypes.number,
         // The maximum number of avatars to display in the summary
-        avatarsMaxLength: React.PropTypes.number,
+        avatarsMaxLength: PropTypes.number,
         // The minimum number of events needed to trigger summarisation
-        threshold: React.PropTypes.number,
+        threshold: PropTypes.number,
         // Called when the MELS expansion is toggled
-        onToggle: React.PropTypes.func,
+        onToggle: PropTypes.func,
+        // Whether or not to begin with state.expanded=true
+        startExpanded: PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
-            expanded: false,
+            expanded: Boolean(this.props.startExpanded),
         };
     },
 
@@ -84,7 +87,6 @@ module.exports = React.createClass({
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this._renderNameList(userNames);
-            const plural = userNames.length > 1;
 
             const splitTransitions = transitions.split(',');
 
@@ -94,18 +96,18 @@ module.exports = React.createClass({
             // Transform into consecutive repetitions of the same transition (like 5
             // consecutive 'joined_and_left's)
             const coalescedTransitions = this._coalesceRepeatedTransitions(
-                canonicalTransitions
+                canonicalTransitions,
             );
 
             const descs = coalescedTransitions.map((t) => {
                 return this._getDescriptionForTransition(
-                    t.transitionType, plural, t.repeats
+                    t.transitionType, userNames.length, t.repeats,
                 );
             });
 
             const desc = this._renderCommaSeparatedList(descs);
 
-            return nameList + " " + desc;
+            return _t('%(nameList)s %(transitionList)s', { nameList: nameList, transitionList: desc });
         });
 
         if (!summaries) {
@@ -117,7 +119,7 @@ module.exports = React.createClass({
         return (
             <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
                 <EmojiText>
-                    {summaries.join(", ")}
+                    { summaries.join(", ") }
                 </EmojiText>
             </span>
         );
@@ -206,148 +208,75 @@ module.exports = React.createClass({
      * For a certain transition, t, describe what happened to the users that
      * underwent the transition.
      * @param {string} t the transition type.
-     * @param {boolean} plural whether there were multiple users undergoing the same
-     * transition.
+     * @param {integer} userCount number of usernames
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
-    _getDescriptionForTransition(t, plural, repeats) {
+    _getDescriptionForTransition(t, userCount, repeats) {
         // The empty interpolations 'severalUsers' and 'oneUser'
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.
         let res = null;
-        switch(t) {
+        switch (t) {
             case "joined":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)sjoined %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)sjoined %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)sjoined", { severalUsers: "" })
-                        : _t("%(oneUser)sjoined", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)sjoined %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)sjoined %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "left":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)sleft %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)sleft %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)sleft", { severalUsers: "" })
-                        : _t("%(oneUser)sleft", { oneUser: "" });
-                }
-               break;
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)sleft %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)sleft %(count)s times", { oneUser: "", count: repeats });
+                break;
             case "joined_and_left":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)sjoined and left %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)sjoined and left %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)sjoined and left", { severalUsers: "" })
-                        : _t("%(oneUser)sjoined and left", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)sjoined and left %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)sjoined and left %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "left_and_joined":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)sleft and rejoined %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)sleft and rejoined %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)sleft and rejoined", { severalUsers: "" })
-                        : _t("%(oneUser)sleft and rejoined", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)sleft and rejoined %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)sleft and rejoined %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "invite_reject":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)srejected their invitations %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)srejected their invitation %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)srejected their invitations", { severalUsers: "" })
-                        : _t("%(oneUser)srejected their invitation", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)srejected their invitations %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)srejected their invitation %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "invite_withdrawal":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)shad their invitations withdrawn %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)shad their invitation withdrawn %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)shad their invitations withdrawn", { severalUsers: "" })
-                        : _t("%(oneUser)shad their invitation withdrawn", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)shad their invitations withdrawn %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)shad their invitation withdrawn %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "invited":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("were invited %(repeats)s times", { repeats: repeats })
-                        : _t("was invited %(repeats)s times", { repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("were invited")
-                        : _t("was invited");
-                }
+                res = (userCount > 1)
+                    ? _t("were invited %(count)s times", { count: repeats })
+                    : _t("was invited %(count)s times", { count: repeats });
                 break;
             case "banned":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("were banned %(repeats)s times", { repeats: repeats })
-                        : _t("was banned %(repeats)s times", { repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("were banned")
-                        : _t("was banned");
-                }
+                res = (userCount > 1)
+                    ? _t("were banned %(count)s times", { count: repeats })
+                    : _t("was banned %(count)s times", { count: repeats });
                 break;
             case "unbanned":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("were unbanned %(repeats)s times", { repeats: repeats })
-                        : _t("was unbanned %(repeats)s times", { repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("were unbanned")
-                        : _t("was unbanned");
-                }
+                res = (userCount > 1)
+                    ? _t("were unbanned %(count)s times", { count: repeats })
+                    : _t("was unbanned %(count)s times", { count: repeats });
                 break;
             case "kicked":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("were kicked %(repeats)s times", { repeats: repeats })
-                        : _t("was kicked %(repeats)s times", { repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("were kicked")
-                        : _t("was kicked");
-                }
+                res = (userCount > 1)
+                    ? _t("were kicked %(count)s times", { count: repeats })
+                    : _t("was kicked %(count)s times", { count: repeats });
                 break;
             case "changed_name":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)schanged their name %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)schanged their name %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)schanged their name", { severalUsers: "" })
-                        : _t("%(oneUser)schanged their name", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged their name %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)schanged their name %(count)s times", { oneUser: "", count: repeats });
                 break;
             case "changed_avatar":
-                if (repeats > 1) {
-                    res = (plural)
-                        ? _t("%(severalUsers)schanged their avatar %(repeats)s times", { severalUsers: "", repeats: repeats })
-                        : _t("%(oneUser)schanged their avatar %(repeats)s times", { oneUser: "", repeats: repeats });
-                } else {
-                    res = (plural)
-                        ? _t("%(severalUsers)schanged their avatar", { severalUsers: "" })
-                        : _t("%(oneUser)schanged their avatar", { oneUser: "" });
-                }
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged their avatar %(count)s times", { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)schanged their avatar %(count)s times", { oneUser: "", count: repeats });
                 break;
         }
 
@@ -368,17 +297,15 @@ module.exports = React.createClass({
      */
     _renderCommaSeparatedList(items, itemLimit) {
         const remaining = itemLimit === undefined ? 0 : Math.max(
-            items.length - itemLimit, 0
+            items.length - itemLimit, 0,
         );
         if (items.length === 0) {
             return "";
         } else if (items.length === 1) {
             return items[0];
-        } else if (remaining) {
+        } else if (remaining > 0) {
             items = items.slice(0, itemLimit);
-            return (remaining > 1) 
-                ? _t("%(items)s and %(remaining)s others", { items: items.join(', '), remaining: remaining } )
-                : _t("%(items)s and one other", { items: items.join(', ') });
+            return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } );
         } else {
             const lastItem = items.pop();
             return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
@@ -392,8 +319,8 @@ module.exports = React.createClass({
             );
         });
         return (
-            <span className="mx_MemberEventListSummary_avatars" onClick={ this._toggleSummary }>
-                {avatars}
+            <span className="mx_MemberEventListSummary_avatars" onClick={this._toggleSummary}>
+                { avatars }
             </span>
         );
     },
@@ -417,19 +344,15 @@ module.exports = React.createClass({
             case 'join':
                 if (e.mxEvent.getPrevContent().membership === 'join') {
                     if (e.mxEvent.getContent().displayname !==
-                        e.mxEvent.getPrevContent().displayname)
-                    {
+                        e.mxEvent.getPrevContent().displayname) {
                         return 'changed_name';
-                    }
-                    else if (e.mxEvent.getContent().avatar_url !==
-                        e.mxEvent.getPrevContent().avatar_url)
-                    {
+                    } else if (e.mxEvent.getContent().avatar_url !==
+                        e.mxEvent.getPrevContent().avatar_url) {
                         return 'changed_avatar';
                     }
                     // console.log("MELS ignoring duplicate membership join event");
                     return null;
-                }
-                else {
+                } else {
                     return 'joined';
                 }
             case 'leave':
@@ -481,7 +404,7 @@ module.exports = React.createClass({
                     firstEvent.index < aggregateIndices[seq]) {
                         aggregateIndices[seq] = firstEvent.index;
                 }
-            }
+            },
         );
 
         return {
@@ -492,7 +415,7 @@ module.exports = React.createClass({
 
     render: function() {
         const eventsToRender = this.props.events;
-        const eventIds = eventsToRender.map(e => e.getId()).join(',');
+        const eventIds = eventsToRender.map((e) => e.getId()).join(',');
         const fewEvents = eventsToRender.length < this.props.threshold;
         const expanded = this.state.expanded || fewEvents;
 
@@ -504,7 +427,7 @@ module.exports = React.createClass({
         if (fewEvents) {
             return (
                 <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                    {expandedEvents}
+                    { expandedEvents }
                 </div>
             );
         }
@@ -540,7 +463,7 @@ module.exports = React.createClass({
 
         // Sort types by order of lowest event index within sequence
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
-            (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2]
+            (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2],
         );
 
         let summaryContainer = null;
@@ -548,24 +471,24 @@ module.exports = React.createClass({
             summaryContainer = (
                 <div className="mx_EventTile_line">
                     <div className="mx_EventTile_info">
-                        {this._renderAvatars(avatarMembers)}
-                        {this._renderSummary(aggregate.names, orderedTransitionSequences)}
+                        { this._renderAvatars(avatarMembers) }
+                        { this._renderSummary(aggregate.names, orderedTransitionSequences) }
                     </div>
                 </div>
             );
         }
         const toggleButton = (
             <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                {expanded ? 'collapse' : 'expand'}
+                { expanded ? _t('collapse') : _t('expand') }
             </div>
         );
 
         return (
             <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                {toggleButton}
-                {summaryContainer}
-                {expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null}
-                {expandedEvents}
+                { toggleButton }
+                { summaryContainer }
+                { expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null }
+                { expandedEvents }
             </div>
         );
     },

@@ -14,15 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ContentMessages = require('../../ContentMessages');
-var dis = require('../../dispatcher');
-var filesize = require('filesize');
+const React = require('react');
+import PropTypes from 'prop-types';
+const ContentMessages = require('../../ContentMessages');
+const dis = require('../../dispatcher');
+const filesize = require('filesize');
 import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({displayName: 'UploadBar',
     propTypes: {
-        room: React.PropTypes.object
+        room: PropTypes.object,
     },
 
     componentDidMount: function() {
@@ -46,7 +47,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
     },
 
     render: function() {
-        var uploads = ContentMessages.getCurrentUploads();
+        const uploads = ContentMessages.getCurrentUploads();
 
         // for testing UI... - also fix up the ContentMessages.getCurrentUploads().length
         // check in RoomView
@@ -62,8 +63,8 @@ module.exports = React.createClass({displayName: 'UploadBar',
             return <div />;
         }
 
-        var upload;
-        for (var i = 0; i < uploads.length; ++i) {
+        let upload;
+        for (let i = 0; i < uploads.length; ++i) {
             if (uploads[i].roomId == this.props.room.roomId) {
                 upload = uploads[i];
                 break;
@@ -73,32 +74,32 @@ module.exports = React.createClass({displayName: 'UploadBar',
             return <div />;
         }
 
-        var innerProgressStyle = {
-            width: ((upload.loaded / (upload.total || 1)) * 100) + '%'
+        const innerProgressStyle = {
+            width: ((upload.loaded / (upload.total || 1)) * 100) + '%',
         };
-        var uploadedSize = filesize(upload.loaded);
-        var totalSize = filesize(upload.total);
+        let uploadedSize = filesize(upload.loaded);
+        const totalSize = filesize(upload.total);
         if (uploadedSize.replace(/^.* /, '') === totalSize.replace(/^.* /, '')) {
             uploadedSize = uploadedSize.replace(/ .*/, '');
         }
 
         // MUST use var name 'count' for pluralization to kick in
-        var uploadText = _t("Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)});
+        const uploadText = _t("Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)});
 
         return (
             <div className="mx_UploadBar">
                 <div className="mx_UploadBar_uploadProgressOuter">
                     <div className="mx_UploadBar_uploadProgressInner" style={innerProgressStyle}></div>
                 </div>
-                <img className="mx_UploadBar_uploadIcon mx_filterFlipColor" src="img/fileicon.png" width="17" height="22"/>
+                <img className="mx_UploadBar_uploadIcon mx_filterFlipColor" src="img/fileicon.png" width="17" height="22" />
                 <img className="mx_UploadBar_uploadCancel mx_filterFlipColor" src="img/cancel.svg" width="18" height="18"
                     onClick={function() { ContentMessages.cancelUpload(upload.promise); }}
                 />
                 <div className="mx_UploadBar_uploadBytes">
                     { uploadedSize } / { totalSize }
                 </div>
-                <div className="mx_UploadBar_uploadFilename">{uploadText}</div>
+                <div className="mx_UploadBar_uploadFilename">{ uploadText }</div>
             </div>
         );
-    }
+    },
 });

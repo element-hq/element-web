@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import * as linkify from 'linkifyjs';
@@ -29,11 +31,12 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import ContextualMenu from '../../structures/ContextualMenu';
-import {RoomMember} from 'matrix-js-sdk';
-import classNames from 'classnames';
+import * as ContextualMenu from '../../structures/ContextualMenu';
+import SettingsStore from "../../../settings/SettingsStore";
+import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
+import ReplyThread from "../elements/ReplyThread";
+import {host as matrixtoHost} from '../../../matrix-to';
 
 linkifyMatrix(linkify);
 
@@ -42,19 +45,22 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* a list of words to highlight */
-        highlights: React.PropTypes.array,
+        highlights: PropTypes.array,
 
         /* link URL for the highlights */
-        highlightLink: React.PropTypes.string,
+        highlightLink: PropTypes.string,
 
         /* should show URL previews for this event */
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         /* callback for when our widget has loaded */
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
+
+        /* the shape of the tile, used */
+        tileShape: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -103,11 +109,11 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
-                            highlight.highlightBlock(blocks[i])
+                        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
+                            highlight.highlightBlock(blocks[i]);
                         } else {
                             // Only syntax highlight if there's a class starting with language-
-                            let classes = blocks[i].className.split(/\s+/).filter(function (cl) {
+                            const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
                                 return cl.startsWith('language-');
                             });
 
@@ -146,7 +152,7 @@ module.exports = React.createClass({
         //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview && !this.state.links.length) {
-            var links = this.findLinks(this.refs.content.children);
+            let links = this.findLinks(this.refs.content.children);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -160,7 +166,7 @@ module.exports = React.createClass({
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
-                    var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                    const hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
                     this.setState({ widgetHidden: hidden });
                 }
             }
@@ -168,9 +174,11 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
+        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+        let node = nodes[0];
+        while (node) {
+            let pillified = false;
+
             if (node.tagName === "A" && node.getAttribute("href")) {
                 const href = node.getAttribute("href");
 
@@ -189,29 +197,87 @@ module.exports = React.createClass({
 
                     ReactDOM.render(pill, pillContainer);
                     node.parentNode.replaceChild(pillContainer, node);
+                    // Pills within pills aren't going to go well, so move on
+                    pillified = true;
+
+                    // update the current node with one that's now taken its place
+                    node = pillContainer;
                 }
-            } else if (node.children && node.children.length) {
-                this.pillifyLinks(node.children);
+            } else if (node.nodeType === Node.TEXT_NODE) {
+                const Pill = sdk.getComponent('elements.Pill');
+
+                let currentTextNode = node;
+                const roomNotifTextNodes = [];
+
+                // Take a textNode and break it up to make all the instances of @room their
+                // own textNode, adding those nodes to roomNotifTextNodes
+                while (currentTextNode !== null) {
+                    const roomNotifPos = Pill.roomNotifPos(currentTextNode.textContent);
+                    let nextTextNode = null;
+                    if (roomNotifPos > -1) {
+                        let roomTextNode = currentTextNode;
+
+                        if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
+                        if (roomTextNode.textContent.length > Pill.roomNotifLen()) {
+                            nextTextNode = roomTextNode.splitText(Pill.roomNotifLen());
+                        }
+                        roomNotifTextNodes.push(roomTextNode);
+                    }
+                    currentTextNode = nextTextNode;
+                }
+
+                if (roomNotifTextNodes.length > 0) {
+                    const pushProcessor = new PushProcessor(MatrixClientPeg.get());
+                    const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
+                    if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
+                        // Now replace all those nodes with Pills
+                        for (const roomNotifTextNode of roomNotifTextNodes) {
+                            // Set the next node to be processed to the one after the node
+                            // we're adding now, since we've just inserted nodes into the structure
+                            // we're iterating over.
+                            // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
+                            node = roomNotifTextNode.nextSibling;
+
+                            const pillContainer = document.createElement('span');
+                            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+                            const pill = <Pill
+                                type={Pill.TYPE_AT_ROOM_MENTION}
+                                inMessage={true}
+                                room={room}
+                                shouldShowPillAvatar={true}
+                            />;
+
+                            ReactDOM.render(pill, pillContainer);
+                            roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
+                        }
+                        // Nothing else to do for a text node (and we don't need to advance
+                        // the loop pointer because we did it above)
+                        continue;
+                    }
+                }
             }
+
+            if (node.childNodes && node.childNodes.length && !pillified) {
+                this.pillifyLinks(node.childNodes);
+            }
+
+            node = node.nextSibling;
         }
     },
 
     findLinks: function(nodes) {
-        var links = [];
+        let links = [];
 
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href"))
-            {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
                 if (this.isLinkPreviewable(node)) {
                     links.push(node.getAttribute("href"));
                 }
-            }
-            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+            } else if (node.tagName === "PRE" || node.tagName === "CODE" ||
                     node.tagName === "BLOCKQUOTE") {
                 continue;
-            }
-            else if (node.children && node.children.length) {
+            } else if (node.children && node.children.length) {
                 links = links.concat(this.findLinks(node.children));
             }
         }
@@ -221,8 +287,7 @@ module.exports = React.createClass({
     isLinkPreviewable: function(node) {
         // don't try to preview relative links
         if (!node.getAttribute("href").startsWith("http://") &&
-            !node.getAttribute("href").startsWith("https://"))
-        {
+            !node.getAttribute("href").startsWith("https://")) {
             return false;
         }
 
@@ -231,24 +296,21 @@ module.exports = React.createClass({
         // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
         // link, in which case we check the target text differs from the link value.
         // TODO: make this configurable?
-        if (node.textContent.indexOf("/") > -1)
-        {
+        if (node.textContent.indexOf("/") > -1) {
             return true;
-        }
-        else {
-            var url = node.getAttribute("href");
-            var host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+        } else {
+            const url = node.getAttribute("href");
+            const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
 
             // never preview matrix.to links (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
-            if (host == 'matrix.to') return false;
+            if (host === matrixtoHost) return false;
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
                 return false;
-            }
-            else {
+            } else {
                 // it's a [foo bar](http://foo.com) style link
                 return true;
             }
@@ -257,13 +319,13 @@ module.exports = React.createClass({
 
     _addCodeCopyButton() {
         // Add 'copy' buttons to pre blocks
-        ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
+        Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
             button.onclick = (e) => {
                 const copyCode = button.parentNode.getElementsByTagName("code")[0];
                 const successful = this.copyToClipboard(copyCode.textContent);
-              
+
                 const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const buttonRect = e.target.getBoundingClientRect();
 
@@ -275,10 +337,21 @@ module.exports = React.createClass({
                     left: x,
                     top: y,
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
-                });
-                e.target.onmouseout = close;
+                }, false);
+                e.target.onmouseleave = close;
             };
-            p.appendChild(button);
+
+            // Wrap a div around <pre> so that the copy button can be correctly positioned
+            // when the <pre> overflows and is scrolled horizontally.
+            const div = document.createElement("div");
+            div.className = "mx_EventTile_pre_container";
+
+            // Insert containing div in place of <pre> block
+            p.parentNode.replaceChild(div, p);
+
+            // Append <pre> block and copy button to container
+            div.appendChild(p);
+            div.appendChild(button);
         });
     },
 
@@ -314,7 +387,7 @@ module.exports = React.createClass({
 
             getInnerText: () => {
                 return this.refs.content.innerText;
-            }
+            },
         };
     },
 
@@ -328,28 +401,28 @@ module.exports = React.createClass({
         // the window.open command occurs in the same stack frame as the onClick callback.
 
         // Go fetch a scalar token
-        let scalarClient = new ScalarAuthClient();
+        const scalarClient = new ScalarAuthClient();
         scalarClient.connect().then(() => {
-            let completeUrl = scalarClient.getStarterLink(starterLink);
-            let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            let integrationsUrl = SdkConfig.get().integrations_ui_url;
+            const completeUrl = scalarClient.getStarterLink(starterLink);
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const integrationsUrl = SdkConfig.get().integrations_ui_url;
             Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>
-                        {_t("You are about to be taken to a third-party site so you can " +
+                        { _t("You are about to be taken to a third-party site so you can " +
                             "authenticate your account for use with %(integrationsUrl)s. " +
-                            "Do you wish to continue?", { integrationsUrl: integrationsUrl })}
+                            "Do you wish to continue?", { integrationsUrl: integrationsUrl }) }
                     </div>,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (!confirmed) {
                         return;
                     }
-                    let width = window.screen.width > 1024 ? 1024 : window.screen.width;
-                    let height = window.screen.height > 800 ? 800 : window.screen.height;
-                    let left = (window.screen.width - width) / 2;
-                    let top = (window.screen.height - height) / 2;
+                    const width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                    const height = window.screen.height > 800 ? 800 : window.screen.height;
+                    const left = (window.screen.width - width) / 2;
+                    const top = (window.screen.height - height) / 2;
                     window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
                 },
             });
@@ -358,28 +431,32 @@ module.exports = React.createClass({
 
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
-        var mxEvent = this.props.mxEvent;
-        var content = mxEvent.getContent();
+        const mxEvent = this.props.mxEvent;
+        const content = mxEvent.getContent();
 
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
+        const stripReply = ReplyThread.getParentEventId(mxEvent);
+        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
+            disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
+            // Part of Replies fallback support
+            stripReplyFallback: stripReply,
+        });
 
         if (this.props.highlightLink) {
-            body = <a href={ this.props.highlightLink }>{ body }</a>;
-        }
-        else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            body = <a href="#" onClick={ this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"]) }>{ body }</a>;
+            body = <a href={this.props.highlightLink}>{ body }</a>;
+        } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
+            body = <a href="#" onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}>{ body }</a>;
         }
 
-        var widgets;
+        let widgets;
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
+            const LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
-                            key={ link }
-                            link={ link }
-                            mxEvent={ this.props.mxEvent }
-                            onCancelClick={ this.onCancelClick }
-                            onWidgetLoad={ this.props.onWidgetLoad }/>;
+                            key={link}
+                            link={link}
+                            mxEvent={this.props.mxEvent}
+                            onCancelClick={this.onCancelClick}
+                            onWidgetLoad={this.props.onWidgetLoad} />;
             });
         }
 
@@ -393,7 +470,7 @@ module.exports = React.createClass({
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
-                            {name}
+                            { name }
                         </EmojiText>
                         &nbsp;
                         { body }

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +15,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
-import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
-    Entity} from 'draft-js';
+import { Editor } from 'slate-react';
+import { getEventTransfer } from 'slate-react';
+import { Value, Document, Block, Inline, Text, Range, Node } from 'slate';
+import type { Change } from 'slate';
+
+import Html from 'slate-html-serializer';
+import Md from 'slate-md-serializer';
+import Plain from 'slate-plain-serializer';
+import PlainWithPillsSerializer from "../../../autocomplete/PlainWithPillsSerializer";
 
 import classNames from 'classnames';
-import escape from 'lodash/escape';
 import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
-import SlashCommands from '../../../SlashCommands';
-import KeyCode from '../../../KeyCode';
+import {processCommandInput} from '../../../SlashCommands';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
-import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
@@ -44,40 +51,77 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
-import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
-const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+import {MATRIXTO_MD_LINK_PATTERN, MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
-import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+import {asciiRegexp, unicodeRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort, toShort} from 'emojione';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import {makeUserPermalink} from "../../../matrix-to";
+import ReplyPreview from "./ReplyPreview";
+import RoomViewStore from '../../../stores/RoomViewStore';
+import ReplyThread from "../elements/ReplyThread";
+import {ContentHelpers} from 'matrix-js-sdk';
+
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
+const EMOJI_REGEX = new RegExp(unicodeRegexp, 'g');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
-const ZWS_CODE = 8203;
-const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
-function stateToMarkdown(state) {
-    return __stateToMarkdown(state)
-        .replace(
-            ZWS, // draft-js-export-markdown adds these
-            ''); // this is *not* a zero width space, trust me :)
-}
+const ENTITY_TYPES = {
+    AT_ROOM_PILL: 'ATROOMPILL',
+};
+
+// the Slate node type to default to for unstyled text
+const DEFAULT_NODE = 'paragraph';
+
+// map HTML elements through to our Slate schema node types
+// used for the HTML deserializer.
+// (The names here are chosen to match the MD serializer's schema for convenience)
+const BLOCK_TAGS = {
+    p: 'paragraph',
+    blockquote: 'block-quote',
+    ul: 'bulleted-list',
+    h1: 'heading1',
+    h2: 'heading2',
+    h3: 'heading3',
+    h4: 'heading4',
+    h5: 'heading5',
+    h6: 'heading6',
+    li: 'list-item',
+    ol: 'numbered-list',
+    pre: 'code',
+};
+
+const MARK_TAGS = {
+    strong: 'bold',
+    b: 'bold', // deprecated
+    em: 'italic',
+    i: 'italic', // deprecated
+    code: 'code',
+    u: 'underlined',
+    del: 'deleted',
+    strike: 'deleted', // deprecated
+    s: 'deleted', // deprecated
+};
 
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-    if (err.name === "UnknownDeviceError") {
-        dis.dispatch({
-            action: 'unknown_device_error',
-            err: err,
-            room: room,
-        });
-    }
     dis.dispatch({
         action: 'message_send_failed',
     });
+}
+
+function rangeEquals(a: Range, b: Range): boolean {
+    return (a.anchorKey === b.anchorKey
+        && a.anchorOffset === b.anchorOffset
+        && a.focusKey === b.focusKey
+        && a.focusOffset === b.focusOffset
+        && a.isFocused === b.isFocused
+        && a.isBackward === b.isBackward);
 }
 
 /*
@@ -87,59 +131,15 @@ export default class MessageComposerInput extends React.Component {
     static propTypes = {
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
-        // called with current plaintext content (as a string) whenever it changes
-        onContentChanged: React.PropTypes.func,
+        onFilesPasted: PropTypes.func,
 
-        onInputStateChanged: React.PropTypes.func,
+        onInputStateChanged: PropTypes.func,
     };
-
-    static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
-
-        // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
-        // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
-        // handle this in `getDefaultKeyBinding` so we do it ourselves here.
-        //
-        // * if macOS, read second option
-        const ctrlCmdCommand = {
-            // C-m => Toggles between rich text and markdown modes
-            [KeyCode.KEY_M]: 'toggle-mode',
-            [KeyCode.KEY_B]: 'bold',
-            [KeyCode.KEY_I]: 'italic',
-            [KeyCode.KEY_U]: 'underline',
-            [KeyCode.KEY_J]: 'code',
-            [KeyCode.KEY_O]: 'split-block',
-        }[ev.keyCode];
-
-        if (ctrlCmdCommand) {
-            if (!ctrlCmdOnly) {
-                return null;
-            }
-            return ctrlCmdCommand;
-        }
-
-        // Handle keys such as return, left and right arrows etc.
-        return getDefaultKeyBinding(ev);
-    }
-
-    static getBlockStyle(block: ContentBlock): ?string {
-        if (block.getType() === 'strikethrough') {
-            return 'mx_Markdown_STRIKETHROUGH';
-        }
-
-        return null;
-    }
 
     client: MatrixClient;
     autocomplete: Autocomplete;
@@ -147,30 +147,159 @@ export default class MessageComposerInput extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.onAction = this.onAction.bind(this);
-        this.handleReturn = this.handleReturn.bind(this);
-        this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
-        this.onUpArrow = this.onUpArrow.bind(this);
-        this.onDownArrow = this.onDownArrow.bind(this);
-        this.onTab = this.onTab.bind(this);
-        this.onEscape = this.onEscape.bind(this);
-        this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
-        this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
-        this.onTextPasted = this.onTextPasted.bind(this);
 
-        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
+        const isRichTextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
-        Analytics.setRichtextMode(isRichtextEnabled);
+        Analytics.setRichtextMode(isRichTextEnabled);
 
+        this.client = MatrixClientPeg.get();
+
+        // track whether we should be trying to show autocomplete suggestions on the current editor
+        // contents. currently it's only suppressed when navigating history to avoid ugly flashes
+        // of unexpected corrections as you navigate.
+        // XXX: should this be in state?
+        this.suppressAutoComplete = false;
+
+        // track whether we've just pressed an arrowkey left or right in order to skip void nodes.
+        // see https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
+        this.direction = '';
+
+        this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
+        this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
+        this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
+
+        this.md = new Md({
+            rules: [
+                {
+                    // if serialize returns undefined it falls through to the default hardcoded
+                    // serialization rules
+                    serialize: (obj, children) => {
+                        if (obj.object !== 'inline') return;
+                        switch (obj.type) {
+                            case 'pill':
+                                return `[${ obj.data.get('completion') }](${ obj.data.get('href') })`;
+                            case 'emoji':
+                                return obj.data.get('emojiUnicode');
+                        }
+                    },
+                }, {
+                    serialize: (obj, children) => {
+                        if (obj.object !== 'mark') return;
+                        // XXX: slate-md-serializer consumes marks other than bold, italic, code, inserted, deleted
+                        switch (obj.type) {
+                            case 'underlined':
+                                return `<u>${ children }</u>`;
+                            case 'deleted':
+                                return `<del>${ children }</del>`;
+                            case 'code':
+                                // XXX: we only ever get given `code` regardless of whether it was inline or block
+                                // XXX: workaround for https://github.com/tommoor/slate-md-serializer/issues/14
+                                // strip single backslashes from children, as they would have been escaped here
+                                return `\`${ children.split('\\').map((v) => v ? v : '\\').join('') }\``;
+                        }
+                    },
+                },
+            ],
+        });
+
+        this.html = new Html({
+            rules: [
+                {
+                    deserialize: (el, next) => {
+                        const tag = el.tagName.toLowerCase();
+                        let type = BLOCK_TAGS[tag];
+                        if (type) {
+                            return {
+                                object: 'block',
+                                type: type,
+                                nodes: next(el.childNodes),
+                            }
+                        }
+                        type = MARK_TAGS[tag];
+                        if (type) {
+                            return {
+                                object: 'mark',
+                                type: type,
+                                nodes: next(el.childNodes),
+                            }
+                        }
+                        // special case links
+                        if (tag === 'a') {
+                            const href = el.getAttribute('href');
+                            let m;
+                            if (href) {
+                                m = href.match(MATRIXTO_URL_PATTERN);
+                            }
+                            if (m) {
+                                return {
+                                    object: 'inline',
+                                    type: 'pill',
+                                    data: {
+                                        href,
+                                        completion: el.innerText,
+                                        completionId: m[1],
+                                    },
+                                    isVoid: true,
+                                }
+                            }
+                            else {
+                                return {
+                                    object: 'inline',
+                                    type: 'link',
+                                    data: { href },
+                                    nodes: next(el.childNodes),
+                                }
+                            }
+                        }
+                    },
+                    serialize: (obj, children) => {
+                        if (obj.object === 'block') {
+                            return this.renderNode({
+                                node: obj,
+                                children: children,
+                            });
+                        }
+                        else if (obj.object === 'mark') {
+                            return this.renderMark({
+                                mark: obj,
+                                children: children,
+                            });
+                        }
+                        else if (obj.object === 'inline') {
+                            // special case links, pills and emoji otherwise we
+                            // end up with React components getting rendered out(!)
+                            switch (obj.type) {
+                                case 'pill':
+                                    return <a href={ obj.data.get('href') }>{ obj.data.get('completion') }</a>;
+                                case 'link':
+                                    return <a href={ obj.data.get('href') }>{ children }</a>;
+                                case 'emoji':
+                                    // XXX: apparently you can't return plain strings from serializer rules
+                                    // until https://github.com/ianstormtaylor/slate/pull/1854 is merged.
+                                    // So instead we temporarily wrap emoji from RTE in an arbitrary tag
+                                    // (<b/>).  <span/> would be nicer, but in practice it causes CSS issues.
+                                    return <b>{ obj.data.get('emojiUnicode') }</b>;
+                            }
+                            return this.renderNode({
+                                node: obj,
+                                children: children,
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+
+        const savedState = MessageComposerStore.getEditorState(this.props.room.roomId);
         this.state = {
             // whether we're in rich text or markdown mode
-            isRichtextEnabled,
+            isRichTextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
             editorState: this.createEditorState(
-                isRichtextEnabled,
-                MessageComposerStore.getContentState(this.props.room.roomId),
+                isRichTextEnabled,
+                savedState ? savedState.editor_state : undefined,
+                savedState ? savedState.rich_text : undefined,
             ),
 
             // the original editor state, before we started tabbing through completions
@@ -183,131 +312,113 @@ export default class MessageComposerInput extends React.Component {
             // whether there were any completions
             someCompletions: null,
         };
-
-        this.client = MatrixClientPeg.get();
-    }
-
-    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
-        contentBlock.findEntityRanges(
-            (character) => {
-                const entityKey = character.getEntity();
-                return (
-                    entityKey !== null &&
-                    contentState.getEntity(entityKey).getType() === 'LINK'
-                );
-            }, callback,
-        );
     }
 
     /*
-     * "Does the right thing" to create an EditorState, based on:
+     * "Does the right thing" to create an Editor value, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
+     * - whether the contentState that was passed in was rich text
      */
-    createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
-        const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                RichText.getScopedMDDecorators(this.props);
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
-        decorators.push({
-            strategy: this.findLinkEntities.bind(this),
-            component: (entityProps) => {
-                const Pill = sdk.getComponent('elements.Pill');
-                const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
-                if (Pill.isPillUrl(url)) {
-                    return <Pill
-                        url={url}
-                        room={this.props.room}
-                        offsetKey={entityProps.offsetKey}
-                        shouldShowPillAvatar={shouldShowPillAvatar}
-                    />;
-                }
-
-                return (
-                    <a href={url} data-offset-key={entityProps.offsetKey}>
-                        {entityProps.children}
-                    </a>
-                );
-            },
-        });
-        const compositeDecorator = new CompositeDecorator(decorators);
-
-        let editorState = null;
-        if (contentState) {
-            editorState = EditorState.createWithContent(contentState, compositeDecorator);
+    createEditorState(wantRichText: boolean, editorState: ?Value, wasRichText: ?boolean): Value {
+        if (editorState instanceof Value) {
+            if (wantRichText && !wasRichText) {
+                return this.mdToRichEditorState(editorState);
+            }
+            if (wasRichText && !wantRichText) {
+                return this.richToMdEditorState(editorState);
+            }
+            return editorState;
         } else {
-            editorState = EditorState.createEmpty(compositeDecorator);
+            // ...or create a new one. and explicitly focus it otherwise tab in-out issues
+            const base = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+            return base.change().focus().value;
         }
-
-        return EditorState.moveFocusToEnd(editorState);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        // this is dirty, but moving all this state to MessageComposer is dirtier
-        if (this.props.onInputStateChanged && nextState !== this.state) {
-            const state = this.getSelectionInfo(nextState.editorState);
-            state.isRichtextEnabled = nextState.isRichtextEnabled;
-            this.props.onInputStateChanged(state);
-        }
-    }
-
     onAction = (payload) => {
         const editor = this.refs.editor;
-        let contentState = this.state.editorState.getCurrentContent();
+        let editorState = this.state.editorState;
 
         switch (payload.action) {
+            case 'reply_to_event':
             case 'focus_composer':
-                editor.focus();
+                this.focusComposer();
                 break;
-            case 'insert_mention': {
-                // Pretend that we've autocompleted this user because keeping two code
-                // paths for inserting a user pill is not fun
-                const selection = this.state.editorState.getSelection();
-                const member = this.props.room.getMember(payload.user_id);
-                const completion = member ?
-                    member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
-                this.setDisplayedCompletion({
-                    completion,
-                    selection,
-                    href: `https://matrix.to/#/${payload.user_id}`,
-                    suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
-                });
-            }
+            case 'insert_mention':
+                {
+                    // Pretend that we've autocompleted this user because keeping two code
+                    // paths for inserting a user pill is not fun
+                    const selection = this.getSelectionRange(this.state.editorState);
+                    const member = this.props.room.getMember(payload.user_id);
+                    const completion = member ?
+                        member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
+                    this.setDisplayedCompletion({
+                        completion,
+                        completionId: payload.user_id,
+                        selection,
+                        href: makeUserPermalink(payload.user_id),
+                        suffix: (selection.beginning && selection.start === 0) ? ': ' : ' ',
+                    });
+                }
                 break;
             case 'quote': {
-                /// XXX: Not doing rich-text quoting from formatted-body because draft-js
-                /// has regressed such that when links are quoted, errors are thrown. See
-                /// https://github.com/vector-im/riot-web/issues/4756.
-                let body = escape(payload.text);
-                if (body) {
-                    let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
-                    if (!this.state.isRichtextEnabled) {
-                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
+                const html = HtmlUtils.bodyToHtml(payload.event.getContent(), null, {
+                    forComposerQuote: true,
+                    returnString: true,
+                    emojiOne: false,
+                });
+                const fragment = this.html.deserialize(html);
+                // FIXME: do we want to put in a permalink to the original quote here?
+                // If so, what should be the format, and how do we differentiate it from replies?
+
+                const quote = Block.create('block-quote');
+                if (this.state.isRichTextEnabled) {
+                    let change = editorState.change();
+                    const anchorText = editorState.anchorText;
+                    if ((!anchorText || anchorText.text === '') && editorState.anchorBlock.nodes.size === 1) {
+                        // replace the current block rather than split the block
+                        // XXX: this destroys our focus by deleting the thing we are anchored/focused on
+                        change = change.replaceNodeByKey(editorState.anchorBlock.key, quote);
+                    } else {
+                        // insert it into the middle of the block (splitting it)
+                        change = change.insertBlock(quote);
                     }
 
-                    const blockMap = content.getBlockMap();
-                    let startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.splitBlock(contentState, startSelection);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.replaceWithFragment(contentState,
-                        startSelection,
-                        blockMap);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    if (this.state.isRichtextEnabled) {
-                        contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
+                    // XXX: heuristic to strip out wrapping <p> which breaks quoting in RT mode
+                    if (fragment.document.nodes.size && fragment.document.nodes.get(0).type === DEFAULT_NODE) {
+                        change = change.insertFragmentByKey(quote.key, 0, fragment.document.nodes.get(0));
+                    } else {
+                        change = change.insertFragmentByKey(quote.key, 0, fragment.document);
                     }
-                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                    editorState = EditorState.moveSelectionToEnd(editorState);
-                    this.onEditorContentChanged(editorState);
-                    editor.focus();
+
+                    // XXX: this is to bring back the focus in a sane place and add a paragraph after it
+                    change = change.select({
+                        anchorKey: quote.key,
+                        focusKey: quote.key,
+                    }).collapseToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
+
+                    this.onChange(change);
+                } else {
+                    let fragmentChange = fragment.change();
+                    fragmentChange.moveToRangeOf(fragment.document)
+                                  .wrapBlock(quote);
+
+                    // FIXME: handle pills and use commonmark rather than md-serialize
+                    const md = this.md.serialize(fragmentChange.value);
+                    let change = editorState.change()
+                                            .insertText(md + '\n\n')
+                                            .focus();
+                    this.onChange(change);
                 }
             }
                 break;
@@ -361,13 +472,13 @@ export default class MessageComposerInput extends React.Component {
 
     stopServerTypingTimer() {
         if (this.serverTypingTimer) {
-            clearTimeout(this.servrTypingTimer);
+            clearTimeout(this.serverTypingTimer);
             this.serverTypingTimer = null;
         }
     }
 
     sendTyping(isTyping) {
-        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
+        if (SettingsStore.getValue('dontSendTypingNotifications')) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT,
@@ -381,194 +492,417 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    // Called by Draft to change editor contents
-    onEditorContentChanged = (editorState: EditorState) => {
-        editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
+    onChange = (change: Change, originalEditorState?: Value) => {
+        let editorState = change.value;
 
-        const currentBlock = editorState.getSelection().getStartKey();
-        const currentSelection = editorState.getSelection();
-        const currentStartOffset = editorState.getSelection().getStartOffset();
-
-        const block = editorState.getCurrentContent().getBlockForKey(currentBlock);
-        const text = block.getText();
-
-        const entityBeforeCurrentOffset = block.getEntityAt(currentStartOffset - 1);
-        const entityAtCurrentOffset = block.getEntityAt(currentStartOffset);
-
-        // If the cursor is on the boundary between an entity and a non-entity and the
-        // text before the cursor has whitespace at the end, set the entity state of the
-        // character before the cursor (the whitespace) to null. This allows the user to
-        // stop editing the link.
-        if (entityBeforeCurrentOffset && !entityAtCurrentOffset &&
-            /\s$/.test(text.slice(0, currentStartOffset))) {
-            editorState = RichUtils.toggleLink(
-                editorState,
-                currentSelection.merge({
-                    anchorOffset: currentStartOffset - 1,
-                    focusOffset: currentStartOffset,
-                }),
-                null,
-            );
-            // Reset selection
-            editorState = EditorState.forceSelection(editorState, currentSelection);
-        }
-
-        // Automatic replacement of plaintext emoji to Unicode emoji
-        if (UserSettingsStore.getSyncedSetting('MessageComposerInput.autoReplaceEmoji', false)) {
-            // The first matched group includes just the matched plaintext emoji
-            const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-            if(emojiMatch) {
-                // plaintext -> hex unicode
-                const emojiUc = asciiList[emojiMatch[1]];
-                // hex unicode -> shortname -> actual unicode
-                const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
-                const newContentState = Modifier.replaceText(
-                    editorState.getCurrentContent(),
-                    currentSelection.merge({
-                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
-                        focusOffset: currentStartOffset,
-                    }),
-                    unicodeEmoji,
-                );
-                editorState = EditorState.push(
-                    editorState,
-                    newContentState,
-                    'insert-characters',
-                );
-                editorState = EditorState.forceSelection(editorState, newContentState.getSelectionAfter());
+        if (this.direction !== '') {
+            const focusedNode = editorState.focusInline || editorState.focusText;
+            if (focusedNode.isVoid) {
+                // XXX: does this work in RTL?
+                const edge = this.direction === 'Previous' ? 'End' : 'Start';
+                if (editorState.isCollapsed) {
+                    change = change[`collapseTo${ edge }Of${ this.direction }Text`]();
+                } else {
+                    const block = this.direction === 'Previous' ? editorState.previousText : editorState.nextText;
+                    if (block) {
+                        change = change[`moveFocusTo${ edge }Of`](block);
+                    }
+                }
+                editorState = change.value;
             }
         }
 
-        /* Since a modification was made, set originalEditorState to null, since newState is now our original */
+        // when in autocomplete mode and selection changes hide the autocomplete.
+        // Selection changes when we enter text so use a heuristic to compare documents without doing it recursively
+        if (this.autocomplete.state.completionList.length > 0 && !this.autocomplete.state.hide &&
+            !rangeEquals(this.state.editorState.selection, editorState.selection) &&
+            // XXX: the heuristic failed when inlines like pills weren't taken into account. This is inideal
+            this.state.editorState.document.toJSON() === editorState.document.toJSON())
+        {
+            this.autocomplete.hide();
+        }
+
+        if (!editorState.document.isEmpty) {
+            this.onTypingActivity();
+        } else {
+            this.onFinishedTyping();
+        }
+
+        if (editorState.startText !== null) {
+            const text = editorState.startText.text;
+            const currentStartOffset = editorState.startOffset;
+
+            // Automatic replacement of plaintext emoji to Unicode emoji
+            if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+                // The first matched group includes just the matched plaintext emoji
+                const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
+                if (emojiMatch) {
+                    // plaintext -> hex unicode
+                    const emojiUc = asciiList[emojiMatch[1]];
+                    // hex unicode -> shortname -> actual unicode
+                    const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+
+                    const range = Range.create({
+                        anchorKey: editorState.selection.startKey,
+                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
+                        focusKey: editorState.selection.startKey,
+                        focusOffset: currentStartOffset - 1,
+                    });
+                    change = change.insertTextAtRange(range, unicodeEmoji);
+                    editorState = change.value;
+                }
+            }
+        }
+
+        // emojioneify any emoji
+        editorState.document.getTexts().forEach(node => {
+            if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
+                let match;
+                while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
+                    const range = Range.create({
+                        anchorKey: node.key,
+                        anchorOffset: match.index,
+                        focusKey: node.key,
+                        focusOffset: match.index + match[0].length,
+                    });
+                    const inline = Inline.create({
+                        type: 'emoji',
+                        data: { emojiUnicode: match[0] },
+                        isVoid: true,
+                    });
+                    change = change.insertInlineAtRange(range, inline);
+                    editorState = change.value;
+                }
+            }
+        });
+
+        // work around weird bug where inserting emoji via the macOS
+        // emoji picker can leave the selection stuck in the emoji's
+        // child text.  This seems to happen due to selection getting
+        // moved in the normalisation phase after calculating these changes
+        if (editorState.anchorKey &&
+            editorState.document.getParent(editorState.anchorKey).type === 'emoji')
+        {
+            change = change.collapseToStartOfNextText();
+            editorState = change.value;
+        }
+
+        if (this.props.onInputStateChanged && editorState.blocks.size > 0) {
+            let blockType = editorState.blocks.first().type;
+            // console.log("onInputStateChanged; current block type is " + blockType + " and marks are " + editorState.activeMarks);
+
+            if (blockType === 'list-item') {
+                const parent = editorState.document.getParent(editorState.blocks.first().key);
+                if (parent.type === 'numbered-list') {
+                    blockType = 'numbered-list';
+                }
+                else if (parent.type === 'bulleted-list') {
+                    blockType = 'bulleted-list';
+                }
+            }
+            const inputState = {
+                marks: editorState.activeMarks,
+                isRichTextEnabled: this.state.isRichTextEnabled,
+                blockType
+            };
+            this.props.onInputStateChanged(inputState);
+        }
+
+        // Record the editor state for this room so that it can be retrieved after switching to another room and back
+        MessageComposerStore.setEditorState(this.props.room.roomId, editorState, this.state.isRichTextEnabled);
+
         this.setState({
             editorState,
-            originalEditorState: null,
+            originalEditorState: originalEditorState || null
         });
     };
 
-    /**
-     * We're overriding setState here because it's the most convenient way to monitor changes to the editorState.
-     * Doing it using a separate function that calls setState is a possibility (and was the old approach), but that
-     * approach requires a callback and an extra setState whenever trying to set multiple state properties.
-     *
-     * @param state
-     * @param callback
-     */
-    setState(state, callback) {
-        if (state.editorState != null) {
-            state.editorState = RichText.attachImmutableEntitiesToEmoji(
-                state.editorState);
+    mdToRichEditorState(editorState: Value): Value {
+        // for consistency when roundtripping, we could use slate-md-serializer rather than
+        // commonmark, but then we would lose pills as the MD deserialiser doesn't know about
+        // them and doesn't have any extensibility hooks.
+        //
+        // The code looks like this:
+        //
+        // const markdown = this.plainWithMdPills.serialize(editorState);
+        //
+        // // weirdly, the Md serializer can't deserialize '' to a valid Value...
+        // if (markdown !== '') {
+        //     editorState = this.md.deserialize(markdown);
+        // }
+        // else {
+        //     editorState = Plain.deserialize('', { defaultBlock: DEFAULT_NODE });
+        // }
 
-            // Hide the autocomplete if the cursor location changes but the plaintext
-            // content stays the same. We don't hide if the pt has changed because the
-            // autocomplete will probably have different completions to show.
-            if (
-                !state.editorState.getSelection().equals(
-                    this.state.editorState.getSelection()
-                )
-                && state.editorState.getCurrentContent().getPlainText() ===
-                this.state.editorState.getCurrentContent().getPlainText()
-            ) {
-                this.autocomplete.hide();
-            }
+        // so, instead, we use commonmark proper (which is arguably more logical to the user
+        // anyway, as they'll expect the RTE view to match what they'll see in the timeline,
+        // but the HTML->MD conversion is anyone's guess).
 
-            if (state.editorState.getCurrentContent().hasText()) {
-                this.onTypingActivity();
-            } else {
-                this.onFinishedTyping();
-            }
+        const textWithMdPills = this.plainWithMdPills.serialize(editorState);
+        const markdown = new Markdown(textWithMdPills);
+        // HTML deserialize has custom rules to turn matrix.to links into pill objects.
+        return this.html.deserialize(markdown.toHTML());
+    }
 
-            // Record the editor state for this room so that it can be retrieved after
-            // switching to another room and back
-            dis.dispatch({
-                action: 'content_state',
-                room_id: this.props.room.roomId,
-                content_state: state.editorState.getCurrentContent(),
-            });
-
-            if (!state.hasOwnProperty('originalEditorState')) {
-                state.originalEditorState = null;
-            }
-        }
-
-        super.setState(state, () => {
-            if (callback != null) {
-                callback();
-            }
-
-            const textContent = this.state.editorState.getCurrentContent().getPlainText();
-            const selection = RichText.selectionStateToTextOffsets(
-                this.state.editorState.getSelection(),
-                this.state.editorState.getCurrentContent().getBlocksAsArray());
-            if (this.props.onContentChanged) {
-                this.props.onContentChanged(textContent, selection);
-            }
-
-            // Scroll to the bottom of the editor if the cursor is on the last line of the
-            // composer. For some reason the editor won't scroll automatically if we paste
-            // blocks of text in or insert newlines.
-            if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
-            }
-        });
+    richToMdEditorState(editorState: Value): Value {
+        // FIXME: this conversion loses pills (turning them into pure MD links).
+        // We need to add a pill-aware deserialize method
+        // to PlainWithPillsSerializer which recognises pills in raw MD and turns them into pills.
+        return Plain.deserialize(
+            // FIXME: we compile the MD out of the RTE state using slate-md-serializer
+            // which doesn't roundtrip symmetrically with commonmark, which we use for
+            // compiling MD out of the MD editor state above.
+            this.md.serialize(editorState),
+            { defaultBlock: DEFAULT_NODE }
+        );
     }
 
     enableRichtext(enabled: boolean) {
-        if (enabled === this.state.isRichtextEnabled) return;
+        if (enabled === this.state.isRichTextEnabled) return;
 
-        let contentState = null;
+        let editorState = null;
         if (enabled) {
-            const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.htmlToContentState(md.toHTML());
+            editorState = this.mdToRichEditorState(this.state.editorState);
         } else {
-            let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
-            if (markdown[markdown.length - 1] === '\n') {
-                markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
-            }
-            contentState = ContentState.createFromText(markdown);
+            editorState = this.richToMdEditorState(this.state.editorState);
         }
 
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, contentState),
-            isRichtextEnabled: enabled,
+            editorState: this.createEditorState(enabled, editorState),
+            isRichTextEnabled: enabled,
+        }, ()=>{
+            this.refs.editor.focus();
         });
-        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
-    }
+
+        SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
+    };
+
+    /**
+    * Check if the current selection has a mark with `type` in it.
+    *
+    * @param {String} type
+    * @return {Boolean}
+    */
+
+    hasMark = type => {
+        const { editorState } = this.state
+        return editorState.activeMarks.some(mark => mark.type === type)
+    };
+
+    /**
+    * Check if the any of the currently selected blocks are of `type`.
+    *
+    * @param {String} type
+    * @return {Boolean}
+    */
+
+    hasBlock = type => {
+        const { editorState } = this.state
+        return editorState.blocks.some(node => node.type === type)
+    };
+
+    onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
+
+        this.suppressAutoComplete = false;
+
+        // skip void nodes - see
+        // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
+        if (ev.keyCode === KeyCode.LEFT) {
+            this.direction = 'Previous';
+        }
+        else if (ev.keyCode === KeyCode.RIGHT) {
+            this.direction = 'Next';
+        } else {
+            this.direction = '';
+        }
+
+        switch (ev.keyCode) {
+            case KeyCode.ENTER:
+                return this.handleReturn(ev, change);
+            case KeyCode.BACKSPACE:
+                return this.onBackspace(ev, change);
+            case KeyCode.UP:
+                return this.onVerticalArrow(ev, true);
+            case KeyCode.DOWN:
+                return this.onVerticalArrow(ev, false);
+            case KeyCode.TAB:
+                return this.onTab(ev);
+            case KeyCode.ESCAPE:
+                return this.onEscape(ev);
+            case KeyCode.SPACE:
+                return this.onSpace(ev, change);
+        }
+
+        if (isOnlyCtrlOrCmdKeyEvent(ev)) {
+            const ctrlCmdCommand = {
+                // C-m => Toggles between rich text and markdown modes
+                [KeyCode.KEY_M]: 'toggle-mode',
+                [KeyCode.KEY_B]: 'bold',
+                [KeyCode.KEY_I]: 'italic',
+                [KeyCode.KEY_U]: 'underlined',
+                [KeyCode.KEY_J]: 'inline-code',
+            }[ev.keyCode];
+
+            if (ctrlCmdCommand) {
+                ev.preventDefault(); // to prevent clashing with Mac's minimize window
+                return this.handleKeyCommand(ctrlCmdCommand);
+            }
+        }
+    };
+
+    onSpace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey || ev.ctrlKey) {
+            return;
+        }
+
+        // drop a point in history so the user can undo a word
+        // XXX: this seems nasty but adding to history manually seems a no-go
+        ev.preventDefault();
+        return change.setOperationFlag("skip", false).setOperationFlag("merge", false).insertText(ev.key);
+    };
+
+    onBackspace = (ev: KeyboardEvent, change: Change): Change => {
+        if (ev.metaKey || ev.altKey || ev.shiftKey) {
+            return;
+        }
+
+        const { editorState } = this.state;
+
+        // Allow Ctrl/Cmd-Backspace when focus starts at the start of the composer (e.g select-all)
+        // for some reason if slate sees you Ctrl-backspace and your anchorOffset=0 it just resets your focus
+        if (!editorState.isCollapsed && editorState.anchorOffset === 0) {
+            return change.delete();
+        }
+
+        if (this.state.isRichTextEnabled) {
+            // let backspace exit lists
+            const isList = this.hasBlock('list-item');
+
+            if (isList && editorState.anchorOffset == 0) {
+                change
+                    .setBlocks(DEFAULT_NODE)
+                    .unwrapBlock('bulleted-list')
+                    .unwrapBlock('numbered-list');
+                return change;
+            }
+            else if (editorState.anchorOffset == 0 && editorState.isCollapsed) {
+                // turn blocks back into paragraphs
+                if ((this.hasBlock('block-quote') ||
+                     this.hasBlock('heading1') ||
+                     this.hasBlock('heading2') ||
+                     this.hasBlock('heading3') ||
+                     this.hasBlock('heading4') ||
+                     this.hasBlock('heading5') ||
+                     this.hasBlock('heading6') ||
+                     this.hasBlock('code')))
+                {
+                    return change.setBlocks(DEFAULT_NODE);
+                }
+
+                // remove paragraphs entirely if they're nested
+                const parent = editorState.document.getParent(editorState.anchorBlock.key);
+                if (editorState.anchorOffset == 0 &&
+                    this.hasBlock('paragraph') &&
+                    parent.nodes.size == 1 &&
+                    parent.object !== 'document')
+                {
+                    return change.replaceNodeByKey(editorState.anchorBlock.key, editorState.anchorText)
+                                 .collapseToEndOf(parent)
+                                 .focus();
+                }
+            }
+        }
+        return;
+    };
 
     handleKeyCommand = (command: string): boolean => {
         if (command === 'toggle-mode') {
-            this.enableRichtext(!this.state.isRichtextEnabled);
+            this.enableRichtext(!this.state.isRichTextEnabled);
             return true;
         }
-        let newState: ?EditorState = null;
+
+        let newState: ?Value = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
-        if (this.state.isRichtextEnabled) {
-            // These are block types, not handled by RichUtils by default.
-            const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
-            const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+        if (this.state.isRichTextEnabled) {
+            const type = command;
+            const { editorState } = this.state;
+            const change = editorState.change();
+            const { document } = editorState;
+            switch (type) {
+                // list-blocks:
+                case 'bulleted-list':
+                case 'numbered-list': {
+                    // Handle the extra wrapping required for list buttons.
+                    const isList = this.hasBlock('list-item');
+                    const isType = editorState.blocks.some(block => {
+                        return !!document.getClosest(block.key, parent => parent.type === type);
+                    });
 
-            const shouldToggleBlockFormat = (
-                command === 'backspace' ||
-                command === 'split-block'
-            ) && currentBlockType !== 'unstyled';
-
-            if (blockCommands.includes(command)) {
-                newState = RichUtils.toggleBlockType(this.state.editorState, command);
-            } else if (command === 'strike') {
-                // this is the only inline style not handled by Draft by default
-                newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
-            } else if (shouldToggleBlockFormat) {
-                const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
-                const currentEndOffset = this.state.editorState.getSelection().getEndOffset();
-                if (currentStartOffset === 0 && currentEndOffset === 0) {
-                    // Toggle current block type (setting it to 'unstyled')
-                    newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
+                    if (isList && isType) {
+                        change
+                            .setBlocks(DEFAULT_NODE)
+                            .unwrapBlock('bulleted-list')
+                            .unwrapBlock('numbered-list');
+                    } else if (isList) {
+                        change
+                            .unwrapBlock(
+                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+                            )
+                            .wrapBlock(type);
+                    } else {
+                        change.setBlocks('list-item').wrapBlock(type);
+                    }
                 }
+                break;
+
+                // simple blocks
+                case 'paragraph':
+                case 'block-quote':
+                case 'heading1':
+                case 'heading2':
+                case 'heading3':
+                case 'heading4':
+                case 'heading5':
+                case 'heading6':
+                case 'list-item':
+                case 'code': {
+                    const isActive = this.hasBlock(type);
+                    const isList = this.hasBlock('list-item');
+
+                    if (isList) {
+                        change
+                            .setBlocks(isActive ? DEFAULT_NODE : type)
+                            .unwrapBlock('bulleted-list')
+                            .unwrapBlock('numbered-list');
+                    } else {
+                        change.setBlocks(isActive ? DEFAULT_NODE : type);
+                    }
+                }
+                break;
+
+                // marks:
+                case 'bold':
+                case 'italic':
+                case 'inline-code':
+                case 'underlined':
+                case 'deleted': {
+                    change.toggleMark(type === 'inline-code' ? 'code' : type);
+                }
+                break;
+
+                default:
+                    console.warn(`ignoring unrecognised RTE command ${type}`);
+                    return false;
             }
+
+            this.onChange(change);
+
+            return true;
         } else {
+/*
             const contentState = this.state.editorState.getCurrentContent();
             const multipleLinesSelected = RichText.hasMultiLineSelection(this.state.editorState);
 
@@ -588,7 +922,7 @@ export default class MessageComposerInput extends React.Component {
                 'strike': (text) => `<del>${text}</del>`,
                 // ("code" is triggered by ctrl+j by draft-js by default)
                 'code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
-                'code-block': textMdCodeBlock,
+                'code': textMdCodeBlock,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
                 'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
@@ -600,20 +934,21 @@ export default class MessageComposerInput extends React.Component {
                 'underline': -4,
                 'strike': -6,
                 'code': treatInlineCodeAsBlock ? -5 : -1,
-                'code-block': -5,
+                'code': -5,
                 'blockquote': -2,
             }[command];
 
-            // Returns a function that collapses a selectionState to its end and moves it by offset
-            const collapseAndOffsetSelection = (selectionState, offset) => {
-                const key = selectionState.getEndKey();
-                return new SelectionState({
+            // Returns a function that collapses a selection to its end and moves it by offset
+            const collapseAndOffsetSelection = (selection, offset) => {
+                const key = selection.endKey();
+                return new Range({
                     anchorKey: key, anchorOffset: offset,
                     focusKey: key, focusOffset: offset,
                 });
             };
 
             if (modifyFn) {
+
                 const previousSelection = this.state.editorState.getSelection();
                 const newContentState = RichText.modifyText(contentState, previousSelection, modifyFn);
                 newState = EditorState.push(
@@ -638,87 +973,106 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        if (newState == null) {
-            newState = RichUtils.handleKeyCommand(this.state.editorState, command);
-        }
-
         if (newState != null) {
             this.setState({editorState: newState});
             return true;
         }
-
+*/
+        }
         return false;
-    }
+    };
 
-    onTextPasted(text: string, html?: string) {
-        const currentSelection = this.state.editorState.getSelection();
-        const currentContent = this.state.editorState.getCurrentContent();
+    onPaste = (event: Event, change: Change, editor: Editor): Change => {
+        const transfer = getEventTransfer(event);
 
-        let contentState = null;
-        if (html && this.state.isRichtextEnabled) {
-            contentState = Modifier.replaceWithFragment(
-                currentContent,
-                currentSelection,
-                RichText.htmlToContentState(html).getBlockMap(),
-            );
-        } else {
-            contentState = Modifier.replaceText(currentContent, currentSelection, text);
+        switch (transfer.type) {
+            case 'files':
+                return this.props.onFilesPasted(transfer.files);
+            case 'html': {
+                if (this.state.isRichTextEnabled) {
+                    // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
+                    // that we will silently discard nested blocks (e.g. nested lists) :(
+                    const fragment = this.html.deserialize(transfer.html);
+                    return change
+                    // XXX: this somehow makes Slate barf on undo and get too empty and break entirely
+                    // .setOperationFlag("skip", false)
+                    // .setOperationFlag("merge", false)
+                        .insertFragment(fragment.document);
+                } else {
+                    // in MD mode we don't want the rich content pasted as the magic was annoying people so paste plain
+                    return change
+                        .setOperationFlag("skip", false)
+                        .setOperationFlag("merge", false)
+                        .insertText(transfer.text);
+                }
+            }
+            case 'text':
+                // don't skip/merge so that multiple consecutive pastes can be undone individually
+                return change
+                    .setOperationFlag("skip", false)
+                    .setOperationFlag("merge", false)
+                    .insertText(transfer.text);
         }
+    };
 
-        let newEditorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-
-        newEditorState = EditorState.forceSelection(newEditorState, contentState.getSelectionAfter());
-        this.onEditorContentChanged(newEditorState);
-        return true;
-    }
-
-    handleReturn(ev) {
+    handleReturn = (ev, change) => {
         if (ev.shiftKey) {
-            this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
-            return true;
+            return change.insertText('\n');
         }
 
-        const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        if(
-            ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
-            .includes(currentBlockType)
-        ) {
-            // By returning false, we allow the default draft-js key binding to occur,
-            // which in this case invokes "split-block". This creates a new block of the
-            // same type, allowing the user to delete it with backspace.
-            // See handleKeyCommand (when command === 'backspace')
-            return false;
+        const editorState = this.state.editorState;
+
+        const lastBlock = editorState.blocks.last();
+        if (['code', 'block-quote', 'list-item'].includes(lastBlock.type)) {
+            const text = lastBlock.text;
+            if (text === '') {
+                // allow the user to cancel empty block by hitting return, useful in conjunction with below `inBlock`
+                return change
+                    .setBlocks(DEFAULT_NODE)
+                    .unwrapBlock('bulleted-list')
+                    .unwrapBlock('numbered-list');
+            }
+
+            // TODO strip trailing lines from blockquotes/list entries
+            // the below code seemingly works but doesn't account for edge cases like return with caret not at end
+            /* const trailingNewlines = text.match(/\n*$/);
+            if (trailingNewlines && trailingNewlines[0]) {
+                remove trailing newlines at the end of this block before making a new one
+                return change.deleteBackward(trailingNewlines[0].length);
+            }*/
+
+            return;
         }
 
-        const contentState = this.state.editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            return true;
+        let contentText;
+        let contentHTML;
+
+        // only look for commands if the first block contains simple unformatted text
+        // i.e. no pills or rich-text formatting and begins with a /.
+        let cmd, commandText;
+        const firstChild = editorState.document.nodes.get(0);
+        const firstGrandChild = firstChild && firstChild.nodes.get(0);
+        if (firstChild && firstGrandChild &&
+            firstChild.object === 'block' && firstGrandChild.object === 'text' &&
+            firstGrandChild.text[0] === '/')
+        {
+            commandText = this.plainWithIdPills.serialize(editorState);
+            cmd = processCommandInput(this.props.room.roomId, commandText);
         }
 
-
-        let contentText = contentState.getPlainText(), contentHTML;
-
-        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
-        // We have to do this now as opposed to after calculating the contentText for MD
-        // mode because entity positions may not be maintained when using
-        // md.toPlaintext().
-        // Unfortunately this means we lose mentions in history when in MD mode. This
-        // would be fixed if history was stored as contentState.
-        contentText = this.removeMDLinks(contentState, ['@']);
-
-        // Some commands (/join) require pills to be replaced with their text content
-        const commandText = this.removeMDLinks(contentState, ['#']);
-        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
+                this.historyManager.save(editorState, this.state.isRichTextEnabled ? 'rich' : 'markdown');
                 this.setState({
                     editorState: this.createEditorState(),
+                }, ()=>{
+                    this.refs.editor.focus();
                 });
             }
             if (cmd.promise) {
-                cmd.promise.then(function() {
+                cmd.promise.then(()=>{
                     console.log("Command success.");
-                }, function(err) {
+                }, (err)=>{
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Server error', '', ErrorDialog, {
@@ -738,117 +1092,113 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        if (this.state.isRichtextEnabled) {
+        const replyingToEv = RoomViewStore.getQuotingEvent();
+        const mustSendHTML = Boolean(replyingToEv);
+
+        if (this.state.isRichTextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
-            const blocks = contentState.getBlocksAsArray();
-            if (blocks.some((block) => block.getType() !== 'unstyled')) {
-                shouldSendHTML = true;
-            } else {
-                const characterLists = blocks.map((block) => block.getCharacterList());
-                // For each block of characters, determine if any inline styles are applied
-                // and if yes, send HTML
-                characterLists.forEach((characters) => {
-                    const numberOfStylesForCharacters = characters.map(
-                        (character) => character.getStyle().toArray().length,
-                    ).toArray();
-                    // If any character has more than 0 inline styles applied, send HTML
-                    if (numberOfStylesForCharacters.some((styles) => styles > 0)) {
-                        shouldSendHTML = true;
-                    }
-                });
-            }
+
+            if (mustSendHTML) shouldSendHTML = true;
+
             if (!shouldSendHTML) {
-                const hasLink = blocks.some((block) => {
-                    return block.getCharacterList().filter((c) => {
-                        const entityKey = c.getEntity();
-                        return entityKey && contentState.getEntity(entityKey).getType() === 'LINK';
-                    }).size > 0;
+                shouldSendHTML = !!editorState.document.findDescendant(node => {
+                    // N.B. node.getMarks() might be private?
+                    return ((node.object === 'block' && node.type !== 'paragraph') ||
+                            (node.object === 'inline') ||
+                            (node.object === 'text' && node.getMarks().size > 0));
                 });
-                shouldSendHTML = hasLink;
             }
+
+            contentText = this.plainWithPlainPills.serialize(editorState);
+            if (contentText === '') return true;
+
             if (shouldSendHTML) {
-                contentHTML = HtmlUtils.processHtmlForSending(
-                    RichText.contentStateToHTML(contentState),
-                );
+                contentHTML = HtmlUtils.processHtmlForSending(this.html.serialize(editorState));
             }
         } else {
-            // Use the original contentState because `contentText` has had mentions
-            // stripped and these need to end up in contentHTML.
+            const sourceWithPills = this.plainWithMdPills.serialize(editorState);
+            if (sourceWithPills === '') return true;
 
-            // Replace all Entities of type `LINK` with markdown link equivalents.
-            // TODO: move this into `Markdown` and do the same conversion in the other
-            // two places (toggling from MD->RT mode and loading MD history into RT mode)
-            // but this can only be done when history includes Entities.
-            const pt = contentState.getBlocksAsArray().map((block) => {
-                let blockText = block.getText();
-                let offset = 0;
-                this.findLinkEntities(contentState, block, (start, end) => {
-                    const entity = contentState.getEntity(block.getEntityAt(start));
-                    if (entity.getType() !== 'LINK') {
-                        return;
-                    }
-                    const text = blockText.slice(offset + start, offset + end);
-                    const url = entity.getData().url;
-                    const mdLink = `[${text}](${url})`;
-                    blockText = blockText.slice(0, offset + start) + mdLink + blockText.slice(offset + end);
-                    offset += mdLink.length - text.length;
-                });
-                return blockText;
-            }).join('\n');
+            const mdWithPills = new Markdown(sourceWithPills);
 
-            const md = new Markdown(pt);
-            if (md.isPlainText()) {
-                contentText = md.toPlaintext();
+            // if contains no HTML and we're not quoting (needing HTML)
+            if (mdWithPills.isPlainText() && !mustSendHTML) {
+                // N.B. toPlainText is only usable here because we know that the MD
+                // didn't contain any formatting in the first place...
+                contentText = mdWithPills.toPlaintext();
             } else {
-                contentHTML = md.toHTML();
+                // to avoid ugliness on clients which ignore the HTML body we don't
+                // send pills in the plaintext body.
+                contentText = this.plainWithPlainPills.serialize(editorState);
+                contentHTML = mdWithPills.toHTML();
             }
         }
 
-        let sendHtmlFn = this.client.sendHtmlMessage;
-        let sendTextFn = this.client.sendTextMessage;
+        let sendHtmlFn = ContentHelpers.makeHtmlMessage;
+        let sendTextFn = ContentHelpers.makeTextMessage;
 
         this.historyManager.save(
-            contentState,
-            this.state.isRichtextEnabled ? 'html' : 'markdown',
+            editorState,
+            this.state.isRichTextEnabled ? 'rich' : 'markdown',
         );
 
-        if (contentText.startsWith('/me')) {
+        if (commandText && commandText.startsWith('/me')) {
+            if (replyingToEv) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Emote Reply Fail', '', ErrorDialog, {
+                    title: _t("Unable to reply"),
+                    description: _t("At this time it is not possible to reply with an emote."),
+                });
+                return false;
+            }
+
             contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
-            sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendEmoteMessage;
+            sendHtmlFn = ContentHelpers.makeHtmlEmote;
+            sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-        let sendMessagePromise;
-        if (contentHTML) {
-            sendMessagePromise = sendHtmlFn.call(
-                this.client, this.props.room.roomId, contentText, contentHTML,
-            );
-        } else {
-            sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
+        let content = contentHTML ?
+                      sendHtmlFn(contentText, contentHTML) :
+                      sendTextFn(contentText);
+
+        if (replyingToEv) {
+            const replyContent = ReplyThread.makeReplyMixIn(replyingToEv);
+            content = Object.assign(replyContent, content);
+
+            // Part of Replies fallback support - prepend the text we're sending
+            // with the text we're replying to
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            if (nestedReply) {
+                if (content.formatted_body) {
+                    content.formatted_body = nestedReply.html + content.formatted_body;
+                }
+                content.body = nestedReply.body + content.body;
+            }
+
+            // Clear reply_to_event as we put the message into the queue
+            // if the send fails, retry will handle resending.
+            dis.dispatch({
+                action: 'reply_to_event',
+                event: null,
+            });
         }
 
-        sendMessagePromise.done((res) => {
+        this.client.sendMessage(this.props.room.roomId, content).then((res) => {
             dis.dispatch({
                 action: 'message_sent',
             });
-        }, (e) => onSendMessageFailed(e, this.props.room));
+        }).catch((e) => {
+            onSendMessageFailed(e, this.props.room);
+        });
 
         this.setState({
             editorState: this.createEditorState(),
-        });
+        }, ()=>{ this.refs.editor.focus() });
 
         return true;
-    }
-
-    onUpArrow = (e) => {
-        this.onVerticalArrow(e, true);
-    };
-
-    onDownArrow = (e) => {
-        this.onVerticalArrow(e, false);
     };
 
     onVerticalArrow = (e, up) => {
@@ -858,25 +1208,18 @@ export default class MessageComposerInput extends React.Component {
 
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
-            // Don't go back in history if we're in the middle of a multi-line message
-            const selection = this.state.editorState.getSelection();
-            const blockKey = selection.getStartKey();
-            const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
-            const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
+            const selection = this.state.editorState.selection;
 
-            let canMoveUp = false;
-            let canMoveDown = false;
-            if (blockKey === firstBlock.getKey()) {
-                canMoveUp = selection.getStartOffset() === selection.getEndOffset() &&
-                    selection.getStartOffset() === 0;
+            // selection must be collapsed
+            if (!selection.isCollapsed) return;
+            const document = this.state.editorState.document;
+
+            // and we must be at the edge of the document (up=start, down=end)
+            if (up) {
+                if (!selection.isAtStartOf(document)) return;
+            } else {
+                if (!selection.isAtEndOf(document)) return;
             }
-
-            if (blockKey === lastBlock.getKey()) {
-                canMoveDown = selection.getStartOffset() === selection.getEndOffset() &&
-                    selection.getStartOffset() === lastBlock.getText().length;
-            }
-
-            if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
 
             const selected = this.selectHistory(up);
             if (selected) {
@@ -910,23 +1253,30 @@ export default class MessageComposerInput extends React.Component {
             return;
         }
 
-        const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
-        if (!newContent) return false;
-        let editorState = EditorState.push(
-            this.state.editorState,
-            newContent,
-            'insert-characters',
-        );
+        let editorState;
+        const historyItem = this.historyManager.getItem(delta);
+        if (!historyItem) return;
+
+        if (historyItem.format === 'rich' && !this.state.isRichTextEnabled) {
+            editorState = this.richToMdEditorState(historyItem.value);
+        } else if (historyItem.format === 'markdown' && this.state.isRichTextEnabled) {
+            editorState = this.mdToRichEditorState(historyItem.value);
+        } else {
+            editorState = historyItem.value;
+        }
 
         // Move selection to the end of the selected history
-        let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
-        newSelection = newSelection.merge({
-            focusOffset: newContent.getLastBlock().getLength(),
-            anchorOffset: newContent.getLastBlock().getLength(),
-        });
-        editorState = EditorState.forceSelection(editorState, newSelection);
+        const change = editorState.change().collapseToEndOf(editorState.document);
 
-        this.setState({editorState});
+        // We don't call this.onChange(change) now, as fixups on stuff like emoji
+        // should already have been done and persisted in the history.
+        editorState = change.value;
+
+        this.suppressAutoComplete = true;
+
+        this.setState({ editorState }, ()=>{
+            this.refs.editor.focus();
+        });
         return true;
     };
 
@@ -960,6 +1310,14 @@ export default class MessageComposerInput extends React.Component {
         await this.setDisplayedCompletion(null); // restore originalEditorState
     };
 
+    onAutocompleteConfirm = (displayedCompletion: ?Completion) => {
+        this.focusComposer();
+        // XXX: this fails if the composer isn't focused so focus it and delay the completion until next tick
+        setImmediate(() => {
+            this.setDisplayedCompletion(displayedCompletion);
+        });
+    };
+
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
@@ -969,133 +1327,214 @@ export default class MessageComposerInput extends React.Component {
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
                 let editorState = this.state.originalEditorState;
-                // This is a workaround from https://github.com/facebook/draft-js/issues/458
-                // Due to the way we swap editorStates, Draft does not rerender at times
-                editorState = EditorState.forceSelection(editorState,
-                    editorState.getSelection());
                 this.setState({editorState});
-
             }
             return false;
         }
 
-        const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
-        let contentState = activeEditorState.getCurrentContent();
+        const {
+            range = null,
+            completion = '',
+            completionId = '',
+            href = null,
+            suffix = ''
+        } = displayedCompletion;
 
-        let entityKey;
+        let inline;
         if (href) {
-            contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
-                url: href,
-                isCompletion: true,
+            inline = Inline.create({
+                type: 'pill',
+                data: { completion, completionId, href },
+                // we can't put text in here otherwise the editor tries to select it
+                isVoid: true,
             });
-            entityKey = contentState.getLastCreatedEntityKey();
+        } else if (completion === '@room') {
+            inline = Inline.create({
+                type: 'pill',
+                data: { completion, completionId },
+                // we can't put text in here otherwise the editor tries to select it
+                isVoid: true,
+            });
         }
 
-        let selection;
+        let editorState = activeEditorState;
+
         if (range) {
-            selection = RichText.textOffsetsToSelectionState(
-                range, contentState.getBlocksAsArray(),
-            );
-        } else {
-            selection = activeEditorState.getSelection();
+            const change = editorState.change()
+                                      .collapseToAnchor()
+                                      .moveOffsetsTo(range.start, range.end)
+                                      .focus();
+            editorState = change.value;
         }
 
-        contentState = Modifier.replaceText(contentState, selection, completion, null, entityKey);
-
-        // Move the selection to the end of the block
-        const afterSelection = contentState.getSelectionAfter();
-        if (suffix) {
-            contentState = Modifier.replaceText(contentState, afterSelection, suffix);
+        let change;
+        if (inline) {
+            change = editorState.change()
+                                .insertInlineAtRange(editorState.selection, inline)
+                                .insertText(suffix)
+                                .focus();
         }
+        else {
+            change = editorState.change()
+                                .insertTextAtRange(editorState.selection, completion)
+                                .insertText(suffix)
+                                .focus();
+        }
+        // for good hygiene, keep editorState updated to track the result of the change
+        // even though we don't do anything subsequently with it
+        editorState = change.value;
 
-        let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
-        editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-        this.setState({editorState, originalEditorState: activeEditorState});
+        this.onChange(change, activeEditorState);
 
-        // for some reason, doing this right away does not update the editor :(
-        // setTimeout(() => this.refs.editor.focus(), 50);
         return true;
     };
 
-    onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) {
-        e.preventDefault(); // don't steal focus from the editor!
-        const command = {
-                code: 'code-block',
-                quote: 'blockquote',
-                bullet: 'unordered-list-item',
-                numbullet: 'ordered-list-item',
-            }[name] || name;
-        this.handleKeyCommand(command);
-    }
+    renderNode = props => {
+        const { attributes, children, node, isSelected } = props;
 
-    /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
-     buttons. */
-    getSelectionInfo(editorState: EditorState) {
-        const styleName = {
-            BOLD: 'bold',
-            ITALIC: 'italic',
-            STRIKETHROUGH: 'strike',
-            UNDERLINE: 'underline',
-        };
+        switch (node.type) {
+            case 'paragraph':
+                return <p {...attributes}>{children}</p>;
+            case 'block-quote':
+                return <blockquote {...attributes}>{children}</blockquote>;
+            case 'bulleted-list':
+                return <ul {...attributes}>{children}</ul>;
+            case 'heading1':
+                return <h1 {...attributes}>{children}</h1>;
+            case 'heading2':
+                return <h2 {...attributes}>{children}</h2>;
+            case 'heading3':
+                return <h3 {...attributes}>{children}</h3>;
+            case 'heading4':
+                return <h4 {...attributes}>{children}</h4>;
+            case 'heading5':
+                return <h5 {...attributes}>{children}</h5>;
+            case 'heading6':
+                return <h6 {...attributes}>{children}</h6>;
+            case 'list-item':
+                return <li {...attributes}>{children}</li>;
+            case 'numbered-list':
+                return <ol {...attributes}>{children}</ol>;
+            case 'code':
+                return <pre {...attributes}>{children}</pre>;
+            case 'link':
+                return <a {...attributes} href={ node.data.get('href') }>{children}</a>;
+            case 'pill': {
+                const { data } = node;
+                const url = data.get('href');
+                const completion = data.get('completion');
 
-        const originalStyle = editorState.getCurrentInlineStyle().toArray();
-        const style = originalStyle
-            .map((style) => styleName[style] || null)
-            .filter((styleName) => !!styleName);
+                const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+                const Pill = sdk.getComponent('elements.Pill');
 
-        const blockName = {
-            'code-block': 'code',
-            'blockquote': 'quote',
-            'unordered-list-item': 'bullet',
-            'ordered-list-item': 'numbullet',
-        };
-        const originalBlockType = editorState.getCurrentContent()
-            .getBlockForKey(editorState.getSelection().getStartKey())
-            .getType();
-        const blockType = blockName[originalBlockType] || null;
-
-        return {
-            style,
-            blockType,
-        };
-    }
-
-    getAutocompleteQuery(contentState: ContentState) {
-        // Don't send markdown links to the autocompleter
-        return this.removeMDLinks(contentState, ['@', '#']);
-    }
-
-    removeMDLinks(contentState: ContentState, prefixes: string[]) {
-        const plaintext = contentState.getPlainText();
-        if (!plaintext) return '';
-        return plaintext.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
-        (markdownLink, text, resource, prefix, offset) => {
-            if (!prefixes.includes(prefix)) return markdownLink;
-            // Calculate the offset relative to the current block that the offset is in
-            let sum = 0;
-            const blocks = contentState.getBlocksAsArray();
-            let block;
-            for (let i = 0; i < blocks.length; i++) {
-                block = blocks[i];
-                sum += block.getLength();
-                if (sum > offset) {
-                    sum -= block.getLength();
-                    break;
+                if (completion === '@room') {
+                    return <Pill
+                            type={Pill.TYPE_AT_ROOM_MENTION}
+                            room={this.props.room}
+                            shouldShowPillAvatar={shouldShowPillAvatar}
+                            isSelected={isSelected}
+                            />;
+                }
+                else if (Pill.isPillUrl(url)) {
+                    return <Pill
+                            url={url}
+                            room={this.props.room}
+                            shouldShowPillAvatar={shouldShowPillAvatar}
+                            isSelected={isSelected}
+                            />;
+                }
+                else {
+                    const { text } = node;
+                    return <a href={url} {...props.attributes}>
+                                { text }
+                           </a>;
                 }
             }
-            offset -= sum;
-
-            const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? contentState.getEntity(entityKey) : null;
-            if (entity && entity.getData().isCompletion) {
-                // This is a completed mention, so do not insert MD link, just text
-                return text;
-            } else {
-                // This is either a MD link that was typed into the composer or another
-                // type of pill (e.g. room pill)
-                return markdownLink;
+            case 'emoji': {
+                const { data } = node;
+                const emojiUnicode = data.get('emojiUnicode');
+                const uri = RichText.unicodeToEmojiUri(emojiUnicode);
+                const shortname = toShort(emojiUnicode);
+                const className = classNames('mx_emojione', {
+                    mx_emojione_selected: isSelected
+                });
+                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode }/>;
             }
-        });
+        }
+    };
+
+    renderMark = props => {
+        const { children, mark, attributes } = props;
+        switch (mark.type) {
+            case 'bold':
+                return <strong {...attributes}>{children}</strong>;
+            case 'italic':
+                return <em {...attributes}>{children}</em>;
+            case 'code':
+                return <code {...attributes}>{children}</code>;
+            case 'underlined':
+                return <u {...attributes}>{children}</u>;
+            case 'deleted':
+                return <del {...attributes}>{children}</del>;
+        }
+    };
+
+    onFormatButtonClicked = (name, e) => {
+        e.preventDefault();
+
+        // XXX: horrible evil hack to ensure the editor is focused so the act
+        // of focusing it doesn't then cancel the format button being pressed
+        // FIXME: can we just tell handleKeyCommand's change to invoke .focus()?
+        if (document.activeElement && document.activeElement.className !== 'mx_MessageComposer_editor') {
+            this.refs.editor.focus();
+            setTimeout(()=>{
+                this.handleKeyCommand(name);
+            }, 500); // can't find any callback to hook this to. onFocus and onChange and willComponentUpdate fire too early.
+            return;
+        }
+
+        this.handleKeyCommand(name);
+    };
+
+    getAutocompleteQuery(editorState: Value) {
+        // We can just return the current block where the selection begins, which
+        // should be enough to capture any autocompletion input, given autocompletion
+        // providers only search for the first match which intersects with the current selection.
+        // This avoids us having to serialize the whole thing to plaintext and convert
+        // selection offsets in & out of the plaintext domain.
+
+        if (editorState.selection.anchorKey) {
+            return editorState.document.getDescendant(editorState.selection.anchorKey).text;
+        }
+        else {
+            return '';
+        }
+    }
+
+    getSelectionRange(editorState: Value) {
+        let beginning = false;
+        const query = this.getAutocompleteQuery(editorState);
+        const firstChild = editorState.document.nodes.get(0);
+        const firstGrandChild = firstChild && firstChild.nodes.get(0);
+        beginning = (firstChild && firstGrandChild &&
+                     firstChild.object === 'block' && firstGrandChild.object === 'text' &&
+                     editorState.selection.anchorKey === firstGrandChild.key);
+
+        // return a character range suitable for handing to an autocomplete provider.
+        // the range is relative to the anchor of the current editor selection.
+        // if the selection spans multiple blocks, then we collapse it for the calculation.
+        const range = {
+            beginning, // whether the selection is in the first block of the editor or not
+            start: editorState.selection.anchorOffset,
+            end: (editorState.selection.anchorKey == editorState.selection.focusKey) ?
+                 editorState.selection.focusOffset : editorState.selection.anchorOffset,
+        }
+        if (range.start > range.end) {
+            const tmp = range.start;
+            range.start = range.end;
+            range.end = tmp;
+        }
+        return range;
     }
 
     onMarkdownToggleClicked = (e) => {
@@ -1103,79 +1542,58 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand('toggle-mode');
     };
 
+    focusComposer = () => {
+        this.refs.editor.focus();
+    };
+
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
-        // From https://github.com/facebook/draft-js/blob/master/examples/rich/rich.html#L92
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it.
-        let hidePlaceholder = false;
-        const contentState = activeEditorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                hidePlaceholder = true;
-            }
-        }
-
         const className = classNames('mx_MessageComposer_input', {
-            mx_MessageComposer_input_empty: hidePlaceholder,
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
-        const content = activeEditorState.getCurrentContent();
-        const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
-            activeEditorState.getCurrentContent().getBlocksAsArray());
+        const isEmpty = this.state.editorState.document.isEmpty;
+
+        let {placeholder} = this.props;
+        // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
+        if (isEmpty && this.state.editorState.startBlock && this.state.editorState.startBlock.type !== DEFAULT_NODE) {
+            placeholder = undefined;
+        }
 
         return (
-            <div className="mx_MessageComposer_input_wrapper">
+            <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
+                    <ReplyPreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
-                        onConfirm={this.setDisplayedCompletion}
+                        room={this.props.room}
+                        onConfirm={this.onAutocompleteConfirm}
                         onSelectionChange={this.setDisplayedCompletion}
-                        query={this.getAutocompleteQuery(content)}
-                        selection={selection}/>
+                        query={ this.suppressAutoComplete ? '' : this.getAutocompleteQuery(activeEditorState) }
+                        selection={this.getSelectionRange(activeEditorState)}
+                    />
                 </div>
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
-                         title={ this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
-                         src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
+                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                         src={`img/button-md-${!this.state.isRichTextEnabled}.png`} />
                     <Editor ref="editor"
                             dir="auto"
-                            placeholder={this.props.placeholder}
-                            editorState={this.state.editorState}
-                            onChange={this.onEditorContentChanged}
-                            blockStyleFn={MessageComposerInput.getBlockStyle}
-                            keyBindingFn={MessageComposerInput.getKeyBinding}
-                            handleKeyCommand={this.handleKeyCommand}
-                            handleReturn={this.handleReturn}
-                            handlePastedText={this.onTextPasted}
-                            handlePastedFiles={this.props.onFilesPasted}
-                            stripPastedStyles={!this.state.isRichtextEnabled}
-                            onTab={this.onTab}
-                            onUpArrow={this.onUpArrow}
-                            onDownArrow={this.onDownArrow}
-                            onEscape={this.onEscape}
-                            spellCheck={true}/>
+                            className="mx_MessageComposer_editor"
+                            placeholder={placeholder}
+                            value={this.state.editorState}
+                            onChange={this.onChange}
+                            onKeyDown={this.onKeyDown}
+                            onPaste={this.onPaste}
+                            renderNode={this.renderNode}
+                            renderMark={this.renderMark}
+                            // disable spell check for the placeholder because browsers don't like "unencrypted"
+                            spellCheck={!isEmpty}
+                            />
                 </div>
             </div>
         );
     }
 }
-
-MessageComposerInput.propTypes = {
-    // a callback which is called when the height of the composer is
-    // changed due to a change in content.
-    onResize: React.PropTypes.func,
-
-    // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
-
-    // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: React.PropTypes.func,
-
-    onFilesPasted: React.PropTypes.func,
-
-    onInputStateChanged: React.PropTypes.func,
-};

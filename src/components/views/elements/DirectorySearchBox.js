@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class DirectorySearchBox extends React.Component {
@@ -95,7 +96,7 @@ export default class DirectorySearchBox extends React.Component {
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
                     placeholder={this.props.placeholder} autoFocus
                 />
-                {join_button}
+                { join_button }
                 <span className="mx_DirectorySearchBox_clear_wrapper">
                     <span className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
                 </span>
@@ -105,10 +106,10 @@ export default class DirectorySearchBox extends React.Component {
 }
 
 DirectorySearchBox.propTypes = {
-    className: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    onClear: React.PropTypes.func,
-    onJoinClick: React.PropTypes.func,
-    placeholder: React.PropTypes.string,
-    showJoinButton: React.PropTypes.bool,
+    className: PropTypes.string,
+    onChange: PropTypes.func,
+    onClear: PropTypes.func,
+    onJoinClick: PropTypes.func,
+    placeholder: PropTypes.string,
+    showJoinButton: PropTypes.bool,
 };

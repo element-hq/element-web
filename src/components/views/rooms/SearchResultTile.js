@@ -16,40 +16,41 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
+const React = require('react');
+import PropTypes from 'prop-types';
+const sdk = require('../../../index');
 
 module.exports = React.createClass({
     displayName: 'SearchResult',
 
     propTypes: {
         // a matrix-js-sdk SearchResult containing the details of this result
-        searchResult: React.PropTypes.object.isRequired,
+        searchResult: PropTypes.object.isRequired,
 
         // a list of strings to be highlighted in the results
-        searchHighlights: React.PropTypes.array,
+        searchHighlights: PropTypes.array,
 
         // href for the highlights in this result
-        resultLink: React.PropTypes.string,
+        resultLink: PropTypes.string,
 
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
     },
 
     render: function() {
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
-        var EventTile = sdk.getComponent('rooms.EventTile');
-        var result = this.props.searchResult;
-        var mxEv = result.context.getEvent();
-        var eventId = mxEv.getId();
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        const result = this.props.searchResult;
+        const mxEv = result.context.getEvent();
+        const eventId = mxEv.getId();
 
-        var ts1 = mxEv.getTs();
-        var ret = [<DateSeparator key={ts1 + "-search"} ts={ts1}/>];
+        const ts1 = mxEv.getTs();
+        const ret = [<DateSeparator key={ts1 + "-search"} ts={ts1} />];
 
-        var timeline = result.context.getTimeline();
+        const timeline = result.context.getTimeline();
         for (var j = 0; j < timeline.length; j++) {
-            var ev = timeline[j];
+            const ev = timeline[j];
             var highlights;
-            var contextual = (j != result.context.getOurEventIndex());
+            const contextual = (j != result.context.getOurEventIndex());
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
@@ -61,7 +62,7 @@ module.exports = React.createClass({
         }
         return (
             <li data-scroll-tokens={eventId+"+"+j}>
-                {ret}
+                { ret }
             </li>);
     },
 });

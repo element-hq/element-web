@@ -23,7 +23,7 @@ const localStorage = window.localStorage;
 let indexedDB;
 try {
     indexedDB = window.indexedDB;
-} catch(e) {}
+} catch (e) {}
 
 /**
  * Create a new matrix client, with the persistent stores set up appropriately
@@ -39,7 +39,9 @@ try {
  * @returns {MatrixClient} the newly-created MatrixClient
  */
 export default function createMatrixClient(opts) {
-    const storeOpts = {};
+    const storeOpts = {
+        useAuthorizationHeader: true,
+    };
 
     if (localStorage) {
         storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);

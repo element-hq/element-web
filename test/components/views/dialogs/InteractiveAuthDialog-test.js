@@ -28,12 +28,12 @@ import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import * as test_utils from '../../../test-utils';
 
 const InteractiveAuthDialog = sdk.getComponent(
-    'views.dialogs.InteractiveAuthDialog'
+    'views.dialogs.InteractiveAuthDialog',
 );
 
-describe('InteractiveAuthDialog', function () {
-    var parentDiv;
-    var sandbox;
+describe('InteractiveAuthDialog', function() {
+    let parentDiv;
+    let sandbox;
 
     beforeEach(function() {
         test_utils.beforeEach(this);
@@ -50,10 +50,10 @@ describe('InteractiveAuthDialog', function () {
 
     it('Should successfully complete a password flow', function() {
         const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(Promise.resolve({a:1}));
+        const doRequest = sinon.stub().returns(Promise.resolve({a: 1}));
 
         // tell the stub matrixclient to return a real userid
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         client.credentials = {userId: "@user:id"};
 
         const dlg = ReactDOM.render(
@@ -62,8 +62,8 @@ describe('InteractiveAuthDialog', function () {
                 authData={{
                     session: "sess",
                     flows: [
-                        {"stages":["m.login.password"]}
-                    ]
+                        {"stages": ["m.login.password"]},
+                    ],
                 }}
                 makeRequest={doRequest}
                 onFinished={onFinished}
@@ -72,7 +72,7 @@ describe('InteractiveAuthDialog', function () {
         // wait for a password box and a submit button
         return MatrixReactTestUtils.waitForRenderedDOMComponentWithTag(dlg, "form", 2).then((formNode) => {
             const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
-                dlg, "input"
+                dlg, "input",
             );
             let passwordNode;
             let submitNode;
@@ -113,7 +113,7 @@ describe('InteractiveAuthDialog', function () {
             return Promise.delay(1);
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
-            expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);
+            expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);
         });
     });
 });

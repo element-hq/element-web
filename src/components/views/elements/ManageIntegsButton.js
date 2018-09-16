@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
+import classNames from 'classnames';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
@@ -31,11 +32,9 @@ export default class ManageIntegsButton extends React.Component {
 
         this.state = {
             scalarError: null,
-            showIntegrationsError: false,
         };
 
         this.onManageIntegrations = this.onManageIntegrations.bind(this);
-        this.onShowIntegrationsError = this.onShowIntegrationsError.bind(this);
     }
 
     componentWillMount() {
@@ -48,7 +47,7 @@ export default class ManageIntegsButton extends React.Component {
                 this.forceUpdate();
             }, (err) => {
                 this.setState({ scalarError: err});
-                console.error(err);
+                console.error('Error whilst initialising scalarClient for ManageIntegsButton', err);
             });
         }
     }
@@ -59,53 +58,44 @@ export default class ManageIntegsButton extends React.Component {
 
     onManageIntegrations(ev) {
         ev.preventDefault();
+        if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
+            return;
+        }
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         Modal.createDialog(IntegrationsManager, {
             src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.roomId) :
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room) :
                 null,
         }, "mx_IntegrationsManager");
     }
 
-    onShowIntegrationsError(ev) {
-        ev.preventDefault();
-        this.setState({
-            showIntegrationsError: !this.state.showIntegrationsError,
-        });
-    }
-
     render() {
         let integrationsButton = <div />;
-        let integrationsError;
+        let integrationsWarningTriangle = <div />;
+        let integrationsErrorPopup = <div />;
         if (this.scalarClient !== null) {
-            if (this.state.showIntegrationsError && this.state.scalarError) {
-                integrationsError = (
+            const integrationsButtonClasses = classNames({
+                mx_RoomHeader_button: true,
+                mx_RoomSettings_integrationsButton_error: !!this.state.scalarError,
+            });
+
+            if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
+                integrationsWarningTriangle = <img src="img/warning.svg" title={_t('Integrations Error')} width="17" />;
+                // Popup shown when hovering over integrationsButton_error (via CSS)
+                integrationsErrorPopup = (
                     <span className="mx_RoomSettings_integrationsButton_errorPopup">
                         { _t('Could not connect to the integration server') }
                     </span>
                 );
             }
 
-            if (this.scalarClient.hasCredentials()) {
-                integrationsButton = (
-                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.onManageIntegrations} title={ _t('Manage Integrations') }>
-                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
-                    </AccessibleButton>
-                );
-            } else if (this.state.scalarError) {
-                integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
-                        <img src="img/warning.svg" title={_t('Integrations Error')} width="17"/>
-                        { integrationsError }
-                    </div>
-                );
-            } else {
-                integrationsButton = (
-                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.onManageIntegrations} title={ _t('Manage Integrations') }>
-                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
-                    </AccessibleButton>
-                );
-            }
+            integrationsButton = (
+                <AccessibleButton className={integrationsButtonClasses} onClick={this.onManageIntegrations} title={_t('Manage Integrations')}>
+                    <TintableSvg src="img/icons-apps.svg" width="35" height="35" />
+                    { integrationsWarningTriangle }
+                    { integrationsErrorPopup }
+                </AccessibleButton>
+            );
         }
 
         return integrationsButton;
@@ -113,5 +103,5 @@ export default class ManageIntegsButton extends React.Component {
 }
 
 ManageIntegsButton.propTypes = {
-    roomId: PropTypes.string.isRequired,
+    room: PropTypes.object.isRequired,
 };

@@ -24,27 +24,27 @@ module.exports = React.createClass({
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
-                    {_t("Custom Server Options")}
+                    { _t("Custom Server Options") }
                 </div>
                 <div className="mx_Dialog_content">
                     <span>
-                        {_t("You can use the custom server options to sign into other Matrix " +
-                        "servers by specifying a different Home server URL.")}
-                        <br/>
-                        {_t("This allows you to use this app with an existing Matrix account on " +
-                            "a different home server.")}
-                        <br/>
-                        <br/>
-                        {_t("You can also set a custom identity server but this will typically prevent " +
-                            "interaction with users based on email address.")}
+                        { _t("You can use the custom server options to sign into other Matrix " +
+                        "servers by specifying a different Home server URL.") }
+                        <br />
+                        { _t("This allows you to use this app with an existing Matrix account on " +
+                            "a different home server.") }
+                        <br />
+                        <br />
+                        { _t("You can also set a custom identity server but this will typically prevent " +
+                            "interaction with users based on email address.") }
                     </span>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
-                        {_t("Dismiss")}
+                        { _t("Dismiss") }
                     </button>
                 </div>
             </div>
         );
-    }
+    },
 });

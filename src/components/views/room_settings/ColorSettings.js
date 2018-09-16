@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import Promise from 'bluebird';
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 
-var sdk = require('../../../index');
-var Tinter = require('../../../Tinter');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var Modal = require("../../../Modal");
+const sdk = require('../../../index');
+const Tinter = require('../../../Tinter');
+const MatrixClientPeg = require("../../../MatrixClientPeg");
+const Modal = require("../../../Modal");
 
 import dis from '../../../dispatcher';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
-var ROOM_COLORS = [
+const ROOM_COLORS = [
     // magic room default values courtesy of Ribot
-    ["#76cfa6", "#eaf5f0"],
+    [Tinter.getKeyRgb()[0], Tinter.getKeyRgb()[1]],
     ["#81bddb", "#eaf1f4"],
     ["#bd79cb", "#f3eaf5"],
     ["#c65d94", "#f5eaef"],
@@ -34,37 +36,37 @@ var ROOM_COLORS = [
     ["#dad658", "#f5f4ea"],
     ["#80c553", "#eef5ea"],
     ["#bb814e", "#eee8e3"],
-    ["#595959", "#ececec"],
+    //["#595959", "#ececec"], // Grey makes everything appear disabled, so remove it for now
 ];
 
 module.exports = React.createClass({
     displayName: 'ColorSettings',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired
+        room: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
-        var data = {
+        const data = {
             index: 0,
-            primary_color: ROOM_COLORS[0].primary_color,
-            secondary_color: ROOM_COLORS[0].secondary_color,
-            hasChanged: false
+            primary_color: ROOM_COLORS[0][0],
+            secondary_color: ROOM_COLORS[0][1],
+            hasChanged: false,
         };
-        var event = this.props.room.getAccountData("org.matrix.room.color_scheme");
-        if (!event) {
-            return data;
+        const scheme = SettingsStore.getValueAt(SettingLevel.ROOM_ACCOUNT, "roomColor", this.props.room.roomId);
+
+        if (scheme.primary_color && scheme.secondary_color) {
+            // We only use the user's scheme if the scheme is valid.
+            data.primary_color = scheme.primary_color;
+            data.secondary_color = scheme.secondary_color;
         }
-        var scheme = event.getContent();
-        data.primary_color = scheme.primary_color;
-        data.secondary_color = scheme.secondary_color;
         data.index = this._getColorIndex(data);
 
         if (data.index === -1) {
             // append the unrecognised colours to our palette
             data.index = ROOM_COLORS.length;
             ROOM_COLORS.push([
-                scheme.primary_color, scheme.secondary_color
+                scheme.primary_color, scheme.secondary_color,
             ]);
         }
         return data;
@@ -74,21 +76,21 @@ module.exports = React.createClass({
         if (!this.state.hasChanged) {
             return Promise.resolve(); // They didn't explicitly give a color to save.
         }
-        var originalState = this.getInitialState();
+        const originalState = this.getInitialState();
         if (originalState.primary_color !== this.state.primary_color ||
                 originalState.secondary_color !== this.state.secondary_color) {
             console.log("ColorSettings: Saving new color");
             // We would like guests to be able to set room colour but currently
             // they can't, so we still send the request but display a sensible
             // error if it fails.
-            return MatrixClientPeg.get().setRoomAccountData(
-                this.props.room.roomId, "org.matrix.room.color_scheme", {
-                    primary_color: this.state.primary_color,
-                    secondary_color: this.state.secondary_color
-                }
-            ).catch(function(err) {
-                if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
-                    dis.dispatch({action: 'view_set_mxid'});
+            // TODO: Support guests for room color. Technically this is possible via granular settings
+            // Granular settings would mean the guest is forced to use the DEVICE level though.
+            SettingsStore.setValue("roomColor", this.props.room.roomId, SettingLevel.ROOM_ACCOUNT, {
+                primary_color: this.state.primary_color,
+                secondary_color: this.state.secondary_color,
+            }).catch(function(err) {
+                if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
+                    dis.dispatch({action: 'require_registration'});
                 }
             });
         }
@@ -100,8 +102,8 @@ module.exports = React.createClass({
             return -1;
         }
         // XXX: we should validate these values
-        for (var i = 0; i < ROOM_COLORS.length; i++) {
-            var room_color = ROOM_COLORS[i];
+        for (let i = 0; i < ROOM_COLORS.length; i++) {
+            const room_color = ROOM_COLORS[i];
             if (room_color[0] === String(scheme.primary_color).toLowerCase() &&
                     room_color[1] === String(scheme.secondary_color).toLowerCase()) {
                 return i;
@@ -117,34 +119,34 @@ module.exports = React.createClass({
             index: index,
             primary_color: ROOM_COLORS[index][0],
             secondary_color: ROOM_COLORS[index][1],
-            hasChanged: true
+            hasChanged: true,
         });
     },
 
     render: function() {
         return (
             <div className="mx_RoomSettings_roomColors">
-                {ROOM_COLORS.map((room_color, i) => {
-                    var selected;
+                { ROOM_COLORS.map((room_color, i) => {
+                    let selected;
                     if (i === this.state.index) {
                         selected = (
                             <div className="mx_RoomSettings_roomColor_selected">
-                                <img src="img/tick.svg" width="17" height="14" alt="./"/>
+                                <img src="img/tick.svg" width="17" height="14" alt="./" />
                             </div>
                         );
                     }
-                    var boundClick = this._onColorSchemeChanged.bind(this, i);
+                    const boundClick = this._onColorSchemeChanged.bind(this, i);
                     return (
                         <div className="mx_RoomSettings_roomColor"
-                              key={ "room_color_" + i }
+                              key={"room_color_" + i}
                               style={{ backgroundColor: room_color[1] }}
-                              onClick={ boundClick }>
+                              onClick={boundClick}>
                             { selected }
                             <div className="mx_RoomSettings_roomColorPrimary" style={{ backgroundColor: room_color[0] }}></div>
                         </div>
                     );
-                })}
+                }) }
             </div>
         );
-    }
+    },
 });

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -22,9 +23,9 @@ module.exports = React.createClass({
     propTypes: {
         // Specifying a homeserver will make magical things happen when you,
         // e.g. start typing in the room alias box.
-        homeserver: React.PropTypes.string,
-        alias: React.PropTypes.string,
-        onChange: React.PropTypes.func,
+        homeserver: PropTypes.string,
+        alias: PropTypes.string,
+        onChange: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -35,10 +36,10 @@ module.exports = React.createClass({
     },
 
     getAliasLocalpart: function() {
-        var room_alias = this.props.alias;
+        let room_alias = this.props.alias;
 
         if (room_alias && this.props.homeserver) {
-            var suffix = ":" + this.props.homeserver;
+            const suffix = ":" + this.props.homeserver;
             if (room_alias.startsWith("#") && room_alias.endsWith(suffix)) {
                 room_alias = room_alias.slice(1, -suffix.length);
             }
@@ -52,22 +53,22 @@ module.exports = React.createClass({
     },
 
     onFocus: function(ev) {
-        var target = ev.target;
-        var curr_val = ev.target.value;
+        const target = ev.target;
+        const curr_val = ev.target.value;
 
         if (this.props.homeserver) {
             if (curr_val == "") {
-                var self = this;
+                const self = this;
                 setTimeout(function() {
                     target.value = "#:" + self.props.homeserver;
                     target.setSelectionRange(1, 1);
                 }, 0);
             } else {
-                var suffix = ":" + this.props.homeserver;
+                const suffix = ":" + this.props.homeserver;
                 setTimeout(function() {
                     target.setSelectionRange(
                         curr_val.startsWith("#") ? 1 : 0,
-                        curr_val.endsWith(suffix) ? (target.value.length - suffix.length) : target.value.length
+                        curr_val.endsWith(suffix) ? (target.value.length - suffix.length) : target.value.length,
                     );
                 }, 0);
             }
@@ -75,7 +76,7 @@ module.exports = React.createClass({
     },
 
     onBlur: function(ev) {
-        var curr_val = ev.target.value;
+        const curr_val = ev.target.value;
 
         if (this.props.homeserver) {
             if (curr_val == "#:" + this.props.homeserver) {
@@ -84,8 +85,8 @@ module.exports = React.createClass({
             }
 
             if (curr_val != "") {
-                var new_val = ev.target.value;
-                var suffix = ":" + this.props.homeserver;
+                let new_val = ev.target.value;
+                const suffix = ":" + this.props.homeserver;
                 if (!curr_val.startsWith("#")) new_val = "#" + new_val;
                 if (!curr_val.endsWith(suffix)) new_val = new_val + suffix;
                 ev.target.value = new_val;
@@ -97,7 +98,7 @@ module.exports = React.createClass({
         return (
             <input type="text" className="mx_RoomAlias" placeholder={_t("Alias (optional)")}
                 onChange={this.onValueChanged} onFocus={this.onFocus} onBlur={this.onBlur}
-                value={this.props.alias}/>
+                value={this.props.alias} />
         );
-    }
+    },
 });

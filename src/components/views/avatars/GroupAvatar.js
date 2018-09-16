@@ -24,10 +24,12 @@ export default React.createClass({
 
     propTypes: {
         groupId: PropTypes.string,
+        groupName: PropTypes.string,
         groupAvatarUrl: PropTypes.string,
         width: PropTypes.number,
         height: PropTypes.number,
         resizeMethod: PropTypes.string,
+        onClick: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -52,11 +54,11 @@ export default React.createClass({
         // extract the props we use from props so we can pass any others through
         // should consider adding this as a global rule in js-sdk?
         /*eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
-        const {groupId, groupAvatarUrl, ...otherProps} = this.props;
+        const {groupId, groupAvatarUrl, groupName, ...otherProps} = this.props;
 
         return (
             <BaseAvatar
-                name={this.props.groupId[1]}
+                name={groupName || this.props.groupId[1]}
                 idName={this.props.groupId}
                 url={this.getGroupAvatarUrl()}
                 {...otherProps}

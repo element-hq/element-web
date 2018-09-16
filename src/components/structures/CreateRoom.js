@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -30,8 +31,8 @@ module.exports = React.createClass({
     displayName: 'CreateRoom',
 
     propTypes: {
-        onRoomCreated: React.PropTypes.func,
-        collapsedRhs: React.PropTypes.bool,
+        onRoomCreated: PropTypes.func,
+        collapsedRhs: PropTypes.bool,
     },
 
     phases: {
@@ -61,7 +62,7 @@ module.exports = React.createClass({
     },
 
     onCreateRoom: function() {
-        var options = {};
+        const options = {};
 
         if (this.state.room_name) {
             options.name = this.state.room_name;
@@ -79,14 +80,14 @@ module.exports = React.createClass({
                     {
                         type: "m.room.join_rules",
                         content: {
-                            "join_rule": this.state.is_private ? "invite" : "public"
-                        }
+                            "join_rule": this.state.is_private ? "invite" : "public",
+                        },
                     },
                     {
                         type: "m.room.history_visibility",
                         content: {
-                            "history_visibility": this.state.share_history ? "shared" : "invited"
-                        }
+                            "history_visibility": this.state.share_history ? "shared" : "invited",
+                        },
                     },
                 ];
             }
@@ -94,19 +95,19 @@ module.exports = React.createClass({
 
         options.invite = this.state.invited_users;
 
-        var alias = this.getAliasLocalpart();
+        const alias = this.getAliasLocalpart();
         if (alias) {
             options.room_alias_name = alias;
         }
 
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         if (!cli) {
             // TODO: Error.
             console.error("Cannot create room: No matrix client.");
             return;
         }
 
-        var deferred = cli.createRoom(options);
+        const deferred = cli.createRoom(options);
 
         if (this.state.encrypt) {
             // TODO
@@ -116,7 +117,7 @@ module.exports = React.createClass({
             phase: this.phases.CREATING,
         });
 
-        var self = this;
+        const self = this;
 
         deferred.then(function(resp) {
             self.setState({
@@ -209,7 +210,7 @@ module.exports = React.createClass({
 
     onAliasChanged: function(alias) {
         this.setState({
-            alias: alias
+            alias: alias,
         });
     },
 
@@ -220,64 +221,64 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var curr_phase = this.state.phase;
+        const curr_phase = this.state.phase;
         if (curr_phase == this.phases.CREATING) {
-            var Loader = sdk.getComponent("elements.Spinner");
+            const Loader = sdk.getComponent("elements.Spinner");
             return (
-                <Loader/>
+                <Loader />
             );
         } else {
-            var error_box = "";
+            let error_box = "";
             if (curr_phase == this.phases.ERROR) {
                 error_box = (
                     <div className="mx_Error">
-                        {_t('An error occurred: %(error_string)s', {error_string: this.state.error_string})}
+                        { _t('An error occurred: %(error_string)s', {error_string: this.state.error_string}) }
                     </div>
                 );
             }
 
-            var CreateRoomButton = sdk.getComponent("create_room.CreateRoomButton");
-            var RoomAlias = sdk.getComponent("create_room.RoomAlias");
-            var Presets = sdk.getComponent("create_room.Presets");
-            var UserSelector = sdk.getComponent("elements.UserSelector");
-            var SimpleRoomHeader = sdk.getComponent("rooms.SimpleRoomHeader");
+            const CreateRoomButton = sdk.getComponent("create_room.CreateRoomButton");
+            const RoomAlias = sdk.getComponent("create_room.RoomAlias");
+            const Presets = sdk.getComponent("create_room.Presets");
+            const UserSelector = sdk.getComponent("elements.UserSelector");
+            const SimpleRoomHeader = sdk.getComponent("rooms.SimpleRoomHeader");
 
-            var domain = MatrixClientPeg.get().getDomain();
+            const domain = MatrixClientPeg.get().getDomain();
 
             return (
             <div className="mx_CreateRoom">
-                <SimpleRoomHeader title={_t("Create Room")} collapsedRhs={ this.props.collapsedRhs }/>
+                <SimpleRoomHeader title={_t("Create Room")} collapsedRhs={this.props.collapsedRhs} />
                 <div className="mx_CreateRoom_body">
-                    <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder={_t('Name')}/> <br />
-                    <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder={_t('Topic')}/> <br />
-                    <RoomAlias ref="alias" alias={this.state.alias} homeserver={ domain } onChange={this.onAliasChanged}/> <br />
-                    <UserSelector ref="user_selector" selected_users={this.state.invited_users} onChange={this.onInviteChanged}/> <br />
-                    <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
+                    <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder={_t('Name')} /> <br />
+                    <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder={_t('Topic')} /> <br />
+                    <RoomAlias ref="alias" alias={this.state.alias} homeserver={domain} onChange={this.onAliasChanged} /> <br />
+                    <UserSelector ref="user_selector" selected_users={this.state.invited_users} onChange={this.onInviteChanged} /> <br />
+                    <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset} /> <br />
                     <div>
                         <label>
-                            <input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged}/>
-                            {_t('Make this room private')}
+                            <input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged} />
+                            { _t('Make this room private') }
                         </label>
                     </div>
                     <div>
                         <label>
-                            <input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/>
-                            {_t('Share message history with new users')}
+                            <input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged} />
+                            { _t('Share message history with new users') }
                         </label>
                     </div>
                     <div className="mx_CreateRoom_encrypt">
                         <label>
-                            <input type="checkbox" ref="encrypt" checked={this.state.encrypt} onChange={this.onEncryptChanged}/>
-                            {_t('Encrypt room')}
+                            <input type="checkbox" ref="encrypt" checked={this.state.encrypt} onChange={this.onEncryptChanged} />
+                            { _t('Encrypt room') }
                         </label>
                     </div>
                     <div>
                         <CreateRoomButton onCreateRoom={this.onCreateRoom} /> <br />
                     </div>
-                    {error_box}
+                    { error_box }
                 </div>
             </div>
             );
         }
-    }
+    },
 });

@@ -107,6 +107,9 @@ export default class BasePlatform {
 
     isElectron(): boolean { return false; }
 
+    setupScreenSharingForIframe() {
+    }
+
     /**
      * Restarts the application, without neccessarily reloading
      * any application code

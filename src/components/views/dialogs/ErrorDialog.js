@@ -26,20 +26,21 @@ limitations under the License.
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'ErrorDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -51,23 +52,19 @@ export default React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        if (this.props.focus) {
-            this.refs.button.focus();
-        }
-    },
-
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title={this.props.title || _t('Error')}>
-                <div className="mx_Dialog_content">
-                    {this.props.description || _t('An error has occurred.')}
+                    title={this.props.title || _t('Error')}
+                    contentId='mx_Dialog_content'
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button ref="button" className="mx_Dialog_primary" onClick={this.props.onFinished}>
-                        {this.props.button || _t('OK')}
+                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                        { this.props.button || _t('OK') }
                     </button>
                 </div>
             </BaseDialog>

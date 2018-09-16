@@ -1,14 +1,34 @@
+/*
+Copyright 2016 Aviral Dasgupta
+Copyright 2017 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
 import type {Completion} from '../../../autocomplete/Autocompleter';
 import Promise from 'bluebird';
-import UserSettingsStore from '../../../UserSettingsStore';
+import { Room } from 'matrix-js-sdk';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
+import SettingsStore from "../../../settings/SettingsStore";
+import Autocompleter from '../../../autocomplete/Autocompleter';
 
 const COMPOSER_SELECTED = 0;
 
@@ -17,6 +37,7 @@ export default class Autocomplete extends React.Component {
     constructor(props) {
         super(props);
 
+        this.autocompleter = new Autocompleter(props.room);
         this.completionPromise = null;
         this.hide = this.hide.bind(this);
         this.onCompletionClicked = this.onCompletionClicked.bind(this);
@@ -41,12 +62,21 @@ export default class Autocomplete extends React.Component {
     }
 
     componentWillReceiveProps(newProps, state) {
+        if (this.props.room.roomId !== newProps.room.roomId) {
+            this.autocompleter.destroy();
+            this.autocompleter = new Autocompleter(newProps.room);
+        }
+
         // Query hasn't changed so don't try to complete it
         if (newProps.query === this.props.query) {
             return;
         }
 
         this.complete(newProps.query, newProps.selection);
+    }
+
+    componentWillUnmount() {
+        this.autocompleter.destroy();
     }
 
     complete(query, selection) {
@@ -66,7 +96,7 @@ export default class Autocomplete extends React.Component {
             });
             return Promise.resolve(null);
         }
-        let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
+        let autocompleteDelay = SettingsStore.getValue("autocompleteDelay");
 
         // Don't debounce if we are already showing completions
         if (this.state.completions.length > 0 || this.state.forceComplete) {
@@ -83,8 +113,8 @@ export default class Autocomplete extends React.Component {
     }
 
     processQuery(query, selection) {
-        return getCompletions(
-            query, selection, this.state.forceComplete,
+        return this.autocompleter.getCompletions(
+            query, selection, this.state.forceComplete
         ).then((completions) => {
             // Only ever process the completions for the most recent query being processed
             if (query !== this.queryRequested) {
@@ -186,12 +216,12 @@ export default class Autocomplete extends React.Component {
         return done.promise;
     }
 
-    onCompletionClicked(): boolean {
-        if (this.countCompletions() === 0 || this.state.selectionOffset === COMPOSER_SELECTED) {
+    onCompletionClicked(selectionOffset: number): boolean {
+        if (this.countCompletions() === 0 || selectionOffset === COMPOSER_SELECTED) {
             return false;
         }
 
-        this.props.onConfirm(this.state.completionList[this.state.selectionOffset - 1]);
+        this.props.onConfirm(this.state.completionList[selectionOffset - 1]);
         this.hide();
 
         return true;
@@ -233,17 +263,14 @@ export default class Autocomplete extends React.Component {
                 const componentPosition = position;
                 position++;
 
-                const onMouseOver = () => this.setSelection(componentPosition);
                 const onClick = () => {
-                    this.setSelection(componentPosition);
-                    this.onCompletionClicked();
+                    this.onCompletionClicked(componentPosition);
                 };
 
                 return React.cloneElement(completion.component, {
                     key: i,
                     ref: `completion${position - 1}`,
                     className,
-                    onMouseOver,
                     onClick,
                 });
             });
@@ -251,15 +278,15 @@ export default class Autocomplete extends React.Component {
 
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">
-                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</EmojiText>
-                    {completionResult.provider.renderCompletions(completions)}
+                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</EmojiText>
+                    { completionResult.provider.renderCompletions(completions) }
                 </div>
             ) : null;
         }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
             <div className="mx_Autocomplete" ref={(e) => this.container = e}>
-                {renderedCompletions}
+                { renderedCompletions }
             </div>
         ) : null;
     }
@@ -267,8 +294,11 @@ export default class Autocomplete extends React.Component {
 
 Autocomplete.propTypes = {
     // the query string for which to show autocomplete suggestions
-    query: React.PropTypes.string.isRequired,
+    query: PropTypes.string.isRequired,
 
     // method invoked with range and text content when completion is confirmed
-    onConfirm: React.PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+
+    // The room in which we're autocompleting
+    room: PropTypes.instanceOf(Room),
 };

@@ -1,5 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Travis Ralston
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,157 +16,105 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
-var React = require('react');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require("../../../index");
-var Modal = require("../../../Modal");
-var UserSettingsStore = require('../../../UserSettingsStore');
-import { _t, _tJsx } from '../../../languageHandler';
+import {MatrixClient} from "matrix-js-sdk";
+const React = require('react');
+import PropTypes from 'prop-types';
+const sdk = require("../../../index");
+import { _t, _td } from '../../../languageHandler';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 module.exports = React.createClass({
     displayName: 'UrlPreviewSettings',
 
     propTypes: {
-        room: React.PropTypes.object,
+        room: PropTypes.object,
     },
 
-    getInitialState: function() {
-        var cli = MatrixClientPeg.get();
-        var roomState = this.props.room.currentState;
-
-        var roomPreviewUrls = this.props.room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        var userPreviewUrls = this.props.room.getAccountData("org.matrix.room.preview_urls");
-
-        return {
-            globalDisableUrlPreview: (roomPreviewUrls && roomPreviewUrls.getContent().disable) || false,
-            userDisableUrlPreview: (userPreviewUrls && (userPreviewUrls.getContent().disable === true)) || false,
-            userEnableUrlPreview: (userPreviewUrls && (userPreviewUrls.getContent().disable === false)) || false,
-        };
-    },
-
-    componentDidMount: function() {
-        this.originalState = Object.assign({}, this.state);
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     saveSettings: function() {
-        var promises = [];
-
-        if (this.state.globalDisableUrlPreview !== this.originalState.globalDisableUrlPreview) {
-            console.log("UrlPreviewSettings: Updating room's preview_urls state event");
-            promises.push(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.props.room.roomId, "org.matrix.room.preview_urls", {
-                        disable: this.state.globalDisableUrlPreview
-                    }, ""
-                )
-            );
-        }
-
-        var content = undefined;
-        if (this.state.userDisableUrlPreview !== this.originalState.userDisableUrlPreview) {
-            console.log("UrlPreviewSettings: Disabling user's per-room preview_urls");
-            content = this.state.userDisableUrlPreview ? { disable : true } : {};
-        }
-
-        if (this.state.userEnableUrlPreview !== this.originalState.userEnableUrlPreview) {
-            console.log("UrlPreviewSettings: Enabling user's per-room preview_urls");
-            if (!content || content.disable === undefined) {
-                content = this.state.userEnableUrlPreview ? { disable : false } : {};
-            }
-        }
-
-        if (content) {
-            promises.push(
-                MatrixClientPeg.get().setRoomAccountData(
-                    this.props.room.roomId, "org.matrix.room.preview_urls", content
-                )
-            );
-        }
-
-        console.log("UrlPreviewSettings: saveSettings: " + JSON.stringify(promises));
-
+        const promises = [];
+        if (this.refs.urlPreviewsRoom) promises.push(this.refs.urlPreviewsRoom.save());
+        if (this.refs.urlPreviewsSelf) promises.push(this.refs.urlPreviewsSelf.save());
         return promises;
     },
 
-    onGlobalDisableUrlPreviewChange: function() {
-        this.setState({
-            globalDisableUrlPreview: this.refs.globalDisableUrlPreview.checked ? true : false,
-        });
-    },
-
-    onUserEnableUrlPreviewChange: function() {
-        this.setState({
-            userDisableUrlPreview: false,
-            userEnableUrlPreview: this.refs.userEnableUrlPreview.checked ? true : false,
-        });
-    },
-
-    onUserDisableUrlPreviewChange: function() {
-        this.setState({
-            userDisableUrlPreview: this.refs.userDisableUrlPreview.checked ? true : false,
-            userEnableUrlPreview: false,
-        });
-    },
-
     render: function() {
-        var self = this;
-        var roomState = this.props.room.currentState;
-        var cli = MatrixClientPeg.get();
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        const roomId = this.props.room.roomId;
+        const isEncrypted = this.context.matrixClient.isRoomEncrypted(roomId);
 
-        var maySetRoomPreviewUrls = roomState.mayClientSendStateEvent('org.matrix.room.preview_urls', cli);
-        var disableRoomPreviewUrls;
-        if (maySetRoomPreviewUrls) {
-            disableRoomPreviewUrls =
-                <label>
-                    <input type="checkbox" ref="globalDisableUrlPreview"
-                           onChange={ this.onGlobalDisableUrlPreviewChange }
-                           checked={ this.state.globalDisableUrlPreview } />
-                    {_t("Disable URL previews by default for participants in this room")}
-                </label>;
-        }
-        else {
-            disableRoomPreviewUrls =
-                <label>
-                    {_t("URL previews are %(globalDisableUrlPreview)s by default for participants in this room.", {globalDisableUrlPreview: this.state.globalDisableUrlPreview ? _t("disabled") : _t("enabled")})}
-                </label>;
-        }
+        let previewsForAccount = null;
+        let previewsForRoom = null;
 
-        let urlPreviewText = null;
-        if (UserSettingsStore.getUrlPreviewsDisabled()) {
-            urlPreviewText = (
-                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
+        if (!isEncrypted) {
+            // Only show account setting state and room state setting state in non-e2ee rooms where they apply
+            const accountEnabled = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled");
+            if (accountEnabled) {
+                previewsForAccount = (
+                    _t("You have <a>enabled</a> URL previews by default.", {}, {
+                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                    })
+                );
+            } else if (accountEnabled) {
+                previewsForAccount = (
+                    _t("You have <a>disabled</a> URL previews by default.", {}, {
+                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                    })
+                );
+            }
+
+            if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
+                previewsForRoom = (
+                    <label>
+                        <SettingsFlag name="urlPreviewsEnabled"
+                                      level={SettingLevel.ROOM}
+                                      roomId={roomId}
+                                      isExplicit={true}
+                                      manualSave={true}
+                                      ref="urlPreviewsRoom" />
+                    </label>
+                );
+            } else {
+                let str = _td("URL previews are enabled by default for participants in this room.");
+                if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled", roomId, /*explicit=*/true)) {
+                    str = _td("URL previews are disabled by default for participants in this room.");
+                }
+                previewsForRoom = (<label>{ _t(str) }</label>);
+            }
+        } else {
+            previewsForAccount = (
+                _t("In encrypted rooms, like this one, URL previews are disabled by default to ensure that your " +
+                    "homeserver (where the previews are generated) cannot gather information about links you see in " +
+                    "this room.")
             );
         }
-        else {
-            urlPreviewText = (
-                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
-            );
-        }
+
+        const previewsForRoomAccount = ( // in an e2ee room we use a special key to enforce per-room opt-in
+            <SettingsFlag name={isEncrypted ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled'}
+                          level={SettingLevel.ROOM_ACCOUNT}
+                          roomId={roomId}
+                          manualSave={true}
+                          ref="urlPreviewsSelf"
+            />
+        );
 
         return (
             <div className="mx_RoomSettings_toggles">
-                <h3>{_t("URL Previews")}</h3>
-
-                <label>
-                {urlPreviewText}
-                </label>
-                { disableRoomPreviewUrls }
-                <label>
-                    <input type="checkbox" ref="userEnableUrlPreview"
-                           onChange={ this.onUserEnableUrlPreviewChange }
-                           checked={ this.state.userEnableUrlPreview } />
-                    {_t("Enable URL previews for this room (affects only you)")}
-                </label>
-                <label>
-                    <input type="checkbox" ref="userDisableUrlPreview"
-                           onChange={ this.onUserDisableUrlPreviewChange }
-                           checked={ this.state.userDisableUrlPreview } />
-                    {_t("Disable URL previews for this room (affects only you)")}
-                </label>
+                <h3>{ _t("URL Previews") }</h3>
+                <div>
+                    { _t('When someone puts a URL in their message, a URL preview can be shown to give more ' +
+                        'information about that link such as the title, description, and an image from the website.') }
+                </div>
+                <div>
+                    { previewsForAccount }
+                </div>
+                { previewsForRoom }
+                <label>{ previewsForRoomAccount }</label>
             </div>
         );
-
-    }
+    },
 });

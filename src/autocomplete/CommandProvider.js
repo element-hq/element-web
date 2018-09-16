@@ -1,6 +1,8 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,90 +18,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../languageHandler';
+import {_t} from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
+import type {Completion, SelectionRange} from "./Autocompleter";
+import {CommandMap} from '../SlashCommands';
 
-// TODO merge this with the factory mechanics of SlashCommands?
-// Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
-const COMMANDS = [
-    {
-        command: '/me',
-        args: '<message>',
-        description: 'Displays action',
-    },
-    {
-        command: '/ban',
-        args: '<user-id> [reason]',
-        description: 'Bans user with given id',
-    },
-    {
-        command: '/unban',
-        args: '<user-id>',
-        description: 'Unbans user with given id',
-    },
-    {
-        command: '/op',
-        args: '<user-id> [<power-level>]',
-        description: 'Define the power level of a user',
-    },
-    {
-        command: '/deop',
-        args: '<user-id>',
-        description: 'Deops user with given id',
-    },
-    {
-        command: '/invite',
-        args: '<user-id>',
-        description: 'Invites user with given id to current room',
-    },
-    {
-        command: '/join',
-        args: '<room-alias>',
-        description: 'Joins room with given alias',
-    },
-    {
-        command: '/part',
-        args: '[<room-alias>]',
-        description: 'Leave room',
-    },
-    {
-        command: '/topic',
-        args: '<topic>',
-        description: 'Sets the room topic',
-    },
-    {
-        command: '/kick',
-        args: '<user-id> [reason]',
-        description: 'Kicks user with given id',
-    },
-    {
-        command: '/nick',
-        args: '<display-name>',
-        description: 'Changes your display nickname',
-    },
-    {
-        command: '/ddg',
-        args: '<query>',
-        description: 'Searches DuckDuckGo for results',
-    },
-    {
-        command: '/tint',
-        args: '<color1> [<color2>]',
-        description: 'Changes colour scheme of current room',
-    },
-    {
-        command: '/verify',
-        args: '<user-id> <device-id> <device-signing-key>',
-        description: 'Verifies a user, device, and pubkey tuple',
-    },
-    // Omitting `/markdown` as it only seems to apply to OldComposer
-];
+const COMMANDS = Object.values(CommandMap);
 
-const COMMAND_RE = /(^\/\w*)/g;
-
-let instance = null;
+const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
@@ -109,38 +37,48 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: {start: number, end: number}) {
-        let completions = [];
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
         const {command, range} = this.getCurrentCommand(query, selection);
-        if (command) {
-            completions = this.matcher.match(command[0]).map((result) => {
-                return {
-                    completion: result.command + ' ',
-                    component: (<TextualCompletion
-                        title={result.command}
-                        subtitle={result.args}
-                        description={ _t(result.description) }
-                        />),
-                    range,
-                };
-            });
+        if (!command) return [];
+
+        let matches = [];
+        // check if the full match differs from the first word (i.e. returns false if the command has args)
+        if (command[0] !== command[1]) {
+            // The input looks like a command with arguments, perform exact match
+            const name = command[1].substr(1); // strip leading `/`
+            if (CommandMap[name]) {
+                // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
+                if (CommandMap[name].hideCompletionAfterSpace) return [];
+                matches = [CommandMap[name]];
+            }
+        } else {
+            if (query === '/') {
+                // If they have just entered `/` show everything
+                matches = COMMANDS;
+            } else {
+                // otherwise fuzzy match against all of the fields
+                matches = this.matcher.match(command[1]);
+            }
         }
-        return completions;
+
+        return matches.map((result) => ({
+            // If the command is the same as the one they entered, we don't want to discard their arguments
+            completion: result.command === command[1] ? command[0] : (result.command + ' '),
+            component: <TextualCompletion
+                title={result.command}
+                subtitle={result.args}
+                description={_t(result.description)} />,
+            range,
+        }));
     }
 
     getName() {
         return '*️⃣ ' + _t('Commands');
     }
 
-    static getInstance(): CommandProvider {
-        if (instance === null) instance = new CommandProvider();
-
-        return instance;
-    }
-
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_block">
-            {completions}
+            { completions }
         </div>;
     }
 }

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 const sdk = require('../../index');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const PlatformPeg = require("../../PlatformPeg");
@@ -26,13 +30,12 @@ import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
-const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import Analytics from '../../Analytics';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import { _t } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import * as languageHandler from '../../languageHandler';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
@@ -52,149 +55,125 @@ const gHVersionLabel = function(repo, token='') {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a target="_blank" rel="noopener" href={url}>{token}</a>;
+    return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
 };
 
-// Enumerate some simple 'flip a bit' UI settings (if any).
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'label' is how we describe it in the UI.
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
-const SETTINGS_LABELS = [
-    {
-        id: 'autoplayGifsAndVideos',
-        label: 'Autoplay GIFs and videos',
-    },
-    {
-        id: 'hideReadReceipts',
-        label: 'Hide read receipts',
-    },
-    {
-        id: 'dontSendTypingNotifications',
-        label: "Don't send typing notifications",
-    },
-    {
-        id: 'alwaysShowTimestamps',
-        label: 'Always show message timestamps',
-    },
-    {
-        id: 'showTwelveHourTimestamps',
-        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
-    },
-    {
-        id: 'hideJoinLeaves',
-        label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
-    },
-    {
-        id: 'hideAvatarDisplaynameChanges',
-        label: 'Hide avatar and display name changes',
-    },
-    {
-        id: 'useCompactLayout',
-        label: 'Use compact timeline layout',
-    },
-    {
-        id: 'hideRedactions',
-        label: 'Hide removed messages',
-    },
-    {
-        id: 'enableSyntaxHighlightLanguageDetection',
-        label: 'Enable automatic language detection for syntax highlighting',
-    },
-    {
-        id: 'MessageComposerInput.autoReplaceEmoji',
-        label: 'Automatically replace plain text Emoji',
-    },
-    {
-        id: 'Pill.shouldHidePillAvatar',
-        label: 'Hide avatars in user and room mentions',
-    },
-/*
-    {
-        id: 'useFixedWidthFont',
-        label: 'Use fixed width font',
-    },
-*/
+// Enumerate some simple 'flip a bit' UI settings (if any). The strings provided here
+// must be settings defined in SettingsStore.
+const SIMPLE_SETTINGS = [
+    { id: "urlPreviewsEnabled" },
+    { id: "autoplayGifsAndVideos" },
+    { id: "alwaysShowEncryptionIcons" },
+    { id: "hideReadReceipts" },
+    { id: "dontSendTypingNotifications" },
+    { id: "alwaysShowTimestamps" },
+    { id: "showTwelveHourTimestamps" },
+    { id: "hideJoinLeaves" },
+    { id: "hideAvatarChanges" },
+    { id: "hideDisplaynameChanges" },
+    { id: "useCompactLayout" },
+    { id: "hideRedactions" },
+    { id: "enableSyntaxHighlightLanguageDetection" },
+    { id: "MessageComposerInput.autoReplaceEmoji" },
+    { id: "MessageComposerInput.dontSuggestEmoji" },
+    { id: "Pill.shouldHidePillAvatar" },
+    { id: "TextualBody.disableBigEmoji" },
+    { id: "VideoView.flipVideoHorizontally" },
+    { id: "TagPanel.disableTagPanel" },
+    { id: "enableWidgetScreenshots" },
+    { id: "RoomSubList.showEmpty" },
 ];
 
-const ANALYTICS_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const ANALYTICS_SETTINGS = [
     {
-        id: 'analyticsOptOut',
-        label: 'Opt out of analytics',
+        id: 'analyticsOptIn',
         fn: function(checked) {
-            Analytics[checked ? 'disable' : 'enable']();
+            checked ? Analytics.enable() : Analytics.disable();
         },
     },
 ];
 
-const WEBRTC_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const WEBRTC_SETTINGS = [
     {
         id: 'webRtcForceTURN',
-        label: 'Disable Peer-to-Peer for 1:1 calls',
+        fn: (val) => {
+            MatrixClientPeg.get().setForceTURN(val);
+        },
     },
 ];
 
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
-const CRYPTO_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const CRYPTO_SETTINGS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: 'Never send encrypted messages to unverified devices from this device',
         fn: function(checked) {
             MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
         },
     },
-    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
-    // {
-    //     id: 'blacklistUnverifiedDevicesPerRoom'
-    //     label: 'Never send encrypted messages to unverified devices in this room',
-    // }
 ];
 
 // Enumerate the available themes, with a nice human text label.
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'value' is the value for that key in the event
 // 'label' is how we describe it in the UI.
+// 'value' is the value for the theme setting
 //
 // XXX: Ideally we would have a theme manifest or something and they'd be nicely
 // packaged up in a single directory, and/or located at the application layer.
 // But for now for expedience we just hardcode them here.
 const THEMES = [
-    {
-        id: 'theme',
-        label: 'Light theme',
-        value: 'light',
-    },
-    {
-        id: 'theme',
-        label: 'Dark theme',
-        value: 'dark',
-    },
+    { label: _td('Light theme'), value: 'light' },
+    { label: _td('Dark theme'), value: 'dark' },
+    { label: _td('Status.im theme'), value: 'status' },
 ];
+
+const IgnoredUser = React.createClass({
+    propTypes: {
+        userId: PropTypes.string.isRequired,
+        onUnignored: PropTypes.func.isRequired,
+    },
+
+    _onUnignoreClick: function() {
+        const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+        const index = ignoredUsers.indexOf(this.props.userId);
+        if (index !== -1) {
+            ignoredUsers.splice(index, 1);
+            MatrixClientPeg.get().setIgnoredUsers(ignoredUsers)
+                .then(() => this.props.onUnignored(this.props.userId));
+        } else this.props.onUnignored(this.props.userId);
+    },
+
+    render: function() {
+        return (
+            <li>
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_textButton">
+                    { _t("Unignore") }
+                </AccessibleButton>
+                { this.props.userId }
+            </li>
+        );
+    },
+});
 
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
-        onClose: React.PropTypes.func,
+        onClose: PropTypes.func,
         // The brand string given when creating email pushers
-        brand: React.PropTypes.string,
-
-        // True to show the 'labs' section of experimental features
-        enableLabs: React.PropTypes.bool,
+        brand: PropTypes.string,
 
         // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: React.PropTypes.string,
+        referralBaseUrl: PropTypes.string,
 
         // Team token for the referral link. If falsy, the referral section will
         // not appear
-        teamToken: React.PropTypes.string,
+        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {
         return {
             onClose: function() {},
-            enableLabs: true,
         };
     },
 
@@ -207,6 +186,7 @@ module.exports = React.createClass({
             vectorVersion: undefined,
             rejectingInvites: false,
             mediaDevices: null,
+            ignoredUsers: [],
         };
     },
 
@@ -228,6 +208,7 @@ module.exports = React.createClass({
         }
 
         this._refreshMediaDevices();
+        this._refreshIgnoredUsers();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -236,19 +217,11 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.membership", this._onInviteStateChange);
 
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
-            middleOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
+            middleDisabled: true,
         });
         this._refreshFromServer();
-
-        const syncedSettings = UserSettingsStore.getSyncedSettings();
-        if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
-        }
-        this._syncedSettings = syncedSettings;
-
-        this._localSettings = UserSettingsStore.getLocalSettings();
 
         if (PlatformPeg.get().isElectron()) {
             const {ipcRenderer} = require('electron');
@@ -276,9 +249,9 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this._unmounted = true;
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 1.0,
+            action: 'panel_disable',
+            sideDisabled: false,
+            middleDisabled: false,
         });
         dis.unregister(this.dispatcherRef);
         const cli = MatrixClientPeg.get();
@@ -312,7 +285,13 @@ module.exports = React.createClass({
         this.setState({ electron_settings: settings });
     },
 
-    _refreshMediaDevices: function() {
+    _refreshMediaDevices: function(stream) {
+        if (stream) {
+            // kill stream so that we don't leave it lingering around with webcam enabled etc
+            // as here we called gUM to ask user for permission to their device names only
+            stream.getTracks().forEach((track) => track.stop());
+        }
+
         Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
@@ -320,8 +299,9 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
-                activeAudioInput: this._localSettings['webrtc_audioinput'],
-                activeVideoInput: this._localSettings['webrtc_videoinput'],
+                activeAudioOutput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audiooutput'),
+                activeAudioInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audioinput'),
+                activeVideoInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_videoinput'),
             });
         });
     },
@@ -346,9 +326,22 @@ module.exports = React.createClass({
         });
     },
 
+    _refreshIgnoredUsers: function(userIdUnignored=null) {
+        const users = MatrixClientPeg.get().getIgnoredUsers();
+        if (userIdUnignored) {
+            const index = users.indexOf(userIdUnignored);
+            if (index !== -1) users.splice(index, 1);
+        }
+        this.setState({
+            ignoredUsers: users,
+        });
+    },
+
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
             this.forceUpdate();
+        } else if (payload.action === "ignore_state_changed") {
+            this._refreshIgnoredUsers();
         }
     },
 
@@ -379,6 +372,11 @@ module.exports = React.createClass({
         });
     },
 
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().setAvatarUrl(null);
+        this.setState({avatarUrl: null}); // the avatar update will complete async for us
+    },
+
     onLogoutClicked: function(ev) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Logout E2E Export', '', QuestionDialog, {
@@ -388,7 +386,7 @@ module.exports = React.createClass({
              { _t("For security, logging out will delete any end-to-end " +
                   "encryption keys from this browser. If you want to be able " +
                   "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.") }.
+                  "please export your room keys for safe-keeping.") }
                 </div>,
             button: _t("Sign out"),
             extraButtons: [
@@ -432,11 +430,6 @@ module.exports = React.createClass({
                 "push notifications on other devices until you log back in to them",
             ) + ".",
         });
-        dis.dispatch({action: 'password_changed'});
-    },
-
-    onEnableNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
     _onAddEmailEditFinished: function(value, shouldSubmit) {
@@ -612,6 +605,11 @@ module.exports = React.createClass({
         });
     },
 
+    _renderGroupSettings: function() {
+        const GroupUserSettings = sdk.getComponent('groups.GroupUserSettings');
+        return <GroupUserSettings />;
+    },
+
     _renderReferral: function() {
         const teamToken = this.props.teamToken;
         if (!teamToken) {
@@ -627,15 +625,15 @@ module.exports = React.createClass({
             <div>
                 <h3>Referral</h3>
                 <div className="mx_UserSettings_section">
-                    {_t("Refer a friend to Riot:")} <a href={href}>{href}</a>
+                    { _t("Refer a friend to Riot:") } <a href={href}>{ href }</a>
                 </div>
             </div>
         );
     },
 
     onLanguageChange: function(newLang) {
-        if(this.state.language !== newLang) {
-            UserSettingsStore.setLocalSetting('language', newLang);
+        if (this.state.language !== newLang) {
+            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             this.setState({
                 language: newLang,
             });
@@ -646,7 +644,7 @@ module.exports = React.createClass({
     _renderLanguageSetting: function() {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
         return <div>
-            <label htmlFor="languageSelector">{_t('Interface Language')}</label>
+            <label htmlFor="languageSelector">{ _t('Interface Language') }</label>
             <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
                           className="mx_UserSettings_language"
                           value={this.state.language}
@@ -658,22 +656,21 @@ module.exports = React.createClass({
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) =>
-            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
+            SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
-                    { this._renderUrlPreviewSelector() }
-                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
-                    { THEMES.map( this._renderThemeSelector ) }
+                    { SIMPLE_SETTINGS.map( this._renderAccountSetting ) }
+                    { THEMES.map( this._renderThemeOption ) }
                     <table>
                         <tbody>
                         <tr>
-                            <td><strong>{_t('Autocomplete Delay (ms):')}</strong></td>
+                            <td><strong>{ _t('Autocomplete Delay (ms):') }</strong></td>
                             <td>
                                 <input
                                     type="number"
-                                    defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                    defaultValue={SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay")}
                                     onChange={onChange}
                                 />
                             </td>
@@ -686,69 +683,31 @@ module.exports = React.createClass({
         );
     },
 
-    _renderUrlPreviewSelector: function() {
-        return <div className="mx_UserSettings_toggle">
-            <input id="urlPreviewsDisabled"
-                   type="checkbox"
-                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                   onChange={ this._onPreviewsDisabledChanged }
-            />
-            <label htmlFor="urlPreviewsDisabled">
-                { _t("Disable inline URL previews by default") }
-            </label>
-        </div>;
+    _renderAccountSetting: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsFlag name={setting.id}
+                                  label={setting.label}
+                                  level={SettingLevel.ACCOUNT}
+                                  onChange={setting.fn} />
+            </div>
+        );
     },
 
-    _onPreviewsDisabledChanged: function(e) {
-         UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
-    },
-
-    _renderSyncedSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-
-        const onChange = (e) => {
-            UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
-
-        return <div className="mx_UserSettings_toggle" key={ setting.id }>
-            <input id={ setting.id }
-                   type="checkbox"
-                   defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={ onChange }
-            />
-            <label htmlFor={ setting.id }>
-                { _t(setting.label) }
-            </label>
-        </div>;
-    },
-
-    _renderThemeSelector: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            if (e.target.checked) {
-                this._syncedSettings[setting.id] = setting.value;
-                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
-            }
-            dis.dispatch({
-                action: 'set_theme',
-                value: setting.value,
-            });
-        };
-        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
-            <input id={ setting.id + "_" + setting.value }
-                   type="radio"
-                   name={ setting.id }
-                   value={ setting.value }
-                   checked={ this._syncedSettings[setting.id] === setting.value }
-                   onChange={ onChange }
-            />
-            <label htmlFor={ setting.id + "_" + setting.value }>
-                { setting.label }
-            </label>
-        </div>;
+    _renderThemeOption: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
+                <SettingsFlag name="theme"
+                                  label={setting.label}
+                                  level={SettingLevel.ACCOUNT}
+                                  onChange={onChange}
+                                  group="theme"
+                                  value={setting.value} />
+            </div>
+        );
     },
 
     _renderCryptoInfo: function() {
@@ -782,46 +741,58 @@ module.exports = React.createClass({
                 <h3>{ _t("Cryptography") }</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>{_t("Device ID:")}</label>
-                            <span><code>{deviceId}</code></span></li>
-                        <li><label>{_t("Device key:")}</label>
-                            <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>{ _t("Device ID:") }</label>
+                            <span><code>{ deviceId }</code></span></li>
+                        <li><label>{ _t("Device key:") }</label>
+                            <span><code><b>{ identityKey }</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
                 <div className="mx_UserSettings_section">
-                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                    { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
             </div>
         );
     },
 
-    _renderLocalSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
+    _renderIgnoredUsers: function() {
+        if (this.state.ignoredUsers.length > 0) {
+            const updateHandler = this._refreshIgnoredUsers;
+            return (
+                <div>
+                    <h3>{ _t("Ignored Users") }</h3>
+                    <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
+                        <ul>
+                            { this.state.ignoredUsers.map(function(userId) {
+                                return (<IgnoredUser key={userId}
+                                                     userId={userId}
+                                                     onUnignored={updateHandler}></IgnoredUser>);
+                            }) }
+                        </ul>
+                    </div>
+                </div>
+            );
+        } else return (<div />);
+    },
 
-        return <div className="mx_UserSettings_toggle" key={ setting.id }>
-            <input id={ setting.id }
-                   type="checkbox"
-                   defaultChecked={ this._localSettings[setting.id] }
-                   onChange={ onChange }
-            />
-            <label htmlFor={ setting.id }>
-                { _t(setting.label) }
-            </label>
-        </div>;
+    _renderDeviceSetting: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsFlag name={setting.id}
+                              label={setting.label}
+                              level={SettingLevel.DEVICE}
+                              onChange={setting.fn} />
+            </div>
+        );
     },
 
     _renderDevicesPanel: function() {
         const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
-                <h3>{_t("Devices")}</h3>
-                <DevicesPanel className="mx_UserSettings_section"/>
+                <h3>{ _t("Devices") }</h3>
+                <DevicesPanel className="mx_UserSettings_section" />
             </div>
         );
     },
@@ -832,11 +803,18 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Bug Report") }</h3>
+                <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Found a bug?") }</p>
-                    <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{_t('Report it')}
+                    <p>{
+                        _t( "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contain messages.",
+                        )
+                    }</p>
+                    <button className="mx_UserSettings_button"
+                        onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
             </div>
@@ -844,46 +822,51 @@ module.exports = React.createClass({
     },
 
     _renderAnalyticsControl: function() {
-        if (!SdkConfig.get().piwik) return <div/>;
+        if (!SdkConfig.get().piwik) return <div />;
 
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
-                {_t('Riot collects anonymous analytics to allow us to improve the application.')}
-                {ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting )}
+                { _t('Riot collects anonymous analytics to allow us to improve the application.') }
+                <br />
+                { _t('Privacy is important to us, so we don\'t collect any personal'
+                    + ' or identifiable data for our analytics.') }
+                <div className="mx_UserSettings_advanced_spoiler" onClick={Analytics.showDetailsModal}>
+                    { _t('Learn more about how we use analytics.') }
+                </div>
+                { ANALYTICS_SETTINGS.map( this._renderDeviceSetting ) }
             </div>
         </div>;
     },
 
     _renderLabs: function() {
-        // default to enabled if undefined
-        if (this.props.enableLabs === false) return null;
-        UserSettingsStore.doTranslations();
-
         const features = [];
-        UserSettingsStore.LABS_FEATURES.forEach((feature) => {
-            // This feature has an override and will be set to the default, so do not
-            // show it here.
-            if (feature.override) {
-                return;
-            }
+        SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = (e) => {
-                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+            const onChange = async (e) => {
+                const checked = e.target.checked;
+                if (featureId === "feature_lazyloading") {
+                    const confirmed = await this._onLazyLoadChanging(checked);
+                    if (!confirmed) {
+                        e.preventDefault();
+                        return;
+                    }
+                }
+                await SettingsStore.setFeatureEnabled(featureId, checked);
                 this.forceUpdate();
             };
 
             features.push(
-                <div key={feature.id} className="mx_UserSettings_toggle">
+                <div key={featureId} className="mx_UserSettings_toggle">
                     <input
                         type="checkbox"
-                        id={feature.id}
-                        name={feature.id}
-                        defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
-                        onChange={ onChange }
+                        id={featureId}
+                        name={featureId}
+                        checked={SettingsStore.isFeatureEnabled(featureId)}
+                        onChange={onChange}
                     />
-                    <label htmlFor={feature.id}>{feature.name}</label>
+                    <label htmlFor={featureId}>{ SettingsStore.getDisplayName(featureId) }</label>
                 </div>);
         });
 
@@ -897,10 +880,34 @@ module.exports = React.createClass({
                 <h3>{ _t("Labs") }</h3>
                 <div className="mx_UserSettings_section">
                     <p>{ _t("These are experimental features that may break in unexpected ways") }. { _t("Use with caution") }.</p>
-                    {features}
+                    { features }
                 </div>
             </div>
         );
+    },
+
+    _onLazyLoadChanging: async function(enabling) {
+        // don't prevent turning LL off when not supported
+        if (enabling) {
+            const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
+            if (!supported) {
+                await new Promise((resolve) => {
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    Modal.createDialog(QuestionDialog, {
+                        title: _t("Lazy loading members not supported"),
+                        description:
+                            <div>
+                         { _t("Lazy loading is not supported by your " +
+                            "current homeserver.") }
+                            </div>,
+                        button: _t("OK"),
+                        onFinished: resolve,
+                    });
+                });
+                return false;
+            }
+        }
+        return true;
     },
 
     _renderDeactivateAccount: function() {
@@ -912,6 +919,25 @@ module.exports = React.createClass({
                     </AccessibleButton>
                 </div>
         </div>;
+    },
+
+    _renderTermsAndConditionsLinks: function() {
+        if (SdkConfig.get().terms_and_conditions_links) {
+            const tncLinks = [];
+            for (const tncEntry of SdkConfig.get().terms_and_conditions_links) {
+                tncLinks.push(<div key={tncEntry.url}>
+                    <a href={tncEntry.url} rel="noopener" target="_blank">{tncEntry.text}</a>
+                </div>);
+            }
+            return <div>
+                <h3>{ _t("Legal") }</h3>
+                <div className="mx_UserSettings_section">
+                    {tncLinks}
+                </div>
+            </div>;
+        } else {
+            return null;
+        }
     },
 
     _renderClearCache: function() {
@@ -930,10 +956,10 @@ module.exports = React.createClass({
         const platform = PlatformPeg.get();
         if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
             return <div>
-                <h3>{_t('Updates')}</h3>
+                <h3>{ _t('Updates') }</h3>
                 <div className="mx_UserSettings_section">
                     <AccessibleButton className="mx_UserSettings_button" onClick={platform.startUpdateCheck}>
-                        {_t('Check for update')}
+                        { _t('Check for update') }
                     </AccessibleButton>
                 </div>
             </div>;
@@ -959,7 +985,7 @@ module.exports = React.createClass({
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={onClick}>
-                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
+                    { _t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length}) }
                 </AccessibleButton>
             );
         }
@@ -967,7 +993,7 @@ module.exports = React.createClass({
         return <div>
             <h3>{ _t("Bulk Options") }</h3>
                 <div className="mx_UserSettings_section">
-                    {reject}
+                    { reject }
                 </div>
         </div>;
     },
@@ -976,6 +1002,8 @@ module.exports = React.createClass({
         const settings = this.state.electron_settings;
         if (!settings) return;
 
+        // TODO: This should probably be a granular setting, but it only applies to electron
+        // and ends up being get/set outside of matrix anyways (local system setting).
         return <div>
             <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
@@ -985,7 +1013,7 @@ module.exports = React.createClass({
                            defaultChecked={settings['auto-launch']}
                            onChange={this._onAutoLaunchChanged}
                     />
-                    <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
+                    <label htmlFor="auto-launch">{ _t('Start automatically after system login') }</label>
                 </div>
             </div>
         </div>;
@@ -997,7 +1025,12 @@ module.exports = React.createClass({
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
-        return devices.map((device) => <span key={device.deviceId}>{device.label}</span>);
+        return devices.map((device) => <span key={device.deviceId}>{ device.label }</span>);
+    },
+
+    _setAudioOutput: function(deviceId) {
+        this.setState({activeAudioOutput: deviceId});
+        CallMediaHandler.setAudioOutput(deviceId);
     },
 
     _setAudioInput: function(deviceId) {
@@ -1033,20 +1066,41 @@ module.exports = React.createClass({
         if (this.state.mediaDevices === false) {
             return (
                 <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
-                    {_t('Missing Media Permissions, click here to request.')}
+                    { _t('Missing Media Permissions, click here to request.') }
                 </p>
             );
         } else if (!this.state.mediaDevices) return;
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
-        let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
+        let speakerDropdown = <p>{ _t('No Audio Outputs detected') }</p>;
+        let microphoneDropdown = <p>{ _t('No Microphones detected') }</p>;
+        let webcamDropdown = <p>{ _t('No Webcams detected') }</p>;
 
         const defaultOption = {
             deviceId: '',
             label: _t('Default Device'),
         };
+
+        const audioOutputs = this.state.mediaDevices.audiooutput.slice(0);
+        if (audioOutputs.length > 0) {
+            let defaultOutput = '';
+            if (!audioOutputs.some((input) => input.deviceId === 'default')) {
+                audioOutputs.unshift(defaultOption);
+            } else {
+                defaultOutput = 'default';
+            }
+
+            speakerDropdown = <div>
+                <h4>{ _t('Audio Output') }</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioOutput || defaultOutput}
+                    onOptionChange={this._setAudioOutput}>
+                    { this._mapWebRtcDevicesToSpans(audioOutputs) }
+                </Dropdown>
+            </div>;
+        }
 
         const audioInputs = this.state.mediaDevices.audioinput.slice(0);
         if (audioInputs.length > 0) {
@@ -1058,12 +1112,12 @@ module.exports = React.createClass({
             }
 
             microphoneDropdown = <div>
-                <h4>{_t('Microphone')}</h4>
+                <h4>{ _t('Microphone') }</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeAudioInput || defaultInput}
                     onOptionChange={this._setAudioInput}>
-                    {this._mapWebRtcDevicesToSpans(audioInputs)}
+                    { this._mapWebRtcDevicesToSpans(audioInputs) }
                 </Dropdown>
             </div>;
         }
@@ -1078,30 +1132,39 @@ module.exports = React.createClass({
             }
 
             webcamDropdown = <div>
-                <h4>{_t('Camera')}</h4>
+                <h4>{ _t('Camera') }</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeVideoInput || defaultInput}
                     onOptionChange={this._setVideoInput}>
-                    {this._mapWebRtcDevicesToSpans(videoInputs)}
+                    { this._mapWebRtcDevicesToSpans(videoInputs) }
                 </Dropdown>
             </div>;
         }
 
         return <div>
-                {microphoneDropdown}
-                {webcamDropdown}
+            { speakerDropdown }
+            { microphoneDropdown }
+            { webcamDropdown }
         </div>;
     },
 
     _renderWebRtcSettings: function() {
         return <div>
-            <h3>{_t('VoIP')}</h3>
+            <h3>{ _t('VoIP') }</h3>
             <div className="mx_UserSettings_section">
-                { WEBRTC_SETTINGS_LABELS.map(this._renderLocalSetting) }
+                { WEBRTC_SETTINGS.map(this._renderDeviceSetting) }
                 { this._renderWebRtcDeviceSettings() }
             </div>
         </div>;
+    },
+
+    onSelfShareClick: function() {
+        const cli = MatrixClientPeg.get();
+        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
+        Modal.createTrackedDialog('share self dialog', '', ShareDialog, {
+            target: cli.getUser(this._me),
+        });
     },
 
     _showSpoiler: function(event) {
@@ -1149,6 +1212,7 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const Notifications = sdk.getComponent("settings.Notifications");
         const EditableText = sdk.getComponent('elements.EditableText');
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
@@ -1162,7 +1226,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
+                        <label htmlFor={id}>{ this.nameForMedium(val.medium) }</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <input type="text" key={val.address} id={id}
@@ -1170,7 +1234,7 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") }
+                        <img src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
                             onClick={onRemoveClick} />
                     </div>
                 </div>
@@ -1183,16 +1247,16 @@ module.exports = React.createClass({
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label>{_t('Email')}</label>
+                        <label>{ _t('Email') }</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
                             ref="add_email_input"
                             className="mx_UserSettings_editable"
                             placeholderClassName="mx_UserSettings_threepidPlaceholder"
-                            placeholder={ _t("Add email address") }
-                            blurToCancel={ false }
-                            onValueChanged={ this._onAddEmailEditFinished } />
+                            placeholder={_t("Add email address")}
+                            blurToCancel={false}
+                            onValueChanged={this._onAddEmailEditFinished} />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
@@ -1240,12 +1304,13 @@ module.exports = React.createClass({
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader
-                    title={ _t("Settings") }
-                    onCancelClick={ this.props.onClose }
+                    title={_t("Settings")}
+                    onCancelClick={this.props.onClose}
                 />
 
-                <GeminiScrollbar className="mx_UserSettings_body"
-                                 autoshow={true}>
+                <GeminiScrollbarWrapper
+                    className="mx_UserSettings_body"
+                    autoshow={true}>
 
                 <h3>{ _t("Profile") }</h3>
 
@@ -1259,21 +1324,28 @@ module.exports = React.createClass({
                                 <ChangeDisplayName />
                             </div>
                         </div>
-                        {threepidsSection}
+                        { threepidsSection }
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={ this.onAvatarPickerClick }>
+                        <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                            <img src="img/cancel.svg"
+                                width="15" height="15"
+                                className="mx_filterFlipColor"
+                                alt={_t("Remove avatar")}
+                                title={_t("Remove avatar")} />
+                        </div>
+                        <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
                                 <img src="img/camera.svg" className="mx_filterFlipColor"
-                                    alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
+                                    alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
-                            <input id="avatarInput" type="file" onChange={this.onAvatarSelected}/>
+                            <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
                         </div>
                     </div>
                 </div>
@@ -1290,36 +1362,42 @@ module.exports = React.createClass({
                         </div> : null
                     }
 
-                    {accountJsx}
+                    { accountJsx }
                 </div>
 
-                {this._renderReferral()}
+                { this._renderGroupSettings() }
 
-                {notificationArea}
+                { this._renderReferral() }
 
-                {this._renderUserInterfaceSettings()}
-                {this._renderLabs()}
-                {this._renderWebRtcSettings()}
-                {this._renderDevicesPanel()}
-                {this._renderCryptoInfo()}
-                {this._renderBulkOptions()}
-                {this._renderBugReport()}
+                { notificationArea }
 
-                {PlatformPeg.get().isElectron() && this._renderElectronSettings()}
+                { this._renderUserInterfaceSettings() }
+                { this._renderLabs() }
+                { this._renderWebRtcSettings() }
+                { this._renderDevicesPanel() }
+                { this._renderCryptoInfo() }
+                { this._renderIgnoredUsers() }
+                { this._renderBulkOptions() }
+                { this._renderBugReport() }
 
-                {this._renderAnalyticsControl()}
+                { PlatformPeg.get().isElectron() && this._renderElectronSettings() }
+
+                { this._renderAnalyticsControl() }
 
                 <h3>{ _t("Advanced") }</h3>
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        { _t("Logged in as:") } {this._me}
+                        { _t("Logged in as:") + ' ' }
+                        <a onClick={this.onSelfShareClick} className="mx_UserSettings_link">
+                            { this._me }
+                        </a>
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('Access Token:')}
+                        { _t('Access Token:') + ' ' }
                         <span className="mx_UserSettings_advanced_spoiler"
                                 onClick={this._showSpoiler}
-                                data-spoiler={ MatrixClientPeg.get().getAccessToken() }>
+                                data-spoiler={MatrixClientPeg.get().getAccessToken()}>
                             &lt;{ _t("click to reveal") }&gt;
                         </span>
                     </div>
@@ -1330,25 +1408,27 @@ module.exports = React.createClass({
                         { _t("Identity Server is") } { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('matrix-react-sdk version:')} {(REACT_SDK_VERSION !== '<local>')
+                        { _t('matrix-react-sdk version:') } { (REACT_SDK_VERSION !== '<local>')
                             ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
-                        }<br/>
-                        {_t('riot-web version:')} {(this.state.vectorVersion !== undefined)
+                        }<br />
+                        { _t('riot-web version:') } { (this.state.vectorVersion !== undefined)
                             ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
-                        }<br/>
-                        { _t("olm version:") } {olmVersionString}<br/>
+                        }<br />
+                        { _t("olm version:") } { olmVersionString }<br />
                     </div>
                 </div>
 
-                {this._renderCheckUpdate()}
+                { this._renderCheckUpdate() }
 
-                {this._renderClearCache()}
+                { this._renderClearCache() }
 
-                {this._renderDeactivateAccount()}
+                { this._renderDeactivateAccount() }
 
-                </GeminiScrollbar>
+                { this._renderTermsAndConditionsLinks() }
+
+                </GeminiScrollbarWrapper>
             </div>
         );
     },

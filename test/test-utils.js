@@ -2,7 +2,8 @@
 
 import sinon from 'sinon';
 import Promise from 'bluebird';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
@@ -14,7 +15,7 @@ const MatrixEvent = jssdk.MatrixEvent;
  * @param {Mocha.Context} context  The test context
  */
 export function beforeEach(context) {
-    var desc = context.currentTest.fullTitle();
+    const desc = context.currentTest.fullTitle();
 
     console.log();
 
@@ -26,7 +27,7 @@ export function beforeEach(context) {
 
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
-};
+}
 
 
 /**
@@ -40,16 +41,16 @@ export function beforeEach(context) {
  * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
-    var sandbox = sinon.sandbox.create();
+    const sandbox = sinon.sandbox.create();
 
-    var client = createTestClient();
+    const client = createTestClient();
 
     // stub out the methods in MatrixClientPeg
     //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingCreds'];
-    for (var i = 0; i < methods.length; i++) {
+    const methods = ['get', 'unset', 'replaceUsingCreds'];
+    for (let i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
     // MatrixClientPeg.get() is called a /lot/, so implement it with our own
@@ -67,10 +68,14 @@ export function createTestClient() {
     return {
         getHomeserverUrl: sinon.stub(),
         getIdentityServerUrl: sinon.stub(),
+        getDomain: sinon.stub().returns("matrix.rog"),
+        getUserId: sinon.stub().returns("@userId:matrix.rog"),
 
         getPushActionsForEvent: sinon.stub(),
         getRoom: sinon.stub().returns(mkStubRoom()),
         getRooms: sinon.stub().returns([]),
+        getVisibleRooms: sinon.stub().returns([]),
+        getGroups: sinon.stub().returns([]),
         loginFlows: sinon.stub(),
         on: sinon.stub(),
         removeListener: sinon.stub(),
@@ -80,6 +85,7 @@ export function createTestClient() {
         paginateEventTimeline: sinon.stub().returns(Promise.resolve()),
         sendReadReceipt: sinon.stub().returns(Promise.resolve()),
         getRoomIdForAlias: sinon.stub().returns(Promise.resolve()),
+        getRoomDirectoryVisibility: sinon.stub().returns(Promise.resolve()),
         getProfileInfo: sinon.stub().returns(Promise.resolve({})),
         getAccountData: (type) => {
             return mkEvent({
@@ -88,10 +94,10 @@ export function createTestClient() {
                 content: {},
             });
         },
+        mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
         setAccountData: sinon.stub(),
         sendTyping: sinon.stub().returns(Promise.resolve({})),
-        sendTextMessage: () => Promise.resolve({}),
-        sendHtmlMessage: () => Promise.resolve({}),
+        sendMessage: () => Promise.resolve({}),
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
@@ -128,7 +134,7 @@ export function mkEvent(opts) {
     if (!opts.type || !opts.content) {
         throw new Error("Missing .type or .content =>" + JSON.stringify(opts));
     }
-    var event = {
+    const event = {
         type: opts.type,
         room_id: opts.room,
         sender: opts.user,
@@ -139,14 +145,13 @@ export function mkEvent(opts) {
     };
     if (opts.skey) {
         event.state_key = opts.skey;
-    }
-    else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
+    } else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
          "m.room.power_levels", "m.room.topic",
          "com.example.state"].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.presence event.
@@ -157,7 +162,7 @@ export function mkPresence(opts) {
     if (!opts.user) {
         throw new Error("Missing user");
     }
-    var event = {
+    const event = {
         event_id: "$" + Math.random() + "-" + Math.random(),
         type: "m.presence",
         sender: opts.user,
@@ -165,11 +170,11 @@ export function mkPresence(opts) {
             avatar_url: opts.url,
             displayname: opts.name,
             last_active_ago: opts.ago,
-            presence: opts.presence || "offline"
-        }
+            presence: opts.presence || "offline",
+        },
     };
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.room.member event.
@@ -195,19 +200,19 @@ export function mkMembership(opts) {
         throw new Error("Missing .mship => " + JSON.stringify(opts));
     }
     opts.content = {
-        membership: opts.mship
+        membership: opts.mship,
     };
     if (opts.prevMship) {
         opts.prev_content = { membership: opts.prevMship };
     }
     if (opts.name) { opts.content.displayname = opts.name; }
     if (opts.url) { opts.content.avatar_url = opts.url; }
-    let e = mkEvent(opts);
+    const e = mkEvent(opts);
     if (opts.target) {
         e.target = opts.target;
     }
     return e;
-};
+}
 
 /**
  * Create an m.room.message event.
@@ -228,13 +233,13 @@ export function mkMessage(opts) {
     }
     opts.content = {
         msgtype: "m.text",
-        body: opts.msg
+        body: opts.msg,
     };
     return mkEvent(opts);
 }
 
 export function mkStubRoom(roomId = null) {
-    var stubTimeline = { getEvents: () => [] };
+    const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
         getReceiptsForEvent: sinon.stub().returns([]),
@@ -244,16 +249,28 @@ export function mkStubRoom(roomId = null) {
             roomId: roomId,
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
         }),
+        getMembersWithMembership: sinon.stub().returns([]),
         getJoinedMembers: sinon.stub().returns([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
         getUnfilteredTimelineSet: () => null,
         getAccountData: () => null,
         hasMembershipState: () => null,
+        getVersion: () => '1',
+        shouldUpgradeToVersion: () => null,
+        getMyMembership: () => "join",
         currentState: {
             getStateEvents: sinon.stub(),
+            mayClientSendStateEvent: sinon.stub().returns(true),
+            maySendStateEvent: sinon.stub().returns(true),
             members: [],
         },
+        tags: {
+            "m.favourite": {
+                order: 0.5,
+            },
+        },
+        setBlacklistUnverifiedDevices: sinon.stub(),
     };
 }
 
@@ -265,4 +282,47 @@ export function getDispatchForStore(store) {
         dis._callbacks[store._dispatchToken](payload);
         dis._isDispatching = false;
     };
+}
+
+export function wrapInMatrixClientContext(WrappedComponent) {
+    class Wrapper extends React.Component {
+        static childContextTypes = {
+            matrixClient: PropTypes.object,
+        }
+
+        getChildContext() {
+            return {
+                matrixClient: this._matrixClient,
+            };
+        }
+
+        componentWillMount() {
+            this._matrixClient = peg.get();
+        }
+
+        render() {
+            return <WrappedComponent ref={this.props.wrappedRef} {...this.props} />;
+        }
+    }
+    return Wrapper;
+}
+
+/**
+ * Call fn before calling componentDidUpdate on a react component instance, inst.
+ * @param {React.Component} inst an instance of a React component.
+ * @returns {Promise} promise that resolves when componentDidUpdate is called on
+ *                    given component instance.
+ */
+export function waitForUpdate(inst) {
+    return new Promise((resolve, reject) => {
+        const cdu = inst.componentDidUpdate;
+
+        inst.componentDidUpdate = (prevProps, prevState, snapshot) => {
+            resolve();
+
+            if (cdu) cdu(prevProps, prevState, snapshot);
+
+            inst.componentDidUpdate = cdu;
+        };
+    });
 }

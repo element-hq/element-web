@@ -16,6 +16,7 @@ limitations under the License.
 
 import FileSaver from 'file-saver';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 import * as Matrix from 'matrix-js-sdk';
@@ -29,8 +30,8 @@ export default React.createClass({
     displayName: 'ExportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -136,13 +137,13 @@ export default React.createClass({
                             ) }
                         </p>
                         <div className='error'>
-                            {this.state.errStr}
+                            { this.state.errStr }
                         </div>
                         <div className='mx_E2eKeysDialog_inputTable'>
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase1'>
-                                        {_t("Enter passphrase")}
+                                        { _t("Enter passphrase") }
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -155,7 +156,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase2'>
-                                        {_t("Confirm passphrase")}
+                                        { _t("Confirm passphrase") }
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -172,7 +173,7 @@ export default React.createClass({
                              disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            {_t("Cancel")}
+                            { _t("Cancel") }
                         </button>
                     </div>
                 </form>

@@ -14,13 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
+const MatrixClientPeg = require("./MatrixClientPeg");
 import { _t } from './languageHandler';
 
 module.exports = {
+    usersTypingApartFromMeAndIgnored: function(room) {
+        return this.usersTyping(
+            room, [MatrixClientPeg.get().credentials.userId].concat(MatrixClientPeg.get().getIgnoredUsers()),
+        );
+    },
+
     usersTypingApartFromMe: function(room) {
         return this.usersTyping(
-            room, [MatrixClientPeg.get().credentials.userId]
+            room, [MatrixClientPeg.get().credentials.userId],
         );
     },
 
@@ -29,15 +35,15 @@ module.exports = {
      * to exclude, return a list of user objects who are typing.
      */
     usersTyping: function(room, exclude) {
-        var whoIsTyping = [];
+        const whoIsTyping = [];
 
         if (exclude === undefined) {
             exclude = [];
         }
 
-        var memberKeys = Object.keys(room.currentState.members);
-        for (var i = 0; i < memberKeys.length; ++i) {
-            var userId = memberKeys[i];
+        const memberKeys = Object.keys(room.currentState.members);
+        for (let i = 0; i < memberKeys.length; ++i) {
+            const userId = memberKeys[i];
 
             if (room.currentState.members[userId].typing) {
                 if (exclude.indexOf(userId) == -1) {
@@ -62,13 +68,11 @@ module.exports = {
         const names = whoIsTyping.map(function(m) {
             return m.name;
         });
-        if (othersCount==1) {
-            return _t('%(names)s and one other are typing', {names: names.slice(0, limit - 1).join(', ')});
-        } else if (othersCount>1) {
-        	return _t('%(names)s and %(count)s others are typing', {names: names.slice(0, limit - 1).join(', '), count: othersCount});
+        if (othersCount>=1) {
+            return _t('%(names)s and %(count)s others are typing', {names: names.slice(0, limit - 1).join(', '), count: othersCount});
         } else {
             const lastPerson = names.pop();
             return _t('%(names)s and %(lastPerson)s are typing', {names: names.join(', '), lastPerson: lastPerson});
         }
-    }
+    },
 };

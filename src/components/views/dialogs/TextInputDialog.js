@@ -15,21 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'TextInputDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        value: React.PropTypes.string,
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        value: PropTypes.string,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -58,27 +58,24 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
             >
-                <div className="mx_Dialog_content">
-                    <div className="mx_TextInputDialog_label">
-                        <label htmlFor="textinput"> {this.props.description} </label>
+                <form onSubmit={this.onOk}>
+                    <div className="mx_Dialog_content">
+                        <div className="mx_TextInputDialog_label">
+                            <label htmlFor="textinput"> { this.props.description } </label>
+                        </div>
+                        <div>
+                            <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
+                        </div>
                     </div>
-                    <div>
-                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown}/>
-                    </div>
-                </div>
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onCancel}>
-                        { _t("Cancel") }
-                    </button>
-                    <button className="mx_Dialog_primary" onClick={this.onOk}>
-                        {this.props.button}
-                    </button>
-                </div>
+                </form>
+                <DialogButtons primaryButton={this.props.button}
+                    onPrimaryButtonClick={this.onOk}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },

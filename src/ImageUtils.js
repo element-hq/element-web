@@ -42,13 +42,12 @@ module.exports = {
             // no scaling needs to be applied
             return fullHeight;
         }
-        var widthMulti = thumbWidth / fullWidth;
-        var heightMulti = thumbHeight / fullHeight;
+        const widthMulti = thumbWidth / fullWidth;
+        const heightMulti = thumbHeight / fullHeight;
         if (widthMulti < heightMulti) {
             // width is the dominant dimension so scaling will be fixed on that
             return Math.floor(widthMulti * fullHeight);
-        }
-        else {
+        } else {
             // height is the dominant dimension so scaling will be fixed on that
             return Math.floor(heightMulti * fullHeight);
         }

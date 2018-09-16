@@ -18,9 +18,10 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { _t, _tJsx } from '../../../languageHandler';
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 
-var DIV_ID = 'mx_recaptcha';
+const DIV_ID = 'mx_recaptcha';
 
 /**
  * A pure UI component which displays a captcha form.
@@ -29,10 +30,10 @@ module.exports = React.createClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
-        sitePublicKey: React.PropTypes.string,
+        sitePublicKey: PropTypes.string,
 
         // called with the captcha response
-        onCaptchaResponse: React.PropTypes.func,
+        onCaptchaResponse: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -60,23 +61,22 @@ module.exports = React.createClass({
         } else {
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
-            var protocol = global.location.protocol;
+            const protocol = global.location.protocol;
             if (protocol === "file:") {
-                var warning = document.createElement('div');
+                const warning = document.createElement('div');
                 // XXX: fix hardcoded app URL.  Better solutions include:
                 // * jumping straight to a hosted captcha page (but we don't support that yet)
                 // * embedding the captcha in an iframe (if that works)
                 // * using a better captcha lib
-                ReactDOM.render(_tJsx(
+                ReactDOM.render(_t(
                     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
-                    /<a>(.*?)<\/a>/,
-                    (sub) => { return <a href='https://riot.im/app'>{ sub }</a>; }), warning);
+                    {},
+                    { 'a': (sub) => { return <a href='https://riot.im/app'>{ sub }</a>; }}), warning);
                 this.refs.recaptchaContainer.appendChild(warning);
-            }
-            else {
-                var scriptTag = document.createElement('script');
+            } else {
+                const scriptTag = document.createElement('script');
                 scriptTag.setAttribute(
-                    'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
+                    'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit",
                 );
                 this.refs.recaptchaContainer.appendChild(scriptTag);
             }
@@ -93,7 +93,7 @@ module.exports = React.createClass({
             throw new Error("Recaptcha did not load successfully");
         }
 
-        var publicKey = this.props.sitePublicKey;
+        const publicKey = this.props.sitePublicKey;
         if (!publicKey) {
             console.error("No public key for recaptcha!");
             throw new Error(
@@ -130,18 +130,18 @@ module.exports = React.createClass({
         if (this.state.errorText) {
             error = (
                 <div className="error">
-                    {this.state.errorText}
+                    { this.state.errorText }
                 </div>
             );
         }
 
         return (
             <div ref="recaptchaContainer">
-                {_t("This Home Server would like to make sure you are not a robot")}
-                <br/>
+                { _t("This Home Server would like to make sure you are not a robot") }
+                <br />
                 <div id={DIV_ID}></div>
-                {error}
+                { error }
             </div>
         );
-    }
+    },
 });

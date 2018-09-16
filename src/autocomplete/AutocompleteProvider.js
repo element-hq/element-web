@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,23 +20,33 @@ import React from 'react';
 import type {Completion, SelectionRange} from './Autocompleter';
 
 export default class AutocompleteProvider {
-    constructor(commandRegex?: RegExp) {
+    constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
         if (commandRegex) {
             if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');
             }
             this.commandRegex = commandRegex;
         }
+        if (forcedCommandRegex) {
+            if (!forcedCommandRegex.global) {
+                throw new Error('forcedCommandRegex must have global flag set');
+            }
+            this.forcedCommandRegex = forcedCommandRegex;
+        }
+    }
+
+    destroy() {
+        // stub
     }
 
     /**
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
      */
-    getCurrentCommand(query: string, selection: {start: number, end: number}, force: boolean = false): ?string {
+    getCurrentCommand(query: string, selection: SelectionRange, force: boolean = false): ?string {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
-            commandRegex = /\S+/g;
+            commandRegex = this.forcedCommandRegex || /\S+/g;
         }
 
         if (commandRegex == null) {
@@ -46,14 +57,14 @@ export default class AutocompleteProvider {
 
         let match;
         while ((match = commandRegex.exec(query)) != null) {
-            let matchStart = match.index,
-                matchEnd = matchStart + match[0].length;
-            if (selection.start <= matchEnd && selection.end >= matchStart) {
+            const start = match.index;
+            const end = start + match[0].length;
+            if (selection.start <= end && selection.end >= start) {
                 return {
                     command: match,
                     range: {
-                        start: matchStart,
-                        end: matchEnd,
+                        start,
+                        end,
                     },
                 };
             }

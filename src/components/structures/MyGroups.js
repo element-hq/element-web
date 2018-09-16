@@ -15,39 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../index';
-import { _t, _tJsx } from '../../languageHandler';
+import { _t } from '../../languageHandler';
+import dis from '../../dispatcher';
 import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import dis from '../../dispatcher';
-import PropTypes from 'prop-types';
-import Modal from '../../Modal';
-
-const GroupTile = React.createClass({
-    displayName: 'GroupTile',
-
-    propTypes: {
-        groupId: PropTypes.string.isRequired,
-    },
-
-    onClick: function(e) {
-        e.preventDefault();
-        dis.dispatch({
-            action: 'view_group',
-            group_id: this.props.groupId,
-        });
-    },
-
-    render: function() {
-        return <a onClick={this.onClick} href="#">{this.props.groupId}</a>;
-    },
-});
 
 export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -62,14 +41,18 @@ export default withMatrixClient(React.createClass({
     },
 
     _onCreateGroupClick: function() {
-        const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
-        Modal.createTrackedDialog('Create Group', '', CreateGroupDialog);
+        dis.dispatch({action: 'view_create_group'});
     },
 
     _fetch: function() {
         this.props.matrixClient.getJoinedGroups().done((result) => {
             this.setState({groups: result.groups, error: null});
         }, (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
+                // Indicate that the guest isn't in any groups (which should be true)
+                this.setState({groups: [], error: null});
+                return;
+            }
             this.setState({groups: null, error: err});
         });
     },
@@ -78,63 +61,90 @@ export default withMatrixClient(React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const GroupTile = sdk.getComponent("groups.GroupTile");
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+
 
         let content;
+        let contentHeader;
         if (this.state.groups) {
             const groupNodes = [];
             this.state.groups.forEach((g) => {
-                groupNodes.push(
-                    <div key={g}>
-                        <GroupTile groupId={g} />
-                    </div>,
-                );
+                groupNodes.push(<GroupTile key={g} groupId={g} />);
             });
-            content = <div>
-                <div>{_t('You are a member of these groups:')}</div>
-                {groupNodes}
-            </div>;
+            contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
+            content = groupNodes.length > 0 ?
+                <GeminiScrollbarWrapper>
+                    <div className="mx_MyGroups_microcopy">
+                        <p>
+                            { _t(
+                                "Did you know: you can use communities to filter your Riot.im experience!",
+                            ) }
+                        </p>
+                        <p>
+                            { _t(
+                                "To set up a filter, drag a community avatar over to the filter panel on " +
+                                "the far left hand side of the screen. You can click on an avatar in the " +
+                                "filter panel at any time to see only the rooms and people associated " +
+                                "with that community.",
+                            ) }
+                        </p>
+                    </div>
+                    <div className="mx_MyGroups_joinedGroups">
+                        { groupNodes }
+                    </div>
+                </GeminiScrollbarWrapper> :
+                <div className="mx_MyGroups_placeholder">
+                    { _t(
+                        "You're not currently a member of any communities.",
+                    ) }
+                </div>;
         } else if (this.state.error) {
             content = <div className="mx_MyGroups_error">
-                {_t('Error whilst fetching joined groups')}
+                { _t('Error whilst fetching joined communities') }
             </div>;
         } else {
             content = <Loader />;
         }
 
         return <div className="mx_MyGroups">
-            <SimpleRoomHeader title={ _t("Groups") } />
-            <div className='mx_MyGroups_joinCreateBox'>
-                <div className="mx_MyGroups_createBox">
-                    <div className="mx_MyGroups_joinCreateHeader">
-                        {_t('Create a new group')}
-                    </div>
-                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onCreateGroupClick}>
+            <SimpleRoomHeader title={_t("Communities")} icon="img/icons-groups.svg" />
+            <div className='mx_MyGroups_header'>
+                <div className="mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    {_t(
-                        'Create a group to represent your community! '+
-                        'Define a set of rooms and your own custom homepage '+
-                        'to mark out your space in the Matrix universe.',
-                    )}
-                </div>
-                <div className="mx_MyGroups_joinBox">
-                    <div className="mx_MyGroups_joinCreateHeader">
-                        {_t('Join an existing group')}
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Create a new community') }
+                        </div>
+                        { _t(
+                            'Create a community to group together users and rooms! ' +
+                            'Build a custom homepage to mark out your space in the Matrix universe.',
+                        ) }
                     </div>
-                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onJoinGroupClick}>
+                </div>
+                {/*<div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    {_tJsx(
-                        'To join an existing group you\'ll have to '+
-                        'know its group identifier; this will look '+
-                        'something like <i>+example:matrix.org</i>.',
-                        /<i>(.*)<\/i>/,
-                        (sub) => <i>{sub}</i>,
-                    )}
-                </div>
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Join an existing community') }
+                        </div>
+                        { _t(
+                            'To join an existing community you\'ll have to '+
+                            'know its community identifier; this will look '+
+                            'something like <i>+example:matrix.org</i>.',
+                            {},
+                            { 'i': (sub) => <i>{ sub }</i> })
+                        }
+                    </div>
+                </div>*/}
             </div>
             <div className="mx_MyGroups_content">
-                {content}
+                { contentHeader }
+                { content }
             </div>
         </div>;
     },

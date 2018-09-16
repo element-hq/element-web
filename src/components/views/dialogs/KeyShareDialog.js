@@ -16,9 +16,10 @@ limitations under the License.
 
 import Modal from '../../../Modal';
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 
 /**
  * Dialog which asks the user whether they want to share their keys with
@@ -30,10 +31,10 @@ import { _t } from '../../../languageHandler';
  */
 export default React.createClass({
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        userId: React.PropTypes.string.isRequired,
-        deviceId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        deviceId: PropTypes.string.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -54,7 +55,7 @@ export default React.createClass({
 
             const deviceInfo = r[userId][deviceId];
 
-            if(!deviceInfo) {
+            if (!deviceInfo) {
                 console.warn(`No details found for device ${userId}:${deviceId}`);
 
                 this.props.onFinished(false);
@@ -116,27 +117,27 @@ export default React.createClass({
 
         let text;
         if (this.state.wasNewDevice) {
-            text = "You added a new device '%(displayName)s', which is"
-                + " requesting encryption keys.";
+            text = _td("You added a new device '%(displayName)s', which is"
+                + " requesting encryption keys.");
         } else {
-            text = "Your unverified device '%(displayName)s' is requesting"
-                + " encryption keys.";
+            text = _td("Your unverified device '%(displayName)s' is requesting"
+                + " encryption keys.");
         }
         text = _t(text, {displayName: displayName});
 
         return (
-            <div>
-                <p>{text}</p>
+            <div id='mx_Dialog_content'>
+                <p>{ text }</p>
 
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._onVerifyClicked}>
-                        {_t('Start verification')}
+                    <button onClick={this._onVerifyClicked} autoFocus="true">
+                        { _t('Start verification') }
                     </button>
                     <button onClick={this._onShareClicked}>
-                        {_t('Share without verifying')}
+                        { _t('Share without verifying') }
                     </button>
                     <button onClick={this._onIgnoreClicked}>
-                        {_t('Ignore request')}
+                        { _t('Ignore request') }
                     </button>
                 </div>
             </div>
@@ -153,8 +154,8 @@ export default React.createClass({
             content = this._renderContent();
         } else {
             content = (
-                <div>
-                    <p>{_t('Loading device info...')}</p>
+                <div id='mx_Dialog_content'>
+                    <p>{ _t('Loading device info...') }</p>
                     <Spinner />
                 </div>
             );
@@ -164,8 +165,9 @@ export default React.createClass({
             <BaseDialog className='mx_KeyShareRequestDialog'
                 onFinished={this.props.onFinished}
                 title={_t('Encryption key request')}
+                contentId='mx_Dialog_content'
             >
-                {content}
+                { content }
             </BaseDialog>
         );
     },

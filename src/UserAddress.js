@@ -16,11 +16,12 @@ limitations under the License.
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
-const mxidRegex = /^@\S+:\S+$/;
+const mxUserIdRegex = /^@\S+:\S+$/;
+const mxRoomIdRegex = /^!\S+:\S+$/;
 
 import PropTypes from 'prop-types';
 export const addressTypes = [
-    'mx', 'email',
+    'mx-user-id', 'mx-room-id', 'email',
 ];
 
 // PropType definition for an object describing
@@ -41,13 +42,16 @@ export const UserAddressType = PropTypes.shape({
 
 export function getAddressType(inputText) {
     const isEmailAddress = emailRegex.test(inputText);
-    const isMatrixId = mxidRegex.test(inputText);
+    const isUserId = mxUserIdRegex.test(inputText);
+    const isRoomId = mxRoomIdRegex.test(inputText);
 
     // sanity check the input for user IDs
     if (isEmailAddress) {
         return 'email';
-    } else if (isMatrixId) {
-        return 'mx';
+    } else if (isUserId) {
+        return 'mx-user-id';
+    } else if (isRoomId) {
+        return 'mx-room-id';
     } else {
         return null;
     }

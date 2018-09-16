@@ -17,14 +17,14 @@ limitations under the License.
 'use strict';
 
 import Promise from 'bluebird';
-var extend = require('./extend');
-var dis = require('./dispatcher');
-var MatrixClientPeg = require('./MatrixClientPeg');
-var sdk = require('./index');
+const extend = require('./extend');
+const dis = require('./dispatcher');
+const MatrixClientPeg = require('./MatrixClientPeg');
+const sdk = require('./index');
 import { _t } from './languageHandler';
-var Modal = require('./Modal');
+const Modal = require('./Modal');
 
-var encrypt = require("browser-encrypt-attachment");
+const encrypt = require("browser-encrypt-attachment");
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 require("blueimp-canvas-to-blob");
@@ -54,8 +54,8 @@ const MAX_HEIGHT = 600;
 function createThumbnail(element, inputWidth, inputHeight, mimeType) {
     const deferred = Promise.defer();
 
-    var targetWidth = inputWidth;
-    var targetHeight = inputHeight;
+    let targetWidth = inputWidth;
+    let targetHeight = inputHeight;
     if (targetHeight > MAX_HEIGHT) {
         targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
         targetHeight = MAX_HEIGHT;
@@ -81,7 +81,7 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
                 w: inputWidth,
                 h: inputHeight,
             },
-            thumbnail: thumbnail
+            thumbnail: thumbnail,
         });
     }, mimeType);
 
@@ -99,23 +99,17 @@ function loadImageElement(imageFile) {
 
     // Load the file into an html element
     const img = document.createElement("img");
+    const objectUrl = URL.createObjectURL(imageFile);
+    img.src = objectUrl;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        img.src = e.target.result;
-
-        // Once ready, create a thumbnail
-        img.onload = function() {
-            deferred.resolve(img);
-        };
-        img.onerror = function(e) {
-            deferred.reject(e);
-        };
+    // Once ready, create a thumbnail
+    img.onload = function() {
+        URL.revokeObjectURL(objectUrl);
+        deferred.resolve(img);
     };
-    reader.onerror = function(e) {
+    img.onerror = function(e) {
         deferred.reject(e);
     };
-    reader.readAsDataURL(imageFile);
 
     return deferred.promise;
 }
@@ -129,12 +123,12 @@ function loadImageElement(imageFile) {
  * @return {Promise} A promise that resolves with the attachment info.
  */
 function infoForImageFile(matrixClient, roomId, imageFile) {
-    var thumbnailType = "image/png";
+    let thumbnailType = "image/png";
     if (imageFile.type == "image/jpeg") {
         thumbnailType = "image/jpeg";
     }
 
-    var imageInfo;
+    let imageInfo;
     return loadImageElement(imageFile).then(function(img) {
         return createThumbnail(img, img.width, img.height, thumbnailType);
     }).then(function(result) {
@@ -191,7 +185,7 @@ function loadVideoElement(videoFile) {
 function infoForVideoFile(matrixClient, roomId, videoFile) {
     const thumbnailType = "image/jpeg";
 
-    var videoInfo;
+    let videoInfo;
     return loadVideoElement(videoFile).then(function(video) {
         return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
     }).then(function(result) {
@@ -249,6 +243,7 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
             const blob = new Blob([encryptResult.data]);
             return matrixClient.uploadContent(blob, {
                 progressHandler: progressHandler,
+                includeFilename: false,
             }).then(function(url) {
                 // If the attachment is encrypted then bundle the URL along
                 // with the information needed to decrypt the attachment and
@@ -281,12 +276,19 @@ class ContentMessages {
         this.nextId = 0;
     }
 
+    sendStickerContentToRoom(url, roomId, info, text, matrixClient) {
+        return MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
+            console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
+            throw e;
+        });
+    }
+
     sendContentToRoom(file, roomId, matrixClient) {
         const content = {
             body: file.name || 'Attachment',
             info: {
                 size: file.size,
-            }
+            },
         };
 
         // if we have a mime type for the file, add it to the message metadata
@@ -297,10 +299,10 @@ class ContentMessages {
         const def = Promise.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
-            infoForImageFile(matrixClient, roomId, file).then(imageInfo=>{
+            infoForImageFile(matrixClient, roomId, file).then((imageInfo)=>{
                 extend(content.info, imageInfo);
                 def.resolve();
-            }, error=>{
+            }, (error)=>{
                 console.error(error);
                 content.msgtype = 'm.file';
                 def.resolve();
@@ -310,10 +312,10 @@ class ContentMessages {
             def.resolve();
         } else if (file.type.indexOf('video/') == 0) {
             content.msgtype = 'm.video';
-            infoForVideoFile(matrixClient, roomId, file).then(videoInfo=>{
+            infoForVideoFile(matrixClient, roomId, file).then((videoInfo)=>{
                 extend(content.info, videoInfo);
                 def.resolve();
-            }, error=>{
+            }, (error)=>{
                 content.msgtype = 'm.file';
                 def.resolve();
             });
@@ -331,7 +333,7 @@ class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
 
-        var error;
+        let error;
 
         function onProgress(ev) {
             upload.total = ev.total;
@@ -355,11 +357,11 @@ class ContentMessages {
         }, function(err) {
             error = err;
             if (!upload.canceled) {
-                var desc = _t('The file \'%(fileName)s\' failed to upload', {fileName: upload.fileName}) + '.';
+                let desc = _t('The file \'%(fileName)s\' failed to upload', {fileName: upload.fileName}) + '.';
                 if (err.http_status == 413) {
                     desc = _t('The file \'%(fileName)s\' exceeds this home server\'s size limit for uploads', {fileName: upload.fileName});
                 }
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,
@@ -367,8 +369,8 @@ class ContentMessages {
             }
         }).finally(() => {
             const inprogressKeys = Object.keys(this.inprogress);
-            for (var i = 0; i < this.inprogress.length; ++i) {
-                var k = inprogressKeys[i];
+            for (let i = 0; i < this.inprogress.length; ++i) {
+                const k = inprogressKeys[i];
                 if (this.inprogress[k].promise === upload.promise) {
                     this.inprogress.splice(k, 1);
                     break;
@@ -376,8 +378,7 @@ class ContentMessages {
             }
             if (error) {
                 dis.dispatch({action: 'upload_failed', upload: upload});
-            }
-            else {
+            } else {
                 dis.dispatch({action: 'upload_finished', upload: upload});
             }
         });
@@ -389,9 +390,9 @@ class ContentMessages {
 
     cancelUpload(promise) {
         const inprogressKeys = Object.keys(this.inprogress);
-        var upload;
-        for (var i = 0; i < this.inprogress.length; ++i) {
-            var k = inprogressKeys[i];
+        let upload;
+        for (let i = 0; i < this.inprogress.length; ++i) {
+            const k = inprogressKeys[i];
             if (this.inprogress[k].promise === promise) {
                 upload = this.inprogress[k];
                 break;

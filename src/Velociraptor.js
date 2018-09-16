@@ -1,6 +1,7 @@
-var React = require('react');
-var ReactDom = require('react-dom');
-var Velocity = require('velocity-vector');
+const React = require('react');
+const ReactDom = require('react-dom');
+import PropTypes from 'prop-types';
+const Velocity = require('velocity-vector');
 
 /**
  * The Velociraptor contains components and animates transitions with velocity.
@@ -14,16 +15,16 @@ module.exports = React.createClass({
 
     propTypes: {
         // either a list of child nodes, or a single child.
-        children: React.PropTypes.any,
+        children: PropTypes.any,
 
         // optional transition information for changing existing children
-        transition: React.PropTypes.object,
+        transition: PropTypes.object,
 
         // a list of state objects to apply to each child node in turn
-        startStyles: React.PropTypes.array,
+        startStyles: PropTypes.array,
 
         // a list of transition options from the corresponding startStyle
-        enterTransitionOpts: React.PropTypes.array,
+        enterTransitionOpts: PropTypes.array,
     },
 
     getDefaultProps: function() {
@@ -46,13 +47,13 @@ module.exports = React.createClass({
      * update `this.children` according to the new list of children given
      */
     _updateChildren: function(newChildren) {
-        var self = this;
-        var oldChildren = this.children || {};
+        const self = this;
+        const oldChildren = this.children || {};
         this.children = {};
         React.Children.toArray(newChildren).forEach(function(c) {
             if (oldChildren[c.key]) {
-                var old = oldChildren[c.key];
-                var oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
+                const old = oldChildren[c.key];
+                const oldNode = ReactDom.findDOMNode(self.nodes[old.key]);
 
                 if (oldNode && oldNode.style.left != c.props.style.left) {
                     Velocity(oldNode, { left: c.props.style.left }, self.props.transition).then(function() {
@@ -71,18 +72,18 @@ module.exports = React.createClass({
             } else {
                 // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations
-                var newProps = {};
-                var restingStyle = c.props.style;
+                const newProps = {};
+                const restingStyle = c.props.style;
 
-                var startStyles = self.props.startStyles;
+                const startStyles = self.props.startStyles;
                 if (startStyles.length > 0) {
-                    var startStyle = startStyles[0];
+                    const startStyle = startStyles[0];
                     newProps.style = startStyle;
                     // console.log("mounted@startstyle0: "+JSON.stringify(startStyle));
                 }
 
-                newProps.ref = (n => self._collectNode(
-                    c.key, n, restingStyle
+                newProps.ref = ((n) => self._collectNode(
+                    c.key, n, restingStyle,
                 ));
 
                 self.children[c.key] = React.cloneElement(c, newProps);
@@ -103,8 +104,8 @@ module.exports = React.createClass({
             this.nodes[k] === undefined &&
             this.props.startStyles.length > 0
         ) {
-            var startStyles = this.props.startStyles;
-            var transitionOpts = this.props.enterTransitionOpts;
+            const startStyles = this.props.startStyles;
+            const transitionOpts = this.props.enterTransitionOpts;
             const domNode = ReactDom.findDOMNode(node);
             // start from startStyle 1: 0 is the one we gave it
             // to start with, so now we animate 1 etc.
@@ -146,7 +147,7 @@ module.exports = React.createClass({
             // creating/destroying large numbers of elements"
             // (https://github.com/julianshapiro/velocity/issues/47)
             const domNode = ReactDom.findDOMNode(this.nodes[k]);
-            Velocity.Utilities.removeData(domNode);
+            if (domNode) Velocity.Utilities.removeData(domNode);
         }
         this.nodes[k] = node;
     },
@@ -154,7 +155,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <span>
-                {Object.values(this.children)}
+                { Object.values(this.children) }
             </span>
         );
     },

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -26,7 +27,7 @@ export function CancelButton(props) {
     return (
         <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
             <img src="img/cancel.svg" className='mx_filterFlipColor'
-                width="18" height="18" alt={_t("Cancel")}/>
+                width="18" height="18" alt={_t("Cancel")} />
         </AccessibleButton>
     );
 }
@@ -39,11 +40,11 @@ export default React.createClass({
     displayName: 'SimpleRoomHeader',
 
     propTypes: {
-        title: React.PropTypes.string,
-        onCancelClick: React.PropTypes.func,
+        title: PropTypes.string,
+        onCancelClick: PropTypes.func,
 
         // `src` to a TintableSvg. Optional.
-        icon: React.PropTypes.string,
+        icon: PropTypes.string,
     },
 
     render: function() {

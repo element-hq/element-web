@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -24,13 +25,13 @@ export default React.createClass({
     displayName: 'DeviceVerifyButtons',
 
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        device: React.PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        device: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
         return {
-            device: this.props.device
+            device: this.props.device,
         };
     },
 
@@ -60,37 +61,37 @@ export default React.createClass({
 
     onUnverifyClick: function() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.state.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     onBlacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.state.device.deviceId, true
+            this.props.userId, this.state.device.deviceId, true,
         );
     },
 
     onUnblacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.state.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     render: function() {
-        var blacklistButton = null, verifyButton = null;
+        let blacklistButton = null, verifyButton = null;
 
         if (this.state.device.isBlocked()) {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
                   onClick={this.onUnblacklistClick}>
-                    {_t("Unblacklist")}
+                    { _t("Unblacklist") }
                 </button>
             );
         } else {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_blacklist"
                   onClick={this.onBlacklistClick}>
-                    {_t("Blacklist")}
+                    { _t("Blacklist") }
                 </button>
             );
         }
@@ -99,14 +100,14 @@ export default React.createClass({
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
-                    {_t("Unverify")}
+                    { _t("Unverify") }
                 </button>
             );
         } else {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
-                    {_t("Verify...")}
+                    { _t("Verify...") }
                 </button>
             );
         }

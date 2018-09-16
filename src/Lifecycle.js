@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
+import ActiveWidgetStore from './stores/ActiveWidgetStore';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -64,33 +66,33 @@ import sdk from './index';
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
-export function loadSession(opts) {
-    const fragmentQueryParams = opts.fragmentQueryParams || {};
-    let enableGuest = opts.enableGuest || false;
-    const guestHsUrl = opts.guestHsUrl;
-    const guestIsUrl = opts.guestIsUrl;
-    const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+export async function loadSession(opts) {
+    try {
+        let enableGuest = opts.enableGuest || false;
+        const guestHsUrl = opts.guestHsUrl;
+        const guestIsUrl = opts.guestIsUrl;
+        const fragmentQueryParams = opts.fragmentQueryParams || {};
+        const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-    if (!guestHsUrl) {
-        console.warn("Cannot enable guest access: can't determine HS URL to use");
-        enableGuest = false;
-    }
+        if (!guestHsUrl) {
+            console.warn("Cannot enable guest access: can't determine HS URL to use");
+            enableGuest = false;
+        }
 
-    if (enableGuest &&
-        fragmentQueryParams.guest_user_id &&
-        fragmentQueryParams.guest_access_token
-       ) {
-        console.log("Using guest access credentials");
-        return _doSetLoggedIn({
-            userId: fragmentQueryParams.guest_user_id,
-            accessToken: fragmentQueryParams.guest_access_token,
-            homeserverUrl: guestHsUrl,
-            identityServerUrl: guestIsUrl,
-            guest: true,
-        }, true).then(() => true);
-    }
-
-    return _restoreFromLocalStorage().then((success) => {
+        if (enableGuest &&
+            fragmentQueryParams.guest_user_id &&
+            fragmentQueryParams.guest_access_token
+           ) {
+            console.log("Using guest access credentials");
+            return _doSetLoggedIn({
+                userId: fragmentQueryParams.guest_user_id,
+                accessToken: fragmentQueryParams.guest_access_token,
+                homeserverUrl: guestHsUrl,
+                identityServerUrl: guestIsUrl,
+                guest: true,
+            }, true).then(() => true);
+        }
+        const success = await _restoreFromLocalStorage();
         if (success) {
             return true;
         }
@@ -101,7 +103,9 @@ export function loadSession(opts) {
 
         // fall back to login screen
         return false;
-    });
+    } catch (e) {
+        return _handleLoadSessionFailure(e);
+    }
 }
 
 /**
@@ -195,9 +199,9 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. teamToken, isGuest etc.)
-function _restoreFromLocalStorage() {
+async function _restoreFromLocalStorage() {
     if (!localStorage) {
-        return Promise.resolve(false);
+        return false;
     }
     const hsUrl = localStorage.getItem("mx_hs_url");
     const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
@@ -215,26 +219,23 @@ function _restoreFromLocalStorage() {
 
     if (accessToken && userId && hsUrl) {
         console.log(`Restoring session for ${userId}`);
-        try {
-            return _doSetLoggedIn({
-                userId: userId,
-                deviceId: deviceId,
-                accessToken: accessToken,
-                homeserverUrl: hsUrl,
-                identityServerUrl: isUrl,
-                guest: isGuest,
-            }, false).then(() => true);
-        } catch (e) {
-            return _handleRestoreFailure(e);
-        }
+        await _doSetLoggedIn({
+            userId: userId,
+            deviceId: deviceId,
+            accessToken: accessToken,
+            homeserverUrl: hsUrl,
+            identityServerUrl: isUrl,
+            guest: isGuest,
+        }, false);
+        return true;
     } else {
         console.log("No previous session found.");
-        return Promise.resolve(false);
+        return false;
     }
 }
 
-function _handleRestoreFailure(e) {
-    console.log("Unable to restore session", e);
+function _handleLoadSessionFailure(e) {
+    console.log("Unable to load session", e);
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
@@ -255,7 +256,7 @@ function _handleRestoreFailure(e) {
         }
 
         // try, try again
-        return _restoreFromLocalStorage();
+        return loadSession();
     });
 }
 
@@ -362,7 +363,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
     });
 
-    startMatrixClient();
+    await startMatrixClient();
     return MatrixClientPeg.get();
 }
 
@@ -385,10 +386,14 @@ function _persistCredentialsToLocalStorage(credentials) {
     console.log(`Session persisted for ${credentials.userId}`);
 }
 
+let _isLoggingOut = false;
+
 /**
  * Logs the current session out and transitions to the logged-out state
  */
 export function logout() {
+    if (!MatrixClientPeg.get()) return;
+
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
@@ -402,6 +407,7 @@ export function logout() {
         return;
     }
 
+    _isLoggingOut = true;
     MatrixClientPeg.get().logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
@@ -417,11 +423,15 @@ export function logout() {
     ).done();
 }
 
+export function isLoggingOut() {
+    return _isLoggingOut;
+}
+
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
  */
-function startMatrixClient() {
+async function startMatrixClient() {
     console.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -434,8 +444,13 @@ function startMatrixClient() {
     UserActivity.start();
     Presence.start();
     DMRoomMap.makeShared().start();
+    ActiveWidgetStore.start();
 
-    MatrixClientPeg.start();
+    await MatrixClientPeg.start();
+
+    // dispatch that we finished starting up to wire up any other bits
+    // of the matrix client that cannot be set prior to starting up.
+    dis.dispatch({action: 'client_started'});
 }
 
 /*
@@ -443,6 +458,7 @@ function startMatrixClient() {
  * storage. Used after a session has been logged out.
  */
 export function onLoggedOut() {
+    _isLoggingOut = false;
     stopMatrixClient();
     _clearStorage().done();
     dis.dispatch({action: 'on_logged_out'});
@@ -482,6 +498,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
+    ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     const cli = MatrixClientPeg.get();
     if (cli) {

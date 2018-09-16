@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
 import dis from '../../../dispatcher';
@@ -27,7 +28,7 @@ module.exports = React.createClass({
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: React.PropTypes.object,
+        ConferenceHandler: PropTypes.object,
     },
 
     getInitialState: function() {
@@ -91,7 +92,8 @@ module.exports = React.createClass({
                 />
             );
         }
-        return null;
+        const PersistentApp = sdk.getComponent('elements.PersistentApp');
+        return <PersistentApp />;
     },
 });
 

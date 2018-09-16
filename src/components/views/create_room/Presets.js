@@ -16,10 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
-var Presets = {
+const Presets = {
     PrivateChat: "private_chat",
     PublicChat: "public_chat",
     Custom: "custom",
@@ -28,8 +29,8 @@ var Presets = {
 module.exports = React.createClass({
     displayName: 'CreateRoomPresets',
     propTypes: {
-        onChange: React.PropTypes.func,
-        preset: React.PropTypes.string
+        onChange: PropTypes.func,
+        preset: PropTypes.string,
     },
 
     Presets: Presets,
@@ -47,10 +48,10 @@ module.exports = React.createClass({
     render: function() {
         return (
             <select className="mx_Presets" onChange={this.onValueChanged} value={this.props.preset}>
-                <option value={this.Presets.PrivateChat}>{_t("Private Chat")}</option>
-                <option value={this.Presets.PublicChat}>{_t("Public Chat")}</option>
-                <option value={this.Presets.Custom}>{_t("Custom")}</option>
+                <option value={this.Presets.PrivateChat}>{ _t("Private Chat") }</option>
+                <option value={this.Presets.PublicChat}>{ _t("Public Chat") }</option>
+                <option value={this.Presets.Custom}>{ _t("Custom") }</option>
             </select>
         );
-    }
+    },
 });

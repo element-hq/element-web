@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher';
 import sdk from '../../../index';
+import Analytics from '../../../Analytics';
 
 export default React.createClass({
     displayName: 'RoleButton',
@@ -47,6 +48,7 @@ export default React.createClass({
 
     _onClick: function(ev) {
         ev.stopPropagation();
+        Analytics.trackEvent('Action Button', 'click', this.props.action);
         dis.dispatch({action: this.props.action});
     },
 
@@ -75,10 +77,11 @@ export default React.createClass({
                 onClick={this._onClick}
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}
+                aria-label={this.props.label}
             >
                 <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
-                {tooltip}
+                { tooltip }
             </AccessibleButton>
         );
-    }
+    },
 });

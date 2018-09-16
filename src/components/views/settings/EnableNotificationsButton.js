@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 'use strict';
-var React = require("react");
-var Notifier = require("../../../Notifier");
-var dis = require("../../../dispatcher");
+const React = require("react");
+const Notifier = require("../../../Notifier");
+const dis = require("../../../dispatcher");
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -43,7 +43,7 @@ module.exports = React.createClass({
     },
 
     onClick: function() {
-        var self = this;
+        const self = this;
         if (!Notifier.supportsDesktopNotifications()) {
             return;
         }
@@ -61,15 +61,15 @@ module.exports = React.createClass({
         if (this.enabled()) {
             return (
                 <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
-                    {_t("Disable Notifications")}
+                    { _t("Disable Notifications") }
                 </button>
             );
         } else {
             return (
                 <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
-                    {_t("Enable Notifications")}
+                    { _t("Enable Notifications") }
                 </button>
             );
         }
-    }
+    },
 });

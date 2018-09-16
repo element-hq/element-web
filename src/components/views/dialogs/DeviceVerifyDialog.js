@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
@@ -28,25 +29,25 @@ export default function DeviceVerifyDialog(props) {
     const body = (
         <div>
             <p>
-                {_t("To verify that this device can be trusted, please contact its " +
+                { _t("To verify that this device can be trusted, please contact its " +
                     "owner using some other means (e.g. in person or a phone call) " +
                     "and ask them whether the key they see in their User Settings " +
-                    "for this device matches the key below:")}
+                    "for this device matches the key below:") }
             </p>
             <div className="mx_UserSettings_cryptoSection">
                 <ul>
-                    <li><label>{_t("Device name")}:</label> <span>{ props.device.getDisplayName() }</span></li>
-                    <li><label>{_t("Device ID")}:</label> <span><code>{ props.device.deviceId}</code></span></li>
-                    <li><label>{_t("Device key")}:</label> <span><code><b>{ key }</b></code></span></li>
+                    <li><label>{ _t("Device name") }:</label> <span>{ props.device.getDisplayName() }</span></li>
+                    <li><label>{ _t("Device ID") }:</label> <span><code>{ props.device.deviceId }</code></span></li>
+                    <li><label>{ _t("Device key") }:</label> <span><code><b>{ key }</b></code></span></li>
                 </ul>
             </div>
             <p>
-                {_t("If it matches, press the verify button below. " +
+                { _t("If it matches, press the verify button below. " +
                     "If it doesn't, then someone else is intercepting this device " +
-                    "and you probably want to press the blacklist button instead.")}
+                    "and you probably want to press the blacklist button instead.") }
             </p>
             <p>
-                {_t("In future this verification process will be more sophisticated.")}
+                { _t("In future this verification process will be more sophisticated.") }
             </p>
         </div>
     );
@@ -71,7 +72,7 @@ export default function DeviceVerifyDialog(props) {
 }
 
 DeviceVerifyDialog.propTypes = {
-    userId: React.PropTypes.string.isRequired,
-    device: React.PropTypes.object.isRequired,
-    onFinished: React.PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

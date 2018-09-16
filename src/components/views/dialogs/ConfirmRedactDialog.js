@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import classnames from 'classnames';
 import { _t } from '../../../languageHandler';
 
 /*
@@ -24,51 +23,17 @@ import { _t } from '../../../languageHandler';
  */
 export default React.createClass({
     displayName: 'ConfirmRedactDialog',
-    propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
-    },
-
-    defaultProps: {
-        danger: false,
-    },
-
-    onOk: function() {
-        this.props.onFinished(true);
-    },
-
-    onCancel: function() {
-        this.props.onFinished(false);
-    },
 
     render: function() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
-        const title = _t("Confirm Removal");
-
-        const confirmButtonClass = classnames({
-            'mx_Dialog_primary': true,
-            'danger': false,
-        });
-
+        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
         return (
-            <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
-                title={title}
-            >
-                <div className="mx_Dialog_content">
-                    {_t("Are you sure you wish to remove (delete) this event? " +
-                        "Note that if you delete a room name or topic change, it could undo the change.")}
-                </div>
-                <div className="mx_Dialog_buttons">
-                    <button className={confirmButtonClass} onClick={this.onOk}>
-                        {_t("Remove")}
-                    </button>
-
-                    <button onClick={this.onCancel}>
-                        {_t("Cancel")}
-                    </button>
-                </div>
-            </BaseDialog>
+            <QuestionDialog onFinished={this.props.onFinished}
+                title={_t("Confirm Removal")}
+                description={
+                    _t("Are you sure you wish to remove (delete) this event? " +
+                       "Note that if you delete a room name or topic change, it could undo the change.")}
+                button={_t("Remove")}>
+            </QuestionDialog>
         );
     },
 });

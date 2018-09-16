@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import { _t, _tJsx} from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -29,26 +30,32 @@ module.exports = React.createClass({
 
     propTypes: {
         // js-sdk room object
-        room: React.PropTypes.object.isRequired,
-        userId: React.PropTypes.string.isRequired,
-        showApps: React.PropTypes.bool,
+        room: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        showApps: PropTypes.bool, // Render apps
+        hideAppsDrawer: PropTypes.bool, // Do not display apps drawer and content (may still be rendered)
 
         // Conference Handler implementation
-        conferenceHandler: React.PropTypes.object,
+        conferenceHandler: PropTypes.object,
 
         // set to true to show the file drop target
-        draggingFile: React.PropTypes.bool,
+        draggingFile: PropTypes.bool,
 
         // set to true to show the 'active conf call' banner
-        displayConfCallNotification: React.PropTypes.bool,
+        displayConfCallNotification: PropTypes.bool,
 
         // maxHeight attribute for the aux panel and the video
         // therein
-        maxHeight: React.PropTypes.number,
+        maxHeight: PropTypes.number,
 
         // a callback which is called when the content of the aux panel changes
         // content in a way that is likely to make it change size.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
+    },
+
+    defaultProps: {
+        showApps: true,
+        hideAppsDrawer: false,
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -83,9 +90,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
                       title={_t("Drop File Here")}>
-                        <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
-                        <br/>
-                        {_t("Drop file here to upload")}
+                        <TintableSvg src="img/upload-big.svg" width="45" height="59" />
+                        <br />
+                        { _t("Drop file here to upload") }
                     </div>
                 </div>
             );
@@ -99,23 +106,23 @@ module.exports = React.createClass({
                 supportedText = _t(" (unsupported)");
             } else {
                 joinNode = (<span>
-                    {_tJsx(
+                    { _t(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
-                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
-                        [
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,
-                        ]
-                    )}
+                        {},
+                        {
+                            'voiceText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
+                            'videoText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
+                        },
+                    ) }
                 </span>);
             }
             // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
             // but there are translations for this in the languages we do have so I'm leaving it for now.
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    {_t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText})}
+                    { _t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText}) }
                     &nbsp;
-                    {joinNode}
+                    { joinNode }
                 </div>
             );
         }
@@ -128,15 +135,13 @@ module.exports = React.createClass({
             />
         );
 
-        let appsDrawer = null;
-        if(UserSettingsStore.isFeatureEnabled('matrix_apps')) {
-            appsDrawer = <AppsDrawer ref="appsDrawer"
-                room={this.props.room}
-                userId={this.props.userId}
-                maxHeight={this.props.maxHeight}
-                showApps={this.props.showApps}
-            />;
-        }
+        const appsDrawer = <AppsDrawer ref="appsDrawer"
+            room={this.props.room}
+            userId={this.props.userId}
+            maxHeight={this.props.maxHeight}
+            showApps={this.props.showApps}
+            hide={this.props.hideAppsDrawer}
+        />;
 
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >

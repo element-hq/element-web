@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-
+import Modal from '../../../Modal';
 
 export default class DevicesPanel extends React.Component {
     constructor(props, context) {
@@ -29,11 +30,16 @@ export default class DevicesPanel extends React.Component {
         this.state = {
             devices: undefined,
             deviceLoadError: undefined,
+
+            selectedDevices: [],
+            deleting: false,
         };
 
         this._unmounted = false;
 
         this._renderDevice = this._renderDevice.bind(this);
+        this._onDeviceSelectionToggled = this._onDeviceSelectionToggled.bind(this);
+        this._onDeleteClick = this._onDeleteClick.bind(this);
     }
 
     componentDidMount() {
@@ -52,7 +58,7 @@ export default class DevicesPanel extends React.Component {
             },
             (error) => {
                 if (this._unmounted) { return; }
-                var errtxt;
+                let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
                     errtxt = _t("Your home server does not support device management.");
@@ -61,7 +67,7 @@ export default class DevicesPanel extends React.Component {
                     errtxt = _t("Unable to load device list");
                 }
                 this.setState({deviceLoadError: errtxt});
-            }
+            },
         );
     }
 
@@ -82,25 +88,78 @@ export default class DevicesPanel extends React.Component {
         return (idA < idB) ? -1 : (idA > idB) ? 1 : 0;
     }
 
-    _onDeviceDeleted(device) {
+    _onDeviceSelectionToggled(device) {
         if (this._unmounted) { return; }
 
-        // delete the removed device from our list.
-        const removed_id = device.device_id;
+        const deviceId = device.device_id;
         this.setState((state, props) => {
-            const newDevices = state.devices.filter(
-                d => { return d.device_id != removed_id; }
-            );
-            return { devices: newDevices };
+            // Make a copy of the selected devices, then add or remove the device
+            const selectedDevices = state.selectedDevices.slice();
+
+            const i = selectedDevices.indexOf(deviceId);
+            if (i === -1) {
+                selectedDevices.push(deviceId);
+            } else {
+                selectedDevices.splice(i, 1);
+            }
+
+            return {selectedDevices};
         });
     }
 
-    _renderDevice(device) {
-        var DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
-        return (
-            <DevicesPanelEntry key={device.device_id} device={device}
-               onDeleted={()=>{this._onDeviceDeleted(device);}} />
+    _onDeleteClick() {
+        this.setState({
+            deleting: true,
+        });
+
+        this._makeDeleteRequest(null).catch((error) => {
+            if (this._unmounted) { return; }
+            if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
+                // doesn't look like an interactive-auth failure
+                throw error;
+            }
+
+            // pop up an interactive auth dialog
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+            Modal.createTrackedDialog('Delete Device Dialog', '', InteractiveAuthDialog, {
+                title: _t("Authentication"),
+                matrixClient: MatrixClientPeg.get(),
+                authData: error.data,
+                makeRequest: this._makeDeleteRequest.bind(this),
+            });
+        }).catch((e) => {
+            console.error("Error deleting devices", e);
+            if (this._unmounted) { return; }
+        }).finally(() => {
+            this.setState({
+                deleting: false,
+            });
+        });
+    }
+
+    _makeDeleteRequest(auth) {
+        return MatrixClientPeg.get().deleteMultipleDevices(this.state.selectedDevices, auth).then(
+            () => {
+                // Remove the deleted devices from `devices`, reset selection to []
+                this.setState({
+                    devices: this.state.devices.filter(
+                        (d) => !this.state.selectedDevices.includes(d.device_id),
+                    ),
+                    selectedDevices: [],
+                });
+            },
         );
+    }
+
+    _renderDevice(device) {
+        const DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
+        return <DevicesPanelEntry
+            key={device.device_id}
+            device={device}
+            selected={this.state.selectedDevices.includes(device.device_id)}
+            onDeviceToggled={this._onDeviceSelectionToggled}
+        />;
     }
 
     render() {
@@ -110,7 +169,7 @@ export default class DevicesPanel extends React.Component {
             const classes = classNames(this.props.className, "error");
             return (
                 <div className={classes}>
-                    {this.state.deviceLoadError}
+                    { this.state.deviceLoadError }
                 </div>
             );
         }
@@ -119,21 +178,29 @@ export default class DevicesPanel extends React.Component {
         if (devices === undefined) {
             // still loading
             const classes = this.props.className;
-            return <Spinner className={classes}/>;
+            return <Spinner className={classes} />;
         }
 
         devices.sort(this._deviceCompare);
+
+        const deleteButton = this.state.deleting ?
+            <Spinner w={22} h={22} /> :
+            <div className="mx_textButton" onClick={this._onDeleteClick}>
+               { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
+            </div>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">{_t("Device ID")}</div>
-                    <div className="mx_DevicesPanel_deviceName">{_t("Device Name")}</div>
-                    <div className="mx_DevicesPanel_deviceLastSeen">{_t("Last seen")}</div>
-                    <div className="mx_DevicesPanel_deviceButtons"></div>
+                    <div className="mx_DevicesPanel_deviceId">{ _t("Device ID") }</div>
+                    <div className="mx_DevicesPanel_deviceName">{ _t("Device Name") }</div>
+                    <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
+                    <div className="mx_DevicesPanel_deviceButtons">
+                        { this.state.selectedDevices.length > 0 ? deleteButton : _t('Select devices') }
+                    </div>
                 </div>
-                {devices.map(this._renderDevice)}
+                { devices.map(this._renderDevice) }
             </div>
         );
     }
@@ -141,5 +208,5 @@ export default class DevicesPanel extends React.Component {
 
 DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
-    className: React.PropTypes.string,
+    className: PropTypes.string,
 };

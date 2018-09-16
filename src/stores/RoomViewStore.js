@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import Modal from '../Modal';
 import { _t } from '../languageHandler';
 
 const INITIAL_STATE = {
-    // Whether we're joining the currently viewed room
+    // Whether we're joining the currently viewed room (see isJoining())
     joining: false,
     // Any error that has occurred during joining
     joinError: null,
@@ -41,6 +42,10 @@ const INITIAL_STATE = {
     roomLoadError: null,
 
     forwardingEvent: null,
+
+    quotingEvent: null,
+
+    isEditingSettings: false,
 };
 
 /**
@@ -72,6 +77,13 @@ class RoomViewStore extends Store {
             case 'view_room':
                 this._viewRoom(payload);
                 break;
+            case 'view_my_groups':
+            case 'view_group':
+                this._setState({
+                    roomId: null,
+                    roomAlias: null,
+                });
+                break;
             case 'view_room_error':
                 this._viewRoomError(payload);
                 break;
@@ -90,9 +102,6 @@ class RoomViewStore extends Store {
             case 'join_room':
                 this._joinRoom(payload);
                 break;
-            case 'joined_room':
-                this._joinedRoom(payload);
-                break;
             case 'join_room_error':
                 this._joinRoomError(payload);
                 break;
@@ -102,6 +111,21 @@ class RoomViewStore extends Store {
             case 'forward_event':
                 this._setState({
                     forwardingEvent: payload.event,
+                });
+                break;
+            case 'reply_to_event':
+                this._setState({
+                    replyingToEvent: payload.event,
+                });
+                break;
+            case 'open_room_settings':
+                this._setState({
+                    isEditingSettings: true,
+                });
+                break;
+            case 'close_settings':
+                this._setState({
+                    isEditingSettings: false,
                 });
                 break;
         }
@@ -119,11 +143,13 @@ class RoomViewStore extends Store {
                 roomLoadError: null,
                 // should peek by default
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
+                // have we sent a join request for this room and are waiting for a response?
+                joining: payload.joining || false,
+                // Reset replyingToEvent because we don't want cross-room because bad UX
+                replyingToEvent: null,
+                // pull the user out of Room Settings
+                isEditingSettings: false,
             };
-
-            if (payload.joined) {
-                newState.joining = false;
-            }
 
             if (this._state.forwardingEvent) {
                 dis.dispatch({
@@ -134,6 +160,10 @@ class RoomViewStore extends Store {
             }
 
             this._setState(newState);
+
+            if (payload.auto_join) {
+                this._joinRoom(payload);
+            }
         } else if (payload.room_alias) {
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
@@ -153,6 +183,7 @@ class RoomViewStore extends Store {
                     event_id: payload.event_id,
                     highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
+                    auto_join: payload.auto_join,
                     oob_data: payload.oob_data,
                 });
             }, (err) => {
@@ -182,26 +213,28 @@ class RoomViewStore extends Store {
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
         ).done(() => {
-            dis.dispatch({
-                action: 'joined_room',
-            });
+            // We don't actually need to do anything here: we do *not*
+            // clear the 'joining' flag because the Room object and/or
+            // our 'joined' member event may not have come down the sync
+            // stream yet, and that's the point at which we'd consider
+            // the user joined to the room.
         }, (err) => {
             dis.dispatch({
                 action: 'join_room_error',
                 err: err,
             });
-            const msg = err.message ? err.message : JSON.stringify(err);
+            let msg = err.message ? err.message : JSON.stringify(err);
+            if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
+                msg = <div>
+                    {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
+                    {_t("Please contact your homeserver administrator.")}
+                </div>;
+            }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
                 title: _t("Failed to join room"),
                 description: msg,
             });
-        });
-    }
-
-    _joinedRoom(payload) {
-        this._setState({
-            joining: false,
         });
     }
 
@@ -246,7 +279,29 @@ class RoomViewStore extends Store {
         return this._state.roomLoadError;
     }
 
-    // Whether we're joining the currently viewed room
+    // True if we're expecting the user to be joined to the room currently being
+    // viewed. Note that this is left true after the join request has finished,
+    // since we should still consider a join to be in progress until the room
+    // & member events come down the sync.
+    //
+    // This flag remains true after the room has been sucessfully joined,
+    // (this store doesn't listen for the appropriate member events)
+    // so you should always observe the joined state from the member event
+    // if a room object is present.
+    // ie. The correct logic is:
+    // if (room) {
+    //     if (myMember.membership == 'joined') {
+    //         // user is joined to the room
+    //     } else {
+    //         // Not joined
+    //     }
+    // } else {
+    //     if (RoomViewStore.isJoining()) {
+    //         // show spinner
+    //     } else {
+    //         // show join prompt
+    //     }
+    // }
     isJoining() {
         return this._state.joining;
     }
@@ -259,6 +314,15 @@ class RoomViewStore extends Store {
     // The mxEvent if one is about to be forwarded
     getForwardingEvent() {
         return this._state.forwardingEvent;
+    }
+
+    // The mxEvent if one is currently being replied to/quoted
+    getQuotingEvent() {
+        return this._state.replyingToEvent;
+    }
+
+    isEditingSettings() {
+        return this._state.isEditingSettings;
     }
 
     shouldPeek() {

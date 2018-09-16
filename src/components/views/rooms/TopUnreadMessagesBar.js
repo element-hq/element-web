@@ -17,29 +17,36 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-var sdk = require('../../../index');
+import AccessibleButton from '../elements/AccessibleButton';
+const sdk = require('../../../index');
 
 module.exports = React.createClass({
     displayName: 'TopUnreadMessagesBar',
 
     propTypes: {
-        onScrollUpClick: React.PropTypes.func,
-        onCloseClick: React.PropTypes.func,
+        onScrollUpClick: PropTypes.func,
+        onCloseClick: PropTypes.func,
     },
 
     render: function() {
         return (
             <div className="mx_TopUnreadMessagesBar">
-                <div className="mx_TopUnreadMessagesBar_scrollUp"
+                <AccessibleButton className="mx_TopUnreadMessagesBar_scrollUp"
                         onClick={this.props.onScrollUpClick}>
                     <img src="img/scrollto.svg" width="24" height="24"
-                        alt={ _t('Scroll to unread messages') }
-                        title={ _t('Scroll to unread messages') }/>
+                        // No point on setting up non empty alt on this image
+                        // as it only complements the text which follows it.
+                        alt=""
+                        title={_t('Scroll to unread messages')}
+                        // In order not to use this title attribute for accessible name
+                        // calculation of the parent button set the role presentation
+                        role="presentation" />
                     { _t("Jump to first unread message.") }
-                </div>
-                <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
+                </AccessibleButton>
+                <AccessibleButton element='img' className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
                     alt={_t("Close")} title={_t("Close")}
                     onClick={this.props.onCloseClick} />

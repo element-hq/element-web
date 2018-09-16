@@ -15,70 +15,73 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ContentState, convertToRaw, convertFromRaw} from 'draft-js';
-import * as RichText from './RichText';
-import Markdown from './Markdown';
+import { Value } from 'slate';
+
 import _clamp from 'lodash/clamp';
 
-type MessageFormat = 'html' | 'markdown';
+type MessageFormat = 'rich' | 'markdown';
 
 class HistoryItem {
 
-    // Keeping message for backwards-compatibility
-    message: string;
-    rawContentState: RawDraftContentState;
-    format: MessageFormat = 'html';
+    // We store history items in their native format to ensure history is accurate
+    // and then convert them if our RTE has subsequently changed format.
+    value: Value;
+    format: MessageFormat = 'rich';
 
-    constructor(contentState: ?ContentState, format: ?MessageFormat) {
-        this.rawContentState = contentState ? convertToRaw(contentState) : null;
+    constructor(value: ?Value, format: ?MessageFormat) {
+        this.value = value;
         this.format = format;
     }
 
-    toContentState(outputFormat: MessageFormat): ContentState {
-        const contentState = convertFromRaw(this.rawContentState);
-        if (outputFormat === 'markdown') {
-            if (this.format === 'html') {
-                return ContentState.createFromText(RichText.stateToMarkdown(contentState));
-            }
-        } else {
-            if (this.format === 'markdown') {
-                return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
-            }
-        }
-        // history item has format === outputFormat
-        return contentState;
+    static fromJSON(obj: Object): HistoryItem {
+        return new HistoryItem(
+            Value.fromJSON(obj.value),
+            obj.format,
+        );
+    }
+
+    toJSON(): Object {
+        return {
+            value: this.value.toJSON(),
+            format: this.format,
+        };
     }
 }
 
 export default class ComposerHistoryManager {
     history: Array<HistoryItem> = [];
     prefix: string;
-    lastIndex: number = 0;
-    currentIndex: number = 0;
+    lastIndex: number = 0; // used for indexing the storage
+    currentIndex: number = 0; // used for indexing the loaded validated history Array
 
     constructor(roomId: string, prefix: string = 'mx_composer_history_') {
         this.prefix = prefix + roomId;
 
         // TODO: Performance issues?
         let item;
-        for(; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
-            this.history.push(
-                Object.assign(new HistoryItem(), JSON.parse(item)),
-            );
+        for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
+            try {
+                this.history.push(
+                    HistoryItem.fromJSON(JSON.parse(item)),
+                );
+            } catch (e) {
+                console.warn("Throwing away unserialisable history", e);
+            }
         }
         this.lastIndex = this.currentIndex;
+        // reset currentIndex to account for any unserialisable history
+        this.currentIndex = this.history.length;
     }
 
-    save(contentState: ContentState, format: MessageFormat) {
-        const item = new HistoryItem(contentState, format);
+    save(value: Value, format: MessageFormat) {
+        const item = new HistoryItem(value, format);
         this.history.push(item);
-        this.currentIndex = this.lastIndex + 1;
-        sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item));
+        this.currentIndex = this.history.length;
+        sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item.toJSON()));
     }
 
-    getItem(offset: number, format: MessageFormat): ?ContentState {
-        this.currentIndex = _clamp(this.currentIndex + offset, 0, this.lastIndex - 1);
-        const item = this.history[this.currentIndex];
-        return item ? item.toContentState(format) : null;
+    getItem(offset: number): ?HistoryItem {
+        this.currentIndex = _clamp(this.currentIndex + offset, 0, this.history.length - 1);
+        return this.history[this.currentIndex];
     }
 }

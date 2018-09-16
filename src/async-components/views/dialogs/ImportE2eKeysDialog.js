@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import * as Matrix from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
@@ -40,8 +41,8 @@ export default React.createClass({
     displayName: 'ImportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -134,13 +135,13 @@ export default React.createClass({
                             ) }
                         </p>
                         <div className='error'>
-                            {this.state.errStr}
+                            { this.state.errStr }
                         </div>
                         <div className='mx_E2eKeysDialog_inputTable'>
                             <div className='mx_E2eKeysDialog_inputRow'>
                                <div className='mx_E2eKeysDialog_inputLabel'>
                                    <label htmlFor='importFile'>
-                                       {_t("File to import")}
+                                       { _t("File to import") }
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
@@ -153,14 +154,14 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                <div className='mx_E2eKeysDialog_inputLabel'>
                                    <label htmlFor='passphrase'>
-                                       {_t("Enter passphrase")}
+                                       { _t("Enter passphrase") }
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
                                    <input ref='passphrase' id='passphrase'
                                        size='64' type='password'
                                        onChange={this._onFormChange}
-                                       disabled={disableForm}/>
+                                       disabled={disableForm} />
                                </div>
                             </div>
                         </div>
@@ -170,7 +171,7 @@ export default React.createClass({
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            {_t("Cancel")}
+                            { _t("Cancel") }
                         </button>
                     </div>
                 </form>

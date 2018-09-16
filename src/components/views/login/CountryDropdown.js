@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 
@@ -69,7 +70,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        return <img src={`flags/${iso2}.png`}/>;
+        return <img src={`img/flags/${iso2}.png`} />;
     }
 
     _getShortOption(iso2) {
@@ -111,8 +112,8 @@ export default class CountryDropdown extends React.Component {
 
         const options = displayedCountries.map((country) => {
             return <div key={country.iso2}>
-                {this._flagImgForIso2(country.iso2)}
-                {country.name} <span>(+{country.prefix})</span>
+                { this._flagImgForIso2(country.iso2) }
+                { country.name } <span>(+{ country.prefix })</span>
             </div>;
         });
 
@@ -123,18 +124,19 @@ export default class CountryDropdown extends React.Component {
         return <Dropdown className={this.props.className + " left_aligned"}
             onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
             menuWidth={298} getShortOption={this._getShortOption}
-            value={value} searchEnabled={true}
+            value={value} searchEnabled={true} disabled={this.props.disabled}
         >
-            {options}
+            { options }
         </Dropdown>;
     }
 }
 
 CountryDropdown.propTypes = {
-    className: React.PropTypes.string,
-    isSmall: React.PropTypes.bool,
+    className: PropTypes.string,
+    isSmall: PropTypes.bool,
     // if isSmall, show +44 in the selected value
-    showPrefix: React.PropTypes.bool,
-    onOptionChange: React.PropTypes.func.isRequired,
-    value: React.PropTypes.string,
+    showPrefix: PropTypes.bool,
+    onOptionChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    disabled: PropTypes.bool,
 };

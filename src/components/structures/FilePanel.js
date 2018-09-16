@@ -15,20 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Matrix from 'matrix-js-sdk';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
-import { _t, _tJsx } from '../../languageHandler';
+import { _t } from '../../languageHandler';
 
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
-var FilePanel = React.createClass({
+const FilePanel = React.createClass({
     displayName: 'FilePanel',
 
     propTypes: {
-        roomId: React.PropTypes.string.isRequired,
+        roomId: PropTypes.string.isRequired,
     },
 
     getInitialState: function() {
@@ -55,33 +56,36 @@ var FilePanel = React.createClass({
     },
 
     updateTimelineSet: function(roomId) {
-        var client = MatrixClientPeg.get();
-        var room = client.getRoom(roomId);
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(roomId);
 
         this.noRoom = !room;
 
         if (room) {
-            var filter = new Matrix.Filter(client.credentials.userId);
+            const filter = new Matrix.Filter(client.credentials.userId);
             filter.setDefinition(
                 {
                     "room": {
                         "timeline": {
-                            "contains_url": true
+                            "contains_url": true,
+                            "types": [
+                                "m.room.message",
+                            ],
                         },
-                    }
-                }
+                    },
+                },
             );
 
             // FIXME: we shouldn't be doing this every time we change room - see comment above.
             client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
                 (filterId)=>{
                     filter.filterId = filterId;
-                    var timelineSet = room.getOrCreateFilteredTimelineSet(filter);
+                    const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
                     this.setState({ timelineSet: timelineSet });
                 },
                 (error)=>{
                     console.error("Failed to get or create file panel filter", error);
-                }
+                },
             );
         } else {
             console.error("Failed to add filtered timelineSet for FilePanel as no room!");
@@ -92,18 +96,21 @@ var FilePanel = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
                 <div className="mx_RoomView_empty">
-                {_tJsx("You must <a>register</a> to use this functionality", /<a>(.*?)<\/a>/, (sub) => <a href="#/register" key="sub">{sub}</a>)}
+                { _t("You must <a>register</a> to use this functionality",
+                    {},
+                    { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
+                }
                 </div>
             </div>;
         } else if (this.noRoom) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
-                <div className="mx_RoomView_empty">{_t("You must join the room to see its files")}</div>
+                <div className="mx_RoomView_empty">{ _t("You must join the room to see its files") }</div>
             </div>;
         }
 
         // wrap a TimelinePanel with the jump-to-event bits turned off.
-        var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
-        var Loader = sdk.getComponent("elements.Spinner");
+        const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        const Loader = sdk.getComponent("elements.Spinner");
 
         if (this.state.timelineSet) {
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
@@ -114,17 +121,15 @@ var FilePanel = React.createClass({
                     manageReadReceipts={false}
                     manageReadMarkers={false}
                     timelineSet={this.state.timelineSet}
-                    showUrlPreview = { false }
+                    showUrlPreview = {false}
                     tileShape="file_grid"
-                    opacity={ this.props.opacity }
                     empty={_t('There are no visible files in this room')}
                 />
             );
-        }
-        else {
+        } else {
             return (
                 <div className="mx_FilePanel">
-                    <Loader/>
+                    <Loader />
                 </div>
             );
         }

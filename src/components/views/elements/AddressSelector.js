@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
@@ -26,15 +27,17 @@ export default React.createClass({
     displayName: 'AddressSelector',
 
     propTypes: {
-        onSelected: React.PropTypes.func.isRequired,
+        onSelected: PropTypes.func.isRequired,
 
         // List of the addresses to display
-        addressList: React.PropTypes.arrayOf(UserAddressType).isRequired,
-        truncateAt: React.PropTypes.number.isRequired,
-        selected: React.PropTypes.number,
+        addressList: PropTypes.arrayOf(UserAddressType).isRequired,
+        // Whether to show the address on the address tiles
+        showAddress: PropTypes.bool,
+        truncateAt: PropTypes.number.isRequired,
+        selected: PropTypes.number,
 
         // Element to put as a header on top of the list
-        header: React.PropTypes.node,
+        header: PropTypes.node,
     },
 
     getInitialState: function() {
@@ -46,8 +49,8 @@ export default React.createClass({
 
     componentWillReceiveProps: function(props) {
         // Make sure the selected item isn't outside the list bounds
-        var selected = this.state.selected;
-        var maxSelected = this._maxSelected(props.addressList);
+        const selected = this.state.selected;
+        const maxSelected = this._maxSelected(props.addressList);
         if (selected > maxSelected) {
             this.setState({ selected: maxSelected });
         }
@@ -57,7 +60,7 @@ export default React.createClass({
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window.
         if (this.scrollElement && this.props.addressList.length > 0 && !this.state.hover) {
-            var elementHeight = this.addressListElement.getBoundingClientRect().height;
+            const elementHeight = this.addressListElement.getBoundingClientRect().height;
             this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
         }
     },
@@ -75,7 +78,7 @@ export default React.createClass({
         if (this.state.selected > 0) {
             this.setState({
                 selected: this.state.selected - 1,
-                hover : false,
+                hover: false,
             });
         }
     },
@@ -84,7 +87,7 @@ export default React.createClass({
         if (this.state.selected < this._maxSelected(this.props.addressList)) {
             this.setState({
                 selected: this.state.selected + 1,
-                hover : false,
+                hover: false,
             });
         }
     },
@@ -105,7 +108,7 @@ export default React.createClass({
     },
 
     onMouseLeave: function() {
-        this.setState({ hover : false });
+        this.setState({ hover: false });
     },
 
     selectAddress: function(index) {
@@ -117,15 +120,15 @@ export default React.createClass({
     },
 
     createAddressListTiles: function() {
-        var self = this;
-        var AddressTile = sdk.getComponent("elements.AddressTile");
-        var maxSelected = this._maxSelected(this.props.addressList);
-        var addressList = [];
+        const self = this;
+        const AddressTile = sdk.getComponent("elements.AddressTile");
+        const maxSelected = this._maxSelected(this.props.addressList);
+        const addressList = [];
 
         // Only create the address elements if there are address
         if (this.props.addressList.length > 0) {
-            for (var i = 0; i <= maxSelected; i++) {
-                var classes = classNames({
+            for (let i = 0; i <= maxSelected; i++) {
+                const classes = classNames({
                     "mx_AddressSelector_addressListElement": true,
                     "mx_AddressSelector_selected": this.state.selected === i,
                 });
@@ -142,8 +145,14 @@ export default React.createClass({
                         key={this.props.addressList[i].addressType + "/" + this.props.addressList[i].address}
                         ref={(ref) => { this.addressListElement = ref; }}
                     >
-                        <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
-                    </div>
+                        <AddressTile
+                            address={this.props.addressList[i]}
+                            showAddress={this.props.showAddress}
+                            justified={true}
+                            networkName="vector"
+                            networkUrl="img/search-icon-vector.svg"
+                        />
+                    </div>,
                 );
             }
         }
@@ -151,13 +160,13 @@ export default React.createClass({
     },
 
     _maxSelected: function(list) {
-        var listSize = list.length === 0 ? 0 : list.length - 1;
-        var maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
+        const listSize = list.length === 0 ? 0 : list.length - 1;
+        const maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;
     },
 
     render: function() {
-        var classes = classNames({
+        const classes = classNames({
             "mx_AddressSelector": true,
             "mx_AddressSelector_empty": this.props.addressList.length === 0,
         });
@@ -168,5 +177,5 @@ export default React.createClass({
                 { this.createAddressListTiles() }
             </div>
         );
-    }
+    },
 });

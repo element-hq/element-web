@@ -29,21 +29,25 @@ module.exports = function(f, minIntervalMs) {
     this.lastCall = 0;
     this.scheduledCall = undefined;
 
-    var self = this;
-    var wrapper = function() {
-        var now = Date.now();
+    const self = this;
+    const wrapper = function() {
+        const now = Date.now();
 
         if (self.lastCall < now - minIntervalMs) {
             f.apply(this);
-            self.lastCall = now;
+            // get the time again now the function has finished, so if it
+            // took longer than the delay time to execute, it doesn't
+            // immediately become eligible to run again.
+            self.lastCall = Date.now();
         } else if (self.scheduledCall === undefined) {
             self.scheduledCall = setTimeout(
                 () => {
                     self.scheduledCall = undefined;
                     f.apply(this);
-                    self.lastCall = now;
+                    // get time again as per above
+                    self.lastCall = Date.now();
                 },
-                (self.lastCall + minIntervalMs) - now
+                (self.lastCall + minIntervalMs) - now,
             );
         }
     };
@@ -58,9 +62,9 @@ module.exports = function(f, minIntervalMs) {
 
     // make sure that cancelPendingCall is copied when react rebinds the
     // wrapper
-    var _bind = wrapper.bind;
+    const _bind = wrapper.bind;
     wrapper.bind = function() {
-        var rebound = _bind.apply(this, arguments);
+        const rebound = _bind.apply(this, arguments);
         rebound.cancelPendingCall = wrapper.cancelPendingCall;
         return rebound;
     };

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,18 +16,20 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'QuestionDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.node,
-        extraButtons: React.PropTypes.node,
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        title: PropTypes.string,
+        description: PropTypes.node,
+        extraButtons: PropTypes.node,
+        button: PropTypes.string,
+        danger: PropTypes.bool,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -36,6 +39,7 @@ export default React.createClass({
             extraButtons: null,
             focus: true,
             hasCancelButton: true,
+            danger: false,
         };
     },
 
@@ -49,26 +53,29 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const cancelButton = this.props.hasCancelButton ? (
-            <button onClick={this.onCancel}>
-                {_t("Cancel")}
-            </button>
-        ) : null;
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        let primaryButtonClass = "";
+        if (this.props.danger) {
+            primaryButtonClass = "danger";
+        }
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
-                <div className="mx_Dialog_content">
-                    {this.props.description}
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { this.props.description }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button || _t('OK')}
-                    </button>
-                    {this.props.extraButtons}
-                    {cancelButton}
-                </div>
+                <DialogButtons primaryButton={this.props.button || _t('OK')}
+                    primaryButtonClass={primaryButtonClass}
+                    cancelButton={this.props.cancelButton}
+                    hasCancel={this.props.hasCancelButton}
+                    onPrimaryButtonClick={this.onOk}
+                    focus={this.props.focus}
+                    onCancel={this.onCancel}
+                >
+                    { this.props.extraButtons }
+                </DialogButtons>
             </BaseDialog>
         );
     },

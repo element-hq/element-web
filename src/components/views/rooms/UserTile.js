@@ -16,41 +16,42 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 
-var Avatar = require("../../../Avatar");
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-var Modal = require("../../../Modal");
+const Avatar = require("../../../Avatar");
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require('../../../index');
+const dis = require('../../../dispatcher');
+const Modal = require("../../../Modal");
 
 module.exports = React.createClass({
     displayName: 'UserTile',
 
     propTypes: {
-        user: React.PropTypes.any.isRequired // User
+        user: PropTypes.any.isRequired, // User
     },
 
     render: function() {
-        var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var user = this.props.user;
-        var name = user.displayName || user.userId;
-        var active = -1;
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
+        const user = this.props.user;
+        const name = user.displayName || user.userId;
+        let active = -1;
 
         // FIXME: make presence data update whenever User.presence changes...
         active = user.lastActiveAgo ?
             (Date.now() - (user.lastPresenceTs - user.lastActiveAgo)) : -1;
 
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        var avatarJsx = (
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const avatarJsx = (
             <BaseAvatar width={36} height={36} name={name} idName={user.userId}
-                        url={ Avatar.avatarUrlForUser(user, 36, 36, "crop") } />
+                        url={Avatar.avatarUrlForUser(user, 36, 36, "crop")} />
         );
 
         return (
             <EntityTile {...this.props} presenceState={user.presence} presenceActiveAgo={active}
-                presenceCurrentlyActive={ user.currentlyActive }
+                presenceCurrentlyActive={user.currentlyActive}
                 name={name} title={user.userId} avatarJsx={avatarJsx} />
         );
-    }
+    },
 });

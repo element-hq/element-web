@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -30,22 +31,22 @@ export class TextualCompletion extends React.Component {
             subtitle,
             description,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_block', className)} {...restProps}>
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }
 }
 TextualCompletion.propTypes = {
-    title: React.PropTypes.string,
-    subtitle: React.PropTypes.string,
-    description: React.PropTypes.string,
-    className: React.PropTypes.string,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    className: PropTypes.string,
 };
 
 export class PillCompletion extends React.Component {
@@ -56,22 +57,22 @@ export class PillCompletion extends React.Component {
             description,
             initialComponent,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_pill', className)} {...restProps}>
-                {initialComponent}
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                { initialComponent }
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }
 }
 PillCompletion.propTypes = {
-    title: React.PropTypes.string,
-    subtitle: React.PropTypes.string,
-    description: React.PropTypes.string,
-    initialComponent: React.PropTypes.element,
-    className: React.PropTypes.string,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    initialComponent: PropTypes.element,
+    className: PropTypes.string,
 };

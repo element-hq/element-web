@@ -16,24 +16,25 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var Avatar = require('../../../Avatar');
-var sdk = require("../../../index");
+const React = require('react');
+import PropTypes from 'prop-types';
+const Avatar = require('../../../Avatar');
+const sdk = require("../../../index");
 const dispatcher = require("../../../dispatcher");
 
 module.exports = React.createClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
-        member: React.PropTypes.object.isRequired,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string,
+        member: PropTypes.object.isRequired,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
         // The onClick to give the avatar
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
         // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
-        viewUserOnClick: React.PropTypes.bool,
-        title: React.PropTypes.string,
+        viewUserOnClick: PropTypes.bool,
+        title: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -63,14 +64,14 @@ module.exports = React.createClass({
             imageUrl: Avatar.avatarUrlForMember(props.member,
                                          props.width,
                                          props.height,
-                                         props.resizeMethod)
+                                         props.resizeMethod),
         };
     },
 
     render: function() {
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {member, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let {member, onClick, viewUserOnClick, ...otherProps} = this.props;
 
         if (viewUserOnClick) {
             onClick = () => {
@@ -83,7 +84,7 @@ module.exports = React.createClass({
 
         return (
             <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={member.userId} url={this.state.imageUrl} onClick={onClick}/>
+                idName={member.userId} url={this.state.imageUrl} onClick={onClick} />
         );
-    }
+    },
 });

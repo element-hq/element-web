@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Promise from 'bluebird';
 
@@ -64,7 +65,7 @@ export default class EditableTextContainer extends React.Component {
                     errorString: error.toString(),
                     busy: false,
                 });
-            }
+            },
         );
     }
 
@@ -96,22 +97,22 @@ export default class EditableTextContainer extends React.Component {
                     errorString: error.toString(),
                     busy: false,
                 });
-            }
+            },
         );
     }
 
     render() {
         if (this.state.busy) {
-            var Loader = sdk.getComponent("elements.Spinner");
+            const Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader />
             );
         } else if (this.state.errorString) {
             return (
-                <div className="error">{this.state.errorString}</div>
+                <div className="error">{ this.state.errorString }</div>
             );
         } else {
-            var EditableText = sdk.getComponent('elements.EditableText');
+            const EditableText = sdk.getComponent('elements.EditableText');
             return (
                 <EditableText initialValue={this.state.value}
                     placeholder={this.props.placeholder}
@@ -126,21 +127,21 @@ export default class EditableTextContainer extends React.Component {
 
 EditableTextContainer.propTypes = {
     /* callback to retrieve the initial value. */
-    getInitialValue: React.PropTypes.func,
+    getInitialValue: PropTypes.func,
 
     /* initial value; used if getInitialValue is not given */
-    initialValue: React.PropTypes.string,
+    initialValue: PropTypes.string,
 
     /* placeholder text to use when the value is empty (and not being
      * edited) */
-    placeholder: React.PropTypes.string,
+    placeholder: PropTypes.string,
 
     /* callback to update the value. Called with a single argument: the new
      * value. */
-    onSubmit: React.PropTypes.func,
+    onSubmit: PropTypes.func,
 
     /* should the input submit when focus is lost? */
-    blurToSubmit: React.PropTypes.bool,
+    blurToSubmit: PropTypes.bool,
 };
 
 
