@@ -70,27 +70,42 @@ module.exports = function (config) {
             // This isn't required by any of the tests, but it stops karma
             // logging warnings when it serves a 404 for them.
             {
-                pattern: 'src/skins/vector/img/*',
+                pattern: 'node_modules/matrix-react-sdk/res/img/*',
+                watched: false, included: false, served: true, nocache: false,
+            },
+            {
+                pattern: 'res/themes/**',
                 watched: false, included: false, served: true, nocache: false,
             },
         ],
 
         proxies: {
             // redirect img links to the karma server. See above.
-            "/img/": "/base/src/skins/vector/img/",
+            "/img/": "/base/node_modules/matrix-react-sdk/res/img/",
+            "/themes/": "/base/res/themes/",
         },
 
         // preprocess matching files before serving them to the browser
         // available preprocessors:
         // https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            '{src,test}/**/*.js': ['webpack'],
+            '{src,test}/**/*.js': ['webpack', 'sourcemap'],
         },
 
         // test results reporter to use
-        // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'junit'],
+        reporters: ['logcapture', 'spec', 'junit', 'summary'],
+
+        specReporter: {
+            suppressErrorSummary: false, // do print error summary
+            suppressFailed: false, // do print information about failed tests
+            suppressPassed: false, // do print information about passed tests
+            showSpecTiming: true, // print the time elapsed for each spec
+        },
+
+        client: {
+            captureLogs: true,
+        },
 
         // web server port
         port: 9876,
@@ -113,7 +128,22 @@ module.exports = function (config) {
         browsers: [
             'Chrome',
             //'PhantomJS',
+            //'ChromeHeadless'
         ],
+
+        customLaunchers: {
+            'ChromeHeadless': {
+                base: 'Chrome',
+                flags: [
+                    // '--no-sandbox',
+                    // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    '--remote-debugging-port=9222',
+                ],
+            }
+        },
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

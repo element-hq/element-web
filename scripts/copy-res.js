@@ -7,25 +7,37 @@
 // a translation in the app (because having a translation with only
 // 3 strings translated is just frustrating)
 // This could readily be automated, but it's nice to explicitly
-// control when we languages are available.
+// control when new languages are available.
 const INCLUDE_LANGS = [
+    {'value': 'bg', 'label': 'Български'},
+    {'value': 'ca', 'label': 'Català'},
+    {'value': 'cs', 'label': 'čeština'},
+    {'value': 'da', 'label': 'Dansk'},
+    {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'en_EN', 'label': 'English'},
     {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'da', 'label': 'Dansk'},
-    {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
-    {'value': 'nl', 'label': 'Nederlands'},
-    {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'es', 'label': 'Español'},
+    {'value': 'eu', 'label': 'Euskara'},
+    {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
+    {'value': 'gl', 'label': 'Galego'},
     {'value': 'hu', 'label': 'Magyar'},
+    {'value': 'it', 'label': 'Italiano'},
     {'value': 'ko', 'label': '한국어'},
+    {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
+    {'value': 'nl', 'label': 'Nederlands'},
+    {'value': 'nn', 'label': 'Norsk Nynorsk'},
     {'value': 'pl', 'label': 'Polski'},
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
+    {'value': 'sk', 'label': 'Slovenčina'},
+    {'value': 'sr', 'label': 'српски'},
     {'value': 'sv', 'label': 'Svenska'},
-    {'value': 'es', 'label': 'Español'},
+    {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'th', 'label': 'ไทย'},
     {'value': 'tr', 'label': 'Türk'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
@@ -38,10 +50,11 @@ const INCLUDE_LANGS = [
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
     ["res/home.html", "webapp"],
+    ["res/home-status.html", "webapp"],
     ["res/home/**", "webapp/home"],
-    ["res/{media,vector-icons}/**", "webapp"],
-    ["res/flags/*", "webapp/flags/"],
-    ["src/skins/vector/{fonts,img}/**", "webapp"],
+    ["res/vector-icons/**", "webapp/vector-icons"],
+    ["node_modules/matrix-react-sdk/res/{fonts,img,themes,media}/**", "webapp"],
+    ["res/themes/**", "webapp/themes"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", { directwatch: 1 }],
@@ -126,8 +139,19 @@ function next(i, err) {
             const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + source + '.json';
             const riotWebFile = 'src/i18n/strings/' + source + '.json';
 
-            const translations = {};
-            const makeLang = () => { genLangFile(source, dest) };
+            // XXX: Use a debounce because for some reason if we read the language
+            // file immediately after the FS event is received, the file contents
+            // appears empty. Possibly https://github.com/nodejs/node/issues/6112
+            let makeLangDebouncer;
+            const makeLang = () => {
+                if (makeLangDebouncer) {
+                    clearTimeout(makeLangDebouncer);
+                }
+                makeLangDebouncer = setTimeout(() => {
+                    genLangFile(source, dest);
+                }, 500);
+            };
+
             [reactSdkFile, riotWebFile].forEach(function(f) {
                 chokidar.watch(f)
                     .on('add', makeLang)
@@ -153,15 +177,23 @@ function genLangFile(lang, dest) {
     const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + lang + '.json';
     const riotWebFile = 'src/i18n/strings/' + lang + '.json';
 
-    const translations = {};
+    let translations = {};
     [reactSdkFile, riotWebFile].forEach(function(f) {
         if (fs.existsSync(f)) {
-            Object.assign(
-                translations,
-                JSON.parse(fs.readFileSync(f).toString())
-            );
+            try {
+                Object.assign(
+                    translations,
+                    JSON.parse(fs.readFileSync(f).toString())
+                );
+            } catch (e) {
+                console.error("Failed: " + f, e);
+                throw e;
+            }
         }
     });
+
+    translations = weblateToCounterpart(translations);
+
     fs.writeFileSync(dest + lang + '.json', JSON.stringify(translations, null, 4));
     if (verbose) {
         console.log("Generated language file: " + lang);
@@ -188,6 +220,40 @@ function genLangList() {
     if (verbose) {
         console.log("Generated languages.json");
     }
+}
+
+/**
+ * Convert translation key from weblate format
+ * (which only supports a single level) to counterpart
+ * which requires object values for 'count' translations.
+ *
+ * eg.
+ *     "there are %(count)s badgers|one": "a badger",
+ *     "there are %(count)s badgers|other": "%(count)s badgers"
+ *   becomes
+ *     "there are %(count)s badgers": {
+ *         "one": "a badger",
+ *         "other": "%(count)s badgers"
+ *     }
+ */
+function weblateToCounterpart(inTrs) {
+    const outTrs = {};
+
+    for (const key of Object.keys(inTrs)) {
+        const keyParts = key.split('|', 2);
+        if (keyParts.length === 2) {
+            let obj = outTrs[keyParts[0]];
+            if (obj === undefined) {
+                obj = {};
+                outTrs[keyParts[0]] = obj;
+            }
+            obj[keyParts[1]] = inTrs[key];
+        } else {
+            outTrs[key] = inTrs[key];
+        }
+    }
+
+    return outTrs;
 }
 
 genLangList();
