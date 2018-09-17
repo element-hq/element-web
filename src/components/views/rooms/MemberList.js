@@ -45,9 +45,7 @@ module.exports = React.createClass({
         this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
-            // true means will not show a spinner but the
-            // known members so far if not joined
-            this._waitForMembersIfJoinedAndLL(true);
+            this._showMembersAccordingToMembershipWithLL();
             cli.on("Room.myMembership", this.onMyMembership);
         } else {
             this._listenForMembersChanges();
@@ -92,14 +90,15 @@ module.exports = React.createClass({
     /**
      * If lazy loading is enabled, either:
      * show a spinner and load the members if the user is joined,
-     * or show the members available so far if initial=true
+     * or show the members available so far if the user is invited
      */
-    _waitForMembersIfJoinedAndLL: async function(initial) {
+    _showMembersAccordingToMembershipWithLL: async function() {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             const cli = MatrixClientPeg.get();
             const room = cli.getRoom(this.props.roomId);
-            if (room && room.getMyMembership() === 'join') {
+            const membership = room && room.getMyMembership();
+            if (membership === "join") {
                 this.setState({loading: true});
                 try {
                     await room.loadMembersIfNeeded();
@@ -108,8 +107,8 @@ module.exports = React.createClass({
                     this.setState(this._getMembersState(this.roomMembers()));
                     this._listenForMembersChanges();
                 }
-            } else if(initial) {
-                // show the members we've got
+            } else if (membership === "invite") {
+                // show the members we've got when invited
                 this.setState(this._getMembersState(this.roomMembers()));
             }
         }
@@ -150,12 +149,12 @@ module.exports = React.createClass({
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        this._waitForMembersIfJoinedAndLL();
+        this._showMembersAccordingToMembershipWithLL();
     },
 
     onMyMembership: function(room, membership, oldMembership) {
         if (room.roomId === this.props.roomId && membership === "join") {
-            this._waitForMembersIfJoinedAndLL();
+            this._showMembersAccordingToMembershipWithLL();
         }
     },
 
