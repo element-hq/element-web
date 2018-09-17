@@ -199,7 +199,7 @@ function textForMessageEvent(ev) {
 }
 
 function textForRoomAliasesEvent(ev) {
-    const senderName = event.sender ? event.sender.name : event.getSender();
+    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAliases = ev.getPrevContent().aliases || [];
     const newAliases = ev.getContent().aliases || [];
 
@@ -211,13 +211,13 @@ function textForRoomAliasesEvent(ev) {
     }
 
     if (addedAliases.length && !removedAliases.length) {
-        return _t('%(senderName)s added %(addedAddresses)s as addresses for this room.', {
+        return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: addedAliases.length,
             addedAddresses: addedAliases.join(', '),
         });
     } else if (!addedAliases.length && removedAliases.length) {
-        return _t('%(senderName)s removed %(removedAddresses)s as addresses for this room.', {
+        return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
             senderName: senderName,
             count: removedAliases.length,
             removedAddresses: removedAliases.join(', '),
@@ -228,17 +228,10 @@ function textForRoomAliasesEvent(ev) {
             addedAddresses: addedAliases.join(', '),
             removedAddresses: removedAliases.join(', '),
         };
-        /* eslint-disable max-len */
-        if (addedAliases.length === 1 && removedAliases.length === 1) {
-            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|one,one', args);
-        } else if (addedAliases.length !== 1 && removedAliases.length === 1) {
-            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|other,one', args);
-        } else if (addedAliases.length === 1 && removedAliases.length !== 1) {
-            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|one,other', args);
-        } else {
-            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|other,other', args);
-        }
-        /* eslint-enable max-len */
+        return _t(
+            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.',
+            args,
+        );
     }
 }
 

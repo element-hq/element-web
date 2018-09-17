@@ -14,6 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/****************************************************************
+ **                                                            **
+ **  THIS CLASS IS NOT USED TO RENDER ALIAS CHANGES, IN ORDER  **
+ **  TO TRY TO KEEP THINGS SIMPLE AND JUST USE TextualEvent.   **
+ **                                                            **
+ **  The code is kept here for ease of reference in future     **
+ **  should we need the GenericEventListSummary stuff          **
+ **                                                            **
+ ****************************************************************/
+
 'use strict';
 
 import React from 'react';
@@ -69,10 +79,8 @@ export class GenericEventListSummary extends React.Component {
         let summaryContainer = null;
         if (showSummary) {
             summaryContainer = (
-                <div className="mx_EventTile_line">
-                    <div className="mx_EventTile_info">
-                        {this.props.summary}
-                    </div>
+                <div>
+                    {this.props.summary}
                 </div>
             );
         }
@@ -140,10 +148,14 @@ export default class RoomAliasesEvent extends React.Component {
 
             const changes = [];
             addedAliases.forEach((alias) => {
-                changes.push(<div key={'+' + alias}>Added {alias}</div>);
+                changes.push(<div key={'+' + alias}>{_t('%(senderName)s added %(alias)s', {
+                    senderName, alias,
+                })}</div>);
             });
             removedAliases.forEach((alias) => {
-                changes.push(<div key={'-' + alias}>Removed {alias}</div>);
+                changes.push(<div key={'-' + alias}>{_t('%(senderName)s removed %(alias)s', {
+                    senderName, alias,
+                })}</div>);
             });
 
             const summary = _t('%(senderName)s changed the addresses of this room.', {senderName});
