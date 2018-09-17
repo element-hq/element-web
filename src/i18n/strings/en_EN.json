@@ -972,6 +972,8 @@
     "No backup found!": "No backup found!",
     "Failed to decrypt %(failedCount)s sessions!": "Failed to decrypt %(failedCount)s sessions!",
     "Restored %(sessionCount)s session keys": "Restored %(sessionCount)s session keys",
+    "This looks like a valid recovery key!": "This looks like a valid recovery key!",
+    "Not a valid recovery key": "Not a valid recovery key",
     "Please enter the recovery key generated when you set up key backup": "Please enter the recovery key generated when you set up key backup",
     "Recover": "Recover",
     "Restore Key Backup": "Restore Key Backup",

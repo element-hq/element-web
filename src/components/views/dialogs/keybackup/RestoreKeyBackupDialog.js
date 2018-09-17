@@ -24,6 +24,10 @@ import Promise from 'bluebird';
 
 import { _t, _td } from '../../../../languageHandler';
 
+function isRecoveryKeyValid(r) {
+    return MatrixClientPeg.get().isValidRecoveryKey(r.replace(/ /g, ''));
+}
+
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
@@ -36,6 +40,7 @@ export default React.createClass({
             restoreError: null,
             recoveryKey: "",
             recoverInfo: null,
+            recoveryKeyValid: false,
         };
     },
 
@@ -52,7 +57,10 @@ export default React.createClass({
     },
 
     _onRecoveryKeyChange: function(e) {
-        this.setState({recoveryKey: e.target.value});
+        this.setState({
+            recoveryKey: e.target.value,
+            recoveryKeyValid: isRecoveryKeyValid(e.target.value),
+        });
     },
 
     _onRecoverClick: async function() {
@@ -125,6 +133,20 @@ export default React.createClass({
             </div>;
         } else {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+
+            let keyStatus;
+            if (this.state.recoveryKey.length === 0) {
+                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus"></div>;
+            } else if (this.state.recoveryKeyValid) {
+                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus">
+                    {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
+                </div>;
+            } else {
+                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus">
+                    {"\uD83D\uDC4E "}{_t("Not a valid recovery key")}
+                </div>;
+            }
+
             content = <div>
                 {_t("Please enter the recovery key generated when you set up key backup")}<br />
                 <textarea 
@@ -133,11 +155,13 @@ export default React.createClass({
                     style={{width: "90%"}}
                     autoFocus={true}
                 />
+                {keyStatus}
                 <DialogButtons primaryButton={_t('Recover')}
                     onPrimaryButtonClick={this._onRecoverClick}
                     hasCancel={true}
                     onCancel={this._onCancel}
                     focus={false}
+                    primaryDisabled={!this.state.recoveryKeyValid}
                 />
             </div>;
         }
