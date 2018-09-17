@@ -154,10 +154,6 @@ module.exports = React.createClass({
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-
-        // also when peeking, we need to await the members being loaded
-        // before showing them.
-
         this._waitForMembersIfJoinedAndLL();
     },
 
