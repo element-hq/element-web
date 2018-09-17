@@ -314,16 +314,6 @@ module.exports = React.createClass({
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
-
-                // lazy load members if enabled
-                if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-                    room.loadMembersIfNeeded().catch((err) => {
-                        const errorMessage = `Fetching room members for ${room.roomId} failed.` +
-                            " Room members will appear incomplete.";
-                        console.error(errorMessage);
-                        console.error(err);
-                    });
-                }
             }
         }
     },
@@ -592,6 +582,23 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        this._loadMembersIfJoined();
+    },
+
+    _loadMembersIfJoined: function() {
+        // lazy load members if enabled
+        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(this.state.roomId);
+            if (room && room.getMyMembership() === 'join') {
+                room.loadMembersIfNeeded().catch((err) => {
+                    const errorMessage = `Fetching room members for ${room.roomId} failed.` +
+                        " Room members will appear incomplete.";
+                    console.error(errorMessage);
+                    console.error(err);
+                });
+            }
+        }
     },
 
     _warnAboutEncryption: function(room) {
@@ -705,6 +712,7 @@ module.exports = React.createClass({
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
         if (member.userId == MatrixClientPeg.get().credentials.userId) {
+            this._loadMembersIfJoined();
             this.forceUpdate();
         }
     },
