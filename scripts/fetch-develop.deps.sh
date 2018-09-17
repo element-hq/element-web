@@ -52,7 +52,7 @@ function dodep() {
     echo "$repo set to branch "`git -C "$repo" rev-parse --abbrev-ref HEAD`
 
     mkdir -p node_modules
-    npm link "../$repo"  # This does an npm install for us
+    npm link "./$repo"  # This does an npm install for us
 }
 
 ##############################
