@@ -27,10 +27,10 @@ module.exports = class RestSessionCreator {
         this.cwd = cwd;
     }
 
-    async createSessionRange(usernames, password) {
+    async createSessionRange(usernames, password, groupName) {
         const sessionPromises = usernames.map((username) => this.createSession(username, password));
         const sessions = await Promise.all(sessionPromises);
-        return new RestMultiSession(sessions);
+        return new RestMultiSession(sessions, groupName);
     }
 
     async createSession(username, password) {

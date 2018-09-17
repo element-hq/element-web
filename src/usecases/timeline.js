@@ -64,10 +64,7 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     if (isExpectedMessage) {
         assertMessage(lastMessage, expectedMessage);
     } else {
-        await session.page.waitForResponse(async (response) => {
-            if (response.request().url().indexOf("/sync") === -1) {
-                return false;
-            }
+        await session.waitForSyncResponseWith(async (response) => {
             const body = await response.text();
             if (expectedMessage.encrypted) {
                 return body.indexOf(expectedMessage.sender) !== -1 &&

@@ -41,7 +41,7 @@ module.exports = async function scenario(createSession, restCreator) {
 
 async function createRestUsers(restCreator) {
     const usernames = range(1, 10).map((i) => `charly-${i}`);
-    const charlies = await restCreator.createSessionRange(usernames, 'testtest');
+    const charlies = await restCreator.createSessionRange(usernames, "testtest", "charly-1..10");
     await charlies.setDisplayName((s) => `Charly #${s.userName().split('-')[1]}`);
     return charlies;
 }
