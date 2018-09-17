@@ -199,6 +199,11 @@ function textForMessageEvent(ev) {
 }
 
 function textForRoomAliasesEvent(ev) {
+    // An alternative implementation of this as a first-class event can be found at
+    // https://github.com/matrix-org/matrix-react-sdk/blob/dc7212ec2bd12e1917233ed7153b3e0ef529a135/src/components/views/messages/RoomAliasesEvent.js
+    // This feels a bit overkill though, and it's not clear the i18n really needs it
+    // so instead it's landing as a simple textual event.
+
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAliases = ev.getPrevContent().aliases || [];
     const newAliases = ev.getContent().aliases || [];
