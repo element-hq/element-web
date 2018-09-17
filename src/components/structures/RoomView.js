@@ -598,7 +598,7 @@ module.exports = React.createClass({
                     if (!this.unmounted) {
                         this.setState({membersLoaded: true});
                     }
-                } catch(err) {
+                } catch (err) {
                     const errorMessage = `Fetching room members for ${room.roomId} failed.` +
                         " Room members will appear incomplete.";
                     console.error(errorMessage);

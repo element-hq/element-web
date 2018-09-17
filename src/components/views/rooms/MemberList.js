@@ -107,7 +107,7 @@ module.exports = React.createClass({
                 this.setState({loading: true});
                 try {
                     await room.loadMembersIfNeeded();
-                } catch(ex) {/* already logged in RoomView */}
+                } catch (ex) {/* already logged in RoomView */}
                 if (this._mounted) {
                     this.setState(this._getMembersState(this.roomMembers()));
                     this._listenForMembersChanges();
