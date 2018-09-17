@@ -91,13 +91,16 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        const llMembers = MatrixClientPeg.get().hasLazyLoadMembersEnabled();
         return {
             room: null,
             roomId: null,
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
-
+            // used to trigger a rerender in TimelinePanel once the members are loaded,
+            // so RR are rendered again (now with the members available), ...
+            membersLoaded: !llMembers,
             // The event to be scrolled to initially
             initialEventId: null,
             // The offset in pixels from the event with which to scroll vertically
@@ -593,7 +596,7 @@ module.exports = React.createClass({
                 try {
                     await room.loadMembersIfNeeded();
                     if (!this.unmounted) {
-                        this.forceUpdate();
+                        this.setState({membersLoaded: true});
                     }
                 } catch(err) {
                     const errorMessage = `Fetching room members for ${room.roomId} failed.` +
@@ -1765,6 +1768,7 @@ module.exports = React.createClass({
                 onReadMarkerUpdated={this._updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
+                membersLoaded={this.state.membersLoaded}
             />);
 
         let topUnreadMessagesBar = null;
