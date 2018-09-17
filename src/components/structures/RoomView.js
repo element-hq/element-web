@@ -590,8 +590,8 @@ module.exports = React.createClass({
 
     _loadMembersIfJoined: async function(room) {
         // lazy load members if enabled
-        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-            const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
             if (room && room.getMyMembership() === 'join') {
                 try {
                     await room.loadMembersIfNeeded();
