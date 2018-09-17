@@ -34,9 +34,10 @@ module.exports = React.createClass({
     getInitialState: function() {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
-            return {loading: true};
+            // show an empty list
+            return this._getMembersState([]);
         } else {
-            return this._getMembersState();
+            return this._getMembersState(this.roomMembers());
         }
     },
 
@@ -46,6 +47,7 @@ module.exports = React.createClass({
         if (cli.hasLazyLoadMembersEnabled()) {
             // true means will not show a spinner but the
             // known members so far if not joined
+            this._loadMembersIfNeeded(true);
             cli.on("Room.myMembership", this.onMyMembership);
         } else {
             this._listenForMembersChanges();
@@ -73,7 +75,6 @@ module.exports = React.createClass({
 
     componentDidMount: async function() {
         this._mounted = true;
-        this._loadMembersIfNeeded(true);
     },
 
     componentWillUnmount: function() {
@@ -104,18 +105,17 @@ module.exports = React.createClass({
                     await room.loadMembersIfNeeded();
                 } catch(ex) {/* already logged in RoomView */}
                 if (this._mounted) {
-                    this.setState(this._getMembersState());
+                    this.setState(this._getMembersState(this.roomMembers()));
                     this._listenForMembersChanges();
                 }
             } else if(initial) {
                 // show the members we've got
-                this.setState(this._getMembersState());
+                this.setState(this._getMembersState(this.roomMembers()));
             }
         }
     },
 
-    _getMembersState: function() {
-        const members = this.roomMembers();
+    _getMembersState: function(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
         return {
