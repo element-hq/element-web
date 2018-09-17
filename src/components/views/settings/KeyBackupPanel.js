@@ -164,7 +164,12 @@ export default class KeyBackupPanel extends React.Component {
                     device: sub => <span className="mx_KeyBackupPanel_deviceName">{sig.device.getDisplayName()}</span>,
                 };
                 let sigStat;
-                if (sig.valid && sig.device.isVerified()) {
+                if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()) {
+                    sigStat = _t(
+                        "Backup has a <validity>valid</validity> signature from this device",
+                        {}, sigStatSub,
+                    );
+                } else if (sig.valid && sig.device.isVerified()) {
                     sigStat = _t(
                         "Backup has a <validity>valid</validity> signature from " +
                         "<verify>verified</verify> device <device>x</device>",
