@@ -582,14 +582,13 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
-        this._loadMembersIfJoined();
+        this._loadMembersIfJoined(room);
     },
 
-    _loadMembersIfJoined: async function() {
+    _loadMembersIfJoined: async function(room) {
         // lazy load members if enabled
         if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(this.state.roomId);
             if (room && room.getMyMembership() === 'join') {
                 try {
                     await room.loadMembersIfNeeded();
