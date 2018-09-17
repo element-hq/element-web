@@ -42,7 +42,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this._mounted = false;
+        this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             // true means will not show a spinner but the
@@ -71,10 +71,6 @@ module.exports = React.createClass({
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
-    },
-
-    componentDidMount: async function() {
-        this._mounted = true;
     },
 
     componentWillUnmount: function() {
