@@ -29,6 +29,7 @@ export default class KeyBackupPanel extends React.Component {
         this._deleteBackup = this._deleteBackup.bind(this);
         this._verifyDevice = this._verifyDevice.bind(this);
         this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
+        this._restoreBackup = this._restoreBackup.bind(this);
 
         this._unmounted = false;
         this.state = {
@@ -47,7 +48,9 @@ export default class KeyBackupPanel extends React.Component {
     componentWillUnmount() {
         this._unmounted = true;
 
-        MatrixClientPeg.get().removeListener('keyBackupStatus', this._onKeyBackupStatus);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener('keyBackupStatus', this._onKeyBackupStatus);
+        }
     }
 
     _onKeyBackupStatus() {
@@ -102,6 +105,12 @@ export default class KeyBackupPanel extends React.Component {
                     this._loadBackupStatus();
                 });
             },
+        });
+    }
+
+    _restoreBackup() {
+        const RestoreKeyBackupDialog = sdk.getComponent("dialogs.keybackup.RestoreKeyBackupDialog");
+        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         });
     }
 
@@ -204,6 +213,10 @@ export default class KeyBackupPanel extends React.Component {
                 {clientBackupStatus}<br />
                 <div>{backupSigStatuses}</div><br />
                 <br />
+                <AccessibleButton className="mx_UserSettings_button"
+                        onClick={this._restoreBackup}>
+                    { _t("Restore backup") }
+                </AccessibleButton>&nbsp;&nbsp;&nbsp;
                 <AccessibleButton className="mx_UserSettings_button danger"
                         onClick={this._deleteBackup}>
                     { _t("Delete backup") }
