@@ -47,7 +47,7 @@ module.exports = React.createClass({
         if (cli.hasLazyLoadMembersEnabled()) {
             // true means will not show a spinner but the
             // known members so far if not joined
-            this._loadMembersIfNeeded(true);
+            this._waitForMembersIfJoinedAndLL(true);
             cli.on("Room.myMembership", this.onMyMembership);
         } else {
             this._listenForMembersChanges();
@@ -93,7 +93,12 @@ module.exports = React.createClass({
         this._updateList.cancelPendingCall();
     },
 
-    _loadMembersIfNeeded: async function(initial) {
+    /**
+     * If lazy loading is enabled, either:
+     * show a spinner and load the members if the user is joined,
+     * or show the members available so far if initial=true
+     */
+    _waitForMembersIfJoinedAndLL: async function(initial) {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             const cli = MatrixClientPeg.get();
@@ -153,12 +158,12 @@ module.exports = React.createClass({
         // also when peeking, we need to await the members being loaded
         // before showing them.
 
-        this._loadMembersIfNeeded();
+        this._waitForMembersIfJoinedAndLL();
     },
 
     onMyMembership: function(room, membership, oldMembership) {
         if (room.roomId === this.props.roomId && membership === "join") {
-            this._loadMembersIfNeeded();
+            this._waitForMembersIfJoinedAndLL();
         }
     },
 
