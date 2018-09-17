@@ -87,7 +87,6 @@ module.exports = React.createClass({
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
             cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
-            // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -131,34 +130,6 @@ module.exports = React.createClass({
             searchQuery: "",
         };
     },
-
-/*
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        // ignore anything but real-time updates at the end of the room:
-        // updates from pagination will happen when the paginate completes.
-        if (toStartOfTimeline || !data || !data.liveEvent) return;
-
-        // treat any activity from a user as implicit presence to update the
-        // ordering of the list whenever someone says something.
-        // Except right now we're not tiebreaking "active now" users in this way
-        // so don't bother for now.
-        if (ev.getSender()) {
-            // console.log("implicit presence from " + ev.getSender());
-
-            var tile = this.refs[ev.getSender()];
-            if (tile) {
-                // work around a race where you might have a room member object
-                // before the user object exists.  XXX: why does this ever happen?
-                var all_members = room.currentState.members;
-                var userId = ev.getSender();
-                if (all_members[userId].user === null) {
-                    all_members[userId].user = MatrixClientPeg.get().getUser(userId);
-                }
-                this._updateList(); // reorder the membership list
-            }
-        }
-    },
-*/
 
     onUserLastPresenceTs(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
