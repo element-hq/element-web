@@ -43,11 +43,14 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this._mounted = false;
         const cli = MatrixClientPeg.get();
-        if (!cli.hasLazyLoadMembersEnabled()) {
+        if (cli.hasLazyLoadMembersEnabled()) {
+            // true means will not show a spinner but the
+            // known members so far if not joined
+            cli.on("Room.myMembership", this.onMyMembership);
+        } else {
             this._listenForMembersChanges();
         }
         cli.on("Room", this.onRoom); // invites & joining after peek
-        cli.on("RoomMember.membership", this.onRoomMembership); // update when accepting an invite
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
         this._showPresence = true;
@@ -79,7 +82,7 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
-            cli.removeListener("RoomMember.membership", this.onRoomMembership);
+            cli.removeListener("Room.myMembership", this.onMyMembership);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
             cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
@@ -182,12 +185,8 @@ module.exports = React.createClass({
         this._loadMembersIfNeeded();
     },
 
-    onRoomMembership: function(ev, member, oldMembership) {
-        const cli = MatrixClientPeg.get();
-        const myId = cli.getUserId();
-        if (member.userId === myId && oldMembership !== "join" && member.membership === "join") {
-            // once we've joined, no need to listen for membership anymore
-            cli.removeListener("RoomMember.membership", this.onRoomMembership);
+    onMyMembership: function(room, membership, oldMembership) {
+        if (room.roomId === this.props.roomId && membership === "join") {
             this._loadMembersIfNeeded();
         }
     },

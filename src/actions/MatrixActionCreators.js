@@ -149,7 +149,7 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
  */
 
 /**
- * Create a MatrixActions.Room.selfMembership action that represents
+ * Create a MatrixActions.Room.myMembership action that represents
  * a MatrixClient `RoomMember.membership` matrix event for the syncing user,
  * emitted when the member's membership is updated.
  *
@@ -159,11 +159,8 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
  * @param {string} oldMembership the member's previous membership.
  * @returns {RoomMembershipAction} an action of type `MatrixActions.RoomMember.membership`.
  */
-function createSelfRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
-    if (member.userId === matrixClient.getUserId()) {
-        return { action: 'MatrixActions.Room.selfMembership', member };
-    }
-    return null;
+function createSelfMembershipAction(matrixClient, room, membership, oldMembership) {
+    return { action: 'MatrixActions.Room.myMembership',  room, membership, oldMembership};
 }
 
 /**
@@ -205,7 +202,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
-        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createSelfRoomMembershipAction);
+        this._addMatrixClientListener(matrixClient, 'Room.myMembership', createSelfMembershipAction);
         this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
     },
 
