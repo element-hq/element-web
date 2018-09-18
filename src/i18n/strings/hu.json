@@ -1270,5 +1270,10 @@
     "Registration Required": "Regisztrációt igényel",
     "You need to register to do this. Would you like to register now?": "Hogy ezt megtedd regisztrálnod kell. Szeretnél regisztrálni?",
     "Unable to query for supported registration methods": "A támogatott regisztrációs folyamatok listáját nem sikerült lekérdezni",
-    "Unable to connect to Homeserver. Retrying...": "A matrix szerverrel nem lehet felvenni a kapcsolatot. Újrapróbálkozás..."
+    "Unable to connect to Homeserver. Retrying...": "A matrix szerverrel nem lehet felvenni a kapcsolatot. Újrapróbálkozás...",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s szoba címnek beállította: %(addedAddresses)s.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s szoba címnek hozzáadta: %(addedAddresses)s.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s törölte a szoba címek közül: %(removedAddresses)s.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s törölte a szoba címek közül: %(removedAddresses)s.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s hozzáadta a szoba címekhez: %(addedAddresses)s és törölte a címek közül: %(removedAddresses)s."
 }
