@@ -48,8 +48,6 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 
-import SuggestKeyRestoreHandler from "../../SuggestKeyRestoreHandler";
-
 /** constants for MatrixChat.state.view */
 const VIEWS = {
     // a special initial state which is only used at startup, while we are
@@ -1359,11 +1357,6 @@ export default React.createClass({
         });
         cli.on("crypto.roomKeyRequestCancellation", (req) => {
             krh.handleKeyRequestCancellation(req);
-        });
-
-        const skrh = new SuggestKeyRestoreHandler(cli);
-        cli.on("crypto.suggestKeyRestore", () => {
-            skrh.handleSuggestKeyRestore();
         });
 
         cli.on("Room", (room) => {
