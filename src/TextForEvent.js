@@ -198,6 +198,48 @@ function textForMessageEvent(ev) {
     return message;
 }
 
+function textForRoomAliasesEvent(ev) {
+    // An alternative implementation of this as a first-class event can be found at
+    // https://github.com/matrix-org/matrix-react-sdk/blob/dc7212ec2bd12e1917233ed7153b3e0ef529a135/src/components/views/messages/RoomAliasesEvent.js
+    // This feels a bit overkill though, and it's not clear the i18n really needs it
+    // so instead it's landing as a simple textual event.
+
+    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const oldAliases = ev.getPrevContent().aliases || [];
+    const newAliases = ev.getContent().aliases || [];
+
+    const addedAliases = newAliases.filter((x) => !oldAliases.includes(x));
+    const removedAliases = oldAliases.filter((x) => !newAliases.includes(x));
+
+    if (!addedAliases.length && !removedAliases.length) {
+        return '';
+    }
+
+    if (addedAliases.length && !removedAliases.length) {
+        return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            count: addedAliases.length,
+            addedAddresses: addedAliases.join(', '),
+        });
+    } else if (!addedAliases.length && removedAliases.length) {
+        return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            count: removedAliases.length,
+            removedAddresses: removedAliases.join(', '),
+        });
+    } else {
+        const args = {
+            senderName: senderName,
+            addedAddresses: addedAliases.join(', '),
+            removedAddresses: removedAliases.join(', '),
+        };
+        return _t(
+            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.',
+            args,
+        );
+    }
+}
+
 function textForCallAnswerEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
@@ -359,6 +401,7 @@ const handlers = {
 };
 
 const stateHandlers = {
+    'm.room.aliases': textForRoomAliasesEvent,
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,

@@ -85,15 +85,15 @@
     "react-dom": "^15.6.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "resize-observer-polyfill": "^1.5.0",
+    "sanitize-html": "^1.18.4",
     "slate": "0.34.7",
-    "slate-react": "^0.12.4",
     "slate-html-serializer": "^0.6.1",
     "slate-md-serializer": "matrix-org/slate-md-serializer#f7c4ad3",
-    "sanitize-html": "^1.18.4",
+    "slate-react": "^0.12.4",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-vector": "vector-im/velocity#059e3b2",
-    "whatwg-fetch": "^1.0.0"
+    "whatwg-fetch": "^1.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.2",
