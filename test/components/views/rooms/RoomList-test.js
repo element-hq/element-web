@@ -74,6 +74,7 @@ describe('RoomList', () => {
         // Mock joined member
         myMember = new RoomMember(movingRoomId, myUserId);
         myMember.membership = 'join';
+        movingRoom.updateMyMembership('join');
         movingRoom.getMember = (userId) => ({
             [client.credentials.userId]: myMember,
         }[userId]);
@@ -81,6 +82,7 @@ describe('RoomList', () => {
         otherRoom = createRoom({name: 'Other room'});
         myOtherMember = new RoomMember(otherRoom.roomId, myUserId);
         myOtherMember.membership = 'join';
+        otherRoom.updateMyMembership('join');
         otherRoom.getMember = (userId) => ({
             [client.credentials.userId]: myOtherMember,
         }[userId]);
