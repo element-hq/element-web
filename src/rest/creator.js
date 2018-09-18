@@ -35,11 +35,12 @@ module.exports = class RestSessionCreator {
 
     async createSession(username, password) {
         await this._register(username, password);
+        console.log(` * created REST user ${username} ... done`);
         const authResult = await this._authenticate(username, password);
         return new RestSession(authResult);
     }
 
-    _register(username, password) {
+    async _register(username, password) {
         const registerArgs = [
             '-c homeserver.yaml',
             `-u ${username}`,
@@ -55,11 +56,14 @@ module.exports = class RestSessionCreator {
             registerCmd
         ].join(';');
 
-        return exec(allCmds, {cwd: this.cwd, encoding: 'utf-8'}).catch((result) => {
+        try {
+            await exec(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
+        } catch (result) {
             const lines = result.stdout.trim().split('\n');
             const failureReason = lines[lines.length - 1];
-            throw new Error(`creating user ${username} failed: ${failureReason}`);
-        });
+            const logs = (await exec("tail -n 100 synapse/installations/consent/homeserver.log")).stdout;
+            throw new Error(`creating user ${username} failed: ${failureReason}, synapse logs:\n${logs}`);
+        }
     }
 
     async _authenticate(username, password) {
