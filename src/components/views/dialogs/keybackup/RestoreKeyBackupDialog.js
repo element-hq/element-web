@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Modal from '../../../../Modal';
 import React from 'react';
-import PropTypes from 'prop-types';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
-import { formatCryptoKey } from '../../../../utils/FormattingUtils';
-import Promise from 'bluebird';
 
-import { _t, _td } from '../../../../languageHandler';
+import { _t } from '../../../../languageHandler';
 
 function isRecoveryKeyValid(r) {
     return MatrixClientPeg.get().isValidRecoveryKey(r.replace(/ /g, ''));
@@ -149,7 +145,7 @@ export default React.createClass({
 
             content = <div>
                 {_t("Please enter the recovery key generated when you set up key backup")}<br />
-                <textarea 
+                <textarea
                     onChange={this._onRecoveryKeyChange}
                     value={this.state.recoveryKey}
                     style={{width: "90%"}}
