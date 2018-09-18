@@ -19,7 +19,7 @@ const acceptInvite = require("./accept-invite")
 module.exports = async function acceptServerNoticesInviteAndConsent(session) {
     await acceptInvite(session, "Server Notices");
     session.log.step(`accepts terms & conditions`);
-    const consentLink = await session.waitAndQuery(".mx_EventTile_body a");
+    const consentLink = await session.waitAndQuery(".mx_EventTile_body a", 10000);
     const termsPagePromise = session.waitForNewPage();
     await consentLink.click();
     const termsPage = await termsPagePromise;
