@@ -1,6 +1,6 @@
 #!/bin/bash
 # config
-SYNAPSE_BRANCH=bwindels/adminapibeforepy277
+SYNAPSE_BRANCH=develop
 INSTALLATION_NAME=consent
 SERVER_DIR=installations/$INSTALLATION_NAME
 CONFIG_TEMPLATE=consent
