@@ -22,7 +22,7 @@ const roomDirectoryScenarios = require('./scenarios/directory');
 const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
 
-module.exports = async function scenario(createSession, restCreator) {
+module.exports = async function scenario(createSession, restCreator, runningOnTravis) {
     async function createUser(username) {
         const session = await createSession(username);
         await signup(session, session.username, 'testtest', session.hsUrl);
@@ -32,11 +32,20 @@ module.exports = async function scenario(createSession, restCreator) {
 
     const alice = await createUser("alice");
     const bob = await createUser("bob");
-    const charlies = await createRestUsers(restCreator);
 
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
-    await lazyLoadingScenarios(alice, bob, charlies);
+
+    // disable LL tests until we can run synapse on anything > than 2.7.7 as
+    // /admin/register fails with a missing method.
+    // either switch to python3 on synapse,
+    // blocked on https://github.com/matrix-org/synapse/issues/3900
+    // or use a more recent version of ubuntu
+    // or switch to circleci?
+    if (!runningOnTravis) {
+        const charlies = await createRestUsers(restCreator);
+        await lazyLoadingScenarios(alice, bob, charlies);
+    }
 }
 
 async function createRestUsers(restCreator) {
