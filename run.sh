@@ -15,5 +15,5 @@ trap 'handle_error' ERR
 
 ./synapse/start.sh
 ./riot/start.sh
-node start.js --travis
+node start.js $@
 stop_servers
