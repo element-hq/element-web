@@ -1269,5 +1269,10 @@
     "Registration Required": "Registrazione necessaria",
     "You need to register to do this. Would you like to register now?": "Devi registrarti per eseguire questa azione. Vuoi registrarti ora?",
     "Unable to connect to Homeserver. Retrying...": "Impossibile connettersi all'homeserver. Riprovo...",
-    "Unable to query for supported registration methods": "Impossibile richiedere i metodi di registrazione supportati"
+    "Unable to query for supported registration methods": "Impossibile richiedere i metodi di registrazione supportati",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s ha aggiunto %(addedAddresses)s come indirizzo per questa stanza.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s ha aggiunto %(addedAddresses)s come indirizzi per questa stanza.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s ha rimosso %(removedAddresses)s tra gli indirizzi di questa stanza.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s ha rimosso %(removedAddresses)s tra gli indirizzi di questa stanza.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s ha aggiunto %(addedAddresses)s e rimosso %(removedAddresses)s tra gli indirizzi di questa stanza."
 }
