@@ -144,26 +144,25 @@ function createRoomTimelineAction(matrixClient, timelineEvent, room, toStartOfTi
 /**
  * @typedef RoomMembershipAction
  * @type {Object}
- * @property {string} action 'MatrixActions.RoomMember.membership'.
- * @property {RoomMember} member the member whose membership was updated.
+ * @property {string} action 'MatrixActions.Room.myMembership'.
+ * @property {Room} room to room for which the self-membership changed.
+ * @property {string} membership the new membership
+ * @property {string} oldMembership the previous membership, can be null.
  */
 
 /**
- * Create a MatrixActions.Room.selfMembership action that represents
- * a MatrixClient `RoomMember.membership` matrix event for the syncing user,
- * emitted when the member's membership is updated.
+ * Create a MatrixActions.Room.myMembership action that represents
+ * a MatrixClient `Room.myMembership` event for the syncing user,
+ * emitted when the syncing user's membership is updated for a room.
  *
  * @param {MatrixClient} matrixClient the matrix client.
- * @param {MatrixEvent} membershipEvent the m.room.member event.
- * @param {RoomMember} member the member whose membership was updated.
- * @param {string} oldMembership the member's previous membership.
- * @returns {RoomMembershipAction} an action of type `MatrixActions.RoomMember.membership`.
+ * @param {Room} room to room for which the self-membership changed.
+ * @param {string} membership the new membership
+ * @param {string} oldMembership the previous membership, can be null.
+ * @returns {RoomMembershipAction} an action of type `MatrixActions.Room.myMembership`.
  */
-function createSelfRoomMembershipAction(matrixClient, membershipEvent, member, oldMembership) {
-    if (member.userId === matrixClient.getUserId()) {
-        return { action: 'MatrixActions.Room.selfMembership', member };
-    }
-    return null;
+function createSelfMembershipAction(matrixClient, room, membership, oldMembership) {
+    return { action: 'MatrixActions.Room.myMembership', room, membership, oldMembership};
 }
 
 /**
@@ -205,7 +204,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
-        this._addMatrixClientListener(matrixClient, 'RoomMember.membership', createSelfRoomMembershipAction);
+        this._addMatrixClientListener(matrixClient, 'Room.myMembership', createSelfMembershipAction);
         this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);
     },
 
