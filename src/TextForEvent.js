@@ -246,13 +246,13 @@ function textForCanonicalAliasEvent(ev) {
     const newAlias = ev.getContent().alias;
 
     if (newAlias) {
-        return _t('%(senderName)s set the canonical address for this room to %(address)s.', {
+        return _t('%(senderName)s set the main address for this room to %(address)s.', {
             senderName: senderName,
             address: ev.getContent().alias,
         });
     }
     else if (oldAlias) {
-        return _t('%(senderName)s removed the canonical address for this room.', {
+        return _t('%(senderName)s removed the main address for this room.', {
             senderName: senderName,
         });
     }
