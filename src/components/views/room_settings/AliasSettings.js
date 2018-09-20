@@ -217,12 +217,14 @@ module.exports = React.createClass({
 
         let canonical_alias_section;
         if (this.props.canSetCanonicalAlias) {
+            let found = false;
             canonical_alias_section = (
                 <select onChange={this.onCanonicalAliasChange} value={this.state.canonicalAlias}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
-                        Object.keys(self.state.domainToAliases).map(function(domain, i) {
-                            return self.state.domainToAliases[domain].map(function(alias, j) {
+                        Object.keys(self.state.domainToAliases).map((domain, i) => {
+                            return self.state.domainToAliases[domain].map((alias, j) => {
+                                if (alias === this.state.canonicalAlias) found = true;
                                 return (
                                     <option value={alias} key={i + "_" + j}>
                                         { alias }
@@ -230,6 +232,12 @@ module.exports = React.createClass({
                                 );
                             });
                         })
+                    }
+                    {
+                        found || !this.stateCanonicalAlias ? '' :
+                        <option value={ this.state.canonicalAlias } key='arbitrary'>
+                            { this.state.canonicalAlias }
+                        </option>
                     }
                 </select>
             );
