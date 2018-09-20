@@ -147,6 +147,7 @@ module.exports = React.createClass({
         if (!alias || alias.length === 0) return; // ignore attempts to create blank aliases
 
         const localDomain = MatrixClientPeg.get().getDomain();
+        if (!alias.includes(':')) alias += ':' + localDomain;
         if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
             this.state.domainToAliases[localDomain] = this.state.domainToAliases[localDomain] || [];
             this.state.domainToAliases[localDomain].push(alias);
@@ -174,6 +175,7 @@ module.exports = React.createClass({
     onLocalAliasChanged: function(alias, index) {
         if (alias === "") return; // hit the delete button to delete please
         const localDomain = MatrixClientPeg.get().getDomain();
+        if (!alias.includes(':')) alias += ':' + localDomain;
         if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
             this.state.domainToAliases[localDomain][index] = alias;
         } else {
