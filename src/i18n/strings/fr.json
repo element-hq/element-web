@@ -1275,5 +1275,7 @@
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s a ajouté %(addedAddresses)s comme adresses pour ce salon.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s a supprimé %(removedAddresses)s comme adresse pour ce salon.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s a supprimé %(removedAddresses)s comme adresses pour ce salon.",
-    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s a ajouté %(addedAddresses)s et supprimé %(removedAddresses)s comme adresses pour ce salon."
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s a ajouté %(addedAddresses)s et supprimé %(removedAddresses)s comme adresses pour ce salon.",
+    "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s a défini l'adresse canonique de ce salon comme %(address)s.",
+    "%(senderName)s removed the canonical address for this room.": "%(senderName)s a supprimé l'adresse canonique de ce salon."
 }
