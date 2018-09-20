@@ -1275,5 +1275,7 @@
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s szoba címnek hozzáadta: %(addedAddresses)s.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s törölte a szoba címek közül: %(removedAddresses)s.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s törölte a szoba címek közül: %(removedAddresses)s.",
-    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s hozzáadta a szoba címekhez: %(addedAddresses)s és törölte a címek közül: %(removedAddresses)s."
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s hozzáadta a szoba címekhez: %(addedAddresses)s és törölte a címek közül: %(removedAddresses)s.",
+    "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s olvasható címet allított be a szobához: %(address)s.",
+    "%(senderName)s removed the canonical address for this room.": "%(senderName)s törölte a szoba olvasható címét."
 }
