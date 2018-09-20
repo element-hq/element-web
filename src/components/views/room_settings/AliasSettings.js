@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -97,18 +98,19 @@ module.exports = React.createClass({
             }
         }
 
-
-        // save new canonical alias
         let oldCanonicalAlias = null;
         if (this.props.canonicalAliasEvent) {
             oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
         }
-        if (oldCanonicalAlias !== this.state.canonicalAlias) {
+
+        let newCanonicalAlias = this.state.canonicalAlias;
+
+        if (this.props.canSetCanonicalAlias && oldCanonicalAlias !== newCanonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
             promises = [Promise.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
-                        alias: this.state.canonicalAlias,
+                        alias: newCanonicalAlias,
                     }, "",
                 ),
             )];
@@ -161,6 +163,12 @@ module.exports = React.createClass({
                 description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
             });
         }
+
+        if (!this.props.canonicalAlias) {
+            this.setState({
+                canonicalAlias: alias
+            });
+        }
     },
 
     onLocalAliasChanged: function(alias, index) {
@@ -184,10 +192,15 @@ module.exports = React.createClass({
         // promptly setState anyway, it's just about acceptable.  The alternative
         // would be to arbitrarily deepcopy to a temp variable and then setState
         // that, but why bother when we can cut this corner.
-        this.state.domainToAliases[localDomain].splice(index, 1);
+        const alias = this.state.domainToAliases[localDomain].splice(index, 1);
         this.setState({
             domainToAliases: this.state.domainToAliases,
         });
+        if (this.props.canonicalAlias === alias) {
+            this.setState({
+                canonicalAlias: null,
+            });
+        }
     },
 
     onCanonicalAliasChange: function(event) {
@@ -205,7 +218,7 @@ module.exports = React.createClass({
         let canonical_alias_section;
         if (this.props.canSetCanonicalAlias) {
             canonical_alias_section = (
-                <select onChange={this.onCanonicalAliasChange} defaultValue={this.state.canonicalAlias}>
+                <select onChange={this.onCanonicalAliasChange} value={this.state.canonicalAlias}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(self.state.domainToAliases).map(function(domain, i) {
