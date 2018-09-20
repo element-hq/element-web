@@ -1269,5 +1269,10 @@
     "The room upgrade could not be completed": "Обновяването на тази стая не можа да бъде завършено",
     "Upgrade this room to version %(version)s": "Обновете тази стая до версия %(version)s",
     "Unable to query for supported registration methods": "Неуспешно запитване за поддържани методи за регистрация",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Принудително прекратява текущата изходяща групова сесия в шифрована стая"
+    "Forces the current outbound group session in an encrypted room to be discarded": "Принудително прекратява текущата изходяща групова сесия в шифрована стая",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s добави %(addedAddresses)s като адрес за тази стая.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s добави %(addedAddresses)s като адреси за тази стая.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s премахна %(removedAddresses)s като адрес за тази стая.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s премахна %(removedAddresses)s като адреси за тази стая.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s добави %(addedAddresses)s и премахна %(removedAddresses)s като адреси за тази стая."
 }
