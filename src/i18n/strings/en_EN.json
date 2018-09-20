@@ -1251,6 +1251,8 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s removed %(removedAddresses)s as an address for this room.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s removed %(removedAddresses)s as addresses for this room.",
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.",
+    "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s set the canonical address for this room to %(address)s.",
+    "%(senderName)s removed the canonical address for this room.": "%(senderName)s removed the canonical address for this room.",
     "File to import": "File to import",
     "Import": "Import",
     "Failed to set direct chat tag": "Failed to set direct chat tag",

@@ -240,6 +240,24 @@ function textForRoomAliasesEvent(ev) {
     }
 }
 
+function textForCanonicalAliasEvent(ev) {
+    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const oldAlias = ev.getPrevContent().alias;
+    const newAlias = ev.getContent().alias;
+
+    if (newAlias) {
+        return _t('%(senderName)s set the canonical address for this room to %(address)s.', {
+            senderName: senderName,
+            address: ev.getContent().alias,
+        });
+    }
+    else if (oldAlias) {
+        return _t('%(senderName)s removed the canonical address for this room.', {
+            senderName: senderName,
+        });
+    }
+}
+
 function textForCallAnswerEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
@@ -402,6 +420,7 @@ const handlers = {
 
 const stateHandlers = {
     'm.room.aliases': textForRoomAliasesEvent,
+    'm.room.canonical_alias': textForCanonicalAliasEvent,
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,
