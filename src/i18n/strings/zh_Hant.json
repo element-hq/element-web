@@ -1270,5 +1270,12 @@
     "Registration Required": "需要註冊",
     "You need to register to do this. Would you like to register now?": "您必須註冊以繼續。您想要現在註冊嗎？",
     "Unable to query for supported registration methods": "無法查詢支援的註冊方式",
-    "Unable to connect to Homeserver. Retrying...": "無法連線到家伺服器。正在重試……"
+    "Unable to connect to Homeserver. Retrying...": "無法連線到家伺服器。正在重試……",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s 新增了 %(addedAddresses)s 為此聊天室的位置。",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s 新增了 %(addedAddresses)s 為此聊天室的位置。",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s 移除了 %(removedAddresses)s 為此聊天室的位置。",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s 移除了 %(removedAddresses)s 為此聊天室的位置。",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s 新增了 %(addedAddresses)s 並移除了 %(removedAddresses)s 為此聊天室的位置。",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s 為此聊天室設定了主要位置 %(address)s。",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s 移除了此聊天室的主要位置。"
 }
