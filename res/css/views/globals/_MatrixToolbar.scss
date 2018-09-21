@@ -28,6 +28,12 @@ limitations under the License.
     margin-top: -2px;
 }
 
+.mx_MatrixToolbar_info {
+    padding-left: 16px;
+    padding-right: 8px;
+    background-color: $info-bg-color;
+}
+
 .mx_MatrixToolbar_error {
     padding-left: 16px;
     padding-right: 8px;

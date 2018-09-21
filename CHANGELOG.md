@@ -1,3 +1,166 @@
+Changes in [0.13.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.4) (2018-09-10)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.4-rc.1...v0.13.4)
+
+ * No changes since rc.1
+
+Changes in [0.13.4-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.4-rc.1) (2018-09-07)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3...v0.13.4-rc.1)
+
+ * Error on splash screen if sync is failing
+   [\#2155](https://github.com/matrix-org/matrix-react-sdk/pull/2155)
+ *  Do full registration if HS doesn't support ILAG
+   [\#2150](https://github.com/matrix-org/matrix-react-sdk/pull/2150)
+ * Re-apply "Don't rely on room members to query power levels"
+   [\#2152](https://github.com/matrix-org/matrix-react-sdk/pull/2152)
+ * s/DidMount/WillMount/ in MessageComposerInput
+   [\#2151](https://github.com/matrix-org/matrix-react-sdk/pull/2151)
+ * Revert "Don't rely on room members to query power levels"
+   [\#2149](https://github.com/matrix-org/matrix-react-sdk/pull/2149)
+ * Don't rely on room members to query power levels
+   [\#2145](https://github.com/matrix-org/matrix-react-sdk/pull/2145)
+ * Correctly mark email as optional
+   [\#2148](https://github.com/matrix-org/matrix-react-sdk/pull/2148)
+ * guests trying to join communities should fire the ILAG flow.
+   [\#2059](https://github.com/matrix-org/matrix-react-sdk/pull/2059)
+ * Fix DM avatars, part 3
+   [\#2146](https://github.com/matrix-org/matrix-react-sdk/pull/2146)
+ * Fix: show spinner again while recovering from connection error
+   [\#2143](https://github.com/matrix-org/matrix-react-sdk/pull/2143)
+ * Fix: infinite spinner on trying to create welcomeUserId room without consent
+   [\#2147](https://github.com/matrix-org/matrix-react-sdk/pull/2147)
+ * Show spinner in member list while loading members
+   [\#2139](https://github.com/matrix-org/matrix-react-sdk/pull/2139)
+ * Slash command to discard megolm session
+   [\#2140](https://github.com/matrix-org/matrix-react-sdk/pull/2140)
+
+Changes in [0.13.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3) (2018-09-03)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3-rc.2...v0.13.3)
+
+ * No changes since rc.2
+
+Changes in [0.13.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3-rc.2) (2018-08-31)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.3-rc.1...v0.13.3-rc.2)
+
+ * Update js-sdk to fix exception
+
+Changes in [0.13.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.3-rc.1) (2018-08-30)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.2...v0.13.3-rc.1)
+
+ * Fix DM avatar
+   [\#2141](https://github.com/matrix-org/matrix-react-sdk/pull/2141)
+ * Update from Weblate.
+   [\#2142](https://github.com/matrix-org/matrix-react-sdk/pull/2142)
+ * Support m.room.tombstone events
+   [\#2124](https://github.com/matrix-org/matrix-react-sdk/pull/2124)
+ * Support room creation events
+   [\#2123](https://github.com/matrix-org/matrix-react-sdk/pull/2123)
+ * Support for room upgrades
+   [\#2122](https://github.com/matrix-org/matrix-react-sdk/pull/2122)
+ * Fix: dont show 1:1 avatar for rooms +2 members but only <=2 members loaded
+   [\#2137](https://github.com/matrix-org/matrix-react-sdk/pull/2137)
+ * Render terms & conditions in settings
+   [\#2136](https://github.com/matrix-org/matrix-react-sdk/pull/2136)
+ * Don't crash if the value of a room tag is null
+   [\#2133](https://github.com/matrix-org/matrix-react-sdk/pull/2133)
+ * Add stub for getVisibleRooms()
+   [\#2134](https://github.com/matrix-org/matrix-react-sdk/pull/2134)
+ * Fix LL crash trying to render own avatar in composer when member isn't
+   available yet
+   [\#2132](https://github.com/matrix-org/matrix-react-sdk/pull/2132)
+ * Support M_INCOMPATIBLE_ROOM_VERSION
+   [\#2125](https://github.com/matrix-org/matrix-react-sdk/pull/2125)
+ * Hide replaced rooms
+   [\#2127](https://github.com/matrix-org/matrix-react-sdk/pull/2127)
+ * Fix CPU spin on joining large room
+   [\#2128](https://github.com/matrix-org/matrix-react-sdk/pull/2128)
+ * Change format of server usage limit message
+   [\#2131](https://github.com/matrix-org/matrix-react-sdk/pull/2131)
+ * Re-apply "Fix showing peek preview while LL members are loading""
+   [\#2130](https://github.com/matrix-org/matrix-react-sdk/pull/2130)
+ * Revert "Fix showing peek preview while LL members are loading"
+   [\#2129](https://github.com/matrix-org/matrix-react-sdk/pull/2129)
+ * Fix showing peek preview while LL members are loading
+   [\#2126](https://github.com/matrix-org/matrix-react-sdk/pull/2126)
+ * Destroy non-persistent widgets when switching room
+   [\#2098](https://github.com/matrix-org/matrix-react-sdk/pull/2098)
+ * Lazy loading of room members
+   [\#2118](https://github.com/matrix-org/matrix-react-sdk/pull/2118)
+ * Lazy loading: feature toggle
+   [\#2115](https://github.com/matrix-org/matrix-react-sdk/pull/2115)
+ * Lazy loading: cleanup
+   [\#2116](https://github.com/matrix-org/matrix-react-sdk/pull/2116)
+ * Lazy loading: fix end-to-end encryption rooms
+   [\#2113](https://github.com/matrix-org/matrix-react-sdk/pull/2113)
+ * Lazy loading: Lazy load members while backpaginating
+   [\#2104](https://github.com/matrix-org/matrix-react-sdk/pull/2104)
+ * Lazy loading: don't assume we have our own member available
+   [\#2102](https://github.com/matrix-org/matrix-react-sdk/pull/2102)
+ * Lazy load room members - Part I
+   [\#2072](https://github.com/matrix-org/matrix-react-sdk/pull/2072)
+
+Changes in [0.13.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.2) (2018-08-23)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.1...v0.13.2)
+
+ * Don't crash if the value of a room tag is null
+   [\#2135](https://github.com/matrix-org/matrix-react-sdk/pull/2135)
+
+Changes in [0.13.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.1) (2018-08-20)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.1-rc.1...v0.13.1)
+
+ * No changes since rc.1
+
+Changes in [0.13.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.1-rc.1) (2018-08-16)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0...v0.13.1-rc.1)
+
+ * Update from Weblate.
+   [\#2121](https://github.com/matrix-org/matrix-react-sdk/pull/2121)
+ * Shift to M_RESOURCE_LIMIT_EXCEEDED errors
+   [\#2120](https://github.com/matrix-org/matrix-react-sdk/pull/2120)
+ * Fix RoomSettings test
+   [\#2119](https://github.com/matrix-org/matrix-react-sdk/pull/2119)
+ * Show room version number in room settings
+   [\#2117](https://github.com/matrix-org/matrix-react-sdk/pull/2117)
+ * Warning bar for MAU limit hit
+   [\#2114](https://github.com/matrix-org/matrix-react-sdk/pull/2114)
+ * Recognise server notices room(s)
+   [\#2112](https://github.com/matrix-org/matrix-react-sdk/pull/2112)
+ * Update room tags behaviour to match spec more
+   [\#2111](https://github.com/matrix-org/matrix-react-sdk/pull/2111)
+ * while logging out ignore `Session.logged_out` as it is intentional
+   [\#2058](https://github.com/matrix-org/matrix-react-sdk/pull/2058)
+ * Don't show 'connection lost' bar on MAU error
+   [\#2110](https://github.com/matrix-org/matrix-react-sdk/pull/2110)
+ * Support MAU error on sync
+   [\#2108](https://github.com/matrix-org/matrix-react-sdk/pull/2108)
+ * Support active user limit on message send
+   [\#2106](https://github.com/matrix-org/matrix-react-sdk/pull/2106)
+ * Run end to end tests as part of Travis build
+   [\#2091](https://github.com/matrix-org/matrix-react-sdk/pull/2091)
+ * Remove package-lock.json for now
+   [\#2097](https://github.com/matrix-org/matrix-react-sdk/pull/2097)
+ * Support montly active user limit error on /login
+   [\#2103](https://github.com/matrix-org/matrix-react-sdk/pull/2103)
+ * Unpin sanitize-html
+   [\#2105](https://github.com/matrix-org/matrix-react-sdk/pull/2105)
+ * Pin sanitize-html to 0.18.2
+   [\#2101](https://github.com/matrix-org/matrix-react-sdk/pull/2101)
+ * Make clicking on side panels close settings (mk 3)
+   [\#2096](https://github.com/matrix-org/matrix-react-sdk/pull/2096)
+ * Fix persistent element location not updating
+   [\#2092](https://github.com/matrix-org/matrix-react-sdk/pull/2092)
+ * fix Devtools input autofocus && state traversal when len === 1 && key=""
+   [\#2090](https://github.com/matrix-org/matrix-react-sdk/pull/2090)
+ * allow autocompleting Emoji by common aliases, e.g :+1: to :thumbsup:
+   [\#2085](https://github.com/matrix-org/matrix-react-sdk/pull/2085)
+
 Changes in [0.13.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.0) (2018-07-30)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.0-rc.2...v0.13.0)

@@ -56,6 +56,18 @@ limitations under the License.
     flex: 1;
 }
 
+.mx_MatrixChat_syncError {
+    color: $accent-fg-color;
+    background-color: $warning-bg-color;
+    border-radius: 5px;
+    display: table;
+    padding: 30px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .mx_MatrixChat .mx_LeftPanel {
     order: 1;
     background-color: $secondary-accent-color;

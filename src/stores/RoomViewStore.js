@@ -223,7 +223,13 @@ class RoomViewStore extends Store {
                 action: 'join_room_error',
                 err: err,
             });
-            const msg = err.message ? err.message : JSON.stringify(err);
+            let msg = err.message ? err.message : JSON.stringify(err);
+            if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
+                msg = <div>
+                    {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
+                    {_t("Please contact your homeserver administrator.")}
+                </div>;
+            }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
                 title: _t("Failed to join room"),

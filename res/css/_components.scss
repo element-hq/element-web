@@ -39,6 +39,7 @@
 @import "./views/dialogs/_EncryptedEventDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_QuestionDialog.scss";
+@import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
 @import "./views/dialogs/_SetMxIdDialog.scss";
 @import "./views/dialogs/_SetPasswordDialog.scss";
@@ -67,6 +68,7 @@
 @import "./views/groups/_GroupUserSettings.scss";
 @import "./views/login/_InteractiveAuthEntryComponents.scss";
 @import "./views/login/_ServerConfig.scss";
+@import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
@@ -99,6 +101,7 @@
 @import "./views/rooms/_RoomSettings.scss";
 @import "./views/rooms/_RoomTile.scss";
 @import "./views/rooms/_RoomTooltip.scss";
+@import "./views/rooms/_RoomUpgradeWarningBar.scss";
 @import "./views/rooms/_SearchBar.scss";
 @import "./views/rooms/_SearchableEntityList.scss";
 @import "./views/rooms/_Stickers.scss";

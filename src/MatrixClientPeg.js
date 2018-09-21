@@ -99,6 +99,10 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
+        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+            opts.lazyLoadMembers = true;
+        }
+
         try {
             const promise = this.matrixClient.store.startup();
             console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
@@ -115,7 +119,7 @@ class MatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
-        this.get().startClient(opts);
+        await this.get().startClient(opts);
         console.log(`MatrixClientPeg: MatrixClient started`);
     }
 

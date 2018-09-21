@@ -26,6 +26,15 @@ import dis from '../../../dispatcher';
 
 import SettingsStore from "../../../settings/SettingsStore";
 
+function getFullScreenElement() {
+    return (
+        document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+    );
+}
+
 module.exports = React.createClass({
     displayName: 'VideoView',
 
@@ -88,7 +97,7 @@ module.exports = React.createClass({
                         element.msRequestFullscreen
                     );
                     requestMethod.call(element);
-                } else {
+                } else if (getFullScreenElement()) {
                     const exitMethod = (
                         document.exitFullscreen ||
                         document.mozCancelFullScreen ||
@@ -108,10 +117,7 @@ module.exports = React.createClass({
         const VideoFeed = sdk.getComponent('voip.VideoFeed');
 
         // if we're fullscreen, we don't want to set a maxHeight on the video element.
-        const fullscreenElement = (document.fullscreenElement ||
-                 document.mozFullScreenElement ||
-                 document.webkitFullscreenElement);
-        const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
+        const maxVideoHeight = getFullScreenElement() ? null : this.props.maxHeight;
         const localVideoFeedClasses = classNames("mx_VideoView_localVideoFeed",
             { "mx_VideoView_localVideoFeed_flipped":
                 SettingsStore.getValue('VideoView.flipVideoHorizontally'),

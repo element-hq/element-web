@@ -37,6 +37,11 @@ function doInputEmail(inputEmail, onTeamSelected) {
         <RegistrationForm
             teamsConfig={TEAM_CONFIG}
             onTeamSelected={onTeamSelected}
+            flows={[
+                {
+                    stages: ['m.login.dummy'],
+                },
+            ]}
         />,
     );
 

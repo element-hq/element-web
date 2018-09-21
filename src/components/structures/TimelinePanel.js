@@ -1146,10 +1146,11 @@ var TimelinePanel = React.createClass({
         // of paginating our way through the entire history of the room.
         const stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
 
-        // If the state is PREPARED, we're still waiting for the js-sdk to sync with
+        // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = (
-            this.state.forwardPaginating || this.state.clientSyncState == 'PREPARED'
+            this.state.forwardPaginating ||
+            ['PREPARED', 'CATCHUP'].includes(this.state.clientSyncState)
         );
         return (
             <MessagePanel ref="messagePanel"

@@ -77,8 +77,7 @@ export default class WidgetUtils {
             return false;
         }
 
-        const member = room.getMember(me);
-        if (!member || member.membership !== "join") {
+        if (room.getMyMembership() !== "join") {
             console.warn(`User ${me} is not in room ${roomId}`);
             return false;
         }

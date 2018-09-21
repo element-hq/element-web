@@ -47,6 +47,10 @@ const eventTileTypes = {
 };
 
 const stateEventTileTypes = {
+    'm.room.aliases': 'messages.TextualEvent',
+    // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
+    'm.room.canonical_alias': 'messages.TextualEvent',
+    'm.room.create': 'messages.RoomCreate',
     'm.room.member': 'messages.TextualEvent',
     'm.room.name': 'messages.TextualEvent',
     'm.room.avatar': 'messages.RoomAvatarEvent',
@@ -57,7 +61,6 @@ const stateEventTileTypes = {
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
     'm.room.server_acl': 'messages.TextualEvent',
-
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
 
@@ -483,7 +486,9 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (eventType !== 'm.room.message' && eventType !== 'm.sticker');
+        const isInfoMessage = (
+            eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
+        );
 
         const tileHandler = getHandlerTile(this.props.mxEvent);
         // This shouldn't happen: the caller should check we support this type
@@ -535,6 +540,9 @@ module.exports = withMatrixClient(React.createClass({
         if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
+        } else if (tileHandler === 'messages.RoomCreate') {
+            avatarSize = 0;
+            needsSenderProfile = false;
         } else if (isInfoMessage) {
             // a small avatar, with no sender profile, for
             // joins/parts/etc
@@ -745,6 +753,8 @@ module.exports.haveTileForEvent = function(e) {
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';
+    } else if (handler === 'messages.RoomCreate') {
+        return Boolean(e.getContent()['predecessor']);
     } else {
         return true;
     }
