@@ -34,7 +34,8 @@ import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
-
+import ResizeHandle from '../views/elements/ResizeHandle';
+import {makeResizeable, FixedDistributor} from '../../resizer'
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -89,6 +90,15 @@ const LoggedInView = React.createClass({
             // any currently active server notice events
             serverNoticeEvents: [],
         };
+    },
+
+    componentDidMount: function() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        };
+        makeResizeable(this.resizeContainer, classNames, FixedDistributor);
     },
 
     componentWillMount: function() {
@@ -186,13 +196,13 @@ const LoggedInView = React.createClass({
     _updateServerNoticeEvents: async function() {
         const roomLists = RoomListStore.getRoomLists();
         if (!roomLists['m.server_notice']) return [];
-        
+
         const pinnedEvents = [];
         for (const room of roomLists['m.server_notice']) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
-            
+
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
                 const timeline = await this._matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId, 0);
@@ -204,7 +214,7 @@ const LoggedInView = React.createClass({
             serverNoticeEvents: pinnedEvents,
         });
     },
-    
+
 
     _onKeyDown: function(ev) {
             /*
@@ -481,14 +491,16 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onClick={this._onClick}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div className={bodyClasses}>
+                    <div ref={(div) => this.resizeContainer = div} className={bodyClasses}>
                         <LeftPanel
                             collapsed={this.props.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
+                        <ResizeHandle/>
                         <main className='mx_MatrixChat_middlePanel'>
                             { page_element }
                         </main>
+                        <ResizeHandle reverse={true}/>
                         { right_panel }
                     </div>
                 </DragDropContext>

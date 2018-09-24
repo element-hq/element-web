@@ -243,6 +243,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        this.state.badgeHover = true;
         const isInvite = this.props.room.getMyMembership() === "invite";
         const notificationCount = this.state.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
@@ -337,10 +338,8 @@ module.exports = React.createClass({
                     { dmIndicator }
                 </div>
             </div>
-            <div className="mx_RoomTile_nameContainer">
-                { label }
-                { badge }
-            </div>
+            { label }
+            { badge }
             { /* { incomingCallBox } */ }
             { tooltip }
         </AccessibleButton>;
