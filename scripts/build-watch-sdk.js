@@ -36,9 +36,34 @@ if (fs.existsSync(path.join(sdkPath, '.git'))) {
         });
     }
 
+    console.log("Sending signal that other processes may unblock");
+    triggerCanarySignal(sdkName);
+
     console.log("Performing task: " + task);
     child_process.execSync(`npm ${task === "build" ? "run build" : "start"}`, {
         env: process.env,
         cwd: sdkPath,
     });
+}
+
+function triggerCanarySignal(sdkName) {
+    const tmpPath = path.resolve(".tmp");
+
+    try {
+        fs.mkdirSync(tmpPath);
+    } catch (e) {
+        if (e.code !== 'EEXIST') {
+            console.error(e);
+            throw "Failed to create temporary directory";
+        }
+    }
+
+    // Note: we intentionally create then delete the file to work around
+    // a file watching problem where if the file exists on startup it may
+    // fire a "created" event for the file. By having the behaviour be "do
+    // something on delete" we avoid accidentally firing the signal too
+    // early.
+    const canaryPath = path.join(tmpPath, sdkName);
+    fs.closeSync(fs.openSync(canaryPath, 'w'));
+    fs.unlinkSync(canaryPath);
 }
