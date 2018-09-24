@@ -29,7 +29,6 @@ limitations under the License.
 
 .mx_RoomSubList_labelContainer {
     height: 31px; /* mx_RoomSubList_label height including border */
-    width: 235px; /* LHS Panel width */
     position: relative;
 }
 
@@ -39,7 +38,6 @@ limitations under the License.
     color: $roomsublist-label-fg-color;
     font-weight: 700;
     font-size: 12px;
-    width: 203px; /* padding + width = LHS Panel width */
     height: 19px; /* height + padding = 31px = mx_RoomSubList_label height */
     margin-left: 16px;
     padding-left: 16px; /* gutter */

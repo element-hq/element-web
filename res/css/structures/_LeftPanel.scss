@@ -15,24 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LeftPanel {
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    border-right: 1px solid $panel-divider-color;
-}
-
 .mx_LeftPanel_container {
     display: flex;
     /* LeftPanel 260px */
-    flex: 0 0 260px;
+    min-width: 260px;
+    flex: 0 0 auto;
 }
 
 .mx_LeftPanel_container.mx_LeftPanel_container_hasTagPanel {
     /* TagPanel 70px + LeftPanel 260px */
-    flex: 0 0 330px;
+    flex: 0 0 auto;
 }
 
 .mx_LeftPanel_container_collapsed {
@@ -42,7 +34,7 @@ limitations under the License.
 
 .mx_LeftPanel_container_collapsed.mx_LeftPanel_container_hasTagPanel {
     /* TagPanel 70px + Collapsed LeftPanel 70px */
-    flex: 0 0 140px;
+    flex: 0 0 auto;
 }
 
 .mx_LeftPanel_hideButton {
@@ -55,6 +47,17 @@ limitations under the License.
 
 .mx_LeftPanel_callView {
 
+}
+
+.mx_LeftPanel {
+    background-color: $secondary-accent-color;
+    flex: 1;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    border-right: 1px solid $panel-divider-color;
 }
 
 .mx_LeftPanel .mx_AppTile_mini {
