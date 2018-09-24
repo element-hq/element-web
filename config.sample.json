@@ -16,7 +16,7 @@
     },
     "default_federate": true,
     "welcomePageUrl": "home.html",
-    "default_theme": "light",
+    "default_theme": "weheal",
     "roomDirectory": {
         "servers": [
             "matrix.org"
