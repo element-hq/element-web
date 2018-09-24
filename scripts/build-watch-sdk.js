@@ -20,6 +20,7 @@ console.log(sdkPath);
 
 // We only want to build the SDK if it looks like it was `npm link`ed
 if (fs.existsSync(path.join(sdkPath, '.git'))) {
+    // Install the develop dependencies just in case they were forgotten by the developer.
     console.log("Installing develop dependencies");
     const devEnv = Object.assign({}, process.env, {NODE_ENV: "development"});
     child_process.execSync("npm install --only=dev", {
@@ -36,9 +37,13 @@ if (fs.existsSync(path.join(sdkPath, '.git'))) {
         });
     }
 
+    // Send a signal so that the various blocks can unblock. See the top of
+    // block-on-sdk-build.js for more information on how this is used.
     console.log("Sending signal that other processes may unblock");
     triggerCanarySignal(sdkName);
 
+    // Actually start the watcher process for the sdk. This is what block-on-sdk-build.js
+    // is going to monitor.
     console.log("Performing task: " + task);
     child_process.execSync(`npm ${task === "build" ? "run build" : "start"}`, {
         env: process.env,
