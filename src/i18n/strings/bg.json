@@ -1274,5 +1274,7 @@
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s добави %(addedAddresses)s като адреси за тази стая.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s премахна %(removedAddresses)s като адрес за тази стая.",
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s премахна %(removedAddresses)s като адреси за тази стая.",
-    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s добави %(addedAddresses)s и премахна %(removedAddresses)s като адреси за тази стая."
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s добави %(addedAddresses)s и премахна %(removedAddresses)s като адреси за тази стая.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s настрой основния адрес на тази стая на %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s премахна основния адрес на тази стая."
 }
