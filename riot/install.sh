@@ -1,5 +1,5 @@
 #!/bin/bash
-RIOT_BRANCH=master
+RIOT_BRANCH=develop
 
 BASE_DIR=$(readlink -f $(dirname $0))
 if [ -d $BASE_DIR/riot-web ]; then
