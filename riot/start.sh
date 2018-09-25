@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 PORT=5000
-BASE_DIR=$(readlink -f $(dirname $0))
+BASE_DIR=$(cd $(dirname $0) && pwd)
 PIDFILE=$BASE_DIR/riot.pid
 CONFIG_BACKUP=config.e2etests_backup.json
 
@@ -21,7 +23,8 @@ cp $BASE_DIR/config-template/config.json .
 LOGFILE=$(mktemp)
 # run web server in the background, showing output on error
 (
-    python -m SimpleHTTPServer $PORT > $LOGFILE 2>&1 &
+    source $BASE_DIR/env/bin/activate
+    python -m ComplexHTTPServer $PORT > $LOGFILE 2>&1 &
     PID=$!
     echo $PID > $PIDFILE
     # wait so subshell does not exit
@@ -40,7 +43,7 @@ LOGFILE=$(mktemp)
 )&
 # to be able to return the exit code for immediate errors (like address already in use)
 # we wait for a short amount of time in the background and exit when the first
-# child process exists
+# child process exits
 sleep 0.5 &
 # wait the first child process to exit (python or sleep)
 wait -n; RESULT=$?
