@@ -18,4 +18,5 @@ const modulePath = path.dirname(require.resolve(`${moduleName}/package.json`));
 child_process.execSync("npm " + argString, {
     env: process.env,
     cwd: modulePath,
+    stdio: ['inherit', 'inherit', 'inherit'],
 });
