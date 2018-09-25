@@ -16,7 +16,15 @@ if (!sdkName) {
 }
 
 const sdkPath = path.dirname(require.resolve(`matrix-${sdkName}-sdk/package.json`));
-console.log(sdkPath);
+
+// Note: we intentionally create then delete the canary file to work
+// around a file watching problem where if the file exists on startup it
+// may fire a "created" event for the file. By having the behaviour be "do
+// something on delete" we avoid accidentally firing the signal too early.
+// We also need to ensure the create and delete events are not too close
+// together, otherwise the filesystem may not fire the watcher. Therefore
+// we create the canary as early as possible and delete it as late as possible.
+prepareCanarySignal(sdkName);
 
 // We only want to build the SDK if it looks like it was `npm link`ed
 if (fs.existsSync(path.join(sdkPath, '.git'))) {
@@ -37,25 +45,37 @@ if (fs.existsSync(path.join(sdkPath, '.git'))) {
         });
     }
 
-    // Send a signal so that the various blocks can unblock. See the top of
-    // block-on-sdk-build.js for more information on how this is used.
-    console.log("Sending signal that other processes may unblock");
-    triggerCanarySignal(sdkName);
-
-    // Actually start the watcher process for the sdk. This is what block-on-sdk-build.js
-    // is going to monitor.
-    console.log("Performing task: " + task);
-    child_process.execSync(`npm ${task === "build" ? "run build" : "start"}`, {
+    // Prepare an initial build of the SDK
+    child_process.execSync("npm run start:init", {
         env: process.env,
         cwd: sdkPath,
     });
-}
+
+    // Send a signal to unblock the build for other processes. Used by block-on-sdk-build.js
+    console.log("Sending signal that other processes may unblock");
+    triggerCanarySignal(sdkName);
+
+    // Actually start the watcher process for the SDK (without an initial build)
+    console.log("Performing task: " + task);
+    const watchTask = sdkName === 'js' ? "start:watch" : "start:all";
+    const buildTask = "build";
+    child_process.execSync(`npm run ${task === "build" ? buildTask : watchTask}`, {
+        env: process.env,
+        cwd: sdkPath,
+    });
+} else triggerCanarySignal(sdkName);
 
 function triggerCanarySignal(sdkName) {
-    const tmpPath = path.resolve(".tmp");
+    fs.unlinkSync(getCanaryPath(sdkName));
+}
+
+function prepareCanarySignal(sdkName) {
+    const canaryPath = getCanaryPath(sdkName);
+    const canaryDir = path.dirname(canaryPath);
 
     try {
-        fs.mkdirSync(tmpPath);
+        console.log("Creating canary temp path...");
+        fs.mkdirSync(canaryDir);
     } catch (e) {
         if (e.code !== 'EEXIST') {
             console.error(e);
@@ -63,12 +83,17 @@ function triggerCanarySignal(sdkName) {
         }
     }
 
-    // Note: we intentionally create then delete the file to work around
-    // a file watching problem where if the file exists on startup it may
-    // fire a "created" event for the file. By having the behaviour be "do
-    // something on delete" we avoid accidentally firing the signal too
-    // early.
-    const canaryPath = path.join(tmpPath, sdkName);
-    fs.closeSync(fs.openSync(canaryPath, 'w'));
-    fs.unlinkSync(canaryPath);
+    try {
+        console.log("Creating canary file: " + canaryPath);
+        fs.closeSync(fs.openSync(canaryPath, 'w'));
+    } catch (e) {
+        if (e.code !== 'EEXIST') {
+            console.error(e);
+            throw "Failed to create canary file";
+        }
+    }
+}
+
+function getCanaryPath(sdkName) {
+    return path.join(path.resolve(".tmp"), sdkName + ".canary");
 }
