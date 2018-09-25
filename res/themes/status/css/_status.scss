@@ -76,6 +76,8 @@ $focus-brightness: 125%;
 
 // red warning colour
 $warning-color: #F69E98;
+$warning-bg-color: #DF2A8B;
+$info-bg-color: #2A9EDF;
 $mention-user-pill-bg-color: #ff0064;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -283,4 +285,8 @@ $progressbar-color: #000;
 
 .mx_RoomSubList_chevron {
     top: 8px ! important;
+}
+
+.mx_MemberInfo .mx_RoomTile_name {
+    color: $primary-fg-color ! important;
 }

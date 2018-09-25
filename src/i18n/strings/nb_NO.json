@@ -1,4 +1,16 @@
 {
     "Custom Server Options": "Tilpassede serveralternativer",
-    "powered by Matrix": "benytter seg av Matrix"
+    "powered by Matrix": "benytter seg av Matrix",
+    "Riot is not supported on mobile web. Install the app?": "Riot er ikke støttet av mobil-nettlesere. Ønsker De å innstalere appen?",
+    "Riot Desktop on %(platformName)s": "Riot på skrivebordet er på %(platformName)s",
+    "Unknown device": "Ukjent enhet",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s på %(osName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "De er nødt til å benytte HTTPS for å kunne ha en samtale med skjermdeling.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "De kan benytte brukerdefinerte server-innstillinger for å kunne logge Dem inn på andre Matrix-servere ved å spesifisere en annen hjemmeserver-adresse. <br/> Dette tillater Dem til å bruke Riot med en eksisterende Matrix-konto på en annen hjemmeserver. <br/><br/> De kan i tillegg definere en egen hjemmeserver-identitet, men De kan da ikke invitere andre brukere via email, og De kan heller ikke bli invitert via email selv.",
+    "Dismiss": "Avvis",
+    "Welcome to Riot.im": "Velkommen skal De være til Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; sammabeid drevet av [matrix]",
+    "Search the room directory": "Søk i romutvalget",
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Allerede finnes det alskens rom i Matrix, sammenkoblet til eksisterende nettverk (Slack, IRC, Gitter osv.) eller selvstendig. Dersom De formoder, kan De kikke på utvalget!",
+    "Chat with Riot Bot": "Nettprat med Riot Bot"
 }
