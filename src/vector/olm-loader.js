@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import olm from 'olm/olm.js';
+
 /* a very thin shim for loading olm.js: just sets the global OLM_OPTIONS and
  * requires the actual olm.js library.
  *
@@ -26,16 +29,11 @@ limitations under the License.
  * before olm.js is loaded.
  */
 
-/* total_memory must be a power of two, and at least twice the stack.
- *
- * We don't need a lot of stack, but we do need about 128K of heap to encrypt a
- * 64K event (enough to store the ciphertext and the plaintext, bearing in mind
- * that the plaintext can only be 48K because base64). We also have about 36K
- * of statics. So let's have 256K of memory.
+/* Tell the Olm js to look for its wasm file at the same level as index.html.
+ * It really should be in the same place as the js, ie. in the bundle directory,
+ * to avoid caching issues, but as far as I can tell this is completely impossible
+ * with webpack.
  */
 global.OLM_OPTIONS = {
-    TOTAL_STACK: 64*1024,
-    TOTAL_MEMORY: 256*1024,
+    locateFile: () => 'olm.wasm',
 };
-
-require('olm/olm.js');
