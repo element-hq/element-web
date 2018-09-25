@@ -256,6 +256,8 @@ First clone and build `matrix-js-sdk`:
 1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
 1. `pushd matrix-js-sdk`
 1. `git checkout develop`
+1. `npm install`
+1. `npm install source-map-loader`  # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
 1. `popd`
 
 Then similarly with `matrix-react-sdk`:
