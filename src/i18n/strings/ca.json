@@ -401,7 +401,7 @@
     "Press <StartChatButton> to start a chat with someone": "Prem <StartChatButton> per a començar un xat amb algú",
     "You may wish to login with a different account, or add this email to this account.": "És possible que vulgueu iniciar la sessió amb un altre compte o bé afegir aquest correu electrònic a aquest compte.",
     "You have been invited to join this room by %(inviterName)s": "Heu sigut convidat a aquesta sala per %(inviterName)s",
-    "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Voleu <acceptText>accept</acceptText> o bé declineText>decline</declineText> aquesta invitació?",
+    "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Voleu <acceptText>accept</acceptText> o bé <declineText>decline</declineText> aquesta invitació?",
     "Reason: %(reasonText)s": "Raó: %(reasonText)s",
     "Rejoin": "Trona a entrar",
     "You have been kicked from %(roomName)s by %(userName)s.": "%(userName)s us ha fet fora de la sala %(roomName)s.",
