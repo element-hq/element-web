@@ -148,6 +148,8 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
  * @return {Promise} A promise that resolves with the video image element.
  */
 function loadVideoElement(videoFile) {
+    const deferred = Promise.defer();
+
     // Load the file into an html element
     const video = document.createElement("video");
 
