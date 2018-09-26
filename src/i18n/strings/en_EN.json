@@ -35,5 +35,7 @@
     "Contributing code to Matrix and Riot": "Contributing code to Matrix and Riot",
     "Dev chat for the Riot/Web dev team": "Dev chat for the Riot/Web dev team",
     "Dev chat for the Dendrite dev team": "Dev chat for the Dendrite dev team",
-    "Co-ordination for Riot translators": "Co-ordination for Riot translators"
+    "Co-ordination for Riot translators": "Co-ordination for Riot translators",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!",
+    "Updating Riot": "Updating Riot"
 }
