@@ -54,6 +54,8 @@ import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/Setting
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
+import Olm from 'olm';
+
 import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
 
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
@@ -226,6 +228,20 @@ async function loadApp() {
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
     window.addEventListener('hashchange', onHashChange);
+
+    /* Start loading Olm. Note that we *don't* wait for this to load: the
+     * js-sdk will also call this and actually wait on the promise before it
+     * tries to use the library. It can be loading its wasm while the rest of
+     * the app loads though.
+     *
+     * We also need to tell the Olm js to look for its wasm file at the same
+     * level as index.html. It really should be in the same place as the js,
+     * ie. in the bundle directory, to avoid caching issues, but as far as I
+     * can tell this is completely impossible with webpack.
+     */
+    Olm.init({
+        locateFile: () => 'olm.wasm',
+    });
 
     await loadLanguage();
 
