@@ -1269,5 +1269,15 @@
     "Error Discarding Session": "Erreur lors du rejet de la session",
     "Registration Required": "Enregistrement nécessaire",
     "You need to register to do this. Would you like to register now?": "Vous devez vous enregistrer pour faire cela. Voulez-vous créer un compte maintenant ?",
-    "Unable to query for supported registration methods": "Impossible de demander les méthodes d'enregistrement prises en charge"
+    "Unable to query for supported registration methods": "Impossible de demander les méthodes d'enregistrement prises en charge",
+    "Unable to connect to Homeserver. Retrying...": "Impossible de se connecter au serveur d'accueil. Reconnexion...",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s a ajouté %(addedAddresses)s comme adresse pour ce salon.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s a ajouté %(addedAddresses)s comme adresses pour ce salon.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s a supprimé %(removedAddresses)s comme adresse pour ce salon.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s a supprimé %(removedAddresses)s comme adresses pour ce salon.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s a ajouté %(addedAddresses)s et supprimé %(removedAddresses)s comme adresses pour ce salon.",
+    "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s a défini l'adresse canonique de ce salon comme %(address)s.",
+    "%(senderName)s removed the canonical address for this room.": "%(senderName)s a supprimé l'adresse canonique de ce salon.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s à défini l'adresse principale pour ce salon comme %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s a supprimé l'adresse principale de ce salon."
 }
