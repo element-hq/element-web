@@ -31,6 +31,7 @@ import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
+import PlatformPeg from "./PlatformPeg";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -236,6 +237,27 @@ async function _restoreFromLocalStorage() {
 
 function _handleLoadSessionFailure(e) {
     console.log("Unable to load session", e);
+
+    if (e instanceof Matrix.InvalidStoreError) {
+        if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
+            const LazyLoadingResyncDialog =
+                sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
+            return Promise.resolve().then(() => {
+                const lazyLoadEnabled = e.value;
+                if (lazyLoadEnabled) {
+                    return new Promise((resolve) => {
+                        Modal.createDialog(LazyLoadingResyncDialog, {
+                            onFinished: resolve,
+                        });
+                    });
+                }
+            }).then(() => {
+                return MatrixClientPeg.get().store.deleteAllData();
+            }).then(() => {
+                PlatformPeg.get().reload();
+            });
+        }
+    }
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
