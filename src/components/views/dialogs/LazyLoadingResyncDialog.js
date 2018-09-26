@@ -20,11 +20,11 @@ import { _t } from '../../../languageHandler';
 
 export default (props) => {
     const description =
-        _t("Lazy loading has been enabled for your account. Performance!! We'll need to resync your account.");
+        _t("Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!");
 
     return (<QuestionDialog
         hasCancelButton={false}
-        title={_t("Need to resync your account")}
+        title={_t("Updating Riot")}
         description={<div>{description}</div>}
         button={_t("OK")}
         onFinished={props.onFinished}
