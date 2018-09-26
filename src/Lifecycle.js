@@ -240,11 +240,11 @@ function _handleLoadSessionFailure(e) {
 
     if (e instanceof Matrix.InvalidStoreError) {
         if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
-            const LazyLoadingResyncDialog =
-                sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
             return Promise.resolve().then(() => {
                 const lazyLoadEnabled = e.value;
                 if (lazyLoadEnabled) {
+                    const LazyLoadingResyncDialog =
+                        sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
                     return new Promise((resolve) => {
                         Modal.createDialog(LazyLoadingResyncDialog, {
                             onFinished: resolve,
