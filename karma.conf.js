@@ -32,6 +32,9 @@ const olm_entry = webpack_config.entry['olm'];
 // 'preprocessors' config below)
 delete webpack_config['entry'];
 
+// make sure we're flagged as development to avoid wasting time optimising
+webpack_config.mode = 'development';
+
 // add ./test as a search path for js
 webpack_config.module.rules.unshift({
     test: /\.js$/, use: "babel-loader",
