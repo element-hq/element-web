@@ -374,7 +374,7 @@
     "Riot was not given permission to send notifications - please try again": "Riot no pudo obtener permisos para enviar notificaciones - por favor, inténtelo de nuevo",
     "riot-web version:": "versión de riot-web:",
     "Room %(roomId)s not visible": "La sala %(roomId)s no es visible",
-    "Searches DuckDuckGo for results": "Busca en DuckDuckGo",
+    "Searches DuckDuckGo for results": "Busca resultados en DuckDuckGo",
     "Server may be unavailable or overloaded": "El servidor podría estar saturado o desconectado",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostrar marcas temporales en formato de 12 horas (ej. 2:30pm)",
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "La clave de firma que usted ha proporcionado coincide con la recibida del dispositivo %(deviceId)s de %(userId)s. Dispositivo verificado.",
