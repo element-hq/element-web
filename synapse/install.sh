@@ -45,8 +45,11 @@ cp -r $BASE_DIR/config-templates/$CONFIG_TEMPLATE/. ./
 
 # Hashes used instead of slashes because we'll get a value back from $(pwd) that'll be
 # full of un-escapable slashes.
-sed -i '' "s#{{SYNAPSE_ROOT}}#$(pwd)/#g" homeserver.yaml
-sed -i '' "s#{{SYNAPSE_PORT}}#${PORT}#g" homeserver.yaml
-sed -i '' "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml
-sed -i '' "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml
-sed -i '' "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml
+# Manually directing output to .templated file and then manually renaming back on top
+# of the original file because -i is a nonstandard sed feature which is implemented 
+# differently, across os X and ubuntu at least
+sed "s#{{SYNAPSE_ROOT}}#$(pwd)/#g" homeserver.yaml > homeserver.yaml.templated && mv homeserver.yaml.templated homeserver.yaml
+sed "s#{{SYNAPSE_PORT}}#${PORT}#g" homeserver.yaml > homeserver.yaml.templated && mv homeserver.yaml.templated homeserver.yaml
+sed "s#{{FORM_SECRET}}#$(uuidgen)#g" homeserver.yaml > homeserver.yaml.templated && mv homeserver.yaml.templated homeserver.yaml
+sed "s#{{REGISTRATION_SHARED_SECRET}}#$(uuidgen)#g" homeserver.yaml > homeserver.yaml.templated && mv homeserver.yaml.templated homeserver.yaml
+sed "s#{{MACAROON_SECRET_KEY}}#$(uuidgen)#g" homeserver.yaml > homeserver.yaml.templated && mv homeserver.yaml.templated homeserver.yaml
