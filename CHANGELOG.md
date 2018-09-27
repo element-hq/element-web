@@ -1,3 +1,14 @@
+Changes in [0.16.5-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.5-rc.1) (2018-09-27)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.4...v0.16.5-rc.1)
+
+ * Update from Weblate.
+   [\#7395](https://github.com/vector-im/riot-web/pull/7395)
+ * Reduce the number of terminals required to build riot-web to 1
+   [\#7355](https://github.com/vector-im/riot-web/pull/7355)
+ * Small typo in release notes v0.16.3
+   [\#7274](https://github.com/vector-im/riot-web/pull/7274)
+
 Changes in [0.16.4](https://github.com/vector-im/riot-web/releases/tag/v0.16.4) (2018-09-10)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.4-rc.1...v0.16.4)
