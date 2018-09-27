@@ -1279,5 +1279,7 @@
     "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s a défini l'adresse canonique de ce salon comme %(address)s.",
     "%(senderName)s removed the canonical address for this room.": "%(senderName)s a supprimé l'adresse canonique de ce salon.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s à défini l'adresse principale pour ce salon comme %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s a supprimé l'adresse principale de ce salon."
+    "%(senderName)s removed the main address for this room.": "%(senderName)s a supprimé l'adresse principale de ce salon.",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot utilise maintenant 3 à 5 fois moins de mémoire, en ne chargeant les informations des autres utilisateurs que quand elles sont nécessaires. Veuillez patienter pendant que l'on se resynchronise avec le serveur !",
+    "Updating Riot": "Mise à jour de Riot"
 }
