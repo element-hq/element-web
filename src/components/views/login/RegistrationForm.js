@@ -182,12 +182,16 @@ module.exports = React.createClass({
                     });
                 }
                 const emailValid = email === '' || Email.looksValid(email);
-                this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
+                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_EMAIL");
+                } else this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             case FIELD_PHONE_NUMBER:
                 const phoneNumber = this.refs.phoneNumber ? this.refs.phoneNumber.value : '';
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
-                this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
+                if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
+                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
+                } else this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
