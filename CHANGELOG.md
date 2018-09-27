@@ -1,3 +1,42 @@
+Changes in [0.13.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.5-rc.1) (2018-09-27)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.4...v0.13.5-rc.1)
+
+ * resync when LL is toggled, show message when enabled
+   [\#2178](https://github.com/matrix-org/matrix-react-sdk/pull/2178)
+ * Update from Weblate.
+   [\#2179](https://github.com/matrix-org/matrix-react-sdk/pull/2179)
+ * Split npm start into an init and watch script
+   [\#2175](https://github.com/matrix-org/matrix-react-sdk/pull/2175)
+ * show canonical aliases in timeline, and set/remove implicit ones
+   [\#2171](https://github.com/matrix-org/matrix-react-sdk/pull/2171)
+ * Fix stale RR and improve LL reliability in RoomView & MemberList.
+   [\#2168](https://github.com/matrix-org/matrix-react-sdk/pull/2168)
+ * pass --travis flag to e2e tests to disable tests known not to work Travis CI
+   [\#2170](https://github.com/matrix-org/matrix-react-sdk/pull/2170)
+ * Add m.room.aliases to the timeline
+   [\#2167](https://github.com/matrix-org/matrix-react-sdk/pull/2167)
+ * postpone loading the members until the user joined the room
+   [\#2165](https://github.com/matrix-org/matrix-react-sdk/pull/2165)
+ * Allow translation tags object to be a variable
+   [\#2166](https://github.com/matrix-org/matrix-react-sdk/pull/2166)
+ * Don't try to exit fullscreen if not fullscreen
+   [\#2164](https://github.com/matrix-org/matrix-react-sdk/pull/2164)
+ * avoid updating the memberlist while the spinner is shown
+   [\#2161](https://github.com/matrix-org/matrix-react-sdk/pull/2161)
+ * fix logging room id when LL members fail
+   [\#2163](https://github.com/matrix-org/matrix-react-sdk/pull/2163)
+ * dont keep the spinner in the memberlist when fetching /members fails
+   [\#2162](https://github.com/matrix-org/matrix-react-sdk/pull/2162)
+ * only dispatch an action for self-membership
+   [\#2160](https://github.com/matrix-org/matrix-react-sdk/pull/2160)
+ * avoid unneeded lookups in memberDict
+   [\#2153](https://github.com/matrix-org/matrix-react-sdk/pull/2153)
+ * Update from Weblate.
+   [\#2157](https://github.com/matrix-org/matrix-react-sdk/pull/2157)
+ * avoid memberlist refresh for events related to rooms other but the current
+   [\#2156](https://github.com/matrix-org/matrix-react-sdk/pull/2156)
+
 Changes in [0.13.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.4) (2018-09-10)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.4-rc.1...v0.13.4)
