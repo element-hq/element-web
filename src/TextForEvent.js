@@ -228,14 +228,12 @@ function textForRoomAliasesEvent(ev) {
             removedAddresses: removedAliases.join(', '),
         });
     } else {
-        const args = {
-            senderName: senderName,
-            addedAddresses: addedAliases.join(', '),
-            removedAddresses: removedAliases.join(', '),
-        };
         return _t(
-            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.',
-            args,
+            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
+                senderName: senderName,
+                addedAddresses: addedAliases.join(', '),
+                removedAddresses: removedAliases.join(', '),
+            },
         );
     }
 }
