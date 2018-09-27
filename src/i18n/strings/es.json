@@ -740,7 +740,7 @@
     "Every page you use in the app": "Todas las páginas que usas en la aplicación",
     "Your User Agent": "Tu Agente de Usuario",
     "Your device resolution": "La resolución de tu dispositivo",
-    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Hay dispositivos desconocidos en esta sala: si procede sin verificarlos, será posible que alguien escuche su llamada.",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Hay dispositivos desconocidos en esta sala: si procedes sin verificarlos, será posible que alguien que no desees escuche tu llamada.",
     "Which officially provided instance you are using, if any": "Cuál instancia ofrecida oficialmente está usando, si existe",
     "e.g. %(exampleValue)s": "ej. %(exampleValue)s",
     "e.g. <CurrentPageURL>": "e.g. <CurrentPageURL>",
