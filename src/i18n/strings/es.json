@@ -505,7 +505,7 @@
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s le quitó el veto a %(targetName)s.",
     "unencrypted": "no cifrado",
     "Unmute": "Dejar de silenciar",
-    "Unrecognised command:": "comando no reconocido:",
+    "Unrecognised command:": "Comando no identificado:",
     "Unrecognised room alias:": "alias de sala no reconocido:",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nivel de permisos %(powerLevelNumber)s)",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVERTENCIA: VERIFICACIÓN DE CLAVE FALLO\" La clave de firma para %(userId)s y el dispositivo %(deviceId)s es \"%(fprint)s\" la cual no concuerda con la clave provista por \"%(fingerprint)s\". Esto puede significar que sus comunicaciones están siendo interceptadas!",
