@@ -1255,5 +1255,17 @@
     "The room upgrade could not be completed": "La actualización de la sala no pudo ser completada",
     "Upgrade this room to version %(version)s": "Actualiza esta sala a la versión %(version)s",
     "Legal": "Legal",
-    "Unable to connect to Homeserver. Retrying...": "No es posible conectarse al Servidor Doméstico. Volviendo a intentar..."
+    "Unable to connect to Homeserver. Retrying...": "No es posible conectarse al Servidor Doméstico. Volviendo a intentar...",
+    "Registration Required": "Se Requiere Registro",
+    "You need to register to do this. Would you like to register now?": "Necesitas registrarte para hacer esto. ¿Te gustaría registrarte ahora?",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s añadió %(addedAddresses)s como direcciones para esta sala.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s añadió %(addedAddresses)s como una dirección para esta sala.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s eliminó %(removedAddresses)s como direcciones para esta sala.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s eliminó %(removedAddresses)s como una dirección para esta sala.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s añadió %(addedAddresses)s y eliminó %(removedAddresses)s como direcciones para esta sala.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s estableció la dirección principal para esta sala como %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s eliminó la dirección principal para esta sala.",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot ahora utiliza de 3 a 5 veces menos memoria, porque solo carga información sobre otros usuarios cuando es necesario. Por favor, ¡aguarda mientras volvemos a sincronizar con el servidor!",
+    "Updating Riot": "Actualizando Riot",
+    "Unable to query for supported registration methods": "No es posible consultar por los métodos de registro compatibles"
 }
