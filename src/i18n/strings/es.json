@@ -503,7 +503,7 @@
     "The maximum permitted number of widgets have already been added to this room.": "La cantidad máxima de widgets permitida ha sido alcanzada en esta sala.",
     "To use it, just wait for autocomplete results to load and tab through them.": "Para usar, solo espere a que carguen los resultados de auto-completar y navegue entre ellos.",
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s le quitó el veto a %(targetName)s.",
-    "unencrypted": "no cifrado",
+    "unencrypted": "sin cifrar",
     "Unmute": "Dejar de silenciar",
     "Unrecognised command:": "Comando no identificado:",
     "Unrecognised room alias:": "alias de sala no reconocido:",
