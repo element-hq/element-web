@@ -251,7 +251,9 @@ async function loadApp() {
 
     // don't try to redirect to the native apps if we're
     // verifying a 3pid (but after we've loaded the config)
-    const preventRedirect = Boolean(fragparts.params.client_secret);
+    // or if the user is following a deep link
+    // (https://github.com/vector-im/riot-web/issues/7378)
+    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
 
     if (!preventRedirect) {
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
