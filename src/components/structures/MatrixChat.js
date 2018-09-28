@@ -1261,8 +1261,8 @@ export default React.createClass({
             // its own dispatch).
             dis.dispatch({action: 'sync_state', prevState, state});
 
-            if (state === "ERROR") {
-                self.setState({syncError: data.error});
+            if (state === "ERROR" || state === "RECONNECTING") {
+                self.setState({syncError: data.error || true});
             } else if (self.state.syncError) {
                 self.setState({syncError: null});
             }
