@@ -273,6 +273,12 @@ function textForCallHangupEvent(event) {
             reason = _t('(could not connect media)');
         } else if (eventContent.reason === "invite_timeout") {
             reason = _t('(no answer)');
+        } else if (eventContent.reason === "user hangup") {
+            // workaround for https://github.com/vector-im/riot-web/issues/5178
+            // it seems Android randomly sets a reason of "user hangup" which is
+            // interpreted as an error code :(
+            // https://github.com/vector-im/riot-android/issues/2623
+            reason = '';
         } else {
             reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
         }
