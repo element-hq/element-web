@@ -1277,5 +1277,9 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s 移除了 %(removedAddresses)s 為此聊天室的位置。",
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s 新增了 %(addedAddresses)s 並移除了 %(removedAddresses)s 為此聊天室的位置。",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s 為此聊天室設定了主要位置 %(address)s。",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s 移除了此聊天室的主要位置。"
+    "%(senderName)s removed the main address for this room.": "%(senderName)s 移除了此聊天室的主要位置。",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "在遞交紀錄檔前，您必須<a>建立 GitHub 議題</a>以描述您的問題。",
+    "What GitHub issue are these logs for?": "這些紀錄檔的 GitHub 議題是什麼？",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot 現在僅使用三分之一到五分之一的記憶體，僅在需要時才會載入其他使用者的資訊。請等待我們與伺服器重新同步！",
+    "Updating Riot": "正在 Riot"
 }
