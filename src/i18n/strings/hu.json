@@ -1279,5 +1279,9 @@
     "%(senderName)s set the canonical address for this room to %(address)s.": "%(senderName)s olvasható címet allított be a szobához: %(address)s.",
     "%(senderName)s removed the canonical address for this room.": "%(senderName)s törölte a szoba olvasható címét.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s elsődleges szoba címnek beállította: %(address)s.",
-    "%(senderName)s removed the main address for this room.": "A szoba elsődleges címét %(senderName)s törölte."
+    "%(senderName)s removed the main address for this room.": "A szoba elsődleges címét %(senderName)s törölte.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Mielőtt a naplót elküldöd, egy <a>Github jegyet kell nyitni</a> amiben leírod a problémádat.",
+    "What GitHub issue are these logs for?": "Melyik Github jegyhez tartozik a napló?",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "3-, 5-ször kevesebb memóriát használ a Riot azzal, hogy csak akkor tölti be az információkat a felhasználókról amikor arra szükség van. Kérlek várd meg amíg újraszinkronizáljuk a szerverrel!",
+    "Updating Riot": "Riot frissítése"
 }
