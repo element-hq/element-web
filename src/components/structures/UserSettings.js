@@ -803,7 +803,7 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Debug Logs Submission") }</h3>
+                <h3>{ _t("Submit Debug Logs") }</h3>
                 <div className="mx_UserSettings_section">
                     <p>{
                         _t( "If you've submitted a bug via GitHub, debug logs can help " +
