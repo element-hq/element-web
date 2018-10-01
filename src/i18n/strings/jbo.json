@@ -26,14 +26,14 @@
     "Riot/Android &amp; matrix-android-sdk chat": "lo nu casnu la guglyfonkemsamcmu nu zunti .e la'o gy. matrix-android-sdk .gy.",
     "Matrix technical discussions": "lo nu casnu lo zbaske be la nacmeimei",
     "Announcements about Synapse releases": "lo notci be lo farvi tcini pe la nirna",
-    "Support for those using and running matrix-appservice-irc": "lo nu sidju lo pilno ja se te se selfu be la'o gy. matrix-appservice-irc .gy.",
+    "Support for those using and running matrix-appservice-irc": "lo nu sidju lo pilno ja admine be la'o gy. matrix-appservice-irc .gy.",
     "Building services on Matrix": "lo nu finti lo te selfu ji'u la nacmeimei",
     "Support for those using the Matrix spec": "lo nu sidju lo pilno be lo sarcu pe la nacmeimei",
     "Design and implementation of E2E in Matrix": "lo nu finti lo mulno mifra te platu .a lo samtcise'u be my. ji'u la nacmeimei",
-    "Support for those using, running and writing other bridges": "lo nu sidju lo pilno ja se te se selfu ja finti be lo drata te jorne",
+    "Support for those using, running and writing other bridges": "lo nu sidju lo pilno ja admine ja finti be lo drata te jorne",
     "Dev chat for the Riot/Web dev team": "lo nu lo favgau be la kibro nu zunti cu casnu",
     "Dev chat for the Dendrite dev team": "lo nu lo favgau be la nirndendriti cu casnu",
     "Implementing VoIP services with Matrix": "lo nu finti lo samtcise'u be fi la .voip. ji'u la nacmeimei",
     "Implementing VR services with Matrix": "lo nu finti lo samtcise'u be fi lo na'e fatci munje ji'u la nacmeimei",
-    "Admin support for Dendrite": "lo nu sidju lo"
+    "Admin support for Dendrite": "lo nu sidju lo admine be la nirndendriti"
 }
