@@ -1,1 +1,10 @@
-{}
+{
+    "This email address is already in use": ".i ca'o pilno le te samymri",
+    "This phone number is already in use": ".i ca'o pilno le fonjudri",
+    "Failed to verify email address: make sure you clicked the link in the email": ".i na pu facki lo du'u xu kau do ponse le skami te mrilu .i ko birti lo du'u do pu skami cuxna le urli pe le se samymri",
+    "The platform you're on": "le ciste poi do pilno",
+    "The version of Riot.im": "le farvi tcini be la nu zunti",
+    "Whether or not you're logged in (we don't record your user name)": "lo du'u xu kau do cmisau to na vreji le do plicme toi",
+    "Your language of choice": "le se cuxna be fi lo'i bangu",
+    "Which officially provided instance you are using, if any": "le klesi poi ca'irselzau se sabji poi do pilno"
+}
