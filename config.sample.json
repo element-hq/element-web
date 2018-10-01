@@ -25,9 +25,7 @@
     "default_theme": "dark",
     "roomDirectory": {
         "servers": [
-            "psyberia.im",
-            "neocrypto.io",
-            "matrix.org"
+            "neocrypto.io"
         ]
     },
     "piwik": {
