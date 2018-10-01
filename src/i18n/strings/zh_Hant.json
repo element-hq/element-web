@@ -1281,5 +1281,9 @@
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "在遞交紀錄檔前，您必須<a>建立 GitHub 議題</a>以描述您的問題。",
     "What GitHub issue are these logs for?": "這些紀錄檔的 GitHub 議題是什麼？",
     "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot 現在僅使用三分之一到五分之一的記憶體，僅在需要時才會載入其他使用者的資訊。請等待我們與伺服器重新同步！",
-    "Updating Riot": "正在更新 Riot"
+    "Updating Riot": "正在更新 Riot",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>您社群頁面的 HTML</h1>\n<p>\n    使用長描述以向新成員介紹社群，或是散佈\n    一些重要<a href=\"foo\">連結</a>\n</p>\n<p>\n    您也可以使用「img」標籤\n</p>\n",
+    "Submit Debug Logs": "遞交除錯紀錄",
+    "An email address is required to register on this homeserver.": "在此家伺服器上註冊必須填入電子郵件。",
+    "A phone number is required to register on this homeserver.": "在此伺服器上註冊必須填入電話號碼。"
 }
