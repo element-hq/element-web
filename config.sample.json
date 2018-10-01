@@ -9,7 +9,7 @@
     "integrations_ui_url": "https://dimension.neocrypto.io/riot",
     "integrations_rest_url": "https://dimension.neocrypto.io/api/v1/scalar",
     "integrations_widgets_urls": ["https://dimension.neocrypto.io/widgets"],
-    "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
+    "integrations_jitsi_widget_url": "https://dimension.neocrypto.io/api/widgets/jitsi.html",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
         "feature_groups": "enable",
@@ -25,17 +25,14 @@
     "default_theme": "dark",
     "roomDirectory": {
         "servers": [
-            "psyberia.im",
-            "neocrypto.io",
-            "matrix.org"
+            "neocrypto.io"
         ]
     },
-    "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
-        "url": "https://piwik.neocrypto.io/",
+        "url": "https://analytics.neocrypto.io/",
         "whitelistedHSUrls": ["https://matrix.org", "https://psyberia.im", "https://neocrypto.io"],
         "whitelistedISUrls": ["https://vector.im", "https://matrix.org", "https://neocrypto.io"],
-        "siteId": 1
+        "siteId": 7
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false

@@ -241,18 +241,6 @@ apps using React.
 After creating a new component you must run `npm run reskindex` to regenerate
 the `component-index.js` for the app (used in future for skinning)
 
-**However, as of July 2016 this layering abstraction is broken due to rapid
-development on Riot forcing `matrix-react-sdk` to move fast at the expense of
-maintaining a clear abstraction between the two.**  Hacking on Riot inevitably
-means hacking equally on `matrix-react-sdk`, and there are bits of
-`matrix-react-sdk` behaviour incorrectly residing in the `riot-web` project
-(e.g. matrix-react-sdk specific CSS), and a bunch of Riot specific behaviour
-in the `matrix-react-sdk` (grep for `vector` / `riot`).  This separation problem will be
-solved asap once development on Riot (and thus matrix-react-sdk) has
-stabilised.  Until then, the two projects should basically be considered as a
-single unit.  In particular, `matrix-react-sdk` issues are currently filed
-against `riot-web` in github.
-
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
