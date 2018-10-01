@@ -1286,5 +1286,6 @@
     "Updating Riot": "Riot frissítése",
     "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML a közösségi oldaladhoz</h1>\n<p>\n    Mutasd be a közösségedet az újoncoknak vagy ossz meg\n    pár fontos <a href=\"foo\">linket</a>\n</p>\n<p>\n    Még „img” tag-et is használhatsz.\n</p>\n",
     "An email address is required to register on this homeserver.": "Erre a Matrix szerverre való regisztrációhoz az e-mail címet meg kell adnod.",
-    "A phone number is required to register on this homeserver.": "Erre a Matrix szerverre való regisztrációhoz a telefonszámot meg kell adnod."
+    "A phone number is required to register on this homeserver.": "Erre a Matrix szerverre való regisztrációhoz a telefonszámot meg kell adnod.",
+    "Submit Debug Logs": "Hibakeresési napló elküldése"
 }
