@@ -1283,5 +1283,9 @@
     "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot utilise maintenant 3 à 5 fois moins de mémoire, en ne chargeant les informations des autres utilisateurs que quand elles sont nécessaires. Veuillez patienter pendant que l'on se resynchronise avec le serveur !",
     "Updating Riot": "Mise à jour de Riot",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Avant de soumettre vos journaux, vous devez <a>créer une « issue » sur GitHub</a> pour décrire votre problème.",
-    "What GitHub issue are these logs for?": "Pour quelle « issue » Github sont ces journaux ?"
+    "What GitHub issue are these logs for?": "Pour quelle « issue » Github sont ces journaux ?",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML pour votre page de communauté</h1>\n<p>\n    Utilisez la description longue pour présenter la communauté aux nouveaux membres,\n    ou fournir des <a href=\"foo\">liens</a> importants\n</p>\n<p>\n    Vous pouvez même utiliser des balises « img »\n</p>\n",
+    "Submit Debug Logs": "Envoyer les journaux de débogage",
+    "An email address is required to register on this homeserver.": "Une adresse e-mail est nécessaire pour s'enregistrer sur ce serveur d'accueil.",
+    "A phone number is required to register on this homeserver.": "Un numéro de téléphone est nécessaire pour s'enregistrer sur ce serveur d'accueil."
 }
