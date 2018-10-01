@@ -1,3 +1,23 @@
+Changes in [0.16.5](https://github.com/vector-im/riot-web/releases/tag/v0.16.5) (2018-10-01)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.5-rc.1...v0.16.5)
+
+ * Don't show mobile guide if deep linking
+   [\#7415](https://github.com/vector-im/riot-web/pull/7415)
+ * Don't show custom server bit on matrix.org
+   [\#7408](https://github.com/vector-im/riot-web/pull/7408)
+
+Changes in [0.16.5-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.5-rc.1) (2018-09-27)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.4...v0.16.5-rc.1)
+
+ * Update from Weblate.
+   [\#7395](https://github.com/vector-im/riot-web/pull/7395)
+ * Reduce the number of terminals required to build riot-web to 1
+   [\#7355](https://github.com/vector-im/riot-web/pull/7355)
+ * Small typo in release notes v0.16.3
+   [\#7274](https://github.com/vector-im/riot-web/pull/7274)
+
 Changes in [0.16.4](https://github.com/vector-im/riot-web/releases/tag/v0.16.4) (2018-09-10)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.4-rc.1...v0.16.4)
@@ -224,7 +244,7 @@ Changes in [0.15.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.1
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.15.0-rc.1...v0.15.0-rc.2)
 
- * Update to matrix-react-sdk 0.12.4-rc.2 
+ * Update to matrix-react-sdk 0.12.4-rc.2
 
 Changes in [0.15.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.15.0-rc.1) (2018-05-09)
 ======================================================================================================
@@ -328,7 +348,7 @@ Changes in [0.14.0-rc.6](https://github.com/vector-im/riot-web/releases/tag/v0.1
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.14.0-rc.5...v0.14.0-rc.6)
 
- * Bump react-sdk to [rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.6) 
+ * Bump react-sdk to [rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.12.0-rc.6)
 
 Changes in [0.14.0-rc.5](https://github.com/vector-im/riot-web/releases/tag/v0.14.0-rc.5) (2018-04-09)
 ======================================================================================================
