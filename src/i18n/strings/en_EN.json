@@ -1137,7 +1137,7 @@
     "Device ID:": "Device ID:",
     "Device key:": "Device key:",
     "Ignored Users": "Ignored Users",
-    "Debug Logs Submission": "Debug Logs Submission",
+    "Submit Debug Logs": "Submit Debug Logs",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot collects anonymous analytics to allow us to improve the application.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.",
