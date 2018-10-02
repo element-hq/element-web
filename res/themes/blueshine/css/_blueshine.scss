@@ -159,6 +159,8 @@ $roomtile-name-color: #EBECED;
 $roomtile-selected-bg-color: #459BA1;
 $roomtile-focused-bg-color: #12686E;
 
+$roomsublist-label-bg-color-override: #004248;
+
 $roomsublist-background: rgba(0, 0, 0, 0.2);
 $roomsublist-label-fg-color: #C5C6C7;
 $roomsublist-label-bg-color: $secondary-accent-color;
@@ -233,6 +235,7 @@ $progressbar-color: #000;
     font-size: 13px;
     font-family: $header-font-family;
     letter-spacing: 1px;
+    background-color: $roomsublist-label-bg-color-override !important;
 }
 
 // FIXME: all these ! importants are horrid - we should instead go and define
