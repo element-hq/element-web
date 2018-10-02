@@ -91,13 +91,16 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        const llMembers = MatrixClientPeg.get().hasLazyLoadMembersEnabled();
         return {
             room: null,
             roomId: null,
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
-
+            // used to trigger a rerender in TimelinePanel once the members are loaded,
+            // so RR are rendered again (now with the members available), ...
+            membersLoaded: !llMembers,
             // The event to be scrolled to initially
             initialEventId: null,
             // The offset in pixels from the event with which to scroll vertically
@@ -148,7 +151,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
-        MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
+        MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
 
         // Start listening for RoomViewStore updates
@@ -314,16 +317,6 @@ module.exports = React.createClass({
                 // Stop peeking because we have joined this room previously
                 MatrixClientPeg.get().stopPeeking();
                 this.setState({isPeeking: false});
-
-                // lazy load members if enabled
-                if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-                    room.loadMembersIfNeeded().catch((err) => {
-                        const errorMessage = `Fetching room members for ${room.roomId} failed.` +
-                            " Room members will appear incomplete.";
-                        console.error(errorMessage);
-                        console.error(err);
-                    });
-                }
             }
         }
     },
@@ -422,8 +415,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
+            MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
-            MatrixClientPeg.get().removeListener("RoomMember.membership", this.onRoomMemberMembership);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
 
@@ -592,6 +585,27 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        this._loadMembersIfJoined(room);
+    },
+
+    _loadMembersIfJoined: async function(room) {
+        // lazy load members if enabled
+        const cli = MatrixClientPeg.get();
+        if (cli.hasLazyLoadMembersEnabled()) {
+            if (room && room.getMyMembership() === 'join') {
+                try {
+                    await room.loadMembersIfNeeded();
+                    if (!this.unmounted) {
+                        this.setState({membersLoaded: true});
+                    }
+                } catch (err) {
+                    const errorMessage = `Fetching room members for ${room.roomId} failed.` +
+                        " Room members will appear incomplete.";
+                    console.error(errorMessage);
+                    console.error(err);
+                }
+            }
+        }
     },
 
     _warnAboutEncryption: function(room) {
@@ -703,9 +717,10 @@ module.exports = React.createClass({
         this._updateRoomMembers();
     },
 
-    onRoomMemberMembership: function(ev, member, oldMembership) {
-        if (member.userId == MatrixClientPeg.get().credentials.userId) {
+    onMyMembership: function(room, membership, oldMembership) {
+        if (room.roomId === this.state.roomId) {
             this.forceUpdate();
+            this._loadMembersIfJoined(room);
         }
     },
 
@@ -1753,6 +1768,7 @@ module.exports = React.createClass({
                 onReadMarkerUpdated={this._updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
+                membersLoaded={this.state.membersLoaded}
             />);
 
         let topUnreadMessagesBar = null;

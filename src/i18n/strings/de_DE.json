@@ -1266,5 +1266,16 @@
     "The room upgrade could not be completed": "Die Raum-Aufrüstung konnte nicht fertiggestellt werden",
     "Upgrade this room to version %(version)s": "Diesen Raum zur Version %(version)s aufrüsten",
     "Forces the current outbound group session in an encrypted room to be discarded": "Erzwingt, dass die aktuell ausgehende Gruppen-Sitzung in einem verschlüsseltem Raum verworfen wird",
-    "Error Discarding Session": "Sitzung konnte nicht verworfen werden"
+    "Error Discarding Session": "Sitzung konnte nicht verworfen werden",
+    "Registration Required": "Registrierung erforderlich",
+    "You need to register to do this. Would you like to register now?": "Du musst dich registrieren um dies zu tun. Möchtest du dich jetzt registrieren?",
+    "Unable to connect to Homeserver. Retrying...": "Verbindung mit Heimserver nicht möglich. Versuche erneut...",
+    "Unable to query for supported registration methods": "Unterstützte Registrierungsmethoden können nicht abgefragt werden",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s fügte %(addedAddresses)s als Adresse zu diesem Raum hinzu.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s fügte %(addedAddresses)s als Adressen zu diesem Raum hinzu.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s entfernte %(removedAddresses)s als Adresse von diesem Raum.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s entfernte %(removedAddresses)s als Adressen von diesem Raum.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s setzte die Hauptadresse zu diesem Raum auf %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s entfernte die Hauptadresse von diesem Raum.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s fügte %(addedAddresses)s hinzu und entfernte %(removedAddresses)s als Adressen von diesem Raum."
 }

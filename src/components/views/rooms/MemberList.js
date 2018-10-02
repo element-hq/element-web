@@ -34,18 +34,23 @@ module.exports = React.createClass({
     getInitialState: function() {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
-            return {loading: true};
+            // show an empty list
+            return this._getMembersState([]);
         } else {
-            return this._getMembersState();
+            return this._getMembersState(this.roomMembers());
         }
     },
 
     componentWillMount: function() {
-        this._mounted = false;
+        this._mounted = true;
         const cli = MatrixClientPeg.get();
-        if (!cli.hasLazyLoadMembersEnabled()) {
+        if (cli.hasLazyLoadMembersEnabled()) {
+            this._showMembersAccordingToMembershipWithLL();
+            cli.on("Room.myMembership", this.onMyMembership);
+        } else {
             this._listenForMembersChanges();
         }
+        cli.on("Room", this.onRoom); // invites & joining after peek
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
         this._showPresence = true;
@@ -59,24 +64,11 @@ module.exports = React.createClass({
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
-        cli.on("Room", this.onRoom); // invites
         // We listen for changes to the lastPresenceTs which is essentially
         // listening for all presence events (we display most of not all of
         // the information contained in presence events).
         cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
         // cli.on("Room.timeline", this.onRoomTimeline);
-    },
-
-    componentDidMount: async function() {
-        this._mounted = true;
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
-            await this._waitForMembersToLoad();
-            if (this._mounted) {
-                this.setState(this._getMembersState());
-                this._listenForMembersChanges();
-            }
-        }
     },
 
     componentWillUnmount: function() {
@@ -85,29 +77,44 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
+            cli.removeListener("Room.myMembership", this.onMyMembership);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
             cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
-            // cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateList.cancelPendingCall();
     },
 
-    _waitForMembersToLoad: async function() {
-        if (!this.props.roomId) return {};
+    /**
+     * If lazy loading is enabled, either:
+     * show a spinner and load the members if the user is joined,
+     * or show the members available so far if the user is invited
+     */
+    _showMembersAccordingToMembershipWithLL: async function() {
         const cli = MatrixClientPeg.get();
-        const room = cli.getRoom(this.props.roomId);
-        if (room) {
-            try {
-                await room.loadMembersIfNeeded();
-            } catch(ex) {/* already logged in RoomView */}
+        if (cli.hasLazyLoadMembersEnabled()) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(this.props.roomId);
+            const membership = room && room.getMyMembership();
+            if (membership === "join") {
+                this.setState({loading: true});
+                try {
+                    await room.loadMembersIfNeeded();
+                } catch (ex) {/* already logged in RoomView */}
+                if (this._mounted) {
+                    this.setState(this._getMembersState(this.roomMembers()));
+                    this._listenForMembersChanges();
+                }
+            } else if (membership === "invite") {
+                // show the members we've got when invited
+                this.setState(this._getMembersState(this.roomMembers()));
+            }
         }
     },
 
-    _getMembersState: function() {
-        const members = this.roomMembers();
+    _getMembersState: function(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
         return {
@@ -123,34 +130,6 @@ module.exports = React.createClass({
             searchQuery: "",
         };
     },
-
-/*
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        // ignore anything but real-time updates at the end of the room:
-        // updates from pagination will happen when the paginate completes.
-        if (toStartOfTimeline || !data || !data.liveEvent) return;
-
-        // treat any activity from a user as implicit presence to update the
-        // ordering of the list whenever someone says something.
-        // Except right now we're not tiebreaking "active now" users in this way
-        // so don't bother for now.
-        if (ev.getSender()) {
-            // console.log("implicit presence from " + ev.getSender());
-
-            var tile = this.refs[ev.getSender()];
-            if (tile) {
-                // work around a race where you might have a room member object
-                // before the user object exists.  XXX: why does this ever happen?
-                var all_members = room.currentState.members;
-                var userId = ev.getSender();
-                if (all_members[userId].user === null) {
-                    all_members[userId].user = MatrixClientPeg.get().getUser(userId);
-                }
-                this._updateList(); // reorder the membership list
-            }
-        }
-    },
-*/
 
     onUserLastPresenceTs(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
@@ -170,7 +149,13 @@ module.exports = React.createClass({
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        this._updateList();
+        this._showMembersAccordingToMembershipWithLL();
+    },
+
+    onMyMembership: function(room, membership, oldMembership) {
+        if (room.roomId === this.props.roomId && membership === "join") {
+            this._showMembersAccordingToMembershipWithLL();
+        }
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -197,6 +182,7 @@ module.exports = React.createClass({
     _updateList: new rate_limited_func(function() {
         // console.log("Updating memberlist");
         const newState = {
+            loading: false,
             members: this.roomMembers(),
         };
         newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);

@@ -198,6 +198,64 @@ function textForMessageEvent(ev) {
     return message;
 }
 
+function textForRoomAliasesEvent(ev) {
+    // An alternative implementation of this as a first-class event can be found at
+    // https://github.com/matrix-org/matrix-react-sdk/blob/dc7212ec2bd12e1917233ed7153b3e0ef529a135/src/components/views/messages/RoomAliasesEvent.js
+    // This feels a bit overkill though, and it's not clear the i18n really needs it
+    // so instead it's landing as a simple textual event.
+
+    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const oldAliases = ev.getPrevContent().aliases || [];
+    const newAliases = ev.getContent().aliases || [];
+
+    const addedAliases = newAliases.filter((x) => !oldAliases.includes(x));
+    const removedAliases = oldAliases.filter((x) => !newAliases.includes(x));
+
+    if (!addedAliases.length && !removedAliases.length) {
+        return '';
+    }
+
+    if (addedAliases.length && !removedAliases.length) {
+        return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            count: addedAliases.length,
+            addedAddresses: addedAliases.join(', '),
+        });
+    } else if (!addedAliases.length && removedAliases.length) {
+        return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            count: removedAliases.length,
+            removedAddresses: removedAliases.join(', '),
+        });
+    } else {
+        return _t(
+            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
+                senderName: senderName,
+                addedAddresses: addedAliases.join(', '),
+                removedAddresses: removedAliases.join(', '),
+            },
+        );
+    }
+}
+
+function textForCanonicalAliasEvent(ev) {
+    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const oldAlias = ev.getPrevContent().alias;
+    const newAlias = ev.getContent().alias;
+
+    if (newAlias) {
+        return _t('%(senderName)s set the main address for this room to %(address)s.', {
+            senderName: senderName,
+            address: ev.getContent().alias,
+        });
+    }
+    else if (oldAlias) {
+        return _t('%(senderName)s removed the main address for this room.', {
+            senderName: senderName,
+        });
+    }
+}
+
 function textForCallAnswerEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
@@ -215,6 +273,12 @@ function textForCallHangupEvent(event) {
             reason = _t('(could not connect media)');
         } else if (eventContent.reason === "invite_timeout") {
             reason = _t('(no answer)');
+        } else if (eventContent.reason === "user hangup") {
+            // workaround for https://github.com/vector-im/riot-web/issues/5178
+            // it seems Android randomly sets a reason of "user hangup" which is
+            // interpreted as an error code :(
+            // https://github.com/vector-im/riot-android/issues/2623
+            reason = '';
         } else {
             reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
         }
@@ -359,6 +423,8 @@ const handlers = {
 };
 
 const stateHandlers = {
+    'm.room.aliases': textForRoomAliasesEvent,
+    'm.room.canonical_alias': textForCanonicalAliasEvent,
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,

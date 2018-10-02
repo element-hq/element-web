@@ -286,6 +286,14 @@ export default React.createClass({
                 register_hs_url: paramHs,
             });
         }
+        // Set a default IS with query param `is_url`
+        const paramIs = this.props.startingFragmentQueryParams.is_url;
+        if (paramIs) {
+            console.log('Setting register_is_url ', paramIs);
+            this.setState({
+                register_is_url: paramIs,
+            });
+        }
 
         // a thing to call showScreen with once login completes.  this is kept
         // outside this.state because updating it should never trigger a
@@ -1253,8 +1261,8 @@ export default React.createClass({
             // its own dispatch).
             dis.dispatch({action: 'sync_state', prevState, state});
 
-            if (state === "ERROR") {
-                self.setState({syncError: data.error});
+            if (state === "ERROR" || state === "RECONNECTING") {
+                self.setState({syncError: data.error || true});
             } else if (self.state.syncError) {
                 self.setState({syncError: null});
             }

@@ -120,7 +120,7 @@ class RoomListStore extends Store {
                 this._generateRoomLists();
             }
             break;
-            case 'MatrixActions.Room.selfMembership': {
+            case 'MatrixActions.Room.myMembership': {
                 this._generateRoomLists();
             }
             break;
@@ -214,8 +214,6 @@ class RoomListStore extends Store {
                 }
             } else if (membership === "leave") {
                 lists["im.vector.fake.archived"].push(room);
-            } else {
-                console.error("unrecognised membership: " + membership + " - this should never happen");
             }
         });
 

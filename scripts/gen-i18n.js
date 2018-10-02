@@ -158,6 +158,7 @@ function getTranslationsJs(file) {
                     } catch (e) {
                         console.log();
                         console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
+                        console.error(e);
                         process.exit(1);
                     }
                 }
