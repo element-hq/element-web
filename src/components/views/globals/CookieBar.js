@@ -95,7 +95,7 @@ export default class CookieBar extends React.Component {
                     { _t("Yes, I want to help!") }
                 </AccessibleButton>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.onReject}>
-                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')}/>
+                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')} />
                 </AccessibleButton>
             </div>
         );

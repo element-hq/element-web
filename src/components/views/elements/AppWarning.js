@@ -1,6 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
 
 const AppWarning = (props) => {
     return (

@@ -1233,10 +1233,10 @@ module.exports = React.createClass({
                             value={this.presentableTextForThreepid(val)} disabled
                         />
                     </div>
-                    <AccessibleButton className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <img src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                        <AccessibleButton element="img" src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
                             onClick={onRemoveClick} />
-                    </AccessibleButton>
+                    </div>
                 </div>
             );
         });
@@ -1258,9 +1258,9 @@ module.exports = React.createClass({
                             blurToCancel={false}
                             onValueChanged={this._onAddEmailEditFinished} />
                     </div>
-                    <AccessibleButton className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
-                    </AccessibleButton>
+                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                         <AccessibleButton element="img" src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
+                    </div>
                 </div>
             );
         }
@@ -1339,14 +1339,14 @@ module.exports = React.createClass({
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
                                 showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>
-                        <AccessibleButton className="mx_UserSettings_avatarPicker_edit">
+                        <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
                                 <img src="img/camera.svg" className="mx_filterFlipColor"
                                     alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
                             <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
-                        </AccessibleButton>
+                        </div>
                     </div>
                 </div>
 
