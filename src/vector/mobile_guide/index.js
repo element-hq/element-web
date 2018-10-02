@@ -13,6 +13,7 @@ async function initPage() {
     if (config && config['default_hs_url']) {
         hsUrl = config['default_hs_url'];
     }
+    if (hsUrl && !hsUrl.endsWith('/')) hsUrl += '/';
     if (hsUrl && hsUrl !== 'https://matrix.org/') {
         document.getElementById('step2_container').style.display = 'block';
         document.getElementById('hs_url').innerHTML = hsUrl;

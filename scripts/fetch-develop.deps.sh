@@ -52,13 +52,7 @@ function dodep() {
     echo "$repo set to branch "`git -C "$repo" rev-parse --abbrev-ref HEAD`
 
     mkdir -p node_modules
-    rm -r "node_modules/$repo" 2>/dev/null || true
-    ln -sv "../$repo" node_modules/
-
-    (
-        cd $repo
-        npm install
-    )
+    npm link "./$repo"  # This does an npm install for us
 }
 
 ##############################
@@ -77,14 +71,15 @@ echo 'Setting up matrix-react-sdk'
 
 dodep matrix-org matrix-react-sdk
 
-# replace the version of js-sdk that got pulled into react-sdk with a symlink
+# replace the version of js-sdk that got pulled into react-sdk with a link
 # to our version. Make sure to do this *after* doing 'npm i' in react-sdk,
 # otherwise npm helpfully moves another-json from matrix-js-sdk/node_modules
 # into matrix-react-sdk/node_modules.
 #
 # (note this matches the instructions in the README.)
-rm -r node_modules/matrix-react-sdk/node_modules/matrix-js-sdk
-ln -s ../../matrix-js-sdk node_modules/matrix-react-sdk/node_modules/
+cd matrix-react-sdk
+npm link ../matrix-js-sdk
+cd ../
 
 echo -en 'travis_fold:end:matrix-react-sdk\r'
 

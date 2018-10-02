@@ -64,12 +64,13 @@ Building From Source
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `node` is at least v6.3.0 (and `npm`
-   is at least v3.10.x).
+1. Install or update `node.js` so that your `node` is at least v8.12.0 (and `npm`
+   is at least v5.x).
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
 1. Switch to the riot-web directory: `cd riot-web`.
-1. If you're using the `develop` branch, install the develop versions of the
-   dependencies, as the released ones will be too old:
+1. If you're using the `develop` branch then it is recommended to set up a proper
+   development environment ("Setting up a dev environment" below) however one can
+   install the develop versions of the dependencies instead:
    ```
    scripts/fetch-develop.deps.sh
    ```
@@ -89,13 +90,9 @@ to build.
    npm install
    npm run build
    ```
-   However, we recommend setting up a proper development environment (see "Setting
-   up a dev environment" below) if you want to run your own copy of the
-   `develop` branch, as it makes it much easier to keep these dependencies
-   up-to-date.  Or just use https://riot.im/develop - the continuous integration
-   release of the develop branch.
-   (Note that we don't reference the develop versions in git directly due to
-   https://github.com/npm/npm/issues/3055.)
+   Or just use https://riot.im/develop - the continuous integration release of the 
+   develop branch. (Note that we don't reference the develop versions in git directly
+   due to https://github.com/npm/npm/issues/3055.)
 1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details).
@@ -239,7 +236,7 @@ higher and lower level React components useful for building Matrix communication
 apps using React.
 
 After creating a new component you must run `npm run reskindex` to regenerate
-the `component-index.js` for the app (used in future for skinning)
+the `component-index.js` for the app (used in future for skinning).
 
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -256,20 +253,19 @@ having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
 1. `pushd matrix-js-sdk`
 1. `git checkout develop`
 1. `npm install`
-1. `npm install source-map-loader` # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
+1. `npm install source-map-loader`  # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
 1. `popd`
 
 Then similarly with `matrix-react-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-react-sdk.git`
 1. `pushd matrix-react-sdk`
 1. `git checkout develop`
-1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+1. `npm link ../matrix-js-sdk`
 1. `popd`
 
 Finally, build and start Riot itself:
@@ -278,8 +274,8 @@ Finally, build and start Riot itself:
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
-1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
+1. `npm link ../matrix-js-sdk`
+1. `npm link ../matrix-react-sdk`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
     ```
@@ -298,10 +294,8 @@ Finally, build and start Riot itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-When you make changes to `matrix-react-sdk` or `matrix-js-sdk`, you will need
-to run `npm run build` in the relevant directory. You can do this automatically
-by instead running `npm start` in the directory, to start a development builder
-which will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
+automatically picked up by webpack and built.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
