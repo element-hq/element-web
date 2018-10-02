@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
-import { formatCryptoKey } from '../../../../utils/FormattingUtils';
 import Promise from 'bluebird';
 
 import { _t, _td } from '../../../../languageHandler';
@@ -139,7 +138,7 @@ export default React.createClass({
         return <div>
             <p>{_t("Here is your recovery key:")}</p>
             <p className="mx_CreateKeyBackupDialog_recoveryKey">
-                <code ref={this._collectRecoveryKeyNode}>{formatCryptoKey(this._keyBackupInfo.recovery_key)}</code>
+                <code ref={this._collectRecoveryKeyNode}>{this._keyBackupInfo.recovery_key}</code>
             </p>
             <p>{_t("This key can decrypt your full message history.")}</p>
             <p>{_t(
