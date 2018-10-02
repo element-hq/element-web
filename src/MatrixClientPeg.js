@@ -109,7 +109,7 @@ class MatrixClientPeg {
             await promise;
         } catch (err) {
             // log any errors when starting up the database (if one exists)
-            console.error(`Error starting matrixclient store: ${err}`);
+            console.error('Error starting matrixclient store', err);
         }
 
         // regardless of errors, start the client. If we did error out, we'll
