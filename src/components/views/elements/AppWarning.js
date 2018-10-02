@@ -6,7 +6,7 @@ const AppWarning = (props) => {
     return (
         <div className='mx_AppPermissionWarning'>
             <div className='mx_AppPermissionWarningImage'>
-                <img src='img/warning.svg' alt={_t('Warning!')} />
+                <img src='img/warning.svg' alt='' />
             </div>
             <div className='mx_AppPermissionWarningText'>
                 <span className='mx_AppPermissionWarningTextLabel'>{ props.errorMsg }</span>

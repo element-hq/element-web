@@ -51,7 +51,7 @@ export default class CookieBar extends React.Component {
         const toolbarClasses = "mx_MatrixToolbar";
         return (
             <div className={toolbarClasses}>
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning" />
+                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="" />
                 <div className="mx_MatrixToolbar_content">
                     { this.props.policyUrl ? _t(
                         "Please help improve Riot.im by sending <UsageDataLink>anonymous usage data</UsageDataLink>. " +
@@ -95,7 +95,7 @@ export default class CookieBar extends React.Component {
                     { _t("Yes, I want to help!") }
                 </AccessibleButton>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.onReject}>
-                    <img src="img/cancel.svg" width="18" height="18" />
+                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')}/>
                 </AccessibleButton>
             </div>
         );
