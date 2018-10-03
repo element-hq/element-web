@@ -17,8 +17,8 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import React from 'react';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'VectorAuthFooter',

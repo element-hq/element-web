@@ -19,8 +19,8 @@ limitations under the License.
 */
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
-import dis from 'matrix-react-sdk/lib/dispatcher';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import dis from 'matrix-react-sdk/src/dispatcher';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 import Promise from 'bluebird';
 import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 

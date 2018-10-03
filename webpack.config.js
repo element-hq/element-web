@@ -2,6 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const mode = process.env.NODE_ENV || 'development';
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
@@ -21,8 +24,18 @@ module.exports = {
     },
     module: {
         rules: [
-            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
-            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, include: [
+                    path.resolve(__dirname, 'src'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
+                    path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
+                ]
+            },
+            { test: /\.js$/, use: "babel-loader", include: [
+                    path.resolve(__dirname, 'src'),
+                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
+                    path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
+                ]
+            },
             {
                 test: /\.wasm$/,
                 loader: "file-loader",
@@ -185,7 +198,8 @@ module.exports = {
             chunks: ['mobileguide'],
         }),
     ],
-    devtool: 'source-map',
+    devtool: (mode === 'development') ? 'source-map' : false,
+    mode: mode,
 
     // configuration for the webpack-dev-server
     devServer: {
@@ -202,6 +216,23 @@ module.exports = {
         // tedious in Riot since that can take a while.
         hot: false,
         inline: false,
+    },
+    optimization: {
+        // Automatically split vendor and commons
+        // https://twitter.com/wSokra/status/969633336732905474
+        // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/](react|react-dom|react-addons-perf|bluebird|matrix-js-sdk|emojione)[\\/]/,
+                    name: 'vendor',
+                    chunks: 'all',
+                }
+            }
+        },
+        // Keep the runtime chunk seperated to enable long term caching
+        // https://twitter.com/wSokra/status/969679223278505985
+        runtimeChunk: true,
     },
 };
 

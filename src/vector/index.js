@@ -39,12 +39,14 @@ if (process.env.NODE_ENV !== 'production') {
 import './modernizr';
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 sdk.loadSkin(require('../component-index'));
-import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandler';
+import VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
 import Promise from 'bluebird';
 import request from 'browser-request';
-import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 import url from 'url';
 
@@ -53,14 +55,14 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import ElectronPlatform from './platform/ElectronPlatform';
 import WebPlatform from './platform/WebPlatform';
 
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
-import Tinter from 'matrix-react-sdk/lib/Tinter';
-import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
+import MatrixClientPeg from 'matrix-react-sdk/src/MatrixClientPeg';
+import SettingsStore, {SettingLevel} from "matrix-react-sdk/src/settings/SettingsStore";
+import Tinter from 'matrix-react-sdk/src/Tinter';
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import Olm from 'olm';
 
-import CallHandler from 'matrix-react-sdk/lib/CallHandler';
+import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
 import {getVectorConfig} from './getconfig';
 
