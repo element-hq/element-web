@@ -248,8 +248,7 @@ function textForCanonicalAliasEvent(ev) {
             senderName: senderName,
             address: ev.getContent().alias,
         });
-    }
-    else if (oldAlias) {
+    } else if (oldAlias) {
         return _t('%(senderName)s removed the main address for this room.', {
             senderName: senderName,
         });
