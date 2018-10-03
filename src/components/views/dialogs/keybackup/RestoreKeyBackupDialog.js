@@ -66,7 +66,7 @@ export default React.createClass({
         });
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackups(
-                this.state.recoveryKey.replace(/ /g, ''), undefined, undefined, this.state.backupInfo.version,
+                this.state.recoveryKey, undefined, undefined, this.state.backupInfo.version,
             );
             this.setState({
                 loading: false,
