@@ -105,7 +105,7 @@ export default class UserProvider extends AutocompleteProvider {
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== '@') {
             completions = this.matcher.match(fullMatch).map((user) => {
-                const displayName = (user.name || user.userId || ''); // FIXME when groups are done
+                const displayName = (user.name || user.userId || '');
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
