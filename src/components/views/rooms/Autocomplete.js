@@ -114,7 +114,7 @@ export default class Autocomplete extends React.Component {
 
     processQuery(query, selection) {
         return this.autocompleter.getCompletions(
-            query, selection, this.state.forceComplete,
+            query, selection, this.state.forceComplete
         ).then((completions) => {
             // Only ever process the completions for the most recent query being processed
             if (query !== this.queryRequested) {
@@ -216,12 +216,12 @@ export default class Autocomplete extends React.Component {
         return done.promise;
     }
 
-    onCompletionClicked(): boolean {
-        if (this.countCompletions() === 0 || this.state.selectionOffset === COMPOSER_SELECTED) {
+    onCompletionClicked(selectionOffset: number): boolean {
+        if (this.countCompletions() === 0 || selectionOffset === COMPOSER_SELECTED) {
             return false;
         }
 
-        this.props.onConfirm(this.state.completionList[this.state.selectionOffset - 1]);
+        this.props.onConfirm(this.state.completionList[selectionOffset - 1]);
         this.hide();
 
         return true;
@@ -263,17 +263,14 @@ export default class Autocomplete extends React.Component {
                 const componentPosition = position;
                 position++;
 
-                const onMouseMove = () => this.setSelection(componentPosition);
                 const onClick = () => {
-                    this.setSelection(componentPosition);
-                    this.onCompletionClicked();
+                    this.onCompletionClicked(componentPosition);
                 };
 
                 return React.cloneElement(completion.component, {
                     key: i,
                     ref: `completion${position - 1}`,
                     className,
-                    onMouseMove,
                     onClick,
                 });
             });

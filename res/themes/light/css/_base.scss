@@ -25,6 +25,9 @@ $focus-brightness: 125%;
 
 // red warning colour
 $warning-color: #ff0064;
+// background colour for warnings
+$warning-bg-color: #DF2A8B;
+$info-bg-color: #2A9EDF;
 $mention-user-pill-bg-color: #ff0064;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -166,6 +169,10 @@ $progressbar-color: #000;
     cursor: pointer;
     display: inline-block;
     outline: none;
+}
+
+@define-mixin mx_DialogButton_danger {
+    background-color: $warning-color;
 }
 
 @define-mixin mx_DialogButton_hover {

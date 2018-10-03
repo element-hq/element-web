@@ -59,8 +59,11 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
+import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
-import SettingsStore from "./settings/SettingsStore";
+import WidgetUtils from './utils/WidgetUtils';
+import WidgetEchoStore from './stores/WidgetEchoStore';
+import ScalarAuthClient from './ScalarAuthClient';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -297,67 +300,7 @@ function _onAction(payload) {
             break;
         case 'place_conference_call':
             console.log("Place conference call in %s", payload.room_id);
-
-            if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
-                // Conference calls are implemented by sending the media to central
-                // server which combines the audio from all the participants together
-                // into a single stream. This is incompatible with end-to-end encryption
-                // because a central server would be decrypting the audio for each
-                // participant.
-                // Therefore we disable conference calling in E2E rooms.
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
-                    description: _t('Conference calls are not supported in encrypted rooms'),
-                });
-                return;
-            }
-
-            if (SettingsStore.isFeatureEnabled('feature_jitsi')) {
-                _startCallApp(payload.room_id, payload.type);
-            } else {
-                if (!ConferenceHandler) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
-                        description: _t('Conference calls are not supported in this client'),
-                    });
-                } else if (!MatrixClientPeg.get().supportsVoip()) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
-                        title: _t('VoIP is unsupported'),
-                        description: _t('You cannot place VoIP calls in this browser.'),
-                    });
-                } else {
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
-                        title: _t('Warning!'),
-                        description: _t('Conference calling is in development and may not be reliable.'),
-                        onFinished: (confirm)=>{
-                            if (confirm) {
-                                ConferenceHandler.createNewMatrixCall(
-                                    MatrixClientPeg.get(), payload.room_id,
-                                ).done(function(call) {
-                                    placeCall(call);
-                                }, function(err) {
-                                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                                    console.error("Conference call failed: " + err);
-                                    Modal.createTrackedDialog(
-                                        'Call Handler',
-                                        'Failed to set up conference call',
-                                        ErrorDialog,
-                                        {
-                                            title: _t('Failed to set up conference call'),
-                                            description: (
-                                                _t('Conference call failed.') +
-                                                ' ' + ((err && err.message) ? err.message : '')
-                                            ),
-                                        },
-                                    );
-                                });
-                            }
-                        },
-                    });
-                }
-            }
+            _startCallApp(payload.room_id, payload.type);
             break;
         case 'incoming_call':
             {
@@ -400,27 +343,61 @@ function _onAction(payload) {
     }
 }
 
-function _startCallApp(roomId, type) {
+async function _startCallApp(roomId, type) {
+    // check for a working intgrations manager. Technically we could put
+    // the state event in anyway, but the resulting widget would then not
+    // work for us. Better that the user knows before everyone else in the
+    // room sees it.
+    const scalarClient = new ScalarAuthClient();
+    let haveScalar = false;
+    try {
+        await scalarClient.connect();
+        haveScalar = scalarClient.hasCredentials();
+    } catch (e) {
+        // fall through
+    }
+    if (!haveScalar) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Could not connect to the integration server', '', ErrorDialog, {
+            title: _t('Could not connect to the integration server'),
+            description: _t('A conference call could not be started because the intgrations server is not available'),
+        });
+        return;
+    }
+
     dis.dispatch({
         action: 'appsDrawer',
         show: true,
     });
 
     const room = MatrixClientPeg.get().getRoom(roomId);
-    if (!room) {
-        console.error("Attempted to start conference call widget in unknown room: " + roomId);
+    const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
+
+    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
+            title: _t('Call in Progress'),
+            description: _t('A call is currently being placed!'),
+        });
         return;
     }
 
-    const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
-    const currentJitsiWidgets = appsStateEvents.filter((ev) => {
-        ev.getContent().type == 'jitsi';
+    const currentJitsiWidgets = currentRoomWidgets.filter((ev) => {
+        return ev.getContent().type === 'jitsi';
     });
     if (currentJitsiWidgets.length > 0) {
         console.warn(
             "Refusing to start conference call widget in " + roomId +
             " a conference call widget is already present",
         );
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+        Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
+            title: _t('Call in Progress'),
+            description: _t('A call is already in progress!'),
+        });
         return;
     }
 
@@ -437,31 +414,38 @@ function _startCallApp(roomId, type) {
         'avatarUrl=$matrix_avatar_url',
         'email=$matrix_user_id',
     ].join('&');
-    const widgetUrl = (
-        'https://scalar.vector.im/api/widgets' +
-        '/jitsi.html?' +
-        queryString
-    );
 
-    const jitsiEvent = {
-        type: 'jitsi',
-        url: widgetUrl,
-        data: {
-            widgetSessionId: widgetSessionId,
-        },
-    };
+    let widgetUrl;
+    if (SdkConfig.get().integrations_jitsi_widget_url) {
+        // Try this config key. This probably isn't ideal as a way of discovering this
+        // URL, but this will at least allow the integration manager to not be hardcoded.
+        widgetUrl = SdkConfig.get().integrations_jitsi_widget_url + '?' + queryString;
+    } else {
+        widgetUrl = SdkConfig.get().integrations_rest_url + '/widgets/jitsi.html?' + queryString;
+    }
+
+    const widgetData = { widgetSessionId };
+
     const widgetId = (
         'jitsi_' +
         MatrixClientPeg.get().credentials.userId +
         '_' +
         Date.now()
     );
-    MatrixClientPeg.get().sendStateEvent(
-        roomId,
-        'im.vector.modular.widgets',
-        jitsiEvent,
-        widgetId,
-    ).then(() => console.log('Sent jitsi widget state event'), (e) => console.error(e));
+
+    WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
+        console.log('Jitsi widget added');
+    }).catch((e) => {
+        if (e.errcode === 'M_FORBIDDEN') {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+                title: _t('Permission Required'),
+                description: _t("You do not have permission to start a conference call in this room"),
+            });
+        }
+        console.error(e);
+    });
 }
 
 // FIXME: Nasty way of making sure we only register
@@ -498,6 +482,24 @@ const callHandler = {
         return null;
     },
 
+    /**
+     * The conference handler is a module that deals with implementation-specific
+     * multi-party calling implementations. Riot passes in its own which creates
+     * a one-to-one call with a freeswitch conference bridge. As of July 2018,
+     * the de-facto way of conference calling is a Jitsi widget, so this is
+     * deprecated. It reamins here for two reasons:
+     *  1. So Riot still supports joining existing freeswitch conference calls
+     *     (but doesn't support creating them). After a transition period, we can
+     *     remove support for joining them too.
+     *  2. To hide the one-to-one rooms that old-style conferencing creates. This
+     *     is much harder to remove: probably either we make Riot leave & forget these
+     *     rooms after we remove support for joining freeswitch conferences, or we
+     *     accept that random rooms with cryptic users will suddently appear for
+     *     anyone who's ever used conference calling, or we are stuck with this
+     *     code forever.
+     *
+     * @param {object} confHandler The conference handler object
+     */
     setConferenceHandler: function(confHandler) {
         ConferenceHandler = confHandler;
     },

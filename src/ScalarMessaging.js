@@ -236,8 +236,7 @@ import SdkConfig from './SdkConfig';
 import MatrixClientPeg from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
-import Widgets from './utils/widgets';
-import WidgetUtils from './WidgetUtils';
+import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 
@@ -297,12 +296,6 @@ function setWidget(event, roomId) {
     const widgetData = event.data.data; // optional
     const userWidget = event.data.userWidget;
 
-    const client = MatrixClientPeg.get();
-    if (!client) {
-        sendError(event, _t('You need to be logged in.'));
-        return;
-    }
-
     // both adding/removing widgets need these checks
     if (!widgetId || widgetUrl === undefined) {
         sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
@@ -329,42 +322,8 @@ function setWidget(event, roomId) {
         }
     }
 
-    let content = {
-        type: widgetType,
-        url: widgetUrl,
-        name: widgetName,
-        data: widgetData,
-    };
-
     if (userWidget) {
-        const client = MatrixClientPeg.get();
-        const userWidgets = Widgets.getUserWidgets();
-
-        // Delete existing widget with ID
-        try {
-            delete userWidgets[widgetId];
-        } catch (e) {
-            console.error(`$widgetId is non-configurable`);
-        }
-
-        // Add new widget / update
-        if (widgetUrl !== null) {
-            userWidgets[widgetId] = {
-                content: content,
-                sender: client.getUserId(),
-                state_key: widgetId,
-                type: 'm.widget',
-                id: widgetId,
-            };
-        }
-
-        // This starts listening for when the echo comes back from the server
-        // since the widget won't appear added until this happens. If we don't
-        // wait for this, the action will complete but if the user is fast enough,
-        // the widget still won't actually be there.
-        client.setAccountData('m.widgets', userWidgets).then(() => {
-            return WidgetUtils.waitForUserWidget(widgetId, widgetUrl !== null);
-        }).then(() => {
+        WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -377,15 +336,7 @@ function setWidget(event, roomId) {
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
         }
-
-        if (widgetUrl === null) { // widget is being deleted
-            content = {};
-        }
-        // TODO - Room widgets need to be moved to 'm.widget' state events
-        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
-        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
-            return WidgetUtils.waitForRoomWidget(widgetId, roomId, widgetUrl !== null);
-        }).then(() => {
+        WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -409,21 +360,13 @@ function getWidgets(event, roomId) {
             sendError(event, _t('This room is not recognised.'));
             return;
         }
-        // TODO - Room widgets need to be moved to 'm.widget' state events
-        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
-        const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
-        // Only return widgets which have required fields
-        if (room) {
-            stateEvents.forEach((ev) => {
-                if (ev.getContent().type && ev.getContent().url) {
-                    widgetStateEvents.push(ev.event); // return the raw event
-                }
-            });
-        }
+        // XXX: This gets the raw event object (I think because we can't
+        // send the MatrixEvent over postMessage?)
+        widgetStateEvents = WidgetUtils.getRoomWidgets(room).map((ev) => ev.event);
     }
 
     // Add user widgets (not linked to a specific room)
-    const userWidgets = Widgets.getUserWidgetsArray();
+    const userWidgets = WidgetUtils.getUserWidgetsArray();
     widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
@@ -537,7 +480,7 @@ function getMembershipCount(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    const count = room.getJoinedMembers().length;
+    const count = room.getJoinedMemberCount();
     sendResponse(event, count);
 }
 
@@ -554,12 +497,11 @@ function canSendEvent(event, roomId) {
         sendError(event, _t('This room is not recognised.'));
         return;
     }
-    const me = client.credentials.userId;
-    const member = room.getMember(me);
-    if (!member || member.membership !== "join") {
+    if (room.getMyMembership() !== "join") {
         sendError(event, _t('You are not in this room.'));
         return;
     }
+    const me = client.credentials.userId;
 
     let canSend = false;
     if (isState) {

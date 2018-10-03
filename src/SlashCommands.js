@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,11 +27,12 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 
 class Command {
-    constructor({name, args='', description, runFn}) {
+    constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
         this.command = '/' + name;
         this.args = args;
         this.description = description;
         this.runFn = runFn;
+        this.hideCompletionAfterSpace = hideCompletionAfterSpace;
     }
 
     getCommand() {
@@ -78,6 +80,7 @@ export const CommandMap = {
             });
             return success();
         },
+        hideCompletionAfterSpace: true,
     }),
 
     nick: new Command({
@@ -466,6 +469,20 @@ export const CommandMap = {
         name: 'me',
         args: '<message>',
         description: _td('Displays action'),
+        hideCompletionAfterSpace: true,
+    }),
+
+    discardsession: new Command({
+        name: 'discardsession',
+        description: _td('Forces the current outbound group session in an encrypted room to be discarded'),
+        runFn: function(roomId) {
+            try {
+                MatrixClientPeg.get().forceDiscardSession(roomId);
+            } catch (e) {
+                return reject(e.message);
+            }
+            return success();
+        },
     }),
 };
 /* eslint-enable babel/no-invalid-this */
@@ -474,7 +491,9 @@ export const CommandMap = {
 // helpful aliases
 const aliases = {
     j: "join",
+    newballsplease: "discardsession",
 };
+
 
 /**
  * Process the given text for /commands and perform them.
@@ -488,7 +507,7 @@ export function processCommandInput(roomId, input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
-    if (input[0] !== '/' || input[1] === '/') return null; // not a command
+    if (input[0] !== '/') return null; // not a command
 
     const bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
     let cmd;

@@ -99,13 +99,17 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
+        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
+            opts.lazyLoadMembers = true;
+        }
+
         try {
             const promise = this.matrixClient.store.startup();
             console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
             await promise;
         } catch (err) {
             // log any errors when starting up the database (if one exists)
-            console.error(`Error starting matrixclient store: ${err}`);
+            console.error('Error starting matrixclient store', err);
         }
 
         // regardless of errors, start the client. If we did error out, we'll
@@ -115,7 +119,7 @@ class MatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
-        this.get().startClient(opts);
+        await this.get().startClient(opts);
         console.log(`MatrixClientPeg: MatrixClient started`);
     }
 

@@ -72,7 +72,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
     for (var i = 0; i < rooms.length; i++) {
         var confUser = rooms[i].getMember(this.confUserId);
         if (confUser && confUser.membership === "join" &&
-                rooms[i].getJoinedMembers().length === 2) {
+                rooms[i].getJoinedMemberCount() === 2) {
             confRoom = rooms[i];
             break;
         }
@@ -84,7 +84,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
         preset: "private_chat",
         invite: [this.confUserId]
     }).then(function(res) {
-        return new Room(res.room_id);
+        return new Room(res.room_id, null, client.getUserId());
     });
 };
 

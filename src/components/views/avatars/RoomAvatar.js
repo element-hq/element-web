@@ -19,6 +19,7 @@ import {ContentRepo} from "matrix-js-sdk";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import sdk from "../../../index";
+import DMRoomMap from '../../../utils/DMRoomMap';
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
@@ -107,58 +108,29 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
-        if (!props.room) return null;
-
-        const mlist = props.room.currentState.members;
-        const userIds = [];
-        const leftUserIds = [];
-        // for .. in optimisation to return early if there are >2 keys
-        for (const uid in mlist) {
-            if (mlist.hasOwnProperty(uid)) {
-                if (["join", "invite"].includes(mlist[uid].membership)) {
-                    userIds.push(uid);
-                } else {
-                    leftUserIds.push(uid);
-                }
-            }
-            if (userIds.length > 2) {
-                return null;
-            }
+        const room = props.room;
+        if (!room) {
+            return null;
         }
-
-        if (userIds.length == 2) {
-            let theOtherGuy = null;
-            if (mlist[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
-                theOtherGuy = mlist[userIds[1]];
-            } else {
-                theOtherGuy = mlist[userIds[0]];
-            }
-            return theOtherGuy.getAvatarUrl(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                Math.floor(props.width * window.devicePixelRatio),
-                Math.floor(props.height * window.devicePixelRatio),
-                props.resizeMethod,
-                false,
-            );
-        } else if (userIds.length == 1) {
-            // The other 1-1 user left, leaving just the current user, so show the left user's avatar
-            if (leftUserIds.length === 1) {
-                return mlist[leftUserIds[0]].getAvatarUrl(
-                    MatrixClientPeg.get().getHomeserverUrl(),
-                    props.width, props.height, props.resizeMethod,
-                    false,
-                );
-            }
-            return mlist[userIds[0]].getAvatarUrl(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                Math.floor(props.width * window.devicePixelRatio),
-                Math.floor(props.height * window.devicePixelRatio),
-                props.resizeMethod,
-                false,
-            );
+        let otherMember = null;
+        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        if (otherUserId) {
+            otherMember = room.getMember(otherUserId);
         } else {
-           return null;
+            // if the room is not marked as a 1:1, but only has max 2 members
+            // then still try to show any avatar (pref. other member)
+            otherMember = room.getAvatarFallbackMember();
         }
+        if (otherMember) {
+            return otherMember.getAvatarUrl(
+                MatrixClientPeg.get().getHomeserverUrl(),
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
+                false,
+            );
+        }
+        return null;
     },
 
     onRoomAvatarClick: function() {

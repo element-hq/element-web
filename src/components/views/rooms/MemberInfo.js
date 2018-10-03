@@ -332,12 +332,39 @@ module.exports = withMatrixClient(React.createClass({
         });
     },
 
-    onMuteToggle: function() {
+    _warnSelfDemote: function() {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        return new Promise((resolve) => {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Demote yourself?"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, " +
+                            "if you are the last privileged user in the room it will be impossible " +
+                            "to regain privileges.") }
+                    </div>,
+                button: _t("Demote"),
+                onFinished: resolve,
+            });
+        });
+    },
+
+    onMuteToggle: async function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
         if (!room) return;
+
+        // if muting self, warn as it may be irreversible
+        if (target === this.props.matrixClient.getUserId()) {
+            try {
+                if (!(await this._warnSelfDemote())) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+                return;
+            }
+        }
 
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
@@ -402,7 +429,7 @@ module.exports = withMatrixClient(React.createClass({
                 console.log("Mod toggle success");
             }, function(err) {
                 if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
-                    dis.dispatch({action: 'view_set_mxid'});
+                    dis.dispatch({action: 'require_registration'});
                 } else {
                     console.error("Toggle moderator error:" + err);
                     Modal.createTrackedDialog('Failed to toggle moderator status', '', ErrorDialog, {
@@ -436,7 +463,7 @@ module.exports = withMatrixClient(React.createClass({
         }).done();
     },
 
-    onPowerChange: function(powerLevel) {
+    onPowerChange: async function(powerLevel) {
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
@@ -455,20 +482,12 @@ module.exports = withMatrixClient(React.createClass({
 
         // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
         if (myUserId === target) {
-            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
-                title: _t("Warning!"),
-                description:
-                    <div>
-                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
-                        { _t("Are you sure?") }
-                    </div>,
-                button: _t("Continue"),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                    }
-                },
-            });
+            try {
+                if (!(await this._warnSelfDemote())) return;
+                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
+            }
             return;
         }
 
@@ -478,7 +497,8 @@ module.exports = withMatrixClient(React.createClass({
                 title: _t("Warning!"),
                 description:
                     <div>
-                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("You will not be able to undo this change as you are promoting the user " +
+                            "to have the same power level as yourself.") }<br />
                         { _t("Are you sure?") }
                     </div>,
                 button: _t("Continue"),
@@ -578,7 +598,7 @@ module.exports = withMatrixClient(React.createClass({
 
     onMemberAvatarClick: function() {
         const member = this.props.member;
-        const avatarUrl = member.user ? member.user.avatarUrl : member.events.member.getContent().avatar_url;
+        const avatarUrl = member.getMxcAvatarUrl();
         if (!avatarUrl) return;
 
         const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
@@ -754,15 +774,15 @@ module.exports = withMatrixClient(React.createClass({
             for (const roomId of dmRooms) {
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
-                    const me = room.getMember(this.props.matrixClient.credentials.userId);
-
+                    const myMembership = room.getMyMembership();
                     // not a DM room if we have are not joined
-                    if (!me.membership || me.membership !== 'join') continue;
-                    // not a DM room if they are not joined
+                    if (myMembership !== 'join') continue;
+                    
                     const them = this.props.member;
+                    // not a DM room if they are not joined
                     if (!them.membership || them.membership !== 'join') continue;
 
-                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0;
 
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
@@ -771,7 +791,7 @@ module.exports = withMatrixClient(React.createClass({
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
-                            isInvite={me.membership === "invite"}
+                            isInvite={false}
                             onClick={this.onRoomTileClick}
                         />,
                     );

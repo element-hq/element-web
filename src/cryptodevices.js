@@ -16,6 +16,7 @@ limitations under the License.
 
 import Resend from './Resend';
 import sdk from './index';
+import dis from './dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 
@@ -42,27 +43,30 @@ export function markAllDevicesKnown(matrixClient, devices) {
  * @return {Promise} A promise which resolves to a map userId->deviceId->{@link
  * module:crypto~DeviceInfo|DeviceInfo}.
  */
-export function getUnknownDevicesForRoom(matrixClient, room) {
-    const roomMembers = room.getJoinedMembers().map((m) => {
+export async function getUnknownDevicesForRoom(matrixClient, room) {
+    const roomMembers = await room.getEncryptionTargetMembers().map((m) => {
         return m.userId;
     });
-    return matrixClient.downloadKeys(roomMembers, false).then((devices) => {
-        const unknownDevices = {};
-        // This is all devices in this room, so find the unknown ones.
-        Object.keys(devices).forEach((userId) => {
-            Object.keys(devices[userId]).map((deviceId) => {
-                const device = devices[userId][deviceId];
+    const devices = await matrixClient.downloadKeys(roomMembers, false);
+    const unknownDevices = {};
+    // This is all devices in this room, so find the unknown ones.
+    Object.keys(devices).forEach((userId) => {
+        Object.keys(devices[userId]).map((deviceId) => {
+            const device = devices[userId][deviceId];
 
-                if (device.isUnverified() && !device.isKnown()) {
-                    if (unknownDevices[userId] === undefined) {
-                        unknownDevices[userId] = {};
-                    }
-                    unknownDevices[userId][deviceId] = device;
+            if (device.isUnverified() && !device.isKnown()) {
+                if (unknownDevices[userId] === undefined) {
+                    unknownDevices[userId] = {};
                 }
-            });
+                unknownDevices[userId][deviceId] = device;
+            }
         });
-        return unknownDevices;
     });
+    return unknownDevices;
+}
+
+function focusComposer() {
+    dis.dispatch({action: 'focus_composer'});
 }
 
 /**
@@ -86,6 +90,7 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
             sendAnywayLabel: _t("Send anyway"),
             sendLabel: _t("Send"),
             onSend: onSendClicked,
+            onFinished: focusComposer,
         }, 'mx_Dialog_unknownDevice');
     });
 }

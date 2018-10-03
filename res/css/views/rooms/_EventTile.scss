@@ -31,7 +31,6 @@ limitations under the License.
     top: 14px;
     left: 8px;
     cursor: pointer;
-    z-index: 2;
 }
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
@@ -187,7 +186,6 @@ limitations under the License.
 .mx_EventTile_msgOption {
     float: right;
     text-align: right;
-    z-index: 1;
     position: relative;
     width: 90px;
 
@@ -290,7 +288,6 @@ limitations under the License.
     position: absolute;
     top: 9px;
     left: 46px;
-    z-index: 2;
     cursor: pointer;
 }
 
@@ -392,7 +389,6 @@ limitations under the License.
     overflow-x: overlay;
     overflow-y: visible;
     max-height: 30vh;
-    position: static;
 }
 
 .mx_EventTile_content .markdown-body code {
@@ -401,20 +397,25 @@ limitations under the License.
     color: #333;
 }
 
+.mx_EventTile_pre_container {
+    // For correct positioning of _copyButton (See TextualBody)
+    position: relative;
+}
+
+// Inserted adjacent to <pre> blocks, (See TextualBody)
 .mx_EventTile_copyButton {
     position: absolute;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
     top: 6px;
-    right: 36px;
+    right: 6px;
     width: 19px;
     height: 19px;
     background-image: url($copy-button-url);
 }
 
 .mx_EventTile_body pre {
-    position: relative;
     border: 1px solid transparent;
 }
 
@@ -423,7 +424,7 @@ limitations under the License.
     border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
-.mx_EventTile_body pre:hover .mx_EventTile_copyButton
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton
 {
     visibility: visible;
 }
@@ -445,6 +446,7 @@ limitations under the License.
 .mx_EventTile_content .markdown-body h2
 {
     font-size: 1.5em;
+    border-bottom: none ! important; // override GFM
 }
 
 .mx_EventTile_content .markdown-body a {
