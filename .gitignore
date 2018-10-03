@@ -19,3 +19,4 @@ electron/pub
 /config.json.*
 /config.local*.json
 /src/component-index.js
+/.tmp
