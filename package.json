@@ -36,7 +36,7 @@
     "build:bundle": "cross-env NODE_ENV=production webpack-cli -p --progress --bail --mode production",
     "build:bundle:dev": "webpack-cli --progress --bail --mode development",
     "build:electron": "npm run clean && npm run build && npm run install:electron && build -wml --ia32 --x64",
-    "build:react-sdk": "node scripts/npm-sub.js matrix-react-sdk run start:init",
+    "build:react-sdk": "node scripts/npm-sub.js matrix-react-sdk run build",
     "build:js-sdk": "node scripts/npm-sub.js matrix-js-sdk run start:init",
     "build": "npm run build:js-sdk && npm run build:react-sdk && npm run reskindex && npm run build:res && npm run build:bundle",
     "build:dev": "npm run build:js-sdk && npm run build:react-sdk && npm run reskindex && npm run build:res && npm run build:bundle:dev",
