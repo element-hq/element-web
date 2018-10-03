@@ -48,9 +48,6 @@ export default function createMatrixClient(opts) {
     }
 
     if (indexedDB && localStorage) {
-        // FIXME: bodge to remove old database. Remove this after a few weeks.
-        indexedDB.deleteDatabase("matrix-js-sdk:default");
-
         storeOpts.store = new Matrix.IndexedDBStore({
             indexedDB: indexedDB,
             dbName: "riot-web-sync",
