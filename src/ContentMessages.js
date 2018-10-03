@@ -153,7 +153,6 @@ function loadVideoElement(videoFile) {
     // Load the file into an html element
     const video = document.createElement("video");
 
-    // Once ready, returns its size
     // Wait until we have enough data to thumbnail the first frame.
     video.onloadeddata = function() {
         URL.revokeObjectURL(video.src);
