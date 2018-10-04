@@ -1,4 +1,5 @@
 {
+    "cross_origin_renderer_url": "https://usercontent.neocrypto.io/v1.html",
     "default_hs_url": "https://neocrypto.io",
     "default_is_url": "https://neocrypto.io",
     "disable_custom_urls": false,
@@ -32,9 +33,20 @@
         "url": "https://analytics.neocrypto.io/",
         "whitelistedHSUrls": ["https://matrix.org", "https://psyberia.im", "https://neocrypto.io"],
         "whitelistedISUrls": ["https://vector.im", "https://matrix.org", "https://neocrypto.io"],
-        "siteId": 7
+        "siteId": 7,
+        "policyUrl": "https://chat.neocrypto.io/neocrypto_io_cookie_policy"
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false
-    }
+    },
+    "terms_and_conditions_links": [
+        {
+            "url": "https://chat.neocrypto.io/privacy",
+            "text": "Privacy Policy"
+        },
+        {
+            "url": "https://chat.neocrypto.io/neocrypto_io_cookie_policy",
+            "text": "Cookie Policy"
+        }
+    ]
 }
