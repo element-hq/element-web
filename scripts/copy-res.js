@@ -61,6 +61,7 @@ const COPY_LIST = [
     // in the bundle dir with the js to avoid caching issues giving us wasm that
     // doesn't match our js, but I cannot find any way to get webpack to do this.
     ["node_modules/olm/olm.wasm", "webapp", { directwatch: 1 }],
+    ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
 ];
 
