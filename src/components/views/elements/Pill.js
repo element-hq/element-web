@@ -234,7 +234,7 @@ const Pill = React.createClass({
                     if (member) {
                         userId = member.userId;
                         member.rawDisplayName = member.rawDisplayName || '';
-                        linkText = member.rawDisplayName,
+                        linkText = member.rawDisplayName;
                         if (this.props.shouldShowPillAvatar) {
                             avatar = <MemberAvatar member={member} width={16} height={16} />;
                         }
