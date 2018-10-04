@@ -1276,5 +1276,13 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s премахна %(removedAddresses)s като адреси за тази стая.",
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s добави %(addedAddresses)s и премахна %(removedAddresses)s като адреси за тази стая.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s настрой основния адрес на тази стая на %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s премахна основния адрес на тази стая."
+    "%(senderName)s removed the main address for this room.": "%(senderName)s премахна основния адрес на тази стая.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Преди да изпратите логове, трябва да <a>отворите доклад за проблем в Github</a>.",
+    "What GitHub issue are these logs for?": "За кой Github проблем са тези логове?",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot вече използва 3-5 пъти по-малко памет, като зарежда информация за потребители само когато е нужна. Моля, изчакайте докато ресинхронизираме със сървъра!",
+    "Updating Riot": "Обновяване на Riot",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML за страницата на Вашата общност</h1>\n<p>\n    Използвайте дългото описание за да въведете нови членове в общността,\n    или да разпространите важно <a href=\"foo\">връзки</a>\n</p>\n<p>\n    Можете дори да използвате 'img' тагове\n</p>\n",
+    "Submit Debug Logs": "Изпратете логове за диагностика",
+    "An email address is required to register on this homeserver.": "Необходим е имейл адрес за регистрация на този сървър.",
+    "A phone number is required to register on this homeserver.": "Необходим е телефонен номер за регистрация на този сървър."
 }
