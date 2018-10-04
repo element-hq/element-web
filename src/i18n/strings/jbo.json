@@ -190,5 +190,9 @@
     "%(senderName)s removed the main address for this room.": ".i la'o ly. %(senderName)s .ly. vimcu lo ralju cmene be le kumfa pe'a",
     "Someone": "da poi prenu",
     "(not supported by this browser)": "to le do kibyca'o na kakne toi",
-    "%(senderName)s answered the call.": ".i la'o ly. %(senderName)s .ly. spuda lo nu fonjo'e"
+    "%(senderName)s answered the call.": ".i la'o ly. %(senderName)s .ly. spuda lo nu fonjo'e",
+    "(could not connect media)": "to na kakne lo nu ganvi samjongau toi",
+    "(no answer)": "to na spuda toi",
+    "(unknown failure: %(reason)s)": "to na'e te djuno nu fliba fi'o ve skicu zoi gy. %(reason)s .gy. toi",
+    "%(senderName)s ended the call.": ".i la'o ly. %(senderName)s .ly. sisti lo nu fonjo'e"
 }
