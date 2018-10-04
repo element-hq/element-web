@@ -109,9 +109,6 @@ export default React.createClass({
                 this.state.userGroups, this.state.relatedGroups,
             );
 
-            // Backwards-compatible replacing of "(IRC)" with AS user flair
-            name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
-
             flair = <Flair key='flair'
                 userId={mxEvent.getSender()}
                 groups={displayedGroups}

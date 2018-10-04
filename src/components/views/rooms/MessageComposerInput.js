@@ -361,7 +361,7 @@ export default class MessageComposerInput extends React.Component {
                     const selection = this.getSelectionRange(this.state.editorState);
                     const member = this.props.room.getMember(payload.user_id);
                     const completion = member ?
-                        member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
+                        member.rawDisplayName : payload.user_id;
                     this.setDisplayedCompletion({
                         completion,
                         completionId: payload.user_id,
