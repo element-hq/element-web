@@ -1276,5 +1276,13 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s ha rimosso %(removedAddresses)s tra gli indirizzi di questa stanza.",
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s ha aggiunto %(addedAddresses)s e rimosso %(removedAddresses)s tra gli indirizzi di questa stanza.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ha messo %(address)s come indirizzo principale per questa stanza.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s ha rimosso l'indirizzo principale di questa stanza."
+    "%(senderName)s removed the main address for this room.": "%(senderName)s ha rimosso l'indirizzo principale di questa stanza.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Prima di inviare i log, devi <a>creare una segnalazione su GitHub</a> per descrivere il tuo problema.",
+    "What GitHub issue are these logs for?": "Per quale segnalazione su GitHub sono questi log?",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot ora usa da 3 a 5 volte meno memoria, caricando le informazioni degli altri utenti solo quando serve. Si prega di attendere mentre ci risincronizziamo con il server!",
+    "Updating Riot": "Aggiornamento di Riot",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML per la pagina della tua comunità</h1>\n<p>\n    Usa la descrizione estesa per introdurre i nuovi membri alla comunità, o distribuire alcuni <a href=\"foo\">link</a> importanti\n</p>\n<p>\n    Puoi anche usare i tag 'img'\n</p>\n",
+    "Submit Debug Logs": "Invia log di debug",
+    "An email address is required to register on this homeserver.": "È necessario un indirizzo email per registrarsi in questo homeserver.",
+    "A phone number is required to register on this homeserver.": "È necessario un numero di telefono per registrarsi in questo homeserver."
 }
