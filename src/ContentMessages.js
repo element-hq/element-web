@@ -153,17 +153,24 @@ function loadVideoElement(videoFile) {
     // Load the file into an html element
     const video = document.createElement("video");
 
-    // Wait until we have enough data to thumbnail the first frame.
-    video.onloadeddata = function() {
-        URL.revokeObjectURL(video.src);
-        deferred.resolve(video);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        video.src = e.target.result;
+
+        // Once ready, returns its size
+        // Wait until we have enough data to thumbnail the first frame.
+        video.onloadeddata = function() {
+            deferred.resolve(video);
+        };
+        video.onerror = function(e) {
+            deferred.reject(e);
+        };
     };
-    video.onerror = function(e) {
+    reader.onerror = function(e) {
         deferred.reject(e);
     };
-    
-    // We don't use readAsDataURL because massive files and b64 don't mix.
-    video.src = URL.createObjectURL(videoFile);
+    reader.readAsDataURL(videoFile);
+
     return deferred.promise;
 }
 
