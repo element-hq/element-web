@@ -1277,5 +1277,13 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s entfernte %(removedAddresses)s als Adressen von diesem Raum.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s setzte die Hauptadresse zu diesem Raum auf %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s entfernte die Hauptadresse von diesem Raum.",
-    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s fügte %(addedAddresses)s hinzu und entfernte %(removedAddresses)s als Adressen von diesem Raum."
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s fügte %(addedAddresses)s hinzu und entfernte %(removedAddresses)s als Adressen von diesem Raum.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Bevor du Log-Dateien übermittelst, musst du ein <a>GitHub-Issue erstellen</a> um dein Problem zu beschreiben.",
+    "What GitHub issue are these logs for?": "Für welches GitHub-Issue sind diese Logs?",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot benutzt nun 3-5x weniger Arbeitsspeicher, indem Informationen über andere Nutzer erst bei Bedarf geladen werden. Bitte warte, während die Daten erneut mit dem Server abgeglichen werden!",
+    "Updating Riot": "Aktualisiere Riot",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML for deine Community-Seite</h1>\n<p>\n    Nutze die lange Beschreibung um die Community neuen Mitgliedern vorzustellen oder um\n    einige wichtige <a href=\"https://beispiel.de\">Links</a> zu teilen\n</p>\n<p>\n    Du kannst auch 'img'-Tags verwenden\n</p>\n",
+    "Submit Debug Logs": "Fehlerprotokoll senden",
+    "An email address is required to register on this homeserver.": "Zur Registrierung auf diesem Heimserver ist eine E-Mail-Adresse erforderlich.",
+    "A phone number is required to register on this homeserver.": "Zur Registrierung auf diesem Heimserver ist eine Telefon-Nummer erforderlich."
 }
