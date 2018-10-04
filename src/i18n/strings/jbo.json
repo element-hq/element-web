@@ -215,5 +215,6 @@
     "This homeserver has exceeded one of its resource limits.": ".i le samtcise'u cu bancu pa lo jimte be ri",
     "Please <a>contact your service administrator</a> to continue using the service.": ".i .e'o ko <a>tavla lo do te selfu admine</a> .i ja nai do djica lo nu ca'o pilno le te selfu",
     "Unable to connect to Homeserver. Retrying...": ".i pu fliba lo nu samjo'e le samtcise'u .i za'u re'u ca'o troci",
-    "Your browser does not support the required cryptography extensions": ".i le do kibyca'o na kakne tu'a le te mifra ciste noi se nitcu"
+    "Your browser does not support the required cryptography extensions": ".i le do kibyca'o na kakne tu'a le te mifra ciste noi se nitcu",
+    "Not a valid Riot keyfile": ".i na'e drani ckiku datnyvei"
 }
