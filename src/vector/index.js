@@ -151,7 +151,7 @@ function onNewScreen(screen) {
 function makeRegistrationUrl(params) {
     let url;
     if (window.location.protocol === "file:") {
-        url = 'https://riot.im/app/#/register';
+        url = 'https://chat.neocrypto.io/#/register';
     } else {
         url = (
             window.location.protocol + '//' +

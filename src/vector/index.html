@@ -2,7 +2,7 @@
 <html lang="en" style="height: 100%;">
   <head>
     <meta charset="utf-8">
-    <title>Riot</title>
+    <title>NeoCrypto Chat</title>
     <link rel="apple-touch-icon" sizes="57x57" href="vector-icons/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="vector-icons/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="vector-icons/apple-touch-icon-72x72.png">
@@ -12,12 +12,23 @@
     <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="vector-icons/apple-touch-icon-precomposed.png">
+    <link rel="icon" type="image/png" href="https://chat.neocrypto.io/vector-icons/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="https://chat.neocrypto.io/vector-icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="https://chat.neocrypto.io/vector-icons/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://chat.neocrypto.io/vector-icons/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="https://chat.neocrypto.io/vector-icons/favicon-128.png" sizes="128x128" />
     <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="vector-icons/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Riot">
-    <meta name="application-name" content="Riot">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="apple-mobile-web-app-title" content="NeoCrypto Chat">
+    <meta name="application-name" content="NeoCrypto Chat">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
+    <meta name="msapplication-square70x70logo" content="https://chat.neocrypto.io/vector-icons/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="https://chat.neocrypto.io/vector-icons/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="https://chat.neocrypto.io/vector-icons/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="https://chat.neocrypto.io/vector-icons/mstile-310x310.png" />
     <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
@@ -32,6 +43,22 @@
            <link rel="stylesheet" href="<%= file %>">
         <% }
     } %>
+    <!-- Matomo -->
+    <script type="text/javascript">
+    var _paq = _paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["setCookieDomain", "*.chat.neocrypto.io"]);
+        var u="//analytics.neocrypto.io/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', 'KnowLyKoyMJB']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+<!-- End Matomo Code -->
   </head>
   <body style="height: 100%;">
     <section id="matrixchat" style="height: 100%;"></section>
