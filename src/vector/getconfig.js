@@ -59,7 +59,7 @@ function getConfig(configJsonFilename) {
                 // which breaks if there's no config.json and we're
                 // loading from the filesystem (see above).
                 resolve(JSON.parse(body));
-            }
+            },
         );
-    })
+    });
 }

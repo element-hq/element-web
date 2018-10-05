@@ -72,7 +72,7 @@ export default class WebPlatform extends VectorBasePlatform {
             global.Notification.requestPermission((result) => {
                 resolve(result);
             });
-        })
+        });
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
@@ -127,7 +127,7 @@ export default class WebPlatform extends VectorBasePlatform {
                     resolve(ver);
                 },
             );
-        })
+        });
     }
 
     getAppVersion(): Promise<string> {
