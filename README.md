@@ -274,7 +274,7 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/riot-web.git`
+1. `git clone https://github.com/vector-im/riot-web.git`
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
