@@ -43,21 +43,25 @@
            <link rel="stylesheet" href="<%= file %>">
         <% }
     } %>
-    <!-- Matomo -->
-    <script type="text/javascript">
-    var _paq = _paq || [];
-    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-    _paq.push(["setCookieDomain", "*.chat.neocrypto.io"]);
-        var u="//analytics.neocrypto.io/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', 'KnowLyKoyMJB']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-    })();
-    </script>
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
-    (function() {
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+  _paq.push(["setCookieDomain", "*.neocrypto.io"]);
+  _paq.push(["setDomains", ["*.neocrypto.io","*.blog.neocrypto.io","*.chat.neocrypto.io","*.tradeflow.neocrypto.io","*.wiki.neocrypto.io"]]);
+  _paq.push(["enableCrossDomainLinking"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.neocrypto.io/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 'LJp1NOGMOMEk']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//analytics.neocrypto.io/piwik.php?idsite=LJp1NOGMOMEk&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 <!-- End Matomo Code -->
   </head>
   <body style="height: 100%;">
