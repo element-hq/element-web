@@ -62,6 +62,10 @@ import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
 import {getVectorConfig} from './getconfig';
 
+// Disable warnings for now: we use deprecated bluebird functions
+// and need to migrate, but they spam the console with warnings.
+Promise.config({warnings: false});
+
 let lastLocationHashSet = null;
 
 function initRageshake() {
