@@ -62,6 +62,10 @@ import {getVectorConfig} from './getconfig';
 
 let lastLocationHashSet = null;
 
+// Disable warnings for now: we use deprecated bluebird functions
+// and need to migrate, but they spam the console with warnings.
+Promise.config({warnings: false});
+
 function initRageshake() {
     rageshake.init().then(() => {
         console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
