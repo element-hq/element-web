@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_Login_links">
-                /*<a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;*/
+                <a href="https://wiki.neocrypto.io">Wiki</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://twitter.com/@ashaman-crypto">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://github.com/neocrypto-io/riot-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://matrix.org">{ _t('powered by Matrix') }</a>
