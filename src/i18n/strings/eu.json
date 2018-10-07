@@ -835,7 +835,7 @@
     "was invited %(count)s times|one": "gonbidatua izan da",
     "were banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
     "were banned %(count)s times|one": "debekatuak izan dira",
-    "was banned %(count)s times|other": "%(count)s aldi debekatuak izan dira",
+    "was banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
     "were unbanned %(count)s times|other": "%(count)s aldiz kendu zaie debekua",
     "were unbanned %(count)s times|one": "debekua kendu zaie",
     "was unbanned %(count)s times|other": "%(count)s aldiz kendu zaio debekua",
