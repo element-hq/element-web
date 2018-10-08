@@ -250,6 +250,19 @@ function _handleLoadSessionFailure(e) {
                             onFinished: resolve,
                         });
                     });
+                } else {
+                    // show warning about simultaneous use
+                    // between LL/non-LL version on same host.
+                    // as disabling LL when previously enabled
+                    // is a strong indicator of this (/develop & /app)
+                    const LazyLoadingDisabledDialog =
+                        sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
+                    return new Promise((resolve) => {
+                        Modal.createDialog(LazyLoadingDisabledDialog, {
+                            onFinished: resolve,
+                            host: window.location.host,
+                        });
+                    });
                 }
             }).then(() => {
                 return MatrixClientPeg.get().store.deleteAllData();
