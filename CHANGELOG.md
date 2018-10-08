@@ -1,3 +1,9 @@
+Changes in [0.16.6](https://github.com/vector-im/riot-web/releases/tag/v0.16.6) (2018-10-08)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.5...v0.16.6)
+
+ * Update to matrix-react-sdk v0.13.6
+
 Changes in [0.16.5](https://github.com/vector-im/riot-web/releases/tag/v0.16.5) (2018-10-01)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.5-rc.1...v0.16.5)
