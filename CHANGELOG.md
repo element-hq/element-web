@@ -1,3 +1,12 @@
+Changes in [0.13.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.6) (2018-10-08)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.5...v0.13.6)
+
+ * Fix resuming session in Firefox private mode/Tor browser being broken
+   [\#2195](https://github.com/matrix-org/matrix-react-sdk/pull/2195)
+ * Show warning about using lazy-loading/non-lazy-loading versions simultaneously (/app & /develop)
+   [\#2201](https://github.com/matrix-org/matrix-react-sdk/pull/2201)
+
 Changes in [0.13.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.5) (2018-10-01)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.5-rc.1...v0.13.5)
