@@ -1259,5 +1259,9 @@
     "Import": "Import",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.",
+    "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.",
+    "Incompatible local cache": "Incompatible local cache",
+    "Clear cache and resync": "Clear cache and resync"
 }
