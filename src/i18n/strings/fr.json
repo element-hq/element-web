@@ -1287,5 +1287,9 @@
     "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML pour votre page de communauté</h1>\n<p>\n    Utilisez la description longue pour présenter la communauté aux nouveaux membres,\n    ou fournir des <a href=\"foo\">liens</a> importants\n</p>\n<p>\n    Vous pouvez même utiliser des balises « img »\n</p>\n",
     "Submit Debug Logs": "Envoyer les journaux de débogage",
     "An email address is required to register on this homeserver.": "Une adresse e-mail est nécessaire pour s'enregistrer sur ce serveur d'accueil.",
-    "A phone number is required to register on this homeserver.": "Un numéro de téléphone est nécessaire pour s'enregistrer sur ce serveur d'accueil."
+    "A phone number is required to register on this homeserver.": "Un numéro de téléphone est nécessaire pour s'enregistrer sur ce serveur d'accueil.",
+    "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "Vous avez utilisé auparavant Riot sur %(host)s avec le chargement différé activé. Dans cette version le chargement différé est désactivé. Comme le cache local n'est pas compatible entre ces deux réglages, Riot doit resynchroniser votre compte.",
+    "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Si l'autre version de Riot est encore ouverte dans un autre onglet, merci de le fermer car l'utilisation de Riot sur le même hôte avec le chargement différé activé et désactivé à la fois causera des problèmes.",
+    "Incompatible local cache": "Cache local incompatible",
+    "Clear cache and resync": "Vider le cache et resynchroniser"
 }
