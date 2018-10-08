@@ -27,7 +27,10 @@ It's important to always stop and start synapse before each run of the tests to 
 start.js accepts the following parameters that can help running the tests locally:
 
  - `--no-logs` dont show the excessive logging show by default (meant for CI), just where the test failed.
- - `--riot-url <url>` don't use the riot copy and static server provided by the tests, but use a running server like the webpack watch server to run the tests against. Make sure to have `welcomeUserId` disabled in your config as the tests assume there is no riot-bot currently.
+ - `--riot-url <url>` don't use the riot copy and static server provided by the tests, but use a running server like the webpack watch server to run the tests against. Make sure to have the following local config:
+   - `welcomeUserId` disabled as the tests assume there is no riot-bot currently. Make sure to set the default homeserver to     
+   - `"default_hs_url": "http://localhost:5005"`, to use the e2e tests synapse (the tests use the default HS to run against atm)
+   - `"feature_lazyloading": "labs"`, currently assumes lazy loading needs to be turned on in the settings, will change soon.
  - `--slow-mo` run the tests a bit slower, so it's easier to follow along with `--windowed`.
  - `--windowed` run the tests in an actual browser window Try to limit interacting with the windows while the tests are running. Hovering over the window tends to fail the tests, dragging the title bar should be fine though.
  - `--dev-tools` open the devtools in the browser window, only applies if `--windowed` is set as well.
