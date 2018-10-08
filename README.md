@@ -269,7 +269,7 @@ Then similarly with `matrix-react-sdk`:
 1. `git clone https://github.com/matrix-org/matrix-react-sdk.git`
 1. `pushd matrix-react-sdk`
 1. `git checkout develop`
-1. `npm link ../matrix-js-sdk`
+1. `npm link matrix-js-sdk`
 1. `popd`
 
 Finally, build and start Riot itself:
@@ -278,8 +278,8 @@ Finally, build and start Riot itself:
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
-1. `npm link ../matrix-js-sdk`
-1. `npm link ../matrix-react-sdk`
+1. `npm link matrix-js-sdk`
+1. `npm link matrix-react-sdk`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
     ```
