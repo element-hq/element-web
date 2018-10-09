@@ -200,9 +200,6 @@ module.exports = function (config) {
                     'matrix-react-sdk': path.resolve('test/skinned-sdk.js'),
                     'sinon': 'sinon/pkg/sinon.js',
                 },
-                root: [
-                    path.resolve('./test'),
-                ],
                 modules: [
                     path.resolve('./test'),
                     "node_modules"
