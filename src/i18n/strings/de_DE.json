@@ -1285,5 +1285,9 @@
     "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>HTML for deine Community-Seite</h1>\n<p>\n    Nutze die lange Beschreibung um die Community neuen Mitgliedern vorzustellen oder um\n    einige wichtige <a href=\"https://beispiel.de\">Links</a> zu teilen\n</p>\n<p>\n    Du kannst auch 'img'-Tags verwenden\n</p>\n",
     "Submit Debug Logs": "Fehlerprotokoll senden",
     "An email address is required to register on this homeserver.": "Zur Registrierung auf diesem Heimserver ist eine E-Mail-Adresse erforderlich.",
-    "A phone number is required to register on this homeserver.": "Zur Registrierung auf diesem Heimserver ist eine Telefon-Nummer erforderlich."
+    "A phone number is required to register on this homeserver.": "Zur Registrierung auf diesem Heimserver ist eine Telefon-Nummer erforderlich.",
+    "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "Du hast zuvor Riot auf %(host)s ohne verzögertem Laden von Mitgliedern genutzt. In dieser Version war das verzögerte Laden deaktiviert. Da die lokal zwischengespeicherten Daten zwischen diesen Einstellungen nicht kompatibel ist, muss Riot dein Konto neu synchronisieren.",
+    "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Wenn Riot mit der alten Version in einem anderen Tab geöffnet ist, schließe dies bitte, da das parallele Nutzen von Riot auf demselben Host mit aktivierten und deaktivierten verzögertem Laden, Probleme verursachen wird.",
+    "Incompatible local cache": "Inkompatibler lokaler Zwischenspeicher",
+    "Clear cache and resync": "Zwischenspeicher löschen und erneut synchronisieren"
 }
