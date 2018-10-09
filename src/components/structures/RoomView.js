@@ -195,6 +195,8 @@ module.exports = React.createClass({
             editingRoomSettings: RoomViewStore.isEditingSettings(),
         };
 
+        if (this.state.editingRoomSettings && !newState.editingRoomSettings) dis.dispatch({action: 'focus_composer'});
+
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
             'RVS update:',
