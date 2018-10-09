@@ -1473,7 +1473,6 @@ export default class MessageComposerInput extends React.Component {
                     const { text } = node;
                     return <a href={url} {...props.attributes}>
                                 { text }
-                                {...attributes}
                            </a>;
                 }
             }
