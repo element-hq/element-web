@@ -122,7 +122,6 @@
     "estree-walker": "^0.5.0",
     "expect": "^1.16.0",
     "flow-parser": "^0.57.3",
-    "json-loader": "^0.5.3",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^0.2.3",
     "karma-cli": "^1.0.1",
