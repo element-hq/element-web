@@ -24,6 +24,7 @@ module.exports = class RestSession {
         this.log = new Logger(credentials.userId);
         this._credentials = credentials;
         this._displayName = null;
+        this._rooms = {};
     }
 
     userId() {
@@ -51,7 +52,18 @@ module.exports = class RestSession {
         this.log.step(`joins ${roomIdOrAlias}`);
         const {room_id} = await this._post(`/join/${encodeURIComponent(roomIdOrAlias)}`);
         this.log.done();
-        return new RestRoom(this, room_id, this.log);
+        const room = new RestRoom(this, room_id, this.log);
+        this._rooms[room_id] = room;
+        this._rooms[roomIdOrAlias] = room;
+        return room;
+    }
+
+    room(roomIdOrAlias) {
+        if (this._rooms.hasOwnProperty(roomIdOrAlias)) {
+            return this._rooms[roomIdOrAlias];
+        } else {
+            throw new Error(`${this._credentials.userId} is not in ${roomIdOrAlias}`);
+        }
     }
 
     async createRoom(name, options) {

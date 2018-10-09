@@ -40,6 +40,10 @@ module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     await checkMemberList(alice, charly1to5);
     await joinCharliesWhileAliceIsOffline(alice, charly6to10);
     await checkMemberList(alice, charly6to10);
+    await charlies.room(alias).leave();
+    await delay(1000);
+    await checkMemberListLacksCharlies(alice, charlies);
+    await checkMemberListLacksCharlies(bob, charlies);
 }
 
 const room = "Lazy Loading Test";
@@ -90,6 +94,17 @@ async function checkMemberList(alice, charlies) {
             `only have ${displayNames}`);
     });
     alice.log.done();
+}
+
+async function checkMemberListLacksCharlies(session, charlies) {
+    session.log.step(`checks the memberlist doesn't contain ${charlies.log.username}`);
+    const displayNames = (await getMembersInMemberlist(session)).map((m) => m.displayName);
+    charlies.sessions.forEach((charly) => {
+        assert(!displayNames.includes(charly.displayName()),
+            `${charly.displayName()} should not be in the member list, ` +
+            `only have ${displayNames}`);
+    });
+    session.log.done();
 }
 
 async function joinCharliesWhileAliceIsOffline(alice, charly6to10) {
