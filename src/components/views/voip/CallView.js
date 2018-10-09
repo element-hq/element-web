@@ -125,14 +125,15 @@ module.exports = React.createClass({
 
     render: function() {
         const VideoView = sdk.getComponent('voip.VideoView');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let voice;
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
             const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
             voice = (
-                <div className="mx_CallView_voice" onClick={this.props.onClick}>
+                <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
                 { _t("Active call (%(roomName)s)", {roomName: callRoom.name}) }
-                </div>
+                </AccessibleButton>
             );
         }
 
