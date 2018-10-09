@@ -223,14 +223,15 @@ module.exports = React.createClass({
             );
         }
 
+            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         if (!this.props.atEndOfLiveTimeline) {
             return (
-                <div className="mx_RoomStatusBar_scrollDownIndicator"
+                <AccessibleButton className="mx_RoomStatusBar_scrollDownIndicator"
                         onClick={this.props.onScrollToBottomClick}>
                     <img src="img/scrolldown.svg" width="24" height="24"
                         alt={_t("Scroll to bottom of page")}
                         title={_t("Scroll to bottom of page")} />
-                </div>
+                </AccessibleButton>
             );
         }
 
@@ -385,7 +386,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
+            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -485,7 +486,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomStatusBar_indicator">
                     { indicator }
                 </div>
-                { content }
+                <div role="alert">
+                    { content }
+                </div>
             </div>
         );
     },

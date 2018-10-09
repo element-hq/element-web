@@ -34,7 +34,7 @@ export default React.createClass({
                     src="img/warning.svg"
                     width="24"
                     height="23"
-                    alt="Warning"
+                    alt=""
                 />
                 <div className="mx_MatrixToolbar_content">
                     { _t(

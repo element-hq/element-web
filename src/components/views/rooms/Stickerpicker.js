@@ -151,8 +151,8 @@ export default class Stickerpicker extends React.Component {
             <AccessibleButton onClick={this._launchManageIntegrations}
                 className='mx_Stickers_contentPlaceholder'>
                 <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
-                <p className='mx_Stickers_addLink'>Add some now</p>
-                <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
+                <p className='mx_Stickers_addLink'>{ _t("Add some now") }</p>
+                <img src='img/stickerpack-placeholder.png' alt="" />
             </AccessibleButton>
         );
     }
@@ -344,7 +344,7 @@ export default class Stickerpicker extends React.Component {
         if (this.state.showStickers) {
             // Show hide-stickers button
             stickersButton =
-                <div
+                <AccessibleButton
                     id='stickersButton'
                     key="controls_hide_stickers"
                     className="mx_MessageComposer_stickers mx_Stickers_hideStickers"
@@ -352,18 +352,18 @@ export default class Stickerpicker extends React.Component {
                     ref='target'
                     title={_t("Hide Stickers")}>
                     <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
-                </div>;
+                </AccessibleButton>;
         } else {
             // Show show-stickers button
             stickersButton =
-                <div
+                <AccessibleButton
                     id='stickersButton'
-                    key="constrols_show_stickers"
+                    key="controls_show_stickers"
                     className="mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
                     title={_t("Show Stickers")}>
                     <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
-                </div>;
+                </AccessibleButton>;
         }
         return <div>
             {stickersButton}
