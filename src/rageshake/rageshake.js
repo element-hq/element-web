@@ -127,7 +127,7 @@ class IndexedDBLogStore {
 
             req.onerror = (event) => {
                 const err = (
-                    "Failed to open log database: " + event.target.errorCode
+                    "Failed to open log database: " + event.target.error.name
                 );
                 console.error(err);
                 reject(new Error(err));
