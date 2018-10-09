@@ -20,10 +20,6 @@ import MatrixClientPeg from '../../../../MatrixClientPeg';
 
 import { _t } from '../../../../languageHandler';
 
-function isRecoveryKeyValid(r) {
-    return MatrixClientPeg.get().isValidRecoveryKey(r.replace(/ /g, ''));
-}
-
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
@@ -55,7 +51,7 @@ export default React.createClass({
     _onRecoveryKeyChange: function(e) {
         this.setState({
             recoveryKey: e.target.value,
-            recoveryKeyValid: isRecoveryKeyValid(e.target.value),
+            recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
         });
     },
 
