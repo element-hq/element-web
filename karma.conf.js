@@ -23,6 +23,9 @@ var fs = require('fs');
 //
 var testFile = process.env.KARMA_TEST_FILE || 'test/all-tests.js';
 
+// make sure we're flagged as development to avoid wasting time optimising
+webpack_config.mode = 'development';
+
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 
 function fileExists(name) {
@@ -160,10 +163,9 @@ module.exports = function (config) {
 
         webpack: {
             module: {
-                loaders: [
-                    { test: /\.json$/, loader: "json" },
+                rules: [
                     {
-                        test: /\.js$/, loader: "babel",
+                        test: /\.js$/, loader: "babel-loader",
                         include: [path.resolve('./src'),
                                   path.resolve('./test'),
                                  ]
@@ -203,6 +205,7 @@ module.exports = function (config) {
                 root: [
                     path.resolve('./test'),
                 ],
+                modules: "node_modules",
             },
             devtool: 'inline-source-map',
             externals: {
