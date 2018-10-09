@@ -1285,5 +1285,9 @@
     "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>您社群頁面的 HTML</h1>\n<p>\n    使用長描述以向新成員介紹社群，或是散佈\n    一些重要<a href=\"foo\">連結</a>\n</p>\n<p>\n    您也可以使用「img」標籤\n</p>\n",
     "Submit Debug Logs": "遞交除錯紀錄",
     "An email address is required to register on this homeserver.": "在此家伺服器上註冊必須填入電子郵件。",
-    "A phone number is required to register on this homeserver.": "在此伺服器上註冊必須填入電話號碼。"
+    "A phone number is required to register on this homeserver.": "在此伺服器上註冊必須填入電話號碼。",
+    "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "您之前曾在 %(host)s 上使用 Riot 並啟用成員列表的延遲載入。在此版本中延遲載入已停用。由於本機快取在這兩個設定間不相容，Riot 必須重新同步您的帳號。",
+    "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "若其他分頁仍有不同版本的 Riot，請將其關閉，因為在同一個主機上同時啟用和停用延遲載入將會發生問題。",
+    "Incompatible local cache": "不相容的本機快取",
+    "Clear cache and resync": "清除快取並重新同步"
 }
