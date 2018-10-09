@@ -23,8 +23,6 @@ var fs = require('fs');
 //
 var testFile = process.env.KARMA_TEST_FILE || 'test/all-tests.js';
 
-// make sure we're flagged as development to avoid wasting time optimising
-webpack_config.mode = 'development';
 
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 
@@ -205,7 +203,10 @@ module.exports = function (config) {
                 root: [
                     path.resolve('./test'),
                 ],
-                modules: "node_modules",
+                modules: [
+                    path.resolve('./test'),
+                    "node_modules"
+                ],
             },
             devtool: 'inline-source-map',
             externals: {
@@ -213,6 +214,8 @@ module.exports = function (config) {
                 // (the 'commonjs' here means it will output a 'require')
                 "electron": "commonjs electron",
             },
+            // make sure we're flagged as development to avoid wasting time optimising
+            mode: 'development',
         },
 
         webpackMiddleware: {
