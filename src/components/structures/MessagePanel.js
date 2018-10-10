@@ -560,9 +560,6 @@ module.exports = React.createClass({
                 return; // ignore ignored users
             }
             const member = room.getMember(r.userId);
-            if (!member) {
-                return; // ignore unknown user IDs
-            }
             receipts.push({
                 userId: r.userId,
                 roomMember: member,
