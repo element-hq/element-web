@@ -1266,6 +1266,9 @@ export default React.createClass({
             dis.dispatch({action: 'sync_state', prevState, state});
 
             if (state === "ERROR" || state === "RECONNECTING") {
+                if (data.error instanceof Matrix.InvalidStoreError) {
+                    Lifecycle.handleInvalidStoreError(data.error);
+                }
                 self.setState({syncError: data.error || true});
             } else if (self.state.syncError) {
                 self.setState({syncError: null});
@@ -1416,6 +1419,42 @@ export default React.createClass({
                 "blacklistUnverifiedDevices",
             );
             cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+        }
+    },
+
+    _handleSyncError(e) {
+        if (e instanceof Matrix.InvalidStoreError) {
+            if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
+                return Promise.resolve().then(() => {
+                    const lazyLoadEnabled = e.value;
+                    if (lazyLoadEnabled) {
+                        const LazyLoadingResyncDialog =
+                            sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
+                        return new Promise((resolve) => {
+                            Modal.createDialog(LazyLoadingResyncDialog, {
+                                onFinished: resolve,
+                            });
+                        });
+                    } else {
+                        // show warning about simultaneous use
+                        // between LL/non-LL version on same host.
+                        // as disabling LL when previously enabled
+                        // is a strong indicator of this (/develop & /app)
+                        const LazyLoadingDisabledDialog =
+                            sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
+                        return new Promise((resolve) => {
+                            Modal.createDialog(LazyLoadingDisabledDialog, {
+                                onFinished: resolve,
+                                host: window.location.host,
+                            });
+                        });
+                    }
+                }).then(() => {
+                    return MatrixClientPeg.get().store.deleteAllData();
+                }).then(() => {
+                    PlatformPeg.get().reload();
+                });
+            }
         }
     },
 
@@ -1742,10 +1781,14 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.LOGGED_IN) {
+            // store errors stop the client syncing and require user intervention, so we'll
+            // be showing a dialog. Don't show anything else.
+            const isStoreError = this.state.syncError && this.state.syncError instanceof Matrix.InvalidStoreError;
+
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
             // keep showing the spinner for now.
-            if (this.state.ready && this.state.page_type) {
+            if (this.state.ready && this.state.page_type && !isStoreError) {
                 /* for now, we stuff the entirety of our props and state into the LoggedInView.
                  * we should go through and figure out what we actually need to pass down, as well
                  * as using something like redux to avoid having a billion bits of state kicking around.
@@ -1767,7 +1810,7 @@ export default React.createClass({
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');
                 let errorBox;
-                if (this.state.syncError) {
+                if (this.state.syncError && !isStoreError) {
                     errorBox = <div className="mx_MatrixChat_syncError">
                         {messageForSyncError(this.state.syncError)}
                     </div>;
