@@ -2,7 +2,7 @@
   "name": "neocrypto-chat-riot",
   "productName": "NeoCrypto Trading Chat",
   "main": "src/electron-main.js",
-  "version": "0.16.6.2",
+  "version": "0.16.6",
   "description": "A feature-rich client for the NeoCrypto Trading Community (and the rest of the Matrix.org network)",
   "author": "NeoCrypto.io",
   "dependencies": {
