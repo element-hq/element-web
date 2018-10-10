@@ -159,6 +159,40 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
     });
 }
 
+export function handleInvalidStoreError(e) {
+    if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
+        return Promise.resolve().then(() => {
+            const lazyLoadEnabled = e.value;
+            if (lazyLoadEnabled) {
+                const LazyLoadingResyncDialog =
+                    sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
+                return new Promise((resolve) => {
+                    Modal.createDialog(LazyLoadingResyncDialog, {
+                        onFinished: resolve,
+                    });
+                });
+            } else {
+                // show warning about simultaneous use
+                // between LL/non-LL version on same host.
+                // as disabling LL when previously enabled
+                // is a strong indicator of this (/develop & /app)
+                const LazyLoadingDisabledDialog =
+                    sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
+                return new Promise((resolve) => {
+                    Modal.createDialog(LazyLoadingDisabledDialog, {
+                        onFinished: resolve,
+                        host: window.location.host,
+                    });
+                });
+            }
+        }).then(() => {
+            return MatrixClientPeg.get().store.deleteAllData();
+        }).then(() => {
+            PlatformPeg.get().reload();
+        });
+    }
+}
+
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log(`Doing guest login on ${hsUrl}`);
 
@@ -237,40 +271,6 @@ async function _restoreFromLocalStorage() {
 
 function _handleLoadSessionFailure(e) {
     console.log("Unable to load session", e);
-
-    if (e instanceof Matrix.InvalidStoreError) {
-        if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
-            return Promise.resolve().then(() => {
-                const lazyLoadEnabled = e.value;
-                if (lazyLoadEnabled) {
-                    const LazyLoadingResyncDialog =
-                        sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
-                    return new Promise((resolve) => {
-                        Modal.createDialog(LazyLoadingResyncDialog, {
-                            onFinished: resolve,
-                        });
-                    });
-                } else {
-                    // show warning about simultaneous use
-                    // between LL/non-LL version on same host.
-                    // as disabling LL when previously enabled
-                    // is a strong indicator of this (/develop & /app)
-                    const LazyLoadingDisabledDialog =
-                        sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
-                    return new Promise((resolve) => {
-                        Modal.createDialog(LazyLoadingDisabledDialog, {
-                            onFinished: resolve,
-                            host: window.location.host,
-                        });
-                    });
-                }
-            }).then(() => {
-                return MatrixClientPeg.get().store.deleteAllData();
-            }).then(() => {
-                PlatformPeg.get().reload();
-            });
-        }
-    }
 
     const def = Promise.defer();
     const SessionRestoreErrorDialog =
