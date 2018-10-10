@@ -41,7 +41,10 @@ module.exports = React.createClass({
 
     propTypes: {
         // the RoomMember to show the RR for
-        member: PropTypes.object.isRequired,
+        member: PropTypes.object,
+        // userId to fallback the avatar to
+        // if the member hasn't been loaded yet
+        fallbackUserId: PropTypes.string.isRequired,
 
         // number of pixels to offset the avatar from the right of its parent;
         // typically a negative value.
@@ -130,8 +133,7 @@ module.exports = React.createClass({
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
             console.warn(
-                `ReadReceiptMarker for ${this.props.member.userId} in ` +
-                `${this.props.member.roomId} has no offsetParent`,
+                `ReadReceiptMarker for ${this.props.fallbackUserId} in has no offsetParent`,
             );
             startTopOffset = 0;
         } else {
@@ -186,17 +188,17 @@ module.exports = React.createClass({
         let title;
         if (this.props.timestamp) {
             const dateString = formatDate(new Date(this.props.timestamp), this.props.showTwelveHour);
-            if (this.props.member.userId === this.props.member.rawDisplayName) {
+            if (!this.props.member || this.props.fallbackUserId === this.props.member.rawDisplayName) {
                 title = _t(
                     "Seen by %(userName)s at %(dateTime)s",
-                    {userName: this.props.member.userId,
+                    {userName: this.props.fallbackUserId,
                     dateTime: dateString},
                 );
             } else {
                 title = _t(
                     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
                     {displayName: this.props.member.rawDisplayName,
-                    userName: this.props.member.userId,
+                    userName: this.props.fallbackUserId,
                     dateTime: dateString},
                 );
             }
@@ -208,6 +210,7 @@ module.exports = React.createClass({
                     enterTransitionOpts={this.state.enterTransitionOpts} >
                 <MemberAvatar
                     member={this.props.member}
+                    fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     width={14} height={14} resizeMethod="crop"
                     style={style}
