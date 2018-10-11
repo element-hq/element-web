@@ -42,7 +42,7 @@ echo "electron npm version"
 
 cd electron_app
 npm version --no-git-tag-version "$release"
-git commit package.json package-lock.json -m "$tag"
+git commit package.json -m "$tag"
 
 
 cd ..
