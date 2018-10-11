@@ -15,8 +15,10 @@ limitations under the License.
 */
 
 .mx_RightPanel {
+    overflow-x: hidden;
+    flex: 0 0 auto;
     position: relative;
-
+    min-width: 250px;
     display: flex;
     flex-direction: column;
 }

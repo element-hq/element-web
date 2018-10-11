@@ -88,11 +88,3 @@ limitations under the License.
     */
     height: 100%;
 }
-
-.mx_MatrixChat .mx_RightPanel {
-    flex: 0 0 235px;
-}
-
-.mx_MatrixChat .mx_RightPanel.collapsed {
-    flex: 0 0 122px;
-}
