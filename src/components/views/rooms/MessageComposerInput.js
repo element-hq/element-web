@@ -428,7 +428,7 @@ export default class MessageComposerInput extends React.Component {
                     this.onChange(change);
                 } else {
                     let fragmentChange = fragment.change();
-                    fragmentChange.moveToRangeOf(fragment.document)
+                    fragmentChange.moveToRangeOfNode(fragment.document)
                                   .wrapBlock(quote);
 
                     // FIXME: handle pills and use commonmark rather than md-serialize
