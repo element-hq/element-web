@@ -2,6 +2,7 @@
 /*
 Copyright 2017 Aviral Dasgupta
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,99 +21,99 @@ import _at from 'lodash/at';
 import _flatMap from 'lodash/flatMap';
 import _sortBy from 'lodash/sortBy';
 import _uniq from 'lodash/uniq';
-import _keys from 'lodash/keys';
-
-class KeyMap {
-    keys: Array<String>;
-    objectMap: {[String]: Array<Object>};
-    priorityMap = new Map();
-}
 
 function stripDiacritics(str: string): string {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+/**
+ * Simple search matcher that matches any results with the query string anywhere
+ * in the search string. Returns matches in the order the query string appears
+ * in the search key, earliest first, then in the order the items appeared in
+ * the source array.
+ *
+ * @param {Object[]} objects Initial list of objects. Equivalent to calling
+ *     setObjects() after construction
+ * @param {Object} options Options object
+ * @param {string[]} options.keys List of keys to use as indexes on the objects
+ * @param {function[]} options.funcs List of functions that when called with the
+ *     object as an arg will return a string to use as an index
+ */
 export default class QueryMatcher {
-    /**
-     * @param {object[]} objects the objects to perform a match on
-     * @param {string[]} keys an array of keys within each object to match on
-     * Keys can refer to object properties by name and as in JavaScript (for nested properties)
-     *
-     * To use, simply presort objects by required criteria, run through this function and create a QueryMatcher with the
-     * resulting KeyMap.
-     *
-     * TODO: Handle arrays and objects (Fuse did this, RoomProvider uses it)
-     * @return {KeyMap}
-     */
-    static valuesToKeyMap(objects: Array<Object>, keys: Array<String>): KeyMap {
-        const keyMap = new KeyMap();
-        const map = {};
-
-        objects.forEach((object, i) => {
-            const keyValues = _at(object, keys);
-            for (const keyValue of keyValues) {
-                const key = stripDiacritics(keyValue).toLowerCase();
-                if (!map.hasOwnProperty(key)) {
-                    map[key] = [];
-                }
-                map[key].push(object);
-            }
-            keyMap.priorityMap.set(object, i);
-        });
-
-        keyMap.objectMap = map;
-        keyMap.keys = _keys(map);
-        return keyMap;
-    }
-
     constructor(objects: Array<Object>, options: {[Object]: Object} = {}) {
-        this.options = options;
-        this.keys = options.keys;
+        this._options = options;
+        this._keys = options.keys;
+        this._funcs = options.funcs || [];
+
         this.setObjects(objects);
 
         // By default, we remove any non-alphanumeric characters ([^A-Za-z0-9_]) from the
         // query and the value being queried before matching
-        if (this.options.shouldMatchWordsOnly === undefined) {
-            this.options.shouldMatchWordsOnly = true;
+        if (this._options.shouldMatchWordsOnly === undefined) {
+            this._options.shouldMatchWordsOnly = true;
         }
 
         // By default, match anywhere in the string being searched. If enabled, only return
         // matches that are prefixed with the query.
-        if (this.options.shouldMatchPrefix === undefined) {
-            this.options.shouldMatchPrefix = false;
+        if (this._options.shouldMatchPrefix === undefined) {
+            this._options.shouldMatchPrefix = false;
         }
     }
 
     setObjects(objects: Array<Object>) {
-        this.keyMap = QueryMatcher.valuesToKeyMap(objects, this.keys);
+        this._items = new Map();
+
+        for (const object of objects) {
+            const keyValues = _at(object, this._keys);
+
+            for (const f of this._funcs) {
+                keyValues.push(f(object));
+            }
+
+            for (const keyValue of keyValues) {
+                const key = stripDiacritics(keyValue).toLowerCase();
+                if (!this._items.has(key)) {
+                    this._items.set(key, []);
+                }
+                this._items.get(key).push(object);
+            }
+        }
     }
 
     match(query: String): Array<Object> {
         query = stripDiacritics(query).toLowerCase();
-        if (this.options.shouldMatchWordsOnly) {
+        if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
         }
         if (query.length === 0) {
             return [];
         }
         const results = [];
-        this.keyMap.keys.forEach((key) => {
+        // Iterate through the map & check each key.
+        // ES6 Map iteration order is defined to be insertion order, so results
+        // here will come out in the order they were put in.
+        for (const key of this._items.keys()) {
             let resultKey = key;
-            if (this.options.shouldMatchWordsOnly) {
+            if (this._options.shouldMatchWordsOnly) {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }
             const index = resultKey.indexOf(query);
-            if (index !== -1 && (!this.options.shouldMatchPrefix || index === 0)) {
+            if (index !== -1 && (!this._options.shouldMatchPrefix || index === 0)) {
                 results.push({key, index});
             }
+        }
+
+        // Sort them by where the query appeared in the search key
+        // lodash sortBy is a stable sort, so results where the query
+        // appeared in the same place will retain their order with
+        // respect to each other.
+        const sortedResults = _sortBy(results, (candidate) => {
+            return candidate.index;
         });
 
-        return _uniq(_flatMap(_sortBy(results, (candidate) => {
-            return candidate.index;
-        }).map((candidate) => {
-            // return an array of objects (those given to setObjects) that have the given
-            // key as a property.
-            return this.keyMap.objectMap[candidate.key];
-        })));
+        // Now map the keys to the result objects. Each result object is a list, so
+        // flatMap will flatten those lists out into a single list. Also remove any
+        // duplicates.
+        return _uniq(_flatMap(sortedResults, (candidate) => this._items.get(candidate.key)));
     }
 }

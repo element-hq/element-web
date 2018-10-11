@@ -45,7 +45,8 @@ export default class UserProvider extends AutocompleteProvider {
         super(USER_REGEX, FORCED_USER_REGEX);
         this.room = room;
         this.matcher = new QueryMatcher([], {
-            keys: ['name', 'userId'],
+            keys: ['name'],
+            funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
             shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
