@@ -423,7 +423,7 @@ export default class MessageComposerInput extends React.Component {
                         focus: {
                             key: quote.key,
                         },
-                    })).collapseToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
+                    })).moveToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
 
                     this.onChange(change);
                 } else {
@@ -838,7 +838,7 @@ export default class MessageComposerInput extends React.Component {
                     parent.object !== 'document')
                 {
                     return change.replaceNodeByKey(editorState.anchorBlock.key, editorState.anchorText)
-                                 .collapseToEndOf(parent)
+                                 .moveToEndOfNode(parent)
                                  .focus();
                 }
             }
@@ -1293,7 +1293,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // Move selection to the end of the selected history
-        const change = editorState.change().collapseToEndOf(editorState.document);
+        const change = editorState.change().moveToEndOfNode(editorState.document);
 
         // We don't call this.onChange(change) now, as fixups on stuff like emoji
         // should already have been done and persisted in the history.
