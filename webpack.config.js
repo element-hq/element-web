@@ -164,6 +164,12 @@ module.exports = {
             // don't fill the console up with a mahoosive list of modules
             chunks: false,
         },
+
+        // hot mdule replacement doesn't work (I think we'd need react-hot-reload?)
+        // so webpack-dev-server reloads the page on every update which is quite
+        // tedious in Riot since that can take a while.
+        hot: false,
+        inline: false,
     },
 };
 

@@ -90,7 +90,7 @@ to build.
    npm install
    npm run build
    ```
-   Or just use https://riot.im/develop - the continuous integration release of the 
+   Or just use https://riot.im/develop - the continuous integration release of the
    develop branch. (Note that we don't reference the develop versions in git directly
    due to https://github.com/npm/npm/issues/3055.)
 1. Install the prerequisites: `npm install`.
@@ -134,7 +134,9 @@ For a good example, see https://riot.im/develop/config.json
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
 1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
-   https://github.com/matrix-org/rageshake server)
+   https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
+   "Send Logs" within the application. Bug reports can be disabled by leaving the
+   `bug_report_endpoint_url` out of your config file.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
@@ -147,11 +149,13 @@ For a good example, see https://riot.im/develop/config.json
    anything else since it is used to isolate the privileges of file attachments to this
    domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
-1. `piwik`: an object containing the following properties:
-    1. `url`: The URL of the Piwik instance to use for collecting Analytics
-    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
-    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
-    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
+1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
+   option out of your config file. If you want to enable analytics, set `piwik` to be an object
+   containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
+    1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
 1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
    with referral tracking; please ignore it.
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
@@ -270,7 +274,7 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/riot-web.git`
+1. `git clone https://github.com/vector-im/riot-web.git`
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
