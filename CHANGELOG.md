@@ -1,3 +1,64 @@
+Changes in [0.14.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.0-rc.1) (2018-10-11)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.6...v0.14.0-rc.1)
+
+ * turn LL on by default!
+   [\#2209](https://github.com/matrix-org/matrix-react-sdk/pull/2209)
+ * Update from Weblate.
+   [\#2207](https://github.com/matrix-org/matrix-react-sdk/pull/2207)
+ * Fix quote post slate update
+   [\#2206](https://github.com/matrix-org/matrix-react-sdk/pull/2206)
+ * Handle InvalidStoreError from js-sdk
+   [\#2205](https://github.com/matrix-org/matrix-react-sdk/pull/2205)
+ * Fall back to default avatar in RR when member isn't loaded yet
+   [\#2204](https://github.com/matrix-org/matrix-react-sdk/pull/2204)
+ * Update to new version of slate
+   [\#2202](https://github.com/matrix-org/matrix-react-sdk/pull/2202)
+ * Update karma to webpack 4
+   [\#2203](https://github.com/matrix-org/matrix-react-sdk/pull/2203)
+ * More accessible buttons - take 2
+   [\#2194](https://github.com/matrix-org/matrix-react-sdk/pull/2194)
+ * log correct error code when opening log idb
+   [\#2200](https://github.com/matrix-org/matrix-react-sdk/pull/2200)
+ * show warning when LL is disabled but was enabled before
+   [\#2201](https://github.com/matrix-org/matrix-react-sdk/pull/2201)
+ * Fall back to another store if indexeddb start fails
+   [\#2195](https://github.com/matrix-org/matrix-react-sdk/pull/2195)
+ * Silence bluebird warnings
+   [\#2198](https://github.com/matrix-org/matrix-react-sdk/pull/2198)
+ * Use createObjectURL instead of readAsDataURL for videos
+   [\#2197](https://github.com/matrix-org/matrix-react-sdk/pull/2197)
+ * Revert "Use createObjectURL instead of readAsDataURL for videos"
+   [\#2196](https://github.com/matrix-org/matrix-react-sdk/pull/2196)
+ * Track how far the user travels before dismissing their user settings
+   [\#2183](https://github.com/matrix-org/matrix-react-sdk/pull/2183)
+ * Drop (IRC) suffix hacks
+   [\#2193](https://github.com/matrix-org/matrix-react-sdk/pull/2193)
+ * Use createObjectURL instead of readAsDataURL for videos
+   [\#2176](https://github.com/matrix-org/matrix-react-sdk/pull/2176)
+ * Remove old migration code
+   [\#2192](https://github.com/matrix-org/matrix-react-sdk/pull/2192)
+ * Fix brace style in TextForEvent.js
+   [\#2191](https://github.com/matrix-org/matrix-react-sdk/pull/2191)
+ * Fix error logging
+   [\#2190](https://github.com/matrix-org/matrix-react-sdk/pull/2190)
+ * Fix Promise.defer warning in ScalarAuthClient.js
+   [\#2188](https://github.com/matrix-org/matrix-react-sdk/pull/2188)
+ * Communicate early that a 3pid is required during registration if needed
+   [\#2180](https://github.com/matrix-org/matrix-react-sdk/pull/2180)
+ * try to encourage people to attach logs to bugs
+   [\#2185](https://github.com/matrix-org/matrix-react-sdk/pull/2185)
+ * Show the 'homeserver unavailable' warning when the first sync fails
+   [\#2182](https://github.com/matrix-org/matrix-react-sdk/pull/2182)
+ * allow passing initial is_url like hs_url in query params
+   [\#2083](https://github.com/matrix-org/matrix-react-sdk/pull/2083)
+ * Update karma
+   [\#2177](https://github.com/matrix-org/matrix-react-sdk/pull/2177)
+ * fudge hangup reasons
+   [\#2184](https://github.com/matrix-org/matrix-react-sdk/pull/2184)
+ * Provide more helpful errors when i18n generation fails
+   [\#2181](https://github.com/matrix-org/matrix-react-sdk/pull/2181)
+
 Changes in [0.13.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.13.6) (2018-10-08)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.5...v0.13.6)
