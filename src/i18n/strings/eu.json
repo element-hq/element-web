@@ -835,7 +835,7 @@
     "was invited %(count)s times|one": "gonbidatua izan da",
     "were banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
     "were banned %(count)s times|one": "debekatuak izan dira",
-    "was banned %(count)s times|other": "%(count)s aldi debekatuak izan dira",
+    "was banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
     "were unbanned %(count)s times|other": "%(count)s aldiz kendu zaie debekua",
     "were unbanned %(count)s times|one": "debekua kendu zaie",
     "was unbanned %(count)s times|other": "%(count)s aldiz kendu zaio debekua",
@@ -1277,5 +1277,13 @@
     "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s erabiltzaileak %(removedAddresses)s helbideak kendu ditu gela honetatik.",
     "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s erabiltzaileak %(addedAddresses)s helbideak gehitu eta %(removedAddresses)s helbideak kendu ditu gela honetatik.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s erabiltzileak %(address)s ezarri du gela honetako helbide nagusi gisa.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s erabiltzaileak gela honen helbide nagusia kendu du."
+    "%(senderName)s removed the main address for this room.": "%(senderName)s erabiltzaileak gela honen helbide nagusia kendu du.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Egunkariak bidali aurretik, <a>GitHub arazo bat sortu</a> behar duzu gertatzen zaizuna azaltzeko.",
+    "What GitHub issue are these logs for?": "Zein GitHub arazorako egunkariak dira hauek?",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot-ek orain 3-5 aldiz memoria gutxiago darabil, beste erabiltzaileen informazioa behar denean besterik ez kargatzen. Itxaron zerbitzariarekin sinkronizatzen garen bitartean!",
+    "Updating Riot": "Riot eguneratzen",
+    "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>Zure komunitatearen orriaren HTMLa</h1>\n<p>\n    Erabili deskripzio luzea kide berriek komunitatea ezagutu dezaten, edo eman ezagutzera <a href=\"foo\">esteka</a> garrantzitsuak\n</p>\n<p>\n    'img' etiketak erabili ditzakezu ere\n</p>\n",
+    "Submit Debug Logs": "Bidali arazketa egunkariak",
+    "An email address is required to register on this homeserver.": "e-mail helbide bat behar da hasiera-zerbitzari honetan izena emateko.",
+    "A phone number is required to register on this homeserver.": "telefono zenbaki bat behar da hasiera-zerbitzari honetan izena emateko."
 }
