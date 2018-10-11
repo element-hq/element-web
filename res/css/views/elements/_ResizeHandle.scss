@@ -17,24 +17,16 @@ limitations under the License.
 .mx_ResizeHandle {
     cursor: row-resize;
     flex: 0 0 auto;
-    background: blue;
+    background: $panel-divider-color;
     padding: 1px
 }
 
 .mx_ResizeHandle.mx_ResizeHandle_horizontal {
     width: 1px;
-    cursor: e-resize;
+    cursor: col-resize;
 }
 
 .mx_ResizeHandle.mx_ResizeHandle_vertical {
     height: 1px;
-    cursor: s-resize;
-}
-
-.mx_ResizeHandle.mx_ResizeHandle_horizontal.mx_ResizeHandle_reverse {
-    cursor: w-resize;
-}
-
-.mx_ResizeHandle.mx_ResizeHandle_vertical.mx_ResizeHandle_reverse {
-    cursor: n-resize;
+    cursor: row-resize;
 }
