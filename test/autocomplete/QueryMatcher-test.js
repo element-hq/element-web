@@ -26,6 +26,11 @@ const OBJECTS = [
     { name: "Victoria", nick: "Posh" },
 ];
 
+const NONWORDOBJECTS = [
+    { name: "B.O.B" },
+    { name: "bob" },
+];
+
 describe('QueryMatcher', function() {
     it('Returns results by key', function() {
         const qm = new QueryMatcher(OBJECTS, {keys: ["name"]});
@@ -132,5 +137,39 @@ describe('QueryMatcher', function() {
         expect(results[0].name).toBe('Mel B');
         expect(results[1].name).toBe('Mel C');
         expect(results[2].name).toBe('Emma');
+    });
+
+    it('Matches words only by default', function() {
+        const qm = new QueryMatcher(NONWORDOBJECTS, { keys: ["name"] });
+
+        const results = qm.match('bob');
+        expect(results.length).toBe(2);
+        expect(results[0].name).toBe('B.O.B');
+        expect(results[1].name).toBe('bob');
+    });
+
+    it('Matches all chars with words-only off', function() {
+        const qm = new QueryMatcher(NONWORDOBJECTS, {
+            keys: ["name"],
+            shouldMatchWordsOnly: false,
+         });
+
+        const results = qm.match('bob');
+        expect(results.length).toBe(1);
+        expect(results[0].name).toBe('bob');
+    });
+
+    it('Matches only by prefix with shouldMatchPrefix on', function() {
+        const qm = new QueryMatcher([
+            {name: "Victoria"},
+            {name: "Tori"},
+        ], {
+            keys: ["name"],
+            shouldMatchPrefix: true,
+         });
+
+        const results = qm.match('tori');
+        expect(results.length).toBe(1);
+        expect(results[0].name).toBe('Tori');
     });
 });
