@@ -248,7 +248,7 @@ export default class SettingsStore {
         if (actualValue !== undefined && actualValue !== null) return actualValue;
         return calculatedValue;
     }
-
+    /* eslint-disable valid-jsdoc */    //https://github.com/eslint/eslint/issues/7307
     /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
      * set for a particular room, otherwise it should be supplied. The value may be null
@@ -260,7 +260,8 @@ export default class SettingsStore {
      * @param {*} value The new value of the setting, may be null.
      * @return {Promise} Resolves when the setting has been changed.
      */
-    static setValue(settingName, roomId, level, value) {
+    /* eslint-enable valid-jsdoc */
+    static async setValue(settingName, roomId, level, value) {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -275,11 +276,12 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        return handler.setValue(settingName, roomId, value).then(() => {
-            const controller = SETTINGS[settingName].controller;
-            if (!controller) return;
+        await handler.setValue(settingName, roomId, value);
+
+        const controller = SETTINGS[settingName].controller;
+        if (controller) {
             controller.onChange(level, roomId, value);
-        });
+        }
     }
 
     /**

@@ -106,9 +106,7 @@
     "Power level must be positive integer.": "Niveli fuqie duhet të jetë numër i plotë pozitiv.",
     "You are not in this room.": "Ti nuk je në këtë dhomë.",
     "You do not have permission to do that in this room.": "Nuk ke leje të bësh këtë në këtë dhomë.",
-    "Must be viewing a room": "Duhet të shikohet një dhomë",
     "Room %(roomId)s not visible": "Dhoma %(roomId)s e padukshme",
-    "Failed to lookup current room": "Dhoma aktuale nuk mundi të kërkohej",
     "Usage": "Përdorimi",
     "/ddg is not a command": "/ddg s'është komandë",
     "To use it, just wait for autocomplete results to load and tab through them.": "Për të përdorur, thjesht prit derisa të mbushën rezultatat vetëplotësuese dhe pastaj shfletoji.",
@@ -269,7 +267,6 @@
     "Set Password": "Caktoni Fjalëkalim",
     "An error occurred whilst saving your email notification preferences.": "Ndodhi një gabim teksa ruheshin parapëlqimet tuaja për njoftime me email.",
     "Enable audible notifications in web client": "Aktivizoni njoftime audio te klienti web",
-    "Permalink": "Permalidhje",
     "Register": "Regjistrohuni",
     "Off": "Off",
     "Edit": "Përpunoni",
@@ -297,5 +294,6 @@
     "Collapse panel": "Tkurre panelin",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Me shfletuesin tuaj të tanishëm, pamja dhe ndjesitë nga aplikacioni mund të jenë plotësisht të pasakta, dhe disa nga ose krejt veçoritë të mos funksionojnë. Nëse doni ta provoni sido qoftë, mund të vazhdoni, por mos u ankoni për çfarëdo problemesh që mund të hasni!",
     "Checking for an update...": "Po kontrollohet për një përditësim…",
-    "There are advanced notifications which are not shown here": "Ka njoftime të thelluara që nuk shfaqen këtu"
+    "There are advanced notifications which are not shown here": "Ka njoftime të thelluara që nuk shfaqen këtu",
+    "Show empty room list headings": "Shfaqi emrat e listave të zbrazëta dhomash"
 }

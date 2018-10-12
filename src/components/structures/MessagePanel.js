@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,9 @@ import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
+
+const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const continuedTypes = ['m.sticker', 'm.room.message'];
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -189,7 +193,7 @@ module.exports = React.createClass({
     /**
      * Page up/down.
      *
-     * mult: -1 to page up, +1 to page down
+     * @param {number} mult: -1 to page up, +1 to page down
      */
     scrollRelative: function(mult) {
         if (this.refs.scrollPanel) {
@@ -199,6 +203,8 @@ module.exports = React.createClass({
 
     /**
      * Scroll up/down in response to a scroll key
+     *
+     * @param {KeyboardEvent} ev: the keyboard event to handle
      */
     handleScrollKey: function(ev) {
         if (this.refs.scrollPanel) {
@@ -257,6 +263,7 @@ module.exports = React.createClass({
 
         this.eventNodes = {};
 
+        let visible = false;
         let i;
 
         // first figure out which is the last event in the list which we're
@@ -297,7 +304,7 @@ module.exports = React.createClass({
         // if the readmarker has moved, cancel any active ghost.
         if (this.currentReadMarkerEventId && this.props.readMarkerEventId &&
                 this.props.readMarkerVisible &&
-                this.currentReadMarkerEventId != this.props.readMarkerEventId) {
+                this.currentReadMarkerEventId !== this.props.readMarkerEventId) {
             this.currentGhostEventId = null;
         }
 
@@ -404,8 +411,8 @@ module.exports = React.createClass({
 
             let isVisibleReadMarker = false;
 
-            if (eventId == this.props.readMarkerEventId) {
-                var visible = this.props.readMarkerVisible;
+            if (eventId === this.props.readMarkerEventId) {
+                visible = this.props.readMarkerVisible;
 
                 // if the read marker comes at the end of the timeline (except
                 // for local echoes, which are excluded from RMs, because they
@@ -423,11 +430,11 @@ module.exports = React.createClass({
 
             // XXX: there should be no need for a ghost tile - we should just use a
             // a dispatch (user_activity_end) to start the RM animation.
-            if (eventId == this.currentGhostEventId) {
+            if (eventId === this.currentGhostEventId) {
                 // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
             } else if (!isVisibleReadMarker &&
-                       eventId == this.currentReadMarkerEventId) {
+                       eventId === this.currentReadMarkerEventId) {
                 // there is currently a read-up-to marker at this point, but no
                 // more. Show an animation of it disappearing.
                 ret.push(this._getReadMarkerGhostTile());
@@ -449,16 +456,17 @@ module.exports = React.createClass({
 
         // Some events should appear as continuations from previous events of
         // different types.
-        const continuedTypes = ['m.sticker', 'm.room.message'];
+
         const eventTypeContinues =
             prevEvent !== null &&
             continuedTypes.includes(mxEv.getType()) &&
             continuedTypes.includes(prevEvent.getType());
 
-        if (prevEvent !== null
-                && prevEvent.sender && mxEv.sender
-                && mxEv.sender.userId === prevEvent.sender.userId
-                && (mxEv.getType() == prevEvent.getType() || eventTypeContinues)) {
+        // if there is a previous event and it has the same sender as this event
+        // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
+        if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
+            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
+            (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
             continuation = true;
         }
 
@@ -493,7 +501,7 @@ module.exports = React.createClass({
         }
 
         const eventId = mxEv.getId();
-        const highlight = (eventId == this.props.highlightedEventId);
+        const highlight = (eventId === this.props.highlightedEventId);
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
@@ -534,7 +542,7 @@ module.exports = React.createClass({
     },
 
     // get a list of read receipts that should be shown next to this event
-    // Receipts are objects which have a 'roomMember' and 'ts'.
+    // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
     _getReadReceiptsForEvent: function(event) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
@@ -552,10 +560,8 @@ module.exports = React.createClass({
                 return; // ignore ignored users
             }
             const member = room.getMember(r.userId);
-            if (!member) {
-                return; // ignore unknown user IDs
-            }
             receipts.push({
+                userId: r.userId,
                 roomMember: member,
                 ts: r.data ? r.data.ts : 0,
             });
@@ -632,7 +638,8 @@ module.exports = React.createClass({
     render: function() {
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const Spinner = sdk.getComponent("elements.Spinner");
-        let topSpinner, bottomSpinner;
+        let topSpinner;
+        let bottomSpinner;
         if (this.props.backPaginating) {
             topSpinner = <li key="_topSpinner"><Spinner /></li>;
         }

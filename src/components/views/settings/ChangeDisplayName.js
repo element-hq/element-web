@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,36 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-const React = require('react');
-const sdk = require('../../../index');
-const MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
 
-    _getDisplayName: function() {
+    _getDisplayName: async function() {
         const cli = MatrixClientPeg.get();
-        return cli.getProfileInfo(cli.credentials.userId).then(function(result) {
-            let displayname = result.displayname;
-            if (!displayname) {
-                if (MatrixClientPeg.get().isGuest()) {
-                    displayname = "Guest " + MatrixClientPeg.get().getUserIdLocalpart();
-                } else {
-                    displayname = MatrixClientPeg.get().getUserIdLocalpart();
-                }
-            }
-            return displayname;
-        }, function(error) {
+        try {
+            const res = await cli.getProfileInfo(cli.getUserId());
+            return res.displayname;
+        } catch (e) {
             throw new Error("Failed to fetch display name");
-        });
+        }
     },
 
-    _changeDisplayName: function(new_displayname) {
+    _changeDisplayName: function(newDisplayname) {
         const cli = MatrixClientPeg.get();
-        return cli.setDisplayName(new_displayname).catch(function(e) {
-            throw new Error("Failed to set display name");
+        return cli.setDisplayName(newDisplayname).catch(function(e) {
+            throw new Error("Failed to set display name", e);
         });
     },
 

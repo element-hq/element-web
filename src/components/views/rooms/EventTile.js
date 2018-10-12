@@ -34,6 +34,7 @@ const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
 import {makeEventPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
+import {EventStatus} from 'matrix-js-sdk';
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -46,6 +47,10 @@ const eventTileTypes = {
 };
 
 const stateEventTileTypes = {
+    'm.room.aliases': 'messages.TextualEvent',
+    // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
+    'm.room.canonical_alias': 'messages.TextualEvent',
+    'm.room.create': 'messages.RoomCreate',
     'm.room.member': 'messages.TextualEvent',
     'm.room.name': 'messages.TextualEvent',
     'm.room.avatar': 'messages.RoomAvatarEvent',
@@ -55,7 +60,7 @@ const stateEventTileTypes = {
     'm.room.topic': 'messages.TextualEvent',
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
-
+    'm.room.server_acl': 'messages.TextualEvent',
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
 
@@ -272,7 +277,11 @@ module.exports = withMatrixClient(React.createClass({
                     return false;
                 }
                 for (let j = 0; j < rA.length; j++) {
-                    if (rA[j].roomMember.userId !== rB[j].roomMember.userId) {
+                    if (rA[j].userId !== rB[j].userId) {
+                        return false;
+                    }
+                    // one has a member set and the other doesn't?
+                    if (rA[j].roomMember !== rB[j].roomMember) {
                         return false;
                     }
                 }
@@ -354,7 +363,7 @@ module.exports = withMatrixClient(React.createClass({
             // else set it proportional to index
             left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
-            const userId = receipt.roomMember.userId;
+            const userId = receipt.userId;
             let readReceiptInfo;
 
             if (this.props.readReceiptMap) {
@@ -368,6 +377,7 @@ module.exports = withMatrixClient(React.createClass({
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <ReadReceiptMarker key={userId} member={receipt.roomMember}
+                    fallbackUserId={userId}
                     leftOffset={left} hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
@@ -442,26 +452,27 @@ module.exports = withMatrixClient(React.createClass({
         const ev = this.props.mxEvent;
         const props = {onClick: this.onCryptoClicked};
 
-
+        // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
             return <E2ePadlockUndecryptable {...props} />;
-        } else if (ev.isEncrypted()) {
-            if (this.state.verified) {
-                return <E2ePadlockVerified {...props} />;
-            } else {
-                return <E2ePadlockUnverified {...props} />;
-            }
-        } else {
-            // XXX: if the event is being encrypted (ie eventSendStatus ===
-            // encrypting), it might be nice to show something other than the
-            // open padlock?
+        }
 
-            // if the event is not encrypted, but it's an e2e room, show the
-            // open padlock
-            const e2eEnabled = this.props.matrixClient.isRoomEncrypted(ev.getRoomId());
-            if (e2eEnabled) {
-                return <E2ePadlockUnencrypted {...props} />;
+        // event is encrypted, display padlock corresponding to whether or not it is verified
+        if (ev.isEncrypted()) {
+            return this.state.verified ? <E2ePadlockVerified {...props} /> : <E2ePadlockUnverified {...props} />;
+        }
+
+        if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
+            // else if room is encrypted
+            // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
+            if (ev.status === EventStatus.ENCRYPTING) {
+                return <E2ePadlockEncrypting {...props} />;
             }
+            if (ev.status === EventStatus.NOT_SENT) {
+                return <E2ePadlockNotSent {...props} />;
+            }
+            // if the event is not encrypted, but it's an e2e room, show the open padlock
+            return <E2ePadlockUnencrypted {...props} />;
         }
 
         // no padlock needed
@@ -480,17 +491,26 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (eventType !== 'm.room.message' && eventType !== 'm.sticker');
+        const isInfoMessage = (
+            eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType != 'm.room.create'
+        );
 
-        const EventTileType = sdk.getComponent(getHandlerTile(this.props.mxEvent));
+        const tileHandler = getHandlerTile(this.props.mxEvent);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
-        if (!EventTileType) {
-            throw new Error("Event type not supported");
+        if (!tileHandler) {
+            const {mxEvent} = this.props;
+            console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
+                <div className="mx_EventTile_line">
+                    { _t('This event could not be displayed') }
+                </div>
+            </div>;
         }
+        const EventTileType = sdk.getComponent(tileHandler);
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
-        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
+        const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
         const classes = classNames({
@@ -525,6 +545,9 @@ module.exports = withMatrixClient(React.createClass({
         if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
+        } else if (tileHandler === 'messages.RoomCreate') {
+            avatarSize = 0;
+            needsSenderProfile = false;
         } else if (isInfoMessage) {
             // a small avatar, with no sender profile, for
             // joins/parts/etc
@@ -608,13 +631,14 @@ module.exports = withMatrixClient(React.createClass({
 
         switch (this.props.tileShape) {
             case 'notif': {
+                const EmojiText = sdk.getComponent('elements.EmojiText');
                 const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_roomName">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                            <EmojiText element="a" href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
-                            </a>
+                            </EmojiText>
                         </div>
                         <div className="mx_EventTile_senderDetails">
                             { avatar }
@@ -691,7 +715,6 @@ module.exports = withMatrixClient(React.createClass({
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
-                        { avatar }
                         { sender }
                         <div className="mx_EventTile_line">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
@@ -708,6 +731,12 @@ module.exports = withMatrixClient(React.createClass({
                             { keyRequestInfo }
                             { editButton }
                         </div>
+                        {
+                            // The avatar goes after the event tile as it's absolutly positioned to be over the
+                            // event tile line, so needs to be later in the DOM so it appears on top (this avoids
+                            // the need for further z-indexing chaos)
+                        }
+                        { avatar }
                     </div>
                 );
             }
@@ -715,14 +744,22 @@ module.exports = withMatrixClient(React.createClass({
     },
 }));
 
+// XXX this'll eventually be dynamic based on the fields once we have extensible event types
+const messageTypes = ['m.room.message', 'm.sticker'];
+function isMessageEvent(ev) {
+    return (messageTypes.includes(ev.getType()));
+}
+
 module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
-    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
+    if (e.isRedacted() && !isMessageEvent(e)) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';
+    } else if (handler === 'messages.RoomCreate') {
+        return Boolean(e.getContent()['predecessor']);
     } else {
         return true;
     }
@@ -734,6 +771,14 @@ function E2ePadlockUndecryptable(props) {
             src="img/e2e-blocked.svg" width="12" height="12"
             style={{ marginLeft: "-1px" }} {...props} />
     );
+}
+
+function E2ePadlockEncrypting(props) {
+    return <E2ePadlock alt={_t("Encrypting")} src="img/e2e-encrypting.svg" width="10" height="12" {...props} />;
+}
+
+function E2ePadlockNotSent(props) {
+    return <E2ePadlock alt={_t("Encrypted, not sent")} src="img/e2e-not_sent.svg" width="10" height="12" {...props} />;
 }
 
 function E2ePadlockVerified(props) {

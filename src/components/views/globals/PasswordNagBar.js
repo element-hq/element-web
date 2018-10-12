@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,28 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     onUpdateClicked: function() {
         const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
-        Modal.createTrackedDialog('Set Password Dialog', 'Password Nag Bar', SetPasswordDialog, {
-            onFinished: (passwordChanged) => {
-                if (!passwordChanged) {
-                    return;
-                }
-                // Notify SessionStore that the user's password was changed
-                dis.dispatch({
-                    action: 'password_changed',
-                });
-            },
-        });
+        Modal.createTrackedDialog('Set Password Dialog', 'Password Nag Bar', SetPasswordDialog);
     },
 
     render: function() {
@@ -46,7 +34,7 @@ export default React.createClass({
                     src="img/warning.svg"
                     width="24"
                     height="23"
-                    alt="Warning"
+                    alt=""
                 />
                 <div className="mx_MatrixToolbar_content">
                     { _t(

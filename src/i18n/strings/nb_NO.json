@@ -98,7 +98,6 @@
     "Riot does not know how to join a room on this network": "Riot vet ikke hvordan man kan komme inn på et rom på dette nettverket",
     "An error occurred whilst saving your email notification preferences.": "En feil oppsto i forbindelse med lagring av epost varsel innstillinger.",
     "Enable audible notifications in web client": "Aktiver lyd-varsel i webklient",
-    "Permalink": "Permanent lenke",
     "remove %(name)s from the directory.": "fjern %(name)s fra katalogen.",
     "Off": "Av",
     "#example": "#eksempel",
@@ -113,5 +112,6 @@
     "Quote": "Sitat",
     "Collapse panel": "Skjul panel",
     "Saturday": "Lørdag",
-    "There are advanced notifications which are not shown here": "Det er avanserte varsler som ikke vises her"
+    "There are advanced notifications which are not shown here": "Det er avanserte varsler som ikke vises her",
+    "Dismiss": "Avvis"
 }

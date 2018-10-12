@@ -56,32 +56,31 @@ class ScalarAuthClient {
                 // Something went wrong - try to get a new token.
                 console.warn("Registering for new scalar token");
                 return this.registerForToken();
-            })
+            });
         }
     }
 
     validateToken(token) {
-        let url = SdkConfig.get().integrations_rest_url + "/account";
+        const url = SdkConfig.get().integrations_rest_url + "/account";
 
-        const defer = Promise.defer();
-        request({
-            method: "GET",
-            uri: url,
-            qs: {scalar_token: token},
-            json: true,
-        }, (err, response, body) => {
-            if (err) {
-                defer.reject(err);
-            } else if (response.statusCode / 100 !== 2) {
-                defer.reject({statusCode: response.statusCode});
-            } else if (!body || !body.user_id) {
-                defer.reject(new Error("Missing user_id in response"));
-            } else {
-                defer.resolve(body.user_id);
-            }
+        return new Promise(function(resolve, reject) {
+            request({
+                method: "GET",
+                uri: url,
+                qs: {scalar_token: token},
+                json: true,
+            }, (err, response, body) => {
+                if (err) {
+                    reject(err);
+                } else if (response.statusCode / 100 !== 2) {
+                    reject({statusCode: response.statusCode});
+                } else if (!body || !body.user_id) {
+                    reject(new Error("Missing user_id in response"));
+                } else {
+                    resolve(body.user_id);
+                }
+            });
         });
-
-        return defer.promise;
     }
 
     registerForToken() {
@@ -96,56 +95,54 @@ class ScalarAuthClient {
     }
 
     exchangeForScalarToken(openid_token_object) {
-        const defer = Promise.defer();
-
         const scalar_rest_url = SdkConfig.get().integrations_rest_url;
-        request({
-            method: 'POST',
-            uri: scalar_rest_url+'/register',
-            body: openid_token_object,
-            json: true,
-        }, (err, response, body) => {
-            if (err) {
-                defer.reject(err);
-            } else if (response.statusCode / 100 !== 2) {
-                defer.reject({statusCode: response.statusCode});
-            } else if (!body || !body.scalar_token) {
-                defer.reject(new Error("Missing scalar_token in response"));
-            } else {
-                defer.resolve(body.scalar_token);
-            }
-        });
 
-        return defer.promise;
+        return new Promise(function(resolve, reject) {
+            request({
+                method: 'POST',
+                uri: scalar_rest_url+'/register',
+                body: openid_token_object,
+                json: true,
+            }, (err, response, body) => {
+                if (err) {
+                    reject(err);
+                } else if (response.statusCode / 100 !== 2) {
+                    reject({statusCode: response.statusCode});
+                } else if (!body || !body.scalar_token) {
+                    reject(new Error("Missing scalar_token in response"));
+                } else {
+                    resolve(body.scalar_token);
+                }
+            });
+        });
     }
 
     getScalarPageTitle(url) {
-        const defer = Promise.defer();
-
         let scalarPageLookupUrl = SdkConfig.get().integrations_rest_url + '/widgets/title_lookup';
         scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
         scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
-        request({
-            method: 'GET',
-            uri: scalarPageLookupUrl,
-            json: true,
-        }, (err, response, body) => {
-            if (err) {
-                defer.reject(err);
-            } else if (response.statusCode / 100 !== 2) {
-                defer.reject({statusCode: response.statusCode});
-            } else if (!body) {
-                defer.reject(new Error("Missing page title in response"));
-            } else {
-                let title = "";
-                if (body.page_title_cache_item && body.page_title_cache_item.cached_title) {
-                    title = body.page_title_cache_item.cached_title;
-                }
-                defer.resolve(title);
-            }
-        });
 
-        return defer.promise;
+        return new Promise(function(resolve, reject) {
+            request({
+                method: 'GET',
+                uri: scalarPageLookupUrl,
+                json: true,
+            }, (err, response, body) => {
+                if (err) {
+                    reject(err);
+                } else if (response.statusCode / 100 !== 2) {
+                    reject({statusCode: response.statusCode});
+                } else if (!body) {
+                    reject(new Error("Missing page title in response"));
+                } else {
+                    let title = "";
+                    if (body.page_title_cache_item && body.page_title_cache_item.cached_title) {
+                        title = body.page_title_cache_item.cached_title;
+                    }
+                    resolve(title);
+                }
+            });
+        });
     }
 
     /**

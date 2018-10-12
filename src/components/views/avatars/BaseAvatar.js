@@ -87,7 +87,7 @@ module.exports = React.createClass({
         if (this.unmounted) return;
 
         // Consider the client reconnected if there is no error with syncing.
-        // This means the state could be RECONNECTING, SYNCING or PREPARED.
+        // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
         if (reconnected &&
             // Did we fall back?

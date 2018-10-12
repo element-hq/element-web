@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,60 +13,49 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher';
-import {Store} from 'flux/utils';
-import {convertToRaw, convertFromRaw} from 'draft-js';
+import { Value } from 'slate';
 
-const INITIAL_STATE = {
-    editorStateMap: localStorage.getItem('content_state') ?
-        JSON.parse(localStorage.getItem('content_state')) : {},
-};
+const localStoragePrefix = 'editor_state_';
 
 /**
- * A class for storing application state to do with the message composer. This is a simple
- * flux store that listens for actions and updates its state accordingly, informing any
- * listeners (views) of state changes.
+ * A class for storing application state to do with the message composer (specifically in-progress message drafts).
+ * It does not worry about cleaning up on log out as this is handled in Lifecycle.js by localStorage.clear()
  */
-class MessageComposerStore extends Store {
+class MessageComposerStore {
     constructor() {
-        super(dis);
-
-        // Initialise state
-        this._state = Object.assign({}, INITIAL_STATE);
+        this.prefix = localStoragePrefix;
     }
 
-    _setState(newState) {
-        this._state = Object.assign(this._state, newState);
-        this.__emitChange();
+    _getKey(roomId: string): string {
+        return this.prefix + roomId;
     }
 
-    __onDispatch(payload) {
-        switch (payload.action) {
-            case 'content_state':
-                this._contentState(payload);
-                break;
-            case 'on_logged_out':
-                this.reset();
-                break;
+    setEditorState(roomId: string, editorState: Value, richText: boolean) {
+        localStorage.setItem(this._getKey(roomId), JSON.stringify({
+            editor_state: editorState.toJSON({
+                preserveSelection: true,
+                // XXX: re-hydrating history is not currently supported by fromJSON
+                // preserveHistory: true,
+                // XXX: this seems like a workaround for selection.isSet being based on anchorKey instead of anchorPath
+                preserveKeys: true,
+            }),
+            rich_text: richText,
+        }));
+    }
+
+    getEditorState(roomId): {editor_state: Value, rich_text: boolean} {
+        const stateStr = localStorage.getItem(this._getKey(roomId));
+
+        let state;
+        if (stateStr) {
+            state = JSON.parse(stateStr);
+
+            // if it does not have the fields we expect then bail
+            if (!state || state.rich_text === undefined || state.editor_state === undefined) return;
+            state.editor_state = Value.fromJSON(state.editor_state);
         }
-    }
 
-    _contentState(payload) {
-        const editorStateMap = this._state.editorStateMap;
-        editorStateMap[payload.room_id] = convertToRaw(payload.content_state);
-        localStorage.setItem('content_state', JSON.stringify(editorStateMap));
-        this._setState({
-            editorStateMap: editorStateMap,
-        });
-    }
-
-    getContentState(roomId) {
-        return this._state.editorStateMap[roomId] ?
-            convertFromRaw(this._state.editorStateMap[roomId]) : null;
-    }
-
-    reset() {
-        this._state = Object.assign({}, INITIAL_STATE);
+        return state;
     }
 }
 

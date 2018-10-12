@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -97,18 +98,19 @@ module.exports = React.createClass({
             }
         }
 
-
-        // save new canonical alias
         let oldCanonicalAlias = null;
         if (this.props.canonicalAliasEvent) {
             oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
         }
-        if (oldCanonicalAlias !== this.state.canonicalAlias) {
+
+        let newCanonicalAlias = this.state.canonicalAlias;
+
+        if (this.props.canSetCanonicalAlias && oldCanonicalAlias !== newCanonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
             promises = [Promise.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
-                        alias: this.state.canonicalAlias,
+                        alias: newCanonicalAlias,
                     }, "",
                 ),
             )];
@@ -145,6 +147,7 @@ module.exports = React.createClass({
         if (!alias || alias.length === 0) return; // ignore attempts to create blank aliases
 
         const localDomain = MatrixClientPeg.get().getDomain();
+        if (!alias.includes(':')) alias += ':' + localDomain;
         if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
             this.state.domainToAliases[localDomain] = this.state.domainToAliases[localDomain] || [];
             this.state.domainToAliases[localDomain].push(alias);
@@ -161,11 +164,18 @@ module.exports = React.createClass({
                 description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
             });
         }
+
+        if (!this.props.canonicalAlias) {
+            this.setState({
+                canonicalAlias: alias
+            });
+        }
     },
 
     onLocalAliasChanged: function(alias, index) {
         if (alias === "") return; // hit the delete button to delete please
         const localDomain = MatrixClientPeg.get().getDomain();
+        if (!alias.includes(':')) alias += ':' + localDomain;
         if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
             this.state.domainToAliases[localDomain][index] = alias;
         } else {
@@ -184,10 +194,15 @@ module.exports = React.createClass({
         // promptly setState anyway, it's just about acceptable.  The alternative
         // would be to arbitrarily deepcopy to a temp variable and then setState
         // that, but why bother when we can cut this corner.
-        this.state.domainToAliases[localDomain].splice(index, 1);
+        const alias = this.state.domainToAliases[localDomain].splice(index, 1);
         this.setState({
             domainToAliases: this.state.domainToAliases,
         });
+        if (this.props.canonicalAlias === alias) {
+            this.setState({
+                canonicalAlias: null,
+            });
+        }
     },
 
     onCanonicalAliasChange: function(event) {
@@ -204,12 +219,14 @@ module.exports = React.createClass({
 
         let canonical_alias_section;
         if (this.props.canSetCanonicalAlias) {
+            let found = false;
             canonical_alias_section = (
-                <select onChange={this.onCanonicalAliasChange} defaultValue={this.state.canonicalAlias}>
+                <select onChange={this.onCanonicalAliasChange} value={this.state.canonicalAlias}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
-                        Object.keys(self.state.domainToAliases).map(function(domain, i) {
-                            return self.state.domainToAliases[domain].map(function(alias, j) {
+                        Object.keys(self.state.domainToAliases).map((domain, i) => {
+                            return self.state.domainToAliases[domain].map((alias, j) => {
+                                if (alias === this.state.canonicalAlias) found = true;
                                 return (
                                     <option value={alias} key={i + "_" + j}>
                                         { alias }
@@ -217,6 +234,12 @@ module.exports = React.createClass({
                                 );
                             });
                         })
+                    }
+                    {
+                        found || !this.stateCanonicalAlias ? '' :
+                        <option value={ this.state.canonicalAlias } key='arbitrary'>
+                            { this.state.canonicalAlias }
+                        </option>
                     }
                 </select>
             );

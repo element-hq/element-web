@@ -22,32 +22,42 @@ export default {
         // Only needed for Electron atm, though should work in modern browsers
         // once permission has been granted to the webapp
         return navigator.mediaDevices.enumerateDevices().then(function(devices) {
-            const audioIn = [];
-            const videoIn = [];
+            const audiooutput = [];
+            const audioinput = [];
+            const videoinput = [];
 
             if (devices.some((device) => !device.label)) return false;
 
             devices.forEach((device) => {
                 switch (device.kind) {
-                    case 'audioinput': audioIn.push(device); break;
-                    case 'videoinput': videoIn.push(device); break;
+                    case 'audiooutput': audiooutput.push(device); break;
+                    case 'audioinput': audioinput.push(device); break;
+                    case 'videoinput': videoinput.push(device); break;
                 }
             });
 
             // console.log("Loaded WebRTC Devices", mediaDevices);
             return {
-                audioinput: audioIn,
-                videoinput: videoIn,
+                audiooutput,
+                audioinput,
+                videoinput,
             };
         }, (error) => { console.log('Unable to refresh WebRTC Devices: ', error); });
     },
 
     loadDevices: function() {
+        const audioOutDeviceId = SettingsStore.getValue("webrtc_audiooutput");
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
+        Matrix.setMatrixCallAudioOutput(audioOutDeviceId);
         Matrix.setMatrixCallAudioInput(audioDeviceId);
         Matrix.setMatrixCallVideoInput(videoDeviceId);
+    },
+
+    setAudioOutput: function(deviceId) {
+        SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
+        Matrix.setMatrixCallAudioOutput(deviceId);
     },
 
     setAudioInput: function(deviceId) {
