@@ -26,6 +26,7 @@ import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
+import Tinter from "./Tinter";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -127,6 +128,9 @@ class MatrixClientPeg {
         if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
             opts.lazyLoadMembers = true;
         }
+
+        const color_scheme = SettingsStore.getValue("roomColor");
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
 
         // Connect the matrix client to the dispatcher
         MatrixActionCreators.start(this.matrixClient);
