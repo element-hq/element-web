@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from '../../index';
-import SettingsStore from "../../settings/SettingsStore";
 import { Droppable } from 'react-beautiful-dnd';
 import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
@@ -100,10 +99,8 @@ const RoomSubList = React.createClass({
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
-        const filteredRooms = this.applySearchFilter(newProps.list, newProps.searchFilter);
-        const sortedRooms = newProps.order === "recent" ? this.applyPinnedTileRules(filteredRooms) : filteredRooms;
         this.setState({
-            sortedList: sortedRooms,
+            sortedList: this.applySearchFilter(newProps.list, newProps.searchFilter),
         });
     },
 
@@ -114,21 +111,6 @@ const RoomSubList = React.createClass({
         // or if starts with `#` and one of room's aliases starts with filter
         return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
             (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
-    },
-
-    applyPinnedTileRules: function(list) {
-        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
-        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
-        if (!pinUnread && !pinMentioned) {
-            return list; // Nothing to sort
-        }
-
-        const mentioned = !pinMentioned ? [] : list.filter(room => room.getUnreadNotificationCount("highlight") > 0);
-        const unread = !pinUnread ? [] : list.filter(room => Unread.doesRoomHaveUnreadMessages(room));
-
-        return mentioned
-            .concat(unread.filter(room => !mentioned.find(other => other === room)))
-            .concat(list.filter(room => !unread.find(other => other === room)));
     },
 
     // The header is collapsable if it is hidden or not stuck

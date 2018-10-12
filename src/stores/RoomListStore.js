@@ -17,6 +17,7 @@ import {Store} from 'flux/utils';
 import dis from '../dispatcher';
 import DMRoomMap from '../utils/DMRoomMap';
 import Unread from '../Unread';
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * A class for storing application state for categorising rooms in
@@ -263,6 +264,30 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(roomA, roomB) {
+        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
+        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
+
+        // We try and set the ordering to be Mentioned > Unread > Recent
+        // assuming the user has the right settings, of course
+
+        if (pinMentioned) {
+             const mentionsA = roomA.getUnreadNotificationCount("highlight") > 0;
+             const mentionsB = roomB.getUnreadNotificationCount("highlight") > 0;
+             if (mentionsA && !mentionsB) return -1;
+             if (!mentionsA && mentionsB) return 1;
+             if (mentionsA && mentionsB) return 0;
+             // If neither have mentions, fall through to remaining checks
+        }
+
+        if (pinUnread) {
+            const unreadA = Unread.doesRoomHaveUnreadMessages(roomA);
+            const unreadB = Unread.doesRoomHaveUnreadMessages(roomB);
+            if (unreadA && !unreadB) return -1;
+            if (!unreadA && unreadB) return 1;
+            if (unreadA && unreadB) return 0;
+            // If neither have unread messages, fall through to remaining checks
+        }
+
         // XXX: We could use a cache here and update it when we see new
         // events that trigger a reorder
         return this._tsOfNewestEvent(roomB) - this._tsOfNewestEvent(roomA);
