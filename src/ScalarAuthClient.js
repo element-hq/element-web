@@ -56,12 +56,12 @@ class ScalarAuthClient {
                 // Something went wrong - try to get a new token.
                 console.warn("Registering for new scalar token");
                 return this.registerForToken();
-            })
+            });
         }
     }
 
     validateToken(token) {
-        let url = SdkConfig.get().integrations_rest_url + "/account";
+        const url = SdkConfig.get().integrations_rest_url + "/account";
 
         return new Promise(function(resolve, reject) {
             request({
@@ -80,7 +80,7 @@ class ScalarAuthClient {
                     resolve(body.user_id);
                 }
             });
-        })
+        });
     }
 
     registerForToken() {
@@ -114,7 +114,7 @@ class ScalarAuthClient {
                     resolve(body.scalar_token);
                 }
             });
-        })
+        });
     }
 
     getScalarPageTitle(url) {
@@ -142,7 +142,7 @@ class ScalarAuthClient {
                     resolve(title);
                 }
             });
-        })
+        });
     }
 
     /**
