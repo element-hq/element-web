@@ -777,7 +777,7 @@ module.exports = withMatrixClient(React.createClass({
                     const myMembership = room.getMyMembership();
                     // not a DM room if we have are not joined
                     if (myMembership !== 'join') continue;
-                    
+
                     const them = this.props.member;
                     // not a DM room if they are not joined
                     if (!them.membership || them.membership !== 'join') continue;
