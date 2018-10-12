@@ -224,7 +224,7 @@ export default class MessageComposerInput extends React.Component {
                                 object: 'block',
                                 type: type,
                                 nodes: next(el.childNodes),
-                            }
+                            };
                         }
                         type = MARK_TAGS[tag];
                         if (type) {
@@ -232,7 +232,7 @@ export default class MessageComposerInput extends React.Component {
                                 object: 'mark',
                                 type: type,
                                 nodes: next(el.childNodes),
-                            }
+                            };
                         }
                         // special case links
                         if (tag === 'a') {
@@ -250,15 +250,14 @@ export default class MessageComposerInput extends React.Component {
                                         completion: el.innerText,
                                         completionId: m[1],
                                     },
-                                }
-                            }
-                            else {
+                                };
+                            } else {
                                 return {
                                     object: 'inline',
                                     type: 'link',
                                     data: { href },
                                     nodes: next(el.childNodes),
-                                }
+                                };
                             }
                         }
                     },
@@ -268,14 +267,12 @@ export default class MessageComposerInput extends React.Component {
                                 node: obj,
                                 children: children,
                             });
-                        }
-                        else if (obj.object === 'mark') {
+                        } else if (obj.object === 'mark') {
                             return this.renderMark({
                                 mark: obj,
                                 children: children,
                             });
-                        }
-                        else if (obj.object === 'inline') {
+                        } else if (obj.object === 'inline') {
                             // special case links, pills and emoji otherwise we
                             // end up with React components getting rendered out(!)
                             switch (obj.type) {
@@ -295,9 +292,9 @@ export default class MessageComposerInput extends React.Component {
                                 children: children,
                             });
                         }
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         });
 
         const savedState = MessageComposerStore.getEditorState(this.props.room.roomId);
@@ -361,7 +358,7 @@ export default class MessageComposerInput extends React.Component {
 
     onAction = (payload) => {
         const editor = this._editor;
-        let editorState = this.state.editorState;
+        const editorState = this.state.editorState;
 
         switch (payload.action) {
             case 'reply_to_event':
@@ -427,13 +424,13 @@ export default class MessageComposerInput extends React.Component {
 
                     this.onChange(change);
                 } else {
-                    let fragmentChange = fragment.change();
+                    const fragmentChange = fragment.change();
                     fragmentChange.moveToRangeOfNode(fragment.document)
                                   .wrapBlock(quote);
 
                     // FIXME: handle pills and use commonmark rather than md-serialize
                     const md = this.md.serialize(fragmentChange.value);
-                    let change = editorState.change()
+                    const change = editorState.change()
                                             .insertText(md + '\n\n')
                                             .focus();
                     this.onChange(change);
@@ -535,8 +532,7 @@ export default class MessageComposerInput extends React.Component {
         if (this.autocomplete.state.completionList.length > 0 && !this.autocomplete.state.hide &&
             !rangeEquals(this.state.editorState.selection, editorState.selection) &&
             // XXX: the heuristic failed when inlines like pills weren't taken into account. This is inideal
-            this.state.editorState.document.toJSON() === editorState.document.toJSON())
-        {
+            this.state.editorState.document.toJSON() === editorState.document.toJSON()) {
             this.autocomplete.hide();
         }
 
@@ -606,8 +602,7 @@ export default class MessageComposerInput extends React.Component {
         // child text.  This seems to happen due to selection getting
         // moved in the normalisation phase after calculating these changes
         if (editorState.selection.anchor.key &&
-            editorState.document.getParent(editorState.selection.anchor.key).type === 'emoji')
-        {
+            editorState.document.getParent(editorState.selection.anchor.key).type === 'emoji') {
             change = change.moveToStartOfNextText();
             editorState = change.value;
         }
@@ -620,15 +615,14 @@ export default class MessageComposerInput extends React.Component {
                 const parent = editorState.document.getParent(editorState.blocks.first().key);
                 if (parent.type === 'numbered-list') {
                     blockType = 'numbered-list';
-                }
-                else if (parent.type === 'bulleted-list') {
+                } else if (parent.type === 'bulleted-list') {
                     blockType = 'bulleted-list';
                 }
             }
             const inputState = {
                 marks: editorState.activeMarks,
                 isRichTextEnabled: this.state.isRichTextEnabled,
-                blockType
+                blockType,
             };
             this.props.onInputStateChanged(inputState);
         }
@@ -638,7 +632,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.setState({
             editorState,
-            originalEditorState: originalEditorState || null
+            originalEditorState: originalEditorState || null,
         });
     };
 
@@ -678,7 +672,7 @@ export default class MessageComposerInput extends React.Component {
             // which doesn't roundtrip symmetrically with commonmark, which we use for
             // compiling MD out of the MD editor state above.
             this.md.serialize(editorState),
-            { defaultBlock: DEFAULT_NODE }
+            { defaultBlock: DEFAULT_NODE },
         );
     }
 
@@ -702,7 +696,7 @@ export default class MessageComposerInput extends React.Component {
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
-    };
+    }
 
     /**
     * Check if the current selection has a mark with `type` in it.
@@ -712,8 +706,8 @@ export default class MessageComposerInput extends React.Component {
     */
 
     hasMark = type => {
-        const { editorState } = this.state
-        return editorState.activeMarks.some(mark => mark.type === type)
+        const { editorState } = this.state;
+        return editorState.activeMarks.some(mark => mark.type === type);
     };
 
     /**
@@ -724,20 +718,18 @@ export default class MessageComposerInput extends React.Component {
     */
 
     hasBlock = type => {
-        const { editorState } = this.state
-        return editorState.blocks.some(node => node.type === type)
+        const { editorState } = this.state;
+        return editorState.blocks.some(node => node.type === type);
     };
 
     onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
-
         this.suppressAutoComplete = false;
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
         if (ev.keyCode === KeyCode.LEFT) {
             this.direction = 'Previous';
-        }
-        else if (ev.keyCode === KeyCode.RIGHT) {
+        } else if (ev.keyCode === KeyCode.RIGHT) {
             this.direction = 'Next';
         } else {
             this.direction = '';
@@ -815,8 +807,7 @@ export default class MessageComposerInput extends React.Component {
                     .unwrapBlock('bulleted-list')
                     .unwrapBlock('numbered-list');
                 return change;
-            }
-            else if (editorState.selection.anchor.offset == 0 && editorState.isCollapsed) {
+            } else if (editorState.selection.anchor.offset == 0 && editorState.isCollapsed) {
                 // turn blocks back into paragraphs
                 if ((this.hasBlock('block-quote') ||
                      this.hasBlock('heading1') ||
@@ -825,8 +816,7 @@ export default class MessageComposerInput extends React.Component {
                      this.hasBlock('heading4') ||
                      this.hasBlock('heading5') ||
                      this.hasBlock('heading6') ||
-                     this.hasBlock('code')))
-                {
+                     this.hasBlock('code'))) {
                     return change.setBlocks(DEFAULT_NODE);
                 }
 
@@ -835,8 +825,7 @@ export default class MessageComposerInput extends React.Component {
                 if (editorState.selection.anchor.offset == 0 &&
                     this.hasBlock('paragraph') &&
                     parent.nodes.size == 1 &&
-                    parent.object !== 'document')
-                {
+                    parent.object !== 'document') {
                     return change.replaceNodeByKey(editorState.anchorBlock.key, editorState.anchorText)
                                  .moveToEndOfNode(parent)
                                  .focus();
@@ -852,7 +841,7 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        let newState: ?Value = null;
+        const newState: ?Value = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichTextEnabled) {
@@ -878,7 +867,7 @@ export default class MessageComposerInput extends React.Component {
                     } else if (isList) {
                         change
                             .unwrapBlock(
-                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list',
                             )
                             .wrapBlock(type);
                     } else {
@@ -1081,8 +1070,7 @@ export default class MessageComposerInput extends React.Component {
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         if (firstChild && firstGrandChild &&
             firstChild.object === 'block' && firstGrandChild.object === 'text' &&
-            firstGrandChild.text[0] === '/')
-        {
+            firstGrandChild.text[0] === '/') {
             commandText = this.plainWithIdPills.serialize(editorState);
             cmd = processCommandInput(this.props.room.roomId, commandText);
         }
@@ -1223,7 +1211,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.setState({
             editorState: this.createEditorState(),
-        }, ()=>{ this._editor.focus() });
+        }, ()=>{ this._editor.focus(); });
 
         return true;
     };
@@ -1353,7 +1341,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                let editorState = this.state.originalEditorState;
+                const editorState = this.state.originalEditorState;
                 this.setState({editorState});
             }
             return false;
@@ -1364,7 +1352,7 @@ export default class MessageComposerInput extends React.Component {
             completion = '',
             completionId = '',
             href = null,
-            suffix = ''
+            suffix = '',
         } = displayedCompletion;
 
         let inline;
@@ -1397,8 +1385,7 @@ export default class MessageComposerInput extends React.Component {
                                 .insertInlineAtRange(editorState.selection, inline)
                                 .insertText(suffix)
                                 .focus();
-        }
-        else {
+        } else {
             change = editorState.change()
                                 .insertTextAtRange(editorState.selection, completion)
                                 .insertText(suffix)
@@ -1459,8 +1446,7 @@ export default class MessageComposerInput extends React.Component {
                             isSelected={isSelected}
                             {...attributes}
                             />;
-                }
-                else if (Pill.isPillUrl(url)) {
+                } else if (Pill.isPillUrl(url)) {
                     return <Pill
                             url={url}
                             room={this.props.room}
@@ -1468,8 +1454,7 @@ export default class MessageComposerInput extends React.Component {
                             isSelected={isSelected}
                             {...attributes}
                             />;
-                }
-                else {
+                } else {
                     const { text } = node;
                     return <a href={url} {...props.attributes}>
                                 { text }
@@ -1482,11 +1467,11 @@ export default class MessageComposerInput extends React.Component {
                 const uri = RichText.unicodeToEmojiUri(emojiUnicode);
                 const shortname = toShort(emojiUnicode);
                 const className = classNames('mx_emojione', {
-                    mx_emojione_selected: isSelected
+                    mx_emojione_selected: isSelected,
                 });
                 const style = {};
                 if (props.selected) style.border = '1px solid blue';
-                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode } style={style}/>;
+                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode } style={style} />;
             }
         }
     };
@@ -1533,8 +1518,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (editorState.selection.anchor.key) {
             return editorState.document.getDescendant(editorState.selection.anchor.key).text;
-        }
-        else {
+        } else {
             return '';
         }
     }
@@ -1556,7 +1540,7 @@ export default class MessageComposerInput extends React.Component {
             start: editorState.selection.anchor.offset,
             end: (editorState.selection.anchor.key == editorState.selection.focus.key) ?
                  editorState.selection.focus.offset : editorState.selection.anchor.offset,
-        }
+        };
         if (range.start > range.end) {
             const tmp = range.start;
             range.start = range.end;
