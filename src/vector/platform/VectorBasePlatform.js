@@ -114,7 +114,7 @@ export default class VectorBasePlatform extends BasePlatform {
         dis.dispatch({
             action: 'check_updates',
             value: false,
-        })
+        });
     }
 
     getUpdateCheckStatusEnum() {
