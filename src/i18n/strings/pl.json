@@ -1146,5 +1146,14 @@
     "was invited %(count)s times|one": "został zaproszony",
     "was banned %(count)s times|one": "został zablokowany",
     "was kicked %(count)s times|one": "został wyrzucony",
-    "Whether or not you're using the Richtext mode of the Rich Text Editor": ""
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "",
+    "Call in Progress": "Łączenie w toku",
+    "Permission Required": "Wymagane Pozwolenie",
+    "Registration Required": "Wymagana Rejestracja",
+    "You need to register to do this. Would you like to register now?": "Musisz się zarejestrować, aby to zrobić. Czy chcesz się teraz zarejestrować?",
+    "underlined": "podkreślenie",
+    "deleted": "przekreślenie",
+    "numbered-list": "lista numerowana",
+    "bulleted-list": "wykropkowana lista",
+    "block-quote": "blok cytowany"
 }
