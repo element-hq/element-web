@@ -20,7 +20,8 @@ import { _t } from '../../../languageHandler';
 
 export default (props) => {
     const description =
-        _t("Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!");
+        _t("Riot now uses 3-5x less memory, by only loading information about other users"
+        + " when needed. Please wait whilst we resynchronise with the server!");
 
     return (<QuestionDialog
         hasCancelButton={false}
