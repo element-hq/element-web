@@ -54,6 +54,7 @@
     "start:prod": "npm run build:js-sdk && npm run build:react-sdk && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n js-sdk,react-sdk,reskindex,res,riot-js \"npm run start:js-sdk:prod\" \"npm run start:react-sdk:prod\" \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
+    "lintwithexclusions": "eslint --max-warnings 20 --ignore-path .eslintignore.errorfiles src test",
     "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run clean && npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers ChromeHeadless",
