@@ -24,4 +24,4 @@ install:
     - scripts/fetch-develop.deps.sh --depth 1 && npm install
 script:
     - npm run test
-    - npm run lintwithexclusions
+    - npm run lint

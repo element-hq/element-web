@@ -17,7 +17,6 @@ limitations under the License.
 
 'use strict';
 
-import React from 'react';
 import HomePage from 'matrix-react-sdk/lib/components/structures/HomePage';
 import sanitizeHtml from 'sanitize-html';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';

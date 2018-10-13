@@ -32,7 +32,6 @@ if (process.env.NODE_ENV !== 'production') {
     global.Perf = require('react-addons-perf');
 }
 
-import RunModernizrTests from './modernizr'; // this side-effects a global
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
@@ -41,8 +40,6 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
-// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -50,7 +47,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
@@ -178,7 +175,7 @@ function makeRegistrationUrl(params) {
     return url;
 }
 
-function getConfig(configJsonFilename) {
+export function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename },
@@ -269,7 +266,6 @@ async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
-    const styleElements = Object.create(null);
     let a;
     const theme = SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
