@@ -20,7 +20,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import FuzzyMatcher from './FuzzyMatcher';
+import QueryMatcher from './QueryMatcher';
 import {TextualCompletion} from './Components';
 import type {Completion, SelectionRange} from "./Autocompleter";
 import {CommandMap} from '../SlashCommands';
@@ -32,7 +32,7 @@ const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.matcher = new FuzzyMatcher(COMMANDS, {
+        this.matcher = new QueryMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
