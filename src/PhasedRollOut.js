@@ -17,14 +17,18 @@ limitations under the License.
 import SdkConfig from './SdkConfig';
 
 function hashCode(str) {
-  var hash = 0, i, chr;
-  if (str.length === 0) return hash;
-  for (i = 0; i < str.length; i++) {
-    chr   = str.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0;
-  }
-  return Math.abs(hash);
+    let hash = 0;
+    let i;
+    let chr;
+    if (str.length === 0) {
+        return hash;
+    }
+    for (i = 0; i < str.length; i++) {
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0;
+    }
+    return Math.abs(hash);
 }
 
 export function phasedRollOutExpiredForUser(username, feature, now, rollOutConfig = SdkConfig.get().phasedRollOut) {
@@ -38,7 +42,8 @@ export function phasedRollOutExpiredForUser(username, feature, now, rollOutConfi
         return true;
     }
     if (!Number.isFinite(featureConfig.offset) || !Number.isFinite(featureConfig.period)) {
-        console.error(`phased rollout of ${feature} is misconfigured, offset and/or period are not numbers, so disabling`, featureConfig);
+        console.error(`phased rollout of ${feature} is misconfigured, ` +
+            `offset and/or period are not numbers, so disabling`, featureConfig);
         return false;
     }
 
@@ -52,7 +57,7 @@ export function phasedRollOutExpiredForUser(username, feature, now, rollOutConfi
     const result = now >= enableAt;
     const bucketStr = `(bucket ${userBucket}/${bucketCount})`;
     if (result) {
-        console.log(`${feature} enabled for ${username} ${bucketStr}`)
+        console.log(`${feature} enabled for ${username} ${bucketStr}`);
     } else {
         console.log(`${feature} will be enabled for ${username} in ${Math.ceil((enableAt - now)/1000)}s ${bucketStr}`);
     }
