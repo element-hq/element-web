@@ -27,7 +27,6 @@ import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
-import Tinter from "./Tinter";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -133,9 +132,6 @@ class MatrixClientPeg {
                 opts.lazyLoadMembers = true;
             }
         }
-
-        const color_scheme = SettingsStore.getValue("roomColor");
-        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
 
         // Connect the matrix client to the dispatcher
         MatrixActionCreators.start(this.matrixClient);
