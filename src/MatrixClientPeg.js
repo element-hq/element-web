@@ -26,6 +26,7 @@ import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
+import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Tinter from "./Tinter";
 
 interface MatrixClientCreds {
@@ -125,8 +126,12 @@ class MatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
-        if (SettingsStore.isFeatureEnabled('feature_lazyloading')) {
-            opts.lazyLoadMembers = true;
+        const LAZY_LOADING_FEATURE = "feature_lazyloading";
+        if (SettingsStore.isFeatureEnabled(LAZY_LOADING_FEATURE)) {
+            const userId = this.matrixClient.credentials.userId;
+            if (phasedRollOutExpiredForUser(userId, LAZY_LOADING_FEATURE, Date.now())) {
+                opts.lazyLoadMembers = true;
+            }
         }
 
         const color_scheme = SettingsStore.getValue("roomColor");
