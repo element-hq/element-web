@@ -25,51 +25,48 @@ describe('PhasedRollOut', function() {
 
     it('should return true if phased rollout feature is not configured', function() {
         expect(phasedRollOutExpiredForUser("@user:hs", "feature_test", 0, {
-            "feature_other": {offset: 0, period: 0}
+            "feature_other": {offset: 0, period: 0},
         })).toBeTruthy();
     });
 
     it('should return false if phased rollout for feature is misconfigured', function() {
         expect(phasedRollOutExpiredForUser("@user:hs", "feature_test", 0, {
-            "feature_test": {}
+            "feature_test": {},
         })).toBeFalsy();
     });
 
     it("should return false if phased rollout hasn't started yet", function() {
-        expect(phasedRollOutExpiredForUser("@user:hs", "feature_test", 5000000,{
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE}
+        expect(phasedRollOutExpiredForUser("@user:hs", "feature_test", 5000000, {
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE},
         })).toBeFalsy();
     });
 
     it("should start to return true in bucket 2/10 for '@user:hs'", function() {
         expect(phasedRollOutExpiredForUser("@user:hs", "feature_test",
             OFFSET + (MS_IN_MINUTE * 2) - 1, {
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10}
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10},
         })).toBeFalsy();
         expect(phasedRollOutExpiredForUser("@user:hs", "feature_test",
             OFFSET + (MS_IN_MINUTE * 2), {
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10}
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10},
         })).toBeTruthy();
     });
 
     it("should start to return true in bucket 4/10 for 'alice@other-hs'", function() {
         expect(phasedRollOutExpiredForUser("alice@other-hs", "feature_test",
             OFFSET + (MS_IN_MINUTE * 4) - 1, {
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10}
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10},
         })).toBeFalsy();
         expect(phasedRollOutExpiredForUser("alice@other-hs", "feature_test",
             OFFSET + (MS_IN_MINUTE * 4), {
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10}
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10},
         })).toBeTruthy();
     });
 
     it("should return true after complete rollout period'", function() {
         expect(phasedRollOutExpiredForUser("user:hs", "feature_test",
             OFFSET + (MS_IN_MINUTE * 20), {
-            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10}
+            "feature_test": {offset: OFFSET, period: MS_IN_MINUTE * 10},
         })).toBeTruthy();
     });
-
-
-
 });
