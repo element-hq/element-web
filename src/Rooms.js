@@ -31,27 +31,27 @@ export function getDisplayAliasForRoom(room) {
  * If the room contains only two members including the logged-in user,
  * return the other one. Otherwise, return null.
  */
-export function getOnlyOtherMember(room, me) {
-    const joinedMembers = room.getJoinedMembers();
+export function getOnlyOtherMember(room, myUserId) {
 
-    if (joinedMembers.length === 2) {
-        return joinedMembers.filter(function(m) {
-            return m.userId !== me.userId;
+    if (room.currentState.getJoinedMemberCount() === 2) {
+        return room.getJoinedMembers().filter(function(m) {
+            return m.userId !== myUserId;
         })[0];
     }
 
     return null;
 }
 
-function _isConfCallRoom(room, me, conferenceHandler) {
+function _isConfCallRoom(room, myUserId, conferenceHandler) {
     if (!conferenceHandler) return false;
 
-    if (me.membership != "join") {
+    const myMembership = room.getMyMembership();
+    if (myMembership != "join") {
         return false;
     }
 
-    const otherMember = getOnlyOtherMember(room, me);
-    if (otherMember === null) {
+    const otherMember = getOnlyOtherMember(room, myUserId);
+    if (!otherMember) {
         return false;
     }
 
@@ -68,29 +68,31 @@ const isConfCallRoomCache = {
     // $roomId: bool
 };
 
-export function isConfCallRoom(room, me, conferenceHandler) {
+export function isConfCallRoom(room, myUserId, conferenceHandler) {
     if (isConfCallRoomCache[room.roomId] !== undefined) {
         return isConfCallRoomCache[room.roomId];
     }
 
-    const result = _isConfCallRoom(room, me, conferenceHandler);
+    const result = _isConfCallRoom(room, myUserId, conferenceHandler);
 
     isConfCallRoomCache[room.roomId] = result;
 
     return result;
 }
 
-export function looksLikeDirectMessageRoom(room, me) {
-    if (me.membership == "join" || me.membership === "ban" ||
-        (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
+export function looksLikeDirectMessageRoom(room, myUserId) {
+    const myMembership = room.getMyMembership();
+    const me = room.getMember(myUserId);
+
+    if (myMembership == "join" || myMembership === "ban" || (me && me.isKicked())) {
         // Used to split rooms via tags
         const tagNames = Object.keys(room.tags);
         // Used for 1:1 direct chats
-        const members = room.currentState.getMembers();
-
         // Show 1:1 chats in seperate "Direct Messages" section as long as they haven't
         // been moved to a different tag section
-        if (members.length === 2 && !tagNames.length) {
+        const totalMemberCount = room.currentState.getJoinedMemberCount() +
+            room.currentState.getInvitedMemberCount();
+        if (totalMemberCount === 2 && !tagNames.length) {
             return true;
         }
     }
@@ -100,10 +102,10 @@ export function looksLikeDirectMessageRoom(room, me) {
 export function guessAndSetDMRoom(room, isDirect) {
     let newTarget;
     if (isDirect) {
-        const guessedTarget = guessDMRoomTarget(
-            room, room.getMember(MatrixClientPeg.get().credentials.userId),
+        const guessedUserId = guessDMRoomTargetId(
+            room, MatrixClientPeg.get().getUserId()
         );
-        newTarget = guessedTarget.userId;
+        newTarget = guessedUserId;
     } else {
         newTarget = null;
     }
@@ -159,15 +161,15 @@ export function setDMRoom(roomId, userId) {
  * Given a room, estimate which of its members is likely to
  * be the target if the room were a DM room and return that user.
  */
-export function guessDMRoomTarget(room, me) {
+function guessDMRoomTargetId(room, myUserId) {
     let oldestTs;
     let oldestUser;
 
     // Pick the joined user who's been here longest (and isn't us),
     for (const user of room.getJoinedMembers()) {
-        if (user.userId == me.userId) continue;
+        if (user.userId == myUserId) continue;
 
-        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+        if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
             oldestTs = user.events.member.getTs();
         }
@@ -176,14 +178,14 @@ export function guessDMRoomTarget(room, me) {
 
     // if there are no joined members other than us, use the oldest member
     for (const user of room.currentState.getMembers()) {
-        if (user.userId == me.userId) continue;
+        if (user.userId == myUserId) continue;
 
-        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+        if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
             oldestTs = user.events.member.getTs();
         }
     }
 
-    if (oldestUser === undefined) return me;
+    if (oldestUser === undefined) return myUserId;
     return oldestUser;
 }

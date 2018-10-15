@@ -93,6 +93,16 @@ Simply call `SettingsStore.getDisplayName`. The appropriate display name will be
 
 Occasionally some parts of the application may be undergoing testing and are not quite production ready. These are commonly known to be behind a "labs flag". Features behind lab flags must go through the granular settings system, and look and act very much normal settings. The exception is that they must supply `isFeature: true` as part of the setting definition and should go through the helper functions on `SettingsStore`.
 
+Although features have levels and a default value, the calculation of those options is blocked by the feature's state. A feature's state is determined from the `SdkConfig` and is a little complex. If `enableLabs` (a legacy flag) is `true` then the feature's state is `labs`, if it is `false`, the state is `disable`. If `enableLabs` is not set then the state is determined from the `features` config, such as in the following:
+```json
+"features": {
+    "feature_lazyloading": "labs"
+}
+```
+In this example, `feature_lazyloading` is in the `labs` state. It may also be in the `enable` or `disable` state with a similar approach. If the state is invalid, the feature is in the `disable` state. A feature's levels are only calculated if it is in the `labs` state, therefore the default only applies in that scenario. If the state is `enable`, the feature is always-on.
+
+Once a feature flag has served its purpose, it is generally recommended to remove it and the associated feature flag checks. This would enable the feature implicitly as it is part of the application now.
+
 ### Determining if a feature is enabled
 
 A simple call to `SettingsStore.isFeatureEnabled` will tell you if the feature is enabled. This will perform all the required calculations to determine if the feature is enabled based upon the configuration and user selection.

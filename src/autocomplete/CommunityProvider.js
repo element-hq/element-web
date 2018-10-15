@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import MatrixClientPeg from '../MatrixClientPeg';
-import FuzzyMatcher from './FuzzyMatcher';
+import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
@@ -26,7 +27,7 @@ import {makeGroupPermalink} from "../matrix-to";
 import type {Completion, SelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 
-const COMMUNITY_REGEX = /(?=\+)(\S*)/g;
+const COMMUNITY_REGEX = /\B\+\S*/g;
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -40,7 +41,7 @@ function score(query, space) {
 export default class CommunityProvider extends AutocompleteProvider {
     constructor() {
         super(COMMUNITY_REGEX);
-        this.matcher = new FuzzyMatcher([], {
+        this.matcher = new QueryMatcher([], {
             keys: ['groupId', 'name', 'shortDescription'],
         });
     }

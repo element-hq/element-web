@@ -3,6 +3,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,29 +23,32 @@ import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
 import sdk from '../index';
-import FuzzyMatcher from './FuzzyMatcher';
+import QueryMatcher from './QueryMatcher';
 import _sortBy from 'lodash/sortBy';
 import MatrixClientPeg from '../MatrixClientPeg';
 
-import type {Room, RoomMember} from 'matrix-js-sdk';
+import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../matrix-to";
-import type {SelectionRange} from "./Autocompleter";
+import type {Completion, SelectionRange} from "./Autocompleter";
 
-const USER_REGEX = /@\S*/g;
+const USER_REGEX = /\B@\S*/g;
+
+// used when you hit 'tab' - we allow some separator chars at the beginning
+// to allow you to tab-complete /mat into /(matthew)
+const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
-    constructor(room: Room) {
-        super(USER_REGEX, {
-            keys: ['name'],
-        });
+    constructor(room) {
+        super(USER_REGEX, FORCED_USER_REGEX);
         this.room = room;
-        this.matcher = new FuzzyMatcher([], {
-            keys: ['name', 'userId'],
+        this.matcher = new QueryMatcher([], {
+            keys: ['name'],
+            funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
             shouldMatchPrefix: true,
-            shouldMatchWordsOnly: false
+            shouldMatchWordsOnly: false,
         });
 
         this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
@@ -61,7 +65,7 @@ export default class UserProvider extends AutocompleteProvider {
         }
     }
 
-    _onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+    _onRoomTimeline(ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean, data: Object) {
         if (!room) return;
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
@@ -77,7 +81,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.onUserSpoke(ev.sender);
     }
 
-    _onRoomStateMember(ev, state, member) {
+    _onRoomStateMember(ev: MatrixEvent, state: RoomState, member: RoomMember) {
         // ignore members in other rooms
         if (member.roomId !== this.room.roomId) {
             return;
@@ -87,14 +91,8 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
+    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
-
-        // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
-        if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
-            return [];
-        }
 
         // lazy-load user list into matcher
         if (this.users === null) this._makeUsers();
@@ -107,13 +105,16 @@ export default class UserProvider extends AutocompleteProvider {
         const fullMatch = command[0];
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== '@') {
-            completions = this.matcher.match(fullMatch).map((user) => {
-                const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
+            // Don't include the '@' in our search query - it's only used as a way to trigger completion
+            const query = fullMatch.startsWith('@') ? fullMatch.substring(1) : fullMatch;
+            completions = this.matcher.match(query).map((user) => {
+                const displayName = (user.name || user.userId || '');
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
-                    completion: user.rawDisplayName.replace(' (IRC)', ''),
-                    suffix: range.start === 0 ? ': ' : ' ',
+                    completion: user.rawDisplayName,
+                    completionId: user.userId,
+                    suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion
@@ -128,7 +129,7 @@ export default class UserProvider extends AutocompleteProvider {
         return completions;
     }
 
-    getName() {
+    getName(): string {
         return '👥 ' + _t('Users');
     }
 
@@ -141,13 +142,9 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
-        this.users = this.room.getJoinedMembers().filter((member) => {
-            if (member.userId !== currentUserId) return true;
-        });
+        this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
 
-        this.users = _sortBy(this.users, (member) =>
-            1E20 - lastSpoken[member.userId] || 1E20,
-        );
+        this.users = _sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 
         this.matcher.setObjects(this.users);
     }

@@ -72,14 +72,12 @@ export default React.createClass({
 
     _updateRelatedGroups() {
         if (this.unmounted) return;
-        const relatedGroupsEvent = this.context.matrixClient
-            .getRoom(this.props.mxEvent.getRoomId())
-            .currentState
-            .getStateEvents('m.room.related_groups', '');
+        const room = this.context.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+        if (!room) return;
+
+        const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
         this.setState({
-            relatedGroups: relatedGroupsEvent ?
-                relatedGroupsEvent.getContent().groups || []
-                : [],
+            relatedGroups: relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [],
         });
     },
 
@@ -98,7 +96,7 @@ export default React.createClass({
     render() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
-        let name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         const {msgtype} = mxEvent.getContent();
 
         if (msgtype === 'm.emote') {
@@ -110,9 +108,6 @@ export default React.createClass({
             const displayedGroups = this._getDisplayedGroups(
                 this.state.userGroups, this.state.relatedGroups,
             );
-
-            // Backwards-compatible replacing of "(IRC)" with AS user flair
-            name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
 
             flair = <Flair key='flair'
                 userId={mxEvent.getSender()}

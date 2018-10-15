@@ -2,7 +2,6 @@
 
 src/autocomplete/AutocompleteProvider.js
 src/autocomplete/Autocompleter.js
-src/autocomplete/EmojiProvider.js
 src/autocomplete/UserProvider.js
 src/component-index.js
 src/components/structures/BottomLeftMenu.js
@@ -17,7 +16,6 @@ src/components/structures/MessagePanel.js
 src/components/structures/NotificationPanel.js
 src/components/structures/RoomDirectory.js
 src/components/structures/RoomStatusBar.js
-src/components/structures/RoomSubList.js
 src/components/structures/RoomView.js
 src/components/structures/ScrollPanel.js
 src/components/structures/SearchBox.js
@@ -29,7 +27,6 @@ src/components/views/avatars/BaseAvatar.js
 src/components/views/avatars/MemberAvatar.js
 src/components/views/create_room/RoomAlias.js
 src/components/views/dialogs/ChangelogDialog.js
-src/components/views/dialogs/ChatCreateOrReuseDialog.js
 src/components/views/dialogs/DeactivateAccountDialog.js
 src/components/views/dialogs/SetPasswordDialog.js
 src/components/views/dialogs/UnknownDeviceDialog.js
@@ -37,13 +34,11 @@ src/components/views/directory/NetworkDropdown.js
 src/components/views/elements/AddressSelector.js
 src/components/views/elements/DeviceVerifyButtons.js
 src/components/views/elements/DirectorySearchBox.js
-src/components/views/elements/EditableText.js
 src/components/views/elements/ImageView.js
 src/components/views/elements/InlineSpinner.js
 src/components/views/elements/MemberEventListSummary.js
 src/components/views/elements/Spinner.js
 src/components/views/elements/TintableSvg.js
-src/components/views/elements/UserInfo.js
 src/components/views/elements/UserSelector.js
 src/components/views/globals/MatrixToolbar.js
 src/components/views/globals/NewVersionBar.js
@@ -58,7 +53,6 @@ src/components/views/messages/RoomAvatarEvent.js
 src/components/views/messages/TextualBody.js
 src/components/views/room_settings/AliasSettings.js
 src/components/views/room_settings/ColorSettings.js
-src/components/views/room_settings/UrlPreviewSettings.js
 src/components/views/rooms/Autocomplete.js
 src/components/views/rooms/AuxPanel.js
 src/components/views/rooms/EntityTile.js
@@ -70,7 +64,6 @@ src/components/views/rooms/MemberTile.js
 src/components/views/rooms/MessageComposer.js
 src/components/views/rooms/MessageComposerInput.js
 src/components/views/rooms/PinnedEventTile.js
-src/components/views/rooms/RoomDropTarget.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
 src/components/views/rooms/RoomSettings.js
@@ -81,7 +74,6 @@ src/components/views/rooms/TopUnreadMessagesBar.js
 src/components/views/rooms/UserTile.js
 src/components/views/settings/AddPhoneNumber.js
 src/components/views/settings/ChangeAvatar.js
-src/components/views/settings/ChangeDisplayName.js
 src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js
 src/components/views/settings/IntegrationsManager.js
@@ -97,7 +89,6 @@ src/Markdown.js
 src/MatrixClientPeg.js
 src/Modal.js
 src/notifications/ContentRules.js
-src/notifications/NotificationUtils.js
 src/notifications/PushRuleVectorState.js
 src/notifications/StandardActions.js
 src/notifications/VectorPushRulesDefinitions.js
@@ -107,7 +98,6 @@ src/Presence.js
 src/rageshake/rageshake.js
 src/rageshake/submit-rageshake.js
 src/ratelimitedfunc.js
-src/RichText.js
 src/Roles.js
 src/Rooms.js
 src/ScalarAuthClient.js

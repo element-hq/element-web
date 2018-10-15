@@ -20,11 +20,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -93,6 +94,13 @@ module.exports = React.createClass({
         this._unmounted = true;
     },
 
+    onPasswordLoginError: function(errorText) {
+        this.setState({
+            errorText,
+            loginIncorrect: Boolean(errorText),
+        });
+    },
+
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         this.setState({
             busy: true,
@@ -114,6 +122,30 @@ module.exports = React.createClass({
             const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus === 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
+            } else if (error.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+                const errorTop = messageForResourceLimitError(
+                    error.data.limit_type,
+                    error.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits.",
+                    ),
+                });
+                const errorDetail = messageForResourceLimitError(
+                    error.data.limit_type,
+                    error.data.admin_contact, {
+                    '': _td(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                    ),
+                });
+                errorText = (
+                    <div>
+                        <div>{errorTop}</div>
+                        <div className="mx_Login_smallError">{errorDetail}</div>
+                    </div>
+                );
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
                 if (SdkConfig.get()['disable_custom_urls']) {
                     errorText = (
@@ -357,6 +389,7 @@ module.exports = React.createClass({
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
+               onError={this.onPasswordLoginError}
                initialUsername={this.state.username}
                initialPhoneCountry={this.state.phoneCountry}
                initialPhoneNumber={this.state.phoneNumber}

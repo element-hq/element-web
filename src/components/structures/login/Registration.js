@@ -26,9 +26,10 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
+import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -92,6 +93,7 @@ module.exports = React.createClass({
             doingUIAuth: Boolean(this.props.sessionId),
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
+            flows: null,
         };
     },
 
@@ -144,11 +146,27 @@ module.exports = React.createClass({
         });
     },
 
-    _replaceClient: function() {
+    _replaceClient: async function() {
         this._matrixClient = Matrix.createClient({
             baseUrl: this.state.hsUrl,
             idBaseUrl: this.state.isUrl,
         });
+        try {
+            await this._makeRegisterRequest({});
+            // This should never succeed since we specified an empty
+            // auth object.
+            console.log("Expecting 401 from register request but got success!");
+        } catch (e) {
+            if (e.httpStatus === 401) {
+                this.setState({
+                    flows: e.data.flows,
+                });
+            } else {
+                this.setState({
+                    errorText: _t("Unable to query for supported registration methods"),
+                });
+            }
+        }
     },
 
     onFormSubmit: function(formVals) {
@@ -164,7 +182,29 @@ module.exports = React.createClass({
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
-            if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+            if (response.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
+                const errorTop = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    'monthly_active_user': _td(
+                        "This homeserver has hit its Monthly Active User limit.",
+                    ),
+                    '': _td(
+                        "This homeserver has exceeded one of its resource limits.",
+                    ),
+                });
+                const errorDetail = messageForResourceLimitError(
+                    response.data.limit_type,
+                    response.data.admin_contact, {
+                    '': _td(
+                        "Please <a>contact your service administrator</a> to continue using this service.",
+                    ),
+                });
+                msg = <div>
+                    <p>{errorTop}</p>
+                    <p>{errorDetail}</p>
+                </div>;
+            } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
                     msisdnAvailable |= flow.stages.indexOf('m.login.msisdn') > -1;
@@ -281,6 +321,12 @@ module.exports = React.createClass({
             case "RegistrationForm.ERR_PHONE_NUMBER_INVALID":
                 errMsg = _t('This doesn\'t look like a valid phone number.');
                 break;
+            case "RegistrationForm.ERR_MISSING_EMAIL":
+                errMsg = _t('An email address is required to register on this homeserver.');
+                break;
+            case "RegistrationForm.ERR_MISSING_PHONE_NUMBER":
+                errMsg = _t('A phone number is required to register on this homeserver.');
+                break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
                 errMsg = _t('User names may only contain letters, numbers, dots, hyphens and underscores.');
                 break;
@@ -355,7 +401,7 @@ module.exports = React.createClass({
                     poll={true}
                 />
             );
-        } else if (this.state.busy || this.state.teamServerBusy) {
+        } else if (this.state.busy || this.state.teamServerBusy || !this.state.flows) {
             registerBody = <Spinner />;
         } else {
             let serverConfigSection;
@@ -385,6 +431,7 @@ module.exports = React.createClass({
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
+                        flows={this.state.flows}
                     />
                     { serverConfigSection }
                 </div>

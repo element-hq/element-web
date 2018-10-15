@@ -62,6 +62,7 @@ export default React.createClass({
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
+                hasCancel={this.props.hasCancelButton}
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     { this.props.description }

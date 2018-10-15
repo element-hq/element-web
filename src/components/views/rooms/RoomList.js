@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2018 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 'use strict';
+import SettingsStore from "../../../settings/SettingsStore";
+
 const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
@@ -33,7 +35,12 @@ import RoomListStore from '../../../stores/RoomListStore';
 import GroupStore from '../../../stores/GroupStore';
 
 const HIDE_CONFERENCE_CHANS = true;
-const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+
+function labelForTagName(tagName) {
+    if (tagName.startsWith('u.')) return tagName.slice(2);
+    return tagName;
+}
 
 function phraseForSection(section) {
     switch (section) {
@@ -90,7 +97,7 @@ module.exports = React.createClass({
         };
         // All rooms that should be kept in the room list when filtering.
         // By default, show all rooms.
-        this._visibleRooms = MatrixClientPeg.get().getRooms();
+        this._visibleRooms = MatrixClientPeg.get().getVisibleRooms();
 
         // Listen to updates to group data. RoomList cares about members and rooms in order
         // to filter the room list when group tags are selected.
@@ -295,7 +302,7 @@ module.exports = React.createClass({
             this._visibleRooms = Array.from(roomSet);
         } else {
             // Show all rooms
-            this._visibleRooms = MatrixClientPeg.get().getRooms();
+            this._visibleRooms = MatrixClientPeg.get().getVisibleRooms();
         }
         this._delayedRefreshRoomList();
     },
@@ -340,8 +347,8 @@ module.exports = React.createClass({
                 if (!taggedRoom) {
                     return;
                 }
-                const me = taggedRoom.getMember(MatrixClientPeg.get().credentials.userId);
-                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, me, this.props.ConferenceHandler)) {
+                const myUserId = MatrixClientPeg.get().getUserId();
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, myUserId, this.props.ConferenceHandler)) {
                     return;
                 }
 
@@ -443,6 +450,8 @@ module.exports = React.createClass({
                 });
             }
         }
+
+        if (!this.stickies) return;
 
         const self = this;
         let scrollStuckOffset = 0;
@@ -608,10 +617,14 @@ module.exports = React.createClass({
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
+        // XXX: we can't detect device-level (localStorage) settings onChange as the SettingsStore does not notify
+        // so checking on every render is the sanest thing at this time.
+        const showEmpty = SettingsStore.getValue('RoomSubList.showEmpty');
+
         const self = this;
         return (
             <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                autoshow={true} onScroll={self._whenScrolling} wrappedRef={this._collectGemini}>
+                autoshow={true} onScroll={self._whenScrolling} onResize={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 <RoomSubList list={[]}
                              extraTiles={this._makeGroupInviteTiles(self.props.searchFilter)}
@@ -623,6 +636,7 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
                              onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty}
                 />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.invite']}
@@ -635,6 +649,7 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
                              onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty}
                 />
 
                 <RoomSubList list={self.state.lists['m.favourite']}
@@ -647,7 +662,8 @@ module.exports = React.createClass({
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty} />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.direct']}
                              label={_t('People')}
@@ -661,7 +677,8 @@ module.exports = React.createClass({
                              alwaysShowHeader={true}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty} />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.recent']}
                              label={_t('Rooms')}
@@ -673,13 +690,14 @@ module.exports = React.createClass({
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty} />
 
                 { Object.keys(self.state.lists).map((tagName) => {
                     if (!tagName.match(STANDARD_TAGS_REGEX)) {
                         return <RoomSubList list={self.state.lists[tagName]}
                              key={tagName}
-                             label={tagName}
+                             label={labelForTagName(tagName)}
                              tagName={tagName}
                              emptyContent={this._getEmptyContent(tagName)}
                              editable={true}
@@ -688,7 +706,8 @@ module.exports = React.createClass({
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />;
+                             onShowMoreRooms={self.onShowMoreRooms}
+                                            showEmpty={showEmpty} />;
                     }
                 }) }
 
@@ -702,9 +721,17 @@ module.exports = React.createClass({
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty} />
 
                 <RoomSubList list={self.state.lists['im.vector.fake.archived']}
+                             emptyContent={self.props.collapsed ? null :
+                                 <div className="mx_RoomList_emptySubListTip_container">
+                                     <div className="mx_RoomList_emptySubListTip">
+                                         { _t('You have no historical rooms') }
+                                     </div>
+                                 </div>
+                             }
                              label={_t('Historical')}
                              editable={false}
                              order="recent"
@@ -712,10 +739,23 @@ module.exports = React.createClass({
                              alwaysShowHeader={true}
                              startAsHidden={true}
                              showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick= {self.onArchivedHeaderClick}
+                             onHeaderClick={self.onArchivedHeaderClick}
                              incomingCall={self.state.incomingCall}
                              searchFilter={self.props.searchFilter}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={showEmpty} />
+
+                <RoomSubList list={self.state.lists['m.server_notice']}
+                             label={_t('System Alerts')}
+                             tagName="m.lowpriority"
+                             editable={false}
+                             order="recent"
+                             incomingCall={self.state.incomingCall}
+                             collapsed={self.props.collapsed}
+                             searchFilter={self.props.searchFilter}
+                             onHeaderClick={self.onSubListHeaderClick}
+                             onShowMoreRooms={self.onShowMoreRooms}
+                             showEmpty={false} />
             </div>
             </GeminiScrollbarWrapper>
         );

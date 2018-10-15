@@ -21,7 +21,7 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-
+import LazyLoadingController from "./controllers/LazyLoadingController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -83,11 +83,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_jitsi": {
+    "feature_lazyloading": {
         isFeature: true,
-        displayName: _td("Jitsi Conference Calling"),
+        displayName: _td("Increase performance by only loading room members on first view"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        controller: new LazyLoadingController(),
+        default: true,
     },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -245,6 +246,13 @@ export const SETTINGS = {
         },
         default: true,
     },
+    "urlPreviewsEnabled_e2ee": {
+        supportedLevels: ['room-device', 'room-account'],
+        displayName: {
+            "room-account": _td("Enable URL previews for this room (only affects you)"),
+        },
+        default: false,
+    },
     "roomColor": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("Room Colour"),
@@ -276,5 +284,10 @@ export const SETTINGS = {
     "PinnedEvents.isOpen": {
         supportedLevels: ['room-device'],
         default: false,
+    },
+    "RoomSubList.showEmpty": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show empty room list headings'),
+        default: true,
     },
 };

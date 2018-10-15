@@ -68,7 +68,9 @@ module.exports = React.createClass({
                 if (oldNode && oldNode.style.visibility == 'hidden' && c.props.style.visibility == 'visible') {
                     oldNode.style.visibility = c.props.style.visibility;
                 }
-                self.children[c.key] = old;
+                // clone the old element with the props (and children) of the new element
+                // so prop updates are still received by the children.
+                self.children[c.key] = React.cloneElement(old, c.props, c.props.children);
             } else {
                 // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations

@@ -30,6 +30,8 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
+import ActiveWidgetStore from './stores/ActiveWidgetStore';
+import PlatformPeg from "./PlatformPeg";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -155,6 +157,40 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
                       err.data);
         return false;
     });
+}
+
+export function handleInvalidStoreError(e) {
+    if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
+        return Promise.resolve().then(() => {
+            const lazyLoadEnabled = e.value;
+            if (lazyLoadEnabled) {
+                const LazyLoadingResyncDialog =
+                    sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
+                return new Promise((resolve) => {
+                    Modal.createDialog(LazyLoadingResyncDialog, {
+                        onFinished: resolve,
+                    });
+                });
+            } else {
+                // show warning about simultaneous use
+                // between LL/non-LL version on same host.
+                // as disabling LL when previously enabled
+                // is a strong indicator of this (/develop & /app)
+                const LazyLoadingDisabledDialog =
+                    sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
+                return new Promise((resolve) => {
+                    Modal.createDialog(LazyLoadingDisabledDialog, {
+                        onFinished: resolve,
+                        host: window.location.host,
+                    });
+                });
+            }
+        }).then(() => {
+            return MatrixClientPeg.get().store.deleteAllData();
+        }).then(() => {
+            PlatformPeg.get().reload();
+        });
+    }
 }
 
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
@@ -385,6 +421,8 @@ function _persistCredentialsToLocalStorage(credentials) {
     console.log(`Session persisted for ${credentials.userId}`);
 }
 
+let _isLoggingOut = false;
+
 /**
  * Logs the current session out and transitions to the logged-out state
  */
@@ -404,6 +442,7 @@ export function logout() {
         return;
     }
 
+    _isLoggingOut = true;
     MatrixClientPeg.get().logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
@@ -417,6 +456,10 @@ export function logout() {
             onLoggedOut();
         },
     ).done();
+}
+
+export function isLoggingOut() {
+    return _isLoggingOut;
 }
 
 /**
@@ -436,6 +479,7 @@ async function startMatrixClient() {
     UserActivity.start();
     Presence.start();
     DMRoomMap.makeShared().start();
+    ActiveWidgetStore.start();
 
     await MatrixClientPeg.start();
 
@@ -449,6 +493,7 @@ async function startMatrixClient() {
  * storage. Used after a session has been logged out.
  */
 export function onLoggedOut() {
+    _isLoggingOut = false;
     stopMatrixClient();
     _clearStorage().done();
     dis.dispatch({action: 'on_logged_out'});
@@ -488,6 +533,7 @@ export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
+    ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     const cli = MatrixClientPeg.get();
     if (cli) {

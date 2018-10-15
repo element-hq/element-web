@@ -16,10 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var StandardActions = require('./StandardActions');
-var NotificationUtils = require('./NotificationUtils');
+const StandardActions = require('./StandardActions');
+const NotificationUtils = require('./NotificationUtils');
 
-var states = {
+const states = {
     /** The push rule is disabled */
     OFF: "off",
 
@@ -48,8 +48,7 @@ module.exports = {
     actionsFor: function(pushRuleVectorState) {
         if (pushRuleVectorState === this.ON) {
             return StandardActions.ACTION_NOTIFY;
-        }
-        else if (pushRuleVectorState === this.LOUD) {
+        } else if (pushRuleVectorState === this.LOUD) {
             return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
     },
@@ -62,21 +61,21 @@ module.exports = {
      * state. Returns null if it does not match these categories.
      */
     contentRuleVectorStateKind: function(rule) {
-        var decoded = NotificationUtils.decodeActions(rule.actions);
+        const decoded = NotificationUtils.decodeActions(rule.actions);
 
         if (!decoded) {
             return null;
         }
 
         // Count tweaks to determine if it is a ON or LOUD rule
-        var tweaks = 0;
+        let tweaks = 0;
         if (decoded.sound) {
             tweaks++;
         }
         if (decoded.highlight) {
             tweaks++;
         }
-        var stateKind = null;
+        let stateKind = null;
         switch (tweaks) {
             case 0:
                 stateKind = this.ON;
@@ -89,6 +88,6 @@ module.exports = {
     },
 };
 
-for (var k in states) {
+for (const k in states) {
     module.exports[k] = states[k];
-};
+}

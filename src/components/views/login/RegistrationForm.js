@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +50,7 @@ module.exports = React.createClass({
         teamsConfig: PropTypes.shape({
             // Email address to request new teams
             supportEmail: PropTypes.string,
-            teams: PropTypes.arrayOf(React.PropTypes.shape({
+            teams: PropTypes.arrayOf(PropTypes.shape({
                 // The displayed name of the team
                 "name": PropTypes.string,
                 // The domain of team email addresses
@@ -60,6 +61,7 @@ module.exports = React.createClass({
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
+        flows: PropTypes.arrayOf(PropTypes.object).isRequired,
     },
 
     getDefaultProps: function() {
@@ -180,12 +182,16 @@ module.exports = React.createClass({
                     });
                 }
                 const emailValid = email === '' || Email.looksValid(email);
-                this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
+                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_EMAIL");
+                } else this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             case FIELD_PHONE_NUMBER:
                 const phoneNumber = this.refs.phoneNumber ? this.refs.phoneNumber.value : '';
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
-                this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
+                if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
+                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
+                } else this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
@@ -273,12 +279,18 @@ module.exports = React.createClass({
         });
     },
 
+    _authStepIsRequired(step) {
+        // A step is required if no flow exists which does not include that step
+        // (Notwithstanding setups like either email or msisdn being required)
+        return !this.props.flows.some((flow) => {
+            return !flow.stages.includes(step);
+        });
+    },
+
     render: function() {
         const self = this;
 
-        const theme = SettingsStore.getValue("theme");
-        // FIXME: remove hardcoded Status team tweaks at some point
-        const emailPlaceholder = theme === 'status' ? _t("Email address") : _t("Email address (optional)");
+        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ? _t("Email address") : _t("Email address (optional)");
 
         const emailSection = (
             <div>
@@ -315,6 +327,7 @@ module.exports = React.createClass({
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
         let phoneSection;
         if (!SdkConfig.get().disable_3pid_login) {
+            const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ? _t("Mobile phone number") : _t("Mobile phone number (optional)");
             phoneSection = (
                 <div className="mx_Login_phoneSection">
                     <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
@@ -324,7 +337,7 @@ module.exports = React.createClass({
                         showPrefix={true}
                     />
                     <input type="text" ref="phoneNumber"
-                        placeholder={_t("Mobile phone number (optional)")}
+                        placeholder={phonePlaceholder}
                         defaultValue={this.props.defaultPhoneNumber}
                         className={this._classForField(
                             FIELD_PHONE_NUMBER,

@@ -20,7 +20,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import FuzzyMatcher from './FuzzyMatcher';
+import QueryMatcher from './QueryMatcher';
 import {TextualCompletion} from './Components';
 import type {Completion, SelectionRange} from "./Autocompleter";
 import {CommandMap} from '../SlashCommands';
@@ -32,7 +32,7 @@ const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.matcher = new FuzzyMatcher(COMMANDS, {
+        this.matcher = new QueryMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
@@ -42,10 +42,13 @@ export default class CommandProvider extends AutocompleteProvider {
         if (!command) return [];
 
         let matches = [];
+        // check if the full match differs from the first word (i.e. returns false if the command has args)
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
             if (CommandMap[name]) {
+                // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
+                if (CommandMap[name].hideCompletionAfterSpace) return [];
                 matches = [CommandMap[name]];
             }
         } else {
