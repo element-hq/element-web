@@ -241,20 +241,27 @@ class IndexedDBLogStore {
 
         // Returns: a string representing the concatenated logs for this ID.
         function fetchLogs(id) {
-            const o = db.transaction("logs", "readonly").objectStore("logs");
-            return selectQuery(o.index("id"), IDBKeyRange.only(id),
-            (cursor) => {
-                return {
-                    lines: cursor.value.lines,
-                    index: cursor.value.index,
+            const objectStore = db.transaction("logs", "readonly").objectStore("logs");
+
+            return new Promise((resolve, reject) => {
+                const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), 'next');
+                let lines = '';
+                query.onerror = (event) => {
+                    reject(new Error("Query failed: " + event.target.errorCode));
                 };
-            }).then((linesArray) => {
-                // We have been storing logs periodically, so string them all
-                // together *in order of index* now
-                linesArray.sort((a, b) => {
-                    return a.index - b.index;
-                });
-                return linesArray.map((l) => l.lines).join("");
+                query.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (!cursor) {
+                        resolve(lines);
+                        return; // end of results
+                    }
+                    lines += cursor.value.lines;
+                    if (lines.length >= MAX_LOG_SIZE) {
+                        resolve(lines);
+                    } else {
+                        cursor.continue();
+                    }
+                };
             });
         }
 
@@ -322,9 +329,6 @@ class IndexedDBLogStore {
             if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
                 // the remaining log IDs should be removed. If we go out of
                 // bounds this is just []
-                //
-                // XXX: there's nothing stopping the current session exceeding
-                // MAX_LOG_SIZE. We ought to think about culling it.
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
