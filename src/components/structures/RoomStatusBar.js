@@ -66,6 +66,10 @@ module.exports = React.createClass({
         // result in "X, Y, Z and 100 others are typing."
         whoIsTypingLimit: PropTypes.number,
 
+        // true if the room is being peeked at. This affects components that shouldn't
+        // logically be shown when peeking, such as a prompt to invite people to a room.
+        isPeeking: PropTypes.bool,
+
         // callback for when the user clicks on the 'resend all' button in the
         // 'unsent messages' bar
         onResendAllClick: PropTypes.func,
@@ -457,7 +461,7 @@ module.exports = React.createClass({
         }
 
         // If you're alone in the room, and have sent a message, suggest to invite someone
-        if (this.props.sentMessageAndIsAlone) {
+        if (this.props.sentMessageAndIsAlone && !this.props.isPeeking) {
             return (
                 <div className="mx_RoomStatusBar_isAlone">
                     { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
