@@ -17,19 +17,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform from './VectorBasePlatform';
+import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import q from 'q';
+import Promise from 'bluebird';
 
 import url from 'url';
 import UAParser from 'ua-parser-js';
+
+var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
         this.runningVersion = null;
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {
@@ -63,11 +68,11 @@ export default class WebPlatform extends VectorBasePlatform {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
-        const defer = q.defer();
-        global.Notification.requestPermission((result) => {
-            defer.resolve(result);
+        return new Promise(function(resolve, reject) {
+            global.Notification.requestPermission((result) => {
+                resolve(result);
+            });
         });
-        return defer.promise;
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
@@ -98,42 +103,47 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     _getVersion(): Promise<string> {
-        const deferred = q.defer();
-
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
         // actually be the version we'd get on a reload (particularly in the
         // presence of intermediate caching proxies), but still: we're trying
         // to tell the user that there is a new version.
-        request(
-            {
-                method: "GET",
-                url: "version",
-                qs: { cachebuster: Date.now() },
-            },
-            (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
-                    if (err === null) err = { status: response.status };
-                    deferred.reject(err);
-                    return;
-                }
 
-                const ver = body.trim();
-                deferred.resolve(ver);
-            },
-        );
-        return deferred.promise;
+        return new Promise(function(resolve, reject) {
+            request(
+                {
+                    method: "GET",
+                    url: "version",
+                    qs: { cachebuster: Date.now() },
+                },
+                (err, response, body) => {
+                    if (err || response.status < 200 || response.status >= 300) {
+                        if (err === null) err = { status: response.status };
+                        reject(err);
+                        return;
+                    }
+
+                    const ver = body.trim();
+                    resolve(ver);
+                },
+            );
+        });
     }
 
     getAppVersion(): Promise<string> {
         if (this.runningVersion !== null) {
-            return q(this.runningVersion);
+            return Promise.resolve(this.runningVersion);
         }
         return this._getVersion();
     }
 
+    startUpdater() {
+        this.pollForUpdate();
+        setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
+    }
+
     pollForUpdate() {
-        this._getVersion().done((ver) => {
+        return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
             } else if (this.runningVersion !== ver) {
@@ -142,14 +152,34 @@ export default class WebPlatform extends VectorBasePlatform {
                     currentVersion: this.runningVersion,
                     newVersion: ver,
                 });
+                // Return to skip a MatrixChat state update
+                return;
             }
+            return { status: updateCheckStatusEnum.NOTAVAILABLE };
         }, (err) => {
             console.error("Failed to poll for update", err);
+            return {
+                status: updateCheckStatusEnum.ERROR,
+                detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
+            };
+        });
+    }
+
+    startUpdateCheck() {
+        if (this.showUpdateCheck) return;
+        super.startUpdateCheck();
+        this.pollForUpdate().then((updateState) => {
+            if (!this.showUpdateCheck) return;
+            if (!updateState) return;
+            dis.dispatch({
+                action: 'check_updates',
+                value: updateState,
+            });
         });
     }
 
     installUpdate() {
-        window.location.reload();
+        window.location.reload(true);
     }
 
     getDefaultDeviceDisplayName(): string {

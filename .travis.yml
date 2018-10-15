@@ -1,3 +1,13 @@
+# we need trusty for the chrome addon
+dist: trusty
+
+# we don't need sudo, so can run in a container, which makes startup much
+# quicker.
+#
+# unfortunately we do temporarily require sudo as a workaround for
+# https://github.com/travis-ci/travis-ci/issues/8836
+sudo: required
+
 language: node_js
 node_js:
     # make sure we work with a range of node versions.
@@ -5,8 +15,9 @@ node_js:
     #  - 4.x is still in LTS (until April 2018), but some of our deps (notably
     #    extract-zip) don't work with it
     #  - 5.x has been EOLed for nearly a year.
-    #  - 6.x is the current 'LTS' version
-    #  - 7.x is the current 'current' version (until October 2017)
+    #  - 6.x is the active 'LTS' version
+    #  - 7.x is no longer supported
+    #  - 8.x is the current 'current' version (until October 2017)
     #
     # see: https://github.com/nodejs/LTS/
     #
@@ -16,6 +27,8 @@ node_js:
     - 6.3
     - 6
     - 7
+addons:
+    chrome: stable
 install:
     # clone the deps with depth 1: we know we will only ever need that one
     # commit.

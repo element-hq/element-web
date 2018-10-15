@@ -23,17 +23,18 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const electron = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu} = require('electron');
 const AutoLaunch = require('auto-launch');
 
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
+const updater = require('./updater');
 
 const windowStateKeeper = require('electron-window-state');
 
-if (argv.profile) {
-    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+if (argv['profile']) {
+    app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
 }
 
 let vectorConfig = {};
@@ -46,69 +47,9 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
-const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
-const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
-
 let mainWindow = null;
-let appQuitting = false;
+global.appQuitting = false;
 
-function installUpdate() {
-    // for some reason, quitAndInstall does not fire the
-    // before-quit event, so we need to set the flag here.
-    appQuitting = true;
-    electron.autoUpdater.quitAndInstall();
-}
-
-function pollForUpdates() {
-    try {
-        electron.autoUpdater.checkForUpdates();
-    } catch (e) {
-        console.log('Couldn\'t check for update', e);
-    }
-}
-
-function startAutoUpdate(updateBaseUrl) {
-    if (updateBaseUrl.slice(-1) !== '/') {
-        updateBaseUrl = updateBaseUrl + '/';
-    }
-    try {
-        // For reasons best known to Squirrel, the way it checks for updates
-        // is completely different between macOS and windows. On macOS, it
-        // hits a URL that either gives it a 200 with some json or
-        // 204 No Content. On windows it takes a base path and looks for
-        // files under that path.
-        if (process.platform === 'darwin') {
-            // include the current version in the URL we hit. Electron doesn't add
-            // it anywhere (apart from the User-Agent) so it's up to us. We could
-            // (and previously did) just use the User-Agent, but this doesn't
-            // rely on NSURLConnection setting the User-Agent to what we expect,
-            // and also acts as a convenient cache-buster to ensure that when the
-            // app updates it always gets a fresh value to avoid update-looping.
-            electron.autoUpdater.setFeedURL(
-                `${updateBaseUrl}macos/?localVersion=${encodeURIComponent(electron.app.getVersion())}`);
-
-        } else if (process.platform === 'win32') {
-            electron.autoUpdater.setFeedURL(`${updateBaseUrl}win32/${process.arch}/`);
-        } else {
-            // Squirrel / electron only supports auto-update on these two platforms.
-            // I'm not even going to try to guess which feed style they'd use if they
-            // implemented it on Linux, or if it would be different again.
-            console.log('Auto update not supported on this platform');
-        }
-        // We check for updates ourselves rather than using 'updater' because we need to
-        // do it in the main process (and we don't really need to check every 10 minutes:
-        // every hour should be just fine for a desktop app)
-        // However, we still let the main window listen for the update events.
-        // We also wait a short time before checking for updates the first time because
-        // of squirrel on windows and it taking a small amount of time to release a
-        // lock file.
-        setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
-        setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
-    } catch (err) {
-        // will fail if running in debug mode
-        console.log('Couldn\'t enable update checking', err);
-    }
-}
 
 // handle uncaught errors otherwise it displays
 // stack traces in popup dialogs, which is terrible (which
@@ -120,17 +61,15 @@ process.on('uncaughtException', function(error) {
     console.log('Unhandled exception', error);
 });
 
-electron.ipcMain.on('install_update', installUpdate);
-
 let focusHandlerAttached = false;
-electron.ipcMain.on('setBadgeCount', function(ev, count) {
-    electron.app.setBadgeCount(count);
-    if (count === 0) {
+ipcMain.on('setBadgeCount', function(ev, count) {
+    app.setBadgeCount(count);
+    if (count === 0 && mainWindow) {
         mainWindow.flashFrame(false);
     }
 });
 
-electron.ipcMain.on('loudNotification', function() {
+ipcMain.on('loudNotification', function() {
     if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused() && !focusHandlerAttached) {
         mainWindow.flashFrame(true);
         mainWindow.once('focus', () => {
@@ -142,16 +81,16 @@ electron.ipcMain.on('loudNotification', function() {
 });
 
 let powerSaveBlockerId;
-electron.ipcMain.on('app_onAction', function(ev, payload) {
+ipcMain.on('app_onAction', function(ev, payload) {
     switch (payload.action) {
         case 'call_state':
-            if (powerSaveBlockerId && powerSaveBlockerId.isStarted(powerSaveBlockerId)) {
+            if (powerSaveBlockerId && powerSaveBlocker.isStarted(powerSaveBlockerId)) {
                 if (payload.state === 'ended') {
-                    electron.powerSaveBlocker.stop(powerSaveBlockerId);
+                    powerSaveBlocker.stop(powerSaveBlockerId);
                 }
             } else {
                 if (payload.state === 'connected') {
-                    powerSaveBlockerId = electron.powerSaveBlocker.start('prevent-display-sleep');
+                    powerSaveBlockerId = powerSaveBlocker.start('prevent-display-sleep');
                 }
             }
             break;
@@ -159,9 +98,12 @@ electron.ipcMain.on('app_onAction', function(ev, payload) {
 });
 
 
-electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
+app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
-const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+    // If other instance launched with --hidden then skip showing window
+    if (commandLine.includes('--hidden')) return;
+
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
         if (!mainWindow.isVisible()) mainWindow.show();
@@ -172,7 +114,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log('Other instance detected: exiting');
-    electron.app.exit();
+    app.exit();
 }
 
 
@@ -197,7 +139,7 @@ const settings = {
     },
 };
 
-electron.ipcMain.on('settings_get', async function(ev) {
+ipcMain.on('settings_get', async function(ev) {
     const data = {};
 
     try {
@@ -206,34 +148,37 @@ electron.ipcMain.on('settings_get', async function(ev) {
         }));
 
         ev.sender.send('settings', data);
-    } catch(e) { console.error(e); }
+    } catch (e) {
+        console.error(e);
+    }
 });
 
-electron.ipcMain.on('settings_set', function(ev, key, value) {
+ipcMain.on('settings_set', function(ev, key, value) {
     console.log(key, value);
     if (settings[key] && settings[key].set) {
         settings[key].set(value);
     }
 });
 
-electron.app.on('ready', () => {
-
-    if (argv.devtools) {
+app.on('ready', () => {
+    if (argv['devtools']) {
         try {
-            const { default: installExtension, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
-            installExtension(REACT_DEVELOPER_TOOLS)
+            const { default: installExt, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
+            installExt(REACT_DEVELOPER_TOOLS)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-            installExtension(REACT_PERF)
+            installExt(REACT_PERF)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-        } catch(e) {console.log(e);}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
 
-    if (vectorConfig.update_base_url) {
-        console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
-        startAutoUpdate(vectorConfig.update_base_url);
+    if (vectorConfig['update_base_url']) {
+        console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
+        updater.start(vectorConfig['update_base_url']);
     } else {
         console.log('No update_base_url is defined: auto update is disabled');
     }
@@ -246,7 +191,7 @@ electron.app.on('ready', () => {
         defaultHeight: 768,
     });
 
-    mainWindow = new electron.BrowserWindow({
+    mainWindow = global.mainWindow = new BrowserWindow({
         icon: iconPath,
         show: false,
         autoHideMenuBar: true,
@@ -257,29 +202,34 @@ electron.app.on('ready', () => {
         height: mainWindowState.height,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
-    electron.Menu.setApplicationMenu(vectorMenu);
+    Menu.setApplicationMenu(vectorMenu);
 
     // explicitly hide because setApplicationMenu on Linux otherwise shows...
     // https://github.com/electron/electron/issues/9621
     mainWindow.hide();
 
     // Create trayIcon icon
-    tray.create(mainWindow, {
+    tray.create({
         icon_path: iconPath,
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!argv.hidden) {
-        mainWindow.once('ready-to-show', () => {
+    mainWindow.once('ready-to-show', () => {
+        mainWindowState.manage(mainWindow);
+
+        if (!argv['hidden']) {
             mainWindow.show();
-        });
-    }
+        } else {
+            // hide here explicitly because window manage above sometimes shows it
+            mainWindow.hide();
+        }
+    });
 
     mainWindow.on('closed', () => {
-        mainWindow = null;
+        mainWindow = global.mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (!appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
+        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
@@ -289,24 +239,37 @@ electron.app.on('ready', () => {
         }
     });
 
+    if (process.platform === 'win32') {
+        // Handle forward/backward mouse buttons in Windows
+        mainWindow.on('app-command', (e, cmd) => {
+            if (cmd === 'browser-backward' && mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            } else if (cmd === 'browser-forward' && mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+        });
+    }
+
     webContentsHandler(mainWindow.webContents);
-    mainWindowState.manage(mainWindow);
 });
 
-electron.app.on('window-all-closed', () => {
-    electron.app.quit();
+app.on('window-all-closed', () => {
+    app.quit();
 });
 
-electron.app.on('activate', () => {
+app.on('activate', () => {
     mainWindow.show();
 });
 
-electron.app.on('before-quit', () => {
-    appQuitting = true;
+app.on('before-quit', () => {
+    global.appQuitting = true;
+    if (mainWindow) {
+        mainWindow.webContents.send('before-quit');
+    }
 });
 
 // Set the App User Model ID to match what the squirrel
 // installer uses for the shortcut icon.
 // This makes notifications work on windows 8.1 (and is
 // a noop on other platforms).
-electron.app.setAppUserModelId('com.squirrel.riot-web.Riot');
+app.setAppUserModelId('com.squirrel.riot-web.Riot');

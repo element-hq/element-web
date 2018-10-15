@@ -1,0 +1,17 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s -ல் %(browserName)s -ன் வழியாக %(appName)s",
+    "Custom Server Options": "விருப்பிற்கேற்ற வழங்கி இடப்புகள்",
+    "Dismiss": "நீக்கு",
+    "powered by Matrix": "Matrix-ஆல் ஆனது",
+    "Riot is not supported on mobile web. Install the app?": "கைபேசி உலாவியில் Riot இயங்காது. செயலியை நிறுவ வேண்டுமா?",
+    "Unknown device": "தெரியாத கருவி",
+    "Riot Desktop on %(platformName)s": "%(platformName)s ற்க்கான Riot",
+    "You need to be using HTTPS to place a screen-sharing call.": "நீங்கள் திரைபகிர்வு அழைப்பை மேற்க்கொள்ள  HTTPS-ஐ பயன்படுத்த வேண்டும்.",
+    "Welcome to Riot.im": "Riot.im -ற்க்கு வரவேற்க்கிறோம்",
+    "Search the room directory": "அறை அடைவில் தேடவும்",
+    "Chat with Riot Bot": "Riot இயங்கியிடம் உரையாடவும்",
+    "Matrix technical discussions": "Matrix தொழில்நுட்ப விவாதங்கள்",
+    "Running Matrix services": "இருப்பிலிருக்கும் Matrix சேவைகள்",
+    "Building services on Matrix": "Matrix- ல் சேவைகளைக் கட்டமைக்க",
+    "Contributing code to Matrix and Riot": "Matrix மற்றும் Riot -ற்க்கு நிரல் பங்களிக்க"
+}

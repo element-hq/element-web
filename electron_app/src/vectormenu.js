@@ -19,7 +19,7 @@ const {app, shell, Menu} = require('electron');
 // Menu template from http://electron.atom.io/docs/api/menu/, edited
 const template = [
     {
-        label: 'Edit',
+        label: '&Edit',
         submenu: [
             { role: 'undo' },
             { role: 'redo' },
@@ -33,7 +33,7 @@ const template = [
         ],
     },
     {
-        label: 'View',
+        label: '&View',
         submenu: [
             { type: 'separator' },
             { role: 'resetzoom' },
@@ -45,6 +45,7 @@ const template = [
         ],
     },
     {
+        label: '&Window',
         role: 'window',
         submenu: [
             { role: 'minimize' },
@@ -52,6 +53,7 @@ const template = [
         ],
     },
     {
+        label: '&Help',
         role: 'help',
         submenu: [
             {
@@ -122,7 +124,7 @@ if (process.platform === 'darwin') {
     ];
 } else {
     template.unshift({
-        label: 'File',
+        label: '&File',
         submenu: [
             // For some reason, 'about' does not seem to work on windows.
             /*{

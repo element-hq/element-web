@@ -20,15 +20,14 @@
     <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
     <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
-            var light = match[1] == 'light';
         %>
-           <link rel="<%= light ? '' : 'alternate ' %>stylesheet" title="<%= title %>"
-               href="<%= file %>">
+           <link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
         <% }
@@ -38,6 +37,14 @@
     <section id="matrixchat" style="height: 100%;"></section>
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
+        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'olm.js')) {
+            var array = htmlWebpackPlugin.files.js;
+            htmlWebpackPlugin.files.js.unshift(htmlWebpackPlugin.files.js[i]);
+            htmlWebpackPlugin.files.js.splice(i, 1);
+        }
+       }
+
+       for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
         // Not a particularly graceful way of not putting the indexeddb worker script
         // into the main page
         if (_.endsWith(htmlWebpackPlugin.files.js[i], 'indexeddb-worker.js')) {
@@ -72,6 +79,8 @@
         <source src="media/busy.ogg" type="audio/ogg" />
         <source src="media/busy.mp3" type="audio/mpeg" />
     </audio>
-    <audio id="remoteAudio"/>
+    <audio id="remoteAudio"></audio>
+    <!-- let CSS themes pass constants to the app -->
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
   </body>
 </html>

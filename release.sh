@@ -7,11 +7,20 @@
 
 set -e
 
+orig_args=$@
+
+# chomp any args starting with '-' as these need to go
+# through to the release script and otherwise we'll get
+# confused about what the version arg is.
+while [[ "$1" == -* ]]; do
+    shift
+done
+
 cd `dirname $0`
 
 for i in matrix-js-sdk matrix-react-sdk
 do
-    depver=`cat package.json | jq -r .dependencies.\"$i\"`
+    depver=`cat package.json | jq -r .dependencies[\"$i\"]`
     latestver=`npm show $i version`
     if [ "$depver" != "$latestver" ]
     then
@@ -33,9 +42,9 @@ echo "electron npm version"
 
 cd electron_app
 npm version --no-git-tag-version "$release"
-git commit package.json -m "$tag"
+git commit package.json package-lock.json -m "$tag"
 
 
 cd ..
 
-exec ./node_modules/matrix-js-sdk/release.sh -z "$@"
+exec ./node_modules/matrix-js-sdk/release.sh -z "$orig_args"
