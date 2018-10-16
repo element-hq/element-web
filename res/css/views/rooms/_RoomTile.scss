@@ -20,8 +20,8 @@ limitations under the License.
     align-items: center;
     cursor: pointer;
     height: 40px;
-    margin: 0px 9px 0px 9px;
-
+    margin: 0px 3px;
+    position: relative;
     background-color: $secondary-accent-color;
 }
 
@@ -69,20 +69,30 @@ limitations under the License.
 /*    color: rgba(69, 69, 69, 0.5); */
 }
 
-.collapsed .mx_RoomTile_name {
-    display: none;
-}
+.collapsed {
+    .mx_RoomTile_name {
+        display: none;
+    }
 
-.collapsed .mx_RoomTile_badge {
-    min-width: 12px;
-    border-radius: 16px;
-    padding: 0px 4px 0px 4px;
-    z-index: 3;
-}
+    .mx_RoomTile_badge {
+        min-width: 12px;
+        border-radius: 16px;
+        padding: 0px 4px 0px 4px;
+        z-index: 3;
+    }
 
-/* Hide the bottom of speech bubble */
-.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
-    display: none;
+    /* Hide the bottom of speech bubble */
+    .mx_RoomTile_highlight .mx_RoomTile_badge:after {
+        display: none;
+    }
+
+    .mx_RoomTile_badge {
+        display: block;
+        position: absolute;
+        height: 15px;
+        right: 5px;
+        top: 2px;
+    }
 }
 
 /* This is the bottom of the speech bubble */
@@ -100,9 +110,6 @@ limitations under the License.
 .mx_RoomTile_badge {
     flex: 0 1 content;
     min-width: 15px;
-    height: 15px;
-    right: 8px; /*gutter */
-    top: 9px;
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
