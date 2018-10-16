@@ -93,23 +93,9 @@ const LoggedInView = React.createClass({
     },
 
     componentDidMount: function() {
-        const classNames = {
-            handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse"
-        };
-        const collapseConfig = {
-            toggleSize: 260 - 50,
-            onCollapsed: (collapsed) => {
-                this.setState({collapseLhs: collapsed});
-            }
-        };
-        const resizer = new Resizer(
-            this.resizeContainer,
-            CollapseDistributor,
-            collapseConfig);
-        resizer.setClassNames(classNames);
-        resizer.attach();
+        this.resizer = this._createResizer();
+        this.resizer.attach();
+        this._loadResizerPreferences();
     },
 
     componentWillMount: function() {
@@ -141,6 +127,7 @@ const LoggedInView = React.createClass({
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
+        this.resizer.detach();
     },
 
     // Child components assume that the client peg will not be null, so give them some
@@ -164,6 +151,49 @@ const LoggedInView = React.createClass({
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
+    },
+
+    _createResizer() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        };
+        const collapseConfig = {
+            toggleSize: 260 - 50,
+            onCollapsed: (collapsed, item) => {
+                if (item.classList.contains("mx_LeftPanel_container")) {
+                    this.setState({collapseLhs: collapsed});
+                    if (collapsed) {
+                        window.localStorage.setItem("mx_lhs_size", '0');
+                    }
+                }
+            },
+            onResized: (size, item) => {
+                if (item.classList.contains("mx_LeftPanel_container")) {
+                    window.localStorage.setItem("mx_lhs_size", '' + size);
+                } else if(item.classList.contains("mx_RightPanel")) {
+                    window.localStorage.setItem("mx_rhs_size", '' + size);
+                }
+            },
+        };
+        const resizer = new Resizer(
+            this.resizeContainer,
+            CollapseDistributor,
+            collapseConfig);
+        resizer.setClassNames(classNames);
+        return resizer;
+    },
+
+    _loadResizerPreferences() {
+        const lhsSize = window.localStorage.getItem("mx_lhs_size");
+        if (lhsSize !== null) {
+            this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
+        }
+        const rhsSize = window.localStorage.getItem("mx_rhs_size");
+        if (rhsSize !== null) {
+            this.resizer.forHandleAt(1).resize(parseInt(rhsSize, 10));
+        }
     },
 
     onAccountData: function(event) {
