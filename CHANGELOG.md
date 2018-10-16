@@ -1,3 +1,12 @@
+Changes in [0.17.0](https://github.com/vector-im/riot-web/releases/tag/v0.17.0) (2018-10-16)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.0-rc.1...v0.17.0)
+
+ * Phased rollout of lazyloading
+   [\#7503](https://github.com/vector-im/riot-web/pull/7503)
+ * Update to latest electron builder
+   [\#7501](https://github.com/vector-im/riot-web/pull/7501)
+
 Changes in [0.17.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.0-rc.1) (2018-10-11)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.16.5...v0.17.0-rc.1)
