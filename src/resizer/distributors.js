@@ -17,29 +17,20 @@ class FixedDistributor {
 
 
 class CollapseDistributor extends FixedDistributor {
-    constructor(container, items, handleIndex, direction, sizer) {
+    constructor(container, items, handleIndex, direction, sizer, toggleSize) {
         super(container, items, handleIndex, direction, sizer);
-        const style = getComputedStyle(this.item);
-        this.minWidth = parseInt(style.minWidth, 10);   //auto becomes NaN
+        this.toggleSize = toggleSize;
     }
 
     resize(offset) {
-        let newWidth = offset - this.sizer.getItemOffset(this.item);
-        if (this.minWidth > 0) {
-            // -50 this is to not collapse immediately
-            // when moving the cursor past the minWidth
-            // to give some visual feedback you are about
-            // to collapse
-            // TODO: should 50 be configurable? minWidth/2 maybe?
-            if (offset < (this.minWidth - 50)) {
-                this.item.classList.add("collapsed");
-                newWidth = this.minWidth;
-            }
-            else {
-                this.item.classList.remove("collapsed");
-            }
+        let newSize = offset - this.sizer.getItemOffset(this.item);
+        if (newSize < this.toggleSize) {
+            this.item.classList.add("collapsed");
         }
-        super.resize(newWidth);
+        else {
+            this.item.classList.remove("collapsed");
+        }
+        super.resize(newSize);
     }
 }
 

@@ -12,7 +12,7 @@ classNames:
     resizing: string
 */
 
-function makeResizeable(container, classNames, distributorCtor, sizerCtor = Sizer) {
+function makeResizeable(container, classNames, distributorCtor, distributorCfg = undefined, sizerCtor = Sizer) {
 
     function isResizeHandle(el) {
         return el && el.classList.contains(classNames.handle);
@@ -44,7 +44,9 @@ function makeResizeable(container, classNames, distributorCtor, sizerCtor = Size
         });
         const prevItem = resizeHandle.previousElementSibling;
         const handleIndex = items.indexOf(prevItem) + 1;
-        const distributor = new distributorCtor(container, items, handleIndex, direction, sizer);
+        const distributor = new distributorCtor(
+            container, items, handleIndex,
+            direction, sizer, distributorCfg);
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);

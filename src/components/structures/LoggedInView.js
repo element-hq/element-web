@@ -98,7 +98,12 @@ const LoggedInView = React.createClass({
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse"
         };
-        makeResizeable(this.resizeContainer, classNames, CollapseDistributor);
+        const collapseToggleSize = 260 - 50;
+        makeResizeable(
+            this.resizeContainer,
+            classNames,
+            CollapseDistributor,
+            collapseToggleSize);
     },
 
     componentWillMount: function() {
