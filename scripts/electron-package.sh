@@ -100,7 +100,7 @@ mkdir -p "$projdir/electron_app/dist/unsigned/"
 # Install packages: what the user downloads the first time,
 # (DMGs for mac, exe installer for windows)
 mkdir -p "$pubdir/install/macos"
-cp $distdir/mac/*.dmg "$pubdir/install/macos/"
+cp $distdir/*.dmg "$pubdir/install/macos/"
 
 # Windows installers go to the dist dir because they need signing
 mkdir -p "$pubdir/install/win32/ia32/"
@@ -111,7 +111,7 @@ cp $distdir/win/*.exe "$projdir/electron_app/dist/unsigned/"
 
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
-cp $distdir/mac/*.zip "$pubdir/update/macos/"
+cp $distdir/*-mac.zip "$pubdir/update/macos/"
 echo "$vername" > "$pubdir/update/macos/latest"
 
 mkdir -p "$pubdir/update/win32/ia32/"
