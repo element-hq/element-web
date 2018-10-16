@@ -35,7 +35,7 @@ import RoomListStore from "../../stores/RoomListStore";
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
 import ResizeHandle from '../views/elements/ResizeHandle';
-import {makeResizeable, CollapseDistributor} from '../../resizer'
+import {Resizer, CollapseDistributor} from '../../resizer'
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -98,17 +98,18 @@ const LoggedInView = React.createClass({
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse"
         };
-        const config = {
+        const collapseConfig = {
             toggleSize: 260 - 50,
             onCollapsed: (collapsed) => {
                 this.setState({collapseLhs: collapsed});
             }
         };
-        makeResizeable(
+        const resizer = new Resizer(
             this.resizeContainer,
-            classNames,
             CollapseDistributor,
-            config);
+            collapseConfig);
+        resizer.setClassNames(classNames);
+        resizer.attach();
     },
 
     componentWillMount: function() {

@@ -1,9 +1,9 @@
 import {Sizer} from "./sizer";
 import {FixedDistributor, CollapseDistributor, PercentageDistributor} from "./distributors";
-import {makeResizeable} from "./event";
+import {Resizer} from "./resizer";
 
 module.exports = {
-    makeResizeable,
+    Resizer,
     Sizer,
     FixedDistributor,
     CollapseDistributor,
