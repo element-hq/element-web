@@ -292,21 +292,22 @@ export default class MessageComposer extends React.Component {
         let videoCallButton;
         let hangupButton;
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
-                <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
+                <AccessibleButton key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
                     <img src="img/hangup.svg" alt={_t('Hangup')} title={_t('Hangup')} width="25" height="26" />
-                </div>;
+                </AccessibleButton>;
         } else {
             callButton =
-                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
+                <AccessibleButton key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
                     <TintableSvg src="img/icon-call.svg" width="35" height="35" />
-                </div>;
+                </AccessibleButton>;
             videoCallButton =
-                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
+                <AccessibleButton key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
                     <TintableSvg src="img/icons-video.svg" width="35" height="35" />
-                </div>;
+                </AccessibleButton>;
         }
 
         const canSendMessages = !this.state.tombstone &&
@@ -317,18 +318,19 @@ export default class MessageComposer extends React.Component {
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
             const uploadButton = (
-                <div key="controls_upload" className="mx_MessageComposer_upload"
+                <AccessibleButton key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title={_t('Upload file')}>
                     <TintableSvg src="img/icons-upload.svg" width="35" height="35" />
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
                         onChange={this.onUploadFileSelected} />
-                </div>
+                </AccessibleButton>
             );
 
             const formattingButton = this.state.inputState.isRichTextEnabled ? (
-                <img className="mx_MessageComposer_formatting"
+                <AccessibleButton element="img" className="mx_MessageComposer_formatting"
+                     alt={_t("Show Text Formatting Toolbar")}
                      title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
@@ -372,7 +374,6 @@ export default class MessageComposer extends React.Component {
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             controls.push(<div className="mx_MessageComposer_replaced_wrapper">
                 <div className="mx_MessageComposer_replaced_valign">
                     <img className="mx_MessageComposer_roomReplaced_icon" src="img/room_replaced.svg" />
@@ -423,7 +424,7 @@ export default class MessageComposer extends React.Component {
                              onMouseDown={this.onToggleMarkdownClicked}
                             className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
                             src={`img/button-md-${!this.state.inputState.isRichTextEnabled}.png`} />
-                        <img title={_t("Hide Text Formatting Toolbar")}
+                        <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
                              onClick={this.onToggleFormattingClicked}
                              className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
                              src="img/icon-text-cancel.svg" />

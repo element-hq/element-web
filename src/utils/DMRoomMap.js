@@ -104,7 +104,7 @@ export default class DMRoomMap {
                     .some((ids) => ids.roomId === roomId);
             });
             guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
-                let roomIds = userToRooms[userId];
+                const roomIds = userToRooms[userId];
                 if (!roomIds) {
                     userToRooms[userId] = [roomId];
                 } else {

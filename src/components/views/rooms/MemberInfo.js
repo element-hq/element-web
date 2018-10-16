@@ -777,7 +777,7 @@ module.exports = withMatrixClient(React.createClass({
                     const myMembership = room.getMyMembership();
                     // not a DM room if we have are not joined
                     if (myMembership !== 'join') continue;
-                    
+
                     const them = this.props.member;
                     // not a DM room if they are not joined
                     if (!them.membership || them.membership !== 'join') continue;
@@ -935,7 +935,7 @@ module.exports = withMatrixClient(React.createClass({
             <div className="mx_MemberInfo">
                 <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
+                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" alt={_t('Close')} />
                     </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />

@@ -26,7 +26,8 @@ module.exports = React.createClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
-        member: PropTypes.object.isRequired,
+        member: PropTypes.object,
+        fallbackUserId: PropTypes.string,
         width: PropTypes.number,
         height: PropTypes.number,
         resizeMethod: PropTypes.string,
@@ -55,23 +56,30 @@ module.exports = React.createClass({
     },
 
     _getState: function(props) {
-        if (!props.member) {
-            console.error("MemberAvatar called somehow with null member");
+        if (props.member) {
+            return {
+                name: props.member.name,
+                title: props.title || props.member.userId,
+                imageUrl: Avatar.avatarUrlForMember(props.member,
+                                             props.width,
+                                             props.height,
+                                             props.resizeMethod),
+            };
+        } else if (props.fallbackUserId) {
+            return {
+                name: props.fallbackUserId,
+                title: props.fallbackUserId,
+            };
+        } else {
+            console.error("MemberAvatar called somehow with null member or fallbackUserId");
         }
-        return {
-            name: props.member.name,
-            title: props.title || props.member.userId,
-            imageUrl: Avatar.avatarUrlForMember(props.member,
-                                         props.width,
-                                         props.height,
-                                         props.resizeMethod),
-        };
     },
 
     render: function() {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        let {member, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {
             onClick = () => {
@@ -84,7 +92,7 @@ module.exports = React.createClass({
 
         return (
             <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={member.userId} url={this.state.imageUrl} onClick={onClick} />
+                idName={userId} url={this.state.imageUrl} onClick={onClick} />
         );
     },
 });

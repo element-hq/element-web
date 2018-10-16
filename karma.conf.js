@@ -23,6 +23,7 @@ var fs = require('fs');
 //
 var testFile = process.env.KARMA_TEST_FILE || 'test/all-tests.js';
 
+
 process.env.PHANTOMJS_BIN = 'node_modules/.bin/phantomjs';
 
 function fileExists(name) {
@@ -160,10 +161,9 @@ module.exports = function (config) {
 
         webpack: {
             module: {
-                loaders: [
-                    { test: /\.json$/, loader: "json" },
+                rules: [
                     {
-                        test: /\.js$/, loader: "babel",
+                        test: /\.js$/, loader: "babel-loader",
                         include: [path.resolve('./src'),
                                   path.resolve('./test'),
                                  ]
@@ -200,8 +200,9 @@ module.exports = function (config) {
                     'matrix-react-sdk': path.resolve('test/skinned-sdk.js'),
                     'sinon': 'sinon/pkg/sinon.js',
                 },
-                root: [
+                modules: [
                     path.resolve('./test'),
+                    "node_modules"
                 ],
             },
             devtool: 'inline-source-map',
@@ -210,6 +211,8 @@ module.exports = function (config) {
                 // (the 'commonjs' here means it will output a 'require')
                 "electron": "commonjs electron",
             },
+            // make sure we're flagged as development to avoid wasting time optimising
+            mode: 'development',
         },
 
         webpackMiddleware: {

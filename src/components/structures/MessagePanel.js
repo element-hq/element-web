@@ -542,7 +542,7 @@ module.exports = React.createClass({
     },
 
     // get a list of read receipts that should be shown next to this event
-    // Receipts are objects which have a 'roomMember' and 'ts'.
+    // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
     _getReadReceiptsForEvent: function(event) {
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
@@ -560,10 +560,8 @@ module.exports = React.createClass({
                 return; // ignore ignored users
             }
             const member = room.getMember(r.userId);
-            if (!member) {
-                return; // ignore unknown user IDs
-            }
             receipts.push({
+                userId: r.userId,
                 roomMember: member,
                 ts: r.data ? r.data.ts : 0,
             });

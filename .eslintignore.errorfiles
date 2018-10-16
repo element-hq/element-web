@@ -39,7 +39,6 @@ src/components/views/elements/InlineSpinner.js
 src/components/views/elements/MemberEventListSummary.js
 src/components/views/elements/Spinner.js
 src/components/views/elements/TintableSvg.js
-src/components/views/elements/UserInfo.js
 src/components/views/elements/UserSelector.js
 src/components/views/globals/MatrixToolbar.js
 src/components/views/globals/NewVersionBar.js
@@ -54,7 +53,6 @@ src/components/views/messages/RoomAvatarEvent.js
 src/components/views/messages/TextualBody.js
 src/components/views/room_settings/AliasSettings.js
 src/components/views/room_settings/ColorSettings.js
-src/components/views/room_settings/UrlPreviewSettings.js
 src/components/views/rooms/Autocomplete.js
 src/components/views/rooms/AuxPanel.js
 src/components/views/rooms/EntityTile.js
@@ -66,7 +64,6 @@ src/components/views/rooms/MemberTile.js
 src/components/views/rooms/MessageComposer.js
 src/components/views/rooms/MessageComposerInput.js
 src/components/views/rooms/PinnedEventTile.js
-src/components/views/rooms/RoomDropTarget.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
 src/components/views/rooms/RoomSettings.js
@@ -92,7 +89,6 @@ src/Markdown.js
 src/MatrixClientPeg.js
 src/Modal.js
 src/notifications/ContentRules.js
-src/notifications/NotificationUtils.js
 src/notifications/PushRuleVectorState.js
 src/notifications/StandardActions.js
 src/notifications/VectorPushRulesDefinitions.js
@@ -102,7 +98,6 @@ src/Presence.js
 src/rageshake/rageshake.js
 src/rageshake/submit-rageshake.js
 src/ratelimitedfunc.js
-src/RichText.js
 src/Roles.js
 src/Rooms.js
 src/ScalarAuthClient.js
