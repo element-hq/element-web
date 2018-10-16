@@ -17,18 +17,25 @@ class FixedDistributor {
 
 
 class CollapseDistributor extends FixedDistributor {
-    constructor(container, items, handleIndex, direction, sizer, toggleSize) {
+    constructor(container, items, handleIndex, direction, sizer, config) {
         super(container, items, handleIndex, direction, sizer);
-        this.toggleSize = toggleSize;
+        this.toggleSize = config && config.toggleSize;
+        this.onCollapsed = config && config.onCollapsed;
     }
 
     resize(offset) {
         let newSize = offset - this.sizer.getItemOffset(this.item);
         if (newSize < this.toggleSize) {
             this.item.classList.add("collapsed");
+            if (this.onCollapsed) {
+                this.onCollapsed(true, this.item);
+            }
         }
         else {
             this.item.classList.remove("collapsed");
+            if (this.onCollapsed) {
+                this.onCollapsed(false, this.item);
+            }
         }
         super.resize(newSize);
     }

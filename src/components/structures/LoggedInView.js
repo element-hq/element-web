@@ -98,12 +98,17 @@ const LoggedInView = React.createClass({
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse"
         };
-        const collapseToggleSize = 260 - 50;
+        const config = {
+            toggleSize: 260 - 50,
+            onCollapsed: (collapsed) => {
+                this.setState({collapseLhs: collapsed});
+            }
+        };
         makeResizeable(
             this.resizeContainer,
             classNames,
             CollapseDistributor,
-            collapseToggleSize);
+            config);
     },
 
     componentWillMount: function() {
@@ -524,7 +529,7 @@ const LoggedInView = React.createClass({
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={(div) => this.resizeContainer = div} className={bodyClasses}>
                         <LeftPanel
-                            collapsed={this.props.collapseLhs || false}
+                            collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
                         <ResizeHandle/>
