@@ -225,6 +225,25 @@ export const TermsAuthEntry = React.createClass({
     },
 
     componentWillMount: function() {
+        // example stageParams:
+        //
+        // {
+        //     "policies": {
+        //         "privacy_policy": {
+        //             "version": "1.0",
+        //             "en": {
+        //                 "name": "Privacy Policy",
+        //                 "url": "https://example.org/privacy-1.0-en.html",
+        //             },
+        //             "fr": {
+        //                 "name": "Politique de confidentialité",
+        //                 "url": "https://example.org/privacy-1.0-fr.html",
+        //             },
+        //         },
+        //         "other_policy": { ... },
+        //     }
+        // }
+
         const allPolicies = this.props.stageParams.policies || {};
         const prefLang = SettingsStore.getValue("language");
         const initToggles = {};
@@ -235,10 +254,13 @@ export const TermsAuthEntry = React.createClass({
             // Pick a language based on the user's language, falling back to english,
             // and finally to the first language available. If there's still no policy
             // available then the homeserver isn't respecting the spec.
-            const availableLangs = Object.keys(policy).filter(e => e !== "version");
             let langPolicy = policy[prefLang];
-            if (!langPolicy) langPolicy = "en";
-            if (!langPolicy) langPolicy = policy[availableLangs[0]]; // last resort
+            if (!langPolicy) langPolicy = policy["en"];
+            if (!langPolicy) {
+                // last resort
+                const firstLang = Object.keys(policy).find(e => e !== "version");
+                langPolicy = policy[firstLang];
+            }
             if (!langPolicy) throw new Error("Failed to find a policy to show the user");
 
             initToggles[policyId] = false;
