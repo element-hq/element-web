@@ -205,7 +205,7 @@ var LeftPanel = React.createClass({
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
             {
-                "mx_LeftPanel_container_collapsed": this.props.collapsed,
+                "collapsed": this.props.collapsed,
                 "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
                 "mx_fadable_faded": this.props.disabled,
             },
