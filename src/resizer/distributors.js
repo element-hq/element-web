@@ -26,23 +26,27 @@ class CollapseDistributor extends FixedDistributor {
         super(sizer, item, config);
         this.toggleSize = config && config.toggleSize;
         this.onCollapsed = config && config.onCollapsed;
+        this.isCollapsed = false;
     }
 
     resize(offset) {
         let newSize = this.sizeFromOffset(offset);
-        if (newSize < this.toggleSize) {
-            this.item.classList.add("collapsed");
+        const isCollapsedSize = newSize < this.toggleSize;
+        if (isCollapsedSize && !this.isCollapsed) {
+            this.isCollapsed = true;
             if (this.onCollapsed) {
                 this.onCollapsed(true, this.item);
             }
         }
-        else {
-            this.item.classList.remove("collapsed");
+        else if (!isCollapsedSize && this.isCollapsed) {
             if (this.onCollapsed) {
                 this.onCollapsed(false, this.item);
             }
+            this.isCollapsed = false;
         }
-        super.resize(offset);
+        if (!isCollapsedSize) {
+            super.resize(offset);
+        }
     }
 }
 
