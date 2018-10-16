@@ -58,20 +58,17 @@ export class Resizer {
         const resizeHandle = event.target;
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = resizeHandle.classList.contains(this.classNames.reverse);
-        const direction = reverse ? 0 : -1;
 
         const sizer = new this.sizerCtor(this.container, vertical, reverse);
 
-        const items = Array.from(this.container.children).filter(el => {
-            return !this._isResizeHandle(el) && (
-                this._isResizeHandle(el.previousElementSibling) ||
-                this._isResizeHandle(el.nextElementSibling));
-        });
+        const items = this._getResizableItems();
         const prevItem = resizeHandle.previousElementSibling;
-        const handleIndex = items.indexOf(prevItem) + 1;
+        // if reverse, resize the item after the handle, so + 1
+        const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
+        const item = items[itemIndex];
         const distributor = new this.distributorCtor(
-            this.container, items, handleIndex,
-            direction, sizer, this.distributorCfg);
+            sizer, item, this.distributorCfg,
+            items, this.container);
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
@@ -90,5 +87,13 @@ export class Resizer {
         };
         body.addEventListener("mouseup", onMouseUp, false);
         body.addEventListener("mousemove", onMouseMove, false);
+    }
+
+    _getResizableItems() {
+        return Array.from(this.container.children).filter(el => {
+            return !this._isResizeHandle(el) && (
+                this._isResizeHandle(el.previousElementSibling) ||
+                this._isResizeHandle(el.nextElementSibling));
+        });
     }
 }

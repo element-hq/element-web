@@ -1,8 +1,8 @@
 class FixedDistributor {
-    constructor(container, items, handleIndex, direction, sizer) {
-        this.item = items[handleIndex + direction];
-        this.beforeOffset = sizer.getItemOffset(this.item);
+    constructor(sizer, item) {
         this.sizer = sizer;
+        this.item = item;
+        this.beforeOffset = sizer.getItemOffset(this.item);
     }
 
     resize(offset) {
@@ -17,8 +17,8 @@ class FixedDistributor {
 
 
 class CollapseDistributor extends FixedDistributor {
-    constructor(container, items, handleIndex, direction, sizer, config) {
-        super(container, items, handleIndex, direction, sizer);
+    constructor(sizer, item, config) {
+        super(sizer, item);
         this.toggleSize = config && config.toggleSize;
         this.onCollapsed = config && config.onCollapsed;
     }
@@ -43,16 +43,17 @@ class CollapseDistributor extends FixedDistributor {
 
 class PercentageDistributor {
 
-    constructor(container, items, handleIndex, direction, sizer) {
+    constructor(sizer, item, _config, items, container) {
         this.container = container;
         this.totalSize = sizer.getTotalSize();
         this.sizer = sizer;
 
-        this.beforeItems = items.slice(0, handleIndex);
-        this.afterItems = items.slice(handleIndex);
+        const itemIndex = items.indexOf(item);
+        this.beforeItems = items.slice(0, itemIndex);
+        this.afterItems = items.slice(itemIndex);
         const percentages = PercentageDistributor._getPercentages(sizer, items);
-        this.beforePercentages = percentages.slice(0, handleIndex);
-        this.afterPercentages = percentages.slice(handleIndex);
+        this.beforePercentages = percentages.slice(0, itemIndex);
+        this.afterPercentages = percentages.slice(itemIndex);
     }
 
     resize(offset) {
