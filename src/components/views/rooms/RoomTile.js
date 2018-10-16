@@ -243,7 +243,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        this.state.badgeHover = true;
         const isInvite = this.props.room.getMyMembership() === "invite";
         const notificationCount = this.state.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
