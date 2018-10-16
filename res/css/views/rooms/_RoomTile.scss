@@ -42,6 +42,10 @@ limitations under the License.
     height: 32px;
 }
 
+.mx_RoomTile_avatar_container {
+    position: relative;
+}
+
 .mx_RoomTile_dm {
     display: block;
     position: absolute;
