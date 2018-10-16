@@ -55,15 +55,6 @@ limitations under the License.
     /* pointer-events: none; */
 }
 
-.collapsed .mx_RoomSubList_label {
-    height: 17px;
-    width: 28px; /* collapsed LHS Panel width */
-}
-
-.collapsed .mx_RoomSubList_labelContainer {
-    width: 28px; /* collapsed LHS Panel width */
-}
-
 .mx_RoomSubList_roomCount {
     display: inline-block;
     font-size: 12px;
@@ -71,10 +62,6 @@ limitations under the License.
     color: $accent-color;
     padding-left: 5px;
     text-transform: none;
-}
-
-.collapsed .mx_RoomSubList_roomCount {
-    display: none;
 }
 
 .mx_RoomSubList_badge {
@@ -99,12 +86,6 @@ limitations under the License.
     filter: brightness($focus-brightness);
 }
 
-/*
-.collapsed .mx_RoomSubList_badge {
-    display: none;
-}
-*/
-
 .mx_RoomSubList_badgeHighlight {
     background-color: $warning-color;
 }
@@ -119,11 +100,6 @@ limitations under the License.
     margin-left: 5px;
     border-top: 5px solid $warning-color;
     border-right: 7px solid transparent;
-}
-
-/* Hide the bottom of speech bubble */
-.collapsed .mx_RoomSubList_badgeHighlight:after {
-    display: none;
 }
 
 .mx_RoomSubList_chevron {
@@ -163,19 +139,11 @@ limitations under the License.
     background-color: $secondary-accent-color;
 }
 
-.collapsed .mx_RoomSubList_ellipsis {
-    height: 20px;
-}
-
 .mx_RoomSubList_line {
     display: inline-block;
     width: 159px;
     border-top: dotted 2px $accent-color;
     vertical-align: middle;
-}
-
-.collapsed .mx_RoomSubList_line {
-    display: none;
 }
 
 .mx_RoomSubList_more {
@@ -189,10 +157,6 @@ limitations under the License.
     padding-right: 7px;
     padding-left: 7px;
     vertical-align: middle;
-}
-
-.collapsed .mx_RoomSubList_more {
-    display: none;
 }
 
 .mx_RoomSubList_moreBadge {
@@ -231,12 +195,6 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.collapsed .mx_RoomSubList_moreBadge {
-    position: static;
-    margin-left: 16px;
-    margin-top: 2px;
-}
-
 .mx_RoomSubList_ellipsis .mx_RoomSubList_chevronDown {
     position: relative;
     top: 4px;
@@ -244,3 +202,40 @@ limitations under the License.
 }
 
 
+.collapsed {
+    .mx_RoomSubList_label {
+        height: 17px;
+        width: 28px; /* collapsed LHS Panel width */
+    }
+
+    .mx_RoomSubList_labelContainer {
+        width: 28px; /* collapsed LHS Panel width */
+    }
+
+    .mx_RoomSubList_roomCount {
+        display: none;
+    }
+
+    /* Hide the bottom of speech bubble */
+    .mx_RoomSubList_badgeHighlight:after {
+        display: none;
+    }
+
+    .mx_RoomSubList_line {
+        display: none;
+    }
+
+    .mx_RoomSubList_moreBadge {
+        position: static;
+        margin-left: 16px;
+        margin-top: 2px;
+    }
+
+    .mx_RoomSubList_ellipsis {
+        height: 20px;
+    }
+
+    .mx_RoomSubList_more {
+        display: none;
+    }
+}
