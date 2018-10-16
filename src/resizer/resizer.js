@@ -39,6 +39,13 @@ export class Resizer {
         this.container.removeEventListener("mousedown", this.mouseDownHandler, false);
     }
 
+    forHandleAt(handleIndex) {
+        const handles = this._getResizeHandles();
+        const handle = handles[handleIndex];
+        const {distributor} = this._createSizerAndDistributor(handle);
+        return distributor;
+    }
+
     _isResizeHandle(el) {
         return el && el.classList.contains(this.classNames.handle);
     }
@@ -55,20 +62,7 @@ export class Resizer {
             this.container.classList.add(this.classNames.resizing);
         }
 
-        const resizeHandle = event.target;
-        const vertical = resizeHandle.classList.contains(this.classNames.vertical);
-        const reverse = resizeHandle.classList.contains(this.classNames.reverse);
-
-        const sizer = new this.sizerCtor(this.container, vertical, reverse);
-
-        const items = this._getResizableItems();
-        const prevItem = resizeHandle.previousElementSibling;
-        // if reverse, resize the item after the handle, so + 1
-        const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
-        const item = items[itemIndex];
-        const distributor = new this.distributorCtor(
-            sizer, item, this.distributorCfg,
-            items, this.container);
+        const {sizer, distributor} = this._createSizerAndDistributor(target);
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
@@ -80,8 +74,6 @@ export class Resizer {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
-            const offset = sizer.offsetFromEvent(event);
-            distributor.finish(offset);
             body.removeEventListener("mouseup", onMouseUp, false);
             body.removeEventListener("mousemove", onMouseMove, false);
         };
@@ -89,11 +81,34 @@ export class Resizer {
         body.addEventListener("mousemove", onMouseMove, false);
     }
 
+    _createSizerAndDistributor(resizeHandle) {
+        const vertical = resizeHandle.classList.contains(this.classNames.vertical);
+        const reverse = resizeHandle.classList.contains(this.classNames.reverse);
+
+        const sizer = new this.sizerCtor(this.container, vertical, reverse);
+
+        const items = this._getResizableItems();
+        const prevItem = resizeHandle.previousElementSibling;
+        // if reverse, resize the item after the handle instead of before, so + 1
+        const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
+        const item = items[itemIndex];
+        const distributor = new this.distributorCtor(
+            sizer, item, this.distributorCfg,
+            items, this.container);
+        return {sizer, distributor};
+    }
+
     _getResizableItems() {
         return Array.from(this.container.children).filter(el => {
             return !this._isResizeHandle(el) && (
                 this._isResizeHandle(el.previousElementSibling) ||
                 this._isResizeHandle(el.nextElementSibling));
+        });
+    }
+
+    _getResizeHandles() {
+        return Array.from(this.container.children).filter(el => {
+            return this._isResizeHandle(el);
         });
     }
 }

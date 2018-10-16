@@ -11,7 +11,8 @@ class FixedDistributor {
         return itemSize;
     }
 
-    finish(_offset) {
+    sizeFromOffset(offset) {
+        return offset - this.beforeOffset;
     }
 }
 
@@ -24,7 +25,7 @@ class CollapseDistributor extends FixedDistributor {
     }
 
     resize(offset) {
-        let newSize = offset - this.sizer.getItemOffset(this.item);
+        let newSize = this.sizeFromOffset(offset);
         if (newSize < this.toggleSize) {
             this.item.classList.add("collapsed");
             if (this.onCollapsed) {
@@ -37,7 +38,7 @@ class CollapseDistributor extends FixedDistributor {
                 this.onCollapsed(false, this.item);
             }
         }
-        super.resize(newSize);
+        super.resize(offset);
     }
 }
 
@@ -73,10 +74,6 @@ class PercentageDistributor {
         this.afterItems.forEach((item, index) => {
             this.sizer.setItemPercentage(item, afterPercentages[index]);
         });
-    }
-
-    finish(_offset) {
-
     }
 
     static _getPercentages(sizer, items) {
