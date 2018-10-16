@@ -1403,6 +1403,11 @@ export default React.createClass({
                     break;
             }
         });
+
+        // Fire the tinter right on startup to ensure the default theme is applied
+        // A later sync can/will correct the tint to be the right value for the user
+        const color_scheme = SettingsStore.getValue("roomColor");
+        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
 
     /**
