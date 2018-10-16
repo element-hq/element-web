@@ -1,13 +1,17 @@
 class FixedDistributor {
-    constructor(sizer, item) {
+    constructor(sizer, item, config) {
         this.sizer = sizer;
         this.item = item;
         this.beforeOffset = sizer.getItemOffset(this.item);
+        this.onResized = config.onResized;
     }
 
     resize(offset) {
         const itemSize = offset - this.beforeOffset;
         this.sizer.setItemSize(this.item, itemSize);
+        if (this.onResized) {
+            this.onResized(itemSize, this.item);
+        }
         return itemSize;
     }
 
@@ -19,7 +23,7 @@ class FixedDistributor {
 
 class CollapseDistributor extends FixedDistributor {
     constructor(sizer, item, config) {
-        super(sizer, item);
+        super(sizer, item, config);
         this.toggleSize = config && config.toggleSize;
         this.onCollapsed = config && config.onCollapsed;
     }
