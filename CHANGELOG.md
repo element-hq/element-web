@@ -1,3 +1,10 @@
+Changes in [0.14.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.0) (2018-10-16)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.0-rc.1...v0.14.0)
+
+ * Phased rollout of lazy loading
+   [\#2218](https://github.com/matrix-org/matrix-react-sdk/pull/2218)
+
 Changes in [0.14.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.0-rc.1) (2018-10-11)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.13.6...v0.14.0-rc.1)
