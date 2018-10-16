@@ -1293,5 +1293,6 @@
     "Incompatible local cache": "A helyi gyorsítótár nem kompatibilis ezzel a verzióval",
     "Clear cache and resync": "Gyorsítótár törlése és újraszinkronizálás",
     "Please accept all of the policies": "Kérlek fogadd el a felhasználói feltételeket",
-    "Please review and accept the policies of this homeserver:": "Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:"
+    "Please review and accept the policies of this homeserver:": "Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:",
+    "Add some now": "Adj hozzá párat"
 }
