@@ -1291,5 +1291,7 @@
     "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "Előzőleg a szoba tagság késleltetett betöltésének engedélyével itt használtad a Riotot: %(host)s. Ebben a verzióban viszont a késleltetett betöltés nem engedélyezett. Mivel a két gyorsítótár nem kompatibilis egymással így Riotnak újra kell szinkronizálnia a fiókot.",
     "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Ha a másik Riot verzió fut még egy másik fülön, kérlek zárd be, mivel ha ugyanott használod a Riotot bekapcsolt késleltetett betöltéssel és kikapcsolva is akkor problémák adódhatnak.",
     "Incompatible local cache": "A helyi gyorsítótár nem kompatibilis ezzel a verzióval",
-    "Clear cache and resync": "Gyorsítótár törlése és újraszinkronizálás"
+    "Clear cache and resync": "Gyorsítótár törlése és újraszinkronizálás",
+    "Please accept all of the policies": "Kérlek fogadd el az összes előírást",
+    "Please review and accept the policies of this homeserver:": "Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:"
 }
