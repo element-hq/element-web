@@ -97,19 +97,17 @@ export function _t(text, variables, tags) {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const translated = safeCounterpartTranslate(text, args);
 
-    let substituted = substitute(translated, variables, tags);
+    const substituted = substitute(translated, variables, tags);
 
     // For development/testing purposes it is useful to also output the original string
     // Don't do that for release versions
     if (ANNOTATE_STRINGS) {
         if (typeof substituted === 'string') {
-            return `@@${text}##${substituted}@@`
-        }
-        else {
+            return `@@${text}##${substituted}@@`;
+        } else {
             return <span className='translated-string' data-orig-string={text}>{substituted}</span>;
         }
-    }
-    else {
+    } else {
         return substituted;
     }
 }

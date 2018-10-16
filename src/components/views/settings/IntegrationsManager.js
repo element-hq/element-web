@@ -16,10 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var dis = require('../../../dispatcher');
+const React = require('react');
+const sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const dis = require('../../../dispatcher');
 
 module.exports = React.createClass({
     displayName: 'IntegrationsManager',
@@ -59,5 +59,5 @@ module.exports = React.createClass({
         return (
             <iframe src={ this.props.src }></iframe>
         );
-    }
+    },
 });

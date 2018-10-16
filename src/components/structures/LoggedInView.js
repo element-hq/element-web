@@ -329,7 +329,7 @@ const LoggedInView = React.createClass({
         ), true);
     },
 
-    _onClick: function(ev) {
+    _onMouseDown: function(ev) {
         // When the panels are disabled, clicking on them results in a mouse event
         // which bubbles to certain elements in the tree. When this happens, close
         // any settings page that is currently open (user/room/group).
@@ -340,9 +340,35 @@ const LoggedInView = React.createClass({
                 targetClasses.has('mx_MatrixChat_middlePanel') ||
                 targetClasses.has('mx_RoomView')
             ) {
-                dis.dispatch({ action: 'close_settings' });
+                this.setState({
+                    mouseDown: {
+                        x: ev.pageX,
+                        y: ev.pageY,
+                    },
+                });
             }
         }
+    },
+
+    _onMouseUp: function(ev) {
+        if (!this.state.mouseDown) return;
+
+        const deltaX = ev.pageX - this.state.mouseDown.x;
+        const deltaY = ev.pageY - this.state.mouseDown.y;
+        const distance = Math.sqrt((deltaX * deltaX) + (deltaY + deltaY));
+        const maxRadius = 5; // People shouldn't be straying too far, hopefully
+
+        // Note: we track how far the user moved their mouse to help
+        // combat against https://github.com/vector-im/riot-web/issues/7158
+
+        if (distance < maxRadius) {
+            // This is probably a real click, and not a drag
+            dis.dispatch({ action: 'close_settings' });
+        }
+
+        // Always clear the mouseDown state to ensure we don't accidentally
+        // use stale values due to the mouseDown checks.
+        this.setState({mouseDown: null});
     },
 
     render: function() {
@@ -488,7 +514,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onClick={this._onClick}>
+            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={(div) => this.resizeContainer = div} className={bodyClasses}>

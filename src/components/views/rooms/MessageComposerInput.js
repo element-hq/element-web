@@ -106,6 +106,17 @@ const MARK_TAGS = {
     s: 'deleted', // deprecated
 };
 
+const SLATE_SCHEMA = {
+    inlines: {
+        pill: {
+            isVoid: true,
+        },
+        emoji: {
+            isVoid: true,
+        },
+    },
+};
+
 function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
@@ -116,10 +127,10 @@ function onSendMessageFailed(err, room) {
 }
 
 function rangeEquals(a: Range, b: Range): boolean {
-    return (a.anchorKey === b.anchorKey
-        && a.anchorOffset === b.anchorOffset
-        && a.focusKey === b.focusKey
-        && a.focusOffset === b.focusOffset
+    return (a.anchor.key === b.anchor.key
+        && a.anchor.offset === b.anchorOffset
+        && a.focus.key === b.focusKey
+        && a.focus.offset === b.focusOffset
         && a.isFocused === b.isFocused
         && a.isBackward === b.isBackward);
 }
@@ -213,7 +224,7 @@ export default class MessageComposerInput extends React.Component {
                                 object: 'block',
                                 type: type,
                                 nodes: next(el.childNodes),
-                            }
+                            };
                         }
                         type = MARK_TAGS[tag];
                         if (type) {
@@ -221,7 +232,7 @@ export default class MessageComposerInput extends React.Component {
                                 object: 'mark',
                                 type: type,
                                 nodes: next(el.childNodes),
-                            }
+                            };
                         }
                         // special case links
                         if (tag === 'a') {
@@ -239,16 +250,14 @@ export default class MessageComposerInput extends React.Component {
                                         completion: el.innerText,
                                         completionId: m[1],
                                     },
-                                    isVoid: true,
-                                }
-                            }
-                            else {
+                                };
+                            } else {
                                 return {
                                     object: 'inline',
                                     type: 'link',
                                     data: { href },
                                     nodes: next(el.childNodes),
-                                }
+                                };
                             }
                         }
                     },
@@ -258,14 +267,12 @@ export default class MessageComposerInput extends React.Component {
                                 node: obj,
                                 children: children,
                             });
-                        }
-                        else if (obj.object === 'mark') {
+                        } else if (obj.object === 'mark') {
                             return this.renderMark({
                                 mark: obj,
                                 children: children,
                             });
-                        }
-                        else if (obj.object === 'inline') {
+                        } else if (obj.object === 'inline') {
                             // special case links, pills and emoji otherwise we
                             // end up with React components getting rendered out(!)
                             switch (obj.type) {
@@ -285,9 +292,9 @@ export default class MessageComposerInput extends React.Component {
                                 children: children,
                             });
                         }
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         });
 
         const savedState = MessageComposerStore.getEditorState(this.props.room.roomId);
@@ -345,9 +352,13 @@ export default class MessageComposerInput extends React.Component {
         dis.unregister(this.dispatcherRef);
     }
 
+    _collectEditor = (e) => {
+        this._editor = e;
+    }
+
     onAction = (payload) => {
-        const editor = this.refs.editor;
-        let editorState = this.state.editorState;
+        const editor = this._editor;
+        const editorState = this.state.editorState;
 
         switch (payload.action) {
             case 'reply_to_event':
@@ -361,7 +372,7 @@ export default class MessageComposerInput extends React.Component {
                     const selection = this.getSelectionRange(this.state.editorState);
                     const member = this.props.room.getMember(payload.user_id);
                     const completion = member ?
-                        member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
+                        member.rawDisplayName : payload.user_id;
                     this.setDisplayedCompletion({
                         completion,
                         completionId: payload.user_id,
@@ -402,20 +413,24 @@ export default class MessageComposerInput extends React.Component {
                     }
 
                     // XXX: this is to bring back the focus in a sane place and add a paragraph after it
-                    change = change.select({
-                        anchorKey: quote.key,
-                        focusKey: quote.key,
-                    }).collapseToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
+                    change = change.select(Range.create({
+                        anchor: {
+                            key: quote.key,
+                        },
+                        focus: {
+                            key: quote.key,
+                        },
+                    })).moveToEndOfBlock().insertBlock(Block.create(DEFAULT_NODE)).focus();
 
                     this.onChange(change);
                 } else {
-                    let fragmentChange = fragment.change();
-                    fragmentChange.moveToRangeOf(fragment.document)
+                    const fragmentChange = fragment.change();
+                    fragmentChange.moveToRangeOfNode(fragment.document)
                                   .wrapBlock(quote);
 
                     // FIXME: handle pills and use commonmark rather than md-serialize
                     const md = this.md.serialize(fragmentChange.value);
-                    let change = editorState.change()
+                    const change = editorState.change()
                                             .insertText(md + '\n\n')
                                             .focus();
                     this.onChange(change);
@@ -497,15 +512,15 @@ export default class MessageComposerInput extends React.Component {
 
         if (this.direction !== '') {
             const focusedNode = editorState.focusInline || editorState.focusText;
-            if (focusedNode.isVoid) {
+            if (editorState.schema.isVoid(focusedNode)) {
                 // XXX: does this work in RTL?
                 const edge = this.direction === 'Previous' ? 'End' : 'Start';
-                if (editorState.isCollapsed) {
-                    change = change[`collapseTo${ edge }Of${ this.direction }Text`]();
+                if (editorState.selection.isCollapsed) {
+                    change = change[`moveTo${ edge }Of${ this.direction }Text`]();
                 } else {
                     const block = this.direction === 'Previous' ? editorState.previousText : editorState.nextText;
                     if (block) {
-                        change = change[`moveFocusTo${ edge }Of`](block);
+                        change = change[`moveFocusTo${ edge }OfNode`](block);
                     }
                 }
                 editorState = change.value;
@@ -517,12 +532,11 @@ export default class MessageComposerInput extends React.Component {
         if (this.autocomplete.state.completionList.length > 0 && !this.autocomplete.state.hide &&
             !rangeEquals(this.state.editorState.selection, editorState.selection) &&
             // XXX: the heuristic failed when inlines like pills weren't taken into account. This is inideal
-            this.state.editorState.document.toJSON() === editorState.document.toJSON())
-        {
+            this.state.editorState.document.toJSON() === editorState.document.toJSON()) {
             this.autocomplete.hide();
         }
 
-        if (!editorState.document.isEmpty) {
+        if (Plain.serialize(editorState) !== '') {
             this.onTypingActivity();
         } else {
             this.onFinishedTyping();
@@ -543,10 +557,14 @@ export default class MessageComposerInput extends React.Component {
                     const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
 
                     const range = Range.create({
-                        anchorKey: editorState.selection.startKey,
-                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
-                        focusKey: editorState.selection.startKey,
-                        focusOffset: currentStartOffset - 1,
+                        anchor: {
+                            key: editorState.selection.startKey,
+                            offset: currentStartOffset - emojiMatch[1].length - 1,
+                        },
+                        focus: {
+                            key: editorState.selection.startKey,
+                            offset: currentStartOffset - 1,
+                        },
                     });
                     change = change.insertTextAtRange(range, unicodeEmoji);
                     editorState = change.value;
@@ -560,15 +578,18 @@ export default class MessageComposerInput extends React.Component {
                 let match;
                 while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
                     const range = Range.create({
-                        anchorKey: node.key,
-                        anchorOffset: match.index,
-                        focusKey: node.key,
-                        focusOffset: match.index + match[0].length,
+                        anchor: {
+                            key: node.key,
+                            offset: match.index,
+                        },
+                        focus: {
+                            key: node.key,
+                            offset: match.index + match[0].length,
+                        },
                     });
                     const inline = Inline.create({
                         type: 'emoji',
                         data: { emojiUnicode: match[0] },
-                        isVoid: true,
                     });
                     change = change.insertInlineAtRange(range, inline);
                     editorState = change.value;
@@ -580,10 +601,9 @@ export default class MessageComposerInput extends React.Component {
         // emoji picker can leave the selection stuck in the emoji's
         // child text.  This seems to happen due to selection getting
         // moved in the normalisation phase after calculating these changes
-        if (editorState.anchorKey &&
-            editorState.document.getParent(editorState.anchorKey).type === 'emoji')
-        {
-            change = change.collapseToStartOfNextText();
+        if (editorState.selection.anchor.key &&
+            editorState.document.getParent(editorState.selection.anchor.key).type === 'emoji') {
+            change = change.moveToStartOfNextText();
             editorState = change.value;
         }
 
@@ -595,15 +615,14 @@ export default class MessageComposerInput extends React.Component {
                 const parent = editorState.document.getParent(editorState.blocks.first().key);
                 if (parent.type === 'numbered-list') {
                     blockType = 'numbered-list';
-                }
-                else if (parent.type === 'bulleted-list') {
+                } else if (parent.type === 'bulleted-list') {
                     blockType = 'bulleted-list';
                 }
             }
             const inputState = {
                 marks: editorState.activeMarks,
                 isRichTextEnabled: this.state.isRichTextEnabled,
-                blockType
+                blockType,
             };
             this.props.onInputStateChanged(inputState);
         }
@@ -613,7 +632,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.setState({
             editorState,
-            originalEditorState: originalEditorState || null
+            originalEditorState: originalEditorState || null,
         });
     };
 
@@ -653,7 +672,7 @@ export default class MessageComposerInput extends React.Component {
             // which doesn't roundtrip symmetrically with commonmark, which we use for
             // compiling MD out of the MD editor state above.
             this.md.serialize(editorState),
-            { defaultBlock: DEFAULT_NODE }
+            { defaultBlock: DEFAULT_NODE },
         );
     }
 
@@ -673,11 +692,11 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(enabled, editorState),
             isRichTextEnabled: enabled,
         }, ()=>{
-            this.refs.editor.focus();
+            this._editor.focus();
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
-    };
+    }
 
     /**
     * Check if the current selection has a mark with `type` in it.
@@ -687,8 +706,8 @@ export default class MessageComposerInput extends React.Component {
     */
 
     hasMark = type => {
-        const { editorState } = this.state
-        return editorState.activeMarks.some(mark => mark.type === type)
+        const { editorState } = this.state;
+        return editorState.activeMarks.some(mark => mark.type === type);
     };
 
     /**
@@ -699,20 +718,18 @@ export default class MessageComposerInput extends React.Component {
     */
 
     hasBlock = type => {
-        const { editorState } = this.state
-        return editorState.blocks.some(node => node.type === type)
+        const { editorState } = this.state;
+        return editorState.blocks.some(node => node.type === type);
     };
 
     onKeyDown = (ev: KeyboardEvent, change: Change, editor: Editor) => {
-
         this.suppressAutoComplete = false;
 
         // skip void nodes - see
         // https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
         if (ev.keyCode === KeyCode.LEFT) {
             this.direction = 'Previous';
-        }
-        else if (ev.keyCode === KeyCode.RIGHT) {
+        } else if (ev.keyCode === KeyCode.RIGHT) {
             this.direction = 'Next';
         } else {
             this.direction = '';
@@ -760,7 +777,9 @@ export default class MessageComposerInput extends React.Component {
         // drop a point in history so the user can undo a word
         // XXX: this seems nasty but adding to history manually seems a no-go
         ev.preventDefault();
-        return change.setOperationFlag("skip", false).setOperationFlag("merge", false).insertText(ev.key);
+        return change.withoutMerging(() => {
+            change.insertText(ev.key);
+        });
     };
 
     onBackspace = (ev: KeyboardEvent, change: Change): Change => {
@@ -771,23 +790,24 @@ export default class MessageComposerInput extends React.Component {
         const { editorState } = this.state;
 
         // Allow Ctrl/Cmd-Backspace when focus starts at the start of the composer (e.g select-all)
-        // for some reason if slate sees you Ctrl-backspace and your anchorOffset=0 it just resets your focus
-        if (!editorState.isCollapsed && editorState.anchorOffset === 0) {
+        // for some reason if slate sees you Ctrl-backspace and your anchor.offset=0 it just resets your focus
+        // XXX: Doing this now seems to put slate into a broken state, and it didn't appear to be doing
+        // what it claims to do on the old version of slate anyway...
+        /*if (!editorState.isCollapsed && editorState.selection.anchor.offset === 0) {
             return change.delete();
-        }
+        }*/
 
         if (this.state.isRichTextEnabled) {
             // let backspace exit lists
             const isList = this.hasBlock('list-item');
 
-            if (isList && editorState.anchorOffset == 0) {
+            if (isList && editorState.selection.anchor.offset == 0) {
                 change
                     .setBlocks(DEFAULT_NODE)
                     .unwrapBlock('bulleted-list')
                     .unwrapBlock('numbered-list');
                 return change;
-            }
-            else if (editorState.anchorOffset == 0 && editorState.isCollapsed) {
+            } else if (editorState.selection.anchor.offset == 0 && editorState.isCollapsed) {
                 // turn blocks back into paragraphs
                 if ((this.hasBlock('block-quote') ||
                      this.hasBlock('heading1') ||
@@ -796,20 +816,18 @@ export default class MessageComposerInput extends React.Component {
                      this.hasBlock('heading4') ||
                      this.hasBlock('heading5') ||
                      this.hasBlock('heading6') ||
-                     this.hasBlock('code')))
-                {
+                     this.hasBlock('code'))) {
                     return change.setBlocks(DEFAULT_NODE);
                 }
 
                 // remove paragraphs entirely if they're nested
                 const parent = editorState.document.getParent(editorState.anchorBlock.key);
-                if (editorState.anchorOffset == 0 &&
+                if (editorState.selection.anchor.offset == 0 &&
                     this.hasBlock('paragraph') &&
                     parent.nodes.size == 1 &&
-                    parent.object !== 'document')
-                {
+                    parent.object !== 'document') {
                     return change.replaceNodeByKey(editorState.anchorBlock.key, editorState.anchorText)
-                                 .collapseToEndOf(parent)
+                                 .moveToEndOfNode(parent)
                                  .focus();
                 }
             }
@@ -823,7 +841,7 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        let newState: ?Value = null;
+        const newState: ?Value = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
         if (this.state.isRichTextEnabled) {
@@ -849,7 +867,7 @@ export default class MessageComposerInput extends React.Component {
                     } else if (isList) {
                         change
                             .unwrapBlock(
-                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+                                type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list',
                             )
                             .wrapBlock(type);
                     } else {
@@ -942,8 +960,8 @@ export default class MessageComposerInput extends React.Component {
             const collapseAndOffsetSelection = (selection, offset) => {
                 const key = selection.endKey();
                 return new Range({
-                    anchorKey: key, anchorOffset: offset,
-                    focusKey: key, focusOffset: offset,
+                    anchorKey: key, anchor.offset: offset,
+                    focus.key: key, focus.offset: offset,
                 });
             };
 
@@ -1000,18 +1018,16 @@ export default class MessageComposerInput extends React.Component {
                         .insertFragment(fragment.document);
                 } else {
                     // in MD mode we don't want the rich content pasted as the magic was annoying people so paste plain
-                    return change
-                        .setOperationFlag("skip", false)
-                        .setOperationFlag("merge", false)
-                        .insertText(transfer.text);
+                    return change.withoutMerging(() => {
+                        change.insertText(transfer.text);
+                    });
                 }
             }
             case 'text':
                 // don't skip/merge so that multiple consecutive pastes can be undone individually
-                return change
-                    .setOperationFlag("skip", false)
-                    .setOperationFlag("merge", false)
-                    .insertText(transfer.text);
+                return change.withoutMerging(() => {
+                    change.insertText(transfer.text);
+                });
         }
     };
 
@@ -1054,8 +1070,7 @@ export default class MessageComposerInput extends React.Component {
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         if (firstChild && firstGrandChild &&
             firstChild.object === 'block' && firstGrandChild.object === 'text' &&
-            firstGrandChild.text[0] === '/')
-        {
+            firstGrandChild.text[0] === '/') {
             commandText = this.plainWithIdPills.serialize(editorState);
             cmd = processCommandInput(this.props.room.roomId, commandText);
         }
@@ -1066,7 +1081,7 @@ export default class MessageComposerInput extends React.Component {
                 this.setState({
                     editorState: this.createEditorState(),
                 }, ()=>{
-                    this.refs.editor.focus();
+                    this._editor.focus();
                 });
             }
             if (cmd.promise) {
@@ -1196,7 +1211,7 @@ export default class MessageComposerInput extends React.Component {
 
         this.setState({
             editorState: this.createEditorState(),
-        }, ()=>{ this.refs.editor.focus() });
+        }, ()=>{ this._editor.focus(); });
 
         return true;
     };
@@ -1216,9 +1231,9 @@ export default class MessageComposerInput extends React.Component {
 
             // and we must be at the edge of the document (up=start, down=end)
             if (up) {
-                if (!selection.isAtStartOf(document)) return;
+                if (!selection.anchor.isAtStartOfNode(document)) return;
             } else {
-                if (!selection.isAtEndOf(document)) return;
+                if (!selection.anchor.isAtEndOfNode(document)) return;
             }
 
             const selected = this.selectHistory(up);
@@ -1266,7 +1281,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // Move selection to the end of the selected history
-        const change = editorState.change().collapseToEndOf(editorState.document);
+        const change = editorState.change().moveToEndOfNode(editorState.document);
 
         // We don't call this.onChange(change) now, as fixups on stuff like emoji
         // should already have been done and persisted in the history.
@@ -1275,7 +1290,7 @@ export default class MessageComposerInput extends React.Component {
         this.suppressAutoComplete = true;
 
         this.setState({ editorState }, ()=>{
-            this.refs.editor.focus();
+            this._editor.focus();
         });
         return true;
     };
@@ -1326,7 +1341,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                let editorState = this.state.originalEditorState;
+                const editorState = this.state.originalEditorState;
                 this.setState({editorState});
             }
             return false;
@@ -1337,7 +1352,7 @@ export default class MessageComposerInput extends React.Component {
             completion = '',
             completionId = '',
             href = null,
-            suffix = ''
+            suffix = '',
         } = displayedCompletion;
 
         let inline;
@@ -1345,15 +1360,11 @@ export default class MessageComposerInput extends React.Component {
             inline = Inline.create({
                 type: 'pill',
                 data: { completion, completionId, href },
-                // we can't put text in here otherwise the editor tries to select it
-                isVoid: true,
             });
         } else if (completion === '@room') {
             inline = Inline.create({
                 type: 'pill',
                 data: { completion, completionId },
-                // we can't put text in here otherwise the editor tries to select it
-                isVoid: true,
             });
         }
 
@@ -1361,8 +1372,9 @@ export default class MessageComposerInput extends React.Component {
 
         if (range) {
             const change = editorState.change()
-                                      .collapseToAnchor()
-                                      .moveOffsetsTo(range.start, range.end)
+                                      .moveToAnchor()
+                                      .moveAnchorTo(range.start)
+                                      .moveFocusTo(range.end)
                                       .focus();
             editorState = change.value;
         }
@@ -1373,8 +1385,7 @@ export default class MessageComposerInput extends React.Component {
                                 .insertInlineAtRange(editorState.selection, inline)
                                 .insertText(suffix)
                                 .focus();
-        }
-        else {
+        } else {
             change = editorState.change()
                                 .insertTextAtRange(editorState.selection, completion)
                                 .insertText(suffix)
@@ -1433,17 +1444,17 @@ export default class MessageComposerInput extends React.Component {
                             room={this.props.room}
                             shouldShowPillAvatar={shouldShowPillAvatar}
                             isSelected={isSelected}
+                            {...attributes}
                             />;
-                }
-                else if (Pill.isPillUrl(url)) {
+                } else if (Pill.isPillUrl(url)) {
                     return <Pill
                             url={url}
                             room={this.props.room}
                             shouldShowPillAvatar={shouldShowPillAvatar}
                             isSelected={isSelected}
+                            {...attributes}
                             />;
-                }
-                else {
+                } else {
                     const { text } = node;
                     return <a href={url} {...props.attributes}>
                                 { text }
@@ -1456,9 +1467,11 @@ export default class MessageComposerInput extends React.Component {
                 const uri = RichText.unicodeToEmojiUri(emojiUnicode);
                 const shortname = toShort(emojiUnicode);
                 const className = classNames('mx_emojione', {
-                    mx_emojione_selected: isSelected
+                    mx_emojione_selected: isSelected,
                 });
-                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode }/>;
+                const style = {};
+                if (props.selected) style.border = '1px solid blue';
+                return <img className={ className } src={ uri } title={ shortname } alt={ emojiUnicode } style={style} />;
             }
         }
     };
@@ -1486,7 +1499,7 @@ export default class MessageComposerInput extends React.Component {
         // of focusing it doesn't then cancel the format button being pressed
         // FIXME: can we just tell handleKeyCommand's change to invoke .focus()?
         if (document.activeElement && document.activeElement.className !== 'mx_MessageComposer_editor') {
-            this.refs.editor.focus();
+            this._editor.focus();
             setTimeout(()=>{
                 this.handleKeyCommand(name);
             }, 500); // can't find any callback to hook this to. onFocus and onChange and willComponentUpdate fire too early.
@@ -1503,10 +1516,9 @@ export default class MessageComposerInput extends React.Component {
         // This avoids us having to serialize the whole thing to plaintext and convert
         // selection offsets in & out of the plaintext domain.
 
-        if (editorState.selection.anchorKey) {
-            return editorState.document.getDescendant(editorState.selection.anchorKey).text;
-        }
-        else {
+        if (editorState.selection.anchor.key) {
+            return editorState.document.getDescendant(editorState.selection.anchor.key).text;
+        } else {
             return '';
         }
     }
@@ -1518,17 +1530,17 @@ export default class MessageComposerInput extends React.Component {
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         beginning = (firstChild && firstGrandChild &&
                      firstChild.object === 'block' && firstGrandChild.object === 'text' &&
-                     editorState.selection.anchorKey === firstGrandChild.key);
+                     editorState.selection.anchor.key === firstGrandChild.key);
 
         // return a character range suitable for handing to an autocomplete provider.
         // the range is relative to the anchor of the current editor selection.
         // if the selection spans multiple blocks, then we collapse it for the calculation.
         const range = {
             beginning, // whether the selection is in the first block of the editor or not
-            start: editorState.selection.anchorOffset,
-            end: (editorState.selection.anchorKey == editorState.selection.focusKey) ?
-                 editorState.selection.focusOffset : editorState.selection.anchorOffset,
-        }
+            start: editorState.selection.anchor.offset,
+            end: (editorState.selection.anchor.key == editorState.selection.focus.key) ?
+                 editorState.selection.focus.offset : editorState.selection.anchor.offset,
+        };
         if (range.start > range.end) {
             const tmp = range.start;
             range.start = range.end;
@@ -1543,7 +1555,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     focusComposer = () => {
-        this.refs.editor.focus();
+        this._editor.focus();
     };
 
     render() {
@@ -1553,7 +1565,7 @@ export default class MessageComposerInput extends React.Component {
             mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
-        const isEmpty = this.state.editorState.document.isEmpty;
+        const isEmpty = Plain.serialize(this.state.editorState) === '';
 
         let {placeholder} = this.props;
         // XXX: workaround for placeholder being shown when there is a formatting block e.g blockquote but no text
@@ -1579,7 +1591,7 @@ export default class MessageComposerInput extends React.Component {
                          onMouseDown={this.onMarkdownToggleClicked}
                          title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                          src={`img/button-md-${!this.state.isRichTextEnabled}.png`} />
-                    <Editor ref="editor"
+                    <Editor ref={this._collectEditor}
                             dir="auto"
                             className="mx_MessageComposer_editor"
                             placeholder={placeholder}
@@ -1591,6 +1603,7 @@ export default class MessageComposerInput extends React.Component {
                             renderMark={this.renderMark}
                             // disable spell check for the placeholder because browsers don't like "unencrypted"
                             spellCheck={!isEmpty}
+                            schema={SLATE_SCHEMA}
                             />
                 </div>
             </div>

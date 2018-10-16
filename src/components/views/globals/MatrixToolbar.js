@@ -35,11 +35,11 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning"/>
+                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" />
                 <div className="mx_MatrixToolbar_content">
                    { _t('You are not receiving desktop notifications') } <a className="mx_MatrixToolbar_link" onClick={ this.onClick }> { _t('Enable them now') }</a>
                 </div>
-                <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
+                <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" alt={_t('Close')}/></AccessibleButton>
             </div>
         );
     },

@@ -48,6 +48,10 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 
+// Disable warnings for now: we use deprecated bluebird functions
+// and need to migrate, but they spam the console with warnings.
+Promise.config({warnings: false});
+
 /** constants for MatrixChat.state.view */
 const VIEWS = {
     // a special initial state which is only used at startup, while we are
@@ -284,6 +288,14 @@ export default React.createClass({
             console.log('Setting register_hs_url ', paramHs);
             this.setState({
                 register_hs_url: paramHs,
+            });
+        }
+        // Set a default IS with query param `is_url`
+        const paramIs = this.props.startingFragmentQueryParams.is_url;
+        if (paramIs) {
+            console.log('Setting register_is_url ', paramIs);
+            this.setState({
+                register_is_url: paramIs,
             });
         }
 
@@ -1253,8 +1265,11 @@ export default React.createClass({
             // its own dispatch).
             dis.dispatch({action: 'sync_state', prevState, state});
 
-            if (state === "ERROR") {
-                self.setState({syncError: data.error});
+            if (state === "ERROR" || state === "RECONNECTING") {
+                if (data.error instanceof Matrix.InvalidStoreError) {
+                    Lifecycle.handleInvalidStoreError(data.error);
+                }
+                self.setState({syncError: data.error || true});
             } else if (self.state.syncError) {
                 self.setState({syncError: null});
             }
@@ -1730,10 +1745,14 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.LOGGED_IN) {
+            // store errors stop the client syncing and require user intervention, so we'll
+            // be showing a dialog. Don't show anything else.
+            const isStoreError = this.state.syncError && this.state.syncError instanceof Matrix.InvalidStoreError;
+
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
             // keep showing the spinner for now.
-            if (this.state.ready && this.state.page_type) {
+            if (this.state.ready && this.state.page_type && !isStoreError) {
                 /* for now, we stuff the entirety of our props and state into the LoggedInView.
                  * we should go through and figure out what we actually need to pass down, as well
                  * as using something like redux to avoid having a billion bits of state kicking around.
@@ -1755,7 +1774,7 @@ export default React.createClass({
                 // we think we are logged in, but are still waiting for the /sync to complete
                 const Spinner = sdk.getComponent('elements.Spinner');
                 let errorBox;
-                if (this.state.syncError) {
+                if (this.state.syncError && !isStoreError) {
                     errorBox = <div className="mx_MatrixChat_syncError">
                         {messageForSyncError(this.state.syncError)}
                     </div>;

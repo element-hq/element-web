@@ -164,6 +164,7 @@ export default class DevicesPanel extends React.Component {
 
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (this.state.deviceLoadError !== undefined) {
             const classes = classNames(this.props.className, "error");
@@ -185,9 +186,9 @@ export default class DevicesPanel extends React.Component {
 
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
-            <div className="mx_textButton" onClick={this._onDeleteClick}>
+            <AccessibleButton className="mx_textButton" onClick={this._onDeleteClick}>
                { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
-            </div>;
+            </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
         return (

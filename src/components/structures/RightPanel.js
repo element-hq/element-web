@@ -51,6 +51,7 @@ class HeaderButton extends React.Component {
 
         return <AccessibleButton
             aria-label={this.props.title}
+            aria-expanded={this.props.isHighlighted}
             title={this.props.title}
             className="mx_RightPanel_headerButton"
             onClick={this.onClick} >
@@ -345,11 +346,11 @@ module.exports = React.createClass({
             // being put in the RoomHeader or GroupView header, so only show the minimise
             // button on these 2 screens or you won't be able to re-expand the panel.
             headerButtons.push(
-                <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
+                <AccessibleButton className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
                     title={_t("Hide panel")} aria-label={_t("Hide panel")} onClick={this.onCollapseClick}
                 >
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" />
-                </div>,
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="" />
+                </AccessibleButton>,
             );
         }
 

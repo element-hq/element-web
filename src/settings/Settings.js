@@ -88,7 +88,7 @@ export const SETTINGS = {
         displayName: _td("Increase performance by only loading room members on first view"),
         supportedLevels: LEVELS_FEATURE,
         controller: new LazyLoadingController(),
-        default: false,
+        default: true,
     },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
