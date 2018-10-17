@@ -14,6 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+distributors translate a moving cursor into
+CSS/DOM changes by calling the sizer
+
+they have one method, `resize` that receives
+the offset from the container edge of where
+the mouse cursor is.
+*/
 class FixedDistributor {
     constructor(sizer, item, config) {
         this.sizer = sizer;

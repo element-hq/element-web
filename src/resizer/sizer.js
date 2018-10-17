@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+implements DOM/CSS operations for resizing.
+The sizer determines what CSS mechanism is used for sizing items, like flexbox, ...
+*/
 class Sizer {
     constructor(container, vertical, reverse) {
         this.container = container;
