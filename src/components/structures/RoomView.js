@@ -1514,6 +1514,7 @@ module.exports = React.createClass({
                                             canPreview={false} error={this.state.roomLoadError}
                                             roomAlias={roomAlias}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1558,6 +1559,7 @@ module.exports = React.createClass({
                                             inviterName={inviterName}
                                             canPreview={false}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             room={this.state.room}
                             />
                         </div>
@@ -1645,6 +1647,7 @@ module.exports = React.createClass({
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
+                                spinnerState="joining"
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
