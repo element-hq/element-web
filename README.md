@@ -259,6 +259,16 @@ Much of the functionality in Riot is actually in the `matrix-react-sdk` and
 easy to track the `develop` branches in git and to make local changes without
 having to manually rebuild each time.
 
+## Setup Script
+It is possible to setup the development environment with an installation script:
+
+````
+wget -q https://raw.githubusercontent.com/vector-im/riot-web/master/scripts/setup.sh -O setup.sh && sh setup.sh
+````
+
+
+## Manual Setup
+
 First clone and build `matrix-js-sdk`:
 
 1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
