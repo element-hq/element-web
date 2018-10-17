@@ -42,7 +42,6 @@ const RoomSubList = React.createClass({
         list: PropTypes.arrayOf(PropTypes.object).isRequired,
         label: PropTypes.string.isRequired,
         tagName: PropTypes.string,
-        editable: PropTypes.bool,
 
         order: PropTypes.string.isRequired,
 
@@ -205,15 +204,9 @@ const RoomSubList = React.createClass({
     },
 
     makeRoomTiles: function() {
-        const DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         const RoomTile = sdk.getComponent("rooms.RoomTile");
         return this.state.sortedList.map((room, index) => {
-            // XXX: is it evil to pass in this as a prop to RoomTile? Yes.
-
-            // We should only use <DNDRoomTile /> when editable
-            const RoomTileComponent = this.props.editable ? DNDRoomTile : RoomTile;
-            return <RoomTileComponent
-                index={index} // For DND
+            return <RoomTile
                 room={room}
                 roomSubList={this}
                 tagName={this.props.tagName}
@@ -371,26 +364,14 @@ const RoomSubList = React.createClass({
             }
         }
 
-        if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0 || this.props.editable) {
+        if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0) {
 
             const subList = this.state.hidden ? undefined : content;
 
-            const subListContent = <div className={"mx_RoomSubList"}>
+            return <div className={"mx_RoomSubList"}>
                 {this._getHeaderJsx()}
                 {subList}
             </div>;
-
-            return this.props.editable ?
-                <Droppable
-                    droppableId={"room-sub-list-droppable_" + this.props.tagName}
-                    type="draggable-RoomTile"
-                >
-                    {(provided, snapshot) => (
-                        <div ref={provided.innerRef}>
-                            {subListContent}
-                        </div>
-                    )}
-                </Droppable> : subListContent;
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
             if (this.props.showSpinner) {
