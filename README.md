@@ -234,6 +234,10 @@ Before attempting to develop on Riot you **must** read the developer guide
 for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
 also defines the design, architecture and style for Riot too.
 
+You should also familiarise yourself with the "Here be Dragons" guide to the
+tame & not-so-tame dragons (gotchas) which exist in the codebase:
+https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM
+
 The idea of Riot is to be a relatively lightweight "skin" of customisations on
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication

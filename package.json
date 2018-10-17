@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.16.5",
+  "version": "0.17.0",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -69,14 +69,14 @@
     "favico.js": "^0.3.10",
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.2",
-    "highlight.js": "^9.0.0",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-    "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+    "highlight.js": "^9.13.0",
+    "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
+    "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
     "modernizr": "^3.6.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
-    "sanitize-html": "^1.18.4",
+    "sanitize-html": "^1.19.1",
     "ua-parser-js": "^0.7.18",
     "url": "^0.11.0"
   },
@@ -100,11 +100,11 @@
     "concurrently": "^4.0.1",
     "cpx": "^1.3.2",
     "cross-env": "^4.0.0",
-    "electron-builder": "^11.2.4",
-    "electron-builder-squirrel-windows": "^11.2.1",
+    "electron-builder": "^20.28.4",
+    "electron-builder-squirrel-windows": "^11.6.1",
     "electron-devtools-installer": "^2.2.4",
     "emojione": "^2.2.7",
-    "eslint": "^5.6.0",
+    "eslint": "^5.7.0",
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-flowtype": "^2.50.3",
@@ -142,7 +142,7 @@
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.2.4",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1",
+    "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"
   },
   "optionalDependencies": {
@@ -150,12 +150,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "category": "Network",
-    "electronVersion": "2.0.8",
-    "//asar=false": "https://github.com/electron-userland/electron-builder/issues/675",
-    "asar": false,
-    "dereference": true,
-    "//files": "We bundle everything, so we only need to include webapp/",
+    "electronVersion": "3.0.3",
     "files": [
       "node_modules/**",
       "src/**",
@@ -172,8 +167,13 @@
         "StartupWMClass": "riot"
       }
     },
+    "mac": {
+      "category": "public.app-category.social-networking"
+    },
     "win": {
-      "target": "squirrel"
+      "target": {
+        "target": "squirrel"
+      }
     },
     "directories": {
       "buildResources": "electron_app/build",
