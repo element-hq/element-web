@@ -14,7 +14,7 @@ const ResizeHandle = (props) => {
         classNames.push('mx_ResizeHandle_reverse');
     }
     return (
-        <div className={classNames.join(' ')}/>
+        <div className={classNames.join(' ')} />
     );
 };
 

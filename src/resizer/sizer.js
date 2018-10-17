@@ -39,7 +39,10 @@ class Sizer {
         item.style.flexGrow = Math.round(percent * 1000);
     }
 
-    /** returns how far the edge of the item is from the edge of the container */
+    /**
+        @param {Element} item the dom element being resized
+        @return {number} how far the edge of the item is from the edge of the container
+    */
     getItemOffset(item) {
         const offset = (this.vertical ? item.offsetTop : item.offsetLeft) - this._getOffset();
         if (this.reverse) {
@@ -49,17 +52,20 @@ class Sizer {
         }
     }
 
-    /** returns the width/height of an item in the container */
+    /**
+        @param {Element} item the dom element being resized
+        @return {number} the width/height of an item in the container
+    */
     getItemSize(item) {
         return this.vertical ? item.offsetHeight : item.offsetWidth;
     }
 
-    /** returns the width/height of the container */
+    /** @return {number} the width/height of the container */
     getTotalSize() {
         return this.vertical ? this.container.offsetHeight : this.container.offsetWidth;
     }
 
-    /** container offset to offsetParent */
+    /** @return {number} container offset to offsetParent */
     _getOffset() {
         return this.vertical ? this.container.offsetTop : this.container.offsetLeft;
     }
@@ -72,7 +78,11 @@ class Sizer {
         }
     }
 
-    /** returns the position of cursor at event relative to the edge of the container */
+    /**
+        @param {MouseEvent} event the mouse event
+        @return {number} the distance between the cursor and the edge of the container,
+            along the applicable axis (vertical or horizontal)
+    */
     offsetFromEvent(event) {
         const pos = this.vertical ? event.pageY : event.pageX;
         if (this.reverse) {

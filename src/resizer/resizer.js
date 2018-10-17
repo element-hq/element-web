@@ -101,6 +101,7 @@ export class Resizer {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = resizeHandle.classList.contains(this.classNames.reverse);
 
+        // eslint-disable-next-line new-cap
         const sizer = new this.sizerCtor(this.container, vertical, reverse);
 
         const items = this._getResizableItems();
@@ -108,6 +109,7 @@ export class Resizer {
         // if reverse, resize the item after the handle instead of before, so + 1
         const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
         const item = items[itemIndex];
+        // eslint-disable-next-line new-cap
         const distributor = new this.distributorCtor(
             sizer, item, this.distributorCfg,
             items, this.container);

@@ -46,15 +46,14 @@ class CollapseDistributor extends FixedDistributor {
     }
 
     resize(offset) {
-        let newSize = this.sizeFromOffset(offset);
+        const newSize = this.sizeFromOffset(offset);
         const isCollapsedSize = newSize < this.toggleSize;
         if (isCollapsedSize && !this.isCollapsed) {
             this.isCollapsed = true;
             if (this.onCollapsed) {
                 this.onCollapsed(true, this.item);
             }
-        }
-        else if (!isCollapsedSize && this.isCollapsed) {
+        } else if (!isCollapsedSize && this.isCollapsed) {
             if (this.onCollapsed) {
                 this.onCollapsed(false, this.item);
             }
