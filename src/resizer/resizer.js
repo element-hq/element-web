@@ -55,6 +55,12 @@ export class Resizer {
         this.container.removeEventListener("mousedown", this.mouseDownHandler, false);
     }
 
+    /**
+    Gives the distributor for a specific resize handle, as if you would have started
+    to drag that handle. Can be used to manipulate the size of an item programmatically.
+    @param {number} handleIndex the index of the resize handle in the container
+    @return {Distributor} a new distributor for the given handle
+    */
     forHandleAt(handleIndex) {
         const handles = this._getResizeHandles();
         const handle = handles[handleIndex];
