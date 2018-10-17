@@ -33,8 +33,6 @@ import PropTypes from 'prop-types';
 // turn this on for drop & drag console debugging galore
 const debug = false;
 
-const TRUNCATE_AT = 10;
-
 const RoomSubList = React.createClass({
     displayName: 'RoomSubList',
 
@@ -68,7 +66,6 @@ const RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            truncateAt: -1, // TRUNCATE_AT,
             sortedList: [],
         };
     },
@@ -144,12 +141,6 @@ const RoomSubList = React.createClass({
             // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
             this.setState({hidden: isHidden});
-
-            if (isHidden) {
-                // as good a way as any to reset the truncate state
-                this.setState({truncateAt: TRUNCATE_AT});
-            }
-
             this.props.onShowMoreRooms();
             this.props.onHeaderClick(isHidden);
         } else {
@@ -178,10 +169,9 @@ const RoomSubList = React.createClass({
     /**
      * Total up all the notification counts from the rooms
      *
-     * @param {Number} truncateAt If supplied will only total notifications for rooms outside the truncation number
      * @returns {Array} The array takes the form [total, highlight] where highlight is a bool
      */
-    roomNotificationCount: function(truncateAt) {
+    roomNotificationCount: function() {
         const self = this;
 
         if (this.props.isInvite) {
@@ -189,20 +179,18 @@ const RoomSubList = React.createClass({
         }
 
         return this.props.list.reduce(function(result, room, index) {
-            if (truncateAt === undefined || index >= truncateAt) {
-                const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-                const highlight = room.getUnreadNotificationCount('highlight') > 0;
-                const notificationCount = room.getUnreadNotificationCount();
+            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
+            const highlight = room.getUnreadNotificationCount('highlight') > 0;
+            const notificationCount = room.getUnreadNotificationCount();
 
-                const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
-                const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
-                const badges = notifBadges || mentionBadges;
+            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
+            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
+            const badges = notifBadges || mentionBadges;
 
-                if (badges) {
-                    result[0] += notificationCount;
-                    if (highlight) {
-                        result[1] = true;
-                    }
+            if (badges) {
+                result[0] += notificationCount;
+                if (highlight) {
+                    result[1] = true;
                 }
             }
             return result;
@@ -356,44 +344,7 @@ const RoomSubList = React.createClass({
         // <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
     },
 
-    _createOverflowTile: function(overflowCount, totalCount) {
-        let content = <div className="mx_RoomSubList_chevronDown" />;
-
-        const overflowNotifications = this.roomNotificationCount(TRUNCATE_AT);
-        const overflowNotifCount = overflowNotifications[0];
-        const overflowNotifHighlight = overflowNotifications[1];
-        if (overflowNotifCount && !this.props.collapsed) {
-            content = FormattingUtils.formatCount(overflowNotifCount);
-        }
-
-        const badgeClasses = classNames({
-            'mx_RoomSubList_moreBadge': true,
-            'mx_RoomSubList_moreBadgeNotify': overflowNotifCount && !this.props.collapsed,
-            'mx_RoomSubList_moreBadgeHighlight': overflowNotifHighlight && !this.props.collapsed,
-        });
-
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return (
-            <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
-                <div className="mx_RoomSubList_line" />
-                <div className="mx_RoomSubList_more">{_t("more")}</div>
-                <div className={badgeClasses}>{content}</div>
-            </AccessibleButton>
-        );
-    },
-
-    _showFullMemberList: function() {
-        this.setState({
-            truncateAt: -1,
-        });
-
-        this.props.onShowMoreRooms();
-        this.props.onHeaderClick(false);
-    },
-
     render: function() {
-        const TruncatedList = sdk.getComponent('elements.TruncatedList');
-
         let content;
 
         if (this.props.showEmpty) {
@@ -421,20 +372,10 @@ const RoomSubList = React.createClass({
         }
 
         if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0 || this.props.editable) {
-            let subList;
-            const classes = "mx_RoomSubList";
 
-            if (!this.state.hidden) {
-                subList = <TruncatedList className={classes} truncateAt={this.state.truncateAt}
-                                         createOverflowElement={this._createOverflowTile}>
-                    {content}
-                </TruncatedList>;
-            } else {
-                subList = <TruncatedList className={classes}>
-                </TruncatedList>;
-            }
+            const subList = this.state.hidden ? undefined : content;
 
-            const subListContent = <div>
+            const subListContent = <div className={"mx_RoomSubList"}>
                 {this._getHeaderJsx()}
                 {subList}
             </div>;
