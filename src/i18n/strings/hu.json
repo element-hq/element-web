@@ -1294,5 +1294,6 @@
     "Clear cache and resync": "Gyorsítótár törlése és újraszinkronizálás",
     "Please accept all of the policies": "Kérlek fogadd el a felhasználói feltételeket",
     "Please review and accept the policies of this homeserver:": "Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:",
-    "Add some now": "Adj hozzá párat"
+    "Add some now": "Adj hozzá párat",
+    "Joining room...": "Belépés a szobába.."
 }
