@@ -511,6 +511,13 @@ module.exports = React.createClass({
         const self = this;
 
         function mapProps(subListsProps) {
+            const defaultProps = {
+                collapsed: self.props.collapsed,
+                searchFilter: self.props.searchFilter,
+                onShowMoreRooms: self.onShowMoreRooms,
+                showEmpty: showEmpty,
+                incomingCall: self.state.incomingCall,
+            };
             return subListsProps.map((props) => {
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
@@ -525,21 +532,12 @@ module.exports = React.createClass({
                 label: _t('Community Invites'),
                 order: "recent",
                 isInvite: true,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
                 order: "recent",
                 isInvite: true,
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['m.favourite'],
@@ -547,11 +545,6 @@ module.exports = React.createClass({
                 tagName: "m.favourite",
                 emptyContent: this._getEmptyContent('m.favourite'),
                 order: "manual",
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['im.vector.fake.direct'],
@@ -560,12 +553,7 @@ module.exports = React.createClass({
                 emptyContent: this._getEmptyContent('im.vector.fake.direct'),
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
                 alwaysShowHeader: true,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['im.vector.fake.recent'],
@@ -573,11 +561,6 @@ module.exports = React.createClass({
                 emptyContent: this._getEmptyContent('im.vector.fake.recent'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
         ];
         const tagSubLists = Object.keys(self.state.lists)
@@ -591,11 +574,6 @@ module.exports = React.createClass({
                     tagName: tagName,
                     emptyContent: this._getEmptyContent(tagName),
                     order: "manual",
-                    incomingCall: self.state.incomingCall,
-                    collapsed: self.props.collapsed,
-                    searchFilter: self.props.searchFilter,
-                    onShowMoreRooms: self.onShowMoreRooms,
-                    showEmpty: showEmpty,
                 };
             });
         subLists = subLists.concat(tagSubLists);
@@ -606,11 +584,6 @@ module.exports = React.createClass({
                 tagName: "m.lowpriority",
                 emptyContent: this._getEmptyContent('m.lowpriority'),
                 order: "recent",
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['im.vector.fake.archived'],
@@ -623,26 +596,16 @@ module.exports = React.createClass({
                     </div>,
                 label: _t('Historical'),
                 order: "recent",
-                collapsed: self.props.collapsed,
                 alwaysShowHeader: true,
                 startAsHidden: true,
                 showSpinner: self.state.isLoadingLeftRooms,
                 onHeaderClick: self.onArchivedHeaderClick,
-                incomingCall: self.state.incomingCall,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
             },
             {
                 list: self.state.lists['m.server_notice'],
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
                 order: "recent",
-                incomingCall: self.state.incomingCall,
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: false,
             },
         ]);
 
