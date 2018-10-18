@@ -362,12 +362,22 @@ const RoomSubList = React.createClass({
             }
         }
 
-        if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0) {
-            const subList = this.state.hidden ? undefined : content;
-            return <div className={"mx_RoomSubList"}>
-                {this._getHeaderJsx()}
-                {subList}
-            </div>;
+        const len = this.state.sortedList.length + this.props.extraTiles.length;
+
+        if (len) {
+            if (this.state.hidden) {
+                return <div className={["mx_RoomSubList", "mx_RoomSubList_hidden"]}>
+                    {this._getHeaderJsx()}
+                </div>;
+            } else {
+                const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+                return <div className={"mx_RoomSubList"} style={{flexGrow: len}}>
+                    {this._getHeaderJsx()}
+                    <GeminiScrollbarWrapper>
+                        { content }
+                    </GeminiScrollbarWrapper>
+                </div>;
+            }
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
             if (this.props.showSpinner) {

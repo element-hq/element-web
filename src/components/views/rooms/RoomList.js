@@ -505,13 +505,8 @@ module.exports = React.createClass({
         return ret;
     },
 
-    _collectGemini(gemScroll) {
-        this._gemScroll = gemScroll;
-    },
-
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         // XXX: we can't detect device-level (localStorage) settings onChange as the SettingsStore does not notify
         // so checking on every render is the sanest thing at this time.
@@ -537,10 +532,7 @@ module.exports = React.createClass({
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
 
-                let subList = <GeminiScrollbarWrapper style={{flexGrow: len}} className={"mx_RoomList_itemsSubList"} key={chosenKey}>
-                                { <RoomSubList label={label} {...otherProps} /> }
-                            </GeminiScrollbarWrapper>;
-
+                let subList = <RoomSubList key={chosenKey} label={label} {...otherProps} />;
                 if (!isLast) {
                     return components.concat(
                         subList,
