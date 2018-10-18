@@ -384,7 +384,7 @@ module.exports = React.createClass({
 
                     try {
                         resolve(JSON.parse(body));
-                    }catch (e) {
+                    } catch (e) {
                         console.error(e);
                         if (e.name === "SyntaxError") {
                             reject({wkAction: "FAIL_PROMPT", wkError: "Invalid JSON"});
