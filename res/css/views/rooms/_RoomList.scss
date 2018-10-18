@@ -16,8 +16,11 @@ limitations under the License.
 */
 
 .mx_RoomList {
-    padding-bottom: 12px;
-    min-height: 400px;
+    /* take up remaining space below TopLeftMenu */
+    flex: 1;
+    /* use flexbox to layout sublists */
+    display: flex;
+    flex-direction: column;
 }
 
 .mx_RoomList_expandButton {
@@ -25,18 +28,6 @@ limitations under the License.
     cursor: pointer;
     padding-left: 12px;
     padding-right: 12px;
-}
-
-/* Evil hacky override until Chrome fixes drop and drag table cells
-   and we can correctly fix horizontal wrapping in the sidebar again */
-.mx_RoomList_scrollbar .gm-scroll-view {
-    overflow-x: hidden ! important;
-    overflow-y: scroll ! important;
-}
-
-/* Make sure the scrollbar is above the sticky headers from RoomList */
-.mx_RoomList_scrollbar .gm-scrollbar.-vertical {
-    z-index: 6;
 }
 
 .mx_RoomList_emptySubListTip_container {
@@ -65,3 +56,9 @@ limitations under the License.
     position: absolute;
     right: 60px;
 }
+
+.mx_RoomList_itemsSubList {
+    min-height: 80px;
+    flex: 1;
+}
+

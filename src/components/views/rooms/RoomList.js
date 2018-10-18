@@ -34,6 +34,8 @@ import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
 import GroupStore from '../../../stores/GroupStore';
 
+import ResizeHandle from '../elements/ResizeHandle';
+import {Resizer, CollapseDistributor} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -518,11 +520,29 @@ module.exports = React.createClass({
                 showEmpty: showEmpty,
                 incomingCall: self.state.incomingCall,
             };
-            return subListsProps.map((props) => {
+            return subListsProps.reduce((components, props, i) => {
+                props = Object.assign({}, defaultProps, props);
+                const isLast = i === subListsProps.length - 1;
+                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
+                if (!len) {
+                    return components;  //dont render
+                }
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
-                return <RoomSubList key={chosenKey} label={label} {...otherProps} />;
-            });
+
+                let subList = <GeminiScrollbarWrapper style={{flexGrow: len}} className={"mx_RoomList_itemsSubList"} key={chosenKey}>
+                                { <RoomSubList label={label} {...otherProps} /> }
+                            </GeminiScrollbarWrapper>;
+
+                if (!isLast) {
+                    return components.concat(
+                        subList,
+                        <ResizeHandle key={chosenKey+"-resizer"} vertical={true} />
+                    );
+                } else {
+                    return components.concat(subList);
+                }
+            }, []);
         }
 
         let subLists = [
@@ -612,12 +632,9 @@ module.exports = React.createClass({
         const subListComponents = mapProps(subLists);
 
         return (
-            <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                autoshow={true} onScroll={self._whenScrolling} onResize={self._whenScrolling} wrappedRef={this._collectGemini}>
             <div className="mx_RoomList">
                 { subListComponents }
             </div>
-            </GeminiScrollbarWrapper>
         );
     },
 });
