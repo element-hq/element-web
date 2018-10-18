@@ -19,8 +19,6 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from '../../index';
-import { Droppable } from 'react-beautiful-dnd';
-import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
 import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
@@ -365,9 +363,7 @@ const RoomSubList = React.createClass({
         }
 
         if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0) {
-
             const subList = this.state.hidden ? undefined : content;
-
             return <div className={"mx_RoomSubList"}>
                 {this._getHeaderJsx()}
                 {subList}
