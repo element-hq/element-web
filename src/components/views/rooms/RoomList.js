@@ -133,15 +133,10 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        // Initialise the stickyHeaders when the component is created
-        this._updateStickyHeaders(true);
-
         this.mounted = true;
     },
 
     componentDidUpdate: function() {
-        // Reinitialise the stickyHeaders when the component is updated
-        this._updateStickyHeaders(true);
         this._repositionIncomingCallBox(undefined, false);
     },
 
@@ -209,10 +204,6 @@ module.exports = React.createClass({
         if (!isHidden) {
             const self = this;
             this.setState({ isLoadingLeftRooms: true });
-
-            // Try scrolling to position
-            this._updateStickyHeaders(true, scrollToPosition);
-
             // we don't care about the response since it comes down via "Room"
             // events.
             MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
@@ -222,11 +213,6 @@ module.exports = React.createClass({
                 self.setState({ isLoadingLeftRooms: false });
             });
         }
-    },
-
-    onSubListHeaderClick: function(isHidden, scrollToPosition) {
-        // The scroll area has expanded or contracted, so re-calculate sticky headers positions
-        this._updateStickyHeaders(true, scrollToPosition);
     },
 
     onRoomReceipt: function(receiptEvent, room) {
@@ -378,7 +364,6 @@ module.exports = React.createClass({
     _whenScrolling: function(e) {
         this._hideTooltip(e);
         this._repositionIncomingCallBox(e, false);
-        this._updateStickyHeaders(false);
     },
 
     _hideTooltip: function(e) {
@@ -409,106 +394,6 @@ module.exports = React.createClass({
 
             incomingCallBox.style.top = top + "px";
             incomingCallBox.style.left = scrollArea.offsetLeft + scrollArea.offsetWidth + 12 + "px";
-        }
-    },
-
-    // Doing the sticky headers as raw DOM, for speed, as it gets very stuttery if done
-    // properly through React
-    _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
-        const scrollArea = this._getScrollNode();
-        if (!scrollArea) return;
-        // Use the offset of the top of the scroll area from the window
-        // as this is used to calculate the CSS fixed top position for the stickies
-        const scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-        // Use the offset of the top of the componet from the window
-        // as this is used to calculate the CSS fixed top position for the stickies
-        const scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
-
-        if (initialise) {
-            // Get a collection of sticky header containers references
-            this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
-
-            if (!this.stickies.length) return;
-
-            // Make sure there is sufficient space to do sticky headers: 120px plus all the sticky headers
-            this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
-
-            // Initialise the sticky headers
-            if (typeof this.stickies === "object" && this.stickies.length > 0) {
-                // Initialise the sticky headers
-                Array.prototype.forEach.call(this.stickies, function(sticky, i) {
-                    // Save the positions of all the stickies within scroll area.
-                    // These positions are relative to the LHS Panel top
-                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
-
-                    // Save and set the sticky heights
-                    const originalHeight = sticky.getBoundingClientRect().height;
-                    sticky.dataset.originalHeight = originalHeight;
-                    sticky.style.height = originalHeight;
-
-                    return sticky;
-                });
-            }
-        }
-
-        if (!this.stickies) return;
-
-        const self = this;
-        let scrollStuckOffset = 0;
-        // Scroll to the passed in position, i.e. a header was clicked and in a scroll to state
-        // rather than a collapsable one (see RoomSubList.isCollapsableOnClick method for details)
-        if (scrollToPosition !== undefined) {
-            scrollArea.scrollTop = scrollToPosition;
-        }
-        // Stick headers to top and bottom, or free them
-        Array.prototype.forEach.call(this.stickies, function(sticky, i, stickyWrappers) {
-            const stickyPosition = sticky.dataset.originalPosition;
-            const stickyHeight = sticky.dataset.originalHeight;
-            const stickyHeader = sticky.childNodes[0];
-            const topStuckHeight = stickyHeight * i;
-            const bottomStuckHeight = stickyHeight * (stickyWrappers.length - i);
-
-            if (self.scrollAreaSufficient && stickyPosition < (scrollArea.scrollTop + topStuckHeight)) {
-                // Top stickies
-                sticky.dataset.stuck = "top";
-                stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = scrollAreaOffset + topStuckHeight + "px";
-                // If stuck at top adjust the scroll back down to take account of all the stuck headers
-                if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
-                    scrollStuckOffset = topStuckHeight;
-                }
-            } else if (self.scrollAreaSufficient && stickyPosition > ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
-                /// Bottom stickies
-                sticky.dataset.stuck = "bottom";
-                stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = (scrollAreaOffset + scrollAreaHeight) - bottomStuckHeight + "px";
-            } else {
-                // Not sticky
-                sticky.dataset.stuck = "none";
-                stickyHeader.classList.remove("mx_RoomSubList_fixed");
-                stickyHeader.style.top = null;
-            }
-        });
-        // Adjust the scroll to take account of top stuck headers
-        if (scrollToPosition !== undefined) {
-            scrollArea.scrollTop -= scrollStuckOffset;
-        }
-    },
-
-    _updateStickyHeaders: function(initialise, scrollToPosition) {
-        return;
-
-        const self = this;
-
-        if (initialise) {
-            // Useing setTimeout to ensure that the code is run after the painting
-            // of the newly rendered object as using requestAnimationFrame caused
-            // artefacts to appear on screen briefly
-            window.setTimeout(function() {
-                self._initAndPositionStickyHeaders(initialise, scrollToPosition);
-            });
-        } else {
-            this._initAndPositionStickyHeaders(initialise, scrollToPosition);
         }
     },
 
