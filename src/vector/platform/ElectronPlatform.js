@@ -170,7 +170,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     clearNotification(notif: Notification) {
         // This crashes on windows under certain circumstances: can't find any
-        // workaround othet than not closing notifs.
+        // workaround other than not closing notifs.
         // https://github.com/electron/electron/issues/15251
         // https://github.com/vector-im/riot-web/issues/7512
         if (window.process.platform === 'win32') return;
