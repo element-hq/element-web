@@ -370,8 +370,9 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx()}
                 </div>;
             } else {
+                const heightEstimation = (len * 40) + 31;
                 const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-                return <div className={"mx_RoomSubList"} style={{flexGrow: len}}>
+                return <div className={"mx_RoomSubList"} style={{flexBasis: heightEstimation}}>
                     {this._getHeaderJsx()}
                     <GeminiScrollbarWrapper>
                         { content }

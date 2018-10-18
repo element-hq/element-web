@@ -16,13 +16,12 @@ limitations under the License.
 
 .mx_RoomSubList {
     min-height: 80px;
-    flex: 1;
+    flex: 0;
     display: flex;
     flex-direction: column;
 }
 
 .mx_RoomSubList_hidden {
-    flex: 0;
     min-height: unset;
 }
 
