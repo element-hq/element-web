@@ -35,7 +35,7 @@ import RoomListStore from '../../../stores/RoomListStore';
 import GroupStore from '../../../stores/GroupStore';
 
 import ResizeHandle from '../elements/ResizeHandle';
-import {Resizer, CollapseDistributor} from '../../../resizer'
+import {Resizer, FixedDistributor, FlexSizer} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
