@@ -1205,6 +1205,8 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Please note you are logging into the %(hs)s server, not matrix.org.",
     "Guest access is disabled on this Home Server.": "Guest access is disabled on this Home Server.",
     "The phone number entered looks invalid": "The phone number entered looks invalid",
+    "Invalid homeserver discovery response": "Invalid homeserver discovery response",
+    "Cannot find homeserver": "Cannot find homeserver",
     "This homeserver doesn't offer any login flows which are supported by this client.": "This homeserver doesn't offer any login flows which are supported by this client.",
     "Error: Problem communicating with the given homeserver.": "Error: Problem communicating with the given homeserver.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",

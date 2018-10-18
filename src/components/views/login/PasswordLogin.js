@@ -53,6 +53,7 @@ class PasswordLogin extends React.Component {
 
         this.onSubmitForm = this.onSubmitForm.bind(this);
         this.onUsernameChanged = this.onUsernameChanged.bind(this);
+        this.onUsernameBlur = this.onUsernameBlur.bind(this);
         this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
         this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
         this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
@@ -121,7 +122,11 @@ class PasswordLogin extends React.Component {
 
     onUsernameChanged(ev) {
         this.setState({username: ev.target.value});
-        this.props.onUsernameChanged(ev.target.value);
+        this.props.onUsernameChanged(ev.target.value, false);
+    }
+
+    onUsernameBlur(ev) {
+        this.props.onUsernameChanged(this.state.username, true);
     }
 
     onLoginTypeChange(loginType) {
@@ -167,6 +172,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
+                    onBlur={this.onUsernameBlur}
                     placeholder="joe@example.com"
                     value={this.state.username}
                     autoFocus
@@ -182,6 +188,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
+                    onBlur={this.onUsernameBlur}
                     placeholder={SdkConfig.get().disable_custom_urls ?
                                       _t("Username on %(hs)s", {
                                         hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
