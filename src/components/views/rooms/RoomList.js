@@ -135,6 +135,13 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        this.resizer = new Resizer(this.resizeContainer, FixedDistributor, null, FlexSizer);
+        this.resizer.setClassNames({
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        });
+        this.resizer.attach();
         this.mounted = true;
     },
 
@@ -632,7 +639,7 @@ module.exports = React.createClass({
         const subListComponents = mapProps(subLists);
 
         return (
-            <div className="mx_RoomList">
+            <div ref={(d) => this.resizeContainer = d} className="mx_RoomList">
                 { subListComponents }
             </div>
         );
