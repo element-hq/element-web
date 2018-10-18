@@ -1,3 +1,10 @@
+Changes in [0.17.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.1) (2018-10-18)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.0...v0.17.1)
+
+ * Stop electron crashing
+   [\#7517](https://github.com/vector-im/riot-web/pull/7517)
+
 Changes in [0.17.0](https://github.com/vector-im/riot-web/releases/tag/v0.17.0) (2018-10-16)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.0-rc.1...v0.17.0)
