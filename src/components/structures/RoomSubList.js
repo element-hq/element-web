@@ -53,7 +53,6 @@ const RoomSubList = React.createClass({
         alwaysShowHeader: PropTypes.bool,
         incomingCall: PropTypes.object,
         searchFilter: PropTypes.string,
-        emptyContent: PropTypes.node, // content shown if the list is empty
         headerItems: PropTypes.node, // content shown in the sublist header
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
     },
@@ -337,37 +336,14 @@ const RoomSubList = React.createClass({
     },
 
     render: function() {
-        let content;
-
-        if (this.props.showEmpty) {
-            // this is new behaviour with still controversial UX in that in hiding RoomSubLists the drop zones for DnD
-            // are also gone so when filtering users can't DnD rooms to some tags but is a lot cleaner otherwise.
-            if (this.state.sortedList.length === 0 && !this.props.searchFilter && this.props.extraTiles.length === 0) {
-                content = this.props.emptyContent;
-            } else {
-                content = this.makeRoomTiles();
-                content.push(...this.props.extraTiles);
-            }
-        } else {
-            if (this.state.sortedList.length === 0 && this.props.extraTiles.length === 0) {
-                // if no search filter is applied and there is a placeholder defined then show it, otherwise show nothing
-                if (!this.props.searchFilter && this.props.emptyContent) {
-                    content = this.props.emptyContent;
-                } else {
-                    // don't show an empty sublist
-                    return null;
-                }
-            } else {
-                content = this.makeRoomTiles();
-                content.push(...this.props.extraTiles);
-            }
-        }
-
         const len = this.state.sortedList.length + this.props.extraTiles.length;
-
         if (len) {
+            const subListClasses = classNames({
+                "mx_RoomSubList": true,
+                "mx_RoomSubList_nonEmpty": len && !this.state.hidden,
+            });
             if (this.state.hidden) {
-                return <div className={["mx_RoomSubList", "mx_RoomSubList_hidden"]}>
+                return <div className={subListClasses}>
                     {this._getHeaderJsx()}
                 </div>;
             } else {
@@ -377,23 +353,26 @@ const RoomSubList = React.createClass({
                     maxHeight: `${heightEstimation}px`,
                 };
                 const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-                return <div className={"mx_RoomSubList"} style={style}>
+                const tiles = this.makeRoomTiles();
+                tiles.push(...this.props.extraTiles);
+                return <div className={subListClasses} style={style}>
                     {this._getHeaderJsx()}
                     <GeminiScrollbarWrapper>
-                        { content }
+                        { tiles }
                     </GeminiScrollbarWrapper>
                 </div>;
             }
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
-            if (this.props.showSpinner) {
+            let content;
+            if (this.props.showSpinner && !this.state.hidden) {
                 content = <Loader />;
             }
 
             return (
                 <div className="mx_RoomSubList">
                     {this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined}
-                    { this.state.hidden ? undefined : content }
+                    { content }
                 </div>
             );
         }

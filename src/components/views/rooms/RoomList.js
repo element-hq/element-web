@@ -406,64 +406,6 @@ module.exports = React.createClass({
         }
     },
 
-    _getEmptyContent: function(section) {
-        if (this.state.selectedTags.length > 0) {
-            return null;
-        }
-
-        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
-
-        if (this.props.collapsed) {
-            return <RoomDropTarget label="" />;
-        }
-
-        const StartChatButton = sdk.getComponent('elements.StartChatButton');
-        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
-        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-
-        let tip = null;
-
-        switch (section) {
-            case 'im.vector.fake.direct':
-                tip = <div className="mx_RoomList_emptySubListTip">
-                    { _t(
-                        "Press <StartChatButton> to start a chat with someone",
-                        {},
-                        { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
-                    ) }
-                </div>;
-                break;
-            case 'im.vector.fake.recent':
-                tip = <div className="mx_RoomList_emptySubListTip">
-                    { _t(
-                        "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
-                        " <RoomDirectoryButton> to browse the directory",
-                        {},
-                        {
-                            'CreateRoomButton': <CreateRoomButton size="16" callout={true} />,
-                            'RoomDirectoryButton': <RoomDirectoryButton size="16" callout={true} />,
-                        },
-                    ) }
-                </div>;
-                break;
-        }
-
-        if (tip) {
-            return <div className="mx_RoomList_emptySubListTip_container">
-                { tip }
-            </div>;
-        }
-
-        // We don't want to display drop targets if there are no room tiles to drag'n'drop
-        if (this.state.totalRoomCount === 0) {
-            return null;
-        }
-
-        const labelText = phraseForSection(section);
-
-        return <RoomDropTarget label={labelText} />;
-    },
-
     _getHeaderItems: function(section) {
         const StartChatButton = sdk.getComponent('elements.StartChatButton');
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
@@ -551,14 +493,12 @@ module.exports = React.createClass({
                 list: self.state.lists['m.favourite'],
                 label: _t('Favourites'),
                 tagName: "m.favourite",
-                emptyContent: this._getEmptyContent('m.favourite'),
                 order: "manual",
             },
             {
                 list: self.state.lists['im.vector.fake.direct'],
                 label: _t('People'),
                 tagName: "im.vector.fake.direct",
-                emptyContent: this._getEmptyContent('im.vector.fake.direct'),
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
                 alwaysShowHeader: true,
@@ -567,7 +507,6 @@ module.exports = React.createClass({
             {
                 list: self.state.lists['im.vector.fake.recent'],
                 label: _t('Rooms'),
-                emptyContent: this._getEmptyContent('im.vector.fake.recent'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
@@ -582,7 +521,6 @@ module.exports = React.createClass({
                     key: tagName,
                     label: labelForTagName(tagName),
                     tagName: tagName,
-                    emptyContent: this._getEmptyContent(tagName),
                     order: "manual",
                 };
             });
@@ -592,18 +530,10 @@ module.exports = React.createClass({
                 list: self.state.lists['m.lowpriority'],
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
-                emptyContent: this._getEmptyContent('m.lowpriority'),
                 order: "recent",
             },
             {
                 list: self.state.lists['im.vector.fake.archived'],
-                emptyContent: self.props.collapsed ?
-                    null :
-                    <div className="mx_RoomList_emptySubListTip_container">
-                        <div className="mx_RoomList_emptySubListTip">
-                            { _t('You have no historical rooms') }
-                        </div>
-                    </div>,
                 label: _t('Historical'),
                 order: "recent",
                 alwaysShowHeader: true,

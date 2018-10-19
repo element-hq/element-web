@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 .mx_RoomSubList {
-    min-height: 80px;
     flex: 0;
     display: flex;
     flex-direction: column;
 }
 
-.mx_RoomSubList_hidden {
-    min-height: unset;
+.mx_RoomSubList_nonEmpty {
+    min-height: 80px;
+    flex: 1;
 }
 
 
