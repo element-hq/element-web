@@ -300,9 +300,6 @@ const RoomSubList = React.createClass({
         let title;
         if (this.props.collapsed) {
             title = this.props.label;
-            if (roomCount !== '') {
-                title += " [" + roomCount + "]";
-            }
         }
 
         let incomingCall;
@@ -338,7 +335,6 @@ const RoomSubList = React.createClass({
                 { addRoomButton }
             </div>
         );
-        // <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
     },
 
     render: function() {

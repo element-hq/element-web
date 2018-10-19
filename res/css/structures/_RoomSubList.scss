@@ -59,15 +59,6 @@ limitations under the License.
     /* pointer-events: none; */
 }
 
-.mx_RoomSubList_roomCount {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: normal;
-    color: $accent-color;
-    padding-left: 5px;
-    text-transform: none;
-}
-
 .mx_RoomSubList_badge {
     display: inline-block;
     min-width: 15px;
@@ -153,10 +144,6 @@ limitations under the License.
 
     .mx_RoomSubList_labelContainer {
         width: 28px; /* collapsed LHS Panel width */
-    }
-
-    .mx_RoomSubList_roomCount {
-        display: none;
     }
 
     /* Hide the bottom of speech bubble */
