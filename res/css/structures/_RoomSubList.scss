@@ -131,6 +131,11 @@ limitations under the License.
     transform: rotateZ(-90deg);
 }
 
+.mx_RoomSubList .gm-scrollbar-container {
+    /* let rooms list grab all available space */
+    flex: 1;
+}
+
 .collapsed {
     .mx_RoomSubList_label {
         height: 17px;
