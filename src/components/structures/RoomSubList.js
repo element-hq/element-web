@@ -309,7 +309,6 @@ const RoomSubList = React.createClass({
             );
         }
 
-        const tabindex = this.props.searchFilter === "" ? "0" : "-1";
         const len = this.state.sortedList.length + this.props.extraTiles.length;
         let chevron;
         if (len) {
@@ -321,6 +320,7 @@ const RoomSubList = React.createClass({
             chevron = (<div className={chevronClasses}></div>);
         }
 
+        const tabindex = this.props.searchFilter === "" ? "0" : "-1";
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
