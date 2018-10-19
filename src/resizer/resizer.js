@@ -40,7 +40,7 @@ export class Resizer {
             vertical: "resizer-vertical",
             resizing: "resizer-resizing",
         };
-        this.mouseDownHandler = (event) => this._onMouseDown(event);
+        this._onMouseDown = this._onMouseDown.bind(this);
     }
 
     setClassNames(classNames) {
@@ -48,11 +48,11 @@ export class Resizer {
     }
 
     attach() {
-        this.container.addEventListener("mousedown", this.mouseDownHandler, false);
+        this.container.addEventListener("mousedown", this._onMouseDown, false);
     }
 
     detach() {
-        this.container.removeEventListener("mousedown", this.mouseDownHandler, false);
+        this.container.removeEventListener("mousedown", this._onMouseDown, false);
     }
 
     /**
