@@ -573,6 +573,7 @@ module.exports = React.createClass({
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
                 alwaysShowHeader: true,
+                onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
                 list: self.state.lists['im.vector.fake.recent'],
@@ -580,6 +581,7 @@ module.exports = React.createClass({
                 emptyContent: this._getEmptyContent('im.vector.fake.recent'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
+                onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
         const tagSubLists = Object.keys(self.state.lists)

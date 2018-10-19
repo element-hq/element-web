@@ -266,6 +266,7 @@ const RoomSubList = React.createClass({
     },
 
     _getHeaderJsx: function() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const subListNotifications = this.roomNotificationCount();
         const subListNotifCount = subListNotifications[0];
         const subListNotifHighlight = subListNotifications[1];
@@ -319,9 +320,13 @@ const RoomSubList = React.createClass({
             }
         }
 
+        let addRoomButton;
+        if (this.props.onAddRoom) {
+            addRoomButton = (<AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom">+</AccessibleButton>);
+        }
+
         const tabindex = this.props.searchFilter === "" ? "0" : "-1";
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
@@ -330,6 +335,7 @@ const RoomSubList = React.createClass({
                     { badge }
                     { incomingCall }
                 </AccessibleButton>
+                { addRoomButton }
             </div>
         );
         // <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
