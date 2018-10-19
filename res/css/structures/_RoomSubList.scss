@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 .mx_RoomSubList {
-    flex: 0;
+    min-height: 31px;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
 }
@@ -25,10 +26,10 @@ limitations under the License.
     flex: 1;
 }
 
-
 .mx_RoomSubList_labelContainer {
     display: flex;
     flex-direction: row;
+    flex: 0 0 auto;
 }
 
 .mx_RoomSubList_label {
