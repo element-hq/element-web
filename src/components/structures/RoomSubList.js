@@ -394,7 +394,6 @@ const RoomSubList = React.createClass({
                 <div className="mx_RoomSubList">
                     {this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined}
                     { this.state.hidden ? undefined : content }
-                    <div className="mx_RoomSubList_resizer"></div>
                 </div>
             );
         }
