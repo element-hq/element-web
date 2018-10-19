@@ -1289,5 +1289,8 @@
     "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "您之前曾在 %(host)s 上使用 Riot 並啟用成員列表的延遲載入。在此版本中延遲載入已停用。由於本機快取在這兩個設定間不相容，Riot 必須重新同步您的帳號。",
     "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "若其他分頁仍有不同版本的 Riot，請將其關閉，因為在同一個主機上同時啟用和停用延遲載入將會發生問題。",
     "Incompatible local cache": "不相容的本機快取",
-    "Clear cache and resync": "清除快取並重新同步"
+    "Clear cache and resync": "清除快取並重新同步",
+    "Please accept all of the policies": "請接受所有政策",
+    "Please review and accept the policies of this homeserver:": "請審閱並接受此家伺服器的政策：",
+    "Add some now": "現在就新增一些"
 }
