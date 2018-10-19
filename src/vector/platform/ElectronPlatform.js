@@ -144,7 +144,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
             {
                 body: msg,
                 icon: avatarUrl,
-                tag: 'vector',
                 silent: true, // we play our own sounds
             },
         );

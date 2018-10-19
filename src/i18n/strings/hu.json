@@ -1,7 +1,7 @@
 {
     "Custom Server Options": "Egyedi szerverbeállítások",
     "Dismiss": "Eltüntet",
-    "powered by Matrix": "A Matrix hajtja",
+    "powered by Matrix": "Matrix hajtja",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s alkalmazás %(browserName)s böngészőn %(osName)s rendszeren",
     "Riot Desktop on %(platformName)s": "Riot Desktop itt: %(platformName)s",
     "Riot is not supported on mobile web. Install the app?": "A mobilböngésző nem támogatja a Riotot. Telepíted inkább az alkalmazást?",
@@ -34,6 +34,6 @@
     "Dev chat for the Riot/Web dev team": "Csevegés a Riot/Web fejlesztői csapatával fejlesztőknek",
     "Dev chat for the Dendrite dev team": "Csevegés a Dendrite fejlesztői csapatával fejlesztőknek",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Már sok szoba van a Matrixon: más hálózatokkal (Slack, IRC, Gitter stb.) összekapcsolt és függetlenek szobák is. Nézd meg a szobajegyzéket!",
-    "Couldn't load home page": "Nem sikerült betölteni a kezdőlapot",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Az egyedi szerverbeállításoknál megadhatod egy másik szerver URL-jét, így be tudsz jelentkezni más Matrix szerverre is.<br/>Így a Riotot tudod használni egy már máshol meglévő Matrix fiókkal is.<br/><br/>Beállíthatsz egyéni identitásszervert is, de akkor nem tudsz más felhasználókat e-mail címmel meghívni, illetve ők sem tudnak téged."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Bejelentkezhetsz más Matrix szerverre is az egyedi szerverbeállításoknál megadott Matrix szerver URL-jével.<br/>Így használhatod a Riotot egy már máshol meglévő Matrix fiókkal is.<br/><br/>Beállíthatsz egyéni identitásszervert is, de akkor nem tudsz más felhasználókat e-mail címmel meghívni, illetve ők sem tudnak téged.",
+    "Co-ordination for Riot translators": "Koordináció Riot fordítók számára"
 }

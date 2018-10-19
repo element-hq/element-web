@@ -23,7 +23,7 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const electron = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu} = require('electron');
 const AutoLaunch = require('auto-launch');
 
 const tray = require('./tray');
@@ -33,8 +33,8 @@ const updater = require('./updater');
 
 const windowStateKeeper = require('electron-window-state');
 
-if (argv.profile) {
-    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+if (argv['profile']) {
+    app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
 }
 
 let vectorConfig = {};
@@ -62,14 +62,14 @@ process.on('uncaughtException', function(error) {
 });
 
 let focusHandlerAttached = false;
-electron.ipcMain.on('setBadgeCount', function(ev, count) {
-    electron.app.setBadgeCount(count);
-    if (count === 0) {
+ipcMain.on('setBadgeCount', function(ev, count) {
+    app.setBadgeCount(count);
+    if (count === 0 && mainWindow) {
         mainWindow.flashFrame(false);
     }
 });
 
-electron.ipcMain.on('loudNotification', function() {
+ipcMain.on('loudNotification', function() {
     if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused() && !focusHandlerAttached) {
         mainWindow.flashFrame(true);
         mainWindow.once('focus', () => {
@@ -81,16 +81,16 @@ electron.ipcMain.on('loudNotification', function() {
 });
 
 let powerSaveBlockerId;
-electron.ipcMain.on('app_onAction', function(ev, payload) {
+ipcMain.on('app_onAction', function(ev, payload) {
     switch (payload.action) {
         case 'call_state':
-            if (powerSaveBlockerId && electron.powerSaveBlocker.isStarted(powerSaveBlockerId)) {
+            if (powerSaveBlockerId && powerSaveBlocker.isStarted(powerSaveBlockerId)) {
                 if (payload.state === 'ended') {
-                    electron.powerSaveBlocker.stop(powerSaveBlockerId);
+                    powerSaveBlocker.stop(powerSaveBlockerId);
                 }
             } else {
                 if (payload.state === 'connected') {
-                    powerSaveBlockerId = electron.powerSaveBlocker.start('prevent-display-sleep');
+                    powerSaveBlockerId = powerSaveBlocker.start('prevent-display-sleep');
                 }
             }
             break;
@@ -98,9 +98,12 @@ electron.ipcMain.on('app_onAction', function(ev, payload) {
 });
 
 
-electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
+app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
-const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+    // If other instance launched with --hidden then skip showing window
+    if (commandLine.includes('--hidden')) return;
+
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
         if (!mainWindow.isVisible()) mainWindow.show();
@@ -111,7 +114,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log('Other instance detected: exiting');
-    electron.app.exit();
+    app.exit();
 }
 
 
@@ -136,7 +139,7 @@ const settings = {
     },
 };
 
-electron.ipcMain.on('settings_get', async function(ev) {
+ipcMain.on('settings_get', async function(ev) {
     const data = {};
 
     try {
@@ -145,34 +148,37 @@ electron.ipcMain.on('settings_get', async function(ev) {
         }));
 
         ev.sender.send('settings', data);
-    } catch(e) { console.error(e); }
+    } catch (e) {
+        console.error(e);
+    }
 });
 
-electron.ipcMain.on('settings_set', function(ev, key, value) {
+ipcMain.on('settings_set', function(ev, key, value) {
     console.log(key, value);
     if (settings[key] && settings[key].set) {
         settings[key].set(value);
     }
 });
 
-electron.app.on('ready', () => {
-
-    if (argv.devtools) {
+app.on('ready', () => {
+    if (argv['devtools']) {
         try {
-            const { default: installExtension, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
-            installExtension(REACT_DEVELOPER_TOOLS)
+            const { default: installExt, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
+            installExt(REACT_DEVELOPER_TOOLS)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-            installExtension(REACT_PERF)
+            installExt(REACT_PERF)
                 .then((name) => console.log(`Added Extension: ${name}`))
                 .catch((err) => console.log('An error occurred: ', err));
-        } catch(e) {console.log(e);}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
 
-    if (vectorConfig.update_base_url) {
-        console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
-        updater.start(vectorConfig.update_base_url);
+    if (vectorConfig['update_base_url']) {
+        console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
+        updater.start(vectorConfig['update_base_url']);
     } else {
         console.log('No update_base_url is defined: auto update is disabled');
     }
@@ -185,7 +191,7 @@ electron.app.on('ready', () => {
         defaultHeight: 768,
     });
 
-    mainWindow = global.mainWindow = new electron.BrowserWindow({
+    mainWindow = global.mainWindow = new BrowserWindow({
         icon: iconPath,
         show: false,
         autoHideMenuBar: true,
@@ -196,7 +202,7 @@ electron.app.on('ready', () => {
         height: mainWindowState.height,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
-    electron.Menu.setApplicationMenu(vectorMenu);
+    Menu.setApplicationMenu(vectorMenu);
 
     // explicitly hide because setApplicationMenu on Linux otherwise shows...
     // https://github.com/electron/electron/issues/9621
@@ -208,11 +214,16 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!argv.hidden) {
-        mainWindow.once('ready-to-show', () => {
+    mainWindow.once('ready-to-show', () => {
+        mainWindowState.manage(mainWindow);
+
+        if (!argv['hidden']) {
             mainWindow.show();
-        });
-    }
+        } else {
+            // hide here explicitly because window manage above sometimes shows it
+            mainWindow.hide();
+        }
+    });
 
     mainWindow.on('closed', () => {
         mainWindow = global.mainWindow = null;
@@ -240,18 +251,17 @@ electron.app.on('ready', () => {
     }
 
     webContentsHandler(mainWindow.webContents);
-    mainWindowState.manage(mainWindow);
 });
 
-electron.app.on('window-all-closed', () => {
-    electron.app.quit();
+app.on('window-all-closed', () => {
+    app.quit();
 });
 
-electron.app.on('activate', () => {
+app.on('activate', () => {
     mainWindow.show();
 });
 
-electron.app.on('before-quit', () => {
+app.on('before-quit', () => {
     global.appQuitting = true;
     if (mainWindow) {
         mainWindow.webContents.send('before-quit');
@@ -262,4 +272,4 @@ electron.app.on('before-quit', () => {
 // installer uses for the shortcut icon.
 // This makes notifications work on windows 8.1 (and is
 // a noop on other platforms).
-electron.app.setAppUserModelId('com.squirrel.riot-web.Riot');
+app.setAppUserModelId('com.squirrel.riot-web.Riot');

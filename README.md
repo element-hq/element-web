@@ -49,18 +49,28 @@ We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
 https://github.com/vector-im/riot-web/issues/1977 for more details.
 
+The same applies for end-to-end encrypted content, but since this is decrypted
+on the client, Riot needs a way to supply the decrypted content from a separate
+origin to the one Riot is hosted on. This currently done with a 'cross origin
+renderer' which is a small piece of javascript hosted on a different domain.
+To avoid all Riot installs needing one of these to be set up, riot.im hosts
+one on usercontent.riot.im which is used by default. See 'config.json' if you'd
+like to host your own. https://github.com/vector-im/riot-web/issues/6173 tracks
+progress on replacing this with something better.
+
 Building From Source
 ====================
 
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `node` is at least v6.3.0 (and `npm`
-   is at least v3.10.x).
+1. Install or update `node.js` so that your `node` is at least v8.12.0 (and `npm`
+   is at least v5.x).
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
 1. Switch to the riot-web directory: `cd riot-web`.
-1. If you're using the `develop` branch, install the develop versions of the
-   dependencies, as the released ones will be too old:
+1. If you're using the `develop` branch then it is recommended to set up a proper
+   development environment ("Setting up a dev environment" below) however one can
+   install the develop versions of the dependencies instead:
    ```
    scripts/fetch-develop.deps.sh
    ```
@@ -80,13 +90,9 @@ to build.
    npm install
    npm run build
    ```
-   However, we recommend setting up a proper development environment (see "Setting
-   up a dev environment" below) if you want to run your own copy of the
-   `develop` branch, as it makes it much easier to keep these dependencies
-   up-to-date.  Or just use https://riot.im/develop - the continuous integration
-   release of the develop branch.
-   (Note that we don't reference the develop versions in git directly due to
-   https://github.com/npm/npm/issues/3055.)
+   Or just use https://riot.im/develop - the continuous integration release of the
+   develop branch. (Note that we don't reference the develop versions in git directly
+   due to https://github.com/npm/npm/issues/3055.)
 1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details).
@@ -128,7 +134,9 @@ For a good example, see https://riot.im/develop/config.json
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
 1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
-   https://github.com/matrix-org/rageshake server)
+   https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
+   "Send Logs" within the application. Bug reports can be disabled by leaving the
+   `bug_report_endpoint_url` out of your config file.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
@@ -141,11 +149,13 @@ For a good example, see https://riot.im/develop/config.json
    anything else since it is used to isolate the privileges of file attachments to this
    domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
-1. `piwik`: an object containing the following properties:
-    1. `url`: The URL of the Piwik instance to use for collecting Analytics
-    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
-    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
-    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
+1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
+   option out of your config file. If you want to enable analytics, set `piwik` to be an object
+   containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
+    1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
 1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
    with referral tracking; please ignore it.
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
@@ -225,25 +235,17 @@ Before attempting to develop on Riot you **must** read the developer guide
 for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
 also defines the design, architecture and style for Riot too.
 
+You should also familiarise yourself with the "Here be Dragons" guide to the
+tame & not-so-tame dragons (gotchas) which exist in the codebase:
+https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM
+
 The idea of Riot is to be a relatively lightweight "skin" of customisations on
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
 
 After creating a new component you must run `npm run reskindex` to regenerate
-the `component-index.js` for the app (used in future for skinning)
-
-**However, as of July 2016 this layering abstraction is broken due to rapid
-development on Riot forcing `matrix-react-sdk` to move fast at the expense of
-maintaining a clear abstraction between the two.**  Hacking on Riot inevitably
-means hacking equally on `matrix-react-sdk`, and there are bits of
-`matrix-react-sdk` behaviour incorrectly residing in the `riot-web` project
-(e.g. matrix-react-sdk specific CSS), and a bunch of Riot specific behaviour
-in the `matrix-react-sdk` (grep for `vector` / `riot`).  This separation problem will be
-solved asap once development on Riot (and thus matrix-react-sdk) has
-stabilised.  Until then, the two projects should basically be considered as a
-single unit.  In particular, `matrix-react-sdk` issues are currently filed
-against `riot-web` in github.
+the `component-index.js` for the app (used in future for skinning).
 
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -260,30 +262,29 @@ having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
 1. `pushd matrix-js-sdk`
 1. `git checkout develop`
 1. `npm install`
-1. `npm install source-map-loader` # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
+1. `npm install source-map-loader`  # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
 1. `popd`
 
 Then similarly with `matrix-react-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-react-sdk.git`
 1. `pushd matrix-react-sdk`
 1. `git checkout develop`
-1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+1. `npm link ../matrix-js-sdk`
 1. `popd`
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/riot-web.git`
+1. `git clone https://github.com/vector-im/riot-web.git`
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
-1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
-1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
+1. `npm link ../matrix-js-sdk`
+1. `npm link ../matrix-react-sdk`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
     ```
@@ -302,10 +303,8 @@ Finally, build and start Riot itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-When you make changes to `matrix-react-sdk` or `matrix-js-sdk`, you will need
-to run `npm run build` in the relevant directory. You can do this automatically
-by instead running `npm start` in the directory, to start a development builder
-which will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
+automatically picked up by webpack and built.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.

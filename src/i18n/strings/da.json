@@ -8,7 +8,6 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s på %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Du skal bruge HTTPS for at lave skærm-delings-opkald.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan bruge de brugerdefinerede server indstillinger til at logge ind på andre Matrix servere ved at skrive en anden Home Server adresse.<br/>Dette tillader dig at bruge Riot med en eksisterende Matrix konto på en anden home server.<br/><br/>Du kan også indstille en brugerdefineret identity server men så vil du ikke kunne invitere brugere ved hjælp af deres emailadresse eller selv blive inviteret med emailadresse.",
-    "Couldn't load home page": "Kunne ikke indlæse startsiden",
     "Welcome to Riot.im": "Velkommen til Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentraliseret, krypteret chat &amp; samarbejde baseret på [matrix]",
     "Search the room directory": "Søg i rumkataloget",

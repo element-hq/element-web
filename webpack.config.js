@@ -8,8 +8,12 @@ if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/rio
 
 module.exports = {
     entry: {
-        "bundle": "./src/vector/index.js",
+        // Load babel-polyfill first to avoid issues where some imports (namely react)
+        // are potentially loaded before babel-polyfill.
+        "bundle": ["babel-polyfill", "./src/vector/index.js"],
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
+
+        "mobileguide": "./src/vector/mobile_guide/index.js",
 
         // We ship olm.js as a separate lump of javascript. This makes it get
         // loaded via a separate <script/> tag in index.html (which loads it
@@ -26,30 +30,41 @@ module.exports = {
         "theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
-            { test: /\.node$/, loader: 'node-loader' },
+        rules: [
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
+            { test: /\.node$/, use: 'node-loader' },
             {
                 test: /\.scss$/,
-
                 // 1. postcss-loader turns the SCSS into normal CSS.
-                // 2. css-raw-loader turns the CSS into a javascript module
+                // 2. raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
-                //    (css-raw-loader is similar to css-loader, but the latter
+                //    (raw-loader is similar to css-loader, but the latter
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "raw-loader",
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                config: {
+                                    path: './postcss.config.js'
+                                }
+                            }
+                        }
+                    ],
+                }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                use: ExtractTextPlugin.extract({
+                    use: "raw-loader"
+                }),
             },
+
         ],
         noParse: [
             // for cross platform compatibility use [\\\/] as the path separator
@@ -128,9 +143,15 @@ module.exports = {
             // bottom of <head> or the bottom of <body>, and I'm a bit scared
             // about moving them.
             inject: false,
+            excludeChunks: ['mobileguide'],
             vars: {
                 og_image_url: og_image_url,
             },
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/vector/mobile_guide/index.html',
+            filename: 'mobile_guide/index.html',
+            chunks: ['mobileguide'],
         }),
     ],
     devtool: 'source-map',
@@ -144,6 +165,12 @@ module.exports = {
             // don't fill the console up with a mahoosive list of modules
             chunks: false,
         },
+
+        // hot mdule replacement doesn't work (I think we'd need react-hot-reload?)
+        // so webpack-dev-server reloads the page on every update which is quite
+        // tedious in Riot since that can take a while.
+        hot: false,
+        inline: false,
     },
 };
 

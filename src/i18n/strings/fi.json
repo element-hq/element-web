@@ -28,7 +28,6 @@
     "Dev chat for the Riot/Web dev team": "Kehittäjäkeskustelu Riot/Web kehitystiimille",
     "Dev chat for the Dendrite dev team": "Kehittäjäkeskustelu Dendrite kehitystiimille",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrixissa on olemassa monia huoneita, jotka on linkitetty olemassa oleviin verkkoihin (Slack, IRC, Gitter yms.). Tutustu hakemistoon!",
-    "Couldn't load home page": "Kotisivun lataus epäonnistui",
     "powered by Matrix": "Matrix",
     "Riot is not supported on mobile web. Install the app?": "Riot ei tue laitettasi. Asenna mobiilisovellus?",
     "Design and implementation of E2E in Matrix": "Matrix päästä-päähän salauksen suunnittelu ja implementointi",

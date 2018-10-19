@@ -1,5 +1,4 @@
 {
-    "Couldn't load home page": "Nepodařilo se nahrát úvodní stránku",
     "Welcome to Riot.im": "Vítá vás Riot.im",
     "Unknown device": "Neznámé zařízení",
     "Riot is not supported on mobile web. Install the app?": "Riot není podporovaný na mobilním webu. Nainstalovat aplikaci?",
@@ -35,5 +34,6 @@
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS a matrix-ios-sdk chat",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android a matrix-android-sdk chat",
     "Discussion of the Identity Service API": "Diskuze o API služby identity",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Přes vlastní serverové volby se můžete přihlásit k dalším Matrix serverům tak, že zadáte jinou adresu domovského serveru.<br/>Díky tomu můžete v Riotu používat Matrix účet z jiného domovského serveru.<br/><br/>Můžete nastavit i vlastní server identity, ale pak už nebudete moci zvát ani být zván/a skrze e-mailovou adresu."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Přes vlastní serverové volby se můžete přihlásit k dalším Matrix serverům tak, že zadáte jinou adresu domovského serveru.<br/>Díky tomu můžete v Riotu používat Matrix účet z jiného domovského serveru.<br/><br/>Můžete nastavit i vlastní server identity, ale pak už nebudete moci zvát ani být zván/a skrze e-mailovou adresu.",
+    "Co-ordination for Riot translators": "Spolupráce pro překladatele Riot"
 }
