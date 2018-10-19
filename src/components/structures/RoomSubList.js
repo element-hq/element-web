@@ -52,7 +52,6 @@ const RoomSubList = React.createClass({
         onHeaderClick: PropTypes.func,
         alwaysShowHeader: PropTypes.bool,
         incomingCall: PropTypes.object,
-        onShowMoreRooms: PropTypes.func,
         searchFilter: PropTypes.string,
         emptyContent: PropTypes.node, // content shown if the list is empty
         headerItems: PropTypes.node, // content shown in the sublist header
@@ -70,8 +69,6 @@ const RoomSubList = React.createClass({
     getDefaultProps: function() {
         return {
             onHeaderClick: function() {
-            }, // NOP
-            onShowMoreRooms: function() {
             }, // NOP
             extraTiles: [],
             isInvite: false,
@@ -138,7 +135,6 @@ const RoomSubList = React.createClass({
             // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
             this.setState({hidden: isHidden});
-            this.props.onShowMoreRooms();
             this.props.onHeaderClick(isHidden);
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header

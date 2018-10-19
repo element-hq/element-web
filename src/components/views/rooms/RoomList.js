@@ -406,13 +406,6 @@ module.exports = React.createClass({
         }
     },
 
-    onShowMoreRooms: function() {
-        // kick gemini in the balls to get it to wake up
-        // XXX: uuuuuuugh.
-        if (!this._gemScroll) return;
-        this._gemScroll.forceUpdate();
-    },
-
     _getEmptyContent: function(section) {
         if (this.state.selectedTags.length > 0) {
             return null;
@@ -508,9 +501,6 @@ module.exports = React.createClass({
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
 
-        // XXX: we can't detect device-level (localStorage) settings onChange as the SettingsStore does not notify
-        // so checking on every render is the sanest thing at this time.
-        const showEmpty = SettingsStore.getValue('RoomSubList.showEmpty');
 
         const self = this;
 
@@ -518,7 +508,6 @@ module.exports = React.createClass({
             const defaultProps = {
                 collapsed: self.props.collapsed,
                 searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
                 showEmpty: showEmpty,
                 incomingCall: self.state.incomingCall,
             };
