@@ -220,8 +220,9 @@ module.exports = React.createClass({
         let canonical_alias_section;
         if (this.props.canSetCanonicalAlias) {
             let found = false;
+            const canonicalValue = this.state.canonicalAlias || "";
             canonical_alias_section = (
-                <select onChange={this.onCanonicalAliasChange} value={this.state.canonicalAlias}>
+                <select onChange={this.onCanonicalAliasChange} value={canonicalValue}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(self.state.domainToAliases).map((domain, i) => {
