@@ -34,7 +34,8 @@ import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
-
+import ResizeHandle from '../views/elements/ResizeHandle';
+import {Resizer, CollapseDistributor} from '../../resizer'
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -91,6 +92,12 @@ const LoggedInView = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        this.resizer = this._createResizer();
+        this.resizer.attach();
+        this._loadResizerPreferences();
+    },
+
     componentWillMount: function() {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
@@ -120,6 +127,7 @@ const LoggedInView = React.createClass({
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
+        this.resizer.detach();
     },
 
     // Child components assume that the client peg will not be null, so give them some
@@ -143,6 +151,49 @@ const LoggedInView = React.createClass({
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
+    },
+
+    _createResizer() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        };
+        const collapseConfig = {
+            toggleSize: 260 - 50,
+            onCollapsed: (collapsed, item) => {
+                if (item.classList.contains("mx_LeftPanel_container")) {
+                    this.setState({collapseLhs: collapsed});
+                    if (collapsed) {
+                        window.localStorage.setItem("mx_lhs_size", '0');
+                    }
+                }
+            },
+            onResized: (size, item) => {
+                if (item.classList.contains("mx_LeftPanel_container")) {
+                    window.localStorage.setItem("mx_lhs_size", '' + size);
+                } else if(item.classList.contains("mx_RightPanel")) {
+                    window.localStorage.setItem("mx_rhs_size", '' + size);
+                }
+            },
+        };
+        const resizer = new Resizer(
+            this.resizeContainer,
+            CollapseDistributor,
+            collapseConfig);
+        resizer.setClassNames(classNames);
+        return resizer;
+    },
+
+    _loadResizerPreferences() {
+        const lhsSize = window.localStorage.getItem("mx_lhs_size");
+        if (lhsSize !== null) {
+            this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
+        }
+        const rhsSize = window.localStorage.getItem("mx_rhs_size");
+        if (rhsSize !== null) {
+            this.resizer.forHandleAt(1).resize(parseInt(rhsSize, 10));
+        }
     },
 
     onAccountData: function(event) {
@@ -186,13 +237,13 @@ const LoggedInView = React.createClass({
     _updateServerNoticeEvents: async function() {
         const roomLists = RoomListStore.getRoomLists();
         if (!roomLists['m.server_notice']) return [];
-        
+
         const pinnedEvents = [];
         for (const room of roomLists['m.server_notice']) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
-            
+
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
                 const timeline = await this._matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId, 0);
@@ -204,7 +255,7 @@ const LoggedInView = React.createClass({
             serverNoticeEvents: pinnedEvents,
         });
     },
-    
+
 
     _onKeyDown: function(ev) {
             /*
@@ -361,6 +412,10 @@ const LoggedInView = React.createClass({
         this.setState({mouseDown: null});
     },
 
+    _setResizeContainerRef(div) {
+        this.resizeContainer = div;
+    },
+
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
@@ -507,14 +562,16 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div className={bodyClasses}>
+                    <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
-                            collapsed={this.props.collapseLhs || false}
+                            collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
+                        <ResizeHandle/>
                         <main className='mx_MatrixChat_middlePanel'>
                             { page_element }
                         </main>
+                        <ResizeHandle reverse={true}/>
                         { right_panel }
                     </div>
                 </DragDropContext>

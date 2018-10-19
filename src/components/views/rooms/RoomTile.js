@@ -337,10 +337,8 @@ module.exports = React.createClass({
                     { dmIndicator }
                 </div>
             </div>
-            <div className="mx_RoomTile_nameContainer">
-                { label }
-                { badge }
-            </div>
+            { label }
+            { badge }
             { /* { incomingCallBox } */ }
             { tooltip }
         </AccessibleButton>;

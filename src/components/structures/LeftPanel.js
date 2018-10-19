@@ -192,20 +192,13 @@ var LeftPanel = React.createClass({
             topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
         }
 */
-        const classes = classNames(
-            "mx_LeftPanel",
-            {
-                "collapsed": this.props.collapsed,
-            },
-        );
-
         const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
             {
-                "mx_LeftPanel_container_collapsed": this.props.collapsed,
+                "collapsed": this.props.collapsed,
                 "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
                 "mx_fadable_faded": this.props.disabled,
             },
@@ -214,7 +207,7 @@ var LeftPanel = React.createClass({
         return (
             <div className={containerClasses}>
                 { tagPanel }
-                <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+                <aside className={"mx_LeftPanel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     { topBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList

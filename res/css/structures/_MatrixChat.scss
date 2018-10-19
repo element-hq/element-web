@@ -68,19 +68,7 @@ limitations under the License.
     transform: translateX(-50%);
 }
 
-.mx_MatrixChat .mx_LeftPanel {
-    order: 1;
-    background-color: $secondary-accent-color;
-    flex: 0 0 260px;
-}
-
-.mx_MatrixChat .mx_LeftPanel.collapsed {
-    flex: 0 0 60px;
-}
-
 .mx_MatrixChat .mx_MatrixChat_middlePanel {
-    order: 2;
-
     background-color: $primary-bg-color;
 
     flex: 1;
@@ -99,14 +87,4 @@ limitations under the License.
        have to be auto, empirically.
     */
     height: 100%;
-}
-
-.mx_MatrixChat .mx_RightPanel {
-    order: 3;
-
-    flex: 0 0 235px;
-}
-
-.mx_MatrixChat .mx_RightPanel.collapsed {
-    flex: 0 0 122px;
 }

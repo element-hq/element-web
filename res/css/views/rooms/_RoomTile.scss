@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 .mx_RoomTile {
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     cursor: pointer;
-    display: block;
     height: 40px;
-    margin: 0px 9px 0px 9px;
-
+    margin: 0px 3px;
+    position: relative;
     background-color: $secondary-accent-color;
 }
 
@@ -31,26 +32,18 @@ limitations under the License.
     left: -12px;
 }
 
-
-.mx_RoomTile_nameContainer {
-    display: inline-block;
-    width: 180px;
-    height: 24px;
-}
-
-.mx_RoomTile_avatar_container {
-    position: relative;
-}
-
 .mx_RoomTile_avatar {
-    display: inline-block;
+    flex: 0;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 14px;
     padding-right: 12px;
     width: 32px;
     height: 32px;
-    vertical-align: middle;
+}
+
+.mx_RoomTile_avatar_container {
+    position: relative;
 }
 
 .mx_RoomTile_dm {
@@ -62,19 +55,13 @@ limitations under the License.
 }
 
 .mx_RoomTile_name {
-    display: inline-block;
+    flex: 1 5 auto;
     font-size: 14px;
     font-weight: 600;
-    position: relative;
-    width: 165px;
-    vertical-align: middle;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 3px;
+    padding: 6px;
     color: $roomtile-name-color;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
 }
 
@@ -82,25 +69,30 @@ limitations under the License.
 /*    color: rgba(69, 69, 69, 0.5); */
 }
 
-.collapsed .mx_RoomTile_nameContainer {
-    width: 60px; /* colapsed panel width */
-}
+.collapsed {
+    .mx_RoomTile_name {
+        display: none;
+    }
 
-.collapsed .mx_RoomTile_name {
-    display: none;
-}
+    .mx_RoomTile_badge {
+        min-width: 12px;
+        border-radius: 16px;
+        padding: 0px 4px 0px 4px;
+        z-index: 3;
+    }
 
-.collapsed .mx_RoomTile_badge {
-    top: 0px;
-    min-width: 12px;
-    border-radius: 16px;
-    padding: 0px 4px 0px 4px;
-    z-index: 3;
-}
+    /* Hide the bottom of speech bubble */
+    .mx_RoomTile_highlight .mx_RoomTile_badge:after {
+        display: none;
+    }
 
-/* Hide the bottom of speech bubble */
-.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
-    display: none;
+    .mx_RoomTile_badge {
+        display: block;
+        position: absolute;
+        height: 15px;
+        right: 5px;
+        top: 2px;
+    }
 }
 
 /* This is the bottom of the speech bubble */
@@ -116,12 +108,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_badge {
-    display: inline-block;
+    flex: 0 1 content;
     min-width: 15px;
-    height: 15px;
-    position: absolute;
-    right: 8px; /*gutter */
-    top: 9px;
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
