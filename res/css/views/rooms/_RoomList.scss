@@ -23,6 +23,11 @@ limitations under the License.
     flex-direction: column;
 }
 
+/* hide resize handles next to collapsed / empty sublists */
+.mx_RoomList .mx_RoomSubList:not(.mx_RoomSubList_nonEmpty) + .mx_ResizeHandle  {
+    display: none;
+}
+
 .mx_RoomList_expandButton {
     margin-left: 8px;
     cursor: pointer;
