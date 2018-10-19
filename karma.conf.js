@@ -51,7 +51,8 @@ webpack_config.resolve.alias['sinon'] = 'sinon/pkg/sinon.js';
 
 webpack_config.resolve.modules = [
     path.resolve('./test'),
-    "node_modules"
+    "node_modules",
+    "electron_app/node_modules"
 ];
 
 webpack_config.devtool = 'inline-source-map';
