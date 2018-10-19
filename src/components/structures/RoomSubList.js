@@ -271,9 +271,6 @@ const RoomSubList = React.createClass({
         const subListNotifCount = subListNotifications[0];
         const subListNotifHighlight = subListNotifications[1];
 
-        const totalTiles = this.props.list.length + (this.props.extraTiles || []).length;
-        const roomCount = totalTiles > 0 ? totalTiles : '';
-
         const chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronRight': this.state.hidden,
@@ -319,7 +316,11 @@ const RoomSubList = React.createClass({
 
         let addRoomButton;
         if (this.props.onAddRoom) {
-            addRoomButton = (<AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom">+</AccessibleButton>);
+            addRoomButton = (
+                <AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom">
+                    +
+                </AccessibleButton>
+            );
         }
 
         const tabindex = this.props.searchFilter === "" ? "0" : "-1";
