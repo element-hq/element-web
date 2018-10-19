@@ -526,8 +526,9 @@ module.exports = React.createClass({
                 props = Object.assign({}, defaultProps, props);
                 const isLast = i === subListsProps.length - 1;
                 const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-                if (!len) {
-                    return components;  //dont render
+                // empty and no add button? dont render
+                if (!len && !props.onAddRoom) {
+                    return components;
                 }
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
