@@ -508,7 +508,6 @@ module.exports = React.createClass({
             const defaultProps = {
                 collapsed: self.props.collapsed,
                 searchFilter: self.props.searchFilter,
-                showEmpty: showEmpty,
                 incomingCall: self.state.incomingCall,
             };
             return subListsProps.reduce((components, props, i) => {

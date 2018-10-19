@@ -56,7 +56,6 @@ const RoomSubList = React.createClass({
         emptyContent: PropTypes.node, // content shown if the list is empty
         headerItems: PropTypes.node, // content shown in the sublist header
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
-        showEmpty: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -72,7 +71,6 @@ const RoomSubList = React.createClass({
             }, // NOP
             extraTiles: [],
             isInvite: false,
-            showEmpty: true,
         };
     },
 
