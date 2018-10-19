@@ -412,6 +412,10 @@ const LoggedInView = React.createClass({
         this.setState({mouseDown: null});
     },
 
+    _setResizeContainerRef(div) {
+        this.resizeContainer = div;
+    },
+
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
@@ -558,7 +562,7 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div ref={(div) => this.resizeContainer = div} className={bodyClasses}>
+                    <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
                             collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
