@@ -97,4 +97,10 @@ class Sizer {
     }
 }
 
-module.exports = {Sizer};
+class FlexSizer extends Sizer {
+    setItemSize(item, size) {
+        item.style.flexBasis = `${Math.round(size)}px`;
+    }
+}
+
+module.exports = {Sizer, FlexSizer};

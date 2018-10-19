@@ -19,8 +19,6 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from '../../index';
-import { Droppable } from 'react-beautiful-dnd';
-import { _t } from '../../languageHandler';
 import dis from '../../dispatcher';
 import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
@@ -364,14 +362,27 @@ const RoomSubList = React.createClass({
             }
         }
 
-        if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0) {
+        const len = this.state.sortedList.length + this.props.extraTiles.length;
 
-            const subList = this.state.hidden ? undefined : content;
-
-            return <div className={"mx_RoomSubList"}>
-                {this._getHeaderJsx()}
-                {subList}
-            </div>;
+        if (len) {
+            if (this.state.hidden) {
+                return <div className={["mx_RoomSubList", "mx_RoomSubList_hidden"]}>
+                    {this._getHeaderJsx()}
+                </div>;
+            } else {
+                const heightEstimation = (len * 40) + 31;
+                const style = {
+                    flexBasis: `${heightEstimation}px`,
+                    maxHeight: `${heightEstimation}px`,
+                };
+                const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+                return <div className={"mx_RoomSubList"} style={style}>
+                    {this._getHeaderJsx()}
+                    <GeminiScrollbarWrapper>
+                        { content }
+                    </GeminiScrollbarWrapper>
+                </div>;
+            }
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
             if (this.props.showSpinner) {

@@ -34,6 +34,8 @@ import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
 import GroupStore from '../../../stores/GroupStore';
 
+import ResizeHandle from '../elements/ResizeHandle';
+import {Resizer, FixedDistributor, FlexSizer} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -133,15 +135,17 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        // Initialise the stickyHeaders when the component is created
-        this._updateStickyHeaders(true);
-
+        this.resizer = new Resizer(this.resizeContainer, FixedDistributor, null, FlexSizer);
+        this.resizer.setClassNames({
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        });
+        this.resizer.attach();
         this.mounted = true;
     },
 
     componentDidUpdate: function() {
-        // Reinitialise the stickyHeaders when the component is updated
-        this._updateStickyHeaders(true);
         this._repositionIncomingCallBox(undefined, false);
     },
 
@@ -209,10 +213,6 @@ module.exports = React.createClass({
         if (!isHidden) {
             const self = this;
             this.setState({ isLoadingLeftRooms: true });
-
-            // Try scrolling to position
-            this._updateStickyHeaders(true, scrollToPosition);
-
             // we don't care about the response since it comes down via "Room"
             // events.
             MatrixClientPeg.get().syncLeftRooms().catch(function(err) {
@@ -222,11 +222,6 @@ module.exports = React.createClass({
                 self.setState({ isLoadingLeftRooms: false });
             });
         }
-    },
-
-    onSubListHeaderClick: function(isHidden, scrollToPosition) {
-        // The scroll area has expanded or contracted, so re-calculate sticky headers positions
-        this._updateStickyHeaders(true, scrollToPosition);
     },
 
     onRoomReceipt: function(receiptEvent, room) {
@@ -378,7 +373,6 @@ module.exports = React.createClass({
     _whenScrolling: function(e) {
         this._hideTooltip(e);
         this._repositionIncomingCallBox(e, false);
-        this._updateStickyHeaders(false);
     },
 
     _hideTooltip: function(e) {
@@ -409,106 +403,6 @@ module.exports = React.createClass({
 
             incomingCallBox.style.top = top + "px";
             incomingCallBox.style.left = scrollArea.offsetLeft + scrollArea.offsetWidth + 12 + "px";
-        }
-    },
-
-    // Doing the sticky headers as raw DOM, for speed, as it gets very stuttery if done
-    // properly through React
-    _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
-        const scrollArea = this._getScrollNode();
-        if (!scrollArea) return;
-        // Use the offset of the top of the scroll area from the window
-        // as this is used to calculate the CSS fixed top position for the stickies
-        const scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-        // Use the offset of the top of the componet from the window
-        // as this is used to calculate the CSS fixed top position for the stickies
-        const scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
-
-        if (initialise) {
-            // Get a collection of sticky header containers references
-            this.stickies = document.getElementsByClassName("mx_RoomSubList_labelContainer");
-
-            if (!this.stickies.length) return;
-
-            // Make sure there is sufficient space to do sticky headers: 120px plus all the sticky headers
-            this.scrollAreaSufficient = (120 + (this.stickies[0].getBoundingClientRect().height * this.stickies.length)) < scrollAreaHeight;
-
-            // Initialise the sticky headers
-            if (typeof this.stickies === "object" && this.stickies.length > 0) {
-                // Initialise the sticky headers
-                Array.prototype.forEach.call(this.stickies, function(sticky, i) {
-                    // Save the positions of all the stickies within scroll area.
-                    // These positions are relative to the LHS Panel top
-                    sticky.dataset.originalPosition = sticky.offsetTop - scrollArea.offsetTop;
-
-                    // Save and set the sticky heights
-                    const originalHeight = sticky.getBoundingClientRect().height;
-                    sticky.dataset.originalHeight = originalHeight;
-                    sticky.style.height = originalHeight;
-
-                    return sticky;
-                });
-            }
-        }
-
-        if (!this.stickies) return;
-
-        const self = this;
-        let scrollStuckOffset = 0;
-        // Scroll to the passed in position, i.e. a header was clicked and in a scroll to state
-        // rather than a collapsable one (see RoomSubList.isCollapsableOnClick method for details)
-        if (scrollToPosition !== undefined) {
-            scrollArea.scrollTop = scrollToPosition;
-        }
-        // Stick headers to top and bottom, or free them
-        Array.prototype.forEach.call(this.stickies, function(sticky, i, stickyWrappers) {
-            const stickyPosition = sticky.dataset.originalPosition;
-            const stickyHeight = sticky.dataset.originalHeight;
-            const stickyHeader = sticky.childNodes[0];
-            const topStuckHeight = stickyHeight * i;
-            const bottomStuckHeight = stickyHeight * (stickyWrappers.length - i);
-
-            if (self.scrollAreaSufficient && stickyPosition < (scrollArea.scrollTop + topStuckHeight)) {
-                // Top stickies
-                sticky.dataset.stuck = "top";
-                stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = scrollAreaOffset + topStuckHeight + "px";
-                // If stuck at top adjust the scroll back down to take account of all the stuck headers
-                if (scrollToPosition !== undefined && stickyPosition === scrollToPosition) {
-                    scrollStuckOffset = topStuckHeight;
-                }
-            } else if (self.scrollAreaSufficient && stickyPosition > ((scrollArea.scrollTop + scrollAreaHeight) - bottomStuckHeight)) {
-                /// Bottom stickies
-                sticky.dataset.stuck = "bottom";
-                stickyHeader.classList.add("mx_RoomSubList_fixed");
-                stickyHeader.style.top = (scrollAreaOffset + scrollAreaHeight) - bottomStuckHeight + "px";
-            } else {
-                // Not sticky
-                sticky.dataset.stuck = "none";
-                stickyHeader.classList.remove("mx_RoomSubList_fixed");
-                stickyHeader.style.top = null;
-            }
-        });
-        // Adjust the scroll to take account of top stuck headers
-        if (scrollToPosition !== undefined) {
-            scrollArea.scrollTop -= scrollStuckOffset;
-        }
-    },
-
-    _updateStickyHeaders: function(initialise, scrollToPosition) {
-        return;
-
-        const self = this;
-
-        if (initialise) {
-            // Useing setTimeout to ensure that the code is run after the painting
-            // of the newly rendered object as using requestAnimationFrame caused
-            // artefacts to appear on screen briefly
-            window.setTimeout(function() {
-                self._initAndPositionStickyHeaders(initialise, scrollToPosition);
-            });
-        } else {
-            this._initAndPositionStickyHeaders(initialise, scrollToPosition);
         }
     },
 
@@ -611,146 +505,135 @@ module.exports = React.createClass({
         return ret;
     },
 
-    _collectGemini(gemScroll) {
-        this._gemScroll = gemScroll;
-    },
-
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         // XXX: we can't detect device-level (localStorage) settings onChange as the SettingsStore does not notify
         // so checking on every render is the sanest thing at this time.
         const showEmpty = SettingsStore.getValue('RoomSubList.showEmpty');
 
         const self = this;
+
+        function mapProps(subListsProps) {
+            const defaultProps = {
+                collapsed: self.props.collapsed,
+                searchFilter: self.props.searchFilter,
+                onShowMoreRooms: self.onShowMoreRooms,
+                showEmpty: showEmpty,
+                incomingCall: self.state.incomingCall,
+            };
+            return subListsProps.reduce((components, props, i) => {
+                props = Object.assign({}, defaultProps, props);
+                const isLast = i === subListsProps.length - 1;
+                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
+                if (!len) {
+                    return components;  //dont render
+                }
+                const {key, label, ... otherProps} = props;
+                const chosenKey = key || label;
+
+                let subList = <RoomSubList key={chosenKey} label={label} {...otherProps} />;
+                if (!isLast) {
+                    return components.concat(
+                        subList,
+                        <ResizeHandle key={chosenKey+"-resizer"} vertical={true} />
+                    );
+                } else {
+                    return components.concat(subList);
+                }
+            }, []);
+        }
+
+        let subLists = [
+            {
+                list: [],
+                extraTiles: this._makeGroupInviteTiles(self.props.searchFilter),
+                label: _t('Community Invites'),
+                order: "recent",
+                isInvite: true,
+            },
+            {
+                list: self.state.lists['im.vector.fake.invite'],
+                label: _t('Invites'),
+                order: "recent",
+                isInvite: true,
+            },
+            {
+                list: self.state.lists['m.favourite'],
+                label: _t('Favourites'),
+                tagName: "m.favourite",
+                emptyContent: this._getEmptyContent('m.favourite'),
+                order: "manual",
+            },
+            {
+                list: self.state.lists['im.vector.fake.direct'],
+                label: _t('People'),
+                tagName: "im.vector.fake.direct",
+                emptyContent: this._getEmptyContent('im.vector.fake.direct'),
+                headerItems: this._getHeaderItems('im.vector.fake.direct'),
+                order: "recent",
+                alwaysShowHeader: true,
+            },
+            {
+                list: self.state.lists['im.vector.fake.recent'],
+                label: _t('Rooms'),
+                emptyContent: this._getEmptyContent('im.vector.fake.recent'),
+                headerItems: this._getHeaderItems('im.vector.fake.recent'),
+                order: "recent",
+            },
+        ];
+        const tagSubLists = Object.keys(self.state.lists)
+            .filter((tagName) => {
+                return !tagName.match(STANDARD_TAGS_REGEX);
+            }).map((tagName) => {
+                return {
+                    list: self.state.lists[tagName],
+                    key: tagName,
+                    label: labelForTagName(tagName),
+                    tagName: tagName,
+                    emptyContent: this._getEmptyContent(tagName),
+                    order: "manual",
+                };
+            });
+        subLists = subLists.concat(tagSubLists);
+        subLists = subLists.concat([
+            {
+                list: self.state.lists['m.lowpriority'],
+                label: _t('Low priority'),
+                tagName: "m.lowpriority",
+                emptyContent: this._getEmptyContent('m.lowpriority'),
+                order: "recent",
+            },
+            {
+                list: self.state.lists['im.vector.fake.archived'],
+                emptyContent: self.props.collapsed ?
+                    null :
+                    <div className="mx_RoomList_emptySubListTip_container">
+                        <div className="mx_RoomList_emptySubListTip">
+                            { _t('You have no historical rooms') }
+                        </div>
+                    </div>,
+                label: _t('Historical'),
+                order: "recent",
+                alwaysShowHeader: true,
+                startAsHidden: true,
+                showSpinner: self.state.isLoadingLeftRooms,
+                onHeaderClick: self.onArchivedHeaderClick,
+            },
+            {
+                list: self.state.lists['m.server_notice'],
+                label: _t('System Alerts'),
+                tagName: "m.lowpriority",
+                order: "recent",
+            },
+        ]);
+
+        const subListComponents = mapProps(subLists);
+
         return (
-            <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
-                autoshow={true} onScroll={self._whenScrolling} onResize={self._whenScrolling} wrappedRef={this._collectGemini}>
-            <div className="mx_RoomList">
-                <RoomSubList list={[]}
-                             extraTiles={this._makeGroupInviteTiles(self.props.searchFilter)}
-                             label={_t('Community Invites')}
-                             order="recent"
-                             isInvite={true}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty}
-                />
-
-                <RoomSubList list={self.state.lists['im.vector.fake.invite']}
-                             label={_t('Invites')}
-                             order="recent"
-                             isInvite={true}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty}
-                />
-
-                <RoomSubList list={self.state.lists['m.favourite']}
-                             label={_t('Favourites')}
-                             tagName="m.favourite"
-                             emptyContent={this._getEmptyContent('m.favourite')}
-                             order="manual"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty} />
-
-                <RoomSubList list={self.state.lists['im.vector.fake.direct']}
-                             label={_t('People')}
-                             tagName="im.vector.fake.direct"
-                             emptyContent={this._getEmptyContent('im.vector.fake.direct')}
-                             headerItems={this._getHeaderItems('im.vector.fake.direct')}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty} />
-
-                <RoomSubList list={self.state.lists['im.vector.fake.recent']}
-                             label={_t('Rooms')}
-                             emptyContent={this._getEmptyContent('im.vector.fake.recent')}
-                             headerItems={this._getHeaderItems('im.vector.fake.recent')}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty} />
-
-                { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(STANDARD_TAGS_REGEX)) {
-                        return <RoomSubList list={self.state.lists[tagName]}
-                             key={tagName}
-                             label={labelForTagName(tagName)}
-                             tagName={tagName}
-                             emptyContent={this._getEmptyContent(tagName)}
-                             order="manual"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                                            showEmpty={showEmpty} />;
-                    }
-                }) }
-
-                <RoomSubList list={self.state.lists['m.lowpriority']}
-                             label={_t('Low priority')}
-                             tagName="m.lowpriority"
-                             emptyContent={this._getEmptyContent('m.lowpriority')}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty} />
-
-                <RoomSubList list={self.state.lists['im.vector.fake.archived']}
-                             emptyContent={self.props.collapsed ? null :
-                                 <div className="mx_RoomList_emptySubListTip_container">
-                                     <div className="mx_RoomList_emptySubListTip">
-                                         { _t('You have no historical rooms') }
-                                     </div>
-                                 </div>
-                             }
-                             label={_t('Historical')}
-                             order="recent"
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             startAsHidden={true}
-                             showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick={self.onArchivedHeaderClick}
-                             incomingCall={self.state.incomingCall}
-                             searchFilter={self.props.searchFilter}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={showEmpty} />
-
-                <RoomSubList list={self.state.lists['m.server_notice']}
-                             label={_t('System Alerts')}
-                             tagName="m.lowpriority"
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                             showEmpty={false} />
+            <div ref={(d) => this.resizeContainer = d} className="mx_RoomList">
+                { subListComponents }
             </div>
-            </GeminiScrollbarWrapper>
         );
     },
 });

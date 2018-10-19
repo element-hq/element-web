@@ -27,7 +27,7 @@ class FixedDistributor {
         this.sizer = sizer;
         this.item = item;
         this.beforeOffset = sizer.getItemOffset(this.item);
-        this.onResized = config.onResized;
+        this.onResized = config && config.onResized;
     }
 
     resize(offset) {
