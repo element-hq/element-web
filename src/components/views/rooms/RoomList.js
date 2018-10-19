@@ -501,7 +501,6 @@ module.exports = React.createClass({
                 tagName: "im.vector.fake.direct",
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
-                alwaysShowHeader: true,
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
@@ -536,7 +535,6 @@ module.exports = React.createClass({
                 list: self.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
                 order: "recent",
-                alwaysShowHeader: true,
                 startAsHidden: true,
                 showSpinner: self.state.isLoadingLeftRooms,
                 onHeaderClick: self.onArchivedHeaderClick,

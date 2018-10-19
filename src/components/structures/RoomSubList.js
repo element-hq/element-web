@@ -50,7 +50,6 @@ const RoomSubList = React.createClass({
         showSpinner: PropTypes.bool, // true to show a spinner if 0 elements when expanded
         collapsed: PropTypes.bool.isRequired, // is LeftPanel collapsed?
         onHeaderClick: PropTypes.func,
-        alwaysShowHeader: PropTypes.bool,
         incomingCall: PropTypes.object,
         searchFilter: PropTypes.string,
         headerItems: PropTypes.node, // content shown in the sublist header
@@ -371,7 +370,7 @@ const RoomSubList = React.createClass({
 
             return (
                 <div className="mx_RoomSubList">
-                    {this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined}
+                    { this._getHeaderJsx() }
                     { content }
                 </div>
             );
