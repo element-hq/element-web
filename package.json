@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -71,7 +71,7 @@
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.0.0",
     "matrix-js-sdk": "0.12.0",
-    "matrix-react-sdk": "0.14.0",
+    "matrix-react-sdk": "0.14.1",
     "modernizr": "^3.6.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.0",
