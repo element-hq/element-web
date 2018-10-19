@@ -265,12 +265,6 @@ const RoomSubList = React.createClass({
         const subListNotifCount = subListNotifications[0];
         const subListNotifHighlight = subListNotifications[1];
 
-        const chevronClasses = classNames({
-            'mx_RoomSubList_chevron': true,
-            'mx_RoomSubList_chevronRight': this.state.hidden,
-            'mx_RoomSubList_chevronDown': !this.state.hidden,
-        });
-
         const badgeClasses = classNames({
             'mx_RoomSubList_badge': true,
             'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
@@ -318,11 +312,21 @@ const RoomSubList = React.createClass({
         }
 
         const tabindex = this.props.searchFilter === "" ? "0" : "-1";
+        const len = this.state.sortedList.length + this.props.extraTiles.length;
+        let chevron;
+        if (len) {
+            const chevronClasses = classNames({
+                'mx_RoomSubList_chevron': true,
+                'mx_RoomSubList_chevronRight': this.state.hidden,
+                'mx_RoomSubList_chevronDown': !this.state.hidden,
+            });
+            chevron = (<div className={chevronClasses}></div>);
+        }
 
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
-                    <div className={chevronClasses}></div>
+                    { chevron }
                     { this.props.collapsed ? '' : this.props.label }
                     { badge }
                     { incomingCall }
