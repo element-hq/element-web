@@ -117,7 +117,10 @@ module.exports = {
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
         },
-        modulesDirectories: ["node_modules", "electron_app/node_modules"],
+        modules: [
+            "node_modules",
+            "electron_app/node_modules"
+        ],
     },
     externals: {
         // Don't try to bundle electron: leave it as a commonjs dependency
