@@ -443,14 +443,11 @@ module.exports = React.createClass({
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
 
-
-        const self = this;
-
-        function mapProps(subListsProps) {
+        const mapProps = (subListsProps) => {
             const defaultProps = {
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                incomingCall: self.state.incomingCall,
+                collapsed: this.props.collapsed,
+                searchFilter: this.props.searchFilter,
+                incomingCall: this.state.incomingCall,
             };
             return subListsProps.reduce((components, props, i) => {
                 props = Object.assign({}, defaultProps, props);
@@ -478,25 +475,25 @@ module.exports = React.createClass({
         let subLists = [
             {
                 list: [],
-                extraTiles: this._makeGroupInviteTiles(self.props.searchFilter),
+                extraTiles: this._makeGroupInviteTiles(this.props.searchFilter),
                 label: _t('Community Invites'),
                 order: "recent",
                 isInvite: true,
             },
             {
-                list: self.state.lists['im.vector.fake.invite'],
+                list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
                 order: "recent",
                 isInvite: true,
             },
             {
-                list: self.state.lists['m.favourite'],
+                list: this.state.lists['m.favourite'],
                 label: _t('Favourites'),
                 tagName: "m.favourite",
                 order: "manual",
             },
             {
-                list: self.state.lists['im.vector.fake.direct'],
+                list: this.state.lists['im.vector.fake.direct'],
                 label: _t('People'),
                 tagName: "im.vector.fake.direct",
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
@@ -504,19 +501,19 @@ module.exports = React.createClass({
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
-                list: self.state.lists['im.vector.fake.recent'],
+                list: this.state.lists['im.vector.fake.recent'],
                 label: _t('Rooms'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
-        const tagSubLists = Object.keys(self.state.lists)
+        const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
                 return !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
-                    list: self.state.lists[tagName],
+                    list: this.state.lists[tagName],
                     key: tagName,
                     label: labelForTagName(tagName),
                     tagName: tagName,
@@ -526,21 +523,21 @@ module.exports = React.createClass({
         subLists = subLists.concat(tagSubLists);
         subLists = subLists.concat([
             {
-                list: self.state.lists['m.lowpriority'],
+                list: this.state.lists['m.lowpriority'],
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
                 order: "recent",
             },
             {
-                list: self.state.lists['im.vector.fake.archived'],
+                list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
                 order: "recent",
                 startAsHidden: true,
-                showSpinner: self.state.isLoadingLeftRooms,
-                onHeaderClick: self.onArchivedHeaderClick,
+                showSpinner: this.state.isLoadingLeftRooms,
+                onHeaderClick: this.onArchivedHeaderClick,
             },
             {
-                list: self.state.lists['m.server_notice'],
+                list: this.state.lists['m.server_notice'],
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
                 order: "recent",
