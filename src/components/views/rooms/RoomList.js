@@ -449,14 +449,15 @@ module.exports = React.createClass({
                 searchFilter: this.props.searchFilter,
                 incomingCall: this.state.incomingCall,
             };
+
+            subListsProps = subListsProps.filter((props => {
+                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
+                return len !== 0 || props.onAddRoom;
+            }));
+
             return subListsProps.reduce((components, props, i) => {
                 props = Object.assign({}, defaultProps, props);
                 const isLast = i === subListsProps.length - 1;
-                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-                // empty and no add button? dont render
-                if (!len && !props.onAddRoom) {
-                    return components;
-                }
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
 
