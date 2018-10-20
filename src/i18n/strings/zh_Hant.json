@@ -165,7 +165,7 @@
     "Success": "成功",
     "The default role for new room members is": "此聊天室新成員的預設角色是",
     "The main address for this room is": "此聊天室的主要地址是",
-    "This email address is already in use": "此電子郵件地址已經被使用",
+    "This email address is already in use": "這個電子郵件位址已被使用",
     "This email address was not found": "未找到此電子郵件地址",
     "The email address linked to your account must be entered.": "必須輸入和你帳號關聯的電子郵件地址。",
     "The file '%(fileName)s' exceeds this home server's size limit for uploads": "文件 '%(fileName)s' 超過了這個家伺服器的上傳大小限制",
