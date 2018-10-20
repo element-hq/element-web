@@ -84,7 +84,7 @@
     "autoprefixer": "^6.6.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^10.0.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-bluebird": "^1.1.1",
