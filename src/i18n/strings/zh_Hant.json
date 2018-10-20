@@ -1292,5 +1292,6 @@
     "Clear cache and resync": "清除快取並重新同步",
     "Please accept all of the policies": "請接受所有政策",
     "Please review and accept the policies of this homeserver:": "請審閱並接受此家伺服器的政策：",
-    "Add some now": "現在就新增一些"
+    "Add some now": "現在就新增一些",
+    "Joining room...": "正在加入聊天室……"
 }
