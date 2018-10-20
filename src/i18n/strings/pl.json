@@ -1178,5 +1178,7 @@
     "Increase performance by only loading room members on first view": "Zwiększ wydajność, ładując tylko członków pokoju w pierwszym widoku",
     "Enable widget screenshots on supported widgets": "Włącz widżety zrzutów ekranów na obsługiwanych widżetach",
     "Show empty room list headings": "Pokaż nagłówki z pustym pokojem",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "W zaszyfrowanych pokojach, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (w którym generowane są podglądy) nie może zbierać informacji o linkach widocznych w tym pokoju."
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "W zaszyfrowanych pokojach, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (w którym generowane są podglądy) nie może zbierać informacji o linkach widocznych w tym pokoju.",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Gdy ktoś umieści URL w wiadomości, można wyświetlić podgląd adresu URL, aby podać więcej informacji o tym łączu, takich jak tytuł, opis i obraz ze strony internetowej.",
+    "This event could not be displayed": "Ten event nie może zostać wyświetlony"
 }
