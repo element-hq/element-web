@@ -73,10 +73,13 @@ limitations under the License.
     filter: brightness($focus-brightness);
 }
 
+.mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
+    margin: 5px;
+}
+
 .mx_RoomSubList_addRoom {
     background-color: $roomheader-addroom-color;
     color: $roomsublist-background;
-    margin: 5px 10px;
     border-radius: 9px;
     text-align: center;
     vertical-align: middle;
