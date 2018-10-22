@@ -1514,6 +1514,7 @@ module.exports = React.createClass({
                                             canPreview={false} error={this.state.roomLoadError}
                                             roomAlias={roomAlias}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1558,6 +1559,7 @@ module.exports = React.createClass({
                                             inviterName={inviterName}
                                             canPreview={false}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             room={this.state.room}
                             />
                         </div>
@@ -1645,6 +1647,7 @@ module.exports = React.createClass({
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
+                                spinnerState="joining"
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
@@ -1670,7 +1673,7 @@ module.exports = React.createClass({
         let messageComposer, searchInfo;
         const canSpeak = (
             // joined and not showing search results
-            myMembership == 'join' && !this.state.searchResults
+            myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
             messageComposer =
@@ -1682,6 +1685,11 @@ module.exports = React.createClass({
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
                 />;
+        }
+
+        if (MatrixClientPeg.get().isGuest()) {
+            const LoginBox = sdk.getComponent('structures.LoginBox');
+            messageComposer = <LoginBox/>;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format

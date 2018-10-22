@@ -625,7 +625,7 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <div>
+            body = <div className="mx_DevTools_dialog">
                 <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
                 <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
                 <div className="mx_DevTools_label_bottom" />
@@ -634,7 +634,7 @@ export default class DevtoolsDialog extends React.Component {
         } else {
             const classes = "mx_DevTools_RoomStateExplorer_button";
             body = <div>
-                <div>
+                <div className="mx_DevTools_dialog">
                     <div className="mx_DevTools_label_left">{ _t('Toolbox') }</div>
                     <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
                     <div className="mx_DevTools_label_bottom" />
