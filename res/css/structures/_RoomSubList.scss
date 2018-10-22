@@ -24,12 +24,14 @@ limitations under the License.
 .mx_RoomSubList_nonEmpty {
     min-height: 80px;
     flex: 1;
+    margin-bottom: 8px;
 }
 
 .mx_RoomSubList_labelContainer {
     display: flex;
     flex-direction: row;
     flex: 0 0 auto;
+    margin: 8px 19px 0 0;
 }
 
 .mx_RoomSubList_label {

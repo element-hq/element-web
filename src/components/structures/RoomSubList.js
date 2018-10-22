@@ -348,7 +348,7 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx()}
                 </div>;
             } else {
-                const heightEstimation = (len * 40) + 31;
+                const heightEstimation = (len * 40) + 31 + (8 + 8);
                 const style = {
                     flexGrow: `${heightEstimation}`,
                     maxHeight: `${heightEstimation}px`,
