@@ -350,7 +350,7 @@ const RoomSubList = React.createClass({
             } else {
                 const heightEstimation = (len * 40) + 31;
                 const style = {
-                    flexBasis: `${heightEstimation}px`,
+                    flexGrow: `${heightEstimation}`,
                     maxHeight: `${heightEstimation}px`,
                 };
                 const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
