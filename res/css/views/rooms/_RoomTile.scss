@@ -141,15 +141,19 @@ limitations under the License.
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
     font-weight: 800;
+
+    .mx_RoomTile_name {
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_RoomTile_selected {
     border-radius: 4px;
     background-color: $roomtile-selected-bg-color;
-}
 
-.mx_RoomTile_selected .mx_RoomTile_name {
-    color: $roomtile-selected-color;
+    .mx_RoomTile_name {
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_DNDRoomTile {
