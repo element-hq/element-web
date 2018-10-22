@@ -406,71 +406,6 @@ module.exports = React.createClass({
         }
     },
 
-    onShowMoreRooms: function() {
-        // kick gemini in the balls to get it to wake up
-        // XXX: uuuuuuugh.
-        if (!this._gemScroll) return;
-        this._gemScroll.forceUpdate();
-    },
-
-    _getEmptyContent: function(section) {
-        if (this.state.selectedTags.length > 0) {
-            return null;
-        }
-
-        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
-
-        if (this.props.collapsed) {
-            return <RoomDropTarget label="" />;
-        }
-
-        const StartChatButton = sdk.getComponent('elements.StartChatButton');
-        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
-        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-
-        let tip = null;
-
-        switch (section) {
-            case 'im.vector.fake.direct':
-                tip = <div className="mx_RoomList_emptySubListTip">
-                    { _t(
-                        "Press <StartChatButton> to start a chat with someone",
-                        {},
-                        { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
-                    ) }
-                </div>;
-                break;
-            case 'im.vector.fake.recent':
-                tip = <div className="mx_RoomList_emptySubListTip">
-                    { _t(
-                        "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
-                        " <RoomDirectoryButton> to browse the directory",
-                        {},
-                        {
-                            'CreateRoomButton': <CreateRoomButton size="16" callout={true} />,
-                            'RoomDirectoryButton': <RoomDirectoryButton size="16" callout={true} />,
-                        },
-                    ) }
-                </div>;
-                break;
-        }
-
-        if (tip) {
-            return <div className="mx_RoomList_emptySubListTip_container">
-                { tip }
-            </div>;
-        }
-
-        // We don't want to display drop targets if there are no room tiles to drag'n'drop
-        if (this.state.totalRoomCount === 0) {
-            return null;
-        }
-
-        const labelText = phraseForSection(section);
-
-        return <RoomDropTarget label={labelText} />;
-    },
-
     _getHeaderItems: function(section) {
         const StartChatButton = sdk.getComponent('elements.StartChatButton');
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
@@ -508,28 +443,21 @@ module.exports = React.createClass({
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
 
-        // XXX: we can't detect device-level (localStorage) settings onChange as the SettingsStore does not notify
-        // so checking on every render is the sanest thing at this time.
-        const showEmpty = SettingsStore.getValue('RoomSubList.showEmpty');
-
-        const self = this;
-
-        function mapProps(subListsProps) {
+        const mapProps = (subListsProps) => {
             const defaultProps = {
-                collapsed: self.props.collapsed,
-                searchFilter: self.props.searchFilter,
-                onShowMoreRooms: self.onShowMoreRooms,
-                showEmpty: showEmpty,
-                incomingCall: self.state.incomingCall,
+                collapsed: this.props.collapsed,
+                searchFilter: this.props.searchFilter,
+                incomingCall: this.state.incomingCall,
             };
+
+            subListsProps = subListsProps.filter((props => {
+                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
+                return len !== 0 || props.onAddRoom;
+            }));
+
             return subListsProps.reduce((components, props, i) => {
                 props = Object.assign({}, defaultProps, props);
                 const isLast = i === subListsProps.length - 1;
-                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-                // empty and no add button? dont render
-                if (!len && !props.onAddRoom) {
-                    return components;
-                }
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
 
@@ -548,83 +476,69 @@ module.exports = React.createClass({
         let subLists = [
             {
                 list: [],
-                extraTiles: this._makeGroupInviteTiles(self.props.searchFilter),
+                extraTiles: this._makeGroupInviteTiles(this.props.searchFilter),
                 label: _t('Community Invites'),
                 order: "recent",
                 isInvite: true,
             },
             {
-                list: self.state.lists['im.vector.fake.invite'],
+                list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
                 order: "recent",
                 isInvite: true,
             },
             {
-                list: self.state.lists['m.favourite'],
+                list: this.state.lists['m.favourite'],
                 label: _t('Favourites'),
                 tagName: "m.favourite",
-                emptyContent: this._getEmptyContent('m.favourite'),
                 order: "manual",
             },
             {
-                list: self.state.lists['im.vector.fake.direct'],
+                list: this.state.lists['im.vector.fake.direct'],
                 label: _t('People'),
                 tagName: "im.vector.fake.direct",
-                emptyContent: this._getEmptyContent('im.vector.fake.direct'),
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
-                alwaysShowHeader: true,
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
-                list: self.state.lists['im.vector.fake.recent'],
+                list: this.state.lists['im.vector.fake.recent'],
                 label: _t('Rooms'),
-                emptyContent: this._getEmptyContent('im.vector.fake.recent'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
-        const tagSubLists = Object.keys(self.state.lists)
+        const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
                 return !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
-                    list: self.state.lists[tagName],
+                    list: this.state.lists[tagName],
                     key: tagName,
                     label: labelForTagName(tagName),
                     tagName: tagName,
-                    emptyContent: this._getEmptyContent(tagName),
                     order: "manual",
                 };
             });
         subLists = subLists.concat(tagSubLists);
         subLists = subLists.concat([
             {
-                list: self.state.lists['m.lowpriority'],
+                list: this.state.lists['m.lowpriority'],
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
-                emptyContent: this._getEmptyContent('m.lowpriority'),
                 order: "recent",
             },
             {
-                list: self.state.lists['im.vector.fake.archived'],
-                emptyContent: self.props.collapsed ?
-                    null :
-                    <div className="mx_RoomList_emptySubListTip_container">
-                        <div className="mx_RoomList_emptySubListTip">
-                            { _t('You have no historical rooms') }
-                        </div>
-                    </div>,
+                list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
                 order: "recent",
-                alwaysShowHeader: true,
                 startAsHidden: true,
-                showSpinner: self.state.isLoadingLeftRooms,
-                onHeaderClick: self.onArchivedHeaderClick,
+                showSpinner: this.state.isLoadingLeftRooms,
+                onHeaderClick: this.onArchivedHeaderClick,
             },
             {
-                list: self.state.lists['m.server_notice'],
+                list: this.state.lists['m.server_notice'],
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
                 order: "recent",
