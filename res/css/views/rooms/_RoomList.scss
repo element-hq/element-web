@@ -21,6 +21,7 @@ limitations under the License.
     /* use flexbox to layout sublists */
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
 
 /* hide resize handles next to collapsed / empty sublists */

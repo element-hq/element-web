@@ -51,6 +51,7 @@ limitations under the License.
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
 
 .mx_LeftPanel .mx_AppTile_mini {
