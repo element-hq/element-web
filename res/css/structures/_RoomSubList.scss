@@ -56,20 +56,14 @@ limitations under the License.
 }
 
 .mx_RoomSubList_badge {
-    display: inline-block;
-    min-width: 15px;
-    height: 15px;
-    position: absolute;
-    right: 8px; /*gutter */
-    top: 7px;
-    border-radius: 8px;
+    height: 18px;
+    border-radius: 9px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 10px;
-    text-align: center;
-    padding-top: 1px;
-    padding-left: 4px;
-    padding-right: 4px;
+    font-size: 12px;
+    vertical-align: middle;
+    line-height: 18px;
+    padding: 0 4px;
     background-color: $accent-color;
 }
 

@@ -75,6 +75,11 @@ limitations under the License.
     }
 
     .mx_RoomTile_badge {
+        display: block;
+        position: absolute;
+        height: 15px;
+        right: 8px;
+        top: 2px;
         min-width: 12px;
         border-radius: 16px;
         padding: 0px 4px 0px 4px;
@@ -84,14 +89,6 @@ limitations under the License.
     /* Hide the bottom of speech bubble */
     .mx_RoomTile_highlight .mx_RoomTile_badge:after {
         display: none;
-    }
-
-    .mx_RoomTile_badge {
-        display: block;
-        position: absolute;
-        height: 15px;
-        right: 5px;
-        top: 2px;
     }
 }
 
@@ -113,7 +110,7 @@ limitations under the License.
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 10px;
+    font-size: 12px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
