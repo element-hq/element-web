@@ -526,8 +526,9 @@ module.exports = React.createClass({
                 props = Object.assign({}, defaultProps, props);
                 const isLast = i === subListsProps.length - 1;
                 const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-                if (!len) {
-                    return components;  //dont render
+                // empty and no add button? dont render
+                if (!len && !props.onAddRoom) {
+                    return components;
                 }
                 const {key, label, ... otherProps} = props;
                 const chosenKey = key || label;
@@ -573,6 +574,7 @@ module.exports = React.createClass({
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
                 alwaysShowHeader: true,
+                onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
                 list: self.state.lists['im.vector.fake.recent'],
@@ -580,6 +582,7 @@ module.exports = React.createClass({
                 emptyContent: this._getEmptyContent('im.vector.fake.recent'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
+                onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
         const tagSubLists = Object.keys(self.state.lists)
