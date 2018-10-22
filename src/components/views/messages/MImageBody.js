@@ -293,7 +293,7 @@ export default class MImageBody extends React.Component {
         if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
-            // mx_MImageBody_ resizes img to exactly container size
+            // mx_MImageBody_thumbnail resizes img to exactly container size
             img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                 style={{ maxWidth: maxWidth + "px" }}
                 alt={content.body}
