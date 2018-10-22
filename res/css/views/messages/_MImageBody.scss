@@ -46,3 +46,14 @@ limitations under the License.
 .mx_MImageBody_thumbnail_spinner > * {
     transform: translate(-50%, -50%);
 }
+
+.mx_MImageBody_GIFlabel {
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    background: $imagebody-giflabel;
+    border: 2px solid $imagebody-giflabel-border;
+}

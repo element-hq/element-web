@@ -278,6 +278,7 @@ export default class MImageBody extends React.Component {
 
         let img = null;
         let placeholder = null;
+        let giflabel = null;
 
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
@@ -292,7 +293,7 @@ export default class MImageBody extends React.Component {
         if (thumbUrl && !this.state.imgError) {
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
-            // mx_MImageBody_thumbnail resizes img to exactly container size
+            // mx_MImageBody_ resizes img to exactly container size
             img = <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                 style={{ maxWidth: maxWidth + "px" }}
                 alt={content.body}
@@ -302,11 +303,14 @@ export default class MImageBody extends React.Component {
                 onMouseLeave={this.onImageLeave} />;
         }
 
+        if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
+            giflabel = <p className="mx_MImageBody_GIFlabel">GIF</p>;
+        }
+
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                 <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
-
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
@@ -320,6 +324,7 @@ export default class MImageBody extends React.Component {
 
                 <div style={{display: !showPlaceholder ? undefined : 'none'}}>
                     { img }
+                    { giflabel }
                 </div>
 
                 { this.state.hover && this.getTooltip() }
