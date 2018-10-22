@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../index';
-import dis from '../../dispatcher';
 
 class TopLeftMenu extends React.Component {
 
@@ -30,7 +29,7 @@ class TopLeftMenu extends React.Component {
     render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const avatarHeight = 28;
-        const name = "My stuff"
+        const name = "My stuff";
 
         return (
             <div className="mx_TopLeftMenu">
@@ -43,7 +42,7 @@ class TopLeftMenu extends React.Component {
                 <div className="mx_TopLeftMenu_name">
                     { name }
                 </div>
-                <img className="mx_TopLeftMenu_chevron" src="img/topleft-chevron.svg" width="11" height="6"/>
+                <img className="mx_TopLeftMenu_chevron" src="img/topleft-chevron.svg" width="11" height="6" />
             </div>
         );
     }
