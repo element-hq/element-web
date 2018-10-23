@@ -18,7 +18,6 @@
 @import "./structures/_RoomView.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TagPanel.scss";
-@import "./structures/_TopLeftMenu.scss";
 @import "./structures/_TopLeftMenuButton.scss";
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserSettings.scss";
@@ -28,6 +27,7 @@
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_RoomTileContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
+@import "./views/context_menus/_TopLeftMenu.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
