@@ -753,8 +753,9 @@ export default React.createClass({
             warnings.push((
                 <span className="warning">
                     { " " /* Whitespace, otherwise the sentences get smashed together */ }
-                    { _t("You are an administrator of this community") + ". " }
-                    { _t("You will not be able to rejoin without an invite from another administrator.") }
+                    { /* eslint-disable max-len */ }
+                    { _t("You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.") }
+                    { /* eslint-enable max-len */ }
                 </span>
             ));
         }
