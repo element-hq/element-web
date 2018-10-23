@@ -1,6 +1,6 @@
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #dddddd;
+$primary-fg-color: #212121;
 $primary-bg-color: #2d2d2d;
 
 // used for focusing form controls
@@ -72,9 +72,11 @@ $input-fg-color: $primary-fg-color;
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
+$menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #2d2d2d;
 $avatar-bg-color: #ffffff;
+$menu-selected-color: #f5f8fa;
 
 $h3-color: $primary-fg-color;
 

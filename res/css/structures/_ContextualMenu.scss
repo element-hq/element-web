@@ -30,8 +30,8 @@ limitations under the License.
 }
 
 .mx_ContextualMenu {
-    border: solid 1px $menu-border-color;
-    border-radius: 4px;
+    border-radius: 2px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.21);
     background-color: $menu-bg-color;
     color: $primary-fg-color;
     position: absolute;
@@ -43,6 +43,10 @@ limitations under the License.
     right: 8px;
 }
 
+.mx_ContextualMenu_noChevron {
+    border-radius: unset !important;
+}
+
 .mx_ContextualMenu_chevron_right {
     position: absolute;
     right: -8px;
@@ -50,7 +54,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
-    border-left: 8px solid $menu-border-color;
+    border-left: 8px solid $menu-bg-color;
     border-bottom: 8px solid transparent;
 }
 
@@ -77,7 +81,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
-    border-right: 8px solid $menu-border-color;
+    border-right: 8px solid $menu-bg-color;
     border-bottom: 8px solid transparent;
 }
 
@@ -104,7 +108,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
-    border-bottom: 8px solid $menu-border-color;
+    border-bottom: 8px solid $menu-bg-color;
     border-right: 8px solid transparent;
 }
 
@@ -131,7 +135,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
-    border-top: 8px solid $menu-border-color;
+    border-top: 8px solid $menu-bg-color;
     border-right: 8px solid transparent;
 }
 
