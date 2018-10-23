@@ -271,7 +271,7 @@ async function loadApp() {
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
     let a;
-    const theme = SettingsStore.getValue("theme");
+    const theme = "dharma";//SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         if (!href) continue;
