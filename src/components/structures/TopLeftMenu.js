@@ -15,37 +15,32 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import sdk from '../../index';
+import dis from '../../dispatcher';
+import { _t } from '../../languageHandler';
 
-class TopLeftMenu extends React.Component {
-
-    static propTypes = {
-        collapsed: PropTypes.bool.isRequired,
-    };
-
-    static displayName = 'TopLeftMenu';
-
+export class TopLeftMenu extends React.Component {
     render() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const avatarHeight = 28;
-        const name = "My stuff";
+        return <div className="mx_TopLeftMenu">
+            <ul className="mx_TopLeftMenu_section">
+                <li onClick={this.openSettings}>{_t("Settings")}</li>
+            </ul>
+            <ul className="mx_TopLeftMenu_section">
+                <li onClick={this.signOut}>{_t("Sign out")}</li>
+            </ul>
+        </div>;
+    }
 
-        return (
-            <div className="mx_TopLeftMenu">
-                <BaseAvatar
-                    className="mx_TopLeftMenu_avatar"
-                    name={name}
-                    width={avatarHeight}
-                    height={avatarHeight}
-                />
-                <div className="mx_TopLeftMenu_name">
-                    { name }
-                </div>
-                <img className="mx_TopLeftMenu_chevron" src="img/topleft-chevron.svg" width="11" height="6" />
-            </div>
-        );
+    openSettings() {
+        dis.dispatch({action: 'view_user_settings'});
+        this.closeMenu();
+    }
+
+    signOut() {
+        dis.dispatch({action: 'logout'});
+        this.closeMenu();
+    }
+
+    closeMenu() {
+        if (this.props.onFinished) this.props.onFinished();
     }
 }
-
-module.exports = TopLeftMenu;
