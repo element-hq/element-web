@@ -24,17 +24,13 @@ limitations under the License.
     height: 52px;
     align-items: center;
     display: flex;
-}
-
-.mx_RoomHeader_leftRow {
-    display: flex;
-    margin-left: 15px;
-    order: 1;
-    flex: 1;
-    overflow: hidden;
+    align-items: center;
+    min-width: 0;
+    padding: 0 10px 0 19px;
 }
 
 .mx_RoomHeader_spinner {
+    flex: 1;
     height: 36px;
     order: 2;
     padding-left: 12px;
@@ -63,12 +59,11 @@ limitations under the License.
     padding-right: 12px;
 }
 
-.mx_RoomHeader_rightRow {
-    margin-top: 4px;
-    background-color: $primary-bg-color;
+.mx_RoomHeader_buttons {
     display: flex;
     align-items: center;
-    order: 3;
+    margin-top: 4px;
+    background-color: $primary-bg-color;
 }
 
 .mx_RoomHeader_info {
@@ -99,19 +94,19 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name {
+    flex: 0 1 auto;
     overflow: hidden;
     color: $roomheader-color;
     font-weight: 600;
     font-size: 18px;
-    padding-left: 15px;
-    padding-right: 15px;
-    /* why isn't text-overflow working? */
-    text-overflow: ellipsis;
+    margin: 0 7px;
     border-bottom: 1px solid transparent;
 }
 
 .mx_RoomHeader_nametext {
-    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .mx_RoomHeader_settingsHint {
@@ -163,20 +158,23 @@ limitations under the License.
 }
 
 .mx_RoomHeader_topic {
-    max-height: 38px;
+    flex: 1;
     color: $roomtopic-color;
     font-weight: 400;
     font-size: 13px;
-    margin-right: 13px;
+    margin: 0 7px;
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
+    line-height: 1.2em;
+    max-height: 2.4em;
 }
 
 .mx_RoomHeader_avatar {
     flex: 0;
     width: 28px;
     height: 28px;
+    margin: 0 7px;
 }
 
 .mx_RoomHeader_avatar .mx_BaseAvatar_image {
