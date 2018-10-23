@@ -178,11 +178,11 @@ var LeftPanel = React.createClass({
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
-        const TopLeftMenu = sdk.getComponent('structures.TopLeftMenu');
+        const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        let topBox = <TopLeftMenu collapsed={ this.props.collapsed }/>;
+        let topBox = <TopLeftMenuButton collapsed={ this.props.collapsed }/>;
 /*
         if (this.context.matrixClient.isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');

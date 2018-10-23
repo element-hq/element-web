@@ -15,27 +15,25 @@ limitations under the License.
 */
 
 .mx_TopLeftMenu {
-    height: 52px;
-    border-bottom: 1px solid $panel-divider-color;
-    color: $topleftmenu-color;
-    background-color: $primary-bg-color;
-    display: flex;
-}
+    min-width: 180px;
 
-.mx_TopLeftMenu_avatar {
-    position: relative; // to get avatar in the right place
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-top: 14px;
-}
+    .mx_TopLeftMenu_section:not(:last-child) {
+        border-bottom: 1px solid $menu-border-color;
+    }
 
-.mx_TopLeftMenu_name {
-    margin-top: 15px;
-    margin-right: 9px;   
-    font-size: 18px;
-    font-weight: 600;
-}
+    .mx_TopLeftMenu_section {
+        list-style: none;
+        margin: 5px 0;
+        padding: 0;
 
-.mx_TopLeftMenu_chevron {
-    margin-top: 24px;
+        li {
+            white-space: nowrap;
+            padding: 5px 20px;
+        }
+
+        li:hover {
+            background-color: $menu-selected-color;
+        }
+    }
+
 }
