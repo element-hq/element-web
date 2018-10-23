@@ -62,8 +62,7 @@ limitations under the License.
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
-    padding-left: 10px;
-    padding-right: 28px;
+    padding: 0 28px;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
@@ -76,7 +75,7 @@ limitations under the License.
 
 .mx_MessageComposer_e2eIcon {
     position: absolute;
-    left: 44px;
+    left: 60px;
 }
 
 .mx_MessageComposer_noperm_error {
