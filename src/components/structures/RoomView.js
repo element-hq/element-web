@@ -693,7 +693,7 @@ module.exports = React.createClass({
     onRoomAccountData: function(event, room) {
         if (room.roomId == this.state.roomId) {
             const type = event.getType();
-            if (type === "org.matrix.room.colorScheme") {
+            if (type === "org.matrix.room.color_scheme") {
                 const colorScheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
