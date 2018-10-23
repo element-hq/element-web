@@ -302,10 +302,8 @@ module.exports = React.createClass({
                     topic = ev.getContent().topic;
                 }
             }
-            if (topic) {
-                topicElement =
-                    <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
-            }
+            topicElement =
+                <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
         }
 
         let roomAvatar = null;
@@ -413,7 +411,7 @@ module.exports = React.createClass({
 
         if (!this.props.editing) {
             rightRow =
-                <div className="mx_RoomHeader_rightRow">
+                <div className="mx_RoomHeader_buttons">
                     { settingsButton }
                     { pinnedEventsButton }
                     { shareRoomButton }
@@ -427,15 +425,9 @@ module.exports = React.createClass({
         return (
             <div className={"mx_RoomHeader " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
                 <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_leftRow">
-                        <div className="mx_RoomHeader_avatar">
-                            { roomAvatar }
-                        </div>
-                        <div className="mx_RoomHeader_info">
-                            { name }
-                            { topicElement }
-                        </div>
-                    </div>
+                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                    { name }
+                    { topicElement }
                     { spinner }
                     { saveButton }
                     { cancelButton }
