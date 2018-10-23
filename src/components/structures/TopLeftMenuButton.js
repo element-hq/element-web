@@ -16,11 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../index';
 import * as ContextualMenu from './ContextualMenu';
 import {TopLeftMenu} from './TopLeftMenu';
+import AccessibleButton from '../views/elements/AccessibleButton';
+import BaseAvatar from '../views/avatars/BaseAvatar';
+import MatrixClientPeg from '../../MatrixClientPeg';
+import Avatar from '../../Avatar';
 
-export class TopLeftMenuButton extends React.Component {
+const AVATAR_SIZE = 28;
+
+export default class TopLeftMenuButton extends React.Component {
 
     static propTypes = {
         collapsed: PropTypes.bool.isRequired,
@@ -32,27 +37,56 @@ export class TopLeftMenuButton extends React.Component {
         super();
         this.state = {
             menuDisplayed: false,
+            profileInfo: null,
+        };
+
+        this.onToggleMenu = this.onToggleMenu.bind(this);
+    }
+
+    async _getProfileInfo() {
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
+        const profileInfo = await cli.getProfileInfo(userId);
+        const avatarUrl = Avatar.avatarUrlForUser(
+            {avatarUrl: profileInfo.avatar_url},
+            AVATAR_SIZE, AVATAR_SIZE, "crop");
+
+        return {
+            userId,
+            name: profileInfo.displayname,
+            avatarUrl,
         };
     }
 
-    render() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const avatarHeight = 28;
-        const name = "My stuff";
+    async componentDidMount() {
+        try {
+            const profileInfo = await this._getProfileInfo();
+            this.setState({profileInfo});
+        } catch(ex) {
+            console.log("could not fetch profile");
+            console.error(ex);
+        }
+    }
 
+    render() {
+        const fallbackUserId = MatrixClientPeg.get().getUserId();
+        const profileInfo = this.state.profileInfo;
+        const name = profileInfo ? profileInfo.name : fallbackUserId;
         return (
-            <div className="mx_TopLeftMenuButton">
+            <AccessibleButton className="mx_TopLeftMenuButton" onClick={this.onToggleMenu}>
                 <BaseAvatar
-                    className="mx_TopLeftMenuButton_avatar"
+                    idName={fallbackUserId}
                     name={name}
-                    width={avatarHeight}
-                    height={avatarHeight}
+                    url={profileInfo && profileInfo.avatarUrl}
+                    width={AVATAR_SIZE}
+                    height={AVATAR_SIZE}
+                    resizeMethod="crop"
                 />
-                <div className="mx_TopLeftMenuButton_name" onClick={this.onToggleMenu}>
+                <div className="mx_TopLeftMenuButton_name">
                     { name }
                 </div>
                 <img className="mx_TopLeftMenuButton_chevron" src="img/topleft-chevron.svg" width="11" height="6" />
-            </div>
+            </AccessibleButton>
         );
     }
 
@@ -60,7 +94,7 @@ export class TopLeftMenuButton extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
-        const elementRect = e.target.parentElement.getBoundingClientRect();
+        const elementRect = e.currentTarget.getBoundingClientRect();
         const x = elementRect.left;
         const y = elementRect.top + elementRect.height;
 
