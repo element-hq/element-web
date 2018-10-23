@@ -24,12 +24,14 @@ limitations under the License.
 .mx_RoomSubList_nonEmpty {
     min-height: 80px;
     flex: 1;
+    margin-bottom: 8px;
 }
 
 .mx_RoomSubList_labelContainer {
     display: flex;
     flex-direction: row;
     flex: 0 0 auto;
+    margin: 8px 19px 0 0;
 }
 
 .mx_RoomSubList_label {
@@ -56,20 +58,14 @@ limitations under the License.
 }
 
 .mx_RoomSubList_badge {
-    display: inline-block;
-    min-width: 15px;
-    height: 15px;
-    position: absolute;
-    right: 8px; /*gutter */
-    top: 7px;
-    border-radius: 8px;
+    height: 18px;
+    border-radius: 9px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 10px;
-    text-align: center;
-    padding-top: 1px;
-    padding-left: 4px;
-    padding-right: 4px;
+    font-size: 12px;
+    vertical-align: middle;
+    line-height: 18px;
+    padding: 0 4px;
     background-color: $accent-color;
 }
 
@@ -77,10 +73,13 @@ limitations under the License.
     filter: brightness($focus-brightness);
 }
 
+.mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
+    margin: 5px;
+}
+
 .mx_RoomSubList_addRoom {
     background-color: $roomheader-addroom-color;
     color: $roomsublist-background;
-    margin: 5px 10px;
     border-radius: 9px;
     text-align: center;
     vertical-align: middle;

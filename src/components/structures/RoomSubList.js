@@ -328,9 +328,9 @@ const RoomSubList = React.createClass({
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { chevron }
                     { this.props.collapsed ? '' : this.props.label }
-                    { badge }
                     { incomingCall }
                 </AccessibleButton>
+                { badge }
                 { addRoomButton }
             </div>
         );
@@ -348,7 +348,7 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx()}
                 </div>;
             } else {
-                const heightEstimation = (len * 40) + 31;
+                const heightEstimation = (len * 40) + 31 + (8 + 8);
                 const style = {
                     flexGrow: `${heightEstimation}`,
                     maxHeight: `${heightEstimation}px`,

@@ -20,7 +20,8 @@ limitations under the License.
     align-items: center;
     cursor: pointer;
     height: 40px;
-    margin: 0px 3px;
+    margin: 0 12px;
+    padding: 2px 12px;
     position: relative;
     background-color: $secondary-accent-color;
 }
@@ -34,10 +35,7 @@ limitations under the License.
 
 .mx_RoomTile_avatar {
     flex: 0;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 14px;
-    padding-right: 12px;
+    padding: 4px;
     width: 32px;
     height: 32px;
 }
@@ -56,7 +54,7 @@ limitations under the License.
 
 .mx_RoomTile_name {
     flex: 1 5 auto;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     padding: 6px;
     color: $roomtile-name-color;
@@ -70,11 +68,21 @@ limitations under the License.
 }
 
 .collapsed {
+    .mx_RoomTile {
+        margin: 2px;
+        padding: 2px 0 2px 12px;
+    }
+
     .mx_RoomTile_name {
         display: none;
     }
 
     .mx_RoomTile_badge {
+        display: block;
+        position: absolute;
+        height: 15px;
+        right: 8px;
+        top: 2px;
         min-width: 12px;
         border-radius: 16px;
         padding: 0px 4px 0px 4px;
@@ -84,14 +92,6 @@ limitations under the License.
     /* Hide the bottom of speech bubble */
     .mx_RoomTile_highlight .mx_RoomTile_badge:after {
         display: none;
-    }
-
-    .mx_RoomTile_badge {
-        display: block;
-        position: absolute;
-        height: 15px;
-        right: 5px;
-        top: 2px;
     }
 }
 
@@ -113,7 +113,7 @@ limitations under the License.
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 10px;
+    font-size: 12px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
@@ -141,15 +141,19 @@ limitations under the License.
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
     font-weight: 800;
+
+    .mx_RoomTile_name {
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_RoomTile_selected {
     border-radius: 4px;
     background-color: $roomtile-selected-bg-color;
-}
 
-.mx_RoomTile_selected .mx_RoomTile_name {
-    color: $roomtile-selected-color;
+    .mx_RoomTile_name {
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_DNDRoomTile {
