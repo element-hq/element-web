@@ -678,8 +678,8 @@ module.exports = React.createClass({
         if (!room) return;
 
         console.log("Tinter.tint from updateTint");
-        const color_scheme = SettingsStore.getValue("roomColor", room.roomId);
-        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+        const colorScheme = SettingsStore.getValue("roomColor", room.roomId);
+        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
     },
 
     onAccountData: function(event) {
@@ -694,10 +694,10 @@ module.exports = React.createClass({
         if (room.roomId == this.state.roomId) {
             const type = event.getType();
             if (type === "org.matrix.room.color_scheme") {
-                const color_scheme = event.getContent();
+                const colorScheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
-                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+                Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
             } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
                 // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this._updatePreviewUrlVisibility(room);
