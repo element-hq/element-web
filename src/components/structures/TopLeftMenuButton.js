@@ -72,6 +72,13 @@ export default class TopLeftMenuButton extends React.Component {
         const fallbackUserId = MatrixClientPeg.get().getUserId();
         const profileInfo = this.state.profileInfo;
         const name = profileInfo ? profileInfo.name : fallbackUserId;
+        let nameElement;
+        if (!this.props.collapsed) {
+            nameElement = <div className="mx_TopLeftMenuButton_name">
+                { name }
+            </div>;
+        }
+
         return (
             <AccessibleButton className="mx_TopLeftMenuButton" onClick={this.onToggleMenu}>
                 <BaseAvatar
@@ -82,9 +89,7 @@ export default class TopLeftMenuButton extends React.Component {
                     height={AVATAR_SIZE}
                     resizeMethod="crop"
                 />
-                <div className="mx_TopLeftMenuButton_name">
-                    { name }
-                </div>
+                { nameElement }
                 <img className="mx_TopLeftMenuButton_chevron" src="img/topleft-chevron.svg" width="11" height="6" />
             </AccessibleButton>
         );
