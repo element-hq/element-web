@@ -36,7 +36,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
             // The event content should already be in an appropriate format, we just need
             // to get the right value.
             // don't fallback to {} because thats truthy and would imply there is an event specifying tint
-            return this._getSettings(roomId, "org.matrix.room.color_scheme");
+            return this._getSettings(roomId, "org.matrix.room.colorScheme");
         }
 
         const settings = this._getSettings(roomId) || {};
@@ -54,7 +54,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         // Special case room color
         if (settingName === "roomColor") {
             // The new value should match our requirements, we just need to store it in the right place.
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
+            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.colorScheme", newValue);
         }
 
         const content = this._getSettings(roomId) || {};
