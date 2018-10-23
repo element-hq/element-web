@@ -56,6 +56,6 @@ export default class DateSeparator extends React.Component {
     }
 
     render() {
-        return <h2 className="mx_DateSeparator">{ this.getLabel() }</h2>;
+        return <h2 className="mx_DateSeparator"><hr/><date>{ this.getLabel() }</date><hr/></h2>;
     }
 }
