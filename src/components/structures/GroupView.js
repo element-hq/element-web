@@ -746,13 +746,37 @@ export default React.createClass({
         });
     },
 
+    _leaveGroupWarnings: function() {
+        const warnings = [];
+
+        if (this.state.isUserPrivileged) {
+            warnings.push((
+                <span className="warning">
+                    { " " /* Whitespace, otherwise the sentences get smashed together */ }
+                    { _t("You are an administrator of this community") + ". " }
+                    { _t("You will not be able to rejoin without an invite from another administrator.") }
+                </span>
+            ));
+        }
+
+        return warnings;
+    },
+
+
     _onLeaveClick: function() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const warnings = this._leaveGroupWarnings();
+
         Modal.createTrackedDialog('Leave Group', '', QuestionDialog, {
             title: _t("Leave Community"),
-            description: _t("Leave %(groupName)s?", {groupName: this.props.groupId}),
+            description: (
+                <span>
+                { _t("Leave %(groupName)s?", {groupName: this.props.groupId}) }
+                { warnings }
+                </span>
+            ),
             button: _t("Leave"),
-            danger: true,
+            danger: this.state.isUserPrivileged,
             onFinished: async (confirmed) => {
                 if (!confirmed) return;
 
