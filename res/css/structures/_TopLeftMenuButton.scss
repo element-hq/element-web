@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_TopLeftMenu {
+.mx_TopLeftMenuButton {
     height: 52px;
     border-bottom: 1px solid $panel-divider-color;
     color: $topleftmenu-color;
@@ -22,20 +22,20 @@ limitations under the License.
     display: flex;
 }
 
-.mx_TopLeftMenu_avatar {
+.mx_TopLeftMenuButton_avatar {
     position: relative; // to get avatar in the right place
     margin-left: 15px;
     margin-right: 15px;
     margin-top: 14px;
 }
 
-.mx_TopLeftMenu_name {
+.mx_TopLeftMenuButton_name {
     margin-top: 15px;
-    margin-right: 9px;   
+    margin-right: 9px;
     font-size: 18px;
     font-weight: 600;
 }
 
-.mx_TopLeftMenu_chevron {
+.mx_TopLeftMenuButton_chevron {
     margin-top: 24px;
 }
