@@ -1034,6 +1034,7 @@ export default React.createClass({
                 { warnings }
                 </span>
             ),
+            button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = MatrixClientPeg.get().leave(roomId);
