@@ -57,10 +57,6 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_MessageComposer_row > div:last-child{
-    padding-right: 0;
-}
-
 .mx_MessageComposer .mx_MessageComposer_avatar {
     padding-left: 10px;
     padding-right: 28px;
@@ -68,6 +64,10 @@ limitations under the License.
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
     display: block;
+}
+
+.mx_MessageComposer .mx_AccessibleButton {
+    padding: 0 12px 0 0;
 }
 
 .mx_MessageComposer_composecontrols {
