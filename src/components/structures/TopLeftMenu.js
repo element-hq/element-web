@@ -19,6 +19,13 @@ import dis from '../../dispatcher';
 import { _t } from '../../languageHandler';
 
 export class TopLeftMenu extends React.Component {
+
+    constructor() {
+        super();
+        this.openSettings = this.openSettings.bind(this);
+        this.signOut = this.signOut.bind(this);
+    }
+
     render() {
         return <div className="mx_TopLeftMenu">
             <ul className="mx_TopLeftMenu_section">
