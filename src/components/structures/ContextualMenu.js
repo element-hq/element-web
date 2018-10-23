@@ -49,7 +49,7 @@ export default class ContextualMenu extends React.Component {
         menuHeight: PropTypes.number,
         chevronOffset: PropTypes.number,
         menuColour: PropTypes.string,
-        chevronFace: PropTypes.string, // top, bottom, left, right
+        chevronFace: PropTypes.string, // top, bottom, left, right or none
         // Function to be called on menu close
         onFinished: PropTypes.func,
         menuPaddingTop: PropTypes.number,
@@ -113,7 +113,6 @@ export default class ContextualMenu extends React.Component {
     render() {
         const position = {};
         let chevronFace = null;
-
         const props = this.props;
 
         if (props.top) {
@@ -137,6 +136,8 @@ export default class ContextualMenu extends React.Component {
         if (props.chevronFace) {
             chevronFace = props.chevronFace;
         }
+        const hasChevron = chevronFace && chevronFace !== "none";
+
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
         } else {
@@ -174,11 +175,12 @@ export default class ContextualMenu extends React.Component {
             `;
         }
 
-        const chevron = <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} />;
+        const chevron = hasChevron ? <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} /> : undefined;
         const className = 'mx_ContextualMenu_wrapper';
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
+            'mx_ContextualMenu_noChevron': chevronFace === 'none',
             'mx_ContextualMenu_left': chevronFace === 'left',
             'mx_ContextualMenu_right': chevronFace === 'right',
             'mx_ContextualMenu_top': chevronFace === 'top',

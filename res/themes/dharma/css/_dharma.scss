@@ -76,8 +76,9 @@ $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
 
 // context menus
-$menu-border-color: rgba(187, 187, 187, 0.5);
-$menu-bg-color: #f6f6f6;
+$menu-border-color: #ebedf8;
+$menu-bg-color: #fff;
+$menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #ffffff;
 $avatar-bg-color: #ffffff;
@@ -119,6 +120,15 @@ $roomtile-selected-color: #212121;
 $roomtile-notified-color: #212121;
 $roomtile-selected-bg-color: #fff;
 $roomtile-focused-bg-color: #fff;
+
+$username-variant1-color: #1e7ddc;
+$username-variant2-color: #a756a8;
+$username-variant3-color: #7ac9a1;
+$username-variant4-color: #f2809d;
+$username-variant5-color: #ffc666;
+$username-variant6-color: #76ddd7;
+$username-variant7-color: #45529b;
+$username-variant8-color: #bfd251;
 
 $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 

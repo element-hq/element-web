@@ -243,7 +243,7 @@ module.exports = React.createClass({
         });
 
         return (
-            <div>
+            <div className="mx_RoomTileContextMenu">
                 <div className="mx_RoomTileContextMenu_notif_picker" >
                     <img src="img/notif-slider.svg" width="20" height="107" />
                 </div>

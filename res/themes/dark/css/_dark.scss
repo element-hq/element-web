@@ -1,6 +1,6 @@
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #dddddd;
+$primary-fg-color: #212121;
 $primary-bg-color: #2d2d2d;
 
 // used for focusing form controls
@@ -72,9 +72,11 @@ $input-fg-color: $primary-fg-color;
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
+$menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #2d2d2d;
 $avatar-bg-color: #ffffff;
+$menu-selected-color: #f5f8fa;
 
 $h3-color: $primary-fg-color;
 
@@ -104,6 +106,15 @@ $rte-code-bg-color: #000;
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
 $roomtile-selected-bg-color: #333;
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
+
+$username-variant1-color: #1e7ddc;
+$username-variant2-color: #a756a8;
+$username-variant3-color: #7ac9a1;
+$username-variant4-color: #f2809d;
+$username-variant5-color: #ffc666;
+$username-variant6-color: #76ddd7;
+$username-variant7-color: #45529b;
+$username-variant8-color: #bfd251;
 
 $roomsublist-background: rgba(0, 0, 0, 0.2);
 $roomsublist-label-fg-color: $h3-color;

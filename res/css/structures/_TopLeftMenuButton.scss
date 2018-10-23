@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageContextMenu {
-    padding: 6px;
+.mx_TopLeftMenuButton {
+    height: 52px;
+    border-bottom: 1px solid $panel-divider-color;
+    color: $topleftmenu-color;
+    background-color: $primary-bg-color;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 0 7px;
+    overflow: hidden;
 }
 
-.mx_MessageContextMenu_field {
-    padding: 3px 6px 3px 6px;
-    cursor: pointer;
+.mx_TopLeftMenuButton .mx_BaseAvatar {
+    margin: 0 7px;
+}
+
+.mx_TopLeftMenuButton_name {
+    margin: 0 7px;
+    font-size: 18px;
     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: 600;
 }
 
-.mx_MessageContextMenu_field.mx_MessageContextMenu_fieldSet {
-    font-weight: bold;
+.mx_TopLeftMenuButton_chevron {
+    margin: 0 7px;
 }
