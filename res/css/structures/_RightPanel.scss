@@ -29,7 +29,7 @@ limitations under the License.
     border-bottom: 1px solid $primary-hairline-color;
     margin-right: 20px;
 
-    flex: 0 0 70px;
+    flex: 0 0 52px;
 }
 
 /** Fixme - factor this out with the main header **/
@@ -39,7 +39,8 @@ limitations under the License.
     display: flex;
     width: 100%;
     background-color: $primary-bg-color;
-    margin-left: 0px;
+    padding: 0 9px;
+    align-items: center;
 }
 
 .mx_RightPanel_headerButton {
@@ -50,26 +51,27 @@ limitations under the License.
     padding-right: 5px;
     text-align: center;
     position: relative;
+    border-bottom: 2px solid transparent;
 }
 
 .mx_RightPanel_headerButton object {
     pointer-events: none;
-    padding-bottom: 3px;
 }
 
 .mx_RightPanel_headerButton_highlight {
-    width: 25px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: $accent-color;
-    opacity: 0.2;
+    border-color: $accent-color;
 }
 
 .mx_RightPanel_headerButton_badge {
-    font-size: 11px;
-    color: $accent-color;
+    font-size: 8px;
+    border-radius: 8px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     font-weight: bold;
-    padding-bottom: 2px;
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    padding: 2px 4px;
 }
 
 .mx_RightPanel_collapsebutton {

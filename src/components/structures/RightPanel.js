@@ -49,19 +49,21 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
+        const classes = classNames({
+            mx_RightPanel_headerButton: true,
+            mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
+        })
+
         return <AccessibleButton
             aria-label={this.props.title}
             aria-expanded={this.props.isHighlighted}
             title={this.props.title}
-            className="mx_RightPanel_headerButton"
+            className={classes}
             onClick={this.onClick} >
-
                 <div className="mx_RightPanel_headerButton_badge">
                     { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
                 </div>
                 <TintableSvg src={this.props.iconSrc} width="25" height="25" />
-                { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight" /> : <div /> }
-
             </AccessibleButton>;
     }
 }
