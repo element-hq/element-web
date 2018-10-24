@@ -424,7 +424,7 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
-        if (room.getMyMembership() === 'join') {
+        if (room && room.getMyMembership() === 'join') {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
