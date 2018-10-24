@@ -1288,5 +1288,8 @@
     "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "Преди сте използвали Riot на %(host)s с включено постепенно зареждане на членове. В тази версия, тази настройка е изключена. Понеже локалният кеш не е съвместим при тези две настройки, Riot трябва да синхронизира акаунта Ви наново.",
     "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Ако другата версия на Riot все още е отворена в друг таб, моля затворете я. Използването на Riot на един адрес във версии с постепенно и без постепенно зареждане ще причини проблеми.",
     "Incompatible local cache": "Несъвместим локален кеш",
-    "Clear cache and resync": "Изчисти кеша и ресинхронизирай"
+    "Clear cache and resync": "Изчисти кеша и ресинхронизирай",
+    "Please accept all of the policies": "Моля, приемете всички политики",
+    "Please review and accept the policies of this homeserver:": "Моля, прегледайте и приемете политиките на този сървър:",
+    "Add some now": "Добави сега"
 }
