@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as ContextualMenu from './ContextualMenu';
-import {TopLeftMenu} from './TopLeftMenu';
+import {TopLeftMenu} from '../views/context_menus/TopLeftMenu';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import MatrixClientPeg from '../../MatrixClientPeg';
