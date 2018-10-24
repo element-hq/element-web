@@ -67,6 +67,11 @@ $primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
 $input-border-color: #f0f0f0;
+$input-darker-bg-color: rgba(193, 201, 214, 0.29);
+$input-darker-fg-color: #9fa9ba;
+
+$button-bg-color: #7ac9a1;
+$button-fg-color: white;
 
 // apart from login forms, which have stronger border
 $strong-input-border-color: #c7c7c7;
@@ -179,11 +184,11 @@ $progressbar-color: #000;
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 36px;
+    border-radius: 4px;
     font-family: $font-family;
     font-size: 14px;
-    color: $accent-fg-color;
-    background-color: $accent-color;
+    color: $button-fg-color;
+    background-color: $button-bg-color;
     width: auto;
     padding: 7px;
     padding-left: 1.5em;
@@ -197,7 +202,7 @@ $progressbar-color: #000;
 }
 
 @define-mixin mx_DialogButton_danger {
-    background-color: $warning-color;
+    background-color: $accent-color;
 }
 
 @define-mixin mx_DialogButton_small {

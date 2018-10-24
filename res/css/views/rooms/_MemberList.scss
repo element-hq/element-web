@@ -17,15 +17,9 @@ limitations under the License.
 .mx_MemberList,
 .mx_GroupMemberList,
 .mx_GroupRoomList {
-    height: 100%;
-
-    margin-top: 12px;
-    margin-right: 20px;
-
+    background-color: $secondary-accent-color;
     flex: 1;
-
     display: flex;
-
     flex-direction: column;
 }
 
@@ -46,54 +40,47 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
+.mx_MemberList form,
+.mx_GroupMemberList form,
+.mx_GroupRoomList form {
+    margin: 8px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.mx_MemberList form > *:not(:first-child),
+.mx_GroupMemberList form > *:not(:first-child),
+.mx_GroupRoomList form > *:not(:first-child) {
+    margin-left: 5px;
+}
+
 .mx_MemberList_query,
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
+    flex: 1 1 0;
+    box-sizing: border-box;
     font-family: $font-family;
-    border-radius: 3px;
-    border: 1px solid $input-border-color;
+    border-radius: 4px;
     padding: 9px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
-    margin-left: 3px;
+    color: $input-darker-fg-color;
+    background-color: $input-darker-bg-color;
     font-size: 14px;
-    margin-bottom: 8px;
-    width: 189px;
-}
-
-.mx_MemberList_query::-moz-placeholder,
-.mx_GroupMemberList_query::-moz-placeholder,
-.mx_GroupRoomList_query::-moz-placeholder {
-    color: $primary-fg-color;
-    opacity: 0.5;
-    font-size: 14px;
+    font-weight: 600;
+    border: none;
 }
 
 .mx_MemberList_query::-webkit-input-placeholder,
 .mx_GroupMemberList_query::-webkit-input-placeholder,
-.mx_GroupRoomList_query::-webkit-input-placeholder {
-    color: $primary-fg-color;
+.mx_GroupRoomList_query::-webkit-input-placeholder,
+.mx_MemberList_query::-moz-placeholder,
+.mx_GroupMemberList_query::-moz-placeholder,
+.mx_GroupRoomList_query::-moz-placeholder {
+    color: $input-darker-fg-color;
     opacity: 0.5;
     font-size: 14px;
 }
 
-.mx_MemberList_joined {
-    order: 2;
-    flex: 1 0 0;
-
-    overflow-y: auto;
-}
-
-/*
-.mx_MemberList_invited {
-    order: 3;
-    flex: 0 0 100px;
-    overflow-y: auto;
-}
-*/
-
-.mx_GroupMemberList_invited h2,
-.mx_MemberList_invited h2 {
+.mx_MemberList h2, .mx_GroupMemberList h2 {
     text-transform: uppercase;
     color: $h3-color;
     font-weight: 600;
@@ -104,13 +91,37 @@ limitations under the License.
     margin-bottom: 4px;
 }
 
-/* we have to have display: table in order for the horizontal wrapping to work */
 .mx_MemberList_wrapper {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
+    padding: 10px;
 }
 
 .mx_MemberList_outerWrapper {
-    height: 0px;
+
 }
+
+.mx_MemberList_inviteIcon object {
+    pointer-events: none;
+}
+
+.mx_MemberList_inviteIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+
+.mx_MemberList_invite {
+    flex: 0 0 auto;
+    position: relative;
+    background-color: $button-bg-color;
+    color: $button-fg-color;
+    border-radius: 4px;
+    padding: 8px;
+    font-weight: 600;
+}
+
+/* move text to left */
+.mx_MemberList_invite > :last-child {
+    margin-left: 25px;
+}
+

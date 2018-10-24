@@ -49,19 +49,22 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
+        const classes = classNames({
+            mx_RightPanel_headerButton: true,
+            mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
+        })
+        // will probably use this later on for notifications, etc ...
+        /* <div className="mx_RightPanel_headerButton_badge">
+            { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
+        </div> */
+
         return <AccessibleButton
             aria-label={this.props.title}
             aria-expanded={this.props.isHighlighted}
             title={this.props.title}
-            className="mx_RightPanel_headerButton"
+            className={classes}
             onClick={this.onClick} >
-
-                <div className="mx_RightPanel_headerButton_badge">
-                    { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
-                </div>
-                <TintableSvg src={this.props.iconSrc} width="25" height="25" />
-                { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight" /> : <div /> }
-
+                <TintableSvg src={this.props.iconSrc} width="20" height="20" />
             </AccessibleButton>;
     }
 }
@@ -156,19 +159,6 @@ module.exports = React.createClass({
     onCollapseClick: function() {
         dis.dispatch({
             action: 'hide_right_panel',
-        });
-    },
-
-    onInviteButtonClick: function() {
-        if (this.context.matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
-            return;
-        }
-
-        // call AddressPickerDialog
-        dis.dispatch({
-            action: 'view_invite',
-            roomId: this.props.roomId,
         });
     },
 
@@ -277,29 +267,6 @@ module.exports = React.createClass({
 
         let membersBadge;
         let membersTitle = _t('Members');
-        if ((this.state.phase === this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo)
-            && this.props.roomId
-        ) {
-            const cli = this.context.matrixClient;
-            const room = cli.getRoom(this.props.roomId);
-            let isUserInRoom;
-            if (room) {
-                const numMembers = room.getJoinedMemberCount();
-                membersTitle = _t('%(count)s Members', { count: numMembers });
-                membersBadge = <div title={membersTitle}>{ formatCount(numMembers) }</div>;
-                isUserInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
-            }
-
-            if (isUserInRoom) {
-                inviteGroup =
-                    <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteButtonClick}>
-                        <div className="mx_RightPanel_icon" >
-                            <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                        </div>
-                        <div className="mx_RightPanel_message">{ _t('Invite to this room') }</div>
-                    </AccessibleButton>;
-            }
-        }
 
         const isPhaseGroup = [
             this.Phase.GroupMemberInfo,
@@ -416,9 +383,6 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 { panel }
-                <div className="mx_RightPanel_footer">
-                    { inviteGroup }
-                </div>
             </aside>
         );
     },

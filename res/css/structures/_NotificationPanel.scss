@@ -16,11 +16,8 @@ limitations under the License.
 
 .mx_NotificationPanel {
     order: 2;
-
     flex: 1 1 0;
-
-    width: 100%;
-
+    background-color: $secondary-accent-color;
     overflow-y: auto;
 }
 

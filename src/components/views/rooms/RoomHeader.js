@@ -396,7 +396,7 @@ module.exports = React.createClass({
         let rightPanelButtons;
         if (this.props.collapsedRhs) {
             rightPanelButtons =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title={_t('Show panel')}>
+                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_showPanel" onClick={this.onShowRhsClick} title={_t('Show panel')}>
                     <TintableSvg src="img/maximise.svg" width="10" height="16" />
                 </AccessibleButton>;
         }

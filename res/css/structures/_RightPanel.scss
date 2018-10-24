@@ -27,19 +27,18 @@ limitations under the License.
     order: 1;
 
     border-bottom: 1px solid $primary-hairline-color;
-    margin-right: 20px;
 
-    flex: 0 0 70px;
+    flex: 0 0 52px;
 }
 
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 6px;
+    height: 100%;
     display: flex;
-    width: 100%;
     background-color: $primary-bg-color;
-    margin-left: 0px;
+    padding: 0 9px;
+    align-items: center;
 }
 
 .mx_RightPanel_headerButton {
@@ -50,32 +49,34 @@ limitations under the License.
     padding-right: 5px;
     text-align: center;
     position: relative;
+    border-bottom: 2px solid transparent;
 }
 
 .mx_RightPanel_headerButton object {
     pointer-events: none;
-    padding-bottom: 3px;
 }
 
 .mx_RightPanel_headerButton_highlight {
-    width: 25px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: $accent-color;
-    opacity: 0.2;
+    border-color: $accent-color;
 }
 
 .mx_RightPanel_headerButton_badge {
-    font-size: 11px;
-    color: $accent-color;
+    font-size: 8px;
+    border-radius: 8px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
     font-weight: bold;
-    padding-bottom: 2px;
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    padding: 2px 4px;
 }
 
 .mx_RightPanel_collapsebutton {
     flex: 1;
     text-align: right;
-    margin-top: 20px;
+    height: 16px;
+    border: none;
 }
 
 .mx_RightPanel .mx_MemberList,
@@ -89,47 +90,4 @@ limitations under the License.
 .mx_RightPanel .mx_RoomView_messagePanelSpinner {
     order: 2;
     margin: auto;
-}
-
-.mx_RightPanel_footer {
-    order: 3;
-
-    border-top: 1px solid $primary-hairline-color;
-    margin-right: 20px;
-
-    flex: 0 0 60px;
-}
-
-.mx_RightPanel_footer .mx_RightPanel_invite {
-    font-size: 14px;
-	color: $primary-fg-color;
-    padding-top: 13px;
-    padding-left: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
-    display: none;
-}
-
-.mx_RightPanel_invite .mx_RightPanel_icon object {
-    pointer-events: none;
-}
-
-.mx_RightPanel_invite .mx_RightPanel_message {
-    padding-left: 10px;
-    line-height: 18px;
-}
-
-.mx_MatrixChat_useCompactLayout {
-    .mx_RightPanel_footer {
-        flex: 0 0 50px;
-    }
-
-    .mx_RightPanel_footer .mx_RightPanel_invite {
-        line-height: 25px;
-        padding-top: 8px;
-    }
 }
