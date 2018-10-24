@@ -208,6 +208,10 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_RoomHeader_showPanel {
+    height: 16px;
+}
+
 .mx_RoomHeader_voipButton {
     display: table-cell;
 }

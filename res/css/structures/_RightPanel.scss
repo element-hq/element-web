@@ -27,7 +27,6 @@ limitations under the License.
     order: 1;
 
     border-bottom: 1px solid $primary-hairline-color;
-    margin-right: 20px;
 
     flex: 0 0 52px;
 }
@@ -35,9 +34,8 @@ limitations under the License.
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
-    margin-top: 6px;
+    height: 100%;
     display: flex;
-    width: 100%;
     background-color: $primary-bg-color;
     padding: 0 9px;
     align-items: center;
@@ -77,7 +75,8 @@ limitations under the License.
 .mx_RightPanel_collapsebutton {
     flex: 1;
     text-align: right;
-    margin-top: 20px;
+    height: 16px;
+    border: none;
 }
 
 .mx_RightPanel .mx_MemberList,
@@ -91,47 +90,4 @@ limitations under the License.
 .mx_RightPanel .mx_RoomView_messagePanelSpinner {
     order: 2;
     margin: auto;
-}
-
-.mx_RightPanel_footer {
-    order: 3;
-
-    border-top: 1px solid $primary-hairline-color;
-    margin-right: 20px;
-
-    flex: 0 0 60px;
-}
-
-.mx_RightPanel_footer .mx_RightPanel_invite {
-    font-size: 14px;
-	color: $primary-fg-color;
-    padding-top: 13px;
-    padding-left: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
-    display: none;
-}
-
-.mx_RightPanel_invite .mx_RightPanel_icon object {
-    pointer-events: none;
-}
-
-.mx_RightPanel_invite .mx_RightPanel_message {
-    padding-left: 10px;
-    line-height: 18px;
-}
-
-.mx_MatrixChat_useCompactLayout {
-    .mx_RightPanel_footer {
-        flex: 0 0 50px;
-    }
-
-    .mx_RightPanel_footer .mx_RightPanel_invite {
-        line-height: 25px;
-        padding-top: 8px;
-    }
 }
