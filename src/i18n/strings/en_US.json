@@ -838,6 +838,5 @@
     "Your homeserver's URL": "Your homeserver's URL",
     "Your identity server's URL": "Your identity server's URL",
     "e.g. %(exampleValue)s": "e.g. %(exampleValue)s",
-    "Every page you use in the app": "Every page you use in the app",
-    "Open Devtools": "Open Devtools"
+    "Every page you use in the app": "Every page you use in the app"
 }
