@@ -1,3 +1,40 @@
+Changes in [0.14.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.2-rc.1) (2018-10-24)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.1...v0.14.2-rc.1)
+
+ * Update from Weblate.
+   [\#2244](https://github.com/matrix-org/matrix-react-sdk/pull/2244)
+ * Show the group member list again
+   [\#2223](https://github.com/matrix-org/matrix-react-sdk/pull/2223)
+ * lint: make colorScheme camel case
+   [\#2237](https://github.com/matrix-org/matrix-react-sdk/pull/2237)
+ * Change leave room button text, OK -> Leave
+   [\#2236](https://github.com/matrix-org/matrix-react-sdk/pull/2236)
+ * Move all dialog buttons to the right and fix their order
+   [\#2231](https://github.com/matrix-org/matrix-react-sdk/pull/2231)
+ * Add a bit of text to explain the purpose of the RoomPreviewSpinner
+   [\#2225](https://github.com/matrix-org/matrix-react-sdk/pull/2225)
+ * Move the login box from the left sidebar to where the composer is
+   [\#2219](https://github.com/matrix-org/matrix-react-sdk/pull/2219)
+ * Fix an error where React doesn't like value=null on a select
+   [\#2230](https://github.com/matrix-org/matrix-react-sdk/pull/2230)
+ * add missing sticker translation
+   [\#2216](https://github.com/matrix-org/matrix-react-sdk/pull/2216)
+ * Support m.login.terms during registration
+   [\#2221](https://github.com/matrix-org/matrix-react-sdk/pull/2221)
+ * Don't show the invite nag bar when peeking
+   [\#2220](https://github.com/matrix-org/matrix-react-sdk/pull/2220)
+ * Apply the user's tint once the MatrixClientPeg is moderately ready
+   [\#2214](https://github.com/matrix-org/matrix-react-sdk/pull/2214)
+ * Make rageshake use less memory
+   [\#2217](https://github.com/matrix-org/matrix-react-sdk/pull/2217)
+ * Fix autocomplete
+   [\#2212](https://github.com/matrix-org/matrix-react-sdk/pull/2212)
+ * Explain feature states in a lot more detail
+   [\#2211](https://github.com/matrix-org/matrix-react-sdk/pull/2211)
+ * Fix various lint errors
+   [\#2213](https://github.com/matrix-org/matrix-react-sdk/pull/2213)
+
 Changes in [0.14.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.1) (2018-10-19)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.0...v0.14.1)
