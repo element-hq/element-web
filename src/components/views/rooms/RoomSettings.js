@@ -947,9 +947,10 @@ module.exports = React.createClass({
             </AccessibleButton>;
         }
 
-        const devtoolsButton = <AccessibleButton className="mx_RoomSettings_devtoolsButton" onClick={this._openDevtools}>
+        const devtoolsButton = SettingsStore.getValue("showDeveloperTools") ?
+        (<AccessibleButton className="mx_RoomSettings_devtoolsButton" onClick={this._openDevtools}>
             { _t("Open Devtools") }
-        </AccessibleButton>;
+        </AccessibleButton>) : null;
 
         return (
             <div className="mx_RoomSettings">
