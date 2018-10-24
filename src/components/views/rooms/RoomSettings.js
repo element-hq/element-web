@@ -947,7 +947,7 @@ module.exports = React.createClass({
             </AccessibleButton>;
         }
 
-        devtoolsButton = <AccessibleButton onClick={this._openDevtools}>
+        const devtoolsButton = <AccessibleButton className="mx_RoomSettings_devtoolsButton" onClick={this._openDevtools}>
             { _t("Open Devtools") }
         </AccessibleButton>;
 
