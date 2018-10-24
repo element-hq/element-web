@@ -333,7 +333,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div>
+            <div className="mx_MessageContextMenu">
                 { resendButton }
                 { redactButton }
                 { cancelButton }
