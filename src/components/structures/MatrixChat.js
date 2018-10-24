@@ -1035,6 +1035,7 @@ export default React.createClass({
                 { warnings }
                 </span>
             ),
+            button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = MatrixClientPeg.get().leave(roomId);
@@ -1407,8 +1408,8 @@ export default React.createClass({
 
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
-        const color_scheme = SettingsStore.getValue("roomColor");
-        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+        const colorScheme = SettingsStore.getValue("roomColor");
+        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
     },
 
     /**
