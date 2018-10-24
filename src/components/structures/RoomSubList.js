@@ -344,7 +344,7 @@ const RoomSubList = React.createClass({
                 "mx_RoomSubList_nonEmpty": len && !this.state.hidden,
             });
             if (this.state.hidden) {
-                return <div className={subListClasses}>
+                return <div className={subListClasses} style={{flexBasis: "unset", flexGrow: "unset"}}>
                     {this._getHeaderJsx()}
                 </div>;
             } else {

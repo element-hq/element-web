@@ -99,6 +99,7 @@ class Sizer {
 
 class FlexSizer extends Sizer {
     setItemSize(item, size) {
+        item.style.flexGrow = `0`;
         item.style.flexBasis = `${Math.round(size)}px`;
     }
 }
