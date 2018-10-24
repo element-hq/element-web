@@ -573,29 +573,43 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // emojioneify any emoji
-        editorState.document.getTexts().forEach(node => {
-            if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
-                let match;
-                while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
-                    const range = Range.create({
-                        anchor: {
-                            key: node.key,
-                            offset: match.index,
-                        },
-                        focus: {
-                            key: node.key,
-                            offset: match.index + match[0].length,
-                        },
-                    });
-                    const inline = Inline.create({
-                        type: 'emoji',
-                        data: { emojiUnicode: match[0] },
-                    });
-                    change = change.insertInlineAtRange(range, inline);
-                    editorState = change.value;
+        while (true) {
+            let foundEmoji = false;
+
+            for (const node of editorState.document.getTexts()) {
+                if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
+                    let match;
+                    EMOJI_REGEX.lastIndex = 0;
+                    while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
+                        const range = Range.create({
+                            anchor: {
+                                key: node.key,
+                                offset: match.index,
+                            },
+                            focus: {
+                                key: node.key,
+                                offset: match.index + match[0].length,
+                            },
+                        });
+                        const inline = Inline.create({
+                            type: 'emoji',
+                            data: { emojiUnicode: match[0] },
+                        });
+                        change = change.insertInlineAtRange(range, inline);
+                        editorState = change.value;
+
+                        // if we replaced an emoji, start again looking for more
+                        // emoji in the new editor state since doing the replacement
+                        // will change the node structure & offsets so we can't compute
+                        // insertion ranges from node.key / match.index anymore.
+                        foundEmoji = true;
+                        break;
+                    }
                 }
             }
-        });
+
+            if (!foundEmoji) break;
+        }
 
         // work around weird bug where inserting emoji via the macOS
         // emoji picker can leave the selection stuck in the emoji's
