@@ -175,7 +175,9 @@ export default class ContextualMenu extends React.Component {
             `;
         }
 
-        const chevron = hasChevron ? <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} /> : undefined;
+        const chevron = hasChevron ?
+            <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} /> :
+            undefined;
         const className = 'mx_ContextualMenu_wrapper';
 
         const menuClasses = classNames({

@@ -29,8 +29,6 @@ import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 
-import { formatCount } from '../../utils/FormattingUtils';
-
 class HeaderButton extends React.Component {
     constructor() {
         super();
@@ -52,11 +50,7 @@ class HeaderButton extends React.Component {
         const classes = classNames({
             mx_RightPanel_headerButton: true,
             mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
-        })
-        // will probably use this later on for notifications, etc ...
-        /* <div className="mx_RightPanel_headerButton_badge">
-            { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
-        </div> */
+        });
 
         return <AccessibleButton
             aria-label={this.props.title}
@@ -263,10 +257,11 @@ module.exports = React.createClass({
 
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
+        // eslint-disable-next-line no-unused-vars
         let inviteGroup;
 
         let membersBadge;
-        let membersTitle = _t('Members');
+        const membersTitle = _t('Members');
 
         const isPhaseGroup = [
             this.Phase.GroupMemberInfo,

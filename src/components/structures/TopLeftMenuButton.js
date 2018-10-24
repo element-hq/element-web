@@ -62,7 +62,7 @@ export default class TopLeftMenuButton extends React.Component {
         try {
             const profileInfo = await this._getProfileInfo();
             this.setState({profileInfo});
-        } catch(ex) {
+        } catch (ex) {
             console.log("could not fetch profile");
             console.error(ex);
         }
