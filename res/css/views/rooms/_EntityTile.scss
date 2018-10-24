@@ -15,10 +15,17 @@ limitations under the License.
 */
 
 .mx_EntityTile {
-    display: table-row;
-    position: relative;
+    display: flex;
+    align-items: center;
     color: $primary-fg-color;
     cursor: pointer;
+}
+
+.mx_EntityTile:hover {
+    background-image: url('../../img/member_chevron.png');
+    background-position: center right 10px;
+    background-repeat: no-repeat;
+    padding-right: 30px;
 }
 
 .mx_EntityTile_invite {
@@ -30,12 +37,10 @@ limitations under the License.
 
 .mx_EntityTile_avatar,
 .mx_GroupRoomTile_avatar {
-    display: table-cell;
     padding-left: 3px;
     padding-right: 12px;
     padding-top: 4px;
     padding-bottom: 4px;
-    vertical-align: middle;
     width: 36px;
     height: 36px;
     position: relative;
@@ -51,30 +56,19 @@ limitations under the License.
 
 .mx_EntityTile_name,
 .mx_GroupRoomTile_name {
-    display: table-cell;
-    vertical-align: middle;
+    flex: 1 1 0;
     overflow: hidden;
     font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 155px;
 }
 
 .mx_EntityTile_details {
-    display: table-cell;
-    padding-right: 14px;
-    vertical-align: middle;
+    overflow: hidden;
 }
 
 .mx_EntityTile_name_hover {
     font-size: 13px;
-}
-
-.mx_EntityTile_chevron {
-    margin-top: 8px;
-    margin-right: -4px;
-    margin-left: 6px;
-    float: right;
 }
 
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
