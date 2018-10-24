@@ -278,7 +278,7 @@ export default class MImageBody extends React.Component {
 
         let img = null;
         let placeholder = null;
-        let giflabel = null;
+        let gifLabel = null;
 
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
@@ -304,7 +304,7 @@ export default class MImageBody extends React.Component {
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
-            giflabel = <p className="mx_MImageBody_GIFlabel">GIF</p>;
+            gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
         const thumbnail = (
@@ -324,7 +324,7 @@ export default class MImageBody extends React.Component {
 
                 <div style={{display: !showPlaceholder ? undefined : 'none'}}>
                     { img }
-                    { giflabel }
+                    { gifLabel }
                 </div>
 
                 { this.state.hover && this.getTooltip() }
