@@ -15,15 +15,6 @@ module.exports = {
 
         "mobileguide": "./src/vector/mobile_guide/index.js",
 
-        // We ship olm.js as a separate lump of javascript. This makes it get
-        // loaded via a separate <script/> tag in index.html (which loads it
-        // into the browser global `Olm`, where js-sdk expects to find it).
-        //
-        // (we should probably make js-sdk load it asynchronously at some
-        // point, so that it doesn't block the pageload, but that is a separate
-        // problem)
-        "olm": "./src/vector/olm-loader.js",
-
         // CSS themes
         "theme-light":  "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark":   "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
@@ -171,12 +162,3 @@ module.exports = {
         inline: false,
     },
 };
-
-// olm is an optional dependency. Ignore it if it's not installed, to avoid a
-// scary-looking error.
-try {
-    require('olm');
-} catch (e) {
-    console.log("Olm is not installed; not shipping it");
-    delete(module.exports.entry["olm"]);
-}
