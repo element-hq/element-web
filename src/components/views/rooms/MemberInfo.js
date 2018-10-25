@@ -928,38 +928,49 @@ module.exports = withMatrixClient(React.createClass({
             </div>;
         }
 
+        const avatarUrl = this.props.member.getMxcAvatarUrl();
+        let avatarElement;
+        if (avatarUrl) {
+            const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            avatarElement = <div className="mx_MemberInfo_avatar">
+                <img src={httpUrl} />
+            </div>
+        }
+
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
+
         return (
             <div className="mx_MemberInfo">
-                <GeminiScrollbarWrapper autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" alt={_t('Close')} />
-                    </AccessibleButton>
-                    <div className="mx_MemberInfo_avatar">
-                        <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
+                    <div className="mx_MemberInfo_name">
+                        <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
+                            <img src="img/minimise.svg" width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
+                        </AccessibleButton>
+                        <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>
+                    { avatarElement }
+                    <div className="mx_MemberInfo_container">
 
-                    <EmojiText element="h2">{ memberName }</EmojiText>
-
-                    <div className="mx_MemberInfo_profile">
-                        <div className="mx_MemberInfo_profileField">
-                            { this.props.member.userId }
+                        <div className="mx_MemberInfo_profile">
+                            <div className="mx_MemberInfo_profileField">
+                                { this.props.member.userId }
+                            </div>
+                            { roomMemberDetails }
                         </div>
-                        { roomMemberDetails }
                     </div>
+                    <GeminiScrollbarWrapper autoshow={true} className="mx_MemberInfo_scrollContainer">
+                        <div className="mx_MemberInfo_container">
+                            { this._renderUserOptions() }
 
-                    { this._renderUserOptions() }
+                            { adminTools }
 
-                    { adminTools }
+                            { startChat }
 
-                    { startChat }
+                            { this._renderDevices() }
 
-                    { this._renderDevices() }
-
-                    { spinner }
-                </GeminiScrollbarWrapper>
+                            { spinner }
+                        </div>
+                    </GeminiScrollbarWrapper>
             </div>
         );
     },

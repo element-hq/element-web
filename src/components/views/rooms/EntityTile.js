@@ -131,7 +131,6 @@ const EntityTile = React.createClass({
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12" />
                     <EmojiText element="div" className={nameClasses} dir="auto">
                         { name }
                     </EmojiText>

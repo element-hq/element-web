@@ -15,14 +15,36 @@ limitations under the License.
 */
 
 .mx_MemberInfo {
-    margin-top: 20px;
-    padding-right: 20px;
-    height: 100%;
+    background-color: $secondary-accent-color;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     overflow-y: auto;
 }
 
+.mx_MemberInfo_name {
+    align-items: center;
+    display: flex;
+}
+
+.mx_MemberInfo_cancel {
+    height: 16px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.mx_MemberInfo_name h2 {
+    flex: 1;
+}
+
 .mx_MemberInfo h2 {
-    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 16px 0;
+}
+
+.mx_MemberInfo_container {
+    padding: 8px;
 }
 
 .mx_MemberInfo .mx_RoomTile_nameContainer {
@@ -37,14 +59,16 @@ limitations under the License.
     width: 160px;
 }
 
-.mx_MemberInfo_cancel {
-    float: right;
-    margin-right: 10px;
-    cursor: pointer;
+.mx_MemberInfo_avatar {
+    background: $tagpanel-bg-color;
 }
 
-.mx_MemberInfo_avatar {
-    clear: both;
+.mx_MemberInfo_avatar > img {
+    height: auto;
+    width: 100%;
+    max-height: 30vh;
+    object-fit: contain;
+    display: block;
 }
 
 .mx_MemberInfo_avatar .mx_BaseAvatar {
@@ -70,7 +94,6 @@ limitations under the License.
 .mx_MemberInfo_profileField {
     font-size: 13px;
     position: relative;
-    background-color: $primary-bg-color;
 }
 
 .mx_MemberInfo_buttons {
@@ -110,3 +133,6 @@ limitations under the License.
     margin-left: 8px;
 }
 
+.mx_MemberInfo .mx_MemberInfo_scrollContainer {
+    flex: 1;
+}
