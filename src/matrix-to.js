@@ -102,12 +102,15 @@ export function pickServerCandidates(roomId) {
     const candidates = [];
     if (highestPlUser.powerLevel >= 50) candidates.push(highestPlUser.serverName);
 
+    const beforePopulation = candidates.length;
     const maxCandidates = 3;
     const serversByPopulation = Object.keys(populationMap)
-        .sort((a, b) => populationMap[a] - populationMap[b])
+        .sort((a, b) => populationMap[b] - populationMap[a])
         .filter(a => !candidates.includes(a));
-    while(candidates.length < maxCandidates && candidates.length <= serversByPopulation.length) {
-        candidates.push(serversByPopulation[Math.max(0, candidates.length - 1)]);
+    for (let i = beforePopulation; i <= maxCandidates; i++) {
+        const idx = i - beforePopulation;
+        if (idx >= serversByPopulation.length) break;
+        candidates.push(serversByPopulation[idx]);
     }
 
     return candidates;
