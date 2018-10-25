@@ -294,5 +294,6 @@
     "Collapse panel": "Tkurre panelin",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Me shfletuesin tuaj të tanishëm, pamja dhe ndjesitë nga aplikacioni mund të jenë plotësisht të pasakta, dhe disa nga ose krejt veçoritë të mos funksionojnë. Nëse doni ta provoni sido qoftë, mund të vazhdoni, por mos u ankoni për çfarëdo problemesh që mund të hasni!",
     "Checking for an update...": "Po kontrollohet për një përditësim…",
-    "There are advanced notifications which are not shown here": "Ka njoftime të thelluara që nuk shfaqen këtu"
+    "There are advanced notifications which are not shown here": "Ka njoftime të thelluara që nuk shfaqen këtu",
+    "Show empty room list headings": "Shfaqi emrat e listave të zbrazëta dhomash"
 }

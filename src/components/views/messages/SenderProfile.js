@@ -96,7 +96,7 @@ export default React.createClass({
     render() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
-        let name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         const {msgtype} = mxEvent.getContent();
 
         if (msgtype === 'm.emote') {

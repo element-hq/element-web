@@ -19,15 +19,21 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 
 export default (props) => {
-    const description =
-        _t("Riot now uses 3-5x less memory, by only loading information about other users"
-        + " when needed. Please wait whilst we resynchronise with the server!");
+    const description1 =
+        _t("You've previously used Riot on %(host)s with lazy loading of members enabled. " +
+            "In this version lazy loading is disabled. " +
+            "As the local cache is not compatible between these two settings, " +
+            "Riot needs to resync your account.",
+            {host: props.host});
+    const description2 = _t("If the other version of Riot is still open in another tab, " +
+            "please close it as using Riot on the same host with both " +
+            "lazy loading enabled and disabled simultaneously will cause issues.");
 
     return (<QuestionDialog
         hasCancelButton={false}
-        title={_t("Updating Riot")}
-        description={<div>{description}</div>}
-        button={_t("OK")}
+        title={_t("Incompatible local cache")}
+        description={<div><p>{description1}</p><p>{description2}</p></div>}
+        button={_t("Clear cache and resync")}
         onFinished={props.onFinished}
     />);
 };

@@ -88,7 +88,7 @@ export const SETTINGS = {
         displayName: _td("Increase performance by only loading room members on first view"),
         supportedLevels: LEVELS_FEATURE,
         controller: new LazyLoadingController(),
-        default: false,
+        default: true,
     },
     "feature_keybackup": {
         isFeature: true,
@@ -295,5 +295,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show empty room list headings'),
         default: true,
+    },
+    "showDeveloperTools": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show developer tools'),
+        default: false,
     },
 };

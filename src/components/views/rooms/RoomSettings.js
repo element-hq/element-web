@@ -590,6 +590,11 @@ module.exports = React.createClass({
         }
     },
 
+    _openDevtools: function() {
+        const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
+        Modal.createDialog(DevtoolsDialog, {roomId: this.props.room.roomId});
+    },
+
     _renderEncryptionSection: function() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
 
@@ -942,6 +947,11 @@ module.exports = React.createClass({
             </AccessibleButton>;
         }
 
+        const devtoolsButton = SettingsStore.getValue("showDeveloperTools") ?
+        (<AccessibleButton className="mx_RoomSettings_devtoolsButton" onClick={this._openDevtools}>
+            { _t("Open Devtools") }
+        </AccessibleButton>) : null;
+
         return (
             <div className="mx_RoomSettings">
 
@@ -1055,6 +1065,7 @@ module.exports = React.createClass({
                     { _t('Internal room ID: ') } <code>{ this.props.room.roomId }</code><br />
                     { _t('Room version number: ') } <code>{ this.props.room.getVersion() }</code><br />
                     { roomUpgradeButton }
+                    { devtoolsButton }
                 </div>
             </div>
         );

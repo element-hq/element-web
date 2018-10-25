@@ -74,6 +74,8 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_Dialog_buttons">
+                { cancelButton }
+                { this.props.children }
                 <button className={primaryButtonClassName}
                     onClick={this.props.onPrimaryButtonClick}
                     autoFocus={this.props.focus}
@@ -81,8 +83,6 @@ module.exports = React.createClass({
                 >
                     { this.props.primaryButton }
                 </button>
-                { this.props.children }
-                { cancelButton }
             </div>
         );
     },

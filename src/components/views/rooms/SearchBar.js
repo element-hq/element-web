@@ -16,11 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
-var classNames = require('classnames');
-var AccessibleButton = require('../../../components/views/elements/AccessibleButton');
+const React = require('react');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require('../../../index');
+const classNames = require('classnames');
+const AccessibleButton = require('../../../components/views/elements/AccessibleButton');
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -28,7 +28,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return ({
-            scope: 'Room'
+            scope: 'Room',
         });
     },
 
@@ -54,18 +54,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var searchButtonClasses = classNames({ mx_SearchBar_searchButton : true, mx_SearchBar_searching: this.props.searchInProgress });
-        var thisRoomClasses = classNames({ mx_SearchBar_button : true, mx_SearchBar_unselected : this.state.scope !== 'Room' });
-        var allRoomsClasses = classNames({ mx_SearchBar_button : true, mx_SearchBar_unselected : this.state.scope !== 'All' });
+        const searchButtonClasses = classNames({ mx_SearchBar_searchButton: true, mx_SearchBar_searching: this.props.searchInProgress });
+        const thisRoomClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'Room' });
+        const allRoomsClasses = classNames({ mx_SearchBar_button: true, mx_SearchBar_unselected: this.state.scope !== 'All' });
 
         return (
-            <div className="mx_SearchBar"> 
-                <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange}/>
-                <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}><img src="img/search-button.svg" width="37" height="37" alt={_t("Search")}/></AccessibleButton>
+            <div className="mx_SearchBar">
+                <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}><img src="img/search-button.svg" width="37" height="37" alt={_t("Search")} /></AccessibleButton>
                 <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick}>{_t("This Room")}</AccessibleButton>
                 <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick}>{_t("All Rooms")}</AccessibleButton>
                 <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
             </div>
         );
-    }
+    },
 });
