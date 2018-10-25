@@ -82,6 +82,7 @@ const SIMPLE_SETTINGS = [
     { id: "TagPanel.disableTagPanel" },
     { id: "enableWidgetScreenshots" },
     { id: "RoomSubList.showEmpty" },
+    { id: "showDeveloperTools" },
 ];
 
 // These settings must be defined in SettingsStore
