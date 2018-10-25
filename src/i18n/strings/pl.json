@@ -1180,5 +1180,18 @@
     "Show empty room list headings": "Pokaż nagłówki z pustym pokojem",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "W zaszyfrowanych pokojach, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (w którym generowane są podglądy) nie może zbierać informacji o linkach widocznych w tym pokoju.",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Gdy ktoś umieści URL w wiadomości, można wyświetlić podgląd adresu URL, aby podać więcej informacji o tym łączu, takich jak tytuł, opis i obraz ze strony internetowej.",
-    "This event could not be displayed": "Ten event nie może zostać wyświetlony"
+    "This event could not be displayed": "Ten event nie może zostać wyświetlony",
+    "This room has been replaced and is no longer active.": "Ten pokój został zamieniony i nie jest już aktywny.",
+    "The conversation continues here.": "Konwersacja jest kontynuowana tutaj.",
+    "System Alerts": "Alerty systemowe",
+    "You don't currently have any stickerpacks enabled": "Nie masz obecnie włączonych żadnych pakietów naklejek",
+    "Stickerpack": "Pakiet naklejek",
+    "This room is a continuation of another conversation.": "Ten pokój jest kontynuacją innej rozmowy.",
+    "Click here to see older messages.": "Kliknij tutaj, aby zobaczyć starsze wiadomości.",
+    "This homeserver has hit its Monthly Active User limit so <b>some users will not be able to log in</b>.": "Ten serwer osiągnął miesięczny limit aktywnych użytkowników, więc <b>niektórzy użytkownicy nie będą mogli się zalogować</b>.",
+    "This homeserver has exceeded one of its resource limits so <b>some users will not be able to log in</b>.": "Ten serwer przekroczył jeden z limitów, więc <b>niektórzy użytkownicy nie będą mogli się zalogować</b>.",
+    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s dołączyli(-ły) %(count)s razy",
+    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s dołączył(a) %(count)s razy",
+    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s dołączył(a)",
+    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s wyszli(-ły)"
 }
