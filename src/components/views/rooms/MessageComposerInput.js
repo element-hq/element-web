@@ -573,7 +573,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // emojioneify any emoji
-        while (true) {
+        do {
             let foundEmoji = false;
 
             for (const node of editorState.document.getTexts()) {
@@ -607,9 +607,7 @@ export default class MessageComposerInput extends React.Component {
                     }
                 }
             }
-
-            if (!foundEmoji) break;
-        }
+        } while (foundEmoji);
 
         // work around weird bug where inserting emoji via the macOS
         // emoji picker can leave the selection stuck in the emoji's
