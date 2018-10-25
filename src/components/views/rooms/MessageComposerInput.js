@@ -573,8 +573,9 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // emojioneify any emoji
+        let foundEmoji;
         do {
-            let foundEmoji = false;
+            foundEmoji = false;
 
             for (const node of editorState.document.getTexts()) {
                 if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
