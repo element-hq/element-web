@@ -14,17 +14,31 @@ limitations under the License.
 import expect from 'expect';
 import peg from '../src/MatrixClientPeg';
 import {pickServerCandidates} from "../src/matrix-to";
+import * as testUtils from "./test-utils";
 
 
 describe('matrix-to', function () {
+    let sandbox;
+
+    beforeEach(function() {
+        testUtils.beforeEach(this);
+        sandbox = testUtils.stubClient();
+        peg.get().credentials = { userId: "@test:example.com" };
+    });
+
+    afterEach(function() {
+        sandbox.restore();
+    });
+
     it('should pick no candidate servers when the room is not found', function () {
-        //peg.getRoom = () => null;
+        peg.get().getRoom = () => null;
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(0);
     });
+
     it('should pick no candidate servers when the room has no members', function () {
-        peg.getRoom = () => {
+        peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [],
             }
@@ -33,27 +47,9 @@ describe('matrix-to', function () {
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(0);
     });
-    it('should pick no candidate servers when no users have enough power level', function () {
-        peg.getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:example.org",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@bob:example.org",
-                        powerLevel: 25,
-                    }
-                ],
-            }
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
-    });
+
     it('should pick a candidate server for the highest power level user in the room', function () {
-        peg.getRoom = () => {
+        peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
@@ -77,8 +73,9 @@ describe('matrix-to', function () {
         expect(pickedServers[0]).toBe("pl_95");
         // we don't check the 2nd and 3rd servers because that is done by the next test
     });
+
     it('should pick candidate servers based on user population', function () {
-        peg.getRoom = () => {
+        peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
@@ -115,8 +112,9 @@ describe('matrix-to', function () {
         expect(pickedServers[1]).toBe("second");
         expect(pickedServers[2]).toBe("third");
     });
+
     it('should pick prefer candidate servers with higher power levels', function () {
-        peg.getRoom = () => {
+        peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
