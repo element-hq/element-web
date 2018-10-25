@@ -300,4 +300,9 @@ export const SETTINGS = {
         displayName: _td('Show empty room list headings'),
         default: true,
     },
+    "showDeveloperTools": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show developer tools'),
+        default: false,
+    },
 };

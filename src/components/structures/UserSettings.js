@@ -84,6 +84,7 @@ const SIMPLE_SETTINGS = [
     { id: "RoomSubList.showEmpty" },
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
+    { id: "showDeveloperTools" },
 ];
 
 // These settings must be defined in SettingsStore
