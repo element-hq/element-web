@@ -1193,5 +1193,13 @@
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s dołączyli(-ły) %(count)s razy",
     "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s dołączył(a) %(count)s razy",
     "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s dołączył(a)",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s wyszli(-ły)"
+    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s wyszli(-ły)",
+    "Internal room ID: ": "Wewnętrzny identyfikator pokoju ",
+    "were invited %(count)s times|one": "zostali(-ły) zaproszeni(-one)",
+    "Show developer tools": "Pokaż narzędzia deweloperskie",
+    "An email address is required to register on this homeserver.": "Adres e-mail jest wymagany do rejestracji na tym serwerze domowym.",
+    "A phone number is required to register on this homeserver.": "Numer telefonu jest wymagany do rejestracji na tym serwerze domowym.",
+    "Updating Riot": "Aktualizowanie Riot",
+    "Submit Debug Logs": "Wyślij dzienniki błędów",
+    "Please <a>contact your service administrator</a> to continue using this service.": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji."
 }
