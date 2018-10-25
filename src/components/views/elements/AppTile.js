@@ -328,7 +328,7 @@ export default class AppTile extends React.Component {
                             // the iframe at a page that is reasonably safe to use in the
                             // event the iframe doesn't wink away.
                             // This is relative to where the Riot instance is located.
-                            this.refs.appFrame.src = '/config.json';
+                            this.refs.appFrame.src = 'about:blank';
                         }
 
                         WidgetUtils.setRoomWidget(
