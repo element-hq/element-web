@@ -931,7 +931,7 @@ module.exports = withMatrixClient(React.createClass({
         const avatarUrl = this.props.member.getMxcAvatarUrl();
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
+            const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = <div className="mx_MemberInfo_avatar">
                 <img src={httpUrl} />
             </div>
