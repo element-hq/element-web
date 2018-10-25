@@ -958,7 +958,7 @@ module.exports = withMatrixClient(React.createClass({
                             { roomMemberDetails }
                         </div>
                     </div>
-                    <GeminiScrollbarWrapper autoshow={true}>
+                    <GeminiScrollbarWrapper autoshow={true} className="mx_MemberInfo_scrollContainer">
                         <div className="mx_MemberInfo_container">
                             { this._renderUserOptions() }
 

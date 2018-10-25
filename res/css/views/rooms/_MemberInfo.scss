@@ -40,6 +40,7 @@ limitations under the License.
 .mx_MemberInfo h2 {
     font-size: 18px;
     font-weight: 600;
+    margin: 16px 0;
 }
 
 .mx_MemberInfo_container {
@@ -59,16 +60,15 @@ limitations under the License.
 }
 
 .mx_MemberInfo_avatar {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
     background: $tagpanel-bg-color;
 }
 
 .mx_MemberInfo_avatar > img {
     height: auto;
     width: 100%;
-    grid-column: 2;
-    max-height: 400px;
+    max-height: 30vh;
+    object-fit: contain;
+    display: block;
 }
 
 .mx_MemberInfo_avatar .mx_BaseAvatar {
@@ -133,3 +133,6 @@ limitations under the License.
     margin-left: 8px;
 }
 
+.mx_MemberInfo .mx_MemberInfo_scrollContainer {
+    flex: 1;
+}
