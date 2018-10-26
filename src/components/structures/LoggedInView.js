@@ -421,7 +421,6 @@ const LoggedInView = React.createClass({
         const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserSettings = sdk.getComponent('structures.UserSettings');
-        const CreateRoom = sdk.getComponent('structures.CreateRoom');
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
@@ -467,14 +466,6 @@ const LoggedInView = React.createClass({
 
             case PageTypes.MyGroups:
                 page_element = <MyGroups />;
-                break;
-
-            case PageTypes.CreateRoom:
-                page_element = <CreateRoom
-                    onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapseRhs}
-                />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.RoomDirectory:
