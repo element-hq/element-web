@@ -17,7 +17,7 @@ import {pickServerCandidates} from "../src/matrix-to";
 import * as testUtils from "./test-utils";
 
 
-describe('matrix-to', function () {
+describe('matrix-to', function() {
     let sandbox;
 
     beforeEach(function() {
@@ -30,25 +30,25 @@ describe('matrix-to', function () {
         sandbox.restore();
     });
 
-    it('should pick no candidate servers when the room is not found', function () {
+    it('should pick no candidate servers when the room is not found', function() {
         peg.get().getRoom = () => null;
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(0);
     });
 
-    it('should pick no candidate servers when the room has no members', function () {
+    it('should pick no candidate servers when the room has no members', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(0);
     });
 
-    it('should pick a candidate server for the highest power level user in the room', function () {
+    it('should pick a candidate server for the highest power level user in the room', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -63,9 +63,9 @@ describe('matrix-to', function () {
                     {
                         userId: "@alice:pl_95",
                         powerLevel: 95,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -74,7 +74,7 @@ describe('matrix-to', function () {
         // we don't check the 2nd and 3rd servers because that is done by the next test
     });
 
-    it('should pick candidate servers based on user population', function () {
+    it('should pick candidate servers based on user population', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -101,9 +101,9 @@ describe('matrix-to', function () {
                     {
                         userId: "@charlie:third",
                         powerLevel: 0,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -113,7 +113,7 @@ describe('matrix-to', function () {
         expect(pickedServers[2]).toBe("third");
     });
 
-    it('should pick prefer candidate servers with higher power levels', function () {
+    it('should pick prefer candidate servers with higher power levels', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -132,9 +132,9 @@ describe('matrix-to', function () {
                     {
                         userId: "@charlie:third",
                         powerLevel: 0,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -144,16 +144,16 @@ describe('matrix-to', function () {
         expect(pickedServers[2]).toBe("third");
     });
 
-    it('should work with IPv4 hostnames', function () {
+    it('should work with IPv4 hostnames', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
                         userId: "@alice:127.0.0.1",
                         powerLevel: 100,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -161,16 +161,16 @@ describe('matrix-to', function () {
         expect(pickedServers[0]).toBe("127.0.0.1");
     });
 
-    it('should work with IPv6 hostnames', function () {
+    it('should work with IPv6 hostnames', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
                         userId: "@alice:[::1]",
                         powerLevel: 100,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -178,16 +178,16 @@ describe('matrix-to', function () {
         expect(pickedServers[0]).toBe("[::1]");
     });
 
-    it('should work with IPv4 hostnames with ports', function () {
+    it('should work with IPv4 hostnames with ports', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
                         userId: "@alice:127.0.0.1:8448",
                         powerLevel: 100,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -195,16 +195,16 @@ describe('matrix-to', function () {
         expect(pickedServers[0]).toBe("127.0.0.1:8448");
     });
 
-    it('should work with IPv6 hostnames with ports', function () {
+    it('should work with IPv6 hostnames with ports', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
                         userId: "@alice:[::1]:8448",
                         powerLevel: 100,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
@@ -212,16 +212,16 @@ describe('matrix-to', function () {
         expect(pickedServers[0]).toBe("[::1]:8448");
     });
 
-    it('should work with hostnames with ports', function () {
+    it('should work with hostnames with ports', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
                     {
                         userId: "@alice:example.org:8448",
                         powerLevel: 100,
-                    }
+                    },
                 ],
-            }
+            };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();

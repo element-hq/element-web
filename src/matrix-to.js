@@ -39,7 +39,7 @@ export function makeGroupPermalink(groupId) {
 
 export function encodeServerCandidates(candidates) {
     if (!candidates) return '';
-    return `via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`
+    return `via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
 }
 
 export function pickServerCandidates(roomId) {
@@ -85,7 +85,7 @@ export function pickServerCandidates(roomId) {
     // the list and magically have the link work.
 
     const populationMap: {[server:string]:number} = {};
-    const highestPlUser = {userId:null, powerLevel: 0, serverName: null};
+    const highestPlUser = {userId: null, powerLevel: 0, serverName: null};
 
     for (const member of room.getJoinedMembers()) {
         const serverName = member.userId.split(":").splice(1).join(":");
