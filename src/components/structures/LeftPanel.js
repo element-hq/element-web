@@ -181,6 +181,8 @@ var LeftPanel = React.createClass({
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
+
+        let topBox = <TopLeftMenuButton collapsed={ this.props.collapsed }/>;
 /*
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
