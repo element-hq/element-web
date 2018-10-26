@@ -68,10 +68,8 @@ export function pickServerCandidates(roomId) {
     //   room.
     //
     //   Server 2: The next most popular server in the room (in user
-    //   distribution). This will probably be matrix.org in most cases
-    //   although it is certainly possible to be some other server. This
-    //   cannot be the same as Server 1. If no other servers are available
-    //   then we'll only return Server 1.
+    //   distribution). This cannot be the same as Server 1. If no other
+    //   servers are available then we'll only return Server 1.
     //
     //   Server 3: The next most popular server by user distribution. This
     //   has the same rules as Server 2, with the added exception that it
