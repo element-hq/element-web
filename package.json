@@ -96,7 +96,7 @@
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "chokidar": "^1.6.1",
+    "chokidar": "^2.0.4",
     "concurrently": "^4.0.1",
     "cpx": "^1.3.2",
     "cross-env": "^4.0.0",
@@ -147,7 +147,7 @@
     "webpack-dev-server": "^3.1.9"
   },
   "optionalDependencies": {
-    "olm": "https://matrix.org/packages/npm/olm/olm-2.2.1.tgz"
+    "olm": "https://matrix.org/packages/npm/olm/olm-3.0.0.tgz"
   },
   "build": {
     "appId": "im.riot.app",
