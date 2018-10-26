@@ -1294,5 +1294,9 @@
     "Clear cache and resync": "Vider le cache et resynchroniser",
     "Please accept all of the policies": "Veuillez accepter toutes les politiques",
     "Please review and accept the policies of this homeserver:": "Veuillez lire et accepter les politiques de ce serveur d'accueil :",
-    "Add some now": "En ajouter maintenant"
+    "Add some now": "En ajouter maintenant",
+    "Joining room...": "Adhésion au salon…",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Vous êtes administrateur de cette communauté. Vous ne pourrez pas revenir sans une invitation d'un autre administrateur.",
+    "Open Devtools": "Ouvrir les outils développeur",
+    "Show developer tools": "Afficher les outils de développeur"
 }
