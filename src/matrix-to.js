@@ -80,6 +80,12 @@ export function pickServerCandidates(roomId) {
     // be ACL'd in the future or for some reason be evicted from the room
     // however an event like that is unlikely the larger the room gets.
 
+    // Note: we don't pick the server the room was created on because the
+    // homeserver should already be using that server as a last ditch attempt
+    // and there's less of a guarantee that the server is a resident server.
+    // Instead, we actively figure out which servers are likely to be residents
+    // in the future and try to use those.
+
     // Note: Users receiving permalinks that happen to have all 3 potential
     // servers fail them (in terms of joining) are somewhat expected to hunt
     // down the person who gave them the link to ask for a participating server.
