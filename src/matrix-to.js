@@ -19,6 +19,10 @@ import MatrixClientPeg from "./MatrixClientPeg";
 export const host = "matrix.to";
 export const baseUrl = `https://${host}`;
 
+// The maximum number of servers to pick when working out which servers
+// to add to permalinks. The servers are appended as ?via=example.org
+const MAX_SERVER_CANDIDATES = 3;
+
 export function makeEventPermalink(roomId, eventId) {
     const serverCandidates = pickServerCandidates(roomId);
     return `${baseUrl}/#/${roomId}/${eventId}?${encodeServerCandidates(serverCandidates)}`;
@@ -103,11 +107,10 @@ export function pickServerCandidates(roomId) {
     if (highestPlUser.powerLevel >= 50) candidates.push(highestPlUser.serverName);
 
     const beforePopulation = candidates.length;
-    const maxCandidates = 3;
     const serversByPopulation = Object.keys(populationMap)
         .sort((a, b) => populationMap[b] - populationMap[a])
         .filter(a => !candidates.includes(a));
-    for (let i = beforePopulation; i <= maxCandidates; i++) {
+    for (let i = beforePopulation; i <= MAX_SERVER_CANDIDATES; i++) {
         const idx = i - beforePopulation;
         if (idx >= serversByPopulation.length) break;
         candidates.push(serversByPopulation[idx]);
