@@ -181,12 +181,15 @@ export default React.createClass({
 
         let content;
         if (this.state.error) {
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             content = <div>
                 <p>{_t("Unable to create key backup")}</p>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._createBackup}>
-                        {_t("Retry")}
-                    </button>
+                    <DialogButtons primaryButton={_t('Retry')}
+                        onPrimaryButtonClick={this._createBackup}
+                        hasCancel={true}
+                        onCancel={this._onCancel}
+                    />
                 </div>
             </div>;
         } else {
