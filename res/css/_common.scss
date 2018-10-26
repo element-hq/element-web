@@ -219,6 +219,11 @@ textarea {
     word-wrap: break-word;
 }
 
+.mx_Dialog_buttons {
+    padding-right: 58px;
+    text-align: right;
+}
+
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;

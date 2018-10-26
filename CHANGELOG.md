@@ -1,3 +1,10 @@
+Changes in [0.14.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.1) (2018-10-19)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.0...v0.14.1)
+
+ * Apply the user's tint once the MatrixClientPeg is moderately ready
+   [\#2214](https://github.com/matrix-org/matrix-react-sdk/pull/2214)
+
 Changes in [0.14.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.0) (2018-10-16)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.0-rc.1...v0.14.0)

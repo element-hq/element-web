@@ -181,16 +181,9 @@ var LeftPanel = React.createClass({
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
-
-        let topBox = <TopLeftMenuButton collapsed={ this.props.collapsed }/>;
 /*
-        if (this.context.matrixClient.isGuest()) {
-            const LoginBox = sdk.getComponent('structures.LoginBox');
-            topBox = <LoginBox collapsed={ this.props.collapsed }/>;
-        } else {
-            const SearchBox = sdk.getComponent('structures.SearchBox');
-            topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
-        }
+        const SearchBox = sdk.getComponent('structures.SearchBox');
+        const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
 */
         const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
