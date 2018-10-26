@@ -125,6 +125,7 @@
     "karma-webpack": "4.0.0-beta.0",
     "matrix-mock-request": "^1.2.0",
     "matrix-react-test-utils": "^0.2.0",
+    "memfs": "^2.10.1",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
