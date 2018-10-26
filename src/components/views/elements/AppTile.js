@@ -318,6 +318,19 @@ export default class AppTile extends React.Component {
                         }
                         this.setState({deleting: true});
 
+                        // HACK: This is a really dirty way to ensure that Jitsi cleans up
+                        // its hold on the webcam. Without this, the widget holds a media
+                        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+                        if (this.refs.appFrame) {
+                            // In practice we could just do `+= ''` to trick the browser
+                            // into thinking the URL changed, however I can foresee this
+                            // being optimized out by a browser. Instead, we'll just point
+                            // the iframe at a page that is reasonably safe to use in the
+                            // event the iframe doesn't wink away.
+                            // This is relative to where the Riot instance is located.
+                            this.refs.appFrame.src = 'about:blank';
+                        }
+
                         WidgetUtils.setRoomWidget(
                             this.props.room.roomId,
                             this.props.id,
