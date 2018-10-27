@@ -23,7 +23,6 @@ const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 const PRESENCE_STATES = ["online", "offline", "unavailable"];
 
 class Presence {
-
     /**
      * Start listening the user activity to evaluate his presence state.
      * Any state change will be sent to the Home Server.

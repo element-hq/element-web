@@ -24,7 +24,6 @@ const DEFAULTS = {
 };
 
 class SdkConfig {
-
     static get() {
         return global.mxReactSdkConfig || {};
     }

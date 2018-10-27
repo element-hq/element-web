@@ -845,7 +845,7 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = async (e) => {
+            const onChange = async(e) => {
                 const checked = e.target.checked;
                 if (featureId === "feature_lazyloading") {
                     const confirmed = await this._onLazyLoadChanging(checked);

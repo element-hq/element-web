@@ -1673,7 +1673,7 @@ module.exports = React.createClass({
             </AuxPanel>
         );
 
-        let messageComposer, searchInfo;
+        let messageComposer; let searchInfo;
         const canSpeak = (
             // joined and not showing search results
             myMembership === 'join' && !this.state.searchResults
@@ -1692,7 +1692,7 @@ module.exports = React.createClass({
 
         if (MatrixClientPeg.get().isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
-            messageComposer = <LoginBox/>;
+            messageComposer = <LoginBox />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1706,7 +1706,7 @@ module.exports = React.createClass({
         }
 
         if (inCall) {
-            let zoomButton, voiceMuteButton, videoMuteButton;
+            let zoomButton; let voiceMuteButton; let videoMuteButton;
 
             if (call.type === "video") {
                 zoomButton = (

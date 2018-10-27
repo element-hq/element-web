@@ -269,7 +269,7 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        let e2eImg, e2eTitle, e2eClass;
+        let e2eImg; let e2eTitle; let e2eClass;
         const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
         if (roomIsEncrypted) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
@@ -429,7 +429,7 @@ export default class MessageComposer extends React.Component {
                              className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
                              src="img/icon-text-cancel.svg" />
                     </div>
-                </div>
+                </div>;
         }
 
         return (
