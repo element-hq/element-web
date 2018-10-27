@@ -29,6 +29,7 @@ export function makeEventPermalink(roomId, eventId) {
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
     if (roomId[0] !== '!') return permalinkBase;
+
     const serverCandidates = pickServerCandidates(roomId);
     return `${permalinkBase}${encodeServerCandidates(serverCandidates)}`;
 }
@@ -53,7 +54,7 @@ export function makeGroupPermalink(groupId) {
 }
 
 export function encodeServerCandidates(candidates) {
-    if (!candidates) return '';
+    if (!candidates || candidates.length === 0) return '';
     return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
 }
 
