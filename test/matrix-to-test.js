@@ -18,7 +18,7 @@ import {
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
-    pickServerCandidates
+    pickServerCandidates,
 } from "../src/matrix-to";
 import * as testUtils from "./test-utils";
 
@@ -293,7 +293,7 @@ describe('matrix-to', function() {
     });
 
     // Technically disallowed but we'll test it anyways
-    it('should generate an event permalink for room aliases without candidate servers even when some are available', function() {
+    it('should generate an event permalink for room aliases without candidate servers', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -318,7 +318,7 @@ describe('matrix-to', function() {
         expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
     });
 
-    it('should generate a room permalink for room aliases without candidate servers even when some are available', function() {
+    it('should generate a room permalink for room aliases without candidate servers', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
