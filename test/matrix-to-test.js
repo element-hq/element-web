@@ -13,7 +13,13 @@ limitations under the License.
 
 import expect from 'expect';
 import peg from '../src/MatrixClientPeg';
-import {pickServerCandidates} from "../src/matrix-to";
+import {
+    makeEventPermalink,
+    makeGroupPermalink,
+    makeRoomPermalink,
+    makeUserPermalink,
+    pickServerCandidates
+} from "../src/matrix-to";
 import * as testUtils from "./test-utils";
 
 
@@ -227,5 +233,117 @@ describe('matrix-to', function() {
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(1);
         expect(pickedServers[0]).toBe("example.org:8448");
+    });
+
+    it('should generate an event permalink for room IDs with no candidate servers', function() {
+        peg.get().getRoom = () => null;
+        const result = makeEventPermalink("!somewhere:example.org", "$something:example.com");
+        expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com");
+    });
+
+    it('should generate an event permalink for room IDs with some candidate servers', function() {
+        peg.get().getRoom = () => {
+            return {
+                getJoinedMembers: () => [
+                    {
+                        userId: "@alice:first",
+                        powerLevel: 100,
+                    },
+                    {
+                        userId: "@bob:second",
+                        powerLevel: 0,
+                    },
+                ],
+            };
+        };
+        const result = makeEventPermalink("!somewhere:example.org", "$something:example.com");
+        expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com?via=first&via=second");
+    });
+
+    it('should generate a room permalink for room IDs with no candidate servers', function() {
+        peg.get().getRoom = () => null;
+        const result = makeRoomPermalink("!somewhere:example.org");
+        expect(result).toBe("https://matrix.to/#/!somewhere:example.org");
+    });
+
+    it('should generate a room permalink for room IDs with some candidate servers', function() {
+        peg.get().getRoom = () => {
+            return {
+                getJoinedMembers: () => [
+                    {
+                        userId: "@alice:first",
+                        powerLevel: 100,
+                    },
+                    {
+                        userId: "@bob:second",
+                        powerLevel: 0,
+                    },
+                ],
+            };
+        };
+        const result = makeRoomPermalink("!somewhere:example.org");
+        expect(result).toBe("https://matrix.to/#/!somewhere:example.org?via=first&via=second");
+    });
+
+    // Technically disallowed but we'll test it anyways
+    it('should generate an event permalink for room aliases with no candidate servers', function() {
+        peg.get().getRoom = () => null;
+        const result = makeEventPermalink("#somewhere:example.org", "$something:example.com");
+        expect(result).toBe("https://matrix.to/#/#somewhere:example.org/$something:example.com");
+    });
+
+    // Technically disallowed but we'll test it anyways
+    it('should generate an event permalink for room aliases without candidate servers even when some are available', function() {
+        peg.get().getRoom = () => {
+            return {
+                getJoinedMembers: () => [
+                    {
+                        userId: "@alice:first",
+                        powerLevel: 100,
+                    },
+                    {
+                        userId: "@bob:second",
+                        powerLevel: 0,
+                    },
+                ],
+            };
+        };
+        const result = makeEventPermalink("#somewhere:example.org", "$something:example.com");
+        expect(result).toBe("https://matrix.to/#/#somewhere:example.org/$something:example.com");
+    });
+
+    it('should generate a room permalink for room aliases with no candidate servers', function() {
+        peg.get().getRoom = () => null;
+        const result = makeRoomPermalink("#somewhere:example.org");
+        expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
+    });
+
+    it('should generate a room permalink for room aliases without candidate servers even when some are available', function() {
+        peg.get().getRoom = () => {
+            return {
+                getJoinedMembers: () => [
+                    {
+                        userId: "@alice:first",
+                        powerLevel: 100,
+                    },
+                    {
+                        userId: "@bob:second",
+                        powerLevel: 0,
+                    },
+                ],
+            };
+        };
+        const result = makeRoomPermalink("#somewhere:example.org");
+        expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
+    });
+
+    it('should generate a user permalink', function() {
+        const result = makeUserPermalink("@someone:example.org");
+        expect(result).toBe("https://matrix.to/#/@someone:example.org");
+    });
+
+    it('should generate a group permalink', function() {
+        const result = makeGroupPermalink("+community:example.org");
+        expect(result).toBe("https://matrix.to/#/+community:example.org");
     });
 });

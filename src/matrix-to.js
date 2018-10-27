@@ -24,8 +24,13 @@ export const baseUrl = `https://${host}`;
 const MAX_SERVER_CANDIDATES = 3;
 
 export function makeEventPermalink(roomId, eventId) {
+    const permalinkBase = `${baseUrl}/#/${roomId}/${eventId}`;
+
+    // If the roomId isn't actually a room ID, don't try to list the servers.
+    // Aliases are already routable, and don't need extra information.
+    if (roomId[0] !== '!') return permalinkBase;
     const serverCandidates = pickServerCandidates(roomId);
-    return `${baseUrl}/#/${roomId}/${eventId}?${encodeServerCandidates(serverCandidates)}`;
+    return `${permalinkBase}${encodeServerCandidates(serverCandidates)}`;
 }
 
 export function makeUserPermalink(userId) {
@@ -33,8 +38,14 @@ export function makeUserPermalink(userId) {
 }
 
 export function makeRoomPermalink(roomId) {
+    const permalinkBase = `${baseUrl}/#/${roomId}`;
+
+    // If the roomId isn't actually a room ID, don't try to list the servers.
+    // Aliases are already routable, and don't need extra information.
+    if (roomId[0] !== '!') return permalinkBase;
+
     const serverCandidates = pickServerCandidates(roomId);
-    return `${baseUrl}/#/${roomId}?${encodeServerCandidates(serverCandidates)}`;
+    return `${permalinkBase}${encodeServerCandidates(serverCandidates)}`;
 }
 
 export function makeGroupPermalink(groupId) {
@@ -43,7 +54,7 @@ export function makeGroupPermalink(groupId) {
 
 export function encodeServerCandidates(candidates) {
     if (!candidates) return '';
-    return `via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
+    return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
 }
 
 export function pickServerCandidates(roomId) {
