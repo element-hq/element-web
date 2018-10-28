@@ -548,8 +548,8 @@
     "code": "kod",
     "quote": "cytat",
     "Create": "Utwórz",
-    "Online": "Dostępny",
-    "Offline": "Niedostępny",
+    "Online": "Dostępny(-a)",
+    "Offline": "Niedostępny(-a)",
     "Add an Integration": "Dodaj integrację",
     "Token incorrect": "Niepoprawny token",
     "To link to a room it must have <a>an address</a>.": "Aby móc stworzyć link do pokoju musi on mieć swój <a>adres</a>.",
@@ -1201,5 +1201,6 @@
     "A phone number is required to register on this homeserver.": "Numer telefonu jest wymagany do rejestracji na tym serwerze domowym.",
     "Updating Riot": "Aktualizowanie Riot",
     "Submit Debug Logs": "Wyślij dzienniki błędów",
-    "Please <a>contact your service administrator</a> to continue using this service.": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji."
+    "Please <a>contact your service administrator</a> to continue using this service.": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji.",
+    "Only room administrators will see this warning": "Tylko administratorzy pokojów widzą to ostrzeżenie"
 }
