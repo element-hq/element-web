@@ -1,3 +1,22 @@
+Changes in [0.17.3](https://github.com/vector-im/riot-web/releases/tag/v0.17.3) (2018-10-29)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3-rc.1...v0.17.3)
+
+ * Fix for autocompleting text emoji from react-sdk v0.14.2
+
+Changes in [0.17.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.3-rc.1) (2018-10-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.2...v0.17.3-rc.1)
+
+ * Update from Weblate.
+   [\#7549](https://github.com/vector-im/riot-web/pull/7549)
+ * Don't set tags on notifications
+   [\#7518](https://github.com/vector-im/riot-web/pull/7518)
+ * Update to latest electron builder
+   [\#7498](https://github.com/vector-im/riot-web/pull/7498)
+ * Fix Tinter.setTheme to not fire using Firefox
+   [\#6831](https://github.com/vector-im/riot-web/pull/6831)
+
 Changes in [0.17.2](https://github.com/vector-im/riot-web/releases/tag/v0.17.2) (2018-10-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.1...v0.17.2)
