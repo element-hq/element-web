@@ -25,7 +25,6 @@ const CURRENTLY_ACTIVE_THRESHOLD_MS = 2000;
  * with the app (but at a much lower frequency than mouse move events)
  */
 class UserActivity {
-
     /**
      * Start listening to user activity
      */

@@ -26,7 +26,6 @@ import { Block } from 'slate';
  */
 
 class PlainWithPillsSerializer {
-
     /*
      * @param {String} options.pillFormat - either 'md', 'plain', 'id'
      */

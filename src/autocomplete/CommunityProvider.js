@@ -61,7 +61,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         if (command) {
             const joinedGroups = cli.getGroups().filter(({myMembership}) => myMembership === 'join');
 
-            const groups = (await Promise.all(joinedGroups.map(async ({groupId}) => {
+            const groups = (await Promise.all(joinedGroups.map(async({groupId}) => {
                 try {
                     return FlairStore.getGroupProfileCached(cli, groupId);
                 } catch (e) { // if FlairStore failed, fall back to just groupId

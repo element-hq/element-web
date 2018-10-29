@@ -54,7 +54,6 @@ function getOrCreateContainer(containerId) {
  * bounding rect as the parent of PE.
  */
 export default class PersistedElement extends React.Component {
-
     static propTypes = {
         // Unique identifier for this PersistedElement instance
         // Any PersistedElements with the same persistKey will use

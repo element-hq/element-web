@@ -31,13 +31,13 @@ export default class ChangelogDialog extends React.Component {
     componentDidMount() {
         const version = this.props.newVersion.split('-');
         const version2 = this.props.version.split('-');
-        if(version == null || version2 == null) return;
+        if (version == null || version2 == null) return;
         // parse versions of form: [vectorversion]-react-[react-sdk-version]-js-[js-sdk-version]
-        for(let i=0; i<REPOS.length; i++) {
+        for (let i=0; i<REPOS.length; i++) {
             const oldVersion = version2[2*i];
             const newVersion = version[2*i];
             request(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`, (a, b, body) => {
-                if(body == null) return;
+                if (body == null) return;
                 this.setState({[REPOS[i]]: JSON.parse(body).commits});
             });
         }
@@ -66,7 +66,7 @@ export default class ChangelogDialog extends React.Component {
                     {this.state[repo].map(this._elementsForCommit)}
                     </ul>
                 </div>
-            )
+            );
         });
 
         const content = (
@@ -83,7 +83,7 @@ export default class ChangelogDialog extends React.Component {
                 button={_t("Update")}
                 onFinished={this.props.onFinished}
                 />
-        )
+        );
     }
 }
 

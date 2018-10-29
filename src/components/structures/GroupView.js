@@ -777,7 +777,7 @@ export default React.createClass({
             ),
             button: _t("Leave"),
             danger: this.state.isUserPrivileged,
-            onFinished: async (confirmed) => {
+            onFinished: async(confirmed) => {
                 if (!confirmed) return;
 
                 this.setState({membershipBusy: true});
