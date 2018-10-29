@@ -1,3 +1,10 @@
+Changes in [0.14.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.2) (2018-10-29)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.2-rc.1...v0.14.2)
+
+ * Fix autoreplacement of ascii emoji
+   [\#2258](https://github.com/matrix-org/matrix-react-sdk/pull/2258)
+
 Changes in [0.14.2-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.2-rc.1) (2018-10-24)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.1...v0.14.2-rc.1)
