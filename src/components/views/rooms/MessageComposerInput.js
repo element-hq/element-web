@@ -544,7 +544,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (editorState.startText !== null) {
             const text = editorState.startText.text;
-            const currentStartOffset = editorState.startOffset;
+            const currentStartOffset = editorState.selection.start.offset;
 
             // Automatic replacement of plaintext emoji to Unicode emoji
             if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
@@ -558,11 +558,11 @@ export default class MessageComposerInput extends React.Component {
 
                     const range = Range.create({
                         anchor: {
-                            key: editorState.selection.startKey,
+                            key: editorState.startText.key,
                             offset: currentStartOffset - emojiMatch[1].length - 1,
                         },
                         focus: {
-                            key: editorState.selection.startKey,
+                            key: editorState.startText.key,
                             offset: currentStartOffset - 1,
                         },
                     });
