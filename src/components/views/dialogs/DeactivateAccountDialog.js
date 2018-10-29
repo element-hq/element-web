@@ -35,19 +35,10 @@ export default class DeactivateAccountDialog extends React.Component {
         this._onPasswordFieldChange = this._onPasswordFieldChange.bind(this);
         this._onEraseFieldChange = this._onEraseFieldChange.bind(this);
 
-        const deactivationPreferences =
-            MatrixClientPeg.get().getAccountData('im.riot.account_deactivation_preferences');
-
-        const shouldErase = (
-            deactivationPreferences &&
-            deactivationPreferences.getContent() &&
-            deactivationPreferences.getContent().shouldErase
-        ) || false;
-
         this.state = {
             confirmButtonEnabled: false,
             busy: false,
-            shouldErase,
+            shouldErase: false,
             errStr: null,
         };
     }
@@ -66,36 +57,6 @@ export default class DeactivateAccountDialog extends React.Component {
 
     async _onOk() {
         this.setState({busy: true});
-
-        // Before we deactivate the account insert an event into
-        // the user's account data indicating that they wish to be
-        // erased from the homeserver.
-        //
-        // We do this because the API for erasing after deactivation
-        // might not be supported by the connected homeserver. Leaving
-        // an indication in account data is only best-effort, and
-        // in the worse case, the HS maintainer would have to run a
-        // script to erase deactivated accounts that have shouldErase
-        // set to true in im.riot.account_deactivation_preferences.
-        //
-        // Note: The preferences are scoped to Riot, hence the
-        // "im.riot..." event type.
-        //
-        // Note: This may have already been set on previous attempts
-        // where, for example, the user entered the wrong password.
-        // This is fine because the UI always indicates the preference
-        // prior to us calling `deactivateAccount`.
-        try {
-            await MatrixClientPeg.get().setAccountData('im.riot.account_deactivation_preferences', {
-                shouldErase: this.state.shouldErase,
-            });
-        } catch (err) {
-            this.setState({
-                busy: false,
-                errStr: _t('Failed to indicate account erasure'),
-            });
-            return;
-        }
 
         try {
             // This assumes that the HS requires password UI auth
