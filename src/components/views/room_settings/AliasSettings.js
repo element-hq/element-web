@@ -103,7 +103,7 @@ module.exports = React.createClass({
             oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
         }
 
-        let newCanonicalAlias = this.state.canonicalAlias;
+        const newCanonicalAlias = this.state.canonicalAlias;
 
         if (this.props.canSetCanonicalAlias && oldCanonicalAlias !== newCanonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
@@ -167,7 +167,7 @@ module.exports = React.createClass({
 
         if (!this.props.canonicalAlias) {
             this.setState({
-                canonicalAlias: alias
+                canonicalAlias: alias,
             });
         }
     },

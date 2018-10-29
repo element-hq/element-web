@@ -23,7 +23,6 @@ import Unread from '../Unread';
  * the RoomList.
  */
 class RoomListStore extends Store {
-
     static _listOrders = {
         "m.favourite": "manual",
         "im.vector.fake.invite": "recent",

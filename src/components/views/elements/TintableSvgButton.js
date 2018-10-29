@@ -20,7 +20,6 @@ import TintableSvg from './TintableSvg';
 import AccessibleButton from './AccessibleButton';
 
 export default class TintableSvgButton extends React.Component {
-
     constructor(props) {
         super(props);
     }

@@ -93,7 +93,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let joinBlock, previewBlock;
+        let joinBlock; let previewBlock;
 
         if (this.props.spinner || this.state.busy) {
             const Spinner = sdk.getComponent("elements.Spinner");

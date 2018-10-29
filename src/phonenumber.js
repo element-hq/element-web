@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const PHONE_NUMBER_REGEXP = /^[0-9 -\.]+$/;
+const PHONE_NUMBER_REGEXP = /^[0-9 -.]+$/;
 
 /*
  * Do basic validation to determine if the given input could be

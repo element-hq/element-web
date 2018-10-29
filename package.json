@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -76,6 +76,7 @@
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
+    "memfs": "^2.10.1",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
@@ -100,7 +101,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.5",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-bluebird": "^1.1.1",
@@ -114,9 +115,9 @@
     "babel-preset-react": "^6.24.1",
     "chokidar": "^1.6.1",
     "concurrently": "^4.0.1",
-    "eslint": "^3.13.1",
+    "eslint": "^5.8.0",
     "eslint-config-google": "^0.7.1",
-    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-babel": "^5.2.1",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-react": "^7.7.0",
     "estree-walker": "^0.5.0",

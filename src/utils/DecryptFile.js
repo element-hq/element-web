@@ -77,7 +77,7 @@ const ALLOWED_BLOB_MIMETYPES = {
     'audio/x-pn-wav': true,
     'audio/flac': true,
     'audio/x-flac': true,
-}
+};
 
 /**
  * Decrypt a file attached to a matrix event.

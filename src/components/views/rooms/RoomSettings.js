@@ -657,31 +657,31 @@ module.exports = React.createClass({
         const userLevels = powerLevels.users || {};
 
         const powerLevelDescriptors = {
-            users_default: {
+            "users_default": {
                 desc: _t('The default role for new room members is'),
                 defaultValue: 0,
             },
-            events_default: {
+            "events_default": {
                 desc: _t('To send messages, you must be a'),
                 defaultValue: 0,
             },
-            invite: {
+            "invite": {
                 desc: _t('To invite users into the room, you must be a'),
                 defaultValue: 50,
             },
-            state_default: {
+            "state_default": {
                 desc: _t('To configure the room, you must be a'),
                 defaultValue: 50,
             },
-            kick: {
+            "kick": {
                 desc: _t('To kick users, you must be a'),
                 defaultValue: 50,
             },
-            ban: {
+            "ban": {
                 desc: _t('To ban users, you must be a'),
                 defaultValue: 50,
             },
-            redact: {
+            "redact": {
                 desc: _t('To remove other users\' messages, you must be a'),
                 defaultValue: 50,
             },

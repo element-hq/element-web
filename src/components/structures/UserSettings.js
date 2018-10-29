@@ -856,7 +856,7 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = async (e) => {
+            const onChange = async(e) => {
                 const checked = e.target.checked;
                 if (featureId === "feature_lazyloading") {
                     const confirmed = await this._onLazyLoadChanging(checked);
@@ -1309,7 +1309,7 @@ module.exports = React.createClass({
         // If the olmVersion is not defined then either crypto is disabled, or
         // we are using a version old version of olm. We assume the former.
         let olmVersionString = "<not-enabled>";
-        if (olmVersion !== undefined) {
+        if (olmVersion) {
             olmVersionString = `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
         }
 

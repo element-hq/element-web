@@ -840,6 +840,7 @@ export default React.createClass({
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
+            viaServers: roomInfo.via_servers,
         };
 
         if (roomInfo.room_alias) {
@@ -1490,9 +1491,21 @@ export default React.createClass({
                 inviterName: params.inviter_name,
             };
 
+            // on our URLs there might be a ?via=matrix.org or similar to help
+            // joins to the room succeed. We'll pass these through as an array
+            // to other levels. If there's just one ?via= then params.via is a
+            // single string. If someone does something like ?via=one.com&via=two.com
+            // then params.via is an array of strings.
+            let via = [];
+            if (params.via) {
+                if (typeof(params.via) === 'string') via = [params.via];
+                else via = params.via;
+            }
+
             const payload = {
                 action: 'view_room',
                 event_id: eventId,
+                via_servers: via,
                 // If an event ID is given in the URL hash, notify RoomViewStore to mark
                 // it as highlighted, which will propagate to RoomView and highlight the
                 // associated EventTile.
