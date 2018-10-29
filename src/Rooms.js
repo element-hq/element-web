@@ -32,7 +32,6 @@ export function getDisplayAliasForRoom(room) {
  * return the other one. Otherwise, return null.
  */
 export function getOnlyOtherMember(room, myUserId) {
-
     if (room.currentState.getJoinedMemberCount() === 2) {
         return room.getJoinedMembers().filter(function(m) {
             return m.userId !== myUserId;
@@ -103,7 +102,7 @@ export function guessAndSetDMRoom(room, isDirect) {
     let newTarget;
     if (isDirect) {
         const guessedUserId = guessDMRoomTargetId(
-            room, MatrixClientPeg.get().getUserId()
+            room, MatrixClientPeg.get().getUserId(),
         );
         newTarget = guessedUserId;
     } else {

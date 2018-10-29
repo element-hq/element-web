@@ -67,7 +67,7 @@ const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
 const EMOJI_REGEX = new RegExp(unicodeRegexp, 'g');
 
-const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
+const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
 
 const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
@@ -175,8 +175,8 @@ export default class MessageComposerInput extends React.Component {
         // see https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
         this.direction = '';
 
-        this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
-        this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
+        this.plainWithMdPills = new PlainWithPillsSerializer({ pillFormat: 'md' });
+        this.plainWithIdPills = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
 
         this.md = new Md({
@@ -1078,7 +1078,7 @@ export default class MessageComposerInput extends React.Component {
 
         // only look for commands if the first block contains simple unformatted text
         // i.e. no pills or rich-text formatting and begins with a /.
-        let cmd, commandText;
+        let cmd; let commandText;
         const firstChild = editorState.document.nodes.get(0);
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         if (firstChild && firstGrandChild &&
@@ -1260,7 +1260,7 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    selectHistory = async (up) => {
+    selectHistory = async(up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
@@ -1308,7 +1308,7 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onTab = async (e) => {
+    onTab = async(e) => {
         this.setState({
             someCompletions: null,
         });
@@ -1330,7 +1330,7 @@ export default class MessageComposerInput extends React.Component {
         up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
-    onEscape = async (e) => {
+    onEscape = async(e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
@@ -1349,7 +1349,7 @@ export default class MessageComposerInput extends React.Component {
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
-    setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
+    setDisplayedCompletion = async(displayedCompletion: ?Completion): boolean => {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {

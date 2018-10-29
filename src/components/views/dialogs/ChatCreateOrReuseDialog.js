@@ -26,7 +26,6 @@ import Unread from '../../../Unread';
 import classNames from 'classnames';
 
 export default class ChatCreateOrReuseDialog extends React.Component {
-
     constructor(props) {
         super(props);
         this.onFinished = this.onFinished.bind(this);
