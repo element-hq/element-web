@@ -24,6 +24,7 @@ import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import GroupHeaderButtons from '../views/right_panel/GroupHeaderButtons';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
@@ -1305,6 +1306,7 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
+                        <GroupHeaderButtons />
                     </div>
                     <GeminiScrollbarWrapper className="mx_GroupView_body">
                         { this._getMembershipSection() }
