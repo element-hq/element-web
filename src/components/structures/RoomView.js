@@ -43,6 +43,8 @@ const Rooms = require('../../Rooms');
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
@@ -1812,6 +1814,8 @@ module.exports = React.createClass({
             },
         );
 
+        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+
         return (
             <div className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
@@ -1828,19 +1832,21 @@ module.exports = React.createClass({
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
-                <div className={fadableSectionClasses}>
-                    { auxPanel }
-                    { topUnreadMessagesBar }
-                    { messagePanel }
-                    { searchResultsPanel }
-                    <div className={statusBarAreaClass}>
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { statusBar }
+                <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
+                    <div className={fadableSectionClasses}>
+                        { auxPanel }
+                        { topUnreadMessagesBar }
+                        { messagePanel }
+                        { searchResultsPanel }
+                        <div className={statusBarAreaClass}>
+                            <div className="mx_RoomView_statusAreaBox">
+                                <div className="mx_RoomView_statusAreaBox_line"></div>
+                                { statusBar }
+                            </div>
                         </div>
+                        { messageComposer }
                     </div>
-                    { messageComposer }
-                </div>
+                </MainSplit>
             </div>
         );
     },

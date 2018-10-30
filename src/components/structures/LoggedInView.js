@@ -418,7 +418,6 @@ const LoggedInView = React.createClass({
 
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
-        const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserSettings = sdk.getComponent('structures.UserSettings');
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
@@ -449,9 +448,6 @@ const LoggedInView = React.createClass({
                         collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapseRhs) {
-                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
-                }
                 break;
 
             case PageTypes.UserSettings:
@@ -562,7 +558,6 @@ const LoggedInView = React.createClass({
                         <main className='mx_MatrixChat_middlePanel'>
                             { page_element }
                         </main>
-                        <ResizeHandle reverse={true}/>
                         { right_panel }
                     </div>
                 </DragDropContext>
