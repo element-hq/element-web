@@ -24,12 +24,6 @@ limitations under the License.
     flex-direction: column;
 }
 
-.mx_RoomView .mx_RoomHeader {
-    order: 1;
-
-    flex: 0 0 52px;
-}
-
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
     width: 100%;
@@ -69,8 +63,6 @@ limitations under the License.
     margin: 0px auto;
 
     overflow: auto;
-    border-bottom: 1px solid $primary-hairline-color;
-
     flex: 0 0 auto;
 }
 

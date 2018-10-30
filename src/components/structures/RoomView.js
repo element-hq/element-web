@@ -1507,18 +1507,20 @@ module.exports = React.createClass({
                             oobData={this.props.oobData}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                            canPreview={false} error={this.state.roomLoadError}
-                                            roomAlias={roomAlias}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            inviterName={inviterName}
-                                            invitedEmail={invitedEmail}
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                                                canPreview={false} error={this.state.roomLoadError}
+                                                roomAlias={roomAlias}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                inviterName={inviterName}
+                                                invitedEmail={invitedEmail}
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1552,16 +1554,18 @@ module.exports = React.createClass({
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectButtonClicked}
-                                            inviterName={inviterName}
-                                            canPreview={false}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectButtonClicked}
+                                                inviterName={inviterName}
+                                                canPreview={false}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1824,8 +1828,8 @@ module.exports = React.createClass({
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
-                { auxPanel }
                 <div className={fadableSectionClasses}>
+                    { auxPanel }
                     { topUnreadMessagesBar }
                     { messagePanel }
                     { searchResultsPanel }
