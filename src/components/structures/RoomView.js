@@ -90,6 +90,9 @@ module.exports = React.createClass({
 
         // is the RightPanel collapsed?
         collapsedRhs: PropTypes.bool,
+
+        // Servers the RoomView can use to try and assist joins
+        viaServers: PropTypes.arrayOf(PropTypes.string),
     },
 
     getInitialState: function() {
@@ -835,7 +838,7 @@ module.exports = React.createClass({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
                     action: 'join_room',
-                    opts: { inviteSignUrl: signUrl },
+                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
                 },
             });
 
@@ -877,7 +880,7 @@ module.exports = React.createClass({
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
             dis.dispatch({
                 action: 'join_room',
-                opts: { inviteSignUrl: signUrl },
+                opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
             });
             return Promise.resolve();
         });
@@ -1676,7 +1679,7 @@ module.exports = React.createClass({
             </AuxPanel>
         );
 
-        let messageComposer, searchInfo;
+        let messageComposer; let searchInfo;
         const canSpeak = (
             // joined and not showing search results
             myMembership === 'join' && !this.state.searchResults
@@ -1695,7 +1698,7 @@ module.exports = React.createClass({
 
         if (MatrixClientPeg.get().isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
-            messageComposer = <LoginBox/>;
+            messageComposer = <LoginBox />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1709,7 +1712,7 @@ module.exports = React.createClass({
         }
 
         if (inCall) {
-            let zoomButton, voiceMuteButton, videoMuteButton;
+            let zoomButton; let voiceMuteButton; let videoMuteButton;
 
             if (call.type === "video") {
                 zoomButton = (

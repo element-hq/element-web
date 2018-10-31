@@ -78,7 +78,6 @@ class MemberEntity extends Entity {
 }
 
 class UserEntity extends Entity {
-
     constructor(model, showInviteButton, inviteFn) {
         super(model);
         this.showInviteButton = Boolean(showInviteButton);

@@ -87,7 +87,7 @@ export default {
             device_display_name: address,
             lang: navigator.language,
             data: data,
-            append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
+            append: true, // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
     },
 };

@@ -153,8 +153,8 @@ export default class NetworkDropdown extends React.Component {
 
                         const sortedInstances = this.props.protocols[proto].instances;
                         sortedInstances.sort(function(x, y) {
-                            const a = x.desc
-                            const b = y.desc
+                            const a = x.desc;
+                            const b = y.desc;
                             if (a < b) {
                                 return -1;
                             } else if (a > b) {
@@ -208,7 +208,7 @@ export default class NetworkDropdown extends React.Component {
         return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
             {icon}
             <span className="mx_NetworkDropdown_menu_network">{name}</span>
-        </div>
+        </div>;
     }
 
     render() {
@@ -223,11 +223,11 @@ export default class NetworkDropdown extends React.Component {
             current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
                 ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
                 placeholder="matrix.org" // 'matrix.org' as an example of an HS name
-            />
+            />;
         } else {
             const instance = instanceForInstanceId(this.props.protocols, this.state.selectedInstanceId);
             current_value = this._makeMenuOption(
-                this.state.selectedServer, instance, this.state.includeAll, false
+                this.state.selectedServer, instance, this.state.includeAll, false,
             );
         }
 
