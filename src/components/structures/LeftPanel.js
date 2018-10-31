@@ -179,10 +179,9 @@ const LeftPanel = React.createClass({
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
-        const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        let topBox = <TopLeftMenuButton collapsed={ this.props.collapsed }/>;
+        const topBox = <TopLeftMenuButton collapsed={ this.props.collapsed } />;
 /*
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
