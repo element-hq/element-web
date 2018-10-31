@@ -27,7 +27,7 @@ npm run build
 npm run test
 popd
 
-if [ "$TRAVIS_BRANCH" != "experimental" ]
+if [ "$TRAVIS_BRANCH" = "develop" ]
 then
     # run end to end tests
     git clone https://github.com/matrix-org/matrix-react-end-to-end-tests.git --branch master
