@@ -55,8 +55,10 @@ export default class MainSplit extends React.Component {
     }
 
     componentWillUnmount() {
-        this.resizer.detach();
-        this.resizer = null;
+        if (this.resizer) {
+            this.resizer.detach();
+            this.resizer = null;
+        }
     }
 
     componentDidUpdate(prevProps) {
