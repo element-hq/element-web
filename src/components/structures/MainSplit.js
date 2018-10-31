@@ -35,28 +35,42 @@ export default class MainSplit extends React.Component {
             this.resizeContainer,
             FixedDistributor);
         resizer.setClassNames(classNames);
-        return resizer;
+        const rhsSize = window.localStorage.getItem("mx_rhs_size");
+        if (rhsSize !== null) {
+            resizer.forHandleAt(0).resize(parseInt(rhsSize, 10));
+        }
+
+        resizer.attach();
+        this.resizer = resizer;
     }
 
     _setResizeContainerRef(div) {
         this.resizeContainer = div;
     }
 
-    _loadResizerPreferences() {
-        const rhsSize = window.localStorage.getItem("mx_rhs_size");
-        if (rhsSize !== null) {
-            this.resizer.forHandleAt(0).resize(parseInt(rhsSize, 10));
-        }
-    }
-
     componentDidMount() {
-        this.resizer = this._createResizer();
-        this.resizer.attach();
-        this._loadResizerPreferences();
+        if (this.props.panel && !this.collapsedRhs) {
+            this._createResizer();
+        }
     }
 
     componentWillUnmount() {
         this.resizer.detach();
+        this.resizer = null;
+    }
+
+    componentDidUpdate(prevProps) {
+        const wasExpanded = !this.props.collapsedRhs && prevProps.collapsedRhs;
+        const wasCollapsed = this.props.collapsedRhs && !prevProps.collapsedRhs;
+        const wasPanelSet = this.props.panel && !prevProps.panel;
+        const wasPanelCleared = !this.props.panel && prevProps.panel;
+
+        if (wasExpanded || wasPanelSet) {
+            this._createResizer();
+        } else if (wasCollapsed || wasPanelCleared) {
+            this.resizer.detach();
+            this.resizer = null;
+        }
     }
 
     render() {
@@ -68,7 +82,7 @@ export default class MainSplit extends React.Component {
         } else {
             return <div className="mx_MainSplit" ref={this._setResizeContainerRef}>
                 { bodyView }
-                <ResizeHandle reverse={true}/>
+                <ResizeHandle reverse={true} />
                 { panelView }
             </div>;
         }
