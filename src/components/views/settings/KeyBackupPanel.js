@@ -80,7 +80,7 @@ export default class KeyBackupPanel extends React.Component {
     }
 
     _startNewBackup() {
-        const CreateKeyBackupDialog = sdk.getComponent("dialogs.keybackup.CreateKeyBackupDialog");
+        const CreateKeyBackupDialog = sdk.getComponent('dialogs.keybackup.CreateKeyBackupDialog');
         Modal.createTrackedDialog('Key Backup', 'Key Backup', CreateKeyBackupDialog, {
             onFinished: () => {
                 this._loadBackupStatus();
@@ -89,9 +89,9 @@ export default class KeyBackupPanel extends React.Component {
     }
 
     _deleteBackup() {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
-            title: _t("Delete Backup"),
+            title: _t('Delete Backup'),
             description: _t(
                 "Delete your backed up encryption keys from the server? " +
                 "You will no longer be able to use your recovery key to read encrypted message history",
@@ -109,7 +109,7 @@ export default class KeyBackupPanel extends React.Component {
     }
 
     _restoreBackup() {
-        const RestoreKeyBackupDialog = sdk.getComponent("dialogs.keybackup.RestoreKeyBackupDialog");
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         });
     }
