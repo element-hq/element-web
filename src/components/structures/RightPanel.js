@@ -159,8 +159,6 @@ export default class RightPanel extends React.Component {
 
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        let inviteGroup;
-
         const isPhaseGroup = [
             RightPanel.Phase.GroupMemberInfo,
             RightPanel.Phase.GroupMemberList,
@@ -194,7 +192,8 @@ export default class RightPanel extends React.Component {
 
         // TODO: either include this in the DOM again, or move it to other component
         if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
-            inviteGroup = isPhaseGroup ? (
+            // inviteGroup =
+            isPhaseGroup ? (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />

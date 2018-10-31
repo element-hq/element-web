@@ -67,7 +67,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
                 isHighlighted={this.state.phase === RightPanel.Phase.NotificationPanel}
                 clickPhase={RightPanel.Phase.NotificationPanel}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
-            />
+            />,
         ];
     }
 }

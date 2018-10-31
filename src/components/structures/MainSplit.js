@@ -29,7 +29,7 @@ export default class MainSplit extends React.Component {
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse"
+            reverse: "mx_ResizeHandle_reverse",
         };
         const resizer = new Resizer(
             this.resizeContainer,
@@ -89,4 +89,4 @@ export default class MainSplit extends React.Component {
             </div>;
         }
     }
-};
+}

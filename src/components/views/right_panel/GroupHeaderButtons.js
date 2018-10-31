@@ -75,7 +75,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
                 isHighlighted={isPhaseRoom}
                 clickPhase={RightPanel.Phase.GroupRoomList}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
-            />
+            />,
         ];
     }
 }
