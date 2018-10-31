@@ -19,14 +19,19 @@ limitations under the License.
     flex: 0 0 auto;
     background: $panel-divider-color;
     background-clip: content-box;
+    z-index: 100;
 }
 
 .mx_ResizeHandle.mx_ResizeHandle_horizontal {
     width: 1px;
+    margin: 0 -5px;
+    padding: 0 5px;
     cursor: col-resize;
 }
 
 .mx_ResizeHandle.mx_ResizeHandle_vertical {
     height: 1px;
+    margin: -5px 0;
+    padding: 5px 0;
     cursor: row-resize;
 }
