@@ -25,6 +25,8 @@ import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import GroupHeaderButtons from '../views/right_panel/GroupHeaderButtons';
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
@@ -1281,6 +1283,8 @@ export default React.createClass({
                 }
             }
 
+            const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
+
             const headerClasses = {
                 mx_GroupView_header: true,
                 mx_GroupView_header_view: !this.state.editing,
@@ -1308,10 +1312,12 @@ export default React.createClass({
                         </div>
                         <GroupHeaderButtons />
                     </div>
-                    <GeminiScrollbarWrapper className="mx_GroupView_body">
-                        { this._getMembershipSection() }
-                        { this._getGroupSection() }
-                    </GeminiScrollbarWrapper>
+                    <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
+                        <GeminiScrollbarWrapper className="mx_GroupView_body">
+                            { this._getMembershipSection() }
+                            { this._getGroupSection() }
+                        </GeminiScrollbarWrapper>
+                    </MainSplit>
                 </div>
             );
         } else if (this.state.error) {
