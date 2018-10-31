@@ -45,10 +45,10 @@ export default React.createClass({
             description: <div className="mx_MatrixToolbar_changelog">{releaseNotes}</div>,
             button: _t("Update"),
             onFinished: (update) => {
-                if(update && PlatformPeg.get()) {
+                if (update && PlatformPeg.get()) {
                     PlatformPeg.get().installUpdate();
                 }
-            }
+            },
         });
     },
 
@@ -58,10 +58,10 @@ export default React.createClass({
             version: this.props.version,
             newVersion: this.props.newVersion,
             onFinished: (update) => {
-                if(update && PlatformPeg.get()) {
+                if (update && PlatformPeg.get()) {
                     PlatformPeg.get().installUpdate();
                 }
-            }
+            },
         });
     },
 
@@ -103,5 +103,5 @@ export default React.createClass({
                 {action_button}
             </div>
         );
-    }
+    },
 });

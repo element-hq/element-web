@@ -37,7 +37,7 @@ function getUnsentMessages(room) {
     return room.getPendingEvents().filter(function(ev) {
         return ev.status === Matrix.EventStatus.NOT_SENT;
     });
-};
+}
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -303,7 +303,7 @@ module.exports = React.createClass({
         const errorIsMauError = Boolean(
             this.state.syncStateData &&
             this.state.syncStateData.error &&
-            this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED'
+            this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
     },

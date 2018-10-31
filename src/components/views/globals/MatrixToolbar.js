@@ -39,7 +39,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixToolbar_content">
                    { _t('You are not receiving desktop notifications') } <a className="mx_MatrixToolbar_link" onClick={ this.onClick }> { _t('Enable them now') }</a>
                 </div>
-                <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" alt={_t('Close')}/></AccessibleButton>
+                <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" alt={_t('Close')} /></AccessibleButton>
             </div>
         );
     },

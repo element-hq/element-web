@@ -712,7 +712,7 @@ module.exports = withMatrixClient(React.createClass({
 
             if (!member || !member.membership || member.membership === 'leave') {
                 const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
-                const onInviteUserButton = async () => {
+                const onInviteUserButton = async() => {
                     try {
                         await cli.invite(roomId, member.userId);
                     } catch (err) {

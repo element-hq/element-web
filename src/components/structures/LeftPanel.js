@@ -28,7 +28,7 @@ import VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 
 
-var LeftPanel = React.createClass({
+const LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     // NB. If you add props, don't forget to update
@@ -214,7 +214,7 @@ var LeftPanel = React.createClass({
             </div>
         );
         // <BottomLeftMenu collapsed={this.props.collapsed}/>
-    }
+    },
 });
 
 module.exports = LeftPanel;

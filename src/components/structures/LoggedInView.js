@@ -65,6 +65,9 @@ const LoggedInView = React.createClass({
 
         teamToken: PropTypes.string,
 
+        // Used by the RoomView to handle joining rooms
+        viaServers: PropTypes.arrayOf(PropTypes.string),
+
         // and lots and lots of other stuff.
     },
 
@@ -444,6 +447,7 @@ const LoggedInView = React.createClass({
                         onRegistered={this.props.onRegistered}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
+                        viaServers={this.props.viaServers}
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}

@@ -296,7 +296,7 @@ export const TermsAuthEntry = React.createClass({
             return <Loader />;
         }
 
-        let checkboxes = [];
+        const checkboxes = [];
         let allChecked = true;
         for (const policy of this.state.policies) {
             const checked = this.state.toggledPolicies[policy.id];
@@ -306,7 +306,7 @@ export const TermsAuthEntry = React.createClass({
                 <label key={"policy_checkbox_" + policy.id}>
                     <input type="checkbox" onClick={() => this._trySubmit(policy.id)} checked={checked} />
                     <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
-                </label>
+                </label>,
             );
         }
 

@@ -67,7 +67,7 @@ module.exports = React.createClass({
     phases: {
         LOADING: "LOADING", // The component is loading or sending data to the hs
         DISPLAY: "DISPLAY", // The component is ready and display data
-        ERROR: "ERROR",      // There was an error
+        ERROR: "ERROR", // There was an error
     },
 
     propTypes: {
@@ -86,14 +86,14 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
-            masterPushRule: undefined,      // The master rule ('.m.rule.master')
-            vectorPushRules: [],            // HS default push rules displayed in Vector UI
-            vectorContentRules: {           // Keyword push rules displayed in Vector UI
+            masterPushRule: undefined, // The master rule ('.m.rule.master')
+            vectorPushRules: [], // HS default push rules displayed in Vector UI
+            vectorContentRules: { // Keyword push rules displayed in Vector UI
                 vectorState: PushRuleVectorState.ON,
                 rules: [],
             },
-            externalPushRules: [],          // Push rules (except content rule) that have been defined outside Vector UI
-            externalContentRules: [],        // Keyword push rules that have been defined outside Vector UI
+            externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
+            externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
         };
     },
 
@@ -290,7 +290,7 @@ module.exports = React.createClass({
         for (const i in this.state.vectorContentRules.rules) {
             const rule = this.state.vectorContentRules.rules[i];
 
-            let enabled, actions;
+            let enabled; let actions;
             switch (newPushRuleVectorState) {
                 case PushRuleVectorState.ON:
                     if (rule.actions.length !== 1) {
