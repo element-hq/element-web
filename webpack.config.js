@@ -107,7 +107,20 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+
+            // To make webpack happy
+            // Related: https://github.com/request/request/issues/1529
+            // (there's no mock available for fs, so we fake a mock by using
+            // an in-memory version of fs)
+            "fs": "memfs",
         },
+    },
+    node: {
+        // Because webpack is made of fail
+        // https://github.com/request/request/issues/1529
+        // Note: 'mock' is the new 'empty'
+        net: 'mock',
+        tls: 'mock'
     },
     externals: {
         // Don't try to bundle electron: leave it as a commonjs dependency
