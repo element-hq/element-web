@@ -170,11 +170,7 @@ const LoggedInView = React.createClass({
                 }
             },
             onResized: (size, item) => {
-                if (item.classList.contains("mx_LeftPanel_container")) {
-                    window.localStorage.setItem("mx_lhs_size", '' + size);
-                } else if(item.classList.contains("mx_RightPanel")) {
-                    window.localStorage.setItem("mx_rhs_size", '' + size);
-                }
+                window.localStorage.setItem("mx_lhs_size", '' + size);
             },
         };
         const resizer = new Resizer(
@@ -189,10 +185,6 @@ const LoggedInView = React.createClass({
         const lhsSize = window.localStorage.getItem("mx_lhs_size");
         if (lhsSize !== null) {
             this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
-        }
-        const rhsSize = window.localStorage.getItem("mx_rhs_size");
-        if (rhsSize !== null) {
-            this.resizer.forHandleAt(1).resize(parseInt(rhsSize, 10));
         }
     },
 
@@ -432,7 +424,6 @@ const LoggedInView = React.createClass({
         const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
         let page_element;
-        let right_panel = '';
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
@@ -457,7 +448,6 @@ const LoggedInView = React.createClass({
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.MyGroups:
@@ -489,7 +479,8 @@ const LoggedInView = React.createClass({
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                // TODO: fix/remove UserView
+                // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
                 page_element = <GroupView
@@ -497,7 +488,6 @@ const LoggedInView = React.createClass({
                     isNew={this.props.currentGroupIsNew}
                     collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
@@ -555,10 +545,7 @@ const LoggedInView = React.createClass({
                             disabled={this.props.leftDisabled}
                         />
                         <ResizeHandle/>
-                        <main className='mx_MatrixChat_middlePanel'>
-                            { page_element }
-                        </main>
-                        { right_panel }
+                        { page_element }
                     </div>
                 </DragDropContext>
             </div>
