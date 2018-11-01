@@ -227,20 +227,12 @@ class RoomListStore extends Store {
         // thousand times.
         const pinUnread = SettingsStore.getValue("pinUnreadRooms");
         const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
-        this._timings = {};
         Object.keys(lists).forEach((listKey) => {
             let comparator;
             switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
                     comparator = (roomA, roomB) => {
-                        this._timings["overall_" + roomA.roomId + "_" + roomB.roomId] = {
-                            type: "overall",
-                            start: performance.now(),
-                            end: 0,
-                        };
-                        const ret = this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
-                        this._timings["overall_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
-                        return ret;
+                        return this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
                     };
                     break;
                 case "manual":
@@ -250,32 +242,6 @@ class RoomListStore extends Store {
             }
             lists[listKey].sort(comparator);
         });
-
-        // Combine the samples for performance metrics
-        const samplesByType = {};
-        for (const sampleName of Object.keys(this._timings)) {
-            const sample = this._timings[sampleName];
-            if (!samplesByType[sample.type]) samplesByType[sample.type] = {
-                min: 999999999,
-                max: 0,
-                count: 0,
-                total: 0,
-            };
-
-            const record = samplesByType[sample.type];
-            const duration = sample.end - sample.start;
-            if (duration < record.min) record.min = duration;
-            if (duration > record.max) record.max = duration;
-            record.count++;
-            record.total += duration;
-        }
-
-        for (const category of Object.keys(samplesByType)) {
-            const {min, max, count, total} = samplesByType[category];
-            const average = total / count;
-
-            console.log(`RoomListSortPerf : type=${category} min=${min} max=${max} total=${total} samples=${count} average=${average}`);
-        }
 
         this._setState({
             lists,
@@ -347,29 +313,16 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(roomA, roomB, pinUnread, pinMentioned) {
-        //console.log("Comparing " + roomA.roomId + " with " + roomB.roomId +" || pinUnread=" + pinUnread +" pinMentioned="+pinMentioned);
         // We try and set the ordering to be Mentioned > Unread > Recent
         // assuming the user has the right settings, of course.
 
-        this._timings["timestamp_" + roomA.roomId + "_" + roomB.roomId] = {
-            type: "timestamp",
-            start: performance.now(),
-            end: 0,
-        };
         const timestampA = this._getRoomState(roomA, "timestamp");
         const timestampB = this._getRoomState(roomB, "timestamp");
         const timestampDiff = timestampB - timestampA;
-        this._timings["timestamp_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
 
         if (pinMentioned) {
-            this._timings["mentioned_" + roomA.roomId + "_" + roomB.roomId] = {
-                type: "mentioned",
-                start: performance.now(),
-                end: 0,
-            };
             const mentionsA = this._getRoomState(roomA, "notifications");
             const mentionsB = this._getRoomState(roomB, "notifications");
-            this._timings["mentioned_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
             if (mentionsA && !mentionsB) return -1;
             if (!mentionsA && mentionsB) return 1;
 
@@ -381,14 +334,8 @@ class RoomListStore extends Store {
         }
 
         if (pinUnread) {
-            this._timings["unread_" + roomA.roomId + "_" + roomB.roomId] = {
-                type: "unread",
-                start: performance.now(),
-                end: 0,
-            };
             const unreadA = this._getRoomState(roomA, "unread");
             const unreadB = this._getRoomState(roomB, "notifications");
-            this._timings["unread_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
             if (unreadA && !unreadB) return -1;
             if (!unreadA && unreadB) return 1;
 
