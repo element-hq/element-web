@@ -16,14 +16,12 @@ limitations under the License.
 
 .mx_RoomSubList {
     min-height: 31px;
-    flex: 0 0 auto;
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
 }
 
 .mx_RoomSubList_nonEmpty {
-    min-height: 80px;
-    flex: 1;
     margin-bottom: 8px;
 }
 
@@ -131,9 +129,18 @@ limitations under the License.
     transform: rotateZ(-90deg);
 }
 
-.mx_RoomSubList .gm-scrollbar-container {
+.mx_RoomSubList_scroll {
     /* let rooms list grab all available space */
-    flex: 1;
+    flex: 0 1 auto;
+    padding: 0 15px !important;
+}
+/*
+for browsers that don't support overlay scrollbars,
+subtract scrollbar width from right padding on hover when overflowing
+so the content doesn't jump when showing the scrollbars
+*/
+body.mx_scrollbar_nooverlay .mx_RoomSubList_scroll.mx_AutoHideScrollbar_overflow:hover {
+    padding-right: calc(15px - var(--scrollbar-width)) !important;
 }
 
 .collapsed {
