@@ -217,11 +217,16 @@ class RoomListStore extends Store {
             }
         });
 
+        // Note: we check the settings up here instead of in the forEach or
+        // in the _recentsComparator to avoid hitting the SettingsStore a few
+        // thousand times.
+        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
+        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
         Object.keys(lists).forEach((listKey) => {
             let comparator;
             switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
-                    comparator = this._recentsComparator;
+                    comparator = (roomA, roomB) => this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
                     break;
                 case "manual":
                 default:
@@ -262,10 +267,7 @@ class RoomListStore extends Store {
         }
     }
 
-    _recentsComparator(roomA, roomB) {
-        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
-        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
-
+    _recentsComparator(roomA, roomB, pinUnread, pinMentioned) {
         // We try and set the ordering to be Mentioned > Unread > Recent
         // assuming the user has the right settings, of course
 
