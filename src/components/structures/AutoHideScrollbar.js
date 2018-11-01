@@ -19,20 +19,20 @@ import React from "react";
 // derived from code from github.com/noeldelgado/gemini-scrollbar
 // Copyright (c) Noel Delgado <pixelia.me@gmail.com> (pixelia.me)
 function getScrollbarWidth(alternativeOverflow) {
-    var e = document.createElement('div'), sw;
-    e.style.position = 'absolute';
-    e.style.top = '-9999px';
-    e.style.width = '100px';
-    e.style.height = '100px';
-    e.style.overflow = "scroll";
+    const div = document.createElement('div');
+    div.style.position = 'absolute';
+    div.style.top = '-9999px';
+    div.style.width = '100px';
+    div.style.height = '100px';
+    div.style.overflow = "scroll";
     if (alternativeOverflow) {
-        e.style.overflow = alternativeOverflow;
+        div.style.overflow = alternativeOverflow;
     }
-    e.style.msOverflowStyle = '-ms-autohiding-scrollbar';
-    document.body.appendChild(e);
-    sw = (e.offsetWidth - e.clientWidth);
-    document.body.removeChild(e);
-    return sw;
+    div.style.msOverflowStyle = '-ms-autohiding-scrollbar';
+    document.body.appendChild(div);
+    const scrollbarWidth = (div.offsetWidth - div.clientWidth);
+    document.body.removeChild(div);
+    return scrollbarWidth;
 }
 
 function install() {
@@ -60,11 +60,10 @@ const installBodyClassesIfNeeded = (function() {
             install();
             installed = true;
         }
-    }
+    };
 })();
 
 export default class AutoHideScrollbar extends React.Component {
-
     constructor(props) {
         super(props);
         this.onOverflow = this.onOverflow.bind(this);

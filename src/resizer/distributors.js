@@ -74,7 +74,6 @@ class CollapseDistributor extends FixedDistributor {
 }
 
 class PercentageDistributor {
-
     constructor(sizer, item, _config, items, container) {
         this.container = container;
         this.totalSize = sizer.getTotalSize();

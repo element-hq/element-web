@@ -26,7 +26,6 @@ import Avatar from '../../Avatar';
 const AVATAR_SIZE = 28;
 
 export default class TopLeftMenuButton extends React.Component {
-
     static propTypes = {
         collapsed: PropTypes.bool.isRequired,
     };
