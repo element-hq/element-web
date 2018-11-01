@@ -226,7 +226,9 @@ class RoomListStore extends Store {
             let comparator;
             switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
-                    comparator = (roomA, roomB) => this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
+                    comparator = (roomA, roomB) => {
+                        return this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
+                    };
                     break;
                 case "manual":
                 default:
