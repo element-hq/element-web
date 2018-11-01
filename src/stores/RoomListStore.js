@@ -54,7 +54,24 @@ class RoomListStore extends Store {
                 "im.vector.fake.archived": [],
             },
             ready: false,
-            roomCache: {}, // roomId => { cacheType => value }
+
+            // The room cache stores a mapping of roomId to cache record.
+            // Each cache record is a key/value pair for various bits of
+            // data used to sort the room list. Currently this stores the
+            // following bits of informations:
+            //   "timestamp":     number, The timestamp of the last relevant
+            //                    event in the room.
+            //   "notifications": boolean, Whether or not the user has been
+            //                    highlighted on any unread events.
+            //   "unread":        boolean, Whether or not the user has any
+            //                    unread events.
+            //
+            // All of the cached values are lazily loaded on read in the
+            // recents comparator. When an event is received for a particular
+            // room, all the cached values are invalidated - forcing the
+            // next read to set new values. The entries do not expire on
+            // their own.
+            roomCache: {},
         };
     }
 
