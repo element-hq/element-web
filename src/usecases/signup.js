@@ -59,6 +59,12 @@ module.exports = async function signup(session, username, password, homeserver) 
     //confirm dialog saying you cant log back in without e-mail
     const continueButton = await session.waitAndQuery('.mx_QuestionDialog button.mx_Dialog_primary');
     await continueButton.click();
+
+    //find the privacy policy checkbox and check it
+    //this should automatically move ahead with registration
+    const policyCheckbox = await session.waitAndQuery('.mx_Login_box input[type="checkbox"]');
+    await policyCheckbox.click();
+
     //wait for registration to finish so the hash gets set
     //onhashchange better?
     await session.delay(2000);
