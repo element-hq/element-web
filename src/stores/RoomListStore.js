@@ -54,6 +54,7 @@ class RoomListStore extends Store {
                 "im.vector.fake.archived": [],
             },
             ready: false,
+            roomCache: {}, // roomId => { cacheType => value }
         };
     }
 
@@ -85,6 +86,8 @@ class RoomListStore extends Store {
                     !payload.isLiveUnfilteredRoomTimelineEvent ||
                     !this._eventTriggersRecentReorder(payload.event)
                 ) break;
+
+                this._clearCachedRoomState(payload.event.getRoomId());
                 this._generateRoomLists();
             }
             break;
@@ -112,6 +115,8 @@ class RoomListStore extends Store {
                 if (liveTimeline !== eventTimeline ||
                     !this._eventTriggersRecentReorder(payload.event)
                 ) break;
+
+                this._clearCachedRoomState(payload.event.getRoomId());
                 this._generateRoomLists();
             }
             break;
@@ -222,12 +227,20 @@ class RoomListStore extends Store {
         // thousand times.
         const pinUnread = SettingsStore.getValue("pinUnreadRooms");
         const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
+        this._timings = {};
         Object.keys(lists).forEach((listKey) => {
             let comparator;
             switch (RoomListStore._listOrders[listKey]) {
                 case "recent":
                     comparator = (roomA, roomB) => {
-                        return this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
+                        this._timings["overall_" + roomA.roomId + "_" + roomB.roomId] = {
+                            type: "overall",
+                            start: performance.now(),
+                            end: 0,
+                        };
+                        const ret = this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
+                        this._timings["overall_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
+                        return ret;
                     };
                     break;
                 case "manual":
@@ -238,10 +251,74 @@ class RoomListStore extends Store {
             lists[listKey].sort(comparator);
         });
 
+        // Combine the samples for performance metrics
+        const samplesByType = {};
+        for (const sampleName of Object.keys(this._timings)) {
+            const sample = this._timings[sampleName];
+            if (!samplesByType[sample.type]) samplesByType[sample.type] = {
+                min: 999999999,
+                max: 0,
+                count: 0,
+                total: 0,
+            };
+
+            const record = samplesByType[sample.type];
+            const duration = sample.end - sample.start;
+            if (duration < record.min) record.min = duration;
+            if (duration > record.max) record.max = duration;
+            record.count++;
+            record.total += duration;
+        }
+
+        for (const category of Object.keys(samplesByType)) {
+            const {min, max, count, total} = samplesByType[category];
+            const average = total / count;
+
+            console.log(`RoomListSortPerf : type=${category} min=${min} max=${max} total=${total} samples=${count} average=${average}`);
+        }
+
         this._setState({
             lists,
             ready: true, // Ready to receive updates via Room.tags events
         });
+    }
+
+    _updateCachedRoomState(roomId, type, value) {
+        const roomCache = this._state.roomCache;
+        if (!roomCache[roomId]) roomCache[roomId] = {};
+
+        if (value) roomCache[roomId][type] = value;
+        else delete roomCache[roomId][type];
+
+        this._setState({roomCache});
+    }
+
+    _clearCachedRoomState(roomId) {
+        const roomCache = this._state.roomCache;
+        delete roomCache[roomId];
+        this._setState({roomCache});
+    }
+
+    _getRoomState(room, type) {
+        const roomId = room.roomId;
+        const roomCache = this._state.roomCache;
+        if (roomCache[roomId] && typeof roomCache[roomId][type] !== 'undefined') {
+            return roomCache[roomId][type];
+        }
+
+        if (type === "timestamp") {
+            const ts = this._tsOfNewestEvent(room);
+            this._updateCachedRoomState(roomId, "timestamp", ts);
+            return ts;
+        } else if (type === "unread") {
+            const unread = room.getUnreadNotificationCount() > 0;
+            this._updateCachedRoomState(roomId, "unread", unread);
+            return unread;
+        } else if (type === "notifications") {
+            const notifs = room.getUnreadNotificationCount("highlight") > 0;
+            this._updateCachedRoomState(roomId, "notifications", notifs);
+            return notifs;
+        } else throw new Error("Unrecognized room cache type: " + type);
     }
 
     _eventTriggersRecentReorder(ev) {
@@ -270,30 +347,58 @@ class RoomListStore extends Store {
     }
 
     _recentsComparator(roomA, roomB, pinUnread, pinMentioned) {
+        //console.log("Comparing " + roomA.roomId + " with " + roomB.roomId +" || pinUnread=" + pinUnread +" pinMentioned="+pinMentioned);
         // We try and set the ordering to be Mentioned > Unread > Recent
-        // assuming the user has the right settings, of course
+        // assuming the user has the right settings, of course.
+
+        this._timings["timestamp_" + roomA.roomId + "_" + roomB.roomId] = {
+            type: "timestamp",
+            start: performance.now(),
+            end: 0,
+        };
+        const timestampA = this._getRoomState(roomA, "timestamp");
+        const timestampB = this._getRoomState(roomB, "timestamp");
+        const timestampDiff = timestampB - timestampA;
+        this._timings["timestamp_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
 
         if (pinMentioned) {
-             const mentionsA = roomA.getUnreadNotificationCount("highlight") > 0;
-             const mentionsB = roomB.getUnreadNotificationCount("highlight") > 0;
-             if (mentionsA && !mentionsB) return -1;
-             if (!mentionsA && mentionsB) return 1;
-             if (mentionsA && mentionsB) return 0;
-             // If neither have mentions, fall through to remaining checks
+            this._timings["mentioned_" + roomA.roomId + "_" + roomB.roomId] = {
+                type: "mentioned",
+                start: performance.now(),
+                end: 0,
+            };
+            const mentionsA = this._getRoomState(roomA, "notifications");
+            const mentionsB = this._getRoomState(roomB, "notifications");
+            this._timings["mentioned_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
+            if (mentionsA && !mentionsB) return -1;
+            if (!mentionsA && mentionsB) return 1;
+
+            // If they both have notifications, sort by timestamp.
+            // If neither have notifications (the fourth check not shown
+            // here), then try and sort by unread messages and finally by
+            // timestamp.
+            if (mentionsA && mentionsB) return timestampDiff;
         }
 
         if (pinUnread) {
-            const unreadA = Unread.doesRoomHaveUnreadMessages(roomA);
-            const unreadB = Unread.doesRoomHaveUnreadMessages(roomB);
+            this._timings["unread_" + roomA.roomId + "_" + roomB.roomId] = {
+                type: "unread",
+                start: performance.now(),
+                end: 0,
+            };
+            const unreadA = this._getRoomState(roomA, "unread");
+            const unreadB = this._getRoomState(roomB, "notifications");
+            this._timings["unread_" + roomA.roomId + "_" + roomB.roomId].end = performance.now();
             if (unreadA && !unreadB) return -1;
             if (!unreadA && unreadB) return 1;
-            if (unreadA && unreadB) return 0;
-            // If neither have unread messages, fall through to remaining checks
+
+            // If they both have unread messages, sort by timestamp
+            // If nether have unread message (the fourth check not shown
+            // here), then just sort by timestamp anyways.
+            if (unreadA && unreadB) return timestampDiff;
         }
 
-        // XXX: We could use a cache here and update it when we see new
-        // events that trigger a reorder
-        return this._tsOfNewestEvent(roomB) - this._tsOfNewestEvent(roomA);
+        return timestampDiff;
     }
 
     _lexicographicalComparator(roomA, roomB) {
