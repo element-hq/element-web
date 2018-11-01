@@ -249,6 +249,8 @@
     "Enable URL previews for this room (only affects you)": "Enable URL previews for this room (only affects you)",
     "Enable URL previews by default for participants in this room": "Enable URL previews by default for participants in this room",
     "Room Colour": "Room Colour",
+    "Pin unread rooms to the top of the room list": "Pin unread rooms to the top of the room list",
+    "Pin rooms I'm mentioned in to the top of the room list": "Pin rooms I'm mentioned in to the top of the room list",
     "Enable widget screenshots on supported widgets": "Enable widget screenshots on supported widgets",
     "Show empty room list headings": "Show empty room list headings",
     "Collecting app version information": "Collecting app version information",
