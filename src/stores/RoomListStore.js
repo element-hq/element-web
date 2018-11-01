@@ -335,7 +335,7 @@ class RoomListStore extends Store {
 
         if (pinUnread) {
             const unreadA = this._getRoomState(roomA, "unread");
-            const unreadB = this._getRoomState(roomB, "notifications");
+            const unreadB = this._getRoomState(roomB, "unread");
             if (unreadA && !unreadB) return -1;
             if (!unreadA && unreadB) return 1;
 
