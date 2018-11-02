@@ -1298,5 +1298,7 @@
     "Joining room...": "Belépés a szobába..",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Te vagy ennek a közösségnek az adminisztrátora. Egy másik adminisztrátortól kapott meghívó nélkül nem tudsz majd újra csatlakozni.",
     "Open Devtools": "Fejlesztői eszközök megnyitása",
-    "Show developer tools": "Fejlesztői eszközök megjelenítése"
+    "Show developer tools": "Fejlesztői eszközök megjelenítése",
+    "Pin unread rooms to the top of the room list": "Nem olvasott üzeneteket tartalmazó szobák a szobalista elejére",
+    "Pin rooms I'm mentioned in to the top of the room list": "Megemlítéseket tartalmazó szobák a szobalista elejére"
 }
