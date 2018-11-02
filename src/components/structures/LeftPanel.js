@@ -179,13 +179,9 @@ const LeftPanel = React.createClass({
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
+        const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        const topBox = <TopLeftMenuButton collapsed={ this.props.collapsed } />;
-/*
-        const SearchBox = sdk.getComponent('structures.SearchBox');
-        const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
-*/
         const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
@@ -202,7 +198,8 @@ const LeftPanel = React.createClass({
             <div className={containerClasses}>
                 { tagPanel }
                 <aside className={"mx_LeftPanel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
-                    { topBox }
+                    <TopLeftMenuButton collapsed={ this.props.collapsed }/>
+                    <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}

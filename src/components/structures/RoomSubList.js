@@ -52,7 +52,7 @@ const RoomSubList = React.createClass({
         collapsed: PropTypes.bool.isRequired, // is LeftPanel collapsed?
         onHeaderClick: PropTypes.func,
         incomingCall: PropTypes.object,
-        searchFilter: PropTypes.string,
+        isFiltered: PropTypes.bool,
         headerItems: PropTypes.node, // content shown in the sublist header
         extraTiles: PropTypes.arrayOf(PropTypes.node), // extra elements added beneath tiles
     },
@@ -60,7 +60,6 @@ const RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
-            sortedList: [],
         };
     },
 
@@ -74,31 +73,11 @@ const RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({
-            sortedList: this.applySearchFilter(this.props.list, this.props.searchFilter),
-        });
         this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        // order the room list appropriately before we re-render
-        //if (debug) console.log("received new props, list = " + newProps.list);
-        this.setState({
-            sortedList: this.applySearchFilter(newProps.list, newProps.searchFilter),
-        });
-    },
-
-    applySearchFilter: function(list, filter) {
-        if (filter === "") return list;
-        const lcFilter = filter.toLowerCase();
-        // case insensitive if room name includes filter,
-        // or if starts with `#` and one of room's aliases starts with filter
-        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
-            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
     },
 
     // The header is collapsable if it is hidden or not stuck
@@ -196,7 +175,7 @@ const RoomSubList = React.createClass({
 
     makeRoomTiles: function() {
         const RoomTile = sdk.getComponent("rooms.RoomTile");
-        return this.state.sortedList.map((room, index) => {
+        return this.props.list.map((room, index) => {
             return <RoomTile
                 room={room}
                 roomSubList={this}
@@ -218,7 +197,7 @@ const RoomSubList = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         // find first room which has notifications and switch to it
-        for (const room of this.state.sortedList) {
+        for (const room of this.props.list) {
             const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
             const highlight = room.getUnreadNotificationCount('highlight') > 0;
             const notificationCount = room.getUnreadNotificationCount();
@@ -241,10 +220,10 @@ const RoomSubList = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         // switch to first room in sortedList as that'll be the top of the list for the user
-        if (this.state.sortedList && this.state.sortedList.length > 0) {
+        if (this.props.list && this.props.list.length > 0) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: this.state.sortedList[0].roomId,
+                room_id: this.props.list[0].roomId,
             });
         } else if (this.props.extraTiles && this.props.extraTiles.length > 0) {
             // Group Invites are different in that they are all extra tiles and not rooms
@@ -312,7 +291,7 @@ const RoomSubList = React.createClass({
             );
         }
 
-        const len = this.state.sortedList.length + this.props.extraTiles.length;
+        const len = this.props.list.length + this.props.extraTiles.length;
         let chevron;
         if (len) {
             const chevronClasses = classNames({
@@ -323,7 +302,7 @@ const RoomSubList = React.createClass({
             chevron = (<div className={chevronClasses}></div>);
         }
 
-        const tabindex = this.props.searchFilter === "" ? "0" : "-1";
+        const tabindex = this.props.isFiltered ? "0" : "-1";
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
@@ -338,7 +317,7 @@ const RoomSubList = React.createClass({
     },
 
     render: function() {
-        const len = this.state.sortedList.length + this.props.extraTiles.length;
+        const len = this.props.list.length + this.props.extraTiles.length;
         if (len) {
             const subListClasses = classNames({
                 "mx_RoomSubList": true,
