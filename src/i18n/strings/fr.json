@@ -1298,5 +1298,7 @@
     "Joining room...": "Adhésion au salon…",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Vous êtes administrateur de cette communauté. Vous ne pourrez pas revenir sans une invitation d'un autre administrateur.",
     "Open Devtools": "Ouvrir les outils développeur",
-    "Show developer tools": "Afficher les outils de développeur"
+    "Show developer tools": "Afficher les outils de développeur",
+    "Pin unread rooms to the top of the room list": "Épingler les salons non lus en haut de la liste des salons",
+    "Pin rooms I'm mentioned in to the top of the room list": "Épingler les salons où l'on me mentionne en haut de la liste des salons"
 }
