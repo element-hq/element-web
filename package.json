@@ -76,7 +76,6 @@
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
-    "memfs": "^2.10.1",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",

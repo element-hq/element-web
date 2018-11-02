@@ -199,24 +199,11 @@ module.exports = function (config) {
 
                     'matrix-react-sdk': path.resolve('test/skinned-sdk.js'),
                     'sinon': 'sinon/pkg/sinon.js',
-
-                    // To make webpack happy
-                    // Related: https://github.com/request/request/issues/1529
-                    // (there's no mock available for fs, so we fake a mock by using
-                    // an in-memory version of fs)
-                    "fs": "memfs",
                 },
                 modules: [
                     path.resolve('./test'),
                     "node_modules"
                 ],
-            },
-            node: {
-                // Because webpack is made of fail
-                // https://github.com/request/request/issues/1529
-                // Note: 'mock' is the new 'empty'
-                net: 'mock',
-                tls: 'mock'
             },
             devtool: 'inline-source-map',
             externals: {
