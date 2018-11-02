@@ -34,7 +34,6 @@ class RoomSizer extends Sizer {
             item.style.maxHeight = `${Math.round(size)}px`;
         }
     }
-
 }
 
 class RoomDistributor extends FixedDistributor {

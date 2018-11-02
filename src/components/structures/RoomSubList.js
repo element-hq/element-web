@@ -23,6 +23,7 @@ import dis from '../../dispatcher';
 import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
+import AutoHideScrollbar from './AutoHideScrollbar';
 import { KeyCode } from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
@@ -348,19 +349,17 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx()}
                 </div>;
             } else {
-                const heightEstimation = (len * 40) + 31 + (8 + 8);
+                const heightEstimation = (len * 44) + 31 + (8 + 8);
                 const style = {
-                    flexGrow: `${heightEstimation}`,
                     maxHeight: `${heightEstimation}px`,
                 };
-                const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
                 const tiles = this.makeRoomTiles();
                 tiles.push(...this.props.extraTiles);
-                return <div className={subListClasses} style={style}>
+                return <div style={style} className={subListClasses}>
                     {this._getHeaderJsx()}
-                    <GeminiScrollbarWrapper>
+                    <AutoHideScrollbar className="mx_RoomSubList_scroll">
                         { tiles }
-                    </GeminiScrollbarWrapper>
+                    </AutoHideScrollbar>
                 </div>;
             }
         } else {

@@ -19,7 +19,6 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 
 export class TopLeftMenu extends React.Component {
-
     constructor() {
         super();
         this.openSettings = this.openSettings.bind(this);
