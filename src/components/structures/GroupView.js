@@ -1292,7 +1292,7 @@ export default React.createClass({
             };
 
             return (
-                <div className="mx_GroupView">
+                <main className="mx_GroupView">
                     <div className={classnames(headerClasses)}>
                         <div className="mx_GroupView_header_leftCol">
                             <div className="mx_GroupView_header_avatar">
@@ -1318,7 +1318,7 @@ export default React.createClass({
                             { this._getGroupSection() }
                         </GeminiScrollbarWrapper>
                     </MainSplit>
-                </div>
+                </main>
             );
         } else if (this.state.error) {
             if (this.state.error.httpStatus === 404) {

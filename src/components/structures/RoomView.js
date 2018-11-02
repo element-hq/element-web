@@ -1820,7 +1820,7 @@ module.exports = React.createClass({
         const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
 
         return (
-            <div className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
+            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
@@ -1850,7 +1850,7 @@ module.exports = React.createClass({
                         { messageComposer }
                     </div>
                 </MainSplit>
-            </div>
+            </main>
         );
     },
 });
