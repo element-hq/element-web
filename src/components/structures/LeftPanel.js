@@ -194,12 +194,16 @@ const LeftPanel = React.createClass({
             },
         );
 
+        const searchBox = !this.props.collapsed ?
+            <SearchBox onSearch={ this.onSearch } /> :
+            undefined;
+
         return (
             <div className={containerClasses}>
                 { tagPanel }
                 <aside className={"mx_LeftPanel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed }/>
-                    <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
+                    { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
