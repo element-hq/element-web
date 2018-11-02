@@ -33,6 +33,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
+import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 
 linkifyMatrix(linkify);
 
@@ -432,6 +433,7 @@ module.exports = React.createClass({
                     { saveButton }
                     { cancelButton }
                     { rightRow }
+                    <RoomHeaderButtons />
                 </div>
             </div>
         );

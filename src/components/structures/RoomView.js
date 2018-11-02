@@ -43,6 +43,8 @@ const Rooms = require('../../Rooms');
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
@@ -1510,18 +1512,20 @@ module.exports = React.createClass({
                             oobData={this.props.oobData}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                            canPreview={false} error={this.state.roomLoadError}
-                                            roomAlias={roomAlias}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            inviterName={inviterName}
-                                            invitedEmail={invitedEmail}
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                                                canPreview={false} error={this.state.roomLoadError}
+                                                roomAlias={roomAlias}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                inviterName={inviterName}
+                                                invitedEmail={invitedEmail}
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1555,16 +1559,18 @@ module.exports = React.createClass({
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectButtonClicked}
-                                            inviterName={inviterName}
-                                            canPreview={false}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectButtonClicked}
+                                                inviterName={inviterName}
+                                                canPreview={false}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1811,8 +1817,10 @@ module.exports = React.createClass({
             },
         );
 
+        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+
         return (
-            <div className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
+            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
@@ -1827,20 +1835,22 @@ module.exports = React.createClass({
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
-                { auxPanel }
-                <div className={fadableSectionClasses}>
-                    { topUnreadMessagesBar }
-                    { messagePanel }
-                    { searchResultsPanel }
-                    <div className={statusBarAreaClass}>
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { statusBar }
+                <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
+                    <div className={fadableSectionClasses}>
+                        { auxPanel }
+                        { topUnreadMessagesBar }
+                        { messagePanel }
+                        { searchResultsPanel }
+                        <div className={statusBarAreaClass}>
+                            <div className="mx_RoomView_statusAreaBox">
+                                <div className="mx_RoomView_statusAreaBox_line"></div>
+                                { statusBar }
+                            </div>
                         </div>
+                        { messageComposer }
                     </div>
-                    { messageComposer }
-                </div>
-            </div>
+                </MainSplit>
+            </main>
         );
     },
 });

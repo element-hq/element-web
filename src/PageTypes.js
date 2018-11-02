@@ -20,7 +20,6 @@ export default {
     HomePage: "home_page",
     RoomView: "room_view",
     UserSettings: "user_settings",
-    CreateRoom: "create_room",
     RoomDirectory: "room_directory",
     UserView: "user_view",
     GroupView: "group_view",

@@ -16,18 +16,8 @@ limitations under the License.
 
 .mx_RoomView {
     word-wrap: break-word;
-    position: relative;
-
     display: flex;
-    width: 100%;
-
     flex-direction: column;
-}
-
-.mx_RoomView .mx_RoomHeader {
-    order: 1;
-
-    flex: 0 0 52px;
 }
 
 .mx_RoomView_fileDropTarget {
@@ -62,15 +52,11 @@ limitations under the License.
 }
 
 .mx_RoomView_auxPanel {
-    order: 2;
-
     min-width: 0px;
     width: 100%;
     margin: 0px auto;
 
     overflow: auto;
-    border-bottom: 1px solid $primary-hairline-color;
-
     flex: 0 0 auto;
 }
 
@@ -79,11 +65,15 @@ limitations under the License.
 }
 
 
-.mx_RoomView_body {
-    order: 3;
+.mx_RoomView .mx_MainSplit {
     flex: 1 1 0;
-    flex-direction: column;
     display: flex;
+}
+
+.mx_RoomView_body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .mx_RoomView_body .mx_RoomView_topUnreadMessagesBar {

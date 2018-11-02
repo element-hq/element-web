@@ -69,7 +69,8 @@ limitations under the License.
     transform: translateX(-50%);
 }
 
-.mx_MatrixChat .mx_MatrixChat_middlePanel {
+/* not the left panel, and not the resize handle, so the roomview/groupview/... */
+.mx_MatrixChat > :not(.mx_LeftPanel_container):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
     flex: 1;
@@ -80,8 +81,6 @@ limitations under the License.
        gemini is in 'prevented' mode
        */
     overflow-x: auto;
-
-    display: flex;
 
     /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
        needed height 100% all the way down to the HomePage. Height does not
