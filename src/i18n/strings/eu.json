@@ -1296,5 +1296,7 @@
     "Joining room...": "Gelara elkartzen...",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Komunitate honen administratzailea zara. Ezin izango duzu berriro elkartu ez bazaitu beste administratzaile batek gonbidatzen.",
     "Open Devtools": "Ireki garapen tresnak",
-    "Show developer tools": "Erakutsi garapen tresnak"
+    "Show developer tools": "Erakutsi garapen tresnak",
+    "Pin unread rooms to the top of the room list": "Finkatu irakurri gabeko gelak gelen zerrendaren goialdean",
+    "Pin rooms I'm mentioned in to the top of the room list": "Finkatu aipatu nauten gelak gelen zerrendaren goialdean"
 }
