@@ -131,8 +131,13 @@ body.mx_scrollbar_nooverlay .mx_RoomSubList_scroll.mx_AutoHideScrollbar_overflow
 }
 
 .collapsed {
+
+    .mx_RoomSubList_scroll {
+        padding: 0px !important;
+    }
     .mx_RoomSubList_label {
         height: 17px;
+        padding-right: 0;
         width: 28px; /* collapsed LHS Panel width */
     }
 
