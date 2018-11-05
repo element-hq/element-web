@@ -26,6 +26,26 @@ limitations under the License.
     background-color: $secondary-accent-color;
 }
 
+.mx_RoomTile_menuButton {
+    display: none;
+    flex: 0 0 16px;
+    height: 16px;
+    background-image: url('../../img/icon_context.svg');
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+// toggle menuButton and badge on hover/menu displayed
+.mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
+    .mx_RoomTile_menuButton {
+        display: block;
+    }
+
+    .mx_RoomTile_badge {
+        display: none;
+    }
+}
+
 .mx_RoomTile_tooltip {
     display: inline-block;
     position: relative;
@@ -88,6 +108,10 @@ limitations under the License.
         z-index: 3;
         border: 0.18em solid $secondary-accent-color;
     }
+
+    .mx_RoomTile_menuButton {
+        display: none;  //no design for this for now
+    }
 }
 
 .mx_RoomTile_badge {
@@ -97,12 +121,6 @@ limitations under the License.
     color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
-}
-
-
-.mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menuDisplayed.mx_RoomTile_noBadges .mx_RoomTile_badge {
-    background-color: $neutral-badge-color;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
@@ -142,10 +160,6 @@ limitations under the License.
 .mx_RoomTile:focus {
     filter: none ! important;
     background-color: $roomtile-focused-bg-color;
-}
-
-.mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
-    width: 140px;
 }
 
 .mx_RoomTile_arrow {
