@@ -17,7 +17,6 @@ limitations under the License.
 
 const {range} = require('./util');
 const signup = require('./usecases/signup');
-const acceptServerNoticesInviteAndConsent = require('./usecases/server-notices-consent');
 const roomDirectoryScenarios = require('./scenarios/directory');
 const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
@@ -26,7 +25,6 @@ module.exports = async function scenario(createSession, restCreator, runningOnTr
     async function createUser(username) {
         const session = await createSession(username);
         await signup(session, session.username, 'testtest', session.hsUrl);
-        await acceptServerNoticesInviteAndConsent(session);
         return session;
     }
 
