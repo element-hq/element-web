@@ -1286,9 +1286,10 @@ export default React.createClass({
             const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
 
             const headerClasses = {
-                mx_GroupView_header: true,
-                mx_GroupView_header_view: !this.state.editing,
-                mx_GroupView_header_isUserMember: this.state.isUserMember,
+                "mx_GroupView_header": true,
+                "light-panel": true,
+                "mx_GroupView_header_view": !this.state.editing,
+                "mx_GroupView_header_isUserMember": this.state.isUserMember,
             };
 
             return (

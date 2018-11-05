@@ -382,7 +382,7 @@ module.exports = React.createClass({
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src="img/icons-search.svg" width="35" height="35" />
+                    <TintableSvg src="img/icons-search.svg" width="16" height="16" />
                 </AccessibleButton>;
         }
 
@@ -424,7 +424,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className={"mx_RoomHeader " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
+            <div className={"mx_RoomHeader light-panel " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
                     { name }

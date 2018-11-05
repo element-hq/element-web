@@ -28,8 +28,8 @@ module.exports = React.createClass({
     displayName: 'SearchBox',
 
     propTypes: {
-        collapsed: React.PropTypes.bool,
         onSearch: React.PropTypes.func,
+        onCleared: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -75,86 +75,44 @@ module.exports = React.createClass({
         100,
     ),
 
-    onToggleCollapse: function(show) {
-        if (show) {
-            dis.dispatch({
-                action: 'show_left_panel',
-            });
-        } else {
-            dis.dispatch({
-                action: 'hide_left_panel',
-            });
-        }
-    },
-
     _onKeyDown: function(ev) {
         switch (ev.keyCode) {
             case KeyCode.ESCAPE:
-                this._clearSearch();
-                dis.dispatch({action: 'focus_composer'});
+                this._clearSearch("keyboard");
                 break;
         }
     },
 
-    _clearSearch: function() {
+    _clearSearch: function(source) {
         this.refs.search.value = "";
         this.onChange();
+        if (this.props.onCleared) {
+            this.props.onCleared(source);
+        }
     },
 
     render: function() {
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
-        const collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";
+        const clearButton = this.state.searchTerm.length > 0 ?
+            (<AccessibleButton key="button"
+                    className="mx_SearchBox_closeButton"
+                    onClick={ () => {this._clearSearch("button")} }>
+            </AccessibleButton>) :  undefined;
 
-        let toggleCollapse;
-        if (this.props.collapsed) {
-            toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_maximise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt={ _t("Expand panel") } />
-                </AccessibleButton>;
-        } else {
-            toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_minimise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt={ _t("Collapse panel") } />
-                </AccessibleButton>;
-        }
-
-        let searchControls;
-        if (!this.props.collapsed) {
-            searchControls = [
-                    this.state.searchTerm.length > 0 ?
-                    <AccessibleButton key="button"
-                            className="mx_SearchBox_closeButton"
-                            onClick={ ()=>{ this._clearSearch(); } }>
-                        <TintableSvg
-                            className="mx_SearchBox_searchButton"
-                            src="img/icons-close.svg" width="24" height="24"
-                        />
-                    </AccessibleButton>
-                    :
-                    <TintableSvg
-                        key="button"
-                        className="mx_SearchBox_searchButton"
-                        src="img/icons-search-copy.svg" width="13" height="13"
-                    />,
-                    <input
-                        key="searchfield"
-                        type="text"
-                        ref="search"
-                        className="mx_SearchBox_search"
-                        value={ this.state.searchTerm }
-                        onChange={ this.onChange }
-                        onKeyDown={ this._onKeyDown }
-                        placeholder={ _t('Filter room names') }
-                    />,
-                ];
-        }
-
-        const self = this;
         return (
-            <div className="mx_SearchBox">
-                { searchControls }
-                { toggleCollapse }
+            <div className="mx_SearchBox mx_textinput">
+                <input
+                    key="searchfield"
+                    type="text"
+                    ref="search"
+                    className="mx_textinput_icon mx_textinput_search"
+                    value={ this.state.searchTerm }
+                    onChange={ this.onChange }
+                    onKeyDown={ this._onKeyDown }
+                    placeholder={ _t('Filter room names') }
+                />
+                { clearButton }
             </div>
         );
     },

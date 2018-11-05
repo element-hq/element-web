@@ -33,8 +33,9 @@ const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
 import GroupStore from '../../../stores/GroupStore';
-
+import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
+
 import {Resizer, FixedDistributor, FlexSizer} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -440,39 +441,50 @@ module.exports = React.createClass({
         return ret;
     },
 
+    _applySearchFilter: function(list, filter) {
+        if (filter === "") return list;
+        const lcFilter = filter.toLowerCase();
+        // case insensitive if room name includes filter,
+        // or if starts with `#` and one of room's aliases starts with filter
+        return list.filter((room) => (room.name && room.name.toLowerCase().includes(lcFilter)) ||
+            (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
+    },
+
+    _mapSubListProps: function(subListsProps) {
+        const defaultProps = {
+            collapsed: this.props.collapsed,
+            isFiltered: !!this.props.searchFilter,
+            incomingCall: this.state.incomingCall,
+        };
+
+        subListsProps.forEach((p) => {
+            p.list = this._applySearchFilter(p.list, this.props.searchFilter);
+        });
+
+        subListsProps = subListsProps.filter((props => {
+            const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
+            return len !== 0 || (props.onAddRoom && !this.props.searchFilter);
+        }));
+
+        return subListsProps.reduce((components, props, i) => {
+            props = Object.assign({}, defaultProps, props);
+            const isLast = i === subListsProps.length - 1;
+            const {key, label, ... otherProps} = props;
+            const chosenKey = key || label;
+
+            let subList = <RoomSubList key={chosenKey} label={label} {...otherProps} />;
+            if (!isLast) {
+                return components.concat(
+                    subList,
+                    <ResizeHandle key={chosenKey+"-resizer"} vertical={true} />
+                );
+            } else {
+                return components.concat(subList);
+            }
+        }, []);
+    },
+
     render: function() {
-        const RoomSubList = sdk.getComponent('structures.RoomSubList');
-
-        const mapProps = (subListsProps) => {
-            const defaultProps = {
-                collapsed: this.props.collapsed,
-                searchFilter: this.props.searchFilter,
-                incomingCall: this.state.incomingCall,
-            };
-
-            subListsProps = subListsProps.filter((props => {
-                const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-                return len !== 0 || props.onAddRoom;
-            }));
-
-            return subListsProps.reduce((components, props, i) => {
-                props = Object.assign({}, defaultProps, props);
-                const isLast = i === subListsProps.length - 1;
-                const {key, label, ... otherProps} = props;
-                const chosenKey = key || label;
-
-                let subList = <RoomSubList key={chosenKey} label={label} {...otherProps} />;
-                if (!isLast) {
-                    return components.concat(
-                        subList,
-                        <ResizeHandle key={chosenKey+"-resizer"} vertical={true} />
-                    );
-                } else {
-                    return components.concat(subList);
-                }
-            }, []);
-        }
-
         let subLists = [
             {
                 list: [],
@@ -545,7 +557,7 @@ module.exports = React.createClass({
             },
         ]);
 
-        const subListComponents = mapProps(subLists);
+        const subListComponents = this._mapSubListProps(subLists);
 
         return (
             <div ref={(d) => this.resizeContainer = d} className="mx_RoomList">
