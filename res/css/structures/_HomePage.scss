@@ -33,3 +33,16 @@ limitations under the License.
 .mx_HomePage_body {
 //  margin-left: 63px;
 }
+
+.mx_HomePage_guest_warning {
+    display: flex;
+    background-color: $secondary-accent-color;
+    border: 1px solid $accent-color;
+    margin: 20px;
+    padding: 20px 40px;
+    border-radius: 5px;
+}
+
+.mx_HomePage_guest_warning img {
+    padding-right: 10px;
+}
