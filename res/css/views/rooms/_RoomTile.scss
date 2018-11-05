@@ -71,6 +71,8 @@ limitations under the License.
     .mx_RoomTile {
         margin: 2px;
         padding: 2px 0 2px 12px;
+        display: block; // not flex
+        position: relative;
     }
 
     .mx_RoomTile_name {
@@ -80,23 +82,21 @@ limitations under the License.
     .mx_RoomTile_badge {
         display: block;
         position: absolute;
-        height: 15px;
-        right: 8px;
-        top: 2px;
-        min-width: 12px;
+        right: 6px;
+        top: 0px;
         border-radius: 16px;
-        padding: 0px 4px 0px 4px;
         z-index: 3;
+        border: 0.18em solid $secondary-accent-color;
     }
 }
 
 .mx_RoomTile_badge {
     flex: 0 1 content;
-    border-radius: 8px;
+    border-radius: 0.8em;
+    padding: 0 0.4em;
     color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
-    padding: 0 5px;
 }
 
 

@@ -283,11 +283,11 @@ module.exports = React.createClass({
         } else if (badges) {
             const limitedCount = FormattingUtils.formatCount(notificationCount);
             badgeContent = notificationCount ? limitedCount : '!';
-        } else {
-            badgeContent = '\u200B';
         }
 
-        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
+        const badge = badgeContent ?
+            (<div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>) :
+            undefined;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
