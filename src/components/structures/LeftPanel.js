@@ -171,6 +171,12 @@ const LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
+    onSearchCleared: function(source) {
+        if (source === "keyboard") {
+            dis.dispatch({action: 'focus_composer'});
+        }
+    },
+
     collectRoomList: function(ref) {
         this._roomList = ref;
     },
@@ -195,7 +201,7 @@ const LeftPanel = React.createClass({
         );
 
         const searchBox = !this.props.collapsed ?
-            <SearchBox onSearch={ this.onSearch } /> :
+            <SearchBox onSearch={ this.onSearch } onCleared={ this.onSearchCleared } /> :
             undefined;
 
         return (

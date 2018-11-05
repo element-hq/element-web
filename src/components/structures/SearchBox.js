@@ -29,6 +29,7 @@ module.exports = React.createClass({
 
     propTypes: {
         onSearch: React.PropTypes.func,
+        onCleared: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -77,52 +78,41 @@ module.exports = React.createClass({
     _onKeyDown: function(ev) {
         switch (ev.keyCode) {
             case KeyCode.ESCAPE:
-                this._clearSearch();
-                dis.dispatch({action: 'focus_composer'});
+                this._clearSearch("keyboard");
                 break;
         }
     },
 
-    _clearSearch: function() {
+    _clearSearch: function(source) {
         this.refs.search.value = "";
         this.onChange();
+        if (this.props.onCleared) {
+            this.props.onCleared(source);
+        }
     },
 
     render: function() {
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
-        const searchControls = [
-            this.state.searchTerm.length > 0 ?
-            <AccessibleButton key="button"
+        const clearButton = this.state.searchTerm.length > 0 ?
+            (<AccessibleButton key="button"
                     className="mx_SearchBox_closeButton"
-                    onClick={ ()=>{ this._clearSearch(); } }>
-                <TintableSvg
-                    className="mx_SearchBox_searchButton"
-                    src="img/icons-close.svg" width="24" height="24"
-                />
-            </AccessibleButton>
-            :
-            <TintableSvg
-                key="button"
-                className="mx_SearchBox_searchButton"
-                src="img/icons-search-copy.svg" width="13" height="13"
-            />,
-            <input
-                key="searchfield"
-                type="text"
-                ref="search"
-                className="mx_SearchBox_search"
-                value={ this.state.searchTerm }
-                onChange={ this.onChange }
-                onKeyDown={ this._onKeyDown }
-                placeholder={ _t('Filter room names') }
-            />,
-        ];
+                    onClick={ () => {this._clearSearch("button")} }>
+            </AccessibleButton>) :  undefined;
 
-        const self = this;
         return (
-            <div className="mx_SearchBox">
-                { searchControls }
+            <div className="mx_SearchBox mx_textinput">
+                <input
+                    key="searchfield"
+                    type="text"
+                    ref="search"
+                    className="mx_textinput_icon mx_textinput_search"
+                    value={ this.state.searchTerm }
+                    onChange={ this.onChange }
+                    onKeyDown={ this._onKeyDown }
+                    placeholder={ _t('Filter room names') }
+                />
+                { clearButton }
             </div>
         );
     },
