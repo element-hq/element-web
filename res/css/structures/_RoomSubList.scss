@@ -77,14 +77,14 @@ limitations under the License.
 .mx_RoomSubList_addRoom {
     background-color: $roomheader-addroom-color;
     color: $roomsublist-background;
-    border-radius: 9px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 18px;
-    font-weight: bold;
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    background-image: url('../../img/icons-room-add.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px; // 16/2 + 2 padding
+    height: 16px;
+    flex: 0 0 16px;
+    background-clip: content-box;
+    padding: 2px;
 }
 
 .mx_RoomSubList_badgeHighlight {
