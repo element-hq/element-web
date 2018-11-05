@@ -119,6 +119,7 @@ limitations under the License.
     /* let rooms list grab all available space */
     flex: 0 1 auto;
     padding: 0 15px !important;
+    overflow-x: hidden;
 }
 /*
 for browsers that don't support overlay scrollbars,
