@@ -79,7 +79,7 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
  * @param {MatrixClient} matrixClient the matrix client.
  * @param {MatrixEvent} accountDataEvent the account data event.
  * @param {Room} room the room where account data was changed
- * @returns {RoomAccountDataAction} an action of type MatrixActions.accountData.
+ * @returns {RoomAccountDataAction} an action of type MatrixActions.Room.accountData.
  */
 function createRoomAccountDataAction(matrixClient, accountDataEvent, room) {
     return {
