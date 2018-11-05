@@ -382,7 +382,7 @@ module.exports = React.createClass({
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src="img/icons-search.svg" width="35" height="35" />
+                    <TintableSvg src="img/icons-search.svg" width="16" height="16" />
                 </AccessibleButton>;
         }
 
