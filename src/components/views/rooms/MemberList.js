@@ -457,7 +457,7 @@ module.exports = React.createClass({
         );
 
         return (
-            <div className="mx_MemberList">
+            <div className="mx_MemberList dark-panel">
                 { filterAndButtons }
                 <GeminiScrollbarWrapper autoshow={true}>
                     <div className="mx_MemberList_wrapper">

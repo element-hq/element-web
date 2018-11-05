@@ -69,6 +69,8 @@ $primary-hairline-color: #e5e5e5;
 $input-border-color: #f0f0f0;
 $input-darker-bg-color: rgba(193, 201, 214, 0.29);
 $input-darker-fg-color: #9fa9ba;
+$input-lighter-bg-color: #f2f5f8;
+$input-lighter-fg-color: $input-darker-fg-color;
 
 $button-bg-color: #7ac9a1;
 $button-fg-color: white;
@@ -220,6 +222,26 @@ input[type=search] {
     font-size: 14px;
     font-weight: 600;
     min-width: 0;
+}
+
+.dark-panel {
+    :not(.mx_textinput) > input[type=text],
+    :not(.mx_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-darker-fg-color;
+        background-color: $input-darker-bg-color;
+        border: none;
+    }
+}
+
+.light-panel {
+    :not(.mx_textinput) > input[type=text],
+    :not(.mx_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-lighter-fg-color;
+        background-color: $input-lighter-bg-color;
+        border: none;
+    }
 }
 
 

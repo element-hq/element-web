@@ -163,7 +163,7 @@ export default React.createClass({
             </div> : <div />;
 
         return (
-            <div className="mx_MemberList">
+            <div className="mx_MemberList dark-panel">
                 { inputBox }
                 <GeminiScrollbarWrapper autoshow={true}>
                     { joined }
