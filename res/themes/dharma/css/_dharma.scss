@@ -211,10 +211,6 @@ $progressbar-color: #000;
     color: inherit; //from .mx_textinput
 }
 
-.mx_textinput > :not(input) {
-    margin-right: 9px;
-}
-
 input[type=text],
 input[type=search] {
     padding: 9px;
