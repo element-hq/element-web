@@ -266,19 +266,17 @@ const RoomSubList = React.createClass({
 
 
         let badge;
-        if (this.state.hidden) {
-            const badgeClasses = classNames({
-                'mx_RoomSubList_badge': true,
-                'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
-            });
-            if (subListNotifCount > 0) {
-                badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
-                    { FormattingUtils.formatCount(subListNotifCount) }
-                </div>;
-            } else if (this.props.isInvite) {
-                // no notifications but highlight anyway because this is an invite badge
-                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>!</div>;
-            }
+        const badgeClasses = classNames({
+            'mx_RoomSubList_badge': true,
+            'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
+        });
+        if (subListNotifCount > 0) {
+            badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
+                { FormattingUtils.formatCount(subListNotifCount) }
+            </div>;
+        } else if (this.props.isInvite) {
+            // no notifications but highlight anyway because this is an invite badge
+            badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>!</div>;
         }
 
         // When collapsed, allow a long hover on the header to show user
