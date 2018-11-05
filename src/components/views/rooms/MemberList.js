@@ -449,7 +449,7 @@ module.exports = React.createClass({
 
         const filterAndButtons = (
             <form autoComplete="off">
-                <input className="mx_MemberList_query" id="mx_MemberList_query" type="search"
+                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="search"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
                         placeholder={_t('Filter room members')} />
                 { inviteButton }

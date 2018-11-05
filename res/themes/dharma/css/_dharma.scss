@@ -244,6 +244,17 @@ input[type=search] {
     }
 }
 
+input[type=text].mx_textinput_icon,
+input[type=search].mx_textinput_icon {
+    padding-left: 30px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+input[type=text].mx_textinput_icon.mx_textinput_search,
+input[type=search].mx_textinput_icon.mx_textinput_search {
+    background-image: url('../../img/icons-search-copy.svg');
+}
 
 // dont search UI as not all browsers support it,
 // we implement it ourselves where needed instead
