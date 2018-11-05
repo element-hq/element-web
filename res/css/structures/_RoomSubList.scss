@@ -109,12 +109,11 @@ limitations under the License.
     pointer-events: none;
     position: absolute;
     top: 11px;
-    width: 9px;
-    height: 4px;
+    width: 10px;
+    height: 6px;
     background-image: url('../../img/topleft-chevron.svg');
-    background-size: cover;
-    // the transition doesn't work as the chevron gets remounted
-    transition: rotateZ 0.2s ease-in;
+    background-repeat: no-repeat;
+    transition: transform 0.2s ease-in;
 }
 
 .mx_RoomSubList_chevronDown {
