@@ -28,6 +28,7 @@ limitations under the License.
 .mx_RoomSubList_labelContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
     flex: 0 0 auto;
     margin: 8px 19px 0 0;
 }
@@ -56,14 +57,12 @@ limitations under the License.
 }
 
 .mx_RoomSubList_badge {
-    height: 18px;
-    border-radius: 9px;
+    flex: 0 1 content;
+    border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
-    vertical-align: middle;
-    line-height: 18px;
-    padding: 0 4px;
+    padding: 0 5px;
     background-color: $accent-color;
 }
 
@@ -90,18 +89,6 @@ limitations under the License.
 
 .mx_RoomSubList_badgeHighlight {
     background-color: $warning-color;
-}
-
-/* This is the bottom of the speech bubble */
-.mx_RoomSubList_badgeHighlight:after {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    border-top: 5px solid $warning-color;
-    border-right: 7px solid transparent;
 }
 
 .mx_RoomSubList_chevron {
