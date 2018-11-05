@@ -140,11 +140,6 @@ body.mx_scrollbar_nooverlay .mx_RoomSubList_scroll.mx_AutoHideScrollbar_overflow
         width: 28px; /* collapsed LHS Panel width */
     }
 
-    /* Hide the bottom of speech bubble */
-    .mx_RoomSubList_badgeHighlight:after {
-        display: none;
-    }
-
     .mx_RoomSubList_line {
         display: none;
     }
