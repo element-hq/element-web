@@ -180,7 +180,7 @@ $lightbox-border-color: #ffffff;
 // unused?
 $progressbar-color: #000;
 
-// form elements
+/*** form elements ***/
 
 // .mx_textinput is a container for a text input
 // + some other controls like buttons, ...
@@ -218,6 +218,11 @@ input[type=search] {
     font-size: 14px;
     font-weight: 600;
     min-width: 0;
+}
+
+/*** panels ***/
+.dark-panel {
+    background-color: $secondary-accent-color;
 }
 
 .dark-panel {
