@@ -21,7 +21,7 @@ limitations under the License.
     cursor: pointer;
     height: 40px;
     margin: 0;
-    padding: 1px 10px;
+    padding: 0 8px 0 10px;
     position: relative;
     background-color: $secondary-accent-color;
 }
@@ -32,7 +32,7 @@ limitations under the License.
     height: 16px;
     background-image: url('../../img/icon_context.svg');
     background-repeat: no-repeat;
-    background-position: right center;
+    background-position: center;
 }
 
 // toggle menuButton and badge on hover/menu displayed
@@ -83,15 +83,12 @@ limitations under the License.
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile_invite {
-/*    color: rgba(69, 69, 69, 0.5); */
-}
-
 .collapsed {
     .mx_RoomTile {
-        margin: 2px;
-        padding: 2px 0 2px 12px;
+        margin: 0 2px;
+        padding: 0 2px;
         position: relative;
+        justify-content: center;
     }
 
     .mx_RoomTile_name {
