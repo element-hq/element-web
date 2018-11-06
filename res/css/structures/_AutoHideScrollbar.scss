@@ -18,6 +18,7 @@ limitations under the License.
 1. for browsers that support native overlay auto-hiding scrollbars
 */
 .mx_AutoHideScrollbar {
+    overflow-x: hidden;
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
 }
@@ -34,23 +35,20 @@ body.mx_scrollbar_overlay_noautohide .mx_AutoHideScrollbar:hover {
 }
 /*
 3. as a last fallback, compensate for the scrollbar taking up space in the layout
-by playing with the paddings. the default below will add a right padding
-of the scrollbar width and clear that on hover.
-this won't work well on classes that also need to set their padding,
-so this needs to be overriden and adjust the padding with calc like so:
-```
-body.mx_scrollbar_nooverlay .componentClass.mx_AutoHideScrollbar_overflow:hover {
-    padding-right: calc(15px - var(--scrollbar-width)) !important;
-}
-```
+by having giving the child element (.mx_AutoHideScrollbar_offset) a
+negative right margin of the width of the scrollbar when the container
+is overflowing. This is what Firefox ends up using. Overflow is detected
+in javascript, and adds the mx_AutoHideScrollbar_overflow class to the container.
+This only works in Firefox, which should be fine as this fallback is only needed there.
 */
 body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar {
-    box-sizing: border-box;
     overflow-y: hidden;
-    padding-right: var(--scrollbar-width);
 }
 
 body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar:hover {
     overflow-y: auto;
-    padding-right: 0;
+}
+
+body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow > .mx_AutoHideScrollbar_offset {
+    margin-right: calc(-1 * var(--scrollbar-width));
 }

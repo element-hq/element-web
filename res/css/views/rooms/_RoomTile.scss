@@ -36,7 +36,7 @@ limitations under the License.
 }
 
 // toggle menuButton and badge on hover/menu displayed
-.mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
     .mx_RoomTile_menuButton {
         display: block;
     }

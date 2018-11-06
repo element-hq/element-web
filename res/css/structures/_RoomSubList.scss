@@ -118,22 +118,13 @@ limitations under the License.
 .mx_RoomSubList_scroll {
     /* let rooms list grab all available space */
     flex: 0 1 auto;
-    padding: 0 15px !important;
-    overflow-x: hidden;
-}
-/*
-for browsers that don't support overlay scrollbars,
-subtract scrollbar width from right padding on hover when overflowing
-so the content doesn't jump when showing the scrollbars
-*/
-body.mx_scrollbar_nooverlay .mx_RoomSubList_scroll.mx_AutoHideScrollbar_overflow:hover {
-    padding-right: calc(15px - var(--scrollbar-width)) !important;
+    padding: 0 8px;
 }
 
 .collapsed {
 
     .mx_RoomSubList_scroll {
-        padding: 0px !important;
+        padding: 0;
     }
     .mx_RoomSubList_label {
         height: 17px;
