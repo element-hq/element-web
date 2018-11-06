@@ -325,7 +325,7 @@ const RoomSubList = React.createClass({
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { chevron }
-                    { this.props.collapsed ? '' : this.props.label }
+                    <span>{this.props.label}</span>
                     { incomingCall }
                 </AccessibleButton>
                 { badge }
