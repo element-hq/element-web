@@ -429,10 +429,7 @@ module.exports = React.createClass({
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
-                    <div className="mx_MemberList_inviteIcon" >
-                        <TintableSvg src="img/icon-invite-people.svg" width="16" height="16" />
-                    </div>
-                    <div>{ _t('Invite to this room') }</div>
+                    <span>{ _t('Invite to this room') }</span>
                 </AccessibleButton>;
         }
 
@@ -447,18 +444,9 @@ module.exports = React.createClass({
                 />;
         }
 
-        const filterAndButtons = (
-            <form autoComplete="off">
-                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="search"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
-                { inviteButton }
-            </form>
-        );
-
         return (
             <div className="mx_MemberList dark-panel">
-                { filterAndButtons }
+                { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true}>
                     <div className="mx_MemberList_wrapper">
                         <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
@@ -469,6 +457,9 @@ module.exports = React.createClass({
                         { invitedSection }
                     </div>
                 </GeminiScrollbarWrapper>
+                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="text"
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={_t('Filter room members')} />
             </div>
         );
     },
