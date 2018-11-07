@@ -429,6 +429,7 @@ const LoggedInView = React.createClass({
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 page_element = <RoomView
+                        roomViewStore={OpenRoomsStore.getCurrentRoomStore()}
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}

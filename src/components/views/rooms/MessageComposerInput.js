@@ -58,7 +58,6 @@ import {asciiRegexp, unicodeRegexp, shortnameToUnicode, emojioneList, asciiList,
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
-import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
 
@@ -150,6 +149,7 @@ export default class MessageComposerInput extends React.Component {
         onFilesPasted: PropTypes.func,
 
         onInputStateChanged: PropTypes.func,
+        roomViewStore: PropTypes.object.isRequired,
     };
 
     client: MatrixClient;
@@ -1120,7 +1120,7 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        const replyingToEv = RoomViewStore.getQuotingEvent();
+        const replyingToEv = this.props.roomViewStore.getQuotingEvent();
         const mustSendHTML = Boolean(replyingToEv);
 
         if (this.state.isRichTextEnabled) {
@@ -1589,7 +1589,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <ReplyPreview />
+                    <ReplyPreview roomViewStore={this.props.roomViewStore} />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

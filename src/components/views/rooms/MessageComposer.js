@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
@@ -63,7 +62,7 @@ export default class MessageComposer extends React.Component {
                 isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
-            isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
+            isQuoting: Boolean(this.props.roomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
         };
     }
@@ -75,7 +74,7 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = this.props.roomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
     }
 
@@ -124,7 +123,7 @@ export default class MessageComposer extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
-        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        const isQuoting = Boolean(this.props.roomViewStore.getQuotingEvent());
         if (this.state.isQuoting === isQuoting) return;
         this.setState({ isQuoting });
     }
@@ -153,7 +152,7 @@ export default class MessageComposer extends React.Component {
             </li>);
         }
 
-        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        const isQuoting = Boolean(this.props.roomViewStore.getQuotingEvent());
         let replyToWarning = null;
         if (isQuoting) {
             replyToWarning = <p>{
@@ -357,6 +356,7 @@ export default class MessageComposer extends React.Component {
 
             controls.push(
                 <MessageComposerInput
+                    roomViewStore={this.props.roomViewStore}
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     onResize={this.props.onResize}
@@ -461,4 +461,5 @@ MessageComposer.propTypes = {
 
     // string representing the current room app drawer state
     showApps: PropTypes.bool,
+    roomViewStore: PropTypes.object.isRequired,
 };

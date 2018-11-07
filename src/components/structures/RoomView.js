@@ -45,7 +45,6 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
-import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
@@ -93,6 +92,8 @@ module.exports = React.createClass({
 
         // Servers the RoomView can use to try and assist joins
         viaServers: PropTypes.arrayOf(PropTypes.string),
+        // the store for this room view
+        roomViewStore: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -160,7 +161,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("accountData", this.onAccountData);
 
         // Start listening for RoomViewStore updates
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = this.props.roomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
@@ -170,8 +171,8 @@ module.exports = React.createClass({
         if (this.unmounted) {
             return;
         }
-
-        if (!initial && this.state.roomId !== RoomViewStore.getRoomId()) {
+        const store = this.props.roomViewStore;
+        if (!initial && this.state.roomId !== store.getRoomId()) {
             // RoomView explicitly does not support changing what room
             // is being viewed: instead it should just be re-mounted when
             // switching rooms. Therefore, if the room ID changes, we
@@ -185,19 +186,18 @@ module.exports = React.createClass({
             // it was, it means we're about to be unmounted.
             return;
         }
-
         const newState = {
-            roomId: RoomViewStore.getRoomId(),
-            roomAlias: RoomViewStore.getRoomAlias(),
-            roomLoading: RoomViewStore.isRoomLoading(),
-            roomLoadError: RoomViewStore.getRoomLoadError(),
-            joining: RoomViewStore.isJoining(),
-            initialEventId: RoomViewStore.getInitialEventId(),
-            isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
-            forwardingEvent: RoomViewStore.getForwardingEvent(),
-            shouldPeek: RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
-            editingRoomSettings: RoomViewStore.isEditingSettings(),
+            roomId: store.getRoomId(),
+            roomAlias: store.getRoomAlias(),
+            roomLoading: store.isRoomLoading(),
+            roomLoadError: store.getRoomLoadError(),
+            joining: store.isJoining(),
+            initialEventId: store.getInitialEventId(),
+            isInitialEventHighlighted: store.isInitialEventHighlighted(),
+            forwardingEvent: store.getForwardingEvent(),
+            shouldPeek: store.shouldPeek(),
+            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", store.getRoomId()),
+            editingRoomSettings: store.isEditingSettings(),
         };
 
         if (this.state.editingRoomSettings && !newState.editingRoomSettings) dis.dispatch({action: 'focus_composer'});
@@ -1687,6 +1687,7 @@ module.exports = React.createClass({
         if (canSpeak) {
             messageComposer =
                 <MessageComposer
+                    roomViewStore={this.props.roomViewStore}
                     room={this.state.room}
                     onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
