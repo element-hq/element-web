@@ -243,9 +243,8 @@ const RoomSubList = React.createClass({
         const subListNotifCount = subListNotifications[0];
         const subListNotifHighlight = subListNotifications[1];
 
-
         let badge;
-        if (this.state.hidden) {
+        if (!this.props.collapsed) {
             const badgeClasses = classNames({
                 'mx_RoomSubList_badge': true,
                 'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
@@ -285,9 +284,7 @@ const RoomSubList = React.createClass({
         let addRoomButton;
         if (this.props.onAddRoom) {
             addRoomButton = (
-                <AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom">
-                    +
-                </AccessibleButton>
+                <AccessibleButton onClick={ this.props.onAddRoom } className="mx_RoomSubList_addRoom" />
             );
         }
 
@@ -307,7 +304,7 @@ const RoomSubList = React.createClass({
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { chevron }
-                    { this.props.collapsed ? '' : this.props.label }
+                    <span>{this.props.label}</span>
                     { incomingCall }
                 </AccessibleButton>
                 { badge }

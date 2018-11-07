@@ -112,7 +112,9 @@ export default class AutoHideScrollbar extends React.Component {
                     ref={this._collectContainerRef}
                     className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
                 >
-            { this.props.children }
+            <div className="mx_AutoHideScrollbar_offset">
+                { this.props.children }
+            </div>
         </div>);
     }
 }

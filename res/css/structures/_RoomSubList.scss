@@ -22,99 +22,75 @@ limitations under the License.
 }
 
 .mx_RoomSubList_nonEmpty {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .mx_RoomSubList_labelContainer {
     display: flex;
     flex-direction: row;
+    align-items: center;
     flex: 0 0 auto;
-    margin: 8px 19px 0 0;
+    margin: 0 16px;
+    height: 36px;
 }
 
 .mx_RoomSubList_label {
     flex: 1;
-    position: relative;
+    cursor: pointer;
+    background-color: $secondary-accent-color;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.mx_RoomSubList_label > span {
+    flex: 1 1 auto;
     text-transform: uppercase;
     color: $roomsublist-label-fg-color;
     font-weight: 700;
     font-size: 12px;
-    margin-left: 16px;
-    padding-left: 16px; /* gutter */
-    padding-right: 16px; /* gutter */
-    padding-top: 6px;
-    padding-bottom: 6px;
-    cursor: pointer;
-    background-color: $secondary-accent-color;
-}
-
-.mx_RoomSubList_label.mx_RoomSubList_fixed {
-    position: fixed;
-    top: 0;
-    z-index: 5;
-    /* pointer-events: none; */
+    margin-left: 8px;
 }
 
 .mx_RoomSubList_badge {
-    height: 18px;
-    border-radius: 9px;
+    flex: 0 0 auto;
+    border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
     font-size: 12px;
-    vertical-align: middle;
-    line-height: 18px;
-    padding: 0 4px;
+    padding: 0 5px;
     background-color: $accent-color;
 }
 
-.mx_RoomSubList_label .mx_RoomSubList_badge:hover {
-    filter: brightness($focus-brightness);
-}
-
 .mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
-    margin: 5px;
+    margin-left: 7px;
 }
 
 .mx_RoomSubList_addRoom {
     background-color: $roomheader-addroom-color;
     color: $roomsublist-background;
-    border-radius: 9px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 18px;
-    font-weight: bold;
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    background-image: url('../../img/icons-room-add.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px; // 16/2 + 2 padding
+    height: 16px;
+    flex: 0 0 16px;
+    background-clip: content-box;
 }
 
 .mx_RoomSubList_badgeHighlight {
     background-color: $warning-color;
 }
 
-/* This is the bottom of the speech bubble */
-.mx_RoomSubList_badgeHighlight:after {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    border-top: 5px solid $warning-color;
-    border-right: 7px solid transparent;
-}
-
 .mx_RoomSubList_chevron {
-    left: 0px;
     pointer-events: none;
-    position: absolute;
-    top: 11px;
-    width: 9px;
-    height: 4px;
     background-image: url('../../img/topleft-chevron.svg');
-    background-size: cover;
-    // the transition doesn't work as the chevron gets remounted
-    transition: rotateZ 0.2s ease-in;
+    background-repeat: no-repeat;
+    transition: transform 0.2s ease-in;
+    width: 10px;
+    height: 10px;
+    background-position: center;
+    margin-left: 2px;
 }
 
 .mx_RoomSubList_chevronDown {
@@ -132,47 +108,26 @@ limitations under the License.
 .mx_RoomSubList_scroll {
     /* let rooms list grab all available space */
     flex: 0 1 auto;
-    padding: 0 15px !important;
-}
-/*
-for browsers that don't support overlay scrollbars,
-subtract scrollbar width from right padding on hover when overflowing
-so the content doesn't jump when showing the scrollbars
-*/
-body.mx_scrollbar_nooverlay .mx_RoomSubList_scroll.mx_AutoHideScrollbar_overflow:hover {
-    padding-right: calc(15px - var(--scrollbar-width)) !important;
+    padding: 0 8px;
 }
 
 .collapsed {
-    .mx_RoomSubList_label {
-        height: 17px;
-        width: 28px; /* collapsed LHS Panel width */
+
+    .mx_RoomSubList_scroll {
+        padding: 0;
     }
 
     .mx_RoomSubList_labelContainer {
-        width: 28px; /* collapsed LHS Panel width */
+        margin-right: 14px;
+        margin-left: 2px;
     }
 
-    /* Hide the bottom of speech bubble */
-    .mx_RoomSubList_badgeHighlight:after {
-        display: none;
+    .mx_RoomSubList_addRoom {
+        margin-left: 3px;
+        margin-right: 28px;
     }
 
-    .mx_RoomSubList_line {
-        display: none;
-    }
-
-    .mx_RoomSubList_moreBadge {
-        position: static;
-        margin-left: 16px;
-        margin-top: 2px;
-    }
-
-    .mx_RoomSubList_ellipsis {
-        height: 20px;
-    }
-
-    .mx_RoomSubList_more {
+    .mx_RoomSubList_label > span {
         display: none;
     }
 }

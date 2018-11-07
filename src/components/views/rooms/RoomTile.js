@@ -220,7 +220,7 @@ module.exports = React.createClass({
         this.setState( { badgeHover: false } );
     },
 
-    onBadgeClicked: function(e) {
+    onOpenMenu: function(e) {
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
         // Only allow non-guests to access the context menu
@@ -276,18 +276,13 @@ module.exports = React.createClass({
         if (name == undefined || name == null) name = '';
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
-        let badgeContent;
 
-        if (this.state.badgeHover || this.state.menuDisplayed) {
-            badgeContent = "\u00B7\u00B7\u00B7";
-        } else if (badges) {
+        let badge;
+        if (badges) {
             const limitedCount = FormattingUtils.formatCount(notificationCount);
-            badgeContent = notificationCount ? limitedCount : '!';
-        } else {
-            badgeContent = '\u200B';
+            const badgeContent = notificationCount ? limitedCount : '!';
+            badge = <div className={badgeClasses}>{ badgeContent }</div>;
         }
-
-        const badge = <div className={badgeClasses} onClick={this.onBadgeClicked}>{ badgeContent }</div>;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
@@ -317,6 +312,11 @@ module.exports = React.createClass({
         //    incomingCallBox = <IncomingCallBox incomingCall={ this.props.incomingCall }/>;
         //}
 
+        let contextMenuButton;
+        if (!MatrixClientPeg.get().isGuest()) {
+            contextMenuButton = <AccessibleButton className="mx_RoomTile_menuButton" onClick={this.onOpenMenu} />;
+        }
+
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
         let dmIndicator;
@@ -338,6 +338,7 @@ module.exports = React.createClass({
                 </div>
             </div>
             { label }
+            { contextMenuButton }
             { badge }
             { /* { incomingCallBox } */ }
             { tooltip }

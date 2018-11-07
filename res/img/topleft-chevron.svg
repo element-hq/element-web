@@ -1,17 +1,86 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-    <title>dropdown</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g id="matrix-my-stuff-no-lines-message-context-menu-smaller-icons" transform="translate(-203.000000, -25.000000)" stroke="#212121" stroke-width="1.3">
-            <g id="Group-3" transform="translate(128.000000, 15.000000)">
-                <g id="dropdown" transform="translate(76.000000, 11.000000)">
-                    <path d="M0.5,0.5 L4.35868526,3.75422271" id="Line-5"></path>
-                    <path d="M8.13193273,0.560421385 L4.35868526,3.75422271" id="Line-5-Copy"></path>
-                </g>
-            </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="9.946106"
+   height="5.5662179"
+   viewBox="0 0 9.946106 5.5662179"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="topleft-chevron.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>dropdown</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1277"
+     inkscape:window-height="653"
+     id="namedview16"
+     showgrid="false"
+     fit-margin-top="0.5"
+     fit-margin-left="0.5"
+     fit-margin-right="0.5"
+     fit-margin-bottom="0.5"
+     inkscape:zoom="35.2"
+     inkscape:cx="4.6570922"
+     inkscape:cy="2.9102278"
+     inkscape:window-x="459"
+     inkscape:window-y="90"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg14" />
+  <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">dropdown</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="Page-1"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round"
+     transform="translate(-0.3429078,-0.34400861)">
+    <g
+       id="matrix-my-stuff-no-lines-message-context-menu-smaller-icons"
+       transform="translate(-203,-25)"
+       style="stroke:#212121;stroke-width:1.29999995">
+      <g
+         id="Group-3"
+         transform="translate(128,15)">
+        <g
+           id="dropdown"
+           transform="translate(76,11)">
+          <path
+             d="M 0.5,0.5 4.3586853,3.7542227"
+             id="Line-5"
+             inkscape:connector-curvature="0" />
+          <path
+             d="M 8.1319327,0.56042139 4.3586853,3.7542227"
+             id="Line-5-Copy"
+             inkscape:connector-curvature="0" />
         </g>
+      </g>
     </g>
+  </g>
 </svg>
