@@ -1,0 +1,65 @@
+/*
+Copyright 2017 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_GroupGridView {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    background-color: red;
+}
+
+.mx_RoomGridView_emptyTile::before {
+    display: block;
+    margin-top: 100px;
+    text-align: center;
+    content: "no room in this tile yet";
+}
+
+.mx_RoomGridView_tile > .mx_RoomView {
+    height: 100%;
+}
+
+.mx_GroupGridView > *:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.mx_GroupGridView > *:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.mx_GroupGridView > *:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.mx_GroupGridView > *:nth-child(4) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.mx_GroupGridView > *:nth-child(5) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.mx_GroupGridView > *:nth-child(6) {
+    grid-column: 3;
+    grid-row: 2;
+}
