@@ -53,8 +53,8 @@ const INITIAL_STATE = {
 *  with a subset of the js-sdk.
  *  ```
  */
-class RoomViewStore extends Store {
-    constructor() {
+export class RoomViewStore extends Store {
+    constructor(dis) {
         super(dis);
 
         // Initialise state
@@ -85,6 +85,8 @@ class RoomViewStore extends Store {
                 });
                 break;
             case 'view_room_error':
+                // should not go over dispatcher anymore
+                // but be internal to RoomViewStore
                 this._viewRoomError(payload);
                 break;
             case 'will_join':
@@ -150,22 +152,11 @@ class RoomViewStore extends Store {
                 // pull the user out of Room Settings
                 isEditingSettings: false,
             };
-
-            if (this._state.forwardingEvent) {
-                dis.dispatch({
-                    action: 'send_event',
-                    room_id: newState.roomId,
-                    event: this._state.forwardingEvent,
-                });
-            }
-
             this._setState(newState);
-
             if (payload.auto_join) {
                 this._joinRoom(payload);
             }
         } else if (payload.room_alias) {
-            // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
                 roomId: null,
                 initialEventId: null,
@@ -174,25 +165,6 @@ class RoomViewStore extends Store {
                 roomAlias: payload.room_alias,
                 roomLoading: true,
                 roomLoadError: null,
-            });
-            MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
-            (result) => {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: result.room_id,
-                    event_id: payload.event_id,
-                    highlighted: payload.highlighted,
-                    room_alias: payload.room_alias,
-                    auto_join: payload.auto_join,
-                    oob_data: payload.oob_data,
-                });
-            }, (err) => {
-                dis.dispatch({
-                    action: 'view_room_error',
-                    room_id: null,
-                    room_alias: payload.room_alias,
-                    err: err,
-                });
             });
         }
     }
@@ -330,8 +302,7 @@ class RoomViewStore extends Store {
     }
 }
 
-let singletonRoomViewStore = null;
-if (!singletonRoomViewStore) {
-    singletonRoomViewStore = new RoomViewStore();
-}
-module.exports = singletonRoomViewStore;
+const MatrixDispatcher = require("../matrix-dispatcher");
+const blubber = new RoomViewStore(new MatrixDispatcher());
+
+export default blubber;
