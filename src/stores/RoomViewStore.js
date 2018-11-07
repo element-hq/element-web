@@ -54,8 +54,8 @@ const INITIAL_STATE = {
  *  ```
  */
 export class RoomViewStore extends Store {
-    constructor(dis) {
-        super(dis);
+    constructor(dispatcher) {
+        super(dispatcher);
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
