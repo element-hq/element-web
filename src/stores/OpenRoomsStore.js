@@ -16,8 +16,20 @@ limitations under the License.
 import MatrixDispatcher from '../matrix-dispatcher';
 import dis from '../dispatcher';
 import {RoomViewStore} from './RoomViewStore';
+import GroupStore from './GroupStore';
 import {Store} from 'flux/utils';
 import MatrixClientPeg from '../MatrixClientPeg';
+
+
+function matchesRoom(payload, roomStore) {
+    if (!roomStore) {
+        return false;
+    }
+    if (payload.room_alias) {
+        return payload.room_alias === roomStore.getRoomAlias();
+    }
+    return payload.room_id === roomStore.getRoomId();
+}
 
 /**
  * A class for keeping track of the RoomViewStores of the rooms shown on the screen.
@@ -29,21 +41,30 @@ class OpenRoomsStore extends Store {
 
         // Initialise state
         this._state = {
-            room: {
-                store: null,
-                dispatcher: null
-            },
+            rooms: [],
+            currentIndex: null,
+            group_id: null,
         };
 
         this._forwardingEvent = null;
     }
 
-    getRoomStore() {
-        return this._state.room.store;
+    getRoomStores() {
+        return this._state.rooms.map((r) => r.store);
     }
 
     getCurrentRoomStore() {
-        return this.getRoomStore(); // just one room for now
+        const currentRoom = this._getCurrentRoom();
+        if (currentRoom) {
+            return currentRoom.store;
+        }
+    }
+
+    _getCurrentRoom() {
+        const index = this._state.currentIndex;
+        if (index !== null && index < this._state.rooms.length) {
+            return this._state.rooms[index];
+        }
     }
 
     _setState(newState) {
@@ -51,30 +72,41 @@ class OpenRoomsStore extends Store {
         this.__emitChange();
     }
 
-    _cleanupRoom() {
+    _hasRoom(payload) {
+        return this._roomIndex(payload) !== -1;
+    }
+
+    _roomIndex(payload) {
+        return this._state.rooms.findIndex((r) => matchesRoom(payload, r.store));
+    }
+
+    _cleanupRooms() {
         const room = this._state.room;
-        room.dispatcher.unregister(room.store.getDispatchToken());
+        this._state.rooms.forEach((room) => {
+            room.dispatcher.unregister(room.store.getDispatchToken());
+        });
         this._setState({
-            room: {
-                store: null,
-                dispatcher: null
-            },
+            rooms: [],
+            group_id: null,
+            currentIndex: null
         });
     }
 
     _createRoom() {
         const dispatcher = new MatrixDispatcher();
         this._setState({
-            room: {
+            rooms: [{
                 store: new RoomViewStore(dispatcher),
                 dispatcher,
-            },
+            }],
+            currentIndex: 0,
         });
     }
 
     _forwardAction(payload) {
-        if (this._state.room.dispatcher) {
-            this._state.room.dispatcher.dispatch(payload, true);
+        const currentRoom = this._getCurrentRoom();
+        if (currentRoom) {
+            currentRoom.dispatcher.dispatch(payload, true);
         }
     }
 
@@ -101,6 +133,10 @@ class OpenRoomsStore extends Store {
         }
     }
 
+    _setCurrentGroupRoom(index) {
+        this._setState({currentIndex: index});
+    }
+
     __onDispatch(payload) {
         switch (payload.action) {
             // view_room:
@@ -115,14 +151,15 @@ class OpenRoomsStore extends Store {
                     this._resolveRoomAlias(payload);
                 }
                 const currentStore = this.getCurrentRoomStore();
-                if (currentStore &&
-                    (!payload.room_alias || payload.room_alias !== currentStore.getRoomAlias()) &&
-                    (!currentStore.getRoomId() || payload.room_id !== currentStore.getRoomId())
-                ) {
-                    console.log("OpenRoomsStore: _cleanupRoom");
-                    this._cleanupRoom();
+                if (matchesRoom(payload, currentStore)) {
+                    if (this._hasRoom(payload)) {
+                        const roomIndex = this._roomIndex(payload);
+                        this._setState({currentIndex: roomIndex});
+                    } else {
+                        this._cleanupRooms();
+                    }
                 }
-                if (!this._state.room.store) {
+                if (!this.getCurrentRoomStore()) {
                     console.log("OpenRoomsStore: _createRoom");
                     this._createRoom();
                 }
@@ -140,7 +177,7 @@ class OpenRoomsStore extends Store {
             case 'view_my_groups':
             case 'view_group':
                 this._forwardAction(payload);
-                this._cleanupRoom();
+                this._cleanupRooms();
                 break;
             case 'will_join':
             case 'cancel_join':
@@ -154,6 +191,31 @@ class OpenRoomsStore extends Store {
                 break;
             case 'forward_event':
                 this._forwardingEvent = payload.event;
+                break;
+            case 'view_group_grid':
+                if (payload.group_id !== this._state.group_id) {
+                    this._cleanupRooms();
+                    // TODO: register to GroupStore updates
+                    const rooms = GroupStore.getGroupRooms(payload.group_id);
+                    const roomStores = rooms.map((room) => {
+                        const dispatcher = new MatrixDispatcher();
+                        const store = new RoomViewStore(dispatcher);
+                        // set room id of store
+                        dispatcher.dispatch({
+                            action: 'view_room',
+                            room_id: room.roomId
+                        }, true);
+                        return {
+                            store,
+                            dispatcher,
+                        };
+                    });
+                    this._setState({
+                        rooms: roomStores,
+                        group_id: payload.group_id,
+                    });
+                    this._setCurrentGroupRoom(0);
+                }
                 break;
         }
     }
