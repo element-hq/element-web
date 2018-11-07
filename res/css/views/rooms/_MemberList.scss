@@ -17,7 +17,6 @@ limitations under the License.
 .mx_MemberList,
 .mx_GroupMemberList,
 .mx_GroupRoomList {
-    background-color: $secondary-accent-color;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -38,20 +37,6 @@ limitations under the License.
 
     order: 1;
     flex: 1 1 0px;
-}
-
-.mx_MemberList form,
-.mx_GroupMemberList form,
-.mx_GroupRoomList form {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.mx_MemberList form > *,
-.mx_GroupMemberList form > *,
-.mx_GroupRoomList form > * {
-    margin: 9px;
 }
 
 .mx_MemberList_query,
@@ -75,28 +60,24 @@ limitations under the License.
     padding: 10px;
 }
 
-.mx_MemberList_inviteIcon object {
-    pointer-events: none;
-}
-
-.mx_MemberList_inviteIcon {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
 
 .mx_MemberList_invite {
     flex: 0 0 auto;
     position: relative;
     background-color: $button-bg-color;
-    color: $button-fg-color;
     border-radius: 4px;
     padding: 8px;
-    font-weight: 600;
-}
+    margin: 9px;
+    display: flex;
 
-/* move text to left */
-.mx_MemberList_invite > :last-child {
-    margin-left: 25px;
+    span {
+        margin: 0 auto;
+        background-image: url('../../img/icon-invite-people.svg');
+        background-repeat: no-repeat;
+        background-position: center left;
+        padding-left: 25px;
+
+        font-weight: 600;
+        color: $button-fg-color;
+    }
 }
