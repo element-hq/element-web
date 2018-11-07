@@ -19,6 +19,7 @@ limitations under the License.
 export default {
     HomePage: "home_page",
     RoomView: "room_view",
+    GroupGridView: "group_grid_view",
     UserSettings: "user_settings",
     RoomDirectory: "room_directory",
     UserView: "user_view",

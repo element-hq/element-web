@@ -627,6 +627,9 @@ export default React.createClass({
             case 'view_group':
                 this._viewGroup(payload);
                 break;
+            case 'view_group_grid':
+                this._viewGroupGrid(payload);
+                break;
             case 'view_home_page':
                 this._viewHome();
                 break;
@@ -834,6 +837,8 @@ export default React.createClass({
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomInfo) {
         this.focusComposer = true;
+                console.log("!!! MatrixChat._viewRoom", roomInfo);
+                console.trace();
 
         const newState = {
             currentRoomId: roomInfo.room_id || null,
@@ -896,6 +901,11 @@ export default React.createClass({
         });
         this._setPage(PageTypes.GroupView);
         this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewGroupGrid: function(payload) {
+        this._setPage(PageTypes.GroupGridView);
+        // this.notifyNewScreen('grid/' + payload.group_id);
     },
 
     _viewHome: function() {
