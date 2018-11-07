@@ -154,7 +154,6 @@ export const CommandMap = {
         args: '<room-alias>',
         description: _td('Joins room with given alias'),
         runFn: function(roomId, args) {
-            console.log(args);
             if (args) {
                 // Note: we support 2 versions of this command. The first is
                 // the public-facing one for most users and the other is a
