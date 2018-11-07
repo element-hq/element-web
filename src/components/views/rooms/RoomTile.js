@@ -116,9 +116,9 @@ module.exports = React.createClass({
         }
     },
 
-    _onActiveRoomChange: function() {
+    _onActiveRoomChange: function(activeRoomId) {
         this.setState({
-            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
+            selected: this.props.room.roomId === activeRoomId,
         });
     },
 

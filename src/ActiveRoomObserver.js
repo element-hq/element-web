@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import RoomViewStore from './stores/RoomViewStore';
+import OpenRoomsStore from './stores/OpenRoomsStore';
 
 /**
- * Consumes changes from the RoomViewStore and notifies specific things
+ * Consumes changes from the OpenRoomsStore and notifies specific things
  * about when the active room changes. Unlike listening for RoomViewStore
  * changes, you can subscribe to only changes relevant to a particular
  * room.
@@ -28,11 +28,11 @@ import RoomViewStore from './stores/RoomViewStore';
 class ActiveRoomObserver {
     constructor() {
         this._listeners = {};
-
-        this._activeRoomId = RoomViewStore.getRoomId();
+        const roomStore = OpenRoomsStore.getCurrentRoomStore();
+        this._activeRoomId = roomStore && roomStore.getRoomId();
         // TODO: We could self-destruct when the last listener goes away, or at least
         // stop listening.
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate.bind(this));
+        this._roomStoreToken = OpenRoomsStore.addListener(this._onOpenRoomsStoreUpdate.bind(this));
     }
 
     addListener(roomId, listener) {
@@ -59,12 +59,13 @@ class ActiveRoomObserver {
         }
     }
 
-    _onRoomViewStoreUpdate() {
+    _onOpenRoomsStoreUpdate() {
         // emit for the old room ID
         if (this._activeRoomId) this._emit(this._activeRoomId);
 
+        const activeRoomStore = OpenRoomsStore.getCurrentRoomStore();
         // update our cache
-        this._activeRoomId = RoomViewStore.getRoomId();
+        this._activeRoomId = activeRoomStore && activeRoomStore.getRoomId();
 
         // and emit for the new one
         if (this._activeRoomId) this._emit(this._activeRoomId);
