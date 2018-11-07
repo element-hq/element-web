@@ -276,6 +276,16 @@ export const SETTINGS = {
         default: true,
         controller: new AudioNotificationsEnabledController(),
     },
+    "pinMentionedRooms": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Pin rooms I'm mentioned in to the top of the room list"),
+        default: false,
+    },
+    "pinUnreadRooms": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Pin unread rooms to the top of the room list"),
+        default: false,
+    },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable widget screenshots on supported widgets'),
