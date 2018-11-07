@@ -29,7 +29,6 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
-import RoomViewStore from '../../../stores/RoomViewStore';
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -61,7 +60,7 @@ module.exports = React.createClass({
             roomName: this.props.room.name,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             notificationCount: this.props.room.getUnreadNotificationCount(),
-            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
+            selected: this.props.room.roomId === ActiveRoomObserver.getActiveRoomId(),
         });
     },
 

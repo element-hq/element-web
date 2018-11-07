@@ -35,6 +35,10 @@ class ActiveRoomObserver {
         this._roomStoreToken = OpenRoomsStore.addListener(this._onOpenRoomsStoreUpdate.bind(this));
     }
 
+    getActiveRoomId() {
+        return this._activeRoomId;
+    }
+
     addListener(roomId, listener) {
         if (!this._listeners[roomId]) this._listeners[roomId] = [];
         this._listeners[roomId].push(listener);
