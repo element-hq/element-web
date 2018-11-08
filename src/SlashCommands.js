@@ -183,9 +183,9 @@ export const CommandMap = {
                         auto_join: true,
                     });
                     return success();
-                } else if(params[0][0] === '!') {
-                    let roomId = params[0];
-                    let viaServers = params.splice(0);
+                } else if (params[0][0] === '!') {
+                    const roomId = params[0];
+                    const viaServers = params.splice(0);
 
                     dis.dispatch({
                         action: 'view_room',
@@ -197,7 +197,7 @@ export const CommandMap = {
                         auto_join: true,
                     });
                     return success();
-                } else if(matrixToMatches) {
+                } else if (matrixToMatches) {
                     let entity = matrixToMatches[1];
                     let eventId = null;
                     let viaServers = [];
@@ -237,7 +237,7 @@ export const CommandMap = {
                         dispatch["opts"] = {
                             // These are passed down to the js-sdk's /join call
                             server_name: viaServers,
-                        }
+                        };
                     }
 
                     dis.dispatch(dispatch);
