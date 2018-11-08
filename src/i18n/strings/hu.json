@@ -1300,5 +1300,7 @@
     "Open Devtools": "Fejlesztői eszközök megnyitása",
     "Show developer tools": "Fejlesztői eszközök megjelenítése",
     "Pin unread rooms to the top of the room list": "Nem olvasott üzeneteket tartalmazó szobák a szobalista elejére",
-    "Pin rooms I'm mentioned in to the top of the room list": "Megemlítéseket tartalmazó szobák a szobalista elejére"
+    "Pin rooms I'm mentioned in to the top of the room list": "Megemlítéseket tartalmazó szobák a szobalista elejére",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Ha létre szeretnél hozni egy Matrix fiókot most <a>regisztrálhatsz</a>.",
+    "You are currently using Riot anonymously as a guest.": "A Riotot ismeretlen vendégként használod."
 }
