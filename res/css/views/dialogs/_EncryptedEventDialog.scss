@@ -24,5 +24,8 @@ limitations under the License.
     @mixin mx_DialogButton;
     background-color: $primary-bg-color;
     color: $accent-color;
+}
+
+.mx_EncryptedEventDialog button {
     margin-top: 0px;
 }
