@@ -18,8 +18,6 @@ limitations under the License.
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
     background-color: red;
 }
 
@@ -28,6 +26,11 @@ limitations under the License.
     margin-top: 100px;
     text-align: center;
     content: "no room in this tile yet";
+}
+
+.mx_RoomGridView_tile {
+    border-right: 1px solid $panel-divider-color;
+    border-bottom: 1px solid $panel-divider-color;
 }
 
 .mx_RoomGridView_tile > .mx_RoomView {
