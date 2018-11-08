@@ -28,6 +28,7 @@ export default class RoomGridView extends React.Component {
         this.state = {
             roomStores: OpenRoomsStore.getRoomStores(),
         };
+        this.onRoomsChanged = this.onRoomsChanged.bind(this);
     }
 
     componentWillMount() {
@@ -39,7 +40,7 @@ export default class RoomGridView extends React.Component {
     componentWillUnmount() {
         this._unmounted = true;
         if (this._openRoomsStoreRegistration) {
-            this._openRoomsStoreRegistration.unregister();
+            this._openRoomsStoreRegistration.remove();
         }
         dis.unregister(this._dispatcherRef);
     }
