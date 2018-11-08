@@ -44,7 +44,7 @@
     "install:electron": "install-app-deps",
     "electron": "npm run install:electron && electron .",
     "start:res": "node scripts/copy-res.js -w",
-    "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
+    "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
     "start:js-sdk": "node scripts/npm-sub.js matrix-js-sdk run start:watch",
     "start:js-sdk:prod": "cross-env NODE_ENV=production node scripts/npm-sub.js matrix-js-sdk run start:watch",
