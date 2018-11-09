@@ -24,6 +24,8 @@ import sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from './settings/SettingsStore';
+import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
+import * as querystring from "querystring";
 
 
 class Command {
@@ -153,11 +155,24 @@ export const CommandMap = {
         description: _td('Joins room with given alias'),
         runFn: function(roomId, args) {
             if (args) {
-                const matches = args.match(/^(\S+)$/);
-                if (matches) {
-                    let roomAlias = matches[1];
-                    if (roomAlias[0] !== '#') return reject(this.getUsage());
+                // Note: we support 2 versions of this command. The first is
+                // the public-facing one for most users and the other is a
+                // power-user edition where someone may join via permalink or
+                // room ID with optional servers. Practically, this results
+                // in the following variations:
+                //   /join #example:example.org
+                //   /join !example:example.org
+                //   /join !example:example.org altserver.com elsewhere.ca
+                //   /join https://matrix.to/#/!example:example.org?via=altserver.com
+                // The command also supports event permalinks transparently:
+                //   /join https://matrix.to/#/!example:example.org/$something:example.org
+                //   /join https://matrix.to/#/!example:example.org/$something:example.org?via=altserver.com
+                const params = args.split(' ');
+                if (params.length < 1) return reject(this.getUsage());
 
+                const matrixToMatches = params[0].match(MATRIXTO_URL_PATTERN);
+                if (params[0][0] === '#') {
+                    let roomAlias = params[0];
                     if (!roomAlias.includes(':')) {
                         roomAlias += ':' + MatrixClientPeg.get().getDomain();
                     }
@@ -167,7 +182,65 @@ export const CommandMap = {
                         room_alias: roomAlias,
                         auto_join: true,
                     });
+                    return success();
+                } else if (params[0][0] === '!') {
+                    const roomId = params[0];
+                    const viaServers = params.splice(0);
 
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: roomId,
+                        opts: {
+                            // These are passed down to the js-sdk's /join call
+                            server_name: viaServers,
+                        },
+                        auto_join: true,
+                    });
+                    return success();
+                } else if (matrixToMatches) {
+                    let entity = matrixToMatches[1];
+                    let eventId = null;
+                    let viaServers = [];
+
+                    if (entity[0] !== '!' && entity[0] !== '#') return reject(this.getUsage());
+
+                    if (entity.indexOf('?') !== -1) {
+                        const parts = entity.split('?');
+                        entity = parts[0];
+
+                        const parsed = querystring.parse(parts[1]);
+                        viaServers = parsed["via"];
+                        if (typeof viaServers === 'string') viaServers = [viaServers];
+                    }
+
+                    // We quietly support event ID permalinks too
+                    if (entity.indexOf('/$') !== -1) {
+                        const parts = entity.split("/$");
+                        entity = parts[0];
+                        eventId = `$${parts[1]}`;
+                    }
+
+                    const dispatch = {
+                        action: 'view_room',
+                        auto_join: true,
+                    };
+
+                    if (entity[0] === '!') dispatch["room_id"] = entity;
+                    else dispatch["room_alias"] = entity;
+
+                    if (eventId) {
+                        dispatch["event_id"] = eventId;
+                        dispatch["highlighted"] = true;
+                    }
+
+                    if (viaServers) {
+                        dispatch["opts"] = {
+                            // These are passed down to the js-sdk's /join call
+                            server_name: viaServers,
+                        };
+                    }
+
+                    dis.dispatch(dispatch);
                     return success();
                 }
             }
@@ -492,6 +565,7 @@ export const CommandMap = {
 const aliases = {
     j: "join",
     newballsplease: "discardsession",
+    goto: "join", // because it handles event permalinks magically
 };
 
 
