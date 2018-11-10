@@ -872,5 +872,13 @@
     "Add to community": "Add to community",
     "Failed to invite the following users to %(groupId)s:": "Failed to invite the following users to %(groupId)s:",
     "Failed to invite users to community": "Failed to invite users to community",
-    "Failed to invite users to %(groupId)s": "Failed to invite users to %(groupId)s"
+    "Failed to invite users to %(groupId)s": "Failed to invite users to %(groupId)s",
+    "Failed to add the following rooms to %(groupId)s:": "Failed to add the following rooms to %(groupId)s:",
+    "Registration Required": "Registration Required",
+    "You need to register to do this. Would you like to register now?": "You need to register to do this. Would you like to register now?",
+    "Restricted": "Restricted",
+    "Missing roomId.": "Missing roomId.",
+    "Opens the Developer Tools dialog": "Opens the Developer Tools dialog",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s changed their display name to %(displayName)s."
 }
