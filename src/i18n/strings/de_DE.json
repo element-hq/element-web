@@ -1298,5 +1298,7 @@
     "Add some now": "Füge jetzt hinzu",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Du bist ein Administrator dieser Community. Du wirst nicht erneut hinzutreten können, wenn du nicht von einem anderen Administrator eingeladen wirst.",
     "Open Devtools": "Öffne Entwickler-Werkzeuge",
-    "Show developer tools": "Zeige Entwickler-Werkzeuge"
+    "Show developer tools": "Zeige Entwickler-Werkzeuge",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Wenn du ein Matrix-Konto erstellen möchtest, kannst du dich jetzt <a>registrieren</a>.",
+    "You are currently using Riot anonymously as a guest.": "Du benutzt aktuell Riot anonym als Gast."
 }
