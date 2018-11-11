@@ -1298,5 +1298,7 @@
     "Open Devtools": "Ireki garapen tresnak",
     "Show developer tools": "Erakutsi garapen tresnak",
     "Pin unread rooms to the top of the room list": "Finkatu irakurri gabeko gelak gelen zerrendaren goialdean",
-    "Pin rooms I'm mentioned in to the top of the room list": "Finkatu aipatu nauten gelak gelen zerrendaren goialdean"
+    "Pin rooms I'm mentioned in to the top of the room list": "Finkatu aipatu nauten gelak gelen zerrendaren goialdean",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Matrix kontu bat sortu nahi baduzu, <a>izena eman</a> dezakezu.",
+    "You are currently using Riot anonymously as a guest.": "Riot anonimoki gonbidatu gisa erabiltzen ari zara."
 }
