@@ -41,14 +41,26 @@ is overflowing. This is what Firefox ends up using. Overflow is detected
 in javascript, and adds the mx_AutoHideScrollbar_overflow class to the container.
 This only works in Firefox, which should be fine as this fallback is only needed there.
 */
-body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar {
-    overflow-y: hidden;
-}
+body.mx_scrollbar_nooverlay {
+    .mx_AutoHideScrollbar {
+        overflow-y: hidden;
+    }
 
-body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar:hover {
-    overflow-y: auto;
-}
+    .mx_AutoHideScrollbar:hover {
+        overflow-y: auto;
+    }
 
-body.mx_scrollbar_nooverlay .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow > .mx_AutoHideScrollbar_offset {
-    margin-right: calc(-1 * var(--scrollbar-width));
+    /*
+    offset scrollbar width with negative margin-right
+
+    include before and after psuedo-elements here so they can
+    be used to do something interesting like scroll-indicating
+    gradients (see IndicatorScrollBar)
+    */
+    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow > .mx_AutoHideScrollbar_offset,
+    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::before,
+    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::after
+    {
+        margin-right: calc(-1 * var(--scrollbar-width));
+    }
 }

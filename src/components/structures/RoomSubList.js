@@ -23,7 +23,7 @@ import dis from '../../dispatcher';
 import Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
-import AutoHideScrollbar from './AutoHideScrollbar';
+import IndicatorScrollbar from './IndicatorScrollbar';
 import { KeyCode } from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
@@ -333,9 +333,9 @@ const RoomSubList = React.createClass({
                 tiles.push(...this.props.extraTiles);
                 return <div style={style} className={subListClasses}>
                     {this._getHeaderJsx()}
-                    <AutoHideScrollbar className="mx_RoomSubList_scroll">
+                    <IndicatorScrollbar className="mx_RoomSubList_scroll">
                         { tiles }
-                    </AutoHideScrollbar>
+                    </IndicatorScrollbar>
                 </div>;
             }
         } else {
