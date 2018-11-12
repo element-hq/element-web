@@ -48,14 +48,14 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        // MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
     },
 
     componentWillUnmount: function() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = MatrixClientPeg.get();
         if (client) {
-            // client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
         }
     },
 
@@ -88,7 +88,7 @@ module.exports = React.createClass({
 
         if (othersCount > 0) {
             avatars.push(
-                <span className="mx_WhoIsTypingTile_typingIndicatorRemaining" key="others">
+                <span className="mx_WhoIsTypingTile_remainingAvatarPlaceholder" key="others">
                     +{ othersCount }
                 </span>,
             );
@@ -97,36 +97,24 @@ module.exports = React.createClass({
         return avatars;
     },
 
-    // return suitable content for the main (text) part of the status bar.
-    _getContent: function() {
-        const EmojiText = sdk.getComponent('elements.EmojiText');
-
+    render: function() {
         const typingString = WhoIsTyping.whoIsTypingString(
             this.state.usersTyping,
             this.props.whoIsTypingLimit,
         );
-        if (typingString) {
-            return (
-                <div className="mx_WhoIsTypingTile_typingBar">
-                    <EmojiText>{ typingString }</EmojiText>
-                </div>
-            );
+        if (!typingString) {
+            return (<div className="mx_WhoIsTypingTile_empty" />);
         }
-    },
 
-    render: function() {
-        // if (this.state.usersTyping.length === 0) {
-        //     return;
-        // }
+        const EmojiText = sdk.getComponent('elements.EmojiText');
+
         return (
             <div className="mx_WhoIsTypingTile">
-                <div className="mx_WhoIsTypingTile_indicator">
-                    <div className="mx_WhoIsTypingTile_typingIndicatorAvatars">
-                        { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
-                    </div>
+                <div className="mx_WhoIsTypingTile_avatars">
+                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
                 </div>
-                <div role="alert">
-                    { this._getContent() }
+                <div className="mx_WhoIsTypingTile_label">
+                    <EmojiText>{ typingString }</EmojiText>
                 </div>
             </div>
         );
