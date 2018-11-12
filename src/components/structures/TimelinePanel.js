@@ -1154,6 +1154,7 @@ var TimelinePanel = React.createClass({
         );
         return (
             <MessagePanel ref="messagePanel"
+                          room={this.props.timelineSet.room}
                           hidden={this.props.hidden}
                           backPaginating={this.state.backPaginating}
                           forwardPaginating={forwardPaginating}

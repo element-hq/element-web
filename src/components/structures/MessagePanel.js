@@ -637,6 +637,7 @@ module.exports = React.createClass({
 
     render: function() {
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
         let topSpinner;
         let bottomSpinner;
@@ -666,6 +667,7 @@ module.exports = React.createClass({
                     stickyBottom={this.props.stickyBottom}>
                 { topSpinner }
                 { this._getEventTiles() }
+                <WhoIsTypingTile room={this.props.room} />
                 { bottomSpinner }
             </ScrollPanel>
         );
