@@ -25,7 +25,7 @@
     "Admin support for Dendrite": "Dendriteの管理者サポート",
     "Announcements about Synapse releases": "Synapseの公開についてのお知らせ",
     "Support for those using and running matrix-appservice-irc": "matrix-appservice-ircを利用並びに運営している方へのサポート",
-    "Building services on Matrix": "Matrixでのサービスの開発",
+    "Building services on Matrix": "Matrix上でのサービスの開発",
     "Support for those using the Matrix spec": "Matrixスペックを利用する方へのサポート",
     "Design and implementation of E2E in Matrix": "Matrixのデザインとエンドツーエンドの実装",
     "Implementing VR services with Matrix": "MatrixでのVRサービスの実装",
