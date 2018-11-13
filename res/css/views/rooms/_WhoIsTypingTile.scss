@@ -60,20 +60,13 @@ limitations under the License.
     color: $eventtile-meta-color;
 }
 
-.mx_WhoIsTypingTile_label > span:after {
-    background-image: url('../../img/spinner.gif');
-    background-size: 16px;
-    background-position: right;
+.mx_WhoIsTypingTile_label > span {
+    background-image: url('../../img/typing-indicator-2x.gif');
+    background-size: 25px;
+    background-position: left bottom;
     background-repeat: no-repeat;
-    right: 0px;
-    top: 0;
-    bottom: 0;
-    margin-left: 10px;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    vertical-align: middle;
-    content: "";
+    padding-bottom: 15px;
+    display: block;
 }
 
 .mx_MatrixChat_useCompactLayout {
