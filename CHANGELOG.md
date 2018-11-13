@@ -1,3 +1,9 @@
+Changes in [0.17.5](https://github.com/vector-im/riot-web/releases/tag/v0.17.5) (2018-11-13)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.4...v0.17.5)
+
+ * Include change that was supposed to be included in orevious version
+
 Changes in [0.17.4](https://github.com/vector-im/riot-web/releases/tag/v0.17.4) (2018-11-13)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3...v0.17.4)
