@@ -118,14 +118,14 @@ module.exports = React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
         return (
-            <div className="mx_WhoIsTypingTile">
+            <li className="mx_WhoIsTypingTile">
                 <div className="mx_WhoIsTypingTile_avatars">
                     { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
                 </div>
                 <div className="mx_WhoIsTypingTile_label">
                     <EmojiText>{ typingString }</EmojiText>
                 </div>
-            </div>
+            </li>
         );
     },
 });

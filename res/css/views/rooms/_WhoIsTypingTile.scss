@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_WhoIsTypingTile {
     margin-left: -18px; //offset padding from mx_RoomView_MessageList to center avatars
-    height: 40px;
+    padding-top: 18px;
     display: flex;
     align-items: center;
 }
@@ -79,6 +79,6 @@ limitations under the License.
 .mx_MatrixChat_useCompactLayout {
 
     .mx_WhoIsTypingTile {
-        height: 35px;
+        padding-top: 4px;
     }
 }
