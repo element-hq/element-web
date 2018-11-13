@@ -71,7 +71,7 @@
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.0",
     "matrix-js-sdk": "0.12.1",
-    "matrix-react-sdk": "0.14.3",
+    "matrix-react-sdk": "0.14.4",
     "modernizr": "^3.6.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.0",
