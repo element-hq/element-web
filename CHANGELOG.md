@@ -1,3 +1,9 @@
+Changes in [0.14.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.3) (2018-11-13)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.2...v0.14.3)
+
+ * Add banner with login/register links for users who aren't logged in
+
 Changes in [0.14.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.2) (2018-10-29)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.2-rc.1...v0.14.2)
