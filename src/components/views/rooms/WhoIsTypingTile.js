@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import WhoIsTyping from '../../../WhoIsTyping';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -54,8 +53,8 @@ module.exports = React.createClass({
     componentDidUpdate: function(_, prevState) {
         if (this.props.onVisible &&
             !prevState.usersTyping.length &&
-            this.state.usersTyping.length)
-        {
+            this.state.usersTyping.length
+        ) {
             this.props.onVisible();
         }
     },
