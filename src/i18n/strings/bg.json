@@ -1297,5 +1297,7 @@
     "Joining room...": "Влизане в стая...",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Вие сте администратор на тази общност. Няма да можете да се присъедините пак без покана от друг администратор.",
     "Open Devtools": "Отвори инструментите за разработчици",
-    "Show developer tools": "Покажи инструментите за разработчици"
+    "Show developer tools": "Покажи инструментите за разработчици",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Ако искате да създадете Matrix акаунт, може да се <a>регистрирате</a> тук.",
+    "You are currently using Riot anonymously as a guest.": "В момента използвате Riot анонимно, като гост."
 }
