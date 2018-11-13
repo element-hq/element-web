@@ -1,3 +1,9 @@
+Changes in [0.17.4](https://github.com/vector-im/riot-web/releases/tag/v0.17.4) (2018-11-13)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3...v0.17.4)
+
+ * Add banner with login/register links for users who aren't logged in
+
 Changes in [0.17.3](https://github.com/vector-im/riot-web/releases/tag/v0.17.3) (2018-10-29)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3-rc.1...v0.17.3)
