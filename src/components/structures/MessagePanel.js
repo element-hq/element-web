@@ -631,6 +631,13 @@ module.exports = React.createClass({
         }
     },
 
+    _scrollDownIfAtBottom: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            scrollPanel.checkScroll();
+        }
+    },
+
     onResize: function() {
         dis.dispatch({ action: 'timeline_resize' }, true);
     },
@@ -667,7 +674,7 @@ module.exports = React.createClass({
                     stickyBottom={this.props.stickyBottom}>
                 { topSpinner }
                 { this._getEventTiles() }
-                <WhoIsTypingTile room={this.props.room} />
+                <WhoIsTypingTile room={this.props.room} onVisible={this._scrollDownIfAtBottom} />
                 { bottomSpinner }
             </ScrollPanel>
         );

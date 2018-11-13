@@ -29,7 +29,7 @@ module.exports = React.createClass({
     propTypes: {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-
+        onVisible: PropTypes.func,
         // Number of names to display in typing indication. E.g. set to 3, will
         // result in "X, Y, Z and 100 others are typing."
         whoIsTypingLimit: PropTypes.number,
@@ -49,6 +49,15 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+    },
+
+    componentDidUpdate: function(_, prevState) {
+        if (this.props.onVisible &&
+            !prevState.usersTyping.length &&
+            this.state.usersTyping.length)
+        {
+            this.props.onVisible();
+        }
     },
 
     componentWillUnmount: function() {
