@@ -97,6 +97,9 @@ export default class AutoHideScrollbar extends React.Component {
                 this.onUnderflow();
             }
         }
+        if (this.props.wrappedRef) {
+            this.props.wrappedRef(ref);
+        }
     }
 
     componentWillUnmount() {

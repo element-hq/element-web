@@ -110,6 +110,36 @@ limitations under the License.
     padding: 0 8px;
 }
 
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_topOverflow::before,
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_bottomOverflow::after {
+    position: sticky;
+    left: 0;
+    right: 0;
+    height: 40px;
+    content: "";
+    display: block;
+    z-index: 100;
+    pointer-events: none;
+}
+
+
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
+    margin-top: -40px;
+}
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
+    margin-bottom: -40px;
+}
+
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_topOverflow::before {
+    top: 0;
+    background: linear-gradient($secondary-accent-color, transparent);
+}
+
+.mx_RoomSubList_scroll.mx_IndicatorScrollbar_bottomOverflow::after {
+    bottom: 0;
+    background: linear-gradient(transparent, $secondary-accent-color);
+}
+
 .collapsed {
 
     .mx_RoomSubList_scroll {
