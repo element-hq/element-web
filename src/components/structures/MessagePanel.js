@@ -631,12 +631,20 @@ module.exports = React.createClass({
         }
     },
 
+    _scrollDownIfAtBottom: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            scrollPanel.checkScroll();
+        }
+    },
+
     onResize: function() {
         dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     render: function() {
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
         let topSpinner;
         let bottomSpinner;
@@ -666,6 +674,7 @@ module.exports = React.createClass({
                     stickyBottom={this.props.stickyBottom}>
                 { topSpinner }
                 { this._getEventTiles() }
+                <WhoIsTypingTile room={this.props.room} onVisible={this._scrollDownIfAtBottom} />
                 { bottomSpinner }
             </ScrollPanel>
         );
