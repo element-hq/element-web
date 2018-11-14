@@ -65,6 +65,7 @@
     "bluebird": "^3.5.2",
     "browser-request": "^0.3.3",
     "draft-js": "^0.11.0-alpha",
+    "electron": "^3.0.9",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "favico.js": "^0.3.10",
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
