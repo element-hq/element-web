@@ -1291,5 +1291,14 @@
     "Incompatible local cache": "Inkompatibler lokaler Zwischenspeicher",
     "Clear cache and resync": "Zwischenspeicher löschen und erneut synchronisieren",
     "Please accept all of the policies": "Bitte akzeptiere alle Bedingungen",
-    "Please review and accept the policies of this homeserver:": "Bitte sieh dir alle Bedingungen dieses Heimservers an und akzeptiere sie:"
+    "Please review and accept the policies of this homeserver:": "Bitte sieh dir alle Bedingungen dieses Heimservers an und akzeptiere sie:",
+    "Pin unread rooms to the top of the room list": "Ungelesene Räume oben an der Raumliste anheften",
+    "Pin rooms I'm mentioned in to the top of the room list": "Räume mit Erwähnungen oben an der Raumliste anheften",
+    "Joining room...": "Trete Raum bei...",
+    "Add some now": "Füge jetzt hinzu",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Du bist ein Administrator dieser Community. Du wirst nicht erneut hinzutreten können, wenn du nicht von einem anderen Administrator eingeladen wirst.",
+    "Open Devtools": "Öffne Entwickler-Werkzeuge",
+    "Show developer tools": "Zeige Entwickler-Werkzeuge",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Wenn du ein Matrix-Konto erstellen möchtest, kannst du dich jetzt <a>registrieren</a>.",
+    "You are currently using Riot anonymously as a guest.": "Du benutzt aktuell Riot anonym als Gast."
 }

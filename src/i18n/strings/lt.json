@@ -872,5 +872,16 @@
     "You have no historical rooms": "Jūs neturite istorinių kambarių",
     "Historical": "Istoriniai",
     "Every page you use in the app": "Kiekvienas puslapis, kurį naudoji programoje",
-    "Call Timeout": "Skambučio laikas baigėsi"
+    "Call Timeout": "Skambučio laikas baigėsi",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s kaip šio kambario adresus pridėjo %(addedAddresses)s.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s kaip šio kambario adresą pridėjo %(addedAddresses)s.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s kaip šio kambario adresus pašalino %(removedAddresses)s.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s kaip šio kambario adresą pašalino %(removedAddresses)s.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s kaip šio kambario adresus pridėjo %(addedAddresses)s ir pašalino %(removedAddresses)s.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s nustatė pagrindinį šio kambario adresą į %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s pašalino pagrindinį šio kambario adresą.",
+    "Disinvite": "Atšaukti pakvietimą",
+    "Disinvite this user?": "Atšaukti pakvietimą šiam naudotojui?",
+    "Unknown for %(duration)s": "Nežinoma jau %(duration)s",
+    "(warning: cannot be disabled again!)": "(įspėjimas: nebeįmanoma bus išjungti!)"
 }

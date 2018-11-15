@@ -1290,5 +1290,12 @@
     "Incompatible local cache": "Cache locale non compatibile",
     "Clear cache and resync": "Svuota cache e risincronizza",
     "Please accept all of the policies": "Si prega di accettare tutte le condizioni",
-    "Please review and accept the policies of this homeserver:": "Consulta ed accetta le condizioni di questo homeserver:"
+    "Please review and accept the policies of this homeserver:": "Consulta ed accetta le condizioni di questo homeserver:",
+    "Pin unread rooms to the top of the room list": "Fissa le stanze non lette in cima all'elenco stanze",
+    "Pin rooms I'm mentioned in to the top of the room list": "Fissa le stanze dove sono menzionato in cima all'elenco stanze",
+    "Joining room...": "Ingresso nella stanza...",
+    "Add some now": "Aggiungine ora",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Sei un amministratore di questa comunità. Non potrai rientrare senza un invito da parte di un altro amministratore.",
+    "Open Devtools": "Apri Devtools",
+    "Show developer tools": "Mostra strumenti sviluppatore"
 }
