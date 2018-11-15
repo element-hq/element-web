@@ -222,6 +222,7 @@ export const TermsAuthEntry = React.createClass({
         stageParams: PropTypes.object.isRequired,
         errorText: PropTypes.string,
         busy: PropTypes.bool,
+        hideContinue: PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -275,19 +276,30 @@ export const TermsAuthEntry = React.createClass({
         });
     },
 
-    _trySubmit: function(policyId) {
+    tryContinue: function() {
+        this._trySubmit();
+    },
+
+    _togglePolicy: function(policyId) {
         const newToggles = {};
-        let allChecked = true;
         for (const policy of this.state.policies) {
             let checked = this.state.toggledPolicies[policy.id];
             if (policy.id === policyId) checked = !checked;
 
             newToggles[policy.id] = checked;
+        }
+        this.setState({"toggledPolicies": newToggles});
+    },
+
+    _trySubmit: function() {
+        let allChecked = true;
+        for (const policy of this.state.policies) {
+            let checked = this.state.toggledPolicies[policy.id];
             allChecked = allChecked && checked;
         }
 
-        this.setState({"toggledPolicies": newToggles});
         if (allChecked) this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
+        else this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
     },
 
     render: function() {
@@ -303,20 +315,25 @@ export const TermsAuthEntry = React.createClass({
             allChecked = allChecked && checked;
 
             checkboxes.push(
-                <label key={"policy_checkbox_" + policy.id}>
-                    <input type="checkbox" onClick={() => this._trySubmit(policy.id)} checked={checked} />
+                <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
+                    <input type="checkbox" onClick={() => this._togglePolicy(policy.id)} checked={checked} />
                     <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
                 </label>,
             );
         }
 
         let errorSection;
-        if (this.props.errorText) {
+        if (this.props.errorText || this.state.errorText) {
             errorSection = (
                 <div className="error" role="alert">
-                    { this.props.errorText }
+                    { this.props.errorText || this.state.errorText }
                 </div>
             );
+        }
+
+        let submitButton;
+        if (!this.props.hideContinue) {
+            submitButton = <button className="mx_textButton" onClick={this._trySubmit}>{_t("Continue")}</button>;
         }
 
         return (
@@ -324,6 +341,7 @@ export const TermsAuthEntry = React.createClass({
                 <p>{_t("Please review and accept the policies of this homeserver:")}</p>
                 { checkboxes }
                 { errorSection }
+                { submitButton }
             </div>
         );
     },
