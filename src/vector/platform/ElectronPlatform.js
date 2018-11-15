@@ -26,6 +26,8 @@ import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
+var globalKeybindings = {};
+
 // try to flush the rageshake logs to indexeddb before quit.
 ipcRenderer.on('before-quit', function () {
     console.log('riot-desktop closing');
@@ -105,6 +107,25 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+
+        ipcRenderer.on('keybinding-pressed', (event, keybindName) => {
+            // Prevent holding down a shortcut meaning multiple presses 
+            if (globalKeybindings[keybindName].pressed) {
+                return;
+            }
+            globalKeybindings[keybindName].pressed = true;
+
+            // Run the callback
+            globalKeybindings[keybindName].callback();
+        });
+
+        ipcRenderer.on('keybinding-released', (event, keybindName) => {
+            // Keybinding is no longer pressed
+            globalKeybindings[keybindName].pressed = false;
+
+            // Run the callback
+            globalKeybindings[keybindName].releaseCallback();
+        });
     }
 
     getHumanReadableName(): string {
@@ -180,6 +201,26 @@ export default class ElectronPlatform extends VectorBasePlatform {
         super.startUpdateCheck();
 
         ipcRenderer.send('check_updates');
+    }
+
+    addGlobalKeybinding(keybindName: string, keybindCode: string, callback: () => void, releaseCallback: () => void) {
+        // Add a keybinding that works even when the app is minimized
+        const keybinding = {name: keybindName, code: keybindCode};
+
+        ipcRenderer.send('register-keybinding', keybinding);
+        globalKeybindings[keybindName] = {callback, releaseCallback};
+
+        console.warn("Adding global keybinding:", keybindName, "with code:", keybindCode);
+    }
+
+    removeGlobalKeybinding(keybindName: string, keybindCode: string) {
+        // Unbind a global keybinding
+        ipcRenderer.send('unregister-keybinding', keybindCode);
+
+        // Remove the callback
+        delete globalKeybindings[keybindName];
+
+        console.warn("Removing global keybinding:", keybindName);
     }
 
     installUpdate() {
