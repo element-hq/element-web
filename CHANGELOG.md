@@ -1,3 +1,10 @@
+Changes in [0.14.5-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5-rc.2) (2018-11-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.1...v0.14.5-rc.2)
+
+ * Update to js-sdk v0.14.0-rc.1 which uses the new Olm API
+   (v0.14.0-rc.1 was broken because of this).
+
 Changes in [0.14.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5-rc.1) (2018-11-15)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.4...v0.14.5-rc.1)
