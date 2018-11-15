@@ -1,3 +1,24 @@
+Changes in [0.17.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.1) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.5...v0.17.6-rc.1)
+
+ * Update from Weblate.
+   [\#7708](https://github.com/vector-im/riot-web/pull/7708)
+ * Add Japanese (#7599)
+   [\#7673](https://github.com/vector-im/riot-web/pull/7673)
+ * Allow Webpack dev server to listen to all interfaces
+   [\#7674](https://github.com/vector-im/riot-web/pull/7674)
+ * Remove the request-only stuff we don't need anymore
+   [\#7637](https://github.com/vector-im/riot-web/pull/7637)
+ * Correct the author of the electron app
+   [\#7615](https://github.com/vector-im/riot-web/pull/7615)
+ * Mock fs, tls, and net to support request in the browser
+   [\#7552](https://github.com/vector-im/riot-web/pull/7552)
+ * Update chokidar to transitively get newer fsevents
+   [\#7598](https://github.com/vector-im/riot-web/pull/7598)
+ * Support WebAssembly version of Olm
+   [\#7385](https://github.com/vector-im/riot-web/pull/7385)
+
 Changes in [0.17.5](https://github.com/vector-im/riot-web/releases/tag/v0.17.5) (2018-11-13)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.4...v0.17.5)
