@@ -45,7 +45,7 @@ export async function startAnyRegistrationFlow(options) {
     // caution though.
     const hasIlagFlow = flows.some((flow) => {
         return flow.stages.every((stage) => {
-            return ['m.login.dummy', 'm.login.recaptcha'].includes(stage);
+            return ['m.login.dummy', 'm.login.recaptcha', 'm.login.terms'].includes(stage);
         });
     });
 
