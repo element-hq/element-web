@@ -1,3 +1,10 @@
+Changes in [0.17.6-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.2) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.1...v0.17.6-rc.2)
+
+ * Update to js-sdk 0.14 and react-sdk rc.2. rc.1 was broken as it was built against
+   js-sdk 0.13 which does not use the new Olm 3.0 API.
+
 Changes in [0.17.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.1) (2018-11-15)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.5...v0.17.6-rc.1)
