@@ -335,7 +335,7 @@ export const TermsAuthEntry = React.createClass({
         if (!this.props.hideContinue) {
             // XXX: button classes
             submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_UserSettings_button"
-                                   onClick={this._trySubmit}>{_t("Continue")}</button>;
+                                   onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
         }
 
         return (
