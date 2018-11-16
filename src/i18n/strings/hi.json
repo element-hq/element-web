@@ -1,9 +1,9 @@
 {
-    "Riot is not supported on mobile web. Install the app?": "रायट फ़ोन पर समर्थन नहीं हैं।  एप्लिकेशन  इनस्टॉल करना चाहेंगे ?",
-    "Riot Desktop on %(platformName)s": "%(platformName)s पर  रायट डेस्कटॉप",
+    "Riot is not supported on mobile web. Install the app?": "रायट फ़ोन पर समर्थन नहीं हैं। एप्लिकेशन इनस्टॉल करना चाहेंगे ?",
+    "Riot Desktop on %(platformName)s": "%(platformName)s पर रायट डेस्कटॉप",
     "Unknown device": "अज्ञात यन्त्र",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s पर %(browserName)s के माध्यम से %(appName)s",
-    "You need to be using HTTPS to place a screen-sharing call.": "स्क्रीन साझा करने के लिए आपको HTTPS का उपयोग करने की आवश्यकता है।",
+    "You need to be using HTTPS to place a screen-sharing call.": "स्क्रीन साझा की कॉल करने के लिए आपको HTTPS का उपयोग करने की आवश्यकता है।",
     "Custom Server Options": "कस्टम सर्वर विकल्प",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "आप एक अलग होम सर्वर यूआरएल निर्दिष्ट करके अन्य मैट्रिक्स सर्वरों में साइन इन करने के लिए कस्टम सर्वर विकल्प का उपयोग कर सकते हैं। <br/> यह आपको एक अलग होम सर्वर पर मौजूदा मैट्रिक्स खाते के साथ रायट का उपयोग करने की अनुमति देता है। <br/> <br/> आप अपना आइडेंटिटी सर्वर भी सेट कर सकते हैं लेकिन आप ईमेल पते से उपयोगकर्ताओं को आमंत्रित नहीं कर पाएंगे, या ईमेल पते से स्वयं आमंत्रित नहीं हों सकेंगे।",
     "Dismiss": "खारिज",
