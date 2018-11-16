@@ -23,10 +23,12 @@ import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
+import sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
+import Modal from './Modal';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -116,6 +118,14 @@ class MatrixClientPeg {
                 await this.matrixClient.initCrypto();
             }
         } catch (e) {
+            if (e.name === 'InvalidCryptoStoreError') {
+                // The js-sdk found a crypto DB too new for it to use
+                const CryptoStoreTooNewDialog =
+                    sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
+                Modal.createDialog(CryptoStoreTooNewDialog, {
+                    host: window.location.host,
+                });
+            }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
             console.warn("Unable to initialise e2e: " + e);
