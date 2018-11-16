@@ -222,7 +222,7 @@ export const TermsAuthEntry = React.createClass({
         stageParams: PropTypes.object.isRequired,
         errorText: PropTypes.string,
         busy: PropTypes.bool,
-        hideContinue: PropTypes.bool,
+        showContinue: PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -332,7 +332,7 @@ export const TermsAuthEntry = React.createClass({
         }
 
         let submitButton;
-        if (!this.props.hideContinue) {
+        if (this.props.showContinue !== false) {
             // XXX: button classes
             submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_UserSettings_button"
                                    onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;

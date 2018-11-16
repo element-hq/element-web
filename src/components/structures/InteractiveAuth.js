@@ -203,7 +203,7 @@ export default React.createClass({
                 fail={this._onAuthStageFailed}
                 setEmailSid={this._setEmailSid}
                 makeRegistrationUrl={this.props.makeRegistrationUrl}
-                hideContinue={this.props.continueIsManaged}
+                showContinue={!this.props.continueIsManaged}
             />
         );
     },
