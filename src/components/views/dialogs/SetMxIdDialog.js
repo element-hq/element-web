@@ -101,6 +101,9 @@ export default React.createClass({
     },
 
     onSubmit: function(ev) {
+        if (this.refs.uiAuth) {
+            this.refs.uiAuth.tryContinue();
+        }
         this.setState({
             doingUIAuth: true,
         });
@@ -217,6 +220,8 @@ export default React.createClass({
                 onAuthFinished={this._onUIAuthFinished}
                 inputs={{}}
                 poll={true}
+                ref="uiAuth"
+                continueIsManaged={true}
             />;
         }
         const inputClasses = classnames({

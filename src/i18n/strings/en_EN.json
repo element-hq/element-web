@@ -648,6 +648,7 @@
     "Dismiss": "Dismiss",
     "To continue, please enter your password.": "To continue, please enter your password.",
     "Password:": "Password:",
+    "Please review and accept all of the homeserver's policies": "Please review and accept all of the homeserver's policies",
     "Please review and accept the policies of this homeserver:": "Please review and accept the policies of this homeserver:",
     "An email has been sent to %(emailAddress)s": "An email has been sent to %(emailAddress)s",
     "Please check your email to continue registration.": "Please check your email to continue registration.",
