@@ -1302,5 +1302,10 @@
     "Pin unread rooms to the top of the room list": "Épingler les salons non lus en haut de la liste des salons",
     "Pin rooms I'm mentioned in to the top of the room list": "Épingler les salons où l'on me mentionne en haut de la liste des salons",
     "If you would like to create a Matrix account you can <a>register</a> now.": "Si vous souhaitez créer un compte Matrix, vous pouvez <a>vous inscrire</a> maintenant.",
-    "You are currently using Riot anonymously as a guest.": "Vous utilisez Riot de façon anonyme en tant qu'invité."
+    "You are currently using Riot anonymously as a guest.": "Vous utilisez Riot de façon anonyme en tant qu'invité.",
+    "Please review and accept all of the homeserver's policies": "Veuillez lire et accepter toutes les polices du serveur d'accueil",
+    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Pour éviter de perdre l'historique de vos discussions, vous devez exporter vos clés avant de vous déconnecter. Vous devez revenir à une version plus récente de Riot pour pouvoir le faire",
+    "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "Vous avez utilisé une version plus récente de Riot sur %(host)s. Pour utiliser à nouveau cette version avec le chiffrement de bout à bout, vous devez vous déconnecter et vous reconnecter. ",
+    "Incompatible Database": "Base de données incompatible",
+    "Continue With Encryption Disabled": "Continuer avec le chiffrement désactivé"
 }
