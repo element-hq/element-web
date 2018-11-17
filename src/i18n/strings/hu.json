@@ -1302,5 +1302,10 @@
     "Pin unread rooms to the top of the room list": "Nem olvasott üzeneteket tartalmazó szobák a szobalista elejére",
     "Pin rooms I'm mentioned in to the top of the room list": "Megemlítéseket tartalmazó szobák a szobalista elejére",
     "If you would like to create a Matrix account you can <a>register</a> now.": "Ha létre szeretnél hozni egy Matrix fiókot most <a>regisztrálhatsz</a>.",
-    "You are currently using Riot anonymously as a guest.": "A Riotot ismeretlen vendégként használod."
+    "You are currently using Riot anonymously as a guest.": "A Riotot ismeretlen vendégként használod.",
+    "Please review and accept all of the homeserver's policies": "Kérlek nézd át és fogadd el a Matrix szerver felhasználási feltételeit",
+    "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Hogy a régi üzenetekhez továbbra is hozzáférhess kijelentkezés előtt ki kell mentened a szobák titkosító kulcsait. Ehhez a Riot egy frissebb verzióját kell használnod",
+    "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "Előzőleg a Riot egy frissebb verzióját használtad itt: %(host)s. Ki-, és vissza kell jelentkezned, hogy megint ezt a verziót használhasd végponttól végpontig titkosításhoz. ",
+    "Incompatible Database": "Nem kompatibilis adatbázis",
+    "Continue With Encryption Disabled": "Folytatás a titkosítás kikapcsolásával"
 }
