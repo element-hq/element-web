@@ -1,3 +1,9 @@
+Changes in [0.14.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5) (2018-11-19)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.2...v0.14.5)
+
+ * No changes since rc.1
+
 Changes in [0.14.5-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5-rc.2) (2018-11-15)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.1...v0.14.5-rc.2)
