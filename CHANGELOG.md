@@ -1,3 +1,66 @@
+Changes in [0.14.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5) (2018-11-19)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.2...v0.14.5)
+
+ * No changes since rc.1
+
+Changes in [0.14.5-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5-rc.2) (2018-11-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.1...v0.14.5-rc.2)
+
+ * Update to js-sdk v0.14.0-rc.1 which uses the new Olm API
+   (v0.14.0-rc.1 was broken because of this).
+
+Changes in [0.14.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5-rc.1) (2018-11-15)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.4...v0.14.5-rc.1)
+
+ * Update from Weblate.
+   [\#2278](https://github.com/matrix-org/matrix-react-sdk/pull/2278)
+ * Support room IDs and event permalinks in the join command
+   [\#2272](https://github.com/matrix-org/matrix-react-sdk/pull/2272)
+ * Align encrypted event buttons in Safari
+   [\#2274](https://github.com/matrix-org/matrix-react-sdk/pull/2274)
+ * Align buttons in encrypted event dialog
+   [\#2273](https://github.com/matrix-org/matrix-react-sdk/pull/2273)
+ * Add visible guest warning to encourage login
+   [\#2268](https://github.com/matrix-org/matrix-react-sdk/pull/2268)
+ * Regenerate the room list when m.fully_read is issued
+   [\#2266](https://github.com/matrix-org/matrix-react-sdk/pull/2266)
+ * Remove the request-only stuff we don't need anymore
+   [\#2263](https://github.com/matrix-org/matrix-react-sdk/pull/2263)
+ * Improve performance of room list and fix timestamp ordering when pinning
+   rooms
+   [\#2265](https://github.com/matrix-org/matrix-react-sdk/pull/2265)
+ * Add options to pin unread/mentioned rooms to the top of the room list
+   [\#1936](https://github.com/matrix-org/matrix-react-sdk/pull/1936)
+ * only run e2e tests on PRs targeted on develop
+   [\#2261](https://github.com/matrix-org/matrix-react-sdk/pull/2261)
+ * Fix and test matrix.to alias permalinks
+   [\#2254](https://github.com/matrix-org/matrix-react-sdk/pull/2254)
+ * click-through svg on tag tile context menu to make it less weird
+   [\#2257](https://github.com/matrix-org/matrix-react-sdk/pull/2257)
+ * Hide Matthew's Time Machine
+   [\#2256](https://github.com/matrix-org/matrix-react-sdk/pull/2256)
+ * Update babel-eslint to 8.1.1
+   [\#2255](https://github.com/matrix-org/matrix-react-sdk/pull/2255)
+ * Support routing matrix.to links to joinable rooms
+   [\#2250](https://github.com/matrix-org/matrix-react-sdk/pull/2250)
+ * Fix autoreplacement of ascii emoji
+   [\#2253](https://github.com/matrix-org/matrix-react-sdk/pull/2253)
+ * Repair DevTools button padding by centralizing styles
+   [\#2252](https://github.com/matrix-org/matrix-react-sdk/pull/2252)
+ * Redirect widgets to another location before deleting them
+   [\#2232](https://github.com/matrix-org/matrix-react-sdk/pull/2232)
+ * disable e2e tests for PRs targeted at experimental (redesign)
+   [\#2251](https://github.com/matrix-org/matrix-react-sdk/pull/2251)
+ * Fix emoji replacement in composer
+   [\#2247](https://github.com/matrix-org/matrix-react-sdk/pull/2247)
+ * Add a devtools button to roomsettings
+   [\#2249](https://github.com/matrix-org/matrix-react-sdk/pull/2249)
+ * Add warning when administrator leaves community (#5724)
+   [\#2242](https://github.com/matrix-org/matrix-react-sdk/pull/2242)
+
 Changes in [0.14.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.4) (2018-11-13)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.3...v0.14.4)
