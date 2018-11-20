@@ -82,6 +82,8 @@ const SIMPLE_SETTINGS = [
     { id: "TagPanel.disableTagPanel" },
     { id: "enableWidgetScreenshots" },
     { id: "RoomSubList.showEmpty" },
+    { id: "pinMentionedRooms" },
+    { id: "pinUnreadRooms" },
     { id: "showDeveloperTools" },
 ];
 

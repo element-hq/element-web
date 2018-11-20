@@ -1110,5 +1110,19 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other devices.": "<requestLink>Redemandi ĉifroŝlosilojn</requestLink> el viaj aliaj aparatoj.",
     "Encrypting": "Ĉifranta",
     "Encrypted, not sent": "Ĉifrita, ne sendita",
-    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Se viaj aliaj aparatoj ne havas la ŝlosilon por ĉi tiu mesaĝo, vi ne povos malĉifri ĝin."
+    "If your other devices do not have the key for this message you will not be able to decrypt them.": "Se viaj aliaj aparatoj ne havas la ŝlosilon por ĉi tiu mesaĝo, vi ne povos malĉifri ĝin.",
+    "Permission Required": "Necesas permeso",
+    "Registration Required": "Necesas registriĝo",
+    "You need to register to do this. Would you like to register now?": "Por fari ĉi tion, vi bezonas registriĝi. Ĉu vi volas registriĝi nun?",
+    "Missing roomId.": "Mankas identigilo de la ĉambro.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s aldonis %(addedAddresses)s kiel adresojn por la ĉambro.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s aldonis %(addedAddresses)s kiel adreson por la ĉambro.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s forigis %(removedAddresses)s kiel adresojn por la ĉambro.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s forigis %(removedAddresses)s kiel adreson por la ĉambro.",
+    "%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.": "%(senderName)s aldonis %(addedAddresses)s kaj forigis %(removedAddresses)s kiel adresojn por la ĉambro.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s agordis la ĉefan adreson por la ĉambro al %(address)s.",
+    "%(senderName)s removed the main address for this room.": "%(senderName)s forigis la ĉefan adreson de la ĉambro.",
+    "Please <a>contact your service administrator</a> to continue using the service.": "Bonvolu <a>kontakti administranton de la servo</a> por daŭre uzadi la servon.",
+    "Pin unread rooms to the top of the room list": "Fiksi nelegitajn ĉambrojn supre de la listo",
+    "Pin rooms I'm mentioned in to the top of the room list": "Fiksi ĉambrojn kun mencioj de mia nomo supre de la listo"
 }
