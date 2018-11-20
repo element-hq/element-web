@@ -35,8 +35,24 @@ limitations under the License.
     margin-bottom: 5px;
 }
 
+.mx_InteractiveAuthEntryComponents_termsSubmit {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    display: block;
+    width: 100%;
+}
+
 // XXX: This should be a common button class
 .mx_InteractiveAuthEntryComponents_msisdnSubmit:disabled {
     background-color: $light-fg-color;
     cursor: default;
+}
+
+.mx_InteractiveAuthEntryComponents_termsSubmit:disabled {
+    background-color: $accent-color-50pct;
+    cursor: default;
+}
+
+.mx_InteractiveAuthEntryComponents_termsPolicy {
+    display: block;
 }
