@@ -36,7 +36,6 @@ export default React.createClass({
             recoveryKeyValid: false,
             forceRecoveryKey: false,
             passPhrase: '',
-            recoveryKey: '',
         };
     },
 

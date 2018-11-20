@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
-import Promise from 'bluebird';
 
 import { _t, _td } from '../../../../languageHandler';
 
@@ -196,7 +195,13 @@ export default React.createClass({
                 "<button>opt out</button>.",
                 {},
                 {
-                    button: sub => <AccessibleButton element="span" className="mx_linkButton" onClick={this._onOptOutClick}>{sub}</AccessibleButton>,
+                    button: sub => <AccessibleButton
+                        element="span"
+                        className="mx_linkButton"
+                        onClick={this._onOptOutClick}
+                    >
+                        {sub}
+                    </AccessibleButton>,
                 },
             )}</p>
             <p>{_t(
@@ -204,7 +209,13 @@ export default React.createClass({
                 "<button>download a recovery key</button>.",
                 {},
                 {
-                    button: sub => <AccessibleButton element="span" className="mx_linkButton" onClick={this._onSkipPassPhraseClick}>{sub}</AccessibleButton>,
+                    button: sub => <AccessibleButton
+                        element="span"
+                        className="mx_linkButton"
+                        onClick={this._onSkipPassPhraseClick}
+                    >
+                        {sub}
+                    </AccessibleButton>,
                 },
             )}</p>
         </div>;
