@@ -262,6 +262,11 @@ textarea {
     opacity: 0.7;
 }
 
+.mx_linkButton {
+    cursor: pointer;
+    color: $accent-color;
+}
+
 .mx_Dialog_title {
     min-height: 16px;
     padding-top: 40px;
