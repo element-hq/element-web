@@ -342,7 +342,7 @@ export default React.createClass({
         return <div>
             {_t(
                 "Without setting up Secure Message Recovery, you won't be able to restore your " +
-                "encrypted message history if you log out or use another device."
+                "encrypted message history if you log out or use another device.",
             )}
             <DialogButtons primaryButton={_t('Set up Secure Message Recovery')}
                 onPrimaryButtonClick={this._onSetUpClick}
