@@ -10,6 +10,9 @@ set -x
 
 npm install
 
+# apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
+npm install olm
+
 # check out corresponding branches of dependencies.
 #
 # clone the deps with depth 1: we know we will only ever need that one
@@ -17,9 +20,6 @@ npm install
 # We need to do this after npm install otherwise modern node versions
 # just reset it back.
 `dirname $0`/fetch-develop.deps.sh --depth 1
-
-# apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
-npm install olm
 
 # install olm. A naive 'npm i ./olm/olm-*.tgz' fails because it uses the url
 # from our package.json (or even matrix-js-sdk's) in preference.
