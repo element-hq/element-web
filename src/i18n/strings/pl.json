@@ -515,7 +515,7 @@
     "You cannot place VoIP calls in this browser.": "Nie możesz przeprowadzić rozmowy głosowej VoIP w tej przeglądarce.",
     "You do not have permission to post to this room": "Nie jesteś uprawniony do pisania w tym pokoju",
     "You have been banned from %(roomName)s by %(userName)s.": "Zostałeś permanentnie usunięty z pokoju %(roomName)s przez %(userName)s.",
-    "You have been invited to join this room by %(inviterName)s": "Zostałeś zaproszony do dołączenia do tego pokoju przez %(inviterName)s",
+    "You have been invited to join this room by %(inviterName)s": "Zostałeś(-aś) zaproszony(-a) do dołączenia do tego pokoju przez %(inviterName)s",
     "You have been kicked from %(roomName)s by %(userName)s.": "Zostałeś usunięty z %(roomName)s przez %(userName)s.",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Wylogowałeś się ze wszystkich urządzeń i nie będziesz już otrzymywał powiadomień push. Aby ponownie aktywować powiadomienia zaloguj się ponownie na każdym urządzeniu",
     "You have <a>disabled</a> URL previews by default.": "Masz domyślnie <a>wyłączone</a> podglądy linków.",
@@ -627,7 +627,7 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Próbowano załadować konkretny punkt na osi czasu w tym pokoju, ale nie nie można go znaleźć.",
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Wyeksportowany plik pozwoli każdej osobie będącej w stanie go odczytać na deszyfrację jakichkolwiek zaszyfrowanych wiadomości, które możesz zobaczyć, tak więc zalecane jest zachowanie ostrożności. Aby w tym pomóc, powinieneś/aś wpisać hasło poniżej; hasło to będzie użyte do zaszyfrowania wyeksportowanych danych. Późniejsze zaimportowanie tych danych będzie możliwe tylko po uprzednim podaniu owego hasła.",
     " (unsupported)": " (niewspierany)",
-    "Idle": "Bezczynny",
+    "Idle": "Bezczynny(-a)",
     "Check for update": "Sprawdź aktualizacje",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s zmienił(a) awatar pokoju na <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s usunął(-ęła) awatar pokoju.",
@@ -743,7 +743,7 @@
     "Loading...": "Ładowanie...",
     "Pinned Messages": "Przypięte Wiadomości",
     "Online for %(duration)s": "Online przez %(duration)s",
-    "Idle for %(duration)s": "Nieaktywny przez %(duration)s",
+    "Idle for %(duration)s": "Bezczynny(-a) przez %(duration)s",
     "Offline for %(duration)s": "Offline przez %(duration)s",
     "Unknown for %(duration)s": "Nieznany przez %(duration)s",
     "Unknown": "Nieznany",
@@ -1207,5 +1207,7 @@
     "Clear cache and resync": "Wyczyść pamięć podręczną i zsynchronizuj ponownie",
     "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot używa teraz 3-5x mniej pamięci, ładując informacje o innych użytkownikach tylko wtedy, gdy jest to konieczne. Poczekaj, aż ponownie zsynchronizujemy się z serwerem!",
     "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jeśli inna wersja Riot jest nadal otwarta w innej zakładce, proszę zamknij ją, ponieważ używanie Riot na tym samym komputerze z włączonym i wyłączonym jednocześnie leniwym ładowaniem będzie powodować problemy.",
-    "And %(count)s more...|other": "I %(count)s więcej…"
+    "And %(count)s more...|other": "I %(count)s więcej…",
+    "Delete Backup": "Usuń Kopię Zapasową",
+    "Delete backup": "Usuń Kopię Zapasową"
 }
