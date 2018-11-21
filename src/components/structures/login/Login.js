@@ -115,11 +115,6 @@ module.exports = React.createClass({
         // discovery went wrong
         if (this.state.discoveryError) return;
 
-        if (this.state.discoveredHsUrl) {
-            console.log("Rewriting username because the homeserver was discovered");
-            username = username.substring(1).split(":")[0];
-        }
-
         this.setState({
             busy: true,
             errorText: null,
@@ -327,16 +322,13 @@ module.exports = React.createClass({
                     return;
                 }
 
-                // XXX: We don't verify the identity server URL because sydent doesn't register
-                // the route we need.
-
-                // console.log("Verifying identity server URL: " + isUrl);
-                // const isResponse = await this._getWellKnownObject(`${isUrl}/_matrix/identity/api/v1`);
-                // if (!isResponse) {
-                //     console.error("Invalid /api/v1 response");
-                //     this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                //     return;
-                // }
+                console.log("Verifying identity server URL: " + isUrl);
+                const isResponse = await this._getWellKnownObject(`${isUrl}/_matrix/identity/api/v1`);
+                if (!isResponse) {
+                    console.error("Invalid /api/v1 response");
+                    this.setState({discoveryError: _t("Invalid homeserver discovery response")});
+                    return;
+                }
             }
 
             this.setState({discoveredHsUrl: hsUrl, discoveredIsUrl: isUrl, discoveryError: ""});
