@@ -1,5 +1,5 @@
-Riot
-====
+~~Riot~~ Pouet
+==============
 
 Riot (formerly known as Vector) is a Matrix web client built using the Matrix
 React SDK (https://github.com/matrix-org/matrix-react-sdk).
