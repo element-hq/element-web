@@ -995,6 +995,7 @@
     "Got it": "Got it",
     "Backup created": "Backup created",
     "Your encryption keys are now being backed up to your Homeserver.": "Your encryption keys are now being backed up to your Homeserver.",
+    "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.",
     "Set up Secure Message Recovery": "Set up Secure Message Recovery",
     "Create a Recovery Passphrase": "Create a Recovery Passphrase",
     "Confirm Recovery Passphrase": "Confirm Recovery Passphrase",

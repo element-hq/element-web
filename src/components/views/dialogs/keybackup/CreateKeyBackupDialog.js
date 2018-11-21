@@ -340,8 +340,10 @@ export default React.createClass({
     _renderPhaseOptOutConfirm: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
-            Without setting up Secure Message Recovery, you won't be able to restore your
-            encrypted message history if you log out or use another device.
+            {_t(
+                "Without setting up Secure Message Recovery, you won't be able to restore your " +
+                "encrypted message history if you log out or use another device."
+            )}
             <DialogButtons primaryButton={_t('Set up Secure Message Recovery')}
                 onPrimaryButtonClick={this._onSetUpClick}
                 hasCancel={false}
