@@ -51,9 +51,6 @@ const AsyncWrapper = React.createClass({
         // https://github.com/vector-im/riot-web/issues/3148
         console.log('Starting load of AsyncWrapper for modal');
         this.props.prom.then((result) => {
-            // XXX: temporary logging to try to diagnose
-            // https://github.com/vector-im/riot-web/issues/3148
-            console.log('AsyncWrapper load completed with '+result.displayName);
             if (this._unmounted) {
                 return;
             }
@@ -63,6 +60,7 @@ const AsyncWrapper = React.createClass({
             const component = result.default ? result.default : result;
             this.setState({component});
         }).catch((e) => {
+            console.warn('AsyncWrapper promise failed', e);
             this.setState({error: e});
         });
     },
