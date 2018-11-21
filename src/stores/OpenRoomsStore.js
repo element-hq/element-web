@@ -133,10 +133,6 @@ class OpenRoomsStore extends Store {
         }
     }
 
-    _setCurrentGroupRoom(index) {
-        this._setState({currentIndex: index});
-    }
-
     __onDispatch(payload) {
         switch (payload.action) {
             // view_room:
@@ -192,7 +188,15 @@ class OpenRoomsStore extends Store {
             case 'forward_event':
                 this._forwardingEvent = payload.event;
                 break;
-            case 'view_group_grid':
+            case 'group_grid_set_active':
+                const proposedIndex = this._roomIndex(payload);
+                if (proposedIndex !== -1) {
+                    this._setState({
+                        currentIndex: proposedIndex
+                    });
+                }
+                break;
+            case 'group_grid_view':
                 if (payload.group_id !== this._state.group_id) {
                     this._cleanupRooms();
                     // TODO: register to GroupStore updates
@@ -213,8 +217,8 @@ class OpenRoomsStore extends Store {
                     this._setState({
                         rooms: roomStores,
                         group_id: payload.group_id,
+                        currentIndex: 0,
                     });
-                    this._setCurrentGroupRoom(0);
                 }
                 break;
         }

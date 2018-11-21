@@ -56,7 +56,7 @@ export default class TagTileContextMenu extends React.Component {
 
     _onViewAsGridClick() {
         dis.dispatch({
-            action: 'view_group_grid',
+            action: 'group_grid_view',
             group_id: this.props.tag,
         });
         this.props.onFinished();

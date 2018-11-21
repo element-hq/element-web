@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import OpenRoomsStore from '../../stores/OpenRoomsStore';
 import dis from '../../dispatcher';
 import RoomView from './RoomView';
+import classNames from 'classnames';
 
 export default class RoomGridView extends React.Component {
 
@@ -49,6 +50,7 @@ export default class RoomGridView extends React.Component {
         if (this._unmounted) return;
         this.setState({
             roomStores: OpenRoomsStore.getRoomStores(),
+            currentRoomStore: OpenRoomsStore.getCurrentRoomStore(),
         });
     }
 
@@ -67,16 +69,21 @@ export default class RoomGridView extends React.Component {
             roomStores = roomStores.concat(emptyTiles);
         }
         return (<main className="mx_GroupGridView">
-            { roomStores.map(roomStore => {
+            { roomStores.map((roomStore) => {
                 if (roomStore) {
-                    return (<section key={roomStore.getRoomId()} className="mx_RoomGridView_tile">
+                    const isActive = roomStore === this.state.currentRoomStore;
+                    const tileClasses = classNames({
+                        "mx_GroupGridView_tile": true,
+                        "mx_GroupGridView_activeTile": isActive,
+                    });
+                    return (<section key={roomStore.getRoomId()} className={tileClasses}>
                         <RoomView
                             collapsedRhs={true}
                             roomViewStore={roomStore}
                         />
                     </section>);
                 } else {
-                    return (<section className={"mx_RoomGridView_emptyTile"} />);
+                    return (<section className={"mx_GroupGridView_emptyTile"} />);
                 }
             }) }
         </main>);

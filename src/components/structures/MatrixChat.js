@@ -627,7 +627,7 @@ export default React.createClass({
             case 'view_group':
                 this._viewGroup(payload);
                 break;
-            case 'view_group_grid':
+            case 'group_grid_view':
                 this._viewGroupGrid(payload);
                 break;
             case 'view_home_page':

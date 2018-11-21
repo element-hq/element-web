@@ -21,19 +21,24 @@ limitations under the License.
     background-color: red;
 }
 
-.mx_RoomGridView_emptyTile::before {
+
+.mx_GroupGridView_emptyTile::before {
     display: block;
     margin-top: 100px;
     text-align: center;
     content: "no room in this tile yet";
 }
 
-.mx_RoomGridView_tile {
+.mx_GroupGridView_tile {
     border-right: 1px solid $panel-divider-color;
     border-bottom: 1px solid $panel-divider-color;
 }
 
-.mx_RoomGridView_tile > .mx_RoomView {
+.mx_GroupGridView_activeTile {
+    border: 1px solid red !important;
+}
+
+.mx_GroupGridView_tile > .mx_RoomView {
     height: 100%;
 }
 
