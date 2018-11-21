@@ -1288,6 +1288,7 @@
     "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Please note you are logging into the %(hs)s server, not matrix.org.",
     "Guest access is disabled on this Home Server.": "Guest access is disabled on this Home Server.",
+    "Failed to perform homeserver discovery": "Failed to perform homeserver discovery",
     "The phone number entered looks invalid": "The phone number entered looks invalid",
     "Invalid homeserver discovery response": "Invalid homeserver discovery response",
     "Cannot find homeserver": "Cannot find homeserver",

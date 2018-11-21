@@ -232,11 +232,24 @@ module.exports = React.createClass({
         }).done();
     },
 
-    onUsernameChanged: function(username, endOfInput) {
+    onUsernameChanged: function(username) {
         this.setState({ username: username });
-        if (username[0] === "@" && endOfInput) {
+    },
+
+    onUsernameBlur: function(username) {
+        this.setState({ username: username });
+        if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
-            this._tryWellKnownDiscovery(serverName);
+            try {
+                // we have to append 'https://' to make the URL constructor happy
+                // otherwise we get things like 'protocol: matrix.org, pathname: 8448'
+                const url = new URL("https://" + serverName);
+                this._tryWellKnownDiscovery(url.hostname);
+            } catch (e) {
+                console.error("Problem parsing URL or unhandled error doing .well-known discovery");
+                console.error(e);
+                this.setState({discoveryError: _t("Failed to perform homeserver discovery")});
+            }
         }
     },
 
@@ -531,6 +544,7 @@ module.exports = React.createClass({
                initialPhoneCountry={this.state.phoneCountry}
                initialPhoneNumber={this.state.phoneNumber}
                onUsernameChanged={this.onUsernameChanged}
+               onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}
                onPhoneNumberChanged={this.onPhoneNumberChanged}
                onForgotPasswordClick={this.props.onForgotPasswordClick}

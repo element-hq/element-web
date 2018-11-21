@@ -30,6 +30,7 @@ class PasswordLogin extends React.Component {
     static defaultProps = {
         onError: function() {},
         onUsernameChanged: function() {},
+        onUsernameBlur: function() {},
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
@@ -122,11 +123,11 @@ class PasswordLogin extends React.Component {
 
     onUsernameChanged(ev) {
         this.setState({username: ev.target.value});
-        this.props.onUsernameChanged(ev.target.value, false);
+        this.props.onUsernameChanged(ev.target.value);
     }
 
     onUsernameBlur(ev) {
-        this.props.onUsernameChanged(this.state.username, true);
+        this.props.onUsernameBlur(this.state.username);
     }
 
     onLoginTypeChange(loginType) {
