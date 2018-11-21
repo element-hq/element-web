@@ -589,23 +589,21 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Export E2E Keys', '',
+            import('../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _onImportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Import E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Import E2E Keys', '',
+            import('../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _renderGroupSettings: function() {

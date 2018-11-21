@@ -53,6 +53,7 @@
     "test-multi": "karma start"
   },
   "dependencies": {
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-runtime": "^6.26.0",
     "bluebird": "^3.5.0",
     "blueimp-canvas-to-blob": "^3.5.0",
