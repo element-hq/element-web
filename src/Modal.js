@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
+import { _t } from './languageHandler';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 
@@ -32,15 +33,15 @@ const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
  */
 const AsyncWrapper = React.createClass({
     propTypes: {
-        /** A function which takes a 'callback' argument which it will call
-         * with the real component once it loads.
+        /** A promise which resolves with the real component
          */
-        loader: PropTypes.func.isRequired,
+        prom: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
         return {
             component: null,
+            error: null,
         };
     },
 
@@ -49,14 +50,20 @@ const AsyncWrapper = React.createClass({
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/riot-web/issues/3148
         console.log('Starting load of AsyncWrapper for modal');
-        this.props.loader((e) => {
+        this.props.prom.then((result) => {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/riot-web/issues/3148
-            console.log('AsyncWrapper load completed with '+e.displayName);
+            console.log('AsyncWrapper load completed with '+result.displayName);
             if (this._unmounted) {
                 return;
             }
-            this.setState({component: e});
+            // Take the 'default' member if it's there, then we support
+            // passing in just an import()ed module, since ES6 async import
+            // always returns a module *namespace*.
+            const component = result.default ? result.default : result;
+            this.setState({component});
+        }).catch((e) => {
+            this.setState({error: e});
         });
     },
 
@@ -64,11 +71,27 @@ const AsyncWrapper = React.createClass({
         this._unmounted = true;
     },
 
+    _onWrapperCancelClick: function() {
+        this.props.onFinished(false);
+    },
+
     render: function() {
         const {loader, ...otherProps} = this.props;
         if (this.state.component) {
             const Component = this.state.component;
             return <Component {...otherProps} />;
+        } else if (this.state.error) {
+            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            return <BaseDialog onFinished={this.props.onFinished}
+                title={_t("Error")}
+            >
+                {_t("Unable to load! Check your network connectivity and try again.")}
+                <DialogButtons primaryButton={_t("Dismiss")}
+                    onPrimaryButtonClick={this._onWrapperCancelClick}
+                    hasCancel={false}
+                />
+            </BaseDialog>;
         } else {
             // show a spinner until the component is loaded.
             const Spinner = sdk.getComponent("elements.Spinner");
@@ -115,7 +138,7 @@ class ModalManager {
     }
 
     createDialog(Element, ...rest) {
-        return this.createDialogAsync((cb) => {cb(Element);}, ...rest);
+        return this.createDialogAsync(new Promise(resolve => resolve(Element)), ...rest);
     }
 
     createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
@@ -133,9 +156,8 @@ class ModalManager {
      *       require(['<module>'], cb);
      *   }
      *
-     * @param {Function} loader   a function which takes a 'callback' argument,
-     *   which it should call with a React component which will be displayed as
-     *   the modal view.
+     * @param {Promise} prom   a promise which resolves with a React component
+     *   which will be displayed as the modal view.
      *
      * @param {Object} props   properties to pass to the displayed
      *    component. (We will also pass an 'onFinished' property.)
@@ -147,7 +169,7 @@ class ModalManager {
      *                                  Also, when closed, all modals will be removed
      *                                  from the stack.
      */
-    createDialogAsync(loader, props, className, isPriorityModal) {
+    createDialogAsync(prom, props, className, isPriorityModal) {
         const self = this;
         const modal = {};
 
@@ -178,7 +200,7 @@ class ModalManager {
         // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the dialog from a button click!
         modal.elem = (
-            <AsyncWrapper key={modalCount} loader={loader} {...props}
+            <AsyncWrapper key={modalCount} prom={prom} {...props}
                 onFinished={closeDialog} />
         );
         modal.onFinished = props ? props.onFinished : null;
