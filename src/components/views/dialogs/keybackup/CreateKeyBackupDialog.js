@@ -122,7 +122,7 @@ export default React.createClass({
     },
 
     _onPassPhraseKeyPress: function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && this._passPhraseIsValid()) {
             this._onPassPhraseNextClick();
         }
     },
@@ -136,7 +136,7 @@ export default React.createClass({
     },
 
     _onPassPhraseConfirmKeyPress: function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && this.state.passPhrase === this.state.passPhraseConfirm) {
             this._onPassPhraseConfirmNextClick();
         }
     },
@@ -167,6 +167,10 @@ export default React.createClass({
         });
     },
 
+    _passPhraseIsValid: function() {
+        return this.state.passPhrase !== '';
+    },
+
     _renderPhasePassPhrase: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -187,7 +191,7 @@ export default React.createClass({
             <DialogButtons primaryButton={_t('Next')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
-                disabled={this.state.passPhrase === ''}
+                disabled={!this._passPhraseIsValid()}
             />
 
             <p>{_t(
