@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
+import Modal from '../../../../Modal';
 
 import { _t } from '../../../../languageHandler';
 
@@ -33,6 +34,8 @@ export default React.createClass({
             recoveryKey: "",
             recoverInfo: null,
             recoveryKeyValid: false,
+            forceRecoveryKey: false,
+            passPhrase: '',
         };
     },
 
@@ -48,6 +51,18 @@ export default React.createClass({
         this.props.onFinished(true);
     },
 
+    _onUseRecoveryKeyClick: function() {
+        this.setState({
+            forceRecoveryKey: true,
+        });
+    },
+
+    _onResetRecoveryClick: function() {
+        this.props.onFinished(false);
+        const CreateKeyBackupDialog = sdk.getComponent("dialogs.keybackup.CreateKeyBackupDialog");
+        Modal.createTrackedDialog('Create Key Backup', '', CreateKeyBackupDialog, {});
+    },
+
     _onRecoveryKeyChange: function(e) {
         this.setState({
             recoveryKey: e.target.value,
@@ -55,13 +70,35 @@ export default React.createClass({
         });
     },
 
-    _onRecoverClick: async function() {
+    _onPassPhraseNext: async function() {
         this.setState({
             loading: true,
             restoreError: null,
         });
         try {
-            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackups(
+            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
+                this.state.passPhrase, undefined, undefined, this.state.backupInfo.version,
+            );
+            this.setState({
+                loading: false,
+                recoverInfo,
+            });
+        } catch (e) {
+            console.log("Error restoring backup", e);
+            this.setState({
+                loading: false,
+                restoreError: e,
+            });
+        }
+    },
+
+    _onRecoveryKeyNext: async function() {
+        this.setState({
+            loading: true,
+            restoreError: null,
+        });
+        try {
+            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo.version,
             );
             this.setState({
@@ -74,6 +111,24 @@ export default React.createClass({
                 loading: false,
                 restoreError: e,
             });
+        }
+    },
+
+    _onPassPhraseChange: function(e) {
+        this.setState({
+            passPhrase: e.target.value,
+        });
+    },
+
+    _onPassPhraseKeyPress: function(e) {
+        if (e.key === "Enter") {
+            this._onPassPhraseNext();
+        }
+    },
+
+    _onRecoveryKeyKeyPress: function(e) {
+        if (e.key === "Enter" && this.state.recoveryKeyValid) {
+            this._onRecoveryKeyNext();
         }
     },
 
@@ -102,16 +157,29 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent("elements.Spinner");
 
+        const backupHasPassphrase = (
+            this.state.backupInfo &&
+            this.state.backupInfo.auth_data &&
+            this.state.backupInfo.auth_data.private_key_salt &&
+            this.state.backupInfo.auth_data.private_key_iterations
+        );
+
         let content;
+        let title;
         if (this.state.loading) {
+            title = _t("Loading...");
             content = <Spinner />;
         } else if (this.state.loadError) {
+            title = _t("Error");
             content = _t("Unable to load backup status");
         } else if (this.state.restoreError) {
+            title = _t("Error");
             content = _t("Unable to restore backup");
         } else if (this.state.backupInfo === null) {
+            title = _t("Error");
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
+            title = _t("Backup Restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
@@ -123,8 +191,54 @@ export default React.createClass({
                 <p>{_t("Restored %(sessionCount)s session keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
             </div>;
-        } else {
+        } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+            title = _t("Enter Recovery Passphrase");
+            content = <div>
+                {_t(
+                    "Access your secure message history and set up secure " +
+                    "messaging by entering your recovery passphrase.",
+                )}<br />
+
+                <div className="mx_RestoreKeyBackupDialog_primaryContainer">
+                    <input type="password"
+                        className="mx_RestoreKeyBackupDialog_passPhraseInput"
+                        onChange={this._onPassPhraseChange}
+                        onKeyPress={this._onPassPhraseKeyPress}
+                        value={this.state.passPhrase}
+                        autoFocus={true}
+                    />
+                    <DialogButtons primaryButton={_t('Next')}
+                        onPrimaryButtonClick={this._onPassPhraseNext}
+                        hasCancel={true}
+                        onCancel={this._onCancel}
+                        focus={false}
+                    />
+                </div>
+                {_t(
+                    "If you've forgotten your recovery passphrase you can "+
+                    "<button1>use your recovery key</button1> or " +
+                    "<button2>set up new recovery options</button2>"
+                , {}, {
+                    button1: s => <AccessibleButton className="mx_linkButton"
+                        element="span"
+                        onClick={this._onUseRecoveryKeyClick}
+                    >
+                        {s}
+                    </AccessibleButton>,
+                    button2: s => <AccessibleButton className="mx_linkButton"
+                        element="span"
+                        onClick={this._onResetRecoveryClick}
+                    >
+                        {s}
+                    </AccessibleButton>,
+                })}
+            </div>;
+        } else {
+            title = _t("Enter Recovery Key");
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
@@ -140,28 +254,45 @@ export default React.createClass({
             }
 
             content = <div>
-                {_t("Please enter the recovery key generated when you set up key backup")}<br />
-                <textarea
-                    onChange={this._onRecoveryKeyChange}
-                    value={this.state.recoveryKey}
-                    style={{width: "90%"}}
-                    autoFocus={true}
-                />
-                {keyStatus}
-                <DialogButtons primaryButton={_t('Recover')}
-                    onPrimaryButtonClick={this._onRecoverClick}
-                    hasCancel={true}
-                    onCancel={this._onCancel}
-                    focus={false}
-                    primaryDisabled={!this.state.recoveryKeyValid}
-                />
+                {_t(
+                    "Access your secure message history and set up secure " +
+                    "messaging by entering your recovery key.",
+                )}<br />
+
+                <div className="mx_RestoreKeyBackupDialog_primaryContainer">
+                    <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"
+                        onChange={this._onRecoveryKeyChange}
+                        onKeyPress={this._onRecoveryKeyKeyPress}
+                        value={this.state.recoveryKey}
+                        autoFocus={true}
+                    />
+                    {keyStatus}
+                    <DialogButtons primaryButton={_t('Next')}
+                        onPrimaryButtonClick={this._onRecoveryKeyNext}
+                        hasCancel={true}
+                        onCancel={this._onCancel}
+                        focus={false}
+                        primaryDisabled={!this.state.recoveryKeyValid}
+                    />
+                </div>
+                {_t(
+                    "If you've forgotten your recovery passphrase you can "+
+                    "<button>set up new recovery options</button>"
+                , {}, {
+                    button: s => <AccessibleButton className="mx_linkButton"
+                        element="span"
+                        onClick={this._onResetRecoveryClick}
+                    >
+                        {s}
+                    </AccessibleButton>,
+                })}
             </div>;
         }
 
         return (
             <BaseDialog className='mx_RestoreKeyBackupDialog'
                 onFinished={this.props.onFinished}
-                title={_t('Restore Key Backup')}
+                title={title}
             >
             <div>
                 {content}
