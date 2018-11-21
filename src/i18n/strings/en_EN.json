@@ -981,6 +981,7 @@
     "That matches!": "That matches!",
     "That doesn't match.": "That doesn't match.",
     "Go back to set it again.": "Go back to set it again.",
+    "Type in your Recovery Passphrase to confirm you remember it. If it helps, add it to your password manager or store it somewhere safe.": "Type in your Recovery Passphrase to confirm you remember it. If it helps, add it to your password manager or store it somewhere safe.",
     "Repeat your passphrase...": "Repeat your passphrase...",
     "Make a copy of this Recovery Key and keep it safe.": "Make a copy of this Recovery Key and keep it safe.",
     "As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.": "As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.",

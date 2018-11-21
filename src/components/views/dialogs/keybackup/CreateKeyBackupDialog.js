@@ -247,11 +247,11 @@ export default React.createClass({
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
-            <p>
-                Type in your Recovery Passphrase to confirm you remember it.
-                If it helps, add it to your password manager or store it
-                somewhere safe.
-            </p>
+            <p>{_t(
+                "Type in your Recovery Passphrase to confirm you remember it. " +
+                "If it helps, add it to your password manager or store it " +
+                "somewhere safe.",
+            )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 {passPhraseMatch}
                 <div>
