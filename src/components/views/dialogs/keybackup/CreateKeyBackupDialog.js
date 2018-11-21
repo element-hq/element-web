@@ -18,6 +18,8 @@ import React from 'react';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 
+import FileSaver from 'file-saver';
+
 import { _t, _td } from '../../../../languageHandler';
 
 const PHASE_PASSPHRASE = 0;
@@ -49,6 +51,7 @@ export default React.createClass({
             passPhrase: '',
             passPhraseConfirm: '',
             copied: false,
+            downloaded: false,
         };
     },
 
@@ -70,6 +73,18 @@ export default React.createClass({
                 phase: PHASE_KEEPITSAFE,
             });
         }
+    },
+
+    _onDownloadClick: function() {
+        const blob = new Blob([this._keyBackupInfo.recovery_key], {
+            type: 'text/plain;charset=us-ascii',
+        });
+        FileSaver.saveAs(blob, 'recovery-key.txt');
+
+        this.setState({
+            downloaded: true,
+            phase: PHASE_KEEPITSAFE,
+        });
     },
 
     _createBackup: function() {
@@ -282,13 +297,21 @@ export default React.createClass({
                 <div>{_t("Your Recovery Key")}</div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
                     <button onClick={this._onCopyClick}>
-                        {this.state.copied ? _t("Copied!") : _t("Copy to clipboard")}
+                        {_t("Copy to clipboard")}
+                    </button>
+                    {
+                        // FIXME REDESIGN: buttons should be adjacent but insufficient room in current design
+                    }
+                    <br /><br />
+                    <button onClick={this._onDownloadClick}>
+                        {_t("Download")}
                     </button>
                 </div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKey">
                     <code ref={this._collectRecoveryKeyNode}>{this._keyBackupInfo.recovery_key}</code>
                 </div>
             </p>
+            <br />
             <DialogButtons primaryButton={_t("I've made a copy")}
                 onPrimaryButtonClick={this._createBackup}
                 hasCancel={false}
@@ -300,7 +323,15 @@ export default React.createClass({
     _renderPhaseKeepItSafe: function() {
         let introText;
         if (this.state.copied) {
-            introText = _t("Your Recovery Key has been copied to your clipboard, paste it to:");
+            introText = _t(
+                "Your Recovery Key has been <b>copied to your clipboard</b>, paste it to:",
+                {}, {b: s => <b>{s}</b>},
+            );
+        } else if (this.state.downloaded) {
+            introText = _t(
+                "Your Recovery Key is in your <b>Downloads</b> folder.",
+                {}, {b: s => <b>{s}</b>},
+            );
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
