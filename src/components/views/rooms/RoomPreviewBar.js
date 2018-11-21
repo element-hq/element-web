@@ -44,8 +44,12 @@ module.exports = React.createClass({
         error: PropTypes.object,
 
         canPreview: PropTypes.bool,
-        spinner: PropTypes.bool,
         room: PropTypes.object,
+
+        // When a spinner is present, a spinnerState can be specified to indicate the
+        // purpose of the spinner.
+        spinner: PropTypes.bool,
+        spinnerState: PropTypes.oneOf(["joining"]),
 
         // The alias that was used to access this room, if appropriate
         // If given, this will be how the room is referred to (eg.
@@ -89,11 +93,16 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let joinBlock, previewBlock;
+        let joinBlock; let previewBlock;
 
         if (this.props.spinner || this.state.busy) {
             const Spinner = sdk.getComponent("elements.Spinner");
+            let spinnerIntro = "";
+            if (this.props.spinnerState === "joining") {
+                spinnerIntro = _t("Joining room...");
+            }
             return (<div className="mx_RoomPreviewBar">
+                <p className="mx_RoomPreviewBar_spinnerIntro">{ spinnerIntro }</p>
                 <Spinner />
             </div>);
         }

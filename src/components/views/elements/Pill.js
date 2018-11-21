@@ -29,7 +29,7 @@ const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_MATRIXTO = /^#\/(?:user|room|group)\/(([#!@+])[^\/]*)$/;
+const REGEX_LOCAL_MATRIXTO = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
 
 const Pill = React.createClass({
     statics: {

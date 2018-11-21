@@ -278,6 +278,7 @@ export default class MImageBody extends React.Component {
 
         let img = null;
         let placeholder = null;
+        let gifLabel = null;
 
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
@@ -302,11 +303,14 @@ export default class MImageBody extends React.Component {
                 onMouseLeave={this.onImageLeave} />;
         }
 
+        if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
+            gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
+        }
+
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                 <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
-
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
@@ -320,6 +324,7 @@ export default class MImageBody extends React.Component {
 
                 <div style={{display: !showPlaceholder ? undefined : 'none'}}>
                     { img }
+                    { gifLabel }
                 </div>
 
                 { this.state.hover && this.getTooltip() }

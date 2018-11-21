@@ -1285,5 +1285,20 @@
     "<h1>HTML for your community's page</h1>\r\n<p>\r\n    Use the long description to introduce new members to the community, or distribute\r\n    some important <a href=\"foo\">links</a>\r\n</p>\r\n<p>\r\n    You can even use 'img' tags\r\n</p>\r\n": "<h1>Zure komunitatearen orriaren HTMLa</h1>\n<p>\n    Erabili deskripzio luzea kide berriek komunitatea ezagutu dezaten, edo eman ezagutzera <a href=\"foo\">esteka</a> garrantzitsuak\n</p>\n<p>\n    'img' etiketak erabili ditzakezu ere\n</p>\n",
     "Submit Debug Logs": "Bidali arazketa egunkariak",
     "An email address is required to register on this homeserver.": "e-mail helbide bat behar da hasiera-zerbitzari honetan izena emateko.",
-    "A phone number is required to register on this homeserver.": "telefono zenbaki bat behar da hasiera-zerbitzari honetan izena emateko."
+    "A phone number is required to register on this homeserver.": "telefono zenbaki bat behar da hasiera-zerbitzari honetan izena emateko.",
+    "Please accept all of the policies": "Onartu mesedez politika guztiak",
+    "Please review and accept the policies of this homeserver:": "Irakurri eta onartu hasiera zerbitzari honen politikak:",
+    "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "Aurretik Riot erabili duzu %(host)s zerbitzarian kideen karga alferra gaituta zenuela. Bertsio honetan karga alferra desgaituta dago. Katxe lokala bi ezarpen hauen artean bateragarria ez denez, Riotek zure kontua berriro sinkronizatu behar du.",
+    "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Rioten beste bertsioa oraindik beste fitxat batean irekita badago, itxi ezazu zerbitzari bera aldi berean karga alferra gaituta eta desgaituta erabiltzeak arazoak sor ditzakeelako.",
+    "Incompatible local cache": "Katxe lokal bateraezina",
+    "Clear cache and resync": "Garbitu katxea eta sinkronizatu berriro",
+    "Add some now": "Gehitu batzuk orain",
+    "Joining room...": "Gelara elkartzen...",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Komunitate honen administratzailea zara. Ezin izango duzu berriro elkartu ez bazaitu beste administratzaile batek gonbidatzen.",
+    "Open Devtools": "Ireki garapen tresnak",
+    "Show developer tools": "Erakutsi garapen tresnak",
+    "Pin unread rooms to the top of the room list": "Finkatu irakurri gabeko gelak gelen zerrendaren goialdean",
+    "Pin rooms I'm mentioned in to the top of the room list": "Finkatu aipatu nauten gelak gelen zerrendaren goialdean",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Matrix kontu bat sortu nahi baduzu, <a>izena eman</a> dezakezu.",
+    "You are currently using Riot anonymously as a guest.": "Riot anonimoki gonbidatu gisa erabiltzen ari zara."
 }

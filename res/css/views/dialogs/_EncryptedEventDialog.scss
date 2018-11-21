@@ -25,3 +25,7 @@ limitations under the License.
     background-color: $primary-bg-color;
     color: $accent-color;
 }
+
+.mx_EncryptedEventDialog button {
+    margin-top: 0px;
+}

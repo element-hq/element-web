@@ -16,18 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CompatibilityPage',
     propTypes: {
-        onAccept: React.PropTypes.func
+        onAccept: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
-            onAccept: function() {} // NOP
+            onAccept: function() {}, // NOP
         };
     },
 
@@ -36,7 +36,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-
         return (
         <div className="mx_CompatibilityPage">
             <div className="mx_CompatibilityPage_box">
@@ -69,5 +68,5 @@ module.exports = React.createClass({
             </div>
         </div>
         );
-    }
+    },
 });

@@ -88,6 +88,9 @@ module.exports = React.createClass({
 
         // is the RightPanel collapsed?
         collapsedRhs: PropTypes.bool,
+
+        // Servers the RoomView can use to try and assist joins
+        viaServers: PropTypes.arrayOf(PropTypes.string),
     },
 
     getInitialState: function() {
@@ -678,8 +681,8 @@ module.exports = React.createClass({
         if (!room) return;
 
         console.log("Tinter.tint from updateTint");
-        const color_scheme = SettingsStore.getValue("roomColor", room.roomId);
-        Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+        const colorScheme = SettingsStore.getValue("roomColor", room.roomId);
+        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
     },
 
     onAccountData: function(event) {
@@ -694,10 +697,10 @@ module.exports = React.createClass({
         if (room.roomId == this.state.roomId) {
             const type = event.getType();
             if (type === "org.matrix.room.color_scheme") {
-                const color_scheme = event.getContent();
+                const colorScheme = event.getContent();
                 // XXX: we should validate the event
                 console.log("Tinter.tint from onRoomAccountData");
-                Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
+                Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
             } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
                 // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this._updatePreviewUrlVisibility(room);
@@ -833,7 +836,7 @@ module.exports = React.createClass({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
                     action: 'join_room',
-                    opts: { inviteSignUrl: signUrl },
+                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
                 },
             });
 
@@ -875,7 +878,7 @@ module.exports = React.createClass({
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
             dis.dispatch({
                 action: 'join_room',
-                opts: { inviteSignUrl: signUrl },
+                opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
             });
             return Promise.resolve();
         });
@@ -1514,6 +1517,7 @@ module.exports = React.createClass({
                                             canPreview={false} error={this.state.roomLoadError}
                                             roomAlias={roomAlias}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1558,6 +1562,7 @@ module.exports = React.createClass({
                                             inviterName={inviterName}
                                             canPreview={false}
                                             spinner={this.state.joining}
+                                            spinnerState="joining"
                                             room={this.state.room}
                             />
                         </div>
@@ -1645,6 +1650,7 @@ module.exports = React.createClass({
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 spinner={this.state.joining}
+                                spinnerState="joining"
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
@@ -1667,10 +1673,10 @@ module.exports = React.createClass({
             </AuxPanel>
         );
 
-        let messageComposer, searchInfo;
+        let messageComposer; let searchInfo;
         const canSpeak = (
             // joined and not showing search results
-            myMembership == 'join' && !this.state.searchResults
+            myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
             messageComposer =
@@ -1684,6 +1690,11 @@ module.exports = React.createClass({
                 />;
         }
 
+        if (MatrixClientPeg.get().isGuest()) {
+            const LoginBox = sdk.getComponent('structures.LoginBox');
+            messageComposer = <LoginBox />;
+        }
+
         // TODO: Why aren't we storing the term/scope/count in this format
         // in this.state if this is what RoomHeader desires?
         if (this.state.searchResults) {
@@ -1695,7 +1706,7 @@ module.exports = React.createClass({
         }
 
         if (inCall) {
-            let zoomButton, voiceMuteButton, videoMuteButton;
+            let zoomButton; let voiceMuteButton; let videoMuteButton;
 
             if (call.type === "video") {
                 zoomButton = (

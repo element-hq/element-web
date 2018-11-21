@@ -590,6 +590,11 @@ module.exports = React.createClass({
         }
     },
 
+    _openDevtools: function() {
+        const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
+        Modal.createDialog(DevtoolsDialog, {roomId: this.props.room.roomId});
+    },
+
     _renderEncryptionSection: function() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
 
@@ -652,31 +657,31 @@ module.exports = React.createClass({
         const userLevels = powerLevels.users || {};
 
         const powerLevelDescriptors = {
-            users_default: {
+            "users_default": {
                 desc: _t('The default role for new room members is'),
                 defaultValue: 0,
             },
-            events_default: {
+            "events_default": {
                 desc: _t('To send messages, you must be a'),
                 defaultValue: 0,
             },
-            invite: {
+            "invite": {
                 desc: _t('To invite users into the room, you must be a'),
                 defaultValue: 50,
             },
-            state_default: {
+            "state_default": {
                 desc: _t('To configure the room, you must be a'),
                 defaultValue: 50,
             },
-            kick: {
+            "kick": {
                 desc: _t('To kick users, you must be a'),
                 defaultValue: 50,
             },
-            ban: {
+            "ban": {
                 desc: _t('To ban users, you must be a'),
                 defaultValue: 50,
             },
-            redact: {
+            "redact": {
                 desc: _t('To remove other users\' messages, you must be a'),
                 defaultValue: 50,
             },
@@ -942,6 +947,11 @@ module.exports = React.createClass({
             </AccessibleButton>;
         }
 
+        const devtoolsButton = SettingsStore.getValue("showDeveloperTools") ?
+        (<AccessibleButton className="mx_RoomSettings_devtoolsButton" onClick={this._openDevtools}>
+            { _t("Open Devtools") }
+        </AccessibleButton>) : null;
+
         return (
             <div className="mx_RoomSettings">
 
@@ -1055,6 +1065,7 @@ module.exports = React.createClass({
                     { _t('Internal room ID: ') } <code>{ this.props.room.roomId }</code><br />
                     { _t('Room version number: ') } <code>{ this.props.room.getVersion() }</code><br />
                     { roomUpgradeButton }
+                    { devtoolsButton }
                 </div>
             </div>
         );

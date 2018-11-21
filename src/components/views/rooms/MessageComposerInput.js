@@ -67,7 +67,7 @@ const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
 const EMOJI_REGEX = new RegExp(unicodeRegexp, 'g');
 
-const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
+const TYPING_USER_TIMEOUT = 10000; const TYPING_SERVER_TIMEOUT = 30000;
 
 const ENTITY_TYPES = {
     AT_ROOM_PILL: 'ATROOMPILL',
@@ -175,8 +175,8 @@ export default class MessageComposerInput extends React.Component {
         // see https://github.com/ianstormtaylor/slate/issues/762#issuecomment-304855095
         this.direction = '';
 
-        this.plainWithMdPills    = new PlainWithPillsSerializer({ pillFormat: 'md' });
-        this.plainWithIdPills    = new PlainWithPillsSerializer({ pillFormat: 'id' });
+        this.plainWithMdPills = new PlainWithPillsSerializer({ pillFormat: 'md' });
+        this.plainWithIdPills = new PlainWithPillsSerializer({ pillFormat: 'id' });
         this.plainWithPlainPills = new PlainWithPillsSerializer({ pillFormat: 'plain' });
 
         this.md = new Md({
@@ -544,7 +544,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (editorState.startText !== null) {
             const text = editorState.startText.text;
-            const currentStartOffset = editorState.startOffset;
+            const currentStartOffset = editorState.selection.start.offset;
 
             // Automatic replacement of plaintext emoji to Unicode emoji
             if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
@@ -558,11 +558,11 @@ export default class MessageComposerInput extends React.Component {
 
                     const range = Range.create({
                         anchor: {
-                            key: editorState.selection.startKey,
+                            key: editorState.startText.key,
                             offset: currentStartOffset - emojiMatch[1].length - 1,
                         },
                         focus: {
-                            key: editorState.selection.startKey,
+                            key: editorState.startText.key,
                             offset: currentStartOffset - 1,
                         },
                     });
@@ -573,29 +573,42 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // emojioneify any emoji
-        editorState.document.getTexts().forEach(node => {
-            if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
-                let match;
-                while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
-                    const range = Range.create({
-                        anchor: {
-                            key: node.key,
-                            offset: match.index,
-                        },
-                        focus: {
-                            key: node.key,
-                            offset: match.index + match[0].length,
-                        },
-                    });
-                    const inline = Inline.create({
-                        type: 'emoji',
-                        data: { emojiUnicode: match[0] },
-                    });
-                    change = change.insertInlineAtRange(range, inline);
-                    editorState = change.value;
+        let foundEmoji;
+        do {
+            foundEmoji = false;
+
+            for (const node of editorState.document.getTexts()) {
+                if (node.text !== '' && HtmlUtils.containsEmoji(node.text)) {
+                    let match;
+                    EMOJI_REGEX.lastIndex = 0;
+                    while ((match = EMOJI_REGEX.exec(node.text)) !== null) {
+                        const range = Range.create({
+                            anchor: {
+                                key: node.key,
+                                offset: match.index,
+                            },
+                            focus: {
+                                key: node.key,
+                                offset: match.index + match[0].length,
+                            },
+                        });
+                        const inline = Inline.create({
+                            type: 'emoji',
+                            data: { emojiUnicode: match[0] },
+                        });
+                        change = change.insertInlineAtRange(range, inline);
+                        editorState = change.value;
+
+                        // if we replaced an emoji, start again looking for more
+                        // emoji in the new editor state since doing the replacement
+                        // will change the node structure & offsets so we can't compute
+                        // insertion ranges from node.key / match.index anymore.
+                        foundEmoji = true;
+                        break;
+                    }
                 }
             }
-        });
+        } while (foundEmoji);
 
         // work around weird bug where inserting emoji via the macOS
         // emoji picker can leave the selection stuck in the emoji's
@@ -1065,7 +1078,7 @@ export default class MessageComposerInput extends React.Component {
 
         // only look for commands if the first block contains simple unformatted text
         // i.e. no pills or rich-text formatting and begins with a /.
-        let cmd, commandText;
+        let cmd; let commandText;
         const firstChild = editorState.document.nodes.get(0);
         const firstGrandChild = firstChild && firstChild.nodes.get(0);
         if (firstChild && firstGrandChild &&
@@ -1247,7 +1260,7 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    selectHistory = async (up) => {
+    selectHistory = async(up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
@@ -1295,7 +1308,7 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onTab = async (e) => {
+    onTab = async(e) => {
         this.setState({
             someCompletions: null,
         });
@@ -1317,7 +1330,7 @@ export default class MessageComposerInput extends React.Component {
         up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
-    onEscape = async (e) => {
+    onEscape = async(e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
@@ -1336,7 +1349,7 @@ export default class MessageComposerInput extends React.Component {
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
-    setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
+    setDisplayedCompletion = async(displayedCompletion: ?Completion): boolean => {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {

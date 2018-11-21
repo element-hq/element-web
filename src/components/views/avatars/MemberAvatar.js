@@ -79,7 +79,7 @@ module.exports = React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
-        let userId = member ? member.userId : fallbackUserId;
+        const userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {
             onClick = () => {

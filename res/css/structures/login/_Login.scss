@@ -142,6 +142,17 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
+.mx_Login_sso_link {
+    display: block;
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.mx_Login_sso_link:link {
+    color: $primary-fg-color;
+}
+
 .mx_Login_loader {
     display: inline;
     position: relative;

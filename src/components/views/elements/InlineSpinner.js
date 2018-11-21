@@ -20,14 +20,14 @@ module.exports = React.createClass({
     displayName: 'InlineSpinner',
 
     render: function() {
-        var w = this.props.w || 16;
-        var h = this.props.h || 16;
-        var imgClass = this.props.imgClassName || "";
+        const w = this.props.w || 16;
+        const h = this.props.h || 16;
+        const imgClass = this.props.imgClassName || "";
 
         return (
             <div className="mx_InlineSpinner">
-                <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
+                <img src="img/spinner.gif" width={w} height={h} className={imgClass} />
             </div>
         );
-    }
+    },
 });
