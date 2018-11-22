@@ -28,7 +28,7 @@ import OpenRoomsStore from './stores/OpenRoomsStore';
 class ActiveRoomObserver {
     constructor() {
         this._listeners = {};
-        const roomStore = OpenRoomsStore.getCurrentRoomStore();
+        const roomStore = OpenRoomsStore.getActiveRoomStore();
         this._activeRoomId = roomStore && roomStore.getRoomId();
         // TODO: We could self-destruct when the last listener goes away, or at least
         // stop listening.
@@ -67,7 +67,7 @@ class ActiveRoomObserver {
         // emit for the old room ID
         if (this._activeRoomId) this._emit(this._activeRoomId);
 
-        const activeRoomStore = OpenRoomsStore.getCurrentRoomStore();
+        const activeRoomStore = OpenRoomsStore.getActiveRoomStore();
         // update our cache
         this._activeRoomId = activeRoomStore && activeRoomStore.getRoomId();
 

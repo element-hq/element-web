@@ -50,7 +50,7 @@ export default class RoomGridView extends React.Component {
         if (this._unmounted) return;
         this.setState({
             roomStores: OpenRoomsStore.getRoomStores(),
-            currentRoomStore: OpenRoomsStore.getCurrentRoomStore(),
+            activeRoomStore: OpenRoomsStore.getActiveRoomStore(),
         });
     }
 
@@ -71,7 +71,7 @@ export default class RoomGridView extends React.Component {
         return (<main className="mx_GroupGridView">
             { roomStores.map((roomStore, i) => {
                 if (roomStore) {
-                    const isActive = roomStore === this.state.currentRoomStore;
+                    const isActive = roomStore === this.state.activeRoomStore;
                     const tileClasses = classNames({
                         "mx_GroupGridView_tile": true,
                         "mx_GroupGridView_activeTile": isActive,

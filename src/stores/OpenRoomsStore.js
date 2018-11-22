@@ -53,14 +53,14 @@ class OpenRoomsStore extends Store {
         return this._state.rooms.map((r) => r.store);
     }
 
-    getCurrentRoomStore() {
-        const currentRoom = this._getCurrentRoom();
-        if (currentRoom) {
-            return currentRoom.store;
+    getActiveRoomStore() {
+        const openRoom = this._getActiveOpenRoom();
+        if (openRoom) {
+            return openRoom.store;
         }
     }
 
-    _getCurrentRoom() {
+    _getActiveOpenRoom() {
         const index = this._state.currentIndex;
         if (index !== null && index < this._state.rooms.length) {
             return this._state.rooms[index];
@@ -80,31 +80,79 @@ class OpenRoomsStore extends Store {
         return this._state.rooms.findIndex((r) => matchesRoom(payload, r.store));
     }
 
-    _cleanupRooms() {
-        const room = this._state.room;
+    _cleanupOpenRooms() {
         this._state.rooms.forEach((room) => {
+            room.dispatcher.unregister(room.dispatcherRef);
             room.dispatcher.unregister(room.store.getDispatchToken());
         });
         this._setState({
             rooms: [],
             group_id: null,
-            currentIndex: null
+            currentIndex: null,
         });
     }
 
-    _createRoom() {
+    _createOpenRoom(room_id, room_alias) {
         const dispatcher = new MatrixDispatcher();
+        // forward all actions coming from the room dispatcher
+        // to the global one
+        const dispatcherRef = dispatcher.register((action) => {
+            action.grid_src_room_id = room_id;
+            action.grid_src_room_alias = room_alias;
+            this.getDispatcher().dispatch(action);
+        });
+        const openRoom = {
+            store: new RoomViewStore(dispatcher),
+            dispatcher,
+            dispatcherRef,
+        };
+
+        dispatcher.dispatch({
+            action: 'view_room',
+            room_id: room_id,
+            room_alias: room_alias,
+        }, true);
+
+        return openRoom;
+    }
+
+    _setSingleOpenRoom(payload) {
         this._setState({
-            rooms: [{
-                store: new RoomViewStore(dispatcher),
-                dispatcher,
-            }],
+            rooms: [this._createOpenRoom(payload.room_id, payload.room_alias)],
+            currentIndex: 0,
+        });
+    }
+
+    _setGroupOpenRooms(group_id) {
+        this._cleanupOpenRooms();
+        // TODO: register to GroupStore updates
+        const rooms = GroupStore.getGroupRooms(group_id);
+        const openRooms = rooms.map((room) => {
+            return this._createOpenRoom(room.roomId);
+        });
+        this._setState({
+            rooms: openRooms,
+            group_id: group_id,
             currentIndex: 0,
         });
     }
 
     _forwardAction(payload) {
-        const currentRoom = this._getCurrentRoom();
+        // don't forward an event to a room dispatcher
+        // if the event originated from that dispatcher, as this
+        // would cause the event to be observed twice in that
+        // dispatcher
+        if (payload.grid_src_room_id || payload.grid_src_room_alias) {
+            const srcPayload = {
+                room_id: payload.grid_src_room_id,
+                room_alias: payload.grid_src_room_alias,
+            };
+            const srcIndex = this._roomIndex(srcPayload);
+            if (srcIndex === this._state.currentIndex) {
+                return;
+            }
+        }
+        const currentRoom = this._getActiveOpenRoom();
         if (currentRoom) {
             currentRoom.dispatcher.dispatch(payload, true);
         }
@@ -114,7 +162,7 @@ class OpenRoomsStore extends Store {
         try {
             const result = await MatrixClientPeg.get()
                 .getRoomIdForAlias(payload.room_alias);
-            dis.dispatch({
+            this.getDispatcher().dispatch({
                 action: 'view_room',
                 room_id: result.room_id,
                 event_id: payload.event_id,
@@ -133,6 +181,36 @@ class OpenRoomsStore extends Store {
         }
     }
 
+    _viewRoom(payload) {
+        console.log("!!! OpenRoomsStore: view_room", payload);
+        if (!payload.room_id && payload.room_alias) {
+            this._resolveRoomAlias(payload);
+        }
+        const currentStore = this.getActiveRoomStore();
+        if (!matchesRoom(payload, currentStore)) {
+            if (this._hasRoom(payload)) {
+                const roomIndex = this._roomIndex(payload);
+                this._setState({currentIndex: roomIndex});
+            } else {
+                this._cleanupOpenRooms();
+            }
+        }
+        if (!this.getActiveRoomStore()) {
+            console.log("OpenRoomsStore: _setSingleOpenRoom");
+            this._setSingleOpenRoom(payload);
+        }
+        console.log("OpenRoomsStore: _forwardAction");
+        this._forwardAction(payload);
+        if (this._forwardingEvent) {
+            this.getDispatcher().dispatch({
+                action: 'send_event',
+                room_id: payload.room_id,
+                event: this._forwardingEvent,
+            });
+            this._forwardingEvent = null;
+        }
+    }
+
     __onDispatch(payload) {
         switch (payload.action) {
             // view_room:
@@ -142,38 +220,12 @@ class OpenRoomsStore extends Store {
             //      - event_offset: 100
             //      - highlighted:  true
             case 'view_room':
-                console.log("!!! OpenRoomsStore: view_room", payload);
-                if (!payload.room_id && payload.room_alias) {
-                    this._resolveRoomAlias(payload);
-                }
-                const currentStore = this.getCurrentRoomStore();
-                if (matchesRoom(payload, currentStore)) {
-                    if (this._hasRoom(payload)) {
-                        const roomIndex = this._roomIndex(payload);
-                        this._setState({currentIndex: roomIndex});
-                    } else {
-                        this._cleanupRooms();
-                    }
-                }
-                if (!this.getCurrentRoomStore()) {
-                    console.log("OpenRoomsStore: _createRoom");
-                    this._createRoom();
-                }
-                console.log("OpenRoomsStore: _forwardAction");
-                this._forwardAction(payload);
-                if (this._forwardingEvent) {
-                    dis.dispatch({
-                        action: 'send_event',
-                        room_id: payload.room_id,
-                        event: this._forwardingEvent,
-                    });
-                    this._forwardingEvent = null;
-                }
+                this._viewRoom(payload);
                 break;
             case 'view_my_groups':
             case 'view_group':
                 this._forwardAction(payload);
-                this._cleanupRooms();
+                this._cleanupOpenRooms();
                 break;
             case 'will_join':
             case 'cancel_join':
@@ -183,6 +235,7 @@ class OpenRoomsStore extends Store {
             case 'reply_to_event':
             case 'open_room_settings':
             case 'close_settings':
+            case 'focus_composer':
                 this._forwardAction(payload);
                 break;
             case 'forward_event':
@@ -198,27 +251,7 @@ class OpenRoomsStore extends Store {
                 break;
             case 'group_grid_view':
                 if (payload.group_id !== this._state.group_id) {
-                    this._cleanupRooms();
-                    // TODO: register to GroupStore updates
-                    const rooms = GroupStore.getGroupRooms(payload.group_id);
-                    const roomStores = rooms.map((room) => {
-                        const dispatcher = new MatrixDispatcher();
-                        const store = new RoomViewStore(dispatcher);
-                        // set room id of store
-                        dispatcher.dispatch({
-                            action: 'view_room',
-                            room_id: room.roomId
-                        }, true);
-                        return {
-                            store,
-                            dispatcher,
-                        };
-                    });
-                    this._setState({
-                        rooms: roomStores,
-                        group_id: payload.group_id,
-                        currentIndex: 0,
-                    });
+                    this._setGroupOpenRooms(payload.group_id);
                 }
                 break;
         }

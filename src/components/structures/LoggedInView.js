@@ -430,14 +430,14 @@ const LoggedInView = React.createClass({
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
-                if (!OpenRoomsStore.getCurrentRoomStore()) {
+                if (!OpenRoomsStore.getActiveRoomStore()) {
                     console.warn(`LoggedInView: getCurrentRoomStore not set!`);
                 }
-                else if (OpenRoomsStore.getCurrentRoomStore().getRoomId() !== this.props.currentRoomId) {
-                    console.warn(`LoggedInView: room id in store not the same as in props: ${OpenRoomsStore.getCurrentRoomStore().getRoomId()} & ${this.props.currentRoomId}`);
+                else if (OpenRoomsStore.getActiveRoomStore().getRoomId() !== this.props.currentRoomId) {
+                    console.warn(`LoggedInView: room id in store not the same as in props: ${OpenRoomsStore.getActiveRoomStore().getRoomId()} & ${this.props.currentRoomId}`);
                 }
                 page_element = <RoomView
-                        roomViewStore={OpenRoomsStore.getCurrentRoomStore()}
+                        roomViewStore={OpenRoomsStore.getActiveRoomStore()}
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
