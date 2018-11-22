@@ -132,6 +132,18 @@ function rangeEquals(a: Range, b: Range): boolean {
         && a.isBackward === b.isBackward);
 }
 
+class NoopHistoryManager {
+    getItem() {}
+    save() {}
+
+    get currentIndex() { return 0; }
+    set currentIndex(_) {}
+
+    get history() { return []; }
+    set history(_) {}
+}
+
+
 /*
  * The textInput part of the MessageComposer
  */
@@ -343,7 +355,14 @@ export default class MessageComposerInput extends React.Component {
 
     componentWillMount() {
         this.dispatcherRef = this.props.roomViewStore.getDispatcher().register(this.onAction);
-        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        if (this.props.isGrid) {
+
+
+
+            this.historyManager = new NoopHistoryManager();
+        } else {
+            this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
+        }
     }
 
     componentWillUnmount() {

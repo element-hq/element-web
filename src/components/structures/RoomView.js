@@ -1690,6 +1690,7 @@ module.exports = React.createClass({
                 <MessageComposer
                     roomViewStore={this.props.roomViewStore}
                     room={this.state.room}
+                    isGrid={this.props.isGrid}
                     onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}

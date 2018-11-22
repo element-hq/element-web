@@ -359,6 +359,7 @@ export default class MessageComposer extends React.Component {
                     roomViewStore={this.props.roomViewStore}
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
+                    isGrid={this.props.isGrid}
                     onResize={this.props.onResize}
                     room={this.props.room}
                     placeholder={placeholderText}
