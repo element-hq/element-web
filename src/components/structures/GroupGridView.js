@@ -69,7 +69,7 @@ export default class RoomGridView extends React.Component {
             roomStores = roomStores.concat(emptyTiles);
         }
         return (<main className="mx_GroupGridView">
-            { roomStores.map((roomStore) => {
+            { roomStores.map((roomStore, i) => {
                 if (roomStore) {
                     const isActive = roomStore === this.state.currentRoomStore;
                     const tileClasses = classNames({
@@ -83,7 +83,7 @@ export default class RoomGridView extends React.Component {
                         />
                     </section>);
                 } else {
-                    return (<section className={"mx_GroupGridView_emptyTile"} />);
+                    return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`} />);
                 }
             }) }
         </main>);
