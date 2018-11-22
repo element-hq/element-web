@@ -16,8 +16,8 @@ limitations under the License.
 
 .mx_GroupGridView_rooms {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(3, calc(100% / 3));
+    grid-template-rows: repeat(2, calc(100% / 2));
     flex: 1 1 0;
 }
 
