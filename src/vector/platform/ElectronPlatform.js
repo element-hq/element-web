@@ -27,7 +27,7 @@ import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
 // try to flush the rageshake logs to indexeddb before quit.
-ipcRenderer.on('before-quit', function () {
+ipcRenderer.on('before-quit', function() {
     console.log('riot-desktop closing');
     rageshake.flush();
 });

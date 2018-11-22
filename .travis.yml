@@ -11,25 +11,18 @@ sudo: required
 language: node_js
 node_js:
     # make sure we work with a range of node versions.
-    # As of the time of writing:
-    #  - 4.x is still in LTS (until April 2018), but some of our deps (notably
-    #    extract-zip) don't work with it
-    #  - 5.x has been EOLed for nearly a year.
-    #  - 6.x is the active 'LTS' version
-    #  - 7.x is no longer supported
-    #  - 8.x is the current 'current' version (until October 2017)
     #
-    # see: https://github.com/nodejs/LTS/
-    #
-    # anything before 6.3 ships with npm 3.9 or earlier, which had problems
-    # with symlinks in node_modules (see
-    # https://github.com/npm/npm/releases/tag/v3.10.0 'FIXES AND REFACTORING').
-    - 6.3
-    - 6
-    - 7
+    # Current status of node versions: https://github.com/nodejs/LTS/
+    # We don't work with node 6 because it doesn't support package-lock
+    # files which we need to avoid the broken version of base-x
+    - 8
+    - 10
 addons:
     chrome: stable
 install:
     # clone the deps with depth 1: we know we will only ever need that one
     # commit.
-    - scripts/fetch-develop.deps.sh --depth 1 && npm install
+    - npm install && scripts/fetch-develop.deps.sh --depth 1
+script:
+    - npm run test
+    - npm run lint
