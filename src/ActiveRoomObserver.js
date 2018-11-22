@@ -55,24 +55,23 @@ class ActiveRoomObserver {
         }
     }
 
-    _emit(roomId) {
+    _emit(roomId, newActiveRoomId) {
         if (!this._listeners[roomId]) return;
 
         for (const l of this._listeners[roomId]) {
-            l.call();
+            l.call(l, newActiveRoomId);
         }
     }
 
     _onOpenRoomsStoreUpdate() {
-        // emit for the old room ID
-        if (this._activeRoomId) this._emit(this._activeRoomId);
-
         const activeRoomStore = OpenRoomsStore.getActiveRoomStore();
+        const newActiveRoomId = activeRoomStore && activeRoomStore.getRoomId();
+        // emit for the old room ID
+        if (this._activeRoomId) this._emit(this._activeRoomId, newActiveRoomId);
         // update our cache
-        this._activeRoomId = activeRoomStore && activeRoomStore.getRoomId();
-
+        this._activeRoomId = newActiveRoomId;
         // and emit for the new one
-        if (this._activeRoomId) this._emit(this._activeRoomId);
+        if (this._activeRoomId) this._emit(this._activeRoomId, this._activeRoomId);
     }
 }
 
