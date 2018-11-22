@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.17.6",
+  "version": "0.17.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
