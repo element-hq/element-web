@@ -60,8 +60,8 @@ export default class VectorBasePlatform extends BasePlatform {
             // This needs to be in in a try block as it will throw
             // if there are more than 100 badge count changes in
             // its internal queue
-            let bgColor = "#d00",
-                notif = this.notificationCount;
+            let bgColor = "#d00";
+            let notif = this.notificationCount;
 
             if (this.errorDidOccur) {
                 notif = notif || "×";
@@ -114,7 +114,7 @@ export default class VectorBasePlatform extends BasePlatform {
         dis.dispatch({
             action: 'check_updates',
             value: false,
-        })
+        });
     }
 
     getUpdateCheckStatusEnum() {

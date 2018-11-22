@@ -21,36 +21,36 @@ import Platform from '../../src/vector/platform';
 
 require('skin-sdk');
 
-var jssdk = require('matrix-js-sdk');
+const jssdk = require('matrix-js-sdk');
 
-var sdk = require('matrix-react-sdk');
-var peg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var PageTypes = require('matrix-react-sdk/lib/PageTypes');
-var MatrixChat = sdk.getComponent('structures.MatrixChat');
-var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
-var RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
-var RoomView = sdk.getComponent('structures.RoomView');
+const sdk = require('matrix-react-sdk');
+const peg = require('matrix-react-sdk/lib/MatrixClientPeg');
+const dis = require('matrix-react-sdk/lib/dispatcher');
+const PageTypes = require('matrix-react-sdk/lib/PageTypes');
+const MatrixChat = sdk.getComponent('structures.MatrixChat');
+const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+const RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
+const RoomView = sdk.getComponent('structures.RoomView');
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var ReactTestUtils = require('react-addons-test-utils');
-var expect = require('expect');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const ReactTestUtils = require('react-addons-test-utils');
+const expect = require('expect');
 import Promise from 'bluebird';
 
-var test_utils = require('../test-utils');
-var MockHttpBackend = require('matrix-mock-request');
+const test_utils = require('../test-utils');
+const MockHttpBackend = require('matrix-mock-request');
 
-var HS_URL='http://localhost';
-var IS_URL='http://localhost';
-var USER_ID='@me:localhost';
-var ACCESS_TOKEN='access_token';
+const HS_URL='http://localhost';
+const IS_URL='http://localhost';
+const USER_ID='@me:localhost';
+const ACCESS_TOKEN='access_token';
 
-describe('joining a room', function () {
-    describe('over federation', function () {
-        var parentDiv;
-        var httpBackend;
-        var matrixChat;
+describe('joining a room', function() {
+    describe('over federation', function() {
+        let parentDiv;
+        let httpBackend;
+        let matrixChat;
 
         beforeEach(function() {
             test_utils.beforeEach(this);
@@ -72,8 +72,8 @@ describe('joining a room', function () {
         });
 
         it('should not get stuck at a spinner', function() {
-            var ROOM_ALIAS = '#alias:localhost';
-            var ROOM_ID = '!id:localhost';
+            const ROOM_ALIAS = '#alias:localhost';
+            const ROOM_ID = '!id:localhost';
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
@@ -90,7 +90,7 @@ describe('joining a room', function () {
 
             PlatformPeg.set(new Platform());
 
-            var mc = (
+            const mc = (
                 <MatrixChat config={{}}
                     makeRegistrationUrl={()=>{throw new Error("unimplemented");}}
                     initialScreenAfterLogin={{
@@ -100,7 +100,7 @@ describe('joining a room', function () {
             );
             matrixChat = ReactDOM.render(mc, parentDiv);
 
-            var roomView;
+            let roomView;
 
             // wait for /sync to happen. This may take some time, as the client
             // has to initialise indexeddb.
@@ -118,11 +118,11 @@ describe('joining a room', function () {
             }).then(() => {
                 console.log(`${Date.now()} App made requests for directory view; switching to a room.`);
 
-                var roomDir = ReactTestUtils.findRenderedComponentWithType(
+                const roomDir = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomDirectory);
 
                 // enter an alias in the input, and simulate enter
-                var input = ReactTestUtils.findRenderedDOMComponentWithTag(
+                const input = ReactTestUtils.findRenderedDOMComponentWithTag(
                     roomDir, 'input');
                 input.value = ROOM_ALIAS;
                 ReactTestUtils.Simulate.change(input);
