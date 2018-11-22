@@ -24,6 +24,8 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
+import './rageshakesetup';
+
 import React from 'react';
 // add React and ReactPerf to the global namespace, to make them easier to
 // access via the console
@@ -56,8 +58,6 @@ import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
 import Olm from 'olm';
 
-import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
-
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
 import {getVectorConfig} from './getconfig';
@@ -67,22 +67,6 @@ let lastLocationHashSet = null;
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
 Promise.config({warnings: false});
-
-function initRageshake() {
-    rageshake.init().then(() => {
-        console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
-
-        window.addEventListener('beforeunload', (e) => {
-            console.log('riot-web closing');
-            // try to flush the logs to indexeddb
-            rageshake.flush();
-        });
-
-        rageshake.cleanup();
-    }, (err) => {
-        console.error("Failed to initialise rageshake: " + err);
-    });
-}
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -225,7 +209,6 @@ function onTokenLoginCompleted() {
 }
 
 async function loadApp() {
-    initRageshake();
     MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
