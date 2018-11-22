@@ -23,6 +23,7 @@ import RoomView from './RoomView';
 import classNames from 'classnames';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
+import RoomHeaderButtons from '../views/right_panel/RoomHeaderButtons';
 
 export default class RoomGridView extends React.Component {
 
@@ -93,7 +94,15 @@ export default class RoomGridView extends React.Component {
             roomStores = roomStores.concat(emptyTiles);
         }
         const activeRoomId = this.state.activeRoomStore && this.state.activeRoomStore.getRoomId();
-        const rightPanel = activeRoomId ? <RightPanel roomId={activeRoomId} /> : undefined;
+        let rightPanel;
+        if (activeRoomId) {
+            rightPanel = (
+                <div className="mx_GroupGridView_rightPanel">
+                    <div className="mx_GroupGridView_tabs"><RoomHeaderButtons /></div>
+                    <RightPanel roomId={activeRoomId} />
+                </div>
+            );
+        }
 
         return (<main className="mx_GroupGridView">
             <MainSplit panel={rightPanel}>
@@ -107,7 +116,7 @@ export default class RoomGridView extends React.Component {
                             });
                             return (<section onClick={() => {this._setActive(i)}} key={roomStore.getRoomId()} className={tileClasses}>
                                 <RoomView
-                                    collapsedRhs={true}
+                                    isGrid={true}
                                     roomViewStore={roomStore}
                                     isActive={isActive}
                                 />

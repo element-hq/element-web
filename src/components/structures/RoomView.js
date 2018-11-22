@@ -1509,6 +1509,7 @@ module.exports = React.createClass({
                         <RoomHeader ref="header"
                             room={this.state.room}
                             oobData={this.props.oobData}
+                            isGrid={this.props.isGrid}
                             collapsedRhs={this.props.collapsedRhs}
                         />
                         <div className="mx_RoomView_body">
@@ -1555,6 +1556,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomHeader
                             ref="header"
+                            isGrid={this.props.isGrid}
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
                         />
@@ -1813,11 +1815,14 @@ module.exports = React.createClass({
             },
         );
 
-        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+        const rightPanel = this.state.room && !this.props.isGrid ?
+            <RightPanel roomId={this.state.room.roomId} /> :
+            undefined;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                    isGrid={this.props.isGrid}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}

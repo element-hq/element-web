@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_GroupGridView {
+    display: flex;
+    flex-direction: column;
+}
+
 .mx_GroupGridView_rooms {
     display: grid;
     grid-template-columns: repeat(3, calc(100% / 3));
@@ -21,10 +26,29 @@ limitations under the License.
     flex: 1 1 0;
 }
 
-.mx_GroupGridView {
+
+.mx_GroupGridView_rightPanel {
     display: flex;
     flex-direction: column;
+
+    .mx_GroupGridView_tabs {
+        flex: 0 0 52px;
+        border-bottom: 1px solid $primary-hairline-color;
+        display: flex;
+        align-items: center;
+
+        > div {
+            justify-content: flex-end;
+            width: 100%;
+            margin-right: 10px;
+        }
+    }
+
+    .mx_RightPanel {
+        flex: 1 0 auto !important;
+    }
 }
+
 
 .mx_GroupGridView > .mx_MainSplit {
     flex: 1 1 0;
