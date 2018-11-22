@@ -102,10 +102,15 @@ class OpenRoomsStore extends Store {
         const dispatcher = new MatrixDispatcher();
         // forward all actions coming from the room dispatcher
         // to the global one
-        const dispatcherRef = dispatcher.register((action) => {
-            action.grid_src_room_id = room_id;
-            action.grid_src_room_alias = room_alias;
-            this.getDispatcher().dispatch(action);
+        const dispatcherRef = dispatcher.register((payload) => {
+            // block a view_room action for the same room because it will switch to
+            // single room mode in MatrixChat
+            if (payload.action === 'view_room' && room_id === payload.room_id) {
+                return;
+            }
+            payload.grid_src_room_id = room_id;
+            payload.grid_src_room_alias = room_alias;
+            this.getDispatcher().dispatch(payload);
         });
         const openRoom = {
             store: new RoomViewStore(dispatcher),
