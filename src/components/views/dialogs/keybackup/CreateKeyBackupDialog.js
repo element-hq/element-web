@@ -315,7 +315,7 @@ export default React.createClass({
             <DialogButtons primaryButton={_t("I've made a copy")}
                 onPrimaryButtonClick={this._createBackup}
                 hasCancel={false}
-                disabled={!this.state.copied}
+                disabled={!this.state.copied && !this.state.downloaded}
             />
         </div>;
     },
