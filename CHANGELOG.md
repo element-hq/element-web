@@ -1,3 +1,10 @@
+Changes in [0.17.7](https://github.com/vector-im/riot-web/releases/tag/v0.17.7) (2018-11-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6...v0.17.7)
+
+ * Warning when crypto DB is too new to use.
+ * Fix missing entries from js-sdk in rageshake logs
+
 Changes in [0.17.6](https://github.com/vector-im/riot-web/releases/tag/v0.17.6) (2018-11-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.2...v0.17.6)
