@@ -34,6 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
     global.Perf = require('react-addons-perf');
 }
 
+import './modernizr';
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
