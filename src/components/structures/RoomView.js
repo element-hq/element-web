@@ -1470,10 +1470,6 @@ module.exports = React.createClass({
         }
     },
 
-    _onMainClicked: function() {
-        dis.dispatch({action: 'group_grid_set_active', room_id: this.state.room.roomId });
-    },
-
     render: function() {
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
         const MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1821,7 +1817,7 @@ module.exports = React.createClass({
         const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
 
         return (
-            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView" onClick={this._onMainClicked}>
+            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}

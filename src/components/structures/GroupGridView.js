@@ -28,8 +28,20 @@ export default class RoomGridView extends React.Component {
         super(props);
         this.state = {
             roomStores: OpenRoomsStore.getRoomStores(),
+            activeRoomStore: OpenRoomsStore.getActiveRoomStore(),
         };
         this.onRoomsChanged = this.onRoomsChanged.bind(this);
+    }
+
+    componentDidUpdate(_, prevState) {
+        const store = this.state.activeRoomStore;
+        if (store) {
+            store.getDispatcher().dispatch({action: 'focus_composer'});
+        }
+    }
+
+    componentDidMount() {
+        this.componentDidUpdate();
     }
 
     componentWillMount() {
@@ -61,6 +73,16 @@ export default class RoomGridView extends React.Component {
         }
     }
 
+    _setActive(i) {
+        const store = OpenRoomsStore.getRoomStoreAt(i);
+        if (store !== this.state.activeRoomStore) {
+            dis.dispatch({
+                action: 'group_grid_set_active',
+                room_id: store.getRoomId(),
+            });
+        }
+    }
+
     render() {
         let roomStores = this.state.roomStores.slice(0, 6);
         const emptyCount = 6 - roomStores.length;
@@ -76,10 +98,11 @@ export default class RoomGridView extends React.Component {
                         "mx_GroupGridView_tile": true,
                         "mx_GroupGridView_activeTile": isActive,
                     });
-                    return (<section key={roomStore.getRoomId()} className={tileClasses}>
+                    return (<section onClick={() => {this._setActive(i)}} key={roomStore.getRoomId()} className={tileClasses}>
                         <RoomView
                             collapsedRhs={true}
                             roomViewStore={roomStore}
+                            isActive={isActive}
                         />
                     </section>);
                 } else {

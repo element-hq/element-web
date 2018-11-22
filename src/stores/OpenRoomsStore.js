@@ -60,6 +60,12 @@ class OpenRoomsStore extends Store {
         }
     }
 
+    getRoomStoreAt(index) {
+        if (index >= 0 && index < this._state.rooms.length) {
+            return this._state.rooms[index].store;
+        }
+    }
+
     _getActiveOpenRoom() {
         const index = this._state.currentIndex;
         if (index !== null && index < this._state.rooms.length) {
