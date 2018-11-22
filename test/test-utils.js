@@ -8,7 +8,7 @@ import Promise from 'bluebird';
  * @param {Mocha.Context} context  The test context
  */
 export function beforeEach(context) {
-    var desc = context.currentTest.fullTitle();
+    const desc = context.currentTest.fullTitle();
     console.log();
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
@@ -22,7 +22,7 @@ export function beforeEach(context) {
  * returns true if the current environment supports webrtc
  */
 export function browserSupportsWebRTC() {
-    var n = global.window.navigator;
+    const n = global.window.navigator;
     return n.getUserMedia || n.webkitGetUserMedia ||
         n.mozGetUserMedia;
 }
