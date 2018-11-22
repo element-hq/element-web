@@ -1,3 +1,68 @@
+Changes in [0.17.6](https://github.com/vector-im/riot-web/releases/tag/v0.17.6) (2018-11-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.2...v0.17.6)
+
+ * No changes since rc.2
+
+Changes in [0.17.6-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.2) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.1...v0.17.6-rc.2)
+
+ * Update to js-sdk 0.14 and react-sdk rc.2. rc.1 was broken as it was built against
+   js-sdk 0.13 which does not use the new Olm 3.0 API.
+
+Changes in [0.17.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.1) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.5...v0.17.6-rc.1)
+
+ * Update from Weblate.
+   [\#7708](https://github.com/vector-im/riot-web/pull/7708)
+ * Add Japanese (#7599)
+   [\#7673](https://github.com/vector-im/riot-web/pull/7673)
+ * Allow Webpack dev server to listen to all interfaces
+   [\#7674](https://github.com/vector-im/riot-web/pull/7674)
+ * Remove the request-only stuff we don't need anymore
+   [\#7637](https://github.com/vector-im/riot-web/pull/7637)
+ * Correct the author of the electron app
+   [\#7615](https://github.com/vector-im/riot-web/pull/7615)
+ * Mock fs, tls, and net to support request in the browser
+   [\#7552](https://github.com/vector-im/riot-web/pull/7552)
+ * Update chokidar to transitively get newer fsevents
+   [\#7598](https://github.com/vector-im/riot-web/pull/7598)
+ * Support WebAssembly version of Olm
+   [\#7385](https://github.com/vector-im/riot-web/pull/7385)
+
+Changes in [0.17.5](https://github.com/vector-im/riot-web/releases/tag/v0.17.5) (2018-11-13)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.4...v0.17.5)
+
+ * Include change that was supposed to be included in orevious version
+
+Changes in [0.17.4](https://github.com/vector-im/riot-web/releases/tag/v0.17.4) (2018-11-13)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3...v0.17.4)
+
+ * Add banner with login/register links for users who aren't logged in
+
+Changes in [0.17.3](https://github.com/vector-im/riot-web/releases/tag/v0.17.3) (2018-10-29)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.3-rc.1...v0.17.3)
+
+ * Fix for autocompleting text emoji from react-sdk v0.14.2
+
+Changes in [0.17.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.3-rc.1) (2018-10-24)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.2...v0.17.3-rc.1)
+
+ * Update from Weblate.
+   [\#7549](https://github.com/vector-im/riot-web/pull/7549)
+ * Don't set tags on notifications
+   [\#7518](https://github.com/vector-im/riot-web/pull/7518)
+ * Update to latest electron builder
+   [\#7498](https://github.com/vector-im/riot-web/pull/7498)
+ * Fix Tinter.setTheme to not fire using Firefox
+   [\#6831](https://github.com/vector-im/riot-web/pull/6831)
+
 Changes in [0.17.2](https://github.com/vector-im/riot-web/releases/tag/v0.17.2) (2018-10-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.1...v0.17.2)

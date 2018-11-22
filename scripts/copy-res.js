@@ -25,6 +25,7 @@ const INCLUDE_LANGS = [
     {'value': 'gl', 'label': 'Galego'},
     {'value': 'hu', 'label': 'Magyar'},
     {'value': 'it', 'label': 'Italiano'},
+    {'value': 'ja', 'label': '日本語'},
     {'value': 'ko', 'label': '한국어'},
     {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
