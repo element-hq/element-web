@@ -40,10 +40,10 @@ import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 
-const DEFAULT_HS_URL='http://my_server';
-const DEFAULT_IS_URL='http://my_is';
+var DEFAULT_HS_URL='http://my_server';
+var DEFAULT_IS_URL='http://my_is';
 
-describe('loading:', function() {
+describe('loading:', function () {
     let parentDiv;
     let httpBackend;
 
@@ -74,7 +74,7 @@ describe('loading:', function() {
         });
     });
 
-    afterEach(async function() {
+    afterEach(async function () {
         console.log(`${Date.now()}: loading: afterEach`);
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
@@ -112,12 +112,12 @@ describe('loading:', function() {
             toString: function() { return this.search + this.hash; },
         };
 
-        const tokenLoginCompleteDefer = Promise.defer();
+        let tokenLoginCompleteDefer = Promise.defer();
         tokenLoginCompletePromise = tokenLoginCompleteDefer.promise;
 
         function onNewScreen(screen) {
             console.log(Date.now() + " newscreen "+screen);
-            const hash = '#/' + screen;
+            var hash = '#/' + screen;
             windowLocation.hash = hash;
             console.log(Date.now() + " browser URI now "+ windowLocation);
         }
@@ -129,7 +129,7 @@ describe('loading:', function() {
             return {
                 screen: fragparts.location.substring(1),
                 params: fragparts.params,
-            };
+            }
         }
 
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
@@ -142,7 +142,7 @@ describe('loading:', function() {
 
         PlatformPeg.set(new Platform());
 
-        const params = parseQs(windowLocation);
+        var params = parseQs(windowLocation);
         matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
@@ -153,7 +153,7 @@ describe('loading:', function() {
                 onTokenLoginCompleted={() => tokenLoginCompleteDefer.resolve()}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
-            />, parentDiv,
+            />, parentDiv
         );
     }
 
@@ -179,7 +179,7 @@ describe('loading:', function() {
     }
 
     describe("Clean load with no stored credentials:", function() {
-        it('gives a login panel by default', function(done) {
+        it('gives a login panel by default', function (done) {
             loadApp();
 
             Promise.delay(1).then(() => {
@@ -257,6 +257,7 @@ describe('loading:', function() {
                 }
                 return completeLogin(matrixChat);
             }).then(() => {
+
                 // once the sync completes, we should have a room view
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.HomePage'));
@@ -355,7 +356,7 @@ describe('loading:', function() {
                 });
                 return httpBackend.flush();
             }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
+                return awaitSyncingSpinner(matrixChat)
             }).then(() => {
                 // we got a sync spinner - let the sync complete
                 return expectAndAwaitSync();
@@ -379,7 +380,7 @@ describe('loading:', function() {
             it('shows a login view', function() {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'),
+                    matrixChat, sdk.getComponent('structures.login.Login')
                 );
 
                 // the only outstanding request should be a GET /login
@@ -407,7 +408,7 @@ describe('loading:', function() {
     });
 
     describe('Guest auto-registration:', function() {
-        it('shows a home page by default', function(done) {
+        it('shows a home page by default', function (done) {
             loadApp();
 
             Promise.delay(1).then(() => {
@@ -437,7 +438,7 @@ describe('loading:', function() {
             }).done(done, done);
         });
 
-        it('uses the last known homeserver to register with', function(done) {
+        it('uses the last known homeserver to register with', function (done) {
             localStorage.setItem("mx_hs_url", "https://homeserver" );
             localStorage.setItem("mx_is_url", "https://idserver" );
 
@@ -476,7 +477,7 @@ describe('loading:', function() {
 
         it('shows a room view if we followed a room link', function(done) {
             loadApp({
-                uriFragment: "#/room/!room:id",
+                uriFragment: "#/room/!room:id"
             });
             Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
@@ -546,7 +547,7 @@ describe('loading:', function() {
 
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'),
+                    matrixChat, sdk.getComponent('structures.login.Login')
                 );
             });
 
@@ -579,7 +580,7 @@ describe('loading:', function() {
     });
 
     describe('Token login:', function() {
-        it('logs in successfully', function(done) {
+        it('logs in successfully', function (done) {
             loadApp({
                 queryString: "?loginToken=secretToken&homeserver=https%3A%2F%2Fhomeserver&identityServer=https%3A%2F%2Fidserver",
             });
@@ -657,7 +658,7 @@ describe('loading:', function() {
 
 // assert that we are on the loading page
 function assertAtLoadingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat);
+    var domComponent = ReactDOM.findDOMNode(matrixChat);
     expect(domComponent.className).toEqual("mx_MatrixChat_splash");
 
     // just the spinner
@@ -696,12 +697,12 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
 }
 
 function assertAtSyncingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat);
+    var domComponent = ReactDOM.findDOMNode(matrixChat);
     expect(domComponent.className).toEqual("mx_MatrixChat_splash");
 
     ReactTestUtils.findRenderedComponentWithType(
         matrixChat, sdk.getComponent('elements.Spinner'));
-    const logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
+    var logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
         matrixChat, 'a');
     expect(logoutLink.text).toEqual("Logout");
 }
