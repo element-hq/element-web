@@ -35,8 +35,33 @@ limitations under the License.
 }
 
 .mx_GroupGridView_activeTile {
-    border: 1px solid red !important;
+    position: relative;
 }
+
+.mx_GroupGridView_activeTile:before,
+.mx_GroupGridView_activeTile:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.mx_GroupGridView_activeTile:before {
+    border-radius: 14px;
+    border: 8px solid rgba(134, 193, 165, 0.5);
+    margin: -8px;
+}
+
+.mx_GroupGridView_activeTile:after {
+    border-radius: 8px;
+    border: 2px solid rgba(134, 193, 165, 1);
+    margin: -2px;
+}
+
 
 .mx_GroupGridView_tile > .mx_RoomView {
     height: 100%;
