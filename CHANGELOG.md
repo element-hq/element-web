@@ -1,3 +1,9 @@
+Changes in [0.14.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.6) (2018-11-22)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5...v0.14.6)
+
+ * Warning when crypto DB is too new to use.
+
 Changes in [0.14.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.5) (2018-11-19)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5-rc.2...v0.14.5)
