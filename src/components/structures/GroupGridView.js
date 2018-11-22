@@ -21,6 +21,8 @@ import OpenRoomsStore from '../../stores/OpenRoomsStore';
 import dis from '../../dispatcher';
 import RoomView from './RoomView';
 import classNames from 'classnames';
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 
 export default class RoomGridView extends React.Component {
 
@@ -90,25 +92,32 @@ export default class RoomGridView extends React.Component {
             const emptyTiles = Array.from({length: emptyCount}, () => null);
             roomStores = roomStores.concat(emptyTiles);
         }
+        const activeRoomId = this.state.activeRoomStore && this.state.activeRoomStore.getRoomId();
+        const rightPanel = activeRoomId ? <RightPanel roomId={activeRoomId} /> : undefined;
+
         return (<main className="mx_GroupGridView">
-            { roomStores.map((roomStore, i) => {
-                if (roomStore) {
-                    const isActive = roomStore === this.state.activeRoomStore;
-                    const tileClasses = classNames({
-                        "mx_GroupGridView_tile": true,
-                        "mx_GroupGridView_activeTile": isActive,
-                    });
-                    return (<section onClick={() => {this._setActive(i)}} key={roomStore.getRoomId()} className={tileClasses}>
-                        <RoomView
-                            collapsedRhs={true}
-                            roomViewStore={roomStore}
-                            isActive={isActive}
-                        />
-                    </section>);
-                } else {
-                    return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`} />);
-                }
-            }) }
+            <MainSplit panel={rightPanel}>
+                <div className="mx_GroupGridView_rooms">
+                    { roomStores.map((roomStore, i) => {
+                        if (roomStore) {
+                            const isActive = roomStore === this.state.activeRoomStore;
+                            const tileClasses = classNames({
+                                "mx_GroupGridView_tile": true,
+                                "mx_GroupGridView_activeTile": isActive,
+                            });
+                            return (<section onClick={() => {this._setActive(i)}} key={roomStore.getRoomId()} className={tileClasses}>
+                                <RoomView
+                                    collapsedRhs={true}
+                                    roomViewStore={roomStore}
+                                    isActive={isActive}
+                                />
+                            </section>);
+                        } else {
+                            return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`} />);
+                        }
+                    }) }
+                </div>
+            </MainSplit>
         </main>);
     }
 
