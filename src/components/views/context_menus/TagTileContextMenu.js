@@ -75,6 +75,12 @@ export default class TagTileContextMenu extends React.Component {
                 { _t('View Community') }
             </div>
             <div className="mx_TagTileContextMenu_item" onClick={this._onViewAsGridClick} >
+                <TintableSvg
+                    className="mx_TagTileContextMenu_item_icon"
+                    src="img/icons-gridview.svg"
+                    width="15"
+                    height="15"
+                />
                 { _t('View as grid') }
             </div>
             <hr className="mx_TagTileContextMenu_separator" />
