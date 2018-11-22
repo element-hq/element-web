@@ -130,7 +130,7 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            this.props.roomViewStore.getDispatcher().dispatch({action: 'require_registration'});
             return;
         }
 
@@ -192,7 +192,7 @@ export default class MessageComposer extends React.Component {
         if (!call) {
             return;
         }
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'hangup',
             // hangup the call for this room, which may not be the room in props
             // (e.g. conferences which will hangup the 1:1 room instead)
@@ -201,7 +201,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onCallClick(ev) {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId,
@@ -209,7 +209,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onVoiceCallClick(ev) {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'place_call',
             type: "voice",
             room_id: this.props.room.roomId,
@@ -245,7 +245,7 @@ export default class MessageComposer extends React.Component {
         ev.preventDefault();
 
         const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'view_room',
             highlighted: true,
             room_id: replacementRoomId,

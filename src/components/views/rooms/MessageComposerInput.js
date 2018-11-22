@@ -41,8 +41,6 @@ import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
-import dis from '../../../dispatcher';
-
 import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
@@ -120,7 +118,7 @@ function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-    dis.dispatch({
+    this.props.roomViewStore.getDispatcher().dispatch({
         action: 'message_send_failed',
     });
 }
@@ -344,12 +342,12 @@ export default class MessageComposerInput extends React.Component {
     }
 
     componentWillMount() {
-        this.dispatcherRef = dis.register(this.onAction);
+        this.dispatcherRef = this.props.roomViewStore.getDispatcher().register(this.onAction);
         this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
+        this.props.roomViewStore.getDispatcher().unregister(this.dispatcherRef);
     }
 
     _collectEditor = (e) => {
@@ -1208,14 +1206,14 @@ export default class MessageComposerInput extends React.Component {
 
             // Clear reply_to_event as we put the message into the queue
             // if the send fails, retry will handle resending.
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'reply_to_event',
                 event: null,
             });
         }
 
         this.client.sendMessage(this.props.room.roomId, content).then((res) => {
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'message_sent',
             });
         }).catch((e) => {
