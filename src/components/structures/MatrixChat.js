@@ -837,8 +837,7 @@ export default React.createClass({
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomInfo) {
         this.focusComposer = true;
-                console.log("!!! MatrixChat._viewRoom", roomInfo);
-                console.trace();
+        console.log("!!! MatrixChat._viewRoom", roomInfo);
 
         const newState = {
             currentRoomId: roomInfo.room_id || null,
@@ -887,6 +886,9 @@ export default React.createClass({
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
+
+
+            // TODO: only emit this when we're not in grid mode?
             this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
             this.setState(newState);
