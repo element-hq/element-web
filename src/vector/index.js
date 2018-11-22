@@ -34,6 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
     global.Perf = require('react-addons-perf');
 }
 
+import RunModernizrTests from './modernizr'; // this side-effects a global
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
@@ -42,6 +43,8 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -49,7 +52,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
@@ -70,12 +73,12 @@ function checkBrowserFeatures(featureList) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
-    let featureComplete = true;
-    for (let i = 0; i < featureList.length; i++) {
+    var featureComplete = true;
+    for (var i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
             console.error(
                 "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i],
+                "Has it been configured correctly?", featureList[i]
             );
             return false;
         }
@@ -96,7 +99,7 @@ function getScreenFromLocation(location) {
     return {
         screen: fragparts.location.substring(1),
         params: fragparts.params,
-    };
+    }
 }
 
 // Here, we do some crude URL analysis to allow
@@ -121,10 +124,10 @@ function onHashChange(ev) {
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen) {
     console.log("newscreen "+screen);
-    const hash = '#/' + screen;
+    var hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-}
+};
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -161,7 +164,7 @@ function makeRegistrationUrl(params) {
     return url;
 }
 
-export function getConfig(configJsonFilename) {
+function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename },
@@ -197,9 +200,9 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    const parsedUrl = url.parse(window.location.href);
+    var parsedUrl = url.parse(window.location.href);
     parsedUrl.search = "";
-    const formatted = url.format(parsedUrl);
+    var formatted = url.format(parsedUrl);
     console.log("Redirecting to " + formatted + " to drop loginToken " +
                 "from queryparams");
     window.location.href = formatted;
@@ -253,6 +256,7 @@ async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
+    const styleElements = Object.create(null);
     let a;
     const theme = SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
@@ -276,7 +280,7 @@ async function loadApp() {
                 // in case it is the first time loading Riot.
                 // `InstallTrigger` is a Object which only exists on Firefox
                 // (it is used for their Plugins) and can be used as a
-                // feature check.
+                // feature check. 
                 // Firefox loads css always before js. This is why we dont use
                 // onload or it's EventListener as thoose will never trigger.
                 if (typeof InstallTrigger !== 'undefined') {
@@ -328,19 +332,19 @@ async function loadApp() {
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
-            document.getElementById('matrixchat'),
+            document.getElementById('matrixchat')
         );
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
-        const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
+        var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
                 console.log("User accepts the compatibility risks.");
                 loadApp();
             }} />,
-            document.getElementById('matrixchat'),
+            document.getElementById('matrixchat')
         );
     }
 }
