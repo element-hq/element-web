@@ -14,7 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 import MatrixClientPeg from '../MatrixClientPeg';
 import sdk from '../index';
@@ -191,7 +190,7 @@ export class RoomViewStore extends Store {
             // stream yet, and that's the point at which we'd consider
             // the user joined to the room.
         }, (err) => {
-            dis.dispatch({
+            this.getDispatcher().dispatch({
                 action: 'join_room_error',
                 err: err,
             });
