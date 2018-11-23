@@ -19,6 +19,8 @@ module.exports = {
         "theme-light":  "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark":   "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
         "theme-dharma": "./node_modules/matrix-react-sdk/res/themes/dharma/css/dharma.scss",
+        "theme-dharma-dark": "./node_modules/matrix-react-sdk/res/themes/dharma-dark/css/dharma-dark.scss",
+        "theme-dharma-darkroom": "./node_modules/matrix-react-sdk/res/themes/dharma-darkroom/css/dharma-darkroom.scss",
         "theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
