@@ -275,7 +275,7 @@ async function loadApp() {
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
     let a;
-    const theme = "dharma";//SettingsStore.getValue("theme");
+    const theme = "dharma"; //SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         if (!href) continue;
@@ -297,7 +297,7 @@ async function loadApp() {
                 // in case it is the first time loading Riot.
                 // `InstallTrigger` is a Object which only exists on Firefox
                 // (it is used for their Plugins) and can be used as a
-                // feature check. 
+                // feature check.
                 // Firefox loads css always before js. This is why we dont use
                 // onload or it's EventListener as thoose will never trigger.
                 if (typeof InstallTrigger !== 'undefined') {
