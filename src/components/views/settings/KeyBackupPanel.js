@@ -80,12 +80,14 @@ export default class KeyBackupPanel extends React.Component {
     }
 
     _startNewBackup() {
-        const CreateKeyBackupDialog = sdk.getComponent('dialogs.keybackup.CreateKeyBackupDialog');
-        Modal.createTrackedDialog('Key Backup', 'Key Backup', CreateKeyBackupDialog, {
-            onFinished: () => {
-                this._loadBackupStatus();
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            {
+                onFinished: () => {
+                    this._loadBackupStatus();
+                },
             },
-        });
+        );
     }
 
     _deleteBackup() {
