@@ -59,8 +59,14 @@ export default React.createClass({
 
     _onResetRecoveryClick: function() {
         this.props.onFinished(false);
-        const CreateKeyBackupDialog = sdk.getComponent("dialogs.keybackup.CreateKeyBackupDialog");
-        Modal.createTrackedDialog('Create Key Backup', '', CreateKeyBackupDialog, {});
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            {
+                onFinished: () => {
+                    this._loadBackupStatus();
+                },
+            },
+        );
     },
 
     _onRecoveryKeyChange: function(e) {
