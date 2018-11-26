@@ -318,20 +318,17 @@ const RoomSubList = React.createClass({
         if (len) {
             const subListClasses = classNames({
                 "mx_RoomSubList": true,
+                "mx_RoomSubList_hidden": this.state.hidden,
                 "mx_RoomSubList_nonEmpty": len && !this.state.hidden,
             });
             if (this.state.hidden) {
-                return <div className={subListClasses} style={{flexBasis: "unset", flexGrow: "unset"}}>
+                return <div className={subListClasses}>
                     {this._getHeaderJsx()}
                 </div>;
             } else {
-                const heightEstimation = (len * 44) + 31 + (8 + 8);
-                const style = {
-                    maxHeight: `${heightEstimation}px`,
-                };
                 const tiles = this.makeRoomTiles();
                 tiles.push(...this.props.extraTiles);
-                return <div style={style} className={subListClasses}>
+                return <div className={subListClasses}>
                     {this._getHeaderJsx()}
                     <IndicatorScrollbar className="mx_RoomSubList_scroll">
                         { tiles }
