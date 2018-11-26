@@ -70,6 +70,10 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+
+        const sizesJson = window.localStorage.getItem("mx_roomlist_sizes");
+        this.subListSizes = sizesJson ? JSON.parse(sizesJson) : {};
+
         return {
             isLoadingLeftRooms: false,
             totalRoomCount: null,
@@ -134,14 +138,34 @@ module.exports = React.createClass({
         this._delayedRefreshRoomListLoopCount = 0;
     },
 
+    _onSubListResize: function(newSize, id) {
+        if (!id) {
+            return;
+        }
+        if (typeof newSize === "string") {
+            newSize = Number.MAX_SAFE_INTEGER;
+        }
+        this.subListSizes[id] = newSize;
+        window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, null, RoomSizer);
+        const cfg = {
+            onResized: this._onSubListResize,
+        };
+        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, cfg, RoomSizer);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse"
         });
+
+        // load stored sizes
+        Object.entries(this.subListSizes).forEach(([id, size]) => {
+            this.resizer.forHandleWithId(id).resize(size);
+        });
+
         this.resizer.attach();
         this.mounted = true;
     },
@@ -476,12 +500,16 @@ module.exports = React.createClass({
             if (!isLast) {
                 return components.concat(
                     subList,
-                    <ResizeHandle key={chosenKey+"-resizer"} vertical={true} />
+                    <ResizeHandle key={chosenKey+"-resizer"} vertical={true} id={chosenKey} />
                 );
             } else {
                 return components.concat(subList);
             }
         }, []);
+    },
+
+    _collectResizeContainer: function(el) {
+        this.resizeContainer = el;
     },
 
     render: function() {
@@ -560,7 +588,7 @@ module.exports = React.createClass({
         const subListComponents = this._mapSubListProps(subLists);
 
         return (
-            <div ref={(d) => this.resizeContainer = d} className="mx_RoomList">
+            <div ref={this._collectResizeContainer} className="mx_RoomList">
                 { subListComponents }
             </div>
         );
