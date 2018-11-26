@@ -21,6 +21,7 @@ $focus-bg-color: #dddddd;
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color: #f56679;
+$accent-color-50pct: #f56679;
 
 $selection-fg-color: $primary-bg-color;
 
@@ -94,6 +95,9 @@ $h3-color: #3d3b39;
 
 $dialog-background-bg-color: #e9e9e9;
 $lightbox-background-bg-color: #000;
+
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
 
 $greyed-fg-color: #888;
 
