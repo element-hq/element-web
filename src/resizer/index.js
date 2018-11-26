@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {Sizer, FlexSizer} from "./sizer";
-import {FixedDistributor, CollapseDistributor, PercentageDistributor} from "./distributors";
+import {FixedDistributor, CollapseDistributor} from "./distributors";
 import {Resizer} from "./resizer";
 import {RoomSizer, RoomDistributor} from "./room";
 
@@ -25,7 +25,6 @@ module.exports = {
     FlexSizer,
     FixedDistributor,
     CollapseDistributor,
-    PercentageDistributor,
     RoomSizer,
     RoomDistributor,
 };
