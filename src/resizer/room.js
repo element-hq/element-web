@@ -36,15 +36,18 @@ class RoomSizer extends Sizer {
 }
 
 class RoomDistributor extends FixedDistributor {
-    resize(offset) {
-        const itemSize = offset - this.sizer.getItemOffset(this.item);
+    resize(itemSize) {
         const scrollItem = this.item.querySelector(".mx_RoomSubList_scroll");
         const fixedHeight = this.item.offsetHeight - scrollItem.offsetHeight;
         if (itemSize > (fixedHeight + scrollItem.scrollHeight)) {
-            this.sizer.setItemSize(this.item, "resized-all");
+            super.resize("resized-all");
         } else {
-            this.sizer.setItemSize(this.item, itemSize);
+            super.resize(itemSize);
         }
+    }
+
+    resizeFromContainerOffset(offset) {
+        return this.resize(offset - this.sizer.getItemOffset(this.item));
     }
 }
 

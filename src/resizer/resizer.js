@@ -88,7 +88,7 @@ export class Resizer {
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
-            distributor.resize(offset);
+            distributor.resizeFromContainerOffset(offset);
         };
 
         const body = document.body;
