@@ -1295,5 +1295,12 @@
     "Please accept all of the policies": "Kérlek fogadd el a felhasználói feltételeket",
     "Please review and accept the policies of this homeserver:": "Kérlek nézd át és fogadd el a Matrix szerver felhasználói feltételeit:",
     "Add some now": "Adj hozzá párat",
-    "Joining room...": "Belépés a szobába.."
+    "Joining room...": "Belépés a szobába..",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Te vagy ennek a közösségnek az adminisztrátora. Egy másik adminisztrátortól kapott meghívó nélkül nem tudsz majd újra csatlakozni.",
+    "Open Devtools": "Fejlesztői eszközök megnyitása",
+    "Show developer tools": "Fejlesztői eszközök megjelenítése",
+    "Pin unread rooms to the top of the room list": "Nem olvasott üzeneteket tartalmazó szobák a szobalista elejére",
+    "Pin rooms I'm mentioned in to the top of the room list": "Megemlítéseket tartalmazó szobák a szobalista elejére",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Ha létre szeretnél hozni egy Matrix fiókot most <a>regisztrálhatsz</a>.",
+    "You are currently using Riot anonymously as a guest.": "A Riotot ismeretlen vendégként használod."
 }

@@ -84,7 +84,10 @@ module.exports = React.createClass({
         // letting you do that login type
         this._stepRendererMap = {
             'm.login.password': this._renderPasswordStep,
-            'm.login.cas': this._renderCasStep,
+
+            // CAS and SSO are the same thing, modulo the url we link to
+            'm.login.cas': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("cas")),
+            'm.login.sso': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("sso")),
         };
 
         this._initLoginLogic();
@@ -184,10 +187,6 @@ module.exports = React.createClass({
                 busy: false,
             });
         }).done();
-    },
-
-    onCasLogin: function() {
-      this._loginLogic.redirectToCas();
     },
 
     _onLoginAsGuestClick: function() {
@@ -403,10 +402,9 @@ module.exports = React.createClass({
         );
     },
 
-    _renderCasStep: function() {
-        const CasLogin = sdk.getComponent('login.CasLogin');
+    _renderSsoStep: function(url) {
         return (
-            <CasLogin onSubmit={this.onCasLogin} />
+            <a href={url} className="mx_Login_sso_link">{ _t('Sign in with single sign-on') }</a>
         );
     },
 

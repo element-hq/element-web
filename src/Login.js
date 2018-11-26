@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import Matrix from "matrix-js-sdk";
-import { _t } from "./languageHandler";
 
 import Promise from 'bluebird';
 import url from 'url';
@@ -225,19 +224,18 @@ export default class Login {
         });
     }
 
-    redirectToCas() {
+    getSsoLoginUrl(loginType) {
       const client = this._createTemporaryClient();
       const parsedUrl = url.parse(window.location.href, true);
 
       // XXX: at this point, the fragment will always be #/login, which is no
       // use to anyone. Ideally, we would get the intended fragment from
       // MatrixChat.screenAfterLogin so that you could follow #/room links etc
-      // through a CAS login.
+      // through an SSO login.
       parsedUrl.hash = "";
 
       parsedUrl.query["homeserver"] = client.getHomeserverUrl();
       parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
-      const casUrl = client.getCasLoginUrl(url.format(parsedUrl));
-      window.location.href = casUrl;
+      return client.getSsoLoginUrl(url.format(parsedUrl), loginType);
     }
 }

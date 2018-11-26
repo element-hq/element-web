@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_EncryptedEventDialog .mx_MemberDeviceInfo {
-    float: right;
-    padding: 0px;
-    margin-right: 42px;
+.mx_CreateKeyBackupDialog {
+    padding-right: 40px;
 }
 
-.mx_EncryptedEventDialog .mx_MemberDeviceInfo_textButton {
-    @mixin mx_DialogButton;
-    background-color: $primary-bg-color;
-    color: $accent-color;
-}
-
-.mx_EncryptedEventDialog button {
-    margin-top: 0px;
+.mx_CreateKeyBackupDialog_recoveryKey {
+    padding: 20px;
+    color: $info-plinth-fg-color;
+    background-color: $info-plinth-bg-color;
 }

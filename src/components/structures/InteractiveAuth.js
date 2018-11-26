@@ -68,6 +68,11 @@ export default React.createClass({
         // If true, poll to see if the auth flow has been completed
         // out-of-band
         poll: PropTypes.bool,
+
+        // If true, components will be told that the 'Continue' button
+        // is managed by some other party and should not be managed by
+        // the component itself.
+        continueIsManaged: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -125,6 +130,12 @@ export default React.createClass({
 
         if (this._intervalId !== null) {
             clearInterval(this._intervalId);
+        }
+    },
+
+    tryContinue: function() {
+        if (this.refs.stageComponent && this.refs.stageComponent.tryContinue) {
+            this.refs.stageComponent.tryContinue();
         }
     },
 
@@ -192,6 +203,7 @@ export default React.createClass({
                 fail={this._onAuthStageFailed}
                 setEmailSid={this._setEmailSid}
                 makeRegistrationUrl={this.props.makeRegistrationUrl}
+                showContinue={!this.props.continueIsManaged}
             />
         );
     },

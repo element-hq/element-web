@@ -590,23 +590,21 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Export E2E Keys', '',
+            import('../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _onImportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Import E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Import E2E Keys', '',
+            import('../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _renderGroupSettings: function() {
@@ -740,6 +738,16 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        let keyBackupSection;
+        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
+            const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
+            keyBackupSection = <div className="mx_UserSettings_section">
+                <h3>{ _t("Key Backup") }</h3>
+                <KeyBackupPanel />
+            </div>;
+        }
+
         return (
             <div>
                 <h3>{ _t("Cryptography") }</h3>
@@ -755,6 +763,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
+                {keyBackupSection}
             </div>
         );
     },

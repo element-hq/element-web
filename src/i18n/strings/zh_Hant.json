@@ -1293,5 +1293,12 @@
     "Please accept all of the policies": "請接受所有政策",
     "Please review and accept the policies of this homeserver:": "請審閱並接受此家伺服器的政策：",
     "Add some now": "現在就新增一些",
-    "Joining room...": "正在加入聊天室……"
+    "Joining room...": "正在加入聊天室……",
+    "Pin unread rooms to the top of the room list": "釘選未讀的聊天示到聊天室清單頂端",
+    "Pin rooms I'm mentioned in to the top of the room list": "釘選我被提及的聊天室到聊天室清單頂端",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "若您想要建立一個 Matrix 帳號，您現在可以<a>註冊</a>了。",
+    "You are currently using Riot anonymously as a guest.": "您目前是以訪客的身份匿名使用 Riot。",
+    "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "您是此社群的管理員。您將無法在沒有其他管理員的邀請下重新加入。",
+    "Open Devtools": "開啟開發者工具",
+    "Show developer tools": "顯示開發者工具"
 }
