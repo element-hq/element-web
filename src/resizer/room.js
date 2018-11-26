@@ -22,15 +22,14 @@ class RoomSizer extends Sizer {
         const isString = typeof size === "string";
         const cl = item.classList;
         if (isString) {
-            item.style.flex = null;
-            if (size === "show-content") {
-                cl.add("show-content");
-                cl.remove("show-available");
+            if (size === "resized-all") {
+                cl.add("resized-all");
+                cl.remove("resized-sized");
                 item.style.maxHeight = null;
             }
         } else {
-            cl.add("show-available");
-            //item.style.flex = `0 1 ${Math.round(size)}px`;
+            cl.add("resized-sized");
+            cl.remove("resized-all");
             item.style.maxHeight = `${Math.round(size)}px`;
         }
     }
@@ -39,9 +38,10 @@ class RoomSizer extends Sizer {
 class RoomDistributor extends FixedDistributor {
     resize(offset) {
         const itemSize = offset - this.sizer.getItemOffset(this.item);
-
-        if (itemSize > this.item.scrollHeight) {
-            this.sizer.setItemSize(this.item, "show-content");
+        const scrollItem = this.item.querySelector(".mx_RoomSubList_scroll");
+        const fixedHeight = this.item.offsetHeight - scrollItem.offsetHeight;
+        if (itemSize > (fixedHeight + scrollItem.scrollHeight)) {
+            this.sizer.setItemSize(this.item, "resized-all");
         } else {
             this.sizer.setItemSize(this.item, itemSize);
         }
