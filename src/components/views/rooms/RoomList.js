@@ -36,7 +36,7 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer, FixedDistributor, FlexSizer} from '../../../resizer'
+import {Resizer, RoomDistributor, RoomSizer} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -136,7 +136,7 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.resizer = new Resizer(this.resizeContainer, FixedDistributor, null, FlexSizer);
+        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, null, RoomSizer);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
