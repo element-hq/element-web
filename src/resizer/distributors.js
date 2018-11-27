@@ -18,43 +18,46 @@ limitations under the License.
 distributors translate a moving cursor into
 CSS/DOM changes by calling the sizer
 
-they have one method, `resize` that receives
+they have two methods:
+    `resize` receives then new item size
+    `resizeFromContainerOffset` receives resize handle location
+        within the container bounding box. For internal use.
+        This method usually ends up calling `resize` once the start offset is subtracted.
 the offset from the container edge of where
 the mouse cursor is.
 */
 class FixedDistributor {
-    constructor(sizer, item, config) {
+    constructor(sizer, item, id, config) {
         this.sizer = sizer;
         this.item = item;
+        this.id = id;
         this.beforeOffset = sizer.getItemOffset(this.item);
         this.onResized = config && config.onResized;
     }
 
-    resize(offset) {
-        const itemSize = offset - this.beforeOffset;
+    resize(itemSize) {
         this.sizer.setItemSize(this.item, itemSize);
         if (this.onResized) {
-            this.onResized(itemSize, this.item);
+            this.onResized(itemSize, this.id, this.item);
         }
         return itemSize;
     }
 
-    sizeFromOffset(offset) {
-        return offset - this.beforeOffset;
+    resizeFromContainerOffset(offset) {
+        this.resize(offset - this.beforeOffset);
     }
 }
 
 
 class CollapseDistributor extends FixedDistributor {
-    constructor(sizer, item, config) {
-        super(sizer, item, config);
+    constructor(sizer, item, id, config) {
+        super(sizer, item, id, config);
         this.toggleSize = config && config.toggleSize;
         this.onCollapsed = config && config.onCollapsed;
         this.isCollapsed = false;
     }
 
-    resize(offset) {
-        const newSize = this.sizeFromOffset(offset);
+    resize(newSize) {
         const isCollapsedSize = newSize < this.toggleSize;
         if (isCollapsedSize && !this.isCollapsed) {
             this.isCollapsed = true;
@@ -68,60 +71,12 @@ class CollapseDistributor extends FixedDistributor {
             this.isCollapsed = false;
         }
         if (!isCollapsedSize) {
-            super.resize(offset);
+            super.resize(newSize);
         }
-    }
-}
-
-class PercentageDistributor {
-    constructor(sizer, item, _config, items, container) {
-        this.container = container;
-        this.totalSize = sizer.getTotalSize();
-        this.sizer = sizer;
-
-        const itemIndex = items.indexOf(item);
-        this.beforeItems = items.slice(0, itemIndex);
-        this.afterItems = items.slice(itemIndex);
-        const percentages = PercentageDistributor._getPercentages(sizer, items);
-        this.beforePercentages = percentages.slice(0, itemIndex);
-        this.afterPercentages = percentages.slice(itemIndex);
-    }
-
-    resize(offset) {
-        const percent = offset / this.totalSize;
-        const beforeSum =
-            this.beforePercentages.reduce((total, p) => total + p, 0);
-        const beforePercentages =
-            this.beforePercentages.map(p => (p / beforeSum) * percent);
-        const afterSum =
-            this.afterPercentages.reduce((total, p) => total + p, 0);
-        const afterPercentages =
-            this.afterPercentages.map(p => (p / afterSum) * (1 - percent));
-
-        this.beforeItems.forEach((item, index) => {
-            this.sizer.setItemPercentage(item, beforePercentages[index]);
-        });
-        this.afterItems.forEach((item, index) => {
-            this.sizer.setItemPercentage(item, afterPercentages[index]);
-        });
-    }
-
-    static _getPercentages(sizer, items) {
-        const percentages = items.map(i => sizer.getItemPercentage(i));
-        const setPercentages = percentages.filter(p => p !== null);
-        const unsetCount = percentages.length - setPercentages.length;
-        const setTotal = setPercentages.reduce((total, p) => total + p, 0);
-        const implicitPercentage = (1 - setTotal) / unsetCount;
-        return percentages.map(p => p === null ? implicitPercentage : p);
-    }
-
-    static setPercentage(el, percent) {
-        el.style.flexGrow = Math.round(percent * 1000);
     }
 }
 
 module.exports = {
     FixedDistributor,
     CollapseDistributor,
-    PercentageDistributor,
 };

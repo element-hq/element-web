@@ -164,15 +164,13 @@ const LoggedInView = React.createClass({
         };
         const collapseConfig = {
             toggleSize: 260 - 50,
-            onCollapsed: (collapsed, item) => {
-                if (item.classList.contains("mx_LeftPanel_container")) {
-                    this.setState({collapseLhs: collapsed});
-                    if (collapsed) {
-                        window.localStorage.setItem("mx_lhs_size", '0');
-                    }
+            onCollapsed: (collapsed) => {
+                this.setState({collapseLhs: collapsed});
+                if (collapsed) {
+                    window.localStorage.setItem("mx_lhs_size", '0');
                 }
             },
-            onResized: (size, item) => {
+            onResized: (size) => {
                 window.localStorage.setItem("mx_lhs_size", '' + size);
             },
         };

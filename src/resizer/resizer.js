@@ -64,8 +64,19 @@ export class Resizer {
     forHandleAt(handleIndex) {
         const handles = this._getResizeHandles();
         const handle = handles[handleIndex];
-        const {distributor} = this._createSizerAndDistributor(handle);
-        return distributor;
+        if (handle) {
+            const {distributor} = this._createSizerAndDistributor(handle);
+            return distributor;
+        }
+    }
+
+    forHandleWithId(id) {
+        const handles = this._getResizeHandles();
+        const handle = handles.find((h) => h.getAttribute("data-id") === id);
+        if (handle) {
+            const {distributor} = this._createSizerAndDistributor(handle);
+            return distributor;
+        }
     }
 
     _isResizeHandle(el) {
@@ -79,6 +90,7 @@ export class Resizer {
         }
         // prevent starting a drag operation
         event.preventDefault();
+
         // mark as currently resizing
         if (this.classNames.resizing) {
             this.container.classList.add(this.classNames.resizing);
@@ -88,7 +100,7 @@ export class Resizer {
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
-            distributor.resize(offset);
+            distributor.resizeFromContainerOffset(offset);
         };
 
         const body = document.body;
@@ -115,9 +127,10 @@ export class Resizer {
         // if reverse, resize the item after the handle instead of before, so + 1
         const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
         const item = items[itemIndex];
+        const id = resizeHandle.getAttribute("data-id");
         // eslint-disable-next-line new-cap
         const distributor = new this.distributorCtor(
-            sizer, item, this.distributorCfg,
+            sizer, item, id, this.distributorCfg,
             items, this.container);
         return {sizer, distributor};
     }
