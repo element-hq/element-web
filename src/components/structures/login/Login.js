@@ -241,8 +241,7 @@ module.exports = React.createClass({
                 const url = new URL("https://" + serverName);
                 this._tryWellKnownDiscovery(url.hostname);
             } catch (e) {
-                console.error("Problem parsing URL or unhandled error doing .well-known discovery");
-                console.error(e);
+                console.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
                 this.setState({discoveryError: _t("Failed to perform homeserver discovery")});
             }
         }
