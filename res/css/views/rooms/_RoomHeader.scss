@@ -19,11 +19,6 @@ limitations under the License.
     border-bottom: 1px solid $primary-hairline-color;
 }
 
-/* add 20px to the height of the header when editing */
-.mx_RoomHeader_editing {
-    flex: 0 0 93px ! important;
-}
-
 .mx_RoomHeader_wrapper {
     margin: auto;
     height: 52px;
@@ -37,7 +32,6 @@ limitations under the License.
 .mx_RoomHeader_spinner {
     flex: 1;
     height: 36px;
-    order: 2;
     padding-left: 12px;
     padding-right: 12px;
 }
@@ -46,7 +40,6 @@ limitations under the License.
     @mixin mx_DialogButton;
     margin-right: 8px;
     margin-top: -5px;
-    order: 2;
 }
 
 .mx_RoomHeader_textButton:hover {
@@ -58,7 +51,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_cancelButton {
-    order: 2;
     cursor: pointer;
     padding-left: 12px;
     padding-right: 12px;
