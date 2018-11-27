@@ -1377,5 +1377,8 @@
     "Not a valid recovery key": "Ce n'est pas une clé de récupération valide",
     "Access your secure message history and set up secure messaging by entering your recovery key.": "Accédez à l'historique sécurisé de vos messages et configurez la messagerie sécurisée en renseignant votre clé de récupération.",
     "If you've forgotten your recovery passphrase you can <button>set up new recovery options</button>": "Si vous avez oublié votre clé de récupération vous pouvez <button>configurer de nouvelle options de récupération</button>",
-    "Key Backup": "Sauvegarde de clés"
+    "Key Backup": "Sauvegarde de clés",
+    "Failed to perform homeserver discovery": "Échec lors de la découverte du serveur d'accueil",
+    "Invalid homeserver discovery response": "Réponse de découverte du serveur d'accueil non valide",
+    "Cannot find homeserver": "Le serveur d'accueil est introuvable"
 }
