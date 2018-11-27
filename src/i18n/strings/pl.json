@@ -1209,5 +1209,7 @@
     "If the other version of Riot is still open in another tab, please close it as using Riot on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jeśli inna wersja Riot jest nadal otwarta w innej zakładce, proszę zamknij ją, ponieważ używanie Riot na tym samym komputerze z włączonym i wyłączonym jednocześnie leniwym ładowaniem będzie powodować problemy.",
     "And %(count)s more...|other": "I %(count)s więcej…",
     "Delete Backup": "Usuń Kopię Zapasową",
-    "Delete backup": "Usuń Kopię Zapasową"
+    "Delete backup": "Usuń Kopię Zapasową",
+    "Unable to load! Check your network connectivity and try again.": "Nie można załadować! Sprawdź połączenie sieciowe i spróbuj ponownie.",
+    "Algorithm: ": "Algorytm: "
 }
