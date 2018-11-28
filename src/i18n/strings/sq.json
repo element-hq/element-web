@@ -1347,5 +1347,9 @@
     "Access your secure message history and set up secure messaging by entering your recovery key.": "Hyni te historiku i mesazheve tuaj të siguruar dhe rregulloni shkëmbim mesazhesh të sigurt duke dhënë kyçin tuaj të rimarrjeve.",
     "If you've forgotten your recovery passphrase you can <button>set up new recovery options</button>": "Nëse keni harruar frazëkalimin tuaj të rimarrjeve, mund të <button2>rregulloni mundësi të reja rimarrjeje</button2>",
     "Key Backup": "Kopjeruajtje Kyçi",
-    "Sign in with single sign-on": "Bëni hyrjen me hyrje njëshe"
+    "Sign in with single sign-on": "Bëni hyrjen me hyrje njëshe",
+    "Disable Peer-to-Peer for 1:1 calls": "Çaktivizoje mekanizmin Peer-to-Peer për thirrje 1 me 1",
+    "Failed to perform homeserver discovery": "S’u arrit të kryhej zbulim shërbyesi Home",
+    "Invalid homeserver discovery response": "Përgjigje e pavlefshme zbulimi shërbyesi Home",
+    "Cannot find homeserver": "S’gjendet dot shërbyesi Home"
 }
