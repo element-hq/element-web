@@ -137,6 +137,11 @@ module.exports = React.createClass({
         const avatarUrl = this.props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             null, null, null, false);
+
+        if (!avatarUrl) {
+            return;
+        }
+
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: avatarUrl,
