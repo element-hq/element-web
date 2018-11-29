@@ -26,6 +26,7 @@ limitations under the License.
  */
 
 import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 function initRageshake() {
     rageshake.init().then(() => {
@@ -44,3 +45,18 @@ function initRageshake() {
 }
 
 initRageshake();
+
+global.mxSendRageshake = function(text, withLogs) {
+    if (withLogs === undefined) withLogs = true;
+    require(['matrix-react-sdk/lib/rageshake/submit-rageshake'], (s) => {
+        s(SdkConfig.get().bug_report_endpoint_url, {
+            userText: text,
+            sendLogs: withLogs,
+            progressCallback: console.log.bind(console),
+        }).then(() => {
+            console.log("Bug report sent!");
+        }, (err) => {
+            console.error(err);
+        });
+    });
+};
