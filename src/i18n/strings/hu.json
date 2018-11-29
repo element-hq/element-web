@@ -1377,5 +1377,8 @@
     "Not a valid recovery key": "Nem helyreállítási kulcs",
     "Access your secure message history and set up secure messaging by entering your recovery key.": "A helyreállítási kulcs megadásával hozzáférhetsz a régi biztonságos üzeneteidhez és beállíthatod a biztonságos üzenetküldést.",
     "If you've forgotten your recovery passphrase you can <button>set up new recovery options</button>": "Ha elfelejtetted a helyreállítási jelmondatot <button>beállíthatsz új helyreállítási paramétereket</button>",
-    "Key Backup": "Kulcs mentés"
+    "Key Backup": "Kulcs mentés",
+    "Failed to perform homeserver discovery": "A Matrix szerver felderítése sikertelen",
+    "Invalid homeserver discovery response": "A Matrix szerver felderítésére kapott válasz érvénytelen",
+    "Cannot find homeserver": "Matrix szerver nem található"
 }
