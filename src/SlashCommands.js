@@ -26,6 +26,7 @@ import Modal from './Modal';
 import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
+import MultiInviter from './utils/MultiInviter';
 
 
 class Command {
@@ -142,7 +143,14 @@ export const CommandMap = {
             if (args) {
                 const matches = args.match(/^(\S+)$/);
                 if (matches) {
-                    return success(MatrixClientPeg.get().invite(roomId, matches[1]));
+                    // We use a MultiInviter to re-use the invite logic, even though
+                    // we're only inviting one user.
+                    const userId = matches[1];
+                    const inviter = new MultiInviter(roomId);
+                    return success(inviter.invite([userId]).then(() => {
+                        if (inviter.getCompletionState(userId) !== "invited")
+                            throw new Error(inviter.getErrorText(userId));
+                    }));
                 }
             }
             return reject(this.getUsage());
