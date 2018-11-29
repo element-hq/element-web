@@ -148,8 +148,9 @@ export const CommandMap = {
                     const userId = matches[1];
                     const inviter = new MultiInviter(roomId);
                     return success(inviter.invite([userId]).then(() => {
-                        if (inviter.getCompletionState(userId) !== "invited")
+                        if (inviter.getCompletionState(userId) !== "invited") {
                             throw new Error(inviter.getErrorText(userId));
+                        }
                     }));
                 }
             }
