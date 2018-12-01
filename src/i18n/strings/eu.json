@@ -1375,5 +1375,8 @@
     "Access your secure message history and set up secure messaging by entering your recovery key.": "Atzitu zure mezu seguruen historiala eta ezarri mezularitza segurua zure berreskuratze gakoa sartuz.",
     "If you've forgotten your recovery passphrase you can <button>set up new recovery options</button>": "Zure berreskuratze pasa-esaldia ahaztu baduzu <button>berreskuratze aukera berriak ezarri</button> ditzakezu",
     "Key Backup": "Gakoen babes-kopia",
-    "Sign in with single sign-on": "Hai saioa urrats batean"
+    "Sign in with single sign-on": "Hai saioa urrats batean",
+    "Failed to perform homeserver discovery": "Huts egin du hasiera-zerbitzarien bilaketak",
+    "Invalid homeserver discovery response": "Baliogabeko hasiera-zerbitzarien bilaketaren erantzuna",
+    "Cannot find homeserver": "Ezin izan da hasiera-zerbitzaria aurkitu"
 }
