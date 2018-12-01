@@ -248,7 +248,7 @@ export default class SettingsStore {
         if (actualValue !== undefined && actualValue !== null) return actualValue;
         return calculatedValue;
     }
-    /* eslint-disable valid-jsdoc */    //https://github.com/eslint/eslint/issues/7307
+    /* eslint-disable valid-jsdoc */ //https://github.com/eslint/eslint/issues/7307
     /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
      * set for a particular room, otherwise it should be supplied. The value may be null

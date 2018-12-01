@@ -22,7 +22,6 @@ import _clamp from 'lodash/clamp';
 type MessageFormat = 'rich' | 'markdown';
 
 class HistoryItem {
-
     // We store history items in their native format to ensure history is accurate
     // and then convert them if our RTE has subsequently changed format.
     value: Value;

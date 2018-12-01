@@ -33,7 +33,6 @@ import Autocompleter from '../../../autocomplete/Autocompleter';
 const COMPOSER_SELECTED = 0;
 
 export default class Autocomplete extends React.Component {
-
     constructor(props) {
         super(props);
 

@@ -170,8 +170,7 @@ textarea {
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    padding-left: 58px;
-    padding-bottom: 36px;
+    padding: 0 58px 36px;
     width: 60%;
     max-width: 704px;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
@@ -216,10 +215,14 @@ textarea {
 }
 
 .mx_Dialog_content {
-    margin: 24px 58px 68px 0;
+    margin: 24px 0 68px;
     font-size: 14px;
     color: $primary-fg-color;
     word-wrap: break-word;
+}
+
+.mx_Dialog_buttons {
+    text-align: right;
 }
 
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
@@ -257,6 +260,11 @@ textarea {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
+}
+
+.mx_linkButton {
+    cursor: pointer;
+    color: $accent-color;
 }
 
 .mx_Dialog_title {

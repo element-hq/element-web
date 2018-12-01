@@ -18,6 +18,7 @@ $focus-bg-color: #dddddd;
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color: #76CFA6;
+$accent-color-50pct: #76CFA67F;
 
 $selection-fg-color: $primary-bg-color;
 
@@ -147,6 +148,9 @@ $e2e-warning-color: #ba6363;
 $lightbox-bg-color: #454545;
 $lightbox-fg-color: #ffffff;
 $lightbox-border-color: #ffffff;
+
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
 
 // unused?
 $progressbar-color: #000;

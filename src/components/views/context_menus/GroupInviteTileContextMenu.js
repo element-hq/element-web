@@ -48,7 +48,7 @@ export default class GroupInviteTileContextMenu extends React.Component {
         Modal.createTrackedDialog('Reject community invite', '', QuestionDialog, {
             title: _t('Reject invitation'),
             description: _t('Are you sure you want to reject the invitation?'),
-            onFinished: async (shouldLeave) => {
+            onFinished: async(shouldLeave) => {
                 if (!shouldLeave) return;
 
                 // FIXME: controller shouldn't be loading a view :(

@@ -23,7 +23,6 @@ limitations under the License.
  * intended to handle environmental factors for specific settings.
  */
 export default class SettingController {
-
     /**
      * Gets the overridden value for the setting, if any. This must return null if the
      * value is not to be overridden, otherwise it must return the new value.

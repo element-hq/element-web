@@ -43,7 +43,11 @@ module.exports = React.createClass({
 
         focus: PropTypes.bool,
 
+        // disables the primary and cancel buttons
         disabled: PropTypes.bool,
+
+        // disables only the primary button
+        primaryDisabled: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -70,15 +74,15 @@ module.exports = React.createClass({
         }
         return (
             <div className="mx_Dialog_buttons">
+                { cancelButton }
+                { this.props.children }
                 <button className={primaryButtonClassName}
                     onClick={this.props.onPrimaryButtonClick}
                     autoFocus={this.props.focus}
-                    disabled={this.props.disabled}
+                    disabled={this.props.disabled || this.props.primaryDisabled}
                 >
                     { this.props.primaryButton }
                 </button>
-                { this.props.children }
-                { cancelButton }
             </div>
         );
     },

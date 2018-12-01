@@ -122,7 +122,6 @@ export default class EditableTextContainer extends React.Component {
             );
         }
     }
-
 }
 
 EditableTextContainer.propTypes = {

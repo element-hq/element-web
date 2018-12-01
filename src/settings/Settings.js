@@ -90,6 +90,12 @@ export const SETTINGS = {
         controller: new LazyLoadingController(),
         default: true,
     },
+    "feature_keybackup": {
+        isFeature: true,
+        displayName: _td("Backup of encryption keys to server"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Disable Emoji suggestions while typing'),
@@ -276,6 +282,16 @@ export const SETTINGS = {
         default: true,
         controller: new AudioNotificationsEnabledController(),
     },
+    "pinMentionedRooms": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Pin rooms I'm mentioned in to the top of the room list"),
+        default: false,
+    },
+    "pinUnreadRooms": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Pin unread rooms to the top of the room list"),
+        default: false,
+    },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable widget screenshots on supported widgets'),
@@ -289,5 +305,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show empty room list headings'),
         default: true,
+    },
+    "showDeveloperTools": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show developer tools'),
+        default: false,
     },
 };

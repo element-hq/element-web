@@ -25,7 +25,6 @@ import { _t } from './languageHandler';
  * API on the homeserver in question with the new password.
  */
 class PasswordReset {
-
     /**
      * Configure the endpoints for password resetting.
      * @param {string} homeserverUrl The URL to the HS which has the account to reset.

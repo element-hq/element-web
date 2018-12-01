@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,26 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+ 
+.mx_CreateKeyBackupDialog_primaryContainer {
+    /*FIXME: plinth colour in new theme(s). background-color: $accent-color;*/
+    padding: 20px
+}
 
-'use strict';
+.mx_CreateKeyBackupDialog_passPhraseInput {
+    width: 300px;
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+    padding: 10px;
+}
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+.mx_CreateKeyBackupDialog_passPhraseMatch {
+    float: right;
+}
 
-module.exports = React.createClass({
-    displayName: 'CasLogin',
+.mx_CreateKeyBackupDialog_recoveryKeyButtons {
+    float: right;
+}
 
-    propTypes: {
-      onSubmit: PropTypes.func, // fn()
-    },
-
-    render: function() {
-        return (
-            <div>
-                <button onClick={this.props.onSubmit}>{ _t("Sign in with CAS") }</button>
-            </div>
-        );
-    },
-
-});
+.mx_CreateKeyBackupDialog_recoveryKey {
+    width: 300px;
+}

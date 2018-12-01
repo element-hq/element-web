@@ -82,6 +82,9 @@ const SIMPLE_SETTINGS = [
     { id: "TagPanel.disableTagPanel" },
     { id: "enableWidgetScreenshots" },
     { id: "RoomSubList.showEmpty" },
+    { id: "pinMentionedRooms" },
+    { id: "pinUnreadRooms" },
+    { id: "showDeveloperTools" },
 ];
 
 // These settings must be defined in SettingsStore
@@ -586,23 +589,21 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Export E2E Keys', '',
+            import('../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _onImportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Import E2E Keys', '', (cb) => {
-            require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
-                cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
-            }, "e2e-export");
-        }, {
-            matrixClient: MatrixClientPeg.get(),
-        });
+        Modal.createTrackedDialogAsync('Import E2E Keys', '',
+            import('../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            {
+                matrixClient: MatrixClientPeg.get(),
+            },
+        );
     },
 
     _renderGroupSettings: function() {
@@ -736,6 +737,16 @@ module.exports = React.createClass({
                 </div>
             );
         }
+
+        let keyBackupSection;
+        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
+            const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
+            keyBackupSection = <div className="mx_UserSettings_section">
+                <h3>{ _t("Key Backup") }</h3>
+                <KeyBackupPanel />
+            </div>;
+        }
+
         return (
             <div>
                 <h3>{ _t("Cryptography") }</h3>
@@ -751,6 +762,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
+                {keyBackupSection}
             </div>
         );
     },
@@ -844,7 +856,7 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = async (e) => {
+            const onChange = async(e) => {
                 const checked = e.target.checked;
                 if (featureId === "feature_lazyloading") {
                     const confirmed = await this._onLazyLoadChanging(checked);
@@ -1297,7 +1309,7 @@ module.exports = React.createClass({
         // If the olmVersion is not defined then either crypto is disabled, or
         // we are using a version old version of olm. We assume the former.
         let olmVersionString = "<not-enabled>";
-        if (olmVersion !== undefined) {
+        if (olmVersion) {
             olmVersionString = `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
         }
 

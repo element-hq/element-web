@@ -32,14 +32,14 @@ export default React.createClass({
     getDefaultProps: function() {
         return {
             detail: '',
-        }
+        };
     },
 
     getStatusText: function() {
         // we can't import the enum from riot-web as we don't want matrix-react-sdk
         // to depend on riot-web. so we grab it as a normal object via API instead.
         const updateCheckStatusEnum = PlatformPeg.get().getUpdateCheckStatusEnum();
-        switch(this.props.status) {
+        switch (this.props.status) {
             case updateCheckStatusEnum.ERROR:
                 return _t('Error encountered (%(errorDetail)s).', { errorDetail: this.props.detail });
             case updateCheckStatusEnum.CHECKING:
@@ -59,7 +59,7 @@ export default React.createClass({
         const message = this.getStatusText();
         const warning = _t('Warning');
 
-        if (!'getUpdateCheckStatusEnum' in PlatformPeg.get()) {
+        if (!('getUpdateCheckStatusEnum' in PlatformPeg.get())) {
             return <div></div>;
         }
 
@@ -83,9 +83,9 @@ export default React.createClass({
                     {message}
                 </div>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.hideToolbar}>
-                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')}/>
+                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')} />
                 </AccessibleButton>
             </div>
         );
-    }
+    },
 });

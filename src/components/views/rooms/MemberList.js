@@ -447,7 +447,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined">
                     <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}

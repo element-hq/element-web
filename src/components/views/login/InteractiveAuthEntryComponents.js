@@ -22,6 +22,7 @@ import classnames from 'classnames';
 
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -204,6 +205,145 @@ export const RecaptchaAuthEntry = React.createClass({
                     onCaptchaResponse={this._onCaptchaResponse}
                 />
                 { errorSection }
+            </div>
+        );
+    },
+});
+
+export const TermsAuthEntry = React.createClass({
+    displayName: 'TermsAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.terms",
+    },
+
+    propTypes: {
+        submitAuthDict: PropTypes.func.isRequired,
+        stageParams: PropTypes.object.isRequired,
+        errorText: PropTypes.string,
+        busy: PropTypes.bool,
+        showContinue: PropTypes.bool,
+    },
+
+    componentWillMount: function() {
+        // example stageParams:
+        //
+        // {
+        //     "policies": {
+        //         "privacy_policy": {
+        //             "version": "1.0",
+        //             "en": {
+        //                 "name": "Privacy Policy",
+        //                 "url": "https://example.org/privacy-1.0-en.html",
+        //             },
+        //             "fr": {
+        //                 "name": "Politique de confidentialité",
+        //                 "url": "https://example.org/privacy-1.0-fr.html",
+        //             },
+        //         },
+        //         "other_policy": { ... },
+        //     }
+        // }
+
+        const allPolicies = this.props.stageParams.policies || {};
+        const prefLang = SettingsStore.getValue("language");
+        const initToggles = {};
+        const pickedPolicies = [];
+        for (const policyId of Object.keys(allPolicies)) {
+            const policy = allPolicies[policyId];
+
+            // Pick a language based on the user's language, falling back to english,
+            // and finally to the first language available. If there's still no policy
+            // available then the homeserver isn't respecting the spec.
+            let langPolicy = policy[prefLang];
+            if (!langPolicy) langPolicy = policy["en"];
+            if (!langPolicy) {
+                // last resort
+                const firstLang = Object.keys(policy).find(e => e !== "version");
+                langPolicy = policy[firstLang];
+            }
+            if (!langPolicy) throw new Error("Failed to find a policy to show the user");
+
+            initToggles[policyId] = false;
+
+            langPolicy.id = policyId;
+            pickedPolicies.push(langPolicy);
+        }
+
+        this.setState({
+            "toggledPolicies": initToggles,
+            "policies": pickedPolicies,
+        });
+    },
+
+    tryContinue: function() {
+        this._trySubmit();
+    },
+
+    _togglePolicy: function(policyId) {
+        const newToggles = {};
+        for (const policy of this.state.policies) {
+            let checked = this.state.toggledPolicies[policy.id];
+            if (policy.id === policyId) checked = !checked;
+
+            newToggles[policy.id] = checked;
+        }
+        this.setState({"toggledPolicies": newToggles});
+    },
+
+    _trySubmit: function() {
+        let allChecked = true;
+        for (const policy of this.state.policies) {
+            let checked = this.state.toggledPolicies[policy.id];
+            allChecked = allChecked && checked;
+        }
+
+        if (allChecked) this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
+        else this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+    },
+
+    render: function() {
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        }
+
+        const checkboxes = [];
+        let allChecked = true;
+        for (const policy of this.state.policies) {
+            const checked = this.state.toggledPolicies[policy.id];
+            allChecked = allChecked && checked;
+
+            checkboxes.push(
+                <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
+                    <input type="checkbox" onClick={() => this._togglePolicy(policy.id)} checked={checked} />
+                    <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
+                </label>,
+            );
+        }
+
+        let errorSection;
+        if (this.props.errorText || this.state.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText || this.state.errorText }
+                </div>
+            );
+        }
+
+        let submitButton;
+        if (this.props.showContinue !== false) {
+            // XXX: button classes
+            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_UserSettings_button"
+                                   onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
+        }
+
+        return (
+            <div>
+                <p>{_t("Please review and accept the policies of this homeserver:")}</p>
+                { checkboxes }
+                { errorSection }
+                { submitButton }
             </div>
         );
     },
@@ -496,6 +636,7 @@ const AuthEntryComponents = [
     RecaptchaAuthEntry,
     EmailIdentityAuthEntry,
     MsisdnAuthEntry,
+    TermsAuthEntry,
 ];
 
 export function getEntryComponentForLoginType(loginType) {

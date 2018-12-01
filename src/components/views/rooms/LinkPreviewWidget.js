@@ -107,7 +107,7 @@ module.exports = React.createClass({
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         let image = p["og:image"];
-        let imageMaxWidth = 100, imageMaxHeight = 100;
+        const imageMaxWidth = 100; const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
         }

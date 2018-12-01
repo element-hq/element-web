@@ -64,7 +64,7 @@ export function containsEmoji(str) {
  * because we want to include emoji shortnames in title text
  */
 function unicodeToImage(str) {
-    let replaceWith, unicode, alt, short, fname;
+    let replaceWith; let unicode; let alt; let short; let fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {

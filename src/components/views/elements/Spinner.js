@@ -16,19 +16,19 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
 module.exports = React.createClass({
     displayName: 'Spinner',
 
     render: function() {
-        var w = this.props.w || 32;
-        var h = this.props.h || 32;
-        var imgClass = this.props.imgClassName || "";
+        const w = this.props.w || 32;
+        const h = this.props.h || 32;
+        const imgClass = this.props.imgClassName || "";
         return (
             <div className="mx_Spinner">
-                <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
+                <img src="img/spinner.gif" width={w} height={h} className={imgClass} />
             </div>
         );
-    }
+    },
 });

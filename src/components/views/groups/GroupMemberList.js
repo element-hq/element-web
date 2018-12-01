@@ -165,7 +165,7 @@ export default React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_outerWrapper">
+                <GeminiScrollbarWrapper autoshow={true}>
                     { joined }
                     { invited }
                 </GeminiScrollbarWrapper>

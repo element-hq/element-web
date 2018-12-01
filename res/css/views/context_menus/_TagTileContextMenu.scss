@@ -25,6 +25,10 @@ limitations under the License.
     line-height: 16px;
 }
 
+.mx_TagTileContextMenu_item object {
+    pointer-events: none;
+}
+
 
 .mx_TagTileContextMenu_item_icon {
     padding-right: 8px;

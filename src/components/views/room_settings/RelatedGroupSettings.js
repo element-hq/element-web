@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import isEqual from 'lodash/isEqual';
 
-const GROUP_ID_REGEX = /\+\S+\:\S+/;
+const GROUP_ID_REGEX = /\+\S+:\S+/;
 
 module.exports = React.createClass({
     displayName: 'RelatedGroupSettings',

@@ -829,7 +829,7 @@ var TimelinePanel = React.createClass({
         // 4. Also, if pos === null, the event might not be paginated - show the unread bar
         const pos = this.getReadMarkerPosition();
         return this.state.readMarkerEventId !== null && // 1.
-            this.state.readMarkerEventId !== this._getCurrentReadReceipt() &&  // 2.
+            this.state.readMarkerEventId !== this._getCurrentReadReceipt() && // 2.
             (pos < 0 || pos === null); // 3., 4.
     },
 

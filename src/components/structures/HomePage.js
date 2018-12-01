@@ -23,6 +23,8 @@ import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
+import { MatrixClient } from 'matrix-js-sdk';
+import dis from '../../dispatcher';
 
 class HomePage extends React.Component {
     static displayName = 'HomePage';
@@ -35,6 +37,10 @@ class HomePage extends React.Component {
         teamToken: PropTypes.string,
         // URL to use as the iFrame src. Defaults to /home.html.
         homePageUrl: PropTypes.string,
+    };
+
+    static contextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
     };
 
     state = {
@@ -52,15 +58,14 @@ class HomePage extends React.Component {
 
         if (this.props.teamToken && this.props.teamServerUrl) {
             this.setState({
-                iframeSrc: `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`
+                iframeSrc: `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`,
             });
-        }
-        else {
+        } else {
             // we use request() to inline the homepage into the react component
             // so that it can inherit CSS and theming easily rather than mess around
             // with iframes and trying to synchronise document.stylesheets.
 
-            let src = this.props.homePageUrl || 'home.html';
+            const src = this.props.homePageUrl || 'home.html';
 
             request(
                 { method: "GET", url: src },
@@ -77,7 +82,7 @@ class HomePage extends React.Component {
 
                     body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
                     this.setState({ page: body });
-                }
+                },
             );
         }
     }
@@ -86,18 +91,55 @@ class HomePage extends React.Component {
         this._unmounted = true;
     }
 
+    onLoginClick() {
+        dis.dispatch({ action: 'start_login' });
+    }
+
+    onRegisterClick() {
+        dis.dispatch({ action: 'start_registration' });
+    }
+
     render() {
-        if (this.state.iframeSrc) {
-            return (
-                <div className="mx_HomePage">
-                    <iframe src={ this.state.iframeSrc } />
+        let guestWarning = "";
+        if (this.context.matrixClient.isGuest()) {
+            guestWarning = (
+                <div className="mx_HomePage_guest_warning">
+                    <img src="img/warning.svg" width="24" height="23" />
+                    <div>
+                        <div>
+                            { _t("You are currently using Riot anonymously as a guest.") }
+                        </div>
+                        <div>
+                            { _t(
+                                'If you would like to create a Matrix account you can <a>register</a> now.',
+                                {},
+                                { 'a': (sub) => <a href="#" onClick={this.onRegisterClick}>{ sub }</a> },
+                            ) }
+                        </div>
+                        <div>
+                            { _t(
+                                'If you already have a Matrix account you can <a>log in</a> instead.',
+                                {},
+                                { 'a': (sub) => <a href="#" onClick={this.onLoginClick}>{ sub }</a> },
+                            ) }
+                        </div>
+                    </div>
                 </div>
             );
         }
-        else {
+
+        if (this.state.iframeSrc) {
+            return (
+                <div className="mx_HomePage">
+                    { guestWarning }
+                    <iframe src={ this.state.iframeSrc } />
+                </div>
+            );
+        } else {
             const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
             return (
                 <GeminiScrollbarWrapper autoshow={true} className="mx_HomePage">
+                    { guestWarning }
                     <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
                     </div>
                 </GeminiScrollbarWrapper>

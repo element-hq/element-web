@@ -22,7 +22,6 @@ const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require('./MatrixClientPeg');
 
 class ScalarAuthClient {
-
     constructor() {
         this.scalarToken = null;
     }

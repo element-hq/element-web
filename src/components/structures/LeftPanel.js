@@ -28,7 +28,7 @@ import VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 
 
-var LeftPanel = React.createClass({
+const LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     // NB. If you add props, don't forget to update
@@ -181,14 +181,8 @@ var LeftPanel = React.createClass({
         const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        let topBox;
-        if (this.context.matrixClient.isGuest()) {
-            const LoginBox = sdk.getComponent('structures.LoginBox');
-            topBox = <LoginBox collapsed={ this.props.collapsed }/>;
-        } else {
-            const SearchBox = sdk.getComponent('structures.SearchBox');
-            topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
-        }
+        const SearchBox = sdk.getComponent('structures.SearchBox');
+        const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
 
         const classes = classNames(
             "mx_LeftPanel",
@@ -220,11 +214,11 @@ var LeftPanel = React.createClass({
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />
-                    <BottomLeftMenu collapsed={this.props.collapsed}/>
+                    <BottomLeftMenu collapsed={this.props.collapsed} />
                 </aside>
             </div>
         );
-    }
+    },
 });
 
 module.exports = LeftPanel;

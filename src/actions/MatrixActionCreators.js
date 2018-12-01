@@ -63,6 +63,35 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
 }
 
 /**
+ * @typedef RoomAccountDataAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.Room.accountData'.
+ * @property {MatrixEvent} event the MatrixEvent that triggered the dispatch.
+ * @property {string} event_type the type of the MatrixEvent, e.g. "m.direct".
+ * @property {Object} event_content the content of the MatrixEvent.
+ * @property {Room} room the room where the account data was changed.
+ */
+
+/**
+ * Create a MatrixActions.Room.accountData action that represents a MatrixClient `Room.accountData`
+ * matrix event.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} accountDataEvent the account data event.
+ * @param {Room} room the room where account data was changed
+ * @returns {RoomAccountDataAction} an action of type MatrixActions.Room.accountData.
+ */
+function createRoomAccountDataAction(matrixClient, accountDataEvent, room) {
+    return {
+        action: 'MatrixActions.Room.accountData',
+        event: accountDataEvent,
+        event_type: accountDataEvent.getType(),
+        event_content: accountDataEvent.getContent(),
+        room: room,
+    };
+}
+
+/**
  * @typedef RoomAction
  * @type {Object}
  * @property {string} action 'MatrixActions.Room'.
@@ -201,6 +230,7 @@ export default {
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+        this._addMatrixClientListener(matrixClient, 'Room.accountData', createRoomAccountDataAction);
         this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);

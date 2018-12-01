@@ -64,6 +64,9 @@ const LoggedInView = React.createClass({
 
         teamToken: PropTypes.string,
 
+        // Used by the RoomView to handle joining rooms
+        viaServers: PropTypes.arrayOf(PropTypes.string),
+
         // and lots and lots of other stuff.
     },
 
@@ -186,13 +189,13 @@ const LoggedInView = React.createClass({
     _updateServerNoticeEvents: async function() {
         const roomLists = RoomListStore.getRoomLists();
         if (!roomLists['m.server_notice']) return [];
-        
+
         const pinnedEvents = [];
         for (const room of roomLists['m.server_notice']) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
-            
+
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
                 const timeline = await this._matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId, 0);
@@ -204,7 +207,7 @@ const LoggedInView = React.createClass({
             serverNoticeEvents: pinnedEvents,
         });
     },
-    
+
 
     _onKeyDown: function(ev) {
             /*
@@ -389,6 +392,7 @@ const LoggedInView = React.createClass({
                         onRegistered={this.props.onRegistered}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
+                        viaServers={this.props.viaServers}
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}

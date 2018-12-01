@@ -78,7 +78,7 @@ export default React.createClass({
     },
 
     render: function() {
-        let blacklistButton = null, verifyButton = null;
+        let blacklistButton = null; let verifyButton = null;
 
         if (this.state.device.isBlocked()) {
             blacklistButton = (

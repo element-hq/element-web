@@ -1234,5 +1234,7 @@
     "Put a link back to the old room at the start of the new room so people can see old messages": "Разместим ссылку на старую комнату, чтобы люди могли видеть старые сообщения",
     "Please <a>contact your service administrator</a> to continue using this service.": "Пожалуйста, <a>обратитесь к вашему администратору</a>, чтобы продолжить использовать этот сервис.",
     "Increase performance by only loading room members on first view": "Увеличьте производительность, загрузив только список участников комнаты",
-    "Lazy loading members not supported": "Задержка загрузки элементов не поддерживается"
+    "Lazy loading members not supported": "Задержка загрузки элементов не поддерживается",
+    "Registration Required": "Требуется регистрация",
+    "You need to register to do this. Would you like to register now?": "Необходимо зарегистрироваться. Хотите зарегистрироваться?"
 }
