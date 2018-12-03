@@ -749,7 +749,6 @@ var TimelinePanel = React.createClass({
         this._loadTimeline(this.state.readMarkerEventId, 0, 1/3);
     },
 
-
     /* update the read-up-to marker to match the read receipt
      */
     forgetReadMarker: function() {

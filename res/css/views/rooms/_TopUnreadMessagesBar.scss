@@ -15,39 +15,29 @@ limitations under the License.
 */
 
 .mx_TopUnreadMessagesBar {
-    margin: auto;  /* centre horizontally */
-    max-width: 960px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid $primary-hairline-color;
+    z-index: 1000;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 38px;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {
-    display: inline;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.mx_TopUnreadMessagesBar_scrollUp img {
-    padding-left: 10px;
-    padding-right: 31px;
-    vertical-align: middle;
-}
-
-.mx_TopUnreadMessagesBar_scrollUp span {
-    opacity: 0.5;
-}
-
-.mx_TopUnreadMessagesBar_close {
-    float: right;
-    padding-right: 14px;
-    padding-top: 3px;
+    height: 38px;
+    border-radius: 19px;
+    box-sizing: border-box;
+    background: $primary-bg-color;
+    border: 1.3px solid $roomtile-name-color;
     cursor: pointer;
 }
 
-.mx_MatrixChat_useCompactLayout {
-    .mx_TopUnreadMessagesBar {
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
+.mx_TopUnreadMessagesBar_scrollUp:before {
+    content: "";
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    mask: url('../../img/icon-jump-to-first-unread.svg');
+    mask-repeat: no-repeat;
+    mask-position: 9px 13px;
+    background: $roomtile-name-color;
 }
