@@ -1211,5 +1211,6 @@
     "Delete Backup": "Usuń Kopię Zapasową",
     "Delete backup": "Usuń Kopię Zapasową",
     "Unable to load! Check your network connectivity and try again.": "Nie można załadować! Sprawdź połączenie sieciowe i spróbuj ponownie.",
-    "Algorithm: ": "Algorytm: "
+    "Algorithm: ": "Algorytm: ",
+    "Pin unread rooms to the top of the room list": "Przypnij nieprzeczytanie pokoje na górę listy pokojów"
 }
