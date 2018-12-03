@@ -72,8 +72,9 @@ module.exports = React.createClass({
     getInitialState: function() {
 
         const sizesJson = window.localStorage.getItem("mx_roomlist_sizes");
+        const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
         this.subListSizes = sizesJson ? JSON.parse(sizesJson) : {};
-
+        this.collapsedState = collapsedJson ? JSON.parse(collapsedJson) : {};
         return {
             isLoadingLeftRooms: false,
             totalRoomCount: null,
@@ -474,6 +475,11 @@ module.exports = React.createClass({
             (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
     },
 
+    _persistCollapsedState: function(key, collapsed) {
+        this.collapsedState[key] = collapsed;
+        window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
+    },
+
     _mapSubListProps: function(subListsProps) {
         const defaultProps = {
             collapsed: this.props.collapsed,
@@ -493,10 +499,23 @@ module.exports = React.createClass({
         return subListsProps.reduce((components, props, i) => {
             props = Object.assign({}, defaultProps, props);
             const isLast = i === subListsProps.length - 1;
-            const {key, label, ... otherProps} = props;
+            const {key, label, onHeaderClick, ... otherProps} = props;
             const chosenKey = key || label;
+            const onSubListHeaderClick = (collapsed) => {
+                this._persistCollapsedState(chosenKey, collapsed);
+                if (onHeaderClick) {
+                    onHeaderClick(collapsed);
+                }
+            };
+            const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
 
-            let subList = <RoomSubList key={chosenKey} label={label} {...otherProps} />;
+            let subList = (<RoomSubList
+                startAsHidden={startAsHidden}
+                onHeaderClick={onSubListHeaderClick}
+                key={chosenKey}
+                label={label}
+                {...otherProps} />);
+
             if (!isLast) {
                 return components.concat(
                     subList,
