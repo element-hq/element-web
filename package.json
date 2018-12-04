@@ -96,7 +96,8 @@
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-vector": "github:vector-im/velocity#059e3b2",
-    "whatwg-fetch": "^1.1.1"
+    "whatwg-fetch": "^1.1.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
