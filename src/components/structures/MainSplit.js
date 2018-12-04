@@ -23,6 +23,11 @@ export default class MainSplit extends React.Component {
     constructor(props) {
         super(props);
         this._setResizeContainerRef = this._setResizeContainerRef.bind(this);
+        this._onResized = this._onResized.bind(this);
+    }
+
+    _onResized(size) {
+        window.localStorage.setItem("mx_rhs_size", size);
     }
 
     _createResizer() {
@@ -33,7 +38,9 @@ export default class MainSplit extends React.Component {
         };
         const resizer = new Resizer(
             this.resizeContainer,
-            FixedDistributor);
+            FixedDistributor,
+            {onResized: this._onResized},
+        );
         resizer.setClassNames(classNames);
         const rhsSize = window.localStorage.getItem("mx_rhs_size");
         if (rhsSize !== null) {
