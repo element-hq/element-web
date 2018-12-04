@@ -1409,5 +1409,6 @@
     "Names and surnames by themselves are easy to guess": "Neveket egymagukban könnyű kitalálni",
     "Common names and surnames are easy to guess": "Elterjedt neveket könnyű kitalálni",
     "Great! This passphrase looks strong enough.": "Szuper! Ez a jelmondat elég erősnek látszik.",
-    "As a safety net, you can use it to restore your encrypted message history.": "Használhatod egy biztonsági hálóként a titkosított üzenetek visszaállításához."
+    "As a safety net, you can use it to restore your encrypted message history.": "Használhatod egy biztonsági hálóként a titkosított üzenetek visszaállításához.",
+    "Failed to load group members": "A közösség tagságokat nem sikerült betölteni"
 }
