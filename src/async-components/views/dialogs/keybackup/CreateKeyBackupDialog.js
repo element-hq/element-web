@@ -178,7 +178,7 @@ export default React.createClass({
         this.setState({
             passPhrase: e.target.value,
             // precompute this and keep it in state: zxcvbn is fast but
-            // we use it in a couple of different places so so point recomputing
+            // we use it in a couple of different places so no point recomputing
             // it unnecessarily.
             zxcvbnResult: scorePassword(e.target.value),
         });
