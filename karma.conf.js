@@ -38,7 +38,7 @@ webpack_config.mode = 'development';
 // add ./test as a search path for js
 webpack_config.module.rules.unshift({
     test: /\.js$/, use: "babel-loader",
-    include: [path.resolve('./src'), path.resolve('./test')],
+    include: [path.resolve('./src'), path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'), path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'), path.resolve('./test')],
 });
 
 // disable parsing for sinon, because it
