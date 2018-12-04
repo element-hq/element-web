@@ -56,6 +56,7 @@ export default React.createClass({
             copied: false,
             downloaded: false,
             zxcvbnResult: null,
+            setPassPhrase: false,
         };
     },
 
@@ -132,6 +133,7 @@ export default React.createClass({
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion();
         this.setState({
             copied: false,
+            downloaded: false,
             phase: PHASE_SHOWKEY,
         });
     },
@@ -149,7 +151,9 @@ export default React.createClass({
     _onPassPhraseConfirmNextClick: async function() {
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion(this.state.passPhrase);
         this.setState({
+            setPassPhrase: true,
             copied: false,
+            downloaded: false,
             phase: PHASE_SHOWKEY,
         });
     },
@@ -327,9 +331,17 @@ export default React.createClass({
 
     _renderPhaseShowKey: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+
+        let bodyText;
+        if (this.state.setPassPhrase) {
+            bodyText = _t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.");
+        } else {
+            bodyText = _t("As a safety net, you can use it to restore your encrypted message history.");
+        }
+
         return <div>
             <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
-            <p>{_t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.")}</p>
+            <p>{bodyText}</p>
             <p className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div>{_t("Your Recovery Key")}</div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
