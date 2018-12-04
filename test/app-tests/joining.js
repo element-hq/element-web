@@ -16,7 +16,7 @@ limitations under the License.
 
 /* joining.js: tests for the various paths when joining a room */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
 
 require('skin-sdk');
@@ -24,9 +24,9 @@ require('skin-sdk');
 const jssdk = require('matrix-js-sdk');
 
 const sdk = require('matrix-react-sdk');
-const peg = require('matrix-react-sdk/lib/MatrixClientPeg');
-const dis = require('matrix-react-sdk/lib/dispatcher');
-const PageTypes = require('matrix-react-sdk/lib/PageTypes');
+const peg = require('matrix-react-sdk/src/MatrixClientPeg');
+const dis = require('matrix-react-sdk/src/dispatcher');
+const PageTypes = require('matrix-react-sdk/src/PageTypes');
 const MatrixChat = sdk.getComponent('structures.MatrixChat');
 const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
 const RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
