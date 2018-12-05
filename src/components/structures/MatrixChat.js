@@ -48,6 +48,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 
+const AutoDiscovery = Matrix.AutoDiscovery;
+
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
 Promise.config({warnings: false});
@@ -181,6 +183,12 @@ export default React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
+            // Parameters used for setting up the login/registration views
+            defaultServerName: this.props.config.default_server_name,
+            defaultHsUrl: this.props.config.default_hs_url,
+            defaultIsUrl: this.props.config.default_is_url,
+            defaultServerDiscoveryError: null,
+
             // When showing Modal dialogs we need to set aria-hidden on the root app element
             // and disable it when there are no dialogs
             hideToSRUsers: false,
@@ -199,6 +207,10 @@ export default React.createClass({
         };
     },
 
+    getDefaultServerName: function() {
+        return this.state.defaultServerName;
+    },
+
     getCurrentHsUrl: function() {
         if (this.state.register_hs_url) {
             return this.state.register_hs_url;
@@ -211,8 +223,10 @@ export default React.createClass({
         }
     },
 
-    getDefaultHsUrl() {
-        return this.props.config.default_hs_url || "https://matrix.org";
+    getDefaultHsUrl(defaultToMatrixDotOrg) {
+        defaultToMatrixDotOrg = typeof(defaultToMatrixDotOrg) !== 'boolean' ? true : defaultToMatrixDotOrg;
+        if (!this.state.defaultHsUrl && defaultToMatrixDotOrg) return "https://matrix.org";
+        return this.state.defaultHsUrl;
     },
 
     getFallbackHsUrl: function() {
@@ -232,7 +246,7 @@ export default React.createClass({
     },
 
     getDefaultIsUrl() {
-        return this.props.config.default_is_url || "https://vector.im";
+        return this.state.defaultIsUrl || "https://vector.im";
     },
 
     componentWillMount: function() {
@@ -280,6 +294,11 @@ export default React.createClass({
 
         if (this._teamToken) {
             console.info(`Team token set to ${this._teamToken}`);
+        }
+
+        // Set up the default URLs (async)
+        if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
+            this._tryDiscoverDefaultHomeserver(this.getDefaultServerName());
         }
 
         // Set a default HS with query param `hs_url`
@@ -1732,6 +1751,21 @@ export default React.createClass({
         this.setState(newState);
     },
 
+    _tryDiscoverDefaultHomeserver: async function(serverName) {
+        const discovery = await AutoDiscovery.findClientConfig(serverName);
+        const state = discovery["m.homeserver"].state;
+        if (state !== AutoDiscovery.SUCCESS) {
+            console.error("Failed to discover homeserver on startup:", discovery);
+            this.setState({defaultServerDiscoveryError: discovery["m.homeserver"].error});
+        } else {
+            const hsUrl = discovery["m.homeserver"].base_url;
+            const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                ? discovery["m.identity_server"].base_url
+                : "https://vector.im";
+            this.setState({defaultHsUrl: hsUrl, defaultIsUrl: isUrl});
+        }
+    },
+
     _makeRegistrationUrl: function(params) {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
@@ -1820,6 +1854,8 @@ export default React.createClass({
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
                     referrer={this.props.startingFragmentQueryParams.referrer}
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
@@ -1842,6 +1878,8 @@ export default React.createClass({
             const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
             return (
                 <ForgotPassword
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
@@ -1858,6 +1896,8 @@ export default React.createClass({
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}

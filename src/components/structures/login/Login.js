@@ -26,10 +26,16 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import request from 'browser-request';
+import { AutoDiscovery } from "matrix-js-sdk";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
+
+// These are used in several places, and come from the js-sdk's autodiscovery
+// stuff. We define them here so that they'll be picked up by i18n.
+_td("Invalid homeserver discovery response");
+_td("Invalid identity server discovery response");
+_td("General failure");
 
 /**
  * A wire component which glues together login UI components and Login logic
@@ -50,6 +56,14 @@ module.exports = React.createClass({
         // the default HS but login fails. Useful for migrating to a
         // different home server without confusing users.
         fallbackHsUrl: PropTypes.string,
+
+        // The default server name to use when the user hasn't specified
+        // one. This is used when displaying the defaultHsUrl in the UI.
+        defaultServerName: PropTypes.string,
+
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
 
         defaultDeviceDisplayName: PropTypes.string,
 
@@ -113,7 +127,7 @@ module.exports = React.createClass({
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
         // Prevent people from submitting their password when homeserver
         // discovery went wrong
-        if (this.state.discoveryError) return;
+        if (this.state.discoveryError || this.props.defaultServerDiscoveryError) return;
 
         this.setState({
             busy: true,
@@ -290,112 +304,41 @@ module.exports = React.createClass({
         }
 
         try {
-            const wellknown = await this._getWellKnownObject(`https://${serverName}/.well-known/matrix/client`);
-            if (!wellknown["m.homeserver"]) {
-                console.error("No m.homeserver key in well-known response");
-                this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                return;
+            const discovery = await AutoDiscovery.findClientConfig(serverName);
+            const state = discovery["m.homeserver"].state;
+            if (state !== AutoDiscovery.SUCCESS && state !== AutoDiscovery.PROMPT) {
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: discovery["m.homeserver"].error,
+                });
+            } else if (state === AutoDiscovery.PROMPT) {
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: "",
+                });
+            } else if (state === AutoDiscovery.SUCCESS) {
+                this.setState({
+                    discoveredHsUrl: discovery["m.homeserver"].base_url,
+                    discoveredIsUrl:
+                        discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                            ? discovery["m.identity_server"].base_url
+                            : "",
+                    discoveryError: "",
+                });
+            } else {
+                console.warn("Unknown state for m.homeserver in discovery response: ", discovery);
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: _t("Unknown failure discovering homeserver"),
+                });
             }
-
-            const hsUrl = this._sanitizeWellKnownUrl(wellknown["m.homeserver"]["base_url"]);
-            if (!hsUrl) {
-                console.error("Invalid base_url for m.homeserver");
-                this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                return;
-            }
-
-            console.log("Verifying homeserver URL: " + hsUrl);
-            const hsVersions = await this._getWellKnownObject(`${hsUrl}/_matrix/client/versions`);
-            if (!hsVersions["versions"]) {
-                console.error("Invalid /versions response");
-                this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                return;
-            }
-
-            let isUrl = "";
-            if (wellknown["m.identity_server"]) {
-                isUrl = this._sanitizeWellKnownUrl(wellknown["m.identity_server"]["base_url"]);
-                if (!isUrl) {
-                    console.error("Invalid base_url for m.identity_server");
-                    this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                    return;
-                }
-
-                console.log("Verifying identity server URL: " + isUrl);
-                const isResponse = await this._getWellKnownObject(`${isUrl}/_matrix/identity/api/v1`);
-                if (!isResponse) {
-                    console.error("Invalid /api/v1 response");
-                    this.setState({discoveryError: _t("Invalid homeserver discovery response")});
-                    return;
-                }
-            }
-
-            this.setState({discoveredHsUrl: hsUrl, discoveredIsUrl: isUrl, discoveryError: ""});
         } catch (e) {
             console.error(e);
-            if (e.wkAction) {
-                if (e.wkAction === "FAIL_ERROR" || e.wkAction === "FAIL_PROMPT") {
-                    // We treat FAIL_ERROR and FAIL_PROMPT the same to avoid having the user
-                    // submit their details to the wrong homeserver. In practice, the custom
-                    // server options will show up to try and guide the user into entering
-                    // the required information.
-                    this.setState({discoveryError: _t("Cannot find homeserver")});
-                    return;
-                } else if (e.wkAction === "IGNORE") {
-                    // Nothing to discover
-                    this.setState({discoveryError: "", discoveredHsUrl: "", discoveredIsUrl: ""});
-                    return;
-                }
-            }
-
             throw e;
         }
-    },
-
-    _sanitizeWellKnownUrl: function(url) {
-        if (!url) return false;
-
-        const parser = document.createElement('a');
-        parser.href = url;
-
-        if (parser.protocol !== "http:" && parser.protocol !== "https:") return false;
-        if (!parser.hostname) return false;
-
-        const port = parser.port ? `:${parser.port}` : "";
-        const path = parser.pathname ? parser.pathname : "";
-        let saferUrl = `${parser.protocol}//${parser.hostname}${port}${path}`;
-        if (saferUrl.endsWith("/")) saferUrl = saferUrl.substring(0, saferUrl.length - 1);
-        return saferUrl;
-    },
-
-    _getWellKnownObject: function(url) {
-        return new Promise(function(resolve, reject) {
-            request(
-                { method: "GET", url: url },
-                (err, response, body) => {
-                    if (err || response.status < 200 || response.status >= 300) {
-                        let action = "FAIL_ERROR";
-                        if (response.status === 404) {
-                            // We could just resolve with an empty object, but that
-                            // causes a different series of branches when the m.homeserver
-                            // bit of the JSON is missing.
-                            action = "IGNORE";
-                        }
-                        reject({err: err, response: response, wkAction: action});
-                        return;
-                    }
-
-                    try {
-                        resolve(JSON.parse(body));
-                    } catch (e) {
-                        console.error(e);
-                        if (e.name === "SyntaxError") {
-                            reject({wkAction: "FAIL_PROMPT", wkError: "Invalid JSON"});
-                        } else throw e;
-                    }
-                },
-            );
-        });
     },
 
     _initLoginLogic: function(hsUrl, isUrl) {
@@ -527,6 +470,9 @@ module.exports = React.createClass({
 
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+        const hsName = this.state.enteredHomeserverUrl === this.props.defaultHsUrl
+            ? this.props.defaultServerName
+            : null;
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
@@ -541,6 +487,7 @@ module.exports = React.createClass({
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
+               hsName={hsName}
                />
         );
     },
@@ -559,7 +506,7 @@ module.exports = React.createClass({
         const ServerConfig = sdk.getComponent("login.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
-        const errorText = this.state.discoveryError || this.state.errorText;
+        const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
 
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
@@ -576,7 +523,7 @@ module.exports = React.createClass({
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
                 customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                customIsUrl={this.state.discoveredIsUrl ||this.props.customIsUrl}
+                customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
                 defaultHsUrl={this.props.defaultHsUrl}
                 defaultIsUrl={this.props.defaultIsUrl}
                 onServerConfigChange={this.onServerConfigChange}

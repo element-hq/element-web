@@ -40,6 +40,7 @@ class PasswordLogin extends React.Component {
         initialPassword: "",
         loginIncorrect: false,
         hsDomain: "",
+        hsName: null,
     }
 
     constructor(props) {
@@ -250,13 +251,24 @@ class PasswordLogin extends React.Component {
             );
         }
 
-        let matrixIdText = '';
+        let matrixIdText = _t('Matrix ID');
+        let matrixIdSubtext = null;
+        if (this.props.hsName) {
+            matrixIdText = _t('%(serverName)s Matrix ID', {serverName: this.props.hsName});
+        }
         if (this.props.hsUrl) {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
-                matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
+                if (!this.props.hsName) {
+                    matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
+                } else if (parsedHsUrl.hostname !== this.props.hsName) {
+                    matrixIdSubtext = _t('%(serverName)s is located at %(homeserverUrl)s', {
+                        serverName: this.props.hsName,
+                        homeserverUrl: this.props.hsUrl,
+                    });
+                }
             } catch (e) {
-                // pass
+                // ignore
             }
         }
 
@@ -292,6 +304,7 @@ class PasswordLogin extends React.Component {
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 { loginType }
+                <span className="mx_Login_subtext">{ matrixIdSubtext }</span>
                 { loginField }
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
@@ -325,6 +338,7 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
+    hsName: PropTypes.string,
 };
 
 module.exports = PasswordLogin;
