@@ -37,7 +37,7 @@ import { _t } from './languageHandler';
  */
 function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
-    return inviter.invite(addrs).then(addrs => Promise.resolve({addrs, inviter}));
+    return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
 export function showStartChatInviteDialog() {
@@ -119,7 +119,7 @@ function _onStartChatFinished(shouldInvite, addrs) {
             room = MatrixClientPeg.get().getRoom(roomId);
             return inviteMultipleToRoom(roomId, addrTexts);
         }).then((result) => {
-            return _showAnyInviteErrors(result.addrs, room, result.inviter);
+            return _showAnyInviteErrors(result.states, room, result.inviter);
         }).catch((err) => {
             console.error(err.stack);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -139,7 +139,7 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
     // Invite new users to a room
     inviteMultipleToRoom(roomId, addrTexts).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        return _showAnyInviteErrors(result.addrs, room, result.inviter);
+        return _showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
         console.error(err.stack);
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
