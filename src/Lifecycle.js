@@ -32,6 +32,7 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
+import {sendLoginRequest} from "./Login";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -129,27 +130,17 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    // create a temporary MatrixClient to do the login
-    const client = Matrix.createClient({
-        baseUrl: queryParams.homeserver,
-    });
-
-    return client.login(
+    return sendLoginRequest(
+        queryParams.homeserver,
+        queryParams.identityServer,
         "m.login.token", {
             token: queryParams.loginToken,
             initial_device_display_name: defaultDeviceDisplayName,
         },
-    ).then(function(data) {
+    ).then(function(creds) {
         console.log("Logged in with token");
         return _clearStorage().then(() => {
-            _persistCredentialsToLocalStorage({
-                userId: data.user_id,
-                deviceId: data.device_id,
-                accessToken: data.access_token,
-                homeserverUrl: queryParams.homeserver,
-                identityServerUrl: queryParams.identityServer,
-                guest: false,
-            });
+            _persistCredentialsToLocalStorage(creds);
             return true;
         });
     }).catch((err) => {
