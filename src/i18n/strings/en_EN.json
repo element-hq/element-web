@@ -222,6 +222,7 @@
     "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
     "Not a valid Riot keyfile": "Not a valid Riot keyfile",
     "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
+    "There was an error joining the room": "There was an error joining the room",
     "Use a few words, avoid common phrases": "Use a few words, avoid common phrases",
     "No need for symbols, digits, or uppercase letters": "No need for symbols, digits, or uppercase letters",
     "Use a longer keyboard pattern with more turns": "Use a longer keyboard pattern with more turns",
