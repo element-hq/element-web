@@ -1409,5 +1409,6 @@
     "Common names and surnames are easy to guess": "Les noms et prénoms répandus sont faciles à deviner",
     "Use a longer keyboard pattern with more turns": "Utilisez un schéma plus long et avec plus de variations",
     "Great! This passphrase looks strong enough.": "Super ! Cette phrase de passe a l'air assez forte.",
-    "As a safety net, you can use it to restore your encrypted message history.": "En cas de problème, vous pouvez l'utiliser pour récupérer l'historique de vos messages chiffrés."
+    "As a safety net, you can use it to restore your encrypted message history.": "En cas de problème, vous pouvez l'utiliser pour récupérer l'historique de vos messages chiffrés.",
+    "Failed to load group members": "Échec du chargement des membres du groupe"
 }
