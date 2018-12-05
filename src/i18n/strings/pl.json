@@ -1266,5 +1266,15 @@
     "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)swyszło i dołączyło ponownie %(count)s razy",
     "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)swyszło i dołączyło ponownie",
     "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)swyszedł(-ła) i dołączył(a) ponownie %(count)s razy",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)swyszedł(-ła) i dołączył(a) ponownie"
+    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)swyszedł(-ła) i dołączył(a) ponownie",
+    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sodrzucił(a) ich zaproszenie %(count)s razy",
+    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)sodrzucił(a) ich zaproszenie",
+    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)sodrzuciło ich zaproszenia",
+    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)swycofał(a) zaproszenie %(count)s razy",
+    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)swycofał(a) zaproszenie",
+    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)swycofało zaproszenie %(count)s razy",
+    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)swycofało zaproszenie",
+    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)szmieniło ich nazwę %(count)s razy",
+    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)szmieniło ich nazwę",
+    "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem"
 }
