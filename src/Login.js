@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@ limitations under the License.
 
 import Matrix from "matrix-js-sdk";
 
-import Promise from 'bluebird';
 import url from 'url';
 
 export default class Login {
@@ -141,82 +141,26 @@ export default class Login {
         };
         Object.assign(loginParams, legacyParams);
 
-        const client = this._createTemporaryClient();
-
         const tryFallbackHs = (originalError) => {
-            const fbClient = Matrix.createClient({
-                baseUrl: self._fallbackHsUrl,
-                idBaseUrl: this._isUrl,
-            });
-
-            return fbClient.login('m.login.password', loginParams).then(function(data) {
-                return Promise.resolve({
-                    homeserverUrl: self._fallbackHsUrl,
-                    identityServerUrl: self._isUrl,
-                    userId: data.user_id,
-                    deviceId: data.device_id,
-                    accessToken: data.access_token,
-                });
-            }).catch((fallback_error) => {
+            return sendLoginRequest(
+                self._fallbackHsUrl, this._isUrl, 'm.login.password', loginParams,
+            ).catch((fallback_error) => {
                 console.log("fallback HS login failed", fallback_error);
-                // throw the original error
-                throw originalError;
-            });
-        };
-        const tryLowercaseUsername = (originalError) => {
-            const loginParamsLowercase = Object.assign({}, loginParams, {
-                user: username.toLowerCase(),
-                identifier: {
-                    user: username.toLowerCase(),
-                },
-            });
-            return client.login('m.login.password', loginParamsLowercase).then(function(data) {
-                return Promise.resolve({
-                    homeserverUrl: self._hsUrl,
-                    identityServerUrl: self._isUrl,
-                    userId: data.user_id,
-                    deviceId: data.device_id,
-                    accessToken: data.access_token,
-                });
-            }).catch((fallback_error) => {
-                console.log("Lowercase username login failed", fallback_error);
                 // throw the original error
                 throw originalError;
             });
         };
 
         let originalLoginError = null;
-        return client.login('m.login.password', loginParams).then(function(data) {
-            return Promise.resolve({
-                homeserverUrl: self._hsUrl,
-                identityServerUrl: self._isUrl,
-                userId: data.user_id,
-                deviceId: data.device_id,
-                accessToken: data.access_token,
-            });
-        }).catch((error) => {
+        return sendLoginRequest(
+            self._hsUrl, self._isUrl, 'm.login.password', loginParams,
+        ).catch((error) => {
             originalLoginError = error;
             if (error.httpStatus === 403) {
                 if (self._fallbackHsUrl) {
                     return tryFallbackHs(originalLoginError);
                 }
             }
-            throw originalLoginError;
-        }).catch((error) => {
-            // We apparently squash case at login serverside these days:
-            // https://github.com/matrix-org/synapse/blob/1189be43a2479f5adf034613e8d10e3f4f452eb9/synapse/handlers/auth.py#L475
-            // so this wasn't needed after all. Keeping the code around in case the
-            // the situation changes...
-
-            /*
-            if (
-                error.httpStatus === 403 &&
-                loginParams.identifier.type === 'm.id.user' &&
-                username.search(/[A-Z]/) > -1
-            ) {
-                return tryLowercaseUsername(originalLoginError);
-            }
-            */
             throw originalLoginError;
         }).catch((error) => {
             console.log("Login failed", error);
@@ -238,4 +182,33 @@ export default class Login {
       parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
       return client.getSsoLoginUrl(url.format(parsedUrl), loginType);
     }
+}
+
+
+/**
+ * Send a login request to the given server, and format the response
+ * as a MatrixClientCreds
+ *
+ * @param {string} hsUrl   the base url of the Homeserver used to log in.
+ * @param {string} isUrl   the base url of the default identity server
+ * @param {string} loginType the type of login to do
+ * @param {object} loginParams the parameters for the login
+ *
+ * @returns {MatrixClientCreds}
+ */
+export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
+    const client = Matrix.createClient({
+        baseUrl: hsUrl,
+        idBaseUrl: isUrl,
+    });
+
+    const data = await client.login(loginType, loginParams);
+
+    return {
+        homeserverUrl: hsUrl,
+        identityServerUrl: isUrl,
+        userId: data.user_id,
+        deviceId: data.device_id,
+        accessToken: data.access_token,
+    };
 }
