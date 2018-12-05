@@ -225,6 +225,7 @@
     "You do not have permission to invite people to this room.": "You do not have permission to invite people to this room.",
     "User %(user_id)s does not exist": "User %(user_id)s does not exist",
     "Unknown server error": "Unknown server error",
+    "There was an error joining the room": "There was an error joining the room",
     "Use a few words, avoid common phrases": "Use a few words, avoid common phrases",
     "No need for symbols, digits, or uppercase letters": "No need for symbols, digits, or uppercase letters",
     "Use a longer keyboard pattern with more turns": "Use a longer keyboard pattern with more turns",
