@@ -1414,5 +1414,6 @@
     "Failed to invite users to the room:": "Felhasználókat nem sikerült meghívni a szobába:",
     "You do not have permission to invite people to this room.": "Nincs jogosultságod embereket meghívni ebbe a szobába.",
     "User %(user_id)s does not exist": "%(user_id)s felhasználó nem létezik",
-    "Unknown server error": "Ismeretlen szerver hiba"
+    "Unknown server error": "Ismeretlen szerver hiba",
+    "There was an error joining the room": "A szobába való belépésnél hiba történt"
 }
