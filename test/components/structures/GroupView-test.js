@@ -164,7 +164,7 @@ describe('GroupView', function() {
 
     it('should indicate failure after failed /summary', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_error');
         });
 
@@ -179,7 +179,7 @@ describe('GroupView', function() {
 
     it('should show a group avatar, name, id and short description after successful /summary', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView');
 
             const avatar = ReactTestUtils.findRenderedComponentWithType(root, sdk.getComponent('avatars.GroupAvatar'));
@@ -214,7 +214,7 @@ describe('GroupView', function() {
 
     it('should show a simple long description after successful /summary', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView');
 
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
@@ -235,7 +235,7 @@ describe('GroupView', function() {
 
     it('should show a placeholder if a long description is not set', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const placeholder = ReactTestUtils
                 .findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc_placeholder');
             const placeholderElement = ReactDOM.findDOMNode(placeholder);
@@ -255,7 +255,7 @@ describe('GroupView', function() {
 
     it('should show a complicated long description after successful /summary', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
             expect(longDescElement).toExist();
@@ -282,7 +282,7 @@ describe('GroupView', function() {
 
     it('should disallow images with non-mxc URLs', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
             expect(longDescElement).toExist();
@@ -305,7 +305,7 @@ describe('GroupView', function() {
 
     it('should show a RoomDetailList after a successful /summary & /rooms (no rooms returned)', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const roomDetailList = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_RoomDetailList');
             const roomDetailListElement = ReactDOM.findDOMNode(roomDetailList);
             expect(roomDetailListElement).toExist();
@@ -322,7 +322,7 @@ describe('GroupView', function() {
 
     it('should show a RoomDetailList after a successful /summary & /rooms (with a single room)', function() {
         const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
-        const prom = waitForUpdate(groupView).then(() => {
+        const prom = waitForUpdate(groupView, 4).then(() => {
             const roomDetailList = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_RoomDetailList');
             const roomDetailListElement = ReactDOM.findDOMNode(roomDetailList);
             expect(roomDetailListElement).toExist();
@@ -351,6 +351,27 @@ describe('GroupView', function() {
             topic: "some topic",
             world_readable: true,
         }] });
+
+        httpBackend.flush(undefined, undefined, 0);
+        return prom;
+    });
+
+    it('should show a summary even if /users fails', function() {
+        const groupView = ReactTestUtils.findRenderedComponentWithType(root, GroupView);
+
+        // Only wait for 3 updates in this test since we don't change state for
+        // the /users error case.
+        const prom = waitForUpdate(groupView, 3).then(() => {
+            const shortDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_shortDesc');
+            const shortDescElement = ReactDOM.findDOMNode(shortDesc);
+            expect(shortDescElement).toExist();
+            expect(shortDescElement.innerText).toBe('This is a community');
+        });
+
+        httpBackend.when('GET', '/groups/' + groupIdEncoded + '/summary').respond(200, summaryResponse);
+        httpBackend.when('GET', '/groups/' + groupIdEncoded + '/users').respond(500, {});
+        httpBackend.when('GET', '/groups/' + groupIdEncoded + '/invited_users').respond(200, { chunk: [] });
+        httpBackend.when('GET', '/groups/' + groupIdEncoded + '/rooms').respond(200, { chunk: [] });
 
         httpBackend.flush(undefined, undefined, 0);
         return prom;
