@@ -1381,5 +1381,9 @@
     "Common names and surnames are easy to guess": "Emra dhe mbiemra të rëndomtë janë të kollajtë për t’u hamendësuar",
     "Great! This passphrase looks strong enough.": "Bukur! Ky frazëkalim duket goxha i fuqishëm.",
     "Failed to load group members": "S'u arrit të ngarkoheshin anëtarë grupi",
-    "As a safety net, you can use it to restore your encrypted message history.": "Si një rrjet sigurie, mund ta përdorni për të rikthyer historikun e mesazheve tuaj të fshehtëzuar."
+    "As a safety net, you can use it to restore your encrypted message history.": "Si një rrjet sigurie, mund ta përdorni për të rikthyer historikun e mesazheve tuaj të fshehtëzuar.",
+    "Failed to invite users to the room:": "S’u arrit të ftohen përdorues te dhoma:",
+    "You do not have permission to invite people to this room.": "S’keni leje të ftoni njerëz në këtë dhomë.",
+    "User %(user_id)s does not exist": "Përdoruesi %(user_id)s nuk ekziston",
+    "Unknown server error": "Gabim i panjohur shërbyesi"
 }
