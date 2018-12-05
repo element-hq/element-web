@@ -1410,5 +1410,9 @@
     "Common names and surnames are easy to guess": "Elterjedt neveket könnyű kitalálni",
     "Great! This passphrase looks strong enough.": "Szuper! Ez a jelmondat elég erősnek látszik.",
     "As a safety net, you can use it to restore your encrypted message history.": "Használhatod egy biztonsági hálóként a titkosított üzenetek visszaállításához.",
-    "Failed to load group members": "A közösség tagságokat nem sikerült betölteni"
+    "Failed to load group members": "A közösség tagságokat nem sikerült betölteni",
+    "Failed to invite users to the room:": "Felhasználókat nem sikerült meghívni a szobába:",
+    "You do not have permission to invite people to this room.": "Nincs jogosultságod embereket meghívni ebbe a szobába.",
+    "User %(user_id)s does not exist": "%(user_id)s felhasználó nem létezik",
+    "Unknown server error": "Ismeretlen szerver hiba"
 }
