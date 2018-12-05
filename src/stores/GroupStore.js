@@ -122,10 +122,6 @@ class GroupStore extends EventEmitter {
                 );
             },
         };
-
-        this.on('error', (err, groupId) => {
-            console.error(`GroupStore encountered error whilst fetching data for ${groupId}`, err);
-        });
     }
 
     _fetchResource(stateKey, groupId) {
@@ -148,7 +144,7 @@ class GroupStore extends EventEmitter {
             }
 
             console.error(`Failed to get resource ${stateKey} for ${groupId}`, err);
-            this.emit('error', err, groupId);
+            this.emit('error', err, groupId, stateKey);
         }).finally(() => {
             // Indicate finished request, allow for future fetches
             delete this._fetchResourcePromise[stateKey][groupId];

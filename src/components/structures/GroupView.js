@@ -470,7 +470,7 @@ export default React.createClass({
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated.bind(this, firstInit));
         let willDoOnboarding = false;
         // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
-        GroupStore.on('error', (err, errorGroupId) => {
+        GroupStore.on('error', (err, errorGroupId, stateKey) => {
             if (this._unmounted || groupId !== errorGroupId) return;
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
                 dis.dispatch({
@@ -483,11 +483,13 @@ export default React.createClass({
                 dis.dispatch({action: 'require_registration'});
                 willDoOnboarding = true;
             }
-            this.setState({
-                summary: null,
-                error: err,
-                editing: false,
-            });
+            if (stateKey === GroupStore.STATE_KEY.Summary) {
+                this.setState({
+                    summary: null,
+                    error: err,
+                    editing: false,
+                });
+            }
         });
     },
 
@@ -511,7 +513,6 @@ export default React.createClass({
             isUserMember: GroupStore.getGroupMembers(this.props.groupId).some(
                 (m) => m.userId === this._matrixClient.credentials.userId,
             ),
-            error: null,
         });
         // XXX: This might not work but this.props.groupIsNew unused anyway
         if (this.props.groupIsNew && firstInit) {
@@ -1157,7 +1158,7 @@ export default React.createClass({
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
-        } else if (this.state.summary) {
+        } else if (this.state.summary && !this.state.error) {
             const summary = this.state.summary;
 
             let avatarNode;

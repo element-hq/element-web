@@ -19,8 +19,26 @@ limitations under the License.
     padding: 20px
 }
 
+.mx_CreateKeyBackupDialog_primaryContainer::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.mx_CreateKeyBackupDialog_passPhraseHelp {
+    float: right;
+    width: 230px;
+    height: 85px;
+    margin-left: 20px;
+    font-size: 80%;
+}
+
+.mx_CreateKeyBackupDialog_passPhraseHelp progress {
+    width: 100%;
+}
+
 .mx_CreateKeyBackupDialog_passPhraseInput {
-    width: 300px;
+    width: 250px;
     border: 1px solid $accent-color;
     border-radius: 5px;
     padding: 10px;
