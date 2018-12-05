@@ -1099,6 +1099,7 @@
     "Community %(groupId)s not found": "Community %(groupId)s not found",
     "This Home server does not support communities": "This Home server does not support communities",
     "Failed to load %(groupId)s": "Failed to load %(groupId)s",
+    "Failed to load group members": "Failed to load group members",
     "Couldn't load home page": "Couldn't load home page",
     "You are currently using Riot anonymously as a guest.": "You are currently using Riot anonymously as a guest.",
     "If you would like to create a Matrix account you can <a>register</a> now.": "If you would like to create a Matrix account you can <a>register</a> now.",
