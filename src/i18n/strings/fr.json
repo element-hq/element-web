@@ -1410,5 +1410,10 @@
     "Use a longer keyboard pattern with more turns": "Utilisez un schéma plus long et avec plus de variations",
     "Great! This passphrase looks strong enough.": "Super ! Cette phrase de passe a l'air assez forte.",
     "As a safety net, you can use it to restore your encrypted message history.": "En cas de problème, vous pouvez l'utiliser pour récupérer l'historique de vos messages chiffrés.",
-    "Failed to load group members": "Échec du chargement des membres du groupe"
+    "Failed to load group members": "Échec du chargement des membres du groupe",
+    "Failed to invite users to the room:": "Échec de l'invitation d'utilisateurs dans le salon :",
+    "There was an error joining the room": "Une erreur est survenue en rejoignant le salon",
+    "You do not have permission to invite people to this room.": "Vous n'avez pas la permission d'envoyer des invitations dans ce salon.",
+    "User %(user_id)s does not exist": "L'utilisateur %(user_id)s n'existe pas",
+    "Unknown server error": "Erreur de serveur inconnue"
 }
