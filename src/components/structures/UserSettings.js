@@ -64,6 +64,7 @@ const SIMPLE_SETTINGS = [
     { id: "urlPreviewsEnabled" },
     { id: "autoplayGifsAndVideos" },
     { id: "alwaysShowEncryptionIcons" },
+    { id: "showRoomRecoveryReminder" },
     { id: "hideReadReceipts" },
     { id: "dontSendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
