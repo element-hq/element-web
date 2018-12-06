@@ -1407,5 +1407,11 @@
     "Names and surnames by themselves are easy to guess": "姓名與姓氏本身很容易猜測",
     "Common names and surnames are easy to guess": "常見的名字與姓氏易於猜測",
     "Great! This passphrase looks strong enough.": "很好！這個密碼看起來夠強了。",
-    "As a safety net, you can use it to restore your encrypted message history.": "做為安全網，您可以使用它來復原您已加密的訊息歷史。"
+    "As a safety net, you can use it to restore your encrypted message history.": "做為安全網，您可以使用它來復原您已加密的訊息歷史。",
+    "Failed to invite users to the room:": "邀請使用者到聊天室失敗：",
+    "There was an error joining the room": "加入聊天室時發生錯誤",
+    "You do not have permission to invite people to this room.": "您沒有權限邀請夥伴到此聊天室。",
+    "User %(user_id)s does not exist": "使用者 %(user_id)s 不存在",
+    "Unknown server error": "未知的伺服器錯誤",
+    "Failed to load group members": "載入群組成員失敗"
 }
