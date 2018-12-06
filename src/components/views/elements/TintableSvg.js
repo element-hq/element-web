@@ -29,6 +29,7 @@ var TintableSvg = React.createClass({
         width: PropTypes.string.isRequired,
         height: PropTypes.string.isRequired,
         className: PropTypes.string,
+        forceColors: PropTypes.arrayOf(PropTypes.string),
     },
 
     statics: {
@@ -58,7 +59,7 @@ var TintableSvg = React.createClass({
 
     onLoad: function(event) {
         // console.log("TintableSvg.onLoad for " + this.props.src);
-        this.fixups = Tinter.calcSvgFixups([event.target]);
+        this.fixups = Tinter.calcSvgFixups([event.target], this.props.forceColors);
         Tinter.applySvgFixups(this.fixups);
     },
 
