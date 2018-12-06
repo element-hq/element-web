@@ -375,6 +375,8 @@
     "Sequences like abc or 6543 are easy to guess": "abc या 6543 जैसे अनुक्रम अनुमान लगाना आसान है",
     "Recent years are easy to guess": "हाल के वर्षों का अनुमान लगाना आसान है",
     "Dates are often easy to guess": "तिथियां अक्सर अनुमान लगाने में आसान होती हैं",
-    "This is a top-10 common password": "यह एक शीर्ष 10 सामान्य पासवर्ड में से एक है",
-    "This is a top-100 common password": "यह एक शीर्ष १०० सामान्य पासवर्ड में से एक है"
+    "This is a top-10 common password": "यह एक शीर्ष १० सामान्य पासवर्ड में से एक है",
+    "This is a top-100 common password": "यह एक शीर्ष १०० सामान्य पासवर्ड में से एक है",
+    "This is a very common password": "यह एक बहुत ही आम पासवर्ड है",
+    "This is similar to a commonly used password": "यह आमतौर पर इस्तेमाल किए गए पासवर्ड के समान है"
 }
