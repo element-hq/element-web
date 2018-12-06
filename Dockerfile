@@ -1,13 +1,15 @@
 # Builder
 FROM node:alpine as builder
 
-COPY . /src
+RUN apk add --no-cache git
 
 WORKDIR /src
 
-RUN apk add --no-cache git \
- && npm install \
- && npm run build
+COPY package.json /src/package.json
+RUN npm install
+
+COPY . /src
+RUN npm run build
 
 
 # App
