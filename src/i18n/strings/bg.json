@@ -1303,5 +1303,9 @@
     "Unable to load! Check your network connectivity and try again.": "Неуспешно зареждане! Проверете мрежовите настройки и опитайте пак.",
     "Failed to invite users to the room:": "Неуспешно поканване на потребители в стаята:",
     "There was an error joining the room": "Възникна грешка при влизане в стаята",
-    "Use a few words, avoid common phrases": "Използвайте няколко думи, избягвайте общи фрази"
+    "Use a few words, avoid common phrases": "Използвайте няколко думи, избягвайте общи фрази",
+    "You do not have permission to invite people to this room.": "Нямате привилегии да каните хора в тази стая.",
+    "User %(user_id)s does not exist": "Потребител %(user_id)s не съществува",
+    "Unknown server error": "Непозната сървърна грешка",
+    "No need for symbols, digits, or uppercase letters": "Няма нужда от символи, цифри и главни букви"
 }
