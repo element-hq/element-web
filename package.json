@@ -72,6 +72,7 @@
     "gfm.css": "^1.1.1",
     "glob": "^5.0.14",
     "highlight.js": "^9.13.0",
+    "is-ip": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
@@ -96,7 +97,8 @@
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-vector": "github:vector-im/velocity#059e3b2",
-    "whatwg-fetch": "^1.1.1"
+    "whatwg-fetch": "^1.1.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
