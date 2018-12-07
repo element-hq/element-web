@@ -72,6 +72,7 @@
     "gfm.css": "^1.1.1",
     "glob": "^5.0.14",
     "highlight.js": "^9.13.0",
+    "is-ip": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
