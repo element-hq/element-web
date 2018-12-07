@@ -470,9 +470,6 @@ module.exports = React.createClass({
 
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('login.PasswordLogin');
-        const hsName = this.state.enteredHomeserverUrl === this.props.defaultHsUrl
-            ? this.props.defaultServerName
-            : null;
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
@@ -487,7 +484,7 @@ module.exports = React.createClass({
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
-               hsName={hsName}
+               hsName={this.props.defaultServerName}
                />
         );
     },

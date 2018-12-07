@@ -252,21 +252,12 @@ class PasswordLogin extends React.Component {
         }
 
         let matrixIdText = _t('Matrix ID');
-        let matrixIdSubtext = null;
         if (this.props.hsName) {
             matrixIdText = _t('%(serverName)s Matrix ID', {serverName: this.props.hsName});
-        }
-        if (this.props.hsUrl) {
+        } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
-                if (!this.props.hsName) {
-                    matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
-                } else if (parsedHsUrl.hostname !== this.props.hsName) {
-                    matrixIdSubtext = _t('%(serverName)s is located at %(homeserverUrl)s', {
-                        serverName: this.props.hsName,
-                        homeserverUrl: this.props.hsUrl,
-                    });
-                }
+                matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
             } catch (e) {
                 // ignore
             }
@@ -304,7 +295,6 @@ class PasswordLogin extends React.Component {
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 { loginType }
-                <span className="mx_Login_subtext">{ matrixIdSubtext }</span>
                 { loginField }
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"

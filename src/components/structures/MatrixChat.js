@@ -298,7 +298,16 @@ export default React.createClass({
 
         // Set up the default URLs (async)
         if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
+            this.setState({loadingDefaultHomeserver: true});
             this._tryDiscoverDefaultHomeserver(this.getDefaultServerName());
+        } else if (this.getDefaultServerName() && this.getDefaultHsUrl(false)) {
+            // Ideally we would somehow only communicate this to the server admins, but
+            // given this is at login time we can't really do much besides hope that people
+            // will check their settings.
+            this.setState({
+                defaultServerName: null, // To un-hide any secrets people might be keeping
+                defaultServerDiscoveryError: _t("Invalid configuration: Cannot supply a default homeserver URL and a default server name"),
+            });
         }
 
         // Set a default HS with query param `hs_url`
@@ -1756,13 +1765,20 @@ export default React.createClass({
         const state = discovery["m.homeserver"].state;
         if (state !== AutoDiscovery.SUCCESS) {
             console.error("Failed to discover homeserver on startup:", discovery);
-            this.setState({defaultServerDiscoveryError: discovery["m.homeserver"].error});
+            this.setState({
+                defaultServerDiscoveryError: discovery["m.homeserver"].error,
+                loadingDefaultHomeserver: false,
+            });
         } else {
             const hsUrl = discovery["m.homeserver"].base_url;
             const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
                 ? discovery["m.identity_server"].base_url
                 : "https://vector.im";
-            this.setState({defaultHsUrl: hsUrl, defaultIsUrl: isUrl});
+            this.setState({
+                defaultHsUrl: hsUrl,
+                defaultIsUrl: isUrl,
+                loadingDefaultHomeserver: false,
+            });
         }
     },
 
@@ -1780,7 +1796,7 @@ export default React.createClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
-        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN) {
+        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN || this.state.loadingDefaultHomeserver) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
