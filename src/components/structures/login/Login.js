@@ -94,6 +94,7 @@ module.exports = React.createClass({
             discoveredHsUrl: "",
             discoveredIsUrl: "",
             discoveryError: "",
+            findingHomeserver: false,
         };
     },
 
@@ -299,10 +300,11 @@ module.exports = React.createClass({
     _tryWellKnownDiscovery: async function(serverName) {
         if (!serverName.trim()) {
             // Nothing to discover
-            this.setState({discoveryError: "", discoveredHsUrl: "", discoveredIsUrl: ""});
+            this.setState({discoveryError: "", discoveredHsUrl: "", discoveredIsUrl: "", findingHomeserver: false});
             return;
         }
 
+        this.setState({findingHomeserver: true});
         try {
             const discovery = await AutoDiscovery.findClientConfig(serverName);
             const state = discovery["m.homeserver"].state;
@@ -311,12 +313,14 @@ module.exports = React.createClass({
                     discoveredHsUrl: "",
                     discoveredIsUrl: "",
                     discoveryError: discovery["m.homeserver"].error,
+                    findingHomeserver: false,
                 });
             } else if (state === AutoDiscovery.PROMPT) {
                 this.setState({
                     discoveredHsUrl: "",
                     discoveredIsUrl: "",
                     discoveryError: "",
+                    findingHomeserver: false,
                 });
             } else if (state === AutoDiscovery.SUCCESS) {
                 this.setState({
@@ -326,6 +330,7 @@ module.exports = React.createClass({
                             ? discovery["m.identity_server"].base_url
                             : "",
                     discoveryError: "",
+                    findingHomeserver: false,
                 });
             } else {
                 console.warn("Unknown state for m.homeserver in discovery response: ", discovery);
@@ -333,6 +338,7 @@ module.exports = React.createClass({
                     discoveredHsUrl: "",
                     discoveredIsUrl: "",
                     discoveryError: _t("Unknown failure discovering homeserver"),
+                    findingHomeserver: false,
                 });
             }
         } catch (e) {
@@ -485,6 +491,7 @@ module.exports = React.createClass({
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
                hsName={this.props.defaultServerName}
+               disableSubmit={this.state.findingHomeserver}
                />
         );
     },

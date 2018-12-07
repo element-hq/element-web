@@ -41,6 +41,7 @@ class PasswordLogin extends React.Component {
         loginIncorrect: false,
         hsDomain: "",
         hsName: null,
+        disableSubmit: false,
     }
 
     constructor(props) {
@@ -291,6 +292,8 @@ class PasswordLogin extends React.Component {
             );
         }
 
+        const disableSubmit = this.props.disableSubmit || matrixIdText === '';
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
@@ -304,7 +307,7 @@ class PasswordLogin extends React.Component {
                 />
                 <br />
                 { forgotPasswordJsx }
-                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={matrixIdText === ''} />
+                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={disableSubmit} />
                 </form>
             </div>
         );
@@ -329,6 +332,7 @@ PasswordLogin.propTypes = {
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
     hsName: PropTypes.string,
+    disableSubmit: PropTypes.bool,
 };
 
 module.exports = PasswordLogin;
