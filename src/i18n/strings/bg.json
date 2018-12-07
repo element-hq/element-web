@@ -1299,5 +1299,9 @@
     "Open Devtools": "Отвори инструментите за разработчици",
     "Show developer tools": "Покажи инструментите за разработчици",
     "If you would like to create a Matrix account you can <a>register</a> now.": "Ако искате да създадете Matrix акаунт, може да се <a>регистрирате</a> тук.",
-    "You are currently using Riot anonymously as a guest.": "В момента използвате Riot анонимно, като гост."
+    "You are currently using Riot anonymously as a guest.": "В момента използвате Riot анонимно, като гост.",
+    "Unable to load! Check your network connectivity and try again.": "Неуспешно зареждане! Проверете мрежовите настройки и опитайте пак.",
+    "Failed to invite users to the room:": "Неуспешно поканване на потребители в стаята:",
+    "There was an error joining the room": "Възникна грешка при влизане в стаята",
+    "Use a few words, avoid common phrases": "Използвайте няколко думи, избягвайте общи фрази"
 }
