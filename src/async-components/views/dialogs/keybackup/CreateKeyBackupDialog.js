@@ -251,7 +251,7 @@ export default React.createClass({
             />
 
             <p>{_t(
-                "If you don't want encrypted message history to be availble on other devices, "+
+                "If you don't want encrypted message history to be available on other devices, "+
                 "<button>opt out</button>.",
                 {},
                 {

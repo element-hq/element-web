@@ -100,6 +100,8 @@ $voip-accept-color: #80f480;
 $rte-bg-color: #353535;
 $rte-code-bg-color: #000;
 
+$room-warning-bg-color: #2d2d2d;
+
 // ********************
 
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
@@ -167,6 +169,14 @@ $progressbar-color: #000;
     cursor: pointer;
     display: inline-block;
     outline: none;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $accent-fg-color;
 }
 
 // Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
