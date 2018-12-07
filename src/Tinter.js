@@ -419,11 +419,18 @@ class Tinter {
                 for (let k = 0; k < this.svgAttrs.length; k++) {
                     const attr = this.svgAttrs[k];
                     for (let m = 0; m < this.keyHex.length; m++) { // dev note: don't use L please.
-                        if (tag.getAttribute(attr) &&
-                            tag.getAttribute(attr).toUpperCase() === this.keyHex[m]) {
+                        // We use a different attribute from the one we're setting
+                        // because we may also be using forceColors. If we were to
+                        // check the keyHex against a forceColors value, it may not
+                        // match and therefore not change when we need it to.
+                        const valAttrName = "mx-val-" + attr;
+                        let attribute = tag.getAttribute(valAttrName);
+                        if (!attribute) attribute = tag.getAttribute(attr); // fall back to the original
+                        if (attribute && (attribute.toUpperCase() === this.keyHex[m] || attribute.toLowerCase() === this.keyRgb[m])) {
                             fixups.push({
                                 node: tag,
                                 attr: attr,
+                                refAttr: valAttrName,
                                 index: m,
                                 forceColors: forceColors,
                             });
@@ -442,8 +449,8 @@ class Tinter {
         for (let i = 0; i < fixups.length; i++) {
             const svgFixup = fixups[i];
             const forcedColor = svgFixup.forceColors ? svgFixup.forceColors[svgFixup.index] : null;
-            if (forcedColor) console.log(forcedColor);
             svgFixup.node.setAttribute(svgFixup.attr, forcedColor ? forcedColor : this.colors[svgFixup.index]);
+            svgFixup.node.setAttribute(svgFixup.refAttr, this.colors[svgFixup.index]);
         }
         if (DEBUG) console.log("applySvgFixups end");
     }

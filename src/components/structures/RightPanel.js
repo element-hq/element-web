@@ -124,7 +124,6 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
-        cli.on("Room.notificationCounts", this.onRoomNotifications);
         this._initGroupStore(this.props.groupId);
     },
 
@@ -212,16 +211,15 @@ module.exports = React.createClass({
         }
     },
 
-    onRoomNotifications: function(room, type, count) {
-        if (type === "highlight") this.forceUpdate();
-    },
-
     _delayedUpdate: new RateLimitedFunc(function() {
         this.forceUpdate(); // eslint-disable-line babel/no-invalid-this
     }, 500),
 
     onAction: function(payload) {
-        if (payload.action === "view_user") {
+        if (payload.action === "event_notification") {
+            // Try and re-caclulate any badge counts we might have
+            this.forceUpdate();
+        } else if (payload.action === "view_user") {
             dis.dispatch({
                 action: 'show_right_panel',
             });

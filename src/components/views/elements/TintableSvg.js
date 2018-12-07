@@ -51,6 +51,12 @@ var TintableSvg = React.createClass({
         delete TintableSvg.mounts[this.id];
     },
 
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevProps.forceColors !== this.props.forceColors) {
+            this.calcAndApplyFixups(this.refs.svgContainer);
+        }
+    },
+
     tint: function() {
         // TODO: only bother running this if the global tint settings have changed
         // since we loaded!
@@ -58,8 +64,13 @@ var TintableSvg = React.createClass({
     },
 
     onLoad: function(event) {
-        // console.log("TintableSvg.onLoad for " + this.props.src);
-        this.fixups = Tinter.calcSvgFixups([event.target], this.props.forceColors);
+        this.calcAndApplyFixups(event.target);
+    },
+
+    calcAndApplyFixups: function(target) {
+        if (!target) return;
+        // console.log("TintableSvg.calcAndApplyFixups for " + this.props.src);
+        this.fixups = Tinter.calcSvgFixups([target], this.props.forceColors);
         Tinter.applySvgFixups(this.fixups);
     },
 
@@ -72,6 +83,7 @@ var TintableSvg = React.createClass({
                     height={this.props.height}
                     onLoad={this.onLoad}
                     tabIndex="-1"
+                    ref="svgContainer"
                 />
         );
     },
