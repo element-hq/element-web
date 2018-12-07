@@ -327,17 +327,10 @@ const RoomSubList = React.createClass({
 
         let incomingCall;
         if (this.props.incomingCall) {
-            const self = this;
-            // Check if the incoming call is for this section
-            const incomingCallRoom = this.props.list.filter(function(room) {
-                return self.props.incomingCall.roomId === room.roomId;
-            });
-
-            if (incomingCallRoom.length === 1) {
-                const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
-                incomingCall =
-                    <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
-            }
+            // We can assume that if we have an incoming call then it is for this list
+            const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+            incomingCall =
+                <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
         }
 
         const tabindex = this.props.searchFilter === "" ? "0" : "-1";

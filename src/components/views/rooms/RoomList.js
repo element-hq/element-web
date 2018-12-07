@@ -71,6 +71,7 @@ module.exports = React.createClass({
             isLoadingLeftRooms: false,
             totalRoomCount: null,
             lists: {},
+            incomingCallTag: null,
             incomingCall: null,
             selectedTags: [],
         };
@@ -155,11 +156,13 @@ module.exports = React.createClass({
                 if (call && call.call_state === 'ringing') {
                     this.setState({
                         incomingCall: call,
+                        incomingCallTag: this.getTagNameForRoomId(payload.room_id),
                     });
                     this._repositionIncomingCallBox(undefined, true);
                 } else {
                     this.setState({
                         incomingCall: null,
+                        incomingCallTag: null,
                     });
                 }
                 break;
@@ -326,6 +329,26 @@ module.exports = React.createClass({
         });
 
         // this._lastRefreshRoomListTs = Date.now();
+    },
+
+    getTagNameForRoomId: function(roomId) {
+        const lists = RoomListStore.getRoomLists();
+        for (const tagName of Object.keys(lists)) {
+            for (const room of lists[tagName]) {
+                // Should be impossible, but guard anyways.
+                if (!room) {
+                    continue;
+                }
+                const myUserId = MatrixClientPeg.get().getUserId();
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, myUserId, this.props.ConferenceHandler)) {
+                    continue;
+                }
+
+                if (room.roomId === roomId) return tagName;
+            }
+        }
+
+        return null;
     },
 
     getRoomLists: function() {
@@ -621,6 +644,12 @@ module.exports = React.createClass({
         // so checking on every render is the sanest thing at this time.
         const showEmpty = SettingsStore.getValue('RoomSubList.showEmpty');
 
+        const incomingCallIfTaggedAs = (tagName) => {
+            if (!this.state.incomingCall) return null;
+            if (this.state.incomingCallTag !== tagName) return null;
+            return this.state.incomingCall;
+        };
+
         const self = this;
         return (
             <GeminiScrollbarWrapper className="mx_RoomList_scrollbar"
@@ -644,7 +673,7 @@ module.exports = React.createClass({
                              editable={false}
                              order="recent"
                              isInvite={true}
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('im.vector.fake.invite')}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
@@ -658,7 +687,7 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.favourite')}
                              editable={true}
                              order="manual"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('m.favourite')}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
@@ -672,7 +701,7 @@ module.exports = React.createClass({
                              headerItems={this._getHeaderItems('im.vector.fake.direct')}
                              editable={true}
                              order="recent"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('im.vector.fake.direct')}
                              collapsed={self.props.collapsed}
                              alwaysShowHeader={true}
                              searchFilter={self.props.searchFilter}
@@ -686,7 +715,7 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('im.vector.fake.recent')}
                              headerItems={this._getHeaderItems('im.vector.fake.recent')}
                              order="recent"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('im.vector.fake.recent')}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
@@ -702,7 +731,7 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent(tagName)}
                              editable={true}
                              order="manual"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs(tagName)}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
@@ -717,7 +746,7 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.lowpriority')}
                              editable={true}
                              order="recent"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('m.lowpriority')}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
@@ -740,7 +769,7 @@ module.exports = React.createClass({
                              startAsHidden={true}
                              showSpinner={self.state.isLoadingLeftRooms}
                              onHeaderClick={self.onArchivedHeaderClick}
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('im.vector.fake.archived')}
                              searchFilter={self.props.searchFilter}
                              onShowMoreRooms={self.onShowMoreRooms}
                              showEmpty={showEmpty} />
@@ -750,7 +779,7 @@ module.exports = React.createClass({
                              tagName="m.lowpriority"
                              editable={false}
                              order="recent"
-                             incomingCall={self.state.incomingCall}
+                             incomingCall={incomingCallIfTaggedAs('m.server_notice')}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
