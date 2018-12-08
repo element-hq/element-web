@@ -1415,5 +1415,13 @@
     "There was an error joining the room": "Une erreur est survenue en rejoignant le salon",
     "You do not have permission to invite people to this room.": "Vous n'avez pas la permission d'envoyer des invitations dans ce salon.",
     "User %(user_id)s does not exist": "L'utilisateur %(user_id)s n'existe pas",
-    "Unknown server error": "Erreur de serveur inconnue"
+    "Unknown server error": "Erreur de serveur inconnue",
+    "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Afficher un rappel pour activer la récupération de messages sécurisée dans les salons chiffrés",
+    "Secure Message Recovery": "Récupération de messages sécurisée",
+    "If you log out or use another device, you'll lose your secure message history. To prevent this, set up Secure Message Recovery.": "Si vous vous déconnectez ou si vous utilisez un autre appareil, vous perdrez l'historique de vos messages chiffrés. Pour éviter cela, configurez la récupération de messages sécurisée.",
+    "Don't ask again": "Ne plus me demander",
+    "Set up": "Configurer",
+    "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Si vous ne souhaitez pas que l'historique de vos messages chiffrés soit disponible sur d'autres appareils, <button>désactivez l'option</button>.",
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Si vous ne configurez pas la récupération de messages sécurisée, vous perdrez l'historique de vos messages sécurisés quand vous vous déconnectez.",
+    "If you don't want to set this up now, you can later in Settings.": "Si vous ne voulez pas le configurer maintenant, vous pouvez le faire plus tard dans les paramètres."
 }
