@@ -38,7 +38,9 @@ function memberEventDiff(ev) {
 }
 
 export default function shouldHideEvent(ev) {
-    // Wrap getValue() for readability
+    // Wrap getValue() for readability. Calling the SettingsStore can be
+    // fairly resource heavy, so the checks below should avoid hitting it
+    // where possible.
     const isEnabled = (name) => SettingsStore.getValue(name, ev.getRoomId());
 
     // Hide redacted events
