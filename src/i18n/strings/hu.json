@@ -1415,5 +1415,13 @@
     "You do not have permission to invite people to this room.": "Nincs jogosultságod embereket meghívni ebbe a szobába.",
     "User %(user_id)s does not exist": "%(user_id)s felhasználó nem létezik",
     "Unknown server error": "Ismeretlen szerver hiba",
-    "There was an error joining the room": "A szobába való belépésnél hiba történt"
+    "There was an error joining the room": "A szobába való belépésnél hiba történt",
+    "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Mutass emlékeztetőt a Biztonságos Üzenet Visszaállítás bekapcsolásához a titkosított szobákban",
+    "Secure Message Recovery": "Biztonságos Üzenet Visszaállítás",
+    "If you log out or use another device, you'll lose your secure message history. To prevent this, set up Secure Message Recovery.": "A titkosított üzeneteidhez nem férsz hozzá ha kijelentkezel vagy másik eszközt használsz. A Biztonságos Üzenet Visszaállítás beállításával ezt elkerülheted.",
+    "Don't ask again": "Ne kérdezd többet",
+    "Set up": "Beállítás",
+    "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Ha más eszközön nem szeretnél hozzáférni a titkosított üzeneteidhez akkor <button>akkor agyd ezt ki</button>.",
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "A Biztonságos Üzenet Visszaállítás beállítása nélkül kijelentkezés után elveszted a hozzáférést a titkosított üzeneteidhez.",
+    "If you don't want to set this up now, you can later in Settings.": "Ha most nem akarod beállítani, később a Beállításoknál megteheted."
 }
