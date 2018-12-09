@@ -195,7 +195,7 @@
     "Displays action": "Wyświetlane akcje",
     "Do you want to load widget from URL:": "Czy chcesz załadować widżet z adresu:",
     "Don't send typing notifications": "Nie wysyłaj powiadomienia o pisaniu",
-    "Download %(text)s": "Pobrano %(text)s",
+    "Download %(text)s": "Pobierz %(text)s",
     "Drop File Here": "Upuść plik tutaj",
     "Drop here to tag %(section)s": "Upuść tutaj by oznaczyć %(section)s",
     "Ed25519 fingerprint": "Odcisk Ed25519",
@@ -1276,5 +1276,8 @@
     "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)swycofało zaproszenie",
     "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)szmieniło ich nazwę %(count)s razy",
     "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)szmieniło ich nazwę",
-    "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem"
+    "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem",
+    "Capitalization doesn't help very much": "Kapitalizacja nie pomaga bardzo",
+    "This is a top-10 common password": "To jest 10 najpopularniejszych haseł",
+    "This is a top-100 common password": "To jest 100 najpopularniejszych haseł"
 }
