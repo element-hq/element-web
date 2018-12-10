@@ -497,16 +497,7 @@ function _clearStorage() {
     Analytics.logout();
 
     if (window.localStorage) {
-        const hsUrl = window.localStorage.getItem("mx_hs_url");
-        const isUrl = window.localStorage.getItem("mx_is_url");
         window.localStorage.clear();
-
-        // preserve our HS & IS URLs for convenience
-        // N.B. we cache them in hsUrl/isUrl and can't really inline them
-        // as getCurrentHsUrl() may call through to localStorage.
-        // NB. We do clear the device ID (as well as all the settings)
-        if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
-        if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
     }
 
     // create a temporary client to clear out the persistent stores.
