@@ -20,10 +20,21 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
-}
 
-.mx_MemberList .mx_Spinner {
-    flex: 1 0 auto;
+    .mx_Spinner {
+        flex: 1 0 auto;
+    }
+
+    h2 {
+        text-transform: uppercase;
+        color: $h3-color;
+        font-weight: 600;
+        font-size: 13px;
+        padding-left: 3px;
+        padding-right: 12px;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
 }
 
 .mx_MemberList_chevron {
@@ -45,23 +56,15 @@ limitations under the License.
     flex: 1 1 0;
 }
 
-.mx_MemberList h2, .mx_GroupMemberList h2 {
-    text-transform: uppercase;
-    color: $h3-color;
-    font-weight: 600;
-    font-size: 13px;
-    padding-left: 3px;
-    padding-right: 12px;
-    margin-top: 8px;
-    margin-bottom: 4px;
-}
+
 
 .mx_MemberList_wrapper {
     padding: 10px;
 }
 
 
-.mx_MemberList_invite {
+.mx_MemberList_invite,
+.mx_RightPanel_invite {
     flex: 0 0 auto;
     position: relative;
     background-color: $button-bg-color;
@@ -69,15 +72,20 @@ limitations under the License.
     padding: 8px;
     margin: 9px;
     display: flex;
+    color: $button-fg-color;
+    font-weight: 600;
 
-    span {
-        margin: 0 auto;
-        background-image: url('../../img/icon-invite-people.svg');
-        background-repeat: no-repeat;
-        background-position: center left;
-        padding-left: 25px;
-
-        font-weight: 600;
-        color: $button-fg-color;
+    .mx_RightPanel_icon {
+        padding-right: 5px;
+        padding-top: 2px;
     }
+}
+
+.mx_MemberList_invite span {
+    margin: 0 auto;
+    background-image: url('../../img/icon-invite-people.svg');
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 25px;
+
 }

@@ -177,7 +177,7 @@ export default React.createClass({
         if (GroupStore.isUserPrivileged(this.props.groupId)) {
             inviteButton = (<AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
                 <div className="mx_RightPanel_icon" >
-                    <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                    <TintableSvg src="img/icon-invite-people.svg" width="18" height="14" />
                 </div>
                 <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
             </AccessibleButton>);
