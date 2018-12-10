@@ -607,6 +607,20 @@ module.exports = React.createClass({
         }
     },
 
+    async onRoomRecoveryReminderFinished(backupCreated) {
+        // If the user cancelled the key backup dialog, it suggests they don't
+        // want to be reminded anymore.
+        if (!backupCreated) {
+            await SettingsStore.setValue(
+                "showRoomRecoveryReminder",
+                null,
+                SettingLevel.ACCOUNT,
+                false,
+            );
+        }
+        this.forceUpdate();
+    },
+
     canResetTimeline: function() {
         if (!this.refs.messagePanel) {
             return true;
@@ -1521,6 +1535,7 @@ module.exports = React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const RoomUpgradeWarningBar = sdk.getComponent("rooms.RoomUpgradeWarningBar");
+        const RoomRecoveryReminder = sdk.getComponent("rooms.RoomRecoveryReminder");
 
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
@@ -1655,6 +1670,13 @@ module.exports = React.createClass({
             this.state.room.userMayUpgradeRoom(MatrixClientPeg.get().credentials.userId)
         );
 
+        const showRoomRecoveryReminder = (
+            SettingsStore.isFeatureEnabled("feature_keybackup") &&
+            SettingsStore.getValue("showRoomRecoveryReminder") &&
+            MatrixClientPeg.get().isRoomEncrypted(this.state.room.roomId) &&
+            !MatrixClientPeg.get().getKeyBackupEnabled()
+        );
+
         let aux = null;
         let hideCancel = false;
         if (this.state.editingRoomSettings) {
@@ -1668,6 +1690,9 @@ module.exports = React.createClass({
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
+            hideCancel = true;
+        } else if (showRoomRecoveryReminder) {
+            aux = <RoomRecoveryReminder onFinished={this.onRoomRecoveryReminderFinished} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
