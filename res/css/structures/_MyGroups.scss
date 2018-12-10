@@ -15,10 +15,6 @@ limitations under the License.
 */
 
 .mx_MyGroups {
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-
     display: flex;
     flex-direction: column;
 }
@@ -34,6 +30,11 @@ limitations under the License.
     flex-wrap: wrap;
 }
 
+.mx_MyGroups > :not(.mx_RoomHeader) {
+    max-width: 960px;
+    margin: 40px;
+}
+
 .mx_MyGroups_headerCard {
     flex: 1 0 50%;
     margin-bottom: 30px;
@@ -43,6 +44,7 @@ limitations under the License.
 }
 
 .mx_MyGroups_headerCard .mx_MyGroups_headerCard_button {
+    flex: 0 0 auto;
     margin-right: 13px;
     height: 40px;
     width: 40px;
