@@ -30,7 +30,7 @@ export default React.createClass({
         action: PropTypes.string.isRequired,
         mouseOverAction: PropTypes.string,
         label: PropTypes.string.isRequired,
-        iconPath: PropTypes.string.isRequired,
+        iconPath: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -72,6 +72,10 @@ export default React.createClass({
             tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
+        const icon = this.props.iconPath ?
+                (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+                undefined;
+
         return (
             <AccessibleButton className="mx_RoleButton"
                 onClick={this._onClick}
@@ -79,7 +83,7 @@ export default React.createClass({
                 onMouseLeave={this._onMouseLeave}
                 aria-label={this.props.label}
             >
-                <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
+                { icon }
                 { tooltip }
             </AccessibleButton>
         );
