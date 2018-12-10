@@ -141,6 +141,8 @@ export default class RightPanel extends React.Component {
         if (payload.action === "view_right_panel_phase") {
             this.setState({
                 phase: payload.phase,
+                groupRoomId: payload.groupRoomId,
+                groupId: payload.groupId,
                 member: payload.member,
             });
         }

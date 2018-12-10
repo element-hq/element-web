@@ -45,7 +45,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         } else if (payload.action === "view_group") {
             this.setPhase(RightPanel.Phase.GroupMemberList);
         } else if (payload.action === "view_group_room") {
-            this.setPhase(RightPanel.Phase.GroupRoomInfo, {groupRoomId: payload.groupRoomId});
+            this.setPhase(RightPanel.Phase.GroupRoomInfo, {groupRoomId: payload.groupRoomId, groupId: payload.groupId});
         } else if (payload.action === "view_group_room_list") {
             this.setPhase(RightPanel.Phase.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
