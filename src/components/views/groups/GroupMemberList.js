@@ -158,11 +158,9 @@ export default React.createClass({
         }
 
         const inputBox = (
-            <form autoComplete="off">
-                <input className="mx_GroupMemberList_query" id="mx_GroupMemberList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter community members')} />
-            </form>
+            <input className="mx_GroupMemberList_query mx_textinput" id="mx_GroupMemberList_query" type="text"
+                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                    placeholder={_t('Filter community members')} />
         );
 
         const joined = this.state.members ? <div className="mx_MemberList_joined">
