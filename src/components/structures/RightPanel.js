@@ -192,26 +192,6 @@ export default class RightPanel extends React.Component {
             panel = <FilePanel roomId={this.props.roomId} />;
         }
 
-        // TODO: either include this in the DOM again, or move it to other component
-        if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
-            // inviteGroup =
-            isPhaseGroup ? (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                    </div>
-                    <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
-                </AccessibleButton>
-            ) : (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onAddRoomToGroupButtonClick}>
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
-                    </div>
-                    <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
-                </AccessibleButton>
-            );
-        }
-
         const classes = classNames("mx_RightPanel", "mx_fadable", {
             "collapsed": this.props.collapsed,
             "mx_fadable_faded": this.props.disabled,

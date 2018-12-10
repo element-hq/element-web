@@ -19,6 +19,9 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
+import { showGroupInviteDialog } from '../../../GroupAddressPicker';
+import AccessibleButton from '../elements/AccessibleButton';
+import TintableSvg from '../elements/TintableSvg';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -135,6 +138,16 @@ export default React.createClass({
         </TruncatedList>;
     },
 
+    onInviteToGroupButtonClick() {
+        showGroupInviteDialog(this.props.groupId).then(() => {
+            dis.dispatch({
+                action: 'view_right_panel_phase',
+                phase: RightPanel.Phase.GroupMemberList,
+                groupId: this.props.groupId,
+            });
+        });
+    },
+
     render: function() {
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.fetching || this.state.fetchingInvitedMembers) {
@@ -162,13 +175,27 @@ export default React.createClass({
                 { this.makeGroupMemberTiles(this.state.searchQuery, this.state.invitedMembers) }
             </div> : <div />;
 
+        let inviteButton;
+        if (GroupStore.isUserPrivileged(this.props.groupId)) {
+            inviteButton = (<AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
+                <div className="mx_RightPanel_icon" >
+                    <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                </div>
+                <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
+            </AccessibleButton>);
+        }
+
         return (
+
+
+
             <div className="mx_MemberList">
-                { inputBox }
+                { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true}>
                     { joined }
                     { invited }
                 </GeminiScrollbarWrapper>
+                { inputBox }
             </div>
         );
     },
