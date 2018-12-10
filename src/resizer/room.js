@@ -38,6 +38,9 @@ class RoomSizer extends Sizer {
 class RoomDistributor extends FixedDistributor {
     resize(itemSize) {
         const scrollItem = this.item.querySelector(".mx_RoomSubList_scroll");
+        if (!scrollItem) {
+            return; //FIXME: happens when starting the page on a community url, taking the safe way out for now
+        }
         const fixedHeight = this.item.offsetHeight - scrollItem.offsetHeight;
         if (itemSize > (fixedHeight + scrollItem.scrollHeight)) {
             super.resize("resized-all");
