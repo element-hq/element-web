@@ -1279,5 +1279,15 @@
     "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem",
     "Capitalization doesn't help very much": "Kapitalizacja nie pomaga bardzo",
     "This is a top-10 common password": "To jest 10 najpopularniejszych haseł",
-    "This is a top-100 common password": "To jest 100 najpopularniejszych haseł"
+    "This is a top-100 common password": "To jest 100 najpopularniejszych haseł",
+    "You are currently using Riot anonymously as a guest.": "Używasz obecnie Riot anonimowo jako gość.",
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Jeśli chcesz utworzyć konto Matrix, możesz <a>zarejestrować się</a> teraz.",
+    "Enter Recovery Key": "Wprowadź Klucz Odzyskiwania",
+    "This looks like a valid recovery key!": "To wygląda na prawidłowy klucz odzyskiwania!",
+    "Not a valid recovery key": "Nieprawidłowy klucz odzyskiwania",
+    "If you don't want to set this up now, you can later in Settings.": "Jeśli nie chcesz tego teraz ustawiać, możesz to zrobić później w Ustawieniach.",
+    "Retry": "Ponów",
+    "Create Key Backup": "Stwórz kopię zapasową klucza",
+    "Recovery Key": "Przywróć Klucz",
+    "Backup created": "Stworzono kopię zapasową"
 }
