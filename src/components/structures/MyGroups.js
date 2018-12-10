@@ -112,7 +112,6 @@ export default withMatrixClient(React.createClass({
             <div className='mx_MyGroups_header'>
                 <div className="mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
-                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
                     <div className="mx_MyGroups_headerCard_content">
                         <div className="mx_MyGroups_headerCard_header">

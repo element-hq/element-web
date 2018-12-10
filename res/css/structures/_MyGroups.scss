@@ -44,13 +44,29 @@ limitations under the License.
 
 .mx_MyGroups_headerCard .mx_MyGroups_headerCard_button {
     margin-right: 13px;
-    height: 50px;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: $roomheader-addroom-color;
+    position: relative;
+
+    &:before {
+        background-color: $accent-fg-color;
+        mask: url('../../img/icons-create-room.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 80%;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
-.mx_MyGroups_headerCard_button object {
-    /* Otherwise the SVG object absorbs clicks and the button doesn't work */
-    pointer-events: none;
-}
+
+
 
 .mx_MyGroups_headerCard_header {
     font-weight: bold;
