@@ -71,7 +71,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
                 clickPhase={RightPanel.Phase.GroupMemberList}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
-            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room.svg"
+            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room-nobg.svg"
                 isHighlighted={isPhaseRoom}
                 clickPhase={RightPanel.Phase.GroupRoomList}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
