@@ -166,9 +166,7 @@ module.exports = React.createClass({
         Object.entries(this.subListSizes).forEach(([id, size]) => {
             const handle = this.resizer.forHandleWithId(id);
             if (handle) {
-                try {
-                    handle.resize(size);
-                } catch(_e) {}
+                handle.resize(size);
             }
         });
 
