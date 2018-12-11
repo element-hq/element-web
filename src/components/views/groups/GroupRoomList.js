@@ -141,7 +141,7 @@ export default React.createClass({
         const inputBox = (
             <input className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query" type="text"
                     onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder={_t('Filter community rooms')} />
+                    placeholder={_t('Filter community rooms')} autoComplete="off" />
         );
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
