@@ -60,7 +60,6 @@ export default withMatrixClient(React.createClass({
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const GroupTile = sdk.getComponent("groups.GroupTile");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 

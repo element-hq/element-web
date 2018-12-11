@@ -20,17 +20,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { MatrixClient } from 'matrix-js-sdk';
 import RateLimitedFunc from '../../ratelimitedfunc';
-import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 
 export default class RightPanel extends React.Component {
-
     static get propTypes() {
         return {
             roomId: React.PropTypes.string, // if showing panels for a given room, this is set
@@ -158,13 +155,6 @@ export default class RightPanel extends React.Component {
         const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
         const GroupRoomList = sdk.getComponent('groups.GroupRoomList');
         const GroupRoomInfo = sdk.getComponent('groups.GroupRoomInfo');
-
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        const isPhaseGroup = [
-            RightPanel.Phase.GroupMemberInfo,
-            RightPanel.Phase.GroupMemberList,
-        ].includes(this.state.phase);
 
         let panel = <div />;
 

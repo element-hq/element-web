@@ -17,11 +17,13 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
+import dis from '../../../dispatcher';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import TintableSvg from '../elements/TintableSvg';
+import RightPanel from '../../structures/RightPanel';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -175,7 +177,11 @@ export default React.createClass({
 
         let inviteButton;
         if (GroupStore.isUserPrivileged(this.props.groupId)) {
-            inviteButton = (<AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
+            inviteButton = (
+            <AccessibleButton
+                className="mx_RightPanel_invite"
+                onClick={this.onInviteToGroupButtonClick}
+            >
                 <div className="mx_RightPanel_icon" >
                     <TintableSvg src="img/icon-invite-people.svg" width="18" height="14" />
                 </div>
@@ -184,9 +190,6 @@ export default React.createClass({
         }
 
         return (
-
-
-
             <div className="mx_MemberList">
                 { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true}>

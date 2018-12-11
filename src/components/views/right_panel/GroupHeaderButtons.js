@@ -25,7 +25,6 @@ import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
 export default class GroupHeaderButtons extends HeaderButtons {
-
     constructor(props) {
         super(props, RightPanel.Phase.GroupMemberList);
     }

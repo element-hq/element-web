@@ -19,7 +19,6 @@ import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, FixedDistributor} from '../../resizer';
 
 export default class MainSplit extends React.Component {
-
     constructor(props) {
         super(props);
         this._setResizeContainerRef = this._setResizeContainerRef.bind(this);
