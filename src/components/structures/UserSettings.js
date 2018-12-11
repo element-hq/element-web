@@ -382,32 +382,8 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('Logout E2E Export', '', QuestionDialog, {
-            title: _t("Sign out"),
-            description:
-                <div>
-             { _t("For security, logging out will delete any end-to-end " +
-                  "encryption keys from this browser. If you want to be able " +
-                  "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.") }
-                </div>,
-            button: _t("Sign out"),
-            extraButtons: [
-                <button key="export" className="mx_Dialog_primary"
-                        onClick={this._onExportE2eKeysClicked}>
-                   { _t("Export E2E room keys") }
-                </button>,
-            ],
-            onFinished: (confirmed) => {
-                if (confirmed) {
-                    dis.dispatch({action: 'logout'});
-                    if (this.props.onFinished) {
-                        this.props.onFinished();
-                    }
-                }
-            },
-        });
+        const LogoutDialog = sdk.getComponent("dialogs.LogoutDialog");
+        Modal.createTrackedDialog('Logout E2E Export', '', LogoutDialog);
     },
 
     onPasswordChangeError: function(err) {
