@@ -39,14 +39,15 @@ export default (props) => {
     const onFinished = (confirmed) => {
         if (confirmed) {
             dis.dispatch({action: 'logout'});
-            if (props.onFinished) {
-                props.onFinished();
-            }
+        }
+        // close dialog
+        if (props.onFinished) {
+            props.onFinished();
         }
     };
 
     return (<QuestionDialog
-        hasCancelButton={false}
+        hasCancelButton={true}
         title={_t("Sign out")}
         description={<div>{description}</div>}
         button={_t("Sign out")}
