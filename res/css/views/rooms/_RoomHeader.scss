@@ -179,13 +179,13 @@ limitations under the License.
 }
 
 .mx_RoomHeader_avatarPicker {
-    margin-top: 23px;
     position: relative;
 }
 
 .mx_RoomHeader_avatarPicker_edit {
-    margin-left: 16px;
-    margin-top: 4px;
+    position: absolute;
+    left: 16px;
+    top: 18px;
 }
 
 .mx_RoomHeader_avatarPicker_edit > label {
