@@ -17,6 +17,8 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import LogoutDialog from "../dialogs/LogoutDialog";
+import Modal from "../../../Modal";
 
 export class TopLeftMenu extends React.Component {
     constructor() {
@@ -42,7 +44,7 @@ export class TopLeftMenu extends React.Component {
     }
 
     signOut() {
-        dis.dispatch({action: 'logout'});
+        Modal.createTrackedDialog('Logout E2E Export', '', LogoutDialog);
         this.closeMenu();
     }
 
