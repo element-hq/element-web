@@ -129,6 +129,7 @@ class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
+        dis.dispatch({action: 'user_activity'});
         if (!this._activityTimeout.isRunning()) {
             this._activityTimeout.start();
             dis.dispatch({action: 'user_activity_start'});

@@ -70,7 +70,7 @@ class Presence {
     }
 
     _onAction(payload) {
-        if (payload.action === 'user_activity_start') {
+        if (payload.action === 'user_activity') {
             this.setState("online");
             this._unavailableTimer.restart();
         }
