@@ -912,7 +912,6 @@
     "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ",
     "Incompatible Database": "Incompatible Database",
     "Continue With Encryption Disabled": "Continue With Encryption Disabled",
-    "Failed to indicate account erasure": "Failed to indicate account erasure",
     "Unknown error": "Unknown error",
     "Incorrect password": "Incorrect password",
     "Deactivate Account": "Deactivate Account",
