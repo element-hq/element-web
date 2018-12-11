@@ -1412,5 +1412,13 @@
     "Backing up...": "Backup...",
     "Create Key Backup": "Crea backup chiave",
     "Unable to create key backup": "Impossibile creare backup della chiave",
-    "Retry": "Riprova"
+    "Retry": "Riprova",
+    "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Mostra un promemoria per attivare il ripristino sicuro dei messaggi nelle stanze cifrate",
+    "Secure Message Recovery": "Ripristino sicuro dei messaggi",
+    "If you log out or use another device, you'll lose your secure message history. To prevent this, set up Secure Message Recovery.": "Se ti disconnetti o usi un altro dispositivo, perderai la cronologia sicura dei messaggi. Per evitare che accada, imposta il ripristino sicuro dei messaggi.",
+    "Don't ask again": "Non chiedere più",
+    "Set up": "Imposta",
+    "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Se non vuoi che la cronologia dei messaggi cifrati sia disponibile su altri dispositivi, <button>rifiuta</button>.",
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Se non imposti il ripristino sicuro dei messaggi, perderai la cronologia sicura dei messaggi quando ti disconnetti.",
+    "If you don't want to set this up now, you can later in Settings.": "Se non vuoi impostarlo ora, è possibile farlo in seguito nelle impostazioni."
 }
