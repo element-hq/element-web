@@ -1413,5 +1413,13 @@
     "Failed to load group members": "Huts egin du taldeko kideak kargatzean",
     "File is too big. Maximum file size is %(fileSize)s": "Fitxategia handiegia da. Gehieneko tamaina %(fileSize)s da",
     "Great! This passphrase looks strong enough.": "Ongi! Pasaesaldi hau nahiko gogorra ematen du.",
-    "As a safety net, you can use it to restore your encrypted message history.": "Badaezpada, zure zifratutako mezuen historiala berreskuratzeko erabili dezakezu."
+    "As a safety net, you can use it to restore your encrypted message history.": "Badaezpada, zure zifratutako mezuen historiala berreskuratzeko erabili dezakezu.",
+    "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Erakutsi zifratutako geletan mezuen berreskuratze segurua gaitzeko origarri bat",
+    "Secure Message Recovery": "Mezuen berreskuratze segurua",
+    "If you log out or use another device, you'll lose your secure message history. To prevent this, set up Secure Message Recovery.": "Saioa amaitzen baduzu edo beste gailu bat erabiltzen baduzu, zure mezu seguruen historiala galduko duzu. Hau gertatu ez dadin, ezarri mezuen berreskuratze segurua.",
+    "Don't ask again": "Ez galdetu berriro",
+    "Set up": "Ezarri",
+    "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Zifratutako mezuen historiala beste gailuetan eskuragarri egotea ez baduzu nahi, <button>desaktibatu</button>.",
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Mezuen berreskuratze segurua ezartzen ez baduzu, mezu seguruen historiala galduko duzu saioa amaitzean.",
+    "If you don't want to set this up now, you can later in Settings.": "Ez baduzu hau orain ezarri nahi, gero ere egin dezakezu ezarpenetan."
 }
