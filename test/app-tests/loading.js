@@ -43,6 +43,17 @@ import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
 
+expect.extend({
+    toStartWith(prefix) {
+        expect.assert(
+            this.actual.startsWith(prefix),
+            'expected %s to start with %s',
+            this.actual, prefix,
+        );
+        return this;
+    }
+});
+
 describe('loading:', function() {
     let parentDiv;
     let httpBackend;
@@ -437,10 +448,7 @@ describe('loading:', function() {
             }).done(done, done);
         });
 
-        it('uses the last known homeserver to register with', function(done) {
-            localStorage.setItem("mx_hs_url", "https://homeserver" );
-            localStorage.setItem("mx_is_url", "https://idserver" );
-
+        it('uses the default homeserver to register with', function(done) {
             loadApp();
 
             Promise.delay(1).then(() => {
@@ -449,7 +457,7 @@ describe('loading:', function() {
                 assertAtLoadingSpinner(matrixChat);
 
                 httpBackend.when('POST', '/register').check(function(req) {
-                    expect(req.path).toMatch(new RegExp("^https://homeserver/"));
+                    expect(req.path).toStartWith(DEFAULT_HS_URL);
                     expect(req.queryParams.kind).toEqual('guest');
                 }).respond(200, {
                     user_id: "@guest:localhost",
@@ -462,15 +470,15 @@ describe('loading:', function() {
             }).then(() => {
                 return expectAndAwaitSync();
             }).then((req) => {
-                expect(req.path).toMatch(new RegExp("^https://homeserver/"));
+                expect(req.path).toStartWith(DEFAULT_HS_URL);
 
                 // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.HomePage'));
                 expect(windowLocation.hash).toEqual("#/home");
-                expect(MatrixClientPeg.get().baseUrl).toEqual("https://homeserver");
-                expect(MatrixClientPeg.get().idBaseUrl).toEqual("https://idserver");
+                expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
+                expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
             }).done(done, done);
         });
 
