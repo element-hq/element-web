@@ -164,7 +164,10 @@ module.exports = React.createClass({
 
         // load stored sizes
         Object.entries(this.subListSizes).forEach(([id, size]) => {
-            this.resizer.forHandleWithId(id).resize(size);
+            const handle = this.resizer.forHandleWithId(id);
+            if (handle) {
+                handle.resize(size);
+            }
         });
 
         this.resizer.attach();

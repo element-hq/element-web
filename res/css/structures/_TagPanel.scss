@@ -124,13 +124,28 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.mx_TagPanel_groupsButton {
+.mx_TagPanel_groupsButton > .mx_AccessibleButton {
+    flex: auto;
     margin-bottom: 17px;
     margin-top: 18px;
-    height: 25px;
-    display: none;
-}
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: $roomheader-addroom-color;
+    position: relative;
+    /* overwrite mx_RoleButton inline-block */
+    display: block !important;
 
-.mx_TagPanel_groupsButton object {
-    pointer-events: none;
+    &:before {
+        background-color: $tagpanel-bg-color;
+        mask: url('../../img/icons-groups-nobg.svg');
+        mask-repeat: no-repeat;
+        mask-position: center 8px;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }

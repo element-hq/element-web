@@ -25,7 +25,6 @@ import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
 export default class RoomHeaderButtons extends HeaderButtons {
-
     constructor(props) {
         super(props, RightPanel.Phase.RoomMemberList);
     }

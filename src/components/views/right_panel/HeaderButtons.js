@@ -21,7 +21,6 @@ import React from 'react';
 import dis from '../../../dispatcher';
 
 export default class HeaderButtons extends React.Component {
-
     constructor(props, initialPhase) {
         super(props);
 

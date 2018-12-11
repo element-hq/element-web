@@ -20,17 +20,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { MatrixClient } from 'matrix-js-sdk';
 import RateLimitedFunc from '../../ratelimitedfunc';
-import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 
 export default class RightPanel extends React.Component {
-
     static get propTypes() {
         return {
             roomId: React.PropTypes.string, // if showing panels for a given room, this is set
@@ -141,6 +138,8 @@ export default class RightPanel extends React.Component {
         if (payload.action === "view_right_panel_phase") {
             this.setState({
                 phase: payload.phase,
+                groupRoomId: payload.groupRoomId,
+                groupId: payload.groupId,
                 member: payload.member,
             });
         }
@@ -156,13 +155,6 @@ export default class RightPanel extends React.Component {
         const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
         const GroupRoomList = sdk.getComponent('groups.GroupRoomList');
         const GroupRoomInfo = sdk.getComponent('groups.GroupRoomInfo');
-
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        const isPhaseGroup = [
-            RightPanel.Phase.GroupMemberInfo,
-            RightPanel.Phase.GroupMemberList,
-        ].includes(this.state.phase);
 
         let panel = <div />;
 
@@ -188,26 +180,6 @@ export default class RightPanel extends React.Component {
             panel = <NotificationPanel />;
         } else if (this.state.phase === RightPanel.Phase.FilePanel) {
             panel = <FilePanel roomId={this.props.roomId} />;
-        }
-
-        // TODO: either include this in the DOM again, or move it to other component
-        if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
-            // inviteGroup =
-            isPhaseGroup ? (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteToGroupButtonClick}>
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                    </div>
-                    <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
-                </AccessibleButton>
-            ) : (
-                <AccessibleButton className="mx_RightPanel_invite" onClick={this.onAddRoomToGroupButtonClick}>
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
-                    </div>
-                    <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
-                </AccessibleButton>
-            );
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {

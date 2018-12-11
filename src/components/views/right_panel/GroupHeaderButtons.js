@@ -25,7 +25,6 @@ import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
 export default class GroupHeaderButtons extends HeaderButtons {
-
     constructor(props) {
         super(props, RightPanel.Phase.GroupMemberList);
     }
@@ -45,7 +44,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         } else if (payload.action === "view_group") {
             this.setPhase(RightPanel.Phase.GroupMemberList);
         } else if (payload.action === "view_group_room") {
-            this.setPhase(RightPanel.Phase.GroupRoomInfo, {groupRoomId: payload.groupRoomId});
+            this.setPhase(RightPanel.Phase.GroupRoomInfo, {groupRoomId: payload.groupRoomId, groupId: payload.groupId});
         } else if (payload.action === "view_group_room_list") {
             this.setPhase(RightPanel.Phase.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
@@ -71,7 +70,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
                 clickPhase={RightPanel.Phase.GroupMemberList}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
-            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room.svg"
+            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room-nobg.svg"
                 isHighlighted={isPhaseRoom}
                 clickPhase={RightPanel.Phase.GroupRoomList}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}

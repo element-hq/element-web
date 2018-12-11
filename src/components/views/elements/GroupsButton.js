@@ -24,7 +24,6 @@ const GroupsButton = function(props) {
     return (
         <ActionButton action="view_my_groups"
             label={_t("Communities")}
-            iconPath="img/icons-groups.svg"
             size={props.size}
             tooltip={props.tooltip}
         />
