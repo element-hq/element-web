@@ -60,7 +60,6 @@ export default class Timer {
         if (timeout === this._timeout) {
             return;
         }
-        console.log(`changing timer timeout from ${this._timeout} to ${timeout}`);
         const isSmallerTimeout = timeout < this._timeout;
         this._timeout = timeout;
         if (this.isRunning() && isSmallerTimeout) {

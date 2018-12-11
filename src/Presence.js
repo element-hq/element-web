@@ -82,7 +82,6 @@ class Presence {
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
     async setState(newState) {
-        console.log("setting Presence state!!", newState);
         if (newState === this.state) {
             return;
         }
