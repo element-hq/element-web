@@ -1426,5 +1426,6 @@
     "If you don't want to set this up now, you can later in Settings.": "Ha most nem akarod beállítani, később a Beállításoknál megteheted.",
     "Messages containing @room": "Az üzenetek „@room”-ot tartalmaznak",
     "Encrypted messages in one-to-one chats": "Titkosított üzenetek közvetlen csevegésekben",
-    "Encrypted messages in group chats": "Titkosított üzenetek a csoportos beszélgetésekben"
+    "Encrypted messages in group chats": "Titkosított üzenetek a csoportos beszélgetésekben",
+    "That doesn't look like a valid email address": "Ez nem úgy néz ki, mint egy érvényes e-mail cím"
 }
