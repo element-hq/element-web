@@ -1426,5 +1426,6 @@
     "If you don't want to set this up now, you can later in Settings.": "Si vous ne voulez pas le configurer maintenant, vous pouvez le faire plus tard dans les paramètres.",
     "Messages containing @room": "Messages contenant @room",
     "Encrypted messages in one-to-one chats": "Messages chiffrés dans les discussions directes",
-    "Encrypted messages in group chats": "Messages chiffrés dans les discussions de groupe"
+    "Encrypted messages in group chats": "Messages chiffrés dans les discussions de groupe",
+    "That doesn't look like a valid email address": "Cela ne ressemble pas à une adresse e-mail valide"
 }
