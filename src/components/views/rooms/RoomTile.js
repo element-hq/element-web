@@ -251,6 +251,17 @@ module.exports = React.createClass({
         const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
         const badges = notifBadges || mentionBadges;
 
+        const isJoined = this.props.room.getMyMembership() === "join";
+        const looksLikeDm = this.props.room.currentState.getMembers().length === 2;
+        let subtext = null;
+        if (!isInvite && isJoined && looksLikeDm) {
+            const selfId = MatrixClientPeg.get().getUserId();
+            const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
+            if (otherMember.user && otherMember.user.statusMessage) {
+                subtext = otherMember.user.statusMessage;
+            }
+        }
+
         const classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.state.selected,
@@ -261,6 +272,7 @@ module.exports = React.createClass({
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
+            'mx_RoomTile_hasSubtext': !!subtext && !this.props.isCollapsed,
         });
 
         const avatarClasses = classNames({
@@ -291,6 +303,7 @@ module.exports = React.createClass({
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
+        let subtextLabel;
         let tooltip;
         if (!this.props.collapsed) {
             const nameClasses = classNames({
@@ -298,6 +311,8 @@ module.exports = React.createClass({
                 'mx_RoomTile_invite': this.props.isInvite,
                 'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
             });
+
+            subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
 
             if (this.state.selected) {
                 const nameSelected = <EmojiText>{ name }</EmojiText>;
@@ -339,6 +354,7 @@ module.exports = React.createClass({
             </div>
             <div className="mx_RoomTile_nameContainer">
                 { label }
+                { subtextLabel }
                 { badge }
             </div>
             { /* { incomingCallBox } */ }
