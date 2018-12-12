@@ -889,11 +889,13 @@ module.exports = withMatrixClient(React.createClass({
         let presenceState;
         let presenceLastActiveAgo;
         let presenceCurrentlyActive;
+        let statusMessage;
 
         if (this.props.member.user) {
             presenceState = this.props.member.user.presence;
             presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
+            statusMessage = this.props.member.user.statusMessage;
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
@@ -915,6 +917,11 @@ module.exports = withMatrixClient(React.createClass({
                 presenceState={presenceState} />;
         }
 
+        let statusLabel = null;
+        if (statusMessage) {
+            statusLabel = <span className="mx_MemberInfo_statusMessage">{ statusMessage }</span>;
+        }
+
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
@@ -931,6 +938,7 @@ module.exports = withMatrixClient(React.createClass({
                 </div>
                 <div className="mx_MemberInfo_profileField">
                     {presenceLabel}
+                    {statusLabel}
                 </div>
             </div>;
         }

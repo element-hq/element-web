@@ -272,7 +272,7 @@ module.exports = React.createClass({
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
-            'mx_RoomTile_hasSubtext': !!subtext && !this.props.isCollapsed,
+            'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
         });
 
         const avatarClasses = classNames({
