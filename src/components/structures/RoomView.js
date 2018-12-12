@@ -1794,14 +1794,10 @@ module.exports = React.createClass({
         let topUnreadMessagesBar = null;
         if (this.state.showTopUnreadMessagesBar) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
-            topUnreadMessagesBar = (
-                <div className="mx_RoomView_topUnreadMessagesBar">
-                    <TopUnreadMessagesBar
-                       onScrollUpClick={this.jumpToReadMarker}
-                       onCloseClick={this.forgetReadMarker}
-                    />
-                </div>
-            );
+            topUnreadMessagesBar = (<TopUnreadMessagesBar
+                                       onScrollUpClick={this.jumpToReadMarker}
+                                       onCloseClick={this.forgetReadMarker}
+                                    />);
         }
         const statusBarAreaClass = classNames(
             "mx_RoomView_statusArea",
@@ -1838,9 +1834,11 @@ module.exports = React.createClass({
                 <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
                     <div className={fadableSectionClasses}>
                         { auxPanel }
-                        { topUnreadMessagesBar }
-                        { messagePanel }
-                        { searchResultsPanel }
+                        <div className="mx_RoomView_timeline">
+                            { topUnreadMessagesBar }
+                            { messagePanel }
+                            { searchResultsPanel }
+                        </div>
                         <div className={statusBarAreaClass}>
                             <div className="mx_RoomView_statusAreaBox">
                                 <div className="mx_RoomView_statusAreaBox_line"></div>

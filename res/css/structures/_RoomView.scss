@@ -87,8 +87,12 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_RoomView_body .mx_RoomView_topUnreadMessagesBar {
-    order: 1;
+.mx_RoomView_body .mx_RoomView_timeline {
+    /* offset parent for mx_RoomView_topUnreadMessagesBar  */
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .mx_RoomView_body .mx_RoomView_messagePanel {
