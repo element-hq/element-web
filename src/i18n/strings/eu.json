@@ -1421,5 +1421,9 @@
     "Set up": "Ezarri",
     "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Zifratutako mezuen historiala beste gailuetan eskuragarri egotea ez baduzu nahi, <button>desaktibatu</button>.",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Mezuen berreskuratze segurua ezartzen ez baduzu, mezu seguruen historiala galduko duzu saioa amaitzean.",
-    "If you don't want to set this up now, you can later in Settings.": "Ez baduzu hau orain ezarri nahi, gero ere egin dezakezu ezarpenetan."
+    "If you don't want to set this up now, you can later in Settings.": "Ez baduzu hau orain ezarri nahi, gero ere egin dezakezu ezarpenetan.",
+    "Messages containing @room": "@room duten mezuak",
+    "Encrypted messages in one-to-one chats": "Zifratutako mezuak bi pertsonen arteko txatetan",
+    "Encrypted messages in group chats": "Zifratutako mezuak talde-txatetan",
+    "That doesn't look like a valid email address": "Horrek ez du baliozko e-mail baten itxurarik"
 }
