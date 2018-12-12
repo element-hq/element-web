@@ -49,7 +49,7 @@ class VectorPushRuleDefinition {
                 // The actions must match to the ones expected by vector state.
                 // Use `decodeActions` on both sides to canonicalize things like
                 // value: true vs. unspecified for highlight (which defaults to
-                // true, making them equivalent.
+                // true, making them equivalent).
                 if (enabled &&
                         JSON.stringify(decodeActions(rule.actions)) ===
                         JSON.stringify(decodeActions(vectorStateToActions))) {
