@@ -1394,5 +1394,8 @@
     "Set up": "Rregulloje",
     "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Nëse s’doni që historiku i mesazheve të fshehtëzuar të gjendet në pajisje të tjera, <button>zgjidhni lënien jashtë nga kjo</button>.",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Po s’rregulluat Rimarrje Mesazhesh të Parrezik, do të humbni historikun e mesazheve të parrezik, kur të dilni nga llogaria.",
-    "If you don't want to set this up now, you can later in Settings.": "Nëse s’doni ta rregulloni tani këtë, mund ta bëni më vonë që nga Rregullimet."
+    "If you don't want to set this up now, you can later in Settings.": "Nëse s’doni ta rregulloni tani këtë, mund ta bëni më vonë që nga Rregullimet.",
+    "Messages containing @room": "Mesazhe që përmbajnë @room",
+    "Encrypted messages in one-to-one chats": "Mesazhe të fshehtëzuar në fjalosje tek-për-tek",
+    "Encrypted messages in group chats": "Mesazhe të fshehtëzuar në fjalosje në grup"
 }
