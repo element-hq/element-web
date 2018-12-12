@@ -252,7 +252,7 @@ module.exports = React.createClass({
         const badges = notifBadges || mentionBadges;
 
         const isJoined = this.props.room.getMyMembership() === "join";
-        const looksLikeDm = this.props.room.currentState.getMembers().length === 2;
+        const looksLikeDm = this.props.room.getInvitedAndJoinedMemberCount() === 2;
         let subtext = null;
         if (!isInvite && isJoined && looksLikeDm) {
             const selfId = MatrixClientPeg.get().getUserId();
