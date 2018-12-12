@@ -1413,5 +1413,16 @@
     "You do not have permission to invite people to this room.": "您沒有權限邀請夥伴到此聊天室。",
     "User %(user_id)s does not exist": "使用者 %(user_id)s 不存在",
     "Unknown server error": "未知的伺服器錯誤",
-    "Failed to load group members": "載入群組成員失敗"
+    "Failed to load group members": "載入群組成員失敗",
+    "Show a reminder to enable Secure Message Recovery in encrypted rooms": "顯示在已加密的聊天室中啟用安全訊息復原的提醒",
+    "Messages containing @room": "包含 @room 的訊息",
+    "Encrypted messages in one-to-one chats": "在一對一的聊天中的加密訊息",
+    "Encrypted messages in group chats": "在群組聊天中的已加密訊息",
+    "Secure Message Recovery": "安全訊息復原",
+    "If you log out or use another device, you'll lose your secure message history. To prevent this, set up Secure Message Recovery.": "如果您登出或使用其他裝置，您將會遺失您的安全訊息歷史。要避免發生這種事，請設定安全訊息復原。",
+    "Don't ask again": "不要再次詢問",
+    "Set up": "設定",
+    "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "如果您不想要在其他裝置上也可以看到已加密的訊息歷史，可以<button>選擇退出</button>。",
+    "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "在沒有設定安全訊息復原的情況下，您將會在登出時遺失您的安全訊息歷史。",
+    "If you don't want to set this up now, you can later in Settings.": "如果您不想立刻進行設定，您稍後可以在設定中進行。"
 }
