@@ -84,7 +84,7 @@ module.exports = React.createClass({
         const name = this._getDisplayName();
         const active = -1;
         const presenceState = member.user ? member.user.presence : null;
-        const statusMessage = member.user ? member.user.statusMessage : null;
+        const statusMessage = member.user ? member.user._unstable_statusMessage : null;
 
         const av = (
             <MemberAvatar member={member} width={36} height={36} />

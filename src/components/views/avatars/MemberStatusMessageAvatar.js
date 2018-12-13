@@ -40,7 +40,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
 
         if (this.props.member.user) {
-            this.setState({message: this.props.member.user.statusMessage});
+            this.setState({message: this.props.member.user._unstable_statusMessage});
         } else {
             this.setState({message: ""});
         }
@@ -55,7 +55,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
     _onRoomStateEvents(ev, state) {
         if (ev.getStateKey() !== MatrixClientPeg.get().getUserId()) return;
         if (ev.getType() !== "im.vector.user_status") return;
-        // TODO: We should be relying on `this.props.member.user.statusMessage`
+        // TODO: We should be relying on `this.props.member.user._unstable_statusMessage`
         this.setState({message: ev.getContent()["status"]});
         this.forceUpdate();
     }
@@ -82,7 +82,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
     }
 
     render() {
-        const hasStatus = this.props.member.user ? !!this.props.member.user.statusMessage : false;
+        const hasStatus = this.props.member.user ? !!this.props.member.user._unstable_statusMessage : false;
 
         const classes = classNames({
             "mx_MemberStatusMessageAvatar": true,

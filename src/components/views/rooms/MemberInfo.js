@@ -895,7 +895,7 @@ module.exports = withMatrixClient(React.createClass({
             presenceState = this.props.member.user.presence;
             presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
-            statusMessage = this.props.member.user.statusMessage;
+            statusMessage = this.props.member.user._unstable_statusMessage;
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);

@@ -29,18 +29,18 @@ export default class StatusMessageContextMenu extends React.Component {
         this._onStatusChange = this._onStatusChange.bind(this);
 
         this.state = {
-            message: props.user ? props.user.statusMessage : "",
+            message: props.user ? props.user._unstable_statusMessage : "",
         };
     }
 
     async _onClearClick(e) {
-        await MatrixClientPeg.get().setStatusMessage("");
+        await MatrixClientPeg.get()._unstable_setStatusMessage("");
         this.setState({message: ""});
     }
 
     _onSubmit(e) {
         e.preventDefault();
-        MatrixClientPeg.get().setStatusMessage(this.state.message);
+        MatrixClientPeg.get()._unstable_setStatusMessage(this.state.message);
     }
 
     _onStatusChange(e) {

@@ -257,8 +257,8 @@ module.exports = React.createClass({
         if (!isInvite && isJoined && looksLikeDm) {
             const selfId = MatrixClientPeg.get().getUserId();
             const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
-            if (otherMember.user && otherMember.user.statusMessage) {
-                subtext = otherMember.user.statusMessage;
+            if (otherMember.user && otherMember.user._unstable_statusMessage) {
+                subtext = otherMember.user._unstable_statusMessage;
             }
         }
 
