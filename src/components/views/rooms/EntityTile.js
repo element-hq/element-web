@@ -126,8 +126,8 @@ const EntityTile = React.createClass({
             let nameClasses = 'mx_EntityTile_name';
             if (this.props.showPresence) {
                 presenceLabel = <PresenceLabel activeAgo={activeAgo}
-                                               currentlyActive={this.props.presenceCurrentlyActive}
-                                               presenceState={this.props.presenceState}/>;
+                    currentlyActive={this.props.presenceCurrentlyActive}
+                    presenceState={this.props.presenceState} />;
                 nameClasses += ' mx_EntityTile_name_hover';
             }
             if (this.props.subtextLabel) {
@@ -135,9 +135,9 @@ const EntityTile = React.createClass({
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
+                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12" />
                     <EmojiText element="div" className={nameClasses} dir="auto">
-                        {name}
+                        { name }
                     </EmojiText>
                     {presenceLabel}
                 </div>
