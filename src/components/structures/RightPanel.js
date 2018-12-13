@@ -326,7 +326,8 @@ module.exports = React.createClass({
             let notifCount = 0;
             MatrixClientPeg.get().getRooms().forEach(r => notifCount += (r.getUnreadNotificationCount('highlight') || 0));
             if (notifCount > 0) {
-                notifCountBadge = <div title={_t("%counts Notifications")}>{ formatCount(notifCount) }</div>;
+                const title = _t("%(count)s Notifications", {count: formatCount(notifCount)});
+                notifCountBadge = <div title={title}>{ formatCount(notifCount) }</div>;
             }
 
             headerButtons = [
