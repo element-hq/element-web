@@ -1054,6 +1054,8 @@
     "Low Priority": "Low Priority",
     "Direct Chat": "Direct Chat",
     "View Community": "View Community",
+    "Clear status": "Clear status",
+    "Set a new status...": "Set a new status...",
     "Sorry, your browser is <b>not</b> able to run Riot.": "Sorry, your browser is <b>not</b> able to run Riot.",
     "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.",
