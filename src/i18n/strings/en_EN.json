@@ -1128,6 +1128,7 @@
     "Review terms and conditions": "Review terms and conditions",
     "Old cryptography data detected": "Old cryptography data detected",
     "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
+    "Unknown error discovering homeserver": "Unknown error discovering homeserver",
     "Logout": "Logout",
     "Your Communities": "Your Communities",
     "Did you know: you can use communities to filter your Riot.im experience!": "Did you know: you can use communities to filter your Riot.im experience!",

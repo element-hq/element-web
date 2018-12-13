@@ -1761,22 +1761,30 @@ export default React.createClass({
     },
 
     _tryDiscoverDefaultHomeserver: async function(serverName) {
-        const discovery = await AutoDiscovery.findClientConfig(serverName);
-        const state = discovery["m.homeserver"].state;
-        if (state !== AutoDiscovery.SUCCESS) {
-            console.error("Failed to discover homeserver on startup:", discovery);
+        try {
+            const discovery = await AutoDiscovery.findClientConfig(serverName);
+            const state = discovery["m.homeserver"].state;
+            if (state !== AutoDiscovery.SUCCESS) {
+                console.error("Failed to discover homeserver on startup:", discovery);
+                this.setState({
+                    defaultServerDiscoveryError: discovery["m.homeserver"].error,
+                    loadingDefaultHomeserver: false,
+                });
+            } else {
+                const hsUrl = discovery["m.homeserver"].base_url;
+                const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                    ? discovery["m.identity_server"].base_url
+                    : "https://vector.im";
+                this.setState({
+                    defaultHsUrl: hsUrl,
+                    defaultIsUrl: isUrl,
+                    loadingDefaultHomeserver: false,
+                });
+            }
+        } catch (e) {
+            console.error(e);
             this.setState({
-                defaultServerDiscoveryError: discovery["m.homeserver"].error,
-                loadingDefaultHomeserver: false,
-            });
-        } else {
-            const hsUrl = discovery["m.homeserver"].base_url;
-            const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
-                ? discovery["m.identity_server"].base_url
-                : "https://vector.im";
-            this.setState({
-                defaultHsUrl: hsUrl,
-                defaultIsUrl: isUrl,
+                defaultServerDiscoveryError: _t("Unknown error discovering homeserver"),
                 loadingDefaultHomeserver: false,
             });
         }

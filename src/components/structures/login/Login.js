@@ -343,7 +343,10 @@ module.exports = React.createClass({
             }
         } catch (e) {
             console.error(e);
-            throw e;
+            this.setState({
+                findingHomeserver: false,
+                discoveryError: _t("Unknown error discovering homeserver"),
+            });
         }
     },
 
