@@ -55,6 +55,10 @@ limitations under the License.
     padding-bottom: 3px;
 }
 
+.mx_RightPanel_headerButton_badgeHighlight .mx_RightPanel_headerButton_badge {
+    color: $warning-color;
+}
+
 .mx_RightPanel_headerButton_highlight {
     width: 25px;
     height: 5px;
