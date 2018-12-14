@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import OpenRoomsStore from '../../stores/OpenRoomsStore';
 import dis from '../../dispatcher';
 import RoomView from './RoomView';
@@ -114,13 +113,17 @@ export default class RoomGridView extends React.Component {
                                 "mx_GroupGridView_tile": true,
                                 "mx_GroupGridView_activeTile": isActive,
                             });
-                            return (<section onClick={() => {this._setActive(i)}} key={roomStore.getRoomId()} className={tileClasses}>
-                                <RoomView
-                                    isGrid={true}
-                                    roomViewStore={roomStore}
-                                    isActive={isActive}
-                                />
-                            </section>);
+                            return (<section
+                                    onClick={() => {this._setActive(i);}}
+                                    key={roomStore.getRoomId()}
+                                    className={tileClasses}
+                                >
+                                    <RoomView
+                                        isGrid={true}
+                                        roomViewStore={roomStore}
+                                        isActive={isActive}
+                                    />
+                                </section>);
                         } else {
                             return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`} />);
                         }

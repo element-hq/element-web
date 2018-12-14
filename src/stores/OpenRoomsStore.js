@@ -182,7 +182,7 @@ class OpenRoomsStore extends Store {
                 auto_join: payload.auto_join,
                 oob_data: payload.oob_data,
             });
-        } catch(err) {
+        } catch (err) {
             this._forwardAction({
                 action: 'view_room_error',
                 room_id: null,
@@ -223,6 +223,7 @@ class OpenRoomsStore extends Store {
     }
 
     __onDispatch(payload) {
+        let proposedIndex;
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -253,10 +254,10 @@ class OpenRoomsStore extends Store {
                 this._forwardingEvent = payload.event;
                 break;
             case 'group_grid_set_active':
-                const proposedIndex = this._roomIndex(payload);
+                proposedIndex = this._roomIndex(payload);
                 if (proposedIndex !== -1) {
                     this._setState({
-                        currentIndex: proposedIndex
+                        currentIndex: proposedIndex,
                     });
                 }
                 break;
