@@ -1427,5 +1427,14 @@
     "Messages containing @room": "Az üzenetek „@room”-ot tartalmaznak",
     "Encrypted messages in one-to-one chats": "Titkosított üzenetek közvetlen csevegésekben",
     "Encrypted messages in group chats": "Titkosított üzenetek a csoportos beszélgetésekben",
-    "That doesn't look like a valid email address": "Ez nem úgy néz ki, mint egy érvényes e-mail cím"
+    "That doesn't look like a valid email address": "Ez nem úgy néz ki, mint egy érvényes e-mail cím",
+    "Only use lower case letters, numbers and '=_-./'": "Csak kisbetűket, számokat és „=_-./” jelet használj",
+    "Checking...": "Ellenőrzés...",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Hibás konfiguráció: Az alapértelmezett Matrix szerver URL és az alapértelmezett szerver név nem tamogatott",
+    "Unknown error discovering homeserver": "A mátrix szerver felderítésénél ismeretlen hiba történt",
+    "%(count)s Notifications|other": "%(count)s értesítés",
+    "%(count)s Notifications|one": "%(count)s értesítés",
+    "Invalid identity server discovery response": "Azonosító szerver felderítésére érkezett válasz érvénytelen",
+    "General failure": "Általános hiba",
+    "Unknown failure discovering homeserver": "Mátrix szerver felderítésénél ismeretlen hiba történt"
 }
