@@ -1435,6 +1435,6 @@
     "%(count)s Notifications|other": "%(count)s notifications",
     "%(count)s Notifications|one": "%(count)s notification",
     "Invalid identity server discovery response": "Réponse non valide lors de la découverte du serveur d'identité",
-    "General failure": "Échec général",
-    "Unknown failure discovering homeserver": "Échec inconnu lors de la découverte du serveur d'accueil"
+    "General failure": "Erreur générale",
+    "Unknown failure discovering homeserver": "Erreur inconnue lors de la découverte du serveur d'accueil"
 }
