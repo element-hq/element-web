@@ -71,6 +71,10 @@ module.exports = React.createClass({
 
     getInitialState: function() {
 
+        this._subListRefs = {
+            // key => RoomSubList ref
+        };
+
         const sizesJson = window.localStorage.getItem("mx_roomlist_sizes");
         const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
         this.subListSizes = sizesJson ? JSON.parse(sizesJson) : {};
@@ -174,8 +178,11 @@ module.exports = React.createClass({
         this.mounted = true;
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate: function(prevProps) {
         this._repositionIncomingCallBox(undefined, false);
+        if (this.props.searchFilter !== prevProps.searchFilter) {
+             Object.values(this._subListRefs).forEach(l => l.checkOverflow());
+        }
     },
 
     onAction: function(payload) {
@@ -483,6 +490,14 @@ module.exports = React.createClass({
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
     },
 
+    _subListRef: function(key, ref) {
+        if (!ref) {
+            delete this._subListRefs[key];
+        } else {
+            this._subListRefs[key] = ref;
+        }
+    },
+
     _mapSubListProps: function(subListsProps) {
         const defaultProps = {
             collapsed: this.props.collapsed,
@@ -513,6 +528,7 @@ module.exports = React.createClass({
             const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
 
             let subList = (<RoomSubList
+                ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
                 onHeaderClick={onSubListHeaderClick}
                 key={chosenKey}
