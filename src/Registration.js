@@ -28,7 +28,7 @@ import { _t } from './languageHandler';
 
 // Regex for what a "safe" or "Matrix-looking" localpart would be.
 // TODO: Update as needed for https://github.com/matrix-org/matrix-doc/issues/1514
-export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/g;
+export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
 
 /**
  * Starts either the ILAG or full registration flow, depending
