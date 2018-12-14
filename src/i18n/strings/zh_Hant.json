@@ -1424,5 +1424,13 @@
     "Set up": "設定",
     "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "如果您不想要在其他裝置上也可以看到已加密的訊息歷史，可以<button>選擇退出</button>。",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "在沒有設定安全訊息復原的情況下，您將會在登出時遺失您的安全訊息歷史。",
-    "If you don't want to set this up now, you can later in Settings.": "如果您不想立刻進行設定，您稍後可以在設定中進行。"
+    "If you don't want to set this up now, you can later in Settings.": "如果您不想立刻進行設定，您稍後可以在設定中進行。",
+    "That doesn't look like a valid email address": "看起來不像有效的電子郵件地址",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "無效的設定：無法提供預設的家伺服器 URL 與預設的伺服器名稱",
+    "Unknown error discovering homeserver": "探索家伺服器時發生未知的錯誤",
+    "%(count)s Notifications|other": "%(count)s 個通知",
+    "%(count)s Notifications|one": "%(count)s 個通知",
+    "Invalid identity server discovery response": "無效的身份伺服器探索回應",
+    "General failure": "一般錯誤",
+    "Unknown failure discovering homeserver": "探索家伺服器時發生未知的失敗"
 }
