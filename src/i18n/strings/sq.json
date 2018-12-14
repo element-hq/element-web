@@ -1397,5 +1397,14 @@
     "If you don't want to set this up now, you can later in Settings.": "Nëse s’doni ta rregulloni tani këtë, mund ta bëni më vonë që nga Rregullimet.",
     "Messages containing @room": "Mesazhe që përmbajnë @room",
     "Encrypted messages in one-to-one chats": "Mesazhe të fshehtëzuar në fjalosje tek-për-tek",
-    "Encrypted messages in group chats": "Mesazhe të fshehtëzuar në fjalosje në grup"
+    "Encrypted messages in group chats": "Mesazhe të fshehtëzuar në fjalosje në grup",
+    "That doesn't look like a valid email address": "Kjo s’duket si adresë email e vlefshme",
+    "Only use lower case letters, numbers and '=_-./'": "Përdorni vetëm shkronja të vogla, numra dhe '=_-./'",
+    "Checking...": "Po kontrollohet…",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Formësim i pavlefshëm: S’mund të jepen një URL parazgjedhje për shërbyesin Home dhe një emër parazgjedhje shërbyesi",
+    "Unknown error discovering homeserver": "Gabim i panjohur gjatë zbulimit të shërbyesit Home",
+    "%(count)s Notifications|other": "%(count)s Njoftime",
+    "%(count)s Notifications|one": "%(count)s Njoftim",
+    "Invalid identity server discovery response": "Përgjigje e pavlefshme zbulimi identiteti shërbyesi",
+    "Unknown failure discovering homeserver": "Dështim i panjohur gjatë zbulimi shërbyesi Home"
 }
