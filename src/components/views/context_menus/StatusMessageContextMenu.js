@@ -48,7 +48,7 @@ export default class StatusMessageContextMenu extends React.Component {
     }
 
     render() {
-        const form = <form className="mx_StatusMessageContextMenu_form" onSubmit={this._onSubmit}>
+        const form = <form className="mx_StatusMessageContextMenu_form" onSubmit={this._onSubmit} autoComplete="off">
             <input type="text" key="message" placeholder={_t("Set a new status...")} autoFocus={true}
                    className="mx_StatusMessageContextMenu_message"
                    value={this.state.message} onChange={this._onStatusChange} maxLength="60" />
