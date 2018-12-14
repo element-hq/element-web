@@ -313,6 +313,12 @@ const RoomSubList = React.createClass({
         );
     },
 
+    checkOverflow: function() {
+        if (this.refs.scroller) {
+            this.refs.scroller.checkOverflow();
+        }
+    },
+
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
         if (len) {
@@ -330,7 +336,7 @@ const RoomSubList = React.createClass({
                 tiles.push(...this.props.extraTiles);
                 return <div className={subListClasses}>
                     {this._getHeaderJsx()}
-                    <IndicatorScrollbar className="mx_RoomSubList_scroll">
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
                         { tiles }
                     </IndicatorScrollbar>
                 </div>;
