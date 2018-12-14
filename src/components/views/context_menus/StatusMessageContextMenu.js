@@ -48,11 +48,16 @@ export default class StatusMessageContextMenu extends React.Component {
     }
 
     render() {
+        const formSubmitClasses = classNames({
+            "mx_StatusMessageContextMenu_submit": true,
+            "mx_StatusMessageContextMenu_submitFaded": !this.state.message, // no message == faded
+        });
+
         const form = <form className="mx_StatusMessageContextMenu_form" onSubmit={this._onSubmit} autoComplete="off">
             <input type="text" key="message" placeholder={_t("Set a new status...")} autoFocus={true}
                    className="mx_StatusMessageContextMenu_message"
                    value={this.state.message} onChange={this._onStatusChange} maxLength="60" />
-            <AccessibleButton onClick={this._onSubmit} element="div" className="mx_StatusMessageContextMenu_submit">
+            <AccessibleButton onClick={this._onSubmit} element="div" className={formSubmitClasses}>
                 <img src="img/icons-checkmark.svg" width="22" height="22" />
             </AccessibleButton>
         </form>;

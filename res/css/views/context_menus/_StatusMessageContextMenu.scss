@@ -28,6 +28,10 @@ limitations under the License.
     display: inline-block;
 }
 
+.mx_StatusMessageContextMenu_submitFaded {
+    opacity: 0.5;
+}
+
 .mx_StatusMessageContextMenu_submit img {
     vertical-align: middle;
     margin-left: 8px;
