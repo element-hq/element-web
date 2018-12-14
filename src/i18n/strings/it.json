@@ -1420,5 +1420,18 @@
     "Set up": "Imposta",
     "If you don't want encrypted message history to be available on other devices, <button>opt out</button>.": "Se non vuoi che la cronologia dei messaggi cifrati sia disponibile su altri dispositivi, <button>rifiuta</button>.",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Se non imposti il ripristino sicuro dei messaggi, perderai la cronologia sicura dei messaggi quando ti disconnetti.",
-    "If you don't want to set this up now, you can later in Settings.": "Se non vuoi impostarlo ora, è possibile farlo in seguito nelle impostazioni."
+    "If you don't want to set this up now, you can later in Settings.": "Se non vuoi impostarlo ora, è possibile farlo in seguito nelle impostazioni.",
+    "Messages containing @room": "Messaggi contenenti @room",
+    "Encrypted messages in one-to-one chats": "Messaggi cifrati in chat uno-ad-uno",
+    "Encrypted messages in group chats": "Messaggi cifrati in chat di gruppo",
+    "That doesn't look like a valid email address": "Non sembra essere un indirizzo email valido",
+    "Only use lower case letters, numbers and '=_-./'": "Usa solo lettere minuscole, numeri e '=_-./'",
+    "Checking...": "Controllo...",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Configurazione non valida: impossibile fornire un URL di homeserver e un nome server predefiniti",
+    "Unknown error discovering homeserver": "Errore sconosciuto cercando gli homeserver",
+    "%(count)s Notifications|other": "%(count)s notifiche",
+    "%(count)s Notifications|one": "%(count)s notifica",
+    "Invalid identity server discovery response": "Risposta non valida cercando server di identità",
+    "General failure": "Guasto generale",
+    "Unknown failure discovering homeserver": "Errore sconosciuto cercando homeserver"
 }
