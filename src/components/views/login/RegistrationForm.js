@@ -25,7 +25,7 @@ import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
+import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -194,9 +194,8 @@ module.exports = React.createClass({
                 } else this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             case FIELD_USERNAME:
-                // XXX: SPEC-1
-                var username = this.refs.username.value.trim();
-                if (encodeURIComponent(username) != username) {
+                const username = this.refs.username.value.trim();
+                if (!SAFE_LOCALPART_REGEX.test(username)) {
                     this.markFieldValid(
                         field_id,
                         false,

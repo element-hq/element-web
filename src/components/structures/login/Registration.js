@@ -342,7 +342,7 @@ module.exports = React.createClass({
                 errMsg = _t('A phone number is required to register on this homeserver.');
                 break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = _t('User names may only contain letters, numbers, dots, hyphens and underscores.');
+                errMsg = _t("Only use lower case letters, numbers and '=_-./'");
                 break;
             case "RegistrationForm.ERR_USERNAME_BLANK":
                 errMsg = _t('You need to enter a user name.');
