@@ -1427,5 +1427,14 @@
     "Messages containing @room": "Messages contenant @room",
     "Encrypted messages in one-to-one chats": "Messages chiffrés dans les discussions directes",
     "Encrypted messages in group chats": "Messages chiffrés dans les discussions de groupe",
-    "That doesn't look like a valid email address": "Cela ne ressemble pas à une adresse e-mail valide"
+    "That doesn't look like a valid email address": "Cela ne ressemble pas à une adresse e-mail valide",
+    "Only use lower case letters, numbers and '=_-./'": "Utiliser uniquement des lettres minuscules, des chiffres et les symboles =_-./",
+    "Checking...": "Vérification…",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Configuration non valide : Impossible de fournir une URL de serveur d'accueil par défaut et un nom de serveur par défaut",
+    "Unknown error discovering homeserver": "Erreur inconnue lors de la découverte du serveur d'accueil",
+    "%(count)s Notifications|other": "%(count)s notifications",
+    "%(count)s Notifications|one": "%(count)s notification",
+    "Invalid identity server discovery response": "Réponse non valide lors de la découverte du serveur d'identité",
+    "General failure": "Échec général",
+    "Unknown failure discovering homeserver": "Échec inconnu lors de la découverte du serveur d'accueil"
 }
