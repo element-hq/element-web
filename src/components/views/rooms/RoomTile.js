@@ -333,7 +333,7 @@ module.exports = React.createClass({
         >
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
-                    <RoomAvatar room={this.props.room} width={32} height={32} />
+                    <RoomAvatar room={this.props.room} width={24} height={24} />
                     { dmIndicator }
                 </div>
             </div>
