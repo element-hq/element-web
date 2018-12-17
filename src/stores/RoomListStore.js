@@ -224,7 +224,7 @@ class RoomListStore extends Store {
                     }
                 }
 
-                // ignore any m. tag names we don't know about
+                // ignore tags we don't know about
                 tagNames = tagNames.filter((t) => {
                     return lists[t] !== undefined;
                 });
