@@ -1079,6 +1079,10 @@ export default React.createClass({
      * @param {string} theme new theme
      */
     _onSetTheme: function(theme) {
+        // disable changing the theme for now
+        // as other themes are not compatible with dharma
+        return;
+
         if (!theme) {
             theme = SettingsStore.getValue("theme");
         }
