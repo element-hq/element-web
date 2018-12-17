@@ -226,7 +226,7 @@ class RoomListStore extends Store {
 
                 // ignore any m. tag names we don't know about
                 tagNames = tagNames.filter((t) => {
-                    return !t.startsWith('m.') || lists[t] !== undefined;
+                    return lists[t] !== undefined;
                 });
 
                 if (tagNames.length) {
