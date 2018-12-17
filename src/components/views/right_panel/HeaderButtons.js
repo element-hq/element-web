@@ -25,7 +25,7 @@ export default class HeaderButtons extends React.Component {
         super(props);
 
         this.state = {
-            phase: initialPhase,
+            phase: props.collapsedRhs ? null : initialPhase,
             isUserPrivilegedInGroup: null,
         };
         this.onAction = this.onAction.bind(this);
@@ -58,7 +58,7 @@ export default class HeaderButtons extends React.Component {
                     phase: null,
                 });
             } else {
-                if (!this.state.phase) {
+                if (this.props.collapsedRhs) {
                     dis.dispatch({
                         action: 'show_right_panel',
                     });

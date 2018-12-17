@@ -1311,7 +1311,7 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
-                        <GroupHeaderButtons />
+                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                     </div>
                     <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
                         <GeminiScrollbarWrapper className="mx_GroupView_body">

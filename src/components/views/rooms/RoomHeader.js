@@ -424,7 +424,7 @@ module.exports = React.createClass({
                     { saveButton }
                     { cancelButton }
                     { rightRow }
-                    <RoomHeaderButtons />
+                    <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                 </div>
             </div>
         );
