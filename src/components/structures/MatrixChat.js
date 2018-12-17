@@ -673,9 +673,11 @@ export default React.createClass({
                 });
                 break;
             }
-            case 'set_theme':
-                this._onSetTheme(payload.value);
-                break;
+            // case 'set_theme':
+                // disable changing the theme for now
+                // as other themes are not compatible with dharma
+                // this._onSetTheme(payload.value);
+                // break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
