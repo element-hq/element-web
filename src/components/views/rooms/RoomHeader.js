@@ -394,14 +394,6 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
-        let rightPanelButtons;
-        if (this.props.collapsedRhs) {
-            rightPanelButtons =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_showPanel" onClick={this.onShowRhsClick} title={_t('Show panel')}>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                </AccessibleButton>;
-        }
-
         let rightRow;
         let manageIntegsButton;
         if (this.props.room && this.props.room.roomId && this.props.inRoom) {
@@ -419,7 +411,6 @@ module.exports = React.createClass({
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
-                    { rightPanelButtons }
                 </div>;
         }
 
