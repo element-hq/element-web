@@ -438,7 +438,7 @@ const LoggedInView = React.createClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}
-                        collapsedRhs={this.props.collapseRhs}
+                        collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
                 break;
@@ -488,7 +488,7 @@ const LoggedInView = React.createClass({
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
-                    collapsedRhs={this.props.collapseRhs}
+                    collapsedRhs={this.props.collapsedRhs}
                 />;
                 break;
         }
