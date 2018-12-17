@@ -161,7 +161,7 @@ export default React.createClass({
             viewUserId: null,
 
             collapseLhs: false,
-            collapsedRhs: false,
+            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -656,11 +656,13 @@ export default React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", true);
                 this.setState({
                     collapsedRhs: true,
                 });
                 break;
             case 'show_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", false);
                 this.setState({
                     collapsedRhs: false,
                 });
