@@ -56,7 +56,6 @@ module.exports = React.createClass({
             case 'focus_room_filter':
                 if (this.refs.search) {
                     this.refs.search.focus();
-                    this.refs.search.select();
                 }
                 break;
         }
@@ -81,6 +80,10 @@ module.exports = React.createClass({
                 this._clearSearch("keyboard");
                 break;
         }
+    },
+
+    _onFocus: function(ev) {
+        ev.target.select();
     },
 
     _clearSearch: function(source) {
@@ -108,6 +111,7 @@ module.exports = React.createClass({
                     ref="search"
                     className="mx_textinput_icon mx_textinput_search"
                     value={ this.state.searchTerm }
+                    onFocus={ this._onFocus }
                     onChange={ this.onChange }
                     onKeyDown={ this._onKeyDown }
                     placeholder={ _t('Filter room names') }
