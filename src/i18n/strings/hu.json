@@ -1436,5 +1436,12 @@
     "%(count)s Notifications|one": "%(count)s értesítés",
     "Invalid identity server discovery response": "Azonosító szerver felderítésére érkezett válasz érvénytelen",
     "General failure": "Általános hiba",
-    "Unknown failure discovering homeserver": "Mátrix szerver felderítésénél ismeretlen hiba történt"
+    "Unknown failure discovering homeserver": "Mátrix szerver felderítésénél ismeretlen hiba történt",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "A mentésnek <verify>ellenőrzött</verify> eszköztől <device></device> származó <validity>érvényes</validity> aláírása van",
+    "New Recovery Method": "Új Visszaállítási Eljárás",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "Biztonságos Üzenetekhez való új visszaállítási jelmondatot és kulcsot találtunk.",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "A Biztonságos Üzenetek ezen az eszközön való beállításával az új visszaállítási eljárással lesznek újra titkosítva a régi üzenetek.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ha nem te állítottad be a visszaállítási eljárást akkor lehet, hogy egy támadó próbálja elérni a fiókodat. Változtasd meg a fiókod jelszavát és állítsd be az új visszaállítási eljárást a Beállításokban amint lehet.",
+    "Set up Secure Messages": "Biztonságos Üzenetek beállítása",
+    "Go to Settings": "Irány a Beállítások"
 }
