@@ -24,6 +24,8 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
 import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 
+const ipcRenderer = window.ipcRenderer;
+
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
     if (navigator.userAgent.indexOf('Macintosh')) {
