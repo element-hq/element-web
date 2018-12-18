@@ -362,7 +362,6 @@ module.exports = React.createClass({
             // we don't need to restore any size here, do we?
             // i guess we could have triggered a new group to appear
             // that already an explicit size the last time it appeared ...
-            //
             this._checkSubListsOverflow();
         });
 
