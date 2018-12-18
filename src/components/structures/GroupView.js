@@ -1077,6 +1077,7 @@ export default React.createClass({
     },
 
     _getJoinableNode: function() {
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         return this.state.editing ? <div>
             <h3>
                 { _t('Who can join this community?') }
