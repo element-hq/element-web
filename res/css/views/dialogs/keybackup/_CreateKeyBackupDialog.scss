@@ -52,13 +52,24 @@ limitations under the License.
     float: right;
 }
 
-.mx_CreateKeyBackupDialog_recoveryKeyButtons {
-    float: right;
+.mx_CreateKeyBackupDialog_recoveryKeyHeader {
+    margin-bottom: 1em;
+}
+
+.mx_CreateKeyBackupDialog_recoveryKeyContainer {
+    display: flex;
 }
 
 .mx_CreateKeyBackupDialog_recoveryKey {
-    width: 300px;
+    width: 275px;
     padding: 20px;
     color: $info-plinth-fg-color;
     background-color: $info-plinth-bg-color;
+    margin-right: 8px;
+}
+
+.mx_CreateKeyBackupDialog_recoveryKeyButtons {
+    flex: 1;
+    display: flex;
+    align-items: center;
 }

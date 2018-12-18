@@ -351,21 +351,21 @@ export default React.createClass({
             <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
             <p>{bodyText}</p>
             <p className="mx_CreateKeyBackupDialog_primaryContainer">
-                <div>{_t("Your Recovery Key")}</div>
-                <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
-                    <button onClick={this._onCopyClick}>
-                        {_t("Copy to clipboard")}
-                    </button>
-                    {
-                        // FIXME REDESIGN: buttons should be adjacent but insufficient room in current design
-                    }
-                    <br /><br />
-                    <button onClick={this._onDownloadClick}>
-                        {_t("Download")}
-                    </button>
+                <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
+                    {_t("Your Recovery Key")}
                 </div>
-                <div className="mx_CreateKeyBackupDialog_recoveryKey">
-                    <code ref={this._collectRecoveryKeyNode}>{this._keyBackupInfo.recovery_key}</code>
+                <div className="mx_CreateKeyBackupDialog_recoveryKeyContainer">
+                    <div className="mx_CreateKeyBackupDialog_recoveryKey">
+                        <code ref={this._collectRecoveryKeyNode}>{this._keyBackupInfo.recovery_key}</code>
+                    </div>
+                    <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
+                        <button onClick={this._onCopyClick}>
+                            {_t("Copy to clipboard")}
+                        </button>
+                        <button onClick={this._onDownloadClick}>
+                            {_t("Download")}
+                        </button>
+                    </div>
                 </div>
             </p>
             <br />
