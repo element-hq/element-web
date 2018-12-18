@@ -154,7 +154,7 @@ limitations under the License.
         position: sticky;
         left: 0;
         right: 0;
-        height: 40px;
+        height: 30px;
         content: "";
         display: block;
         z-index: 100;
@@ -162,10 +162,10 @@ limitations under the License.
     }
 
     &.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
-        margin-top: -40px;
+        margin-top: -30px;
     }
     &.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
-        margin-bottom: -40px;
+        margin-bottom: -30px;
     }
 
     &.mx_IndicatorScrollbar_topOverflow::before {
