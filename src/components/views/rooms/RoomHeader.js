@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
-import dis from "../../../dispatcher";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import * as linkify from 'linkifyjs';
