@@ -100,23 +100,11 @@ ipcMain.on('app_onAction', function(ev, payload) {
 
 app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
-const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
-    // If other instance launched with --hidden then skip showing window
-    if (commandLine.includes('--hidden')) return;
-
-    // Someone tried to run a second instance, we should focus our window.
-    if (mainWindow) {
-        if (!mainWindow.isVisible()) mainWindow.show();
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
-    }
-});
-
-if (shouldQuit) {
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
     console.log('Other instance detected: exiting');
     app.exit();
 }
-
 
 const launcher = new AutoLaunch({
     name: vectorConfig.brand || 'Riot',
@@ -265,6 +253,18 @@ app.on('before-quit', () => {
     global.appQuitting = true;
     if (mainWindow) {
         mainWindow.webContents.send('before-quit');
+    }
+});
+
+app.on('second-instance', (ev, commandLine, workingDirectory) => {
+    // If other instance launched with --hidden then skip showing window
+    if (commandLine.includes('--hidden')) return;
+
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        if (!mainWindow.isVisible()) mainWindow.show();
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
     }
 });
 
