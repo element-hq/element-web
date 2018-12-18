@@ -19,14 +19,14 @@ limitations under the License.
    each with a flex-shrink difference of 4 order of magnitude,
    so they ideally wouldn't affect each other.
    lowest category: .mx_RoomSubList
-        flex:-shrink: 10000000
+        flex-shrink: 10000000
         distribute size of items within the same categery by their size
    middle category: .mx_RoomSubList.resized-sized
-        flex:-shrink: 1000
+        flex-shrink: 1000
         applied when using the resizer, will have a max-height set to it,
         to limit the size
    highest category: .mx_RoomSubList.resized-all
-        flex:-shrink: 1
+        flex-shrink: 1
         small flex-shrink value (1), is only added if you can drag the resizer so far
         so in practice you can only assign this category if there is enough space.
 */
