@@ -22,7 +22,6 @@ import qs from 'querystring';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import TintableSvgButton from './TintableSvgButton';
