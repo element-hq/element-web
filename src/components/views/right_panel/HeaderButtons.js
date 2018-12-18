@@ -74,6 +74,11 @@ export default class HeaderButtons extends React.Component {
                     dis.dispatch({
                         action: 'show_right_panel',
                     });
+                    // emit payload again as the RightPanel didn't exist up
+                    // till show_right_panel, just without the fromHeader flag
+                    // as that would hide the right panel again
+                    dis.dispatch(Object.assign({}, payload, {fromHeader: false}));
+
                 }
                 this.setState({
                     phase: payload.phase,
