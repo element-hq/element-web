@@ -1406,5 +1406,12 @@
     "%(count)s Notifications|other": "%(count)s Njoftime",
     "%(count)s Notifications|one": "%(count)s Njoftim",
     "Invalid identity server discovery response": "Përgjigje e pavlefshme zbulimi identiteti shërbyesi",
-    "Unknown failure discovering homeserver": "Dështim i panjohur gjatë zbulimi shërbyesi Home"
+    "Unknown failure discovering homeserver": "Dështim i panjohur gjatë zbulimi shërbyesi Home",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "Kopjeruajtja ka një nënshkrim <validity>të vlefshëm</validity> prej pajisjes së <verify>verifikuar</verify> <device></device>",
+    "New Recovery Method": "Metodë e Re Rimarrjesh",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "Janë pikasur një frazëkalim dhe kyç i ri rimarrjesh për Mesazhe të Sigurt.",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Rregullimi i Mesazheve të Sigurt në këtë pajisje do të rifshehtëzojë historikun e mesazheve në këtë pajisje me metodën e re të rimarrjeve.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju,  dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh.",
+    "Set up Secure Messages": "Rregulloni Mesazhi të Sigurt",
+    "Go to Settings": "Kalo te Rregullimet"
 }
