@@ -48,6 +48,17 @@ export default class HeaderButtons extends React.Component {
         }, extras));
     }
 
+    isPhase(phases) {
+        if (this.props.collapsedRhs) {
+            return false;
+        }
+        if (Array.isArray(phases)) {
+            return phases.includes(this.state.phase);
+        } else {
+            return phases === this.state.phase;
+        }
+    }
+
     onAction(payload) {
         if (payload.action === "view_right_panel_phase") {
             // only actions coming from header buttons should collapse the right panel
