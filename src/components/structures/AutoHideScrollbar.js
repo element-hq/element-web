@@ -98,16 +98,19 @@ export default class AutoHideScrollbar extends React.Component {
     }
 
     componentDidMount() {
+        installBodyClassesIfNeeded();
+        this._needsOverflowListener =
+            document.body.classList.contains("mx_scrollbar_nooverlay");
+        if (this._needsOverflowListener) {
+            this.containerRef.addEventListener("overflow", this.onOverflow);
+            this.containerRef.addEventListener("underflow", this.onUnderflow);
+        }
         this.checkOverflow();
     }
 
     _collectContainerRef(ref) {
         if (ref && !this.containerRef) {
             this.containerRef = ref;
-            if (this._needsOverflowListener) {
-                this.containerRef.addEventListener("overflow", this.onOverflow);
-                this.containerRef.addEventListener("underflow", this.onUnderflow);
-            }
         }
         if (this.props.wrappedRef) {
             this.props.wrappedRef(ref);
@@ -115,17 +118,13 @@ export default class AutoHideScrollbar extends React.Component {
     }
 
     componentWillUnmount() {
-        if (this.containerRef) {
+        if (this._needsOverflowListener && this.containerRef) {
             this.containerRef.removeEventListener("overflow", this.onOverflow);
             this.containerRef.removeEventListener("underflow", this.onUnderflow);
         }
     }
 
     render() {
-        installBodyClassesIfNeeded();
-        if (this._needsOverflowListener === null) {
-            this._needsOverflowListener = document.body.classList.contains("mx_scrollbar_nooverlay");
-        }
         return (<div
                     ref={this._collectContainerRef}
                     className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
