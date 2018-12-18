@@ -59,7 +59,7 @@ export default class HeaderButtons extends React.Component {
                     phase: null,
                 });
             } else {
-                if (this.props.collapsedRhs) {
+                if (this.props.collapsedRhs && payload.fromHeader) {
                     dis.dispatch({
                         action: 'show_right_panel',
                     });
