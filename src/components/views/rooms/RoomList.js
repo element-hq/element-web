@@ -152,6 +152,8 @@ module.exports = React.createClass({
         }
         this.subListSizes[id] = newSize;
         window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
+        // update overflow indicators
+        this._checkSubListsOverflow();
     },
 
     componentDidMount: function() {
@@ -167,12 +169,10 @@ module.exports = React.createClass({
         });
 
         // load stored sizes
-        Object.entries(this.subListSizes).forEach(([id, size]) => {
-            const handle = this.resizer.forHandleWithId(id);
-            if (handle) {
-                handle.resize(size);
-            }
+        Object.keys(this.subListSizes).forEach((key) => {
+            this._restoreSubListSize(key);
         });
+        this._checkSubListsOverflow();
 
         this.resizer.attach();
         this.mounted = true;
@@ -181,7 +181,11 @@ module.exports = React.createClass({
     componentDidUpdate: function(prevProps) {
         this._repositionIncomingCallBox(undefined, false);
         if (this.props.searchFilter !== prevProps.searchFilter) {
-             Object.values(this._subListRefs).forEach(l => l.checkOverflow());
+            // restore sizes
+            Object.keys(this.subListSizes).forEach((key) => {
+                this._restoreSubListSize(key);
+            });
+            this._checkSubListsOverflow();
         }
     },
 
@@ -354,6 +358,11 @@ module.exports = React.createClass({
             // Do this here so as to not render every time the selected tags
             // themselves change.
             selectedTags: TagOrderStore.getSelectedTags(),
+        }, () => {
+            // we don't need to restore any size here, do we?
+            // i guess we could have triggered a new group to appear
+            // that already an explicit size the last time it appeared ...
+            this._checkSubListsOverflow();
         });
 
         // this._lastRefreshRoomListTs = Date.now();
@@ -485,9 +494,30 @@ module.exports = React.createClass({
             (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
     },
 
-    _persistCollapsedState: function(key, collapsed) {
+    _handleCollapsedState: function(key, collapsed) {
+        // persist collapsed state
         this.collapsedState[key] = collapsed;
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
+        // load the persisted size configuration of the expanded sub list
+        if (!collapsed) {
+            this._restoreSubListSize(key);
+        }
+        // check overflow, as sub lists sizes have changed
+        // important this happens after calling resize above
+        this._checkSubListsOverflow();
+    },
+
+    _restoreSubListSize(key) {
+        const size = this.subListSizes[key];
+        const handle = this.resizer.forHandleWithId(key);
+        if (handle) {
+            handle.resize(size);
+        }
+    },
+
+    // check overflow for scroll indicator gradient
+    _checkSubListsOverflow() {
+        Object.values(this._subListRefs).forEach(l => l.checkOverflow());
     },
 
     _subListRef: function(key, ref) {
@@ -520,7 +550,7 @@ module.exports = React.createClass({
             const {key, label, onHeaderClick, ... otherProps} = props;
             const chosenKey = key || label;
             const onSubListHeaderClick = (collapsed) => {
-                this._persistCollapsedState(chosenKey, collapsed);
+                this._handleCollapsedState(chosenKey, collapsed);
                 if (onHeaderClick) {
                     onHeaderClick(collapsed);
                 }
