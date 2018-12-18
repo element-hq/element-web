@@ -146,10 +146,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
     },
 
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
-    },
-
     onShareRoomClick: function(ev) {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
