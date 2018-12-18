@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 
 export default class HeaderButtons extends React.Component {
@@ -77,3 +78,7 @@ export default class HeaderButtons extends React.Component {
         </div>;
     }
 }
+
+HeaderButtons.propTypes = {
+    collapsedRhs: PropTypes.bool,
+};
