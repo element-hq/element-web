@@ -36,6 +36,7 @@ export default class HeaderButton extends React.Component {
         dis.dispatch({
             action: 'view_right_panel_phase',
             phase: this.props.clickPhase,
+            fromHeader: true,
         });
     }
 

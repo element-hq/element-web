@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 
 export default class HeaderButtons extends React.Component {
@@ -25,7 +26,7 @@ export default class HeaderButtons extends React.Component {
         super(props);
 
         this.state = {
-            phase: initialPhase,
+            phase: props.collapsedRhs ? null : initialPhase,
             isUserPrivilegedInGroup: null,
         };
         this.onAction = this.onAction.bind(this);
@@ -49,9 +50,24 @@ export default class HeaderButtons extends React.Component {
 
     onAction(payload) {
         if (payload.action === "view_right_panel_phase") {
-            this.setState({
-                phase: payload.phase,
-            });
+            // only actions coming from header buttons should collapse the right panel
+            if (this.state.phase === payload.phase && payload.fromHeader) {
+                dis.dispatch({
+                    action: 'hide_right_panel',
+                });
+                this.setState({
+                    phase: null,
+                });
+            } else {
+                if (this.props.collapsedRhs) {
+                    dis.dispatch({
+                        action: 'show_right_panel',
+                    });
+                }
+                this.setState({
+                    phase: payload.phase,
+                });
+            }
         }
     }
 
@@ -62,3 +78,7 @@ export default class HeaderButtons extends React.Component {
         </div>;
     }
 }
+
+HeaderButtons.propTypes = {
+    collapsedRhs: PropTypes.bool,
+};
