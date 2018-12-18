@@ -170,12 +170,12 @@ limitations under the License.
 
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
-        background: linear-gradient($secondary-accent-color, transparent);
+        background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 
     &.mx_IndicatorScrollbar_bottomOverflow::after {
         bottom: 0;
-        background: linear-gradient(transparent, $secondary-accent-color);
+        background: linear-gradient(to bottom, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 }
 
