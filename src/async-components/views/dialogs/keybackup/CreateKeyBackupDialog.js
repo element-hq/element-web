@@ -92,25 +92,33 @@ export default React.createClass({
         });
     },
 
-    _createBackup: function() {
+    _createBackup: async function() {
         this.setState({
             phase: PHASE_BACKINGUP,
             error: null,
         });
-        this._createBackupPromise = MatrixClientPeg.get().createKeyBackupVersion(
-            this._keyBackupInfo,
-        ).then((info) => {
-            return MatrixClientPeg.get().backupAllGroupSessions(info.version);
-        }).then(() => {
+        let info;
+        try {
+            info = await MatrixClientPeg.get().createKeyBackupVersion(
+                this._keyBackupInfo,
+            );
+            await MatrixClientPeg.get().backupAllGroupSessions(info.version);
             this.setState({
                 phase: PHASE_DONE,
             });
-        }).catch(e => {
+        } catch (e) {
             console.log("Error creating key backup", e);
+            // TODO: If creating a version succeeds, but backup fails, should we
+            // delete the version, disable backup, or do nothing?  If we just
+            // disable without deleting, we'll enable on next app reload since
+            // it is trusted.
+            if (info) {
+                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
+            }
             this.setState({
                 error: e,
             });
-        });
+        }
     },
 
     _onCancel: function() {

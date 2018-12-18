@@ -1430,6 +1430,11 @@ export default React.createClass({
                     break;
             }
         });
+        cli.on("crypto.keyBackupFailed", () => {
+            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+            );
+        });
 
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
