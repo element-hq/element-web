@@ -485,9 +485,21 @@ module.exports = React.createClass({
             (filter[0] === '#' && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))));
     },
 
-    _persistCollapsedState: function(key, collapsed) {
+    _handleCollapsedState: function(key, collapsed) {
+        // persist collapsed state
         this.collapsedState[key] = collapsed;
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
+        // load the persisted size configuration of the expanded sub list
+        if (!collapsed) {
+            const size = this.subListSizes[key];
+            const handle = this.resizer.forHandleWithId(key);
+            if (handle) {
+                handle.resize(size);
+            }
+        }
+        // check overflow, as sub lists sizes have changed
+        // important this happens after calling resize above
+        Object.values(this._subListRefs).forEach(l => l.checkOverflow());
     },
 
     _subListRef: function(key, ref) {
@@ -520,7 +532,7 @@ module.exports = React.createClass({
             const {key, label, onHeaderClick, ... otherProps} = props;
             const chosenKey = key || label;
             const onSubListHeaderClick = (collapsed) => {
-                this._persistCollapsedState(chosenKey, collapsed);
+                this._handleCollapsedState(chosenKey, collapsed);
                 if (onHeaderClick) {
                     onHeaderClick(collapsed);
                 }

@@ -110,8 +110,9 @@ const RoomSubList = React.createClass({
         if (this.isCollapsableOnClick()) {
             // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
-            this.setState({hidden: isHidden});
-            this.props.onHeaderClick(isHidden);
+            this.setState({hidden: isHidden}, () => {
+                this.props.onHeaderClick(isHidden);
+            });
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
