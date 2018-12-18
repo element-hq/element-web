@@ -22,8 +22,9 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import * as ContextualMenu from "../../structures/ContextualMenu";
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
+import SettingsStore from "../../../settings/SettingsStore";
 
-export default class MemberStatusMessageAvatar extends React.PureComponent {
+export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {
         member: PropTypes.object.isRequired,
         width: PropTypes.number,
@@ -92,6 +93,13 @@ export default class MemberStatusMessageAvatar extends React.PureComponent {
     };
 
     render() {
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return <MemberAvatar member={this.props.member}
+                                 width={this.props.width}
+                                 height={this.props.height}
+                                 resizeMethod={this.props.resizeMethod} />;
+        }
+
         const hasStatus = this.props.member.user ? !!this.props.member.user._unstable_statusMessage : false;
 
         const classes = classNames({

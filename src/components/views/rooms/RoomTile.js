@@ -30,6 +30,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -254,7 +255,7 @@ module.exports = React.createClass({
         const isJoined = this.props.room.getMyMembership() === "join";
         const looksLikeDm = this.props.room.getInvitedAndJoinedMemberCount() === 2;
         let subtext = null;
-        if (!isInvite && isJoined && looksLikeDm) {
+        if (!isInvite && isJoined && looksLikeDm && SettingsStore.isFeatureEnabled("feature_custom_status")) {
             const selfId = MatrixClientPeg.get().getUserId();
             const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
             if (otherMember && otherMember.user && otherMember.user._unstable_statusMessage) {

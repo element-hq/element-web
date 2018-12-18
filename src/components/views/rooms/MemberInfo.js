@@ -42,6 +42,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -895,7 +896,10 @@ module.exports = withMatrixClient(React.createClass({
             presenceState = this.props.member.user.presence;
             presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
-            statusMessage = this.props.member.user._unstable_statusMessage;
+
+            if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+                statusMessage = this.props.member.user._unstable_statusMessage;
+            }
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);

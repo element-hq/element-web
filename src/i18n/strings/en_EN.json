@@ -255,6 +255,7 @@
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
     "Failed to join room": "Failed to join room",
     "Message Pinning": "Message Pinning",
+    "Custom user status messages": "Custom user status messages",
     "Increase performance by only loading room members on first view": "Increase performance by only loading room members on first view",
     "Backup of encryption keys to server": "Backup of encryption keys to server",
     "Disable Emoji suggestions while typing": "Disable Emoji suggestions while typing",

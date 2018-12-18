@@ -16,6 +16,8 @@ limitations under the License.
 
 'use strict';
 
+import SettingsStore from "../../../settings/SettingsStore";
+
 const React = require('react');
 import PropTypes from 'prop-types';
 
@@ -84,7 +86,11 @@ module.exports = React.createClass({
         const name = this._getDisplayName();
         const active = -1;
         const presenceState = member.user ? member.user.presence : null;
-        const statusMessage = member.user ? member.user._unstable_statusMessage : null;
+
+        let statusMessage = null;
+        if (member.user && SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            statusMessage = member.user._unstable_statusMessage;
+        }
 
         const av = (
             <MemberAvatar member={member} width={36} height={36} />
