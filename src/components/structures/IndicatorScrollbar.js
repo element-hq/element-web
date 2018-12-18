@@ -21,41 +21,52 @@ export default class IndicatorScrollbar extends React.Component {
     constructor(props) {
         super(props);
         this._collectScroller = this._collectScroller.bind(this);
+        this._collectScrollerComponent = this._collectScrollerComponent.bind(this);
         this.checkOverflow = this.checkOverflow.bind(this);
+        this._scrollElement = null;
+        this._autoHideScrollbar = null;
     }
 
     _collectScroller(scroller) {
-        if (scroller && !this._scroller) {
-            this._scroller = scroller;
-            this._scroller.addEventListener("scroll", this.checkOverflow);
+        if (scroller && !this._scrollElement) {
+            this._scrollElement = scroller;
+            this._scrollElement.addEventListener("scroll", this.checkOverflow);
             this.checkOverflow();
         }
     }
 
+    _collectScrollerComponent(autoHideScrollbar) {
+        this._autoHideScrollbar = autoHideScrollbar;
+    }
+
     checkOverflow() {
-        const hasTopOverflow = this._scroller.scrollTop > 0;
-        const hasBottomOverflow = this._scroller.scrollHeight >
-            (this._scroller.scrollTop + this._scroller.clientHeight);
+        const hasTopOverflow = this._scrollElement.scrollTop > 0;
+        const hasBottomOverflow = this._scrollElement.scrollHeight >
+            (this._scrollElement.scrollTop + this._scrollElement.clientHeight);
         if (hasTopOverflow) {
-            this._scroller.classList.add("mx_IndicatorScrollbar_topOverflow");
+            this._scrollElement.classList.add("mx_IndicatorScrollbar_topOverflow");
         } else {
-            this._scroller.classList.remove("mx_IndicatorScrollbar_topOverflow");
+            this._scrollElement.classList.remove("mx_IndicatorScrollbar_topOverflow");
         }
         if (hasBottomOverflow) {
-            this._scroller.classList.add("mx_IndicatorScrollbar_bottomOverflow");
+            this._scrollElement.classList.add("mx_IndicatorScrollbar_bottomOverflow");
         } else {
-            this._scroller.classList.remove("mx_IndicatorScrollbar_bottomOverflow");
+            this._scrollElement.classList.remove("mx_IndicatorScrollbar_bottomOverflow");
+        }
+
+        if (this._autoHideScrollbar) {
+            this._autoHideScrollbar.checkOverflow();
         }
     }
 
     componentWillUnmount() {
-        if (this._scroller) {
-            this._scroller.removeEventListener("scroll", this.checkOverflow);
+        if (this._scrollElement) {
+            this._scrollElement.removeEventListener("scroll", this.checkOverflow);
         }
     }
 
     render() {
-        return (<AutoHideScrollbar wrappedRef={this._collectScroller} {... this.props}>
+        return (<AutoHideScrollbar ref={this._collectScrollerComponent} wrappedRef={this._collectScroller} {... this.props}>
             { this.props.children }
         </AutoHideScrollbar>);
     }

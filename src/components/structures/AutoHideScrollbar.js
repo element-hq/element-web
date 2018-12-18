@@ -69,6 +69,7 @@ export default class AutoHideScrollbar extends React.Component {
         this.onOverflow = this.onOverflow.bind(this);
         this.onUnderflow = this.onUnderflow.bind(this);
         this._collectContainerRef = this._collectContainerRef.bind(this);
+        this._needsOverflowListener = null;
     }
 
     onOverflow() {
@@ -81,20 +82,31 @@ export default class AutoHideScrollbar extends React.Component {
         this.containerRef.classList.add("mx_AutoHideScrollbar_underflow");
     }
 
+    checkOverflow() {
+        if (!this._needsOverflowListener) {
+            return;
+        }
+        if (this.containerRef.scrollHeight > this.containerRef.clientHeight) {
+            this.onOverflow();
+        } else {
+            this.onUnderflow();
+        }
+    }
+
+    componentDidUpdate() {
+        this.checkOverflow();
+    }
+
+    componentDidMount() {
+        this.checkOverflow();
+    }
+
     _collectContainerRef(ref) {
         if (ref && !this.containerRef) {
             this.containerRef = ref;
-            const needsOverflowListener =
-                document.body.classList.contains("mx_scrollbar_nooverlay");
-
-            if (needsOverflowListener) {
+            if (this._needsOverflowListener) {
                 this.containerRef.addEventListener("overflow", this.onOverflow);
                 this.containerRef.addEventListener("underflow", this.onUnderflow);
-            }
-            if (ref.scrollHeight > ref.clientHeight) {
-                this.onOverflow();
-            } else {
-                this.onUnderflow();
             }
         }
         if (this.props.wrappedRef) {
@@ -111,6 +123,9 @@ export default class AutoHideScrollbar extends React.Component {
 
     render() {
         installBodyClassesIfNeeded();
+        if (this._needsOverflowListener === null) {
+            this._needsOverflowListener = document.body.classList.contains("mx_scrollbar_nooverlay");
+        }
         return (<div
                     ref={this._collectContainerRef}
                     className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
