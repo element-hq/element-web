@@ -302,11 +302,11 @@ export default class MessageComposer extends React.Component {
         } else {
             callButton =
                 <AccessibleButton key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
-                    <TintableSvg src="img/icon-call.svg" width="25" height="25" />
+                    <TintableSvg src="img/feather-icons/phone.svg" width="20" height="20" />
                 </AccessibleButton>;
             videoCallButton =
                 <AccessibleButton key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
-                    <TintableSvg src="img/icons-video.svg" width="25" height="25" />
+                    <TintableSvg src="img/feather-icons/video.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -320,7 +320,7 @@ export default class MessageComposer extends React.Component {
             const uploadButton = (
                 <AccessibleButton key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title={_t('Upload file')}>
-                    <TintableSvg src="img/icons-upload.svg" width="25" height="25" />
+                    <TintableSvg src="img/feather-icons/paperclip.svg" width="20" height="20" />
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple

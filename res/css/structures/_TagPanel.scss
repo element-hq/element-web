@@ -138,9 +138,9 @@ limitations under the License.
 
     &:before {
         background-color: $tagpanel-bg-color;
-        mask: url('../../img/icons-groups-nobg.svg');
+        mask: url('../../img/feather-icons/users.svg');
         mask-repeat: no-repeat;
-        mask-position: center 8px;
+        mask-position: center 10px;
         content: '';
         position: absolute;
         top: 0;
