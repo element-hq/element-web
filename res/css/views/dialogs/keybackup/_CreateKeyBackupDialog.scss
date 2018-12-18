@@ -13,7 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
- 
+
+.mx_CreateKeyBackupDialog {
+    padding-right: 40px;
+}
+
 .mx_CreateKeyBackupDialog_primaryContainer {
     /*FIXME: plinth colour in new theme(s). background-color: $accent-color;*/
     padding: 20px
@@ -54,4 +58,7 @@ limitations under the License.
 
 .mx_CreateKeyBackupDialog_recoveryKey {
     width: 300px;
+    padding: 20px;
+    color: $info-plinth-fg-color;
+    background-color: $info-plinth-bg-color;
 }
