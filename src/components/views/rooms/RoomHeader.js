@@ -337,7 +337,7 @@ module.exports = React.createClass({
         if (this.props.onSettingsClick) {
             settingsButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
-                    <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/settings.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -377,7 +377,7 @@ module.exports = React.createClass({
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src="img/icons-search.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/search.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -385,7 +385,7 @@ module.exports = React.createClass({
         if (this.props.inRoom) {
             shareRoomButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShareRoomClick} title={_t('Share room')}>
-                    <TintableSvg src="img/icons-share.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/share.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
