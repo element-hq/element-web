@@ -23,11 +23,22 @@ import classNames from 'classnames';
 import * as ContextualMenu from "../../structures/ContextualMenu";
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 
-export default class MemberStatusMessageAvatar extends React.Component {
+export default class MemberStatusMessageAvatar extends React.PureComponent {
+    static propTypes = {
+        member: PropTypes.object.isRequired,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
+    };
+
+    static defaultProps = {
+        width: 40,
+        height: 40,
+        resizeMethod: 'crop',
+    };
+
     constructor(props, context) {
         super(props, context);
-        this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
-        this._onClick = this._onClick.bind(this);
     }
 
     componentWillMount() {
@@ -52,15 +63,14 @@ export default class MemberStatusMessageAvatar extends React.Component {
         }
     }
 
-    _onRoomStateEvents(ev, state) {
+    _onRoomStateEvents = (ev, state) => {
         if (ev.getStateKey() !== MatrixClientPeg.get().getUserId()) return;
         if (ev.getType() !== "im.vector.user_status") return;
         // TODO: We should be relying on `this.props.member.user._unstable_statusMessage`
         this.setState({message: ev.getContent()["status"]});
-        this.forceUpdate();
-    }
+    };
 
-    _onClick(e) {
+    _onClick = (e) => {
         e.stopPropagation();
 
         const elementRect = e.target.getBoundingClientRect();
@@ -79,7 +89,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
             menuWidth: 190,
             user: this.props.member.user,
         });
-    }
+    };
 
     render() {
         const hasStatus = this.props.member.user ? !!this.props.member.user._unstable_statusMessage : false;
@@ -97,16 +107,3 @@ export default class MemberStatusMessageAvatar extends React.Component {
         </AccessibleButton>;
     }
 }
-
-MemberStatusMessageAvatar.propTypes = {
-    member: PropTypes.object.isRequired,
-    width: PropTypes.number,
-    height: PropTypes.number,
-    resizeMethod: PropTypes.string,
-};
-
-MemberStatusMessageAvatar.defaultProps = {
-    width: 40,
-    height: 40,
-    resizeMethod: 'crop',
-};

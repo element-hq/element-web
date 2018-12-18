@@ -22,30 +22,32 @@ import AccessibleButton from '../elements/AccessibleButton';
 import classNames from 'classnames';
 
 export default class StatusMessageContextMenu extends React.Component {
+    static propTypes = {
+        // js-sdk User object. Not required because it might not exist.
+        user: PropTypes.object,
+    };
+
     constructor(props, context) {
         super(props, context);
-        this._onClearClick = this._onClearClick.bind(this);
-        this._onSubmit = this._onSubmit.bind(this);
-        this._onStatusChange = this._onStatusChange.bind(this);
 
         this.state = {
             message: props.user ? props.user._unstable_statusMessage : "",
         };
     }
 
-    async _onClearClick(e) {
+    _onClearClick = async (e) => {
         await MatrixClientPeg.get()._unstable_setStatusMessage("");
         this.setState({message: ""});
-    }
+    };
 
-    _onSubmit(e) {
+    _onSubmit = (e) => {
         e.preventDefault();
         MatrixClientPeg.get()._unstable_setStatusMessage(this.state.message);
-    }
+    };
 
-    _onStatusChange(e) {
+    _onStatusChange = (e) => {
         this.setState({message: e.target.value});
-    }
+    };
 
     render() {
         const formSubmitClasses = classNames({
@@ -82,8 +84,3 @@ export default class StatusMessageContextMenu extends React.Component {
         </div>;
     }
 }
-
-StatusMessageContextMenu.propTypes = {
-    // js-sdk User object. Not required because it might not exist.
-    user: PropTypes.object,
-};
