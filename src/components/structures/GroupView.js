@@ -1272,15 +1272,6 @@ export default React.createClass({
                         <TintableSvg src="img/icons-share.svg" width="16" height="16" />
                     </AccessibleButton>,
                 );
-                if (this.props.collapsedRhs) {
-                    rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onShowRhsClick} title={_t('Show panel')} key="_maximiseButton"
-                        >
-                            <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                        </AccessibleButton>,
-                    );
-                }
             }
 
             const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
@@ -1311,7 +1302,7 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
-                        <GroupHeaderButtons />
+                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                     </div>
                     <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
                         <GeminiScrollbarWrapper className="mx_GroupView_body">

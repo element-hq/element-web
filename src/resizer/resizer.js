@@ -84,8 +84,10 @@ export class Resizer {
     }
 
     _onMouseDown(event) {
-        const target = event.target;
-        if (!this._isResizeHandle(target) || target.parentElement !== this.container) {
+        // use closest in case the resize handle contains
+        // child dom nodes that can be the target
+        const resizeHandle = event.target && event.target.closest(`.${this.classNames.handle}`);
+        if (!resizeHandle || resizeHandle.parentElement !== this.container) {
             return;
         }
         // prevent starting a drag operation
@@ -96,7 +98,7 @@ export class Resizer {
             this.container.classList.add(this.classNames.resizing);
         }
 
-        const {sizer, distributor} = this._createSizerAndDistributor(target);
+        const {sizer, distributor} = this._createSizerAndDistributor(resizeHandle);
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);

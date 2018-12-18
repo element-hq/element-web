@@ -41,10 +41,13 @@ export default class MainSplit extends React.Component {
             {onResized: this._onResized},
         );
         resizer.setClassNames(classNames);
-        const rhsSize = window.localStorage.getItem("mx_rhs_size");
+        let rhsSize = window.localStorage.getItem("mx_rhs_size");
         if (rhsSize !== null) {
-            resizer.forHandleAt(0).resize(parseInt(rhsSize, 10));
+            rhsSize = parseInt(rhsSize, 10);
+        } else {
+            rhsSize = 350;
         }
+        resizer.forHandleAt(0).resize(rhsSize);
 
         resizer.attach();
         this.resizer = resizer;
@@ -55,7 +58,7 @@ export default class MainSplit extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.panel && !this.collapsedRhs) {
+        if (this.props.panel && !this.props.collapsedRhs) {
             this._createResizer();
         }
     }

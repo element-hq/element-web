@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
-import dis from "../../../dispatcher";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import * as linkify from 'linkifyjs';
@@ -144,10 +143,6 @@ module.exports = React.createClass({
 
     onAvatarRemoveClick: function() {
         MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
     },
 
     onShareRoomClick: function(ev) {
@@ -394,14 +389,6 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
-        let rightPanelButtons;
-        if (this.props.collapsedRhs) {
-            rightPanelButtons =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_showPanel" onClick={this.onShowRhsClick} title={_t('Show panel')}>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                </AccessibleButton>;
-        }
-
         let rightRow;
         let manageIntegsButton;
         if (this.props.room && this.props.room.roomId && this.props.inRoom) {
@@ -419,7 +406,6 @@ module.exports = React.createClass({
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
-                    { rightPanelButtons }
                 </div>;
         }
 
@@ -433,7 +419,7 @@ module.exports = React.createClass({
                     { saveButton }
                     { cancelButton }
                     { rightRow }
-                    <RoomHeaderButtons />
+                    <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                 </div>
             </div>
         );

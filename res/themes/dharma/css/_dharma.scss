@@ -192,32 +192,37 @@ $progressbar-color: #000;
 // it has the appearance of a text box so the controls
 // appear to be part of the input
 
-:not(.mx_textinput) > input[type=text],
-:not(.mx_textinput) > input[type=search],
-.mx_textinput {
-    display: block;
-    margin: 9px;
-    box-sizing: border-box;
-    background-color: transparent;
-    color: $input-darker-fg-color;
-    border-radius: 4px;
-    border: 1px solid #c1c1c1;
-}
+.mx_MatrixChat {
 
-.mx_textinput {
-    display: flex;
-    align-items: center;
-}
+    :not(.mx_textinput) > input[type=text],
+    :not(.mx_textinput) > input[type=search],
+    .mx_textinput {
+        display: block;
+        margin: 9px;
+        box-sizing: border-box;
+        background-color: transparent;
+        color: $input-darker-fg-color;
+        border-radius: 4px;
+        border: 1px solid #c1c1c1;
+        flex: 0 0 auto;
+    }
 
-.mx_textinput > input[type=text],
-.mx_textinput > input[type=search] {
-    border: none;
-    flex: 1;
-    color: inherit; //from .mx_textinput
+    .mx_textinput {
+        display: flex;
+        align-items: center;
+
+        > input[type=text],
+        > input[type=search] {
+            border: none;
+            flex: 1;
+            color: inherit; //from .mx_textinput
+        }
+    }
 }
 
 input[type=text],
-input[type=search] {
+input[type=search],
+input[type=password] {
     padding: 9px;
     font-family: $font-family;
     font-size: 14px;

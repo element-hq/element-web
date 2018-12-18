@@ -161,7 +161,7 @@ export default React.createClass({
             viewUserId: null,
 
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -555,7 +555,7 @@ export default React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapseRhs) {
+                if (this.state.collapsedRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -656,13 +656,15 @@ export default React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", true);
                 this.setState({
-                    collapseRhs: true,
+                    collapsedRhs: true,
                 });
                 break;
             case 'show_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", false);
                 this.setState({
-                    collapseRhs: false,
+                    collapsedRhs: false,
                 });
                 break;
             case 'panel_disable': {
@@ -1217,7 +1219,7 @@ export default React.createClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
