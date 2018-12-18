@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
-import dis from "../../../dispatcher";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import * as linkify from 'linkifyjs';
@@ -144,10 +143,6 @@ module.exports = React.createClass({
 
     onAvatarRemoveClick: function() {
         MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
     },
 
     onShareRoomClick: function(ev) {

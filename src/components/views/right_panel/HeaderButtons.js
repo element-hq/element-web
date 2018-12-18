@@ -48,6 +48,17 @@ export default class HeaderButtons extends React.Component {
         }, extras));
     }
 
+    isPhase(phases) {
+        if (this.props.collapsedRhs) {
+            return false;
+        }
+        if (Array.isArray(phases)) {
+            return phases.includes(this.state.phase);
+        } else {
+            return phases === this.state.phase;
+        }
+    }
+
     onAction(payload) {
         if (payload.action === "view_right_panel_phase") {
             // only actions coming from header buttons should collapse the right panel
@@ -59,10 +70,15 @@ export default class HeaderButtons extends React.Component {
                     phase: null,
                 });
             } else {
-                if (this.props.collapsedRhs) {
+                if (this.props.collapsedRhs && payload.fromHeader) {
                     dis.dispatch({
                         action: 'show_right_panel',
                     });
+                    // emit payload again as the RightPanel didn't exist up
+                    // till show_right_panel, just without the fromHeader flag
+                    // as that would hide the right panel again
+                    dis.dispatch(Object.assign({}, payload, {fromHeader: false}));
+
                 }
                 this.setState({
                     phase: payload.phase,
