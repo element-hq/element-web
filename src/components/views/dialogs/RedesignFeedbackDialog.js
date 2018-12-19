@@ -19,7 +19,6 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 
 export default (props) => {
-
     const existingIssuesUrl = "https://github.com/vector-im/riot-web/issues" +
         "?q=is%3Aopen+is%3Aissue+label%3Aredesign+sort%3Areactions-%2B1-desc";
     const newIssueUrl = "https://github.com/vector-im/riot-web/issues/new" +
