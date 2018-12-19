@@ -27,20 +27,13 @@ the offset from the container edge of where
 the mouse cursor is.
 */
 class FixedDistributor {
-    constructor(sizer, item, id, config) {
-        this.sizer = sizer;
+    constructor(item) {
         this.item = item;
-        this.id = id;
-        this.beforeOffset = sizer.getItemOffset(this.item);
-        this.onResized = config && config.onResized;
+        this.beforeOffset = item.offset();
     }
 
-    resize(itemSize) {
-        this.sizer.setItemSize(this.item, itemSize);
-        if (this.onResized) {
-            this.onResized(itemSize, this.id, this.item);
-        }
-        return itemSize;
+    resize(size) {
+        this.item.setSize(size);
     }
 
     resizeFromContainerOffset(offset) {
@@ -50,8 +43,8 @@ class FixedDistributor {
 
 
 class CollapseDistributor extends FixedDistributor {
-    constructor(sizer, item, id, config) {
-        super(sizer, item, id, config);
+    constructor(item, sizer, _container, config) {
+        super(item);
         this.toggleSize = config && config.toggleSize;
         this.onCollapsed = config && config.onCollapsed;
         this.isCollapsed = false;

@@ -15,42 +15,99 @@ limitations under the License.
 */
 
 import {Sizer} from "./sizer";
-import {FixedDistributor} from "./distributors";
 
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
-        const isString = typeof size === "string";
-        const cl = item.classList;
-        if (isString) {
-            if (size === "resized-all") {
-                cl.add("resized-all");
-                cl.remove("resized-sized");
-                item.style.maxHeight = null;
-            }
-        } else {
-            cl.add("resized-sized");
-            cl.remove("resized-all");
-            item.style.maxHeight = `${Math.round(size)}px`;
-        }
+        item.style.maxHeight = `${Math.round(size)}px`;
     }
 }
 
-class RoomDistributor extends FixedDistributor {
-    resize(itemSize) {
-        const scrollItem = this.item.querySelector(".mx_RoomSubList_scroll");
-        if (!scrollItem) {
-            return; //FIXME: happens when starting the page on a community url, taking the safe way out for now
-        }
-        const fixedHeight = this.item.offsetHeight - scrollItem.offsetHeight;
-        if (itemSize > (fixedHeight + scrollItem.scrollHeight)) {
-            super.resize("resized-all");
+/*
+class RoomSubList extends ResizeItem {
+    collapsed() {
+
+    }
+
+    scrollSizes() {
+        return {offsetHeight, scrollHeight};
+    }
+
+    id() {
+
+    }
+}
+*/
+
+const MIN_SIZE = 70;
+// would be good to have a way in here to know if the item can be resized
+//  - collapsed items can't be resized (.mx_RoomSubList_hidden)
+//  - items at MIN_SIZE can't be resized smaller
+//  - items at maxContentHeight can't be resized larger
+
+// if you shrink the predecesor, and start dragging down again afterwards, which item has to grow?
+
+class RoomDistributor {
+    constructor(item) {
+        this.item = item;
+    }
+
+    _handleSize() {
+        return 1;
+    }
+
+    // returns the remainder of size it didn't consume for this item
+    _sizeItem(item, size) {
+        // if collapsed, do nothing and subtract own height
+        if (item.domNode.classList.contains("mx_RoomSubList_hidden")) {
+            return;
+        } else if (size < MIN_SIZE) {
+            item.setSize(MIN_SIZE);
         } else {
-            super.resize(itemSize);
+            const scrollItem = item.domNode.querySelector(".mx_RoomSubList_scroll");
+            const headerHeight = item.size() - scrollItem.offsetHeight;
+            const maxContentHeight = headerHeight + scrollItem.scrollHeight;
+            // avoid flexbox growing larger than the content height
+            if (size > maxContentHeight) {
+                item.setSize(maxContentHeight);
+            } else {
+                item.setSize(size);
+            }
         }
     }
 
-    resizeFromContainerOffset(offset) {
-        return this.resize(offset - this.sizer.getItemOffset(this.item));
+    resize(size) {
+        if (size < 0) {
+            console.log("NEGATIVE SIZE RESIZE RESIZE RESIZE!!!", size);
+        }
+        let item = this.item;
+        // move to item that is at position of cursor
+        // this would happen if the cursor goes beyond the min-height
+        while (item && size < 0) {
+            item = item.previous();
+            if (item) {
+                size = item.size() - size - this._handleSize();
+            }
+        }
+        // change size of item and previous items from here
+        while(item && size > 0) {
+            const itemSize = item.size();
+            this._sizeItem(item, size);
+            const delta = item.size() - itemSize;
+            const remainder = size - delta;
+            // pass remainder to previous item
+            if (remainder !== 0) {
+                item = item.previous();
+                if (item) {
+                    size = item.size() - remainder - this._handleSize();
+                }
+            } else {
+                item = null;
+            }
+        }
+    }
+
+    resizeFromContainerOffset(containerOffset) {
+        this.resize(containerOffset - this.item.offset());
     }
 }
 

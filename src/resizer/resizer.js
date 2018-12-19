@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import {Sizer} from "./sizer";
+import ResizeItem from "./item";
 
 /*
 classNames:
@@ -28,7 +29,10 @@ classNames:
     resizing: string
 */
 
+
 export class Resizer {
+    // TODO move vertical/horizontal to config option/container class
+    // as it doesn't make sense to mix them within one container/Resizer
     constructor(container, distributorCtor, distributorCfg, sizerCtor = Sizer) {
         this.container = container;
         this.distributorCtor = distributorCtor;
@@ -79,7 +83,11 @@ export class Resizer {
         }
     }
 
-    _isResizeHandle(el) {
+    isReverseResizeHandle(el) {
+        return el && el.classList.contains(this.classNames.reverse);
+    }
+
+    isResizeHandle(el) {
         return el && el.classList.contains(this.classNames.handle);
     }
 
@@ -119,35 +127,29 @@ export class Resizer {
 
     _createSizerAndDistributor(resizeHandle) {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
-        const reverse = resizeHandle.classList.contains(this.classNames.reverse);
-
+        const reverse = this.isReverseResizeHandle(resizeHandle);
         // eslint-disable-next-line new-cap
         const sizer = new this.sizerCtor(this.container, vertical, reverse);
-
-        const items = this._getResizableItems();
-        const prevItem = resizeHandle.previousElementSibling;
-        // if reverse, resize the item after the handle instead of before, so + 1
-        const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
-        const item = items[itemIndex];
-        const id = resizeHandle.getAttribute("data-id");
+        const item = ResizeItem.fromResizeHandle(resizeHandle, this, sizer);
         // eslint-disable-next-line new-cap
         const distributor = new this.distributorCtor(
-            sizer, item, id, this.distributorCfg,
-            items, this.container);
+            item,
+            sizer,
+            this.container,
+            this.distributorCfg
+        );
         return {sizer, distributor};
     }
 
-    _getResizableItems() {
-        return Array.from(this.container.children).filter(el => {
-            return !this._isResizeHandle(el) && (
-                this._isResizeHandle(el.previousElementSibling) ||
-                this._isResizeHandle(el.nextElementSibling));
+    _getResizableItems(reverse) {
+        return this._getResizeHandles().map((handle) => {
+            return ResizeItem.fromResizeHandle(handle);
         });
     }
 
     _getResizeHandles() {
         return Array.from(this.container.children).filter(el => {
-            return this._isResizeHandle(el);
+            return this.isResizeHandle(el);
         });
     }
 }
