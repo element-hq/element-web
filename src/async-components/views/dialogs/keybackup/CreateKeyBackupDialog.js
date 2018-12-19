@@ -363,10 +363,10 @@ export default React.createClass({
                         <code ref={this._collectRecoveryKeyNode}>{this._keyBackupInfo.recovery_key}</code>
                     </div>
                     <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">
-                        <button onClick={this._onCopyClick}>
+                        <button className="mx_Dialog_primary" onClick={this._onCopyClick}>
                             {_t("Copy to clipboard")}
                         </button>
-                        <button onClick={this._onDownloadClick}>
+                        <button className="mx_Dialog_primary" onClick={this._onDownloadClick}>
                             {_t("Download")}
                         </button>
                     </div>
