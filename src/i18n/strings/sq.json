@@ -1413,5 +1413,11 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Rregullimi i Mesazheve të Sigurt në këtë pajisje do të rifshehtëzojë historikun e mesazheve në këtë pajisje me metodën e re të rimarrjeve.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju,  dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh.",
     "Set up Secure Messages": "Rregulloni Mesazhi të Sigurt",
-    "Go to Settings": "Kalo te Rregullimet"
+    "Go to Settings": "Kalo te Rregullimet",
+    "Straight rows of keys are easy to guess": "Rreshta uniformë tastesh janë lehtësisht të hamendësueshëm",
+    "Short keyboard patterns are easy to guess": "Kombinime të shkurtra tastiere janë lehtësisht të hamendësueshme",
+    "Custom user status messages": "Mesazhe vetjakë për gjendje përdoruesi",
+    "Unable to load commit detail: %(msg)s": "S’arrihet të ngarkohen hollësi depozitimi: %(msg)s",
+    "Set a new status...": "Caktoni një gjendje të re…",
+    "Clear status": "Pastroji gjendjen"
 }
