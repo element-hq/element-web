@@ -31,6 +31,7 @@ export default React.createClass({
         mouseOverAction: PropTypes.string,
         label: PropTypes.string.isRequired,
         iconPath: PropTypes.string,
+        className: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -76,8 +77,13 @@ export default React.createClass({
                 (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
                 undefined;
 
+        const classNames = ["mx_RoleButton"];
+        if (this.props.className) {
+            classNames.push(this.props.className);
+        }
+
         return (
-            <AccessibleButton className="mx_RoleButton"
+            <AccessibleButton className={classNames.join(" ")}
                 onClick={this._onClick}
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}

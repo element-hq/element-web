@@ -1348,5 +1348,9 @@
     "Import": "Import",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Report bugs & give feedback": "Report bugs & give feedback",
+    "Thanks for testing the Riot Redesign. If you run into any bugs or visual issues, please let us know on GitHub.": "Thanks for testing the Riot Redesign. If you run into any bugs or visual issues, please let us know on GitHub.",
+    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.",
+    "Go back": "Go back"
 }
