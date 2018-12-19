@@ -52,6 +52,8 @@ _td("This is similar to a commonly used password");
 _td("A word by itself is easy to guess");
 _td("Names and surnames by themselves are easy to guess");
 _td("Common names and surnames are easy to guess");
+_td("Straight rows of keys are easy to guess");
+_td("Short keyboard patterns are easy to guess");
 
 /**
  * Wrapper around zxcvbn password strength estimation
