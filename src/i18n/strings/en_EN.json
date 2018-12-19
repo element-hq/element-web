@@ -250,6 +250,8 @@
     "A word by itself is easy to guess": "A word by itself is easy to guess",
     "Names and surnames by themselves are easy to guess": "Names and surnames by themselves are easy to guess",
     "Common names and surnames are easy to guess": "Common names and surnames are easy to guess",
+    "Straight rows of keys are easy to guess": "Straight rows of keys are easy to guess",
+    "Short keyboard patterns are easy to guess": "Short keyboard patterns are easy to guess",
     "There was an error joining the room": "There was an error joining the room",
     "Sorry, your homeserver is too old to participate in this room.": "Sorry, your homeserver is too old to participate in this room.",
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
