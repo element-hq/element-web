@@ -1,8 +1,5 @@
-// @flow
-
 /*
-Copyright 2016 Aviral Dasgupta
-Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,13 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-let Platform = null;
+const { ipcRenderer } = require('electron');
 
-if (window && window.process && window.process && window.process.type === 'renderer') {
-    // we're running inside electron
-    Platform = require('./ElectronPlatform');
-} else {
-    Platform = require('./WebPlatform');
-}
+// expose ipcRenderer to the renderer process
+window.ipcRenderer = ipcRenderer;
 
-export default Platform;

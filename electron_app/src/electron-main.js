@@ -2,6 +2,7 @@
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,8 +24,9 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu} = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater} = require('electron');
 const AutoLaunch = require('auto-launch');
+const path = require('path');
 
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
@@ -97,6 +99,61 @@ ipcMain.on('app_onAction', function(ev, payload) {
     }
 });
 
+autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName, releaseDate, updateURL) => {
+    if (!mainWindow) return;
+    // forward to renderer
+    mainWindow.webContents.send('update-downloaded', {
+        releaseNotes,
+        releaseName,
+        releaseDate,
+        updateURL,
+    });
+});
+
+ipcMain.on('ipcCall', function(ev, payload) {
+    if (!mainWindow) return;
+
+    const args = payload.args || [];
+    let ret;
+
+    switch (payload.name) {
+        case 'getUpdateFeedUrl':
+            ret = autoUpdater.getFeedURL();
+            break;
+        case 'getAutoLaunchEnabled':
+            ret = launcher.isEnabled;
+            break;
+        case 'setAutoLaunchEnabled':
+            if (args[0]) {
+                launcher.enable();
+            } else {
+                launcher.disable();
+            }
+            break;
+        case 'getAppVersion':
+            ret = app.getVersion();
+            break;
+        case 'focusWindow':
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
+            } else if (!mainWindow.isVisible()) {
+                mainWindow.show();
+            } else {
+                mainWindow.focus();
+            }
+        default:
+            mainWindow.webContents.send('ipcReply', {
+                id: payload.id,
+                error: new Error("Unknown IPC Call: "+payload.name),
+            });
+            return;
+    }
+
+    mainWindow.webContents.send('ipcReply', {
+        id: payload.id,
+        reply: ret,
+    });
+});
 
 app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
@@ -112,40 +169,6 @@ const launcher = new AutoLaunch({
     mac: {
         useLaunchAgent: true,
     },
-});
-
-const settings = {
-    'auto-launch': {
-        get: launcher.isEnabled,
-        set: function(bool) {
-            if (bool) {
-                return launcher.enable();
-            } else {
-                return launcher.disable();
-            }
-        },
-    },
-};
-
-ipcMain.on('settings_get', async function(ev) {
-    const data = {};
-
-    try {
-        await Promise.all(Object.keys(settings).map(async function (setting) {
-            data[setting] = await settings[setting].get();
-        }));
-
-        ev.sender.send('settings', data);
-    } catch (e) {
-        console.error(e);
-    }
-});
-
-ipcMain.on('settings_set', function(ev, key, value) {
-    console.log(key, value);
-    if (settings[key] && settings[key].set) {
-        settings[key].set(value);
-    }
 });
 
 app.on('ready', () => {
@@ -179,6 +202,7 @@ app.on('ready', () => {
         defaultHeight: 768,
     });
 
+    const preloadScript = path.normalize(`${__dirname}/preload.js`);
     mainWindow = global.mainWindow = new BrowserWindow({
         icon: iconPath,
         show: false,
@@ -188,6 +212,18 @@ app.on('ready', () => {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
+        webPreferences: {
+            preload: preloadScript,
+            nodeIntegration: false,
+            sandbox: true,
+            enableRemoteModule: false,
+            // We don't use this: it's useful for the preload script to
+            // share a context with the main page so we can give select
+            // objects to the main page. The sandbox option isolates the
+            // main page from the background script.
+            contextIsolation: false,
+            webgl: false,
+        },
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     Menu.setApplicationMenu(vectorMenu);

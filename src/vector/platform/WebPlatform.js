@@ -142,6 +142,10 @@ export default class WebPlatform extends VectorBasePlatform {
         setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
     }
 
+    async canSelfUpdate(): boolean {
+        return true;
+    }
+
     pollForUpdate() {
         return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
