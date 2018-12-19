@@ -14,12 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+@charset "utf-8";
+
 .mx_TopUnreadMessagesBar {
     z-index: 1000;
     position: absolute;
     top: 24px;
     right: 24px;
     width: 38px;
+}
+
+.mx_TopUnreadMessagesBar:after {
+    content: "·";
+    position: absolute;
+    top: -8px;
+    left: 11px;
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 14px;
+    text-align: center;
+    color: $secondary-accent-color;
+    background-color: $accent-color;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {
