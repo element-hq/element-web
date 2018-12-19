@@ -18,4 +18,4 @@ import {IndexedDBStoreWorker} from 'matrix-js-sdk/lib/indexeddb-worker.js';
 
 const remoteWorker = new IndexedDBStoreWorker(postMessage);
 
-export const onmessage = remoteWorker.onMessage;
+global.onmessage = remoteWorker.onMessage;
