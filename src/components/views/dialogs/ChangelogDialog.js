@@ -36,8 +36,12 @@ export default class ChangelogDialog extends React.Component {
         for (let i=0; i<REPOS.length; i++) {
             const oldVersion = version2[2*i];
             const newVersion = version[2*i];
-            request(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`, (a, b, body) => {
-                if (body == null) return;
+            const url = `https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`;
+            request(url, (err, response, body) => {
+                if (response.statusCode < 200 || response.statusCode >= 300) {
+                    this.setState({ [REPOS[i]]: response.statusText });
+                    return;
+                }
                 this.setState({[REPOS[i]]: JSON.parse(body).commits});
             });
         }
@@ -58,13 +62,20 @@ export default class ChangelogDialog extends React.Component {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
 
         const logs = REPOS.map(repo => {
-            if (this.state[repo] == null) return <Spinner key={repo} />;
+            let content;
+            if (this.state[repo] == null) {
+                content = <Spinner key={repo} />;
+            } else if (typeof this.state[repo] === "string") {
+                content = _t("Unable to load commit detail: %(msg)s", {
+                    msg: this.state[repo],
+                });
+            } else {
+                content = this.state[repo].map(this._elementsForCommit);
+            }
             return (
                 <div key={repo}>
                     <h2>{repo}</h2>
-                    <ul>
-                    {this.state[repo].map(this._elementsForCommit)}
-                    </ul>
+                    <ul>{content}</ul>
                 </div>
             );
         });
