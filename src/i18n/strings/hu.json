@@ -1443,5 +1443,11 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "A Biztonságos Üzenetek ezen az eszközön való beállításával az új visszaállítási eljárással lesznek újra titkosítva a régi üzenetek.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ha nem te állítottad be a visszaállítási eljárást akkor lehet, hogy egy támadó próbálja elérni a fiókodat. Változtasd meg a fiókod jelszavát és állítsd be az új visszaállítási eljárást a Beállításokban amint lehet.",
     "Set up Secure Messages": "Biztonságos Üzenetek beállítása",
-    "Go to Settings": "Irány a Beállítások"
+    "Go to Settings": "Irány a Beállítások",
+    "Straight rows of keys are easy to guess": "A billentyű sorokat könnyű kitalálni",
+    "Short keyboard patterns are easy to guess": "Rövid billentyűzet sormintát könnyű kitalálni",
+    "Custom user status messages": "Egyedi felhasználói állapot üzenet",
+    "Set a new status...": "Új állapot beállítása...",
+    "Clear status": "Állapot törlése",
+    "Unable to load commit detail: %(msg)s": "Sikertelen betöltés részletek: \n%(msg)s"
 }
