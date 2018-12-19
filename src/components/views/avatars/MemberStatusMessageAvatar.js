@@ -68,6 +68,9 @@ export default class MemberStatusMessageAvatar extends React.Component {
         if (ev.getStateKey() !== MatrixClientPeg.get().getUserId()) return;
         if (ev.getType() !== "im.vector.user_status") return;
         // TODO: We should be relying on `this.props.member.user._unstable_statusMessage`
+        // We don't currently because the js-sdk doesn't emit a specific event for this
+        // change, and we don't want to race it. This should be improved when we rip out
+        // the im.vector.user_status stuff and replace it with a complete solution.
         this.setState({message: ev.getContent()["status"]});
     };
 
