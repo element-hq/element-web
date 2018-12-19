@@ -239,17 +239,19 @@ export default React.createClass({
             <p>{_t("You'll need it if you log out or lose access to this device.")}</p>
 
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
-                <div className="mx_CreateKeyBackupDialog_passPhraseHelp">
-                    {strengthMeter}
-                    {helpText}
+                <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
+                    <input type="password"
+                        onChange={this._onPassPhraseChange}
+                        onKeyPress={this._onPassPhraseKeyPress}
+                        value={this.state.passPhrase}
+                        className="mx_CreateKeyBackupDialog_passPhraseInput"
+                        placeholder={_t("Enter a passphrase...")}
+                    />
+                    <div className="mx_CreateKeyBackupDialog_passPhraseHelp">
+                        {strengthMeter}
+                        {helpText}
+                    </div>
                 </div>
-                <input type="password"
-                    onChange={this._onPassPhraseChange}
-                    onKeyPress={this._onPassPhraseKeyPress}
-                    value={this.state.passPhrase}
-                    className="mx_CreateKeyBackupDialog_passPhraseInput"
-                    placeholder={_t("Enter a passphrase...")}
-                />
             </div>
 
             <DialogButtons primaryButton={_t('Next')}
@@ -317,16 +319,18 @@ export default React.createClass({
                 "somewhere safe.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
-                {passPhraseMatch}
-                <div>
-                    <input type="password"
-                        onChange={this._onPassPhraseConfirmChange}
-                        onKeyPress={this._onPassPhraseConfirmKeyPress}
-                        value={this.state.passPhraseConfirm}
-                        className="mx_CreateKeyBackupDialog_passPhraseInput"
-                        placeholder={_t("Repeat your passphrase...")}
-                        autoFocus={true}
-                    />
+                <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
+                    <div>
+                        <input type="password"
+                            onChange={this._onPassPhraseConfirmChange}
+                            onKeyPress={this._onPassPhraseConfirmKeyPress}
+                            value={this.state.passPhraseConfirm}
+                            className="mx_CreateKeyBackupDialog_passPhraseInput"
+                            placeholder={_t("Repeat your passphrase...")}
+                            autoFocus={true}
+                        />
+                    </div>
+                    {passPhraseMatch}
                 </div>
             </div>
             <DialogButtons primaryButton={_t('Next')}

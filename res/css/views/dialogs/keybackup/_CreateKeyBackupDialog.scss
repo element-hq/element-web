@@ -29,9 +29,13 @@ limitations under the License.
     display: block;
 }
 
+.mx_CreateKeyBackupDialog_passPhraseContainer {
+    display: flex;
+    align-items: start;
+}
+
 .mx_CreateKeyBackupDialog_passPhraseHelp {
-    float: right;
-    width: 230px;
+    flex: 1;
     height: 85px;
     margin-left: 20px;
     font-size: 80%;
@@ -42,14 +46,16 @@ limitations under the License.
 }
 
 .mx_CreateKeyBackupDialog_passPhraseInput {
+    flex: none;
     width: 250px;
     border: 1px solid $accent-color;
     border-radius: 5px;
     padding: 10px;
+    margin-bottom: 1em;
 }
 
 .mx_CreateKeyBackupDialog_passPhraseMatch {
-    float: right;
+    margin-left: 20px;
 }
 
 .mx_CreateKeyBackupDialog_recoveryKeyHeader {
@@ -61,11 +67,11 @@ limitations under the License.
 }
 
 .mx_CreateKeyBackupDialog_recoveryKey {
-    width: 275px;
+    width: 262px;
     padding: 20px;
     color: $info-plinth-fg-color;
     background-color: $info-plinth-bg-color;
-    margin-right: 8px;
+    margin-right: 12px;
 }
 
 .mx_CreateKeyBackupDialog_recoveryKeyButtons {
