@@ -40,6 +40,8 @@ class PasswordLogin extends React.Component {
         initialPassword: "",
         loginIncorrect: false,
         hsDomain: "",
+        hsName: null,
+        disableSubmit: false,
     }
 
     constructor(props) {
@@ -250,13 +252,15 @@ class PasswordLogin extends React.Component {
             );
         }
 
-        let matrixIdText = '';
-        if (this.props.hsUrl) {
+        let matrixIdText = _t('Matrix ID');
+        if (this.props.hsName) {
+            matrixIdText = _t('%(serverName)s Matrix ID', {serverName: this.props.hsName});
+        } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
                 matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
             } catch (e) {
-                // pass
+                // ignore
             }
         }
 
@@ -288,6 +292,8 @@ class PasswordLogin extends React.Component {
             );
         }
 
+        const disableSubmit = this.props.disableSubmit || matrixIdText === '';
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
@@ -301,7 +307,7 @@ class PasswordLogin extends React.Component {
                 />
                 <br />
                 { forgotPasswordJsx }
-                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={matrixIdText === ''} />
+                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={disableSubmit} />
                 </form>
             </div>
         );
@@ -325,6 +331,8 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
+    hsName: PropTypes.string,
+    disableSubmit: PropTypes.bool,
 };
 
 module.exports = PasswordLogin;

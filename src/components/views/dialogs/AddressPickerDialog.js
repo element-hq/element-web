@@ -23,6 +23,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
+import * as Email from "../../../email";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -419,6 +420,10 @@ module.exports = React.createClass({
         // a perfectly valid address if there are close matches.
         const addrType = getAddressType(query);
         if (this.props.validAddressTypes.includes(addrType)) {
+            if (addrType === 'email' && !Email.looksValid(query)) {
+                this.setState({searchError: _t("That doesn't look like a valid email address")});
+                return;
+            }
             suggestedList.unshift({
                 addressType: addrType,
                 address: query,
