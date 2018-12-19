@@ -222,7 +222,6 @@ async function loadApp() {
     const params = parseQs(window.location);
 
     // set the platform for react sdk
-    //if (navigator.userAgent.toLowerCase().indexOf('electron') > 0) {
     if (window.ipcRenderer) {
         console.log("Using Electron platform");
         PlatformPeg.set(new ElectronPlatform());
