@@ -1432,5 +1432,14 @@
     "%(count)s Notifications|one": "%(count)s 個通知",
     "Invalid identity server discovery response": "無效的身份伺服器探索回應",
     "General failure": "一般錯誤",
-    "Unknown failure discovering homeserver": "探索家伺服器時發生未知的失敗"
+    "Unknown failure discovering homeserver": "探索家伺服器時發生未知的失敗",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "備份有從<verify>驗證過的</verify>裝置<device></device>而來的<validity>有效</validity>簽章",
+    "Only use lower case letters, numbers and '=_-./'": "僅使用小寫字母，數字與 '=_-./'",
+    "Checking...": "正在檢查……",
+    "New Recovery Method": "新復原方法",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "偵測到安全訊息的新復原密碼與金鑰。",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "在此裝置上設定安全訊息將會以新的復原方法重新加密此裝置的訊息歷史。",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "如果您沒有設定新的復原方法，攻擊者可能會嘗試存取您的帳號。在設定中立刻變更您的密碼並設定新的復原方法。",
+    "Set up Secure Messages": "設定安全訊息",
+    "Go to Settings": "到設定"
 }
