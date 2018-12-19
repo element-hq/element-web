@@ -24,7 +24,7 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const argv = require('minimist')(process.argv);
-const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater} = require('electron');
+const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol} = require('electron');
 const AutoLaunch = require('auto-launch');
 const path = require('path');
 
@@ -171,6 +171,13 @@ const launcher = new AutoLaunch({
     },
 });
 
+// Register the scheme the app is served from as 'standard'
+// which allows things like relative URLs and IndexedDB to
+// work.
+// Also mark it as secure (ie. accessing resources from this
+// protocol and HTTPS won't trigger mixed content warnings).
+protocol.registerStandardSchemes(['vector'], {secure: true});
+
 app.on('ready', () => {
     if (argv['devtools']) {
         try {
@@ -185,6 +192,45 @@ app.on('ready', () => {
             console.log(e);
         }
     }
+
+    protocol.registerFileProtocol('vector', (request, callback) => {
+        if (request.method !== 'GET') {
+            callback({error: -322}); // METHOD_NOT_SUPPORTED from chromium/src/net/base/net_error_list.h
+            return null;
+        }
+
+        const parsedUrl = new URL(request.url);
+        if (parsedUrl.protocol !== 'vector:') {
+            callback({error: -302}); // UNKNOWN_URL_SCHEME
+            return;
+        }
+        if (parsedUrl.host !== 'vector') {
+            callback({error: -105}); // NAME_NOT_RESOLVED
+            return;
+        }
+
+        const target = parsedUrl.pathname.split('/');
+        if (target[target.length - 1] == '') {
+            target[target.length - 1] = 'index.html';
+        }
+
+        // Normalise the base dir and the target path separately, then make sure
+        // the target path isn't trying to back out beyond its root
+        const appBaseDir = path.normalize(__dirname + "/../../webapp");
+        const relTarget = path.normalize(path.join(...target));
+        if (relTarget.startsWith('..')) {
+            callback({error: -6}); // FILE_NOT_FOUND
+            return;
+        }
+        const absTarget = path.join(appBaseDir, relTarget);
+
+        callback({
+            path: absTarget,
+        });
+    }, (error) => {
+        if (error) console.error('Failed to register protocol')
+    });
+
 
 
     if (vectorConfig['update_base_url']) {
@@ -225,7 +271,7 @@ app.on('ready', () => {
             webgl: false,
         },
     });
-    mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
+    mainWindow.loadURL('vector://vector/');
     Menu.setApplicationMenu(vectorMenu);
 
     // explicitly hide because setApplicationMenu on Linux otherwise shows...

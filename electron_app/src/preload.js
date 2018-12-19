@@ -19,3 +19,11 @@ const { ipcRenderer } = require('electron');
 // expose ipcRenderer to the renderer process
 window.ipcRenderer = ipcRenderer;
 
+// Allow the fetch API to load resources from this
+// protocol: this is necessary to load olm.wasm.
+// (Also mark it a secure although we've already
+// done this in the main process).
+webFrame.registerURLSchemeAsPrivileged('vector', {
+    secure: true,
+    supportFetchAPI: true,
+});
