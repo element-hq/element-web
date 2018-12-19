@@ -889,6 +889,7 @@
     "What GitHub issue are these logs for?": "What GitHub issue are these logs for?",
     "Notes:": "Notes:",
     "Send logs": "Send logs",
+    "Unable to load commit detail: %(msg)s": "Unable to load commit detail: %(msg)s",
     "Unavailable": "Unavailable",
     "Changelog": "Changelog",
     "Create a new chat or reuse an existing one": "Create a new chat or reuse an existing one",
