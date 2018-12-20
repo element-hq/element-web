@@ -141,7 +141,7 @@ module.exports = React.createClass({
         // member tile and re-render it. This is more efficient than every tile
         // ever attaching their own listener.
         const tile = this.refs[user.userId];
-        console.log(`Got presence update for ${user.userId}. hasTile=${!!tile}`);
+        // console.log(`Got presence update for ${user.userId}. hasTile=${!!tile}`);
         if (tile) {
             this._updateList(); // reorder the membership list
         }
@@ -286,13 +286,13 @@ module.exports = React.createClass({
         // ...and then alphabetically.
         // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-        console.log(`Comparing userA=${this.memberString(memberA)} userB=${this.memberString(memberB)}`);
+        // console.log(`Comparing userA=${this.memberString(memberA)} userB=${this.memberString(memberB)}`);
 
         const userA = memberA.user;
         const userB = memberB.user;
 
-        if (!userA) console.log("!! MISSING USER FOR A-SIDE: " + memberA.name + " !!");
-        if (!userB) console.log("!! MISSING USER FOR B-SIDE: " + memberB.name + " !!");
+        // if (!userA) console.log("!! MISSING USER FOR A-SIDE: " + memberA.name + " !!");
+        // if (!userB) console.log("!! MISSING USER FOR B-SIDE: " + memberB.name + " !!");
 
         if (!userA && !userB) return 0;
         if (userA && !userB) return -1;
@@ -309,29 +309,29 @@ module.exports = React.createClass({
 
             const idxA = presenceIndex(userA.currentlyActive ? 'active' : userA.presence);
             const idxB = presenceIndex(userB.currentlyActive ? 'active' : userB.presence);
-            console.log(`userA_presenceGroup=${idxA} userB_presenceGroup=${idxB}`);
+            // console.log(`userA_presenceGroup=${idxA} userB_presenceGroup=${idxB}`);
             if (idxA !== idxB) {
-                console.log("Comparing on presence group - returning");
+                // console.log("Comparing on presence group - returning");
                 return idxA - idxB;
             }
         }
 
         // Second by power level
         if (memberA.powerLevel !== memberB.powerLevel) {
-            console.log("Comparing on power level - returning");
+            // console.log("Comparing on power level - returning");
             return memberB.powerLevel - memberA.powerLevel;
         }
 
         // Third by last active
         if (this._showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs) {
-            console.log("Comparing on last active timestamp - returning");
+            // console.log("Comparing on last active timestamp - returning");
             return userB.getLastActiveTs() - userA.getLastActiveTs();
         }
 
         // Fourth by name (alphabetical)
         const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
         const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
-        console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
+        // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
         return nameA.localeCompare(nameB);
     },
 
