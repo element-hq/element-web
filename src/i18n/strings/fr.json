@@ -1443,5 +1443,11 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "La configuration des messages sécurisés sur cet appareil va rechiffrer l'historique des messages de cet appareil avec la nouvelle méthode de récupération.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si vous n'avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d'accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres.",
     "Set up Secure Messages": "Configurer les messages sécurisés",
-    "Go to Settings": "Aller aux paramètres"
+    "Go to Settings": "Aller aux paramètres",
+    "Straight rows of keys are easy to guess": "Les suites de touches sont faciles à deviner",
+    "Short keyboard patterns are easy to guess": "Les répétitions de motif court sur un clavier sont faciles à deviner",
+    "Custom user status messages": "Messages de statut de l'utilisateur personnalisés",
+    "Unable to load commit detail: %(msg)s": "Impossible de charger les détails de l'envoi : %(msg)s",
+    "Set a new status...": "Configurer un nouveau statut…",
+    "Clear status": "Effacer le statut"
 }
