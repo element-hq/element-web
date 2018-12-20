@@ -112,11 +112,11 @@ limitations under the License.
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
-    background-color: $accent-color;
+    background-color: $roomtile-name-color;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
-    background-color: $warning-color;
+    background-color: $accent-color;
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
