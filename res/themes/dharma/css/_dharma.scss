@@ -20,19 +20,20 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color: #f56679;
-$accent-color-50pct: #f56679;
+$accent-color: #7ac9a1;
+$accent-color-50pct: #92caad;
+$accent-color-alt: #238CF5;
 
 $selection-fg-color: $primary-bg-color;
 
-$focus-brightness: 125%;
+$focus-brightness: 105%;
 
 // red warning colour
-$warning-color: #ff0064;
+$warning-color: #f56679;
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;
-$mention-user-pill-bg-color: #ff0064;
+$mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // pinned events indicator
