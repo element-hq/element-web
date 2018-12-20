@@ -209,6 +209,13 @@ function onTokenLoginCompleted() {
 }
 
 async function loadApp() {
+    if (window.vector_indexeddb_worker_script === undefined) {
+        // If this is missing, something has probably gone wrong with
+        // the bundling. The js-sdk will just fall back to accessing
+        // indexeddb directly with no worker script, but we want to
+        // make sure the indexeddb script is present, so fail hard.
+        throw new Error("Missing indexeddb worker script!");
+    }
     MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
