@@ -262,9 +262,11 @@ input[type=search].mx_textinput_icon {
     background-position: 10px center;
 }
 
+
+// FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
-    background-image: url('../../img/feather-icons/search.svg');
+    background-image: url('../../img/feather-icons/search-input.svg');
 }
 
 // dont search UI as not all browsers support it,
