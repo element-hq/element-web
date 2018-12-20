@@ -112,7 +112,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
-    background-color: $accent-color;
+    background-color: $roomtile-name-color;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
@@ -130,10 +130,6 @@ limitations under the License.
 .mx_RoomTile_selected {
     border-radius: 4px;
     background-color: $roomtile-selected-bg-color;
-
-    .mx_RoomTile_name {
-        color: $roomtile-selected-color;
-    }
 }
 
 .mx_DNDRoomTile {
@@ -162,4 +158,3 @@ limitations under the License.
 .mx_RoomTile.mx_RoomTile_transparent:focus {
     background-color: $roomtile-transparent-focused-color;
 }
-

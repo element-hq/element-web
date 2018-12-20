@@ -20,19 +20,20 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color: #f56679;
-$accent-color-50pct: #f56679;
+$accent-color: #7ac9a1;
+$accent-color-50pct: #92caad;
+$accent-color-alt: #238CF5;
 
 $selection-fg-color: $primary-bg-color;
 
-$focus-brightness: 125%;
+$focus-brightness: 105%;
 
 // red warning colour
-$warning-color: #ff0064;
+$warning-color: #f56679;
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;
-$mention-user-pill-bg-color: #ff0064;
+$mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // pinned events indicator
@@ -121,13 +122,13 @@ $rte-group-pill-color: #aaa;
 
 $topleftmenu-color: #212121;
 $roomheader-color: #45474a;
-$roomheader-addroom-color: #929eb4;
+$roomheader-addroom-color: #91A1C0;
 $roomtopic-color: #9fa9ba;
 $eventtile-meta-color: $roomtopic-color;
 
 // ********************
 
-$roomtile-name-color: #929eb4;
+$roomtile-name-color: #61708b;
 $roomtile-selected-color: #212121;
 $roomtile-notified-color: #212121;
 $roomtile-selected-bg-color: #fff;
@@ -215,7 +216,10 @@ $progressbar-color: #000;
         > input[type=search] {
             border: none;
             flex: 1;
-            color: inherit; //from .mx_textinput
+            color: $primary-fg-color;
+        },
+        input::placeholder {
+          color: $roomsublist-label-fg-color;
         }
     }
 }
@@ -262,9 +266,11 @@ input[type=search].mx_textinput_icon {
     background-position: 10px center;
 }
 
+
+// FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
-    background-image: url('../../img/feather-icons/search.svg');
+    background-image: url('../../img/feather-icons/search-input.svg');
 }
 
 // dont search UI as not all browsers support it,
