@@ -36,28 +36,10 @@
   <body style="height: 100%;">
     <section id="matrixchat" style="height: 100%;"></section>
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
-        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'olm.js')) {
-            var array = htmlWebpackPlugin.files.js;
-            htmlWebpackPlugin.files.js.unshift(htmlWebpackPlugin.files.js[i]);
-            htmlWebpackPlugin.files.js.splice(i, 1);
-        }
-       }
-
-       for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
-        // Not a particularly graceful way of not putting the indexeddb worker script
-        // into the main page
-        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'indexeddb-worker.js')) {
-            %>
-            <script>
-                window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.js[i] %>';
-            </script>
-            <%
-            continue;
-        }
-        %>
-        <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
-    <% } %>
+    <script>
+        window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
+    </script>
+    <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
     <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
