@@ -224,7 +224,16 @@ async function loadApp() {
     // set the platform for react sdk
     if (window.ipcRenderer) {
         console.log("Using Electron platform");
-        PlatformPeg.set(new ElectronPlatform());
+        const plaf = new ElectronPlatform();
+        PlatformPeg.set(plaf);
+
+        // Electron only: see if we need to do a one-time data
+        // migration
+        if (window.localStorage.getItem('mx_user_id') === null) {
+            console.log("Migrating session from old origin...");
+            await plaf.migrateFromOldOrigin();
+            console.log("Origin migration complete");
+        }
     } else {
         console.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());

@@ -32,6 +32,7 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
+const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 
@@ -110,7 +111,7 @@ autoUpdater.on('update-downloaded', (ev, releaseNotes, releaseName, releaseDate,
     });
 });
 
-ipcMain.on('ipcCall', function(ev, payload) {
+ipcMain.on('ipcCall', async function(ev, payload) {
     if (!mainWindow) return;
 
     const args = payload.args || [];
@@ -141,10 +142,13 @@ ipcMain.on('ipcCall', function(ev, payload) {
             } else {
                 mainWindow.focus();
             }
+        case 'origin_migrate':
+            await migrateFromOldOrigin();
+            break;
         default:
             mainWindow.webContents.send('ipcReply', {
                 id: payload.id,
-                error: new Error("Unknown IPC Call: "+payload.name),
+                error: "Unknown IPC Call: " + payload.name,
             });
             return;
     }
@@ -210,19 +214,42 @@ app.on('ready', () => {
         }
 
         const target = parsedUrl.pathname.split('/');
+
+        // path starts with a '/'
+        if (target[0] !== '') {
+            callback({error: -6}); // FILE_NOT_FOUND
+            return;
+        }
+
         if (target[target.length - 1] == '') {
             target[target.length - 1] = 'index.html';
         }
 
+        let baseDir;
+        // first part of the path determines where we serve from
+        if (target[1] === 'origin_migrator_dest') {
+            // the origin migrator destination page
+            // (only the destination script needs to come from the
+            // custom protocol: the source part is loaded from a
+            // file:// as that's the origin we're migrating from).
+            baseDir = __dirname + "/../../origin_migrator/dest";
+        } else if (target[1] === 'webapp') {
+            baseDir = __dirname + "/../../webapp";
+        } else {
+            callback({error: -6}); // FILE_NOT_FOUND
+            return;
+        }
+
         // Normalise the base dir and the target path separately, then make sure
         // the target path isn't trying to back out beyond its root
-        const appBaseDir = path.normalize(__dirname + "/../../webapp");
-        const relTarget = path.normalize(path.join(...target));
+        baseDir = path.normalize(baseDir);
+
+        const relTarget = path.normalize(path.join(...target.slice(2)));
         if (relTarget.startsWith('..')) {
             callback({error: -6}); // FILE_NOT_FOUND
             return;
         }
-        const absTarget = path.join(appBaseDir, relTarget);
+        const absTarget = path.join(baseDir, relTarget);
 
         callback({
             path: absTarget,
@@ -230,8 +257,6 @@ app.on('ready', () => {
     }, (error) => {
         if (error) console.error('Failed to register protocol')
     });
-
-
 
     if (vectorConfig['update_base_url']) {
         console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
@@ -271,7 +296,7 @@ app.on('ready', () => {
             webgl: false,
         },
     });
-    mainWindow.loadURL('vector://vector/');
+    mainWindow.loadURL('vector://vector/webapp/');
     Menu.setApplicationMenu(vectorMenu);
 
     // explicitly hide because setApplicationMenu on Linux otherwise shows...
