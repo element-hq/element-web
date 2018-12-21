@@ -1433,5 +1433,18 @@
     "%(count)s Notifications|one": "%(count)s notifica",
     "Invalid identity server discovery response": "Risposta non valida cercando server di identità",
     "General failure": "Guasto generale",
-    "Unknown failure discovering homeserver": "Errore sconosciuto cercando homeserver"
+    "Unknown failure discovering homeserver": "Errore sconosciuto cercando homeserver",
+    "Straight rows of keys are easy to guess": "Sequenze di tasti in riga sono facili da indovinare",
+    "Short keyboard patterns are easy to guess": "Sequenze di tasti brevi sono facili da indovinare",
+    "Custom user status messages": "Messaggi di stato utente personalizzati",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "Il backup ha una firma <validity>valida</validity> dal dispositivo <verify>verificato</verify> <device></device>",
+    "Unable to load commit detail: %(msg)s": "Caricamento dettagli del commit fallito: %(msg)s",
+    "Set a new status...": "Imposta un nuovo stato...",
+    "Clear status": "Elimina stato",
+    "New Recovery Method": "Nuovo metodo di recupero",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "Sono state rilevate una nuova password e chiave di recupero per messaggi sicuri.",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Impostare i messaggi sicuri su questo dispositivo cripterà di nuovo la cronologia dei messaggi con il nuovo metodo di recupero.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Se non hai impostato il nuovo metodo di recupero, un aggressore potrebbe tentare di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni.",
+    "Set up Secure Messages": "Imposta i messaggi sicuri",
+    "Go to Settings": "Vai alle impostazioni"
 }
