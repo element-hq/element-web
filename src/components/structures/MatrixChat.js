@@ -927,6 +927,9 @@ export default React.createClass({
     },
 
     _viewHome: function() {
+        this.setStateForNewView({
+            view: VIEWS.LOGGED_IN,
+        });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
     },
