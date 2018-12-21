@@ -1431,5 +1431,18 @@
     "Unable to create key backup": "Неуспешно създаване на резервно копие на ключа",
     "Retry": "Опитай пак",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Без настроено Защитено Възстановяване на Съобщения, ще загубите защитената история на съобщенията когато излезете от профила си.",
-    "If you don't want to set this up now, you can later in Settings.": "Ако не искате да настройвате това сега, може и по-късно от Настройки."
+    "If you don't want to set this up now, you can later in Settings.": "Ако не искате да настройвате това сега, може и по-късно от Настройки.",
+    "Straight rows of keys are easy to guess": "Клавиши от прави редици са лесни за отгатване",
+    "Short keyboard patterns are easy to guess": "Къси клавиатурни последователности са лесни за отгатване",
+    "Custom user status messages": "Собствено статус съобщение",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "Резервното копие има <validity>валиден</validity> подпис от <verify>потвърдено</verify> устройство <device></device>",
+    "Unable to load commit detail: %(msg)s": "Неуспешно зареждане на информация за commit: %(msg)s",
+    "Set a new status...": "Задаване на нов статус...",
+    "Clear status": "Изчисти статуса",
+    "New Recovery Method": "Нов метод за възстановяване",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "Беше открита нова парола за възстановяване за Защитени Съобщения.",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Настройката на Защитени Съобщения на това устройство ще зашифрова наново историята на съобщенията му посредством новия метод за възстановяване.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако не сте настройвали новия метод за възстановяване, вероятно някой се опитва да проникне в акаунта Ви. Веднага променете паролата на акаунта си и настройте нов метод за възстановяване от Настройки.",
+    "Set up Secure Messages": "Настрой Защитени Съобщения",
+    "Go to Settings": "Отиди в Настройки"
 }
