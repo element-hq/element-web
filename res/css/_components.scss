@@ -24,8 +24,10 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/login/_Login.scss";
 @import "./views/avatars/_BaseAvatar.scss";
+@import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_RoomTileContextMenu.scss";
+@import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
@@ -33,7 +35,6 @@
 @import "./views/dialogs/_ChatInviteDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
-@import "./views/dialogs/_CreateKeyBackupDialog.scss";
 @import "./views/dialogs/_CreateRoomDialog.scss";
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
 @import "./views/dialogs/_DevtoolsDialog.scss";
@@ -47,6 +48,7 @@
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_UnknownDeviceDialog.scss";
 @import "./views/dialogs/keybackup/_CreateKeyBackupDialog.scss";
+@import "./views/dialogs/keybackup/_NewRecoveryMethodDialog.scss";
 @import "./views/dialogs/keybackup/_RestoreKeyBackupDialog.scss";
 @import "./views/directory/_NetworkDropdown.scss";
 @import "./views/elements/_AccessibleButton.scss";

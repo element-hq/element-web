@@ -57,8 +57,7 @@ export default React.createClass({
         className: PropTypes.string,
 
         // Title for the dialog.
-        // (could probably actually be something more complicated than a string if desired)
-        title: PropTypes.string.isRequired,
+        title: PropTypes.node.isRequired,
 
         // children should be the content of the dialog
         children: PropTypes.node,

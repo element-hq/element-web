@@ -291,7 +291,7 @@ export default class MessageComposer extends React.Component {
 
     render() {
         const uploadInputStyle = {display: 'none'};
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -300,7 +300,7 @@ export default class MessageComposer extends React.Component {
         if (this.state.me) {
             controls.push(
                 <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                    <MemberAvatar member={this.state.me} width={24} height={24} />
+                    <MemberStatusMessageAvatar member={this.state.me} width={24} height={24} />
                 </div>,
             );
         }

@@ -111,4 +111,12 @@ limitations under the License.
     opacity: 0.25;
 }
 
+.mx_EntityTile_subtext {
+    font-size: 11px;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
+
 

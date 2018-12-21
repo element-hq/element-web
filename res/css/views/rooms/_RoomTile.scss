@@ -35,7 +35,19 @@ limitations under the License.
 .mx_RoomTile_nameContainer {
     display: inline-block;
     width: 180px;
-    height: 24px;
+    vertical-align: middle;
+}
+
+.mx_RoomTile_subtext {
+    display: inline-block;
+    font-size: 11px;
+    padding: 0 0 0 7px;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+    position: relative;
+    bottom: 4px;
 }
 
 .mx_RoomTile_avatar_container {
@@ -49,8 +61,12 @@ limitations under the License.
     padding-left: 16px;
     padding-right: 6px;
     width: 24px;
-    height: 24px;
     vertical-align: middle;
+}
+
+.mx_RoomTile_hasSubtext .mx_RoomTile_avatar {
+    padding-top: 0;
+    vertical-align: super;
 }
 
 .mx_RoomTile_dm {
