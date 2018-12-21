@@ -36,6 +36,11 @@ const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
 
+// boolean flag set whilst we are doing one-time origin migration
+// We only serve the origin migration script while we're actually
+// migrating to mitigate any risk of it being used maliciously.
+let migratingOrigin = false;
+
 if (argv['profile']) {
     app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
 }
@@ -143,7 +148,9 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 mainWindow.focus();
             }
         case 'origin_migrate':
+            migratingOrigin = true;
             await migrateFromOldOrigin();
+            migratingOrigin = false;
             break;
         default:
             mainWindow.webContents.send('ipcReply', {
@@ -227,7 +234,7 @@ app.on('ready', () => {
 
         let baseDir;
         // first part of the path determines where we serve from
-        if (target[1] === 'origin_migrator_dest') {
+        if (migratingOrigin && target[1] === 'origin_migrator_dest') {
             // the origin migrator destination page
             // (only the destination script needs to come from the
             // custom protocol: the source part is loaded from a
