@@ -24,6 +24,7 @@ import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
+import RateLimitedFunc from '../../../ratelimitedfunc';
 
 
 module.exports = React.createClass({
@@ -60,6 +61,18 @@ module.exports = React.createClass({
         hideAppsDrawer: false,
     },
 
+    componentDidMount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.on("RoomState.events", this._rateLimitedUpdate);
+    },
+
+    componentWillUnmount: function() {
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.events", this._rateLimitedUpdate);
+        }
+    },
+
     shouldComponentUpdate: function(nextProps, nextState) {
         return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
                 !ObjectUtils.shallowEqual(this.state, nextState));
@@ -81,6 +94,11 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
     },
+
+    _rateLimitedUpdate: new RateLimitedFunc(function() {
+        /* eslint-disable babel/no-invalid-this */
+        this.forceUpdate();
+    }, 500),
 
     render: function() {
         const CallView = sdk.getComponent("voip.CallView");
@@ -145,6 +163,60 @@ module.exports = React.createClass({
             hide={this.props.hideAppsDrawer}
         />;
 
+        let stateViews = null;
+        if (this.props.room) {
+            const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
+
+            let counters = [];
+
+            stateEvs.forEach((ev, idx) => {
+                const title = ev.getContent().title;
+                const value = ev.getContent().value;
+                const link = ev.getContent().link;
+                const severity = ev.getContent().severity || "normal";
+                const stateKey = ev.getStateKey();
+
+                if (title && value && severity) {
+                    let span = <span>{ title }: { value }</span>
+
+                    if (link) {
+                        span = (
+                            <a href={link} target="_blank" rel="noopener">
+                                { span }
+                            </a>
+                        );
+                    }
+
+                    span = (
+                        <span
+                            className="m_RoomView_auxPanel_stateViews_span"
+                            data-severity={severity}
+                            key={ "x-" + stateKey }
+                        >
+                            {span}
+                        </span>
+                    );
+
+                    counters.push(span);
+                    counters.push(
+                        <span
+                            className="m_RoomView_auxPanel_stateViews_delim"
+                            key={"delim" + idx}
+                        > ─ </span>
+                    );
+                }
+            });
+
+            if (counters.length > 0) {
+                counters.pop(); // remove last deliminator
+                stateViews = (
+                    <div className="m_RoomView_auxPanel_stateViews">
+                        { counters }
+                    </div>
+                );
+            }
+        }
+
         const classes = classNames({
             "mx_RoomView_auxPanel": true,
             "mx_RoomView_auxPanel_fullHeight": this.props.fullHeight,
@@ -156,6 +228,7 @@ module.exports = React.createClass({
 
         return (
             <div className={classes} style={style} >
+                { stateViews }
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }
