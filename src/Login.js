@@ -204,6 +204,19 @@ export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
 
     const data = await client.login(loginType, loginParams);
 
+    const wellknown = data.well_known;
+    if (wellknown) {
+        if (wellknown["m.homeserver"] && wellknown["m.homeserver"]["base_url"]) {
+            hsUrl = wellknown["m.homeserver"]["base_url"];
+            console.log(`Overrode homeserver setting with ${hsUrl} from login response`);
+        }
+        if (wellknown["m.identity_server"] && wellknown["m.identity_server"]["base_url"]) {
+            // TODO: should we prompt here?
+            isUrl = wellknown["m.identity_server"]["base_url"];
+            console.log(`Overrode IS setting with ${isUrl} from login response`);
+        }
+    }
+
     return {
         homeserverUrl: hsUrl,
         identityServerUrl: isUrl,
