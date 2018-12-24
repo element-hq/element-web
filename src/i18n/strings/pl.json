@@ -1318,5 +1318,6 @@
     "Please review and accept the policies of this homeserver:": "Przeczytaj i zaakceptuj zasady tego serwera domowego:",
     "Upgrade room to version %(ver)s": "Zaktualizuj pokój do wersji %(ver)s",
     "Don't ask again": "Nie pytaj ponownie",
-    "Messages containing @room": "Wiadomości zawierające @room"
+    "Messages containing @room": "Wiadomości zawierające @room",
+    "This is similar to a commonly used password": "Jest to podobne do powszechnie stosowanego hasła"
 }
