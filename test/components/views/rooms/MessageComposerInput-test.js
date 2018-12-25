@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import expect, {createSpy} from 'expect';
+import expect from 'expect';
 import sinon from 'sinon';
 import Promise from 'bluebird';
 import * as testUtils from '../../../test-utils';
