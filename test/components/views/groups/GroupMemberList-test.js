@@ -114,7 +114,7 @@ describe("GroupMemberList", function() {
 
             const memberList = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_MemberList_joined");
             const memberListElement = ReactDOM.findDOMNode(memberList);
-            expect(memberListElement).toExist();
+            expect(memberListElement).toBeTruthy();
             expect(memberListElement.innerText).toBe("Test");
         });
 
@@ -134,7 +134,7 @@ describe("GroupMemberList", function() {
 
             const memberList = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_MemberList_joined");
             const memberListElement = ReactDOM.findDOMNode(memberList);
-            expect(memberListElement).toExist();
+            expect(memberListElement).toBeTruthy();
             expect(memberListElement.innerText).toBe("Failed to load group members");
         });
 

@@ -54,7 +54,7 @@ describe('DecryptionFailureTracker', function() {
         // Immediately track the newest failures
         tracker.trackFailures();
 
-        expect(count).toNotBe(0, 'should track a failure for an event that failed decryption');
+        expect(count).not.toBe(0, 'should track a failure for an event that failed decryption');
 
         done();
     });
