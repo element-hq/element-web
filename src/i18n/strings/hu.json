@@ -228,7 +228,7 @@
     "Joins room with given alias": "A megadott becenévvel belépett a szobába",
     "Jump to first unread message.": "Ugrás az első olvasatlan üzenetre.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s kizárta: %(targetName)s.",
-    "Kick": "Kirúg",
+    "Kick": "Elküld",
     "Kicks user with given id": "Az adott azonosítójú felhasználó kirúgása",
     "Labs": "Labor",
     "Last seen": "Utoljára láttuk",
