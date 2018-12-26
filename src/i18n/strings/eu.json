@@ -1425,5 +1425,20 @@
     "Messages containing @room": "@room duten mezuak",
     "Encrypted messages in one-to-one chats": "Zifratutako mezuak bi pertsonen arteko txatetan",
     "Encrypted messages in group chats": "Zifratutako mezuak talde-txatetan",
-    "That doesn't look like a valid email address": "Horrek ez du baliozko e-mail baten itxurarik"
+    "That doesn't look like a valid email address": "Horrek ez du baliozko e-mail baten itxurarik",
+    "Straight rows of keys are easy to guess": "Teklatuko errenkadak asmatzeko errazak dira",
+    "Short keyboard patterns are easy to guess": "Teklatuko eredu laburrak asmatzeko errazak dira",
+    "Custom user status messages": "Erabiltzailearen egoera mezu pertsonalizatuak",
+    "Only use lower case letters, numbers and '=_-./'": "Erabili soilik letra xeheak, zenbakiak eta '=_-./'",
+    "Checking...": "Egiaztatzen...",
+    "Set a new status...": "Ezarri egoera berri bat...",
+    "Clear status": "Garbitu egoera",
+    "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Konfigurazio baliogabea: Ezin da lehenetsitako hasiera-zerbitzari bat eta lehenetsitako zerbitzari izen bat zerbitzatu",
+    "Unknown error discovering homeserver": "Errore ezezaguna hasiera-zerbitzaria bilatzean",
+    "%(count)s Notifications|other": "%(count)s jakinarazpen",
+    "%(count)s Notifications|one": "Jakinarazpen %(count)s",
+    "General failure": "Hutsegite orokorra",
+    "New Recovery Method": "Berreskuratze metodo berria",
+    "Set up Secure Messages": "Ezarri mezu seguruak",
+    "Go to Settings": "Joan ezarpenetara"
 }
