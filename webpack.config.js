@@ -166,6 +166,9 @@ module.exports = {
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
 
             "$webapp": path.resolve('./webapp'),
+
+            // We need to overwrite the main file of react-sdk to point to the src version
+            "matrix-react-sdk": path.resolve('./node_modules/matrix-react-sdk/src/index.js'),
         },
     },
     plugins: [

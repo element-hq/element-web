@@ -25,6 +25,7 @@
   ],
   "style": "bundle.css",
   "matrix-react-parent": "matrix-react-sdk",
+  "matrix-react-build-type": "webpack",
   "scripts": {
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
