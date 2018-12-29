@@ -4,6 +4,9 @@ set -e
 
 org="$1"
 repo="$2"
+defbranch="$3"
+
+[ -z "$defbranch" ] && defbranch="develop"
 
 rm -r "$repo" || true
 
@@ -18,5 +21,5 @@ then
     git clone https://github.com/$org/$repo.git $repo --branch "$curbranch" && exit 0
 fi
 
-echo "Checking out develop branch"
-git clone https://github.com/$org/$repo.git $repo --branch develop
+echo "Checking out default branch $defbranch"
+git clone https://github.com/$org/$repo.git $repo --branch $defbranch
