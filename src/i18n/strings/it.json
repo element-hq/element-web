@@ -1446,5 +1446,6 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Impostare i messaggi sicuri su questo dispositivo cripterà di nuovo la cronologia dei messaggi con il nuovo metodo di recupero.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Se non hai impostato il nuovo metodo di recupero, un aggressore potrebbe tentare di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni.",
     "Set up Secure Messages": "Imposta i messaggi sicuri",
-    "Go to Settings": "Vai alle impostazioni"
+    "Go to Settings": "Vai alle impostazioni",
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Per vedere la tua cronologia di messaggi sicura e assicurarti di poter vedere nuovi messaggi in dispositivi futuri, imposta il Ripristino Sicuro dei Messaggi."
 }
