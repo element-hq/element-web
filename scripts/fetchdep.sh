@@ -21,5 +21,5 @@ then
     git clone https://github.com/$org/$repo.git $repo --branch "$curbranch" && exit 0
 fi
 
-echo "Checking out develop branch"
+echo "Checking out default branch $defbranch"
 git clone https://github.com/$org/$repo.git $repo --branch $defbranch
