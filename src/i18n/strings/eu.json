@@ -1309,7 +1309,7 @@
     "Unable to load key backup status": "Ezin izan da babes-kopiaren egoera kargatu",
     "This device is uploading keys to this backup": "Gailu honek gakoak babes-kopia honetara igotzen ditu",
     "This device is <b>not</b> uploading keys to this backup": "Gailu honek <b>ez</b> ditu gakoak igotzen babes-kopia honetara",
-    "Backup has a <validity>valid</validity> signature from this device": "Babes-kopiak gailu honen <validity>baliozko</validity> sinadura du",
+    "Backup has a <validity>valid</validity> signature from this device": "Babes-kopiak gailu honen <validity>baliozko</validity> sinadura bat du",
     "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device>x</device>": "Babes-kopiak <verify>egiaztatutako</verify> <device>x</device> gailuaren <validity>baliozko</validity> sinadura du",
     "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>": "Babes-kopiak <verify>egiaztatu gabeko</verify> <device>gailu baten</device> <validity>baliozko</validity> sinadura du",
     "Backup has an <validity>invalid</validity> signature from <verify>verified</verify> device <device></device>": "Babes-kopiak <verify>egiaztatutako</verify> <device></device> gailuaren <validity>balio gabeko</validity> sinadura du",
@@ -1440,5 +1440,12 @@
     "General failure": "Hutsegite orokorra",
     "New Recovery Method": "Berreskuratze metodo berria",
     "Set up Secure Messages": "Ezarri mezu seguruak",
-    "Go to Settings": "Joan ezarpenetara"
+    "Go to Settings": "Joan ezarpenetara",
+    "Unknown failure discovering homeserver": "Hutsegite ezezaguna hasiera-zerbitzaria bilatzean",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "Babes-kopiak <verify>egiaztatutako</verify> <device>gailu</device> baten <validity>baliozko</validity> sinadura bat du",
+    "Unable to load commit detail: %(msg)s": "Ezin izan dira xehetasunak kargatu: %(msg)s",
+    "Invalid identity server discovery response": "Baliogabeko erantzuna identitate zerbitzariaren bilaketan",
+    "A new recovery passphrase and key for Secure Messages has been detected.": "Mezu seguruentzako berreskuratze pasa-esaldi eta gako berri bat antzeman dira.",
+    "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Mezu seguruak gailu honetan ezartzeak, gailu honen mezuen historiala birzifratuko du berreskuratze metodo berriarekin.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ez baduzu berreskuratze sistema berria ezarri, erasotzaile bat zure kontua atzitzen saiatzen egon daiteke. Aldatu zure kontuaren pasahitza eta ezarri berreskuratze metodo berria berehala ezarpenetan."
 }
