@@ -53,9 +53,9 @@ const COPY_LIST = [
     ["res/home.html", "webapp"],
     ["res/home-status.html", "webapp"],
     ["res/home/**", "webapp/home"],
-    ["res/vector-icons/**", "webapp/vector-icons"],
-    ["node_modules/matrix-react-sdk/res/{fonts,img,themes,media}/**", "webapp"],
     ["res/themes/**", "webapp/themes"],
+    ["res/vector-icons/**", "webapp/vector-icons"],
+    ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     // XXX: This is tied quite heavily to the matching olm.js so it really should be
