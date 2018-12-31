@@ -105,7 +105,7 @@ limitations under the License.
 .mx_RoomSubList_addRoom {
     background-color: $roomheader-addroom-color;
     color: $roomsublist-background;
-    background-image: url('../../img/icons-room-add.svg');
+    background-image: url('$(res)/img/icons-room-add.svg');
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 10px; // 16/2 + 2 padding
@@ -120,7 +120,7 @@ limitations under the License.
 
 .mx_RoomSubList_chevron {
     pointer-events: none;
-    background-image: url('../../img/topleft-chevron.svg');
+    background-image: url('$(res)/img/topleft-chevron.svg');
     background-repeat: no-repeat;
     transition: transform 0.2s ease-in;
     width: 10px;

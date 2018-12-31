@@ -169,8 +169,8 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$edit-button-url: "../../img/icon_context_message.svg";
-$copy-button-url: "../../img/icon_copy_message.svg";
+$edit-button-url: "$(res)/img/icon_context_message.svg";
+$copy-button-url: "$(res)/img/icon_copy_message.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -273,7 +273,7 @@ input[type=search].mx_textinput_icon {
 // FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
-    background-image: url('../../img/feather-icons/search-input.svg');
+    background-image: url('$(res)/img/feather-icons/search-input.svg');
 }
 
 // dont search UI as not all browsers support it,
