@@ -1186,10 +1186,7 @@ export default React.createClass({
      * @param {string} teamToken
      */
     _onLoggedIn: async function(teamToken) {
-        this.setState({
-            view: VIEWS.LOGGED_IN,
-        });
-
+        this.setStateForNewView({view: VIEWS.LOGGED_IN});
         if (teamToken) {
             // A team member has logged in, not a guest
             this._teamToken = teamToken;
