@@ -1445,7 +1445,7 @@
     "Straight rows of keys are easy to guess": "直排按鍵很容易猜到",
     "Short keyboard patterns are easy to guess": "短鍵盤重覆很容易猜到",
     "Custom user status messages": "自訂使用者狀態訊息",
-    "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：",
+    "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：%(msg)s",
     "Set a new status...": "設定新狀態……",
     "Clear status": "清除狀態"
 }
