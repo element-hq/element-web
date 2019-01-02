@@ -1447,5 +1447,6 @@
     "Custom user status messages": "自訂使用者狀態訊息",
     "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：%(msg)s",
     "Set a new status...": "設定新狀態……",
-    "Clear status": "清除狀態"
+    "Clear status": "清除狀態",
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "要檢視您的安全訊息歷史並確保可以在將來的裝置上檢視新訊息，請設定安全訊息復原。"
 }
