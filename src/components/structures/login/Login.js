@@ -216,6 +216,7 @@ module.exports = React.createClass({
 
     _onLoginAsGuestClick: function(ev) {
         ev.preventDefault();
+        ev.stopPropagation();
 
         const self = this;
         self.setState({
