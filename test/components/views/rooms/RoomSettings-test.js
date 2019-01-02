@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import expect, {createSpy} from 'expect';
+import expect from 'expect';
+import jest from 'jest-mock';
 import Promise from 'bluebird';
 import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
@@ -18,12 +19,12 @@ describe('RoomSettings', () => {
 
     function expectSentStateEvent(roomId, eventType, expectedEventContent) {
         let found = false;
-        for (const call of client.sendStateEvent.calls) {
+        for (const call of client.sendStateEvent.mock.calls) {
             const [
                 actualRoomId,
                 actualEventType,
                 actualEventContent,
-            ] = call.arguments.slice(0, 3);
+            ] = call.slice(0, 3);
 
             if (roomId === actualRoomId && actualEventType === eventType) {
                 expect(actualEventContent).toEqual(expectedEventContent);
@@ -40,20 +41,20 @@ describe('RoomSettings', () => {
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:domain.com'};
 
-        client.setRoomName = createSpy().andReturn(Promise.resolve());
-        client.setRoomTopic = createSpy().andReturn(Promise.resolve());
-        client.setRoomDirectoryVisibility = createSpy().andReturn(Promise.resolve());
+        client.setRoomName = jest.fn().mockReturnValue(Promise.resolve());
+        client.setRoomTopic = jest.fn().mockReturnValue(Promise.resolve());
+        client.setRoomDirectoryVisibility = jest.fn().mockReturnValue(Promise.resolve());
 
         // Covers any room state event (e.g. name, avatar, topic)
-        client.sendStateEvent = createSpy().andReturn(Promise.resolve());
+        client.sendStateEvent = jest.fn().mockReturnValue(Promise.resolve());
 
         // Covers room tagging
-        client.setRoomTag = createSpy().andReturn(Promise.resolve());
-        client.deleteRoomTag = createSpy().andReturn(Promise.resolve());
+        client.setRoomTag = jest.fn().mockReturnValue(Promise.resolve());
+        client.deleteRoomTag = jest.fn().mockReturnValue(Promise.resolve());
 
         // Covers any setting in the SettingsStore
         // (including local client settings not stored via matrix)
-        SettingsStore.setValue = createSpy().andReturn(Promise.resolve());
+        SettingsStore.setValue = jest.fn().mockReturnValue(Promise.resolve());
 
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
@@ -83,9 +84,9 @@ describe('RoomSettings', () => {
 
     it('should not set when no setting is changed', (done) => {
         roomSettings.save().then(() => {
-            expect(client.sendStateEvent).toNotHaveBeenCalled();
-            expect(client.setRoomTag).toNotHaveBeenCalled();
-            expect(client.deleteRoomTag).toNotHaveBeenCalled();
+            expect(client.sendStateEvent).not.toHaveBeenCalled();
+            expect(client.setRoomTag).not.toHaveBeenCalled();
+            expect(client.deleteRoomTag).not.toHaveBeenCalled();
             done();
         });
     });
@@ -93,7 +94,7 @@ describe('RoomSettings', () => {
     // XXX: Apparently we do call SettingsStore.setValue
     xit('should not settings via the SettingsStore when no setting is changed', (done) => {
         roomSettings.save().then(() => {
-            expect(SettingsStore.setValue).toNotHaveBeenCalled();
+            expect(SettingsStore.setValue).not.toHaveBeenCalled();
             done();
         });
     });
@@ -103,7 +104,7 @@ describe('RoomSettings', () => {
         roomSettings.setName(name);
 
         roomSettings.save().then(() => {
-            expect(client.setRoomName.calls[0].arguments.slice(0, 2))
+            expect(client.setRoomName.mock.calls[0].slice(0, 2))
                 .toEqual(['!DdJkzRliezrwpNebLk:matrix.org', name]);
 
             done();
@@ -115,7 +116,7 @@ describe('RoomSettings', () => {
         roomSettings.setTopic(topic);
 
         roomSettings.save().then(() => {
-            expect(client.setRoomTopic.calls[0].arguments.slice(0, 2))
+            expect(client.setRoomTopic.mock.calls[0].slice(0, 2))
                 .toEqual(['!DdJkzRliezrwpNebLk:matrix.org', topic]);
 
             done();

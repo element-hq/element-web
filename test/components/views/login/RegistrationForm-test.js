@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const jest = require('jest-mock');
 const React = require('react');
 const ReactDOM = require("react-dom");
 const ReactTestUtils = require('react-addons-test-utils');
@@ -55,14 +56,14 @@ function doInputEmail(inputEmail, onTeamSelected) {
 }
 
 function expectTeamSelectedFromEmailInput(inputEmail, expectedTeam) {
-    const onTeamSelected = expect.createSpy();
+    const onTeamSelected = jest.fn();
     doInputEmail(inputEmail, onTeamSelected);
 
     expect(onTeamSelected).toHaveBeenCalledWith(expectedTeam);
 }
 
 function expectSupportFromEmailInput(inputEmail, isSupportShown) {
-    const onTeamSelected = expect.createSpy();
+    const onTeamSelected = jest.fn();
     const res = doInputEmail(inputEmail, onTeamSelected);
 
     expect(res.state.showSupportEmail).toBe(isSupportShown);

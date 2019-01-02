@@ -185,21 +185,21 @@ describe('GroupView', function() {
             const avatar = ReactTestUtils.findRenderedComponentWithType(root, sdk.getComponent('avatars.GroupAvatar'));
             const img = ReactTestUtils.findRenderedDOMComponentWithTag(avatar, 'img');
             const avatarImgElement = ReactDOM.findDOMNode(img);
-            expect(avatarImgElement).toExist();
-            expect(avatarImgElement.src).toInclude(
+            expect(avatarImgElement).toBeTruthy();
+            expect(avatarImgElement.src).toContain(
                 'https://my.home.server/_matrix/media/v1/thumbnail/' +
                 'someavatarurl?width=48&height=48&method=crop',
             );
 
             const name = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_name');
             const nameElement = ReactDOM.findDOMNode(name);
-            expect(nameElement).toExist();
-            expect(nameElement.innerText).toInclude('The name of a community');
-            expect(nameElement.innerText).toInclude(groupId);
+            expect(nameElement).toBeTruthy();
+            expect(nameElement.innerText).toContain('The name of a community');
+            expect(nameElement.innerText).toContain(groupId);
 
             const shortDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_shortDesc');
             const shortDescElement = ReactDOM.findDOMNode(shortDesc);
-            expect(shortDescElement).toExist();
+            expect(shortDescElement).toBeTruthy();
             expect(shortDescElement.innerText).toBe('This is a community');
         });
 
@@ -219,7 +219,7 @@ describe('GroupView', function() {
 
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
-            expect(longDescElement).toExist();
+            expect(longDescElement).toBeTruthy();
             expect(longDescElement.innerText).toBe('This is a LONG description.');
             expect(longDescElement.innerHTML).toBe('<div dir="auto">This is a <b>LONG</b> description.</div>');
         });
@@ -239,7 +239,7 @@ describe('GroupView', function() {
             const placeholder = ReactTestUtils
                 .findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc_placeholder');
             const placeholderElement = ReactDOM.findDOMNode(placeholder);
-            expect(placeholderElement).toExist();
+            expect(placeholderElement).toBeTruthy();
         });
 
         httpBackend
@@ -258,15 +258,15 @@ describe('GroupView', function() {
         const prom = waitForUpdate(groupView, 4).then(() => {
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
-            expect(longDescElement).toExist();
+            expect(longDescElement).toBeTruthy();
 
-            expect(longDescElement.innerHTML).toInclude('<h1>This is a more complicated group page</h1>');
-            expect(longDescElement.innerHTML).toInclude('<p>With paragraphs</p>');
-            expect(longDescElement.innerHTML).toInclude('<ul>');
-            expect(longDescElement.innerHTML).toInclude('<li>And lists!</li>');
+            expect(longDescElement.innerHTML).toContain('<h1>This is a more complicated group page</h1>');
+            expect(longDescElement.innerHTML).toContain('<p>With paragraphs</p>');
+            expect(longDescElement.innerHTML).toContain('<ul>');
+            expect(longDescElement.innerHTML).toContain('<li>And lists!</li>');
 
             const imgSrc = "https://my.home.server/_matrix/media/v1/thumbnail/someimageurl?width=800&amp;height=600";
-            expect(longDescElement.innerHTML).toInclude('<img src="' + imgSrc + '">');
+            expect(longDescElement.innerHTML).toContain('<img src="' + imgSrc + '">');
         });
 
         httpBackend
@@ -285,11 +285,11 @@ describe('GroupView', function() {
         const prom = waitForUpdate(groupView, 4).then(() => {
             const longDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_groupDesc');
             const longDescElement = ReactDOM.findDOMNode(longDesc);
-            expect(longDescElement).toExist();
+            expect(longDescElement).toBeTruthy();
 
             // If this fails, the URL could be in an img `src`, which is what we care about but
             // there's no harm in keeping this simple and checking the entire HTML string.
-            expect(longDescElement.innerHTML).toExclude('evilimageurl');
+            expect(longDescElement.innerHTML).not.toContain('evilimageurl');
         });
 
         httpBackend
@@ -308,7 +308,7 @@ describe('GroupView', function() {
         const prom = waitForUpdate(groupView, 4).then(() => {
             const roomDetailList = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_RoomDetailList');
             const roomDetailListElement = ReactDOM.findDOMNode(roomDetailList);
-            expect(roomDetailListElement).toExist();
+            expect(roomDetailListElement).toBeTruthy();
         });
 
         httpBackend.when('GET', '/groups/' + groupIdEncoded + '/summary').respond(200, summaryResponse);
@@ -325,7 +325,7 @@ describe('GroupView', function() {
         const prom = waitForUpdate(groupView, 4).then(() => {
             const roomDetailList = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_RoomDetailList');
             const roomDetailListElement = ReactDOM.findDOMNode(roomDetailList);
-            expect(roomDetailListElement).toExist();
+            expect(roomDetailListElement).toBeTruthy();
 
             const roomDetailListRoomName = ReactTestUtils.findRenderedDOMComponentWithClass(
                 root,
@@ -333,7 +333,7 @@ describe('GroupView', function() {
             );
             const roomDetailListRoomNameElement = ReactDOM.findDOMNode(roomDetailListRoomName);
 
-            expect(roomDetailListRoomNameElement).toExist();
+            expect(roomDetailListRoomNameElement).toBeTruthy();
             expect(roomDetailListRoomNameElement.innerText).toEqual('Some room name');
         });
 
@@ -364,7 +364,7 @@ describe('GroupView', function() {
         const prom = waitForUpdate(groupView, 3).then(() => {
             const shortDesc = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_shortDesc');
             const shortDescElement = ReactDOM.findDOMNode(shortDesc);
-            expect(shortDescElement).toExist();
+            expect(shortDescElement).toBeTruthy();
             expect(shortDescElement.innerText).toBe('This is a community');
         });
 
