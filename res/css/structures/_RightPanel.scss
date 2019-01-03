@@ -57,6 +57,10 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_RightPanel_headerButton_badgeHighlight .mx_RightPanel_headerButton_badge {
+    color: $warning-color;
+}
+
 .mx_RightPanel_headerButton_highlight {
     border-color: $button-bg-color;
 }

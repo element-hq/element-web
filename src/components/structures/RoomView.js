@@ -27,6 +27,7 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
+import filesize from 'filesize';
 const classNames = require("classnames");
 import { _t } from '../../languageHandler';
 
@@ -103,6 +104,10 @@ module.exports = React.createClass({
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
+
+            // Media limits for uploading.
+            mediaConfig: undefined,
+
             // used to trigger a rerender in TimelinePanel once the members are loaded,
             // so RR are rendered again (now with the members available), ...
             membersLoaded: !llMembers,
@@ -158,12 +163,33 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
+        this._fetchMediaConfig();
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
+    },
+
+    _fetchMediaConfig: function(invalidateCache: boolean = false) {
+        /// NOTE: Using global here so we don't make repeated requests for the
+        /// config every time we swap room.
+        if(global.mediaConfig !== undefined && !invalidateCache) {
+            this.setState({mediaConfig: global.mediaConfig});
+            return;
+        }
+        console.log("[Media Config] Fetching");
+        MatrixClientPeg.get().getMediaConfig().then((config) => {
+            console.log("[Media Config] Fetched config:", config);
+            return config;
+        }).catch(() => {
+            // Media repo can't or won't report limits, so provide an empty object (no limits).
+            console.log("[Media Config] Could not fetch config, so not limiting uploads.");
+            return {};
+        }).then((config) => {
+            global.mediaConfig = config;
+            this.setState({mediaConfig: config});
+        });
     },
 
     _onRoomViewStoreUpdate: function(initial) {
@@ -501,6 +527,10 @@ module.exports = React.createClass({
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
+                // 413: File was too big or upset the server in some way.
+                if(payload.error.http_status === 413) {
+                    this._fetchMediaConfig(true);
+                }
             case 'upload_started':
             case 'upload_finished':
                 this.forceUpdate();
@@ -577,6 +607,20 @@ module.exports = React.createClass({
         if (this.state.room && room.roomId == this.state.room.roomId) {
             this.forceUpdate();
         }
+    },
+
+    async onRoomRecoveryReminderFinished(backupCreated) {
+        // If the user cancelled the key backup dialog, it suggests they don't
+        // want to be reminded anymore.
+        if (!backupCreated) {
+            await SettingsStore.setValue(
+                "showRoomRecoveryReminder",
+                null,
+                SettingLevel.ACCOUNT,
+                false,
+            );
+        }
+        this.forceUpdate();
     },
 
     canResetTimeline: function() {
@@ -931,6 +975,15 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
         this.setState({ draggingFile: false });
+    },
+
+    isFileUploadAllowed(file) {
+        if (this.state.mediaConfig !== undefined &&
+            this.state.mediaConfig["m.upload.size"] !== undefined &&
+            file.size > this.state.mediaConfig["m.upload.size"]) {
+            return _t("File is too big. Maximum file size is %(fileSize)s", {fileSize: filesize(this.state.mediaConfig["m.upload.size"])});
+        }
+        return true;
     },
 
     uploadFile: async function(file) {
@@ -1484,6 +1537,7 @@ module.exports = React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const RoomUpgradeWarningBar = sdk.getComponent("rooms.RoomUpgradeWarningBar");
+        const RoomRecoveryReminder = sdk.getComponent("rooms.RoomRecoveryReminder");
 
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
@@ -1621,6 +1675,13 @@ module.exports = React.createClass({
             this.state.room.userMayUpgradeRoom(MatrixClientPeg.get().credentials.userId)
         );
 
+        const showRoomRecoveryReminder = (
+            SettingsStore.isFeatureEnabled("feature_keybackup") &&
+            SettingsStore.getValue("showRoomRecoveryReminder") &&
+            MatrixClientPeg.get().isRoomEncrypted(this.state.room.roomId) &&
+            !MatrixClientPeg.get().getKeyBackupEnabled()
+        );
+
         let aux = null;
         let hideCancel = false;
         if (this.state.editingRoomSettings) {
@@ -1634,6 +1695,9 @@ module.exports = React.createClass({
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
+            hideCancel = true;
+        } else if (showRoomRecoveryReminder) {
+            aux = <RoomRecoveryReminder onFinished={this.onRoomRecoveryReminderFinished} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
@@ -1693,6 +1757,7 @@ module.exports = React.createClass({
                     callState={this.state.callState}
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
+                    uploadAllowed={this.isFileUploadAllowed}
                 />;
         }
 
