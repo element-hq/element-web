@@ -622,7 +622,7 @@ module.exports = React.createClass({
                 list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('im.vector.fake.invite')},
+                incomingCall: incomingCallIfTaggedAs('im.vector.fake.invite'),
                 isInvite: true,
             },
             {
@@ -630,7 +630,7 @@ module.exports = React.createClass({
                 label: _t('Favourites'),
                 tagName: "m.favourite",
                 order: "manual",
-                incomingCall={incomingCallIfTaggedAs('m.favourite')},
+                incomingCall: incomingCallIfTaggedAs('m.favourite'),
             },
             {
                 list: this.state.lists['im.vector.fake.direct'],
@@ -638,7 +638,7 @@ module.exports = React.createClass({
                 tagName: "im.vector.fake.direct",
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('im.vector.fake.direct')},
+                incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
@@ -646,7 +646,7 @@ module.exports = React.createClass({
                 label: _t('Rooms'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('im.vector.fake.recent')},
+                incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
@@ -660,7 +660,7 @@ module.exports = React.createClass({
                     label: labelForTagName(tagName),
                     tagName: tagName,
                     order: "manual",
-                    incomingCallIfTaggedAs(tagName),
+                    incomingCall: incomingCallIfTaggedAs(tagName),
                 };
             });
         subLists = subLists.concat(tagSubLists);
@@ -670,13 +670,13 @@ module.exports = React.createClass({
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('m.lowpriority')},
+                incomingCall: incomingCallIfTaggedAs('m.lowpriority'),
             },
             {
                 list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('im.vector.fake.archived')},
+                incomingCall: incomingCallIfTaggedAs('im.vector.fake.archived'),
                 startAsHidden: true,
                 showSpinner: this.state.isLoadingLeftRooms,
                 onHeaderClick: this.onArchivedHeaderClick,
@@ -686,7 +686,7 @@ module.exports = React.createClass({
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
                 order: "recent",
-                incomingCall={incomingCallIfTaggedAs('m.server_notice')},
+                incomingCall: incomingCallIfTaggedAs('m.server_notice'),
             },
         ]);
 
