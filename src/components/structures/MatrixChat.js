@@ -927,10 +927,6 @@ export default React.createClass({
     },
 
     _viewHome: function() {
-        // The home page requires the "logged in" view, so we'll set that.
-        this.setStateForNewView({
-            view: VIEWS.LOGGED_IN,
-        });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
     },
@@ -1187,7 +1183,10 @@ export default React.createClass({
      * @param {string} teamToken
      */
     _onLoggedIn: async function(teamToken) {
-        this.setStateForNewView({view: VIEWS.LOGGED_IN});
+        this.setState({
+            view: VIEWS.LOGGED_IN,
+        });
+
         if (teamToken) {
             // A team member has logged in, not a guest
             this._teamToken = teamToken;

@@ -363,12 +363,6 @@ module.exports = React.createClass({
         }
     },
 
-    onLoginClick: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.props.onLoginClick();
-    },
-
     _makeRegisterRequest: function(auth) {
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
@@ -474,7 +468,7 @@ module.exports = React.createClass({
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
+                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                     { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
                 </a>
             );
