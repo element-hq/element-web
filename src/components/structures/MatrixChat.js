@@ -927,6 +927,7 @@ export default React.createClass({
     },
 
     _viewHome: function() {
+        // The home page requires the "logged in" view, so we'll set that.
         this.setStateForNewView({
             view: VIEWS.LOGGED_IN,
         });
