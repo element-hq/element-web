@@ -214,7 +214,10 @@ module.exports = React.createClass({
         }).done();
     },
 
-    _onLoginAsGuestClick: function() {
+    _onLoginAsGuestClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         const self = this;
         self.setState({
             busy: true,
@@ -295,6 +298,12 @@ module.exports = React.createClass({
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
+    },
+
+    onRegisterClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onRegisterClick();
     },
 
     _tryWellKnownDiscovery: async function(serverName) {
@@ -567,7 +576,7 @@ module.exports = React.createClass({
                         { errorTextSection }
                         { this.componentForStep(this.state.currentFlow) }
                         { serverConfig }
-                        <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
+                        <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
                             { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
