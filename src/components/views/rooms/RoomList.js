@@ -86,7 +86,6 @@ module.exports = React.createClass({
             incomingCallTag: null,
             incomingCall: null,
             selectedTags: [],
-            hover: false,
         };
     },
 
@@ -295,17 +294,6 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
-    onMouseEnter: function(ev) {
-        this.setState({hover: true});
-    },
-
-    onMouseLeave: function(ev) {
-        this.setState({hover: false});
-
-        // Refresh the room list just in case the user missed something.
-        this._delayedRefreshRoomList();
-    },
-
     _delayedRefreshRoomList: new rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
@@ -358,11 +346,6 @@ module.exports = React.createClass({
     },
 
     refreshRoomList: function() {
-        if (this.state.hover) {
-            // Don't re-sort the list if we're hovering over the list
-            return;
-        }
-
         // TODO: ideally we'd calculate this once at start, and then maintain
         // any changes to it incrementally, updating the appropriate sublists
         // as needed.
@@ -710,8 +693,7 @@ module.exports = React.createClass({
         const subListComponents = this._mapSubListProps(subLists);
 
         return (
-            <div ref={this._collectResizeContainer} className="mx_RoomList"
-                 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div ref={this._collectResizeContainer} className="mx_RoomList">
                 { subListComponents }
             </div>
         );
