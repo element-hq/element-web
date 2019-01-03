@@ -187,8 +187,10 @@ To run as a desktop app:
 
    ```
    npm install electron
+   npm run electron:rebuild <version>
    npm run electron
    ```
+The version parameter for electron:rebuild is the electron version, e.g. "4.0.0"
 
 To build packages, use electron-builder. This is configured to output:
  * dmg + zip for macOS
@@ -196,7 +198,6 @@ To build packages, use electron-builder. This is configured to output:
  * deb for Linux
 But this can be customised by editing the `build` section of package.json
 as per https://github.com/electron-userland/electron-builder/wiki/Options
-
 See https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build
 for dependencies required for building packages for various platforms.
 

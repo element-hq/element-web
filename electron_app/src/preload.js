@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const { ipcRenderer, webFrame } = require('electron');
+const { remote, ipcRenderer, webFrame } = require('electron');
+const SpellChecker = remote.require('spellchecker');
 
 // expose ipcRenderer to the renderer process
 window.ipcRenderer = ipcRenderer;
@@ -27,3 +28,12 @@ webFrame.registerURLSchemeAsPrivileged('vector', {
     secure: true,
     supportFetchAPI: true,
 });
+
+window.setSpellCheckLang = (locale) => {
+  const fmtLocale = `${locale.split('-')[0]}-${locale.split('-')[1].toUpperCase()}`;
+  webFrame.setSpellCheckProvider(fmtLocale, true, {
+    spellCheck(text) {
+        return !(SpellChecker.isMisspelled(text));
+    },
+  });
+};

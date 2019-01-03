@@ -419,7 +419,11 @@ async function loadLanguage() {
     }
     try {
         await languageHandler.setLanguage(langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
+        const lang = languageHandler.getCurrentLanguage();
+        document.documentElement.setAttribute("lang", lang);
+        if (window.setSpellCheckLang !== undefined) {
+            window.setSpellCheckLang(lang);
+        }
     } catch (e) {
         console.error("Unable to set language", e);
     }
