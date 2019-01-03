@@ -2,6 +2,9 @@
 
 org="$1"
 repo="$2"
+defbranch="$3"
+
+[ -z "$defbranch" ] && defbranch="develop"
 
 rm -r "$repo" || true
 
@@ -20,5 +23,5 @@ clone $TRAVIS_PULL_REQUEST_BRANCH
 clone $TRAVIS_BRANCH
 # Try the current branch from Jenkins.
 clone `"echo $GIT_BRANCH" | sed -e 's/^origin\///'`
-# Use develop as the last resort.
-clone develop
+# Use the default branch as the last resort.
+clone $defbranch

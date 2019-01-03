@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Tick</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Custom-Status-Copy" transform="translate(-529.000000, -917.000000)" fill-rule="nonzero">
+            <g id="Tick" transform="translate(530.000000, 918.000000)">
+                <circle id="Oval" stroke="#6AAC8C" fill="#75CFA6" cx="9" cy="9" r="9"></circle>
+                <g id="Glyph" transform="translate(8.949747, 7.949747) rotate(-45.000000) translate(-8.949747, -7.949747) translate(4.449747, 5.449747)" fill="#FFFFFF">
+                    <rect id="Rectangle" x="0" y="0" width="2" height="5"></rect>
+                    <rect id="Rectangle" x="0" y="3" width="9" height="2"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

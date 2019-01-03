@@ -85,8 +85,8 @@ export default React.createClass({
     _getDisplayedGroups(userGroups, relatedGroups) {
         let displayedGroups = userGroups || [];
         if (relatedGroups && relatedGroups.length > 0) {
-            displayedGroups = displayedGroups.filter((groupId) => {
-                return relatedGroups.includes(groupId);
+            displayedGroups = relatedGroups.filter((groupId) => {
+                return displayedGroups.includes(groupId);
             });
         } else {
             displayedGroups = [];

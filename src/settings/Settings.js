@@ -83,6 +83,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_custom_status": {
+        isFeature: true,
+        displayName: _td("Custom user status messages"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_lazyloading": {
         isFeature: true,
         displayName: _td("Increase performance by only loading room members on first view"),
@@ -149,6 +155,11 @@ export const SETTINGS = {
     "alwaysShowEncryptionIcons": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Always show encryption icons'),
+        default: true,
+    },
+    "showRoomRecoveryReminder": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),
         default: true,
     },
     "enableSyntaxHighlightLanguageDetection": {

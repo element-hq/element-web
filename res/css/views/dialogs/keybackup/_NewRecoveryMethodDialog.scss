@@ -14,12 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CreateKeyBackupDialog {
-    padding-right: 40px;
+.mx_NewRecoveryMethodDialog .mx_Dialog_title {
+    margin-bottom: 32px;
 }
 
-.mx_CreateKeyBackupDialog_recoveryKey {
-    padding: 20px;
-    color: $info-plinth-fg-color;
-    background-color: $info-plinth-bg-color;
+.mx_NewRecoveryMethodDialog_title {
+    position: relative;
+    padding-left: 45px;
+    padding-bottom: 10px;
+
+    &:before {
+        mask: url("../../../img/e2e/lock-warning.svg");
+        mask-repeat: no-repeat;
+        background-color: $primary-fg-color;
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+
+.mx_NewRecoveryMethodDialog .mx_Dialog_buttons {
+    margin-top: 36px;
 }

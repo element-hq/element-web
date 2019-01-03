@@ -69,7 +69,7 @@ describe('RoomList', () => {
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
         movingRoom = createRoom({name: 'Moving room'});
-        expect(movingRoom.roomId).toNotBe(null);
+        expect(movingRoom.roomId).not.toBe(null);
 
         // Mock joined member
         myMember = new RoomMember(movingRoomId, myUserId);
@@ -139,7 +139,7 @@ describe('RoomList', () => {
             throw err;
         }
 
-        expect(expectedRoomTile).toExist();
+        expect(expectedRoomTile).toBeTruthy();
         expect(expectedRoomTile.props.room).toBe(room);
     }
 

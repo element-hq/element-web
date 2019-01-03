@@ -139,7 +139,8 @@ export default class MessageComposer extends React.Component {
     }
 
     onUploadFileSelected(files) {
-        this.uploadFiles(files.target.files);
+        const tfiles = files.target.files;
+        this.uploadFiles(tfiles);
     }
 
     uploadFiles(files) {
@@ -147,10 +148,21 @@ export default class MessageComposer extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const fileList = [];
+        const acceptedFiles = [];
+        const failedFiles = [];
+
         for (let i=0; i<files.length; i++) {
-            fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
-            </li>);
+            const fileAcceptedOrError = this.props.uploadAllowed(files[i]);
+            if (fileAcceptedOrError === true) {
+                acceptedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
+                </li>);
+                fileList.push(files[i]);
+            } else {
+                failedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') } <p>{ _t('Reason') + ": " + fileAcceptedOrError}</p>
+                </li>);
+            }
         }
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
@@ -161,23 +173,47 @@ export default class MessageComposer extends React.Component {
             }</p>;
         }
 
+        const acceptedFilesPart = acceptedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('Are you sure you want to upload the following files?') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { acceptedFiles }
+                </ul>
+            </div>
+        );
+
+        const failedFilesPart = failedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('The following files cannot be uploaded:') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { failedFiles }
+                </ul>
+            </div>
+        );
+        let buttonText;
+        if (acceptedFiles.length > 0 && failedFiles.length > 0) {
+            buttonText = "Upload selected"
+        } else if (failedFiles.length > 0) {
+            buttonText = "Close"
+        }
+
         Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
-                    <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                        { fileList }
-                    </ul>
+                    { acceptedFilesPart }
+                    { failedFilesPart }
                     { replyToWarning }
                 </div>
             ),
+            hasCancelButton: acceptedFiles.length > 0,
+            button: buttonText,
             onFinished: (shouldUpload) => {
                 if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-                    if (files) {
-                        for (let i=0; i<files.length; i++) {
-                            this.props.uploadFile(files[i]);
+                    if (fileList) {
+                        for (let i=0; i<fileList.length; i++) {
+                            this.props.uploadFile(fileList[i]);
                         }
                     }
                 }
@@ -255,7 +291,7 @@ export default class MessageComposer extends React.Component {
 
     render() {
         const uploadInputStyle = {display: 'none'};
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -264,7 +300,7 @@ export default class MessageComposer extends React.Component {
         if (this.state.me) {
             controls.push(
                 <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                    <MemberAvatar member={this.state.me} width={24} height={24} />
+                    <MemberStatusMessageAvatar member={this.state.me} width={24} height={24} />
                 </div>,
             );
         }
@@ -312,6 +348,34 @@ export default class MessageComposer extends React.Component {
 
         const canSendMessages = !this.state.tombstone &&
             this.props.room.maySendMessage();
+
+        // TODO: Remove temporary logging for riot-web#7838
+        // Note: we rip apart the power level event ourselves because we don't want to
+        // log too much data about it - just the bits we care about. Many of the variables
+        // logged here are to help figure out where in the stack the 'cannot post in room'
+        // warning is coming from. This means logging various numbers from the PL event to
+        // verify RoomState._maySendEventOfType is doing the right thing.
+        const room = this.props.room;
+        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        let plEventString = "<no power level event>";
+        if (plEvent) {
+            const content = plEvent.getContent();
+            if (!content) {
+                plEventString = "<no event content>";
+            } else {
+                const stringifyFalsey = (v) => v === null ? '<null>' : (v === undefined ? '<undefined>' : v);
+                const actualUserPl = stringifyFalsey(content.users ? content.users[room.myUserId] : "<no users in content>");
+                const usersPl = stringifyFalsey(content.users_default);
+                const actualEventPl = stringifyFalsey(content.events ? content.events['m.room.message'] : "<no events in content>");
+                const eventPl = stringifyFalsey(content.events_default);
+                plEventString = `actualUserPl=${actualUserPl} defaultUserPl=${usersPl} actualEventPl=${actualEventPl} defaultEventPl=${eventPl}`;
+            }
+        }
+        console.log(
+            `[riot-web#7838] renderComposer() hasTombstone=${!!this.state.tombstone} maySendMessage=${room.maySendMessage()}` +
+            ` myMembership=${room.getMyMembership()} maySendEvent=${room.currentState.maySendEvent('m.room.message', room.myUserId)}` +
+            ` myUserId=${room.myUserId} roomId=${room.roomId} hasPlEvent=${!!plEvent} powerLevels='${plEventString}'`
+        );
 
         if (canSendMessages) {
             // This also currently includes the call buttons. Really we should
@@ -389,6 +453,8 @@ export default class MessageComposer extends React.Component {
                 </div>
             </div>);
         } else {
+            // TODO: Remove temporary logging for riot-web#7838
+            console.log("[riot-web#7838] Falling back to showing cannot post in room error");
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
                     { _t('You do not have permission to post to this room') }
@@ -459,6 +525,9 @@ MessageComposer.propTypes = {
     // callback when a file to upload is chosen
     uploadFile: PropTypes.func.isRequired,
 
+    // function to test whether a file should be allowed to be uploaded.
+    uploadAllowed: PropTypes.func.isRequired,
+
     // string representing the current room app drawer state
-    showApps: PropTypes.bool,
+    showApps: PropTypes.bool
 };

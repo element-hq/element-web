@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ limitations under the License.
 
 import MatrixClientPeg from '../MatrixClientPeg';
 import {getAddressType} from '../UserAddress';
-import {inviteToRoom} from '../RoomInvite';
 import GroupStore from '../stores/GroupStore';
 import Promise from 'bluebird';
+import {_t} from "../languageHandler";
 
 /**
  * Invites multiple addresses to a room or group, handling rate limiting from the server
@@ -49,7 +49,7 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
-     * @param {array} addresses Array of addresses to invite
+     * @param {array} addrs Array of addresses to invite
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
     invite(addrs) {
@@ -88,12 +88,30 @@ export default class MultiInviter {
         return this.errorTexts[addr];
     }
 
+    async _inviteToRoom(roomId, addr) {
+        const addrType = getAddressType(addr);
+
+        if (addrType === 'email') {
+            return MatrixClientPeg.get().inviteByEmail(roomId, addr);
+        } else if (addrType === 'mx-user-id') {
+            const profile = await MatrixClientPeg.get().getProfileInfo(addr);
+            if (!profile) {
+                return Promise.reject({errcode: "M_NOT_FOUND", error: "User does not have a profile."});
+            }
+
+            return MatrixClientPeg.get().invite(roomId, addr);
+        } else {
+            throw new Error('Unsupported address');
+        }
+    }
+
+
     _inviteMore(nextIndex) {
         if (this._canceled) {
             return;
         }
 
-        if (nextIndex == this.addrs.length) {
+        if (nextIndex === this.addrs.length) {
             this.busy = false;
             this.deferred.resolve(this.completionStates);
             return;
@@ -111,7 +129,7 @@ export default class MultiInviter {
 
         // don't re-invite (there's no way in the UI to do this, but
         // for sanity's sake)
-        if (this.completionStates[addr] == 'invited') {
+        if (this.completionStates[addr] === 'invited') {
             this._inviteMore(nextIndex + 1);
             return;
         }
@@ -120,7 +138,7 @@ export default class MultiInviter {
         if (this.groupId !== null) {
             doInvite = GroupStore.inviteUserToGroup(this.groupId, addr);
         } else {
-            doInvite = inviteToRoom(this.roomId, addr);
+            doInvite = this._inviteToRoom(this.roomId, addr);
         }
 
         doInvite.then(() => {
@@ -129,29 +147,34 @@ export default class MultiInviter {
             this.completionStates[addr] = 'invited';
 
             this._inviteMore(nextIndex + 1);
-        }, (err) => {
+        }).catch((err) => {
             if (this._canceled) { return; }
 
             let errorText;
             let fatal = false;
-            if (err.errcode == 'M_FORBIDDEN') {
+            if (err.errcode === 'M_FORBIDDEN') {
                 fatal = true;
-                errorText = 'You do not have permission to invite people to this room.';
-            } else if (err.errcode == 'M_LIMIT_EXCEEDED') {
+                errorText = _t('You do not have permission to invite people to this room.');
+            } else if (err.errcode === 'M_LIMIT_EXCEEDED') {
                 // we're being throttled so wait a bit & try again
                 setTimeout(() => {
                     this._inviteMore(nextIndex);
                 }, 5000);
                 return;
+            } else if(err.errcode === "M_NOT_FOUND") {
+                errorText = _t("User %(user_id)s does not exist", {user_id: addr});
             } else {
-                errorText = 'Unknown server error';
+                errorText = _t('Unknown server error');
             }
             this.completionStates[addr] = 'error';
             this.errorTexts[addr] = errorText;
             this.busy = !fatal;
+            this.fatal = fatal;
 
             if (!fatal) {
                 this._inviteMore(nextIndex + 1);
+            } else {
+                this.deferred.resolve(this.completionStates);
             }
         });
     }

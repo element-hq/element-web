@@ -30,6 +30,7 @@ class PasswordLogin extends React.Component {
     static defaultProps = {
         onError: function() {},
         onUsernameChanged: function() {},
+        onUsernameBlur: function() {},
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
@@ -39,6 +40,8 @@ class PasswordLogin extends React.Component {
         initialPassword: "",
         loginIncorrect: false,
         hsDomain: "",
+        hsName: null,
+        disableSubmit: false,
     }
 
     constructor(props) {
@@ -53,6 +56,7 @@ class PasswordLogin extends React.Component {
 
         this.onSubmitForm = this.onSubmitForm.bind(this);
         this.onUsernameChanged = this.onUsernameChanged.bind(this);
+        this.onUsernameBlur = this.onUsernameBlur.bind(this);
         this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
         this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
         this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
@@ -124,6 +128,10 @@ class PasswordLogin extends React.Component {
         this.props.onUsernameChanged(ev.target.value);
     }
 
+    onUsernameBlur(ev) {
+        this.props.onUsernameBlur(this.state.username);
+    }
+
     onLoginTypeChange(loginType) {
         this.props.onError(null); // send a null error to clear any error messages
         this.setState({
@@ -167,6 +175,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
+                    onBlur={this.onUsernameBlur}
                     placeholder="joe@example.com"
                     value={this.state.username}
                     autoFocus
@@ -182,6 +191,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
+                    onBlur={this.onUsernameBlur}
                     placeholder={SdkConfig.get().disable_custom_urls ?
                                       _t("Username on %(hs)s", {
                                         hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
@@ -242,13 +252,15 @@ class PasswordLogin extends React.Component {
             );
         }
 
-        let matrixIdText = '';
-        if (this.props.hsUrl) {
+        let matrixIdText = _t('Matrix ID');
+        if (this.props.hsName) {
+            matrixIdText = _t('%(serverName)s Matrix ID', {serverName: this.props.hsName});
+        } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
                 matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
             } catch (e) {
-                // pass
+                // ignore
             }
         }
 
@@ -280,6 +292,8 @@ class PasswordLogin extends React.Component {
             );
         }
 
+        const disableSubmit = this.props.disableSubmit || matrixIdText === '';
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
@@ -293,7 +307,7 @@ class PasswordLogin extends React.Component {
                 />
                 <br />
                 { forgotPasswordJsx }
-                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={matrixIdText === ''} />
+                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={disableSubmit} />
                 </form>
             </div>
         );
@@ -317,6 +331,8 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
+    hsName: PropTypes.string,
+    disableSubmit: PropTypes.bool,
 };
 
 module.exports = PasswordLogin;
