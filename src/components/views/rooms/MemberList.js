@@ -19,6 +19,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
+import dis from '../../../dispatcher';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -420,42 +421,59 @@ module.exports = React.createClass({
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
-        let invitedSection = null;
-        if (this._getChildCountInvited() > 0) {
-            invitedSection = (
-                <div className="mx_MemberList_invited">
-                    <h2>{ _t("Invited") }</h2>
-                    <div className="mx_MemberList_wrapper">
-                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtInvited}
-                                createOverflowElement={this._createOverflowTileInvited}
-                                getChildren={this._getChildrenInvited}
-                                getChildCount={this._getChildCountInvited}
-                        />
-                    </div>
-                </div>
-            );
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        let inviteButton;
+        if (room && room.getMyMembership() === 'join') {
+            const TintableSvg = sdk.getComponent("elements.TintableSvg");
+            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+            inviteButton =
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
+                    <span>{ _t('Invite to this room') }</span>
+                </AccessibleButton>;
         }
 
-        const inputBox = (
-            <form autoComplete="off">
-                <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
-            </form>
-        );
+        let invitedHeader;
+        let invitedSection;
+        if (this._getChildCountInvited() > 0) {
+            invitedHeader = <h2>{ _t("Invited") }</h2>;
+            invitedSection = <TruncatedList className="mx_MemberList_section mx_MemberList_invited" truncateAt={this.state.truncateAtInvited}
+                        createOverflowElement={this._createOverflowTileInvited}
+                        getChildren={this._getChildrenInvited}
+                        getChildCount={this._getChildCountInvited}
+                />;
+        }
 
         return (
             <div className="mx_MemberList">
-                { inputBox }
-                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
+                { inviteButton }
+                <GeminiScrollbarWrapper autoshow={true}>
+                    <div className="mx_MemberList_wrapper">
+                        <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}
-                            getChildCount={this._getChildCountJoined}
-                    />
-                    { invitedSection }
+                            getChildCount={this._getChildCountJoined} />
+                        { invitedHeader }
+                        { invitedSection }
+                    </div>
                 </GeminiScrollbarWrapper>
+                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="text"
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={_t('Filter room members')} />
             </div>
         );
+    },
+
+    onInviteButtonClick: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'require_registration'});
+            return;
+        }
+
+        // call AddressPickerDialog
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.roomId,
+        });
     },
 });

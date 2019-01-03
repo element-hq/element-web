@@ -351,7 +351,7 @@ export default class Stickerpicker extends React.Component {
                     onClick={this._onHideStickersClick}
                     ref='target'
                     title={_t("Hide Stickers")}>
-                    <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/face.svg" width="20" height="20" />
                 </AccessibleButton>;
         } else {
             // Show show-stickers button
@@ -362,7 +362,7 @@ export default class Stickerpicker extends React.Component {
                     className="mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
                     title={_t("Show Stickers")}>
-                    <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/face.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
         return <div>

@@ -17,20 +17,24 @@ limitations under the License.
 .mx_MemberList,
 .mx_GroupMemberList,
 .mx_GroupRoomList {
-    height: 100%;
-
-    margin-top: 12px;
-    margin-right: 20px;
-
     flex: 1;
-
     display: flex;
-
     flex-direction: column;
-}
 
-.mx_MemberList .mx_Spinner {
-    flex: 0 0 auto;
+    .mx_Spinner {
+        flex: 1 0 auto;
+    }
+
+    h2 {
+        text-transform: uppercase;
+        color: $h3-color;
+        font-weight: 600;
+        font-size: 13px;
+        padding-left: 3px;
+        padding-right: 12px;
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
 }
 
 .mx_MemberList_chevron {
@@ -49,65 +53,39 @@ limitations under the License.
 .mx_MemberList_query,
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
-    font-family: $font-family;
-    border-radius: 3px;
-    border: 1px solid $input-border-color;
-    padding: 9px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
-    margin-left: 3px;
-    font-size: 14px;
-    margin-bottom: 8px;
-    width: 189px;
+    flex: 1 1 0;
 }
 
-.mx_MemberList_query::-moz-placeholder,
-.mx_GroupMemberList_query::-moz-placeholder,
-.mx_GroupRoomList_query::-moz-placeholder {
-    color: $primary-fg-color;
-    opacity: 0.5;
-    font-size: 14px;
-}
 
-.mx_MemberList_query::-webkit-input-placeholder,
-.mx_GroupMemberList_query::-webkit-input-placeholder,
-.mx_GroupRoomList_query::-webkit-input-placeholder {
-    color: $primary-fg-color;
-    opacity: 0.5;
-    font-size: 14px;
-}
 
-.mx_MemberList_joined {
-    order: 2;
-    flex: 1 0 0;
-
-    overflow-y: auto;
-}
-
-/*
-.mx_MemberList_invited {
-    order: 3;
-    flex: 0 0 100px;
-    overflow-y: auto;
-}
-*/
-
-.mx_GroupMemberList_invited h2,
-.mx_MemberList_invited h2 {
-    text-transform: uppercase;
-    color: $h3-color;
-    font-weight: 600;
-    font-size: 13px;
-    padding-left: 3px;
-    padding-right: 12px;
-    margin-top: 8px;
-    margin-bottom: 4px;
-}
-
-/* we have to have display: table in order for the horizontal wrapping to work */
 .mx_MemberList_wrapper {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
+    padding: 10px;
 }
 
+
+.mx_MemberList_invite,
+.mx_RightPanel_invite {
+    flex: 0 0 auto;
+    position: relative;
+    background-color: $button-bg-color;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 9px;
+    display: flex;
+    color: $button-fg-color;
+    font-weight: 600;
+
+    .mx_RightPanel_icon {
+        padding-right: 5px;
+        padding-top: 2px;
+    }
+}
+
+.mx_MemberList_invite span {
+    margin: 0 auto;
+    background-image: url('../../img/feather-icons/user-add.svg');
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 25px;
+
+}

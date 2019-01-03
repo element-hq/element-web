@@ -15,32 +15,72 @@ limitations under the License.
 */
 
 import dis from './dispatcher';
+import Timer from './utils/Timer';
 
-const MIN_DISPATCH_INTERVAL_MS = 500;
-const CURRENTLY_ACTIVE_THRESHOLD_MS = 2000;
+// important this is larger than the timeouts of timers
+// used with UserActivity.timeWhileActive,
+// such as READ_MARKER_INVIEW_THRESHOLD_MS,
+// READ_MARKER_OUTOFVIEW_THRESHOLD_MS,
+// READ_RECEIPT_INTERVAL_MS in TimelinePanel
+const CURRENTLY_ACTIVE_THRESHOLD_MS = 2 * 60 * 1000;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
- * and dispatches the user_activity action at times when the user is interacting
- * with the app (but at a much lower frequency than mouse move events)
+ * and starts/stops attached timers while the user is active.
  */
 class UserActivity {
+    constructor() {
+        this._attachedTimers = [];
+        this._activityTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
+        this._onUserActivity = this._onUserActivity.bind(this);
+        this._onDocumentBlurred = this._onDocumentBlurred.bind(this);
+        this._onPageVisibilityChanged = this._onPageVisibilityChanged.bind(this);
+        this.lastScreenX = 0;
+        this.lastScreenY = 0;
+    }
+
+    /**
+     * Runs the given timer while the user is active, aborting when the user becomes inactive.
+     * Can be called multiple times with the same already running timer, which is a NO-OP.
+     * Can be called before the user becomes active, in which case it is only started
+     * later on when the user does become active.
+     */
+    timeWhileActive(timer) {
+        // important this happens first
+        const index = this._attachedTimers.indexOf(timer);
+        if (index === -1) {
+            this._attachedTimers.push(timer);
+            // remove when done or aborted
+            timer.finished().finally(() => {
+                const index = this._attachedTimers.indexOf(timer);
+                if (index !== -1) { // should never be -1
+                    this._attachedTimers.splice(index, 1);
+                }
+            // as we fork the promise here,
+            // avoid unhandled rejection warnings
+            }).catch((err) => {});
+        }
+        if (this.userCurrentlyActive()) {
+            timer.start();
+        }
+    }
+
     /**
      * Start listening to user activity
      */
     start() {
-        document.onmousedown = this._onUserActivity.bind(this);
-        document.onmousemove = this._onUserActivity.bind(this);
-        document.onkeydown = this._onUserActivity.bind(this);
+        document.onmousedown = this._onUserActivity;
+        document.onmousemove = this._onUserActivity;
+        document.onkeydown = this._onUserActivity;
+        document.addEventListener("visibilitychange", this._onPageVisibilityChanged);
+        document.addEventListener("blur", this._onDocumentBlurred);
+        document.addEventListener("focus", this._onUserActivity);
         // can't use document.scroll here because that's only the document
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
         // fired when the view scrolls down for a new message.
-        window.addEventListener('wheel', this._onUserActivity.bind(this),
+        window.addEventListener('wheel', this._onUserActivity,
                                 { passive: true, capture: true });
-        this.lastActivityAtTs = new Date().getTime();
-        this.lastDispatchAtTs = 0;
-        this.activityEndTimer = undefined;
     }
 
     /**
@@ -50,8 +90,12 @@ class UserActivity {
         document.onmousedown = undefined;
         document.onmousemove = undefined;
         document.onkeydown = undefined;
-        window.removeEventListener('wheel', this._onUserActivity.bind(this),
+        window.removeEventListener('wheel', this._onUserActivity,
                                    { passive: true, capture: true });
+
+        document.removeEventListener("visibilitychange", this._onPageVisibilityChanged);
+        document.removeEventListener("blur", this._onDocumentBlurred);
+        document.removeEventListener("focus", this._onUserActivity);
     }
 
     /**
@@ -60,10 +104,22 @@ class UserActivity {
      * @returns {boolean} true if user is currently/very recently active
      */
     userCurrentlyActive() {
-        return this.lastActivityAtTs > new Date().getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
+        return this._activityTimeout.isRunning();
     }
 
-    _onUserActivity(event) {
+    _onPageVisibilityChanged(e) {
+        if (document.visibilityState === "hidden") {
+            this._activityTimeout.abort();
+        } else {
+            this._onUserActivity(e);
+        }
+    }
+
+    _onDocumentBlurred() {
+        this._activityTimeout.abort();
+    }
+
+    async _onUserActivity(event) {
         if (event.screenX && event.type === "mousemove") {
             if (event.screenX === this.lastScreenX && event.screenY === this.lastScreenY) {
                 // mouse hasn't actually moved
@@ -73,30 +129,20 @@ class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
-        this.lastActivityAtTs = new Date().getTime();
-        if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL_MS) {
-            this.lastDispatchAtTs = this.lastActivityAtTs;
-            dis.dispatch({
-                action: 'user_activity',
-            });
-            if (!this.activityEndTimer) {
-                this.activityEndTimer = setTimeout(this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL_MS);
-            }
-        }
-    }
-
-    _onActivityEndTimer() {
-        const now = new Date().getTime();
-        const targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
-        if (now >= targetTime) {
-            dis.dispatch({
-                action: 'user_activity_end',
-            });
-            this.activityEndTimer = undefined;
+        dis.dispatch({action: 'user_activity'});
+        if (!this._activityTimeout.isRunning()) {
+            this._activityTimeout.start();
+            dis.dispatch({action: 'user_activity_start'});
+            this._attachedTimers.forEach((t) => t.start());
+            try {
+                await this._activityTimeout.finished();
+            } catch (_e) { /* aborted */ }
+            this._attachedTimers.forEach((t) => t.abort());
         } else {
-            this.activityEndTimer = setTimeout(this._onActivityEndTimer.bind(this), targetTime - now);
+            this._activityTimeout.restart();
         }
     }
 }
+
 
 module.exports = new UserActivity();

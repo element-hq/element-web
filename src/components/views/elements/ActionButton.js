@@ -30,7 +30,8 @@ export default React.createClass({
         action: PropTypes.string.isRequired,
         mouseOverAction: PropTypes.string,
         label: PropTypes.string.isRequired,
-        iconPath: PropTypes.string.isRequired,
+        iconPath: PropTypes.string,
+        className: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -72,14 +73,23 @@ export default React.createClass({
             tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
+        const icon = this.props.iconPath ?
+                (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+                undefined;
+
+        const classNames = ["mx_RoleButton"];
+        if (this.props.className) {
+            classNames.push(this.props.className);
+        }
+
         return (
-            <AccessibleButton className="mx_RoleButton"
+            <AccessibleButton className={classNames.join(" ")}
                 onClick={this._onClick}
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}
                 aria-label={this.props.label}
             >
-                <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
+                { icon }
                 { tooltip }
             </AccessibleButton>
         );

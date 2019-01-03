@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
-import dis from "../../../dispatcher";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import * as linkify from 'linkifyjs';
@@ -33,6 +32,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
+import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 
 linkifyMatrix(linkify);
 
@@ -143,10 +143,6 @@ module.exports = React.createClass({
 
     onAvatarRemoveClick: function() {
         MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
     },
 
     onShareRoomClick: function(ev) {
@@ -302,18 +298,17 @@ module.exports = React.createClass({
                     topic = ev.getContent().topic;
                 }
             }
-            if (topic) {
-                topicElement =
-                    <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
-            }
+            topicElement =
+                <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
         }
 
         let roomAvatar = null;
+        const avatarSize = 28;
         if (canSetRoomAvatar) {
             roomAvatar = (
                 <div className="mx_RoomHeader_avatarPicker">
                     <div onClick={this.onAvatarPickerClick}>
-                        <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={48} height={48} />
+                        <ChangeAvatar ref="changeAvatar" room={this.props.room} showUploadSection={false} width={avatarSize} height={avatarSize} />
                     </div>
                     <div className="mx_RoomHeader_avatarPicker_edit">
                         <label htmlFor="avatarInput" ref="file_label">
@@ -334,7 +329,7 @@ module.exports = React.createClass({
             );
         } else if (this.props.room || (this.props.oobData && this.props.oobData.name)) {
             roomAvatar = (
-                <RoomAvatar room={this.props.room} width={48} height={48} oobData={this.props.oobData}
+                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} oobData={this.props.oobData}
                     viewAvatarOnClick={true} />
             );
         }
@@ -342,7 +337,7 @@ module.exports = React.createClass({
         if (this.props.onSettingsClick) {
             settingsButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
-                    <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/settings.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -382,7 +377,7 @@ module.exports = React.createClass({
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src="img/icons-search.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/search.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -390,15 +385,7 @@ module.exports = React.createClass({
         if (this.props.inRoom) {
             shareRoomButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShareRoomClick} title={_t('Share room')}>
-                    <TintableSvg src="img/icons-share.svg" width="16" height="16" />
-                </AccessibleButton>;
-        }
-
-        let rightPanelButtons;
-        if (this.props.collapsedRhs) {
-            rightPanelButtons =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title={_t('Show panel')}>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" />
+                    <TintableSvg src="img/feather-icons/share.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -412,33 +399,27 @@ module.exports = React.createClass({
 
         if (!this.props.editing) {
             rightRow =
-                <div className="mx_RoomHeader_rightRow">
+                <div className="mx_RoomHeader_buttons">
                     { settingsButton }
                     { pinnedEventsButton }
                     { shareRoomButton }
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
-                    { rightPanelButtons }
                 </div>;
         }
 
         return (
-            <div className={"mx_RoomHeader " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
+            <div className={"mx_RoomHeader light-panel " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
                 <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_leftRow">
-                        <div className="mx_RoomHeader_avatar">
-                            { roomAvatar }
-                        </div>
-                        <div className="mx_RoomHeader_info">
-                            { name }
-                            { topicElement }
-                        </div>
-                    </div>
+                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                    { name }
+                    { topicElement }
                     { spinner }
                     { saveButton }
                     { cancelButton }
                     { rightRow }
+                    <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                 </div>
             </div>
         );

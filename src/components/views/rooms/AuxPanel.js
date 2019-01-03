@@ -23,6 +23,7 @@ import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
+import classNames from 'classnames';
 
 
 module.exports = React.createClass({
@@ -51,6 +52,7 @@ module.exports = React.createClass({
         // a callback which is called when the content of the aux panel changes
         // content in a way that is likely to make it change size.
         onResize: PropTypes.func,
+        fullHeight: PropTypes.bool,
     },
 
     defaultProps: {
@@ -143,8 +145,17 @@ module.exports = React.createClass({
             hide={this.props.hideAppsDrawer}
         />;
 
+        const classes = classNames({
+            "mx_RoomView_auxPanel": true,
+            "mx_RoomView_auxPanel_fullHeight": this.props.fullHeight,
+        });
+        const style = {};
+        if (!this.props.fullHeight) {
+            style.maxHeight = this.props.maxHeight;
+        }
+
         return (
-            <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >
+            <div className={classes} style={style} >
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }

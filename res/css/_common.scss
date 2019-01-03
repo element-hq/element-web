@@ -30,8 +30,6 @@ body {
     color: $primary-fg-color;
     border: 0px;
     margin: 0px;
-    /* This should render the fonts the same accross browsers */
-    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .error, .warning {
@@ -49,20 +47,14 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: $accent-color;
+    color: $accent-color-alt;
 }
 
 input[type=text], input[type=password], textarea {
     background-color: transparent;
-    color: $primary-fg-color;
-}
-
-input[type=text].error, input[type=password].error {
-    border: 1px solid $warning-color;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    border: 1px solid $accent-color;
     outline: none;
     box-shadow: none;
 }
@@ -81,11 +73,6 @@ textarea {
 .mx_fadable {
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
-}
-
-.mx_fadable.mx_fadable_faded {
-    opacity: 0.3;
-    pointer-events: none;
 }
 
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
@@ -314,7 +301,7 @@ textarea {
 }
 
 .mx_textButton {
-    @mixin mx_DialogButton_small;    
+    @mixin mx_DialogButton_small;
 }
 
 .mx_textButton:hover {

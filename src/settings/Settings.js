@@ -206,8 +206,8 @@ export const SETTINGS = {
         default: false,
     },
     "theme": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "light",
+        supportedLevels: ['config'],
+        default: "dharma",
     },
     "webRtcForceTURN": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

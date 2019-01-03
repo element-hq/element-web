@@ -24,6 +24,9 @@ import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import GroupHeaderButtons from '../views/right_panel/GroupHeaderButtons';
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
@@ -1271,25 +1274,19 @@ export default React.createClass({
                         <TintableSvg src="img/icons-share.svg" width="16" height="16" />
                     </AccessibleButton>,
                 );
-                if (this.props.collapsedRhs) {
-                    rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onShowRhsClick} title={_t('Show panel')} key="_maximiseButton"
-                        >
-                            <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                        </AccessibleButton>,
-                    );
-                }
             }
 
+            const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
+
             const headerClasses = {
-                mx_GroupView_header: true,
-                mx_GroupView_header_view: !this.state.editing,
-                mx_GroupView_header_isUserMember: this.state.isUserMember,
+                "mx_GroupView_header": true,
+                "light-panel": true,
+                "mx_GroupView_header_view": !this.state.editing,
+                "mx_GroupView_header_isUserMember": this.state.isUserMember,
             };
 
             return (
-                <div className="mx_GroupView">
+                <main className="mx_GroupView">
                     <div className={classnames(headerClasses)}>
                         <div className="mx_GroupView_header_leftCol">
                             <div className="mx_GroupView_header_avatar">
@@ -1307,12 +1304,15 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
+                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                     </div>
-                    <GeminiScrollbarWrapper className="mx_GroupView_body">
-                        { this._getMembershipSection() }
-                        { this._getGroupSection() }
-                    </GeminiScrollbarWrapper>
-                </div>
+                    <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
+                        <GeminiScrollbarWrapper className="mx_GroupView_body">
+                            { this._getMembershipSection() }
+                            { this._getGroupSection() }
+                        </GeminiScrollbarWrapper>
+                    </MainSplit>
+                </main>
             );
         } else if (this.state.error) {
             if (this.state.error.httpStatus === 404) {

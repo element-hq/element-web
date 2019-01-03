@@ -15,10 +15,6 @@ limitations under the License.
 */
 
 .mx_GroupView {
-    max-width: 960px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -29,7 +25,6 @@ limitations under the License.
 }
 
 .mx_GroupView_header {
-    max-width: 960px;
     min-height: 70px;
     align-items: center;
     display: flex;
@@ -39,6 +34,8 @@ limitations under the License.
 .mx_GroupView_header_view {
     border-bottom: 1px solid $primary-hairline-color;
     padding-bottom: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .mx_GroupView_header_avatar, .mx_GroupView_header_info {
@@ -160,6 +157,11 @@ limitations under the License.
     max-width: 80%;
     vertical-align: 0.1em;
     line-height: 2em;
+}
+
+.mx_GroupView > .mx_MainSplit {
+    flex: 1;
+    display: flex;
 }
 
 .mx_GroupView_body  {

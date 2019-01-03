@@ -62,10 +62,6 @@ module.exports = React.createClass({
         // more interesting)
         hasActiveCall: PropTypes.bool,
 
-        // Number of names to display in typing indication. E.g. set to 3, will
-        // result in "X, Y, Z and 100 others are typing."
-        whoIsTypingLimit: PropTypes.number,
-
         // true if the room is being peeked at. This affects components that shouldn't
         // logically be shown when peeking, such as a prompt to invite people to a room.
         isPeeking: PropTypes.bool,
@@ -103,24 +99,16 @@ module.exports = React.createClass({
         onVisible: PropTypes.func,
     },
 
-    getDefaultProps: function() {
-        return {
-            whoIsTypingLimit: 3,
-        };
-    },
-
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
             syncStateData: MatrixClientPeg.get().getSyncStateData(),
-            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
             unsentMessages: getUnsentMessages(this.props.room),
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
@@ -135,7 +123,6 @@ module.exports = React.createClass({
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
-            client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
             client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
     },
@@ -147,12 +134,6 @@ module.exports = React.createClass({
         this.setState({
             syncState: state,
             syncStateData: data,
-        });
-    },
-
-    onRoomMemberTyping: function(ev, member) {
-        this.setState({
-            usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
         });
     },
 
@@ -199,7 +180,6 @@ module.exports = React.createClass({
     // indicate other sizes.
     _getSize: function() {
         if (this._shouldShowConnectionError() ||
-            (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
             this.props.hasActiveCall ||
@@ -213,10 +193,7 @@ module.exports = React.createClass({
     },
 
     // return suitable content for the image on the left of the status bar.
-    //
-    // if wantPlaceholder is true, we include a "..." placeholder if
-    // there is nothing better to put in.
-    _getIndicator: function(wantPlaceholder) {
+    _getIndicator: function() {
         if (this.props.numUnreadMessages) {
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
@@ -250,47 +227,7 @@ module.exports = React.createClass({
             return null;
         }
 
-        if (wantPlaceholder) {
-            return (
-                <div className="mx_RoomStatusBar_typingIndicatorAvatars">
-                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
-                </div>
-            );
-        }
-
         return null;
-    },
-
-    _renderTypingIndicatorAvatars: function(limit) {
-        let users = this.state.usersTyping;
-
-        let othersCount = 0;
-        if (users.length > limit) {
-            othersCount = users.length - limit + 1;
-            users = users.slice(0, limit - 1);
-        }
-
-        const avatars = users.map((u) => {
-            return (
-                <MemberAvatar
-                    key={u.userId}
-                    member={u}
-                    width={24}
-                    height={24}
-                    resizeMethod="crop"
-                />
-            );
-        });
-
-        if (othersCount > 0) {
-            avatars.push(
-                <span className="mx_RoomStatusBar_typingIndicatorRemaining" key="others">
-                    +{ othersCount }
-                </span>,
-            );
-        }
-
-        return avatars;
     },
 
     _shouldShowConnectionError: function() {
@@ -440,18 +377,6 @@ module.exports = React.createClass({
             );
         }
 
-        const typingString = WhoIsTyping.whoIsTypingString(
-            this.state.usersTyping,
-            this.props.whoIsTypingLimit,
-        );
-        if (typingString) {
-            return (
-                <div className="mx_RoomStatusBar_typingBar">
-                    <EmojiText>{ typingString }</EmojiText>
-                </div>
-            );
-        }
-
         if (this.props.hasActiveCall) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
@@ -483,7 +408,7 @@ module.exports = React.createClass({
 
     render: function() {
         const content = this._getContent();
-        const indicator = this._getIndicator(this.state.usersTyping.length > 0);
+        const indicator = this._getIndicator();
 
         return (
             <div className="mx_RoomStatusBar">

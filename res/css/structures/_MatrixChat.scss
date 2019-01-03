@@ -54,6 +54,7 @@ limitations under the License.
     order: 2;
 
     flex: 1;
+    min-height: 0;
 }
 
 .mx_MatrixChat_syncError {
@@ -68,23 +69,8 @@ limitations under the License.
     transform: translateX(-50%);
 }
 
-.mx_MatrixChat .mx_LeftPanel {
-    order: 1;
-
-    background-color: $secondary-accent-color;
-
-    flex: 0 0 235px;
-}
-
-.mx_MatrixChat .mx_LeftPanel.collapsed {
-    flex: 0 0 60px;
-}
-
-.mx_MatrixChat .mx_MatrixChat_middlePanel {
-    order: 2;
-
-    padding-left: 20px;
-    padding-right: 22px;
+/* not the left panel, and not the resize handle, so the roomview/groupview/... */
+.mx_MatrixChat > :not(.mx_LeftPanel_container):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
     flex: 1;
@@ -96,21 +82,9 @@ limitations under the License.
        */
     overflow-x: auto;
 
-    display: flex;
-
     /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
        needed height 100% all the way down to the HomePage. Height does not
        have to be auto, empirically.
     */
     height: 100%;
-}
-
-.mx_MatrixChat .mx_RightPanel {
-    order: 3;
-
-    flex: 0 0 235px;
-}
-
-.mx_MatrixChat .mx_RightPanel.collapsed {
-    flex: 0 0 122px;
 }
