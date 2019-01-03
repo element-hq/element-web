@@ -30,7 +30,6 @@ import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddres
 import GroupStore from '../../stores/GroupStore';
 
 import { formatCount } from '../../utils/FormattingUtils';
-import MatrixClientPeg from "../../MatrixClientPeg";
 
 class HeaderButton extends React.Component {
     constructor() {
@@ -50,26 +49,17 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        // XXX: We really shouldn't be hardcoding colors here, but the way TintableSvg
-        // works kinda prevents us from using normal CSS tactics. We use $warning-color
-        // here.
-        // Note: This array gets passed along to the Tinter's forceColors eventually.
-        const tintableColors = this.props.badgeHighlight ? ["#ff0064"] : null;
-
-        const classNames = ["mx_RightPanel_headerButton"];
-        if (this.props.badgeHighlight) classNames.push("mx_RightPanel_headerButton_badgeHighlight");
-
         return <AccessibleButton
             aria-label={this.props.title}
             aria-expanded={this.props.isHighlighted}
             title={this.props.title}
-            className={classNames.join(" ")}
+            className="mx_RightPanel_headerButton"
             onClick={this.onClick} >
 
                 <div className="mx_RightPanel_headerButton_badge">
                     { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
                 </div>
-                <TintableSvg src={this.props.iconSrc} width="25" height="25" forceColors={tintableColors} />
+                <TintableSvg src={this.props.iconSrc} width="25" height="25" />
                 { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight" /> : <div /> }
 
             </AccessibleButton>;
@@ -86,7 +76,6 @@ HeaderButton.propTypes = {
 
     // The badge to display above the icon
     badge: PropTypes.node,
-    badgeHighlight: PropTypes.bool,
     // The parameters to track the click event
     analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
 
@@ -216,10 +205,7 @@ module.exports = React.createClass({
     }, 500),
 
     onAction: function(payload) {
-        if (payload.action === "event_notification") {
-            // Try and re-caclulate any badge counts we might have
-            this.forceUpdate();
-        } else if (payload.action === "view_user") {
+        if (payload.action === "view_user") {
             dis.dispatch({
                 action: 'show_right_panel',
             });
@@ -322,14 +308,6 @@ module.exports = React.createClass({
 
         let headerButtons = [];
         if (this.props.roomId) {
-            let notifCountBadge;
-            let notifCount = 0;
-            MatrixClientPeg.get().getRooms().forEach(r => notifCount += (r.getUnreadNotificationCount('highlight') || 0));
-            if (notifCount > 0) {
-                const title = _t("%(count)s Notifications", {count: formatCount(notifCount)});
-                notifCountBadge = <div title={title}>{ formatCount(notifCount) }</div>;
-            }
-
             headerButtons = [
                 <HeaderButton key="_membersButton" title={membersTitle} iconSrc="img/icons-people.svg"
                     isHighlighted={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo].includes(this.state.phase)}
@@ -345,7 +323,6 @@ module.exports = React.createClass({
                 <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc="img/icons-notifications.svg"
                     isHighlighted={this.state.phase === this.Phase.NotificationPanel}
                     clickPhase={this.Phase.NotificationPanel}
-                    badge={notifCountBadge} badgeHighlight={notifCount > 0}
                     analytics={['Right Panel', 'Notification List Button', 'click']}
                 />,
             ];
