@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
-import { scorePassword } from '../../../../utils/PasswordScorer';
 
 import FileSaver from 'file-saver';
 
@@ -30,8 +29,6 @@ const PHASE_KEEPITSAFE = 3;
 const PHASE_BACKINGUP = 4;
 const PHASE_DONE = 5;
 const PHASE_OPTOUT_CONFIRM = 6;
-
-const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
 // XXX: copied from ShareDialog: factor out into utils
 function selectText(target) {
@@ -55,8 +52,6 @@ export default React.createClass({
             passPhraseConfirm: '',
             copied: false,
             downloaded: false,
-            zxcvbnResult: null,
-            setPassPhrase: false,
         };
     },
 
@@ -92,33 +87,25 @@ export default React.createClass({
         });
     },
 
-    _createBackup: async function() {
+    _createBackup: function() {
         this.setState({
             phase: PHASE_BACKINGUP,
             error: null,
         });
-        let info;
-        try {
-            info = await MatrixClientPeg.get().createKeyBackupVersion(
-                this._keyBackupInfo,
-            );
-            await MatrixClientPeg.get().backupAllGroupSessions(info.version);
+        this._createBackupPromise = MatrixClientPeg.get().createKeyBackupVersion(
+            this._keyBackupInfo,
+        ).then((info) => {
+            return MatrixClientPeg.get().backupAllGroupSessions(info.version);
+        }).then(() => {
             this.setState({
                 phase: PHASE_DONE,
             });
-        } catch (e) {
+        }).catch(e => {
             console.log("Error creating key backup", e);
-            // TODO: If creating a version succeeds, but backup fails, should we
-            // delete the version, disable backup, or do nothing?  If we just
-            // disable without deleting, we'll enable on next app reload since
-            // it is trusted.
-            if (info) {
-                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
-            }
             this.setState({
                 error: e,
             });
-        }
+        });
     },
 
     _onCancel: function() {
@@ -141,7 +128,6 @@ export default React.createClass({
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion();
         this.setState({
             copied: false,
-            downloaded: false,
             phase: PHASE_SHOWKEY,
         });
     },
@@ -159,9 +145,7 @@ export default React.createClass({
     _onPassPhraseConfirmNextClick: async function() {
         this._keyBackupInfo = await MatrixClientPeg.get().prepareKeyBackupVersion(this.state.passPhrase);
         this.setState({
-            setPassPhrase: true,
             copied: false,
-            downloaded: false,
             phase: PHASE_SHOWKEY,
         });
     },
@@ -189,10 +173,6 @@ export default React.createClass({
     _onPassPhraseChange: function(e) {
         this.setState({
             passPhrase: e.target.value,
-            // precompute this and keep it in state: zxcvbn is fast but
-            // we use it in a couple of different places so no point recomputing
-            // it unnecessarily.
-            zxcvbnResult: scorePassword(e.target.value),
         });
     },
 
@@ -203,46 +183,17 @@ export default React.createClass({
     },
 
     _passPhraseIsValid: function() {
-        return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
+        return this.state.passPhrase !== '';
     },
 
     _renderPhasePassPhrase: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-        let strengthMeter;
-        let helpText;
-        if (this.state.zxcvbnResult) {
-            if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
-                helpText = _t("Great! This passphrase looks strong enough.");
-            } else {
-                const suggestions = [];
-                for (let i = 0; i < this.state.zxcvbnResult.feedback.suggestions.length; ++i) {
-                    suggestions.push(<div key={i}>{this.state.zxcvbnResult.feedback.suggestions[i]}</div>);
-                }
-                const suggestionBlock = suggestions.length > 0 ? <div>
-                    {suggestions}
-                </div> : null;
-
-                helpText = <div>
-                    {this.state.zxcvbnResult.feedback.warning}
-                    {suggestionBlock}
-                </div>;
-            }
-            strengthMeter = <div>
-                <progress max={PASSWORD_MIN_SCORE} value={this.state.zxcvbnResult.score} />
-            </div>;
-        }
-
         return <div>
             <p>{_t("Secure your encrypted message history with a Recovery Passphrase.")}</p>
             <p>{_t("You'll need it if you log out or lose access to this device.")}</p>
 
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
-                <div className="mx_CreateKeyBackupDialog_passPhraseHelp">
-                    {strengthMeter}
-                    {helpText}
-                </div>
                 <input type="password"
                     onChange={this._onPassPhraseChange}
                     onKeyPress={this._onPassPhraseKeyPress}
@@ -259,7 +210,7 @@ export default React.createClass({
             />
 
             <p>{_t(
-                "If you don't want encrypted message history to be available on other devices, "+
+                "If you don't want encrypted message history to be availble on other devices, "+
                 "<button>opt out</button>.",
                 {},
                 {
@@ -339,17 +290,9 @@ export default React.createClass({
 
     _renderPhaseShowKey: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
-        let bodyText;
-        if (this.state.setPassPhrase) {
-            bodyText = _t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.");
-        } else {
-            bodyText = _t("As a safety net, you can use it to restore your encrypted message history.");
-        }
-
         return <div>
             <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
-            <p>{bodyText}</p>
+            <p>{_t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.")}</p>
             <p className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div>{_t("Your Recovery Key")}</div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyButtons">

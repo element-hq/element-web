@@ -130,7 +130,7 @@ module.exports = React.createClass({
     },
 
     isAliasValid: function(alias) {
-        // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
+        // XXX: FIXME SPEC-1
         return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
     },
 

@@ -32,7 +32,6 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
-import {sendLoginRequest} from "./Login";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -130,17 +129,27 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    return sendLoginRequest(
-        queryParams.homeserver,
-        queryParams.identityServer,
+    // create a temporary MatrixClient to do the login
+    const client = Matrix.createClient({
+        baseUrl: queryParams.homeserver,
+    });
+
+    return client.login(
         "m.login.token", {
             token: queryParams.loginToken,
             initial_device_display_name: defaultDeviceDisplayName,
         },
-    ).then(function(creds) {
+    ).then(function(data) {
         console.log("Logged in with token");
         return _clearStorage().then(() => {
-            _persistCredentialsToLocalStorage(creds);
+            _persistCredentialsToLocalStorage({
+                userId: data.user_id,
+                deviceId: data.device_id,
+                accessToken: data.access_token,
+                homeserverUrl: queryParams.homeserver,
+                identityServerUrl: queryParams.identityServer,
+                guest: false,
+            });
             return true;
         });
     }).catch((err) => {
@@ -497,7 +506,16 @@ function _clearStorage() {
     Analytics.logout();
 
     if (window.localStorage) {
+        const hsUrl = window.localStorage.getItem("mx_hs_url");
+        const isUrl = window.localStorage.getItem("mx_is_url");
         window.localStorage.clear();
+
+        // preserve our HS & IS URLs for convenience
+        // N.B. we cache them in hsUrl/isUrl and can't really inline them
+        // as getCurrentHsUrl() may call through to localStorage.
+        // NB. We do clear the device ID (as well as all the settings)
+        if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
+        if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
     }
 
     // create a temporary client to clear out the persistent stores.

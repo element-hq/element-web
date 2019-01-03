@@ -473,7 +473,7 @@ export default React.createClass({
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated.bind(this, firstInit));
         let willDoOnboarding = false;
         // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
-        GroupStore.on('error', (err, errorGroupId, stateKey) => {
+        GroupStore.on('error', (err, errorGroupId) => {
             if (this._unmounted || groupId !== errorGroupId) return;
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
                 dis.dispatch({
@@ -486,13 +486,11 @@ export default React.createClass({
                 dis.dispatch({action: 'require_registration'});
                 willDoOnboarding = true;
             }
-            if (stateKey === GroupStore.STATE_KEY.Summary) {
-                this.setState({
-                    summary: null,
-                    error: err,
-                    editing: false,
-                });
-            }
+            this.setState({
+                summary: null,
+                error: err,
+                editing: false,
+            });
         });
     },
 
@@ -516,6 +514,7 @@ export default React.createClass({
             isUserMember: GroupStore.getGroupMembers(this.props.groupId).some(
                 (m) => m.userId === this._matrixClient.credentials.userId,
             ),
+            error: null,
         });
         // XXX: This might not work but this.props.groupIsNew unused anyway
         if (this.props.groupIsNew && firstInit) {
@@ -1080,7 +1079,6 @@ export default React.createClass({
     },
 
     _getJoinableNode: function() {
-        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         return this.state.editing ? <div>
             <h3>
                 { _t('Who can join this community?') }
@@ -1162,7 +1160,7 @@ export default React.createClass({
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
-        } else if (this.state.summary && !this.state.error) {
+        } else if (this.state.summary) {
             const summary = this.state.summary;
 
             let avatarNode;
