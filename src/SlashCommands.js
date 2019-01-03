@@ -135,6 +135,18 @@ export const CommandMap = {
         },
     }),
 
+    name: new Command({
+        name: 'name',
+        args: '<name>',
+        description: _td('Sets the room name'),
+        runFn: function(roomId, args) {
+            if (args) {
+                return success(MatrixClientPeg.get().setRoomName(roomId, args));
+            }
+            return reject(this.getUsage());
+        },
+    }),
+
     invite: new Command({
         name: 'invite',
         args: '<user-id>',
