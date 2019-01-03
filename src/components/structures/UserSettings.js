@@ -64,6 +64,7 @@ const SIMPLE_SETTINGS = [
     { id: "urlPreviewsEnabled" },
     { id: "autoplayGifsAndVideos" },
     { id: "alwaysShowEncryptionIcons" },
+    { id: "showRoomRecoveryReminder" },
     { id: "hideReadReceipts" },
     { id: "dontSendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
@@ -188,9 +189,11 @@ module.exports = React.createClass({
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
             vectorVersion: undefined,
+            canSelfUpdate: null,
             rejectingInvites: false,
             mediaDevices: null,
             ignoredUsers: [],
+            autoLaunchEnabled: null,
         };
     },
 
@@ -208,6 +211,13 @@ module.exports = React.createClass({
                 });
             }, (e) => {
                 console.log("Failed to fetch app version", e);
+            });
+
+            PlatformPeg.get().canSelfUpdate().then((canUpdate) => {
+                if (this._unmounted) return;
+                this.setState({
+                    canSelfUpdate: canUpdate,
+                });
             });
         }
 
@@ -227,11 +237,12 @@ module.exports = React.createClass({
         });
         this._refreshFromServer();
 
-        if (PlatformPeg.get().isElectron()) {
-            const {ipcRenderer} = require('electron');
-
-            ipcRenderer.on('settings', this._electronSettings);
-            ipcRenderer.send('settings_get');
+        if (PlatformPeg.get().supportsAutoLaunch()) {
+            PlatformPeg.get().getAutoLaunchEnabled().then(enabled => {
+                this.setState({
+                    autoLaunchEnabled: enabled,
+                });
+            });
         }
 
         this.setState({
@@ -262,11 +273,6 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
-
-        if (PlatformPeg.get().isElectron()) {
-            const {ipcRenderer} = require('electron');
-            ipcRenderer.removeListener('settings', this._electronSettings);
-        }
     },
 
     // `UserSettings` assumes that the client peg will not be null, so give it some
@@ -283,10 +289,6 @@ module.exports = React.createClass({
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
-    },
-
-    _electronSettings: function(ev, settings) {
-        this.setState({ electron_settings: settings });
     },
 
     _refreshMediaDevices: function(stream) {
@@ -943,7 +945,7 @@ module.exports = React.createClass({
 
     _renderCheckUpdate: function() {
         const platform = PlatformPeg.get();
-        if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
+        if (this.state.canSelfUpdate) {
             return <div>
                 <h3>{ _t('Updates') }</h3>
                 <div className="mx_UserSettings_section">
@@ -988,8 +990,7 @@ module.exports = React.createClass({
     },
 
     _renderElectronSettings: function() {
-        const settings = this.state.electron_settings;
-        if (!settings) return;
+        if (!PlatformPeg.get().supportsAutoLaunch()) return;
 
         // TODO: This should probably be a granular setting, but it only applies to electron
         // and ends up being get/set outside of matrix anyways (local system setting).
@@ -999,7 +1000,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_toggle">
                     <input type="checkbox"
                            name="auto-launch"
-                           defaultChecked={settings['auto-launch']}
+                           defaultChecked={this.state.autoLaunchEnabled}
                            onChange={this._onAutoLaunchChanged}
                     />
                     <label htmlFor="auto-launch">{ _t('Start automatically after system login') }</label>
@@ -1009,8 +1010,11 @@ module.exports = React.createClass({
     },
 
     _onAutoLaunchChanged: function(e) {
-        const {ipcRenderer} = require('electron');
-        ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
+        PlatformPeg.get().setAutoLaunchEnabled(e.target.checked).then(() => {
+            this.setState({
+                autoLaunchEnabled: e.target.checked,
+            });
+        });
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
@@ -1369,7 +1373,7 @@ module.exports = React.createClass({
                 { this._renderBulkOptions() }
                 { this._renderBugReport() }
 
-                { PlatformPeg.get().isElectron() && this._renderElectronSettings() }
+                { this._renderElectronSettings() }
 
                 { this._renderAnalyticsControl() }
 

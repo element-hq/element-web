@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.14.6",
+  "version": "0.14.7",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "files": [
+    ".babelrc",
     ".eslintrc.js",
     "CHANGELOG.md",
     "CONTRIBUTING.rst",
@@ -72,11 +73,12 @@
     "gfm.css": "^1.1.1",
     "glob": "^5.0.14",
     "highlight.js": "^9.13.0",
+    "is-ip": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
-    "matrix-js-sdk": "0.14.1",
+    "matrix-js-sdk": "0.14.2",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
@@ -96,7 +98,8 @@
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
     "velocity-vector": "github:vector-im/velocity#059e3b2",
-    "whatwg-fetch": "^1.1.1"
+    "whatwg-fetch": "^1.1.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

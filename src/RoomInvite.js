@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from 'react';
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
@@ -25,18 +26,6 @@ import dis from './dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import { _t } from './languageHandler';
 
-export function inviteToRoom(roomId, addr) {
-    const addrType = getAddressType(addr);
-
-    if (addrType == 'email') {
-        return MatrixClientPeg.get().inviteByEmail(roomId, addr);
-    } else if (addrType == 'mx-user-id') {
-        return MatrixClientPeg.get().invite(roomId, addr);
-    } else {
-        throw new Error('Unsupported address');
-    }
-}
-
 /**
  * Invites multiple addresses to a room
  * Simpler interface to utils/MultiInviter but with
@@ -46,9 +35,9 @@ export function inviteToRoom(roomId, addr) {
  * @param {string[]} addrs Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(roomId, addrs) {
+function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
-    return inviter.invite(addrs);
+    return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
 export function showStartChatInviteDialog() {
@@ -129,8 +118,8 @@ function _onStartChatFinished(shouldInvite, addrs) {
         createRoom().then((roomId) => {
             room = MatrixClientPeg.get().getRoom(roomId);
             return inviteMultipleToRoom(roomId, addrTexts);
-        }).then((addrs) => {
-            return _showAnyInviteErrors(addrs, room);
+        }).then((result) => {
+            return _showAnyInviteErrors(result.states, room, result.inviter);
         }).catch((err) => {
             console.error(err.stack);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -148,9 +137,9 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
     const addrTexts = addrs.map((addr) => addr.address);
 
     // Invite new users to a room
-    inviteMultipleToRoom(roomId, addrTexts).then((addrs) => {
+    inviteMultipleToRoom(roomId, addrTexts).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        return _showAnyInviteErrors(addrs, room);
+        return _showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
         console.error(err.stack);
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -169,22 +158,36 @@ function _isDmChat(addrTexts) {
     }
 }
 
-function _showAnyInviteErrors(addrs, room) {
+function _showAnyInviteErrors(addrs, room, inviter) {
     // Show user any errors
-    const errorList = [];
-    for (const addr of Object.keys(addrs)) {
-        if (addrs[addr] === "error") {
-            errorList.push(addr);
+    const failedUsers = Object.keys(addrs).filter(a => addrs[a] === 'error');
+    if (failedUsers.length === 1 && inviter.fatal) {
+        // Just get the first message because there was a fatal problem on the first
+        // user. This usually means that no other users were attempted, making it
+        // pointless for us to list who failed exactly.
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Failed to invite users to the room', '', ErrorDialog, {
+            title: _t("Failed to invite users to the room:", {roomName: room.name}),
+            description: inviter.getErrorText(failedUsers[0]),
+        });
+    } else {
+        const errorList = [];
+        for (const addr of failedUsers) {
+            if (addrs[addr] === "error") {
+                const reason = inviter.getErrorText(addr);
+                errorList.push(addr + ": " + reason);
+            }
+        }
+
+        if (errorList.length > 0) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
+                title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
+                description: errorList.join(<br />),
+            });
         }
     }
 
-    if (errorList.length > 0) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
-            title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
-            description: errorList.join(", "),
-        });
-    }
     return addrs;
 }
 

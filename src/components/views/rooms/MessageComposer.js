@@ -139,7 +139,8 @@ export default class MessageComposer extends React.Component {
     }
 
     onUploadFileSelected(files) {
-        this.uploadFiles(files.target.files);
+        const tfiles = files.target.files;
+        this.uploadFiles(tfiles);
     }
 
     uploadFiles(files) {
@@ -147,10 +148,21 @@ export default class MessageComposer extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const fileList = [];
+        const acceptedFiles = [];
+        const failedFiles = [];
+
         for (let i=0; i<files.length; i++) {
-            fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
-            </li>);
+            const fileAcceptedOrError = this.props.uploadAllowed(files[i]);
+            if (fileAcceptedOrError === true) {
+                acceptedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
+                </li>);
+                fileList.push(files[i]);
+            } else {
+                failedFiles.push(<li key={i}>
+                    <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') } <p>{ _t('Reason') + ": " + fileAcceptedOrError}</p>
+                </li>);
+            }
         }
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
@@ -161,23 +173,47 @@ export default class MessageComposer extends React.Component {
             }</p>;
         }
 
+        const acceptedFilesPart = acceptedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('Are you sure you want to upload the following files?') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { acceptedFiles }
+                </ul>
+            </div>
+        );
+
+        const failedFilesPart = failedFiles.length === 0 ? null : (
+            <div>
+                <p>{ _t('The following files cannot be uploaded:') }</p>
+                <ul style={{listStyle: 'none', textAlign: 'left'}}>
+                    { failedFiles }
+                </ul>
+            </div>
+        );
+        let buttonText;
+        if (acceptedFiles.length > 0 && failedFiles.length > 0) {
+            buttonText = "Upload selected"
+        } else if (failedFiles.length > 0) {
+            buttonText = "Close"
+        }
+
         Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
-                    <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                        { fileList }
-                    </ul>
+                    { acceptedFilesPart }
+                    { failedFilesPart }
                     { replyToWarning }
                 </div>
             ),
+            hasCancelButton: acceptedFiles.length > 0,
+            button: buttonText,
             onFinished: (shouldUpload) => {
                 if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-                    if (files) {
-                        for (let i=0; i<files.length; i++) {
-                            this.props.uploadFile(files[i]);
+                    if (fileList) {
+                        for (let i=0; i<fileList.length; i++) {
+                            this.props.uploadFile(fileList[i]);
                         }
                     }
                 }
@@ -459,6 +495,9 @@ MessageComposer.propTypes = {
     // callback when a file to upload is chosen
     uploadFile: PropTypes.func.isRequired,
 
+    // function to test whether a file should be allowed to be uploaded.
+    uploadAllowed: PropTypes.func.isRequired,
+
     // string representing the current room app drawer state
-    showApps: PropTypes.bool,
+    showApps: PropTypes.bool
 };

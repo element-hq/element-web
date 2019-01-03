@@ -134,6 +134,8 @@
     "Failed to join room": "Failed to join room",
     "Failed to kick": "Failed to kick",
     "Failed to leave room": "Failed to leave room",
+    "Failed to load %(groupId)s": "Failed to load %(groupId)s",
+    "Failed to load group members": "Failed to load group members",
     "Failed to load timeline position": "Failed to load timeline position",
     "Failed to mute user": "Failed to mute user",
     "Failed to reject invite": "Failed to reject invite",

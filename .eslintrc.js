@@ -47,6 +47,9 @@ module.exports = {
         }],
         "react/jsx-key": ["error"],
 
+        // Components in JSX should always be defined.
+        "react/jsx-no-undef": "error",
+
         // Assert no spacing in JSX curly brackets
         // <Element prop={ consideredError} prop={notConsideredError} />
         //

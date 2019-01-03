@@ -186,6 +186,8 @@ $lightbox-border-color: #ffffff;
 // unused?
 $progressbar-color: #000;
 
+$room-warning-bg-color: #fff8e3;
+
 /*** form elements ***/
 
 // .mx_textinput is a container for a text input
@@ -319,4 +321,12 @@ input[type=search]::-webkit-search-results-decoration {
     @mixin mx_DialogButton;
     font-size: 15px;
     padding: 0px 1.5em 0px 1.5em;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $accent-fg-color;
 }

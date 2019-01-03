@@ -26,9 +26,16 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
+import { AutoDiscovery } from "matrix-js-sdk";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
+
+// These are used in several places, and come from the js-sdk's autodiscovery
+// stuff. We define them here so that they'll be picked up by i18n.
+_td("Invalid homeserver discovery response");
+_td("Invalid identity server discovery response");
+_td("General failure");
 
 /**
  * A wire component which glues together login UI components and Login logic
@@ -49,6 +56,14 @@ module.exports = React.createClass({
         // the default HS but login fails. Useful for migrating to a
         // different home server without confusing users.
         fallbackHsUrl: PropTypes.string,
+
+        // The default server name to use when the user hasn't specified
+        // one. This is used when displaying the defaultHsUrl in the UI.
+        defaultServerName: PropTypes.string,
+
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
 
         defaultDeviceDisplayName: PropTypes.string,
 
@@ -74,6 +89,12 @@ module.exports = React.createClass({
             phoneCountry: null,
             phoneNumber: "",
             currentFlow: "m.login.password",
+
+            // .well-known discovery
+            discoveredHsUrl: "",
+            discoveredIsUrl: "",
+            discoveryError: "",
+            findingHomeserver: false,
         };
     },
 
@@ -105,6 +126,10 @@ module.exports = React.createClass({
     },
 
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
+        // Prevent people from submitting their password when homeserver
+        // discovery went wrong
+        if (this.state.discoveryError || this.props.defaultServerDiscoveryError) return;
+
         this.setState({
             busy: true,
             errorText: null,
@@ -221,6 +246,22 @@ module.exports = React.createClass({
         this.setState({ username: username });
     },
 
+    onUsernameBlur: function(username) {
+        this.setState({ username: username });
+        if (username[0] === "@") {
+            const serverName = username.split(':').slice(1).join(':');
+            try {
+                // we have to append 'https://' to make the URL constructor happy
+                // otherwise we get things like 'protocol: matrix.org, pathname: 8448'
+                const url = new URL("https://" + serverName);
+                this._tryWellKnownDiscovery(url.hostname);
+            } catch (e) {
+                console.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
+                this.setState({discoveryError: _t("Failed to perform homeserver discovery")});
+            }
+        }
+    },
+
     onPhoneCountryChanged: function(phoneCountry) {
         this.setState({ phoneCountry: phoneCountry });
     },
@@ -254,6 +295,59 @@ module.exports = React.createClass({
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
+    },
+
+    _tryWellKnownDiscovery: async function(serverName) {
+        if (!serverName.trim()) {
+            // Nothing to discover
+            this.setState({discoveryError: "", discoveredHsUrl: "", discoveredIsUrl: "", findingHomeserver: false});
+            return;
+        }
+
+        this.setState({findingHomeserver: true});
+        try {
+            const discovery = await AutoDiscovery.findClientConfig(serverName);
+            const state = discovery["m.homeserver"].state;
+            if (state !== AutoDiscovery.SUCCESS && state !== AutoDiscovery.PROMPT) {
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: discovery["m.homeserver"].error,
+                    findingHomeserver: false,
+                });
+            } else if (state === AutoDiscovery.PROMPT) {
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: "",
+                    findingHomeserver: false,
+                });
+            } else if (state === AutoDiscovery.SUCCESS) {
+                this.setState({
+                    discoveredHsUrl: discovery["m.homeserver"].base_url,
+                    discoveredIsUrl:
+                        discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                            ? discovery["m.identity_server"].base_url
+                            : "",
+                    discoveryError: "",
+                    findingHomeserver: false,
+                });
+            } else {
+                console.warn("Unknown state for m.homeserver in discovery response: ", discovery);
+                this.setState({
+                    discoveredHsUrl: "",
+                    discoveredIsUrl: "",
+                    discoveryError: _t("Unknown failure discovering homeserver"),
+                    findingHomeserver: false,
+                });
+            }
+        } catch (e) {
+            console.error(e);
+            this.setState({
+                findingHomeserver: false,
+                discoveryError: _t("Unknown error discovering homeserver"),
+            });
+        }
     },
 
     _initLoginLogic: function(hsUrl, isUrl) {
@@ -393,11 +487,14 @@ module.exports = React.createClass({
                initialPhoneCountry={this.state.phoneCountry}
                initialPhoneNumber={this.state.phoneNumber}
                onUsernameChanged={this.onUsernameChanged}
+               onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}
                onPhoneNumberChanged={this.onPhoneNumberChanged}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
+               hsName={this.props.defaultServerName}
+               disableSubmit={this.state.findingHomeserver}
                />
         );
     },
@@ -416,6 +513,8 @@ module.exports = React.createClass({
         const ServerConfig = sdk.getComponent("login.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
+        const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
+
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
@@ -430,8 +529,8 @@ module.exports = React.createClass({
         if (!SdkConfig.get()['disable_custom_urls']) {
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
-                customHsUrl={this.props.customHsUrl}
-                customIsUrl={this.props.customIsUrl}
+                customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
+                customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
                 defaultHsUrl={this.props.defaultHsUrl}
                 defaultIsUrl={this.props.defaultIsUrl}
                 onServerConfigChange={this.onServerConfigChange}
@@ -443,16 +542,16 @@ module.exports = React.createClass({
         if (theme !== "status") {
             header = <h2>{ _t('Sign in') } { loader }</h2>;
         } else {
-            if (!this.state.errorText) {
+            if (!errorText) {
                 header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
             }
         }
 
         let errorTextSection;
-        if (this.state.errorText) {
+        if (errorText) {
             errorTextSection = (
                 <div className="mx_Login_error">
-                    { this.state.errorText }
+                    { errorText }
                 </div>
             );
         }

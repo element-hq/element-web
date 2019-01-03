@@ -289,6 +289,11 @@ const Notifier = {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
+            dis.dispatch({
+                action: "event_notification",
+                event: ev,
+                room: room,
+            });
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
             }
