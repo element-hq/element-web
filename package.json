@@ -157,7 +157,8 @@
       "img/**"
     ],
     "extraResources": [
-      "webapp/**/*"
+      "webapp/**/*",
+      "origin_migrator/**/*"
     ],
     "linux": {
       "target": "deb",
