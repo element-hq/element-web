@@ -109,11 +109,6 @@ module.exports = {
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
         },
     },
-    externals: {
-        // Don't try to bundle electron: leave it as a commonjs dependency
-        // (the 'commonjs' here means it will output a 'require')
-        "electron": "commonjs electron",
-    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {

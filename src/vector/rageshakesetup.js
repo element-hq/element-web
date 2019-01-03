@@ -26,10 +26,13 @@ limitations under the License.
  */
 
 import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 function initRageshake() {
     rageshake.init().then(() => {
-        console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
+        console.log("Initialised rageshake.");
+        console.log("To fix line numbers in Chrome: " +
+            "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
 
         window.addEventListener('beforeunload', (e) => {
             console.log('riot-web closing');
@@ -44,3 +47,18 @@ function initRageshake() {
 }
 
 initRageshake();
+
+global.mxSendRageshake = function(text, withLogs) {
+    if (withLogs === undefined) withLogs = true;
+    require(['matrix-react-sdk/lib/rageshake/submit-rageshake'], (s) => {
+        s(SdkConfig.get().bug_report_endpoint_url, {
+            userText: text,
+            sendLogs: withLogs,
+            progressCallback: console.log.bind(console),
+        }).then(() => {
+            console.log("Bug report sent!");
+        }, (err) => {
+            console.error(err);
+        });
+    });
+};
