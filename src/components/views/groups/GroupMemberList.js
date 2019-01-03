@@ -37,9 +37,7 @@ export default React.createClass({
     getInitialState: function() {
         return {
             members: null,
-            membersError: null,
             invitedMembers: null,
-            invitedMembersError: null,
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
     },
@@ -56,19 +54,6 @@ export default React.createClass({
     _initGroupStore: function(groupId) {
         GroupStore.registerListener(groupId, () => {
             this._fetchMembers();
-        });
-        GroupStore.on('error', (err, errorGroupId, stateKey) => {
-            if (this._unmounted || groupId !== errorGroupId) return;
-            if (stateKey === GroupStore.STATE_KEY.GroupMembers) {
-                this.setState({
-                    membersError: err,
-                });
-            }
-            if (stateKey === GroupStore.STATE_KEY.GroupInvitedMembers) {
-                this.setState({
-                    invitedMembersError: err,
-                });
-            }
         });
     },
 
@@ -103,11 +88,7 @@ export default React.createClass({
         this.setState({ searchQuery: ev.target.value });
     },
 
-    makeGroupMemberTiles: function(query, memberList, memberListError) {
-        if (memberListError) {
-            return <div className="warning">{ _t("Failed to load group members") }</div>;
-        }
-
+    makeGroupMemberTiles: function(query, memberList) {
         const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         query = (query || "").toLowerCase();
@@ -185,25 +166,13 @@ export default React.createClass({
         );
 
         const joined = this.state.members ? <div className="mx_MemberList_joined">
-            {
-                this.makeGroupMemberTiles(
-                    this.state.searchQuery,
-                    this.state.members,
-                    this.state.membersError,
-                )
-            }
+            { this.makeGroupMemberTiles(this.state.searchQuery, this.state.members) }
         </div> : <div />;
 
         const invited = (this.state.invitedMembers && this.state.invitedMembers.length > 0) ?
             <div className="mx_MemberList_invited">
-                <h2>{_t("Invited")}</h2>
-                {
-                    this.makeGroupMemberTiles(
-                        this.state.searchQuery,
-                        this.state.invitedMembers,
-                        this.state.invitedMembersError,
-                    )
-                }
+                <h2>{ _t("Invited") }</h2>
+                { this.makeGroupMemberTiles(this.state.searchQuery, this.state.invitedMembers) }
             </div> : <div />;
 
         let inviteButton;

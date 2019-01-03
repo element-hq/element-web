@@ -154,7 +154,6 @@ export default class KeyBackupPanel extends React.Component {
             }
 
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
-                const deviceName = sig.device.getDisplayName() || sig.device.deviceId;
                 const sigStatusSubstitutions = {
                     validity: sub =>
                         <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>
@@ -164,7 +163,7 @@ export default class KeyBackupPanel extends React.Component {
                         <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
                             {sub}
                         </span>,
-                    device: sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>,
+                    device: sub => <span className="mx_KeyBackupPanel_deviceName">{sig.device.getDisplayName()}</span>,
                 };
                 let sigStatus;
                 if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()) {
@@ -175,7 +174,7 @@ export default class KeyBackupPanel extends React.Component {
                 } else if (sig.valid && sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
-                        "<verify>verified</verify> device <device></device>",
+                        "<verify>verified</verify> device <device>x</device>",
                         {}, sigStatusSubstitutions,
                     );
                 } else if (sig.valid && !sig.device.isVerified()) {

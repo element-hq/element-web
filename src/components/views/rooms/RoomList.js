@@ -83,10 +83,8 @@ module.exports = React.createClass({
             isLoadingLeftRooms: false,
             totalRoomCount: null,
             lists: {},
-            incomingCallTag: null,
             incomingCall: null,
             selectedTags: [],
-            hover: false,
         };
     },
 
@@ -201,13 +199,11 @@ module.exports = React.createClass({
                 if (call && call.call_state === 'ringing') {
                     this.setState({
                         incomingCall: call,
-                        incomingCallTag: this.getTagNameForRoomId(payload.room_id),
                     });
                     this._repositionIncomingCallBox(undefined, true);
                 } else {
                     this.setState({
                         incomingCall: null,
-                        incomingCallTag: null,
                     });
                 }
                 break;
@@ -295,17 +291,6 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
-    onMouseEnter: function(ev) {
-        this.setState({hover: true});
-    },
-
-    onMouseLeave: function(ev) {
-        this.setState({hover: false});
-
-        // Refresh the room list just in case the user missed something.
-        this._delayedRefreshRoomList();
-    },
-
     _delayedRefreshRoomList: new rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
@@ -358,11 +343,6 @@ module.exports = React.createClass({
     },
 
     refreshRoomList: function() {
-        if (this.state.hover) {
-            // Don't re-sort the list if we're hovering over the list
-            return;
-        }
-
         // TODO: ideally we'd calculate this once at start, and then maintain
         // any changes to it incrementally, updating the appropriate sublists
         // as needed.
@@ -386,26 +366,6 @@ module.exports = React.createClass({
         });
 
         // this._lastRefreshRoomListTs = Date.now();
-    },
-
-    getTagNameForRoomId: function(roomId) {
-        const lists = RoomListStore.getRoomLists();
-        for (const tagName of Object.keys(lists)) {
-            for (const room of lists[tagName]) {
-                // Should be impossible, but guard anyways.
-                if (!room) {
-                    continue;
-                }
-                const myUserId = MatrixClientPeg.get().getUserId();
-                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, myUserId, this.props.ConferenceHandler)) {
-                    continue;
-                }
-
-                if (room.roomId === roomId) return tagName;
-            }
-        }
-
-        return null;
     },
 
     getRoomLists: function() {
@@ -621,12 +581,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const incomingCallIfTaggedAs = (tagName) => {
-            if (!this.state.incomingCall) return null;
-            if (this.state.incomingCallTag !== tagName) return null;
-            return this.state.incomingCall;
-        };
-
         let subLists = [
             {
                 list: [],
@@ -639,7 +593,6 @@ module.exports = React.createClass({
                 list: this.state.lists['im.vector.fake.invite'],
                 label: _t('Invites'),
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.invite'),
                 isInvite: true,
             },
             {
@@ -647,7 +600,6 @@ module.exports = React.createClass({
                 label: _t('Favourites'),
                 tagName: "m.favourite",
                 order: "manual",
-                incomingCall: incomingCallIfTaggedAs('m.favourite'),
             },
             {
                 list: this.state.lists['im.vector.fake.direct'],
@@ -655,7 +607,6 @@ module.exports = React.createClass({
                 tagName: "im.vector.fake.direct",
                 headerItems: this._getHeaderItems('im.vector.fake.direct'),
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.direct'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_chat'})},
             },
             {
@@ -663,7 +614,6 @@ module.exports = React.createClass({
                 label: _t('Rooms'),
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
             },
         ];
@@ -677,7 +627,6 @@ module.exports = React.createClass({
                     label: labelForTagName(tagName),
                     tagName: tagName,
                     order: "manual",
-                    incomingCall: incomingCallIfTaggedAs(tagName),
                 };
             });
         subLists = subLists.concat(tagSubLists);
@@ -687,13 +636,11 @@ module.exports = React.createClass({
                 label: _t('Low priority'),
                 tagName: "m.lowpriority",
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('m.lowpriority'),
             },
             {
                 list: this.state.lists['im.vector.fake.archived'],
                 label: _t('Historical'),
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('im.vector.fake.archived'),
                 startAsHidden: true,
                 showSpinner: this.state.isLoadingLeftRooms,
                 onHeaderClick: this.onArchivedHeaderClick,
@@ -703,15 +650,13 @@ module.exports = React.createClass({
                 label: _t('System Alerts'),
                 tagName: "m.lowpriority",
                 order: "recent",
-                incomingCall: incomingCallIfTaggedAs('m.server_notice'),
             },
         ]);
 
         const subListComponents = this._mapSubListProps(subLists);
 
         return (
-            <div ref={this._collectResizeContainer} className="mx_RoomList"
-                 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div ref={this._collectResizeContainer} className="mx_RoomList">
                 { subListComponents }
             </div>
         );

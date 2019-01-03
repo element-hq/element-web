@@ -150,39 +150,7 @@ describe('matrix-to', function() {
         expect(pickedServers[2]).toBe("third");
     });
 
-    it('should pick a maximum of 3 candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:alpha",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@alice:bravo",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:charlie",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:delta",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:echo",
-                        powerLevel: 0,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(3);
-    });
-
-    it('should not consider IPv4 hosts', function() {
+    it('should work with IPv4 hostnames', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -195,10 +163,11 @@ describe('matrix-to', function() {
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
+        expect(pickedServers.length).toBe(1);
+        expect(pickedServers[0]).toBe("127.0.0.1");
     });
 
-    it('should not consider IPv6 hosts', function() {
+    it('should work with IPv6 hostnames', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -211,10 +180,11 @@ describe('matrix-to', function() {
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
+        expect(pickedServers.length).toBe(1);
+        expect(pickedServers[0]).toBe("[::1]");
     });
 
-    it('should not consider IPv4 hostnames with ports', function() {
+    it('should work with IPv4 hostnames with ports', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -227,10 +197,11 @@ describe('matrix-to', function() {
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
+        expect(pickedServers.length).toBe(1);
+        expect(pickedServers[0]).toBe("127.0.0.1:8448");
     });
 
-    it('should not consider IPv6 hostnames with ports', function() {
+    it('should work with IPv6 hostnames with ports', function() {
         peg.get().getRoom = () => {
             return {
                 getJoinedMembers: () => [
@@ -243,7 +214,8 @@ describe('matrix-to', function() {
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
         expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
+        expect(pickedServers.length).toBe(1);
+        expect(pickedServers[0]).toBe("[::1]:8448");
     });
 
     it('should work with hostnames with ports', function() {
@@ -261,140 +233,6 @@ describe('matrix-to', function() {
         expect(pickedServers).toExist();
         expect(pickedServers.length).toBe(1);
         expect(pickedServers[0]).toBe("example.org:8448");
-    });
-
-    it('should not consider servers explicitly denied by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: ["evilcorp.com", "*.evilcorp.com"],
-                                    allow: ["*"],
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
-    });
-
-    it('should not consider servers not allowed by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: [],
-                                    allow: [], // implies "ban everyone"
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(0);
-    });
-
-    it('should consider servers not explicitly banned by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: ["*.evilcorp.com"], // evilcorp.com is still good though
-                                    allow: ["*"],
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(1);
-        expect(pickedServers[0]).toEqual("evilcorp.com");
-    });
-
-    it('should consider servers not disallowed by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: [],
-                                    allow: ["evilcorp.com"], // implies "ban everyone else"
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
-        expect(pickedServers.length).toBe(1);
-        expect(pickedServers[0]).toEqual("evilcorp.com");
     });
 
     it('should generate an event permalink for room IDs with no candidate servers', function() {

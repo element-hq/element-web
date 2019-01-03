@@ -151,11 +151,6 @@ export const SETTINGS = {
         displayName: _td('Always show encryption icons'),
         default: true,
     },
-    "showRoomRecoveryReminder": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),
-        default: true,
-    },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
