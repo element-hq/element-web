@@ -52,7 +52,7 @@ limitations under the License.
 .mx_RoomTile_nameContainer {
     display: flex;
     align-items: center;
-    width: 180px;
+    flex: 1;
     vertical-align: middle;
 }
 
@@ -60,11 +60,6 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex: 1;
-}
-
-.mx_RoomTile_avatar {
-    flex: 0;
-    padding: 4px;
 }
 
 .mx_RoomTile_subtext {
@@ -84,11 +79,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_avatar {
-    display: inline-block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 16px;
-    padding-right: 6px;
+    flex: 0;
+    padding: 4px;
     width: 24px;
     vertical-align: middle;
 }
