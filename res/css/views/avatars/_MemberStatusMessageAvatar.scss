@@ -17,4 +17,5 @@ limitations under the License.
 .mx_MemberStatusMessageAvatar_hasStatus {
     border: 2px solid $accent-color;
     border-radius: 40px;
+    padding-right: 0 !important; /* Override AccessibleButton styling */
 }
