@@ -37,7 +37,7 @@ describe('MemberList', () => {
     let moderatorUsers = [];
     let defaultUsers = [];
 
-    beforeEach(function (){
+    beforeEach(function() {
         TestUtils.beforeEach(this);
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
