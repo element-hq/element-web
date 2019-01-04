@@ -135,8 +135,8 @@ export const CommandMap = {
         },
     }),
 
-    name: new Command({
-        name: 'name',
+    roomname: new Command({
+        name: 'roomname',
         args: '<name>',
         description: _td('Sets the room name'),
         runFn: function(roomId, args) {
