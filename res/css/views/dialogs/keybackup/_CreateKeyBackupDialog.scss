@@ -18,6 +18,11 @@ limitations under the License.
     padding-right: 40px;
 }
 
+.mx_CreateKeyBackupDialog .mx_Dialog_title {
+    /* TODO: Consider setting this for all dialog titles. */
+    margin-bottom: 1em;
+}
+
 .mx_CreateKeyBackupDialog_primaryContainer {
     /*FIXME: plinth colour in new theme(s). background-color: $accent-color;*/
     padding: 20px
