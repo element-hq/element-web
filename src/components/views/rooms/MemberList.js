@@ -327,7 +327,7 @@ module.exports = React.createClass({
         }
 
         // Third by last active
-        if (this._showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs) {
+        if (this._showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
             // console.log("Comparing on last active timestamp - returning");
             return userB.getLastActiveTs() - userA.getLastActiveTs();
         }
