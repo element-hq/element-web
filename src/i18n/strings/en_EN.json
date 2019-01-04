@@ -1382,7 +1382,6 @@
     "<b>Print it</b> and store it somewhere safe": "<b>Print it</b> and store it somewhere safe",
     "<b>Save it</b> on a USB key or backup drive": "<b>Save it</b> on a USB key or backup drive",
     "<b>Copy it</b> to your personal cloud storage": "<b>Copy it</b> to your personal cloud storage",
-    "Got it": "Got it",
     "Backup created": "Backup created",
     "Your encryption keys are now being backed up to your Homeserver.": "Your encryption keys are now being backed up to your Homeserver.",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.",

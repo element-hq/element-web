@@ -180,7 +180,7 @@ export default React.createClass({
         });
     },
 
-    _onKeepItSafeGotItClick: function() {
+    _onKeepItSafeBackClick: function() {
         this.setState({
             phase: PHASE_SHOWKEY,
         });
@@ -342,8 +342,6 @@ export default React.createClass({
     },
 
     _renderPhaseShowKey: function() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let bodyText;
         if (this.state.setPassPhrase) {
             bodyText = _t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.");
@@ -372,12 +370,6 @@ export default React.createClass({
                     </div>
                 </div>
             </p>
-            <br />
-            <DialogButtons primaryButton={_t("I've made a copy")}
-                onPrimaryButtonClick={this._createBackup}
-                hasCancel={false}
-                disabled={!this.state.copied && !this.state.downloaded}
-            />
         </div>;
     },
 
@@ -402,10 +394,11 @@ export default React.createClass({
                 <li>{_t("<b>Save it</b> on a USB key or backup drive", {}, {b: s => <b>{s}</b>})}</li>
                 <li>{_t("<b>Copy it</b> to your personal cloud storage", {}, {b: s => <b>{s}</b>})}</li>
             </ul>
-            <DialogButtons primaryButton={_t("Got it")}
-                onPrimaryButtonClick={this._onKeepItSafeGotItClick}
-                hasCancel={false}
-            />
+            <DialogButtons primaryButton={_t("OK")}
+                onPrimaryButtonClick={this._createBackup}
+                hasCancel={false}>
+                <button onClick={this._onKeepItSafeBackClick}>{_t("Back")}</button>
+            </DialogButtons>
         </div>;
     },
 
