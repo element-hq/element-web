@@ -50,9 +50,16 @@ limitations under the License.
 
 
 .mx_RoomTile_nameContainer {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     width: 180px;
     vertical-align: middle;
+}
+
+.mx_RoomTile_labelContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .mx_RoomTile_avatar {
@@ -103,7 +110,7 @@ limitations under the License.
     flex: 1 5 auto;
     font-size: 14px;
     font-weight: 600;
-    padding: 6px;
+    padding: 0 6px;
     color: $roomtile-name-color;
     white-space: nowrap;
     overflow-x: hidden;

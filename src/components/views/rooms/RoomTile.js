@@ -354,8 +354,10 @@ module.exports = React.createClass({
                 </div>
             </div>
             <div className="mx_RoomTile_nameContainer">
-                { label }
-                { subtextLabel }
+                <div className="mx_RoomTile_labelContainer">
+                    { label }
+                    { subtextLabel }
+                </div>
                 { contextMenuButton }
                 { badge }
             </div>
