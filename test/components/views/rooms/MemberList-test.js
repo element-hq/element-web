@@ -170,7 +170,7 @@ describe('MemberList', () => {
             if (!groupChange) {
                 if (isPresenceEnabled) {
                     console.log("Comparing last active timestamp...");
-                    expect(userB.getLastActiveTs()).toBeGreaterThanOrEqual(userA.getLastActiveTs());
+                    expect(userB.getLastActiveTs()).toBeLessThanOrEqual(userA.getLastActiveTs());
                     groupChange = userA.getLastActiveTs() !== userB.getLastActiveTs();
                 } else {
                     console.log("Skipping last active timestamp");
@@ -245,14 +245,17 @@ describe('MemberList', () => {
                 const semiActiveUsers = [adminUsers[0]];
                 const inactiveUsers = [...moderatorUsers, ...adminUsers.slice(1), ...defaultUsers.slice(1)];
                 activeUsers.forEach((u) => {
+                    u.powerLevel = 100; // set everyone to the same PL to avoid running that check
                     u.user.lastPresenceTs = 1000;
                     u.user.lastActiveAgo = 0;
                 });
                 semiActiveUsers.forEach((u) => {
+                    u.powerLevel = 100;
                     u.user.lastPresenceTs = 1000;
                     u.user.lastActiveAgo = 50;
                 });
                 inactiveUsers.forEach((u) => {
+                    u.powerLevel = 100;
                     u.user.lastPresenceTs = 1000;
                     u.user.lastActiveAgo = 100;
                 });
