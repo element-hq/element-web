@@ -185,6 +185,10 @@ module.exports = React.createClass({
     },
 
     _updateList: new rate_limited_func(function() {
+        this._updateListNow();
+    }, 500),
+
+    _updateListNow: function() {
         // console.log("Updating memberlist");
         const newState = {
             loading: false,
@@ -193,7 +197,7 @@ module.exports = React.createClass({
         newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
         newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
-    }, 500),
+    },
 
     getMembersWithUser: function() {
         if (!this.props.roomId) return [];
@@ -272,7 +276,7 @@ module.exports = React.createClass({
             return "(null)";
         } else {
             const u = member.user;
-            return "(" + member.name + ", " + member.powerLevel + ", " + (u ? u.lastActiveAgo : "<null>") + ", " + (u ? u.getLastActiveTs() : "<null>") + ", " + (u ? u.currentlyActive : "<null>") + ")";
+            return "(" + member.name + ", " + member.powerLevel + ", " + (u ? u.lastActiveAgo : "<null>") + ", " + (u ? u.getLastActiveTs() : "<null>") + ", " + (u ? u.currentlyActive : "<null>") + ", " + (u ? u.presence : "<null>") + ")";
         }
     },
 
