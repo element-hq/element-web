@@ -39,7 +39,7 @@ describe('matrix-to', function() {
     it('should pick no candidate servers when the room is not found', function() {
         peg.get().getRoom = () => null;
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -50,7 +50,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -74,7 +74,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(3);
         expect(pickedServers[0]).toBe("pl_95");
         // we don't check the 2nd and 3rd servers because that is done by the next test
@@ -112,7 +112,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(3);
         expect(pickedServers[0]).toBe("first");
         expect(pickedServers[1]).toBe("second");
@@ -143,7 +143,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(3);
         expect(pickedServers[0]).toBe("first");
         expect(pickedServers[1]).toBe("second");
@@ -178,7 +178,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(3);
     });
 
@@ -194,7 +194,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -210,7 +210,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -226,7 +226,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -242,7 +242,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -258,7 +258,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(1);
         expect(pickedServers[0]).toBe("example.org:8448");
     });
@@ -292,7 +292,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -325,7 +325,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(0);
     });
 
@@ -358,7 +358,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(1);
         expect(pickedServers[0]).toEqual("evilcorp.com");
     });
@@ -392,7 +392,7 @@ describe('matrix-to', function() {
             };
         };
         const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toExist();
+        expect(pickedServers).toBeTruthy();
         expect(pickedServers.length).toBe(1);
         expect(pickedServers[0]).toEqual("evilcorp.com");
     });

@@ -162,6 +162,18 @@ module.exports = React.createClass({
         this.setState(newState);
     },
 
+    onLoginClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onLoginClick();
+    },
+
+    onRegisterClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onRegisterClick();
+    },
+
     showErrorDialog: function(body, title) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
@@ -253,10 +265,10 @@ module.exports = React.createClass({
                     </form>
                     { serverConfigSection }
                     { errorText }
-                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                    <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
                         { _t('Return to login screen') }
                     </a>
-                    <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
+                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
                         { _t('Create an account') }
                     </a>
                     <LanguageSelector />

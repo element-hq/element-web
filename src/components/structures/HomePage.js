@@ -91,11 +91,15 @@ class HomePage extends React.Component {
         this._unmounted = true;
     }
 
-    onLoginClick() {
+    onLoginClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
         dis.dispatch({ action: 'start_login' });
     }
 
-    onRegisterClick() {
+    onRegisterClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
         dis.dispatch({ action: 'start_registration' });
     }
 

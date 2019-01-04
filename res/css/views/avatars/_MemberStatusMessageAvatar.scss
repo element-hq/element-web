@@ -14,12 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CreateKeyBackupDialog {
-    padding-right: 40px;
-}
-
-.mx_CreateKeyBackupDialog_recoveryKey {
-    padding: 20px;
-    color: $info-plinth-fg-color;
-    background-color: $info-plinth-bg-color;
+.mx_MemberStatusMessageAvatar_hasStatus {
+    border: 2px solid $accent-color;
+    border-radius: 40px;
+    padding-right: 0 !important; /* Override AccessibleButton styling */
 }

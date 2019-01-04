@@ -163,6 +163,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+        MatrixClientPeg.get().on("crypto.keyBackupStatus", this.onKeyBackupStatus);
         this._fetchMediaConfig();
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -451,6 +452,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
+            MatrixClientPeg.get().removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -620,6 +622,11 @@ module.exports = React.createClass({
                 false,
             );
         }
+    },
+
+    onKeyBackupStatus() {
+        // Key backup status changes affect whether the in-room recovery
+        // reminder is displayed.
         this.forceUpdate();
     },
 

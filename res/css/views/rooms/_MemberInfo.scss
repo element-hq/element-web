@@ -132,6 +132,13 @@ limitations under the License.
     margin-left: 8px;
 }
 
+.mx_MemberInfo_statusMessage {
+    font-size: 11px;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
 .mx_MemberInfo .mx_MemberInfo_scrollContainer {
     flex: 1;
 }

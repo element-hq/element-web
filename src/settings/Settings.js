@@ -83,6 +83,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_custom_status": {
+        isFeature: true,
+        displayName: _td("Custom user status messages"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_lazyloading": {
         isFeature: true,
         displayName: _td("Increase performance by only loading room members on first view"),
