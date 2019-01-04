@@ -9,7 +9,7 @@ import * as TestUtils from 'test-utils';
 import sdk from '../../../../src/index';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
-import {MatrixClient, Room, RoomMember, User} from 'matrix-js-sdk';
+import {Room, RoomMember, User} from 'matrix-js-sdk';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -37,7 +37,7 @@ describe('MemberList', () => {
     let moderatorUsers = [];
     let defaultUsers = [];
 
-    beforeEach(function () {
+    beforeEach(function (){
         TestUtils.beforeEach(this);
         sandbox = TestUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
@@ -53,6 +53,9 @@ describe('MemberList', () => {
         expect(memberListRoom.roomId).toBeTruthy();
 
         // Make users
+        adminUsers = [];
+        moderatorUsers = [];
+        defaultUsers = [];
         const usersPerLevel = 2;
         for (let i = 0; i < usersPerLevel; i++) {
             const adminUser = new RoomMember(memberListRoom.roomId, `@admin${i}:localhost`);
@@ -104,7 +107,7 @@ describe('MemberList', () => {
             memberList = r;
         };
         root = ReactDOM.render(<WrappedMemberList roomId={memberListRoom.roomId}
-                                                  wrappedRef={gatherWrappedRef}/>, parentDiv);
+                                                  wrappedRef={gatherWrappedRef} />, parentDiv);
     });
 
     afterEach((done) => {
