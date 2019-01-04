@@ -79,3 +79,8 @@ limitations under the License.
     display: flex;
     align-items: center;
 }
+
+.mx_CreateKeyBackupDialog_recoveryKeyButtons button {
+    flex: 1;
+    white-space: nowrap;
+}
