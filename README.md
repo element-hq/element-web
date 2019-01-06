@@ -131,7 +131,7 @@ for now.
 Development
 ===========
 
-Ensure you have the latest stable Node JS runtime installed. Then check out
+Ensure you have the latest stable Node JS runtime installed (v8.x is the best choice). Then check out
 the code and pull in dependencies:
 
 ```bash
