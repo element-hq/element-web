@@ -1292,5 +1292,19 @@
     "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible.</b>": "Isso tornará sua conta permanentemente inutilizável. Você não poderá efetuar login e ninguém poderá registrar novamente o mesmo ID de usuário. Isso fará com que sua conta deixe todas as salas nas quais está participando e removerá os detalhes da sua conta do seu servidor de identidade. <b>Esta ação é irreversível.</ b>",
     "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "Desativar sua conta <b>não faz com que, por padrão, esqueçamos as mensagens que você enviou.</ B> Se você quiser que esqueçamos suas mensagens, marque a caixa abaixo.",
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "A visibilidade da mensagem no Matrix é semelhante ao e-mail. O fato de esquecermos suas mensagens significa que as mensagens que você enviou não serão compartilhadas com usuários novos ou não registrados, mas os usuários registrados que já têm acesso a essas mensagens ainda terão acesso a suas cópias.",
-    "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (<b>Aviso:</ b> isso fará com que futuros usuários vejam uma visão incompleta das conversas)"
+    "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Por favor, esqueça todas as mensagens que enviei quando minha conta for desativada (<b>Aviso:</ b> isso fará com que futuros usuários vejam uma visão incompleta das conversas)",
+    "To continue, please enter your password:": "Para continuar, por favor digite sua senha:",
+    "password": "senha",
+    "Incompatible local cache": "Cache local incompatível",
+    "Clear cache and resync": "Limpar cache e ressincronizar",
+    "Riot now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "Riot agora usa 3-5x menos memória, pois carrega informação sobre outros usuários apenas quando necessário. Por favor, aguarde enquanto ressincronizamos com o servidor!",
+    "Updating Riot": "Atualizando Riot",
+    "Failed to upgrade room": "Falha ao atualizar a sala",
+    "The room upgrade could not be completed": "A atualização da sala não pode ser completada",
+    "Upgrade this room to version %(version)s": "Atualize essa sala para versão %(version)s",
+    "Upgrade Room Version": "Atualize a Versão da Sala",
+    "Upgrading this room requires closing down the current instance of the room and creating a new room it its place. To give room members the best possible experience, we will:": "Atualização dessa sala requer fechar a instância atual e criar uma nova sala em seu lugar. Para dar aos usuários a melhor experiência possível, nós vamos:",
+    "Create a new room with the same name, description and avatar": "Criar uma nova sala com o mesmo nome, descrição e avatar",
+    "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Impedir usuários de conversar na versão antiga da sala e postar uma mensagem aconselhando os usuários a migrarem para a nova sala",
+    "Put a link back to the old room at the start of the new room so people can see old messages": "Colocar um link para a sala antiga no começo da sala nova de modo que as pessoas possam ver mensagens antigas"
 }
