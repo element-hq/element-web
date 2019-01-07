@@ -104,7 +104,7 @@ export default class RoomGridView extends React.Component {
         }
 
         return (<main className="mx_GroupGridView">
-            <MainSplit panel={rightPanel}>
+            <MainSplit panel={rightPanel} disableSizing={this.props.collapsedRhs}  >
                 <div className="mx_GroupGridView_rooms">
                     { roomStores.map((roomStore, i) => {
                         if (roomStore) {
