@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 
 export default class HeaderButtons extends React.Component {
@@ -25,7 +26,7 @@ export default class HeaderButtons extends React.Component {
         super(props);
 
         this.state = {
-            phase: initialPhase,
+            phase: props.collapsedRhs ? null : initialPhase,
             isUserPrivilegedInGroup: null,
         };
         this.onAction = this.onAction.bind(this);
@@ -47,11 +48,42 @@ export default class HeaderButtons extends React.Component {
         }, extras));
     }
 
+    isPhase(phases) {
+        if (this.props.collapsedRhs) {
+            return false;
+        }
+        if (Array.isArray(phases)) {
+            return phases.includes(this.state.phase);
+        } else {
+            return phases === this.state.phase;
+        }
+    }
+
     onAction(payload) {
         if (payload.action === "view_right_panel_phase") {
-            this.setState({
-                phase: payload.phase,
-            });
+            // only actions coming from header buttons should collapse the right panel
+            if (this.state.phase === payload.phase && payload.fromHeader) {
+                dis.dispatch({
+                    action: 'hide_right_panel',
+                });
+                this.setState({
+                    phase: null,
+                });
+            } else {
+                if (this.props.collapsedRhs && payload.fromHeader) {
+                    dis.dispatch({
+                        action: 'show_right_panel',
+                    });
+                    // emit payload again as the RightPanel didn't exist up
+                    // till show_right_panel, just without the fromHeader flag
+                    // as that would hide the right panel again
+                    dis.dispatch(Object.assign({}, payload, {fromHeader: false}));
+
+                }
+                this.setState({
+                    phase: payload.phase,
+                });
+            }
         }
     }
 
@@ -62,3 +94,7 @@ export default class HeaderButtons extends React.Component {
         </div>;
     }
 }
+
+HeaderButtons.propTypes = {
+    collapsedRhs: PropTypes.bool,
+};

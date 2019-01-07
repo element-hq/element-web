@@ -29,6 +29,7 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -250,6 +251,17 @@ module.exports = React.createClass({
         const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
         const badges = notifBadges || mentionBadges;
 
+        const isJoined = this.props.room.getMyMembership() === "join";
+        const looksLikeDm = this.props.room.getInvitedAndJoinedMemberCount() === 2;
+        let subtext = null;
+        if (!isInvite && isJoined && looksLikeDm && SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            const selfId = MatrixClientPeg.get().getUserId();
+            const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
+            if (otherMember && otherMember.user && otherMember.user._unstable_statusMessage) {
+                subtext = otherMember.user._unstable_statusMessage;
+            }
+        }
+
         const classes = classNames({
             'mx_RoomTile': true,
             'mx_RoomTile_selected': this.state.selected,
@@ -260,6 +272,7 @@ module.exports = React.createClass({
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
             'mx_RoomTile_transparent': this.props.transparent,
+            'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
         });
 
         const avatarClasses = classNames({
@@ -285,6 +298,7 @@ module.exports = React.createClass({
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         let label;
+        let subtextLabel;
         let tooltip;
         if (!this.props.collapsed) {
             const nameClasses = classNames({
@@ -292,6 +306,8 @@ module.exports = React.createClass({
                 'mx_RoomTile_invite': this.props.isInvite,
                 'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
             });
+
+            subtextLabel = subtext ? <span className="mx_RoomTile_subtext">{ subtext }</span> : null;
 
             if (this.state.selected) {
                 const nameSelected = <EmojiText>{ name }</EmojiText>;
@@ -332,13 +348,18 @@ module.exports = React.createClass({
         >
             <div className={avatarClasses}>
                 <div className="mx_RoomTile_avatar_container">
-                    <RoomAvatar room={this.props.room} width={32} height={32} />
+                    <RoomAvatar room={this.props.room} width={24} height={24} />
                     { dmIndicator }
                 </div>
             </div>
-            { label }
-            { contextMenuButton }
-            { badge }
+            <div className="mx_RoomTile_nameContainer">
+                <div className="mx_RoomTile_labelContainer">
+                    { label }
+                    { subtextLabel }
+                </div>
+                { contextMenuButton }
+                { badge }
+            </div>
             { /* { incomingCallBox } */ }
             { tooltip }
         </AccessibleButton>;

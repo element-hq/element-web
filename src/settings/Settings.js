@@ -83,6 +83,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_custom_status": {
+        isFeature: true,
+        displayName: _td("Custom user status messages"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_lazyloading": {
         isFeature: true,
         displayName: _td("Increase performance by only loading room members on first view"),
@@ -151,6 +157,11 @@ export const SETTINGS = {
         displayName: _td('Always show encryption icons'),
         default: true,
     },
+    "showRoomRecoveryReminder": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),
+        default: true,
+    },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
@@ -195,8 +206,8 @@ export const SETTINGS = {
         default: false,
     },
     "theme": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "light",
+        supportedLevels: ['config'],
+        default: "dharma",
     },
     "webRtcForceTURN": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

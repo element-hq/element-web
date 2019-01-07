@@ -124,10 +124,23 @@ limitations under the License.
     padding-right: 4px;
 }
 
+.mx_TagPanel_groupsButton {
+    flex: 0;
+    margin: 17px 0 3px 0;
+}
+
+.mx_TagPanel_groupsButton > .mx_GroupsButton:before {
+    mask: url('../../img/feather-icons/users.svg');
+    mask-position: center 11px;
+}
+
+.mx_TagPanel_groupsButton > .mx_TagPanel_report:before {
+    mask: url('../../img/feather-icons/life-buoy.svg');
+    mask-position: center 9px;
+}
+
 .mx_TagPanel_groupsButton > .mx_AccessibleButton {
-    flex: auto;
-    margin-bottom: 17px;
-    margin-top: 18px;
+    margin-bottom: 12px;
     height: 40px;
     width: 40px;
     border-radius: 20px;
@@ -138,9 +151,7 @@ limitations under the License.
 
     &:before {
         background-color: $tagpanel-bg-color;
-        mask: url('../../img/icons-groups-nobg.svg');
         mask-repeat: no-repeat;
-        mask-position: center 8px;
         content: '';
         position: absolute;
         top: 0;

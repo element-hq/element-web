@@ -14,13 +14,14 @@ const ResizeHandle = (props) => {
         classNames.push('mx_ResizeHandle_reverse');
     }
     return (
-        <div className={classNames.join(' ')} data-id={props.id} />
+        <div className={classNames.join(' ')} data-id={props.id}><div /></div>
     );
 };
 
 ResizeHandle.propTypes = {
     vertical: PropTypes.bool,
     reverse: PropTypes.bool,
+    id: PropTypes.string,
 };
 
 export default ResizeHandle;

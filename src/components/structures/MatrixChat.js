@@ -48,6 +48,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 
+const AutoDiscovery = Matrix.AutoDiscovery;
+
 // Disable warnings for now: we use deprecated bluebird functions
 // and need to migrate, but they spam the console with warnings.
 Promise.config({warnings: false});
@@ -161,7 +163,7 @@ export default React.createClass({
             viewUserId: null,
 
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -181,6 +183,12 @@ export default React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
+            // Parameters used for setting up the login/registration views
+            defaultServerName: this.props.config.default_server_name,
+            defaultHsUrl: this.props.config.default_hs_url,
+            defaultIsUrl: this.props.config.default_is_url,
+            defaultServerDiscoveryError: null,
+
             // When showing Modal dialogs we need to set aria-hidden on the root app element
             // and disable it when there are no dialogs
             hideToSRUsers: false,
@@ -199,20 +207,24 @@ export default React.createClass({
         };
     },
 
+    getDefaultServerName: function() {
+        return this.state.defaultServerName;
+    },
+
     getCurrentHsUrl: function() {
         if (this.state.register_hs_url) {
             return this.state.register_hs_url;
         } else if (MatrixClientPeg.get()) {
             return MatrixClientPeg.get().getHomeserverUrl();
-        } else if (window.localStorage && window.localStorage.getItem("mx_hs_url")) {
-            return window.localStorage.getItem("mx_hs_url");
         } else {
             return this.getDefaultHsUrl();
         }
     },
 
-    getDefaultHsUrl() {
-        return this.props.config.default_hs_url || "https://matrix.org";
+    getDefaultHsUrl(defaultToMatrixDotOrg) {
+        defaultToMatrixDotOrg = typeof(defaultToMatrixDotOrg) !== 'boolean' ? true : defaultToMatrixDotOrg;
+        if (!this.state.defaultHsUrl && defaultToMatrixDotOrg) return "https://matrix.org";
+        return this.state.defaultHsUrl;
     },
 
     getFallbackHsUrl: function() {
@@ -224,15 +236,13 @@ export default React.createClass({
             return this.state.register_is_url;
         } else if (MatrixClientPeg.get()) {
             return MatrixClientPeg.get().getIdentityServerUrl();
-        } else if (window.localStorage && window.localStorage.getItem("mx_is_url")) {
-            return window.localStorage.getItem("mx_is_url");
         } else {
             return this.getDefaultIsUrl();
         }
     },
 
     getDefaultIsUrl() {
-        return this.props.config.default_is_url || "https://vector.im";
+        return this.state.defaultIsUrl || "https://vector.im";
     },
 
     componentWillMount: function() {
@@ -280,6 +290,20 @@ export default React.createClass({
 
         if (this._teamToken) {
             console.info(`Team token set to ${this._teamToken}`);
+        }
+
+        // Set up the default URLs (async)
+        if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
+            this.setState({loadingDefaultHomeserver: true});
+            this._tryDiscoverDefaultHomeserver(this.getDefaultServerName());
+        } else if (this.getDefaultServerName() && this.getDefaultHsUrl(false)) {
+            // Ideally we would somehow only communicate this to the server admins, but
+            // given this is at login time we can't really do much besides hope that people
+            // will check their settings.
+            this.setState({
+                defaultServerName: null, // To un-hide any secrets people might be keeping
+                defaultServerDiscoveryError: _t("Invalid configuration: Cannot supply a default homeserver URL and a default server name"),
+            });
         }
 
         // Set a default HS with query param `hs_url`
@@ -555,7 +579,7 @@ export default React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapseRhs) {
+                if (this.state.collapsedRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -659,13 +683,15 @@ export default React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", true);
                 this.setState({
-                    collapseRhs: true,
+                    collapsedRhs: true,
                 });
                 break;
             case 'show_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", false);
                 this.setState({
-                    collapseRhs: false,
+                    collapsedRhs: false,
                 });
                 break;
             case 'panel_disable': {
@@ -676,9 +702,11 @@ export default React.createClass({
                 });
                 break;
             }
-            case 'set_theme':
-                this._onSetTheme(payload.value);
-                break;
+            // case 'set_theme':
+                // disable changing the theme for now
+                // as other themes are not compatible with dharma
+                // this._onSetTheme(payload.value);
+                // break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -911,6 +939,10 @@ export default React.createClass({
     },
 
     _viewHome: function() {
+        // The home page requires the "logged in" view, so we'll set that.
+        this.setStateForNewView({
+            view: VIEWS.LOGGED_IN,
+        });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
     },
@@ -1167,10 +1199,7 @@ export default React.createClass({
      * @param {string} teamToken
      */
     _onLoggedIn: async function(teamToken) {
-        this.setState({
-            view: VIEWS.LOGGED_IN,
-        });
-
+        this.setStateForNewView({view: VIEWS.LOGGED_IN});
         if (teamToken) {
             // A team member has logged in, not a guest
             this._teamToken = teamToken;
@@ -1227,7 +1256,7 @@ export default React.createClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
@@ -1417,6 +1446,11 @@ export default React.createClass({
                     });
                     break;
             }
+        });
+        cli.on("crypto.keyBackupFailed", () => {
+            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+            );
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied
@@ -1744,6 +1778,36 @@ export default React.createClass({
         this.setState(newState);
     },
 
+    _tryDiscoverDefaultHomeserver: async function(serverName) {
+        try {
+            const discovery = await AutoDiscovery.findClientConfig(serverName);
+            const state = discovery["m.homeserver"].state;
+            if (state !== AutoDiscovery.SUCCESS) {
+                console.error("Failed to discover homeserver on startup:", discovery);
+                this.setState({
+                    defaultServerDiscoveryError: discovery["m.homeserver"].error,
+                    loadingDefaultHomeserver: false,
+                });
+            } else {
+                const hsUrl = discovery["m.homeserver"].base_url;
+                const isUrl = discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                    ? discovery["m.identity_server"].base_url
+                    : "https://vector.im";
+                this.setState({
+                    defaultHsUrl: hsUrl,
+                    defaultIsUrl: isUrl,
+                    loadingDefaultHomeserver: false,
+                });
+            }
+        } catch (e) {
+            console.error(e);
+            this.setState({
+                defaultServerDiscoveryError: _t("Unknown error discovering homeserver"),
+                loadingDefaultHomeserver: false,
+            });
+        }
+    },
+
     _makeRegistrationUrl: function(params) {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
@@ -1758,7 +1822,7 @@ export default React.createClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
-        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN) {
+        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN || this.state.loadingDefaultHomeserver) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
@@ -1832,6 +1896,8 @@ export default React.createClass({
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
                     referrer={this.props.startingFragmentQueryParams.referrer}
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
@@ -1854,6 +1920,8 @@ export default React.createClass({
             const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
             return (
                 <ForgotPassword
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}
@@ -1870,6 +1938,8 @@ export default React.createClass({
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
+                    defaultServerName={this.getDefaultServerName()}
+                    defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     customHsUrl={this.getCurrentHsUrl()}

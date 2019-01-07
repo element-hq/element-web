@@ -445,7 +445,8 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body a {
-    color: $accent-color;
+    color: $accent-color-alt;
+    text-decoration: underline;
 }
 
 .mx_EventTile_content .markdown-body .hljs {

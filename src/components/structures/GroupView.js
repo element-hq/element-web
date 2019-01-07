@@ -473,7 +473,7 @@ export default React.createClass({
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated.bind(this, firstInit));
         let willDoOnboarding = false;
         // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
-        GroupStore.on('error', (err, errorGroupId) => {
+        GroupStore.on('error', (err, errorGroupId, stateKey) => {
             if (this._unmounted || groupId !== errorGroupId) return;
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
                 dis.dispatch({
@@ -486,11 +486,13 @@ export default React.createClass({
                 dis.dispatch({action: 'require_registration'});
                 willDoOnboarding = true;
             }
-            this.setState({
-                summary: null,
-                error: err,
-                editing: false,
-            });
+            if (stateKey === GroupStore.STATE_KEY.Summary) {
+                this.setState({
+                    summary: null,
+                    error: err,
+                    editing: false,
+                });
+            }
         });
     },
 
@@ -514,7 +516,6 @@ export default React.createClass({
             isUserMember: GroupStore.getGroupMembers(this.props.groupId).some(
                 (m) => m.userId === this._matrixClient.credentials.userId,
             ),
-            error: null,
         });
         // XXX: This might not work but this.props.groupIsNew unused anyway
         if (this.props.groupIsNew && firstInit) {
@@ -1079,6 +1080,7 @@ export default React.createClass({
     },
 
     _getJoinableNode: function() {
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         return this.state.editing ? <div>
             <h3>
                 { _t('Who can join this community?') }
@@ -1160,7 +1162,7 @@ export default React.createClass({
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
-        } else if (this.state.summary) {
+        } else if (this.state.summary && !this.state.error) {
             const summary = this.state.summary;
 
             let avatarNode;
@@ -1272,15 +1274,6 @@ export default React.createClass({
                         <TintableSvg src="img/icons-share.svg" width="16" height="16" />
                     </AccessibleButton>,
                 );
-                if (this.props.collapsedRhs) {
-                    rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onShowRhsClick} title={_t('Show panel')} key="_maximiseButton"
-                        >
-                            <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                        </AccessibleButton>,
-                    );
-                }
             }
 
             const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
@@ -1311,7 +1304,7 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
-                        <GroupHeaderButtons />
+                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                     </div>
                     <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
                         <GeminiScrollbarWrapper className="mx_GroupView_body">

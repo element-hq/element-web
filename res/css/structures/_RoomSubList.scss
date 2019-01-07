@@ -19,14 +19,14 @@ limitations under the License.
    each with a flex-shrink difference of 4 order of magnitude,
    so they ideally wouldn't affect each other.
    lowest category: .mx_RoomSubList
-        flex:-shrink: 10000000
+        flex-shrink: 10000000
         distribute size of items within the same categery by their size
    middle category: .mx_RoomSubList.resized-sized
-        flex:-shrink: 1000
+        flex-shrink: 1000
         applied when using the resizer, will have a max-height set to it,
         to limit the size
    highest category: .mx_RoomSubList.resized-all
-        flex:-shrink: 1
+        flex-shrink: 1
         small flex-shrink value (1), is only added if you can drag the resizer so far
         so in practice you can only assign this category if there is enough space.
 */
@@ -39,7 +39,7 @@ limitations under the License.
 }
 
 .mx_RoomSubList_nonEmpty {
-    min-height: 76px;
+    min-height: 70px;
 
     .mx_AutoHideScrollbar_offset {
         padding-bottom: 4px;
@@ -94,7 +94,7 @@ limitations under the License.
     font-weight: 600;
     font-size: 12px;
     padding: 0 5px;
-    background-color: $accent-color;
+    background-color: $roomtile-name-color;
 }
 
 .mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
@@ -154,7 +154,7 @@ limitations under the License.
         position: sticky;
         left: 0;
         right: 0;
-        height: 40px;
+        height: 30px;
         content: "";
         display: block;
         z-index: 100;
@@ -162,20 +162,20 @@ limitations under the License.
     }
 
     &.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
-        margin-top: -40px;
+        margin-top: -30px;
     }
     &.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
-        margin-bottom: -40px;
+        margin-bottom: -30px;
     }
 
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
-        background: linear-gradient($secondary-accent-color, transparent);
+        background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 
     &.mx_IndicatorScrollbar_bottomOverflow::after {
         bottom: 0;
-        background: linear-gradient(transparent, $secondary-accent-color);
+        background: linear-gradient(to bottom, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 }
 

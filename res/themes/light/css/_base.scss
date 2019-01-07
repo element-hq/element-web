@@ -20,6 +20,7 @@ $focus-bg-color: #dddddd;
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color: #76CFA6;
+$accent-color-alt: $accent-color;
 $accent-color-50pct: #76CFA67F;
 
 $selection-fg-color: $primary-bg-color;
@@ -180,6 +181,8 @@ $imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
 // unused?
 $progressbar-color: #000;
 
+$room-warning-bg-color: #fff8e3;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
@@ -211,4 +214,12 @@ $progressbar-color: #000;
     @mixin mx_DialogButton;
     font-size: 15px;
     padding: 0px 1.5em 0px 1.5em;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $accent-fg-color;
 }

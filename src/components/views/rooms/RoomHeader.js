@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
-import dis from "../../../dispatcher";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import * as linkify from 'linkifyjs';
@@ -144,10 +143,6 @@ module.exports = React.createClass({
 
     onAvatarRemoveClick: function() {
         MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
     },
 
     onShareRoomClick: function(ev) {
@@ -342,7 +337,7 @@ module.exports = React.createClass({
         if (this.props.onSettingsClick) {
             settingsButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
-                    <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/settings.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -382,7 +377,7 @@ module.exports = React.createClass({
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src="img/icons-search.svg" width="16" height="16" />
+                    <TintableSvg src="img/feather-icons/search.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -390,15 +385,7 @@ module.exports = React.createClass({
         if (this.props.inRoom) {
             shareRoomButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShareRoomClick} title={_t('Share room')}>
-                    <TintableSvg src="img/icons-share.svg" width="16" height="16" />
-                </AccessibleButton>;
-        }
-
-        let rightPanelButtons;
-        if (this.props.collapsedRhs) {
-            rightPanelButtons =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_showPanel" onClick={this.onShowRhsClick} title={_t('Show panel')}>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" />
+                    <TintableSvg src="img/feather-icons/share.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -419,7 +406,6 @@ module.exports = React.createClass({
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
-                    { rightPanelButtons }
                 </div>;
         }
 
@@ -433,7 +419,7 @@ module.exports = React.createClass({
                     { saveButton }
                     { cancelButton }
                     { rightRow }
-                    { !this.props.isGrid ? <RoomHeaderButtons /> : undefined }
+                    { !this.props.isGrid ? <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} /> : undefined }
                 </div>
             </div>
         );

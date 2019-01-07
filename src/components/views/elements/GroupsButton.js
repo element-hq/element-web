@@ -22,17 +22,16 @@ import { _t } from '../../../languageHandler';
 const GroupsButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton action="view_my_groups"
+        <ActionButton className="mx_GroupsButton" action="view_my_groups"
             label={_t("Communities")}
             size={props.size}
-            tooltip={props.tooltip}
+            tooltip={true}
         />
     );
 };
 
 GroupsButton.propTypes = {
     size: PropTypes.string,
-    tooltip: PropTypes.bool,
 };
 
 export default GroupsButton;

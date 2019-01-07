@@ -222,10 +222,21 @@ const translatables = new Set();
 
 const walkOpts = {
     listeners: {
+        names: function(root, nodeNamesArray) {
+            // Sort the names case insensitively and alphabetically to
+            // maintain some sense of order between the different strings.
+            nodeNamesArray.sort((a, b) => {
+                a = a.toLowerCase();
+                b = b.toLowerCase();
+                if (a > b) return 1;
+                if (a < b) return -1;
+                return 0;
+            });
+        },
         file: function(root, fileStats, next) {
             const fullPath = path.join(root, fileStats.name);
 
-            let ltrs;
+            let trs;
             if (fileStats.name.endsWith('.js')) {
                 trs = getTranslationsJs(fullPath);
             } else if (fileStats.name.endsWith('.html')) {
@@ -235,7 +246,8 @@ const walkOpts = {
             }
             console.log(`${fullPath} (${trs.size} strings)`);
             for (const tr of trs.values()) {
-                translatables.add(tr);
+                // Convert DOS line endings to unix
+                translatables.add(tr.replace(/\r\n/g, "\n"));
             }
         },
     }

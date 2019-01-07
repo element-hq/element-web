@@ -22,7 +22,6 @@ import qs from 'querystring';
 import React from 'react';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import WidgetMessaging from '../../../WidgetMessaging';
 import TintableSvgButton from './TintableSvgButton';
@@ -49,7 +48,6 @@ export default class AppTile extends React.Component {
         this.state = this._getNewState(props);
 
         this._onAction = this._onAction.bind(this);
-        this._onMessage = this._onMessage.bind(this);
         this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
         this._onDeleteClick = this._onDeleteClick.bind(this);
@@ -143,10 +141,6 @@ export default class AppTile extends React.Component {
     }
 
     componentDidMount() {
-        // Legacy Jitsi widget messaging -- TODO replace this with standard widget
-        // postMessaging API
-        window.addEventListener('message', this._onMessage, false);
-
         // Widget action listeners
         this.dispatcherRef = dis.register(this._onAction);
     }
@@ -154,9 +148,6 @@ export default class AppTile extends React.Component {
     componentWillUnmount() {
         // Widget action listeners
         dis.unregister(this.dispatcherRef);
-
-        // Jitsi listener
-        window.removeEventListener('message', this._onMessage);
 
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
@@ -230,32 +221,6 @@ export default class AppTile extends React.Component {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
-        }
-    }
-
-    // Legacy Jitsi widget messaging
-    // TODO -- This should be replaced with the new widget postMessaging API
-    _onMessage(event) {
-        if (this.props.type !== 'jitsi') {
-            return;
-        }
-        if (!event.origin) {
-            event.origin = event.originalEvent.origin;
-        }
-
-        const widgetUrlObj = url.parse(this.state.widgetUrl);
-        const eventOrigin = url.parse(event.origin);
-        if (
-            eventOrigin.protocol !== widgetUrlObj.protocol ||
-            eventOrigin.host !== widgetUrlObj.host
-        ) {
-            return;
-        }
-
-        if (event.data.widgetAction === 'jitsi_iframe_loaded') {
-            const iframe = this.refs.appFrame.contentWindow
-                .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
-            PlatformPeg.get().setupScreenSharingForIframe(iframe);
         }
     }
 
@@ -544,7 +509,7 @@ export default class AppTile extends React.Component {
 
         // Additional iframe feature pemissions
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
-        const iframeFeatures = "microphone; camera; encrypted-media;";
+        const iframeFeatures = "microphone; camera; encrypted-media; autoplay;";
 
         const appTileBodyClass = 'mx_AppTileBody' + (this.props.miniMode ? '_mini  ' : ' ');
 

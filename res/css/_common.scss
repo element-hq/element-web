@@ -32,7 +32,7 @@ body {
     margin: 0px;
 }
 
-div.error, div.warning {
+.error, .warning {
     color: $warning-color;
 }
 
@@ -47,7 +47,7 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: $accent-color;
+    color: $accent-color-alt;
 }
 
 input[type=text], input[type=password], textarea {
@@ -301,7 +301,7 @@ textarea {
 }
 
 .mx_textButton {
-    @mixin mx_DialogButton_small;    
+    @mixin mx_DialogButton_small;
 }
 
 .mx_textButton:hover {

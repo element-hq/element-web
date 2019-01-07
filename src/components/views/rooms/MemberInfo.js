@@ -40,6 +40,8 @@ import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
+import MultiInviter from "../../../utils/MultiInviter";
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -714,12 +716,18 @@ module.exports = withMatrixClient(React.createClass({
                 const roomId = member && member.roomId ? member.roomId : this.props.roomId;
                 const onInviteUserButton = async() => {
                     try {
-                        await cli.invite(roomId, member.userId);
+                        // We use a MultiInviter to re-use the invite logic, even though
+                        // we're only inviting one user.
+                        const inviter = new MultiInviter(roomId);
+                        await inviter.invite([member.userId]).then(() => {
+                            if (inviter.getCompletionState(userId) !== "invited")
+                                throw new Error(inviter.getErrorText(userId));
+                        });
                     } catch (err) {
                         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                         Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
                             title: _t('Failed to invite'),
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            description: ((err && err.message) ? err.message : _t("Operation failed")),
                         });
                     }
                 };
@@ -882,11 +890,16 @@ module.exports = withMatrixClient(React.createClass({
         let presenceState;
         let presenceLastActiveAgo;
         let presenceCurrentlyActive;
+        let statusMessage;
 
         if (this.props.member.user) {
             presenceState = this.props.member.user.presence;
             presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
+
+            if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+                statusMessage = this.props.member.user._unstable_statusMessage;
+            }
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
@@ -908,6 +921,11 @@ module.exports = withMatrixClient(React.createClass({
                 presenceState={presenceState} />;
         }
 
+        let statusLabel = null;
+        if (statusMessage) {
+            statusLabel = <span className="mx_MemberInfo_statusMessage">{ statusMessage }</span>;
+        }
+
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
@@ -924,6 +942,7 @@ module.exports = withMatrixClient(React.createClass({
                 </div>
                 <div className="mx_MemberInfo_profileField">
                     {presenceLabel}
+                    {statusLabel}
                 </div>
             </div>;
         }

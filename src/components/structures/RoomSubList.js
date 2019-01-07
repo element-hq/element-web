@@ -110,8 +110,9 @@ const RoomSubList = React.createClass({
         if (this.isCollapsableOnClick()) {
             // The header isCollapsable, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
-            this.setState({hidden: isHidden});
-            this.props.onHeaderClick(isHidden);
+            this.setState({hidden: isHidden}, () => {
+                this.props.onHeaderClick(isHidden);
+            });
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
@@ -268,17 +269,10 @@ const RoomSubList = React.createClass({
 
         let incomingCall;
         if (this.props.incomingCall) {
-            const self = this;
-            // Check if the incoming call is for this section
-            const incomingCallRoom = this.props.list.filter(function(room) {
-                return self.props.incomingCall.roomId === room.roomId;
-            });
-
-            if (incomingCallRoom.length === 1) {
-                const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
-                incomingCall =
-                    <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
-            }
+            // We can assume that if we have an incoming call then it is for this list
+            const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+            incomingCall =
+                <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
         }
 
         let addRoomButton;
@@ -313,6 +307,12 @@ const RoomSubList = React.createClass({
         );
     },
 
+    checkOverflow: function() {
+        if (this.refs.scroller) {
+            this.refs.scroller.checkOverflow();
+        }
+    },
+
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
         if (len) {
@@ -330,7 +330,7 @@ const RoomSubList = React.createClass({
                 tiles.push(...this.props.extraTiles);
                 return <div className={subListClasses}>
                     {this._getHeaderJsx()}
-                    <IndicatorScrollbar className="mx_RoomSubList_scroll">
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
                         { tiles }
                     </IndicatorScrollbar>
                 </div>;

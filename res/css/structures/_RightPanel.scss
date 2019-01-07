@@ -45,7 +45,8 @@ limitations under the License.
     cursor: pointer;
     flex: 0 0 auto;
     vertical-align: top;
-    padding-left: 4px;
+    margin-top: 4px;
+    padding-left: 5px;
     padding-right: 5px;
     text-align: center;
     position: relative;
@@ -57,7 +58,7 @@ limitations under the License.
 }
 
 .mx_RightPanel_headerButton_highlight {
-    border-color: $accent-color;
+    border-color: $button-bg-color;
 }
 
 .mx_RightPanel_headerButton_badge {

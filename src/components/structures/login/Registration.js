@@ -57,6 +57,14 @@ module.exports = React.createClass({
         }),
         teamSelected: PropTypes.object,
 
+        // The default server name to use when the user hasn't specified
+        // one. This is used when displaying the defaultHsUrl in the UI.
+        defaultServerName: PropTypes.string,
+
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
+
         defaultDeviceDisplayName: PropTypes.string,
 
         // registration shouldn't know or care how login is done.
@@ -170,6 +178,12 @@ module.exports = React.createClass({
     },
 
     onFormSubmit: function(formVals) {
+        // Don't allow the user to register if there's a discovery error
+        // Without this, the user could end up registering on the wrong homeserver.
+        if (this.props.defaultServerDiscoveryError) {
+            this.setState({errorText: this.props.defaultServerDiscoveryError});
+            return;
+        }
         this.setState({
             errorText: "",
             busy: true,
@@ -328,7 +342,7 @@ module.exports = React.createClass({
                 errMsg = _t('A phone number is required to register on this homeserver.');
                 break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = _t('User names may only contain letters, numbers, dots, hyphens and underscores.');
+                errMsg = _t("Only use lower case letters, numbers and '=_-./'");
                 break;
             case "RegistrationForm.ERR_USERNAME_BLANK":
                 errMsg = _t('You need to enter a user name.');
@@ -347,6 +361,12 @@ module.exports = React.createClass({
         if (!this._unmounted) {
             this.setState({ teamSelected });
         }
+    },
+
+    onLoginClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onLoginClick();
     },
 
     _makeRegisterRequest: function(auth) {
@@ -441,19 +461,20 @@ module.exports = React.createClass({
         let header;
         let errorText;
         // FIXME: remove hardcoded Status team tweaks at some point
-        if (theme === 'status' && this.state.errorText) {
-            header = <div className="mx_Login_error">{ this.state.errorText }</div>;
+        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        if (theme === 'status' && err) {
+            header = <div className="mx_Login_error">{ err }</div>;
         } else {
             header = <h2>{ _t('Create an account') }</h2>;
-            if (this.state.errorText) {
-                errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            if (err) {
+                errorText = <div className="mx_Login_error">{ err }</div>;
             }
         }
 
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
                     { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
                 </a>
             );
