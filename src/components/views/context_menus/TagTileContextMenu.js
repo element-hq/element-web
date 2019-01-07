@@ -21,6 +21,7 @@ import dis from '../../../dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class TagTileContextMenu extends React.Component {
     static propTypes = {
@@ -64,6 +65,18 @@ export default class TagTileContextMenu extends React.Component {
 
     render() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        let gridViewOption;
+        if (SettingsStore.isFeatureEnabled("feature_gridview")) {
+            gridViewOption = (<div className="mx_TagTileContextMenu_item" onClick={this._onViewAsGridClick} >
+                <TintableSvg
+                    className="mx_TagTileContextMenu_item_icon"
+                    src="img/icons-gridview.svg"
+                    width="15"
+                    height="15"
+                />
+                { _t('View as grid') }
+            </div>);
+        }
         return <div>
             <div className="mx_TagTileContextMenu_item" onClick={this._onViewCommunityClick} >
                 <TintableSvg
@@ -74,15 +87,7 @@ export default class TagTileContextMenu extends React.Component {
                 />
                 { _t('View Community') }
             </div>
-            <div className="mx_TagTileContextMenu_item" onClick={this._onViewAsGridClick} >
-                <TintableSvg
-                    className="mx_TagTileContextMenu_item_icon"
-                    src="img/icons-gridview.svg"
-                    width="15"
-                    height="15"
-                />
-                { _t('View as grid') }
-            </div>
+            { gridViewOption }
             <hr className="mx_TagTileContextMenu_separator" />
             <div className="mx_TagTileContextMenu_item" onClick={this._onRemoveClick} >
                 <img className="mx_TagTileContextMenu_item_icon" src="img/icon_context_delete.svg" width="15" height="15" />
