@@ -54,12 +54,14 @@ limitations under the License.
     align-items: center;
     flex: 1;
     vertical-align: middle;
+    min-width: 0;
 }
 
 .mx_RoomTile_labelContainer {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
 }
 
 .mx_RoomTile_subtext {
@@ -99,7 +101,6 @@ limitations under the License.
 }
 
 .mx_RoomTile_name {
-    flex: 1 5 auto;
     font-size: 14px;
     font-weight: 600;
     padding: 0 6px;
