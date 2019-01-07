@@ -19,6 +19,11 @@
     cursor: pointer;
 }
 
+/* More specific to override `.markdown-body a` text-decoration */
+.mx_EventTile_content .markdown-body a.mx_Pill {
+    text-decoration: none;
+}
+
 /* More specific to override `.markdown-body a` color */
 .mx_EventTile_content .markdown-body a.mx_UserPill,
 .mx_UserPill {
