@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,17 +15,44 @@ limitations under the License.
 */
 
 import React from 'react';
-import QuestionDialog from './QuestionDialog';
 import Modal from '../../../Modal';
+import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default (props) => {
-    const description = _t("For security, logging out will delete any end-to-end " +
-                  "encryption keys from this browser. If you want to be able " +
-                  "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.");
+    const onSettingsLinkClick = () => {
+        // close dialog
+        if (props.onFinished) {
+            props.onFinished();
+        }
+    };
+
+    let description;
+    if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
+        description = <div>
+            <p>{_t(
+                "When you log out, you'll lose your secure message history. To prevent " +
+                "this, set up a recovery method."
+            )}</p>
+            <p>{_t(
+                "Alternatively, advanced users can also manually export encryption keys in " +
+                "<a>Settings</a> before logging out.", {},
+                {
+                    a: sub => <a href='#/settings' onClick={onSettingsLinkClick}>{sub}</a>,
+                }
+            )}</p>
+        </div>;
+    } else {
+        description = <div>{_t(
+            "For security, logging out will delete any end-to-end " +
+            "encryption keys from this browser. If you want to be able " +
+            "to decrypt your conversation history from future Riot sessions, " +
+            "please export your room keys for safe-keeping.",
+        )}</div>;
+    }
 
     const onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
@@ -46,17 +73,81 @@ export default (props) => {
         }
     };
 
-    return (<QuestionDialog
-        hasCancelButton={true}
-        title={_t("Sign out")}
-        description={<div>{description}</div>}
-        button={_t("Sign out")}
-        extraButtons={[
-            (<button key="export" className="mx_Dialog_primary"
-                    onClick={onExportE2eKeysClicked}>
-               { _t("Export E2E room keys") }
-            </button>),
-        ]}
-        onFinished={onFinished}
-    />);
+    const onSetRecoveryMethodClick = () => {
+        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+        );
+
+        // close dialog
+        if (props.onFinished) {
+            props.onFinished();
+        }
+    };
+
+    const onLogoutConfirm = () => {
+        dis.dispatch({action: 'logout'});
+
+        // close dialog
+        if (props.onFinished) {
+            props.onFinished();
+        }
+    };
+
+    if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
+        if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            // Not quite a standard question dialog as the primary button cancels
+            // the action and does something else instead, whilst non-default button
+            // confirms the action.
+            return (<BaseDialog
+                title={_t("Warning!")}
+                contentId='mx_Dialog_content'
+                hasCancel={false}
+                onFinsihed={onFinished}
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { description }
+                </div>
+                <DialogButtons primaryButton={_t('Set a Recovery Method')}
+                    hasCancel={false}
+                    onPrimaryButtonClick={onSetRecoveryMethodClick}
+                    focus={true}
+                >
+                    <button onClick={onLogoutConfirm}>
+                        {_t("I understand, log out without")}
+                    </button>
+                </DialogButtons>
+            </BaseDialog>);
+        } else {
+            const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+            return (<QuestionDialog
+                hasCancelButton={true}
+                title={_t("Sign out")}
+                // TODO: This is made up by me and would need to also mention verifying
+                // once you can restorew a backup by verifying a device
+                description={_t(
+                    "When signing in again, you can access encrypted chat history by " +
+                    "restoring your key backup. You'll need your recovery key.",
+                )}
+                button={_t("Sign out")}
+                onFinished={onFinished}
+            />);
+        }
+    } else {
+        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        return (<QuestionDialog
+            hasCancelButton={true}
+            title={_t("Sign out")}
+            description={description}
+            button={_t("Sign out")}
+            extraButtons={[
+                (<button key="export" className="mx_Dialog_primary"
+                        onClick={onExportE2eKeysClicked}>
+                   { _t("Export E2E room keys") }
+                </button>),
+            ]}
+            onFinished={onFinished}
+        />);
+    }
 };
