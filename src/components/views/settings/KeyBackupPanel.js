@@ -155,46 +155,44 @@ export default class KeyBackupPanel extends React.Component {
 
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device.getDisplayName() || sig.device.deviceId;
-                const sigStatusSubstitutions = {
-                    validity: sub =>
-                        <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>
-                            {sub}
-                        </span>,
-                    verify: sub =>
-                        <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
-                            {sub}
-                        </span>,
-                    device: sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>,
-                };
+                const validity = sub =>
+                    <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>
+                        {sub}
+                    </span>;
+                const verify = sub =>
+                    <span className={sig.device.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
+                        {sub}
+                    </span>;
+                const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;
                 let sigStatus;
                 if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from this device",
-                        {}, sigStatusSubstitutions,
+                        {}, { validity },
                     );
                 } else if (sig.valid && sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
                         "<verify>verified</verify> device <device></device>",
-                        {}, sigStatusSubstitutions,
+                        {}, { validity, verify, device },
                     );
                 } else if (sig.valid && !sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from " +
                         "<verify>unverified</verify> device <device></device>",
-                        {}, sigStatusSubstitutions,
+                        {}, { validity, verify, device },
                     );
                 } else if (!sig.valid && sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
                         "<verify>verified</verify> device <device></device>",
-                        {}, sigStatusSubstitutions,
+                        {}, { validity, verify, device },
                     );
                 } else if (!sig.valid && !sig.device.isVerified()) {
                     sigStatus = _t(
                         "Backup has an <validity>invalid</validity> signature from " +
                         "<verify>unverified</verify> device <device></device>",
-                        {}, sigStatusSubstitutions,
+                        {}, { validity, verify, device },
                     );
                 }
 
