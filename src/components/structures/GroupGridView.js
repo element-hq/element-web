@@ -25,7 +25,6 @@ import RightPanel from './RightPanel';
 import RoomHeaderButtons from '../views/right_panel/RoomHeaderButtons';
 
 export default class RoomGridView extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -132,5 +131,4 @@ export default class RoomGridView extends React.Component {
             </MainSplit>
         </main>);
     }
-
 }

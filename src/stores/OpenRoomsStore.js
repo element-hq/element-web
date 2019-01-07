@@ -98,18 +98,18 @@ class OpenRoomsStore extends Store {
         });
     }
 
-    _createOpenRoom(room_id, room_alias) {
+    _createOpenRoom(roomId, roomAlias) {
         const dispatcher = new MatrixDispatcher();
         // forward all actions coming from the room dispatcher
         // to the global one
         const dispatcherRef = dispatcher.register((payload) => {
             // block a view_room action for the same room because it will switch to
             // single room mode in MatrixChat
-            if (payload.action === 'view_room' && room_id === payload.room_id) {
+            if (payload.action === 'view_room' && roomId === payload.room_id) {
                 return;
             }
-            payload.grid_src_room_id = room_id;
-            payload.grid_src_room_alias = room_alias;
+            payload.grid_src_room_id = roomId;
+            payload.grid_src_room_alias = roomAlias;
             this.getDispatcher().dispatch(payload);
         });
         const openRoom = {
@@ -120,8 +120,8 @@ class OpenRoomsStore extends Store {
 
         dispatcher.dispatch({
             action: 'view_room',
-            room_id: room_id,
-            room_alias: room_alias,
+            room_id: roomId,
+            room_alias: roomAlias,
         }, true);
 
         return openRoom;
@@ -134,16 +134,16 @@ class OpenRoomsStore extends Store {
         });
     }
 
-    _setGroupOpenRooms(group_id) {
+    _setGroupOpenRooms(groupId) {
         this._cleanupOpenRooms();
         // TODO: register to GroupStore updates
-        const rooms = GroupStore.getGroupRooms(group_id);
+        const rooms = GroupStore.getGroupRooms(groupId);
         const openRooms = rooms.map((room) => {
             return this._createOpenRoom(room.roomId);
         });
         this._setState({
             rooms: openRooms,
-            group_id: group_id,
+            group_id: groupId,
             currentIndex: 0,
         });
     }
