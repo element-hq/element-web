@@ -35,14 +35,14 @@ export default (props) => {
         description = <div>
             <p>{_t(
                 "When you log out, you'll lose your secure message history. To prevent " +
-                "this, set up a recovery method."
+                "this, set up a recovery method.",
             )}</p>
             <p>{_t(
                 "Alternatively, advanced users can also manually export encryption keys in " +
                 "<a>Settings</a> before logging out.", {},
                 {
                     a: sub => <a href='#/settings' onClick={onSettingsLinkClick}>{sub}</a>,
-                }
+                },
             )}</p>
         </div>;
     } else {
