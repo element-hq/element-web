@@ -69,6 +69,7 @@ export default class Timer {
 
     /**
      * if not started before, starts the timer.
+     * @returns {Timer} the same timer
      */
     start() {
         if (!this.isRunning()) {
@@ -80,6 +81,7 @@ export default class Timer {
 
     /**
      * (re)start the timer. If it's running, reset the timeout. If not, start it.
+     * @returns {Timer} the same timer
      */
     restart() {
         if (this.isRunning()) {
@@ -97,6 +99,7 @@ export default class Timer {
     /**
      * if the timer is running, abort it,
      * and reject the promise for this timer.
+     * @returns {Timer} the same timer
      */
     abort() {
         if (this.isRunning()) {
