@@ -452,7 +452,7 @@ const LoggedInView = React.createClass({
                     />;
                 break;
             case PageTypes.GroupGridView:
-                page_element = <GroupGridView />;
+                page_element = <GroupGridView collapsedRhs={this.props.collapsedRhs} />;
                 break;
             case PageTypes.UserSettings:
                 page_element = <UserSettings

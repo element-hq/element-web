@@ -97,8 +97,8 @@ export default class RoomGridView extends React.Component {
         if (activeRoomId) {
             rightPanel = (
                 <div className="mx_GroupGridView_rightPanel">
-                    <div className="mx_GroupGridView_tabs"><RoomHeaderButtons /></div>
-                    <RightPanel roomId={activeRoomId} />
+                    <div className="mx_GroupGridView_tabs"><RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} /></div>
+                    { !this.props.collapsedRhs ? <RightPanel roomId={activeRoomId} /> : undefined }
                 </div>
             );
         }
