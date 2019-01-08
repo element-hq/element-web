@@ -17,8 +17,6 @@ install:
     - npm install
     - ./scripts/travis/install-deps.sh
 
-cache: npm
-
 matrix:
     include:
         - name: Linting Checks
