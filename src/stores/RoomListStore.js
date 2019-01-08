@@ -277,7 +277,7 @@ class RoomListStore extends Store {
         const roomCache = this._state.roomCache;
         if (!roomCache[roomId]) roomCache[roomId] = {};
 
-        if (value) roomCache[roomId][type] = value;
+        if (typeof value !== "undefined") roomCache[roomId][type] = value;
         else delete roomCache[roomId][type];
 
         this._setState({roomCache});
