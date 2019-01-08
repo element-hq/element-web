@@ -74,7 +74,7 @@ export default class TagTileContextMenu extends React.Component {
                     width="15"
                     height="15"
                 />
-                { _t('View as grid') }
+                { _t('View as Grid') }
             </div>);
         }
         return <div>
