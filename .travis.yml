@@ -15,7 +15,24 @@ addons:
     chrome: stable
 install:
     - npm install
-# install synapse prerequisites for end to end tests
-    - sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev
+    - ./scripts/travis/install-deps.sh
 script:
     ./scripts/travis.sh
+
+matrix:
+    include:
+        - name: Linting Checks
+          script:
+            # run the linter, but exclude any files known to have errors or warnings.
+            - npm run lintwithexclusions
+        - name: End-to-End Tests
+          install:
+            - npm install
+            - ./scripts/travis/install-deps.sh
+            - sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev
+          script:
+            - ./scripts/travis/test-riot.sh
+        - name: Unit Tests
+          script:
+            - npm run test
+
