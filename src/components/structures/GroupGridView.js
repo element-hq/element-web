@@ -96,14 +96,14 @@ export default class RoomGridView extends React.Component {
         if (activeRoomId) {
             rightPanel = (
                 <div className="mx_GroupGridView_rightPanel">
-                    <div className="mx_GroupGridView_tabs"><RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} /></div>
-                    { !this.props.collapsedRhs ? <RightPanel roomId={activeRoomId} /> : undefined }
+                    <div className="mx_GroupGridView_tabs"><RoomHeaderButtons /></div>
+                    <RightPanel roomId={activeRoomId} />
                 </div>
             );
         }
 
         return (<main className="mx_GroupGridView">
-            <MainSplit panel={rightPanel} disableSizing={this.props.collapsedRhs} >
+            <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs} >
                 <div className="mx_GroupGridView_rooms">
                     { roomStores.map((roomStore, i) => {
                         if (roomStore) {
@@ -118,6 +118,7 @@ export default class RoomGridView extends React.Component {
                                     className={tileClasses}
                                 >
                                     <RoomView
+                                        collapsedRhs={this.props.collapsedRhs}
                                         isGrid={true}
                                         roomViewStore={roomStore}
                                         isActive={isActive}
