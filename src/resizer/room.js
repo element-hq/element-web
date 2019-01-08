@@ -81,7 +81,10 @@ class RoomDistributor {
         // this would happen if the cursor goes beyond the min-height
         while (item) {
             // TODO: collapsed
-            if (size <= MIN_SIZE) {
+            if (this._isCollapsed(item)) {
+                item = item.previous();
+            }
+            else if (size <= MIN_SIZE) {
                 item.setSize(MIN_SIZE);
                 const remainder = MIN_SIZE - size;
                 item = item.previous();
