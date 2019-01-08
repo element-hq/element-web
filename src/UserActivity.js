@@ -44,6 +44,7 @@ class UserActivity {
      * Can be called multiple times with the same already running timer, which is a NO-OP.
      * Can be called before the user becomes active, in which case it is only started
      * later on when the user does become active.
+     * @param {Timer} timer the timer to use
      */
     timeWhileActive(timer) {
         // important this happens first

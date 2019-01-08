@@ -420,7 +420,11 @@ module.exports = React.createClass({
 
         let toggleRightPanelButton;
         if (this.props.isGrid) {
-            toggleRightPanelButton = <AccessibleButton className="mx_RoomHeader_button" onClick={this.onToggleRightPanelClick} title={_t('Toggle right panel')}>
+            toggleRightPanelButton =
+                <AccessibleButton
+                    className="mx_RoomHeader_button"
+                    onClick={this.onToggleRightPanelClick}
+                    title={_t('Toggle right panel')}>
                     <TintableSvg src="img/feather-icons/toggle-right-panel.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
