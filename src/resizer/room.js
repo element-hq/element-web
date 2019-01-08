@@ -39,7 +39,7 @@ class RoomSubList extends ResizeItem {
 }
 */
 
-const MIN_SIZE = 70;
+const MIN_SIZE = 74;
 // would be good to have a way in here to know if the item can be resized
 //  - collapsed items can't be resized (.mx_RoomSubList_hidden)
 //  - items at MIN_SIZE can't be resized smaller
