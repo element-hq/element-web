@@ -16,8 +16,6 @@ addons:
 install:
     - npm install
     - ./scripts/travis/install-deps.sh
-script:
-    ./scripts/travis.sh
 
 matrix:
     include:
