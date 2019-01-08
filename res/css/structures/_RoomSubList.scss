@@ -33,9 +33,13 @@ limitations under the License.
 
 .mx_RoomSubList {
     min-height: 31px;
-    flex: 0 1 auto;
+    flex: 0 10000 auto;
     display: flex;
     flex-direction: column;
+}
+
+.mx_RoomSubList.resized-sized {
+    flex: 1 1 auto;
 }
 
 .mx_RoomSubList_nonEmpty {
@@ -48,17 +52,6 @@ limitations under the License.
 
 .mx_RoomSubList_hidden {
     flex: none !important;
-}
-
-// .mx_RoomSubList.resized-all {
-//     flex: 0 1 auto;
-// }
-
-.mx_RoomSubList.resized-sized {
-    /*  resizer set max-height on resized-sized,
-        so that limits the height and hence
-        needs a very small flex-shrink */
-    flex: 1 0 auto;
 }
 
 .mx_RoomSubList_labelContainer {
