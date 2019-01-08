@@ -66,7 +66,7 @@ class RoomDistributor {
     _contentSize(item) {
         const scrollItem = item.domNode.querySelector(".mx_RoomSubList_scroll");
         const headerHeight = item.size() - scrollItem.offsetHeight;
-        return headerHeight + scrollItem.scrollHeight;
+        return headerHeight + scrollItem.scrollHeight + 4;
     }
 
     resize(size) {
