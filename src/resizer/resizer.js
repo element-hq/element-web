@@ -43,14 +43,6 @@ export class Resizer {
         this._onMouseDown = this._onMouseDown.bind(this);
     }
 
-    clearItemSizes() {
-        const handles = this._getResizeHandles();
-        handles.forEach((handle) => {
-            const {sizer, item} = this._createSizerAndDistributor(handle);
-            sizer.clearItemSize(item);
-        });
-    }
-
     setClassNames(classNames) {
         this.classNames = classNames;
     }
@@ -142,7 +134,7 @@ export class Resizer {
         const distributor = new this.distributorCtor(
             sizer, item, id, this.distributorCfg,
             items, this.container);
-        return {sizer, distributor, item};
+        return {sizer, distributor};
     }
 
     _getResizableItems() {

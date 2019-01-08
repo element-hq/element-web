@@ -72,16 +72,12 @@ export default class MainSplit extends React.Component {
 
     componentDidUpdate(prevProps) {
         const shouldAllowResizing =
-            !this.props.disableSizing &&
             !this.props.collapsedRhs &&
             this.props.panel;
 
         if (shouldAllowResizing && !this.resizer) {
             this._createResizer();
         } else if (!shouldAllowResizing && this.resizer) {
-            if (this.props.disableSizing) {
-                this.resizer.clearItemSizes();
-            }
             this.resizer.detach();
             this.resizer = null;
         }
