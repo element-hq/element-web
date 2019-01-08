@@ -21,7 +21,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
-export default class KeyBackupPanel extends React.Component {
+export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
