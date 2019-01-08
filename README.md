@@ -128,60 +128,35 @@ Github Issues
 All issues should be filed under https://github.com/vector-im/riot-web/issues
 for now.
 
-OUTDATED: To Create Your Own Skin
-=================================
+Development
+===========
 
-**This is ALL LIES currently, and needs to be updated**
+Ensure you have the latest stable Node JS runtime installed (v8.x is the best choice). Then check out
+the code and pull in dependencies:
 
-Skins are modules are exported from such a package in the `lib` directory.
-`lib/skins` contains one directory per-skin, named after the skin, and the
-`modules` directory contains modules as their javascript files.
+```bash
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+cd matrix-react-sdk
+git checkout develop
+npm install
+```
 
-A basic skin is provided in the matrix-react-skin package. This also contains
-a minimal application that instantiates the basic skin making a working matrix
-client.
+`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the 
+latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
+you should run the following which will sync changes from the JS sdk here.
 
-You can use matrix-react-sdk directly, but to do this you would have to provide
-'views' for each UI component. To get started quickly, use matrix-react-skin.
+```bash
+npm link ../matrix-js-sdk
+```
 
-To actually change the look of a skin, you can create a base skin (which
-does not use views from any other skin) or you can make a derived skin.
-Note that derived skins are currently experimental: for example, the CSS
-from the skins it is based on will not be automatically included.
+Command assumes a checked out and installed `matrix-js-sdk` folder in parent
+folder.
 
-To make a skin, create React classes for any custom components you wish to add
-in a skin within `src/skins/<skin name>`. These can be based off the files in
-`views` in the `matrix-react-skin` package, modifying the require() statement
-appropriately.
+Running tests
+=============
 
-If you make a derived skin, you only need copy the files you wish to customise.
+Ensure you've followed the above development instructions and then:
 
-Once you've made all your view files, you need to make a `skinfo.json`. This
-contains all the metadata for a skin. This is a JSON file with, currently, a
-single key, 'baseSkin'. Set this to the empty string if your skin is a base skin,
-or for a derived skin, set it to the path of your base skin's skinfo.json file, as
-you would use in a require call.
-
-Now you have the basis of a skin, you need to generate a skindex.json file. The
-`reskindex.js` tool in matrix-react-sdk does this for you. It is suggested that
-you add an npm script to run this, as in matrix-react-skin.
-
-For more specific detail on any of these steps, look at matrix-react-skin.
-
-Alternative instructions:
-
-  * Create a new NPM project. Be sure to directly depend on react, (otherwise
-    you can end up with two copies of react).
-  * Create an index.js file that sets up react. Add require statements for
-    React and matrix-react-sdk. Load a skin using the 'loadSkin' method on the
-    SDK and call Render. This can be a skin provided by a separate package or
-    a skin in the same package.
-  * Add a way to build your project: we suggest copying the scripts block
-    from matrix-react-skin (which uses babel and webpack). You could use
-    different tools but remember that at least the skins and modules of
-    your project should end up in plain (ie. non ES6, non JSX) javascript in
-    the lib directory at the end of the build process, as well as any
-    packaging that you might do.
-  * Create an index.html file pulling in your compiled javascript and the
-    CSS bundle from the skin you use. For now, you'll also need to manually
-    import CSS from any skins that your skin inherts from.
+```bash
+npm run test
+```

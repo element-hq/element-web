@@ -36,6 +36,14 @@ module.exports = React.createClass({
         onLoginClick: PropTypes.func,
         onRegisterClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
+
+        // The default server name to use when the user hasn't specified
+        // one. This is used when displaying the defaultHsUrl in the UI.
+        defaultServerName: PropTypes.string,
+
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -45,6 +53,7 @@ module.exports = React.createClass({
             progress: null,
             password: null,
             password2: null,
+            errorText: null,
         };
     },
 
@@ -80,6 +89,13 @@ module.exports = React.createClass({
 
     onSubmitForm: function(ev) {
         ev.preventDefault();
+
+        // Don't allow the user to register if there's a discovery error
+        // Without this, the user could end up registering on the wrong homeserver.
+        if (this.props.defaultServerDiscoveryError) {
+            this.setState({errorText: this.props.defaultServerDiscoveryError});
+            return;
+        }
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -146,6 +162,18 @@ module.exports = React.createClass({
         this.setState(newState);
     },
 
+    onLoginClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onLoginClick();
+    },
+
+    onRegisterClick: function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onRegisterClick();
+    },
+
     showErrorDialog: function(body, title) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
@@ -200,6 +228,12 @@ module.exports = React.createClass({
                 );
             }
 
+            let errorText = null;
+            const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+            if (err) {
+                errorText = <div className="mx_Login_error">{ err }</div>;
+            }
+
             const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
 
             resetPasswordJsx = (
@@ -230,10 +264,11 @@ module.exports = React.createClass({
                         <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
                     </form>
                     { serverConfigSection }
-                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                    { errorText }
+                    <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
                         { _t('Return to login screen') }
                     </a>
-                    <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
+                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
                         { _t('Create an account') }
                     </a>
                     <LanguageSelector />

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const jest = require('jest-mock');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-addons-test-utils');
@@ -87,8 +88,8 @@ describe('Registration', function() {
     });
 
     it('should NOT track a referral following successful registration of a non-team member', function(done) {
-        const onLoggedIn = expect.createSpy().andCall(function(creds, teamToken) {
-            expect(teamToken).toNotExist();
+        const onLoggedIn = jest.fn(function(creds, teamToken) {
+            expect(teamToken).toBeFalsy();
             done();
         });
 

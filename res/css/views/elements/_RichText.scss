@@ -19,6 +19,11 @@
     cursor: pointer;
 }
 
+/* More specific to override `.markdown-body a` text-decoration */
+.mx_EventTile_content .markdown-body a.mx_Pill {
+    text-decoration: none;
+}
+
 /* More specific to override `.markdown-body a` color */
 .mx_EventTile_content .markdown-body a.mx_UserPill,
 .mx_UserPill {
@@ -31,7 +36,9 @@
     background-color: $accent-color ! important;
 }
 
+/* More specific to override `.markdown-body a` color */
 .mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me,
+.mx_EventTile_content .markdown-body a.mx_AtRoomPill,
 .mx_EventTile_content .mx_AtRoomPill,
 .mx_MessageComposer_input .mx_AtRoomPill {
     color: $accent-fg-color;

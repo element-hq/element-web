@@ -107,3 +107,10 @@ limitations under the License.
 }
 */
 
+.mx_EntityTile_subtext {
+    font-size: 11px;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}

@@ -70,6 +70,23 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.customHsUrl === this.state.hs_url &&
+            newProps.customIsUrl === this.state.is_url) return;
+
+        this.setState({
+            hs_url: newProps.customHsUrl,
+            is_url: newProps.customIsUrl,
+            configVisible: !newProps.withToggleButton ||
+                (newProps.customHsUrl !== newProps.defaultHsUrl) ||
+                (newProps.customIsUrl !== newProps.defaultIsUrl),
+        });
+        this.props.onServerConfigChange({
+            hsUrl: newProps.customHsUrl,
+            isUrl: newProps.customIsUrl,
+        });
+    },
+
     onHomeserverChanged: function(ev) {
         this.setState({hs_url: ev.target.value}, function() {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {

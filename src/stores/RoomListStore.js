@@ -277,7 +277,7 @@ class RoomListStore extends Store {
         const roomCache = this._state.roomCache;
         if (!roomCache[roomId]) roomCache[roomId] = {};
 
-        if (value) roomCache[roomId][type] = value;
+        if (typeof value !== "undefined") roomCache[roomId][type] = value;
         else delete roomCache[roomId][type];
 
         this._setState({roomCache});
@@ -300,6 +300,10 @@ class RoomListStore extends Store {
             const ts = this._tsOfNewestEvent(room);
             this._updateCachedRoomState(roomId, "timestamp", ts);
             return ts;
+        } else if (type === "unread-muted") {
+            const unread = Unread.doesRoomHaveUnreadMessages(room);
+            this._updateCachedRoomState(roomId, "unread-muted", unread);
+            return unread;
         } else if (type === "unread") {
             const unread = room.getUnreadNotificationCount() > 0;
             this._updateCachedRoomState(roomId, "unread", unread);
@@ -358,8 +362,21 @@ class RoomListStore extends Store {
         }
 
         if (pinUnread) {
-            const unreadA = this._getRoomState(roomA, "unread");
-            const unreadB = this._getRoomState(roomB, "unread");
+            let unreadA = this._getRoomState(roomA, "unread");
+            let unreadB = this._getRoomState(roomB, "unread");
+            if (unreadA && !unreadB) return -1;
+            if (!unreadA && unreadB) return 1;
+
+            // If they both have unread messages, sort by timestamp
+            // If nether have unread message (the fourth check not shown
+            // here), then just sort by timestamp anyways.
+            if (unreadA && unreadB) return timestampDiff;
+
+            // Unread can also mean "unread without badge", which is
+            // different from what the above checks for. We're also
+            // going to sort those here.
+            unreadA = this._getRoomState(roomA, "unread-muted");
+            unreadB = this._getRoomState(roomB, "unread-muted");
             if (unreadA && !unreadB) return -1;
             if (!unreadA && unreadB) return 1;
 

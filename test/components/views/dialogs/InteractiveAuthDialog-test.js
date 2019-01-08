@@ -83,8 +83,8 @@ describe('InteractiveAuthDialog', function() {
                     submitNode = node;
                 }
             }
-            expect(passwordNode).toExist();
-            expect(submitNode).toExist();
+            expect(passwordNode).toBeTruthy();
+            expect(submitNode).toBeTruthy();
 
             // submit should be disabled
             expect(submitNode.disabled).toBe(true);

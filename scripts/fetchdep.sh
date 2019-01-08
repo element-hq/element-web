@@ -1,22 +1,27 @@
 #!/bin/sh
 
-set -e
-
 org="$1"
 repo="$2"
+defbranch="$3"
+
+[ -z "$defbranch" ] && defbranch="develop"
 
 rm -r "$repo" || true
 
-curbranch="$TRAVIS_PULL_REQUEST_BRANCH"
-[ -z "$curbranch" ] && curbranch="$TRAVIS_BRANCH"
-[ -z "$curbranch" ] && curbranch=`"echo $GIT_BRANCH" | sed -e 's/^origin\///'` # jenkins
+clone() {
+    branch=$1
+    if [ -n "$branch" ]
+    then
+        echo "Trying to use the branch $branch"
+        git clone https://github.com/$org/$repo.git $repo --branch "$branch" && exit 0
+    fi
+}
 
-if [ -n "$curbranch" ]
-then
-    echo "Determined branch to be $curbranch"
-
-    git clone https://github.com/$org/$repo.git $repo --branch "$curbranch" && exit 0
-fi
-
-echo "Checking out develop branch"
-git clone https://github.com/$org/$repo.git $repo --branch develop
+# Try the PR author's branch in case it exists on the deps as well.
+clone $TRAVIS_PULL_REQUEST_BRANCH
+# Try the target branch of the push or PR.
+clone $TRAVIS_BRANCH
+# Try the current branch from Jenkins.
+clone `"echo $GIT_BRANCH" | sed -e 's/^origin\///'`
+# Use the default branch as the last resort.
+clone $defbranch

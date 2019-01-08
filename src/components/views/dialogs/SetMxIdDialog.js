@@ -23,6 +23,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
 import { KeyCode } from '../../../Keyboard';
 import { _t } from '../../../languageHandler';
+import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 
 // The amount of time to wait for further changes to the input username before
 // sending a request to the server
@@ -110,12 +111,11 @@ export default React.createClass({
     },
 
     _doUsernameCheck: function() {
-        // XXX: SPEC-1
-        // Check if username is valid
-        // Naive impl copied from https://github.com/matrix-org/matrix-react-sdk/blob/66c3a6d9ca695780eb6b662e242e88323053ff33/src/components/views/login/RegistrationForm.js#L190
-        if (encodeURIComponent(this.state.username) !== this.state.username) {
+        // We do a quick check ahead of the username availability API to ensure the
+        // user ID roughly looks okay from a Matrix perspective.
+        if (!SAFE_LOCALPART_REGEX.test(this.state.username)) {
             this.setState({
-                usernameError: _t('User names may only contain letters, numbers, dots, hyphens and underscores.'),
+                usernameError: _t("Only use lower case letters, numbers and '=_-./'"),
             });
             return Promise.reject();
         }
@@ -210,7 +210,6 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
-        const Spinner = sdk.getComponent('elements.Spinner');
 
         let auth;
         if (this.state.doingUIAuth) {
@@ -230,9 +229,8 @@ export default React.createClass({
         });
 
         let usernameIndicator = null;
-        let usernameBusyIndicator = null;
         if (this.state.usernameBusy) {
-            usernameBusyIndicator = <Spinner w="24" h="24" />;
+            usernameIndicator = <div>{_t("Checking...")}</div>;
         } else {
             const usernameAvailable = this.state.username &&
                 this.state.usernameCheckSupport && !this.state.usernameError;
@@ -270,7 +268,6 @@ export default React.createClass({
                             size="30"
                             className={inputClasses}
                         />
-                        { usernameBusyIndicator }
                     </div>
                     { usernameIndicator }
                     <p>

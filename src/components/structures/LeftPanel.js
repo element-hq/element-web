@@ -151,7 +151,7 @@ const LeftPanel = React.createClass({
             }
         } while (element && !(
             classes.contains("mx_RoomTile") ||
-            classes.contains("mx_SearchBox_search")));
+            classes.contains("mx_textinput_search")));
 
         if (element) {
             element.focus();

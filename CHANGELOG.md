@@ -1,3 +1,57 @@
+Changes in [0.14.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.7) (2018-12-10)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.7-rc.2...v0.14.7)
+
+ * No changes since rc.2
+
+Changes in [0.14.7-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.7-rc.2) (2018-12-06)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.7-rc.1...v0.14.7-rc.2)
+
+ * Ship the babelrc file to npm
+   [\#2332](https://github.com/matrix-org/matrix-react-sdk/pull/2332)
+
+Changes in [0.14.7-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.7-rc.1) (2018-12-06)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.6...v0.14.7-rc.1)
+
+ * Suppress CORS errors in the 'failed to join room' dialog
+   [\#2306](https://github.com/matrix-org/matrix-react-sdk/pull/2306)
+ * Check if users exist before inviting them and communicate errors
+   [\#2317](https://github.com/matrix-org/matrix-react-sdk/pull/2317)
+ * Update from Weblate.
+   [\#2328](https://github.com/matrix-org/matrix-react-sdk/pull/2328)
+ * Allow group summary to load when /users fails
+   [\#2326](https://github.com/matrix-org/matrix-react-sdk/pull/2326)
+ * Show correct text if passphrase is skipped
+   [\#2324](https://github.com/matrix-org/matrix-react-sdk/pull/2324)
+ * Add password strength meter to backup creation UI
+   [\#2294](https://github.com/matrix-org/matrix-react-sdk/pull/2294)
+ * Check upload limits before trying to upload large files
+   [\#1876](https://github.com/matrix-org/matrix-react-sdk/pull/1876)
+ * Support .well-known discovery
+   [\#2227](https://github.com/matrix-org/matrix-react-sdk/pull/2227)
+ * Make create key backup dialog async
+   [\#2291](https://github.com/matrix-org/matrix-react-sdk/pull/2291)
+ * Forgot to enable continue button on download
+   [\#2288](https://github.com/matrix-org/matrix-react-sdk/pull/2288)
+ * Online incremental megolm backups (v2)
+   [\#2169](https://github.com/matrix-org/matrix-react-sdk/pull/2169)
+ * Add recovery key download button
+   [\#2284](https://github.com/matrix-org/matrix-react-sdk/pull/2284)
+ * Passphrase Support for e2e backups
+   [\#2283](https://github.com/matrix-org/matrix-react-sdk/pull/2283)
+ * Update async dialog interface to use promises
+   [\#2286](https://github.com/matrix-org/matrix-react-sdk/pull/2286)
+ * Support for m.login.sso
+   [\#2279](https://github.com/matrix-org/matrix-react-sdk/pull/2279)
+ * Added badge to non-autoplay GIFs
+   [\#2235](https://github.com/matrix-org/matrix-react-sdk/pull/2235)
+ * Improve terms auth flow
+   [\#2277](https://github.com/matrix-org/matrix-react-sdk/pull/2277)
+ * Handle crypto db version upgrade
+   [\#2282](https://github.com/matrix-org/matrix-react-sdk/pull/2282)
+
 Changes in [0.14.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.6) (2018-11-22)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.5...v0.14.6)
