@@ -19,6 +19,7 @@ import {Sizer} from "./sizer";
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
         item.style.maxHeight = `${Math.round(size)}px`;
+        item.classList.add("resized-sized");
     }
 }
 
@@ -45,7 +46,10 @@ const MIN_SIZE = 70;
 //  - items at maxContentHeight can't be resized larger
 
 // if you shrink the predecesor, and start dragging down again afterwards, which item has to grow?
-
+/*
+    either items before (starting from first or last)
+    or
+*/
 class RoomDistributor {
     constructor(item) {
         this.item = item;
@@ -55,24 +59,14 @@ class RoomDistributor {
         return 1;
     }
 
-    // returns the remainder of size it didn't consume for this item
-    _sizeItem(item, size) {
-        // if collapsed, do nothing and subtract own height
-        if (item.domNode.classList.contains("mx_RoomSubList_hidden")) {
-            return;
-        } else if (size < MIN_SIZE) {
-            item.setSize(MIN_SIZE);
-        } else {
-            const scrollItem = item.domNode.querySelector(".mx_RoomSubList_scroll");
-            const headerHeight = item.size() - scrollItem.offsetHeight;
-            const maxContentHeight = headerHeight + scrollItem.scrollHeight;
-            // avoid flexbox growing larger than the content height
-            if (size > maxContentHeight) {
-                item.setSize(maxContentHeight);
-            } else {
-                item.setSize(size);
-            }
-        }
+    _isCollapsed(item) {
+        return item.domNode.classList.contains("mx_RoomSubList_hidden");
+    }
+
+    _contentSize(item) {
+        const scrollItem = item.domNode.querySelector(".mx_RoomSubList_scroll");
+        const headerHeight = item.size() - scrollItem.offsetHeight;
+        return headerHeight + scrollItem.scrollHeight;
     }
 
     resize(size) {
@@ -80,28 +74,36 @@ class RoomDistributor {
             console.log("NEGATIVE SIZE RESIZE RESIZE RESIZE!!!", size);
         }
         let item = this.item;
+
+        // cache result of this loop?
+
         // move to item that is at position of cursor
         // this would happen if the cursor goes beyond the min-height
-        while (item && size < 0) {
-            item = item.previous();
-            if (item) {
-                size = item.size() - size - this._handleSize();
-            }
-        }
-        // change size of item and previous items from here
-        while(item && size > 0) {
-            const itemSize = item.size();
-            this._sizeItem(item, size);
-            const delta = item.size() - itemSize;
-            const remainder = size - delta;
-            // pass remainder to previous item
-            if (remainder !== 0) {
+        while (item) {
+            // TODO: collapsed
+            if (size <= MIN_SIZE) {
+                item.setSize(MIN_SIZE);
+                const remainder = MIN_SIZE - size;
                 item = item.previous();
                 if (item) {
                     size = item.size() - remainder - this._handleSize();
                 }
-            } else {
-                item = null;
+            }
+            else {
+                const contentSize = this._contentSize(item);
+                if (size > contentSize) {
+                    item.setSize(contentSize);
+                    const remainder = size - contentSize;
+                    item = item.previous();
+                    if (item) {
+                        size = item.size() + remainder; // todo: handle size here?
+                    }
+                }
+                else {
+                    item.setSize(size);
+                    item = null;
+                    size = 0;
+                }
             }
         }
     }

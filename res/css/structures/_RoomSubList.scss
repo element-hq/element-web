@@ -33,7 +33,7 @@ limitations under the License.
 
 .mx_RoomSubList {
     min-height: 31px;
-    flex: 0 100000000 auto;
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
 }
@@ -50,15 +50,15 @@ limitations under the License.
     flex: none !important;
 }
 
-.mx_RoomSubList.resized-all {
-    flex: 0 1 auto;
-}
+// .mx_RoomSubList.resized-all {
+//     flex: 0 1 auto;
+// }
 
 .mx_RoomSubList.resized-sized {
     /*  resizer set max-height on resized-sized,
         so that limits the height and hence
         needs a very small flex-shrink */
-    flex: 0 10000 auto;
+    flex: 1 0 auto;
 }
 
 .mx_RoomSubList_labelContainer {

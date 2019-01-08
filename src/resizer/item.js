@@ -69,7 +69,6 @@ export default class ResizeItem {
 
     setSize(size) {
         this.sizer.setItemSize(this.domNode, size);
-        console.log("resizing", this.domNode, "to", size, this.size());
         const callback = this.resizer.distributorCtor.onResized;
         if (callback) {
             callback(size, this.id, this.domNode);
