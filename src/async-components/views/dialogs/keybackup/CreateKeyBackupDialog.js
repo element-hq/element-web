@@ -344,7 +344,10 @@ export default React.createClass({
     _renderPhaseShowKey: function() {
         let bodyText;
         if (this.state.setPassPhrase) {
-            bodyText = _t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.");
+            bodyText = _t(
+                "As a safety net, you can use it to restore your encrypted message " +
+                "history if you forget your Recovery Passphrase.",
+            );
         } else {
             bodyText = _t("As a safety net, you can use it to restore your encrypted message history.");
         }
