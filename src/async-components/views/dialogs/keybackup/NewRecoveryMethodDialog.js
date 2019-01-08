@@ -79,7 +79,6 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
             <BaseDialog className="mx_NewRecoveryMethodDialog"
                 onFinished={this.props.onFinished}
                 title={title}
-                hasCancel={false}
             >
                 <div>
                     <p>{_t(
