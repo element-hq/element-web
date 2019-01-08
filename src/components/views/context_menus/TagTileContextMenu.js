@@ -70,7 +70,7 @@ export default class TagTileContextMenu extends React.Component {
             gridViewOption = (<div className="mx_TagTileContextMenu_item" onClick={this._onViewAsGridClick} >
                 <TintableSvg
                     className="mx_TagTileContextMenu_item_icon"
-                    src="img/icons-gridview.svg"
+                    src="img/feather-icons/grid.svg"
                     width="15"
                     height="15"
                 />
