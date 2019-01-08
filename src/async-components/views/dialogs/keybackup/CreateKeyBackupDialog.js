@@ -355,7 +355,7 @@ export default React.createClass({
         return <div>
             <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
             <p>{bodyText}</p>
-            <p className="mx_CreateKeyBackupDialog_primaryContainer">
+            <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
                     {_t("Your Recovery Key")}
                 </div>
@@ -372,7 +372,7 @@ export default React.createClass({
                         </button>
                     </div>
                 </div>
-            </p>
+            </div>
         </div>;
     },
 
