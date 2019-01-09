@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,10 +20,16 @@ import sdk from "../../../index";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 export default class RoomRecoveryReminder extends React.PureComponent {
     static propTypes = {
-        onFinished: PropTypes.func.isRequired,
+        // called if the user sets the option to suppress this reminder in the future
+        onDontAskAgainSet: PropTypes.func,
+    }
+
+    static defaultProps = {
+        onDontAskAgainSet: function() {},
     }
 
     constructor(props) {
@@ -82,7 +88,6 @@ export default class RoomRecoveryReminder extends React.PureComponent {
             Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
                 userId: MatrixClientPeg.get().credentials.userId,
                 device: this.state.unverifiedDevice,
-                onFinished: this.props.onFinished,
             });
             return;
         }
@@ -91,9 +96,6 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         // we'll show the create key backup flow.
         Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
             import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
-            {
-                onFinished: this.props.onFinished,
-            },
         );
     }
 
@@ -103,10 +105,14 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         Modal.createTrackedDialogAsync("Ignore Recovery Reminder", "Ignore Recovery Reminder",
             import("../../../async-components/views/dialogs/keybackup/IgnoreRecoveryReminderDialog"),
             {
-                onDontAskAgain: () => {
-                    // Report false to the caller, who should prevent the
-                    // reminder from appearing in the future.
-                    this.props.onFinished(false);
+                onDontAskAgain: async () => {
+                    await SettingsStore.setValue(
+                        "showRoomRecoveryReminder",
+                        null,
+                        SettingLevel.ACCOUNT,
+                        false,
+                    );
+                    this.props.onDontAskAgainSet();
                 },
                 onSetup: () => {
                     this.showSetupDialog();
