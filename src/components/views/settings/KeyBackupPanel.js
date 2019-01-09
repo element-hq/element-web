@@ -161,23 +161,28 @@ export default class KeyBackupPanel extends React.PureComponent {
         } else if (this.state.backupInfo) {
             let clientBackupStatus;
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                clientBackupStatus = _t("This device is uploading keys to this backup");
+                clientBackupStatus = _t("This device is using key backup");
             } else {
                 // XXX: display why and how to fix it
                 clientBackupStatus = _t(
-                    "This device is <b>not</b> uploading keys to this backup", {},
+                    "This device is <b>not</b> using key backup", {},
                     {b: x => <b>{x}</b>},
                 );
             }
 
             let uploadStatus;
             const { sessionsRemaining } = this.state;
-            if (sessionsRemaining > 0) {
-                uploadStatus = _t("Backing up %(sessionsRemaining)s keys...", {
-                    sessionsRemaining,
-                });
+            if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+                // No upload status to show when backup disabled.
+                uploadStatus = "";
+            } else if (sessionsRemaining > 0) {
+                uploadStatus = <div>
+                    {_t("Backing up %(sessionsRemaining)s keys...", { sessionsRemaining })} <br />
+                </div>;
             } else {
-                uploadStatus = _t("All keys backed up");
+                uploadStatus = <div>
+                    {_t("All keys backed up")} <br />
+                </div>;
             }
 
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
@@ -244,7 +249,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 {_t("Backup version: ")}{this.state.backupInfo.version}<br />
                 {_t("Algorithm: ")}{this.state.backupInfo.algorithm}<br />
                 {clientBackupStatus}<br />
-                {uploadStatus}<br />
+                {uploadStatus}
                 <div>{backupSigStatuses}</div><br />
                 <br />
                 <AccessibleButton className="mx_UserSettings_button"
