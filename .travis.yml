@@ -30,3 +30,6 @@ matrix:
         - name: Unit Tests
           script:
             - ./scripts/travis/unit-tests.sh
+        - name: Riot-web Unit Tests
+          script:
+            - ./scripts/travis/riot-unit-tests.sh
