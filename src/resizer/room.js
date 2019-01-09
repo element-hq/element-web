@@ -29,11 +29,15 @@ class RoomSubList extends ResizeItem {
 
     }
 
-    scrollSizes() {
-        return {offsetHeight, scrollHeight};
+    id() {
+
     }
 
-    id() {
+    maxSize() {
+
+    }
+
+    minSize() {
 
     }
 }
