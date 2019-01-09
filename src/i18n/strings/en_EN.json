@@ -354,6 +354,8 @@
     "Unable to load key backup status": "Unable to load key backup status",
     "This device is uploading keys to this backup": "This device is uploading keys to this backup",
     "This device is <b>not</b> uploading keys to this backup": "This device is <b>not</b> uploading keys to this backup",
+    "Backing up %(sessionsRemaining)s keys...": "Backing up %(sessionsRemaining)s keys...",
+    "All keys backed up": "All keys backed up",
     "Backup has a <validity>valid</validity> signature from this device": "Backup has a <validity>valid</validity> signature from this device",
     "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>": "Backup has a <validity>valid</validity> signature from <verify>verified</verify> device <device></device>",
     "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>": "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> device <device></device>",

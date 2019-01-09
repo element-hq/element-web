@@ -28,6 +28,8 @@ export default class KeyBackupPanel extends React.PureComponent {
         this._startNewBackup = this._startNewBackup.bind(this);
         this._deleteBackup = this._deleteBackup.bind(this);
         this._verifyDevice = this._verifyDevice.bind(this);
+        this._onKeyBackupSessionsRemaining =
+            this._onKeyBackupSessionsRemaining.bind(this);
         this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
         this._restoreBackup = this._restoreBackup.bind(this);
 
@@ -36,6 +38,7 @@ export default class KeyBackupPanel extends React.PureComponent {
             loading: true,
             error: null,
             backupInfo: null,
+            sessionsRemaining: 0,
         };
     }
 
@@ -43,6 +46,10 @@ export default class KeyBackupPanel extends React.PureComponent {
         this._loadBackupStatus();
 
         MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatus);
+        MatrixClientPeg.get().on(
+            'crypto.keyBackupSessionsRemaining',
+            this._onKeyBackupSessionsRemaining,
+        );
     }
 
     componentWillUnmount() {
@@ -50,7 +57,17 @@ export default class KeyBackupPanel extends React.PureComponent {
 
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatus);
+            MatrixClientPeg.get().removeListener(
+                'crypto.keyBackupSessionsRemaining',
+                this._onKeyBackupSessionsRemaining,
+            );
         }
+    }
+
+    _onKeyBackupSessionsRemaining(sessionsRemaining) {
+        this.setState({
+            sessionsRemaining,
+        });
     }
 
     _onKeyBackupStatus() {
@@ -153,6 +170,16 @@ export default class KeyBackupPanel extends React.PureComponent {
                 );
             }
 
+            let uploadStatus;
+            const { sessionsRemaining } = this.state;
+            if (sessionsRemaining > 0) {
+                uploadStatus = _t("Backing up %(sessionsRemaining)s keys...", {
+                    sessionsRemaining,
+                });
+            } else {
+                uploadStatus = _t("All keys backed up");
+            }
+
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device.getDisplayName() || sig.device.deviceId;
                 const validity = sub =>
@@ -217,6 +244,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 {_t("Backup version: ")}{this.state.backupInfo.version}<br />
                 {_t("Algorithm: ")}{this.state.backupInfo.algorithm}<br />
                 {clientBackupStatus}<br />
+                {uploadStatus}<br />
                 <div>{backupSigStatuses}</div><br />
                 <br />
                 <AccessibleButton className="mx_UserSettings_button"
