@@ -1274,7 +1274,7 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    selectHistory = async(up) => {
+    selectHistory = async (up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
