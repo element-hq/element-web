@@ -356,9 +356,6 @@ export default class MessageComposerInput extends React.Component {
     componentWillMount() {
         this.dispatcherRef = this.props.roomViewStore.getDispatcher().register(this.onAction);
         if (this.props.isGrid) {
-
-
-
             this.historyManager = new NoopHistoryManager();
         } else {
             this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');

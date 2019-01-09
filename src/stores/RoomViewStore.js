@@ -307,6 +307,6 @@ export class RoomViewStore extends Store {
 }
 
 const MatrixDispatcher = require("../matrix-dispatcher");
-const blubber = new RoomViewStore(new MatrixDispatcher());
+const backwardsCompatInstance = new RoomViewStore(new MatrixDispatcher());
 
-export default blubber;
+export default backwardsCompatInstance;

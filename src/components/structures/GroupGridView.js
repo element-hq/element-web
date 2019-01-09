@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import OpenRoomsStore from '../../stores/OpenRoomsStore';
 import dis from '../../dispatcher';
+import {_t} from '../../languageHandler';
 import RoomView from './RoomView';
 import classNames from 'classnames';
 import MainSplit from './MainSplit';
@@ -48,7 +49,6 @@ export default class RoomGridView extends React.Component {
     componentWillMount() {
         this._unmounted = false;
         this._openRoomsStoreRegistration = OpenRoomsStore.addListener(this.onRoomsChanged);
-        this._dispatcherRef = dis.register(this._onAction);
     }
 
     componentWillUnmount() {
@@ -56,7 +56,6 @@ export default class RoomGridView extends React.Component {
         if (this._openRoomsStoreRegistration) {
             this._openRoomsStoreRegistration.remove();
         }
-        dis.unregister(this._dispatcherRef);
     }
 
     onRoomsChanged() {
@@ -65,13 +64,6 @@ export default class RoomGridView extends React.Component {
             roomStores: OpenRoomsStore.getRoomStores(),
             activeRoomStore: OpenRoomsStore.getActiveRoomStore(),
         });
-    }
-
-    _onAction(payload) {
-        switch (payload.action) {
-            default:
-                break;
-        }
     }
 
     _setActive(i) {
@@ -125,7 +117,7 @@ export default class RoomGridView extends React.Component {
                                     />
                                 </section>);
                         } else {
-                            return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`} />);
+                            return (<section className={"mx_GroupGridView_emptyTile"} key={`empty-${i}`}>{_t("No room in this tile yet.")}</section>);
                         }
                     }) }
                 </div>

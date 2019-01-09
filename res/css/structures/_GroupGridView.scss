@@ -26,7 +26,6 @@ limitations under the License.
     flex: 1 1 0;
 }
 
-
 .mx_GroupGridView_rightPanel {
     display: flex;
     flex-direction: column;
@@ -55,11 +54,11 @@ limitations under the License.
     display: flex;
 }
 
-.mx_GroupGridView_emptyTile::before {
+.mx_GroupGridView_emptyTile {
     display: block;
     margin-top: 100px;
     text-align: center;
-    content: "no room in this tile yet";
+    user-select: none;
 }
 
 .mx_GroupGridView_tile {
@@ -85,16 +84,15 @@ limitations under the License.
 
 .mx_GroupGridView_activeTile:before {
     border-radius: 14px;
-    border: 8px solid rgba(134, 193, 165, 0.5);
+    border: 8px solid $gridview-focus-border-glow-color;
     margin: -8px;
 }
 
 .mx_GroupGridView_activeTile:after {
     border-radius: 8px;
-    border: 2px solid rgba(134, 193, 165, 1);
+    border: 2px solid $gridview-focus-border-color;
     margin: -2px;
 }
-
 
 .mx_GroupGridView_tile > .mx_RoomView {
     height: 100%;
