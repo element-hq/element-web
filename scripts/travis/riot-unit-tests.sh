@@ -6,5 +6,9 @@
 
 set -ev
 
+RIOT_WEB_DIR=riot-web
+
 scripts/travis/build.sh
+pushd "$RIOT_WEB_DIR"
 npm run test
+popd
