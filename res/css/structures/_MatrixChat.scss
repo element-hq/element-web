@@ -73,7 +73,8 @@ limitations under the License.
 .mx_MatrixChat > :not(.mx_LeftPanel_container):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
 
     /* Experimental fix for https://github.com/vector-im/vector-web/issues/947
        and https://github.com/vector-im/vector-web/issues/946.
