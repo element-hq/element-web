@@ -36,7 +36,6 @@ const ContentMessages = require("../../ContentMessages");
 const Modal = require("../../Modal");
 const sdk = require('../../index');
 const CallHandler = require('../../CallHandler');
-const dis = require("../../dispatcher");
 const Tinter = require("../../Tinter");
 const rate_limited_func = require('../../ratelimitedfunc');
 const ObjectUtils = require('../../ObjectUtils');
@@ -46,7 +45,6 @@ import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
-import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
@@ -94,6 +92,8 @@ module.exports = React.createClass({
 
         // Servers the RoomView can use to try and assist joins
         viaServers: PropTypes.arrayOf(PropTypes.string),
+        // the store for this room view
+        roomViewStore: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -155,7 +155,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
+        this.dispatcherRef = this.props.roomViewStore.getDispatcher().register(this.onAction);
         MatrixClientPeg.get().on("Room", this.onRoom);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
@@ -166,7 +166,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("crypto.keyBackupStatus", this.onKeyBackupStatus);
         this._fetchMediaConfig();
         // Start listening for RoomViewStore updates
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = this.props.roomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
@@ -197,8 +197,8 @@ module.exports = React.createClass({
         if (this.unmounted) {
             return;
         }
-
-        if (!initial && this.state.roomId !== RoomViewStore.getRoomId()) {
+        const store = this.props.roomViewStore;
+        if (!initial && this.state.roomId !== store.getRoomId()) {
             // RoomView explicitly does not support changing what room
             // is being viewed: instead it should just be re-mounted when
             // switching rooms. Therefore, if the room ID changes, we
@@ -212,22 +212,21 @@ module.exports = React.createClass({
             // it was, it means we're about to be unmounted.
             return;
         }
-
         const newState = {
-            roomId: RoomViewStore.getRoomId(),
-            roomAlias: RoomViewStore.getRoomAlias(),
-            roomLoading: RoomViewStore.isRoomLoading(),
-            roomLoadError: RoomViewStore.getRoomLoadError(),
-            joining: RoomViewStore.isJoining(),
-            initialEventId: RoomViewStore.getInitialEventId(),
-            isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
-            forwardingEvent: RoomViewStore.getForwardingEvent(),
-            shouldPeek: RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
-            editingRoomSettings: RoomViewStore.isEditingSettings(),
+            roomId: store.getRoomId(),
+            roomAlias: store.getRoomAlias(),
+            roomLoading: store.isRoomLoading(),
+            roomLoadError: store.getRoomLoadError(),
+            joining: store.isJoining(),
+            initialEventId: store.getInitialEventId(),
+            isInitialEventHighlighted: store.isInitialEventHighlighted(),
+            forwardingEvent: store.getForwardingEvent(),
+            shouldPeek: store.shouldPeek(),
+            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", store.getRoomId()),
+            editingRoomSettings: store.isEditingSettings(),
         };
 
-        if (this.state.editingRoomSettings && !newState.editingRoomSettings) dis.dispatch({action: 'focus_composer'});
+        if (this.state.editingRoomSettings && !newState.editingRoomSettings) this.props.roomViewStore.getDispatcher().dispatch({action: 'focus_composer'});
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
@@ -389,7 +388,7 @@ module.exports = React.createClass({
 
         // XXX: EVIL HACK to autofocus inviting on empty rooms.
         // We use the setTimeout to avoid racing with focus_composer.
-        if (this.state.room &&
+        if (this.props.isActive !== false && this.state.room &&
             this.state.room.getJoinedMemberCount() == 1 &&
             this.state.room.getLiveTimeline() &&
             this.state.room.getLiveTimeline().getEvents() &&
@@ -443,7 +442,7 @@ module.exports = React.createClass({
             roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
             roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
-        dis.unregister(this.dispatcherRef);
+        this.props.roomViewStore.getDispatcher().unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
@@ -842,7 +841,7 @@ module.exports = React.createClass({
     },
 
     onSearchResultsResize: function() {
-        dis.dispatch({ action: 'timeline_resize' }, true);
+        this.props.roomViewStore.getDispatcher().dispatch({ action: 'timeline_resize' }, true);
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -863,7 +862,7 @@ module.exports = React.createClass({
 
     onInviteButtonClick: function() {
         // call AddressPickerDialog
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'view_invite',
             roomId: this.state.room.roomId,
         });
@@ -885,7 +884,7 @@ module.exports = React.createClass({
             // Join this room once the user has registered and logged in
             const signUrl = this.props.thirdPartyInvite ?
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
                     action: 'join_room',
@@ -895,7 +894,7 @@ module.exports = React.createClass({
 
             // Don't peek whilst registering otherwise getPendingEventList complains
             // Do this by indicating our intention to join
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'will_join',
             });
 
@@ -906,20 +905,20 @@ module.exports = React.createClass({
                     if (submitted) {
                         this.props.onRegistered(credentials);
                     } else {
-                        dis.dispatch({
+                        this.props.roomViewStore.getDispatcher().dispatch({
                             action: 'cancel_after_sync_prepared',
                         });
-                        dis.dispatch({
+                        this.props.roomViewStore.getDispatcher().dispatch({
                             action: 'cancel_join',
                         });
                     }
                 },
                 onDifferentServerClicked: (ev) => {
-                    dis.dispatch({action: 'start_registration'});
+                    this.props.roomViewStore.getDispatcher().dispatch({action: 'start_registration'});
                     close();
                 },
                 onLoginClick: (ev) => {
-                    dis.dispatch({action: 'start_login'});
+                    this.props.roomViewStore.getDispatcher().dispatch({action: 'start_login'});
                     close();
                 },
             }).close;
@@ -929,7 +928,7 @@ module.exports = React.createClass({
         Promise.resolve().then(() => {
             const signUrl = this.props.thirdPartyInvite ?
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'join_room',
                 opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
             });
@@ -994,10 +993,10 @@ module.exports = React.createClass({
     },
 
     uploadFile: async function(file) {
-        dis.dispatch({action: 'focus_composer'});
+        this.props.roomViewStore.getDispatcher().dispatch({action: 'focus_composer'});
 
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            this.props.roomViewStore.getDispatcher().dispatch({action: 'require_registration'});
             return;
         }
 
@@ -1021,14 +1020,14 @@ module.exports = React.createClass({
         }
 
         // Send message_sent callback, for things like _checkIfAlone because after all a file is still a message.
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'message_sent',
         });
     },
 
     injectSticker: function(url, info, text) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            this.props.roomViewStore.getDispatcher().dispatch({action: 'require_registration'});
             return;
         }
 
@@ -1229,7 +1228,7 @@ module.exports = React.createClass({
     },
 
     onSettingsClick: function() {
-        dis.dispatch({ action: 'open_room_settings' });
+        this.props.roomViewStore.getDispatcher().dispatch({ action: 'open_room_settings' });
     },
 
     onSettingsSaveClick: function() {
@@ -1262,31 +1261,31 @@ module.exports = React.createClass({
                 });
                 // still editing room settings
             } else {
-                dis.dispatch({ action: 'close_settings' });
+                this.props.roomViewStore.getDispatcher().dispatch({ action: 'close_settings' });
             }
         }).finally(() => {
             this.setState({
                 uploadingRoomSettings: false,
             });
-            dis.dispatch({ action: 'close_settings' });
+            this.props.roomViewStore.getDispatcher().dispatch({ action: 'close_settings' });
         }).done();
     },
 
     onCancelClick: function() {
         console.log("updateTint from onCancelClick");
         this.updateTint();
-        dis.dispatch({ action: 'close_settings' });
+        this.props.roomViewStore.getDispatcher().dispatch({ action: 'close_settings' });
         if (this.state.forwardingEvent) {
-            dis.dispatch({
+            this.props.roomViewStore.getDispatcher().dispatch({
                 action: 'forward_event',
                 event: null,
             });
         }
-        dis.dispatch({action: 'focus_composer'});
+        this.props.roomViewStore.getDispatcher().dispatch({action: 'focus_composer'});
     },
 
     onLeaveClick: function() {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'leave_room',
             room_id: this.state.room.roomId,
         });
@@ -1294,7 +1293,7 @@ module.exports = React.createClass({
 
     onForgetClick: function() {
         MatrixClientPeg.get().forget(this.state.room.roomId).done(function() {
-            dis.dispatch({ action: 'view_next_room' });
+            this.props.roomViewStore.getDispatcher().dispatch({ action: 'view_next_room' });
         }, function(err) {
             const errCode = err.errcode || _t("unknown error code");
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1311,7 +1310,7 @@ module.exports = React.createClass({
             rejecting: true,
         });
         MatrixClientPeg.get().leave(this.state.roomId).done(function() {
-            dis.dispatch({ action: 'view_next_room' });
+            this.props.roomViewStore.getDispatcher().dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false,
             });
@@ -1337,7 +1336,7 @@ module.exports = React.createClass({
         // using /leave rather than /join. In the short term though, we
         // just ignore them.
         // https://github.com/vector-im/vector-web/issues/1134
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'view_room_directory',
         });
     },
@@ -1356,7 +1355,7 @@ module.exports = React.createClass({
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this.refs.messagePanel.jumpToLiveTimeline();
-        dis.dispatch({action: 'focus_composer'});
+        this.props.roomViewStore.getDispatcher().dispatch({action: 'focus_composer'});
     },
 
     // jump up to wherever our read marker is
@@ -1446,7 +1445,7 @@ module.exports = React.createClass({
     },
 
     onFullscreenClick: function() {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'video_fullscreen',
             fullscreen: true,
         }, true);
@@ -1571,6 +1570,7 @@ module.exports = React.createClass({
                         <RoomHeader ref="header"
                             room={this.state.room}
                             oobData={this.props.oobData}
+                            isGrid={this.props.isGrid}
                             collapsedRhs={this.props.collapsedRhs}
                         />
                         <div className="mx_RoomView_body">
@@ -1617,6 +1617,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomView">
                         <RoomHeader
                             ref="header"
+                            isGrid={this.props.isGrid}
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
                         />
@@ -1758,7 +1759,9 @@ module.exports = React.createClass({
         if (canSpeak) {
             messageComposer =
                 <MessageComposer
+                    roomViewStore={this.props.roomViewStore}
                     room={this.state.room}
+                    isGrid={this.props.isGrid}
                     onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}
@@ -1885,11 +1888,14 @@ module.exports = React.createClass({
             },
         );
 
-        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+        const rightPanel = this.state.room && !this.props.isGrid ?
+            <RightPanel roomId={this.state.room.roomId} /> :
+            undefined;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
+                    isGrid={this.props.isGrid}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}

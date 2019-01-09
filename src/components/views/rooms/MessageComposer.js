@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
@@ -63,7 +62,7 @@ export default class MessageComposer extends React.Component {
                 isRichTextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
-            isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
+            isQuoting: Boolean(this.props.roomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
         };
     }
@@ -75,7 +74,7 @@ export default class MessageComposer extends React.Component {
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = this.props.roomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
     }
 
@@ -124,14 +123,14 @@ export default class MessageComposer extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
-        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        const isQuoting = Boolean(this.props.roomViewStore.getQuotingEvent());
         if (this.state.isQuoting === isQuoting) return;
         this.setState({ isQuoting });
     }
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            this.props.roomViewStore.getDispatcher().dispatch({action: 'require_registration'});
             return;
         }
 
@@ -165,7 +164,7 @@ export default class MessageComposer extends React.Component {
             }
         }
 
-        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        const isQuoting = Boolean(this.props.roomViewStore.getQuotingEvent());
         let replyToWarning = null;
         if (isQuoting) {
             replyToWarning = <p>{
@@ -229,7 +228,7 @@ export default class MessageComposer extends React.Component {
         if (!call) {
             return;
         }
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'hangup',
             // hangup the call for this room, which may not be the room in props
             // (e.g. conferences which will hangup the 1:1 room instead)
@@ -238,7 +237,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onCallClick(ev) {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId,
@@ -246,7 +245,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onVoiceCallClick(ev) {
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'place_call',
             type: "voice",
             room_id: this.props.room.roomId,
@@ -282,7 +281,7 @@ export default class MessageComposer extends React.Component {
         ev.preventDefault();
 
         const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
-        dis.dispatch({
+        this.props.roomViewStore.getDispatcher().dispatch({
             action: 'view_room',
             highlighted: true,
             room_id: replacementRoomId,
@@ -421,8 +420,10 @@ export default class MessageComposer extends React.Component {
 
             controls.push(
                 <MessageComposerInput
+                    roomViewStore={this.props.roomViewStore}
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
+                    isGrid={this.props.isGrid}
                     onResize={this.props.onResize}
                     room={this.props.room}
                     placeholder={placeholderText}
@@ -529,5 +530,6 @@ MessageComposer.propTypes = {
     uploadAllowed: PropTypes.func.isRequired,
 
     // string representing the current room app drawer state
-    showApps: PropTypes.bool
+    showApps: PropTypes.bool,
+    roomViewStore: PropTypes.object.isRequired,
 };

@@ -78,7 +78,6 @@ export default class HeaderButtons extends React.Component {
                     // till show_right_panel, just without the fromHeader flag
                     // as that would hide the right panel again
                     dis.dispatch(Object.assign({}, payload, {fromHeader: false}));
-
                 }
                 this.setState({
                     phase: payload.phase,
