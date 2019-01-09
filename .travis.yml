@@ -14,9 +14,7 @@ node_js:
 addons:
     chrome: stable
 install:
-    - npm install
     - ./scripts/travis/install-deps.sh
-
 matrix:
     include:
         - name: Linting Checks
@@ -25,12 +23,9 @@ matrix:
             - npm run lintwithexclusions
         - name: End-to-End Tests
           install:
-            - npm install
-            - ./scripts/travis/install-deps.sh
             - sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev
           script:
-            - ./scripts/travis/test-riot.sh
+            - ./scripts/travis/end-to-end-tests.sh
         - name: Unit Tests
           script:
-            - npm run test
-
+            - ./scripts/travis/unit-tests.sh

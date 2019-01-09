@@ -9,26 +9,9 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
-scripts/fetchdep.sh vector-im riot-web
-pushd "$RIOT_WEB_DIR"
-
-mkdir node_modules
-npm install
-
-# use the version of js-sdk we just used in the react-sdk tests
-rm -r node_modules/matrix-js-sdk
-ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
-
-# ... and, of course, the version of react-sdk we just built
-rm -r node_modules/matrix-react-sdk
-ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
-
-npm run build
-npm run test
-popd
-
 if [ "$TRAVIS_BRANCH" = "develop" ]
 then
+    scripts/travis/build.sh
     # run end to end tests
     scripts/fetchdep.sh matrix-org matrix-react-end-to-end-tests master
     pushd matrix-react-end-to-end-tests
