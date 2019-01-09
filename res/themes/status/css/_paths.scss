@@ -1,0 +1,5 @@
+// Path from root SCSS file (such as `status.scss`) to `res` dir in `matrix-react-sdk`
+$res: ../../../../node_modules/matrix-react-sdk/res;
+
+// Path from root SCSS file (such as `status.scss`) to `status` dir in `riot-web`
+$status: ..;
