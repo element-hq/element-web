@@ -32,7 +32,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
         dis.dispatch({ action: 'view_user_settings' });
     }
 
-    onSetupClick = async() => {
+    onSetupClick = async () => {
         // TODO: Should change to a restore key backup flow that checks the
         // recovery passphrase while at the same time also cross-signing the
         // device as well in a single flow.  Since we don't have that yet, we'll

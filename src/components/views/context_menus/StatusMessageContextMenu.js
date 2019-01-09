@@ -35,7 +35,7 @@ export default class StatusMessageContextMenu extends React.Component {
         };
     }
 
-    _onClearClick = async(e) => {
+    _onClearClick = async (e) => {
         await MatrixClientPeg.get()._unstable_setStatusMessage("");
         this.setState({message: ""});
     };
