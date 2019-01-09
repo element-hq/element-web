@@ -24,6 +24,7 @@ limitations under the License.
     grid-template-columns: repeat(3, calc(100% / 3));
     grid-template-rows: repeat(2, calc(100% / 2));
     flex: 1 1 0;
+    min-width: 0;
 }
 
 .mx_GroupGridView_rightPanel {
