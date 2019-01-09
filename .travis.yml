@@ -22,6 +22,7 @@ matrix:
             # run the linter, but exclude any files known to have errors or warnings.
             - npm run lintwithexclusions
         - name: End-to-End Tests
+          if: branch = develop
           install:
             - sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev
           script:

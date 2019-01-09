@@ -9,16 +9,13 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
-if [ "$TRAVIS_BRANCH" = "develop" ]
-then
-    scripts/travis/build.sh
-    # run end to end tests
-    scripts/fetchdep.sh matrix-org matrix-react-end-to-end-tests master
-    pushd matrix-react-end-to-end-tests
-    ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
-    # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
-    # CHROME_PATH=$(which google-chrome-stable) ./run.sh
-    ./install.sh
-    ./run.sh --travis
-    popd
-fi
+scripts/travis/build.sh
+# run end to end tests
+scripts/fetchdep.sh matrix-org matrix-react-end-to-end-tests master
+pushd matrix-react-end-to-end-tests
+ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
+# PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
+# CHROME_PATH=$(which google-chrome-stable) ./run.sh
+./install.sh
+./run.sh --travis
+popd
