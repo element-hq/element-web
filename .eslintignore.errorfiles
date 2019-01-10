@@ -53,7 +53,6 @@ src/components/views/rooms/MemberInfo.js
 src/components/views/rooms/MemberList.js
 src/components/views/rooms/MemberTile.js
 src/components/views/rooms/MessageComposer.js
-src/components/views/rooms/MessageComposerInput.js
 src/components/views/rooms/PinnedEventTile.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
