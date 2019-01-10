@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import RoomViewStore from './stores/RoomViewStore';
+import OpenRoomsStore from './stores/OpenRoomsStore';
 
 /**
- * Consumes changes from the RoomViewStore and notifies specific things
+ * Consumes changes from the OpenRoomsStore and notifies specific things
  * about when the active room changes. Unlike listening for RoomViewStore
  * changes, you can subscribe to only changes relevant to a particular
  * room.
@@ -28,11 +28,15 @@ import RoomViewStore from './stores/RoomViewStore';
 class ActiveRoomObserver {
     constructor() {
         this._listeners = {};
-
-        this._activeRoomId = RoomViewStore.getRoomId();
+        const roomStore = OpenRoomsStore.getActiveRoomStore();
+        this._activeRoomId = roomStore && roomStore.getRoomId();
         // TODO: We could self-destruct when the last listener goes away, or at least
         // stop listening.
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate.bind(this));
+        this._roomStoreToken = OpenRoomsStore.addListener(this._onOpenRoomsStoreUpdate.bind(this));
+    }
+
+    getActiveRoomId() {
+        return this._activeRoomId;
     }
 
     addListener(roomId, listener) {
@@ -51,23 +55,23 @@ class ActiveRoomObserver {
         }
     }
 
-    _emit(roomId) {
+    _emit(roomId, newActiveRoomId) {
         if (!this._listeners[roomId]) return;
 
         for (const l of this._listeners[roomId]) {
-            l.call();
+            l.call(l, newActiveRoomId);
         }
     }
 
-    _onRoomViewStoreUpdate() {
+    _onOpenRoomsStoreUpdate() {
+        const activeRoomStore = OpenRoomsStore.getActiveRoomStore();
+        const newActiveRoomId = activeRoomStore && activeRoomStore.getRoomId();
         // emit for the old room ID
-        if (this._activeRoomId) this._emit(this._activeRoomId);
-
+        if (this._activeRoomId) this._emit(this._activeRoomId, newActiveRoomId);
         // update our cache
-        this._activeRoomId = RoomViewStore.getRoomId();
-
+        this._activeRoomId = newActiveRoomId;
         // and emit for the new one
-        if (this._activeRoomId) this._emit(this._activeRoomId);
+        if (this._activeRoomId) this._emit(this._activeRoomId, this._activeRoomId);
     }
 }
 

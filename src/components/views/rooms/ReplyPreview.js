@@ -18,7 +18,6 @@ import React from 'react';
 import dis from '../../../dispatcher';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 
 function cancelQuoting() {
@@ -38,7 +37,7 @@ export default class ReplyPreview extends React.Component {
 
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = this.props.roomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate();
     }
 
@@ -50,7 +49,7 @@ export default class ReplyPreview extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
-        const event = RoomViewStore.getQuotingEvent();
+        const event = this.props.roomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });
         }
