@@ -165,7 +165,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
-            panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
+            panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
         } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
             panel = <GroupMemberInfo
                 groupMember={this.state.member}

@@ -21,13 +21,15 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
-export default class KeyBackupPanel extends React.Component {
+export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this._startNewBackup = this._startNewBackup.bind(this);
         this._deleteBackup = this._deleteBackup.bind(this);
         this._verifyDevice = this._verifyDevice.bind(this);
+        this._onKeyBackupSessionsRemaining =
+            this._onKeyBackupSessionsRemaining.bind(this);
         this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
         this._restoreBackup = this._restoreBackup.bind(this);
 
@@ -36,6 +38,7 @@ export default class KeyBackupPanel extends React.Component {
             loading: true,
             error: null,
             backupInfo: null,
+            sessionsRemaining: 0,
         };
     }
 
@@ -43,6 +46,10 @@ export default class KeyBackupPanel extends React.Component {
         this._loadBackupStatus();
 
         MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatus);
+        MatrixClientPeg.get().on(
+            'crypto.keyBackupSessionsRemaining',
+            this._onKeyBackupSessionsRemaining,
+        );
     }
 
     componentWillUnmount() {
@@ -50,7 +57,17 @@ export default class KeyBackupPanel extends React.Component {
 
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatus);
+            MatrixClientPeg.get().removeListener(
+                'crypto.keyBackupSessionsRemaining',
+                this._onKeyBackupSessionsRemaining,
+            );
         }
+    }
+
+    _onKeyBackupSessionsRemaining(sessionsRemaining) {
+        this.setState({
+            sessionsRemaining,
+        });
     }
 
     _onKeyBackupStatus() {
@@ -144,13 +161,28 @@ export default class KeyBackupPanel extends React.Component {
         } else if (this.state.backupInfo) {
             let clientBackupStatus;
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                clientBackupStatus = _t("This device is uploading keys to this backup");
+                clientBackupStatus = _t("This device is using key backup");
             } else {
                 // XXX: display why and how to fix it
                 clientBackupStatus = _t(
-                    "This device is <b>not</b> uploading keys to this backup", {},
+                    "This device is <b>not</b> using key backup", {},
                     {b: x => <b>{x}</b>},
                 );
+            }
+
+            let uploadStatus;
+            const { sessionsRemaining } = this.state;
+            if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+                // No upload status to show when backup disabled.
+                uploadStatus = "";
+            } else if (sessionsRemaining > 0) {
+                uploadStatus = <div>
+                    {_t("Backing up %(sessionsRemaining)s keys...", { sessionsRemaining })} <br />
+                </div>;
+            } else {
+                uploadStatus = <div>
+                    {_t("All keys backed up")} <br />
+                </div>;
             }
 
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
@@ -217,6 +249,7 @@ export default class KeyBackupPanel extends React.Component {
                 {_t("Backup version: ")}{this.state.backupInfo.version}<br />
                 {_t("Algorithm: ")}{this.state.backupInfo.algorithm}<br />
                 {clientBackupStatus}<br />
+                {uploadStatus}
                 <div>{backupSigStatuses}</div><br />
                 <br />
                 <AccessibleButton className="mx_UserSettings_button"

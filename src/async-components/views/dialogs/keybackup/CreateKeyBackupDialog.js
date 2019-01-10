@@ -21,7 +21,7 @@ import { scorePassword } from '../../../../utils/PasswordScorer';
 
 import FileSaver from 'file-saver';
 
-import { _t, _td } from '../../../../languageHandler';
+import { _t } from '../../../../languageHandler';
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -102,7 +102,7 @@ export default React.createClass({
             info = await MatrixClientPeg.get().createKeyBackupVersion(
                 this._keyBackupInfo,
             );
-            await MatrixClientPeg.get().backupAllGroupSessions(info.version);
+            await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
             this.setState({
                 phase: PHASE_DONE,
             });
@@ -344,7 +344,10 @@ export default React.createClass({
     _renderPhaseShowKey: function() {
         let bodyText;
         if (this.state.setPassPhrase) {
-            bodyText = _t("As a safety net, you can use it to restore your encrypted message history if you forget your Recovery Passphrase.");
+            bodyText = _t(
+                "As a safety net, you can use it to restore your encrypted message " +
+                "history if you forget your Recovery Passphrase.",
+            );
         } else {
             bodyText = _t("As a safety net, you can use it to restore your encrypted message history.");
         }
@@ -352,7 +355,7 @@ export default React.createClass({
         return <div>
             <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
             <p>{bodyText}</p>
-            <p className="mx_CreateKeyBackupDialog_primaryContainer">
+            <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
                     {_t("Your Recovery Key")}
                 </div>
@@ -369,7 +372,7 @@ export default React.createClass({
                         </button>
                     </div>
                 </div>
-            </p>
+            </div>
         </div>;
     },
 
@@ -405,7 +408,6 @@ export default React.createClass({
     _renderBusyPhase: function(text) {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         return <div>
-            <p>{_t(text)}</p>
             <Spinner />
         </div>;
     },
@@ -413,8 +415,10 @@ export default React.createClass({
     _renderPhaseDone: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
-            <p>{_t("Backup created")}</p>
-            <p>{_t("Your encryption keys are now being backed up to your Homeserver.")}</p>
+            <p>{_t(
+                "Your encryption keys are now being backed up in the background " +
+                "to your Homeserver. The initial backup could take several minutes. " +
+                "You can view key backup upload progress in Settings.")}</p>
             <DialogButtons primaryButton={_t('Close')}
                 onPrimaryButtonClick={this._onDone}
                 hasCancel={false}
@@ -451,7 +455,9 @@ export default React.createClass({
             case PHASE_KEEPITSAFE:
                 return _t('Keep it safe');
             case PHASE_BACKINGUP:
-                return _t('Backing up...');
+                return _t('Starting backup...');
+            case PHASE_DONE:
+                return _t('Backup Started');
             default:
                 return _t("Create Key Backup");
         }
@@ -488,7 +494,7 @@ export default React.createClass({
                     content = this._renderPhaseKeepItSafe();
                     break;
                 case PHASE_BACKINGUP:
-                    content = this._renderBusyPhase(_td("Backing up..."));
+                    content = this._renderBusyPhase();
                     break;
                 case PHASE_DONE:
                     content = this._renderPhaseDone();

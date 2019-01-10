@@ -17,42 +17,10 @@ limitations under the License.
 
 'use strict';
 
-const flux = require("flux");
-
-class MatrixDispatcher extends flux.Dispatcher {
-    /**
-     * @param {Object|function} payload Required. The payload to dispatch.
-     *        If an Object, must contain at least an 'action' key.
-     *        If a function, must have the signature (dispatch) => {...}.
-     * @param {boolean=} sync Optional. Pass true to dispatch
-     *        synchronously. This is useful for anything triggering
-     *        an operation that the browser requires user interaction
-     *        for.
-     */
-    dispatch(payload, sync) {
-        // Allow for asynchronous dispatching by accepting payloads that have the
-        // type `function (dispatch) {...}`
-        if (typeof payload === 'function') {
-            payload((action) => {
-                this.dispatch(action, sync);
-            });
-            return;
-        }
-
-        if (sync) {
-            super.dispatch(payload);
-        } else {
-            // Unless the caller explicitly asked for us to dispatch synchronously,
-            // we always set a timeout to do this: The flux dispatcher complains
-            // if you dispatch from within a dispatch, so rather than action
-            // handlers having to worry about not calling anything that might
-            // then dispatch, we just do dispatches asynchronously.
-            setTimeout(super.dispatch.bind(this, payload), 0);
-        }
-    }
-}
+import MatrixDispatcher from "./matrix-dispatcher";
 
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();
 }
+
 module.exports = global.mxDispatcher;

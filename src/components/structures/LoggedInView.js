@@ -31,6 +31,7 @@ import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
+import OpenRoomsStore from "../../stores/OpenRoomsStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -416,6 +417,7 @@ const LoggedInView = React.createClass({
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
+        const GroupGridView = sdk.getComponent('structures.GroupGridView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const CookieBar = sdk.getComponent('globals.CookieBar');
@@ -428,7 +430,14 @@ const LoggedInView = React.createClass({
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
+                if (!OpenRoomsStore.getActiveRoomStore()) {
+                    console.warn(`LoggedInView: getCurrentRoomStore not set!`);
+                }
+                else if (OpenRoomsStore.getActiveRoomStore().getRoomId() !== this.props.currentRoomId) {
+                    console.warn(`LoggedInView: room id in store not the same as in props: ${OpenRoomsStore.getActiveRoomStore().getRoomId()} & ${this.props.currentRoomId}`);
+                }
                 page_element = <RoomView
+                        roomViewStore={OpenRoomsStore.getActiveRoomStore()}
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
@@ -442,7 +451,9 @@ const LoggedInView = React.createClass({
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
                 break;
-
+            case PageTypes.GroupGridView:
+                page_element = <GroupGridView collapsedRhs={this.props.collapsedRhs} />;
+                break;
             case PageTypes.UserSettings:
                 page_element = <UserSettings
                     onClose={this.props.onCloseAllSettings}
