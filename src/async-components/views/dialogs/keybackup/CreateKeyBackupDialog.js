@@ -303,7 +303,8 @@ export default React.createClass({
             // on this screen, this would make it easy for a malicious person to guess
             // your passphrase one letter at a time, but they could get this faster by
             // just opening the browser's developer tools and reading it.
-            // Note that this includes not having typed anything at all.
+            // Note that not having typed anything at all will not hit this clause and
+            // fall through so empty box === no hint.
             matchText = _t("That doesn't match.");
         }
 
