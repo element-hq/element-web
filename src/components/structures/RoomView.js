@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -610,17 +610,10 @@ module.exports = React.createClass({
         }
     },
 
-    async onRoomRecoveryReminderFinished(backupCreated) {
-        // If the user cancelled the key backup dialog, it suggests they don't
-        // want to be reminded anymore.
-        if (!backupCreated) {
-            await SettingsStore.setValue(
-                "showRoomRecoveryReminder",
-                null,
-                SettingLevel.ACCOUNT,
-                false,
-            );
-        }
+    onRoomRecoveryReminderDontAskAgain: function() {
+        // Called when the option to not ask again is set:
+        // force an update to hide the recovery reminder
+        this.forceUpdate();
     },
 
     onKeyBackupStatus() {
@@ -1705,7 +1698,7 @@ module.exports = React.createClass({
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
             hideCancel = true;
         } else if (showRoomRecoveryReminder) {
-            aux = <RoomRecoveryReminder onFinished={this.onRoomRecoveryReminderFinished} />;
+            aux = <RoomRecoveryReminder onDontAskAgainSet={this.onRoomRecoveryReminderDontAskAgain} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
