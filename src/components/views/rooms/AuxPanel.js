@@ -101,7 +101,9 @@ module.exports = React.createClass({
     },
 
     _rateLimitedUpdate: new RateLimitedFunc(function() {
-        this.setState({counters: this._computeCounters()})
+        if (SettingsStore.isFeatureEnabled("feature_state_counters")) {
+            this.setState({counters: this._computeCounters()});
+        }
     }, 500),
 
     _computeCounters: function() {
