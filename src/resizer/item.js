@@ -77,5 +77,9 @@ export default class ResizeItem {
 
     clearSize() {
         this.sizer.clearItemSize(this.domNode);
+        const callback = this.resizer.distributorCtor.onResized;
+        if (callback) {
+            callback(null, this.id, this.domNode);
+        }
     }
 }

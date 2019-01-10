@@ -98,7 +98,7 @@ class RoomDistributor {
         //     while (nextItem)
         // }
 
-        if (false && interactive) {
+        if (interactive) {
             const nextItem = this.item.next();
             if (nextItem) {
                 // let item = nextItem;
@@ -124,6 +124,7 @@ class RoomDistributor {
                 item = item.previous();
             }
             else if (size <= MIN_SIZE) {
+                // console.log("  - resizing", item.id, "to min size", MIN_SIZE);
                 item.setSize(MIN_SIZE);
                 const remainder = MIN_SIZE - size;
                 item = item.previous();
@@ -134,6 +135,7 @@ class RoomDistributor {
             else {
                 const contentSize = this._contentSize(item);
                 if (size > contentSize) {
+                    // console.log("  - resizing", item.id, "to contentSize", contentSize);
                     item.setSize(contentSize);
                     const remainder = size - contentSize;
                     item = item.previous();
@@ -142,12 +144,14 @@ class RoomDistributor {
                     }
                 }
                 else {
+                    // console.log("  - resizing", item.id, "to size", size);
                     item.setSize(size);
                     item = null;
                     size = 0;
                 }
             }
         }
+        // console.log("*** ending resize session");
     }
 
     resizeFromContainerOffset(containerOffset) {

@@ -152,7 +152,11 @@ module.exports = React.createClass({
         if (typeof newSize === "string") {
             newSize = Number.MAX_SAFE_INTEGER;
         }
-        this.subListSizes[id] = newSize;
+        if (newSize === null) {
+            delete this.subListSizes[id];
+        } else {
+            this.subListSizes[id] = newSize;
+        }
         window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
         // update overflow indicators
         this._checkSubListsOverflow();
