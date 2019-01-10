@@ -183,6 +183,7 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s removed the room name.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s changed the room name to %(roomName)s.",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s upgraded this room.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sent an image.",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s added %(addedAddresses)s as addresses for this room.",
     "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s added %(addedAddresses)s as an address for this room.",
