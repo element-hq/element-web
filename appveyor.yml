@@ -8,10 +8,11 @@ environment:
 os: Visual Studio 2015
 
 install: 
-  - npm install && scripts/fetch-develop.deps.sh --depth 1
+  - npm install
+  - npm install electron
+  - npm run build:electron:windows
 platform:
   -x64
-build:
-  - npm run build:electron:windows
+build: OFF
 test: OFF
 deploy: OFF
