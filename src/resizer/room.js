@@ -18,7 +18,7 @@ import {Sizer} from "./sizer";
 
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
-        item.style.maxHeight = `${Math.round(size)}px`;
+        item.style.flexBasis = `${Math.round(size)}px`;
         item.classList.add("resized-sized");
     }
 }
