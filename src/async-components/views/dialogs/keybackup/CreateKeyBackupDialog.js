@@ -296,14 +296,22 @@ export default React.createClass({
     _renderPhasePassPhraseConfirm: function() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
+        let matchText;
+        if (this.state.passPhraseConfirm === this.state.passPhrase) {
+            matchText = _t("That matches!");
+        } else if (!this.state.passPhrase.startsWith(this.state.passPhraseConfirm)) {
+            // only tell them they're wrong if they've actually gone wrong.
+            // Security concious readers will note that if you left riot-web unattended
+            // on this screen, this would make it easy for a malicious person to guess
+            // your passphrase one letter at a time, but they could get this faster by
+            // just opening the browser's developer tools and reading it.
+            // Note that not having typed anything at all will not hit this clause and
+            // fall through so empty box === no hint.
+            matchText = _t("That doesn't match.");
+        }
+
         let passPhraseMatch = null;
-        if (this.state.passPhraseConfirm.length > 0) {
-            let matchText;
-            if (this.state.passPhraseConfirm === this.state.passPhrase) {
-                matchText = _t("That matches!");
-            } else {
-                matchText = _t("That doesn't match.");
-            }
+        if (matchText) {
             passPhraseMatch = <div className="mx_CreateKeyBackupDialog_passPhraseMatch">
                 <div>{matchText}</div>
                 <div>
