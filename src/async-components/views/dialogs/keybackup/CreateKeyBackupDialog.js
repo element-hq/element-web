@@ -32,6 +32,7 @@ const PHASE_DONE = 5;
 const PHASE_OPTOUT_CONFIRM = 6;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
+const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
 
 // XXX: copied from ShareDialog: factor out into utils
 function selectText(target) {
@@ -63,6 +64,13 @@ export default React.createClass({
     componentWillMount: function() {
         this._recoveryKeyNode = null;
         this._keyBackupInfo = null;
+        this._setZxcvbnResultTimeout = null;
+    },
+
+    componentWillUnmount: function() {
+        if (this._setZxcvbnResultTimeout !== null) {
+            clearTimeout(this._setZxcvbnResultTimeout);
+        }
     },
 
     _collectRecoveryKeyNode: function(n) {
@@ -150,9 +158,23 @@ export default React.createClass({
         this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
     },
 
-    _onPassPhraseKeyPress: function(e) {
-        if (e.key === 'Enter' && this._passPhraseIsValid()) {
-            this._onPassPhraseNextClick();
+    _onPassPhraseKeyPress: async function(e) {
+        if (e.key === 'Enter') {
+            // If we're waiting for the timeout before updating the result at this point,
+            // skip ahead and do it now, otherwise we'll deny the attempt to proceed
+            // even if the user enetered a valid passphrase
+            if (this._setZxcvbnResultTimeout !== null) {
+                clearTimeout(this._setZxcvbnResultTimeout);
+                this._setZxcvbnResultTimeout = null;
+                await new Promise((resolve) => {
+                    this.setState({
+                        zxcvbnResult: scorePassword(this.state.passPhrase),
+                    }, resolve);
+                });
+            }
+            if (this._passPhraseIsValid()) {
+                this._onPassPhraseNextClick();
+            }
         }
     },
 
@@ -189,11 +211,20 @@ export default React.createClass({
     _onPassPhraseChange: function(e) {
         this.setState({
             passPhrase: e.target.value,
-            // precompute this and keep it in state: zxcvbn is fast but
-            // we use it in a couple of different places so no point recomputing
-            // it unnecessarily.
-            zxcvbnResult: scorePassword(e.target.value),
         });
+
+        if (this._setZxcvbnResultTimeout !== null) {
+            clearTimeout(this._setZxcvbnResultTimeout);
+        }
+        this._setZxcvbnResultTimeout = setTimeout(() => {
+            this._setZxcvbnResultTimeout = null;
+            this.setState({
+                // precompute this and keep it in state: zxcvbn is fast but
+                // we use it in a couple of different places so no point recomputing
+                // it unnecessarily.
+                zxcvbnResult: scorePassword(this.state.passPhrase),
+            });
+        }, PASSPHRASE_FEEDBACK_DELAY);
     },
 
     _onPassPhraseConfirmChange: function(e) {
