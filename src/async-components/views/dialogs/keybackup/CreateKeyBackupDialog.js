@@ -177,6 +177,7 @@ export default React.createClass({
             passPhrase: '',
             passPhraseConfirm: '',
             phase: PHASE_PASSPHRASE,
+            zxcvbnResult: null,
         });
     },
 
@@ -246,6 +247,7 @@ export default React.createClass({
                         value={this.state.passPhrase}
                         className="mx_CreateKeyBackupDialog_passPhraseInput"
                         placeholder={_t("Enter a passphrase...")}
+                        autoFocus={true}
                     />
                     <div className="mx_CreateKeyBackupDialog_passPhraseHelp">
                         {strengthMeter}
