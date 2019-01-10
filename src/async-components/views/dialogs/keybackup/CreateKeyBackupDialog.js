@@ -162,7 +162,7 @@ export default React.createClass({
         if (e.key === 'Enter') {
             // If we're waiting for the timeout before updating the result at this point,
             // skip ahead and do it now, otherwise we'll deny the attempt to proceed
-            // even if the user enetered a valid passphrase
+            // even if the user entered a valid passphrase
             if (this._setZxcvbnResultTimeout !== null) {
                 clearTimeout(this._setZxcvbnResultTimeout);
                 this._setZxcvbnResultTimeout = null;
