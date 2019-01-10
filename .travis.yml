@@ -7,7 +7,9 @@ dist: trusty
 # unfortunately we do temporarily require sudo as a workaround for
 # https://github.com/travis-ci/travis-ci/issues/8836
 sudo: required
-
+os:
+  - linux
+  - osx
 language: node_js
 node_js:
     # make sure we work with a range of node versions.
@@ -26,3 +28,5 @@ install:
 script:
     - npm run test
     - npm run lint
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:electron:osx; fi 
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:electron:linux; fi 

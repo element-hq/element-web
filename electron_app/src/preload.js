@@ -37,3 +37,20 @@ window.setSpellCheckLang = (locale) => {
     },
   });
 };
+window.addEventListener('contextmenu', (e) => {
+  console.log(`global ${global.mainWindow}`);
+  console.log(e.target.tagName);
+  e.preventDefault();
+});
+
+
+(async() => {
+  await waitForWebContents();
+  console.log(`MAINWIN ${global.mainWindow}`);
+})();
+
+const waitForWebContents = () => {
+  new Promise(resolve => {
+    setTimeout(() => resolve(), 2000);
+  });
+};

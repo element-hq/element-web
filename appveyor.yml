@@ -1,0 +1,17 @@
+environment:
+  matrix:
+    - nodejs_version: 10
+      platform: x64
+      NODE_RUNTIME: electron
+      NODE_RUNTIME_VERSION: 4.0.0
+      TOOLSET_ARGS: --dist-url=https://atom.io/download/electron
+os: Visual Studio 2015
+
+install: 
+  - npm install && scripts/fetch-develop.deps.sh --depth 1
+platform:
+  -x64
+build:
+  - npm run build:electron:windows
+test: OFF
+deploy: OFF
