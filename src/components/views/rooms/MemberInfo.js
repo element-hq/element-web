@@ -714,7 +714,7 @@ module.exports = withMatrixClient(React.createClass({
 
             if (!member || !member.membership || member.membership === 'leave') {
                 const roomId = member && member.roomId ? member.roomId : this.props.roomId;
-                const onInviteUserButton = async() => {
+                const onInviteUserButton = async () => {
                     try {
                         // We use a MultiInviter to re-use the invite logic, even though
                         // we're only inviting one user.

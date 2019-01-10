@@ -1274,7 +1274,7 @@ export default class MessageComposerInput extends React.Component {
         }
     };
 
-    selectHistory = async(up) => {
+    selectHistory = async (up) => {
         const delta = up ? -1 : 1;
 
         // True if we are not currently selecting history, but composing a message
@@ -1322,7 +1322,7 @@ export default class MessageComposerInput extends React.Component {
         return true;
     };
 
-    onTab = async(e) => {
+    onTab = async (e) => {
         this.setState({
             someCompletions: null,
         });
@@ -1344,7 +1344,7 @@ export default class MessageComposerInput extends React.Component {
         up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
-    onEscape = async(e) => {
+    onEscape = async (e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
@@ -1363,7 +1363,7 @@ export default class MessageComposerInput extends React.Component {
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
-    setDisplayedCompletion = async(displayedCompletion: ?Completion): boolean => {
+    setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {

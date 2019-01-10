@@ -18,7 +18,6 @@ src/components/structures/ScrollPanel.js
 src/components/structures/SearchBox.js
 src/components/structures/TimelinePanel.js
 src/components/structures/UploadBar.js
-src/components/structures/UserSettings.js
 src/components/views/avatars/BaseAvatar.js
 src/components/views/avatars/MemberAvatar.js
 src/components/views/create_room/RoomAlias.js
