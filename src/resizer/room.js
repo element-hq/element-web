@@ -20,6 +20,15 @@ class RoomSizer extends Sizer {
     setItemSize(item, size) {
         item.style.flexBasis = `${Math.round(size)}px`;
         item.classList.add("resized-sized");
+        // const total = this.getTotalSize();
+        // const percent = size / total;
+        // const growFactor = Math.round(1 + (percent * 100));
+        // item.style.flexGrow = `${growFactor}`;
+    }
+
+    clearItemSize(item) {
+        item.style.flexBasis = null;
+        item.classList.remove("resized-sized");
     }
 }
 
@@ -74,16 +83,41 @@ class RoomDistributor {
         return headerHeight + scrollItem.scrollHeight;
     }
 
-    resize(size) {
-        if (size < 0) {
-            console.log("NEGATIVE SIZE RESIZE RESIZE RESIZE!!!", size);
+    _isSized(item) {
+        return item.domNode.classList.contains("resized-sized");
+    }
+
+    resize(size, interactive = false) {
+        // console.log("*** starting resize session with size", size);
+
+        // grow/shrink items after first?
+        // const itemSize = this.item.size();
+        // //
+        // if (size < itemSize) {
+        //     let nextItem = this.item.next();
+        //     while (nextItem)
+        // }
+
+        if (false && interactive) {
+            const nextItem = this.item.next();
+            if (nextItem) {
+                // let item = nextItem;
+                // let hasUnsizedProceedingItem = false;
+                // while (item) {
+                //     if (this._isSized(item)) {
+                //         hasUnsizedProceedingItem = true;
+                //         item = null;
+                //     } else {
+                //         item = item.next();
+                //     }
+                // }
+                // if (!hasUnsizedProceedingItem) {
+                    nextItem.clearSize();
+                // }
+            }
         }
+
         let item = this.item;
-
-        // cache result of this loop?
-
-        // move to item that is at position of cursor
-        // this would happen if the cursor goes beyond the min-height
         while (item) {
             // TODO: collapsed
             if (this._isCollapsed(item)) {
@@ -117,7 +151,7 @@ class RoomDistributor {
     }
 
     resizeFromContainerOffset(containerOffset) {
-        this.resize(containerOffset - this.item.offset());
+        this.resize(containerOffset - this.item.offset(), true);
     }
 }
 

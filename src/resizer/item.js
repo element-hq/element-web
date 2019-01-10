@@ -74,4 +74,8 @@ export default class ResizeItem {
             callback(size, this.id, this.domNode);
         }
     }
+
+    clearSize() {
+        this.sizer.clearItemSize(this.domNode);
+    }
 }

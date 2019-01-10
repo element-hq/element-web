@@ -64,6 +64,14 @@ export class Sizer {
         }
     }
 
+    clearItemSize(item) {
+        if (this.vertical) {
+            item.style.height = null;
+        } else {
+            item.style.width = null;
+        }
+    }
+
     /**
         @param {MouseEvent} event the mouse event
         @return {number} the distance between the cursor and the edge of the container,
