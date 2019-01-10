@@ -1411,6 +1411,7 @@
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Render simple counters in room header": "Render simple counters in room header",
     "View as Grid": "View as Grid",
     "Allow up to 6 rooms in a community to be shown simultaneously in a grid via the context menu": "Allow up to 6 rooms in a community to be shown simultaneously in a grid via the context menu",
     "No room in this tile yet.": "No room in this tile yet."
