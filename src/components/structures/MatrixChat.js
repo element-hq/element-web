@@ -1447,10 +1447,21 @@ export default React.createClass({
                     break;
             }
         });
-        cli.on("crypto.keyBackupFailed", () => {
-            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-            );
+        cli.on("crypto.keyBackupFailed", (errcode) => {
+            switch (errcode) {
+                case 'M_NOT_FOUND':
+                    Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                        import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                    );
+                    return;
+                case 'M_WRONG_ROOM_KEYS_VERSION':
+                    Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                        import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    );
+                    return;
+                default:
+                    console.error(`Invalid key backup failure code: ${errcode}`);
+            }
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied

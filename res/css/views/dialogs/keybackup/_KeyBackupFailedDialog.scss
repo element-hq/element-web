@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_NewRecoveryMethodDialog .mx_Dialog_title {
+.mx_KeyBackupFailedDialog .mx_Dialog_title {
     margin-bottom: 32px;
 }
 
-.mx_NewRecoveryMethodDialog_title {
+.mx_KeyBackupFailedDialog_title {
     position: relative;
     padding-left: 45px;
     padding-bottom: 10px;
@@ -36,6 +36,6 @@ limitations under the License.
     }
 }
 
-.mx_NewRecoveryMethodDialog .mx_Dialog_buttons {
+.mx_KeyBackupFailedDialog .mx_Dialog_buttons {
     margin-top: 36px;
 }
