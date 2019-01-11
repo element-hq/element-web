@@ -317,6 +317,11 @@ export const SETTINGS = {
         displayName: _td('Show empty room list headings'),
         default: true,
     },
+    "alwaysRetryInvites": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Always retry invites for unknown users'),
+        default: false,
+    },
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show developer tools'),
