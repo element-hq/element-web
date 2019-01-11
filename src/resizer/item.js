@@ -82,4 +82,23 @@ export default class ResizeItem {
             callback(null, this.id, this.domNode);
         }
     }
+
+
+    first() {
+        const firstHandle = Array.from(this.domNode.parentElement.children).find(el => {
+            return this.resizer.isResizeHandle(el);
+        });
+        if (firstHandle) {
+            return ResizeItem.fromResizeHandle(firstHandle, this.resizer, this.sizer);
+        }
+    }
+
+    last() {
+        const lastHandle = Array.from(this.domNode.parentElement.children).reverse().find(el => {
+            return this.resizer.isResizeHandle(el);
+        });
+        if (lastHandle) {
+            return ResizeItem.fromResizeHandle(lastHandle, this.resizer, this.sizer);
+        }
+    }
 }

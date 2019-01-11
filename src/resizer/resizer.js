@@ -107,6 +107,7 @@ export class Resizer {
         }
 
         const {sizer, distributor} = this._createSizerAndDistributor(resizeHandle);
+        distributor.start();
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
@@ -118,9 +119,11 @@ export class Resizer {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
+            distributor.finish();
             body.removeEventListener("mouseup", onMouseUp, false);
             body.removeEventListener("mousemove", onMouseMove, false);
         };
+        // TODO: listen for mouseout on document here as well
         body.addEventListener("mouseup", onMouseUp, false);
         body.addEventListener("mousemove", onMouseMove, false);
     }

@@ -39,6 +39,10 @@ class FixedDistributor {
     resizeFromContainerOffset(offset) {
         this.resize(offset - this.beforeOffset);
     }
+
+    start() {}
+
+    finish() {}
 }
 
 

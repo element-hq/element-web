@@ -18,7 +18,7 @@ import {Sizer} from "./sizer";
 
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
-        item.style.flexBasis = `${Math.round(size)}px`;
+        item.style.maxHeight = `${Math.round(size)}px`;
         item.classList.add("resized-sized");
         // const total = this.getTotalSize();
         // const percent = size / total;
@@ -27,7 +27,7 @@ class RoomSizer extends Sizer {
     }
 
     clearItemSize(item) {
-        item.style.flexBasis = null;
+        item.style.maxHeight = null;
         item.classList.remove("resized-sized");
     }
 }
@@ -87,44 +87,15 @@ class RoomDistributor {
         return item.domNode.classList.contains("resized-sized");
     }
 
-    resize(size, interactive = false) {
-        // console.log("*** starting resize session with size", size);
-
-        // grow/shrink items after first?
-        // const itemSize = this.item.size();
-        // //
-        // if (size < itemSize) {
-        //     let nextItem = this.item.next();
-        //     while (nextItem)
-        // }
-
-        if (interactive) {
-            const nextItem = this.item.next();
-            if (nextItem) {
-                // let item = nextItem;
-                // let hasUnsizedProceedingItem = false;
-                // while (item) {
-                //     if (this._isSized(item)) {
-                //         hasUnsizedProceedingItem = true;
-                //         item = null;
-                //     } else {
-                //         item = item.next();
-                //     }
-                // }
-                // if (!hasUnsizedProceedingItem) {
-                    nextItem.clearSize();
-                // }
-            }
-        }
-
+    resize(size) {
+        console.log("*** starting resize session with size", size);
         let item = this.item;
         while (item) {
-            // TODO: collapsed
             if (this._isCollapsed(item)) {
                 item = item.previous();
             }
             else if (size <= MIN_SIZE) {
-                // console.log("  - resizing", item.id, "to min size", MIN_SIZE);
+                console.log("  - resizing", item.id, "to min size", MIN_SIZE);
                 item.setSize(MIN_SIZE);
                 const remainder = MIN_SIZE - size;
                 item = item.previous();
@@ -144,18 +115,33 @@ class RoomDistributor {
                     }
                 }
                 else {
-                    // console.log("  - resizing", item.id, "to size", size);
+                    console.log("  - resizing", item.id, "to size", size);
                     item.setSize(size);
                     item = null;
                     size = 0;
                 }
             }
         }
-        // console.log("*** ending resize session");
+        console.log("*** ending resize session");
     }
 
     resizeFromContainerOffset(containerOffset) {
-        this.resize(containerOffset - this.item.offset(), true);
+        this.resize(containerOffset - this.item.offset());
+    }
+
+    start() {
+        console.log("RoomDistributor::start: setting all items to their actual size in pixels");
+        let item = this.item.first();
+        while(item) {
+            if (!this._isCollapsed(item)) {
+                item.setSize(item.size());
+            }
+            item = item.next();
+        }
+    }
+
+    finish() {
+
     }
 }
 

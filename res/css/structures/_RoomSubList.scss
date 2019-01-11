@@ -33,13 +33,13 @@ limitations under the License.
 
 .mx_RoomSubList {
     min-height: 31px;
-    flex: 0 10000 content;
+    flex: 0 10000 auto;
     display: flex;
     flex-direction: column;
 }
 
 .mx_RoomSubList.resized-sized {
-    flex: 0 1 0;
+    flex: 0 1 auto;
 }
 
 .mx_RoomSubList_nonEmpty {
