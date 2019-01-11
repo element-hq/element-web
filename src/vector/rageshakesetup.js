@@ -26,7 +26,7 @@ limitations under the License.
  */
 
 import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
 function initRageshake() {
     rageshake.init().then(() => {
