@@ -115,16 +115,17 @@ export class Resizer {
         };
 
         const body = document.body;
-        const onMouseUp = (event) => {
+        const finishResize = () => {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
             distributor.finish();
-            body.removeEventListener("mouseup", onMouseUp, false);
+            body.removeEventListener("mouseup", finishResize, false);
+            document.removeEventListener("mouseleave", finishResize, false);
             body.removeEventListener("mousemove", onMouseMove, false);
         };
-        // TODO: listen for mouseout on document here as well
-        body.addEventListener("mouseup", onMouseUp, false);
+        body.addEventListener("mouseup", finishResize, false);
+        document.addEventListener("mouseleave", finishResize, false);
         body.addEventListener("mousemove", onMouseMove, false);
     }
 
