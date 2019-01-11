@@ -302,7 +302,10 @@ export default React.createClass({
             // will check their settings.
             this.setState({
                 defaultServerName: null, // To un-hide any secrets people might be keeping
-                defaultServerDiscoveryError: _t("Invalid configuration: Cannot supply a default homeserver URL and a default server name"),
+                defaultServerDiscoveryError: _t(
+                    "Invalid configuration: Cannot supply a default homeserver URL and " +
+                    "a default server name",
+                ),
             });
         }
 
@@ -1833,7 +1836,11 @@ export default React.createClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
-        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN || this.state.loadingDefaultHomeserver) {
+        if (
+            this.state.view === VIEWS.LOADING ||
+            this.state.view === VIEWS.LOGGING_IN ||
+            this.state.loadingDefaultHomeserver
+        ) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
