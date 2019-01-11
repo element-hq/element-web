@@ -25,7 +25,7 @@ import Modal from "../../../../Modal";
 export default class NewRecoveryMethodDialog extends React.PureComponent {
     static propTypes = {
         // As returned by js-sdk getKeyBackupVersion()
-        newVersionInfo: PropTypes.object.isRequired,
+        newVersionInfo: PropTypes.object,
         onFinished: PropTypes.func.isRequired,
     }
 
