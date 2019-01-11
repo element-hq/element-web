@@ -1467,7 +1467,7 @@ export default React.createClass({
             if (haveNewVersion) {
                 Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
                     import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-                    { newVersionInfo }
+                    { newVersionInfo },
                 );
             } else {
                 Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
