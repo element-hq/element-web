@@ -281,9 +281,17 @@ export default class MessageComposer extends React.Component {
         ev.preventDefault();
 
         const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
+        const replacementRoom = MatrixClientPeg.get().getRoom(replacementRoomId);
+        let createEventId = null;
+        if (replacementRoom) {
+            const createEvent = replacementRoom.currentState.getStateEvents('m.room.create', '');
+            if (createEvent && createEvent.getId()) createEventId = createEvent.getId();
+        }
+
         this.props.roomViewStore.getDispatcher().dispatch({
             action: 'view_room',
             highlighted: true,
+            event_id: createEventId,
             room_id: replacementRoomId,
 
             // Try to join via the server that sent the event. This converts $something:example.org
