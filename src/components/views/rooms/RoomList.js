@@ -102,6 +102,7 @@ module.exports = React.createClass({
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
+        cli.on("RoomState.events", this.onRoomStateEvents);
 
         const dmRoomMap = DMRoomMap.shared();
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
@@ -226,6 +227,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
 
         if (this._tagStoreToken) {
@@ -247,6 +249,12 @@ module.exports = React.createClass({
 
     onRoom: function(room) {
         this.updateVisibleRooms();
+    },
+
+    onRoomStateEvents: function(ev, state) {
+        if (ev.getType() === "m.room.create" || ev.getType() === "m.room.tombstone") {
+            this.updateVisibleRooms();
+        }
     },
 
     onDeleteRoom: function(roomId) {
