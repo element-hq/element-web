@@ -317,9 +317,9 @@ export const SETTINGS = {
         displayName: _td('Show empty room list headings'),
         default: true,
     },
-    "alwaysRetryInvites": {
+    "alwaysInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Always retry invites for unknown users'),
+        displayName: _td('Always invite users which may not exist'),
         default: false,
     },
     "showDeveloperTools": {

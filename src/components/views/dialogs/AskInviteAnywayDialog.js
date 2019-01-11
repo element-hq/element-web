@@ -23,20 +23,20 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 export default React.createClass({
     propTypes: {
-        failedInvites: PropTypes.object.isRequired, // { address: { errcode, errorText } }
-        onTryAgain: PropTypes.func.isRequired,
+        unknownProfileUsers: PropTypes.array.isRequired, // [ {userId, errorText}... ]
+        onInviteAnyways: PropTypes.func.isRequired,
         onGiveUp: PropTypes.func.isRequired,
         onFinished: PropTypes.func.isRequired,
     },
 
-    _onTryAgainClicked: function() {
-        this.props.onTryAgain();
+    _onInviteClicked: function() {
+        this.props.onInviteAnyways();
         this.props.onFinished(true);
     },
 
-    _onTryAgainNeverWarnClicked: function() {
-        SettingsStore.setValue("alwaysRetryInvites", null, SettingLevel.ACCOUNT, true);
-        this.props.onTryAgain();
+    _onInviteNeverWarnClicked: function() {
+        SettingsStore.setValue("alwaysInviteUnknownUsers", null, SettingLevel.ACCOUNT, true);
+        this.props.onInviteAnyways();
         this.props.onFinished(true);
     },
 
@@ -48,28 +48,31 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
-        const errorList = Object.keys(this.props.failedInvites)
-            .map(address => <p key={address}>{address}: {this.props.failedInvites[address].errorText}</p>);
+        const errorList = this.props.unknownProfileUsers
+            .map(address => <li key={address.userId}>{address.userId}: {address.errorText}</li>);
 
         return (
             <BaseDialog className='mx_RetryInvitesDialog'
                 onFinished={this._onGiveUpClicked}
-                title={_t('Failed to invite the following users')}
+                title={_t('The following users may not exist')}
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    { errorList }
+                    <p>{_t("The following users may not exist - would you like to invite them anyways?")}</p>
+                    <ul>
+                        { errorList }
+                    </ul>
                 </div>
 
                 <div className="mx_Dialog_buttons">
                     <button onClick={this._onGiveUpClicked}>
                         { _t('Close') }
                     </button>
-                    <button onClick={this._onTryAgainNeverWarnClicked}>
-                        { _t('Try again and never warn me again') }
+                    <button onClick={this._onInviteNeverWarnClicked}>
+                        { _t('Invite anyways and never warn me again') }
                     </button>
-                    <button onClick={this._onTryAgainClicked} autoFocus="true">
-                        { _t('Try again') }
+                    <button onClick={this._onInviteClicked} autoFocus="true">
+                        { _t('Invite anyways') }
                     </button>
                 </div>
             </BaseDialog>
