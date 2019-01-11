@@ -41,8 +41,12 @@ export default class AutocompleteProvider {
 
     /**
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
+     * @param {string} query The query string
+     * @param {SelectionRange} selection Selection to search
+     * @param {boolean} force True if the user is forcing completion
+     * @return {object} { command, range } where both objects fields are null if no match
      */
-    getCurrentCommand(query: string, selection: SelectionRange, force: boolean = false): ?string {
+    getCurrentCommand(query: string, selection: SelectionRange, force: boolean = false) {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
