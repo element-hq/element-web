@@ -41,7 +41,7 @@ export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
-    constructor(room) {
+    constructor(room: Room) {
         super(USER_REGEX, FORCED_USER_REGEX);
         this.room = room;
         this.matcher = new QueryMatcher([], {
