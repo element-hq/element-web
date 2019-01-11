@@ -49,7 +49,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         const errorList = Object.keys(this.props.failedInvites)
-            .map(address => <p>{address}: {this.props.failedInvites[address].errorText}</p>);
+            .map(address => <p key={address}>{address}: {this.props.failedInvites[address].errorText}</p>);
 
         return (
             <BaseDialog className='mx_RetryInvitesDialog'
