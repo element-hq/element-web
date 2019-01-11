@@ -48,7 +48,7 @@ module.exports = React.createClass({
             return <div />; // We should never have been instaniated in this case
         }
         return <div className="mx_CreateEvent">
-            <img className="mx_CreateEvent_image" src="img/room-continuation.svg" />
+            <img className="mx_CreateEvent_image" src={require("../../../../res/img/room-continuation.svg")} />
             <div className="mx_CreateEvent_header">
                 {_t("This room is a continuation of another conversation.")}
             </div>

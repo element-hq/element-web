@@ -107,7 +107,7 @@ export default withMatrixClient(React.createClass({
         }
 
         return <div className="mx_MyGroups">
-            <SimpleRoomHeader title={_t("Communities")} icon="img/icons-groups.svg" />
+            <SimpleRoomHeader title={_t("Communities")} icon={require("../../../res/img/icons-groups.svg")} />
             <div className='mx_MyGroups_header'>
                 <div className="mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
@@ -124,7 +124,7 @@ export default withMatrixClient(React.createClass({
                 </div>
                 {/*<div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
-                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
+                        <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="50" height="50" />
                     </AccessibleButton>
                     <div className="mx_MyGroups_headerCard_content">
                         <div className="mx_MyGroups_headerCard_header">

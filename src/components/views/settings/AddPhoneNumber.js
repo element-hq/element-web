@@ -166,7 +166,7 @@ export default withMatrixClient(React.createClass({
                     </div>
                 </div>
                 <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                     <input type="image" value={_t("Add")} src="img/plus.svg" width="14" height="14" />
+                     <input type="image" value={_t("Add")} src={require("../../../../res/img/plus.svg")} width="14" height="14" />
                 </div>
             </form>
         );

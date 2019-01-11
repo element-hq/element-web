@@ -81,7 +81,7 @@ export default class MAudioBody extends React.Component {
         if (this.state.error !== null) {
             return (
                 <span className="mx_MAudioBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16" />
+                    <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting audio") }
                 </span>
             );
@@ -94,7 +94,7 @@ export default class MAudioBody extends React.Component {
             // Not sure how tall the audio player is so not sure how tall it should actually be.
             return (
                 <span className="mx_MAudioBody">
-                    <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
+                    <img src={require("../../../../res/img/spinner.gif")} alt={content.body} width="16" height="16" />
                 </span>
             );
         }

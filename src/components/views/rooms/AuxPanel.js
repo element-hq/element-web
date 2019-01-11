@@ -147,7 +147,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
                       title={_t("Drop File Here")}>
-                        <TintableSvg src="img/upload-big.svg" width="45" height="59" />
+                        <TintableSvg src={require("../../../../res/img/upload-big.svg")} width="45" height="59" />
                         <br />
                         { _t("Drop file here to upload") }
                     </div>

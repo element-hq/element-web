@@ -198,7 +198,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
                         onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/newmessages.svg" width="24" height="24"
+                    <img src={require("../../../res/img/newmessages.svg")} width="24" height="24"
                         alt="" />
                 </div>
             );
@@ -209,7 +209,7 @@ module.exports = React.createClass({
             return (
                 <AccessibleButton className="mx_RoomStatusBar_scrollDownIndicator"
                         onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/scrolldown.svg" width="24" height="24"
+                    <img src={require("../../../res/img/scrolldown.svg")} width="24" height="24"
                         alt={_t("Scroll to bottom of page")}
                         title={_t("Scroll to bottom of page")} />
                 </AccessibleButton>
@@ -219,7 +219,7 @@ module.exports = React.createClass({
         if (this.props.hasActiveCall) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src="img/sound-indicator.svg" width="23" height="20" />
+                <TintableSvg src={require("../../../res/img/sound-indicator.svg")} width="23" height="20" />
             );
         }
 
@@ -327,7 +327,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/warning.svg")} width="24" height="23" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -346,7 +346,7 @@ module.exports = React.createClass({
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/warning.svg")} width="24" height="23" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }

@@ -26,7 +26,7 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_InlineSpinner">
-                <img src="img/spinner.gif" width={w} height={h} className={imgClass} />
+                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
             </div>
         );
     },

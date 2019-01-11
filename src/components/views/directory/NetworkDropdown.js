@@ -18,7 +18,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
 
-const DEFAULT_ICON_URL = "img/network-matrix.svg";
+const DEFAULT_ICON_URL = require("../../../../res/img/network-matrix.svg");
 
 export default class NetworkDropdown extends React.Component {
     constructor(props) {
@@ -191,7 +191,7 @@ export default class NetworkDropdown extends React.Component {
         } else if (!instance) {
             key = server + '_all';
             name = 'Matrix';
-            icon = <img src="img/network-matrix.svg" />;
+            icon = <img src={require("../../../../res/img/network-matrix.svg")} />;
             span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             key = server + '_inst_' + instance.instance_id;

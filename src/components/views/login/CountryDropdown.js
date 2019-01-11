@@ -70,7 +70,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        return <img src={`img/flags/${iso2}.png`} />;
+        return <img src={require(`../../../../res/img/flags/${iso2}.png`)} />;
     }
 
     _getShortOption(iso2) {

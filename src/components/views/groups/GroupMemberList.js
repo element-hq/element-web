@@ -87,7 +87,7 @@ export default React.createClass({
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={this._showFullMemberList} />
         );
@@ -214,7 +214,7 @@ export default React.createClass({
                 onClick={this.onInviteToGroupButtonClick}
             >
                 <div className="mx_RightPanel_icon" >
-                    <TintableSvg src="img/icon-invite-people.svg" width="18" height="14" />
+                    <TintableSvg src={require("../../../../res/img/icon-invite-people.svg")} width="18" height="14" />
                 </div>
                 <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
             </AccessibleButton>);
