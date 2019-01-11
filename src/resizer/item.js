@@ -69,7 +69,7 @@ export default class ResizeItem {
 
     setSize(size) {
         this.sizer.setItemSize(this.domNode, size);
-        const callback = this.resizer.distributorCtor.onResized;
+        const callback = this.resizer.distributorCfg.onResized;
         if (callback) {
             callback(size, this.id, this.domNode);
         }
@@ -77,7 +77,7 @@ export default class ResizeItem {
 
     clearSize() {
         this.sizer.clearItemSize(this.domNode);
-        const callback = this.resizer.distributorCtor.onResized;
+        const callback = this.resizer.distributorCfg.onResized;
         if (callback) {
             callback(null, this.id, this.domNode);
         }
