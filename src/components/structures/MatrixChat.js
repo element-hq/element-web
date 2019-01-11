@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -1447,20 +1447,32 @@ export default React.createClass({
                     break;
             }
         });
-        cli.on("crypto.keyBackupFailed", (errcode) => {
-            switch (errcode) {
-                case 'M_NOT_FOUND':
-                    Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
-                        import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
-                    );
+        cli.on("crypto.keyBackupFailed", async (errcode) => {
+            let haveNewVersion;
+            let newVersionInfo;
+            // if key backup is still enabled, there must be a new backup in place
+            if (MatrixClientPeg.get().getKeyBackupEnabled()) {
+                haveNewVersion = true;
+            } else {
+                // otherwise check the server to see if there's a new one
+                try {
+                    newVersionInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+                    if (newVersionInfo !== null) haveNewVersion = true;
+                } catch (e) {
+                    console.error("Saw key backup error but failed to check backup version!", e);
                     return;
-                case 'M_WRONG_ROOM_KEYS_VERSION':
-                    Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                        import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-                    );
-                    return;
-                default:
-                    console.error(`Invalid key backup failure code: ${errcode}`);
+                }
+            }
+
+            if (haveNewVersion) {
+                Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    { newVersionInfo },
+                );
+            } else {
+                Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                );
             }
         });
 
