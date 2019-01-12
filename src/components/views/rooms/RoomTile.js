@@ -112,7 +112,13 @@ module.exports = React.createClass({
                 this.setState({
                     notificationCount: this.props.room.getUnreadNotificationCount(),
                 });
-            break;
+                break;
+            // RoomTiles are one of the few components that may show custom status and
+            // also remain on screen while in Settings toggling the feature.  This ensures
+            // you can clearly see the status hide and show when toggling the feature.
+            case 'feature_custom_status_changed':
+                this.forceUpdate();
+                break;
         }
     },
 
