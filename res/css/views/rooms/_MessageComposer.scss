@@ -65,10 +65,6 @@ limitations under the License.
     display: block;
 }
 
-.mx_MessageComposer .mx_AccessibleButton {
-    padding: 0 12px 0 0;
-}
-
 .mx_MessageComposer_composecontrols {
     width: 100%;
 }
@@ -185,7 +181,7 @@ limitations under the License.
     /*display: table-cell;*/
     /*vertical-align: middle;*/
     /*padding-left: 10px;*/
-    padding-right: 5px;
+    padding-right: 12px;
     cursor: pointer;
     padding-top: 4px;
 }
