@@ -40,7 +40,46 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {};
+        return {
+            statusMessage: this.getStatusMessage(),
+        };
+    },
+
+    componentDidMount() {
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return;
+        }
+        const { user } = this.props.member;
+        if (!user) {
+            return;
+        }
+        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
+    },
+
+    componentWillUmount() {
+        const { user } = this.props.member;
+        if (!user) {
+            return;
+        }
+        user.removeListener(
+            "User._unstable_statusMessage",
+            this._onStatusMessageCommitted,
+        );
+    },
+
+    getStatusMessage() {
+        const { user } = this.props.member;
+        if (!user) {
+            return "";
+        }
+        return user._unstable_statusMessage;
+    },
+
+    _onStatusMessageCommitted() {
+        // The `User` object has observed a status message change.
+        this.setState({
+            statusMessage: this.getStatusMessage(),
+        });
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -88,7 +127,7 @@ module.exports = React.createClass({
 
         let statusMessage = null;
         if (member.user && SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            statusMessage = member.user._unstable_statusMessage;
+            statusMessage = this.state.statusMessage;
         }
 
         const av = (
