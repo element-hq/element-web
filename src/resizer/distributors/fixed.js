@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import ResizeItem from "./item";
-import Sizer from "./sizer";
+import ResizeItem from "../item";
+import Sizer from "../sizer";
 
 /**
 distributors translate a moving cursor into
@@ -29,7 +29,7 @@ they have two methods:
 the offset from the container edge of where
 the mouse cursor is.
 */
-export class FixedDistributor {
+export default class FixedDistributor {
     static createItem(resizeHandle, resizer, sizer) {
         return new ResizeItem(resizeHandle, resizer, sizer);
     }
@@ -54,39 +54,4 @@ export class FixedDistributor {
     start() {}
 
     finish() {}
-}
-
-class CollapseItem extends ResizeItem {
-    notifyCollapsed(collapsed) {
-        const callback = this.resizer.config.onCollapsed;
-        if (callback) {
-            callback(collapsed, this.id, this.domNode);
-        }
-    }
-}
-
-export class CollapseDistributor extends FixedDistributor {
-    static createItem(resizeHandle, resizer, sizer) {
-        return new CollapseItem(resizeHandle, resizer, sizer);
-    }
-
-    constructor(item, config) {
-        super(item);
-        this.toggleSize = config && config.toggleSize;
-        this.isCollapsed = false;
-    }
-
-    resize(newSize) {
-        const isCollapsedSize = newSize < this.toggleSize;
-        if (isCollapsedSize && !this.isCollapsed) {
-            this.isCollapsed = true;
-            this.item.notifyCollapsed(true);
-        } else if (!isCollapsedSize && this.isCollapsed) {
-            this.item.notifyCollapsed(false);
-            this.isCollapsed = false;
-        }
-        if (!isCollapsedSize) {
-            super.resize(newSize);
-        }
-    }
 }

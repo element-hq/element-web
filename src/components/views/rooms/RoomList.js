@@ -36,7 +36,7 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer, RoomDistributor, RoomSizer} from '../../../resizer'
+import {Resizer, RoomSubListDistributor} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -167,7 +167,7 @@ module.exports = React.createClass({
         const cfg = {
             onResized: this._onSubListResize,
         };
-        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, cfg);
+        this.resizer = new Resizer(this.resizeContainer, RoomSubListDistributor, cfg);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",

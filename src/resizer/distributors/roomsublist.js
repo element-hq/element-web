@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Sizer from "./sizer";
-import ResizeItem from "./item";
+import Sizer from "../sizer";
+import ResizeItem from "../item";
 
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
@@ -50,7 +50,7 @@ class RoomSubListItem extends ResizeItem {
     }
 }
 
-export default class RoomDistributor {
+export default class RoomSubListDistributor {
     static createItem(resizeHandle, resizer, sizer) {
         return new RoomSubListItem(resizeHandle, resizer, sizer);
     }
