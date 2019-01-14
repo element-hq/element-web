@@ -21,10 +21,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 const React = require('react');
 import PropTypes from 'prop-types';
 
-const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require('../../../index');
 const dis = require('../../../dispatcher');
-const Modal = require("../../../Modal");
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -74,17 +72,18 @@ module.exports = React.createClass({
     },
 
     getPowerLabel: function() {
-        return _t("%(userName)s (power %(powerLevelNumber)s)", {userName: this.props.member.userId, powerLevelNumber: this.props.member.powerLevel});
+        return _t("%(userName)s (power %(powerLevelNumber)s)", {
+            userName: this.props.member.userId,
+            powerLevelNumber: this.props.member.powerLevel,
+        });
     },
 
     render: function() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
         const member = this.props.member;
         const name = this._getDisplayName();
-        const active = -1;
         const presenceState = member.user ? member.user.presence : null;
 
         let statusMessage = null;
