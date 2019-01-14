@@ -18,7 +18,7 @@ limitations under the License.
 implements DOM/CSS operations for resizing.
 The sizer determines what CSS mechanism is used for sizing items, like flexbox, ...
 */
-export class Sizer {
+export default class Sizer {
     constructor(container, vertical, reverse) {
         this.container = container;
         this.reverse = reverse;
@@ -84,12 +84,5 @@ export class Sizer {
         } else {
             return pos - this._getOffset();
         }
-    }
-}
-
-export class FlexSizer extends Sizer {
-    setItemSize(item, size) {
-        item.style.flexGrow = `0`;
-        item.style.flexBasis = `${Math.round(size)}px`;
     }
 }

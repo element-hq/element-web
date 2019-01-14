@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import ResizeItem from "./item";
+import Sizer from "./sizer";
+
 /**
 distributors translate a moving cursor into
 CSS/DOM changes by calling the sizer
@@ -26,7 +29,15 @@ they have two methods:
 the offset from the container edge of where
 the mouse cursor is.
 */
-class FixedDistributor {
+export class FixedDistributor {
+    static createItem(resizeHandle, resizer, sizer) {
+        return new ResizeItem(resizeHandle, resizer, sizer);
+    }
+
+    static createSizer(containerElement, vertical, reverse) {
+        return new Sizer(containerElement, vertical, reverse);
+    }
+
     constructor(item) {
         this.item = item;
         this.beforeOffset = item.offset();
@@ -45,12 +56,23 @@ class FixedDistributor {
     finish() {}
 }
 
+class CollapseItem extends ResizeItem {
+    notifyCollapsed(collapsed) {
+        const callback = this.resizer.config.onCollapsed;
+        if (callback) {
+            callback(collapsed, this.id, this.domNode);
+        }
+    }
+}
 
-class CollapseDistributor extends FixedDistributor {
-    constructor(item, sizer, _container, config) {
+export class CollapseDistributor extends FixedDistributor {
+    static createItem(resizeHandle, resizer, sizer) {
+        return new CollapseItem(resizeHandle, resizer, sizer);
+    }
+
+    constructor(item, config) {
         super(item);
         this.toggleSize = config && config.toggleSize;
-        this.onCollapsed = config && config.onCollapsed;
         this.isCollapsed = false;
     }
 
@@ -58,13 +80,9 @@ class CollapseDistributor extends FixedDistributor {
         const isCollapsedSize = newSize < this.toggleSize;
         if (isCollapsedSize && !this.isCollapsed) {
             this.isCollapsed = true;
-            if (this.onCollapsed) {
-                this.onCollapsed(true, this.item);
-            }
+            this.item.notifyCollapsed(true);
         } else if (!isCollapsedSize && this.isCollapsed) {
-            if (this.onCollapsed) {
-                this.onCollapsed(false, this.item);
-            }
+            this.item.notifyCollapsed(false);
             this.isCollapsed = false;
         }
         if (!isCollapsedSize) {
@@ -72,8 +90,3 @@ class CollapseDistributor extends FixedDistributor {
         }
     }
 }
-
-module.exports = {
-    FixedDistributor,
-    CollapseDistributor,
-};

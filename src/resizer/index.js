@@ -14,17 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Sizer, FlexSizer} from "./sizer";
 import {FixedDistributor, CollapseDistributor} from "./distributors";
-import {Resizer} from "./resizer";
-import {RoomSizer, RoomDistributor} from "./room";
+import Resizer from "./resizer";
+import RoomDistributor from "./room";
 
 module.exports = {
     Resizer,
-    Sizer,
-    FlexSizer,
     FixedDistributor,
     CollapseDistributor,
-    RoomSizer,
     RoomDistributor,
 };

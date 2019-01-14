@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Sizer} from "./sizer";
-import ResizeItem from "./item";
-
 /*
 classNames:
     // class on resize-handle
@@ -30,14 +27,13 @@ classNames:
 */
 
 
-export class Resizer {
+export default class Resizer {
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
-    constructor(container, distributorCtor, distributorCfg, sizerCtor = Sizer) {
+    constructor(container, distributorCtor, config) {
         this.container = container;
         this.distributorCtor = distributorCtor;
-        this.distributorCfg = distributorCfg;
-        this.sizerCtor = sizerCtor;
+        this.config = config;
         this.classNames = {
             handle: "resizer-handle",
             reverse: "resizer-reverse",
@@ -132,23 +128,11 @@ export class Resizer {
     _createSizerAndDistributor(resizeHandle) {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
-        // eslint-disable-next-line new-cap
-        const sizer = new this.sizerCtor(this.container, vertical, reverse);
-        const item = ResizeItem.fromResizeHandle(resizeHandle, this, sizer);
-        // eslint-disable-next-line new-cap
-        const distributor = new this.distributorCtor(
-            item,
-            sizer,
-            this.container,
-            this.distributorCfg
-        );
+        const Distributor = this.distributorCtor;
+        const sizer = Distributor.createSizer(this.container, vertical, reverse);
+        const item = Distributor.createItem(resizeHandle, this, sizer);
+        const distributor = new Distributor(item, this.config);
         return {sizer, distributor};
-    }
-
-    _getResizableItems(reverse) {
-        return this._getResizeHandles().map((handle) => {
-            return ResizeItem.fromResizeHandle(handle);
-        });
     }
 
     _getResizeHandles() {

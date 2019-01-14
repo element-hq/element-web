@@ -167,7 +167,7 @@ module.exports = React.createClass({
         const cfg = {
             onResized: this._onSubListResize,
         };
-        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, cfg, RoomSizer);
+        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, cfg);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",

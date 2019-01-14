@@ -14,16 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Sizer} from "./sizer";
+import Sizer from "./sizer";
+import ResizeItem from "./item";
 
 class RoomSizer extends Sizer {
     setItemSize(item, size) {
         item.style.maxHeight = `${Math.round(size)}px`;
         item.classList.add("resized-sized");
-        // const total = this.getTotalSize();
-        // const percent = size / total;
-        // const growFactor = Math.round(1 + (percent * 100));
-        // item.style.flexGrow = `${growFactor}`;
     }
 
     clearItemSize(item) {
@@ -32,38 +29,36 @@ class RoomSizer extends Sizer {
     }
 }
 
-/*
-class RoomSubList extends ResizeItem {
-    collapsed() {
-
-    }
-
-    id() {
-
+class RoomSubListItem extends ResizeItem {
+    isCollapsed() {
+        return this.domNode.classList.contains("mx_RoomSubList_hidden");
     }
 
     maxSize() {
-
+        const scrollItem = this.domNode.querySelector(".mx_RoomSubList_scroll");
+        const header = this.domNode.querySelector(".mx_RoomSubList_labelContainer");
+        const headerHeight = this.sizer.getItemSize(header);
+        return headerHeight + scrollItem.scrollHeight;
     }
 
     minSize() {
+        return 74; //size of header + 1 room tile
+    }
 
+    isSized() {
+        return this.domNode.classList.contains("resized-sized");
     }
 }
-*/
 
-const MIN_SIZE = 74;
-// would be good to have a way in here to know if the item can be resized
-//  - collapsed items can't be resized (.mx_RoomSubList_hidden)
-//  - items at MIN_SIZE can't be resized smaller
-//  - items at maxContentHeight can't be resized larger
+export default class RoomDistributor {
+    static createItem(resizeHandle, resizer, sizer) {
+        return new RoomSubListItem(resizeHandle, resizer, sizer);
+    }
 
-// if you shrink the predecesor, and start dragging down again afterwards, which item has to grow?
-/*
-    either items before (starting from first or last)
-    or
-*/
-class RoomDistributor {
+    static createSizer(containerElement, vertical, reverse) {
+        return new RoomSizer(containerElement, vertical, reverse);
+    }
+
     constructor(item) {
         this.item = item;
     }
@@ -72,57 +67,40 @@ class RoomDistributor {
         return 1;
     }
 
-    _isCollapsed(item) {
-        return item.domNode.classList.contains("mx_RoomSubList_hidden");
-    }
-
-    _contentSize(item) {
-        const scrollItem = item.domNode.querySelector(".mx_RoomSubList_scroll");
-        const header = item.domNode.querySelector(".mx_RoomSubList_labelContainer");
-        const headerHeight = item.sizer.getItemSize(header);
-        return headerHeight + scrollItem.scrollHeight;
-    }
-
-    _isSized(item) {
-        return item.domNode.classList.contains("resized-sized");
-    }
-
     resize(size) {
-        console.log("*** starting resize session with size", size);
+        //console.log("*** starting resize session with size", size);
         let item = this.item;
         while (item) {
-            if (this._isCollapsed(item)) {
+            const minSize = item.minSize();
+            if (item.isCollapsed()) {
                 item = item.previous();
-            }
-            else if (size <= MIN_SIZE) {
-                console.log("  - resizing", item.id, "to min size", MIN_SIZE);
-                item.setSize(MIN_SIZE);
-                const remainder = MIN_SIZE - size;
+            } else if (size <= minSize) {
+                //console.log("  - resizing", item.id, "to min size", minSize);
+                item.setSize(minSize);
+                const remainder = minSize - size;
                 item = item.previous();
                 if (item) {
                     size = item.size() - remainder - this._handleSize();
                 }
-            }
-            else {
-                const contentSize = this._contentSize(item);
-                if (size > contentSize) {
-                    // console.log("  - resizing", item.id, "to contentSize", contentSize);
-                    item.setSize(contentSize);
-                    const remainder = size - contentSize;
+            } else {
+                const maxSize = item.maxSize();
+                if (size > maxSize) {
+                    // console.log("  - resizing", item.id, "to maxSize", maxSize);
+                    item.setSize(maxSize);
+                    const remainder = size - maxSize;
                     item = item.previous();
                     if (item) {
                         size = item.size() + remainder; // todo: handle size here?
                     }
-                }
-                else {
-                    console.log("  - resizing", item.id, "to size", size);
+                } else {
+                    //console.log("  - resizing", item.id, "to size", size);
                     item.setSize(size);
                     item = null;
                     size = 0;
                 }
             }
         }
-        console.log("*** ending resize session");
+        //console.log("*** ending resize session");
     }
 
     resizeFromContainerOffset(containerOffset) {
@@ -130,10 +108,10 @@ class RoomDistributor {
     }
 
     start() {
-        console.log("RoomDistributor::start: setting all items to their actual size in pixels");
+        // set all max-height props to the actual height.
         let item = this.item.first();
-        while(item) {
-            if (!this._isCollapsed(item)) {
+        while (item) {
+            if (!item.isCollapsed() && item.isSized()) {
                 item.setSize(item.size());
             }
             item = item.next();
@@ -141,11 +119,5 @@ class RoomDistributor {
     }
 
     finish() {
-
     }
 }
-
-module.exports = {
-    RoomSizer,
-    RoomDistributor,
-};

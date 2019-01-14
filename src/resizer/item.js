@@ -15,7 +15,11 @@ limitations under the License.
 */
 
 export default class ResizeItem {
-    constructor(domNode, id, reverse, resizer, sizer) {
+    constructor(handle, resizer, sizer) {
+        const id = handle.getAttribute("data-id");
+        const reverse = resizer.isReverseResizeHandle(handle);
+        const domNode = reverse ? handle.nextElementSibling : handle.previousElementSibling;
+
         this.domNode = domNode;
         this.id = id;
         this.reverse = reverse;
@@ -23,11 +27,9 @@ export default class ResizeItem {
         this.sizer = sizer;
     }
 
-    static fromResizeHandle(handle, resizer, sizer) {
-        const id = handle.getAttribute("data-id");
-        const reverse = resizer.isReverseResizeHandle(handle);
-        const domNode = reverse ? handle.nextElementSibling : handle.previousElementSibling;
-        return new ResizeItem(domNode, id, reverse, resizer, sizer);
+    _copyWith(handle, resizer, sizer) {
+        const Ctor = this.constructor;
+        return new Ctor(handle, resizer, sizer);
     }
 
     _advance(forwards) {
@@ -43,9 +45,10 @@ export default class ResizeItem {
             } else {
                 handle = handle.previousElementSibling;
             }
-        } while(handle && !this.resizer.isResizeHandle(handle));
+        } while (handle && !this.resizer.isResizeHandle(handle));
+
         if (handle) {
-            const nextHandle = ResizeItem.fromResizeHandle(handle, this.resizer, this.sizer);
+            const nextHandle = this._copyWith(handle, this.resizer, this.sizer);
             nextHandle.reverse = this.reverse;
             return nextHandle;
         }
@@ -69,7 +72,7 @@ export default class ResizeItem {
 
     setSize(size) {
         this.sizer.setItemSize(this.domNode, size);
-        const callback = this.resizer.distributorCfg.onResized;
+        const callback = this.resizer.config.onResized;
         if (callback) {
             callback(size, this.id, this.domNode);
         }
@@ -77,7 +80,7 @@ export default class ResizeItem {
 
     clearSize() {
         this.sizer.clearItemSize(this.domNode);
-        const callback = this.resizer.distributorCfg.onResized;
+        const callback = this.resizer.config.onResized;
         if (callback) {
             callback(null, this.id, this.domNode);
         }
@@ -89,7 +92,7 @@ export default class ResizeItem {
             return this.resizer.isResizeHandle(el);
         });
         if (firstHandle) {
-            return ResizeItem.fromResizeHandle(firstHandle, this.resizer, this.sizer);
+            return this._copyWith(firstHandle, this.resizer, this.sizer);
         }
     }
 
@@ -98,7 +101,7 @@ export default class ResizeItem {
             return this.resizer.isResizeHandle(el);
         });
         if (lastHandle) {
-            return ResizeItem.fromResizeHandle(lastHandle, this.resizer, this.sizer);
+            return this._copyWith(lastHandle, this.resizer, this.sizer);
         }
     }
 }
