@@ -40,38 +40,50 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+
+        this.state = {
+            hasStatus: this.hasStatus,
+        };
     }
 
     componentWillMount() {
         if (this.props.member.userId !== MatrixClientPeg.get().getUserId()) {
             throw new Error("Cannot use MemberStatusMessageAvatar on anyone but the logged in user");
         }
-    }
-
-    componentDidMount() {
-        MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-
-        if (this.props.member.user) {
-            this.setState({message: this.props.member.user._unstable_statusMessage});
-        } else {
-            this.setState({message: ""});
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return;
         }
-    }
-
-    componentWillUnmount() {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
+        const { user } = this.props.member;
+        if (!user) {
+            return;
         }
+        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     }
 
-    _onRoomStateEvents = (ev, state) => {
-        if (ev.getStateKey() !== MatrixClientPeg.get().getUserId()) return;
-        if (ev.getType() !== "im.vector.user_status") return;
-        // TODO: We should be relying on `this.props.member.user._unstable_statusMessage`
-        // We don't currently because the js-sdk doesn't emit a specific event for this
-        // change, and we don't want to race it. This should be improved when we rip out
-        // the im.vector.user_status stuff and replace it with a complete solution.
-        this.setState({message: ev.getContent()["status"]});
+    componentWillUmount() {
+        const { user } = this.props.member;
+        if (!user) {
+            return;
+        }
+        user.removeListener(
+            "User._unstable_statusMessage",
+            this._onStatusMessageCommitted,
+        );
+    }
+
+    get hasStatus() {
+        const { user } = this.props.member;
+        if (!user) {
+            return false;
+        }
+        return !!user._unstable_statusMessage;
+    }
+
+    _onStatusMessageCommitted = () => {
+        // The `User` object has observed a status message change.
+        this.setState({
+            hasStatus: this.hasStatus,
+        });
     };
 
     _onClick = (e) => {
@@ -104,9 +116,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
         if (customStatusFeatureEnabled) {
             onClick = this._onClick;
-            if (this.props.member.user) {
-                hasStatus = !!this.props.member.user._unstable_statusMessage;
-            }
+            hasStatus = this.state.hasStatus;
         }
 
         const classes = classNames({
