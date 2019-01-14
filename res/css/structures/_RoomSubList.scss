@@ -39,7 +39,15 @@ limitations under the License.
 }
 
 .mx_RoomSubList.resized-sized {
-    flex: 0 1 auto;
+    /*
+    flex-basis to 0 so sublists
+    are not shrinking/growing relative
+    to their content (as would be the case with auto),
+    as this intervenes with sizing an item exactly
+    when not available space is available
+    in the flex container
+    */
+    flex: 1 1 0;
 }
 
 .mx_RoomSubList_nonEmpty {
