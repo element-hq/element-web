@@ -79,18 +79,18 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
         const elementRect = e.target.getBoundingClientRect();
 
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = (elementRect.left + window.pageXOffset) - (elementRect.width / 2) + 3;
-        const chevronOffset = 12;
-        let y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
-        y = y - (chevronOffset + 4); // where 4 is 1/4 the height of the chevron
+        const x = (elementRect.left + window.pageXOffset);
+        const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
+        const chevronOffset = (elementRect.width - chevronWidth) / 2;
+        const chevronMargin = 1; // Add some spacing away from target
+        const y = elementRect.top + window.pageYOffset - chevronMargin;
 
         ContextualMenu.createMenu(StatusMessageContextMenu, {
             chevronOffset: chevronOffset,
             chevronFace: 'bottom',
             left: x,
             top: y,
-            menuWidth: 190,
+            menuWidth: 226,
             user: this.props.member.user,
         });
     };
