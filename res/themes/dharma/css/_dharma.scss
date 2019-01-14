@@ -68,7 +68,7 @@ $event-selected-color: #f7f7f7;
 $primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
-$input-border-color: #f0f0f0;
+$input-border-color: #e7e7e7;
 $input-darker-bg-color: rgba(193, 201, 214, 0.29);
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
@@ -191,6 +191,8 @@ $gridview-focus-border-color: rgba(134, 193, 165, 1);
 $progressbar-color: #000;
 
 $room-warning-bg-color: #fff8e3;
+
+$memberstatus-placeholder-color: $roomtile-name-color;
 
 /*** form elements ***/
 

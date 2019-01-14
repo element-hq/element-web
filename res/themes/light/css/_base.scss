@@ -188,6 +188,8 @@ $progressbar-color: #000;
 
 $room-warning-bg-color: #fff8e3;
 
+$memberstatus-placeholder-color: $roomtile-name-color;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
