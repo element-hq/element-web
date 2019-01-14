@@ -179,10 +179,16 @@ export default class MImageBody extends React.Component {
             // given we deliberately don't thumbnail them serverside to prevent
             // billion lol attacks and similar
             return this.context.matrixClient.mxcUrlToHttp(
-                content.info.thumbnail_url, 800, 600,
+                content.info.thumbnail_url,
+                800 * window.devicePixelRatio,
+                600 * window.devicePixelRatio,
             );
         } else {
-            return this.context.matrixClient.mxcUrlToHttp(content.url, 800, 600);
+            return this.context.matrixClient.mxcUrlToHttp(
+                content.url,
+                800 * window.devicePixelRatio,
+                600 * window.devicePixelRatio
+            );
         }
     }
 

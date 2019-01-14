@@ -25,6 +25,7 @@ import { _t } from './languageHandler';
 const Modal = require('./Modal');
 
 const encrypt = require("browser-encrypt-attachment");
+const png_chunks_extract = require("png-chunks-extract");
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 require("blueimp-canvas-to-blob");
@@ -32,6 +33,9 @@ require("blueimp-canvas-to-blob");
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
 
+// scraped out of a macOS hidpi (5660ppm) screenshot png
+//                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
+const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 /**
  * Create a thumbnail for a image DOM element.
@@ -102,10 +106,34 @@ function loadImageElement(imageFile) {
     const objectUrl = URL.createObjectURL(imageFile);
     img.src = objectUrl;
 
+    // check for hi-dpi PNGs and fudge display resolution as needed.
+    // this is mainly needed for macOS screencaps
+    let hidpi = false;
+    if (imageFile.type === "image/png") {
+        // in practice macOS happens to order the chunks so they fall in
+        // the first 0x1000 bytes (thanks to a massive ICC header).
+        // Thus we could slice the file down to only sniff the first 0x1000
+        // bytes (but this makes png_chunks_extract choke on the corrupt file)
+        const headers = imageFile; //.slice(0, 0x1000);
+        readFileAsArrayBuffer(headers).then(arrayBuffer=>{
+            const buffer = new Uint8Array(arrayBuffer);
+            const chunks = png_chunks_extract(buffer);
+            for (const chunk of chunks) {
+                if (chunk.name === 'pHYs') {
+                    if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
+                    hidpi = chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
+                    return;
+                }
+            }
+        });
+    }
+
     // Once ready, create a thumbnail
     img.onload = function() {
         URL.revokeObjectURL(objectUrl);
-        deferred.resolve(img);
+        let width = hidpi ? (img.width >> 1) : img.width;
+        let height = hidpi ? (img.height >> 1) : img.height;
+        deferred.resolve({ img, width, height });
     };
     img.onerror = function(e) {
         deferred.reject(e);
@@ -129,8 +157,8 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
     }
 
     let imageInfo;
-    return loadImageElement(imageFile).then(function(img) {
-        return createThumbnail(img, img.width, img.height, thumbnailType);
+    return loadImageElement(imageFile).then(function(r) {
+        return createThumbnail(r.img, r.width, r.height, thumbnailType);
     }).then(function(result) {
         imageInfo = result.info;
         return uploadFile(matrixClient, roomId, result.thumbnail);
