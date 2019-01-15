@@ -111,12 +111,20 @@ export default class RoomSubListDistributor {
     start() {
         // set all max-height props to the actual height.
         let item = this.item.first();
+        const sizes = [];
         while (item) {
-            if (!item.isCollapsed() && item.isSized()) {
-                item.setSize(item.size());
+            if (!item.isCollapsed()) {
+                sizes.push(item.size());
+            } else {
+                sizes.push(100);
             }
             item = item.next();
         }
+        item = this.item.first();
+        sizes.forEach((size) => {
+            item.setSize(size);
+            item = item.next();
+        });
     }
 
     finish() {
