@@ -1430,5 +1430,12 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "A configuração de mensagens seguras neste dispositivo criptografará novamente o histórico de mensagens deste dispositivo com o novo método de recuperação.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Se você não definiu o novo método de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina um novo método de recuperação imediatamente em Configurações.",
     "Set up Secure Messages": "Configurar mensagens seguras",
-    "Go to Settings": "Ir para as configurações"
+    "Go to Settings": "Ir para as configurações",
+    "Unrecognised address": "Endereço não reconhecido",
+    "User %(user_id)s may or may not exist": "Usuário %(user_id)s pode existir ou não",
+    "Always invite users which may not exist": "Sempre convidar usuários que talvez não existam",
+    "The following users may not exist": "Os seguintes usuários podem não existir",
+    "The following users may not exist - would you like to invite them anyways?": "Os seguintes usuários podem não existir - você gostaria de convidá-los de qualquer maneira?",
+    "Invite anyways and never warn me again": "Convide mesmo assim e nunca mais me alerte",
+    "Invite anyways": "Convidar mesmo assim"
 }
