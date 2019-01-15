@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -651,6 +651,9 @@ export default React.createClass({
             case 'view_group':
                 this._viewGroup(payload);
                 break;
+            case 'group_grid_view':
+                this._viewGroupGrid(payload);
+                break;
             case 'view_home_page':
                 this._viewHome();
                 break;
@@ -862,6 +865,7 @@ export default React.createClass({
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomInfo) {
         this.focusComposer = true;
+        console.log("!!! MatrixChat._viewRoom", roomInfo);
 
         const newState = {
             currentRoomId: roomInfo.room_id || null,
@@ -910,6 +914,9 @@ export default React.createClass({
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
+
+
+            // TODO: only emit this when we're not in grid mode?
             this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
             this.setState(newState);
@@ -924,6 +931,11 @@ export default React.createClass({
         });
         this._setPage(PageTypes.GroupView);
         this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewGroupGrid: function(payload) {
+        this._setPage(PageTypes.GroupGridView);
+        // this.notifyNewScreen('grid/' + payload.group_id);
     },
 
     _viewHome: function() {
@@ -1435,10 +1447,33 @@ export default React.createClass({
                     break;
             }
         });
-        cli.on("crypto.keyBackupFailed", () => {
-            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-            );
+        cli.on("crypto.keyBackupFailed", async (errcode) => {
+            let haveNewVersion;
+            let newVersionInfo;
+            // if key backup is still enabled, there must be a new backup in place
+            if (MatrixClientPeg.get().getKeyBackupEnabled()) {
+                haveNewVersion = true;
+            } else {
+                // otherwise check the server to see if there's a new one
+                try {
+                    newVersionInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+                    if (newVersionInfo !== null) haveNewVersion = true;
+                } catch (e) {
+                    console.error("Saw key backup error but failed to check backup version!", e);
+                    return;
+                }
+            }
+
+            if (haveNewVersion) {
+                Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    { newVersionInfo },
+                );
+            } else {
+                Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                );
+            }
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied

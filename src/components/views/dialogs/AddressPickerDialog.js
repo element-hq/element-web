@@ -389,6 +389,17 @@ module.exports = React.createClass({
         const suggestedList = [];
         results.forEach((result) => {
             if (result.room_id) {
+                const client = MatrixClientPeg.get();
+                const room = client.getRoom(result.room_id);
+                if (room) {
+                    const tombstone = room.currentState.getStateEvents('m.room.tombstone', '');
+                    if (tombstone && tombstone.getContent() && tombstone.getContent()["replacement_room"]) {
+                        const replacementRoom = client.getRoom(tombstone.getContent()["replacement_room"]);
+
+                        // Skip rooms with tombstones where we are also aware of the replacement room.
+                        if (replacementRoom) return;
+                    }
+                }
                 suggestedList.push({
                     addressType: 'mx-room-id',
                     address: result.room_id,

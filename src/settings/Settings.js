@@ -102,6 +102,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_state_counters": {
+        isFeature: true,
+        displayName: _td("Render simple counters in room header"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_gridview": {
+        isFeature: true,
+        displayName: _td("Allow up to 6 rooms in a community to be shown simultaneously in a grid via the context menu"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Disable Emoji suggestions while typing'),
@@ -316,6 +328,11 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show empty room list headings'),
         default: true,
+    },
+    "alwaysInviteUnknownUsers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Always invite users which may not exist'),
+        default: false,
     },
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

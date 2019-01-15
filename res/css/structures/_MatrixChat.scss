@@ -73,14 +73,16 @@ limitations under the License.
 .mx_MatrixChat > :not(.mx_LeftPanel_container):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
 
     /* Experimental fix for https://github.com/vector-im/vector-web/issues/947
        and https://github.com/vector-im/vector-web/issues/946.
        Empirically this stops the MessagePanel's width exploding outwards when
        gemini is in 'prevented' mode
        */
-    overflow-x: auto;
+    // disabling this for now as it clips the active room rect on the grid view
+    // overflow-x: auto;
 
     /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
        needed height 100% all the way down to the HomePage. Height does not
