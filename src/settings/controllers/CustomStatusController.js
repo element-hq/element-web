@@ -23,7 +23,6 @@ export default class CustomStatusController extends SettingController {
         // Settings page is open (such as RoomTiles) can reflect the change.
         dis.dispatch({
             action: "feature_custom_status_changed",
-            value: newValue,
         });
     }
 }
