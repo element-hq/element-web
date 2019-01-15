@@ -108,27 +108,26 @@ export default class MemberStatusMessageAvatar extends React.Component {
     };
 
     render() {
-        const customStatusFeatureEnabled =
-            SettingsStore.isFeatureEnabled("feature_custom_status");
+        const avatar = <MemberAvatar
+            member={this.props.member}
+            width={this.props.width}
+            height={this.props.height}
+            resizeMethod={this.props.resizeMethod}
+        />;
 
-        let onClick = null;
-        let hasStatus = false;
-
-        if (customStatusFeatureEnabled) {
-            onClick = this._onClick;
-            hasStatus = this.state.hasStatus;
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return avatar;
         }
 
         const classes = classNames({
             "mx_MemberStatusMessageAvatar": true,
-            "mx_MemberStatusMessageAvatar_hasStatus": hasStatus,
+            "mx_MemberStatusMessageAvatar_hasStatus": this.state.hasStatus,
         });
 
-        return <AccessibleButton onClick={onClick} className={classes} element="div">
-            <MemberAvatar member={this.props.member}
-                          width={this.props.width}
-                          height={this.props.height}
-                          resizeMethod={this.props.resizeMethod} />
+        return <AccessibleButton className={classes}
+            element="div" onClick={this._onClick}
+        >
+            {avatar}
         </AccessibleButton>;
     }
 }
