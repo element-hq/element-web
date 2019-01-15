@@ -95,12 +95,10 @@ limitations under the License.
     flex-direction: column;
 }
 
-.mx_RoomView_body .mx_RoomView_messagePanel {
-    order: 2;
-}
-
-.mx_RoomView_body .mx_RoomView_messagePanelSpinner {
-    order: 2;
+.mx_RoomView_body {
+    .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner{
+        order: 2;
+    }
 }
 
 .mx_RoomView_body .mx_RoomView_statusArea {
@@ -114,6 +112,29 @@ limitations under the License.
 .mx_RoomView_messagePanel {
     width: 100%;
     overflow-y: auto;
+}
+
+.mx_RoomView_messagePanelSearchSpinner {
+    flex: 1;
+    background-image: url('../../img/typing-indicator-2x.gif');
+    background-position: center 367px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.mx_RoomView_messagePanelSearchSpinner:before {
+    background-color: $greyed-fg-color;
+    mask: url('../../../img/feather-icons/search-input.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 50px;
+    content: '';
+    position: absolute;
+    top: 286px;
+    left: 0;
+    right: 0;
+    height: 50px;
 }
 
 .mx_RoomView_messageListWrapper {

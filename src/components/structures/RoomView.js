@@ -1135,11 +1135,6 @@ module.exports = React.createClass({
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
 
-        if (this.state.searchResults.results === undefined) {
-            // awaiting results
-            return [];
-        }
-
         const ret = [];
 
         if (this.state.searchInProgress) {
@@ -1820,16 +1815,21 @@ module.exports = React.createClass({
         let hideMessagePanel = false;
 
         if (this.state.searchResults) {
-            searchResultsPanel = (
-                <ScrollPanel ref="searchResultsPanel"
-                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
-                    onFillRequest={this.onSearchResultsFillRequest}
-                    onResize={this.onSearchResultsResize}
-                >
-                    <li className={scrollheader_classes}></li>
-                    { this.getSearchResultTiles() }
-                </ScrollPanel>
-            );
+            // show searching spinner
+            if (this.state.searchResults.results === undefined) {
+                searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
+            } else {
+                searchResultsPanel = (
+                    <ScrollPanel ref="searchResultsPanel"
+                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                        onFillRequest={this.onSearchResultsFillRequest}
+                        onResize={this.onSearchResultsResize}
+                    >
+                        <li className={scrollheader_classes}></li>
+                        { this.getSearchResultTiles() }
+                    </ScrollPanel>
+                );
+            }
             hideMessagePanel = true;
         }
 
