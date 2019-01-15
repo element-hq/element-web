@@ -35,14 +35,15 @@ class RoomSubListItem extends ResizeItem {
     }
 
     maxSize() {
-        const scrollItem = this.domNode.querySelector(".mx_RoomSubList_scroll");
         const header = this.domNode.querySelector(".mx_RoomSubList_labelContainer");
+        const scrollItem = this.domNode.querySelector(".mx_RoomSubList_scroll");
         const headerHeight = this.sizer.getItemSize(header);
-        return headerHeight + scrollItem.scrollHeight;
+        return headerHeight + (scrollItem ? scrollItem.scrollHeight : 0);
     }
 
     minSize() {
-        return 74; //size of header + 1 room tile
+        const isNotEmpty = this.domNode.classList.contains("mx_RoomSubList_nonEmpty");
+        return isNotEmpty ? 74 : 31; //size of header + 1? room tile (see room sub list css)
     }
 
     isSized() {
