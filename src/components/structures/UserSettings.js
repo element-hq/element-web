@@ -86,6 +86,7 @@ const SIMPLE_SETTINGS = [
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
     { id: "showDeveloperTools" },
+    { id: "alwaysInviteUnknownUsers" },
 ];
 
 // These settings must be defined in SettingsStore

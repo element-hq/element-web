@@ -317,6 +317,11 @@ export const SETTINGS = {
         displayName: _td('Show empty room list headings'),
         default: true,
     },
+    "alwaysInviteUnknownUsers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Always invite users which may not exist'),
+        default: false,
+    },
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show developer tools'),
