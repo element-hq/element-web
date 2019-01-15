@@ -34,6 +34,9 @@ import { _t } from '../../languageHandler';
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
+const MAX_NAME_LENGTH = 80;
+const MAX_TOPIC_LENGTH = 160;
+
 linkifyMatrix(linkify);
 
 module.exports = React.createClass({
@@ -390,7 +393,6 @@ module.exports = React.createClass({
         const self = this;
         let guestRead; let guestJoin; let perms;
         for (let i = 0; i < rooms.length; i++) {
-            const name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
             guestRead = null;
             guestJoin = null;
 
@@ -410,7 +412,15 @@ module.exports = React.createClass({
                 perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
             }
 
+            let name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
+            if (name.length > MAX_NAME_LENGTH) {
+                name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
+            }
+
             let topic = rooms[i].topic || '';
+            if (topic.length > MAX_TOPIC_LENGTH) {
+                topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
+            }
             topic = linkifyString(sanitizeHtml(topic));
 
             rows.push(
