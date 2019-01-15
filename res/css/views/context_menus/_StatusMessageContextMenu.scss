@@ -36,6 +36,10 @@ input.mx_StatusMessageContextMenu_message {
     color: $memberstatus-placeholder-color;
 }
 
+.mx_StatusMessageContextMenu_actionContainer {
+    display: flex;
+}
+
 .mx_StatusMessageContextMenu_submit,
 .mx_StatusMessageContextMenu_clear {
     @mixin mx_DialogButton;
@@ -43,6 +47,7 @@ input.mx_StatusMessageContextMenu_message {
     font-size: 12px;
     padding: 6px 1em;
     border: 1px solid transparent;
+    margin-right: 10px;
 }
 
 .mx_StatusMessageContextMenu_submit[disabled] {
@@ -53,4 +58,8 @@ input.mx_StatusMessageContextMenu_message {
     color: $warning-color;
     background-color: transparent;
     border: 1px solid $warning-color;
+}
+
+.mx_StatusMessageContextMenu_actionContainer .mx_Spinner {
+    justify-content: start;
 }

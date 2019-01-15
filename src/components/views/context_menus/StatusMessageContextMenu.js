@@ -18,12 +18,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 
 export default class StatusMessageContextMenu extends React.Component {
     static propTypes = {
         // js-sdk User object. Not required because it might not exist.
         user: PropTypes.object,
+        // True when waiting for status change to complete.
+        waiting: false,
     };
 
     constructor(props, context) {
@@ -61,16 +64,23 @@ export default class StatusMessageContextMenu extends React.Component {
         // The `User` object has observed a status message change.
         this.setState({
             message: this.comittedStatusMessage,
+            waiting: false,
         });
     };
 
-    _onClearClick = async (e) => {
-        await MatrixClientPeg.get()._unstable_setStatusMessage("");
+    _onClearClick = (e) => {
+        MatrixClientPeg.get()._unstable_setStatusMessage("");
+        this.setState({
+            waiting: true,
+        });
     };
 
     _onSubmit = (e) => {
         e.preventDefault();
         MatrixClientPeg.get()._unstable_setStatusMessage(this.state.message);
+        this.setState({
+            waiting: true,
+        });
     };
 
     _onStatusChange = (e) => {
@@ -81,6 +91,8 @@ export default class StatusMessageContextMenu extends React.Component {
     };
 
     render() {
+        const Spinner = sdk.getComponent('views.elements.Spinner');
+
         let actionButton;
         if (this.comittedStatusMessage) {
             if (this.state.message === this.comittedStatusMessage) {
@@ -104,6 +116,11 @@ export default class StatusMessageContextMenu extends React.Component {
             </AccessibleButton>;
         }
 
+        let spinner = null;
+        if (this.state.waiting) {
+            spinner = <Spinner w="24" h="24" />;
+        }
+
         const form = <form className="mx_StatusMessageContextMenu_form"
             autoComplete="off" onSubmit={this._onSubmit}
         >
@@ -112,7 +129,10 @@ export default class StatusMessageContextMenu extends React.Component {
                 autoFocus={true} maxLength="60" value={this.state.message}
                 onChange={this._onStatusChange}
             />
-            {actionButton}
+            <div className="mx_StatusMessageContextMenu_actionContainer">
+                {actionButton}
+                {spinner}
+            </div>
         </form>;
 
         return <div className="mx_StatusMessageContextMenu">
