@@ -1,10 +1,12 @@
 const {clipboard, nativeImage, Menu, MenuItem, shell} = require('electron');
 const url = require('url');
 
+const MAILTO_PREFIX = "mailto:";
+
 const PERMITTED_URL_SCHEMES = [
     'http:',
     'https:',
-    'mailto:',
+    MAILTO_PREFIX,
 ];
 
 function safeOpenURL(target) {
@@ -47,7 +49,7 @@ function onLinkContextMenu(ev, params) {
 
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
         popupMenu.append(new MenuItem({
-            label: 'Copy Image',
+            label: 'Copy image',
             click() {
                 if (url.startsWith('data:')) {
                     clipboard.writeImage(nativeImage.createFromDataURL(url));
@@ -58,14 +60,24 @@ function onLinkContextMenu(ev, params) {
         }));
     }
 
-    // No point offerring to copy a blob: URL either
+    // No point offering to copy a blob: URL either
     if (!url.startsWith('blob:')) {
-        popupMenu.append(new MenuItem({
-            label: 'Copy Link Address',
-            click() {
-                clipboard.writeText(url);
-            },
-        }));
+        // Special-case e-mail URLs to strip the `mailto:` like modern browsers do
+        if (url.startsWith(MAILTO_PREFIX)) {
+            popupMenu.append(new MenuItem({
+                label: 'Copy email address',
+                click() {
+                    clipboard.writeText(url.substr(MAILTO_PREFIX.length));
+                },
+            }));
+        } else {
+            popupMenu.append(new MenuItem({
+                label: 'Copy link address',
+                click() {
+                    clipboard.writeText(url);
+                },
+            }));
+        }
     }
     // popup() requires an options object even for no options
     popupMenu.popup({});
