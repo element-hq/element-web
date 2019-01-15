@@ -60,12 +60,44 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_SearchBar">
-                <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
-                <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}><img src="img/search-button.svg" width="37" height="37" alt={_t("Search")} /></AccessibleButton>
                 <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick}>{_t("This Room")}</AccessibleButton>
                 <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick}>{_t("All Rooms")}</AccessibleButton>
-                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
+                <div className="mx_SearchBar_input mx_textinput">
+                    <input ref="search_term" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}></AccessibleButton>
+                </div>
+                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}></AccessibleButton>
             </div>
         );
+
+
+
+
+/*
+const clearButton = this.state.searchTerm.length > 0 ?
+            (<AccessibleButton key="button"
+                    className="mx_SearchBox_closeButton"
+                    onClick={ () => {this._clearSearch("button")} }>
+            </AccessibleButton>) :  undefined;
+
+        return (
+            <div className="mx_SearchBox mx_textinput">
+                <input
+                    key="searchfield"
+                    type="text"
+                    ref="search"
+                    className="mx_textinput_icon mx_textinput_search"
+                    value={ this.state.searchTerm }
+                    onFocus={ this._onFocus }
+                    onChange={ this.onChange }
+                    onKeyDown={ this._onKeyDown }
+                    placeholder={ _t('Filter room names') }
+                />
+                { clearButton }
+            </div>
+        );
+*/
+
+
     },
 });
