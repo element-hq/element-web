@@ -1450,5 +1450,12 @@
     "Set a new status...": "Új állapot beállítása...",
     "Clear status": "Állapot törlése",
     "Unable to load commit detail: %(msg)s": "Sikertelen betöltés részletek: \n%(msg)s",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Ahhoz, hogy a múltbeli titkosított üzeneteidet és az újakat a leendő eszközeiden láthasd, állítsd be a Biztonságos Üzenet Visszaállítást."
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Ahhoz, hogy a múltbeli titkosított üzeneteidet és az újakat a leendő eszközeiden láthasd, állítsd be a Biztonságos Üzenet Visszaállítást.",
+    "Unrecognised address": "Ismeretlen cím",
+    "User %(user_id)s may or may not exist": "%(user_id)s felhasználó lehet, hogy nem létezik",
+    "Always invite users which may not exist": "Valószínűleg nem létező felhasználókat is meghívhat",
+    "The following users may not exist": "Az alábbi felhasználók lehet, hogy nem léteznek",
+    "The following users may not exist - would you like to invite them anyways?": "Az alábbi felhasználók lehet, hogy nem léteznek - mégis meghívod őket?",
+    "Invite anyways and never warn me again": "Mindig meghívom és többet nem kérek figyelmeztetést",
+    "Invite anyways": "Mindig meghív"
 }
