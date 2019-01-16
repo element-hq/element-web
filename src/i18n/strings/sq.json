@@ -1420,5 +1420,7 @@
     "Unable to load commit detail: %(msg)s": "S’arrihet të ngarkohen hollësi depozitimi: %(msg)s",
     "Set a new status...": "Caktoni një gjendje të re…",
     "Clear status": "Pastroji gjendjen",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Që të shihni historik mesazhesh të sigurta dhe të garantoni se mund t’i shihni mesazhet e reja në pajisje të ardhshme, ujdisni Rimarrje Mesazhesh të Sigurt."
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Që të shihni historik mesazhesh të sigurta dhe të garantoni se mund t’i shihni mesazhet e reja në pajisje të ardhshme, ujdisni Rimarrje Mesazhesh të Sigurt.",
+    "Unrecognised address": "Adresë jo e pranuar",
+    "User %(user_id)s may or may not exist": "Përdoruesi %(user_id)s mund të ekzistojë ose jo"
 }
