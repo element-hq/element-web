@@ -1450,5 +1450,12 @@
     "Unable to load commit detail: %(msg)s": "Impossible de charger les détails de l'envoi : %(msg)s",
     "Set a new status...": "Configurer un nouveau statut…",
     "Clear status": "Effacer le statut",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Pour voir votre historique de messages sécurisé et vous assurer que vous pouvez voir les nouveaux messages sur de futurs appareils, configurez la récupération de messages sécurisée."
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Pour voir votre historique de messages sécurisé et vous assurer que vous pouvez voir les nouveaux messages sur de futurs appareils, configurez la récupération de messages sécurisée.",
+    "Unrecognised address": "Adresse non reconnue",
+    "User %(user_id)s may or may not exist": "L'utilisateur %(user_id)s pourrait exister",
+    "Always invite users which may not exist": "Toujours inviter les utilisateurs qui pourraient ne pas exister",
+    "The following users may not exist": "Les utilisateurs suivants pourraient ne pas exister",
+    "The following users may not exist - would you like to invite them anyways?": "Les utilisateurs suivants pourraient ne pas exister. Souhaitez-vous quand même les inviter ?",
+    "Invite anyways and never warn me again": "Les inviter quand même et ne plus m'avertir",
+    "Invite anyways": "Les inviter quand même"
 }
