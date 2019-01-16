@@ -1457,5 +1457,11 @@
     "The following users may not exist": "Az alábbi felhasználók lehet, hogy nem léteznek",
     "The following users may not exist - would you like to invite them anyways?": "Az alábbi felhasználók lehet, hogy nem léteznek - mégis meghívod őket?",
     "Invite anyways and never warn me again": "Mindig meghívom és többet nem kérek figyelmeztetést",
-    "Invite anyways": "Mindig meghív"
+    "Invite anyways": "Mindig meghív",
+    "Waiting for %(userId)s to accept...": "Várakozás %(userId)s felhasználóra, hogy elfogadja...",
+    "Waiting for %(userId)s to confirm...": "Várakozás %(userId)s felhasználóra, hogy megerősítse...",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Vélhetően hibás matrix ID-kra való meghívó küldés előtt figyelmeztessen",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Az alábbi Matrix ID-koz nem sikerül megtalálni a profilokat - így is meghívod őket?",
+    "Invite anyway and never warn me again": "Mindenképpen meghív és ne figyelmeztess többet",
+    "Invite anyway": "Mindenképpen meghív"
 }
