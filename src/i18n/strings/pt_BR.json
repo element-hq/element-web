@@ -1437,5 +1437,11 @@
     "The following users may not exist": "Os seguintes usuários podem não existir",
     "The following users may not exist - would you like to invite them anyways?": "Os seguintes usuários podem não existir - você gostaria de convidá-los de qualquer maneira?",
     "Invite anyways and never warn me again": "Convide mesmo assim e nunca mais me alerte",
-    "Invite anyways": "Convidar mesmo assim"
+    "Invite anyways": "Convidar mesmo assim",
+    "Waiting for %(userId)s to accept...": "Aguardando que %(userId)s aceite...",
+    "Waiting for %(userId)s to confirm...": "Aguardando que %(userId)s confirme...",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Avisar antes de enviar convites para IDs da Matrix potencialmente inválidas",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Não é possível encontrar perfis para os IDs da Matrix listados abaixo - você gostaria de convidá-los mesmo assim?",
+    "Invite anyway and never warn me again": "Convide mesmo assim e nunca mais me avise",
+    "Invite anyway": "Convide mesmo assim"
 }
