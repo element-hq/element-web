@@ -75,35 +75,5 @@ module.exports = React.createClass({
                 <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}></AccessibleButton>
             </div>
         );
-
-
-
-
-/*
-const clearButton = this.state.searchTerm.length > 0 ?
-            (<AccessibleButton key="button"
-                    className="mx_SearchBox_closeButton"
-                    onClick={ () => {this._clearSearch("button")} }>
-            </AccessibleButton>) :  undefined;
-
-        return (
-            <div className="mx_SearchBox mx_textinput">
-                <input
-                    key="searchfield"
-                    type="text"
-                    ref="search"
-                    className="mx_textinput_icon mx_textinput_search"
-                    value={ this.state.searchTerm }
-                    onFocus={ this._onFocus }
-                    onChange={ this.onChange }
-                    onKeyDown={ this._onKeyDown }
-                    placeholder={ _t('Filter room names') }
-                />
-                { clearButton }
-            </div>
-        );
-*/
-
-
     },
 });
