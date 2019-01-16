@@ -101,7 +101,7 @@ export default class MultiInviter {
         if (addrType === 'email') {
             return MatrixClientPeg.get().inviteByEmail(roomId, addr);
         } else if (addrType === 'mx-user-id') {
-            if (!ignoreProfile && !SettingsStore.getValue("alwaysInviteUnknownUsers", this.roomId)) {
+            if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
                 try {
                     const profile = await MatrixClientPeg.get().getProfileInfo(addr);
                     if (!profile) {
@@ -204,7 +204,7 @@ export default class MultiInviter {
                         Promise.all(promises).then(() => this.deferred.resolve(this.completionStates));
                     };
 
-                    if (SettingsStore.getValue("alwaysInviteUnknownUsers", this.roomId)) {
+                    if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
                         inviteUnknowns();
                         return;
                     }
