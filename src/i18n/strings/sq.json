@@ -1422,5 +1422,12 @@
     "Clear status": "Pastroji gjendjen",
     "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Që të shihni historik mesazhesh të sigurta dhe të garantoni se mund t’i shihni mesazhet e reja në pajisje të ardhshme, ujdisni Rimarrje Mesazhesh të Sigurt.",
     "Unrecognised address": "Adresë jo e pranuar",
-    "User %(user_id)s may or may not exist": "Përdoruesi %(user_id)s mund të ekzistojë ose jo"
+    "User %(user_id)s may or may not exist": "Përdoruesi %(user_id)s mund të ekzistojë ose jo",
+    "Waiting for %(userId)s to accept...": "Po pritet që %(userId)s të pranojë…",
+    "Waiting for %(userId)s to confirm...": "Po pritet që %(userId)s të bëjë ripohimin…",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Pyet, përpara se të dërgohen ftesa te ID Matrix potencialisht të pavlefshme",
+    "The following users may not exist": "Përdoruesit vijues mund të mos ekzistojnë",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "S’arrihet të gjenden profile për ID-të Matrix të treguara më poshtë - do të donit të ftohe, sido qoftë?",
+    "Invite anyway and never warn me again": "Ftoji sido që të jetë dhe mos më sinjalizo më kurrë",
+    "Invite anyway": "Ftoji sido qoftë"
 }
