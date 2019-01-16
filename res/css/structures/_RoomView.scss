@@ -147,8 +147,15 @@ limitations under the License.
     justify-content: flex-end;
 }
 
-.mx_RoomView_searchResultsPanel .mx_RoomView_messageListWrapper {
-    justify-content: flex-start;
+.mx_RoomView_searchResultsPanel {
+    .mx_RoomView_messageListWrapper {
+        justify-content: flex-start;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 }
 
 .mx_RoomView_empty {
