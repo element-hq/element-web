@@ -1448,5 +1448,12 @@
     "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：%(msg)s",
     "Set a new status...": "設定新狀態……",
     "Clear status": "清除狀態",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "要檢視您的安全訊息歷史並確保可以在將來的裝置上檢視新訊息，請設定安全訊息復原。"
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "要檢視您的安全訊息歷史並確保可以在將來的裝置上檢視新訊息，請設定安全訊息復原。",
+    "Unrecognised address": "無法識別的位置",
+    "User %(user_id)s may or may not exist": "使用者 %(user_id)s 可能存在也可能不存在",
+    "Always invite users which may not exist": "總是邀請可能不存在的使用者",
+    "The following users may not exist": "以下的使用者可能不存在",
+    "The following users may not exist - would you like to invite them anyways?": "以下的使用者可能不存在，您無論如何都想邀請他們嗎？",
+    "Invite anyways and never warn me again": "總是邀請而且不要再警告我",
+    "Invite anyways": "總是邀請"
 }
