@@ -62,6 +62,7 @@ module.exports = React.createClass({
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             notificationCount: this.props.room.getUnreadNotificationCount(),
             selected: this.props.room.roomId === ActiveRoomObserver.getActiveRoomId(),
+            statusMessage: this._getStatusMessage(),
         });
     },
 
@@ -77,6 +78,33 @@ module.exports = React.createClass({
     _isDirectMessageRoom: function(roomId) {
         const dmRooms = DMRoomMap.shared().getUserIdForRoomId(roomId);
         return Boolean(dmRooms);
+    },
+
+    _shouldShowStatusMessage() {
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return false;
+        }
+        const isInvite = this.props.room.getMyMembership() === "invite";
+        const isJoined = this.props.room.getMyMembership() === "join";
+        const looksLikeDm = this.props.room.getInvitedAndJoinedMemberCount() === 2;
+        return !isInvite && isJoined && looksLikeDm;
+    },
+
+    _getStatusMessageUser() {
+        const selfId = MatrixClientPeg.get().getUserId();
+        const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
+        if (!otherMember) {
+            return null;
+        }
+        return otherMember.user;
+    },
+
+    _getStatusMessage() {
+        const statusUser = this._getStatusMessageUser();
+        if (!statusUser) {
+            return "";
+        }
+        return statusUser._unstable_statusMessage;
     },
 
     onRoomTimeline: function(ev, room) {
@@ -112,7 +140,13 @@ module.exports = React.createClass({
                 this.setState({
                     notificationCount: this.props.room.getUnreadNotificationCount(),
                 });
-            break;
+                break;
+            // RoomTiles are one of the few components that may show custom status and
+            // also remain on screen while in Settings toggling the feature.  This ensures
+            // you can clearly see the status hide and show when toggling the feature.
+            case 'feature_custom_status_changed':
+                this.forceUpdate();
+                break;
         }
     },
 
@@ -128,6 +162,16 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
+
+        if (this._shouldShowStatusMessage()) {
+            const statusUser = this._getStatusMessageUser();
+            if (statusUser) {
+                statusUser.on(
+                    "User._unstable_statusMessage",
+                    this._onStatusMessageCommitted,
+                );
+            }
+        }
     },
 
     componentWillUnmount: function() {
@@ -139,6 +183,16 @@ module.exports = React.createClass({
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
         dis.unregister(this.dispatcherRef);
+
+        if (this._shouldShowStatusMessage()) {
+            const statusUser = this._getStatusMessageUser();
+            if (statusUser) {
+                statusUser.removeListener(
+                    "User._unstable_statusMessage",
+                    this._onStatusMessageCommitted,
+                );
+            }
+        }
     },
 
     componentWillReceiveProps: function(props) {
@@ -164,6 +218,13 @@ module.exports = React.createClass({
             return true;
         }
         return false;
+    },
+
+    _onStatusMessageCommitted() {
+        // The status message `User` object has observed a message change.
+        this.setState({
+            statusMessage: this._getStatusMessage(),
+        });
     },
 
     onClick: function(ev) {
@@ -251,15 +312,9 @@ module.exports = React.createClass({
         const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
         const badges = notifBadges || mentionBadges;
 
-        const isJoined = this.props.room.getMyMembership() === "join";
-        const looksLikeDm = this.props.room.getInvitedAndJoinedMemberCount() === 2;
         let subtext = null;
-        if (!isInvite && isJoined && looksLikeDm && SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            const selfId = MatrixClientPeg.get().getUserId();
-            const otherMember = this.props.room.currentState.getMembersExcept([selfId])[0];
-            if (otherMember && otherMember.user && otherMember.user._unstable_statusMessage) {
-                subtext = otherMember.user._unstable_statusMessage;
-            }
+        if (this._shouldShowStatusMessage()) {
+            subtext = this.state.statusMessage;
         }
 
         const classes = classNames({

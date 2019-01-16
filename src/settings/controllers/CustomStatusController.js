@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageComposer_avatar .mx_BaseAvatar {
-    padding: 2px;
-    border: 1px solid transparent;
-    border-radius: 15px;
-}
+import SettingController from "./SettingController";
+import dis from "../../dispatcher";
 
-.mx_MessageComposer_avatar .mx_BaseAvatar_initial {
-    left: 2px;
-}
-
-.mx_MemberStatusMessageAvatar_hasStatus .mx_BaseAvatar {
-    border-color: $accent-color;
+export default class CustomStatusController extends SettingController {
+    onChange(level, roomId, newValue) {
+        // Dispatch setting change so that some components that are still visible when the
+        // Settings page is open (such as RoomTiles) can reflect the change.
+        dis.dispatch({
+            action: "feature_custom_status_changed",
+        });
+    }
 }
