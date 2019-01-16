@@ -26,8 +26,6 @@ they have two methods:
     `resizeFromContainerOffset` receives resize handle location
         within the container bounding box. For internal use.
         This method usually ends up calling `resize` once the start offset is subtracted.
-the offset from the container edge of where
-the mouse cursor is.
 */
 export default class FixedDistributor {
     static createItem(resizeHandle, resizer, sizer) {
