@@ -33,11 +33,11 @@ module.exports = React.createClass({
     },
 
     onThisRoomClick: function() {
-        this.setState({ scope: 'Room' });
+        this.setState({ scope: 'Room' }, () => this._searchIfQuery());
     },
 
     onAllRoomsClick: function() {
-        this.setState({ scope: 'All' });
+        this.setState({ scope: 'All' }, () => this._searchIfQuery());
     },
 
     onSearchChange: function(e) {
@@ -46,6 +46,12 @@ module.exports = React.createClass({
         }
         if (e.keyCode === 27) { // escape...
             this.props.onCancelClick();
+        }
+    },
+
+    _searchIfQuery: function() {
+        if (this.refs.search_term.value) {
+            this.onSearch();
         }
     },
 
