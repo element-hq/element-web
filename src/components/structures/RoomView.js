@@ -1191,7 +1191,7 @@ module.exports = React.createClass({
                     const roomName = room ? room.name : _t("Unknown room %(roomId)s", { roomId: roomId });
 
                     ret.push(<li key={mxEv.getId() + "-room"}>
-                                 <h1>{ _t("Room") }: { roomName }</h1>
+                                 <h2>{ _t("Room") }: { roomName }</h2>
                              </li>);
                     lastRoomId = roomId;
                 }
