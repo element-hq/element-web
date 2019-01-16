@@ -35,7 +35,7 @@ export default React.createClass({
     },
 
     _onInviteNeverWarnClicked: function() {
-        SettingsStore.setValue("alwaysInviteUnknownUsers", null, SettingLevel.ACCOUNT, true);
+        SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
         this.props.onInviteAnyways();
         this.props.onFinished(true);
     },
@@ -58,7 +58,7 @@ export default React.createClass({
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    <p>{_t("The following users may not exist - would you like to invite them anyways?")}</p>
+                    <p>{_t("Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?")}</p>
                     <ul>
                         { errorList }
                     </ul>
@@ -69,10 +69,10 @@ export default React.createClass({
                         { _t('Close') }
                     </button>
                     <button onClick={this._onInviteNeverWarnClicked}>
-                        { _t('Invite anyways and never warn me again') }
+                        { _t('Invite anyway and never warn me again') }
                     </button>
                     <button onClick={this._onInviteClicked} autoFocus="true">
-                        { _t('Invite anyways') }
+                        { _t('Invite anyway') }
                     </button>
                 </div>
             </BaseDialog>

@@ -317,10 +317,10 @@ export const SETTINGS = {
         displayName: _td('Show empty room list headings'),
         default: true,
     },
-    "alwaysInviteUnknownUsers": {
+    "promptBeforeInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Always invite users which may not exist'),
-        default: false,
+        displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),
+        default: true,
     },
     "showDeveloperTools": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
