@@ -1136,11 +1136,6 @@ module.exports = React.createClass({
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
 
-        if (this.state.searchResults.results === undefined) {
-            // awaiting results
-            return [];
-        }
-
         const ret = [];
 
         if (this.state.searchInProgress) {
@@ -1197,7 +1192,7 @@ module.exports = React.createClass({
                     const roomName = room ? room.name : _t("Unknown room %(roomId)s", { roomId: roomId });
 
                     ret.push(<li key={mxEv.getId() + "-room"}>
-                                 <h1>{ _t("Room") }: { roomName }</h1>
+                                 <h2>{ _t("Room") }: { roomName }</h2>
                              </li>);
                     lastRoomId = roomId;
                 }
@@ -1817,16 +1812,21 @@ module.exports = React.createClass({
         let hideMessagePanel = false;
 
         if (this.state.searchResults) {
-            searchResultsPanel = (
-                <ScrollPanel ref="searchResultsPanel"
-                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
-                    onFillRequest={this.onSearchResultsFillRequest}
-                    onResize={this.onSearchResultsResize}
-                >
-                    <li className={scrollheader_classes}></li>
-                    { this.getSearchResultTiles() }
-                </ScrollPanel>
-            );
+            // show searching spinner
+            if (this.state.searchResults.results === undefined) {
+                searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
+            } else {
+                searchResultsPanel = (
+                    <ScrollPanel ref="searchResultsPanel"
+                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                        onFillRequest={this.onSearchResultsFillRequest}
+                        onResize={this.onSearchResultsResize}
+                    >
+                        <li className={scrollheader_classes}></li>
+                        { this.getSearchResultTiles() }
+                    </ScrollPanel>
+                );
+            }
             hideMessagePanel = true;
         }
 
