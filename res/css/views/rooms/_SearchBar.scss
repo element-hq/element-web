@@ -32,7 +32,7 @@ limitations under the License.
         width: 37px;
         height: 37px;
         background-color: $accent-color;
-        mask: url('../../../img/feather-icons/search-input.svg');
+        mask: url('../../img/feather-icons/search-input.svg');
         mask-repeat: no-repeat;
         mask-position: center;
     }
@@ -55,7 +55,7 @@ limitations under the License.
 
     .mx_SearchBar_cancel {
         background-color: $warning-color;
-        mask: url('../../../img/cancel.svg');
+        mask: url('../../img/cancel.svg');
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 14px;
