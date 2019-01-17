@@ -74,12 +74,23 @@ module.exports = React.createClass({
 
     onRoomTimeline: function(event, room) {
         if (room.roomId === this.props.room.roomId) {
-            console.log(`WhoIsTypingTile: incoming timeline event for ${event.getSender()}`);
-            this._abortUserTimer(event.getSender(), "timeline event");
+            const userId = event.getSender();
+            const userWasTyping = this.state.usersTyping.some((m) => m.userId === userId);
+            if (userWasTyping) {
+                console.log(`WhoIsTypingTile: remove ${userId} from usersTyping`);
+            }
+            const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
+            this.setState({usersTyping});
+
+            if (this.state.userTimers[userId]) {
+                console.log(`WhoIsTypingTile: incoming timeline event for ${userId}`);
+            }
+            this._abortUserTimer(userId, "timeline event");
         }
     },
 
     onRoomMemberTyping: function(ev, member) {
+        //TODO: don't we need to check the roomId here?
         console.log(`WhoIsTypingTile: incoming typing event for`, ev.getContent().user_ids);
         const usersTyping = WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room);
         this.setState({
