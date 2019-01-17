@@ -19,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import WhoIsTyping from '../../../WhoIsTyping';
+import Timer from '../../../utils/Timer';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
@@ -43,11 +44,13 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
+            userTimers: {},
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
     },
 
     componentDidUpdate: function(_, prevState) {
@@ -64,18 +67,89 @@ module.exports = React.createClass({
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            client.removeListener("Room.timeline", this.onRoomTimeline);
+        }
+        Object.values(this.state.userTimers).forEach((t) => t.abort());
+    },
+
+    onRoomTimeline: function(event, room) {
+        if (room.roomId === this.props.room.roomId) {
+            console.log(`WhoIsTypingTile: incoming timeline event for ${event.getSender()}`);
+            this._abortUserTimer(event.getSender(), "timeline event");
         }
     },
 
     onRoomMemberTyping: function(ev, member) {
+        console.log(`WhoIsTypingTile: incoming typing event for`, ev.getContent().user_ids);
+        const usersTyping = WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room);
         this.setState({
-            usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
+            userTimers: this._updateUserTimers(usersTyping),
+            usersTyping,
         });
     },
 
-    _renderTypingIndicatorAvatars: function(limit) {
-        let users = this.state.usersTyping;
+    _updateUserTimers(usersTyping) {
+        const usersThatStoppedTyping = this.state.usersTyping.filter((a) => {
+            return !usersTyping.some((b) => a.userId === b.userId);
+        });
+        const usersThatStartedTyping = usersTyping.filter((a) => {
+            return !this.state.usersTyping.some((b) => a.userId === b.userId);
+        });
+        // abort all the timers for the users that started typing again
+        usersThatStartedTyping.forEach((m) => {
+            const timer = this.state.userTimers[m.userId];
+            timer && timer.abort();
+        });
+        // prepare new userTimers object to update state with
+        let userTimers = Object.assign({}, this.state.userTimers);
+        // remove members that started typing again
+        userTimers = usersThatStartedTyping.reduce((userTimers, m) => {
+            if (userTimers[m.userId]) {
+                console.log(`WhoIsTypingTile: stopping timer for ${m.userId} because started typing again`);
+            }
+            delete userTimers[m.userId];
+            return userTimers;
+        }, userTimers);
+        // start timer for members that stopped typing
+        userTimers = usersThatStoppedTyping.reduce((userTimers, m) => {
+            if (!userTimers[m.userId]) {
+                console.log(`WhoIsTypingTile: starting 5s timer for ${m.userId}`);
+                const timer = new Timer(5000);
+                userTimers[m.userId] = timer;
+                timer.start();
+                timer.finished().then(
+                    () => {
+                        console.log(`WhoIsTypingTile: elapsed 5s timer for ${m.userId}`);
+                        this._removeUserTimer(m.userId);
+                    },  //on elapsed
+                    () => {/* aborted */},
+                );
+            }
+            return userTimers;
+        }, userTimers);
 
+        return userTimers;
+    },
+
+    _abortUserTimer: function(userId, reason) {
+        const timer = this.state.userTimers[userId];
+        if (timer) {
+            console.log(`WhoIsTypingTile: aborting timer for ${userId} because ${reason}`);
+            timer.abort();
+            this._removeUserTimer(userId);
+        }
+    },
+
+    _removeUserTimer: function(userId) {
+        const timer = this.state.userTimers[userId];
+        if (timer) {
+            const userTimers = Object.assign({}, this.state.userTimers);
+            delete userTimers[userId];
+            this.setState({userTimers});
+        }
+    },
+
+    _renderTypingIndicatorAvatars: function(users, limit) {
         let othersCount = 0;
         if (users.length > limit) {
             othersCount = users.length - limit + 1;
@@ -106,8 +180,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        let usersTyping = this.state.usersTyping;
+        const stoppedUsersOnTimer = Object.keys(this.state.userTimers)
+            .map((userId) => this.props.room.getMember(userId));
+        usersTyping = usersTyping.concat(stoppedUsersOnTimer);
+
         const typingString = WhoIsTyping.whoIsTypingString(
-            this.state.usersTyping,
+            usersTyping,
             this.props.whoIsTypingLimit,
         );
         if (!typingString) {
@@ -119,7 +198,7 @@ module.exports = React.createClass({
         return (
             <li className="mx_WhoIsTypingTile">
                 <div className="mx_WhoIsTypingTile_avatars">
-                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
+                    { this._renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit) }
                 </div>
                 <div className="mx_WhoIsTypingTile_label">
                     <EmojiText>{ typingString }</EmojiText>
