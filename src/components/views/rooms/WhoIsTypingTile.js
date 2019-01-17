@@ -75,23 +75,14 @@ module.exports = React.createClass({
     onRoomTimeline: function(event, room) {
         if (room.roomId === this.props.room.roomId) {
             const userId = event.getSender();
-            const userWasTyping = this.state.usersTyping.some((m) => m.userId === userId);
-            if (userWasTyping) {
-                console.log(`WhoIsTypingTile: remove ${userId} from usersTyping`);
-            }
+            // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
             this.setState({usersTyping});
-
-            if (this.state.userTimers[userId]) {
-                console.log(`WhoIsTypingTile: incoming timeline event for ${userId}`);
-            }
-            this._abortUserTimer(userId, "timeline event");
+            this._abortUserTimer(userId);
         }
     },
 
     onRoomMemberTyping: function(ev, member) {
-        //TODO: don't we need to check the roomId here?
-        console.log(`WhoIsTypingTile: incoming typing event for`, ev.getContent().user_ids);
         const usersTyping = WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room);
         this.setState({
             userTimers: this._updateUserTimers(usersTyping),
@@ -115,24 +106,17 @@ module.exports = React.createClass({
         let userTimers = Object.assign({}, this.state.userTimers);
         // remove members that started typing again
         userTimers = usersThatStartedTyping.reduce((userTimers, m) => {
-            if (userTimers[m.userId]) {
-                console.log(`WhoIsTypingTile: stopping timer for ${m.userId} because started typing again`);
-            }
             delete userTimers[m.userId];
             return userTimers;
         }, userTimers);
         // start timer for members that stopped typing
         userTimers = usersThatStoppedTyping.reduce((userTimers, m) => {
             if (!userTimers[m.userId]) {
-                console.log(`WhoIsTypingTile: starting 5s timer for ${m.userId}`);
                 const timer = new Timer(5000);
                 userTimers[m.userId] = timer;
                 timer.start();
                 timer.finished().then(
-                    () => {
-                        console.log(`WhoIsTypingTile: elapsed 5s timer for ${m.userId}`);
-                        this._removeUserTimer(m.userId);
-                    },  //on elapsed
+                    () => this._removeUserTimer(m.userId),  //on elapsed
                     () => {/* aborted */},
                 );
             }
@@ -142,10 +126,9 @@ module.exports = React.createClass({
         return userTimers;
     },
 
-    _abortUserTimer: function(userId, reason) {
+    _abortUserTimer: function(userId) {
         const timer = this.state.userTimers[userId];
         if (timer) {
-            console.log(`WhoIsTypingTile: aborting timer for ${userId} because ${reason}`);
             timer.abort();
             this._removeUserTimer(userId);
         }
