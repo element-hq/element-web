@@ -1,3 +1,71 @@
+Changes in [0.14.8-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.8-rc.1) (2019-01-17)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.7...v0.14.8-rc.1)
+
+ * Change wording of 'invite anyway' setting
+   [\#2450](https://github.com/matrix-org/matrix-react-sdk/pull/2450)
+ * Minimal lint-fixes to make develop CI build
+   [\#2449](https://github.com/matrix-org/matrix-react-sdk/pull/2449)
+ * Develop->Experimental
+   [\#2445](https://github.com/matrix-org/matrix-react-sdk/pull/2445)
+ * Limit line length in the room directory
+   [\#2438](https://github.com/matrix-org/matrix-react-sdk/pull/2438)
+ * Develop->Experimental
+   [\#2444](https://github.com/matrix-org/matrix-react-sdk/pull/2444)
+ * Fix setting label for unknown invites
+   [\#2443](https://github.com/matrix-org/matrix-react-sdk/pull/2443)
+ * Merge develop -> experimental
+   [\#2441](https://github.com/matrix-org/matrix-react-sdk/pull/2441)
+ * Give a route for retrying invites for users which may not exist
+   [\#2434](https://github.com/matrix-org/matrix-react-sdk/pull/2434)
+ * Show in-room reminder when key backup creating device unverified
+   [\#2394](https://github.com/matrix-org/matrix-react-sdk/pull/2394)
+ * Consistent flair ordering.
+   [\#2389](https://github.com/matrix-org/matrix-react-sdk/pull/2389)
+ * Fetch matching e2e-test branch
+   [\#2387](https://github.com/matrix-org/matrix-react-sdk/pull/2387)
+ * Add some logging for riot-web#7838
+   [\#2385](https://github.com/matrix-org/matrix-react-sdk/pull/2385)
+ * Handle well-known data in the login response
+   [\#2384](https://github.com/matrix-org/matrix-react-sdk/pull/2384)
+ * Custom status messages
+   [\#2347](https://github.com/matrix-org/matrix-react-sdk/pull/2347)
+ * React-sdk changes to support sandboxed electron
+   [\#2372](https://github.com/matrix-org/matrix-react-sdk/pull/2372)
+ * Make sure to grab the InlineSpinner object
+   [\#2363](https://github.com/matrix-org/matrix-react-sdk/pull/2363)
+ * Standardize errors about localpart structure
+   [\#2351](https://github.com/matrix-org/matrix-react-sdk/pull/2351)
+ * Fix translation error on notification icon
+   [\#2352](https://github.com/matrix-org/matrix-react-sdk/pull/2352)
+ * Introduce a default_server_name for aesthetics and rework .well-known
+   [\#2327](https://github.com/matrix-org/matrix-react-sdk/pull/2327)
+ * Show the number of unread notifications above the bell on the right
+   [\#2336](https://github.com/matrix-org/matrix-react-sdk/pull/2336)
+ * Check to make sure email addresses look roughly valid before inviting them
+   to rooms
+   [\#2338](https://github.com/matrix-org/matrix-react-sdk/pull/2338)
+ * Expose hidden notification rules in UI
+   [\#2346](https://github.com/matrix-org/matrix-react-sdk/pull/2346)
+ * Avoid preserving HS url at logout
+   [\#2340](https://github.com/matrix-org/matrix-react-sdk/pull/2340)
+ * Speed up room unread checks by not hitting the SettingsStore so often
+   [\#2339](https://github.com/matrix-org/matrix-react-sdk/pull/2339)
+ * Remove outdated info about custom skins
+   [\#2337](https://github.com/matrix-org/matrix-react-sdk/pull/2337)
+ * Show the IncomingCallBox if the call is for the RoomSubList
+   [\#2333](https://github.com/matrix-org/matrix-react-sdk/pull/2333)
+ * Don't consider ACL'd servers as permalink candidates
+   [\#2331](https://github.com/matrix-org/matrix-react-sdk/pull/2331)
+ * Fix pinning of rooms without badges
+   [\#2330](https://github.com/matrix-org/matrix-react-sdk/pull/2330)
+ * Sort translations by file name
+   [\#2329](https://github.com/matrix-org/matrix-react-sdk/pull/2329)
+ * Update React guide in code style
+   [\#2335](https://github.com/matrix-org/matrix-react-sdk/pull/2335)
+ * Remove temporary account_deactivation_preferences
+   [\#2259](https://github.com/matrix-org/matrix-react-sdk/pull/2259)
+
 Changes in [0.14.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.14.7) (2018-12-10)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.7-rc.2...v0.14.7)
