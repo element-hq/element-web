@@ -55,11 +55,6 @@ limitations under the License.
     line-height: 22px;
 }
 
-.mx_EventTile .mx_SenderProfile .mx_SenderProfile_name,
-.mx_EventTile .mx_SenderProfile .mx_SenderProfile_aux {
-    opacity: 0.5;
-}
-
 .mx_EventTile .mx_SenderProfile .mx_Flair {
     opacity: 0.7;
     margin-left: 5px;
@@ -450,11 +445,19 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body a {
-    color: $accent-color;
+    color: $accent-color-alt;
+    text-decoration: underline;
 }
 
 .mx_EventTile_content .markdown-body .hljs {
     display: inline ! important;
+}
+
+// compensate for Nunito italics being terrible
+// https://github.com/google/fonts/issues/1726
+.mx_EventTile_content .markdown-body em {
+    transform: skewX(-14deg);
+    display: inline-block;
 }
 
 /* end of overrides */

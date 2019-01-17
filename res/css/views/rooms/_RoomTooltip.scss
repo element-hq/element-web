@@ -21,7 +21,7 @@ limitations under the License.
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
-    border-right: 8px solid $menu-border-color;
+    border-right: 8px solid $menu-bg-color;
     border-bottom: 8px solid transparent;
 }
 
@@ -40,8 +40,8 @@ limitations under the License.
 .mx_RoomTooltip {
     display: none;
     position: fixed;
-    border: 1px solid $menu-border-color;
     border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.21);
     background-color: $primary-bg-color;
     z-index: 2000;
     padding: 5px;

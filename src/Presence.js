@@ -17,21 +17,33 @@ limitations under the License.
 
 const MatrixClientPeg = require("./MatrixClientPeg");
 const dis = require("./dispatcher");
+import Timer from './utils/Timer';
 
  // Time in ms after that a user is considered as unavailable/away
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 const PRESENCE_STATES = ["online", "offline", "unavailable"];
 
 class Presence {
+
+    constructor() {
+        this._activitySignal = null;
+        this._unavailableTimer = null;
+        this._onAction = this._onAction.bind(this);
+        this._dispatcherRef = null;
+    }
     /**
      * Start listening the user activity to evaluate his presence state.
      * Any state change will be sent to the Home Server.
      */
-    start() {
-        this.running = true;
-        if (undefined === this.state) {
-            this._resetTimer();
-            this.dispatcherRef = dis.register(this._onAction.bind(this));
+    async start() {
+        this._unavailableTimer = new Timer(UNAVAILABLE_TIME_MS);
+        // the user_activity_start action starts the timer
+        this._dispatcherRef = dis.register(this._onAction);
+        while (this._unavailableTimer) {
+            try {
+                await this._unavailableTimer.finished();
+                this.setState("unavailable");
+            } catch(e) { /* aborted, stop got called */ }
         }
     }
 
@@ -39,13 +51,14 @@ class Presence {
      * Stop tracking user activity
      */
     stop() {
-        this.running = false;
-        if (this.timer) {
-            clearInterval(this.timer);
-            this.timer = undefined;
-            dis.unregister(this.dispatcherRef);
+        if (this._dispatcherRef) {
+            dis.unregister(this._dispatcherRef);
+            this._dispatcherRef = null;
         }
-        this.state = undefined;
+        if (this._unavailableTimer) {
+            this._unavailableTimer.abort();
+            this._unavailableTimer = null;
+        }
     }
 
     /**
@@ -56,20 +69,24 @@ class Presence {
         return this.state;
     }
 
+    _onAction(payload) {
+        if (payload.action === 'user_activity') {
+            this.setState("online");
+            this._unavailableTimer.restart();
+        }
+    }
+
     /**
      * Set the presence state.
      * If the state has changed, the Home Server will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
-    setState(newState) {
+    async setState(newState) {
         if (newState === this.state) {
             return;
         }
         if (PRESENCE_STATES.indexOf(newState) === -1) {
             throw new Error("Bad presence state: " + newState);
-        }
-        if (!this.running) {
-            return;
         }
         const old_state = this.state;
         this.state = newState;
@@ -78,41 +95,13 @@ class Presence {
             return; // don't try to set presence when a guest; it won't work.
         }
 
-        const self = this;
-        MatrixClientPeg.get().setPresence(this.state).done(function() {
+        try {
+            await MatrixClientPeg.get().setPresence(this.state);
             console.log("Presence: %s", newState);
-        }, function(err) {
+        } catch(err) {
             console.error("Failed to set presence: %s", err);
-            self.state = old_state;
-        });
-    }
-
-    /**
-     * Callback called when the user made no action on the page for UNAVAILABLE_TIME ms.
-     * @private
-     */
-    _onUnavailableTimerFire() {
-        this.setState("unavailable");
-    }
-
-    _onAction(payload) {
-        if (payload.action === "user_activity") {
-            this._resetTimer();
+            this.state = old_state;
         }
-    }
-
-    /**
-     * Callback called when the user made an action on the page
-     * @private
-     */
-    _resetTimer() {
-        const self = this;
-        this.setState("online");
-        // Re-arm the timer
-        clearTimeout(this.timer);
-        this.timer = setTimeout(function() {
-            self._onUnavailableTimerFire();
-        }, UNAVAILABLE_TIME_MS);
     }
 }
 

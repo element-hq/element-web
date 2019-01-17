@@ -14,28 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_NewRecoveryMethodDialog .mx_Dialog_title {
-    margin-bottom: 32px;
+.mx_TopLeftMenuButton {
+    flex: 0 0 52px;
+    border-bottom: 1px solid $panel-divider-color;
+    color: $topleftmenu-color;
+    background-color: $primary-bg-color;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 0 7px;
+    overflow: hidden;
 }
 
-.mx_NewRecoveryMethodDialog_title {
-    position: relative;
-    padding-left: 45px;
-    padding-bottom: 10px;
-
-    &:before {
-        mask: url("../../../img/e2e/lock-warning.svg");
-        mask-repeat: no-repeat;
-        background-color: $primary-fg-color;
-        content: "";
-        position: absolute;
-        top: -6px;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
+.mx_TopLeftMenuButton .mx_BaseAvatar {
+    margin: 0 7px;
 }
 
-.mx_NewRecoveryMethodDialog .mx_Dialog_buttons {
-    margin-top: 36px;
+.mx_TopLeftMenuButton_name {
+    margin: 0 7px;
+    font-size: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: 600;
+}
+
+.mx_TopLeftMenuButton_chevron {
+    margin: 0 7px;
 }

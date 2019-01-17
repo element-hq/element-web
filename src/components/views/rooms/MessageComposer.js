@@ -282,10 +282,21 @@ export default class MessageComposer extends React.Component {
         ev.preventDefault();
 
         const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
+        const replacementRoom = MatrixClientPeg.get().getRoom(replacementRoomId);
+        let createEventId = null;
+        if (replacementRoom) {
+            const createEvent = replacementRoom.currentState.getStateEvents('m.room.create', '');
+            if (createEvent && createEvent.getId()) createEventId = createEvent.getId();
+        }
         dis.dispatch({
             action: 'view_room',
             highlighted: true,
+            event_id: createEventId,
             room_id: replacementRoomId,
+
+            // Try to join via the server that sent the event. This converts $something:example.org
+            // into a server domain by splitting on colons and ignoring the first entry ("$something").
+            via_servers: [this.state.tombstone.getId().split(':').splice(1).join(':')],
         });
     }
 
@@ -333,16 +344,16 @@ export default class MessageComposer extends React.Component {
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <AccessibleButton key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
-                    <img src="img/hangup.svg" alt={_t('Hangup')} title={_t('Hangup')} width="25" height="26" />
+                    <img src="img/hangup.svg" alt={_t('Hangup')} title={_t('Hangup')} width="25" height="25" />
                 </AccessibleButton>;
         } else {
             callButton =
                 <AccessibleButton key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
-                    <TintableSvg src="img/icon-call.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/phone.svg" width="20" height="20" />
                 </AccessibleButton>;
             videoCallButton =
                 <AccessibleButton key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
-                    <TintableSvg src="img/icons-video.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/video.svg" width="20" height="20" />
                 </AccessibleButton>;
         }
 
@@ -384,7 +395,7 @@ export default class MessageComposer extends React.Component {
             const uploadButton = (
                 <AccessibleButton key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title={_t('Upload file')}>
-                    <TintableSvg src="img/icons-upload.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/paperclip.svg" width="20" height="20" />
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple

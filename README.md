@@ -127,3 +127,36 @@ Github Issues
 
 All issues should be filed under https://github.com/vector-im/riot-web/issues
 for now.
+
+Development
+===========
+
+Ensure you have the latest stable Node JS runtime installed (v8.x is the best choice). Then check out
+the code and pull in dependencies:
+
+```bash
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+cd matrix-react-sdk
+git checkout develop
+npm install
+```
+
+`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the 
+latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
+you should run the following which will sync changes from the JS sdk here.
+
+```bash
+npm link ../matrix-js-sdk
+```
+
+Command assumes a checked out and installed `matrix-js-sdk` folder in parent
+folder.
+
+Running tests
+=============
+
+Ensure you've followed the above development instructions and then:
+
+```bash
+npm run test
+```

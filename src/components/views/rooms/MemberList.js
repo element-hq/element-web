@@ -19,6 +19,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
+import dis from '../../../dispatcher';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -67,7 +68,9 @@ module.exports = React.createClass({
         // We listen for changes to the lastPresenceTs which is essentially
         // listening for all presence events (we display most of not all of
         // the information contained in presence events).
-        cli.on("User.lastPresenceTs", this.onUserLastPresenceTs);
+        cli.on("User.lastPresenceTs", this.onUserPresenceChange);
+        cli.on("User.presence", this.onUserPresenceChange);
+        cli.on("User.currentlyActive", this.onUserPresenceChange);
         // cli.on("Room.timeline", this.onRoomTimeline);
     },
 
@@ -80,7 +83,9 @@ module.exports = React.createClass({
             cli.removeListener("Room.myMembership", this.onMyMembership);
             cli.removeListener("RoomState.events", this.onRoomStateEvent);
             cli.removeListener("Room", this.onRoom);
-            cli.removeListener("User.lastPresenceTs", this.onUserLastPresenceTs);
+            cli.removeListener("User.lastPresenceTs", this.onUserPresenceChange);
+            cli.removeListener("User.presence", this.onUserPresenceChange);
+            cli.removeListener("User.currentlyActive", this.onUserPresenceChange);
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -131,12 +136,12 @@ module.exports = React.createClass({
         };
     },
 
-    onUserLastPresenceTs(event, user) {
+    onUserPresenceChange(event, user) {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
-        // evar attaching their own listener.
-        // console.log("explicit presence from " + user.userId);
+        // ever attaching their own listener.
         const tile = this.refs[user.userId];
+        // console.log(`Got presence update for ${user.userId}. hasTile=${!!tile}`);
         if (tile) {
             this._updateList(); // reorder the membership list
         }
@@ -180,6 +185,10 @@ module.exports = React.createClass({
     },
 
     _updateList: new rate_limited_func(function() {
+        this._updateListNow();
+    }, 500),
+
+    _updateListNow: function() {
         // console.log("Updating memberlist");
         const newState = {
             loading: false,
@@ -188,7 +197,7 @@ module.exports = React.createClass({
         newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
         newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
-    }, 500),
+    },
 
     getMembersWithUser: function() {
         if (!this.props.roomId) return [];
@@ -266,7 +275,8 @@ module.exports = React.createClass({
         if (!member) {
             return "(null)";
         } else {
-            return "(" + member.name + ", " + member.powerLevel + ", " + member.user.lastActiveAgo + ", " + member.user.currentlyActive + ")";
+            const u = member.user;
+            return "(" + member.name + ", " + member.powerLevel + ", " + (u ? u.lastActiveAgo : "<null>") + ", " + (u ? u.getLastActiveTs() : "<null>") + ", " + (u ? u.currentlyActive : "<null>") + ", " + (u ? u.presence : "<null>") + ")";
         }
     },
 
@@ -274,48 +284,59 @@ module.exports = React.createClass({
     // returns 0 if a and b are equivalent in ordering
     // returns positive if a comes after b.
     memberSort: function(memberA, memberB) {
-            // order by last active, with "active now" first.
-            // ...and then by power
-            // ...and then alphabetically.
-            // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
+        // order by presence, with "active now" first.
+        // ...and then by power level
+        // ...and then by last active
+        // ...and then alphabetically.
+        // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-            const userA = memberA.user;
-            const userB = memberB.user;
+        // console.log(`Comparing userA=${this.memberString(memberA)} userB=${this.memberString(memberB)}`);
 
-            // if (!userA || !userB) {
-            //     console.log("comparing " + memberA.name + " user=" + memberA.user + " with " + memberB.name + " user=" + memberB.user);
-            // }
+        const userA = memberA.user;
+        const userB = memberB.user;
 
-            if (!userA && !userB) return 0;
-            if (userA && !userB) return -1;
-            if (!userA && userB) return 1;
+        // if (!userA) console.log("!! MISSING USER FOR A-SIDE: " + memberA.name + " !!");
+        // if (!userB) console.log("!! MISSING USER FOR B-SIDE: " + memberB.name + " !!");
 
-            // console.log("comparing " + this.memberString(memberA) + " and " + this.memberString(memberB));
+        if (!userA && !userB) return 0;
+        if (userA && !userB) return -1;
+        if (!userA && userB) return 1;
 
-            if ((userA.currentlyActive && userB.currentlyActive) || !this._showPresence) {
-                // console.log(memberA.name + " and " + memberB.name + " are both active");
-                if (memberA.powerLevel === memberB.powerLevel) {
-                    // console.log(memberA + " and " + memberB + " have same power level");
-                    if (memberA.name && memberB.name) {
-                        // console.log("comparing names: " + memberA.name + " and " + memberB.name);
-                        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-                        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
-                        return nameA.localeCompare(nameB);
-                    } else {
-                        return 0;
-                    }
-                } else {
-                    // console.log("comparing power: " + memberA.powerLevel + " and " + memberB.powerLevel);
-                    return memberB.powerLevel - memberA.powerLevel;
-                }
+        // First by presence
+        if (this._showPresence) {
+            const convertPresence = (p) => p === 'unavailable' ? 'online' : p;
+            const presenceIndex = p => {
+                const order = ['active', 'online', 'offline'];
+                const idx = order.indexOf(convertPresence(p));
+                return idx === -1 ? order.length : idx; // unknown states at the end
+            };
+
+            const idxA = presenceIndex(userA.currentlyActive ? 'active' : userA.presence);
+            const idxB = presenceIndex(userB.currentlyActive ? 'active' : userB.presence);
+            // console.log(`userA_presenceGroup=${idxA} userB_presenceGroup=${idxB}`);
+            if (idxA !== idxB) {
+                // console.log("Comparing on presence group - returning");
+                return idxA - idxB;
             }
+        }
 
-            if (userA.currentlyActive && !userB.currentlyActive) return -1;
-            if (!userA.currentlyActive && userB.currentlyActive) return 1;
+        // Second by power level
+        if (memberA.powerLevel !== memberB.powerLevel) {
+            // console.log("Comparing on power level - returning");
+            return memberB.powerLevel - memberA.powerLevel;
+        }
 
-            // For now, let's just order things by timestamp. It's really annoying
-            // that a user disappears from sight just because they temporarily go offline
+        // Third by last active
+        if (this._showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
+            // console.log("Comparing on last active timestamp - returning");
             return userB.getLastActiveTs() - userA.getLastActiveTs();
+        }
+
+        // Fourth by name (alphabetical)
+        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
+        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+        // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
+        return nameA.localeCompare(nameB);
     },
 
     onSearchQueryChanged: function(ev) {
@@ -420,42 +441,59 @@ module.exports = React.createClass({
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
-        let invitedSection = null;
-        if (this._getChildCountInvited() > 0) {
-            invitedSection = (
-                <div className="mx_MemberList_invited">
-                    <h2>{ _t("Invited") }</h2>
-                    <div className="mx_MemberList_wrapper">
-                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtInvited}
-                                createOverflowElement={this._createOverflowTileInvited}
-                                getChildren={this._getChildrenInvited}
-                                getChildCount={this._getChildCountInvited}
-                        />
-                    </div>
-                </div>
-            );
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        let inviteButton;
+        if (room && room.getMyMembership() === 'join') {
+            const TintableSvg = sdk.getComponent("elements.TintableSvg");
+            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+            inviteButton =
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
+                    <span>{ _t('Invite to this room') }</span>
+                </AccessibleButton>;
         }
 
-        const inputBox = (
-            <form autoComplete="off">
-                <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
-            </form>
-        );
+        let invitedHeader;
+        let invitedSection;
+        if (this._getChildCountInvited() > 0) {
+            invitedHeader = <h2>{ _t("Invited") }</h2>;
+            invitedSection = <TruncatedList className="mx_MemberList_section mx_MemberList_invited" truncateAt={this.state.truncateAtInvited}
+                        createOverflowElement={this._createOverflowTileInvited}
+                        getChildren={this._getChildrenInvited}
+                        getChildCount={this._getChildCountInvited}
+                />;
+        }
 
         return (
             <div className="mx_MemberList">
-                { inputBox }
-                <GeminiScrollbarWrapper autoshow={true} className="mx_MemberList_joined">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
+                { inviteButton }
+                <GeminiScrollbarWrapper autoshow={true}>
+                    <div className="mx_MemberList_wrapper">
+                        <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}
-                            getChildCount={this._getChildCountJoined}
-                    />
-                    { invitedSection }
+                            getChildCount={this._getChildCountJoined} />
+                        { invitedHeader }
+                        { invitedSection }
+                    </div>
                 </GeminiScrollbarWrapper>
+                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="text"
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={_t('Filter room members')} />
             </div>
         );
+    },
+
+    onInviteButtonClick: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'require_registration'});
+            return;
+        }
+
+        // call AddressPickerDialog
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.roomId,
+        });
     },
 });

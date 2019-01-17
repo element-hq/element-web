@@ -24,18 +24,4 @@ rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
 npm run build
-npm run test
 popd
-
-if [ "$TRAVIS_BRANCH" = "develop" ]
-then
-    # run end to end tests
-    scripts/fetchdep.sh matrix-org matrix-react-end-to-end-tests master
-    pushd matrix-react-end-to-end-tests
-    ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
-    # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
-    # CHROME_PATH=$(which google-chrome-stable) ./run.sh
-    ./install.sh
-    ./run.sh --travis
-    popd
-fi

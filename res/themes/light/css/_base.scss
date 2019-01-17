@@ -1,3 +1,5 @@
+@import "_fonts.scss";
+
 /* Open Sans lacks combining diacritics, so these will fall through
    to the next font.  Helevetica's diacritics however do not combine
    nicely with Open Sans (on OSX, at least) and result in a huge
@@ -18,6 +20,7 @@ $focus-bg-color: #dddddd;
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color: #76CFA6;
+$accent-color-alt: $accent-color;
 $accent-color-50pct: #76CFA67F;
 
 $selection-fg-color: $primary-bg-color;
@@ -46,6 +49,8 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #eaf5f0;
 $tertiary-accent-color: #d3efe1;
 
+$tagpanel-bg-color: $tertiary-accent-color;
+
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
 
@@ -64,6 +69,10 @@ $primary-hairline-color: #e5e5e5;
 // used for the border of input text fields
 $input-border-color: #f0f0f0;
 
+$input-darker-bg-color: #c1c9d6;
+$input-darker-fg-color: #9fa9ba;
+$button-bg-color: #7ac9a1;
+$button-fg-color: white;
 // apart from login forms, which have stronger border
 $strong-input-border-color: #c7c7c7;
 
@@ -74,6 +83,7 @@ $input-fg-color: rgba(74, 74, 74, 0.9);
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #f6f6f6;
+$menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #ffffff;
 $avatar-bg-color: #ffffff;
@@ -103,11 +113,27 @@ $rte-code-bg-color: rgba(0, 0, 0, 0.04);
 $rte-room-pill-color: #aaa;
 $rte-group-pill-color: #aaa;
 
+$topleftmenu-color: $primary-fg-color;
+$roomheader-color: $primary-fg-color;
+$roomheader-addroom-color: $primary-bg-color;
+$roomtopic-color: $settings-grey-fg-color;
+$eventtile-meta-color: $roomtopic-color;
 // ********************
 
 $roomtile-name-color: rgba(69, 69, 69, 0.8);
+$roomtile-selected-color: $roomtile-name-color;
+$roomtile-notified-color: $roomtile-name-color;
 $roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
+
+$username-variant1-color: #1e7ddc;
+$username-variant2-color: #a756a8;
+$username-variant3-color: #7ac9a1;
+$username-variant4-color: #f2809d;
+$username-variant5-color: #ffc666;
+$username-variant6-color: #76ddd7;
+$username-variant7-color: #45529b;
+$username-variant8-color: #bfd251;
 
 $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 
@@ -151,11 +177,14 @@ $lightbox-border-color: #ffffff;
 
 $imagebody-giflabel: rgba(0, 0, 0, 0.7);
 $imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
+$imagebody-giflabel-color: rgba(255, 255, 255, 1);
 
 // unused?
 $progressbar-color: #000;
 
 $room-warning-bg-color: #fff8e3;
+
+$memberstatus-placeholder-color: $roomtile-name-color;
 
 // ***** Mixins! *****
 

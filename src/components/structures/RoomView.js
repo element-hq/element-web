@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ const Rooms = require('../../Rooms');
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
@@ -609,17 +611,10 @@ module.exports = React.createClass({
         }
     },
 
-    async onRoomRecoveryReminderFinished(backupCreated) {
-        // If the user cancelled the key backup dialog, it suggests they don't
-        // want to be reminded anymore.
-        if (!backupCreated) {
-            await SettingsStore.setValue(
-                "showRoomRecoveryReminder",
-                null,
-                SettingLevel.ACCOUNT,
-                false,
-            );
-        }
+    onRoomRecoveryReminderDontAskAgain: function() {
+        // Called when the option to not ask again is set:
+        // force an update to hide the recovery reminder
+        this.forceUpdate();
     },
 
     onKeyBackupStatus() {
@@ -1141,11 +1136,6 @@ module.exports = React.createClass({
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
 
-        if (this.state.searchResults.results === undefined) {
-            // awaiting results
-            return [];
-        }
-
         const ret = [];
 
         if (this.state.searchInProgress) {
@@ -1202,7 +1192,7 @@ module.exports = React.createClass({
                     const roomName = room ? room.name : _t("Unknown room %(roomId)s", { roomId: roomId });
 
                     ret.push(<li key={mxEv.getId() + "-room"}>
-                                 <h1>{ _t("Room") }: { roomName }</h1>
+                                 <h2>{ _t("Room") }: { roomName }</h2>
                              </li>);
                     lastRoomId = roomId;
                 }
@@ -1571,18 +1561,20 @@ module.exports = React.createClass({
                             oobData={this.props.oobData}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                            canPreview={false} error={this.state.roomLoadError}
-                                            roomAlias={roomAlias}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            inviterName={inviterName}
-                                            invitedEmail={invitedEmail}
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                                                canPreview={false} error={this.state.roomLoadError}
+                                                roomAlias={roomAlias}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                inviterName={inviterName}
+                                                invitedEmail={invitedEmail}
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1616,16 +1608,18 @@ module.exports = React.createClass({
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
                         />
-                        <div className="mx_RoomView_auxPanel">
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                            onForgetClick={this.onForgetClick}
-                                            onRejectClick={this.onRejectButtonClicked}
-                                            inviterName={inviterName}
-                                            canPreview={false}
-                                            spinner={this.state.joining}
-                                            spinnerState="joining"
-                                            room={this.state.room}
-                            />
+                        <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_auxPanel">
+                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                                                onForgetClick={this.onForgetClick}
+                                                onRejectClick={this.onRejectButtonClicked}
+                                                inviterName={inviterName}
+                                                canPreview={false}
+                                                spinner={this.state.joining}
+                                                spinnerState="joining"
+                                                room={this.state.room}
+                                />
+                            </div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
                     </div>
@@ -1668,7 +1662,6 @@ module.exports = React.createClass({
                 onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
-                whoIsTypingLimit={3}
             />;
         }
 
@@ -1699,7 +1692,7 @@ module.exports = React.createClass({
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
             hideCancel = true;
         } else if (showRoomRecoveryReminder) {
-            aux = <RoomRecoveryReminder onFinished={this.onRoomRecoveryReminderFinished} />;
+            aux = <RoomRecoveryReminder onDontAskAgainSet={this.onRoomRecoveryReminderDontAskAgain} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
@@ -1732,6 +1725,7 @@ module.exports = React.createClass({
 
         const auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
+              fullHeight={this.state.editingRoomSettings}
               userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
@@ -1818,16 +1812,21 @@ module.exports = React.createClass({
         let hideMessagePanel = false;
 
         if (this.state.searchResults) {
-            searchResultsPanel = (
-                <ScrollPanel ref="searchResultsPanel"
-                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
-                    onFillRequest={this.onSearchResultsFillRequest}
-                    onResize={this.onSearchResultsResize}
-                >
-                    <li className={scrollheader_classes}></li>
-                    { this.getSearchResultTiles() }
-                </ScrollPanel>
-            );
+            // show searching spinner
+            if (this.state.searchResults.results === undefined) {
+                searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
+            } else {
+                searchResultsPanel = (
+                    <ScrollPanel ref="searchResultsPanel"
+                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                        onFillRequest={this.onSearchResultsFillRequest}
+                        onResize={this.onSearchResultsResize}
+                    >
+                        <li className={scrollheader_classes}></li>
+                        { this.getSearchResultTiles() }
+                    </ScrollPanel>
+                );
+            }
             hideMessagePanel = true;
         }
 
@@ -1860,14 +1859,10 @@ module.exports = React.createClass({
         let topUnreadMessagesBar = null;
         if (this.state.showTopUnreadMessagesBar) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
-            topUnreadMessagesBar = (
-                <div className="mx_RoomView_topUnreadMessagesBar">
-                    <TopUnreadMessagesBar
-                       onScrollUpClick={this.jumpToReadMarker}
-                       onCloseClick={this.forgetReadMarker}
-                    />
-                </div>
-            );
+            topUnreadMessagesBar = (<TopUnreadMessagesBar
+                                       onScrollUpClick={this.jumpToReadMarker}
+                                       onCloseClick={this.forgetReadMarker}
+                                    />);
         }
         const statusBarAreaClass = classNames(
             "mx_RoomView_statusArea",
@@ -1883,8 +1878,10 @@ module.exports = React.createClass({
             },
         );
 
+        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+
         return (
-            <div className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
+            <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
@@ -1899,20 +1896,24 @@ module.exports = React.createClass({
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                 />
-                { auxPanel }
-                <div className={fadableSectionClasses}>
-                    { topUnreadMessagesBar }
-                    { messagePanel }
-                    { searchResultsPanel }
-                    <div className={statusBarAreaClass}>
-                        <div className="mx_RoomView_statusAreaBox">
-                            <div className="mx_RoomView_statusAreaBox_line"></div>
-                            { statusBar }
+                <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
+                    <div className={fadableSectionClasses}>
+                        { auxPanel }
+                        <div className="mx_RoomView_timeline">
+                            { topUnreadMessagesBar }
+                            { messagePanel }
+                            { searchResultsPanel }
                         </div>
+                        <div className={statusBarAreaClass}>
+                            <div className="mx_RoomView_statusAreaBox">
+                                <div className="mx_RoomView_statusAreaBox_line"></div>
+                                { statusBar }
+                            </div>
+                        </div>
+                        { messageComposer }
                     </div>
-                    { messageComposer }
-                </div>
-            </div>
+                </MainSplit>
+            </main>
         );
     },
 });

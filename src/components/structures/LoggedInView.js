@@ -34,7 +34,8 @@ import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
-
+import ResizeHandle from '../views/elements/ResizeHandle';
+import {Resizer, CollapseDistributor} from '../../resizer'
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -61,7 +62,7 @@ const LoggedInView = React.createClass({
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
         onRegistered: PropTypes.func,
-
+        collapsedRhs: PropTypes.bool,
         teamToken: PropTypes.string,
 
         // Used by the RoomView to handle joining rooms
@@ -94,6 +95,12 @@ const LoggedInView = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        this.resizer = this._createResizer();
+        this.resizer.attach();
+        this._loadResizerPreferences();
+    },
+
     componentWillMount: function() {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
@@ -123,6 +130,7 @@ const LoggedInView = React.createClass({
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
+        this.resizer.detach();
     },
 
     // Child components assume that the client peg will not be null, so give them some
@@ -146,6 +154,39 @@ const LoggedInView = React.createClass({
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
+    },
+
+    _createResizer() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse"
+        };
+        const collapseConfig = {
+            toggleSize: 260 - 50,
+            onCollapsed: (collapsed) => {
+                this.setState({collapseLhs: collapsed});
+                if (collapsed) {
+                    window.localStorage.setItem("mx_lhs_size", '0');
+                }
+            },
+            onResized: (size) => {
+                window.localStorage.setItem("mx_lhs_size", '' + size);
+            },
+        };
+        const resizer = new Resizer(
+            this.resizeContainer,
+            CollapseDistributor,
+            collapseConfig);
+        resizer.setClassNames(classNames);
+        return resizer;
+    },
+
+    _loadResizerPreferences() {
+        const lhsSize = window.localStorage.getItem("mx_lhs_size");
+        if (lhsSize !== null) {
+            this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
+        }
     },
 
     onAccountData: function(event) {
@@ -364,12 +405,14 @@ const LoggedInView = React.createClass({
         this.setState({mouseDown: null});
     },
 
+    _setResizeContainerRef(div) {
+        this.resizeContainer = div;
+    },
+
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
-        const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserSettings = sdk.getComponent('structures.UserSettings');
-        const CreateRoom = sdk.getComponent('structures.CreateRoom');
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
@@ -382,7 +425,6 @@ const LoggedInView = React.createClass({
         const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
         let page_element;
-        let right_panel = '';
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
@@ -396,12 +438,9 @@ const LoggedInView = React.createClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}
-                        collapsedRhs={this.props.collapseRhs}
+                        collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapseRhs) {
-                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
-                }
                 break;
 
             case PageTypes.UserSettings:
@@ -411,19 +450,10 @@ const LoggedInView = React.createClass({
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.MyGroups:
                 page_element = <MyGroups />;
-                break;
-
-            case PageTypes.CreateRoom:
-                page_element = <CreateRoom
-                    onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapseRhs}
-                />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.RoomDirectory:
@@ -451,15 +481,15 @@ const LoggedInView = React.createClass({
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                // TODO: fix/remove UserView
+                // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
-                    collapsedRhs={this.props.collapseRhs}
+                    collapsedRhs={this.props.collapsedRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
@@ -511,15 +541,13 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div className={bodyClasses}>
+                    <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
-                            collapsed={this.props.collapseLhs || false}
+                            collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
-                        <main className='mx_MatrixChat_middlePanel'>
-                            { page_element }
-                        </main>
-                        { right_panel }
+                        <ResizeHandle/>
+                        { page_element }
                     </div>
                 </DragDropContext>
             </div>

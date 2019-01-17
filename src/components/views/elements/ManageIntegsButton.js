@@ -91,7 +91,7 @@ export default class ManageIntegsButton extends React.Component {
 
             integrationsButton = (
                 <AccessibleButton className={integrationsButtonClasses} onClick={this.onManageIntegrations} title={_t('Manage Integrations')}>
-                    <TintableSvg src="img/icons-apps.svg" width="35" height="35" />
+                    <TintableSvg src="img/feather-icons/grid.svg" width="20" height="20" />
                     { integrationsWarningTriangle }
                     { integrationsErrorPopup }
                 </AccessibleButton>

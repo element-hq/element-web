@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -163,7 +163,7 @@ export default React.createClass({
             viewUserId: null,
 
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -579,7 +579,7 @@ export default React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapseRhs) {
+                if (this.state.collapsedRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -680,13 +680,15 @@ export default React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", true);
                 this.setState({
-                    collapseRhs: true,
+                    collapsedRhs: true,
                 });
                 break;
             case 'show_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", false);
                 this.setState({
-                    collapseRhs: false,
+                    collapsedRhs: false,
                 });
                 break;
             case 'panel_disable': {
@@ -697,9 +699,11 @@ export default React.createClass({
                 });
                 break;
             }
-            case 'set_theme':
-                this._onSetTheme(payload.value);
-                break;
+            // case 'set_theme':
+                // disable changing the theme for now
+                // as other themes are not compatible with dharma
+                // this._onSetTheme(payload.value);
+                // break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -923,6 +927,10 @@ export default React.createClass({
     },
 
     _viewHome: function() {
+        // The home page requires the "logged in" view, so we'll set that.
+        this.setStateForNewView({
+            view: VIEWS.LOGGED_IN,
+        });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
     },
@@ -1179,10 +1187,7 @@ export default React.createClass({
      * @param {string} teamToken
      */
     _onLoggedIn: async function(teamToken) {
-        this.setState({
-            view: VIEWS.LOGGED_IN,
-        });
-
+        this.setStateForNewView({view: VIEWS.LOGGED_IN});
         if (teamToken) {
             // A team member has logged in, not a guest
             this._teamToken = teamToken;
@@ -1239,7 +1244,7 @@ export default React.createClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
@@ -1430,10 +1435,33 @@ export default React.createClass({
                     break;
             }
         });
-        cli.on("crypto.keyBackupFailed", () => {
-            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-            );
+        cli.on("crypto.keyBackupFailed", async (errcode) => {
+            let haveNewVersion;
+            let newVersionInfo;
+            // if key backup is still enabled, there must be a new backup in place
+            if (MatrixClientPeg.get().getKeyBackupEnabled()) {
+                haveNewVersion = true;
+            } else {
+                // otherwise check the server to see if there's a new one
+                try {
+                    newVersionInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+                    if (newVersionInfo !== null) haveNewVersion = true;
+                } catch (e) {
+                    console.error("Saw key backup error but failed to check backup version!", e);
+                    return;
+                }
+            }
+
+            if (haveNewVersion) {
+                Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    { newVersionInfo },
+                );
+            } else {
+                Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                );
+            }
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied
