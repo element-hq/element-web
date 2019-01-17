@@ -14,6 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 import MatrixClientPeg from '../MatrixClientPeg';
 import sdk from '../index';
@@ -52,12 +53,12 @@ const INITIAL_STATE = {
 *  with a subset of the js-sdk.
  *  ```
  */
-export class RoomViewStore extends Store {
-    constructor(dispatcher) {
-        super(dispatcher);
+class RoomViewStore extends Store {
+    constructor() {
+        super(dis);
 
         // Initialise state
-        this._state = Object.assign({}, INITIAL_STATE);
+        this._state = INITIAL_STATE;
     }
 
     _setState(newState) {
@@ -84,8 +85,6 @@ export class RoomViewStore extends Store {
                 });
                 break;
             case 'view_room_error':
-                // should not go over dispatcher anymore
-                // but be internal to RoomViewStore
                 this._viewRoomError(payload);
                 break;
             case 'will_join':
@@ -151,11 +150,22 @@ export class RoomViewStore extends Store {
                 // pull the user out of Room Settings
                 isEditingSettings: false,
             };
+
+            if (this._state.forwardingEvent) {
+                dis.dispatch({
+                    action: 'send_event',
+                    room_id: newState.roomId,
+                    event: this._state.forwardingEvent,
+                });
+            }
+
             this._setState(newState);
+
             if (payload.auto_join) {
                 this._joinRoom(payload);
             }
         } else if (payload.room_alias) {
+            // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
                 roomId: null,
                 initialEventId: null,
@@ -164,6 +174,25 @@ export class RoomViewStore extends Store {
                 roomAlias: payload.room_alias,
                 roomLoading: true,
                 roomLoadError: null,
+            });
+            MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
+            (result) => {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: result.room_id,
+                    event_id: payload.event_id,
+                    highlighted: payload.highlighted,
+                    room_alias: payload.room_alias,
+                    auto_join: payload.auto_join,
+                    oob_data: payload.oob_data,
+                });
+            }, (err) => {
+                dis.dispatch({
+                    action: 'view_room_error',
+                    room_id: null,
+                    room_alias: payload.room_alias,
+                    err: err,
+                });
             });
         }
     }
@@ -190,7 +219,7 @@ export class RoomViewStore extends Store {
             // stream yet, and that's the point at which we'd consider
             // the user joined to the room.
         }, (err) => {
-            this.getDispatcher().dispatch({
+            dis.dispatch({
                 action: 'join_room_error',
                 err: err,
             });
@@ -306,7 +335,8 @@ export class RoomViewStore extends Store {
     }
 }
 
-const MatrixDispatcher = require("../matrix-dispatcher");
-const backwardsCompatInstance = new RoomViewStore(new MatrixDispatcher());
-
-export default backwardsCompatInstance;
+let singletonRoomViewStore = null;
+if (!singletonRoomViewStore) {
+    singletonRoomViewStore = new RoomViewStore();
+}
+module.exports = singletonRoomViewStore;

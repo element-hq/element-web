@@ -651,9 +651,6 @@ export default React.createClass({
             case 'view_group':
                 this._viewGroup(payload);
                 break;
-            case 'group_grid_view':
-                this._viewGroupGrid(payload);
-                break;
             case 'view_home_page':
                 this._viewHome();
                 break;
@@ -865,7 +862,6 @@ export default React.createClass({
     //                               room name and avatar from an invite email)
     _viewRoom: function(roomInfo) {
         this.focusComposer = true;
-        console.log("!!! MatrixChat._viewRoom", roomInfo);
 
         const newState = {
             currentRoomId: roomInfo.room_id || null,
@@ -914,9 +910,6 @@ export default React.createClass({
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
-
-
-            // TODO: only emit this when we're not in grid mode?
             this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
             this.setState(newState);
@@ -931,11 +924,6 @@ export default React.createClass({
         });
         this._setPage(PageTypes.GroupView);
         this.notifyNewScreen('group/' + groupId);
-    },
-
-    _viewGroupGrid: function(payload) {
-        this._setPage(PageTypes.GroupGridView);
-        // this.notifyNewScreen('grid/' + payload.group_id);
     },
 
     _viewHome: function() {
