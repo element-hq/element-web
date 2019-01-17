@@ -45,6 +45,11 @@ module.exports = React.createClass({
         return {
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
             userTimers: {},
+            // a map with userid => Timer to delay
+            // hiding the "x is typing" message for a
+            // user so hiding it can coincide
+            // with the sent message by the other side
+            // resulting in less timeline jumpiness
         };
     },
 
@@ -78,6 +83,7 @@ module.exports = React.createClass({
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
             this.setState({usersTyping});
+            // abort timer if any
             this._abortUserTimer(userId);
         }
     },
@@ -177,6 +183,9 @@ module.exports = React.createClass({
         let usersTyping = this.state.usersTyping;
         const stoppedUsersOnTimer = Object.keys(this.state.userTimers)
             .map((userId) => this.props.room.getMember(userId));
+        // append the users that have been reported not typing anymore
+        // but have a timeout timer running so they can disappear
+        // when a message comes in
         usersTyping = usersTyping.concat(stoppedUsersOnTimer);
 
         const typingString = WhoIsTyping.whoIsTypingString(
