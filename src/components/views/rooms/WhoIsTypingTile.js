@@ -44,12 +44,12 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
-            userTimers: {},
             // a map with userid => Timer to delay
             // hiding the "x is typing" message for a
             // user so hiding it can coincide
             // with the sent message by the other side
             // resulting in less timeline jumpiness
+            delayedStopTypingTimers: {},
         };
     },
 
@@ -74,7 +74,7 @@ module.exports = React.createClass({
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
             client.removeListener("Room.timeline", this.onRoomTimeline);
         }
-        Object.values(this.state.userTimers).forEach((t) => t.abort());
+        Object.values(this.state.delayedStopTypingTimers).forEach((t) => t.abort());
     },
 
     onRoomTimeline: function(event, room) {
@@ -91,12 +91,12 @@ module.exports = React.createClass({
     onRoomMemberTyping: function(ev, member) {
         const usersTyping = WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room);
         this.setState({
-            userTimers: this._updateUserTimers(usersTyping),
+            delayedStopTypingTimers: this._updateDelayedStopTypingTimers(usersTyping),
             usersTyping,
         });
     },
 
-    _updateUserTimers(usersTyping) {
+    _updateDelayedStopTypingTimers(usersTyping) {
         const usersThatStoppedTyping = this.state.usersTyping.filter((a) => {
             return !usersTyping.some((b) => a.userId === b.userId);
         });
@@ -105,35 +105,35 @@ module.exports = React.createClass({
         });
         // abort all the timers for the users that started typing again
         usersThatStartedTyping.forEach((m) => {
-            const timer = this.state.userTimers[m.userId];
+            const timer = this.state.delayedStopTypingTimers[m.userId];
             timer && timer.abort();
         });
-        // prepare new userTimers object to update state with
-        let userTimers = Object.assign({}, this.state.userTimers);
+        // prepare new delayedStopTypingTimers object to update state with
+        let delayedStopTypingTimers = Object.assign({}, this.state.delayedStopTypingTimers);
         // remove members that started typing again
-        userTimers = usersThatStartedTyping.reduce((userTimers, m) => {
-            delete userTimers[m.userId];
-            return userTimers;
-        }, userTimers);
+        delayedStopTypingTimers = usersThatStartedTyping.reduce((delayedStopTypingTimers, m) => {
+            delete delayedStopTypingTimers[m.userId];
+            return delayedStopTypingTimers;
+        }, delayedStopTypingTimers);
         // start timer for members that stopped typing
-        userTimers = usersThatStoppedTyping.reduce((userTimers, m) => {
-            if (!userTimers[m.userId]) {
+        delayedStopTypingTimers = usersThatStoppedTyping.reduce((delayedStopTypingTimers, m) => {
+            if (!delayedStopTypingTimers[m.userId]) {
                 const timer = new Timer(5000);
-                userTimers[m.userId] = timer;
+                delayedStopTypingTimers[m.userId] = timer;
                 timer.start();
                 timer.finished().then(
                     () => this._removeUserTimer(m.userId),  //on elapsed
                     () => {/* aborted */},
                 );
             }
-            return userTimers;
-        }, userTimers);
+            return delayedStopTypingTimers;
+        }, delayedStopTypingTimers);
 
-        return userTimers;
+        return delayedStopTypingTimers;
     },
 
     _abortUserTimer: function(userId) {
-        const timer = this.state.userTimers[userId];
+        const timer = this.state.delayedStopTypingTimers[userId];
         if (timer) {
             timer.abort();
             this._removeUserTimer(userId);
@@ -141,11 +141,11 @@ module.exports = React.createClass({
     },
 
     _removeUserTimer: function(userId) {
-        const timer = this.state.userTimers[userId];
+        const timer = this.state.delayedStopTypingTimers[userId];
         if (timer) {
-            const userTimers = Object.assign({}, this.state.userTimers);
-            delete userTimers[userId];
-            this.setState({userTimers});
+            const delayedStopTypingTimers = Object.assign({}, this.state.delayedStopTypingTimers);
+            delete delayedStopTypingTimers[userId];
+            this.setState({delayedStopTypingTimers});
         }
     },
 
@@ -181,7 +181,7 @@ module.exports = React.createClass({
 
     render: function() {
         let usersTyping = this.state.usersTyping;
-        const stoppedUsersOnTimer = Object.keys(this.state.userTimers)
+        const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers)
             .map((userId) => this.props.room.getMember(userId));
         // append the users that have been reported not typing anymore
         // but have a timeout timer running so they can disappear
