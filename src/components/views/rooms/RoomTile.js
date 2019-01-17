@@ -29,6 +29,7 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
@@ -61,7 +62,7 @@ module.exports = React.createClass({
             roomName: this.props.room.name,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
             notificationCount: this.props.room.getUnreadNotificationCount(),
-            selected: this.props.room.roomId === ActiveRoomObserver.getActiveRoomId(),
+            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
             statusMessage: this._getStatusMessage(),
         });
     },
@@ -150,9 +151,9 @@ module.exports = React.createClass({
         }
     },
 
-    _onActiveRoomChange: function(activeRoomId) {
+    _onActiveRoomChange: function() {
         this.setState({
-            selected: this.props.room.roomId === activeRoomId,
+            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
         });
     },
 

@@ -81,8 +81,7 @@ limitations under the License.
        Empirically this stops the MessagePanel's width exploding outwards when
        gemini is in 'prevented' mode
        */
-    // disabling this for now as it clips the active room rect on the grid view
-    // overflow-x: auto;
+    overflow-x: auto;
 
     /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
        needed height 100% all the way down to the HomePage. Height does not

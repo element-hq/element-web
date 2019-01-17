@@ -26,6 +26,7 @@ Once a timer is finished or aborted, it can't be started again
 a new one through `clone()` or `cloneIfRun()`.
 */
 export default class Timer {
+
     constructor(timeout) {
         this._timeout = timeout;
         this._onTimeout = this._onTimeout.bind(this);
@@ -69,7 +70,6 @@ export default class Timer {
 
     /**
      * if not started before, starts the timer.
-     * @returns {Timer} the same timer
      */
     start() {
         if (!this.isRunning()) {
@@ -81,7 +81,6 @@ export default class Timer {
 
     /**
      * (re)start the timer. If it's running, reset the timeout. If not, start it.
-     * @returns {Timer} the same timer
      */
     restart() {
         if (this.isRunning()) {
@@ -99,7 +98,6 @@ export default class Timer {
     /**
      * if the timer is running, abort it,
      * and reject the promise for this timer.
-     * @returns {Timer} the same timer
      */
     abort() {
         if (this.isRunning()) {
