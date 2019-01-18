@@ -69,7 +69,8 @@ module.exports = {
                                 // CSS image usages end up in the `bundles/[hash]` output
                                 // directory, so we adjust the final path to navigate up
                                 // twice.
-                                return path.join("../..", getImgOutputPath(url, resourcePath));
+                                const outputPath = getImgOutputPath(url, resourcePath);
+                                return toPublicPath(path.join("../..", outputPath));
                             },
                         },
                     },
@@ -197,4 +198,14 @@ function getImgOutputPath(url, resourcePath) {
     const prefix = /^.*[/\\]res[/\\]/;
     const outputDir = path.dirname(resourcePath).replace(prefix, "");
     return path.join(outputDir, path.basename(url));
+}
+
+/**
+ * Convert path to public path format, which always uses forward slashes, since it will
+ * be placed directly into things like CSS files.
+ *
+ * @param {string} path Some path to a file.
+ */
+function toPublicPath(path) {
+    return path.replace(/\\/g, '/');
 }
