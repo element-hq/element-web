@@ -17,33 +17,30 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import {_t} from '../../../languageHandler';
-import SdkConfig from "../../../SdkConfig";
+import {Tab, TabbedView} from "../../structures/TabbedView";
+import {_td} from "../../../languageHandler";
 
-export default React.createClass({
-    propTypes: {
+export default class UserSettingsDialog extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    render: function () {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const UserSettings = sdk.getComponent('structures.UserSettings');
+    _getTabs() {
+        return [
+            new Tab(_td("General"), <div>General Test</div>),
+            new Tab(_td("Account"), <div>Account Test</div>),
+        ];
+    }
 
+    render() {
         return (
-            <BaseDialog className='mx_UserSettingsDialog'
-                        onFinished={this.props.onFinished}
-                        title={_t('Settings')}
-                        contentId='mx_Dialog_content'
-            >
-                <div id='mx_Dialog_content'>
-                    <UserSettings
-                        onClose={this.props.onFinished}
-                        brand={SdkConfig.get().brand}
-                        referralBaseUrl={SdkConfig.get().referralBaseUrl}
-                        teamToken={SdkConfig.get().teamToken}
-                    />
-                </div>
-            </BaseDialog>
+            <TabbedView onExit={this.props.onFinished} tabs={this._getTabs()} />
+            // <UserSettings
+            //     onClose={this.props.onFinished}
+            //     brand={SdkConfig.get().brand}
+            //     referralBaseUrl={SdkConfig.get().referralBaseUrl}
+            //     teamToken={SdkConfig.get().teamToken}
+            // />
         );
-    },
-});
+    }
+}

@@ -612,9 +612,7 @@ export default React.createClass({
                 break;
             case 'view_user_settings':
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {
-                    title: _t("Settings"),
-                });
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {});
                 //this._setPage(PageTypes.UserSettings);
                 //this.notifyNewScreen('settings');
                 break;
