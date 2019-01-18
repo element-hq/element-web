@@ -168,6 +168,10 @@ module.exports = function (config) {
                                   path.resolve('./test'),
                                  ]
                     },
+                    {
+                        test: /\.(gif|png|svg|ttf)$/,
+                        loader: 'file-loader',
+                    },
                 ],
                 noParse: [
                     // for cross platform compatibility use [\\\/] as the path separator

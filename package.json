@@ -125,6 +125,7 @@
     "eslint-plugin-react": "^7.7.0",
     "estree-walker": "^0.5.0",
     "expect": "^23.6.0",
+    "file-loader": "^3.0.1",
     "flow-parser": "^0.57.3",
     "jest-mock": "^23.2.0",
     "karma": "^3.0.0",
