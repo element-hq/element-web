@@ -631,9 +631,11 @@ module.exports = React.createClass({
         }
     },
 
-    _scrollDownIfAtBottom: function() {
+    _onTypingVisible: function() {
         const scrollPanel = this.refs.scrollPanel;
-        if (scrollPanel) {
+        if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
+            scrollPanel.blockShrinking();
+            // scroll down if at bottom
             scrollPanel.checkScroll();
         }
     },
@@ -666,7 +668,7 @@ module.exports = React.createClass({
 
         let whoIsTyping;
         if (this.props.room) {
-            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._scrollDownIfAtBottom} />);
+            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._onTypingVisible} />);
         }
 
         return (
