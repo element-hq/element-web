@@ -55,27 +55,32 @@ module.exports = {
             },
             {
                 test: /\.(gif|png|svg|ttf)$/,
-                loader: 'file-loader',
-                options: {
-                    // Use a content-based hash in the name so that we can set a
-                    // long cache lifetime for assets while still delivering
-                    // changes quickly.
-                    name: '[name].[hash:7].[ext]',
-                    outputPath: function(url, resourcePath, context) {
-                        // Merge assets found via CSS and imports into a single
-                        // tree, while also preserving directories under **/res.
-                        const prefix = /^.*\/res\//;
-                        const outputDir = path.dirname(resourcePath).replace(prefix, "");
-                        return path.join(outputDir, path.basename(url));
+                // Use a content-based hash in the name so that we can set a long cache
+                // lifetime for assets while still delivering changes quickly.
+                oneOf: [
+                    {
+                        // Images referenced in HTML files
+                        issuer: /\.html$/,
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash:7].[ext]',
+                            outputPath: getImgOutputPath,
+                        },
                     },
-                    publicPath: function(url, resourcePath, context) {
-                        // Merge assets found via CSS and imports into a single
-                        // tree, while also preserving directories under **/res.
-                        const prefix = /^.*\/res\//;
-                        const outputDir = path.dirname(resourcePath).replace(prefix, "");
-                        return path.join("../..", outputDir, path.basename(url));
+                    {
+                        // Images referenced in JS and CSS files
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash:7].[ext]',
+                            outputPath: getImgOutputPath,
+                            publicPath: function(url, resourcePath) {
+                                // JS and CSS image usages end up the `bundles/[hash]` output
+                                // directory, so we adjust the final path to navigate up twice.
+                                return path.join("../..", getImgOutputPath(url, resourcePath));
+                            },
+                        },
                     },
-                },
+                ],
             },
         ],
         noParse: [
@@ -178,3 +183,17 @@ module.exports = {
         inline: false,
     },
 };
+
+/**
+ * Merge assets found via CSS and imports into a single tree, while also preserving
+ * directories under `res`.
+ *
+ * @param {string} url The adjusted name of the file, such as `warning.1234567.svg`.
+ * @param {string} resourcePath The absolute path to the source file with unmodified name.
+ * @return {string} The returned paths will look like `img/warning.1234567.svg`.
+ */
+function getImgOutputPath(url, resourcePath) {
+    const prefix = /^.*\/res\//;
+    const outputDir = path.dirname(resourcePath).replace(prefix, "");
+    return path.join(outputDir, path.basename(url));
+}
