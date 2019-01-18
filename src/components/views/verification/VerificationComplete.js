@@ -39,4 +39,4 @@ export default class VerificationComplete extends React.Component {
             />
         </div>;
     }
-};
+}

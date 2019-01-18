@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
 
 import sdk from '../../../index';
@@ -40,15 +39,15 @@ class HexVerifyPair extends React.Component {
             mx_HexVerify_pair_verified: this.props.verified,
         };
         const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
-        return <AccessibleButton className={classnames(classNames)} 
+        return <AccessibleButton className={classnames(classNames)}
             onClick={this._onClick}
         >
             {this.props.text}
-        </AccessibleButton>
+        </AccessibleButton>;
     }
 }
 
-/**
+/*
  * Helps a user verify a hexadecimal code matches one displayed
  * elsewhere (eg. on a different device)
  */

@@ -16,10 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -102,13 +100,13 @@ export default class IncomingSasDialog extends React.Component {
                 <p>{_t(
                     "Verify this user to mark them as trusted. " +
                     "Trusting users gives you extra peace of mind when using " +
-                    "end-to-end encrypted messages."
+                    "end-to-end encrypted messages.",
                 )}</p>
                 <p>{_t(
                     // NB. Below wording adjusted to singular 'device' until we have
                     // cross-signing
                     "Verifying this user will mark their device as trusted, and " +
-                    "also mark your device as trusted to them"
+                    "also mark your device as trusted to them",
                 )}</p>
                 <DialogButtons
                     primaryButton={_t('Continue')}
@@ -126,7 +124,7 @@ export default class IncomingSasDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
-        />
+        />;
     }
 
     _renderPhaseWaitForPartnerToConfirm() {
@@ -142,12 +140,12 @@ export default class IncomingSasDialog extends React.Component {
 
     _renderPhaseVerified() {
         const VerificationComplete = sdk.getComponent('views.verification.VerificationComplete');
-        return <VerificationComplete onDone={this._onVerifiedDoneClick} />
+        return <VerificationComplete onDone={this._onVerifiedDoneClick} />;
     }
 
     _renderPhaseCancelled() {
         const VerificationCancelled = sdk.getComponent('views.verification.VerificationCancelled');
-        return <VerificationCancelled onDone={this._onCancelClick} />
+        return <VerificationCancelled onDone={this._onCancelClick} />;
     }
 
     render() {

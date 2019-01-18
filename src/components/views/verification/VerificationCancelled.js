@@ -37,4 +37,4 @@ export default class VerificationCancelled extends React.Component {
                 />
         </div>;
     }
-};
+}

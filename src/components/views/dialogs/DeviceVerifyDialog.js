@@ -186,7 +186,11 @@ export default class DeviceVerifyDialog extends React.Component {
 
     _renderSasVerificationPhaseShowSas() {
         const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
-        return <VerificationShowSas sas={this._showSasEvent.sas} onCancel={this._onCancelClick} onDone={this._onSasMatchesClick} />
+        return <VerificationShowSas
+            sas={this._showSasEvent.sas}
+            onCancel={this._onCancelClick}
+            onDone={this._onSasMatchesClick}
+        />;
     }
 
     _renderSasVerificationPhaseWaitForPartnerToConfirm() {
@@ -201,12 +205,12 @@ export default class DeviceVerifyDialog extends React.Component {
 
     _renderSasVerificationPhaseVerified() {
         const VerificationComplete = sdk.getComponent('views.verification.VerificationComplete');
-        return <VerificationComplete onDone={this._onVerifiedDoneClick} />
+        return <VerificationComplete onDone={this._onVerifiedDoneClick} />;
     }
 
     _renderSasVerificationPhaseCancelled() {
         const VerificationCancelled = sdk.getComponent('views.verification.VerificationCancelled');
-        return <VerificationCancelled onDone={this._onCancelClick} />
+        return <VerificationCancelled onDone={this._onCancelClick} />;
     }
 
     _renderLegacyVerification() {

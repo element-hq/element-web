@@ -42,11 +42,11 @@ export default class VerificationShowSas extends React.Component {
         const HexVerify = sdk.getComponent('views.elements.HexVerify');
         return <div>
             <p>{_t(
-                "Verify this user by confirming the following number appears on their screen"
+                "Verify this user by confirming the following number appears on their screen",
             )}</p>
             <p>{_t(
                 "For maximum security, we reccommend you do this in person or use another " +
-                "trusted means of communication"
+                "trusted means of communication",
             )}</p>
             <HexVerify text={this.props.sas}
                 onVerifiedStateChange={this._onVerifiedStateChange}
@@ -62,4 +62,4 @@ export default class VerificationShowSas extends React.Component {
             />
         </div>;
     }
-};
+}
