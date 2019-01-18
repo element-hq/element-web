@@ -103,10 +103,6 @@ export default class DeviceVerifyDialog extends React.Component {
         });
     }
 
-    _onVerifyStateChanged = (newVal) => {
-        this.setState({sasVerified: newVal});
-    }
-
     _onSasMatchesClick = () => {
         this._showSasEvent.confirm();
         this.setState({
@@ -170,10 +166,16 @@ export default class DeviceVerifyDialog extends React.Component {
                     {_t("Use Legacy Verification (for older clients)")}
                 </AccessibleButton>
                 <p>
-                    { _t("Do clicky clicky button press request verify user send to do.") }
+                    { _t("Verify by comparing a short text string.") }
+                </p>
+                <p>
+                    {_t(
+                        "For maximum security, we recommend you do this in person or " +
+                        "use another trusted means of communication.",
+                    )}
                 </p>
                 <DialogButtons
-                    primaryButton={_t('Send Verification Request')}
+                    primaryButton={_t('Begin Verifying')}
                     hasCancel={true}
                     onPrimaryButtonClick={this._onSasRequestClick}
                     onCancel={this._onCancelClick}
@@ -183,29 +185,8 @@ export default class DeviceVerifyDialog extends React.Component {
     }
 
     _renderSasVerificationPhaseShowSas() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const HexVerify = sdk.getComponent('views.elements.HexVerify');
-        return <div>
-            <p>{_t(
-                "Verify this user by confirming the following number appears on their screen"
-            )}</p>
-            <p>{_t(
-                "For maximum security, we reccommend you do this in person or use another " +
-                "trusted means of communication"
-            )}</p>
-            <HexVerify text={this._showSasEvent.sas}
-                onVerifiedStateChange={this._onVerifyStateChanged}
-            />
-            <p>{_t(
-                "To continue, click on each pair to confirm it's correct.",
-            )}</p>
-            <DialogButtons onPrimaryButtonClick={this._onSasMatchesClick}
-                primaryButton={_t("Continue")}
-                primaryDisabled={!this.state.sasVerified}
-                hasCancel={true}
-                onCancel={this._onCancelClick}
-            />
-        </div>;
+        const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+        return <VerificationShowSas sas={this._showSasEvent.sas} onCancel={this._onCancelClick} onDone={this._onSasMatchesClick} />
     }
 
     _renderSasVerificationPhaseWaitForPartnerToConfirm() {
@@ -219,31 +200,13 @@ export default class DeviceVerifyDialog extends React.Component {
     }
 
     _renderSasVerificationPhaseVerified() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        return <div>
-            <p>{_t("Verification complete!")}</p>
-            <DialogButtons onPrimaryButtonClick={this._onVerifiedDoneClick}
-                primaryButton={_t("Done")}
-                hasCancel={false}
-            />
-        </div>;
+        const VerificationComplete = sdk.getComponent('views.verification.VerificationComplete');
+        return <VerificationComplete onDone={this._onVerifiedDoneClick} />
     }
 
     _renderSasVerificationPhaseCancelled() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
-        return (
-            <div>
-                <p>{_t(
-                    "%(userId)s cancelled the verification.", {userId: this.props.userId},
-                )}</p>
-                <DialogButtons
-                    primaryButton={_t('Cancel')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this._onCancelClick}
-                />
-            </div>
-        );
+        const VerificationCancelled = sdk.getComponent('views.verification.VerificationCancelled');
+        return <VerificationCancelled onDone={this._onCancelClick} />
     }
 
     _renderLegacyVerification() {

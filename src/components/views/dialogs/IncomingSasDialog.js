@@ -82,10 +82,6 @@ export default class IncomingSasDialog extends React.Component {
         });
     }
 
-    _onVerifiedStateChange = (newVal) => {
-        this.setState({sasVerified: newVal});
-    }
-
     _onSasMatchesClick = () => {
         this._showSasEvent.confirm();
         this.setState({
@@ -125,29 +121,12 @@ export default class IncomingSasDialog extends React.Component {
     }
 
     _renderPhaseShowSas() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const HexVerify = sdk.getComponent('views.elements.HexVerify');
-        return <div>
-            <p>{_t(
-                "Verify this user by confirming the following number appears on their screen"
-            )}</p>
-            <p>{_t(
-                "For maximum security, we reccommend you do this in person or use another " +
-                "trusted means of communication"
-            )}</p>
-            <HexVerify text={this._showSasEvent.sas}
-                onVerifiedStateChange={this._onVerifiedStateChange}
-            />
-            <p>{_t(
-                "To continue, click on each pair to confirm it's correct.",
-            )}</p>
-            <DialogButtons onPrimaryButtonClick={this._onSasMatchesClick}
-                primaryButton={_t("Continue")}
-                primaryDisabled={!this.state.sasVerified}
-                hasCancel={true}
-                onCancel={this._onCancelClick}
-            />
-        </div>;
+        const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+        return <VerificationShowSas
+            sas={this._showSasEvent.sas}
+            onCancel={this._onCancelClick}
+            onDone={this._onSasMatchesClick}
+        />
     }
 
     _renderPhaseWaitForPartnerToConfirm() {
@@ -162,37 +141,13 @@ export default class IncomingSasDialog extends React.Component {
     }
 
     _renderPhaseVerified() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
-        return (
-            <div>
-                <p>{_t(
-                    "Verification Complete!"
-                )}</p>
-                <DialogButtons
-                    primaryButton={_t('Done')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this._onVerifiedDoneClick}
-                />
-            </div>
-        );
+        const VerificationComplete = sdk.getComponent('views.verification.VerificationComplete');
+        return <VerificationComplete onDone={this._onVerifiedDoneClick} />
     }
 
     _renderPhaseCancelled() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
-        return (
-            <div>
-                <p>{_t(
-                    "The other party cancelled the verification."
-                )}</p>
-                <DialogButtons
-                    primaryButton={_t('Cancel')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this._onCancelClick}
-                />
-            </div>
-        );
+        const VerificationCancelled = sdk.getComponent('views.verification.VerificationCancelled');
+        return <VerificationCancelled onDone={this._onCancelClick} />
     }
 
     render() {
