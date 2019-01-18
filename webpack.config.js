@@ -59,25 +59,26 @@ module.exports = {
                 // lifetime for assets while still delivering changes quickly.
                 oneOf: [
                     {
-                        // Images referenced in HTML files
-                        issuer: /\.html$/,
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[hash:7].[ext]',
-                            outputPath: getImgOutputPath,
-                        },
-                    },
-                    {
-                        // Images referenced in JS and CSS files
+                        // Images referenced in CSS files
+                        issuer: /\.(scss|css)$/,
                         loader: 'file-loader',
                         options: {
                             name: '[name].[hash:7].[ext]',
                             outputPath: getImgOutputPath,
                             publicPath: function(url, resourcePath) {
-                                // JS and CSS image usages end up the `bundles/[hash]` output
-                                // directory, so we adjust the final path to navigate up twice.
+                                // CSS image usages end up in the `bundles/[hash]` output
+                                // directory, so we adjust the final path to navigate up
+                                // twice.
                                 return path.join("../..", getImgOutputPath(url, resourcePath));
                             },
+                        },
+                    },
+                    {
+                        // Images referenced in HTML and JS files
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash:7].[ext]',
+                            outputPath: getImgOutputPath,
                         },
                     },
                 ],
