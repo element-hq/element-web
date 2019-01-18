@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_td} from "../../../languageHandler";
 
@@ -27,14 +26,14 @@ export default class UserSettingsDialog extends React.Component {
 
     _getTabs() {
         return [
-            new Tab(_td("General"), <div>General Test</div>),
-            new Tab(_td("Account"), <div>Account Test</div>),
+            new Tab(_td("General"), "", <div>General Test</div>),
+            new Tab(_td("Account"), "", <div>Account Test</div>),
         ];
     }
 
     render() {
         return (
-            <TabbedView onExit={this.props.onFinished} tabs={this._getTabs()} />
+            <TabbedView tabs={this._getTabs()} />
             // <UserSettings
             //     onClose={this.props.onFinished}
             //     brand={SdkConfig.get().brand}

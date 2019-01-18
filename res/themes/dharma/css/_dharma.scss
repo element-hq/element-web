@@ -187,12 +187,10 @@ $lightbox-fg-color: #ffffff;
 $lightbox-border-color: #ffffff;
 
 // Tabbed views
-$tab-list-bg-color: $secondary-accent-color;
-$tab-list-fg-color: $accent-color;
-$tab-list-active-bg-color: $tertiary-accent-color;
-$tab-list-active-fg-color: $accent-color;
-$tab-border-color: $tertiary-accent-color;
-$tab-panel-bg-color: #fff;
+$tab-label-fg-color: #45474a;
+$tab-label-active-fg-color: #ffffff;
+$tab-label-bg-color: transparent;
+$tab-label-active-bg-color: #7ac9a1;
 
 // unused?
 $progressbar-color: #000;

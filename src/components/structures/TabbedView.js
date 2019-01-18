@@ -16,45 +16,42 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {_t, _td} from '../../languageHandler';
-import GeminiScrollbar from 'react-gemini-scrollbar';
+import {_t} from '../../languageHandler';
 import PropTypes from "prop-types";
-//import scrollSnapPolyfill from 'css-scroll-snap-polyfill';
-
-const DEFAULT_EXIT_STRING = _td("Return to app");
 
 /**
- * Represents a tab for the TabbedView
+ * Represents a tab for the TabbedView.
  */
 export class Tab {
     /**
-     * Creates a new tab
-     * @param {string} tabLabel The untranslated tab label
+     * Creates a new tab.
+     * @param {string} tabLabel The untranslated tab label.
+     * @param {string} tabIconRef The relative path to the tab's icon.
      * @param {string} tabJsx The JSX for the tab container.
      */
-    constructor(tabLabel, tabJsx) {
+    constructor(tabLabel, tabIconRef, tabJsx) {
         this.label = tabLabel;
         this.body = tabJsx;
     }
 }
 
 export class TabbedView extends React.Component {
+    static propTypes = {
+        // The tabs to show
+        tabs: PropTypes.arrayOf(Tab).isRequired,
+    };
+
     constructor() {
         super();
 
-        // This is used to track when the user has scrolled all the way up or down so we
-        // don't immediately start flipping between tabs.
-        this._reachedEndAt = 0;
-    }
-
-    getInitialState() {
-        return {
+        this.state = {
             activeTabIndex: 0,
         };
     }
 
     _getActiveTabIndex() {
-        return this.state ? this.state.activeTabIndex : 0;
+        if (!this.state || !this.state.activeTabIndex) return 0;
+        return this.state.activeTabIndex;
     }
 
     /**
@@ -66,28 +63,12 @@ export class TabbedView extends React.Component {
         const idx = this.props.tabs.indexOf(tab);
         if (idx !== -1) {
             this.setState({activeTabIndex: idx});
-            this._reachedEndAt = 0; // reset scroll timer
-        }
-        else console.error("Could not find tab " + tab.label + " in tabs");
-    }
-
-    _nextTab() {
-        let targetIndex = this._getActiveTabIndex() + 1;
-        if (targetIndex < this.props.tabs.length) {
-            this.setState({activeTabIndex: targetIndex});
-            this._reachedEndAt = 0; // reset scroll timer
+        } else {
+            console.error("Could not find tab " + tab.label + " in tabs");
         }
     }
 
-    _previousTab() {
-        let targetIndex = this._getActiveTabIndex() - 1;
-        if (targetIndex >= 0) {
-            this.setState({activeTabIndex: targetIndex});
-            this._reachedEndAt = 0; // reset scroll timer
-        }
-    }
-
-    _getTabLabel(tab) {
+    _renderTabLabel(tab) {
         let classes = "mx_TabbedView_tabLabel ";
 
         const idx = this.props.tabs.indexOf(tab);
@@ -101,7 +82,7 @@ export class TabbedView extends React.Component {
         );
     }
 
-    _getTabPanel(tab) {
+    _renderTabPanel(tab) {
         return (
             <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
                 {tab.body}
@@ -109,57 +90,17 @@ export class TabbedView extends React.Component {
         );
     }
 
-    componentDidUpdate() {
-        window.requestAnimationFrame(() => {
-            console.log("SCROLL SNAP POLYFILL: UPDATE");
-            //scrollSnapPolyfill();
-        });
-    }
-
-    componentDidMount() {
-        window.requestAnimationFrame(() => {
-            console.log("SCROLL SNAP POLYFILL: MOUNT");
-            //scrollSnapPolyfill();
-        });
-    }
-
     render() {
-        const labels = [];
-        const tabs = [];
-
-        for (const tab of this.props.tabs) {
-            labels.push(this._getTabLabel(tab));
-            tabs.push(this._getTabPanel(tab));
-        }
-
-        const returnToApp = (
-            <span className="mx_TabbedView_tabLabel mx_TabbedView_exit" onClick={this.props.onExit}>
-                {_t(this.props.exitLabel || DEFAULT_EXIT_STRING)}
-            </span>
-        );
+        const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
+        const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
 
         return (
             <div className="mx_TabbedView">
                 <div className="mx_TabbedView_tabLabels">
-                    {returnToApp}
                     {labels}
                 </div>
-                <div className="mx_TabbedView_tabPanels">
-                    {tabs}
-                </div>
+                {panel}
             </div>
         );
     }
 }
-
-TabbedView.PropTypes = {
-    // Called when the user clicks the "Exit" or "Return to app" button
-    onExit: PropTypes.func.isRequired,
-
-    // The untranslated label for the "Return to app" button.
-    // Default: "Return to app"
-    exitLabel: PropTypes.string,
-
-    // The tabs to show
-    tabs: PropTypes.arrayOf(Tab).isRequired,
-};

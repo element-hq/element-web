@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,40 +21,22 @@ limitations under the License.
   display: flex;
   width: 100%;
   height: 100%;
-  background-color: $tab-panel-bg-color;
 }
 
 .mx_TabbedView_tabLabels {
-  width: 300px;
+  width: 136px;
   height: 100%;
-  background-color: $tab-list-bg-color;
-  color: $tab-list-fg-color;
-  border-right: 1px solid $tab-border-color;
-  border-left: 1px solid $tab-border-color;
-}
-
-.mx_TabbedView_tabPanels {
-  width: calc(100% - 320px);
-  display: inline-block;
-  height: 100%;
-  padding-left: 20px;
-  scroll-snap-type: block;
+  color: $tab-label-fg-color;
 }
 
 .mx_TabbedView_tabLabel {
-  text-align: center;
   vertical-align: middle;
-  text-transform: uppercase;
   cursor: pointer;
   display: block;
-  padding: 20px;
-  width: calc(100% - 40px);
-  border-bottom: 1px solid $tab-border-color;
-}
-
-.mx_TabbedView_exit {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  height: 20px;
 }
 
 .mx_TabbedView_tabLabel:hover {
@@ -61,16 +44,17 @@ limitations under the License.
 }
 
 .mx_TabbedView_tabLabel_active {
-  font-weight: 700;
-  background-color: $tab-list-active-bg-color;
-  color: $tab-list-active-fg-color;
+  background-color: $tab-label-active-bg-color;
+  color: $tab-label-active-fg-color;
 }
 
 .mx_TabbedView_tabPanel {
+  width: calc(100% - 320px);
+  display: inline-block;
   height: 100vh; // 100% of viewport height
-  scroll-snap-align: start;
+  margin-left: 20px;
 }
 
 .mx_TabbedView_tabPanelContent {
-  width: 600px;
+  flex-grow: 1;
 }
