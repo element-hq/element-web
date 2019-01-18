@@ -768,23 +768,31 @@ module.exports.haveTileForEvent = function(e) {
 function E2ePadlockUndecryptable(props) {
     return (
         <E2ePadlock alt={_t("Undecryptable")}
-            src="img/e2e-blocked.svg" width="12" height="12"
+            src={require("../../../../res/img/e2e-blocked.svg")} width="12" height="12"
             style={{ marginLeft: "-1px" }} {...props} />
     );
 }
 
 function E2ePadlockEncrypting(props) {
-    return <E2ePadlock alt={_t("Encrypting")} src="img/e2e-encrypting.svg" width="10" height="12" {...props} />;
+    return (
+        <E2ePadlock alt={_t("Encrypting")}
+            src={require("../../../../res/img/e2e-encrypting.svg")} width="10" height="12"
+            {...props} />
+    );
 }
 
 function E2ePadlockNotSent(props) {
-    return <E2ePadlock alt={_t("Encrypted, not sent")} src="img/e2e-not_sent.svg" width="10" height="12" {...props} />;
+    return (
+        <E2ePadlock alt={_t("Encrypted, not sent")}
+            src={require("../../../../res/img/e2e-not_sent.svg")} width="10" height="12"
+            {...props} />
+    );
 }
 
 function E2ePadlockVerified(props) {
     return (
         <E2ePadlock alt={_t("Encrypted by a verified device")}
-            src="img/e2e-verified.svg" width="10" height="12"
+            src={require("../../../../res/img/e2e-verified.svg")} width="10" height="12"
             {...props} />
     );
 }
@@ -792,7 +800,7 @@ function E2ePadlockVerified(props) {
 function E2ePadlockUnverified(props) {
     return (
         <E2ePadlock alt={_t("Encrypted by an unverified device")}
-            src="img/e2e-warning.svg" width="15" height="12"
+            src={require("../../../../res/img/e2e-warning.svg")} width="15" height="12"
             style={{ marginLeft: "-2px" }} {...props} />
     );
 }
@@ -800,7 +808,7 @@ function E2ePadlockUnverified(props) {
 function E2ePadlockUnencrypted(props) {
     return (
         <E2ePadlock alt={_t("Unencrypted message")}
-            src="img/e2e-unencrypted.svg" width="12" height="12"
+            src={require("../../../../res/img/e2e-unencrypted.svg")} width="12" height="12"
             {...props} />
     );
 }

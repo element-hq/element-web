@@ -392,7 +392,13 @@ module.exports = React.createClass({
 
         let dmIndicator;
         if (this._isDirectMessageRoom(this.props.room.roomId)) {
-            dmIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
+            dmIndicator = <img
+                src={require("../../../../res/img/icon_person.svg")}
+                className="mx_RoomTile_dm"
+                width="11"
+                height="13"
+                alt="dm"
+            />;
         }
 
         return <AccessibleButton tabIndex="0"

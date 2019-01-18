@@ -25,7 +25,7 @@ const CreateRoomButton = function(props) {
         <ActionButton action="view_create_room"
             mouseOverAction={props.callout ? "callout_create_room" : null}
             label={_t("Create new room")}
-            iconPath="img/icons-create-room.svg"
+            iconPath={require("../../../../res/img/icons-create-room.svg")}
             size={props.size}
             tooltip={props.tooltip}
         />

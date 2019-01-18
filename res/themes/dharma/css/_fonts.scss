@@ -11,37 +11,37 @@
   font-family: 'Nunito';
   font-style: italic;
   font-weight: 400;
-  src: url('../../fonts/Nunito/XRXX3I6Li01BKofIMNaDRss.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXX3I6Li01BKofIMNaDRss.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: italic;
   font-weight: 600;
-  src: url('../../fonts/Nunito/XRXQ3I6Li01BKofIMN5cYtvKUTo.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXQ3I6Li01BKofIMN5cYtvKUTo.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: italic;
   font-weight: 700;
-  src: url('../../fonts/Nunito/XRXQ3I6Li01BKofIMN44Y9vKUTo.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXQ3I6Li01BKofIMN44Y9vKUTo.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
-  src: url('../../fonts/Nunito/XRXV3I6Li01BKofINeaE.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXV3I6Li01BKofINeaE.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 600;
-  src: url('../../fonts/Nunito/XRXW3I6Li01BKofA6sKUYevN.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXW3I6Li01BKofA6sKUYevN.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 700;
-  src: url('../../fonts/Nunito/XRXW3I6Li01BKofAjsOUYevN.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/XRXW3I6Li01BKofAjsOUYevN.ttf') format('truetype');
 }
 
 /*
@@ -51,14 +51,14 @@
 
 @font-face {
     font-family: 'Fira Mono';
-    src: url('../../fonts/Fira_Mono/FiraMono-Regular.ttf') format('truetype');
+    src: url('$(res)/fonts/Fira_Mono/FiraMono-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Fira Mono';
-    src: url('../../fonts/Fira_Mono/FiraMono-Bold.ttf') format('truetype');
+    src: url('$(res)/fonts/Fira_Mono/FiraMono-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
 }

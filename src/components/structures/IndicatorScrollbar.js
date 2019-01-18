@@ -66,7 +66,11 @@ export default class IndicatorScrollbar extends React.Component {
     }
 
     render() {
-        return (<AutoHideScrollbar ref={this._collectScrollerComponent} wrappedRef={this._collectScroller} {... this.props}>
+        return (<AutoHideScrollbar
+            ref={this._collectScrollerComponent}
+            wrappedRef={this._collectScroller}
+            {... this.props}
+        >
             { this.props.children }
         </AutoHideScrollbar>);
     }

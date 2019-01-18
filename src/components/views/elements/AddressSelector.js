@@ -150,7 +150,7 @@ export default React.createClass({
                             showAddress={this.props.showAddress}
                             justified={true}
                             networkName="vector"
-                            networkUrl="img/search-icon-vector.svg"
+                            networkUrl={require("../../../../res/img/search-icon-vector.svg")}
                         />
                     </div>,
                 );

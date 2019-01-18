@@ -52,17 +52,17 @@ export default class RoomHeaderButtons extends HeaderButtons {
         ];
 
         return [
-            <HeaderButton key="_membersButton" title={_t('Members')} iconSrc="img/feather-icons/user.svg"
+            <HeaderButton key="_membersButton" title={_t('Members')} iconSrc={require("../../../../res/img/feather-icons/user.svg")}
                 isHighlighted={this.isPhase(membersPhases)}
                 clickPhase={RightPanel.Phase.RoomMemberList}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
-            <HeaderButton key="_filesButton" title={_t('Files')} iconSrc="img/feather-icons/files.svg"
+            <HeaderButton key="_filesButton" title={_t('Files')} iconSrc={require("../../../../res/img/feather-icons/files.svg")}
                 isHighlighted={this.isPhase(RightPanel.Phase.FilePanel)}
                 clickPhase={RightPanel.Phase.FilePanel}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
-            <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc="img/feather-icons/notifications.svg"
+            <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc={require("../../../../res/img/feather-icons/notifications.svg")}
                 isHighlighted={this.isPhase(RightPanel.Phase.NotificationPanel)}
                 clickPhase={RightPanel.Phase.NotificationPanel}
                 analytics={['Right Panel', 'Notification List Button', 'click']}

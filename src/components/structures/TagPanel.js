@@ -136,7 +136,7 @@ const TagPanel = React.createClass({
         let clearButton;
         if (itemsSelected) {
             clearButton = <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
-                <TintableSvg src="img/icons-close.svg" width="24" height="24"
+                <TintableSvg src={require("../../../res/img/icons-close.svg")} width="24" height="24"
                              alt={_t("Clear filter")}
                              title={_t("Clear filter")}
                 />

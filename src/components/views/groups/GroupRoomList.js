@@ -77,7 +77,7 @@ export default React.createClass({
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={this._showFullRoomList} />
         );
@@ -137,7 +137,7 @@ export default React.createClass({
                     onClick={this.onAddRoomToGroupButtonClick}
                 >
                     <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icons-room-add.svg" width="18" height="14" />
+                        <TintableSvg src={require("../../../../res/img/icons-room-add.svg")} width="18" height="14" />
                     </div>
                     <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
                 </AccessibleButton>

@@ -291,8 +291,8 @@ limitations under the License.
 }
 
 /* always override hidden attribute for blocked and warning */
-.mx_EventTile_e2eIcon_hidden[src="img/e2e-blocked.svg"],
-.mx_EventTile_e2eIcon_hidden[src="img/e2e-warning.svg"] {
+.mx_EventTile_e2eIcon_hidden[src*="img/e2e-blocked.svg"],
+.mx_EventTile_e2eIcon_hidden[src*="img/e2e-warning.svg"] {
     display: block;
 }
 

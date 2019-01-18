@@ -80,7 +80,11 @@ export default class ManageIntegsButton extends React.Component {
             });
 
             if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
-                integrationsWarningTriangle = <img src="img/warning.svg" title={_t('Integrations Error')} width="17" />;
+                integrationsWarningTriangle = <img
+                    src={require("../../../../res/img/warning.svg")}
+                    title={_t('Integrations Error')}
+                    width="17"
+                />;
                 // Popup shown when hovering over integrationsButton_error (via CSS)
                 integrationsErrorPopup = (
                     <span className="mx_RoomSettings_integrationsButton_errorPopup">
@@ -91,7 +95,7 @@ export default class ManageIntegsButton extends React.Component {
 
             integrationsButton = (
                 <AccessibleButton className={integrationsButtonClasses} onClick={this.onManageIntegrations} title={_t('Manage Integrations')}>
-                    <TintableSvg src="img/feather-icons/grid.svg" width="20" height="20" />
+                    <TintableSvg src={require("../../../../res/img/feather-icons/grid.svg")} width="20" height="20" />
                     { integrationsWarningTriangle }
                     { integrationsErrorPopup }
                 </AccessibleButton>

@@ -66,7 +66,7 @@ module.exports = React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_IncomingCallBox" id="incomingCallBox">
-                <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
+                <img className="mx_IncomingCallBox_chevron" src={require("../../../../res/img/chevron-left.png")} width="9" height="16" />
                 <div className="mx_IncomingCallBox_title">
                     { incomingCallText }
                 </div>

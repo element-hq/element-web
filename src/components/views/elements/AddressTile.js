@@ -54,7 +54,7 @@ export default React.createClass({
                 address.avatarMxc, 25, 25, 'crop',
             ));
         } else if (address.addressType === 'email') {
-            imgUrls.push('img/icon-email-user.svg');
+            imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
         }
 
         // Removing networks for now as they're not really supported
@@ -141,7 +141,7 @@ export default React.createClass({
         if (this.props.canDismiss) {
             dismiss = (
                 <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
-                    <TintableSvg src="img/icon-address-delete.svg" width="9" height="9" />
+                    <TintableSvg src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );
         }
