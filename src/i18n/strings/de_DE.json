@@ -1447,5 +1447,14 @@
     "Set up Secure Messages": "Richte sichere Nachrichten ein",
     "Go to Settings": "Gehe zu Einstellungen",
     "Sign in with single sign-on": "Mit Single Sign-On anmelden",
-    "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "Wenn du die Sichere Nachrichten-Wiederherstellung nicht einrichtest, wirst du nicht in der Lage sein deine verschlüsselte Nachrichtenhistorie wiederherzustellen, wenn du dich abmeldest oder ein weiteres Gerät benutzt."
+    "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another device.": "Wenn du die Sichere Nachrichten-Wiederherstellung nicht einrichtest, wirst du nicht in der Lage sein deine verschlüsselte Nachrichtenhistorie wiederherzustellen, wenn du dich abmeldest oder ein weiteres Gerät benutzt.",
+    "Waiting for %(userId)s to accept...": "Warte darauf %(userId)s anzunehmen ...",
+    "Waiting for %(userId)s to confirm...": "Warte auf Bestätigung für  %(userId)s ...",
+    "Unrecognised address": "Nicht erkannte Adresse",
+    "User %(user_id)s may or may not exist": "Existenz der Benutzer %(user_id)s unsicher",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Nachfragen bevor Einladungen zu möglichen ungültigen Matrix IDs gesendet werden",
+    "The following users may not exist": "Eventuell existieren folgende Benutzer nicht",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Profile für die unteren Matrix IDs wurden nicht gefunden - willst Du sie trotzdem einladen?",
+    "Invite anyway and never warn me again": "Trotzdem einladen und mich nicht mehr warnen",
+    "Invite anyway": "Trotzdem einladen"
 }
