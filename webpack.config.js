@@ -193,7 +193,7 @@ module.exports = {
  * @return {string} The returned paths will look like `img/warning.1234567.svg`.
  */
 function getImgOutputPath(url, resourcePath) {
-    const prefix = /^.*\/res\//;
+    const prefix = /^.*[/\\]res[/\\]/;
     const outputDir = path.dirname(resourcePath).replace(prefix, "");
     return path.join(outputDir, path.basename(url));
 }
