@@ -1,19 +1,3 @@
-@font-face {
-    font-family:PostGrotesk-Medium;
-    src:url('https://status.im/fonts/PostGrotesk-Medium.eot');
-    src:url('https://status.im/fonts/PostGrotesk-Medium.eot?#iefix') format("embedded-opentype"),url('https://status.im/fonts/PostGrotesk-Medium.woff') format("woff"),url('https://status.im/fonts/PostGrotesk-Medium.svg#PostGrotesk-Medium') format("svg");
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family:PostGrotesk-Book;
-    src:url('https://status.im/fonts/PostGrotesk-Book.eot');
-    src:url('https://status.im/fonts/PostGrotesk-Book.eot?#iefix') format("embedded-opentype"),url('https://status.im/fonts/PostGrotesk-Book.woff') format("woff"),url('https://status.im/fonts/PostGrotesk-Book.svg#PostGrotesk-Book') format("svg");
-    font-weight: 400;
-    font-style: normal;
-}
-
 // We deliberately prioritise Arial over Helvetica here due to diacritic problems (see _base.scss)
 // N.B. that the status.im website uses:
 // font-family:PostGrotesk-Book,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
@@ -203,8 +187,8 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$edit-button-url: "../../img/icon_context_message.svg";
-$copy-button-url: "../../img/icon_copy_message.svg";
+$edit-button-url: "$(res)/img/icon_context_message.svg";
+$copy-button-url: "$(res)/img/icon_copy_message.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color

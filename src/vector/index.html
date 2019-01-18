@@ -40,7 +40,7 @@
         window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
     </script>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
-    <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />

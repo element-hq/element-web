@@ -28,23 +28,21 @@ module.exports = {
             {
                 test: /\.scss$/,
                 // 1. postcss-loader turns the SCSS into normal CSS.
-                // 2. raw-loader turns the CSS into a javascript module
-                //    whose default export is a string containing the CSS.
-                //    (raw-loader is similar to css-loader, but the latter
-                //    would also drag in the imgs and fonts that our CSS refers to
-                //    as webpack inputs.)
+                // 2. css-loader turns the CSS into a JS module whose default
+                //    export is a string containing the CSS, while also adding
+                //    the images and fonts from CSS as Webpack inputs.
                 // 3. ExtractTextPlugin turns that string into a separate asset.
                 use: ExtractTextPlugin.extract({
                     use: [
-                        "raw-loader",
+                        "css-loader",
                         {
                             loader: 'postcss-loader',
                             options: {
                                 config: {
-                                    path: './postcss.config.js'
-                                }
-                            }
-                        }
+                                    path: './postcss.config.js',
+                                },
+                            },
+                        },
                     ],
                 }),
             },
@@ -52,10 +50,38 @@ module.exports = {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
-                    use: "raw-loader"
+                    use: "css-loader",
                 }),
             },
-
+            {
+                test: /\.(gif|png|svg|ttf)$/,
+                // Use a content-based hash in the name so that we can set a long cache
+                // lifetime for assets while still delivering changes quickly.
+                oneOf: [
+                    {
+                        // Images referenced in HTML files
+                        issuer: /\.html$/,
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash:7].[ext]',
+                            outputPath: getImgOutputPath,
+                        },
+                    },
+                    {
+                        // Images referenced in JS and CSS files
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[hash:7].[ext]',
+                            outputPath: getImgOutputPath,
+                            publicPath: function(url, resourcePath) {
+                                // JS and CSS image usages end up the `bundles/[hash]` output
+                                // directory, so we adjust the final path to navigate up twice.
+                                return path.join("../..", getImgOutputPath(url, resourcePath));
+                            },
+                        },
+                    },
+                ],
+            },
         ],
         noParse: [
             // for cross platform compatibility use [\\\/] as the path separator
@@ -75,14 +101,13 @@ module.exports = {
     output: {
         path: path.join(__dirname, "webapp"),
 
-        // the generated js (and CSS, from the ExtractTextPlugin) are put in a
+        // The generated JS (and CSS, from the ExtractTextPlugin) are put in a
         // unique subdirectory for the build. There will only be one such
         // 'bundle' directory in the generated tarball; however, hosting
         // servers can collect 'bundles' from multiple versions into one
         // directory and symlink it into place - this allows users who loaded
         // an older version of the application to continue to access webpack
         // chunks even after the app is redeployed.
-        //
         filename: "bundles/[hash]/[name].js",
         chunkFilename: "bundles/[hash]/[name].js",
         devtoolModuleFilenameTemplate: function(info) {
@@ -158,3 +183,17 @@ module.exports = {
         inline: false,
     },
 };
+
+/**
+ * Merge assets found via CSS and imports into a single tree, while also preserving
+ * directories under `res`.
+ *
+ * @param {string} url The adjusted name of the file, such as `warning.1234567.svg`.
+ * @param {string} resourcePath The absolute path to the source file with unmodified name.
+ * @return {string} The returned paths will look like `img/warning.1234567.svg`.
+ */
+function getImgOutputPath(url, resourcePath) {
+    const prefix = /^.*\/res\//;
+    const outputDir = path.dirname(resourcePath).replace(prefix, "");
+    return path.join(outputDir, path.basename(url));
+}
