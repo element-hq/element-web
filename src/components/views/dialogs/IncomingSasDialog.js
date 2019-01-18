@@ -38,6 +38,7 @@ export default class IncomingSasDialog extends React.Component {
         this._showSasEvent = null;
         this.state = {
             phase: PHASE_START,
+            sasVerified: false,
         };
         this.props.verifier.on('show_sas', this._onVerifierShowSas);
         this.props.verifier.on('cancel', this._onVerifierCancel);
@@ -81,6 +82,10 @@ export default class IncomingSasDialog extends React.Component {
         });
     }
 
+    _onVerifiedStateChange = (newVal) => {
+        this.setState({sasVerified: newVal});
+    }
+
     _onSasMatchesClick = () => {
         this._showSasEvent.confirm();
         this.setState({
@@ -121,6 +126,7 @@ export default class IncomingSasDialog extends React.Component {
 
     _renderPhaseShowSas() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const HexVerify = sdk.getComponent('views.elements.HexVerify');
         return <div>
             <p>{_t(
                 "Verify this user by confirming the following number appears on their screen"
@@ -129,9 +135,15 @@ export default class IncomingSasDialog extends React.Component {
                 "For maximum security, we reccommend you do this in person or use another " +
                 "trusted means of communication"
             )}</p>
-            <pre>{this._showSasEvent.sas}</pre>
+            <HexVerify text={this._showSasEvent.sas}
+                onVerifiedStateChange={this._onVerifiedStateChange}
+            />
+            <p>{_t(
+                "To continue, click on each pair to confirm it's correct.",
+            )}</p>
             <DialogButtons onPrimaryButtonClick={this._onSasMatchesClick}
-                primaryButton={_t("This Matches")}
+                primaryButton={_t("Continue")}
+                primaryDisabled={!this.state.sasVerified}
                 hasCancel={true}
                 onCancel={this._onCancelClick}
             />
@@ -184,7 +196,6 @@ export default class IncomingSasDialog extends React.Component {
     }
 
     render() {
-        console.log("rendering pahse "+this.state.phase);
         let body;
         switch (this.state.phase) {
             case PHASE_START:

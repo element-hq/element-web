@@ -947,7 +947,7 @@
     "Send Verification Request": "Send Verification Request",
     "Verify this user by confirming the following number appears on their screen": "Verify this user by confirming the following number appears on their screen",
     "For maximum security, we reccommend you do this in person or use another trusted means of communication": "For maximum security, we reccommend you do this in person or use another trusted means of communication",
-    "This Matches": "This Matches",
+    "To continue, click on each pair to confirm it's correct.": "To continue, click on each pair to confirm it's correct.",
     "Verification complete!": "Verification complete!",
     "Done": "Done",
     "%(userId)s cancelled the verification.": "%(userId)s cancelled the verification.",

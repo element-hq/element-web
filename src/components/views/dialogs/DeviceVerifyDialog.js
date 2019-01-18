@@ -50,6 +50,7 @@ export default class DeviceVerifyDialog extends React.Component {
         this.state = {
             phase: PHASE_START,
             mode: SettingsStore.isFeatureEnabled("feature_sas") ? MODE_SAS : MODE_LEGACY,
+            sasVerified: false,
         };
     }
 
@@ -102,6 +103,10 @@ export default class DeviceVerifyDialog extends React.Component {
         });
     }
 
+    _onVerifyStateChanged = (newVal) => {
+        this.setState({sasVerified: newVal});
+    }
+
     _onSasMatchesClick = () => {
         this._showSasEvent.confirm();
         this.setState({
@@ -127,7 +132,6 @@ export default class DeviceVerifyDialog extends React.Component {
                 body = this._renderSasVerificationPhaseStart();
                 break;
             case PHASE_WAIT_FOR_PARTNER_TO_ACCEPT:
-                //body = this._renderSasVerificationPhaseWaitForPartnerToAccept();
                 body = renderSasWaitAccept(this.props.userId);
                 break;
             case PHASE_SHOW_SAS:
@@ -180,6 +184,7 @@ export default class DeviceVerifyDialog extends React.Component {
 
     _renderSasVerificationPhaseShowSas() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const HexVerify = sdk.getComponent('views.elements.HexVerify');
         return <div>
             <p>{_t(
                 "Verify this user by confirming the following number appears on their screen"
@@ -188,9 +193,15 @@ export default class DeviceVerifyDialog extends React.Component {
                 "For maximum security, we reccommend you do this in person or use another " +
                 "trusted means of communication"
             )}</p>
-            <pre>{this._showSasEvent.sas}</pre>
+            <HexVerify text={this._showSasEvent.sas}
+                onVerifiedStateChange={this._onVerifyStateChanged}
+            />
+            <p>{_t(
+                "To continue, click on each pair to confirm it's correct.",
+            )}</p>
             <DialogButtons onPrimaryButtonClick={this._onSasMatchesClick}
-                primaryButton={_t("This Matches")}
+                primaryButton={_t("Continue")}
+                primaryDisabled={!this.state.sasVerified}
                 hasCancel={true}
                 onCancel={this._onCancelClick}
             />
