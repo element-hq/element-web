@@ -1174,7 +1174,7 @@
     "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "Standardmäßig werden <b>die von dir gesendeten Nachrichten beim Deaktiveren nicht gelöscht</b>. Wenn du dies von uns möchtest, aktivere das Auswalfeld unten.",
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Sie Sichtbarkeit der Nachrichten in Matrix ist vergleichbar mit E-Mails: Wenn wir deine Nachrichten vergessen heißt das, dass diese nicht mit neuen oder nicht registrierten Nutzern teilen werden, aber registrierte Nutzer, die bereits zugriff haben, werden Zugriff auf ihre Kopie behalten.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Bitte vergesst alle Nachrichten, die ich gesendet habe, wenn mein Account deaktiviert wird. (<b>Warnung:</b> Zukünftige Nutzer werden eine unvollständige Konversation sehen)",
-    "To continue, please enter your password:": "Um fortzufahren, bitte Password eingeben:",
+    "To continue, please enter your password:": "Um fortzufahren, bitte Passwort eingeben:",
     "password": "Passwort",
     "Can't leave Server Notices room": "Du kannst den Raum für Server-Notizen nicht verlassen",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Du kannst diesen Raum nicht verlassen, da dieser Raum für wichtige Nachrichten vom Heimserver verwendet wird.",
