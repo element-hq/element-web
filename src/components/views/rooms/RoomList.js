@@ -36,7 +36,7 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer, RoomDistributor, RoomSizer} from '../../../resizer'
+import {Resizer, RoomSubListDistributor} from '../../../resizer'
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -153,7 +153,11 @@ module.exports = React.createClass({
         if (typeof newSize === "string") {
             newSize = Number.MAX_SAFE_INTEGER;
         }
-        this.subListSizes[id] = newSize;
+        if (newSize === null) {
+            delete this.subListSizes[id];
+        } else {
+            this.subListSizes[id] = newSize;
+        }
         window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
         // update overflow indicators
         this._checkSubListsOverflow();
@@ -164,7 +168,7 @@ module.exports = React.createClass({
         const cfg = {
             onResized: this._onSubListResize,
         };
-        this.resizer = new Resizer(this.resizeContainer, RoomDistributor, cfg, RoomSizer);
+        this.resizer = new Resizer(this.resizeContainer, RoomSubListDistributor, cfg);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",

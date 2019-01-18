@@ -86,6 +86,18 @@ export const CommandMap = {
         hideCompletionAfterSpace: true,
     }),
 
+    upgraderoom: new Command({
+        name: 'upgraderoom',
+        args: '<new_version>',
+        description: _td('Upgrades a room to a new version'),
+        runFn: function(roomId, args) {
+            if (args) {
+                return success(MatrixClientPeg.get().upgradeRoom(roomId, args));
+            }
+            return reject(this.getUsage());
+        },
+    }),
+
     nick: new Command({
         name: 'nick',
         args: '<display_name>',

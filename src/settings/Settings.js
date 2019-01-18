@@ -22,6 +22,7 @@ import {
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
 import LazyLoadingController from "./controllers/LazyLoadingController";
+import CustomStatusController from "./controllers/CustomStatusController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -88,6 +89,7 @@ export const SETTINGS = {
         displayName: _td("Custom user status messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new CustomStatusController(),
     },
     "feature_lazyloading": {
         isFeature: true,
@@ -105,12 +107,6 @@ export const SETTINGS = {
     "feature_state_counters": {
         isFeature: true,
         displayName: _td("Render simple counters in room header"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_gridview": {
-        isFeature: true,
-        displayName: _td("Allow up to 6 rooms in a community to be shown simultaneously in a grid via the context menu"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -330,9 +326,9 @@ export const SETTINGS = {
         supportedLevels: ['room-device'],
         default: false,
     },
-    "RoomSubList.showEmpty": {
+    "promptBeforeInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show empty room list headings'),
+        displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),
         default: true,
     },
     "showDeveloperTools": {

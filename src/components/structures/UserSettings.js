@@ -82,10 +82,10 @@ const SIMPLE_SETTINGS = [
     { id: "VideoView.flipVideoHorizontally" },
     { id: "TagPanel.disableTagPanel" },
     { id: "enableWidgetScreenshots" },
-    { id: "RoomSubList.showEmpty" },
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
     { id: "showDeveloperTools" },
+    { id: "promptBeforeInviteUnknownUsers" },
 ];
 
 // These settings must be defined in SettingsStore

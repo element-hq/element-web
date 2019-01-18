@@ -58,15 +58,11 @@ limitations under the License.
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
-    padding: 0 28px;
+    padding: 0 27px;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
     display: block;
-}
-
-.mx_MessageComposer .mx_AccessibleButton {
-    padding: 0 12px 0 0;
 }
 
 .mx_MessageComposer_composecontrols {
@@ -185,7 +181,7 @@ limitations under the License.
     /*display: table-cell;*/
     /*vertical-align: middle;*/
     /*padding-left: 10px;*/
-    padding-right: 5px;
+    padding-right: 12px;
     cursor: pointer;
     padding-top: 4px;
 }

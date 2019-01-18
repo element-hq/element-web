@@ -39,6 +39,7 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -49,7 +50,6 @@ module.exports = withMatrixClient(React.createClass({
     propTypes: {
         matrixClient: PropTypes.object.isRequired,
         member: PropTypes.object.isRequired,
-        roomId: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -713,7 +713,7 @@ module.exports = withMatrixClient(React.createClass({
             }
 
             if (!member || !member.membership || member.membership === 'leave') {
-                const roomId = member && member.roomId ? member.roomId : this.props.roomId;
+                const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
                 const onInviteUserButton = async () => {
                     try {
                         // We use a MultiInviter to re-use the invite logic, even though

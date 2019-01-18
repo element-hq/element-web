@@ -98,6 +98,7 @@ limitations under the License.
     font-size: 18px;
     margin: 0 7px;
     border-bottom: 1px solid transparent;
+    display: flex;
 }
 
 .mx_RoomHeader_nametext {
@@ -111,7 +112,6 @@ limitations under the License.
 }
 
 .mx_RoomHeader_searchStatus {
-    display: inline-block;
     font-weight: normal;
     opacity: 0.6;
 }

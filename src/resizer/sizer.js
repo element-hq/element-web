@@ -18,29 +18,11 @@ limitations under the License.
 implements DOM/CSS operations for resizing.
 The sizer determines what CSS mechanism is used for sizing items, like flexbox, ...
 */
-class Sizer {
+export default class Sizer {
     constructor(container, vertical, reverse) {
         this.container = container;
         this.reverse = reverse;
         this.vertical = vertical;
-    }
-
-    getItemPercentage(item) {
-        /*
-        const flexGrow = window.getComputedStyle(item).flexGrow;
-        if (flexGrow === "") {
-            return null;
-        }
-        return parseInt(flexGrow) / 1000;
-        */
-        const style = window.getComputedStyle(item);
-        const sizeStr = this.vertical ? style.height : style.width;
-        const size = parseInt(sizeStr, 10);
-        return size / this.getTotalSize();
-    }
-
-    setItemPercentage(item, percent) {
-        item.style.flexGrow = Math.round(percent * 1000);
     }
 
     /**
@@ -82,6 +64,14 @@ class Sizer {
         }
     }
 
+    clearItemSize(item) {
+        if (this.vertical) {
+            item.style.height = null;
+        } else {
+            item.style.width = null;
+        }
+    }
+
     /**
         @param {MouseEvent} event the mouse event
         @return {number} the distance between the cursor and the edge of the container,
@@ -96,12 +86,3 @@ class Sizer {
         }
     }
 }
-
-class FlexSizer extends Sizer {
-    setItemSize(item, size) {
-        item.style.flexGrow = `0`;
-        item.style.flexBasis = `${Math.round(size)}px`;
-    }
-}
-
-module.exports = {Sizer, FlexSizer};

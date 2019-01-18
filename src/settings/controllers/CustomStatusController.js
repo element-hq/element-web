@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** The types of page which can be shown by the LoggedInView */
-export default {
-    HomePage: "home_page",
-    RoomView: "room_view",
-    UserSettings: "user_settings",
-    RoomDirectory: "room_directory",
-    UserView: "user_view",
-    GroupView: "group_view",
-    MyGroups: "my_groups",
-};
+import SettingController from "./SettingController";
+import dis from "../../dispatcher";
+
+export default class CustomStatusController extends SettingController {
+    onChange(level, roomId, newValue) {
+        // Dispatch setting change so that some components that are still visible when the
+        // Settings page is open (such as RoomTiles) can reflect the change.
+        dis.dispatch({
+            action: "feature_custom_status_changed",
+        });
+    }
+}

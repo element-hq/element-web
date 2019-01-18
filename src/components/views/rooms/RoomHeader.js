@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
-import dis from '../../../dispatcher';
 
 import * as linkify from 'linkifyjs';
 import linkifyElement from 'linkifyjs/element';
@@ -151,14 +150,6 @@ module.exports = React.createClass({
         Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
             target: this.props.room,
         });
-    },
-
-    onToggleRightPanelClick: function(ev) {
-        if (this.props.collapsedRhs) {
-            dis.dispatch({action: "show_right_panel"});
-        } else {
-            dis.dispatch({action: "hide_right_panel"});
-        }
     },
 
     _hasUnreadPins: function() {
@@ -418,17 +409,6 @@ module.exports = React.createClass({
                 </div>;
         }
 
-        let toggleRightPanelButton;
-        if (this.props.isGrid) {
-            toggleRightPanelButton =
-                <AccessibleButton
-                    className="mx_RoomHeader_button"
-                    onClick={this.onToggleRightPanelClick}
-                    title={_t('Toggle right panel')}>
-                    <TintableSvg src="img/feather-icons/toggle-right-panel.svg" width="20" height="20" />
-                </AccessibleButton>;
-        }
-
         return (
             <div className={"mx_RoomHeader light-panel " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
                 <div className="mx_RoomHeader_wrapper">
@@ -439,8 +419,7 @@ module.exports = React.createClass({
                     { saveButton }
                     { cancelButton }
                     { rightRow }
-                    { !this.props.isGrid ? <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} /> : undefined }
-                    { toggleRightPanelButton }
+                    <RoomHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                 </div>
             </div>
         );
