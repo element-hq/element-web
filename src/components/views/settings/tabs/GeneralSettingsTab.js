@@ -15,37 +15,32 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../../languageHandler";
 
 export default class GeneralSettingsTab extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-
     render() {
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
                 <div className="mx_GeneralSettingsTab_profile mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
-                    <input type="text" value="travis" />
-                    <input type="text" value="TravisR" />
+                    <input type="text" value="travis"/>
+                    <input type="text" value="TravisR"/>
                 </div>
                 <div className="mx_GeneralSettingsTab_profile mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
-                    <input type="text" value="travis" />
-                    <input type="text" value="TravisR" />
+                    <input type="text" value="travis"/>
+                    <input type="text" value="TravisR"/>
                 </div>
                 <div className="mx_GeneralSettingsTab_profile mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
-                    <input type="text" value="travis" />
-                    <input type="text" value="TravisR" />
+                    <input type="text" value="travis"/>
+                    <input type="text" value="TravisR"/>
                 </div>
                 <div className="mx_GeneralSettingsTab_profile mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
-                    <input type="text" value="travis" />
-                    <input type="text" value="TravisR" />
+                    <input type="text" value="travis"/>
+                    <input type="text" value="TravisR"/>
                 </div>
             </div>
         );

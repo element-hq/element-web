@@ -616,6 +616,10 @@ export default React.createClass({
                 //this._setPage(PageTypes.UserSettings);
                 //this.notifyNewScreen('settings');
                 break;
+            case 'view_old_user_settings':
+                this._setPage(PageTypes.UserSettings);
+                this.notifyNewScreen('settings');
+                break;
             case 'close_settings':
                 this.setState({
                     leftDisabled: false,

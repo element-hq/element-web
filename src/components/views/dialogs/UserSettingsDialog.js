@@ -20,6 +20,23 @@ import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
+import dis from '../../../dispatcher';
+
+export class TempTab extends React.Component {
+    // TODO: Ditch this
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+    };
+
+    componentDidMount(): void {
+        dis.dispatch({action: "view_old_user_settings"});
+        this.props.onClose();
+    }
+
+    render() {
+        return <div>Hello World</div>;
+    }
+}
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
@@ -34,6 +51,7 @@ export default class UserSettingsDialog extends React.Component {
             new Tab(_td("Voice & Video"), <span className="mx_UserSettingsDialog_voiceIcon mx_TabbedView_maskedIcon" />, <div>Voice Test</div>),
             new Tab(_td("Security & Privacy"), <span className="mx_UserSettingsDialog_securityIcon mx_TabbedView_maskedIcon" />, <div>Security Test</div>),
             new Tab(_td("Help & About"), <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />, <div>Help Test</div>),
+            new Tab(_td("Visit old settings"), <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />, <TempTab onClose={this.props.onFinished}/>),
         ];
     }
 
