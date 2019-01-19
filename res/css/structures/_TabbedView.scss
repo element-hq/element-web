@@ -82,8 +82,8 @@ limitations under the License.
 .mx_TabbedView_tabPanel {
   width: calc(100% - 320px);
   display: inline-block;
-  height: 100vh; // 100% of viewport height
   margin-left: 20px;
+  flex-grow: 1;
 }
 
 .mx_TabbedView_tabPanelContent {

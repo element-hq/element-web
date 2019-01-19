@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
+import AccessibleButton from "../elements/AccessibleButton";
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
@@ -38,12 +39,12 @@ export default class UserSettingsDialog extends React.Component {
     render() {
         return (
             <div className="mx_UserSettingsDialog">
-                <h1 className="mx_UserSettingsDialog_header">
+                <div className="mx_UserSettingsDialog_header">
                     {_t("Settings")}
-                </h1>
-                <span className="mx_UserSettingsDialog_close">
-                    X
-                </span>
+                    <span className="mx_UserSettingsDialog_close">
+                        <AccessibleButton className="mx_UserSettingsDialog_closeIcon" onClick={this.props.onFinished} />
+                    </span>
+                </div>
                 <TabbedView tabs={this._getTabs()} />
             </div>
             // <UserSettings
