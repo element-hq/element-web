@@ -24,7 +24,6 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import SettingsStore from '../../../settings/SettingsStore';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
-import {renderSasWaitAccept} from '../../../sas_ui';
 
 const MODE_LEGACY = 'legacy';
 const MODE_SAS = 'sas';
@@ -128,7 +127,7 @@ export default class DeviceVerifyDialog extends React.Component {
                 body = this._renderSasVerificationPhaseStart();
                 break;
             case PHASE_WAIT_FOR_PARTNER_TO_ACCEPT:
-                body = renderSasWaitAccept(this.props.userId);
+                body = this._renderSasVerificationPhaseWaitAccept();
                 break;
             case PHASE_SHOW_SAS:
                 body = this._renderSasVerificationPhaseShowSas();
@@ -180,6 +179,17 @@ export default class DeviceVerifyDialog extends React.Component {
                     onPrimaryButtonClick={this._onSasRequestClick}
                     onCancel={this._onCancelClick}
                 />
+            </div>
+        );
+    }
+
+    _renderSasVerificationPhaseWaitAccept() {
+        const Spinner = sdk.getComponent("views.elements.Spinner");
+
+        return (
+            <div>
+                <Spinner />
+                <p>{_t("Waiting for partner to accept...")}</p>
             </div>
         );
     }
