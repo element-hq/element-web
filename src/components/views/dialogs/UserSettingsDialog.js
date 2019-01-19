@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
-import {_td} from "../../../languageHandler";
+import {_t, _td} from "../../../languageHandler";
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
@@ -26,14 +26,26 @@ export default class UserSettingsDialog extends React.Component {
 
     _getTabs() {
         return [
-            new Tab(_td("General"), "", <div>General Test</div>),
-            new Tab(_td("Account"), "", <div>Account Test</div>),
+            new Tab(_td("General"), <span className="mx_UserSettingsDialog_settingsIcon mx_TabbedView_maskedIcon" />, <div>General Test</div>),
+            new Tab(_td("Notifications"), <span className="mx_UserSettingsDialog_bellIcon mx_TabbedView_maskedIcon" />, <div>Notifications Test</div>),
+            new Tab(_td("Preferences"), <span className="mx_UserSettingsDialog_preferencesIcon mx_TabbedView_maskedIcon" />, <div>Preferences Test</div>),
+            new Tab(_td("Voice & Video"), <span className="mx_UserSettingsDialog_voiceIcon mx_TabbedView_maskedIcon" />, <div>Voice Test</div>),
+            new Tab(_td("Security & Privacy"), <span className="mx_UserSettingsDialog_securityIcon mx_TabbedView_maskedIcon" />, <div>Security Test</div>),
+            new Tab(_td("Help & About"), <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />, <div>Help Test</div>),
         ];
     }
 
     render() {
         return (
-            <TabbedView tabs={this._getTabs()} />
+            <div className="mx_UserSettingsDialog">
+                <h1 className="mx_UserSettingsDialog_header">
+                    {_t("Settings")}
+                </h1>
+                <span className="mx_UserSettingsDialog_close">
+                    X
+                </span>
+                <TabbedView tabs={this._getTabs()} />
+            </div>
             // <UserSettings
             //     onClose={this.props.onFinished}
             //     brand={SdkConfig.get().brand}

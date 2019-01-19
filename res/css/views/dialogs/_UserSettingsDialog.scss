@@ -1,0 +1,26 @@
+.mx_UserSettingsDialog_settingsIcon:before {
+  mask: url('$(res)/img/feather-icons/settings.svg');
+}
+
+.mx_UserSettingsDialog_voiceIcon:before {
+  mask: url('$(res)/img/feather-icons/phone.svg');
+}
+
+.mx_UserSettingsDialog_bellIcon:before {
+  mask: url('$(res)/img/feather-icons/notifications.svg');
+}
+
+.mx_UserSettingsDialog_preferencesIcon:before {
+  // TODO: Use real icon
+  mask: url('$(res)/img/feather-icons/paperclip.svg');
+}
+
+.mx_UserSettingsDialog_securityIcon:before {
+  // TODO: Use real icon
+  mask: url('$(res)/img/feather-icons/life-buoy.svg');
+}
+
+.mx_UserSettingsDialog_helpIcon:before {
+  // TODO: Use real icon
+  mask: url('$(res)/img/feather-icons/share.svg');
+}

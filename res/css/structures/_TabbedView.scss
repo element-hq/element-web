@@ -39,13 +39,44 @@ limitations under the License.
   height: 20px;
 }
 
-.mx_TabbedView_tabLabel:hover {
-  font-weight: 700;
-}
-
 .mx_TabbedView_tabLabel_active {
   background-color: $tab-label-active-bg-color;
   color: $tab-label-active-fg-color;
+}
+
+.mx_TabbedView_tabLabel_icon {
+  width: 12px;
+  height: 12px;
+  margin-left: 6px;
+  margin-right: 9px;
+  position: relative;
+}
+
+.mx_TabbedView_tabLabel_icon > .mx_TabbedView_maskedIcon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+}
+
+.mx_TabbedView_tabLabel_icon > .mx_TabbedView_maskedIcon:before {
+  background-color: $tab-label-icon-bg-color;
+  mask-repeat: no-repeat;
+  mask-size: 12px;
+  mask-position: center;
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.mx_TabbedView_tabLabel_active .mx_TabbedView_tabLabel_icon > .mx_TabbedView_maskedIcon:before {
+  background-color: $tab-label-active-icon-bg-color;
+}
+
+.mx_TabbedView_tabLabel_text {
+  vertical-align: middle;
 }
 
 .mx_TabbedView_tabPanel {

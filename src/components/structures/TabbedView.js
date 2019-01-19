@@ -26,11 +26,12 @@ export class Tab {
     /**
      * Creates a new tab.
      * @param {string} tabLabel The untranslated tab label.
-     * @param {string} tabIconRef The relative path to the tab's icon.
+     * @param {string} tabIconJsx The JSX for the tab icon. This should be a plain img element or null.
      * @param {string} tabJsx The JSX for the tab container.
      */
-    constructor(tabLabel, tabIconRef, tabJsx) {
+    constructor(tabLabel, tabIconJsx, tabJsx) {
         this.label = tabLabel;
+        this.icon = tabIconJsx;
         this.body = tabJsx;
     }
 }
@@ -74,10 +75,18 @@ export class TabbedView extends React.Component {
         const idx = this.props.tabs.indexOf(tab);
         if (idx === this._getActiveTabIndex()) classes += "mx_TabbedView_tabLabel_active";
 
+        let tabIcon = null;
+        if (tab.icon) {
+            tabIcon = <span className="mx_TabbedView_tabLabel_icon">{tab.icon}</span>;
+        }
+
         return (
             <span className={classes} key={"tab_label_ " + tab.label}
                   onClick={() => this._setActiveTab(tab)}>
-                {_t(tab.label)}
+                {tabIcon}
+                <span className="mx_TabbedView_tabLabel_text">
+                    {_t(tab.label)}
+                </span>
             </span>
         );
     }
