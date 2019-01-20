@@ -71,6 +71,9 @@ $input-darker-bg-color: rgba(193, 201, 214, 0.29);
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
+$input-valid-border-color: #7ac9a1;
+
+$field-focused-label-bg-color: #ffffff;
 
 $button-bg-color: #7ac9a1;
 $button-fg-color: white;
@@ -198,8 +201,8 @@ $memberstatus-placeholder-color: $roomtile-name-color;
 
 .mx_MatrixChat {
 
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         display: block;
         margin: 9px;
