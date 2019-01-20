@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 
 export default class Field extends React.PureComponent {
     static propTypes = {
-        // The field's id, which binds the input and label together.
+        // The field's ID, which binds the input and label together.
         id: PropTypes.string.isRequired,
         // The field's <input> type. Defaults to "text".
         type: PropTypes.string,
