@@ -37,6 +37,7 @@
   "scripts": {
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
+    "rethemendex": "res/css/rethemendex.sh",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "build": "npm run reskindex && npm run start:init",
