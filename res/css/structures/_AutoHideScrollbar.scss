@@ -64,3 +64,20 @@ body.mx_scrollbar_nooverlay {
         margin-right: calc(-1 * var(--scrollbar-width));
     }
 }
+
+// style the native scrollbars ...
+// ... standard css scrollbars (firefox at time of writing)
+.mx_AutoHideScrollbar {
+    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+    scrollbar-width: thin;
+}
+// or fallback for webkit browsers
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: $scrollbar-track-color;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb-color;
+    border-radius: 3px;
+}
