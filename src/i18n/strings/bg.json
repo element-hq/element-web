@@ -1444,5 +1444,15 @@
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Настройката на Защитени Съобщения на това устройство ще зашифрова наново историята на съобщенията му посредством новия метод за възстановяване.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако не сте настройвали новия метод за възстановяване, вероятно някой се опитва да проникне в акаунта Ви. Веднага променете паролата на акаунта си и настройте нов метод за възстановяване от Настройки.",
     "Set up Secure Messages": "Настрой Защитени Съобщения",
-    "Go to Settings": "Отиди в Настройки"
+    "Go to Settings": "Отиди в Настройки",
+    "Waiting for %(userId)s to accept...": "Изкачване на %(userId)s да приеме...",
+    "Waiting for %(userId)s to confirm...": "Изчакване на %(userId)s да потвърди...",
+    "Unrecognised address": "Неразпознат адрес",
+    "User %(user_id)s may or may not exist": "Потребител %(user_id)s може да съществува или не",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Питай преди изпращане на покани към потенциално невалидни Matrix идентификатори",
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "За да видите защитената история на съобщенията и да подсигурите, че ще можете да я гледате на бъдещи устройства, настройте Защитено Възстановяване на Съобщения.",
+    "The following users may not exist": "Следните потребители може да не съществуват",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Не бяга открити профили за изброените по-долу Matrix идентификатори. Желаете ли да ги поканите въпреки това?",
+    "Invite anyway and never warn me again": "Покани въпреки това и не питай отново",
+    "Invite anyway": "Покани въпреки това"
 }
