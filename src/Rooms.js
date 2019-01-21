@@ -159,6 +159,10 @@ export function setDMRoom(roomId, userId) {
 /**
  * Given a room, estimate which of its members is likely to
  * be the target if the room were a DM room and return that user.
+ *
+ * @param {Object} room Target room
+ * @param {string} myUserId User ID of the current user
+ * @returns {string} User ID of the user that the room is probably a DM with
  */
 function guessDMRoomTargetId(room, myUserId) {
     let oldestTs;
@@ -173,7 +177,7 @@ function guessDMRoomTargetId(room, myUserId) {
             oldestTs = user.events.member.getTs();
         }
     }
-    if (oldestUser) return oldestUser;
+    if (oldestUser) return oldestUser.userId;
 
     // if there are no joined members other than us, use the oldest member
     for (const user of room.currentState.getMembers()) {
@@ -186,5 +190,5 @@ function guessDMRoomTargetId(room, myUserId) {
     }
 
     if (oldestUser === undefined) return myUserId;
-    return oldestUser;
+    return oldestUser.userId;
 }
