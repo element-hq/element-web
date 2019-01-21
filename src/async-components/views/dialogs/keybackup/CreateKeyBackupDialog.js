@@ -254,7 +254,7 @@ export default React.createClass({
                 }
                 const suggestionBlock = suggestions.length > 0 ? <div>
                     {suggestions}
-                </div> : null;
+                </div> : <div>{_t("Keep going...")}</div>;
 
                 helpText = <div>
                     {this.state.zxcvbnResult.feedback.warning}
