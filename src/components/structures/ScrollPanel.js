@@ -689,7 +689,7 @@ module.exports = React.createClass({
     blockShrinking: function() {
         const messageList = this.refs.itemlist;
         if (messageList) {
-            const currentHeight = messageList.clientHeight - 18;
+            const currentHeight = messageList.clientHeight;
             messageList.style.minHeight = `${currentHeight}px`;
         }
     },
