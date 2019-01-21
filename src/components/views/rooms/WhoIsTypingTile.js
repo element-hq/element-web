@@ -191,6 +191,9 @@ module.exports = React.createClass({
         // but have a timeout timer running so they can disappear
         // when a message comes in
         usersTyping = usersTyping.concat(stoppedUsersOnTimer);
+        // sort them so the typing members don't change order when
+        // moved to delayedStopTypingTimers
+        usersTyping.sort((a, b) => a.name.localeCompare(b.name));
 
         const typingString = WhoIsTyping.whoIsTypingString(
             usersTyping,
