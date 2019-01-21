@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -404,8 +403,6 @@ module.exports = React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
 
-        const theme = SettingsStore.getValue("theme");
-
         let registerBody;
         if (this.state.doingUIAuth) {
             registerBody = (
@@ -458,24 +455,18 @@ module.exports = React.createClass({
             );
         }
 
-        let header;
         let errorText;
-        // FIXME: remove hardcoded Status team tweaks at some point
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
-        if (theme === 'status' && err) {
-            header = <div className="mx_Login_error">{ err }</div>;
-        } else {
-            header = <h2>{ _t('Create an account') }</h2>;
-            if (err) {
-                errorText = <div className="mx_Login_error">{ err }</div>;
-            }
+        const header = <h2>{ _t('Create an account') }</h2>;
+        if (err) {
+            errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
                 <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
-                    { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
+                    { _t('I already have an account') }
                 </a>
             );
         }

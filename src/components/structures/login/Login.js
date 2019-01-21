@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import { AutoDiscovery } from "matrix-js-sdk";
 
@@ -533,7 +532,6 @@ module.exports = React.createClass({
         }
 
         let serverConfig;
-        let header;
 
         if (!SdkConfig.get()['disable_custom_urls']) {
             serverConfig = <ServerConfig ref="serverConfig"
@@ -546,15 +544,7 @@ module.exports = React.createClass({
                 delayTimeMs={1000} />;
         }
 
-        // FIXME: remove status.im theme tweaks
-        const theme = SettingsStore.getValue("theme");
-        if (theme !== "status") {
-            header = <h2>{ _t('Sign in') } { loader }</h2>;
-        } else {
-            if (!errorText) {
-                header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
-            }
-        }
+        const header = <h2>{ _t('Sign in') } { loader }</h2>;
 
         let errorTextSection;
         if (errorText) {
