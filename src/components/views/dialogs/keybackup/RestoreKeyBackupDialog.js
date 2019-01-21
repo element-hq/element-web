@@ -186,7 +186,6 @@ export default React.createClass({
             content = _t("No backup found!");
         } else if (this.state.recoverInfo && this.state.recoverInfo.imported === 0) {
             title = _t("Error Restoring Backup");
-            let failedToDecrypt;
             content = <div>
                 <p>{_t(
                     "Backup could not be decrypted with this key: " +
