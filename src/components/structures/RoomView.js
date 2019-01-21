@@ -1757,8 +1757,8 @@ module.exports = React.createClass({
         }
 
         if (MatrixClientPeg.get().isGuest()) {
-            const LoginBox = sdk.getComponent('structures.LoginBox');
-            messageComposer = <LoginBox />;
+            const AuthButtons = sdk.getComponent('views.auth.AuthButtons');
+            messageComposer = <AuthButtons />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
