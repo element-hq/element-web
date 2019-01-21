@@ -295,6 +295,13 @@ input[type=search]::-webkit-search-results-decoration {
 .input[type=search]::-moz-placeholder {
     color: #a5aab2;
 }
+
+// Override Firefox's UA style so we get a consistent look across browsers
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
