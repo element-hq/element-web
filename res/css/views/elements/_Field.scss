@@ -31,7 +31,7 @@ limitations under the License.
 
 .mx_Field input:focus {
     outline: 0;
-    border-color: $input-valid-border-color;
+    border-color: $input-focused-border-color;
 }
 
 .mx_Field input::placeholder {
@@ -73,5 +73,5 @@ limitations under the License.
 }
 
 .mx_Field input:focus + label {
-    color: $input-valid-border-color;
+    color: $input-focused-border-color;
 }
