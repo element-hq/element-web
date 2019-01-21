@@ -189,7 +189,8 @@ export default React.createClass({
             let failedToDecrypt;
             content = <div>
                 <p>{_t(
-                    "Backup restore failed: please verify that you entered the correct recovery key.",
+                    "Backup could not be decrypted with this key: " +
+                    "please verify that you entered the correct recovery key.",
                 )}</p>
             </div>;
         } else if (this.state.recoverInfo) {
