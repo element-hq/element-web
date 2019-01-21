@@ -189,8 +189,7 @@ export default React.createClass({
             let failedToDecrypt;
             content = <div>
                 <p>{_t(
-                    "Failed to decrypt any sessions: check that the recovery key " +
-                    "used is the correct one for this backup."
+                    "Backup restore failed: please verify that you entered the correct recovery key.",
                 )}</p>
             </div>;
         } else if (this.state.recoverInfo) {
