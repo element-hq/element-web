@@ -183,7 +183,7 @@ export default React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
-            // Parameters used for setting up the login/registration views
+            // Parameters used for setting up the authentication views
             defaultServerName: this.props.config.default_server_name,
             defaultHsUrl: this.props.config.default_hs_url,
             defaultIsUrl: this.props.config.default_is_url,
@@ -1851,7 +1851,7 @@ export default React.createClass({
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.view === VIEWS.POST_REGISTRATION) {
-            const PostRegistration = sdk.getComponent('structures.login.PostRegistration');
+            const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
             return (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
@@ -1906,7 +1906,7 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.REGISTER) {
-            const Registration = sdk.getComponent('structures.login.Registration');
+            const Registration = sdk.getComponent('structures.auth.Registration');
             return (
                 <Registration
                     clientSecret={this.state.register_client_secret}
@@ -1935,7 +1935,7 @@ export default React.createClass({
 
 
         if (this.state.view === VIEWS.FORGOT_PASSWORD) {
-            const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
+            const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             return (
                 <ForgotPassword
                     defaultServerName={this.getDefaultServerName()}
@@ -1951,7 +1951,7 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.LOGIN) {
-            const Login = sdk.getComponent('structures.login.Login');
+            const Login = sdk.getComponent('structures.auth.Login');
             return (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}

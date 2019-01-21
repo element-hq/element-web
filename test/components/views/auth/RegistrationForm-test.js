@@ -23,7 +23,7 @@ const expect = require('expect');
 const testUtils = require('test-utils');
 
 const sdk = require('matrix-react-sdk');
-const RegistrationForm = sdk.getComponent('views.login.RegistrationForm');
+const RegistrationForm = sdk.getComponent('views.auth.RegistrationForm');
 
 const TEAM_CONFIG = {
     supportEmail: "support@some.domain",

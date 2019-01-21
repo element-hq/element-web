@@ -23,7 +23,9 @@
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserSettings.scss";
 @import "./structures/_ViewSource.scss";
-@import "./structures/login/_Login.scss";
+@import "./structures/auth/_Login.scss";
+@import "./views/auth/_InteractiveAuthEntryComponents.scss";
+@import "./views/auth/_ServerConfig.scss";
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
@@ -75,8 +77,6 @@
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
-@import "./views/login/_InteractiveAuthEntryComponents.scss";
-@import "./views/login/_ServerConfig.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_MEmoteBody.scss";

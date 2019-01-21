@@ -486,7 +486,7 @@ module.exports = React.createClass({
     },
 
     _renderPasswordStep: function() {
-        const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+        const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
@@ -515,10 +515,10 @@ module.exports = React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
-        const LoginPage = sdk.getComponent("login.LoginPage");
-        const LoginHeader = sdk.getComponent("login.LoginHeader");
-        const LoginFooter = sdk.getComponent("login.LoginFooter");
-        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const LoginPage = sdk.getComponent("auth.LoginPage");
+        const LoginHeader = sdk.getComponent("auth.LoginHeader");
+        const LoginFooter = sdk.getComponent("auth.LoginFooter");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
@@ -555,7 +555,7 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
             <LoginPage>

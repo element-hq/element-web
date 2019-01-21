@@ -60,8 +60,8 @@ module.exports = React.createClass({
     render: function() {
         const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        const LoginPage = sdk.getComponent('login.LoginPage');
-        const LoginHeader = sdk.getComponent('login.LoginHeader');
+        const LoginPage = sdk.getComponent('auth.LoginPage');
+        const LoginHeader = sdk.getComponent('auth.LoginHeader');
         return (
             <LoginPage>
                 <div className="mx_Login_box">

@@ -183,10 +183,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginPage = sdk.getComponent("login.LoginPage");
-        const LoginHeader = sdk.getComponent("login.LoginHeader");
-        const LoginFooter = sdk.getComponent("login.LoginFooter");
-        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const LoginPage = sdk.getComponent("auth.LoginPage");
+        const LoginHeader = sdk.getComponent("auth.LoginHeader");
+        const LoginFooter = sdk.getComponent("auth.LoginFooter");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const Spinner = sdk.getComponent("elements.Spinner");
 
         let resetPasswordJsx;
@@ -234,7 +234,7 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
-            const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+            const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
             resetPasswordJsx = (
             <div>

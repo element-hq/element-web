@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import RegistrationForm from '../../views/login/RegistrationForm';
+import RegistrationForm from '../../views/auth/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
@@ -396,12 +396,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginHeader = sdk.getComponent('login.LoginHeader');
-        const LoginFooter = sdk.getComponent('login.LoginFooter');
-        const LoginPage = sdk.getComponent('login.LoginPage');
+        const LoginHeader = sdk.getComponent('auth.LoginHeader');
+        const LoginFooter = sdk.getComponent('auth.LoginFooter');
+        const LoginPage = sdk.getComponent('auth.LoginPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
-        const ServerConfig = sdk.getComponent('views.login.ServerConfig');
+        const ServerConfig = sdk.getComponent('views.auth.ServerConfig');
 
         let registerBody;
         if (this.state.doingUIAuth) {
@@ -471,7 +471,7 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
             <LoginPage>
