@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -184,6 +184,15 @@ export default React.createClass({
         } else if (this.state.backupInfo === null) {
             title = _t("Error");
             content = _t("No backup found!");
+        } else if (this.state.recoverInfo && this.state.recoverInfo.imported === 0) {
+            title = _t("Error Restoring Backup");
+            let failedToDecrypt;
+            content = <div>
+                <p>{_t(
+                    "Failed to decrypt any sessions: check that the recovery key " +
+                    "used is the correct one for this backup."
+                )}</p>
+            </div>;
         } else if (this.state.recoverInfo) {
             title = _t("Backup Restored");
             let failedToDecrypt;
