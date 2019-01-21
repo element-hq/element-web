@@ -3,29 +3,29 @@
   display: block;
   text-align: center;
   color: $dialog-title-fg-color;
-  margin-top: 23px;
+  margin-top: 16px;
   margin-bottom: 24px;
   padding: 0;
 }
 
 .mx_UserSettingsDialog_close {
   position: absolute;
-  top: 23px;
+  top: 16px;
   right: 25px;
 }
 
 .mx_UserSettingsDialog_closeIcon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
 }
 
 .mx_UserSettingsDialog_closeIcon:before {
   // TODO: Use real icon
-  mask: url('$(res)/img/feather-icons/video.svg');
+  mask: url('$(res)/img/feather-icons/cancel.svg');
   background-color: $dialog-close-fg-color;
   mask-repeat: no-repeat;
-  mask-size: 14px;
+  mask-size: 16px;
   mask-position: center;
   content: '';
   position: absolute;
@@ -52,16 +52,13 @@
 }
 
 .mx_UserSettingsDialog_preferencesIcon:before {
-  // TODO: Use real icon
-  mask: url('$(res)/img/feather-icons/paperclip.svg');
+  mask: url('$(res)/img/feather-icons/sliders.svg');
 }
 
 .mx_UserSettingsDialog_securityIcon:before {
-  // TODO: Use real icon
-  mask: url('$(res)/img/feather-icons/life-buoy.svg');
+  mask: url('$(res)/img/feather-icons/lock.svg');
 }
 
 .mx_UserSettingsDialog_helpIcon:before {
-  // TODO: Use real icon
-  mask: url('$(res)/img/feather-icons/share.svg');
+  mask: url('$(res)/img/feather-icons/help-circle.svg');
 }
