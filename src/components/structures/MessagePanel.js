@@ -640,6 +640,20 @@ module.exports = React.createClass({
         }
     },
 
+    updateTimelineMinHeight: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        const whoIsTyping = this.refs.whoIsTyping;
+        const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+
+        if (scrollPanel) {
+            if (isTypingVisible) {
+                scrollPanel.blockShrinking();
+            } else {
+                scrollPanel.clearBlockShrinking();
+            }
+        }
+    },
+
     onResize: function() {
         dis.dispatch({ action: 'timeline_resize' }, true);
     },
@@ -668,7 +682,7 @@ module.exports = React.createClass({
 
         let whoIsTyping;
         if (this.props.room) {
-            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._onTypingVisible} />);
+            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._onTypingVisible} ref="whoIsTyping" />);
         }
 
         return (

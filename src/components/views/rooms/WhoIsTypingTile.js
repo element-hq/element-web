@@ -77,6 +77,10 @@ module.exports = React.createClass({
         Object.values(this.state.delayedStopTypingTimers).forEach((t) => t.abort());
     },
 
+    isVisible: function() {
+        return this.state.usersTyping.length !== 0 || Object.keys(this.state.delayedStopTypingTimers) !== 0;
+    },
+
     onRoomTimeline: function(event, room) {
         if (room.roomId === this.props.room.roomId) {
             const userId = event.getSender();

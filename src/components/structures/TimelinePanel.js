@@ -455,7 +455,7 @@ var TimelinePanel = React.createClass({
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
-                var callback = null;
+                var callRMUpdated = false;
                 if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastEv && this.getReadMarkerPosition() === 0) {
@@ -465,11 +465,16 @@ var TimelinePanel = React.createClass({
                     this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
                     updatedState.readMarkerVisible = false;
                     updatedState.readMarkerEventId = lastEv.getId();
-                    callback = this.props.onReadMarkerUpdated;
+                    callRMUpdated = true;
                 }
             }
 
-            this.setState(updatedState, callback);
+            this.setState(updatedState, () => {
+                this.refs.messagePanel.updateTimelineMinHeight();
+                if (callRMUpdated) {
+                    this.props.onReadMarkerUpdated();
+                }
+            });
         });
     },
 
