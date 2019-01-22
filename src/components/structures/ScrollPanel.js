@@ -681,6 +681,7 @@ module.exports = React.createClass({
     _collectGeminiScroll: function(gemScroll) {
         this._gemScroll = gemScroll;
     },
+
     /**
      * Set the current height as the min height for the message list
      * so the timeline cannot shrink. This is used to avoid
@@ -693,6 +694,7 @@ module.exports = React.createClass({
             messageList.style.minHeight = `${currentHeight}px`;
         }
     },
+
     /**
      * Clear the previously set min height
      */
