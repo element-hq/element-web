@@ -396,9 +396,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginHeader = sdk.getComponent('auth.LoginHeader');
-        const LoginFooter = sdk.getComponent('auth.LoginFooter');
-        const LoginPage = sdk.getComponent('auth.LoginPage');
+        const AuthHeader = sdk.getComponent('auth.AuthHeader');
+        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+        const AuthPage = sdk.getComponent('auth.AuthPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.auth.ServerConfig');
@@ -474,9 +474,9 @@ module.exports = React.createClass({
         const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
-            <LoginPage>
+            <AuthPage>
                 <div className="mx_Login_box">
-                    <LoginHeader
+                    <AuthHeader
                         icon={this.state.teamSelected ?
                             this.props.teamServerConfig.teamServerURL + "/static/common/" +
                             this.state.teamSelected.domain + "/icon.png" :
@@ -487,9 +487,9 @@ module.exports = React.createClass({
                     { signIn }
                     { errorText }
                     <LanguageSelector />
-                    <LoginFooter />
+                    <AuthFooter />
                 </div>
-            </LoginPage>
+            </AuthPage>
         );
     },
 });

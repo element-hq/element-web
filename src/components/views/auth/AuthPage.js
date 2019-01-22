@@ -20,11 +20,11 @@ limitations under the License.
 const React = require('react');
 
 module.exports = React.createClass({
-    displayName: 'LoginPage',
+    displayName: 'AuthPage',
 
     render: function() {
         return (
-            <div className="mx_Login">
+            <div className="mx_AuthPage">
                 { this.props.children }
             </div>
         );

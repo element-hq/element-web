@@ -60,12 +60,12 @@ module.exports = React.createClass({
     render: function() {
         const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        const LoginPage = sdk.getComponent('auth.LoginPage');
-        const LoginHeader = sdk.getComponent('auth.LoginHeader');
+        const AuthPage = sdk.getComponent('auth.AuthPage');
+        const AuthHeader = sdk.getComponent('auth.AuthHeader');
         return (
-            <LoginPage>
+            <AuthPage>
                 <div className="mx_Login_box">
-                    <LoginHeader />
+                    <AuthHeader />
                     <div className="mx_Login_profile">
                         { _t('Set a display name:') }
                         <ChangeDisplayName />
@@ -76,7 +76,7 @@ module.exports = React.createClass({
                         { this.state.errorString }
                     </div>
                 </div>
-            </LoginPage>
+            </AuthPage>
         );
     },
 });

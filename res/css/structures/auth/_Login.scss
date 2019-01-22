@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,39 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Login {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: auto;
-}
-
-.mx_Login h2 {
-    font-weight: 300;
-    margin-top: 32px;
-    margin-bottom: 20px;
-}
-
 .mx_Login_box {
     width: 300px;
     min-height: 450px;
     padding-top: 50px;
     padding-bottom: 50px;
     margin: auto;
-}
-
-.mx_Login_logo {
-    text-align: center;
-    height: 150px;
-    margin-bottom: 45px;
-}
-
-.mx_Login_logo img {
-    max-height: 100%
 }
 
 .mx_Login_support {
@@ -113,19 +87,6 @@ limitations under the License.
 
 .mx_Login_create:link {
     color: $primary-fg-color;
-}
-
-.mx_Login_links {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    width: 100%;
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-.mx_Login_links a:link {
-   color: $primary-fg-color;
 }
 
 .mx_Login_prompt {

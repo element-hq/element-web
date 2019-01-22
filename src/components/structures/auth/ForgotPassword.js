@@ -183,9 +183,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginPage = sdk.getComponent("auth.LoginPage");
-        const LoginHeader = sdk.getComponent("auth.LoginHeader");
-        const LoginFooter = sdk.getComponent("auth.LoginFooter");
+        const AuthPage = sdk.getComponent("auth.AuthPage");
+        const AuthHeader = sdk.getComponent("auth.AuthHeader");
+        const AuthFooter = sdk.getComponent("auth.AuthFooter");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -272,7 +272,7 @@ module.exports = React.createClass({
                         { _t('Create an account') }
                     </a>
                     <LanguageSelector />
-                    <LoginFooter />
+                    <AuthFooter />
                 </div>
             </div>
             );
@@ -280,12 +280,12 @@ module.exports = React.createClass({
 
 
         return (
-            <LoginPage>
+            <AuthPage>
                 <div className="mx_Login_box">
-                    <LoginHeader />
+                    <AuthHeader />
                     { resetPasswordJsx }
                 </div>
-            </LoginPage>
+            </AuthPage>
         );
     },
 });
