@@ -1268,9 +1268,7 @@ module.exports = React.createClass({
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
-                        rowLabelClassName="mx_UserSettings_profileLabelCell"
-                        rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
+                        buttonClassName="mx_UserSettings_button"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
         );

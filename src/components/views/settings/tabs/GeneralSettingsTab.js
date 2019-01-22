@@ -24,6 +24,8 @@ import GroupUserSettings from "../../groups/GroupUserSettings";
 import PropTypes from "prop-types";
 import {MatrixClient} from "matrix-js-sdk";
 import { DragDropContext } from 'react-beautiful-dnd';
+const sdk = require('../../../../index');
+const Modal = require("../../../../Modal");
 
 export default class GeneralSettingsTab extends React.Component {
     static childContextTypes = {
@@ -90,6 +92,13 @@ export default class GeneralSettingsTab extends React.Component {
         this.setState(newState);
     };
 
+    _changePassword = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        console.log(this.refs.currentPassword);
+    };
+
     _onDisplayNameChanged = (e) => {
         this.setState({
             displayName: e.target.value,
@@ -117,6 +126,34 @@ export default class GeneralSettingsTab extends React.Component {
             });
         };
         reader.readAsDataURL(file);
+    };
+
+    _onPasswordChangeError = (err) => {
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
+        let errMsg = err.error || "";
+        if (err.httpStatus === 403) {
+            errMsg = _t("Failed to change password. Is your password correct?");
+        } else if (err.httpStatus) {
+            errMsg += ` (HTTP status ${err.httpStatus})`;
+        }
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        console.error("Failed to change password: " + errMsg);
+        Modal.createTrackedDialog('Failed to change password', '', ErrorDialog, {
+            title: _t("Error"),
+            description: errMsg,
+        });
+    };
+
+    _onPasswordChanged = () => {
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Password changed', '', ErrorDialog, {
+            title: _t("Success"),
+            description: _t(
+                "Your password was successfully changed. You will not receive " +
+                "push notifications on other devices until you log back in to them",
+            ) + ".",
+        });
     };
 
     _renderProfileSection() {
@@ -181,10 +218,23 @@ export default class GeneralSettingsTab extends React.Component {
     }
 
     _renderAccountSection() {
+        const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        const passwordChangeForm = (
+            <ChangePassword
+                className="mx_GeneralSettingsTab_changePassword"
+                rowClassName=""
+                buttonKind="primary"
+                onError={this._onPasswordChangeError}
+                onFinished={this._onPasswordChanged} />
+        );
+
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
-                <p>ACCOUNT SECTION</p>
+                <p className="mx_SettingsTab_subsectionText">
+                    {_t("Set a new account password...")}
+                </p>
+                {passwordChangeForm}
             </div>
         );
     }

@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Field from "../elements/Field";
+
 const React = require('react');
 import PropTypes from 'prop-types';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -35,9 +37,8 @@ module.exports = React.createClass({
         onError: PropTypes.func,
         onCheckPassword: PropTypes.func,
         rowClassName: PropTypes.string,
-        rowLabelClassName: PropTypes.string,
-        rowInputClassName: PropTypes.string,
         buttonClassName: PropTypes.string,
+        buttonKind: PropTypes.string,
         confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
         autoFocusNewPasswordInput: PropTypes.bool,
@@ -203,21 +204,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        // TODO: Live validation on `new pw == confirm pw`
+
         const rowClassName = this.props.rowClassName;
-        const rowLabelClassName = this.props.rowLabelClassName;
-        const rowInputClassName = this.props.rowInputClassName;
         const buttonClassName = this.props.buttonClassName;
 
         let currentPassword = null;
         if (!this.state.cachedPassword) {
-            currentPassword = <div className={rowClassName}>
-                <div className={rowLabelClassName}>
-                    <label htmlFor="passwordold">{ _t('Current password') }</label>
+            currentPassword = (
+                <div className={rowClassName}>
+                    <Field id="passwordold" type="password" ref="old_input" label={_t('Current password')} />
                 </div>
-                <div className={rowInputClassName}>
-                    <input id="passwordold" type="password" ref="old_input" />
-                </div>
-            </div>;
+            );
         }
 
         switch (this.state.phase) {
@@ -228,24 +226,13 @@ module.exports = React.createClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <div className={rowLabelClassName}>
-                                <label htmlFor="password1">{ passwordLabel }</label>
-                            </div>
-                            <div className={rowInputClassName}>
-                                <input id="password1" type="password" ref="new_input" autoFocus={this.props.autoFocusNewPasswordInput} />
-                            </div>
+                            <Field id="password1" type="password" ref="new_input" label={passwordLabel}
+                                   autoFocus={this.props.autoFocusNewPasswordInput} />
                         </div>
                         <div className={rowClassName}>
-                            <div className={rowLabelClassName}>
-                                <label htmlFor="password2">{ _t('Confirm password') }</label>
-                            </div>
-                            <div className={rowInputClassName}>
-                                <input id="password2" type="password" ref="confirm_input" />
-                            </div>
+                            <Field id="password2" type="password" ref="confirm_input" label={_t("Confirm password")} />
                         </div>
-                        <AccessibleButton className={buttonClassName}
-                                onClick={this.onClickChange}
-                                element="button">
+                        <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
                             { _t('Change Password') }
                         </AccessibleButton>
                     </form>
