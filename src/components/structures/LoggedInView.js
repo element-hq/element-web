@@ -183,10 +183,13 @@ const LoggedInView = React.createClass({
     },
 
     _loadResizerPreferences() {
-        const lhsSize = window.localStorage.getItem("mx_lhs_size");
+        let lhsSize = window.localStorage.getItem("mx_lhs_size");
         if (lhsSize !== null) {
-            this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
+            lhsSize = parseInt(lhsSize, 10);
+        } else {
+            lhsSize = 350;
         }
+        this.resizer.forHandleAt(0).resize(lhsSize);
     },
 
     onAccountData: function(event) {
