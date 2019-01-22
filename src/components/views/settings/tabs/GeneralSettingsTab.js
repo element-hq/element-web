@@ -73,6 +73,7 @@ export default class GeneralSettingsTab extends React.Component {
                                   disabled={!this.state.enableProfileSave}>
                     {_t("Save")}
                 </AccessibleButton>
+                <div>FLAIR</div>
             </form>
         );
 
@@ -84,11 +85,51 @@ export default class GeneralSettingsTab extends React.Component {
         );
     }
 
+    _renderAccountSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
+                <p>ACCOUNT SECTION</p>
+            </div>
+        );
+    }
+
+    _renderLanguageSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
+                <p>LANGUAGE SECTION</p>
+            </div>
+        );
+    }
+
+    _renderThemeSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
+                <p>THEME SECTION</p>
+            </div>
+        );
+    }
+
+    _renderManagementSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Account management")}</span>
+                <p>MANAGEMENT SECTION</p>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
                 {this._renderProfileSection()}
+                {this._renderAccountSection()}
+                {this._renderLanguageSection()}
+                {this._renderThemeSection()}
+                {this._renderManagementSection()}
             </div>
         );
     }
