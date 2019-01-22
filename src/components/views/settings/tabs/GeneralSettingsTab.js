@@ -19,18 +19,33 @@ import {_t} from "../../../../languageHandler";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
+import classNames from 'classnames';
 
 export default class GeneralSettingsTab extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
+        const user = client.getUser(client.getUserId());
+        let avatarUrl = user.avatarUrl;
+        if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
         this.state = {
-            userId: client.getUserId(),
-            displayName: client.getUser(client.getUserId()).displayName,
+            userId: user.userId,
+            originalDisplayName: user.displayName,
+            displayName: user.displayName,
+            originalAvatarUrl: avatarUrl,
+            avatarUrl: avatarUrl,
+            avatarFile: null,
             enableProfileSave: false,
         };
     }
+
+    _uploadAvatar = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        this.refs.avatarUpload.click();
+    };
 
     _saveProfile = async (e) => {
         e.stopPropagation();
@@ -39,12 +54,26 @@ export default class GeneralSettingsTab extends React.Component {
         if (!this.state.enableProfileSave) return;
         this.setState({enableProfileSave: false});
 
+        const client = MatrixClientPeg.get();
+        const newState = {};
+
         // TODO: What do we do about errors?
-        await MatrixClientPeg.get().setDisplayName(this.state.displayName);
 
-        // TODO: Support avatars
+        if (this.state.originalDisplayName !== this.state.displayName) {
+            await client.setDisplayName(this.state.displayName);
+            newState.originalDisplayName = this.state.displayName;
+        }
 
-        this.setState({enableProfileSave: true});
+        if (this.state.avatarFile) {
+            const uri = await client.uploadContent(this.state.avatarFile);
+            await client.setAvatarUrl(uri);
+            newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+            newState.originalAvatarUrl = newState.avatarUrl;
+            newState.avatarFile = null;
+        }
+
+        newState.enableProfileSave = true;
+        this.setState(newState);
     };
 
     _onDisplayNameChanged = (e) => {
@@ -54,19 +83,66 @@ export default class GeneralSettingsTab extends React.Component {
         });
     };
 
+    _onAvatarChanged = (e) => {
+        if (!e.target.files || !e.target.files.length) {
+            this.setState({
+                avatarUrl: this.state.originalAvatarUrl,
+                avatarFile: null,
+                enableProfileSave: false,
+            });
+            return;
+        }
+
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            this.setState({
+                avatarUrl: ev.target.result,
+                avatarFile: file,
+                enableProfileSave: true,
+            });
+        };
+        reader.readAsDataURL(file);
+    };
+
     _renderProfileSection() {
-        // TODO: Ditch avatar placeholder and use the real thing
+        // TODO: Why is rendering a box with an overlay so complicated? Can the DOM be reduced?
+
+        let showOverlayAnyways = true;
+        let avatarElement = <div className="mx_GeneralSettingsTab_profileAvatarPlaceholder" />;
+        if (this.state.avatarUrl) {
+            showOverlayAnyways = false;
+            avatarElement = <img src={this.state.avatarUrl} className="mx_GeneralSettingsTab_profileAvatarImg"
+                                 alt={_t("Profile picture")}/>
+        }
+
+        const avatarOverlayClasses = classNames({
+            "mx_GeneralSettingsTab_profileAvatarOverlay": true,
+            "mx_GeneralSettingsTab_profileAvatarOverlay_show": showOverlayAnyways,
+        });
+        let avatarHoverElement = (
+            <div className={avatarOverlayClasses} onClick={this._uploadAvatar}>
+                <span className="mx_GeneralSettingsTab_profileAvatarOverlayText">{_t("Upload profile picture")}</span>
+                <div className="mx_GeneralSettingsTab_profileAvatarOverlayImgContainer">
+                    <div className="mx_GeneralSettingsTab_profileAvatarOverlayImg" />
+                </div>
+            </div>
+        );
+
         const form = (
             <form onSubmit={this._saveProfile} autoComplete={false} noValidate={true}>
+                <input type="file" ref="avatarUpload" className="mx_GeneralSettingsTab_profileAvatarUpload"
+                       onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_GeneralSettingsTab_profile">
                     <div className="mx_GeneralSettingsTab_profileControls">
                         <p className="mx_GeneralSettingsTab_profileUsername">{this.state.userId}</p>
                         <Field id="profileDisplayName" label={_t("Display Name")}
-                               type="text" value={this.state.displayName} autocomplete="off"
+                               type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} />
                     </div>
                     <div className="mx_GeneralSettingsTab_profileAvatar">
-                        <div />
+                        {avatarElement}
+                        {avatarHoverElement}
                     </div>
                 </div>
                 <AccessibleButton onClick={this._saveProfile} kind="primary"

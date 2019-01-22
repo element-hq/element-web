@@ -14,12 +14,78 @@
   width: 88px;
   height: 88px;
   margin-left: 13px;
+  position: relative;
+  cursor: pointer;
 }
 
-.mx_GeneralSettingsTab_profileAvatar div {
+.mx_GeneralSettingsTab_profileAvatar > * {
   display: block;
   width: 88px;
   height: 88px;
   border-radius: 4px;
-  background-color: #ccc;
+}
+
+.mx_GeneralSettingsTab_profileAvatar .mx_GeneralSettingsTab_profileAvatarPlaceholder {
+  background-color: $settings-profile-placeholder-bg-color;
+}
+
+.mx_GeneralSettingsTab_profileAvatarOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+}
+
+.mx_GeneralSettingsTab_profileAvatar:hover .mx_GeneralSettingsTab_profileAvatarOverlay {
+  display: inline-block;
+  opacity: 0.5 !important;
+  color: $settings-profile-overlay-fg-color !important;
+  background-color: $settings-profile-overlay-bg-color !important;
+}
+
+.mx_GeneralSettingsTab_profileAvatarOverlay_show {
+  display: inline-block;
+  opacity: 1;
+  color: $settings-profile-overlay-placeholder-fg-color;
+  background-color: $settings-profile-overlay-placeholder-bg-color;
+}
+
+.mx_GeneralSettingsTab_profileAvatarOverlayText {
+  display: block;
+  margin-top: 17px;
+  margin-bottom: 8px;
+}
+
+.mx_GeneralSettingsTab_profileAvatarOverlayImgContainer {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin: auto;
+}
+
+.mx_GeneralSettingsTab_profileAvatarOverlayImg:before {
+  background-color: $settings-profile-overlay-placeholder-fg-color;
+  mask: url("$(res)/img/feather-icons/upload.svg");
+  mask-repeat: no-repeat;
+  mask-size: 14px;
+  mask-position: center;
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.mx_GeneralSettingsTab_profileAvatar:hover .mx_GeneralSettingsTab_profileAvatarOverlayImg:before {
+  background-color: $settings-profile-overlay-fg-color !important;
+}
+
+.mx_GeneralSettingsTab_profileAvatarUpload {
+  display: none;
 }
