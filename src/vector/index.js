@@ -47,7 +47,9 @@ import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
-import Platform from './platform';
+
+import ElectronPlatform from './platform/ElectronPlatform';
+import WebPlatform from './platform/WebPlatform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
@@ -207,6 +209,13 @@ function onTokenLoginCompleted() {
 }
 
 async function loadApp() {
+    if (window.vector_indexeddb_worker_script === undefined) {
+        // If this is missing, something has probably gone wrong with
+        // the bundling. The js-sdk will just fall back to accessing
+        // indexeddb directly with no worker script, but we want to
+        // make sure the indexeddb script is present, so fail hard.
+        throw new Error("Missing indexeddb worker script!");
+    }
     MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
@@ -219,8 +228,23 @@ async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
-    // set the platform for react sdk (our Platform object automatically picks the right one)
-    PlatformPeg.set(new Platform());
+    // set the platform for react sdk
+    if (window.ipcRenderer) {
+        console.log("Using Electron platform");
+        const plaf = new ElectronPlatform();
+        PlatformPeg.set(plaf);
+
+        // Electron only: see if we need to do a one-time data
+        // migration
+        if (window.localStorage.getItem('mx_user_id') === null) {
+            console.log("Migrating session from old origin...");
+            await plaf.migrateFromOldOrigin();
+            console.log("Origin migration complete");
+        }
+    } else {
+        console.log("Using Web platform");
+        PlatformPeg.set(new WebPlatform());
+    }
 
     // Load the config file. First try to load up a domain-specific config of the
     // form "config.$domain.json" and if that fails, fall back to config.json.
