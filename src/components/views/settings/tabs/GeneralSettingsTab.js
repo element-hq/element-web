@@ -20,8 +20,16 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import classNames from 'classnames';
+import GroupUserSettings from "../../groups/GroupUserSettings";
+import PropTypes from "prop-types";
+import {MatrixClient} from "matrix-js-sdk";
+import { DragDropContext } from 'react-beautiful-dnd';
 
 export default class GeneralSettingsTab extends React.Component {
+    static childContextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    };
+
     constructor() {
         super();
 
@@ -37,6 +45,12 @@ export default class GeneralSettingsTab extends React.Component {
             avatarUrl: avatarUrl,
             avatarFile: null,
             enableProfileSave: false,
+        };
+    }
+
+    getChildContext() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
         };
     }
 
@@ -149,14 +163,19 @@ export default class GeneralSettingsTab extends React.Component {
                                   disabled={!this.state.enableProfileSave}>
                     {_t("Save")}
                 </AccessibleButton>
-                <div>FLAIR</div>
             </form>
         );
 
+        // HACK/TODO: Using DragDropContext feels wrong, but we need it.
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 {form}
+
+                <span className="mx_SettingsTab_subheading">{_t("Flair")}</span>
+                <DragDropContext>
+                    <GroupUserSettings />
+                </DragDropContext>
             </div>
         );
     }

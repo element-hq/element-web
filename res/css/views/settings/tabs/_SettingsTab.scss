@@ -10,8 +10,13 @@
   font-family: $font-family-semibold;
   color: $primary-fg-color;
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-.mx_SettingsTab_section {
-  margin-top: 10px;
+.mx_SettingsTab_subsectionText {
+  color: $settings-subsection-fg-color;
+  font-size: 12px;
+  padding-bottom: 12px;
+  margin: 0;
+  display: block;
 }
