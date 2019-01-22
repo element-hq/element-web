@@ -110,7 +110,9 @@ module.exports = React.createClass({
         // abort all the timers for the users that started typing again
         usersThatStartedTyping.forEach((m) => {
             const timer = this.state.delayedStopTypingTimers[m.userId];
-            timer && timer.abort();
+            if (timer) {
+                timer.abort();
+            }
         });
         // prepare new delayedStopTypingTimers object to update state with
         let delayedStopTypingTimers = Object.assign({}, this.state.delayedStopTypingTimers);
