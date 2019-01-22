@@ -22,6 +22,7 @@ import PropTypes from "prop-types";
 import {MatrixClient} from "matrix-js-sdk";
 import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileSettings from "../ProfileSettings";
+import EmailAddresses from "../EmailAddresses";
 const sdk = require('../../../../index');
 const Modal = require("../../../../Modal");
 
@@ -95,12 +96,15 @@ export default class GeneralSettingsTab extends React.Component {
         );
 
         return (
-            <div className="mx_SettingsTab_section">
+            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
                 <p className="mx_SettingsTab_subsectionText">
                     {_t("Set a new account password...")}
                 </p>
                 {passwordChangeForm}
+
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                <EmailAddresses />
             </div>
         );
     }

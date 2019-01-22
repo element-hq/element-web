@@ -38,6 +38,13 @@ export default class Field extends React.PureComponent {
         return this.refs.fieldInput.value;
     }
 
+    set value(newValue) {
+        if (!this.refs.fieldInput) {
+            throw new Error("No field input reference");
+        }
+        this.refs.fieldInput.value = newValue;
+    }
+
     render() {
         const extraProps = Object.assign({}, this.props);
 

@@ -14,24 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralSettingsTab_changePassword {
-  display: block;
+.mx_ExistingEmailAddress {
+  margin-bottom: 5px;
 }
 
-.mx_GeneralSettingsTab_changePassword .mx_Field {
-  display: block;
-  margin-right: 100px; // Align with the other fields on the page
+.mx_ExistingEmailAddress_delete {
+  margin-right: 5px;
+  cursor: pointer;
+  vertical-align: middle;
 }
 
-.mx_GeneralSettingsTab_changePassword .mx_Field input {
-  display: block;
-  width: calc(100% - 20px); // subtract 10px padding on left and right
+.mx_ExistingEmailAddress_email {
+  vertical-align: middle;
 }
 
-.mx_GeneralSettingsTab_changePassword .mx_Field:first-child {
-  margin-top: 0;
+.mx_ExistingEmailAddress_promptText {
+  margin-right: 10px;
 }
 
-.mx_GeneralSettingsTab_accountSection > .mx_EmailAddresses {
-  margin-right: 100px; // Align with the other fields on the page
+.mx_ExistingEmailAddress_confirmBtn {
+  margin-right: 5px;
+}
+
+.mx_EmailAddresses_new .mx_Field input {
+  width: calc(100% - 20px);
 }
