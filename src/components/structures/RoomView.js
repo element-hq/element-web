@@ -1651,14 +1651,11 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                numUnreadMessages={this.state.numUnreadMessages}
-                atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 sentMessageAndIsAlone={this.state.isAlone}
                 hasActiveCall={inCall}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
-                onScrollToBottomClick={this.jumpToLiveTimeline}
                 onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
