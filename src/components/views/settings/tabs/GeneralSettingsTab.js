@@ -76,7 +76,8 @@ export default class GeneralSettingsTab extends React.Component {
             </form>
         );
 
-        return (<div className="mx_SettingsTab_section">
+        return (
+            <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 {form}
             </div>
