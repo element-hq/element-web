@@ -20,7 +20,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 export default (props) => {
     let badge;
     if (props.numUnreadMessages) {
-        badge = <div className="mx_JumpToBottomButton_badge">{props.numUnreadMessages}</div>
+        badge = (<div className="mx_JumpToBottomButton_badge">{props.numUnreadMessages}</div>);
     }
     return (<div className="mx_JumpToBottomButton">
         <AccessibleButton className="mx_JumpToBottomButton_scrollDown"
