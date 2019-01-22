@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,9 +22,9 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
 
 module.exports = React.createClass({
-    displayName: 'VectorLoginFooter',
+    displayName: 'VectorAuthFooter',
     statics: {
-        replaces: 'LoginFooter',
+        replaces: 'AuthFooter',
     },
 
     render: function() {
@@ -32,7 +33,7 @@ module.exports = React.createClass({
         if (SettingsStore.getValue("theme") === 'status') return <div />;
 
         return (
-            <div className="mx_Login_links">
+            <div className="mx_AuthFooter">
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://github.com/vector-im/riot-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;

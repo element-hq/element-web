@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,9 +24,9 @@ const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
 const DEFAULT_LOGO_URI = "themes/riot/img/logos/riot-im-logo-" + i + ".svg";
 
 module.exports = React.createClass({
-    displayName: 'VectorLoginHeader',
+    displayName: 'VectorAuthHeader',
     statics: {
-        replaces: 'LoginHeader',
+        replaces: 'AuthHeader',
     },
     propTypes: {
         icon: PropTypes.string,
@@ -33,8 +34,8 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_Login_header">
-                <div className="mx_Login_logo">
+            <div className="mx_AuthHeader">
+                <div className="mx_AuthHeader_logo">
                     <img src={this.props.icon || DEFAULT_LOGO_URI} alt="Riot" />
                 </div>
             </div>
