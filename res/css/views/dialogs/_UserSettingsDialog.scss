@@ -21,7 +21,6 @@
 }
 
 .mx_UserSettingsDialog_closeIcon:before {
-  // TODO: Use real icon
   mask: url('$(res)/img/feather-icons/cancel.svg');
   background-color: $dialog-close-fg-color;
   mask-repeat: no-repeat;
