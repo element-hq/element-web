@@ -1473,11 +1473,10 @@ module.exports = React.createClass({
 
     onStatusBarHidden: function() {
         // This is currently not desired as it is annoying if it keeps expanding and collapsing
-        // TODO: Find a less annoying way of hiding the status bar
-        /*if (this.unmounted) return;
+        if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
-        });*/
+        });
     },
 
     /**
@@ -1651,14 +1650,11 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                numUnreadMessages={this.state.numUnreadMessages}
-                atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 sentMessageAndIsAlone={this.state.isAlone}
                 hasActiveCall={inCall}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
-                onScrollToBottomClick={this.jumpToLiveTimeline}
                 onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
@@ -1864,6 +1860,14 @@ module.exports = React.createClass({
                                        onCloseClick={this.forgetReadMarker}
                                     />);
         }
+        let jumpToBottom;
+        if (!this.state.atEndOfLiveTimeline) {
+            const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
+            jumpToBottom = (<JumpToBottomButton
+                numUnreadMessages={this.state.numUnreadMessages}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
+            />);
+        }
         const statusBarAreaClass = classNames(
             "mx_RoomView_statusArea",
             {
@@ -1901,6 +1905,7 @@ module.exports = React.createClass({
                         { auxPanel }
                         <div className="mx_RoomView_timeline">
                             { topUnreadMessagesBar }
+                            { jumpToBottom }
                             { messagePanel }
                             { searchResultsPanel }
                         </div>
