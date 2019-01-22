@@ -1,5 +1,6 @@
 /*
 Copyright 2017 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LoginBox {
+.mx_AuthButtons {
     min-height: 24px;
     height: unset !important;
     padding-top: 13px !important;
@@ -22,13 +23,13 @@ limitations under the License.
     order: 4;
 }
 
-.mx_LoginBox_loginButton_wrapper {
+.mx_AuthButtons_loginButton_wrapper {
     text-align: center;
     width: 100%;
 }
 
-.mx_LoginBox_loginButton,
-.mx_LoginBox_registerButton {
+.mx_AuthButtons_loginButton,
+.mx_AuthButtons_registerButton {
     margin-top: 3px;
     height: 40px;
     border: 0px;

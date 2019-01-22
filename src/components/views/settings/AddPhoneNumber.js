@@ -141,7 +141,7 @@ export default withMatrixClient(React.createClass({
             return <div />;
         }
 
-        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         // XXX: This CSS relies on the CSS surrounding it in UserSettings as its in
         // a tabular format to align the submit buttons
         return (

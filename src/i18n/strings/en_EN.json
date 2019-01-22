@@ -1328,7 +1328,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
     "Sign in with single sign-on": "Sign in with single sign-on",
     "Try the app first": "Try the app first",
-    "Sign in to get started": "Sign in to get started",
     "Failed to fetch avatar URL": "Failed to fetch avatar URL",
     "Set a display name:": "Set a display name:",
     "Upload an avatar:": "Upload an avatar:",

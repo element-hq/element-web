@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,11 +24,10 @@ import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import RegistrationForm from '../../views/login/RegistrationForm';
+import RegistrationForm from '../../views/auth/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -397,14 +396,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginHeader = sdk.getComponent('login.LoginHeader');
-        const LoginFooter = sdk.getComponent('login.LoginFooter');
-        const LoginPage = sdk.getComponent('login.LoginPage');
+        const AuthHeader = sdk.getComponent('auth.AuthHeader');
+        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+        const AuthPage = sdk.getComponent('auth.AuthPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
-        const ServerConfig = sdk.getComponent('views.login.ServerConfig');
-
-        const theme = SettingsStore.getValue("theme");
+        const ServerConfig = sdk.getComponent('views.auth.ServerConfig');
 
         let registerBody;
         if (this.state.doingUIAuth) {
@@ -458,47 +455,39 @@ module.exports = React.createClass({
             );
         }
 
-        let header;
         let errorText;
-        // FIXME: remove hardcoded Status team tweaks at some point
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
-        if (theme === 'status' && err) {
-            header = <div className="mx_Login_error">{ err }</div>;
-        } else {
-            header = <h2>{ _t('Create an account') }</h2>;
-            if (err) {
-                errorText = <div className="mx_Login_error">{ err }</div>;
-            }
+        const header = <h2>{ _t('Create an account') }</h2>;
+        if (err) {
+            errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
                 <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
-                    { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
+                    { _t('I already have an account') }
                 </a>
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
-            <LoginPage>
-                <div className="mx_Login_box">
-                    <LoginHeader
-                        icon={this.state.teamSelected ?
-                            this.props.teamServerConfig.teamServerURL + "/static/common/" +
-                            this.state.teamSelected.domain + "/icon.png" :
-                            null}
-                    />
-                    { header }
-                    { registerBody }
-                    { signIn }
-                    { errorText }
-                    <LanguageSelector />
-                    <LoginFooter />
-                </div>
-            </LoginPage>
+            <AuthPage>
+                <AuthHeader
+                    icon={this.state.teamSelected ?
+                        this.props.teamServerConfig.teamServerURL + "/static/common/" +
+                        this.state.teamSelected.domain + "/icon.png" :
+                        null}
+                />
+                { header }
+                { registerBody }
+                { signIn }
+                { errorText }
+                <LanguageSelector />
+                <AuthFooter />
+            </AuthPage>
         );
     },
 });

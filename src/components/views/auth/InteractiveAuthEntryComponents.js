@@ -187,7 +187,7 @@ export const RecaptchaAuthEntry = React.createClass({
             return <Loader />;
         }
 
-        const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
+        const CaptchaForm = sdk.getComponent("views.auth.CaptchaForm");
         const sitePublicKey = this.props.stageParams.public_key;
 
         let errorSection;

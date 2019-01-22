@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import { AutoDiscovery } from "matrix-js-sdk";
 
@@ -487,7 +486,7 @@ module.exports = React.createClass({
     },
 
     _renderPasswordStep: function() {
-        const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+        const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
@@ -516,10 +515,10 @@ module.exports = React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
-        const LoginPage = sdk.getComponent("login.LoginPage");
-        const LoginHeader = sdk.getComponent("login.LoginHeader");
-        const LoginFooter = sdk.getComponent("login.LoginFooter");
-        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const AuthPage = sdk.getComponent("auth.AuthPage");
+        const AuthHeader = sdk.getComponent("auth.AuthHeader");
+        const AuthFooter = sdk.getComponent("auth.AuthFooter");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
@@ -533,7 +532,6 @@ module.exports = React.createClass({
         }
 
         let serverConfig;
-        let header;
 
         if (!SdkConfig.get()['disable_custom_urls']) {
             serverConfig = <ServerConfig ref="serverConfig"
@@ -546,15 +544,7 @@ module.exports = React.createClass({
                 delayTimeMs={1000} />;
         }
 
-        // FIXME: remove status.im theme tweaks
-        const theme = SettingsStore.getValue("theme");
-        if (theme !== "status") {
-            header = <h2>{ _t('Sign in') } { loader }</h2>;
-        } else {
-            if (!errorText) {
-                header = <h2>{ _t('Sign in to get started') } { loader }</h2>;
-            }
-        }
+        const header = <h2>{ _t('Sign in') } { loader }</h2>;
 
         let errorTextSection;
         if (errorText) {
@@ -565,26 +555,24 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
-            <LoginPage>
-                <div className="mx_Login_box">
-                    <LoginHeader />
-                    <div>
-                        { header }
-                        { errorTextSection }
-                        { this.componentForStep(this.state.currentFlow) }
-                        { serverConfig }
-                        <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                            { _t('Create an account') }
-                        </a>
-                        { loginAsGuestJsx }
-                        <LanguageSelector />
-                        <LoginFooter />
-                    </div>
+            <AuthPage>
+                <AuthHeader />
+                <div>
+                    { header }
+                    { errorTextSection }
+                    { this.componentForStep(this.state.currentFlow) }
+                    { serverConfig }
+                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
+                        { _t('Create an account') }
+                    </a>
+                    { loginAsGuestJsx }
+                    <LanguageSelector />
+                    <AuthFooter />
                 </div>
-            </LoginPage>
+            </AuthPage>
         );
     },
 });

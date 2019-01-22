@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
-import { _t } from '../../languageHandler';
-const dis = require('../../dispatcher');
-const AccessibleButton = require('../../components/views/elements/AccessibleButton');
+import { _t } from '../../../languageHandler';
+const dis = require('../../../dispatcher');
+const AccessibleButton = require('../elements/AccessibleButton');
 
 module.exports = React.createClass({
-    displayName: 'LoginBox',
+    displayName: 'AuthButtons',
 
     propTypes: {
     },
@@ -38,18 +38,18 @@ module.exports = React.createClass({
 
     render: function() {
         const loginButton = (
-            <div className="mx_LoginBox_loginButton_wrapper">
-                <AccessibleButton className="mx_LoginBox_loginButton" element="button" onClick={this.onLoginClick}>
+            <div className="mx_AuthButtons_loginButton_wrapper">
+                <AccessibleButton className="mx_AuthButtons_loginButton" element="button" onClick={this.onLoginClick}>
                     { _t("Login") }
                 </AccessibleButton>
-                <AccessibleButton className="mx_LoginBox_registerButton" element="button" onClick={this.onRegisterClick}>
+                <AccessibleButton className="mx_AuthButtons_registerButton" element="button" onClick={this.onRegisterClick}>
                     { _t("Register") }
                 </AccessibleButton>
             </div>
         );
 
         return (
-            <div className="mx_LoginBox">
+            <div className="mx_AuthButtons">
                 { loginButton }
             </div>
         );

@@ -23,7 +23,7 @@ const expect = require('expect');
 const testUtils = require('test-utils');
 
 const sdk = require('matrix-react-sdk');
-const Registration = sdk.getComponent('structures.login.Registration');
+const Registration = sdk.getComponent('structures.auth.Registration');
 
 let rtsClient;
 let client;

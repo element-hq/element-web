@@ -323,7 +323,7 @@ module.exports = React.createClass({
             }
         }
 
-        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
         if (!SdkConfig.get().disable_3pid_login) {
             const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ? _t("Mobile phone number") : _t("Mobile phone number (optional)");

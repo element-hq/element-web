@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +17,17 @@ limitations under the License.
 
 'use strict';
 
-import { _t } from '../../../languageHandler';
-import React from 'react';
+const React = require('react');
 
 module.exports = React.createClass({
-    displayName: 'LoginFooter',
+    displayName: 'AuthHeader',
 
     render: function() {
         return (
-            <div className="mx_Login_links">
-                <a href="https://matrix.org">{ _t("powered by Matrix") }</a>
+            <div className="mx_AuthHeader">
+                <div className="mx_AuthHeader_logo">
+                    Matrix
+                </div>
             </div>
         );
     },

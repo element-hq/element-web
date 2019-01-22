@@ -138,7 +138,7 @@ module.exports = React.createClass({
     },
 
     showHelpPopup: function() {
-        const CustomServerDialog = sdk.getComponent('login.CustomServerDialog');
+        const CustomServerDialog = sdk.getComponent('auth.CustomServerDialog');
         Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
     },
 

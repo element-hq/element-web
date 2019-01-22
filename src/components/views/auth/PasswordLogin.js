@@ -201,7 +201,7 @@ class PasswordLogin extends React.Component {
                     disabled={disabled}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
-                const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+                const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
                 classes.mx_Login_phoneNumberField = true;
                 classes.mx_Login_field_has_prefix = true;
                 classes.error = this.props.loginIncorrect && !this.state.phoneNumber;

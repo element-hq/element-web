@@ -71,6 +71,7 @@ $input-darker-bg-color: rgba(193, 201, 214, 0.29);
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
+$input-focused-border-color: #238cf5;
 $input-valid-border-color: #7ac9a1;
 
 $field-focused-label-bg-color: #ffffff;
@@ -246,8 +247,8 @@ input[type=password] {
 }
 
 .dark-panel {
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         color: $input-darker-fg-color;
         background-color: $input-darker-bg-color;
@@ -256,8 +257,8 @@ input[type=password] {
 }
 
 .light-panel {
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         color: $input-lighter-fg-color;
         background-color: $input-lighter-bg-color;
@@ -294,6 +295,13 @@ input[type=search]::-webkit-search-results-decoration {
 .input[type=search]::-moz-placeholder {
     color: #a5aab2;
 }
+
+// Override Firefox's UA style so we get a consistent look across browsers
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

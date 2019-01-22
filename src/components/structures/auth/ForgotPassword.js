@@ -183,10 +183,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const LoginPage = sdk.getComponent("login.LoginPage");
-        const LoginHeader = sdk.getComponent("login.LoginHeader");
-        const LoginFooter = sdk.getComponent("login.LoginFooter");
-        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const AuthPage = sdk.getComponent("auth.AuthPage");
+        const AuthHeader = sdk.getComponent("auth.AuthHeader");
+        const AuthFooter = sdk.getComponent("auth.AuthFooter");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const Spinner = sdk.getComponent("elements.Spinner");
 
         let resetPasswordJsx;
@@ -234,7 +234,7 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
-            const LanguageSelector = sdk.getComponent('structures.login.LanguageSelector');
+            const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
             resetPasswordJsx = (
             <div>
@@ -272,7 +272,7 @@ module.exports = React.createClass({
                         { _t('Create an account') }
                     </a>
                     <LanguageSelector />
-                    <LoginFooter />
+                    <AuthFooter />
                 </div>
             </div>
             );
@@ -280,12 +280,10 @@ module.exports = React.createClass({
 
 
         return (
-            <LoginPage>
-                <div className="mx_Login_box">
-                    <LoginHeader />
-                    { resetPasswordJsx }
-                </div>
-            </LoginPage>
+            <AuthPage>
+                <AuthHeader />
+                { resetPasswordJsx }
+            </AuthPage>
         );
     },
 });
