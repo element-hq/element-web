@@ -66,15 +66,16 @@ limitations under the License.
 .mx_RoomSettings_integrationsButton_errorPopup {
     position: absolute;
     top: 110%;
-    left: -125%;
-    width: 348%;
-    padding: 2%;
+    left: -275%;
+    width: 550%;
+    padding: 30%;
     font-size: 10pt;
     line-height: 1.5em;
     border-radius: 5px;
     background-color: $accent-color;
     color: $accent-fg-color;
     text-align: center;
+    z-index: 1000;
 }
 .mx_RoomSettings_unbanButton {
     display: inline;
