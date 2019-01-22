@@ -47,37 +47,37 @@ export default class UserSettingsDialog extends React.Component {
         return [
             new Tab(
                 _td("General"),
-                <span className="mx_UserSettingsDialog_settingsIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_settingsIcon",
                 <GeneralSettingsTab />,
             ),
             new Tab(
                 _td("Notifications"),
-                <span className="mx_UserSettingsDialog_bellIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_bellIcon",
                 <div>Notifications Test</div>,
             ),
             new Tab(
                 _td("Preferences"),
-                <span className="mx_UserSettingsDialog_preferencesIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_preferencesIcon",
                 <div>Preferences Test</div>,
             ),
             new Tab(
                 _td("Voice & Video"),
-                <span className="mx_UserSettingsDialog_voiceIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_voiceIcon",
                 <div>Voice Test</div>,
             ),
             new Tab(
                 _td("Security & Privacy"),
-                <span className="mx_UserSettingsDialog_securityIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_securityIcon",
                 <div>Security Test</div>,
             ),
             new Tab(
                 _td("Help & About"),
-                <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_helpIcon",
                 <div>Help Test</div>,
             ),
             new Tab(
                 _td("Visit old settings"),
-                <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />,
+                "mx_UserSettingsDialog_helpIcon",
                 <TempTab onClose={this.props.onFinished} />,
             ),
         ];

@@ -39,25 +39,25 @@
 // ==========================================================
 
 .mx_UserSettingsDialog_settingsIcon:before {
-  mask: url('$(res)/img/feather-icons/settings.svg');
+  mask-image: url('$(res)/img/feather-icons/settings.svg');
 }
 
 .mx_UserSettingsDialog_voiceIcon:before {
-  mask: url('$(res)/img/feather-icons/phone.svg');
+  mask-image: url('$(res)/img/feather-icons/phone.svg');
 }
 
 .mx_UserSettingsDialog_bellIcon:before {
-  mask: url('$(res)/img/feather-icons/notifications.svg');
+  mask-image: url('$(res)/img/feather-icons/notifications.svg');
 }
 
 .mx_UserSettingsDialog_preferencesIcon:before {
-  mask: url('$(res)/img/feather-icons/sliders.svg');
+  mask-image: url('$(res)/img/feather-icons/sliders.svg');
 }
 
 .mx_UserSettingsDialog_securityIcon:before {
-  mask: url('$(res)/img/feather-icons/lock.svg');
+  mask-image: url('$(res)/img/feather-icons/lock.svg');
 }
 
 .mx_UserSettingsDialog_helpIcon:before {
-  mask: url('$(res)/img/feather-icons/help-circle.svg');
+  mask-image: url('$(res)/img/feather-icons/help-circle.svg');
 }
