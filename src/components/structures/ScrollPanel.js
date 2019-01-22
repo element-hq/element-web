@@ -223,6 +223,8 @@ module.exports = React.createClass({
 
     onResize: function() {
         this.props.onResize();
+        // clear min-height as the height might have changed
+        this.clearBlockShrinking();
         this.checkScroll();
         if (this._gemScroll) this._gemScroll.forceUpdate();
     },
@@ -372,6 +374,8 @@ module.exports = React.createClass({
             }
             this._unfillDebouncer = setTimeout(() => {
                 this._unfillDebouncer = null;
+                // if timeline shrinks, min-height should be cleared
+                this.clearBlockShrinking();
                 this.props.onUnfillRequest(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
@@ -676,6 +680,29 @@ module.exports = React.createClass({
 
     _collectGeminiScroll: function(gemScroll) {
         this._gemScroll = gemScroll;
+    },
+
+    /**
+     * Set the current height as the min height for the message list
+     * so the timeline cannot shrink. This is used to avoid
+     * jumping when the typing indicator gets replaced by a smaller message.
+     */
+    blockShrinking: function() {
+        const messageList = this.refs.itemlist;
+        if (messageList) {
+            const currentHeight = messageList.clientHeight;
+            messageList.style.minHeight = `${currentHeight}px`;
+        }
+    },
+
+    /**
+     * Clear the previously set min height
+     */
+    clearBlockShrinking: function() {
+        const messageList = this.refs.itemlist;
+        if (messageList) {
+            messageList.style.minHeight = null;
+        }
     },
 
     render: function() {
