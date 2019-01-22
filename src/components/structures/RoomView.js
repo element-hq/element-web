@@ -1861,6 +1861,14 @@ module.exports = React.createClass({
                                        onCloseClick={this.forgetReadMarker}
                                     />);
         }
+        let jumpToBottom;
+        if (!this.state.atEndOfLiveTimeline) {
+            const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
+            jumpToBottom = (<JumpToBottomButton
+                numUnreadMessages={this.state.numUnreadMessages}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
+            />);
+        }
         const statusBarAreaClass = classNames(
             "mx_RoomView_statusArea",
             {
@@ -1898,6 +1906,7 @@ module.exports = React.createClass({
                         { auxPanel }
                         <div className="mx_RoomView_timeline">
                             { topUnreadMessagesBar }
+                            { jumpToBottom }
                             { messagePanel }
                             { searchResultsPanel }
                         </div>
