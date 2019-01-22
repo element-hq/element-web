@@ -21,7 +21,6 @@ import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 
 export default class GeneralSettingsTab extends React.Component {
-
     constructor() {
         super();
 
@@ -56,6 +55,7 @@ export default class GeneralSettingsTab extends React.Component {
     };
 
     _renderProfileSection() {
+        // TODO: Ditch avatar placeholder and use the real thing
         const form = (
             <form onSubmit={this._saveProfile} autoComplete={false} noValidate={true}>
                 <div className="mx_GeneralSettingsTab_profile">
@@ -63,24 +63,20 @@ export default class GeneralSettingsTab extends React.Component {
                         <p className="mx_GeneralSettingsTab_profileUsername">{this.state.userId}</p>
                         <Field id="profileDisplayName" label={_t("Display Name")}
                                type="text" value={this.state.displayName} autocomplete="off"
-                               onChange={this._onDisplayNameChanged}
-                        />
+                               onChange={this._onDisplayNameChanged} />
                     </div>
                     <div className="mx_GeneralSettingsTab_profileAvatar">
-                        {/*TODO: Ditch avatar placeholder and use the real thing*/}
-                        <div/>
+                        <div />
                     </div>
                 </div>
                 <AccessibleButton onClick={this._saveProfile} kind="primary"
-                                  disabled={!this.state.enableProfileSave}
-                >
+                                  disabled={!this.state.enableProfileSave}>
                     {_t("Save")}
                 </AccessibleButton>
             </form>
         );
 
-        return (
-            <div className="mx_SettingsTab_section">
+        return (<div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 {form}
             </div>

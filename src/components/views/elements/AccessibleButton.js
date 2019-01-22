@@ -39,7 +39,7 @@ export default function AccessibleButton(props) {
         // And divs which we report as role button to assistive technologies.
         // Browsers handle space and enter keypresses differently and we are only adjusting to the
         // inconsistencies here
-        restProps.onKeyDown = function (e) {
+        restProps.onKeyDown = function(e) {
             if (e.keyCode === KeyCode.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -50,7 +50,7 @@ export default function AccessibleButton(props) {
                 e.preventDefault();
             }
         };
-        restProps.onKeyUp = function (e) {
+        restProps.onKeyUp = function(e) {
             if (e.keyCode === KeyCode.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();

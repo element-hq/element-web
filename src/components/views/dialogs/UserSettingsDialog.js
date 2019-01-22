@@ -22,8 +22,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
 import dis from '../../../dispatcher';
 
+// TODO: Ditch this whole component
 export class TempTab extends React.Component {
-    // TODO: Ditch this
     static propTypes = {
         onClose: PropTypes.func.isRequired,
     };
@@ -45,13 +45,41 @@ export default class UserSettingsDialog extends React.Component {
 
     _getTabs() {
         return [
-            new Tab(_td("General"), <span className="mx_UserSettingsDialog_settingsIcon mx_TabbedView_maskedIcon" />, <GeneralSettingsTab />),
-            new Tab(_td("Notifications"), <span className="mx_UserSettingsDialog_bellIcon mx_TabbedView_maskedIcon" />, <div>Notifications Test</div>),
-            new Tab(_td("Preferences"), <span className="mx_UserSettingsDialog_preferencesIcon mx_TabbedView_maskedIcon" />, <div>Preferences Test</div>),
-            new Tab(_td("Voice & Video"), <span className="mx_UserSettingsDialog_voiceIcon mx_TabbedView_maskedIcon" />, <div>Voice Test</div>),
-            new Tab(_td("Security & Privacy"), <span className="mx_UserSettingsDialog_securityIcon mx_TabbedView_maskedIcon" />, <div>Security Test</div>),
-            new Tab(_td("Help & About"), <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />, <div>Help Test</div>),
-            new Tab(_td("Visit old settings"), <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />, <TempTab onClose={this.props.onFinished}/>),
+            new Tab(
+                _td("General"),
+                <span className="mx_UserSettingsDialog_settingsIcon mx_TabbedView_maskedIcon" />,
+                <GeneralSettingsTab />,
+            ),
+            new Tab(
+                _td("Notifications"),
+                <span className="mx_UserSettingsDialog_bellIcon mx_TabbedView_maskedIcon" />,
+                <div>Notifications Test</div>,
+            ),
+            new Tab(
+                _td("Preferences"),
+                <span className="mx_UserSettingsDialog_preferencesIcon mx_TabbedView_maskedIcon" />,
+                <div>Preferences Test</div>,
+            ),
+            new Tab(
+                _td("Voice & Video"),
+                <span className="mx_UserSettingsDialog_voiceIcon mx_TabbedView_maskedIcon" />,
+                <div>Voice Test</div>,
+            ),
+            new Tab(
+                _td("Security & Privacy"),
+                <span className="mx_UserSettingsDialog_securityIcon mx_TabbedView_maskedIcon" />,
+                <div>Security Test</div>,
+            ),
+            new Tab(
+                _td("Help & About"),
+                <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />,
+                <div>Help Test</div>,
+            ),
+            new Tab(
+                _td("Visit old settings"),
+                <span className="mx_UserSettingsDialog_helpIcon mx_TabbedView_maskedIcon" />,
+                <TempTab onClose={this.props.onFinished} />,
+            ),
         ];
     }
 
@@ -66,12 +94,6 @@ export default class UserSettingsDialog extends React.Component {
                 </div>
                 <TabbedView tabs={this._getTabs()} />
             </div>
-            // <UserSettings
-            //     onClose={this.props.onFinished}
-            //     brand={SdkConfig.get().brand}
-            //     referralBaseUrl={SdkConfig.get().referralBaseUrl}
-            //     teamToken={SdkConfig.get().teamToken}
-            // />
         );
     }
 }

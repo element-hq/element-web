@@ -610,12 +610,13 @@ export default React.createClass({
             case 'view_indexed_room':
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings':
+            case 'view_user_settings': {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {});
                 //this._setPage(PageTypes.UserSettings);
                 //this.notifyNewScreen('settings');
                 break;
+            }
             case 'view_old_user_settings':
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');

@@ -42,9 +42,8 @@ module.exports = {
 
         // bind or arrow function in props causes performance issues
         // (but we currently use them in some places)
-        "react/jsx-no-bind": ["warn", {
-            "ignoreRefs": true,
-        }],
+        // It's disabled here, but we should using it sparingly.
+        "react/jsx-no-bind": "off",
         "react/jsx-key": ["error"],
 
         // Components in JSX should always be defined.

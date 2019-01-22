@@ -81,9 +81,11 @@ export class TabbedView extends React.Component {
             tabIcon = <span className="mx_TabbedView_tabLabel_icon">{tab.icon}</span>;
         }
 
+        const onClickHandler = () => this._setActiveTab(tab);
+
         return (
-            <span className={classes} key={"tab_label_ " + tab.label}
-                  onClick={() => this._setActiveTab(tab)}>
+            <span className={classes} key={"tab_label_" + tab.label}
+                  onClick={onClickHandler}>
                 {tabIcon}
                 <span className="mx_TabbedView_tabLabel_text">
                     {_t(tab.label)}
