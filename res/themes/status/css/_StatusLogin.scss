@@ -88,7 +88,7 @@ limitations under the License.
 
     // overrides of .mx_Login
 
-    .mx_Login_box {
+    .mx_AuthPage_modal {
         width: 330px;
         min-height: initial;
         padding-top: 40px;
@@ -124,7 +124,7 @@ limitations under the License.
         padding: 19px;
     }
 
-    .mx_Login_box h2 {
+    .mx_AuthPage_modal h2 {
         text-align: center;
         color: $form-fg-color;
         font-size: 25px;
