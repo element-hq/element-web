@@ -78,7 +78,7 @@ module.exports = React.createClass({
     },
 
     isVisible: function() {
-        return this.state.usersTyping.length !== 0 || Object.keys(this.state.delayedStopTypingTimers) !== 0;
+        return this.state.usersTyping.length !== 0 || Object.keys(this.state.delayedStopTypingTimers).length !== 0;
     },
 
     onRoomTimeline: function(event, room) {
