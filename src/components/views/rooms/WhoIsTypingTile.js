@@ -128,7 +128,7 @@ module.exports = React.createClass({
                 delayedStopTypingTimers[m.userId] = timer;
                 timer.start();
                 timer.finished().then(
-                    () => this._removeUserTimer(m.userId),  //on elapsed
+                    () => this._removeUserTimer(m.userId), // on elapsed
                     () => {/* aborted */},
                 );
             }
