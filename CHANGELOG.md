@@ -1,3 +1,29 @@
+Changes in [0.17.9](https://github.com/vector-im/riot-web/releases/tag/v0.17.9) (2019-01-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.9-rc.1...v0.17.9)
+
+ * Bugfix in react-sdk for setting DM rooms
+
+Changes in [0.17.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.9-rc.1) (2019-01-17)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.8...v0.17.9-rc.1)
+
+ * Merge develop into experimental
+   [\#8003](https://github.com/vector-im/riot-web/pull/8003)
+ * Electron: Load app from custom protocol
+   [\#7943](https://github.com/vector-im/riot-web/pull/7943)
+ * Fix the IndexedDB worker
+   [\#7920](https://github.com/vector-im/riot-web/pull/7920)
+ * Make clear that the Debian package is for desktop
+   [\#7919](https://github.com/vector-im/riot-web/pull/7919)
+ * Run the Desktop app in a sandbox
+   [\#7907](https://github.com/vector-im/riot-web/pull/7907)
+ * Update to new electron single instance API
+   [\#7908](https://github.com/vector-im/riot-web/pull/7908)
+ * Update the tests to match https://github.com/matrix-org/matrix-react-
+   sdk/pull/2340
+   [\#7834](https://github.com/vector-im/riot-web/pull/7834)
+
 Changes in [0.17.8](https://github.com/vector-im/riot-web/releases/tag/v0.17.8) (2018-12-10)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.8-rc.1...v0.17.8)

@@ -47,4 +47,4 @@ git commit package.json -m "$tag"
 
 cd ..
 
-exec ./node_modules/matrix-js-sdk/release.sh -z "$orig_args"
+exec ./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
