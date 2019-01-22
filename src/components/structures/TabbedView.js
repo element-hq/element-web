@@ -39,7 +39,7 @@ export class Tab {
 export class TabbedView extends React.Component {
     static propTypes = {
         // The tabs to show
-        tabs: PropTypes.arrayOf(Tab).isRequired,
+        tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,
     };
 
     constructor() {
@@ -74,6 +74,7 @@ export class TabbedView extends React.Component {
 
         const idx = this.props.tabs.indexOf(tab);
         if (idx === this._getActiveTabIndex()) classes += "mx_TabbedView_tabLabel_active";
+        if (tab.label === "Visit old settings") classes += "mx_TabbedView_tabLabel_TEMP_HACK";
 
         let tabIcon = null;
         if (tab.icon) {

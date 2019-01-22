@@ -45,6 +45,11 @@ limitations under the License.
   color: $tab-label-active-fg-color;
 }
 
+// TODO: Remove temporary hack alongside "visit old settings" tab
+.mx_TabbedView_tabLabel_TEMP_HACK {
+  background-color: orange;
+}
+
 .mx_TabbedView_tabLabel_icon {
   width: 14px;
   height: 14px;
@@ -89,4 +94,5 @@ limitations under the License.
 
 .mx_TabbedView_tabPanelContent {
   flex-grow: 1;
+  min-width: 560px;
 }
