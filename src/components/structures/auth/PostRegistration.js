@@ -64,17 +64,15 @@ module.exports = React.createClass({
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         return (
             <AuthPage>
-                <div className="mx_Login_box">
-                    <AuthHeader />
-                    <div className="mx_Login_profile">
-                        { _t('Set a display name:') }
-                        <ChangeDisplayName />
-                        { _t('Upload an avatar:') }
-                        <ChangeAvatar
-                            initialAvatarUrl={this.state.avatarUrl} />
-                        <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
-                        { this.state.errorString }
-                    </div>
+                <AuthHeader />
+                <div className="mx_Login_profile">
+                    { _t('Set a display name:') }
+                    <ChangeDisplayName />
+                    { _t('Upload an avatar:') }
+                    <ChangeAvatar
+                        initialAvatarUrl={this.state.avatarUrl} />
+                    <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
+                    { this.state.errorString }
                 </div>
             </AuthPage>
         );

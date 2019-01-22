@@ -281,10 +281,8 @@ module.exports = React.createClass({
 
         return (
             <AuthPage>
-                <div className="mx_Login_box">
-                    <AuthHeader />
-                    { resetPasswordJsx }
-                </div>
+                <AuthHeader />
+                { resetPasswordJsx }
             </AuthPage>
         );
     },

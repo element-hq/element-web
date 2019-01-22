@@ -559,20 +559,18 @@ module.exports = React.createClass({
 
         return (
             <AuthPage>
-                <div className="mx_Login_box">
-                    <AuthHeader />
-                    <div>
-                        { header }
-                        { errorTextSection }
-                        { this.componentForStep(this.state.currentFlow) }
-                        { serverConfig }
-                        <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                            { _t('Create an account') }
-                        </a>
-                        { loginAsGuestJsx }
-                        <LanguageSelector />
-                        <AuthFooter />
-                    </div>
+                <AuthHeader />
+                <div>
+                    { header }
+                    { errorTextSection }
+                    { this.componentForStep(this.state.currentFlow) }
+                    { serverConfig }
+                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
+                        { _t('Create an account') }
+                    </a>
+                    { loginAsGuestJsx }
+                    <LanguageSelector />
+                    <AuthFooter />
                 </div>
             </AuthPage>
         );

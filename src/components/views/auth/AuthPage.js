@@ -25,7 +25,9 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_AuthPage">
-                { this.props.children }
+                <div className="mx_AuthPage_modal">
+                    { this.props.children }
+                </div>
             </div>
         );
     },

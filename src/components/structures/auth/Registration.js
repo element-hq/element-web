@@ -475,20 +475,18 @@ module.exports = React.createClass({
 
         return (
             <AuthPage>
-                <div className="mx_Login_box">
-                    <AuthHeader
-                        icon={this.state.teamSelected ?
-                            this.props.teamServerConfig.teamServerURL + "/static/common/" +
-                            this.state.teamSelected.domain + "/icon.png" :
-                            null}
-                    />
-                    { header }
-                    { registerBody }
-                    { signIn }
-                    { errorText }
-                    <LanguageSelector />
-                    <AuthFooter />
-                </div>
+                <AuthHeader
+                    icon={this.state.teamSelected ?
+                        this.props.teamServerConfig.teamServerURL + "/static/common/" +
+                        this.state.teamSelected.domain + "/icon.png" :
+                        null}
+                />
+                { header }
+                { registerBody }
+                { signIn }
+                { errorText }
+                <LanguageSelector />
+                <AuthFooter />
             </AuthPage>
         );
     },
