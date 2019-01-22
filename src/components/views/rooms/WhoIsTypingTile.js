@@ -82,7 +82,7 @@ module.exports = React.createClass({
     },
 
     onRoomTimeline: function(event, room) {
-        if (room.roomId === this.props.room.roomId) {
+        if (room && room.roomId === this.props.room.roomId) {
             const userId = event.getSender();
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
