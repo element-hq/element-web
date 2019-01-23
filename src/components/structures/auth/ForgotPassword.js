@@ -34,7 +34,6 @@ module.exports = React.createClass({
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         onLoginClick: PropTypes.func,
-        onRegisterClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
 
         // The default server name to use when the user hasn't specified
@@ -168,12 +167,6 @@ module.exports = React.createClass({
         this.props.onLoginClick();
     },
 
-    onRegisterClick: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.props.onRegisterClick();
-    },
-
     showErrorDialog: function(body, title) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
@@ -265,9 +258,6 @@ module.exports = React.createClass({
                     { errorText }
                     <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
                         { _t('Return to login screen') }
-                    </a>
-                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                        { _t('Create an account') }
                     </a>
                 </div>
             </div>
