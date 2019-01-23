@@ -544,8 +544,6 @@ module.exports = React.createClass({
                 delayTimeMs={1000} />;
         }
 
-        const header = <h2>{ _t('Sign in') } { loader }</h2>;
-
         let errorTextSection;
         if (errorText) {
             errorTextSection = (
@@ -559,7 +557,10 @@ module.exports = React.createClass({
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    { header }
+                    <h2>
+                        {_t('Sign in to your account')}
+                        {loader}
+                    </h2>
                     { errorTextSection }
                     { this.componentForStep(this.state.currentFlow) }
                     { serverConfig }
