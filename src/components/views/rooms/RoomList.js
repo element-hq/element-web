@@ -593,7 +593,7 @@ module.exports = React.createClass({
 
         subListsProps = subListsProps.filter((props => {
             const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
-            return len !== 0 || (props.onAddRoom && !this.props.searchFilter);
+            return len !== 0 || props.onAddRoom;
         }));
 
         return subListsProps.reduce((components, props, i) => {
