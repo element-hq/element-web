@@ -29,6 +29,8 @@ import * as languageHandler from "../../../../languageHandler";
 import {SettingLevel} from "../../../../settings/SettingsStore";
 import SettingsStore from "../../../../settings/SettingsStore";
 import LanguageDropdown from "../../elements/LanguageDropdown";
+import AccessibleButton from "../../elements/AccessibleButton";
+import DeactivateAccountDialog from "../../dialogs/DeactivateAccountDialog";
 const PlatformPeg = require("../../../../PlatformPeg");
 const sdk = require('../../../../index');
 const Modal = require("../../../../Modal");
@@ -96,6 +98,10 @@ export default class GeneralSettingsTab extends React.Component {
                 "push notifications on other devices until you log back in to them",
             ) + ".",
         });
+    };
+
+    _onDeactivateClicked = () => {
+        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {});
     };
 
     _renderProfileSection() {
@@ -171,10 +177,16 @@ export default class GeneralSettingsTab extends React.Component {
     }
 
     _renderManagementSection() {
+        // TODO: Improve warning text for account deactivation
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Account management")}</span>
-                <p>MANAGEMENT SECTION</p>
+                <span className="mx_SettingsTab_subsectionText">
+                    {_t("Deactivating your account is a permanent action - be careful!")}
+                </span>
+                <AccessibleButton onClick={this._onDeactivateClicked} kind="danger">
+                    {_t("Close Account")}
+                </AccessibleButton>
             </div>
         );
     }
