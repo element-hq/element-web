@@ -34,9 +34,9 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_AuthFooter">
-                <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://github.com/vector-im/riot-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                <a href="https://medium.com/@RiotChat">blog</a>
+                <a href="https://twitter.com/@RiotChat">twitter</a>
+                <a href="https://github.com/vector-im/riot-web">github</a>
                 <a href="https://matrix.org">{ _t('powered by Matrix') }</a>
             </div>
         );
