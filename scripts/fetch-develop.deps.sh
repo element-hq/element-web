@@ -27,7 +27,9 @@ function clone() {
         echo "Trying to use $org/$repo#$branch"
         git clone https://github.com/$org/$repo.git $repo --branch $branch \
             "${GIT_CLONE_ARGS[@]}"
+        return $?
     fi
+    return 1
 }
 
 function dodep() {
