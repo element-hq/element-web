@@ -234,8 +234,6 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
-            const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
             resetPasswordJsx = (
             <div>
                 <div className="mx_Login_prompt">
@@ -271,7 +269,6 @@ module.exports = React.createClass({
                     <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
                         { _t('Create an account') }
                     </a>
-                    <LanguageSelector />
                 </div>
             </div>
             );
