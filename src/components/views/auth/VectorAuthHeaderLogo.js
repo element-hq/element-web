@@ -24,9 +24,9 @@ const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
 const DEFAULT_LOGO_URI = "themes/riot/img/logos/riot-im-logo-" + i + ".svg";
 
 module.exports = React.createClass({
-    displayName: 'VectorAuthHeader',
+    displayName: 'VectorAuthHeaderLogo',
     statics: {
-        replaces: 'AuthHeader',
+        replaces: 'AuthHeaderLogo',
     },
     propTypes: {
         icon: PropTypes.string,
@@ -34,10 +34,8 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_AuthHeader">
-                <div className="mx_AuthHeader_logo">
-                    <img src={this.props.icon || DEFAULT_LOGO_URI} alt="Riot" />
-                </div>
+            <div className="mx_AuthHeaderLogo">
+                <img src={this.props.icon || DEFAULT_LOGO_URI} alt="Riot" />
             </div>
         );
     },
