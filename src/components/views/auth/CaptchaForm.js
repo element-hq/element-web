@@ -62,7 +62,7 @@ module.exports = React.createClass({
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
             const protocol = global.location.protocol;
-            if (protocol === "file:") {
+            if (protocol === "vector:") {
                 const warning = document.createElement('div');
                 // XXX: fix hardcoded app URL.  Better solutions include:
                 // * jumping straight to a hosted captcha page (but we don't support that yet)
