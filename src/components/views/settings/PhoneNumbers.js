@@ -207,7 +207,8 @@ export default class PhoneNumbers extends React.Component {
             addVerifySection = (
               <div>
                   <div>
-                      {_t("A text message has been sent to +%(msisdn)s. Please enter the verification code it contains", {msisdn: msisdn})}
+                      {_t("A text message has been sent to +%(msisdn)s. " +
+                          "Please enter the verification code it contains", {msisdn: msisdn})}
                       <br />
                       {this.state.verifyError}
                   </div>

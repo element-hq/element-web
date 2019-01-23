@@ -61,6 +61,6 @@ export default class ToggleSwitch extends React.Component {
             <div className={classes} onClick={this._onClick}>
                 <div className="mx_ToggleSwitch_ball" />
             </div>
-        )
+        );
     }
 }

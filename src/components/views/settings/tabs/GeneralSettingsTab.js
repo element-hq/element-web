@@ -153,7 +153,7 @@ export default class GeneralSettingsTab extends React.Component {
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
                 <LanguageDropdown className="mx_GeneralSettingsTab_languageInput"
-                                  onOptionChange={this._onLanguageChange} value={this.state.language}/>
+                                  onOptionChange={this._onLanguageChange} value={this.state.language} />
             </div>
         );
     }
