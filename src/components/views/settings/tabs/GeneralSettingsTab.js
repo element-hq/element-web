@@ -24,8 +24,15 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileSettings from "../ProfileSettings";
 import EmailAddresses from "../EmailAddresses";
 import PhoneNumbers from "../PhoneNumbers";
+import Field from "../../elements/Field";
+import * as languageHandler from "../../../../languageHandler";
+import {SettingLevel} from "../../../../settings/SettingsStore";
+import SettingsStore from "../../../../settings/SettingsStore";
+import LanguageDropdown from "../../elements/LanguageDropdown";
+const PlatformPeg = require("../../../../PlatformPeg");
 const sdk = require('../../../../index');
 const Modal = require("../../../../Modal");
+const dis = require("../../../../dispatcher");
 
 export default class GeneralSettingsTab extends React.Component {
     static childContextTypes = {
@@ -34,6 +41,11 @@ export default class GeneralSettingsTab extends React.Component {
 
     constructor() {
         super();
+
+        this.state = {
+            language: languageHandler.getCurrentLanguage(),
+            theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+        };
     }
 
     getChildContext() {
@@ -41,6 +53,22 @@ export default class GeneralSettingsTab extends React.Component {
             matrixClient: MatrixClientPeg.get(),
         };
     }
+
+    _onLanguageChange = (newLanguage) => {
+        if (this.state.language === newLanguage) return;
+
+        SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
+        this.setState({language: newLanguage});
+        PlatformPeg.get().reload();
+    };
+
+    _onThemeChange = (e) => {
+        const newTheme = e.target.value;
+        if (this.state.theme === newTheme) return;
+
+        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        dis.dispatch({action: 'set_theme', value: newTheme});
+    };
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
@@ -114,19 +142,28 @@ export default class GeneralSettingsTab extends React.Component {
     }
 
     _renderLanguageSection() {
+        // TODO: Convert to new-styled Field
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
-                <p>LANGUAGE SECTION</p>
+                <LanguageDropdown className="mx_GeneralSettingsTab_languageInput"
+                                  onOptionChange={this._onLanguageChange} value={this.state.language}/>
             </div>
         );
     }
 
     _renderThemeSection() {
+        // TODO: Re-enable theme selection once the themes actually work
         return (
-            <div className="mx_SettingsTab_section">
+            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
-                <p>THEME SECTION</p>
+                <Field id="theme" label={_t("Theme")} element="select" disabled={true}
+                       value={this.state.theme} onChange={this._onThemeChange}>
+                    <option value="light">{_t("Light theme")}</option>
+                    <option value="dark">{_t("Dark theme")}</option>
+                    <option value="dharma">{_t("2018 theme")}</option>
+                    <option value="status">{_t("Status.im theme")}</option>
+                </Field>
             </div>
         );
     }
