@@ -44,7 +44,10 @@ limitations under the License.
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {
-  vertical-align: middle;
+  vertical-align: bottom;
+  display: inline-block;
+  font-size: 12px;
+  color: $settings-label-fg-color;
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
