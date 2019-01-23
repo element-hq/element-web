@@ -45,14 +45,6 @@ module.exports = React.createClass({
     propTypes: {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-
-        // the number of messages which have arrived since we've been scrolled up
-        numUnreadMessages: PropTypes.number,
-
-        // this is true if we are fully scrolled-down, and are looking at
-        // the end of the live timeline.
-        atEndOfLiveTimeline: PropTypes.bool,
-
         // This is true when the user is alone in the room, but has also sent a message.
         // Used to suggest to the user to invite someone
         sentMessageAndIsAlone: PropTypes.bool,
@@ -81,9 +73,6 @@ module.exports = React.createClass({
         // callback for when the user clicks on the 'stop warning me' button in the
         // 'you are alone' bar
         onStopWarningClick: PropTypes.func,
-
-        // callback for when the user clicks on the 'scroll to bottom' button
-        onScrollToBottomClick: PropTypes.func,
 
         // callback for when we do something that changes the size of the
         // status bar. This is used to trigger a re-layout in the parent
@@ -180,8 +169,6 @@ module.exports = React.createClass({
     // indicate other sizes.
     _getSize: function() {
         if (this._shouldShowConnectionError() ||
-            this.props.numUnreadMessages ||
-            !this.props.atEndOfLiveTimeline ||
             this.props.hasActiveCall ||
             this.props.sentMessageAndIsAlone
         ) {
@@ -194,32 +181,10 @@ module.exports = React.createClass({
 
     // return suitable content for the image on the left of the status bar.
     _getIndicator: function() {
-        if (this.props.numUnreadMessages) {
-            return (
-                <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/newmessages.svg" width="24" height="24"
-                        alt="" />
-                </div>
-            );
-        }
-
-            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        if (!this.props.atEndOfLiveTimeline) {
-            return (
-                <AccessibleButton className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/scrolldown.svg" width="24" height="24"
-                        alt={_t("Scroll to bottom of page")}
-                        title={_t("Scroll to bottom of page")} />
-                </AccessibleButton>
-            );
-        }
-
         if (this.props.hasActiveCall) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src="img/sound-indicator.svg" width="23" height="20" />
+                <TintableSvg src={require("../../../res/img/sound-indicator.svg")} width="23" height="20" />
             );
         }
 
@@ -231,9 +196,7 @@ module.exports = React.createClass({
     },
 
     _shouldShowConnectionError: function() {
-        // no conn bar trumps unread count since you can't get unread messages
-        // without a connection! (technically may already have some but meh)
-        // It also trumps the "some not sent" msg since you can't resend without
+        // no conn bar trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
         // if it's a resource limit exceeded error: those are shown in the top bar.
@@ -327,7 +290,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/warning.svg")} width="24" height="23" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -346,7 +309,7 @@ module.exports = React.createClass({
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/warning.svg")} width="24" height="23" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }
@@ -361,20 +324,6 @@ module.exports = React.createClass({
 
         if (this.state.unsentMessages.length > 0) {
             return this._getUnsentMessageContent();
-        }
-
-        // unread count trumps who is typing since the unread count is only
-        // set when you've scrolled up
-        if (this.props.numUnreadMessages) {
-            // MUST use var name "count" for pluralization to kick in
-            const unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
-
-            return (
-                <div className="mx_RoomStatusBar_unreadMessagesBar"
-                        onClick={this.props.onScrollToBottomClick}>
-                    { unreadMsgs }
-                </div>
-            );
         }
 
         if (this.props.hasActiveCall) {

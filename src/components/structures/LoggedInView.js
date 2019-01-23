@@ -35,7 +35,7 @@ import RoomListStore from "../../stores/RoomListStore";
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
 import ResizeHandle from '../views/elements/ResizeHandle';
-import {Resizer, CollapseDistributor} from '../../resizer'
+import {Resizer, CollapseDistributor} from '../../resizer';
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -160,7 +160,7 @@ const LoggedInView = React.createClass({
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse"
+            reverse: "mx_ResizeHandle_reverse",
         };
         const collapseConfig = {
             toggleSize: 260 - 50,
@@ -183,10 +183,13 @@ const LoggedInView = React.createClass({
     },
 
     _loadResizerPreferences() {
-        const lhsSize = window.localStorage.getItem("mx_lhs_size");
+        let lhsSize = window.localStorage.getItem("mx_lhs_size");
         if (lhsSize !== null) {
-            this.resizer.forHandleAt(0).resize(parseInt(lhsSize, 10));
+            lhsSize = parseInt(lhsSize, 10);
+        } else {
+            lhsSize = 350;
         }
+        this.resizer.forHandleAt(0).resize(lhsSize);
     },
 
     onAccountData: function(event) {
@@ -201,7 +204,11 @@ const LoggedInView = React.createClass({
     },
 
     onSync: function(syncState, oldSyncState, data) {
-        const oldErrCode = this.state.syncErrorData && this.state.syncErrorData.error && this.state.syncErrorData.error.errcode;
+        const oldErrCode = (
+            this.state.syncErrorData &&
+            this.state.syncErrorData.error &&
+            this.state.syncErrorData.error.errcode
+        );
         const newErrCode = data && data.error && data.error.errcode;
         if (syncState === oldSyncState && oldErrCode === newErrCode) return;
 
@@ -310,7 +317,10 @@ const LoggedInView = React.createClass({
         }
     },
 
-    /** dispatch a page-up/page-down/etc to the appropriate component */
+    /**
+     * dispatch a page-up/page-down/etc to the appropriate component
+     * @param {Object} ev The key event
+     */
     _onScrollKeyPressed: function(ev) {
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
@@ -424,11 +434,11 @@ const LoggedInView = React.createClass({
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
         const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
-        let page_element;
+        let pageElement;
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
-                page_element = <RoomView
+                pageElement = <RoomView
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
@@ -444,7 +454,7 @@ const LoggedInView = React.createClass({
                 break;
 
             case PageTypes.UserSettings:
-                page_element = <UserSettings
+                pageElement = <UserSettings
                     onClose={this.props.onCloseAllSettings}
                     brand={this.props.config.brand}
                     referralBaseUrl={this.props.config.referralBaseUrl}
@@ -453,11 +463,11 @@ const LoggedInView = React.createClass({
                 break;
 
             case PageTypes.MyGroups:
-                page_element = <MyGroups />;
+                pageElement = <MyGroups />;
                 break;
 
             case PageTypes.RoomDirectory:
-                page_element = <RoomDirectory
+                pageElement = <RoomDirectory
                     ref="roomDirectory"
                     config={this.props.config.roomDirectory}
                 />;
@@ -471,7 +481,7 @@ const LoggedInView = React.createClass({
                     const teamServerUrl = this.props.config.teamServerConfig ?
                         this.props.config.teamServerConfig.teamServerURL : null;
 
-                    page_element = <HomePage
+                    pageElement = <HomePage
                         teamServerUrl={teamServerUrl}
                         teamToken={this.props.teamToken}
                         homePageUrl={this.props.config.welcomePageUrl}
@@ -480,12 +490,12 @@ const LoggedInView = React.createClass({
                 break;
 
             case PageTypes.UserView:
-                page_element = null; // deliberately null for now
+                pageElement = null; // deliberately null for now
                 // TODO: fix/remove UserView
                 // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
-                page_element = <GroupView
+                pageElement = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
                     collapsedRhs={this.props.collapsedRhs}
@@ -525,7 +535,10 @@ const LoggedInView = React.createClass({
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
-        } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (
+            !isGuest && Notifier.supportsDesktopNotifications() &&
+            !Notifier.isEnabled() && !Notifier.isToolbarHidden()
+        ) {
             topBar = <MatrixToolbar />;
         }
 
@@ -546,8 +559,8 @@ const LoggedInView = React.createClass({
                             collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
-                        <ResizeHandle/>
-                        { page_element }
+                        <ResizeHandle />
+                        { pageElement }
                     </div>
                 </DragDropContext>
             </div>

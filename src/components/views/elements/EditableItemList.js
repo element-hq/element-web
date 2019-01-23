@@ -62,13 +62,13 @@ const EditableItem = React.createClass({
             { this.props.onAdd ?
                 <div className="mx_EditableItem_addButton">
                     <img className="mx_filterFlipColor"
-                        src="img/plus.svg" width="14" height="14"
+                        src={require("../../../../res/img/plus.svg")} width="14" height="14"
                         alt={_t("Add")} onClick={this.onAdd} />
                 </div>
                 :
                 <div className="mx_EditableItem_removeButton">
                     <img className="mx_filterFlipColor"
-                        src="img/cancel-small.svg" width="14" height="14"
+                        src={require("../../../../res/img/cancel-small.svg")} width="14" height="14"
                         alt={_t("Delete")} onClick={this.onRemove} />
                 </div>
             }

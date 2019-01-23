@@ -815,7 +815,7 @@ module.exports = withMatrixClient(React.createClass({
                 onClick={this.onNewDMClick}
             >
                 <div className="mx_RoomTile_avatar">
-                    <img src="img/create-big.svg" width="26" height="26" />
+                    <img src={require("../../../../res/img/create-big.svg")} width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>{ _t("Start a chat") }</i></div>
             </AccessibleButton>;
@@ -963,7 +963,7 @@ module.exports = withMatrixClient(React.createClass({
             <div className="mx_MemberInfo">
                     <div className="mx_MemberInfo_name">
                         <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                            <img src="img/minimise.svg" width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
+                            <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
                         </AccessibleButton>
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>

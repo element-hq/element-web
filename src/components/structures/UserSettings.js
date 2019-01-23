@@ -1227,7 +1227,7 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <AccessibleButton element="img" src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
+                        <AccessibleButton element="img" src={require("../../../res/img/cancel-small.svg")} width="14" height="14" alt={_t("Remove")}
                             onClick={onRemoveClick} />
                     </div>
                 </div>
@@ -1252,7 +1252,7 @@ module.exports = React.createClass({
                             onValueChanged={this._onAddEmailEditFinished} />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <AccessibleButton element="img" src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
+                         <AccessibleButton element="img" src={require("../../../res/img/plus.svg")} width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
                     </div>
                 </div>
             );
@@ -1322,7 +1322,7 @@ module.exports = React.createClass({
 
                     <div className="mx_UserSettings_avatarPicker">
                         <AccessibleButton className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
-                            <img src="img/cancel.svg"
+                            <img src={require("../../../res/img/cancel.svg")}
                                 width="15" height="15"
                                 className="mx_filterFlipColor"
                                 alt={_t("Remove avatar")}
@@ -1334,7 +1334,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg" className="mx_filterFlipColor"
+                                <img src={require("../../../res/img/camera.svg")} className="mx_filterFlipColor"
                                     alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>

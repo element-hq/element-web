@@ -54,7 +54,7 @@ limitations under the License.
 
     &:before {
         background-color: $accent-fg-color;
-        mask: url('../../img/icons-create-room.svg');
+        mask: url('$(res)/img/icons-create-room.svg');
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 80%;

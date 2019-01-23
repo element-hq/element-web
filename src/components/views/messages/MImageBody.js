@@ -282,7 +282,12 @@ export default class MImageBody extends React.Component {
 
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            placeholder = <img src="img/spinner.gif" alt={content.body} width="32" height="32" />;
+            placeholder = <img
+                src={require("../../../../res/img/spinner.gif")}
+                alt={content.body}
+                width="32"
+                height="32"
+            />;
         } else if (!this.state.imgLoaded) {
             // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
             placeholder = this.getPlaceholder();
@@ -363,7 +368,7 @@ export default class MImageBody extends React.Component {
         if (this.state.error !== null) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16" />
+                    <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting image") }
                 </span>
             );

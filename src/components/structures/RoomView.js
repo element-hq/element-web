@@ -1473,11 +1473,10 @@ module.exports = React.createClass({
 
     onStatusBarHidden: function() {
         // This is currently not desired as it is annoying if it keeps expanding and collapsing
-        // TODO: Find a less annoying way of hiding the status bar
-        /*if (this.unmounted) return;
+        if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
-        });*/
+        });
     },
 
     /**
@@ -1651,14 +1650,11 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                numUnreadMessages={this.state.numUnreadMessages}
-                atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 sentMessageAndIsAlone={this.state.isAlone}
                 hasActiveCall={inCall}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
-                onScrollToBottomClick={this.jumpToLiveTimeline}
                 onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
@@ -1757,8 +1753,8 @@ module.exports = React.createClass({
         }
 
         if (MatrixClientPeg.get().isGuest()) {
-            const LoginBox = sdk.getComponent('structures.LoginBox');
-            messageComposer = <LoginBox />;
+            const AuthButtons = sdk.getComponent('views.auth.AuthButtons');
+            messageComposer = <AuthButtons />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
@@ -1777,20 +1773,20 @@ module.exports = React.createClass({
             if (call.type === "video") {
                 zoomButton = (
                     <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={_t("Fill screen")}>
-                        <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }} />
+                        <TintableSvg src={require("../../../res/img/fullscreen.svg")} width="29" height="22" style={{ marginTop: 1, marginRight: 4 }} />
                     </div>
                 );
 
                 videoMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                        <TintableSvg src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
+                        <TintableSvg src={call.isLocalVideoMuted() ? require("../../../res/img/video-unmute.svg") : require("../../../res/img/video-mute.svg")}
                              alt={call.isLocalVideoMuted() ? _t("Click to unmute video") : _t("Click to mute video")}
                              width="31" height="27" />
                     </div>;
             }
             voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                    <TintableSvg src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
+                    <TintableSvg src={call.isMicrophoneMuted() ? require("../../../res/img/voice-unmute.svg") : require("../../../res/img/voice-mute.svg")}
                          alt={call.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
                          width="21" height="26" />
                 </div>;
@@ -1802,7 +1798,7 @@ module.exports = React.createClass({
                     { videoMuteButton }
                     { zoomButton }
                     { statusBar }
-                    <TintableSvg className="mx_RoomView_voipChevron" src="img/voip-chevron.svg" width="22" height="17" />
+                    <TintableSvg className="mx_RoomView_voipChevron" src={require("../../../res/img/voip-chevron.svg")} width="22" height="17" />
                 </div>;
         }
 
@@ -1864,6 +1860,14 @@ module.exports = React.createClass({
                                        onCloseClick={this.forgetReadMarker}
                                     />);
         }
+        let jumpToBottom;
+        if (!this.state.atEndOfLiveTimeline) {
+            const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
+            jumpToBottom = (<JumpToBottomButton
+                numUnreadMessages={this.state.numUnreadMessages}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
+            />);
+        }
         const statusBarAreaClass = classNames(
             "mx_RoomView_statusArea",
             {
@@ -1901,6 +1905,7 @@ module.exports = React.createClass({
                         { auxPanel }
                         <div className="mx_RoomView_timeline">
                             { topUnreadMessagesBar }
+                            { jumpToBottom }
                             { messagePanel }
                             { searchResultsPanel }
                         </div>

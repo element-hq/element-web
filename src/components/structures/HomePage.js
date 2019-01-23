@@ -108,7 +108,7 @@ class HomePage extends React.Component {
         if (this.context.matrixClient.isGuest()) {
             guestWarning = (
                 <div className="mx_HomePage_guest_warning">
-                    <img src="img/warning.svg" width="24" height="23" />
+                    <img src={require("../../../res/img/warning.svg")} width="24" height="23" />
                     <div>
                         <div>
                             { _t("You are currently using Riot anonymously as a guest.") }

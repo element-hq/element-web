@@ -130,7 +130,7 @@ module.exports = React.createClass({
             <div className="mx_PinnedEventsPanel">
                 <div className="mx_PinnedEventsPanel_body">
                     <AccessibleButton className="mx_PinnedEventsPanel_cancel" onClick={this.props.onCancelClick}>
-                        <img className="mx_filterFlipColor" src="img/cancel.svg" width="18" height="18" />
+                        <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
                     </AccessibleButton>
                     <h3 className="mx_PinnedEventsPanel_header">{ _t("Pinned Messages") }</h3>
                     { tiles }

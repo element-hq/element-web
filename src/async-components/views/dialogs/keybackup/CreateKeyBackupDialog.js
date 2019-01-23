@@ -252,9 +252,7 @@ export default React.createClass({
                 for (let i = 0; i < this.state.zxcvbnResult.feedback.suggestions.length; ++i) {
                     suggestions.push(<div key={i}>{this.state.zxcvbnResult.feedback.suggestions[i]}</div>);
                 }
-                const suggestionBlock = suggestions.length > 0 ? <div>
-                    {suggestions}
-                </div> : null;
+                const suggestionBlock = <div>{suggestions.length > 0 ? suggestions : _t("Keep going...")}</div>;
 
                 helpText = <div>
                     {this.state.zxcvbnResult.feedback.warning}

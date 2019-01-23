@@ -1,5 +1,3 @@
-@import "_fonts.scss";
-
 // XXX: check this?
 /* Nunito lacks combining diacritics, so these will fall through
    to the next font.  Helevetica's diacritics however do not combine
@@ -7,6 +5,7 @@
    horizontal mess.  Arial empirically gets it right, hence prioritising
    Arial here. */
 $font-family: 'Nunito', Arial, Helvetica, Sans-Serif;
+$font-family-semibold: 'Nunito SemiBold', Arial, Helvetica, Sans-Serif;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #454545;
@@ -73,6 +72,10 @@ $input-darker-bg-color: rgba(193, 201, 214, 0.29);
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
+$input-focused-border-color: #238cf5;
+$input-valid-border-color: #7ac9a1;
+
+$field-focused-label-bg-color: #ffffff;
 
 $button-bg-color: #7ac9a1;
 $button-fg-color: white;
@@ -93,6 +96,11 @@ $avatar-initial-color: #ffffff;
 $avatar-bg-color: #ffffff;
 
 $h3-color: #3d3b39;
+
+$dialog-title-fg-color: #454545;
+$dialog-backdrop-color: rgba(46, 48, 51, 0.38);
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+$dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: #e9e9e9;
 $lightbox-background-bg-color: #000;
@@ -171,8 +179,8 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$edit-button-url: "../../img/icon_context_message.svg";
-$copy-button-url: "../../img/icon_copy_message.svg";
+$edit-button-url: "$(res)/img/icon_context_message.svg";
+$copy-button-url: "$(res)/img/icon_copy_message.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -184,12 +192,30 @@ $lightbox-bg-color: #454545;
 $lightbox-fg-color: #ffffff;
 $lightbox-border-color: #ffffff;
 
+// Tabbed views
+$tab-label-fg-color: #45474a;
+$tab-label-active-fg-color: #ffffff;
+$tab-label-bg-color: transparent;
+$tab-label-active-bg-color: #7ac9a1;
+$tab-label-icon-bg-color: #454545;
+$tab-label-active-icon-bg-color: #ffffff;
+
+// Buttons
+$button-primary-fg-color: #ffffff;
+$button-primary-bg-color: #7ac9a1;
+$button-primary-disabled-fg-color: #ffffff;
+$button-primary-disabled-bg-color: #bce4d0;
+
 // unused?
 $progressbar-color: #000;
 
 $room-warning-bg-color: #fff8e3;
 
 $memberstatus-placeholder-color: $roomtile-name-color;
+
+$authpage-bg-color: #2e3649;
+$authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
+$authpage-body-bg-color: #ffffff;
 
 /*** form elements ***/
 
@@ -200,8 +226,8 @@ $memberstatus-placeholder-color: $roomtile-name-color;
 
 .mx_MatrixChat {
 
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         display: block;
         margin: 9px;
@@ -245,8 +271,8 @@ input[type=password] {
 }
 
 .dark-panel {
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         color: $input-darker-fg-color;
         background-color: $input-darker-bg-color;
@@ -255,8 +281,8 @@ input[type=password] {
 }
 
 .light-panel {
-    :not(.mx_textinput) > input[type=text],
-    :not(.mx_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field) > input[type=search],
     .mx_textinput {
         color: $input-lighter-fg-color;
         background-color: $input-lighter-bg-color;
@@ -275,7 +301,7 @@ input[type=search].mx_textinput_icon {
 // FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
-    background-image: url('../../img/feather-icons/search-input.svg');
+    background-image: url('$(res)/img/feather-icons/search-input.svg');
 }
 
 // dont search UI as not all browsers support it,
@@ -293,6 +319,13 @@ input[type=search]::-webkit-search-results-decoration {
 .input[type=search]::-moz-placeholder {
     color: #a5aab2;
 }
+
+// Override Firefox's UA style so we get a consistent look across browsers
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

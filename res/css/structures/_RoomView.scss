@@ -116,7 +116,7 @@ limitations under the License.
 
 .mx_RoomView_messagePanelSearchSpinner {
     flex: 1;
-    background-image: url('../../img/typing-indicator-2x.gif');
+    background-image: url('$(res)/img/typing-indicator-2x.gif');
     background-position: center 367px;
     background-size: 25px;
     background-repeat: no-repeat;
@@ -125,7 +125,7 @@ limitations under the License.
 
 .mx_RoomView_messagePanelSearchSpinner:before {
     background-color: $greyed-fg-color;
-    mask: url('../../img/feather-icons/search-input.svg');
+    mask: url('$(res)/img/feather-icons/search-input.svg');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 50px;
@@ -171,6 +171,10 @@ limitations under the License.
 .mx_RoomView_MessageList {
     list-style-type: none;
     padding: 18px;
+    margin: 0;
+    /* needed as min-height is set to clientHeight in ScrollPanel
+    to prevent shrinking when WhoIsTypingTile is hidden */
+    box-sizing: border-box;
 }
 
 .mx_RoomView_MessageList li {

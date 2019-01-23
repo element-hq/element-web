@@ -111,7 +111,7 @@ export default React.createClass({
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
-                <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
+                <TintableSvg src={require("../../../../res/img/icons-close-button.svg")} width="35" height="35" />
             </AccessibleButton>;
         }
 

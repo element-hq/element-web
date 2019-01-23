@@ -160,7 +160,7 @@ const EntityTile = React.createClass({
         if (this.props.showInviteButton) {
             inviteButton = (
                 <div className="mx_EntityTile_invite">
-                    <img src="img/plus.svg" width="16" height="16" />
+                    <img src={require("../../../../res/img/plus.svg")} width="16" height="16" />
                 </div>
             );
         }
@@ -169,8 +169,8 @@ const EntityTile = React.createClass({
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
             const src = {
-                [EntityTile.POWER_STATUS_MODERATOR]: "img/mod.svg",
-                [EntityTile.POWER_STATUS_ADMIN]: "img/admin.svg",
+                [EntityTile.POWER_STATUS_MODERATOR]: require("../../../../res/img/mod.svg"),
+                [EntityTile.POWER_STATUS_ADMIN]: require("../../../../res/img/admin.svg"),
             }[powerStatus];
             const alt = {
                 [EntityTile.POWER_STATUS_MODERATOR]: _t("Moderator"),

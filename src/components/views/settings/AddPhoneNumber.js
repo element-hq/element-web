@@ -141,7 +141,7 @@ export default withMatrixClient(React.createClass({
             return <div />;
         }
 
-        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         // XXX: This CSS relies on the CSS surrounding it in UserSettings as its in
         // a tabular format to align the submit buttons
         return (
@@ -166,7 +166,7 @@ export default withMatrixClient(React.createClass({
                     </div>
                 </div>
                 <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                     <input type="image" value={_t("Add")} src="img/plus.svg" width="14" height="14" />
+                     <input type="image" value={_t("Add")} src={require("../../../../res/img/plus.svg")} width="14" height="14" />
                 </div>
             </form>
         );

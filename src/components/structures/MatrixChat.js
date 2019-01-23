@@ -183,7 +183,7 @@ export default React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
-            // Parameters used for setting up the login/registration views
+            // Parameters used for setting up the authentication views
             defaultServerName: this.props.config.default_server_name,
             defaultHsUrl: this.props.config.default_hs_url,
             defaultIsUrl: this.props.config.default_is_url,
@@ -302,7 +302,10 @@ export default React.createClass({
             // will check their settings.
             this.setState({
                 defaultServerName: null, // To un-hide any secrets people might be keeping
-                defaultServerDiscoveryError: _t("Invalid configuration: Cannot supply a default homeserver URL and a default server name"),
+                defaultServerDiscoveryError: _t(
+                    "Invalid configuration: Cannot supply a default homeserver URL and " +
+                    "a default server name",
+                ),
             });
         }
 
@@ -607,7 +610,17 @@ export default React.createClass({
             case 'view_indexed_room':
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings':
+            case 'view_user_settings': {
+                if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
+                    const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
+                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {});
+                } else {
+                    this._setPage(PageTypes.UserSettings);
+                    this.notifyNewScreen('settings');
+                }
+                break;
+            }
+            case 'view_old_user_settings':
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
@@ -1840,7 +1853,11 @@ export default React.createClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
-        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN || this.state.loadingDefaultHomeserver) {
+        if (
+            this.state.view === VIEWS.LOADING ||
+            this.state.view === VIEWS.LOGGING_IN ||
+            this.state.loadingDefaultHomeserver
+        ) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
@@ -1851,7 +1868,7 @@ export default React.createClass({
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.view === VIEWS.POST_REGISTRATION) {
-            const PostRegistration = sdk.getComponent('structures.login.PostRegistration');
+            const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
             return (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
@@ -1906,7 +1923,7 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.REGISTER) {
-            const Registration = sdk.getComponent('structures.login.Registration');
+            const Registration = sdk.getComponent('structures.auth.Registration');
             return (
                 <Registration
                     clientSecret={this.state.register_client_secret}
@@ -1935,7 +1952,7 @@ export default React.createClass({
 
 
         if (this.state.view === VIEWS.FORGOT_PASSWORD) {
-            const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
+            const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             return (
                 <ForgotPassword
                     defaultServerName={this.getDefaultServerName()}
@@ -1951,7 +1968,7 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.LOGIN) {
-            const Login = sdk.getComponent('structures.login.Login');
+            const Login = sdk.getComponent('structures.auth.Login');
             return (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}

@@ -1,0 +1,63 @@
+.mx_UserSettingsDialog_header {
+  font-size: 24px;
+  display: block;
+  text-align: center;
+  color: $dialog-title-fg-color;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.mx_UserSettingsDialog_close {
+  position: absolute;
+  top: 16px;
+  right: 25px;
+}
+
+.mx_UserSettingsDialog_closeIcon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+.mx_UserSettingsDialog_closeIcon:before {
+  mask: url('$(res)/img/feather-icons/cancel.svg');
+  background-color: $dialog-close-fg-color;
+  mask-repeat: no-repeat;
+  mask-size: 16px;
+  mask-position: center;
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+// ICONS
+// ==========================================================
+
+.mx_UserSettingsDialog_settingsIcon:before {
+  mask-image: url('$(res)/img/feather-icons/settings.svg');
+}
+
+.mx_UserSettingsDialog_voiceIcon:before {
+  mask-image: url('$(res)/img/feather-icons/phone.svg');
+}
+
+.mx_UserSettingsDialog_bellIcon:before {
+  mask-image: url('$(res)/img/feather-icons/notifications.svg');
+}
+
+.mx_UserSettingsDialog_preferencesIcon:before {
+  mask-image: url('$(res)/img/feather-icons/sliders.svg');
+}
+
+.mx_UserSettingsDialog_securityIcon:before {
+  mask-image: url('$(res)/img/feather-icons/lock.svg');
+}
+
+.mx_UserSettingsDialog_helpIcon:before {
+  mask-image: url('$(res)/img/feather-icons/help-circle.svg');
+}

@@ -616,7 +616,7 @@ module.exports = React.createClass({
                 <div>
                     <label>
                         <input type="checkbox" ref="encrypt" onClick={this.onEnableEncryptionClick} />
-                        <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src={require("../../../../res/img/e2e-unencrypted.svg")} width="12" height="12" />
                         { _t('Enable encryption') } { _t('(warning: cannot be disabled again!)') }
                     </label>
                     { settings }
@@ -627,8 +627,8 @@ module.exports = React.createClass({
                 <div>
                     <label>
                     { isEncrypted
-                      ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                      : <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                      ? <img className="mx_RoomSettings_e2eIcon" src={require("../../../../res/img/e2e-verified.svg")} width="10" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src={require("../../../../res/img/e2e-unencrypted.svg")} width="12" height="12" />
                     }
                     { isEncrypted ? _t("Encryption is enabled in this room") : _t("Encryption is not enabled in this room") }.
                     </label>
