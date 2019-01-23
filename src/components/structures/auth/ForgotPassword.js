@@ -269,6 +269,7 @@ module.exports = React.createClass({
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
+                    <h2> { _t('Set a new password') } </h2>
                     {resetPasswordJsx}
                 </AuthBody>
             </AuthPage>
