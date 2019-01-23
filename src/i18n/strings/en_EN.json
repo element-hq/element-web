@@ -1092,7 +1092,7 @@
     "Username on %(hs)s": "Username on %(hs)s",
     "User name": "User name",
     "Mobile phone number": "Mobile phone number",
-    "Forgot your password?": "Forgot your password?",
+    "Not sure of your password? <a>Set a new one</a>": "Not sure of your password? <a>Set a new one</a>",
     "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
     "Sign in with": "Sign in with",
     "Sign in": "Sign in",

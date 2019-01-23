@@ -245,11 +245,16 @@ class PasswordLogin extends React.Component {
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
-            forgotPasswordJsx = (
-                <a className="mx_Login_forgot" onClick={this.props.onForgotPasswordClick} href="#">
-                    { _t('Forgot your password?') }
-                </a>
-            );
+            forgotPasswordJsx = <span>
+                {_t('Not sure of your password? <a>Set a new one</a>', {}, {
+                    a: sub => <a className="mx_Login_forgot"
+                        onClick={this.props.onForgotPasswordClick}
+                        href="#"
+                    >
+                        {sub}
+                    </a>,
+                })}
+            </span>;
         }
 
         let matrixIdText = _t('Matrix ID');
