@@ -136,7 +136,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // maybe we should pass basic styling (italics, bold, underline) through from MD
         // we only have to strip out < and > as the spec doesn't include anything about things like &amp;
         // so we shouldn't assume that all implementations will treat those properly. Very basic tag parsing is done.
-        if (navigator.userAgent.indexOf('Linux')) {
+        if (navigator.userAgent.includes('Linux')) {
             msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
