@@ -565,7 +565,7 @@ module.exports = React.createClass({
                     { this.componentForStep(this.state.currentFlow) }
                     { serverConfig }
                     <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
-                        { _t('Create an account') }
+                        { _t('Create account') }
                     </a>
                     { loginAsGuestJsx }
                 </AuthBody>

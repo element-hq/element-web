@@ -257,7 +257,7 @@ module.exports = React.createClass({
                     { serverConfigSection }
                     { errorText }
                     <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
-                        { _t('Return to login screen') }
+                        { _t('Sign in instead') }
                     </a>
                 </div>
             </div>
