@@ -21,7 +21,8 @@ limitations under the License.
     margin: 1em 0;
 }
 
-.mx_Field input {
+.mx_Field input,
+.mx_Field select {
     font-weight: normal;
     border-radius: 4px;
     transition: border-color 0.25s;
@@ -29,7 +30,8 @@ limitations under the License.
     padding: 8px 9px;
 }
 
-.mx_Field input:focus {
+.mx_Field input:focus,
+.mx_Field select:focus {
     outline: 0;
     border-color: $input-focused-border-color;
 }
@@ -61,7 +63,8 @@ limitations under the License.
 }
 
 .mx_Field input:focus + label,
-.mx_Field input:not(:placeholder-shown) + label {
+.mx_Field input:not(:placeholder-shown) + label,
+.mx_Field select:focus + label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
@@ -72,6 +75,7 @@ limitations under the License.
     background-color: $field-focused-label-bg-color;
 }
 
-.mx_Field input:focus + label {
+.mx_Field input:focus + label,
+.mx_Field select:focus + label {
     color: $input-focused-border-color;
 }

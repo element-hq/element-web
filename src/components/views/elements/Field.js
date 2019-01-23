@@ -27,24 +27,27 @@ export default class Field extends React.PureComponent {
         label: PropTypes.string,
         // The field's placeholder string.
         placeholder: PropTypes.string,
+        // The type of field to create. Defaults to "input". Should be "input" or "select".
+        // To define options for a select, use <Field><option ... /></Field>
+        element: PropTypes.string,
         // All other props pass through to the <input>.
     }
 
     render() {
         const extraProps = Object.assign({}, this.props);
 
-        // Remove explicit props
-        delete extraProps.id;
-        delete extraProps.type;
-        delete extraProps.placeholder;
-        delete extraProps.label;
+        // Remove explicit properties that shouldn't be copied
+        delete extraProps.element;
+        delete extraProps.children;
+
+        // Set some defaults for the element
+        extraProps.type = extraProps.type || "text";
+
+        const element = this.props.element || "input";
+        const fieldInput = React.createElement(element, extraProps, this.props.children);
 
         return <div className="mx_Field">
-            <input id={this.props.id}
-                type={this.props.type || "text"}
-                placeholder={this.props.placeholder}
-                {...extraProps}
-            />
+            {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
         </div>;
     }
