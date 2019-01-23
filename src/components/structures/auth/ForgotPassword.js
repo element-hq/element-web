@@ -188,7 +188,7 @@ module.exports = React.createClass({
             resetPasswordJsx = <Spinner />;
         } else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (
-                <div className="mx_Login_prompt">
+                <div>
                     { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, " +
                         "click below.", { emailAddress: this.state.email }) }
                     <br />
@@ -198,14 +198,14 @@ module.exports = React.createClass({
             );
         } else if (this.state.progress === "complete") {
             resetPasswordJsx = (
-                <div className="mx_Login_prompt">
+                <div>
                     <p>{ _t('Your password has been reset') }.</p>
                     <p>{ _t('You have been logged out of all devices and will no longer receive push notifications. ' +
                         'To re-enable notifications, sign in again on each device') }.</p>
                     <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                         value={_t('Return to login screen')} />
                 </div>
-            );
+            )
         } else {
             let serverConfigSection;
             if (!SdkConfig.get()['disable_custom_urls']) {
@@ -229,9 +229,9 @@ module.exports = React.createClass({
 
             resetPasswordJsx = (
             <div>
-                <div className="mx_Login_prompt">
+                <p>
                     { _t('To reset your password, enter the email address linked to your account') }:
-                </div>
+                </p>
                 <div>
                     <form onSubmit={this.onSubmitForm}>
                         <input className="mx_Login_field" ref="user" type="text"
