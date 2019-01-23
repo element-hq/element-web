@@ -15,13 +15,12 @@ limitations under the License.
 */
 
 .mx_Auth_language {
-    margin-left: auto;
-    margin-right: auto;
-    min-width: 60%;
+    width: 100%;
 }
 
-.mx_Auth_language_div {
-    display: flex;
-    margin-top: 12px;
-    margin-bottom: 12px;
+.mx_Auth_language .mx_Dropdown_input {
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: $authpage-lang-color;
 }
