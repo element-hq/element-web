@@ -465,7 +465,7 @@ module.exports = React.createClass({
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
+                <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
                     { _t('I already have an account') }
                 </a>
             );
