@@ -23,6 +23,7 @@ import {MatrixClient} from "matrix-js-sdk";
 import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileSettings from "../ProfileSettings";
 import EmailAddresses from "../EmailAddresses";
+import PhoneNumbers from "../PhoneNumbers";
 const sdk = require('../../../../index');
 const Modal = require("../../../../Modal");
 
@@ -105,6 +106,9 @@ export default class GeneralSettingsTab extends React.Component {
 
                 <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
                 <EmailAddresses />
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                <PhoneNumbers />
             </div>
         );
     }
