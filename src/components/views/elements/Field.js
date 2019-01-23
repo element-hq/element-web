@@ -54,6 +54,7 @@ export default class Field extends React.PureComponent {
 
         // Set some defaults for the element
         extraProps.type = extraProps.type || "text";
+        extraProps.ref = "fieldInput";
 
         const element = this.props.element || "input";
         const fieldInput = React.createElement(element, extraProps, this.props.children);
