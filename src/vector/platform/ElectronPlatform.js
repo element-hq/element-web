@@ -28,17 +28,17 @@ const ipcRenderer = window.ipcRenderer;
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
-    if (navigator.userAgent.indexOf('Macintosh')) {
+    if (navigator.userAgent.includes('Macintosh')) {
         return 'macOS';
-    } else if (navigator.userAgent.indexOf('FreeBSD')) {
+    } else if (navigator.userAgent.includes('FreeBSD')) {
         return 'FreeBSD';
-    } else if (navigator.userAgent.indexOf('OpenBSD')) {
+    } else if (navigator.userAgent.includes('OpenBSD')) {
         return 'OpenBSD';
-    } else if (navigator.userAgent.indexOf('SunOS')) {
+    } else if (navigator.userAgent.includes('SunOS')) {
         return 'SunOS';
-    } else if (navigator.userAgent.indexOf('Windows')) {
+    } else if (navigator.userAgent.includes('Windows')) {
         return 'Windows';
-    } else if (navigator.userAgent.indexOf('Linux')) {
+    } else if (navigator.userAgent.includes('Linux')) {
         return 'Linux';
     } else {
         return 'Unknown';
