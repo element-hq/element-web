@@ -22,7 +22,9 @@ limitations under the License.
     margin: 20px 0;
 }
 
-.mx_AuthFooter a:link, a:hover, a:visited {
+.mx_AuthFooter a:link,
+.mx_AuthFooter a:hover,
+.mx_AuthFooter a:visited {
     color: $accent-fg-color;
     margin: 0 22px;
 }
