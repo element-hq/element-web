@@ -140,7 +140,7 @@ function onNewScreen(screen) {
 // so in that instance, hardcode to use riot.im/app for now instead.
 function makeRegistrationUrl(params) {
     let url;
-    if (window.location.protocol === "file:") {
+    if (window.location.protocol === "vector:") {
         url = 'https://riot.im/app/#/register';
     } else {
         url = (
