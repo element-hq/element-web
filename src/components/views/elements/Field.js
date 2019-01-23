@@ -36,12 +36,12 @@ export default class Field extends React.PureComponent {
     render() {
         const extraProps = Object.assign({}, this.props);
 
-        // Remove explicit props
-        delete extraProps.id;
-        delete extraProps.type;
-        delete extraProps.placeholder;
-        delete extraProps.label;
+        // Remove explicit properties that shouldn't be copied
         delete extraProps.element;
+        delete extraProps.children;
+
+        // Set some defaults for the element
+        extraProps.type = extraProps.type || "text";
 
         const element = this.props.element || "input";
         const fieldInput = React.createElement(element, extraProps, this.props.children);

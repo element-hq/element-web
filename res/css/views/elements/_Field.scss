@@ -36,14 +36,12 @@ limitations under the License.
     border-color: $input-focused-border-color;
 }
 
-.mx_Field input::placeholder,
-.mx_Field select::placeholder {
+.mx_Field input::placeholder {
     transition: color 0.25s ease-in 0s;
     color: transparent;
 }
 
-.mx_Field input:placeholder-shown:focus::placeholder,
-.mx_Field select:placeholder-shown:focus::placeholder {
+.mx_Field input:placeholder-shown:focus::placeholder {
     transition: color 0.25s ease-in 0.1s;
     color: $greyed-fg-color;
 }
@@ -66,8 +64,7 @@ limitations under the License.
 
 .mx_Field input:focus + label,
 .mx_Field input:not(:placeholder-shown) + label,
-.mx_Field select:focus + label,
-.mx_Field select:not(:placeholder-shown) + label {
+.mx_Field select:focus + label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
