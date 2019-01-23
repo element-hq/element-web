@@ -397,7 +397,7 @@ module.exports = React.createClass({
 
     render: function() {
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+        const AuthBody = sdk.getComponent("auth.AuthBody");
         const AuthPage = sdk.getComponent('auth.AuthPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
@@ -481,12 +481,13 @@ module.exports = React.createClass({
                         this.state.teamSelected.domain + "/icon.png" :
                         null}
                 />
-                { header }
-                { registerBody }
-                { signIn }
-                { errorText }
-                <LanguageSelector />
-                <AuthFooter />
+                <AuthBody>
+                    { header }
+                    { registerBody }
+                    { signIn }
+                    { errorText }
+                    <LanguageSelector />
+                </AuthBody>
             </AuthPage>
         );
     },

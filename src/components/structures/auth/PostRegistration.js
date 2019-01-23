@@ -62,18 +62,21 @@ module.exports = React.createClass({
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const AuthPage = sdk.getComponent('auth.AuthPage');
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
+        const AuthBody = sdk.getComponent("auth.AuthBody");
         return (
             <AuthPage>
                 <AuthHeader />
-                <div className="mx_Login_profile">
-                    { _t('Set a display name:') }
-                    <ChangeDisplayName />
-                    { _t('Upload an avatar:') }
-                    <ChangeAvatar
-                        initialAvatarUrl={this.state.avatarUrl} />
-                    <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
-                    { this.state.errorString }
-                </div>
+                <AuthBody>
+                    <div className="mx_Login_profile">
+                        { _t('Set a display name:') }
+                        <ChangeDisplayName />
+                        { _t('Upload an avatar:') }
+                        <ChangeAvatar
+                            initialAvatarUrl={this.state.avatarUrl} />
+                        <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
+                        { this.state.errorString }
+                    </div>
+                </AuthBody>
             </AuthPage>
         );
     },

@@ -517,7 +517,7 @@ module.exports = React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthFooter = sdk.getComponent("auth.AuthFooter");
+        const AuthBody = sdk.getComponent("auth.AuthBody");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
@@ -560,7 +560,7 @@ module.exports = React.createClass({
         return (
             <AuthPage>
                 <AuthHeader />
-                <div>
+                <AuthBody>
                     { header }
                     { errorTextSection }
                     { this.componentForStep(this.state.currentFlow) }
@@ -570,8 +570,7 @@ module.exports = React.createClass({
                     </a>
                     { loginAsGuestJsx }
                     <LanguageSelector />
-                    <AuthFooter />
-                </div>
+                </AuthBody>
             </AuthPage>
         );
     },

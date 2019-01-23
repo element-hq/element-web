@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthFooter {
-    text-align: center;
-    width: 100%;
-    font-size: 14px;
-    opacity: 0.72;
-    margin: 20px 0;
-}
+'use strict';
 
-.mx_AuthFooter a:link, a:hover, a:visited {
-    color: $accent-fg-color;
-    margin: 0 22px;
+import React from 'react';
+
+export default class AuthBody extends React.PureComponent {
+    render() {
+        return <div className="mx_AuthBody">
+            { this.props.children }
+        </div>;
+    }
 }

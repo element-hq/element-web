@@ -14,12 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_AuthHeader {
+    width: 206px;
+    padding: 25px 50px;
+    box-sizing: border-box;
+}
+
 .mx_AuthHeader_logo {
-    text-align: center;
-    height: 150px;
-    margin-bottom: 45px;
+    margin-top: 15px;
 }
 
 .mx_AuthHeader_logo img {
-    max-height: 100%
+    width: 100%;
 }

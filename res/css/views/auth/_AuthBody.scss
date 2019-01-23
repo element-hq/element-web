@@ -14,15 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthFooter {
-    text-align: center;
-    width: 100%;
-    font-size: 14px;
-    opacity: 0.72;
-    margin: 20px 0;
-}
-
-.mx_AuthFooter a:link, a:hover, a:visited {
-    color: $accent-fg-color;
-    margin: 0 22px;
+.mx_AuthBody {
+    width: 500px;
+    background-color: $authpage-body-bg-color;
+    border-radius: 0 4px 4px 0;
+    padding: 25px 60px;
+    box-sizing: border-box;
 }

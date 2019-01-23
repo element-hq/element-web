@@ -18,16 +18,20 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'AuthPage',
 
     render: function() {
+        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+
         return (
             <div className="mx_AuthPage">
                 <div className="mx_AuthPage_modal">
                     { this.props.children }
                 </div>
+                <AuthFooter />
             </div>
         );
     },

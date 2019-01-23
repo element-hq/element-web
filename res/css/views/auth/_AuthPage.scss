@@ -17,12 +17,10 @@ limitations under the License.
 .mx_AuthPage {
     width: 100%;
     height: 100%;
-
     display: flex;
-    align-items: center;
-    justify-content: center;
-
+    flex-direction: column;
     overflow: auto;
+    background-color: $authpage-bg-color;
 }
 
 .mx_AuthPage h2 {
@@ -32,9 +30,11 @@ limitations under the License.
 }
 
 .mx_AuthPage_modal {
-    width: 300px;
-    min-height: 450px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    margin: auto;
+    display: flex;
+    margin: 100px auto auto;
+    border-radius: 4px;
+    // Not currently supported in Firefox: https://bugzilla.mozilla.org/show_bug.cgi?id=1178765
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.33);
+    background-color: $authpage-modal-bg-color;
 }
