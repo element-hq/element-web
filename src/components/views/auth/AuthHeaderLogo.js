@@ -14,8 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthHeader {
-    width: 206px;
-    padding: 25px 50px;
-    box-sizing: border-box;
+'use strict';
+
+import React from 'react';
+
+export default class AuthHeaderLogo extends React.PureComponent {
+    render() {
+        return <div className="mx_AuthHeaderLogo">
+            Matrix
+        </div>;
+    }
 }

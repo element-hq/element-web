@@ -18,16 +18,17 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'AuthHeader',
 
     render: function() {
+        const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
+
         return (
             <div className="mx_AuthHeader">
-                <div className="mx_AuthHeader_logo">
-                    Matrix
-                </div>
+                <AuthHeaderLogo />
             </div>
         );
     },
