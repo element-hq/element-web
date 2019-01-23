@@ -471,8 +471,6 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
         return (
             <AuthPage>
                 <AuthHeader
@@ -486,7 +484,6 @@ module.exports = React.createClass({
                     { registerBody }
                     { signIn }
                     { errorText }
-                    <LanguageSelector />
                 </AuthBody>
             </AuthPage>
         );

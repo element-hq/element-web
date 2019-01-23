@@ -555,8 +555,6 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
         return (
             <AuthPage>
                 <AuthHeader />
@@ -569,7 +567,6 @@ module.exports = React.createClass({
                         { _t('Create an account') }
                     </a>
                     { loginAsGuestJsx }
-                    <LanguageSelector />
                 </AuthBody>
             </AuthPage>
         );

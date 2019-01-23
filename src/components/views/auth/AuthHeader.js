@@ -25,10 +25,12 @@ module.exports = React.createClass({
 
     render: function() {
         const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
+        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
 
         return (
             <div className="mx_AuthHeader">
                 <AuthHeaderLogo />
+                <LanguageSelector />
             </div>
         );
     },
