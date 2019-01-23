@@ -73,12 +73,6 @@ limitations under the License.
     display: block;
     text-align: center;
     width: 100%;
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-.mx_Login_create:link {
-    color: $primary-fg-color;
 }
 
 .mx_Login_prompt {
@@ -90,12 +84,7 @@ limitations under the License.
 .mx_Login_sso_link {
     display: block;
     text-align: center;
-    font-size: 15px;
     margin-bottom: 20px;
-}
-
-.mx_Login_sso_link:link {
-    color: $primary-fg-color;
 }
 
 .mx_Login_loader {
