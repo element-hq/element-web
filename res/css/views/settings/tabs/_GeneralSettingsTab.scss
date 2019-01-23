@@ -1,0 +1,25 @@
+.mx_GeneralSettingsTab_profile {
+  display: flex;
+}
+
+.mx_GeneralSettingsTab_profileControls {
+  flex-grow: 1;
+}
+
+.mx_GeneralSettingsTab_profileControls .mx_Field #profileDisplayName {
+  width: calc(100% - 20px); // subtract 10px padding on left and right
+}
+
+.mx_GeneralSettingsTab_profileAvatar {
+  width: 88px;
+  height: 88px;
+  margin-left: 13px;
+}
+
+.mx_GeneralSettingsTab_profileAvatar div {
+  display: block;
+  width: 88px;
+  height: 88px;
+  border-radius: 4px;
+  background-color: #ccc;
+}

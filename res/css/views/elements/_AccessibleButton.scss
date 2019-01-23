@@ -21,3 +21,24 @@ limitations under the License.
 .mx_AccessibleButton {
     cursor: pointer;
 }
+
+.mx_AccessibleButton_disabled {
+    cursor: default;
+}
+
+.mx_AccessibleButton_hasKind {
+    padding: 10px 25px;
+    text-align: center;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.mx_AccessibleButton_kind_primary {
+    color: $button-primary-fg-color;
+    background-color: $button-primary-bg-color;
+}
+
+.mx_AccessibleButton_kind_primary.mx_AccessibleButton_disabled {
+    color: $button-primary-disabled-fg-color;
+    background-color: $button-primary-disabled-bg-color;
+}
