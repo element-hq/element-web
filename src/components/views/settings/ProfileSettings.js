@@ -109,18 +109,18 @@ export default class ProfileSettings extends React.Component {
         // TODO: Why is rendering a box with an overlay so complicated? Can the DOM be reduced?
 
         let showOverlayAnyways = true;
-        let avatarElement = <div className="mx_ProfileSettings_avatarPlaceholder"/>;
+        let avatarElement = <div className="mx_ProfileSettings_avatarPlaceholder" />;
         if (this.state.avatarUrl) {
             showOverlayAnyways = false;
             avatarElement = <img src={this.state.avatarUrl}
-                                 alt={_t("Profile picture")} />
+                                 alt={_t("Profile picture")} />;
         }
 
         const avatarOverlayClasses = classNames({
             "mx_ProfileSettings_avatarOverlay": true,
             "mx_ProfileSettings_avatarOverlay_show": showOverlayAnyways,
         });
-        let avatarHoverElement = (
+        const avatarHoverElement = (
             <div className={avatarOverlayClasses} onClick={this._uploadAvatar}>
                 <span className="mx_ProfileSettings_avatarOverlayText">{_t("Upload profile picture")}</span>
                 <div className="mx_ProfileSettings_avatarOverlayImgContainer">
@@ -132,7 +132,7 @@ export default class ProfileSettings extends React.Component {
         return (
             <form onSubmit={this._saveProfile} autoComplete={false} noValidate={true}>
                 <input type="file" ref="avatarUpload" className="mx_ProfileSettings_avatarUpload"
-                       onChange={this._onAvatarChanged} accept="image/*"/>
+                       onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
                         <p>{this.state.userId}</p>

@@ -97,7 +97,7 @@ export class ExistingEmailAddress extends React.Component {
                         {_t("No")}
                     </AccessibleButton>
                 </div>
-            )
+            );
         }
 
         return (
@@ -196,7 +196,7 @@ export default class EmailAddresses extends React.Component {
 
     render() {
         const existingEmailElements = this.state.emails.map((e) => {
-            return <ExistingEmailAddress email={e} onRemoved={this._onRemoved} key={e.address}/>;
+            return <ExistingEmailAddress email={e} onRemoved={this._onRemoved} key={e.address} />;
         });
 
         let addButton = (
@@ -222,7 +222,7 @@ export default class EmailAddresses extends React.Component {
                 <form onSubmit={this._onAddClick} autoComplete={false}
                       noValidate={true} className="mx_EmailAddresses_new">
                     <Field id="newEmailAddress" ref="newEmailAddress" label={_t("Email Address")}
-                           type="text" autoComplete="off" disabled={this.state.verifying}/>
+                           type="text" autoComplete="off" disabled={this.state.verifying} />
                     {addButton}
                 </form>
             </div>
