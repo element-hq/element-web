@@ -154,6 +154,7 @@ export default class GeneralSettingsTab extends React.Component {
 
     _renderThemeSection() {
         // TODO: Re-enable theme selection once the themes actually work
+        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return (
             <div className="mx_SettingsTab_section mx_GeneralSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
@@ -164,6 +165,7 @@ export default class GeneralSettingsTab extends React.Component {
                     <option value="dharma">{_t("2018 theme")}</option>
                     <option value="status">{_t("Status.im theme")}</option>
                 </Field>
+                <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
         );
     }

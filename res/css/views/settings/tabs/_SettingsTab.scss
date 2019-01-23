@@ -36,3 +36,17 @@ limitations under the License.
   margin: 0;
   display: block;
 }
+
+.mx_SettingsTab_section .mx_SettingsFlag {
+  margin-right: 100px;
+  height: 25px;
+  margin-bottom: 10px;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {
+  vertical-align: middle;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
+  float: right;
+}
