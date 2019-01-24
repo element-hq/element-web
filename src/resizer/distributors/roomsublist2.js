@@ -71,7 +71,7 @@ export class Layout {
     openHandle(id) {
         const index = this._getSectionIndex(id);
         //log(`openHandle resolved ${id} to ${index}`);
-        return new Handle(this, index);
+        return new Handle(this, index, this._originalHeights[index]);
     }
 
     _getAvailableHeight() {
@@ -258,13 +258,14 @@ export class Layout {
 }
 
 class Handle {
-    constructor(layout, anchor) {
+    constructor(layout, anchor, height) {
         this._layout = layout;
         this._anchor = anchor;
+        this._initialHeight = height;
     }
 
-    setOffset(offset) {
-        this._layout._relayout(this._anchor, offset);
+    setHeight(height) {
+        this._layout._relayout(this._anchor, height - this._initialHeight);
     }
 
     finish() {
@@ -283,7 +284,7 @@ export class Distributor extends FixedDistributor {
         this._handle.finish();
     }
 
-    resize(offset) {
-        this._handle.setOffset(offset);
+    resize(height) {
+        this._handle.setHeight(height);
     }
 }
