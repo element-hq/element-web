@@ -97,7 +97,7 @@ export default class VoiceSettingsTab extends React.Component {
         let webcamDropdown = null;
         if (this.state.mediaDevices === false) {
             requestButton = (
-                <div>
+                <div className='mx_VoiceSettingsTab_missingMediaPermissions'>
                     <p>{_t("Missing media permissions, click the button below to request.")}</p>
                     <AccessibleButton onClick={this._requestMediaPermissions} kind="primary">
                         {_t("Request media permissions")}
