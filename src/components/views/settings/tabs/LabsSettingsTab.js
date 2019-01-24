@@ -19,6 +19,7 @@ import {_t} from "../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore from "../../../../settings/SettingsStore";
 import ToggleSwitch from "../../elements/ToggleSwitch";
+import MatrixClientPeg from "../../../../MatrixClientPeg";
 const Modal = require("../../../../Modal");
 const sdk = require("../../../../index");
 
