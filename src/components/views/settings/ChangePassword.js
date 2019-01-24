@@ -114,7 +114,11 @@ module.exports = React.createClass({
                         'making encrypted chat history unreadable, unless you first export your room keys ' +
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',
-                    ) } (<a href="https://github.com/vector-im/riot-web/issues/2671">https://github.com/vector-im/riot-web/issues/2671</a>)
+                    ) }
+                    {' '}
+                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noopener">
+                        https://github.com/vector-im/riot-web/issues/2671
+                    </a>
                 </div>,
             button: _t("Continue"),
             extraButtons: [
