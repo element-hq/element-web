@@ -48,6 +48,7 @@ limitations under the License.
   display: inline-block;
   font-size: 12px;
   color: $primary-fg-color;
+  max-width: calc(100% - 48px); // Force word wrap instead of colliding with the switch
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {

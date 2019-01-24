@@ -21,6 +21,8 @@ import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
 import dis from '../../../dispatcher';
+import SettingsStore from "../../../settings/SettingsStore";
+import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -44,43 +46,52 @@ export default class UserSettingsDialog extends React.Component {
     };
 
     _getTabs() {
-        return [
-            new Tab(
-                _td("General"),
-                "mx_UserSettingsDialog_settingsIcon",
-                <GeneralSettingsTab />,
-            ),
-            new Tab(
-                _td("Notifications"),
-                "mx_UserSettingsDialog_bellIcon",
-                <div>Notifications Test</div>,
-            ),
-            new Tab(
-                _td("Preferences"),
-                "mx_UserSettingsDialog_preferencesIcon",
-                <div>Preferences Test</div>,
-            ),
-            new Tab(
-                _td("Voice & Video"),
-                "mx_UserSettingsDialog_voiceIcon",
-                <div>Voice Test</div>,
-            ),
-            new Tab(
-                _td("Security & Privacy"),
-                "mx_UserSettingsDialog_securityIcon",
-                <div>Security Test</div>,
-            ),
-            new Tab(
-                _td("Help & About"),
-                "mx_UserSettingsDialog_helpIcon",
-                <div>Help Test</div>,
-            ),
-            new Tab(
-                _td("Visit old settings"),
-                "mx_UserSettingsDialog_helpIcon",
-                <TempTab onClose={this.props.onFinished} />,
-            ),
-        ];
+        const tabs = [];
+
+        tabs.push(new Tab(
+            _td("General"),
+            "mx_UserSettingsDialog_settingsIcon",
+            <GeneralSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Notifications"),
+            "mx_UserSettingsDialog_bellIcon",
+            <div>Notifications Test</div>,
+        ));
+        tabs.push(new Tab(
+            _td("Preferences"),
+            "mx_UserSettingsDialog_preferencesIcon",
+            <div>Preferences Test</div>,
+        ));
+        tabs.push(new Tab(
+            _td("Voice & Video"),
+            "mx_UserSettingsDialog_voiceIcon",
+            <div>Voice Test</div>,
+        ));
+        tabs.push(new Tab(
+            _td("Security & Privacy"),
+            "mx_UserSettingsDialog_securityIcon",
+            <div>Security Test</div>,
+        ));
+        if (SettingsStore.getLabsFeatures().length > 0) {
+            tabs.push(new Tab(
+                _td("Labs"),
+                "mx_UserSettingsDialog_labsIcon",
+                <LabsSettingsTab />,
+            ));
+        }
+        tabs.push(new Tab(
+            _td("Help & About"),
+            "mx_UserSettingsDialog_helpIcon",
+            <div>Help Test</div>,
+        ));
+        tabs.push(new Tab(
+            _td("Visit old settings"),
+            "mx_UserSettingsDialog_helpIcon",
+            <TempTab onClose={this.props.onFinished} />,
+        ));
+
+        return tabs;
     }
 
     render() {
