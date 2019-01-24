@@ -21,7 +21,7 @@ import sdk from '../../../index';
 
 import { COUNTRIES } from '../../../phonenumber';
 
-const COUNTRIES_BY_ISO2 = new Object(null);
+const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
     COUNTRIES_BY_ISO2[c.iso2] = c;
 }
