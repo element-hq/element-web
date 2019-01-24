@@ -446,7 +446,9 @@ module.exports = React.createClass({
                         "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
                         {
                             'a': (sub) => {
-                                return <a target="_blank" rel="noopener" href="https://www.google.com/search?&q=enable%20unsafe%20scripts">
+                                return <a target="_blank" rel="noopener"
+                                    href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
+                                >
                                     { sub }
                                 </a>;
                             },
@@ -460,7 +462,9 @@ module.exports = React.createClass({
                         "is not blocking requests.", {},
                         {
                             'a': (sub) => {
-                                return <a target="_blank" rel="noopener" href={this.state.enteredHomeserverUrl}>{ sub }</a>;
+                                return <a target="_blank" rel="noopener"
+                                    href={this.state.enteredHomeserverUrl}
+                                >{ sub }</a>;
                             },
                         },
                     ) }
