@@ -191,7 +191,7 @@ module.exports = React.createClass({
         });
         this._layout.update(
             this._layoutSections,
-            this.resizeContainer && this.resizeContainer.clientHeight,
+            this.resizeContainer && this.resizeContainer.offsetHeight,
         );
         this._checkSubListsOverflow();
 
