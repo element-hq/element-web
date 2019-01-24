@@ -205,7 +205,7 @@ module.exports = React.createClass({
                     <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                         value={_t('Return to login screen')} />
                 </div>
-            )
+            );
         } else {
             let serverConfigSection;
             if (!SdkConfig.get()['disable_custom_urls']) {
