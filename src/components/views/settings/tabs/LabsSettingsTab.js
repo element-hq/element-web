@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../languageHandler";
 import PropTypes from "prop-types";
-import SettingsStore from "../../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 const Modal = require("../../../../Modal");
@@ -77,12 +77,14 @@ export default class LabsSettingsTab extends React.Component {
     }
 
     render() {
+        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         const flags = SettingsStore.getLabsFeatures().map(f => <LabsSettingToggle featureId={f} key={f} />);
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
                 <div className="mx_SettingsTab_section">
                     {flags}
+                    <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
                 </div>
             </div>
         );
