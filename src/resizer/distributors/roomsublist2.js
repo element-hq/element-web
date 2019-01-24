@@ -84,19 +84,25 @@ export class Layout {
 
     _applyNewSize() {
         const height = this._getAvailableHeight();
-        const sectionHeights = this._sections.map((section) => {
+        // we should only scale the section here between min and max size
+        const requestedHeights = this._sections.map((section) => {
             return this._sectionHeights[section.id] || (height / this._sections.length);
         });
-        const totalRequestedHeight = sectionHeights.reduce((sum, h) => h + sum, 0);
-        const ratios = sectionHeights.map((h) => h / totalRequestedHeight);
-        this._originalHeights = ratios.map((r) => r * height);
+        const totalRequestedHeight = requestedHeights.reduce((sum, h) => h + sum, 0);
+        const ratios = requestedHeights.map((h) => h / totalRequestedHeight);
+        this._originalHeights = ratios.map((r, i) => clamp(r * height, this._getMinHeight(i), this._getMaxHeight(i)));
+        const totalRequestedHeight2 = requestedHeights.reduce((sum, h) => h + sum, 0);
+        const overflow = height - totalRequestedHeight2;
         // re-assign adjusted heights
         this._sections.forEach((section, i) => {
             this._sectionHeights[section.id] = this._originalHeights[i];
         });
-        log("_applyNewSize", height, this._sections, sectionHeights, ratios, this._originalHeights);
+        log("_applyNewSize", height, this._sections, requestedHeights, ratios, this._originalHeights);
         this._heights = this._originalHeights.slice(0);
         this._relayout();
+        if (overflow) {
+            this._applyOverflow(overflow, this._sections.map((_, i) => i));
+        }
     }
 
     _getSectionIndex(id) {
@@ -104,17 +110,15 @@ export class Layout {
     }
 
     _getMaxHeight(i) {
-        return 100000;
-        /*
         const section = this._sections[i];
         const collapsed = this._collapsedState[section.id];
 
         if (collapsed) {
             return this._sectionHeight(0);
         } else {
+            // return 100000;
             return this._sectionHeight(section.count);
         }
-        */
     }
 
     _sectionHeight(count) {
@@ -123,8 +127,10 @@ export class Layout {
 
     _getMinHeight(i) {
         const section = this._sections[i];
-        log("_getMinHeight", i, section);
-        return this._sectionHeight(Math.min(section.count, 1));
+        const collapsed = this._collapsedState[section.id];
+        const maxItems = collapsed ? 0 : 1;
+        // log("_getMinHeight", i, section);
+        return this._sectionHeight(Math.min(section.count, maxItems));
     }
 
     _applyOverflow(overflow, sections) {
