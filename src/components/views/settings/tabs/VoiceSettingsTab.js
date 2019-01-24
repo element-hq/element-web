@@ -33,7 +33,7 @@ export default class VoiceSettingsTab extends React.Component {
             activeAudioOutput: null,
             activeAudioInput: null,
             activeVideoInput: null,
-        }
+        };
     }
 
     componentWillMount(): void {
