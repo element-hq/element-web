@@ -16,20 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
 const sdk = require("../../../../index");
 
 export default class NotificationSettingsTab extends React.Component {
     constructor() {
         super();
-
-        this.state = {
-            threepids: [],
-        };
-    }
-
-    async componentWillMount(): void {
-        MatrixClientPeg.get().getThreePids().then(r => this.setState({threepids: r.threepids}));
     }
 
     render() {
@@ -38,7 +29,7 @@ export default class NotificationSettingsTab extends React.Component {
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
                 <div className="mx_SettingsTab_section">
-                    <Notifications threepids={this.state.threepids} />
+                    <Notifications />
                 </div>
             </div>
         );
