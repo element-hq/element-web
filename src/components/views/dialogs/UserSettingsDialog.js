@@ -25,6 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
 import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
+import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -68,7 +69,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Voice & Video"),
             "mx_UserSettingsDialog_voiceIcon",
-            <div>Voice Test</div>,
+            <VoiceSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Security & Privacy"),
