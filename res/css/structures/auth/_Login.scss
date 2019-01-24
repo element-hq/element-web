@@ -69,41 +69,10 @@ limitations under the License.
     margin-right: 10px;
 }
 
-.mx_Login_create {
-    display: block;
-    text-align: center;
-    width: 100%;
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-.mx_Login_create:link {
-    color: $primary-fg-color;
-}
-
-.mx_Login_prompt {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-size: 13px;
-}
-
-.mx_Login_forgot {
-    font-size: 15px;
-}
-
-.mx_Login_forgot:link {
-    color: $primary-fg-color;
-}
-
 .mx_Login_sso_link {
     display: block;
     text-align: center;
-    font-size: 15px;
     margin-bottom: 20px;
-}
-
-.mx_Login_sso_link:link {
-    color: $primary-fg-color;
 }
 
 .mx_Login_loader {

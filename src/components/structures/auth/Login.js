@@ -526,7 +526,7 @@ module.exports = React.createClass({
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
-                <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
+                <a className="mx_Auth_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Try the app first') }
                 </a>;
         }
@@ -544,8 +544,6 @@ module.exports = React.createClass({
                 delayTimeMs={1000} />;
         }
 
-        const header = <h2>{ _t('Sign in') } { loader }</h2>;
-
         let errorTextSection;
         if (errorText) {
             errorTextSection = (
@@ -559,12 +557,15 @@ module.exports = React.createClass({
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    { header }
+                    <h2>
+                        {_t('Sign in to your account')}
+                        {loader}
+                    </h2>
                     { errorTextSection }
                     { this.componentForStep(this.state.currentFlow) }
                     { serverConfig }
-                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                        { _t('Create an account') }
+                    <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
+                        { _t('Create account') }
                     </a>
                     { loginAsGuestJsx }
                 </AuthBody>

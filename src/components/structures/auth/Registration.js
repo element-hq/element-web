@@ -457,7 +457,6 @@ module.exports = React.createClass({
 
         let errorText;
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
-        const header = <h2>{ _t('Create an account') }</h2>;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
@@ -465,8 +464,8 @@ module.exports = React.createClass({
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
-                    { _t('I already have an account') }
+                <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
+                    { _t('Sign in instead') }
                 </a>
             );
         }
@@ -480,7 +479,7 @@ module.exports = React.createClass({
                         null}
                 />
                 <AuthBody>
-                    { header }
+                    <h2>{ _t('Create your account') }</h2>
                     { registerBody }
                     { signIn }
                     { errorText }
