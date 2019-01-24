@@ -23,6 +23,7 @@ import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
+import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
 import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
 import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
 import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
@@ -74,7 +75,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
-            <div>Security Test</div>,
+            <SecuritySettingsTab />,
         ));
         if (SettingsStore.getLabsFeatures().length > 0) {
             tabs.push(new Tab(
