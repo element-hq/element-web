@@ -28,6 +28,7 @@ import {
     PushRuleVectorState,
     ContentRules,
 } from '../../../notifications';
+import * as SdkConfig from "../../../SdkConfig";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -73,8 +74,6 @@ module.exports = React.createClass({
     propTypes: {
         // The array of threepids from the JS SDK (required for email notifications)
         threepids: React.PropTypes.array.isRequired,
-        // The brand string set when creating an email pusher
-        brand: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -146,7 +145,7 @@ module.exports = React.createClass({
         let emailPusherPromise;
         if (event.target.checked) {
             const data = {};
-            data['brand'] = this.props.brand || 'Riot';
+            data['brand'] = SdkConfig.get().brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
             const emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
