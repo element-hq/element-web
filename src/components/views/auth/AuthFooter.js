@@ -26,7 +26,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_AuthFooter">
-                <a href="https://matrix.org">{ _t("powered by Matrix") }</a>
+                <a href="https://matrix.org" target="_blank" rel="noopener">{ _t("powered by Matrix") }</a>
             </div>
         );
     },

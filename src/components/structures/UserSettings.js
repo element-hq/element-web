@@ -605,7 +605,7 @@ module.exports = React.createClass({
             <div>
                 <h3>Referral</h3>
                 <div className="mx_UserSettings_section">
-                    { _t("Refer a friend to Riot:") } <a href={href}>{ href }</a>
+                    { _t("Refer a friend to Riot:") } <a href={href} target="_blank" rel="noopener">{ href }</a>
                 </div>
             </div>
         );
