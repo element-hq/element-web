@@ -24,6 +24,7 @@ limitations under the License.
 .mx_Field input,
 .mx_Field select {
     font-weight: normal;
+    font-family: $font-family;
     border-radius: 4px;
     transition: border-color 0.25s;
     border: 1px solid $input-border-color;
