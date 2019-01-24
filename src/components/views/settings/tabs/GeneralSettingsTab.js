@@ -17,69 +17,176 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../languageHandler";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
+import GroupUserSettings from "../../groups/GroupUserSettings";
+import PropTypes from "prop-types";
+import {MatrixClient} from "matrix-js-sdk";
+import { DragDropContext } from 'react-beautiful-dnd';
+import ProfileSettings from "../ProfileSettings";
+import EmailAddresses from "../EmailAddresses";
+import PhoneNumbers from "../PhoneNumbers";
 import Field from "../../elements/Field";
+import * as languageHandler from "../../../../languageHandler";
+import {SettingLevel} from "../../../../settings/SettingsStore";
+import SettingsStore from "../../../../settings/SettingsStore";
+import LanguageDropdown from "../../elements/LanguageDropdown";
 import AccessibleButton from "../../elements/AccessibleButton";
+import DeactivateAccountDialog from "../../dialogs/DeactivateAccountDialog";
+const PlatformPeg = require("../../../../PlatformPeg");
+const sdk = require('../../../../index');
+const Modal = require("../../../../Modal");
+const dis = require("../../../../dispatcher");
 
 export default class GeneralSettingsTab extends React.Component {
+    static childContextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    };
+
     constructor() {
         super();
 
-        const client = MatrixClientPeg.get();
         this.state = {
-            userId: client.getUserId(),
-            displayName: client.getUser(client.getUserId()).displayName,
-            enableProfileSave: false,
+            language: languageHandler.getCurrentLanguage(),
+            theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
         };
     }
 
-    _saveProfile = async (e) => {
-        e.stopPropagation();
-        e.preventDefault();
+    getChildContext() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
+        };
+    }
 
-        if (!this.state.enableProfileSave) return;
-        this.setState({enableProfileSave: false});
+    _onLanguageChange = (newLanguage) => {
+        if (this.state.language === newLanguage) return;
 
-        // TODO: What do we do about errors?
-        await MatrixClientPeg.get().setDisplayName(this.state.displayName);
-
-        // TODO: Support avatars
-
-        this.setState({enableProfileSave: true});
+        SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
+        this.setState({language: newLanguage});
+        PlatformPeg.get().reload();
     };
 
-    _onDisplayNameChanged = (e) => {
-        this.setState({
-            displayName: e.target.value,
-            enableProfileSave: true,
+    _onThemeChange = (e) => {
+        const newTheme = e.target.value;
+        if (this.state.theme === newTheme) return;
+
+        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        dis.dispatch({action: 'set_theme', value: newTheme});
+    };
+
+    _onPasswordChangeError = (err) => {
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
+        let errMsg = err.error || "";
+        if (err.httpStatus === 403) {
+            errMsg = _t("Failed to change password. Is your password correct?");
+        } else if (err.httpStatus) {
+            errMsg += ` (HTTP status ${err.httpStatus})`;
+        }
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        console.error("Failed to change password: " + errMsg);
+        Modal.createTrackedDialog('Failed to change password', '', ErrorDialog, {
+            title: _t("Error"),
+            description: errMsg,
         });
     };
 
-    _renderProfileSection() {
-        // TODO: Ditch avatar placeholder and use the real thing
-        const form = (
-            <form onSubmit={this._saveProfile} autoComplete={false} noValidate={true}>
-                <div className="mx_GeneralSettingsTab_profile">
-                    <div className="mx_GeneralSettingsTab_profileControls">
-                        <p className="mx_GeneralSettingsTab_profileUsername">{this.state.userId}</p>
-                        <Field id="profileDisplayName" label={_t("Display Name")}
-                               type="text" value={this.state.displayName} autocomplete="off"
-                               onChange={this._onDisplayNameChanged} />
-                    </div>
-                    <div className="mx_GeneralSettingsTab_profileAvatar">
-                        <div />
-                    </div>
-                </div>
-                <AccessibleButton onClick={this._saveProfile} kind="primary"
-                                  disabled={!this.state.enableProfileSave}>
-                    {_t("Save")}
-                </AccessibleButton>
-            </form>
-        );
+    _onPasswordChanged = () => {
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Password changed', '', ErrorDialog, {
+            title: _t("Success"),
+            description: _t(
+                "Your password was successfully changed. You will not receive " +
+                "push notifications on other devices until you log back in to them",
+            ) + ".",
+        });
+    };
 
+    _onDeactivateClicked = () => {
+        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {});
+    };
+
+    _renderProfileSection() {
+        // HACK/TODO: Using DragDropContext feels wrong, but we need it.
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
-                {form}
+                <ProfileSettings />
+
+                <span className="mx_SettingsTab_subheading">{_t("Flair")}</span>
+                <DragDropContext>
+                    <GroupUserSettings />
+                </DragDropContext>
+            </div>
+        );
+    }
+
+    _renderAccountSection() {
+        const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        const passwordChangeForm = (
+            <ChangePassword
+                className="mx_GeneralSettingsTab_changePassword"
+                rowClassName=""
+                buttonKind="primary"
+                onError={this._onPasswordChangeError}
+                onFinished={this._onPasswordChanged} />
+        );
+
+        return (
+            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_accountSection">
+                <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
+                <p className="mx_SettingsTab_subsectionText">
+                    {_t("Set a new account password...")}
+                </p>
+                {passwordChangeForm}
+
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                <EmailAddresses />
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                <PhoneNumbers />
+            </div>
+        );
+    }
+
+    _renderLanguageSection() {
+        // TODO: Convert to new-styled Field
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
+                <LanguageDropdown className="mx_GeneralSettingsTab_languageInput"
+                                  onOptionChange={this._onLanguageChange} value={this.state.language} />
+            </div>
+        );
+    }
+
+    _renderThemeSection() {
+        // TODO: Re-enable theme selection once the themes actually work
+        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        return (
+            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_themeSection">
+                <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
+                <Field id="theme" label={_t("Theme")} element="select" disabled={true}
+                       value={this.state.theme} onChange={this._onThemeChange}>
+                    <option value="light">{_t("Light theme")}</option>
+                    <option value="dark">{_t("Dark theme")}</option>
+                    <option value="dharma">{_t("2018 theme")}</option>
+                    <option value="status">{_t("Status.im theme")}</option>
+                </Field>
+                <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
+            </div>
+        );
+    }
+
+    _renderManagementSection() {
+        // TODO: Improve warning text for account deactivation
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Account management")}</span>
+                <span className="mx_SettingsTab_subsectionText">
+                    {_t("Deactivating your account is a permanent action - be careful!")}
+                </span>
+                <AccessibleButton onClick={this._onDeactivateClicked} kind="danger">
+                    {_t("Close Account")}
+                </AccessibleButton>
             </div>
         );
     }
@@ -89,6 +196,10 @@ export default class GeneralSettingsTab extends React.Component {
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
                 {this._renderProfileSection()}
+                {this._renderAccountSection()}
+                {this._renderLanguageSection()}
+                {this._renderThemeSection()}
+                {this._renderManagementSection()}
             </div>
         );
     }

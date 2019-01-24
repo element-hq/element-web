@@ -80,6 +80,7 @@
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
+@import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_ToolTipButton.scss";
 @import "./views/globals/_MatrixToolbar.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";
@@ -128,9 +129,12 @@
 @import "./views/rooms/_TopUnreadMessagesBar.scss";
 @import "./views/rooms/_WhoIsTypingTile.scss";
 @import "./views/settings/_DevicesPanel.scss";
+@import "./views/settings/_EmailAddresses.scss";
 @import "./views/settings/_IntegrationsManager.scss";
 @import "./views/settings/_KeyBackupPanel.scss";
 @import "./views/settings/_Notifications.scss";
+@import "./views/settings/_PhoneNumbers.scss";
+@import "./views/settings/_ProfileSettings.scss";
 @import "./views/settings/tabs/_GeneralSettingsTab.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/voip/_CallView.scss";

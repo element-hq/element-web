@@ -31,6 +31,18 @@ export default class Field extends React.PureComponent {
         // To define options for a select, use <Field><option ... /></Field>
         element: PropTypes.string,
         // All other props pass through to the <input>.
+    };
+
+    get value() {
+        if (!this.refs.fieldInput) return null;
+        return this.refs.fieldInput.value;
+    }
+
+    set value(newValue) {
+        if (!this.refs.fieldInput) {
+            throw new Error("No field input reference");
+        }
+        this.refs.fieldInput.value = newValue;
     }
 
     render() {
@@ -42,6 +54,7 @@ export default class Field extends React.PureComponent {
 
         // Set some defaults for the element
         extraProps.type = extraProps.type || "text";
+        extraProps.ref = "fieldInput";
 
         const element = this.props.element || "input";
         const fieldInput = React.createElement(element, extraProps, this.props.children);

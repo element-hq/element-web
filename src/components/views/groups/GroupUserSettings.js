@@ -68,15 +68,12 @@ export default React.createClass({
             text = _t("You're not currently a member of any communities.");
         }
 
-        return <div>
-            <h3>{ _t('Flair') }</h3>
-            <div className="mx_UserSettings_section">
-                <p>
-                    { text }
-                </p>
+        return (
+            <div>
+                <p className="mx_SettingsTab_subsectionText">{ text }</p>
                 { scrollbox }
             </div>
-        </div>;
+        );
     },
 
     render() {

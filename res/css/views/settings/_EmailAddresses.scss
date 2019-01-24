@@ -1,0 +1,43 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ExistingEmailAddress {
+  margin-bottom: 5px;
+}
+
+.mx_ExistingEmailAddress_delete {
+  margin-right: 5px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.mx_ExistingEmailAddress_email {
+  vertical-align: middle;
+}
+
+.mx_ExistingEmailAddress_promptText {
+  margin-right: 10px;
+}
+
+.mx_ExistingEmailAddress_confirmBtn {
+  margin-right: 5px;
+}
+
+.mx_EmailAddresses_new .mx_Field input {
+  // Use 100% of the space available for the input, but don't let the 10px
+  // padding on either side of the input to push it out of alignment.
+  width: calc(100% - 20px);
+}
