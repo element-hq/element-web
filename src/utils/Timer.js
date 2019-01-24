@@ -26,7 +26,6 @@ Once a timer is finished or aborted, it can't be started again
 a new one through `clone()` or `cloneIfRun()`.
 */
 export default class Timer {
-
     constructor(timeout) {
         this._timeout = timeout;
         this._onTimeout = this._onTimeout.bind(this);
