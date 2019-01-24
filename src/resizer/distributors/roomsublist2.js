@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const allowWhitespace = true;
+import FixedDistributor from "./fixed";
+
+// const allowWhitespace = true;
 const blendOverflow = false;
 const handleHeight = 1;
 
 function log(...params) {
-    // console.log.apply(console, params);
+    console.log.apply(console, params);
 }
 
 function clamp(height, min, max) {
@@ -53,31 +55,46 @@ export class Layout {
         this._applyNewSize();
     }
     // [{id, count}]
-    setSections(sections) {
+    update(sections, availableHeight) {
+        if (Number.isFinite(availableHeight)) {
+            this._availableHeight = availableHeight;
+        }
+
+        this._sections.forEach((section, i) => {
+            this._sectionHeights[section.id] = this._originalHeights[i];
+        });
+
         this._sections = sections;
         this._applyNewSize();
     }
 
     openHandle(id) {
-        return new Handle(this, this._getSectionIndex(id));
+        const index = this._getSectionIndex(id);
+        //log(`openHandle resolved ${id} to ${index}`);
+        return new Handle(this, index);
     }
 
     _getAvailableHeight() {
         const nonCollapsedSectionCount = this._sections.reduce((count, section) => {
             const collapsed = this._collapsedState[section.id];
             return count + (collapsed ? 0 : 1);
-        });
+        }, 0);
         return this._availableHeight - ((nonCollapsedSectionCount - 1) * handleHeight);
     }
 
     _applyNewSize() {
         const height = this._getAvailableHeight();
         const sectionHeights = this._sections.map((section) => {
-            return this._sectionHeight[section.id] || (height / this._sections.length);
+            return this._sectionHeights[section.id] || (height / this._sections.length);
         });
         const totalRequestedHeight = sectionHeights.reduce((sum, h) => h + sum, 0);
         const ratios = sectionHeights.map((h) => h / totalRequestedHeight);
         this._originalHeights = ratios.map((r) => r * height);
+        // re-assign adjusted heights
+        this._sections.forEach((section, i) => {
+            this._sectionHeights[section.id] = this._originalHeights[i];
+        });
+        log("_applyNewSize", height, this._sections, sectionHeights, ratios, this._originalHeights);
         this._heights = this._originalHeights.slice(0);
         this._relayout();
     }
@@ -87,6 +104,8 @@ export class Layout {
     }
 
     _getMaxHeight(i) {
+        return 100000;
+        /*
         const section = this._sections[i];
         const collapsed = this._collapsedState[section.id];
 
@@ -95,6 +114,7 @@ export class Layout {
         } else {
             return this._sectionHeight(section.count);
         }
+        */
     }
 
     _sectionHeight(count) {
@@ -103,6 +123,7 @@ export class Layout {
 
     _getMinHeight(i) {
         const section = this._sections[i];
+        log("_getMinHeight", i, section);
         return this._sectionHeight(Math.min(section.count, 1));
     }
 
@@ -112,11 +133,11 @@ export class Layout {
         // calls itself recursively until it has distributed all the overflow
         // or run out of unclamped sections.
 
-        let unclampedSections = [];
+        const unclampedSections = [];
 
-        let overflowPerSection = blendOverflow ? (overflow / sections.length) : overflow;
+        // let overflowPerSection = blendOverflow ? (overflow / sections.length) : overflow;
         for (const i of sections) {
-            newHeight = clamp(this._heights[i] - overflow, this._getMinHeight(i), this._getMaxHeight(i));
+            const newHeight = clamp(this._heights[i] - overflow, this._getMinHeight(i), this._getMaxHeight(i));
             if (newHeight == this._heights[i] - overflow) {
                 unclampedSections.push(i);
             }
@@ -129,7 +150,7 @@ export class Layout {
             //log(`for section ${i} overflow is ${overflow}`);
 
             if (!blendOverflow) {
-                overflowPerSection = overflow;
+                // overflowPerSection = overflow;
                 if (Math.abs(overflow) < 1.0) break;
             }
         }
@@ -143,11 +164,11 @@ export class Layout {
         return overflow;
     }
 
-    _rebalanceAbove(overflowAbove) {
+    _rebalanceAbove(anchor, overflowAbove) {
         if (Math.abs(overflowAbove) > 1.0) {
-            log(`trying to rebalance upstream with ${overflowAbove}`);
-            let sections = [];
-            for (let i = anchor - 1; i >= 1; i--) {
+            // log(`trying to rebalance upstream with ${overflowAbove}`);
+            const sections = [];
+            for (let i = anchor - 1; i >= 0; i--) {
                 sections.push(i);
             }
             overflowAbove = this._applyOverflow(overflowAbove, sections);
@@ -155,11 +176,11 @@ export class Layout {
         return overflowAbove;
     }
 
-    _rebalanceBelow(overflowBelow) {
+    _rebalanceBelow(anchor, overflowBelow) {
         if (Math.abs(overflowBelow) > 1.0) {
-            log(`trying to rebalance downstream with ${overflowBelow}`);
-            let sections = [];
-            for (let i = anchor + 1; i <= this._sections.length; i++) {
+            // log(`trying to rebalance downstream with ${overflowBelow}`);
+            const sections = [];
+            for (let i = anchor + 1; i < this._sections.length; i++) {
                 sections.push(i);
             }
             overflowBelow = this._applyOverflow(overflowBelow, sections);
@@ -183,32 +204,29 @@ export class Layout {
             // overflowAbove = minus how much are we above max height?
             overflowAbove = (maxHeight - this._heights[anchor]) - offset;
             overflowBelow = offset;
-            log(`pulling downwards clamped at max: ${overflowAbove} ${overflowBelow}`);
-        }
-        // new height < min?
-        else if (this._heights[anchor] + offset < minHeight) {
+            // log(`pulling downwards clamped at max: ${overflowAbove} ${overflowBelow}`);
+        } else if (this._heights[anchor] + offset < minHeight) { // new height < min?
             // we're pulling upwards and clamped
             // overflowAbove = ??? (offset is negative here, so - offset will add)
             overflowAbove = (minHeight - this._heights[anchor]) - offset;
             overflowBelow = offset;
-            log(`pulling upwards clamped at min: ${overflowAbove} ${overflowBelow}`);
-        }
-        else {
+            // log(`pulling upwards clamped at min: ${overflowAbove} ${overflowBelow}`);
+        } else {
             overflowAbove = 0;
             overflowBelow = offset;
-            log(`resizing the anchor: ${overflowAbove} ${overflowBelow}`);
+            // log(`resizing the anchor: ${overflowAbove} ${overflowBelow}`);
         }
         this._heights[anchor] = clamp(this._heights[anchor] + offset, minHeight, maxHeight);
 
         // these are reassigned the amount of overflow that could not be rebalanced
         // meaning we dragged the handle too far and it can't follow the cursor anymore
-        overflowAbove = this._rebalanceAbove(overflowAbove);
-        overflowBelow = this._rebalanceBelow(overflowBelow);
+        overflowAbove = this._rebalanceAbove(anchor, overflowAbove);
+        overflowBelow = this._rebalanceBelow(anchor, overflowBelow);
 
         if (!clamped) { // to avoid risk of infinite recursion
             // clamp to avoid overflowing or underflowing the page
             if (Math.abs(overflowAbove) > 1.0) {
-                log(`clamping with overflowAbove ${overflowAbove}`);
+                // log(`clamping with overflowAbove ${overflowAbove}`);
                 // here we do the layout again with offset - the amount of space we took too much
                 this._relayout(anchor, offset + overflowAbove, true);
                 return offset + overflowAbove;
@@ -216,25 +234,26 @@ export class Layout {
 
             if (Math.abs(overflowBelow) > 1.0) {
                 // here we do the layout again with offset - the amount of space we took too much
-                log(`clamping with overflowBelow ${overflowBelow}`);
+                // log(`clamping with overflowBelow ${overflowBelow}`);
                 this._relayout(anchor, offset - overflowBelow, true);
                 return offset - overflowBelow;
             }
         }
 
+        log("updating layout, heights are now", this._heights);
         // apply the heights
         for (let i = 0; i < this._sections.length; i++) {
             const section = this._sections[i];
             this._applyHeight(section.id, this._heights[i]);
-            // const roomSubList = document.getElementById(`roomSubList${i}`);
-            // roomSubList.style.height = `${heights[i]}px`;
         }
 
         return undefined;
     }
 
     _commitHeights() {
-        this._originalHeights = this._heights;
+        const heights = this._heights.slice(0);
+        log("committing heights:", heights);
+        this._originalHeights = heights;
     }
 }
 
@@ -253,28 +272,18 @@ class Handle {
     }
 }
 
-export class Distributor {
+export class Distributor extends FixedDistributor {
     constructor(item, cfg) {
-        this._item = item;
-        this._layout = cfg.layout;
-        this._initialTop;
-    }
-
-    start() {
-        this._handle = this._layout.openHandle(this._item.id);
-        this._initialTop = this._item.getOffset();
+        super(item);
+        const layout = cfg.layout;
+        this._handle = layout.openHandle(item.id);
     }
 
     finish() {
         this._handle.finish();
     }
 
-    resize() {
-        // not supported
-    }
-
-    resizeFromContainerOffset(containerOffset) {
-        const offset = containerOffset - this._initialTop;
+    resize(offset) {
         this._handle.setOffset(offset);
     }
 }
