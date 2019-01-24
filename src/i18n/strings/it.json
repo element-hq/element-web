@@ -1447,5 +1447,14 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Se non hai impostato il nuovo metodo di recupero, un aggressore potrebbe tentare di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni.",
     "Set up Secure Messages": "Imposta i messaggi sicuri",
     "Go to Settings": "Vai alle impostazioni",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Per vedere la tua cronologia di messaggi sicura e assicurarti di poter vedere nuovi messaggi in dispositivi futuri, imposta il Ripristino Sicuro dei Messaggi."
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Per vedere la tua cronologia di messaggi sicura e assicurarti di poter vedere nuovi messaggi in dispositivi futuri, imposta il Ripristino Sicuro dei Messaggi.",
+    "Waiting for %(userId)s to accept...": "In attesa che %(userId)s accetti...",
+    "Waiting for %(userId)s to confirm...": "In attesa che %(userId)s confermi...",
+    "Unrecognised address": "Indirizzo non riconosciuto",
+    "User %(user_id)s may or may not exist": "L'utente %(user_id)s potrebbe non esistere",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Chiedi prima di inviare inviti a possibili ID matrix non validi",
+    "The following users may not exist": "I seguenti utenti potrebbero non esistere",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Impossibile trovare profili per gli ID Matrix elencati sotto - vuoi comunque invitarli?",
+    "Invite anyway and never warn me again": "Invitali lo stesso e non avvisarmi più",
+    "Invite anyway": "Invita comunque"
 }
