@@ -28,6 +28,8 @@ import {
     PushRuleVectorState,
     ContentRules,
 } from '../../../notifications';
+import * as SdkConfig from "../../../SdkConfig";
+import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -70,19 +72,6 @@ module.exports = React.createClass({
         ERROR: "ERROR", // There was an error
     },
 
-    propTypes: {
-        // The array of threepids from the JS SDK (required for email notifications)
-        threepids: React.PropTypes.array.isRequired,
-        // The brand string set when creating an email pusher
-        brand: React.PropTypes.string,
-    },
-
-    getDefaultProps: function() {
-        return {
-            threepids: [],
-        };
-    },
-
     getInitialState: function() {
         return {
             phase: this.phases.LOADING,
@@ -94,6 +83,7 @@ module.exports = React.createClass({
             },
             externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
             externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
+            threepids: [], // used for email notifications
         };
     },
 
@@ -101,42 +91,42 @@ module.exports = React.createClass({
         this._refreshFromServer();
     },
 
-    onEnableNotificationsChange: function(event) {
+    onEnableNotificationsChange: function(checked) {
         const self = this;
         this.setState({
             phase: this.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !event.target.checked).done(function() {
+        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).done(function() {
            self._refreshFromServer();
         });
     },
 
-    onEnableDesktopNotificationsChange: function(event) {
+    onEnableDesktopNotificationsChange: function(checked) {
         SettingsStore.setValue(
             "notificationsEnabled", null,
             SettingLevel.DEVICE,
-            event.target.checked,
+            checked,
         ).finally(() => {
             this.forceUpdate();
         });
     },
 
-    onEnableDesktopNotificationBodyChange: function(event) {
+    onEnableDesktopNotificationBodyChange: function(checked) {
         SettingsStore.setValue(
             "notificationBodyEnabled", null,
             SettingLevel.DEVICE,
-            event.target.checked,
+            checked,
         ).finally(() => {
             this.forceUpdate();
         });
     },
 
-    onEnableAudioNotificationsChange: function(event) {
+    onEnableAudioNotificationsChange: function(checked) {
         SettingsStore.setValue(
             "audioNotificationsEnabled", null,
             SettingLevel.DEVICE,
-            event.target.checked,
+            checked,
         ).finally(() => {
             this.forceUpdate();
         });
@@ -146,7 +136,7 @@ module.exports = React.createClass({
         let emailPusherPromise;
         if (event.target.checked) {
             const data = {};
-            data['brand'] = this.props.brand || 'Riot';
+            data['brand'] = SdkConfig.get().brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
             const emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
@@ -434,7 +424,6 @@ module.exports = React.createClass({
     // Check if any legacy im.vector rules need to be ported to the new API
     // for overriding the actions of default rules.
     _portRulesToNewAPI: function(rulesets) {
-        const self = this;
         const needsUpdate = [];
         const cli = MatrixClientPeg.get();
 
@@ -633,6 +622,8 @@ module.exports = React.createClass({
                 externalPushRules: self.state.externalPushRules,
             });
         }).done();
+
+        MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
     },
 
     _updatePushRuleActions: function(rule, actions, enabled) {
@@ -691,27 +682,25 @@ module.exports = React.createClass({
         return rows;
     },
 
+    hasEmailPusher: function(pushers, address) {
+        if (pushers === undefined) {
+            return false;
+        }
+        for (let i = 0; i < pushers.length; ++i) {
+            if (pushers[i].kind === 'email' && pushers[i].pushkey === address) {
+                return true;
+            }
+        }
+        return false;
+    },
+
     emailNotificationsRow: function(address, label) {
-        return (<div className="mx_UserNotifSettings_tableRow">
-            <div className="mx_UserNotifSettings_inputCell">
-                <input id="enableEmailNotifications_{address}"
-                    ref="enableEmailNotifications_{address}"
-                    type="checkbox"
-                    checked={ UserSettingsStore.hasEmailPusher(this.state.pushers, address) }
-                    onChange={ this.onEnableEmailNotificationsChange.bind(this, address) }
-                />
-            </div>
-            <div className="mx_UserNotifSettings_labelCell">
-                <label htmlFor="enableEmailNotifications_{address}">
-                    {label}
-                </label>
-            </div>
-        </div>);
+        return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
+                                     onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
+                                     label={label} />;
     },
 
     render: function() {
-        const self = this;
-
         let spinner;
         if (this.state.phase === this.phases.LOADING) {
             const Loader = sdk.getComponent("elements.Spinner");
@@ -720,23 +709,9 @@ module.exports = React.createClass({
 
         let masterPushRuleDiv;
         if (this.state.masterPushRule) {
-            masterPushRuleDiv = (
-                <div className="mx_UserNotifSettings_tableRow">
-                    <div className="mx_UserNotifSettings_inputCell">
-                        <input id="enableNotifications"
-                            ref="enableNotifications"
-                            type="checkbox"
-                            checked={ !this.state.masterPushRule.enabled }
-                            onChange={ this.onEnableNotificationsChange }
-                        />
-                    </div>
-                    <div className="mx_UserNotifSettings_labelCell">
-                        <label htmlFor="enableNotifications">
-                            { _t('Enable notifications for this account') }
-                        </label>
-                    </div>
-                </div>
-            );
+            masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
+                                                      onChange={this.onEnableNotificationsChange}
+                                                      label={_t('Enable notifications for this account')}/>;
         }
 
         // When enabled, the master rule inhibits all existing rules
@@ -747,17 +722,17 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        { _t('All notifications are currently disabled for all targets.') }.
+                        { _t('All notifications are currently disabled for all targets.') }
                     </div>
                 </div>
             );
         }
 
-        const emailThreepids = this.props.threepids.filter((tp) => tp.medium === "email");
+        const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRow;
         if (emailThreepids.length === 0) {
             emailNotificationsRow = <div>
-                { _t('Add an email address above to configure email notifications') }
+                { _t('Add an email address to configure email notifications') }
             </div>;
         } else {
             // This only supports the first email address in your profile for now
@@ -788,7 +763,7 @@ module.exports = React.createClass({
         let devicesSection;
         if (this.state.pushers === undefined) {
             devicesSection = <div className="error">{ _t('Unable to fetch notification target list') }</div>;
-        } else if (this.state.pushers.length == 0) {
+        } else if (this.state.pushers.length === 0) {
             devicesSection = null;
         } else {
             // TODO: It would be great to be able to delete pushers from here too,
@@ -836,50 +811,17 @@ module.exports = React.createClass({
 
                     { spinner }
 
-                    <div className="mx_UserNotifSettings_tableRow">
-                        <div className="mx_UserNotifSettings_inputCell">
-                            <input id="enableDesktopNotifications"
-                                ref="enableDesktopNotifications"
-                                type="checkbox"
-                                checked={ SettingsStore.getValue("notificationsEnabled") }
-                                onChange={ this.onEnableDesktopNotificationsChange } />
-                        </div>
-                        <div className="mx_UserNotifSettings_labelCell">
-                            <label htmlFor="enableDesktopNotifications">
-                                { _t('Enable desktop notifications') }
-                            </label>
-                        </div>
-                    </div>
+                    <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
+                                          onChange={this.onEnableDesktopNotificationsChange}
+                                          label={_t('Enable desktop notifications')} />
 
-                    <div className="mx_UserNotifSettings_tableRow">
-                        <div className="mx_UserNotifSettings_inputCell">
-                            <input id="enableDesktopNotificationBody"
-                                ref="enableDesktopNotificationBody"
-                                type="checkbox"
-                                checked={ SettingsStore.getValue("notificationBodyEnabled") }
-                                onChange={ this.onEnableDesktopNotificationBodyChange } />
-                        </div>
-                        <div className="mx_UserNotifSettings_labelCell">
-                            <label htmlFor="enableDesktopNotificationBody">
-                                { _t('Show message in desktop notification') }
-                            </label>
-                        </div>
-                    </div>
+                    <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
+                                          onChange={this.onEnableDesktopNotificationBodyChange}
+                                          label={_t('Show message in desktop notification')} />
 
-                    <div className="mx_UserNotifSettings_tableRow">
-                        <div className="mx_UserNotifSettings_inputCell">
-                            <input id="enableDesktopAudioNotifications"
-                                ref="enableDesktopAudioNotifications"
-                                type="checkbox"
-                                checked={ SettingsStore.getValue("audioNotificationsEnabled") }
-                                onChange={ this.onEnableAudioNotificationsChange } />
-                        </div>
-                        <div className="mx_UserNotifSettings_labelCell">
-                            <label htmlFor="enableDesktopAudioNotifications">
-                                { _t('Enable audible notifications in web client') }
-                            </label>
-                        </div>
-                    </div>
+                    <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
+                                          onChange={this.onEnableAudioNotificationsChange}
+                                          label={_t('Enable audible notifications in web client')} />
 
                     { emailNotificationsRow }
 

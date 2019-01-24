@@ -18,8 +18,8 @@ import React from 'react';
 import {_t} from "../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore from "../../../../settings/SettingsStore";
-import ToggleSwitch from "../../elements/ToggleSwitch";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
+import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 const Modal = require("../../../../Modal");
 const sdk = require("../../../../index");
 
@@ -65,15 +65,9 @@ export class LabsSettingToggle extends React.Component {
     };
 
     render() {
-        // This is a minimal version of a SettingsFlag
         const label = _t(SettingsStore.getDisplayName(this.props.featureId));
         const value = SettingsStore.isFeatureEnabled(this.props.featureId);
-        return (
-            <div className="mx_SettingsFlag">
-                <span className="mx_SettingsFlag_label">{label}</span>
-                <ToggleSwitch checked={value} onChange={this._onChange} />
-            </div>
-        );
+        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} />;
     }
 }
 
