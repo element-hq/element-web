@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@ module.exports = React.createClass({
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
 
-        withToggleButton: PropTypes.bool,
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
     },
 
@@ -54,7 +54,6 @@ module.exports = React.createClass({
             onServerConfigChange: function() {},
             customHsUrl: "",
             customIsUrl: "",
-            withToggleButton: false,
             delayTimeMs: 0,
         };
     },
@@ -63,9 +62,7 @@ module.exports = React.createClass({
         return {
             hs_url: this.props.customHsUrl,
             is_url: this.props.customIsUrl,
-            // if withToggleButton is false, then show the config all the time given we have no way otherwise of making it visible
-            configVisible: !this.props.withToggleButton ||
-                           (this.props.customHsUrl !== this.props.defaultHsUrl) ||
+            configVisible: (this.props.customHsUrl !== this.props.defaultHsUrl) ||
                            (this.props.customIsUrl !== this.props.defaultIsUrl),
         };
     },
@@ -77,7 +74,7 @@ module.exports = React.createClass({
         this.setState({
             hs_url: newProps.customHsUrl,
             is_url: newProps.customIsUrl,
-            configVisible: !newProps.withToggleButton ||
+            configVisible:
                 (newProps.customHsUrl !== newProps.defaultHsUrl) ||
                 (newProps.customIsUrl !== newProps.defaultIsUrl),
         });
@@ -146,26 +143,23 @@ module.exports = React.createClass({
         const serverConfigStyle = {};
         serverConfigStyle.display = this.state.configVisible ? 'block' : 'none';
 
-        let toggleButton;
-        if (this.props.withToggleButton) {
-            toggleButton = (
-                <div className="mx_ServerConfig_selector">
-                    <input className="mx_Login_radio" id="basic" name="configVisible" type="radio"
-                        checked={!this.state.configVisible}
-                        onChange={this.onServerConfigVisibleChange.bind(this, false)} />
-                    <label className="mx_Login_label" htmlFor="basic">
-                        { _t("Default server") }
-                    </label>
-                    &nbsp;&nbsp;
-                    <input className="mx_Login_radio" id="advanced" name="configVisible" type="radio"
-                        checked={this.state.configVisible}
-                        onChange={this.onServerConfigVisibleChange.bind(this, true)} />
-                    <label className="mx_Login_label" htmlFor="advanced">
-                        { _t("Custom server") }
-                    </label>
-                </div>
-            );
-        }
+        const toggleButton = (
+            <div className="mx_ServerConfig_selector">
+                <input className="mx_Login_radio" id="basic" name="configVisible" type="radio"
+                    checked={!this.state.configVisible}
+                    onChange={this.onServerConfigVisibleChange.bind(this, false)} />
+                <label className="mx_Login_label" htmlFor="basic">
+                    { _t("Default server") }
+                </label>
+                &nbsp;&nbsp;
+                <input className="mx_Login_radio" id="advanced" name="configVisible" type="radio"
+                    checked={this.state.configVisible}
+                    onChange={this.onServerConfigVisibleChange.bind(this, true)} />
+                <label className="mx_Login_label" htmlFor="advanced">
+                    { _t("Custom server") }
+                </label>
+            </div>
+        );
 
         return (
         <div>
@@ -177,7 +171,6 @@ module.exports = React.createClass({
                     </label>
                     <input className="mx_Login_field" id="hsurl" type="text"
                         placeholder={this.props.defaultHsUrl}
-                        disabled={!this.props.withToggleButton}
                         value={this.state.hs_url}
                         onChange={this.onHomeserverChanged} />
                     <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
@@ -185,7 +178,6 @@ module.exports = React.createClass({
                     </label>
                     <input className="mx_Login_field" id="isurl" type="text"
                         placeholder={this.props.defaultIsUrl}
-                        disabled={!this.props.withToggleButton}
                         value={this.state.is_url}
                         onChange={this.onIdentityServerChanged} />
                     <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>

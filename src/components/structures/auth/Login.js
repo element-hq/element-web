@@ -547,7 +547,6 @@ module.exports = React.createClass({
 
         if (!SdkConfig.get()['disable_custom_urls']) {
             serverConfig = <ServerConfig ref="serverConfig"
-                withToggleButton={true}
                 customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
                 customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
                 defaultHsUrl={this.props.defaultHsUrl}
