@@ -343,40 +343,6 @@ describe('loading:', function() {
             }).done(done, done);
         });
 
-        it("logs in correctly with a Riot Team Server", function() {
-            sdk.setFetch(httpBackend.fetchFn); // XXX: ought to restore this!
-
-            httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-
-            loadApp({
-                config: {
-                    teamServerConfig: {
-                        teamServerURL: 'http://my_team_server',
-                    },
-                },
-            });
-
-            return Promise.delay(1).then(() => {
-                // we expect a loading spinner while we log into the RTS
-                assertAtLoadingSpinner(matrixChat);
-
-                httpBackend.when('GET', 'my_team_server/login').respond(200, {
-                    team_token: 'nom',
-                });
-                return httpBackend.flush();
-            }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
-            }).then(() => {
-                // we got a sync spinner - let the sync complete
-                return expectAndAwaitSync();
-            }).then(() => {
-                // once the sync completes, we should have a home page
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.HomePage'));
-            });
-        });
-
         describe('/#/login link:', function() {
             beforeEach(function() {
                 loadApp({
