@@ -228,24 +228,18 @@ export default class SettingsStore {
 
         // Check if we need to invert the setting at all. Do this after we get the setting
         // handlers though, otherwise we'll fail to read the value.
-        let inverted = false;
         if (setting.invertedSettingName) {
             //console.warn(`Inverting ${settingName} to be ${setting.invertedSettingName} - legacy setting`);
             settingName = setting.invertedSettingName;
-            inverted = true;
         }
 
         if (explicit) {
             const handler = handlers[level];
             if (!handler) {
-                let value = SettingsStore._tryControllerOverride(setting, level, roomId, null, null);
-                if (inverted) value = !value;
-                return value;
+                return SettingsStore._getFinalValue(setting, level, roomId, null, null);
             }
             let value = handler.getValue(settingName, roomId);
-            value = SettingsStore._tryControllerOverride(setting, level, roomId, value, level);
-            if (inverted) value = !value;
-            return value;
+            return SettingsStore._getFinalValue(setting, level, roomId, value, level);
         }
 
         for (let i = minIndex; i < levelOrder.length; i++) {
@@ -255,23 +249,22 @@ export default class SettingsStore {
 
             let value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
-            value = SettingsStore._tryControllerOverride(setting, level, roomId, value, levelOrder[i]);
-            if (inverted) value = !value;
-            return value;
+            return SettingsStore._getFinalValue(setting, level, roomId, value, levelOrder[i]);
         }
 
-        let value = SettingsStore._tryControllerOverride(setting, level, roomId, null, null);
-        if (inverted) value = !value;
-        return value;
+        return SettingsStore._getFinalValue(setting, level, roomId, null, null);
     }
 
-    static _tryControllerOverride(setting, level, roomId, calculatedValue, calculatedAtLevel) {
-        const controller = setting.controller;
-        if (!controller) return calculatedValue;
+    static _getFinalValue(setting, level, roomId, calculatedValue, calculatedAtLevel) {
+        let resultingValue = calculatedValue;
 
-        const actualValue = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
-        if (actualValue !== undefined && actualValue !== null) return actualValue;
-        return calculatedValue;
+        if (setting.controller) {
+            const actualValue = setting.controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
+            if (actualValue !== undefined && actualValue !== null) resultingValue = actualValue;
+        }
+
+        if (setting.invertedSettingName) resultingValue = !resultingValue;
+        return resultingValue;
     }
 
     /* eslint-disable valid-jsdoc */ //https://github.com/eslint/eslint/issues/7307
