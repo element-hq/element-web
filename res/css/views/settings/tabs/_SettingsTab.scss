@@ -26,15 +26,15 @@ limitations under the License.
   font-family: $font-family-semibold;
   color: $primary-fg-color;
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .mx_SettingsTab_subsectionText {
   color: $settings-subsection-fg-color;
   font-size: 12px;
   padding-bottom: 12px;
-  margin: 0;
   display: block;
+  margin: 0 100px 0 0; // Align with the rest of the view
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag {
@@ -53,4 +53,10 @@ limitations under the License.
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
   float: right;
+}
+
+.mx_SettingsTab_linkBtn {
+  cursor: pointer;
+  color: $accent-color;
+  word-break: break-all;
 }
