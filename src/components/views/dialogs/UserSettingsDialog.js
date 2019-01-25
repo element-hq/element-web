@@ -26,6 +26,7 @@ import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
 import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
 import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
+import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -86,7 +87,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Help & About"),
             "mx_UserSettingsDialog_helpIcon",
-            <div>Help Test</div>,
+            <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         tabs.push(new Tab(
             _td("Visit old settings"),
