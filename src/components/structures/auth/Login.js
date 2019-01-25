@@ -26,6 +26,7 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import { AutoDiscovery } from "matrix-js-sdk";
+import * as ServerType from '../../views/auth/ServerTypeSelector';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -80,6 +81,8 @@ module.exports = React.createClass({
             busy: false,
             errorText: null,
             loginIncorrect: false,
+
+            serverType: null,
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
@@ -299,6 +302,12 @@ module.exports = React.createClass({
         });
     },
 
+    onServerTypeChange(type) {
+        this.setState({
+            serverType: type,
+        });
+    },
+
     onRegisterClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -475,7 +484,45 @@ module.exports = React.createClass({
         return errorText;
     },
 
-    componentForStep: function(step) {
+    serverComponentForStep() {
+        const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
+
+        // TODO: May need to adjust the behavior of this config option
+        if (SdkConfig.get()['disable_custom_urls']) {
+            return null;
+        }
+
+        let serverDetails = null;
+        switch (this.state.serverType) {
+            case ServerType.FREE:
+                break;
+            case ServerType.PREMIUM:
+                break;
+            case ServerType.ADVANCED:
+                serverDetails = <ServerConfig ref="serverConfig"
+                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
+                    customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultIsUrl={this.props.defaultIsUrl}
+                    onServerConfigChange={this.onServerConfigChange}
+                    delayTimeMs={1000}
+                />;
+                break;
+        }
+
+        return <div>
+            <ServerTypeSelector
+                defaultHsUrl={this.props.defaultHsUrl}
+                onChange={this.onServerTypeChange}
+            />
+            {serverDetails}
+        </div>;
+    },
+
+    loginComponentForStep() {
+        const step = this.state.currentFlow;
+
         if (!step) {
             return null;
         }
@@ -530,7 +577,6 @@ module.exports = React.createClass({
         const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
-        const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         const errorText = this.props.defaultServerDiscoveryError || this.state.discoveryError || this.state.errorText;
@@ -541,18 +587,6 @@ module.exports = React.createClass({
                 <a className="mx_Auth_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Try the app first') }
                 </a>;
-        }
-
-        let serverConfig;
-
-        if (!SdkConfig.get()['disable_custom_urls']) {
-            serverConfig = <ServerConfig ref="serverConfig"
-                customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
-                defaultHsUrl={this.props.defaultHsUrl}
-                defaultIsUrl={this.props.defaultIsUrl}
-                onServerConfigChange={this.onServerConfigChange}
-                delayTimeMs={1000} />;
         }
 
         let errorTextSection;
@@ -573,8 +607,8 @@ module.exports = React.createClass({
                         {loader}
                     </h2>
                     { errorTextSection }
-                    { this.componentForStep(this.state.currentFlow) }
-                    { serverConfig }
+                    { this.serverComponentForStep() }
+                    { this.loginComponentForStep() }
                     <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
                     </a>

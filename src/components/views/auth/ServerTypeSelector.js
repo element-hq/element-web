@@ -22,15 +22,21 @@ import classnames from 'classnames';
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
+export const FREE = 'Free';
+export const PREMIUM = 'Premium';
+export const ADVANCED = 'Advanced';
+
+const MATRIX_ORG_HS = 'https://matrix.org';
+
 const TYPES = [
     {
-        id: 'Free',
+        id: FREE,
         label: () => _t('Free'),
         logo: () => <img src={require('../../../../res/img/feather-icons/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
     },
     {
-        id: 'Premium',
+        id: PREMIUM,
         label: () => _t('Premium'),
         logo: () => <img src={require('../../../../res/img/feather-icons/modular-bw-logo.svg')} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
@@ -40,7 +46,7 @@ const TYPES = [
         }),
     },
     {
-        id: 'Advanced',
+        id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
             <img src={require('../../../../res/img/feather-icons/globe.svg')} />
@@ -50,10 +56,24 @@ const TYPES = [
     },
 ];
 
+function getDefaultType(defaultHsUrl) {
+    if (!defaultHsUrl) {
+        return null;
+    } else if (defaultHsUrl === MATRIX_ORG_HS) {
+        return FREE;
+    } else if (new URL(defaultHsUrl).hostname.endsWith('.modular.im')) {
+        // TODO: Use a Riot config parameter to detect Modular-ness.
+        // https://github.com/vector-im/riot-web/issues/8253
+        return PREMIUM;
+    } else {
+        return ADVANCED;
+    }
+}
+
 export default class ServerTypeSelector extends React.PureComponent {
     static propTypes = {
-        // ID of the initial type to show as selected or null for none.
-        selected: PropTypes.string,
+        // The default HS URL as another way to set the initially selected type.
+        defaultHsUrl: PropTypes.string,
         // Handler called when the selected type changes.
         onChange: PropTypes.func.isRequired,
     }
@@ -61,30 +81,28 @@ export default class ServerTypeSelector extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        const { defaultHsUrl } = props;
         this.state = {
-            selected: null,
+            selected: getDefaultType(defaultHsUrl),
         };
     }
 
-    componentWillReceiveProps(props) {
-        const { selected } = props;
+    updateSelectedType(type) {
+        if (this.state.selected === type) {
+            return;
+        }
         this.setState({
-            selected,
+            selected: type,
         });
+        if (this.props.onChange) {
+            this.props.onChange(type);
+        }
     }
 
     onClick = (e) => {
         e.stopPropagation();
-        const id = e.currentTarget.dataset.id;
-        if (this.state.selected === id) {
-            return;
-        }
-        this.setState({
-            selected: id,
-        });
-        if (this.props.onChange) {
-            this.props.onChange(id);
-        }
+        const type = e.currentTarget.dataset.id;
+        this.updateSelectedType(type);
     }
 
     render() {
