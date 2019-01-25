@@ -24,8 +24,8 @@ limitations under the License.
 }
 
 .mx_TabbedView_tabLabels {
-  width: 136px;
-  max-width: 136px;
+  width: 150px;
+  max-width: 150px;
   height: 100%;
   color: $tab-label-fg-color;
 }
@@ -37,7 +37,7 @@ limitations under the License.
   border-radius: 3px;
   font-size: 12px;
   font-weight: 600;
-  height: 20px;
+  min-height: 20px; // use min-height instead of height to allow the label to overflow a bit
   margin-bottom: 6px;
   position: relative;
 }
