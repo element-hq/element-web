@@ -43,9 +43,9 @@ export default React.createClass({
         });
     },
 
-    _renderGroupPublicity() {
+    render() {
         let text = "";
-        let scrollbox = <div />;
+        let groupPublicityToggles = null;
         const groups = this.state.groups;
 
         if (this.state.error) {
@@ -54,16 +54,10 @@ export default React.createClass({
             text = _t('Loading...');
         } else if (groups.length > 0) {
             const GroupPublicityToggle = sdk.getComponent('groups.GroupPublicityToggle');
-            const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
-            const groupPublicityToggles = groups.map((groupId, index) => {
+            groupPublicityToggles = groups.map((groupId, index) => {
                 return <GroupPublicityToggle key={index} groupId={groupId} />;
             });
             text = _t('Display your community flair in rooms configured to show it.');
-            scrollbox = <div className="mx_GroupUserSettings_groupPublicity_scrollbox">
-                <GeminiScrollbarWrapper>
-                    { groupPublicityToggles }
-                </GeminiScrollbarWrapper>
-            </div>;
         } else {
             text = _t("You're not currently a member of any communities.");
         }
@@ -71,16 +65,10 @@ export default React.createClass({
         return (
             <div>
                 <p className="mx_SettingsTab_subsectionText">{ text }</p>
-                { scrollbox }
+                <div className='mx_SettingsTab_subsectionText'>
+                    { groupPublicityToggles }
+                </div>
             </div>
         );
-    },
-
-    render() {
-        const groupPublicity = this._renderGroupPublicity();
-
-        return <div>
-            { groupPublicity }
-        </div>;
     },
 });
