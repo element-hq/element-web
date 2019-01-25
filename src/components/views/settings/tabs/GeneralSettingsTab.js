@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../languageHandler";
-import {MatrixClient} from "matrix-js-sdk";
 import ProfileSettings from "../ProfileSettings";
 import EmailAddresses from "../EmailAddresses";
 import PhoneNumbers from "../PhoneNumbers";
