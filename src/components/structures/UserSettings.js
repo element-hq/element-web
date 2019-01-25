@@ -167,13 +167,6 @@ module.exports = React.createClass({
         onClose: PropTypes.func,
         // The brand string given when creating email pushers
         brand: PropTypes.string,
-
-        // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: PropTypes.string,
-
-        // Team token for the referral link. If falsy, the referral section will
-        // not appear
-        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -588,27 +581,6 @@ module.exports = React.createClass({
     _renderGroupSettings: function() {
         const GroupUserSettings = sdk.getComponent('groups.GroupUserSettings');
         return <GroupUserSettings />;
-    },
-
-    _renderReferral: function() {
-        const teamToken = this.props.teamToken;
-        if (!teamToken) {
-            return null;
-        }
-        if (typeof teamToken !== 'string') {
-            console.warn('Team token not a string');
-            return null;
-        }
-        const href = (this.props.referralBaseUrl || window.location.origin) +
-            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
-        return (
-            <div>
-                <h3>Referral</h3>
-                <div className="mx_UserSettings_section">
-                    { _t("Refer a friend to Riot:") } <a href={href} target="_blank" rel="noopener">{ href }</a>
-                </div>
-            </div>
-        );
     },
 
     onLanguageChange: function(newLang) {
@@ -1354,8 +1326,6 @@ module.exports = React.createClass({
                 </div>
 
                 { this._renderGroupSettings() }
-
-                { this._renderReferral() }
 
                 { notificationArea }
 

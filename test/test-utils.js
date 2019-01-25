@@ -104,20 +104,6 @@ export function createTestClient() {
     };
 }
 
-export function createTestRtsClient(teamMap, sidMap) {
-    return {
-        getTeamsConfig() {
-            return Promise.resolve(Object.keys(teamMap).map((token) => teamMap[token]));
-        },
-        trackReferral(referrer, emailSid, clientSecret) {
-            return Promise.resolve({team_token: sidMap[emailSid]});
-        },
-        getTeam(teamToken) {
-            return Promise.resolve(teamMap[teamToken]);
-        },
-    };
-}
-
 /**
  * Create an Event.
  * @param {Object} opts Values for the event.

@@ -46,17 +46,6 @@ module.exports = React.createClass({
         defaultPhoneNumber: PropTypes.string,
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
-        teamsConfig: PropTypes.shape({
-            // Email address to request new teams
-            supportEmail: PropTypes.string,
-            teams: PropTypes.arrayOf(PropTypes.shape({
-                // The displayed name of the team
-                "name": PropTypes.string,
-                // The domain of team email addresses
-                "domain": PropTypes.string,
-            })).required,
-        }),
-
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
@@ -75,7 +64,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             fieldValid: {},
-            selectedTeam: null,
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
         };
@@ -150,10 +138,6 @@ module.exports = React.createClass({
         return true;
     },
 
-    _isUniEmail: function(email) {
-        return email.endsWith('.ac.uk') || email.endsWith('.edu') || email.endsWith('matrix.org');
-    },
-
     validateField: function(fieldID) {
         const pwd1 = this.refs.password.value.trim();
         const pwd2 = this.refs.passwordConfirm.value.trim();
@@ -161,24 +145,6 @@ module.exports = React.createClass({
         switch (fieldID) {
             case FIELD_EMAIL: {
                 const email = this.refs.email.value;
-                if (this.props.teamsConfig && this._isUniEmail(email)) {
-                    const matchingTeam = this.props.teamsConfig.teams.find(
-                        (team) => {
-                            return email.split('@').pop() === team.domain;
-                        },
-                    ) || null;
-                    this.setState({
-                        selectedTeam: matchingTeam,
-                        showSupportEmail: !matchingTeam,
-                    });
-                    this.props.onTeamSelected(matchingTeam);
-                } else {
-                    this.props.onTeamSelected(null);
-                    this.setState({
-                        selectedTeam: null,
-                        showSupportEmail: false,
-                    });
-                }
                 const emailValid = email === '' || Email.looksValid(email);
                 if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
                     this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
@@ -304,30 +270,6 @@ module.exports = React.createClass({
                     value={self.state.email} />
             </div>
         );
-        let belowEmailSection;
-        if (this.props.teamsConfig) {
-            if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
-                belowEmailSection = (
-                    <p className="mx_Login_support">
-                        Sorry, but your university is not registered with us just yet.&nbsp;
-                        Email us on&nbsp;
-                        <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
-                            { this.props.teamsConfig.supportEmail }
-                        </a>&nbsp;
-                        to get your university signed up.
-                        Or continue to register with Riot to enjoy our open source platform.
-                    </p>
-                );
-            } else if (this.state.selectedTeam) {
-                belowEmailSection = (
-                    <p className="mx_Login_support">
-                        {_t("You are registering with %(SelectedTeamName)s", {
-                            SelectedTeamName: this.state.selectedTeam.name,
-                        })}
-                    </p>
-                );
-            }
-        }
 
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
@@ -369,7 +311,6 @@ module.exports = React.createClass({
             <div>
                 <form onSubmit={this.onSubmit}>
                     { emailSection }
-                    { belowEmailSection }
                     { phoneSection }
                     <input type="text" ref="username"
                         placeholder={placeholderUserName} defaultValue={this.props.defaultUsername}
