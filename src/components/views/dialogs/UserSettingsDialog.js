@@ -27,6 +27,7 @@ import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
 import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
 import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
 import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
+import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -87,7 +88,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Help & About"),
             "mx_UserSettingsDialog_helpIcon",
-            <div>Help Test</div>,
+            <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         tabs.push(new Tab(
             _td("Visit old settings"),
@@ -101,10 +102,10 @@ export default class UserSettingsDialog extends React.Component {
     render() {
         return (
             <div className="mx_UserSettingsDialog">
-                <div className="mx_UserSettingsDialog_header">
+                <div className="mx_SettingsDialog_header">
                     {_t("Settings")}
-                    <span className="mx_UserSettingsDialog_close">
-                        <AccessibleButton className="mx_UserSettingsDialog_closeIcon" onClick={this.props.onFinished} />
+                    <span className="mx_SettingsDialog_close">
+                        <AccessibleButton className="mx_SettingsDialog_closeIcon" onClick={this.props.onFinished} />
                     </span>
                 </div>
                 <TabbedView tabs={this._getTabs()} />

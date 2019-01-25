@@ -1,0 +1,70 @@
+/*
+Copyright 2019 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SettingsDialog {
+  .mx_Dialog {
+    max-width: 784px; // 900px - 58px (left padding) - 58px (right padding)
+    width: 80%;
+    height: 80%;
+    border-radius: 4px;
+
+    .mx_TabbedView_tabLabels {
+      // Force the sidebar to be always visible, letting the rest of the content scroll
+      position: fixed;
+    }
+
+    .mx_TabbedView_tabPanel {
+      max-width: 485px;
+      margin-left: 206px; // 70px margin + 136px for the sidebar
+    }
+
+    .mx_SettingsDialog_header {
+      font-size: 24px;
+      display: block;
+      text-align: center;
+      color: $dialog-title-fg-color;
+      margin-top: 16px;
+      margin-bottom: 24px;
+      padding: 0;
+    }
+
+    .mx_SettingsDialog_close {
+      position: absolute;
+      top: 16px;
+      right: 25px;
+    }
+
+    .mx_SettingsDialog_closeIcon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    .mx_SettingsDialog_closeIcon:before {
+      mask: url('$(res)/img/feather-icons/cancel.svg');
+      background-color: $dialog-close-fg-color;
+      mask-repeat: no-repeat;
+      mask-size: 16px;
+      mask-position: center;
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+}
