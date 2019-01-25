@@ -931,7 +931,6 @@
     "Device name": "Device name",
     "Device key": "Device key",
     "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.": "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.",
-    "In future this verification process will be more sophisticated.": "In future this verification process will be more sophisticated.",
     "I verify that the keys match": "I verify that the keys match",
     "Back": "Back",
     "Send Custom Event": "Send Custom Event",

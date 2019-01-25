@@ -253,9 +253,6 @@ export default class DeviceVerifyDialog extends React.Component {
                         "If it doesn't, then someone else is intercepting this device " +
                         "and you probably want to press the blacklist button instead.") }
                 </p>
-                <p>
-                    { _t("In future this verification process will be more sophisticated.") }
-                </p>
             </div>
         );
 
