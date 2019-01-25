@@ -23,8 +23,8 @@ import * as FormattingUtils from "../../../../utils/FormattingUtils";
 import AccessibleButton from "../../elements/AccessibleButton";
 import Analytics from "../../../../Analytics";
 import Promise from "bluebird";
-const Modal = require("../../../../Modal");
-const sdk = require("../../../../index");
+import Modal from "../../../../Modal";
+import sdk from "../../../../index";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -223,12 +223,12 @@ export default class SecuritySettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t('Riot collects anonymous analytics to allow us to improve the application.')}
+                        {_t("Riot collects anonymous analytics to allow us to improve the application.")}
                         &nbsp;
-                        {_t('Privacy is important to us, so we don\'t collect any personal or ' +
-                            'identifiable data for our analytics.')}
+                        {_t("Privacy is important to us, so we don't collect any personal or " +
+                            "identifiable data for our analytics.")}
                         <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
-                            {_t('Learn more about how we use analytics.')}
+                            {_t("Learn more about how we use analytics.")}
                         </AccessibleButton>
                     </div>
                     <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
