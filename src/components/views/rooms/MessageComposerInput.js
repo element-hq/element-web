@@ -486,7 +486,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
-        if (SettingsStore.getValue('dontSendTypingNotifications')) return;
+        if (!SettingsStore.getValue('sendTypingNotifications')) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT,
@@ -1443,7 +1443,7 @@ export default class MessageComposerInput extends React.Component {
                 const url = data.get('href');
                 const completion = data.get('completion');
 
-                const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+                const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
                 const Pill = sdk.getComponent('elements.Pill');
 
                 if (completion === '@room') {

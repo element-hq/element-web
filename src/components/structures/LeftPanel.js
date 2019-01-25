@@ -187,7 +187,7 @@ const LeftPanel = React.createClass({
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
+        const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
         const containerClasses = classNames(

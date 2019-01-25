@@ -183,7 +183,7 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
-            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
+            forceTURN: !SettingsStore.getValue('webRtcForcePeerToPeer', false),
         };
 
         this.matrixClient = createMatrixClient(opts, useIndexedDb);

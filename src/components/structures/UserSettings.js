@@ -65,22 +65,22 @@ const SIMPLE_SETTINGS = [
     { id: "autoplayGifsAndVideos" },
     { id: "alwaysShowEncryptionIcons" },
     { id: "showRoomRecoveryReminder" },
-    { id: "hideReadReceipts" },
-    { id: "dontSendTypingNotifications" },
+    { id: "showReadReceipts" },
+    { id: "sendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
     { id: "showTwelveHourTimestamps" },
-    { id: "hideJoinLeaves" },
-    { id: "hideAvatarChanges" },
-    { id: "hideDisplaynameChanges" },
+    { id: "showJoinLeaves" },
+    { id: "showAvatarChanges" },
+    { id: "showDisplaynameChanges" },
     { id: "useCompactLayout" },
-    { id: "hideRedactions" },
+    { id: "showRedactions" },
     { id: "enableSyntaxHighlightLanguageDetection" },
     { id: "MessageComposerInput.autoReplaceEmoji" },
-    { id: "MessageComposerInput.dontSuggestEmoji" },
-    { id: "Pill.shouldHidePillAvatar" },
-    { id: "TextualBody.disableBigEmoji" },
+    { id: "MessageComposerInput.suggestEmoji" },
+    { id: "Pill.shouldShowPillAvatar" },
+    { id: "TextualBody.enableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
-    { id: "TagPanel.disableTagPanel" },
+    { id: "TagPanel.enableTagPanel" },
     { id: "enableWidgetScreenshots" },
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
@@ -101,9 +101,9 @@ const ANALYTICS_SETTINGS = [
 // These settings must be defined in SettingsStore
 const WEBRTC_SETTINGS = [
     {
-        id: 'webRtcForceTURN',
+        id: 'webRtcForcePeerToPeer',
         fn: (val) => {
-            MatrixClientPeg.get().setForceTURN(val);
+            MatrixClientPeg.get().setForceTURN(!val);
         },
     },
 ];

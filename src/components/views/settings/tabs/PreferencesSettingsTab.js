@@ -26,8 +26,8 @@ const PlatformPeg = require("../../../../PlatformPeg");
 export default class PreferencesSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
-        'MessageComposerInput.dontSuggestEmoji', // TODO: Positive wording
-        'dontSendTypingNotifications', // TODO: Positive wording
+        'MessageComposerInput.suggestEmoji',
+        'sendTypingNotifications',
     ];
 
     static ROOM_LIST_SETTINGS = [
@@ -38,21 +38,21 @@ export default class PreferencesSettingsTab extends React.Component {
     static TIMELINE_SETTINGS = [
         'autoplayGifsAndVideos',
         'urlPreviewsEnabled',
-        'TextualBody.disableBigEmoji', // TODO: Positive wording
-        'hideReadReceipts', // TODO: Positive wording
+        'TextualBody.enableBigEmoji',
+        'showReadReceipts',
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
-        'hideRedactions', // TODO: Positive wording ("Show a placeholder for removed messages")
+        'showRedactions',
         'enableSyntaxHighlightLanguageDetection',
-        'hideJoinLeaves', // TODO: Positive wording
-        'hideAvatarChanges', // TODO: Positive wording
-        'hideDisplaynameChanges', // TODO: Positive wording
+        'showJoinLeaves',
+        'showAvatarChanges',
+        'showDisplaynameChanges',
     ];
 
     static ADVANCED_SETTINGS = [
         'alwaysShowEncryptionIcons',
-        'Pill.shouldHidePillAvatar', // TODO: Positive wording
-        'TagPanel.disableTagPanel', // TODO: Positive wording
+        'Pill.shouldShowPillAvatar',
+        'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
         // Start automatically after startup (electron-only)
         // Autocomplete delay (niche text box)
