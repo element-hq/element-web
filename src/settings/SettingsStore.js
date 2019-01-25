@@ -238,7 +238,7 @@ export default class SettingsStore {
             if (!handler) {
                 return SettingsStore._getFinalValue(setting, level, roomId, null, null);
             }
-            let value = handler.getValue(settingName, roomId);
+            const value = handler.getValue(settingName, roomId);
             return SettingsStore._getFinalValue(setting, level, roomId, value, level);
         }
 
@@ -247,7 +247,7 @@ export default class SettingsStore {
             if (!handler) continue;
             if (excludeDefault && levelOrder[i] === "default") continue;
 
-            let value = handler.getValue(settingName, roomId);
+            const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
             return SettingsStore._getFinalValue(setting, level, roomId, value, levelOrder[i]);
         }
