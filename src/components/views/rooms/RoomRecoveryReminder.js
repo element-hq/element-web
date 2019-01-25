@@ -62,7 +62,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
 
         let unverifiedDevice;
         for (const sig of backupSigStatus.sigs) {
-            if (!sig.device.isVerified()) {
+            if (sig.device && !sig.device.isVerified()) {
                 unverifiedDevice = sig.device;
                 break;
             }
@@ -133,12 +133,11 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
 
         let body;
-        let primaryCaption;
+        let primaryCaption = _t("Set up");
         if (this.state.error) {
             body = <div className="error">
                 {_t("Unable to load key backup status")}
             </div>;
-            primaryCaption = _t("Set up");
         } else if (this.state.unverifiedDevice) {
             // A key backup exists for this account, but the creating device is not
             // verified.
