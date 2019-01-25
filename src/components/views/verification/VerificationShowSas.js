@@ -46,7 +46,7 @@ export default class VerificationShowSas extends React.Component {
             )}</p>
             <p>{_t(
                 "For maximum security, we reccommend you do this in person or use another " +
-                "trusted means of communication",
+                "trusted means of communication.",
             )}</p>
             <HexVerify text={this.props.sas}
                 onVerifiedStateChange={this._onVerifiedStateChange}
