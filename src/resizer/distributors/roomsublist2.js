@@ -17,7 +17,6 @@ limitations under the License.
 import FixedDistributor from "./fixed";
 
 // const allowWhitespace = true;
-const blendOverflow = false;
 const handleHeight = 1;
 
 function log(...params) {
@@ -59,11 +58,16 @@ export class Layout {
         if (Number.isFinite(availableHeight)) {
             this._availableHeight = availableHeight;
         }
-
+        const totalHeight = this._getAvailableHeight();
         this._sections.forEach((section, i) => {
-            this._sectionHeights[section.id] = this._originalHeights[i];
+            this._originalHeights[i] =
+                this._sectionHeights[section.id] ||
+                clamp(
+                    totalHeight / this._sections.length,
+                    this._getMinHeight(i),
+                    this._getMaxHeight(i),
+                );
         });
-
         this._sections = sections;
         this._applyNewSize();
     }
@@ -83,26 +87,21 @@ export class Layout {
     }
 
     _applyNewSize() {
-        const height = this._getAvailableHeight();
-        // we should only scale the section here between min and max size
-        const requestedHeights = this._sections.map((section) => {
-            return this._sectionHeights[section.id] || (height / this._sections.length);
-        });
-        const totalRequestedHeight = requestedHeights.reduce((sum, h) => h + sum, 0);
-        const ratios = requestedHeights.map((h) => h / totalRequestedHeight);
-        this._originalHeights = ratios.map((r, i) => clamp(r * height, this._getMinHeight(i), this._getMaxHeight(i)));
-        const totalRequestedHeight2 = requestedHeights.reduce((sum, h) => h + sum, 0);
-        const overflow = height - totalRequestedHeight2;
-        // re-assign adjusted heights
+        const newHeight = this._getAvailableHeight();
+        let currHeight = 0;
+        const sections = [];
+        for (let i = 0; i < this._sections.length; i++) {
+            currHeight += this._originalHeights[i];
+            sections.push(i);
+        }
+        const offset = newHeight - currHeight;
+        this._heights = this._originalHeights.slice(0);
+        this._applyOverflow(-offset, sections, true);
+        this._applyHeights();
+        this._originalHeights = this._heights;
         this._sections.forEach((section, i) => {
             this._sectionHeights[section.id] = this._originalHeights[i];
         });
-        log("_applyNewSize", height, this._sections, requestedHeights, ratios, this._originalHeights);
-        this._heights = this._originalHeights.slice(0);
-        this._relayout();
-        if (overflow) {
-            this._applyOverflow(overflow, this._sections.map((_, i) => i));
-        }
     }
 
     _getSectionIndex(id) {
@@ -116,8 +115,8 @@ export class Layout {
         if (collapsed) {
             return this._sectionHeight(0);
         } else {
-            // return 100000;
-            return this._sectionHeight(section.count);
+            return 100000;
+            // return this._sectionHeight(section.count);
         }
     }
 
@@ -133,7 +132,7 @@ export class Layout {
         return this._sectionHeight(Math.min(section.count, maxItems));
     }
 
-    _applyOverflow(overflow, sections) {
+    _applyOverflow(overflow, sections, blend) {
         //log("applyOverflow", overflow, sections);
         // take the given overflow amount, and applies it to the given sections.
         // calls itself recursively until it has distributed all the overflow
@@ -141,22 +140,23 @@ export class Layout {
 
         const unclampedSections = [];
 
-        // let overflowPerSection = blendOverflow ? (overflow / sections.length) : overflow;
+        let overflowPerSection = blend ? (overflow / sections.length) : overflow;
         for (const i of sections) {
-            const newHeight = clamp(this._heights[i] - overflow, this._getMinHeight(i), this._getMaxHeight(i));
-            if (newHeight == this._heights[i] - overflow) {
+            const newHeight = clamp(this._heights[i] - overflowPerSection, this._getMinHeight(i), this._getMaxHeight(i));
+            if (newHeight == this._heights[i] - overflowPerSection) {
                 unclampedSections.push(i);
             }
+            // when section is growing, overflow increases?
+            // 100 -= 200 - 300
+            // 100 -= -100
+            // 200
             overflow -= this._heights[i] - newHeight;
-            log(`heights[${i}] (${this._heights[i]}) - newHeight (${newHeight}) = ${this._heights[i] - newHeight}`);
-
-            // log(`changing ${this._heights[i]} to ${newHeight}`);
+            // console.log(`this._heights[${i}] (${this._heights[i]}) - newHeight (${newHeight}) = ${this._heights[i] - newHeight}`);
+            // console.log(`changing ${this._heights[i]} to ${newHeight}`);
             this._heights[i] = newHeight;
-
-            //log(`for section ${i} overflow is ${overflow}`);
-
-            if (!blendOverflow) {
-                // overflowPerSection = overflow;
+            // console.log(`for section ${i} overflow is ${overflow}`);
+            if (!blend) {
+                overflowPerSection = overflow;
                 if (Math.abs(overflow) < 1.0) break;
             }
         }
@@ -164,7 +164,7 @@ export class Layout {
         if (Math.abs(overflow) > 1.0 && unclampedSections.length > 0) {
             // we weren't able to distribute all the overflow so recurse and try again
             log("recursing with", overflow, unclampedSections);
-            overflow = this._applyOverflow(overflow, unclampedSections);
+            overflow = this._applyOverflow(overflow, unclampedSections, blend);
         }
 
         return overflow;
@@ -246,14 +246,17 @@ export class Layout {
             }
         }
 
+        this._applyHeights();
+        return undefined;
+    }
+
+    _applyHeights() {
         log("updating layout, heights are now", this._heights);
         // apply the heights
         for (let i = 0; i < this._sections.length; i++) {
             const section = this._sections[i];
             this._applyHeight(section.id, this._heights[i]);
         }
-
-        return undefined;
     }
 
     _commitHeights() {
