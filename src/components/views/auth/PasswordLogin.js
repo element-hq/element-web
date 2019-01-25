@@ -93,7 +93,7 @@ class PasswordLogin extends React.Component {
             case PasswordLogin.LOGIN_FIELD_MXID:
                 username = this.state.username;
                 if (!username) {
-                    error = _t('The user name field must not be blank.');
+                    error = _t('The username field must not be blank.');
                 }
                 break;
             case PasswordLogin.LOGIN_FIELD_PHONE:
@@ -193,7 +193,7 @@ class PasswordLogin extends React.Component {
                     placeholder={SdkConfig.get().disable_custom_urls ?
                                       _t("Username on %(hs)s", {
                                         hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
-                                      }) : _t("User name")}
+                                      }) : _t("Username")}
                     value={this.state.username}
                     autoFocus
                 />;

@@ -66,7 +66,7 @@ const customVariables = {
     },
     'User Type': {
         id: 3,
-        expl: _td('Whether or not you\'re logged in (we don\'t record your user name)'),
+        expl: _td('Whether or not you\'re logged in (we don\'t record your username)'),
         example: 'Logged In',
     },
     'Chosen Language': {
