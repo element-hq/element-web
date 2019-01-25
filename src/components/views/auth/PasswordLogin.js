@@ -293,20 +293,20 @@ class PasswordLogin extends React.Component {
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
-                { loginType }
-                { loginField }
-                <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
-                    name="password"
-                    value={this.state.password} onChange={this.onPasswordChanged}
-                    placeholder={_t('Password')}
-                />
-                <br />
-                { forgotPasswordJsx }
-                <input className="mx_Login_submit"
-                    type="submit"
-                    value={_t('Sign in')}
-                    disabled={this.props.disableSubmit}
-                />
+                    { loginType }
+                    { loginField }
+                    <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
+                        name="password"
+                        value={this.state.password} onChange={this.onPasswordChanged}
+                        placeholder={_t('Password')}
+                    />
+                    <br />
+                    { forgotPasswordJsx }
+                    <input className="mx_Login_submit"
+                        type="submit"
+                        value={_t('Sign in')}
+                        disabled={this.props.disableSubmit}
+                    />
                 </form>
             </div>
         );
