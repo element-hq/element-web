@@ -252,13 +252,13 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let matrixIdText = _t('Matrix ID');
+        let yourMatrixAccountText = _t('Your account');
         if (this.props.hsName) {
-            matrixIdText = _t('%(serverName)s Matrix ID', {serverName: this.props.hsName});
+            yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: this.props.hsName});
         } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
-                matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
+                yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: parsedHsUrl.hostname});
             } catch (e) {
                 // ignore
             }
@@ -282,7 +282,7 @@ class PasswordLogin extends React.Component {
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}
                         onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ matrixIdText }</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('Username') }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
@@ -292,6 +292,7 @@ class PasswordLogin extends React.Component {
 
         return (
             <div>
+                <h3>{ yourMatrixAccountText }</h3>
                 <form onSubmit={this.onSubmitForm}>
                     { loginType }
                     { loginField }

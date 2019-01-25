@@ -24,6 +24,18 @@ limitations under the License.
     color: $authpage-body-color;
 }
 
+.mx_AuthBody h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.mx_AuthBody h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: $primary-fg-color;
+}
+
 .mx_AuthBody a:link,
 .mx_AuthBody a:hover,
 .mx_AuthBody a:visited {
