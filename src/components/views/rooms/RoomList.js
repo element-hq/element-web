@@ -196,6 +196,7 @@ module.exports = React.createClass({
         this._checkSubListsOverflow();
 
         this.resizer.attach();
+        window.addEventListener("resize", this.onWindowResize);
         this.mounted = true;
     },
 
@@ -241,6 +242,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this.mounted = false;
 
+        window.removeEventListener("resize", this.onWindowResize);
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -268,6 +270,17 @@ module.exports = React.createClass({
 
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
+    },
+
+    onWindowResize: function() {
+        if (this.mounted && this._layout && this.resizeContainer &&
+            Array.isArray(this._layoutSections)
+        ) {
+            this._layout.update(
+                this._layoutSections,
+                this.resizeContainer.offsetHeight
+            );
+        }
     },
 
     onRoom: function(room) {
