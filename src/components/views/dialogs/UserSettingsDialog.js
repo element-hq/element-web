@@ -100,10 +100,10 @@ export default class UserSettingsDialog extends React.Component {
     render() {
         return (
             <div className="mx_UserSettingsDialog">
-                <div className="mx_UserSettingsDialog_header">
+                <div className="mx_SettingsDialog_header">
                     {_t("Settings")}
-                    <span className="mx_UserSettingsDialog_close">
-                        <AccessibleButton className="mx_UserSettingsDialog_closeIcon" onClick={this.props.onFinished} />
+                    <span className="mx_SettingsDialog_close">
+                        <AccessibleButton className="mx_SettingsDialog_closeIcon" onClick={this.props.onFinished} />
                     </span>
                 </div>
                 <TabbedView tabs={this._getTabs()} />
