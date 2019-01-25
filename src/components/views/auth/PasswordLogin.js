@@ -158,10 +158,9 @@ class PasswordLogin extends React.Component {
         this.props.onPasswordChanged(ev.target.value);
     }
 
-    renderLoginField(loginType, disabled) {
+    renderLoginField(loginType) {
         const classes = {
             mx_Login_field: true,
-            mx_Login_field_disabled: disabled,
         };
 
         switch (loginType) {
@@ -169,7 +168,7 @@ class PasswordLogin extends React.Component {
                 classes.mx_Login_email = true;
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <input
-                    className={classNames(classes)}
+                    className="mx_Login_field"
                     ref={(e) => {this._loginField = e;}}
                     key="email_input"
                     type="text"
@@ -179,7 +178,6 @@ class PasswordLogin extends React.Component {
                     placeholder="joe@example.com"
                     value={this.state.username}
                     autoFocus
-                    disabled={disabled}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.mx_Login_username = true;
@@ -198,7 +196,6 @@ class PasswordLogin extends React.Component {
                                       }) : _t("User name")}
                     value={this.state.username}
                     autoFocus
-                    disabled={disabled}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -212,7 +209,6 @@ class PasswordLogin extends React.Component {
                         value={this.state.phoneCountry}
                         isSmall={true}
                         showPrefix={true}
-                        disabled={disabled}
                     />
                     <input
                         className={classNames(classes)}
@@ -224,7 +220,6 @@ class PasswordLogin extends React.Component {
                         placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
-                        disabled={disabled}
                     />
                 </div>;
             }
@@ -271,13 +266,12 @@ class PasswordLogin extends React.Component {
 
         const pwFieldClass = classNames({
             mx_Login_field: true,
-            mx_Login_field_disabled: matrixIdText === '',
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        const loginField = this.renderLoginField(this.state.loginType, matrixIdText === '');
+        const loginField = this.renderLoginField(this.state.loginType);
 
         let loginType;
         if (!SdkConfig.get().disable_3pid_login) {
@@ -287,7 +281,6 @@ class PasswordLogin extends React.Component {
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}
-                        disabled={matrixIdText === ''}
                         onOptionChange={this.onLoginTypeChange}>
                             <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ matrixIdText }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
@@ -296,8 +289,6 @@ class PasswordLogin extends React.Component {
                 </div>
             );
         }
-
-        const disableSubmit = this.props.disableSubmit || matrixIdText === '';
 
         return (
             <div>
@@ -308,11 +299,14 @@ class PasswordLogin extends React.Component {
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
                     placeholder={_t('Password')}
-                    disabled={matrixIdText === ''}
                 />
                 <br />
                 { forgotPasswordJsx }
-                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={disableSubmit} />
+                <input className="mx_Login_submit"
+                    type="submit"
+                    value={_t('Sign in')}
+                    disabled={this.props.disableSubmit}
+                />
                 </form>
             </div>
         );
