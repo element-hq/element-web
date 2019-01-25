@@ -106,7 +106,7 @@ export default class IncomingSasDialog extends React.Component {
                     // NB. Below wording adjusted to singular 'device' until we have
                     // cross-signing
                     "Verifying this user will mark their device as trusted, and " +
-                    "also mark your device as trusted to them",
+                    "also mark your device as trusted to them.",
                 )}</p>
                 <DialogButtons
                     primaryButton={_t('Continue')}
