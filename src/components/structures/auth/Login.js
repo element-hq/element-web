@@ -590,7 +590,7 @@ module.exports = React.createClass({
         // user's browser, let them log into their SSO provider, then redirect their browser
         // to vector://vector which, of course, will not work.
         return (
-            <a href={url} className="mx_Login_sso_link">{ _t('Sign in with single sign-on') }</a>
+            <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
         );
     },
 
