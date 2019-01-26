@@ -26,16 +26,16 @@ export const FREE = 'Free';
 export const PREMIUM = 'Premium';
 export const ADVANCED = 'Advanced';
 
-const MATRIX_ORG_HS = 'https://matrix.org';
-
-const TYPES = [
-    {
+export const TYPES = {
+    FREE: {
         id: FREE,
         label: () => _t('Free'),
         logo: () => <img src={require('../../../../res/img/feather-icons/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
+        hsUrl: 'https://matrix.org',
+        isUrl: 'https://vector.im',
     },
-    {
+    PREMIUM: {
         id: PREMIUM,
         label: () => _t('Premium'),
         logo: () => <img src={require('../../../../res/img/feather-icons/modular-bw-logo.svg')} />,
@@ -45,7 +45,7 @@ const TYPES = [
             </a>,
         }),
     },
-    {
+    ADVANCED: {
         id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
@@ -54,12 +54,12 @@ const TYPES = [
         </div>,
         description: () => _t('Find other public servers or use a custom server'),
     },
-];
+};
 
 function getDefaultType(defaultHsUrl) {
     if (!defaultHsUrl) {
         return null;
-    } else if (defaultHsUrl === MATRIX_ORG_HS) {
+    } else if (defaultHsUrl === TYPES.FREE.hsUrl) {
         return FREE;
     } else if (new URL(defaultHsUrl).hostname.endsWith('.modular.im')) {
         // TODO: Use a Riot config parameter to detect Modular-ness.
@@ -81,10 +81,17 @@ export default class ServerTypeSelector extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const { defaultHsUrl } = props;
+        const {
+            defaultHsUrl,
+            onChange,
+        } = props;
+        const type = getDefaultType(defaultHsUrl);
         this.state = {
-            selected: getDefaultType(defaultHsUrl),
+            selected: type,
         };
+        if (onChange) {
+            onChange(type);
+        }
     }
 
     updateSelectedType(type) {
@@ -108,7 +115,8 @@ export default class ServerTypeSelector extends React.PureComponent {
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
-        const serverTypes = TYPES.map(type => {
+        const serverTypes = [];
+        for (const type of Object.values(TYPES)) {
             const { id, label, logo, description } = type;
             const classes = classnames(
                 "mx_ServerTypeSelector_type",
@@ -118,7 +126,7 @@ export default class ServerTypeSelector extends React.PureComponent {
                 },
             );
 
-            return <div className={classes} key={id} >
+            serverTypes.push(<div className={classes} key={id} >
                 <div className="mx_ServerTypeSelector_label">
                     {label()}
                 </div>
@@ -130,8 +138,8 @@ export default class ServerTypeSelector extends React.PureComponent {
                         {description()}
                     </div>
                 </AccessibleButton>
-            </div>;
-        });
+            </div>);
+        }
 
         return <div className="mx_ServerTypeSelector">
             {serverTypes}

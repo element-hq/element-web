@@ -306,6 +306,28 @@ module.exports = React.createClass({
         this.setState({
             serverType: type,
         });
+
+        // When changing server types, set the HS / IS URLs to reasonable defaults for the
+        // the new type.
+        switch (type) {
+            case ServerType.FREE: {
+                const { hsUrl, isUrl } = ServerType.TYPES.FREE;
+                this.onServerConfigChange({
+                    hsUrl,
+                    isUrl,
+                });
+                break;
+            }
+            case ServerType.PREMIUM:
+                // TODO: Handle the Modular case.
+                break;
+            case ServerType.ADVANCED:
+                this.onServerConfigChange({
+                    hsUrl: this.props.defaultHsUrl,
+                    isUrl: this.props.defaultIsUrl,
+                });
+                break;
+        }
     },
 
     onRegisterClick: function(ev) {
