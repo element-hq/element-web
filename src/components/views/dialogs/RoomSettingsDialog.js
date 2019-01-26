@@ -20,6 +20,7 @@ import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import dis from '../../../dispatcher';
+import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -37,8 +38,9 @@ export class TempTab extends React.Component {
     }
 }
 
-export default class UserSettingsDialog extends React.Component {
+export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
+        roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
     };
 
@@ -48,7 +50,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("General"),
             "mx_RoomSettingsDialog_settingsIcon",
-            <div>General Test</div>,
+            <GeneralRoomSettingsTab roomId={this.props.roomId}/>,
         ));
         tabs.push(new Tab(
             _td("Security & Privacy"),
