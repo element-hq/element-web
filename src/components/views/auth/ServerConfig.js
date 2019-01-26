@@ -60,23 +60,18 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            hs_url: this.props.customHsUrl,
-            is_url: this.props.customIsUrl,
-            configVisible: (this.props.customHsUrl !== this.props.defaultHsUrl) ||
-                           (this.props.customIsUrl !== this.props.defaultIsUrl),
+            hsUrl: this.props.customHsUrl,
+            isUrl: this.props.customIsUrl,
         };
     },
 
     componentWillReceiveProps: function(newProps) {
-        if (newProps.customHsUrl === this.state.hs_url &&
-            newProps.customIsUrl === this.state.is_url) return;
+        if (newProps.customHsUrl === this.state.hsUrl &&
+            newProps.customIsUrl === this.state.isUrl) return;
 
         this.setState({
-            hs_url: newProps.customHsUrl,
-            is_url: newProps.customIsUrl,
-            configVisible:
-                (newProps.customHsUrl !== newProps.defaultHsUrl) ||
-                (newProps.customIsUrl !== newProps.defaultIsUrl),
+            hsUrl: newProps.customHsUrl,
+            isUrl: newProps.customIsUrl,
         });
         this.props.onServerConfigChange({
             hsUrl: newProps.customHsUrl,
@@ -85,26 +80,26 @@ module.exports = React.createClass({
     },
 
     onHomeserverChanged: function(ev) {
-        this.setState({hs_url: ev.target.value}, () => {
+        this.setState({hsUrl: ev.target.value}, () => {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-                let hsUrl = this.state.hs_url.trim().replace(/\/$/, "");
+                let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
                 if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
                 this.props.onServerConfigChange({
-                    hsUrl: this.state.hs_url,
-                    isUrl: this.state.is_url,
+                    hsUrl: this.state.hsUrl,
+                    isUrl: this.state.isUrl,
                 });
             });
         });
     },
 
     onIdentityServerChanged: function(ev) {
-        this.setState({is_url: ev.target.value}, () => {
+        this.setState({isUrl: ev.target.value}, () => {
             this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
-                let isUrl = this.state.is_url.trim().replace(/\/$/, "");
+                let isUrl = this.state.isUrl.trim().replace(/\/$/, "");
                 if (isUrl === "") isUrl = this.props.defaultIsUrl;
                 this.props.onServerConfigChange({
-                    hsUrl: this.state.hs_url,
-                    isUrl: this.state.is_url,
+                    hsUrl: this.state.hsUrl,
+                    isUrl: this.state.isUrl,
                 });
             });
         });
@@ -117,75 +112,37 @@ module.exports = React.createClass({
         return setTimeout(fn.bind(this), this.props.delayTimeMs);
     },
 
-    onServerConfigVisibleChange: function(visible, ev) {
-        this.setState({
-            configVisible: visible,
-        });
-        if (!visible) {
-            this.props.onServerConfigChange({
-                hsUrl: this.props.defaultHsUrl,
-                isUrl: this.props.defaultIsUrl,
-            });
-        } else {
-            this.props.onServerConfigChange({
-                hsUrl: this.state.hs_url,
-                isUrl: this.state.is_url,
-            });
-        }
-    },
-
     showHelpPopup: function() {
         const CustomServerDialog = sdk.getComponent('auth.CustomServerDialog');
         Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
     },
 
     render: function() {
-        const serverConfigStyle = {};
-        serverConfigStyle.display = this.state.configVisible ? 'block' : 'none';
-
-        const toggleButton = (
-            <div className="mx_ServerConfig_selector">
-                <input className="mx_Login_radio" id="basic" name="configVisible" type="radio"
-                    checked={!this.state.configVisible}
-                    onChange={this.onServerConfigVisibleChange.bind(this, false)} />
-                <label className="mx_Login_label" htmlFor="basic">
-                    { _t("Default server") }
-                </label>
-                &nbsp;&nbsp;
-                <input className="mx_Login_radio" id="advanced" name="configVisible" type="radio"
-                    checked={this.state.configVisible}
-                    onChange={this.onServerConfigVisibleChange.bind(this, true)} />
-                <label className="mx_Login_label" htmlFor="advanced">
-                    { _t("Custom server") }
-                </label>
-            </div>
-        );
+        const Field = sdk.getComponent('elements.Field');
 
         return (
-        <div>
-            { toggleButton }
-            <div style={serverConfigStyle}>
-                <div className="mx_ServerConfig">
-                    <label className="mx_Login_label mx_ServerConfig_hslabel" htmlFor="hsurl">
-                        { _t("Home server URL") }
-                    </label>
-                    <input className="mx_Login_field" id="hsurl" type="text"
+            <div className="mx_ServerConfig">
+                <h3>{_t("Other servers")}</h3>
+                {_t("Enter custom server URLs <a>What does this mean?</a>", {}, {
+                    a: sub => <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
+                        { sub }
+                    </a>,
+                })}
+                <div className="mx_ServerConfig_fields">
+                    <Field id="mx_ServerConfig_hsUrl"
+                        label={_t("Homeserver URL")}
                         placeholder={this.props.defaultHsUrl}
-                        value={this.state.hs_url}
-                        onChange={this.onHomeserverChanged} />
-                    <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
-                        { _t("Identity server URL") }
-                    </label>
-                    <input className="mx_Login_field" id="isurl" type="text"
+                        value={this.state.hsUrl}
+                        onChange={this.onHomeserverChanged}
+                    />
+                    <Field id="mx_ServerConfig_isUrl"
+                        label={_t("Identity Server URL")}
                         placeholder={this.props.defaultIsUrl}
-                        value={this.state.is_url}
-                        onChange={this.onIdentityServerChanged} />
-                    <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
-                        { _t("What does this mean?") }
-                    </a>
+                        value={this.state.isUrl}
+                        onChange={this.onIdentityServerChanged}
+                    />
                 </div>
             </div>
-        </div>
         );
     },
 });
