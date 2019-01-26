@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
+import GeneralUserSettingsTab from "../settings/tabs/GeneralUserSettingsTab";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
@@ -56,7 +56,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("General"),
             "mx_UserSettingsDialog_settingsIcon",
-            <GeneralSettingsTab />,
+            <GeneralUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Notifications"),
