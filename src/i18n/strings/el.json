@@ -57,7 +57,7 @@
     "%(senderDisplayName)s removed the room name.": "Ο %(senderDisplayName)s διέγραψε το όνομα του δωματίου.",
     "Changes your display nickname": "Αλλάζει το ψευδώνυμο χρήστη",
     "Conference call failed.": "Η κλήση συνδιάσκεψης απέτυχε.",
-    "powered by Matrix": "βασισμένο στο Matrix",
+    "powered by Matrix": "με τη βοήθεια του Matrix",
     "Confirm password": "Επιβεβαίωση κωδικού πρόσβασης",
     "Confirm your new password": "Επιβεβαίωση του νέου κωδικού πρόσβασης",
     "Continue": "Συνέχεια",
