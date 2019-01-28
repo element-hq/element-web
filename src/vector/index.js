@@ -24,6 +24,8 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
+import olmWasmPath from 'olm/olm.wasm';
+
 import './rageshakesetup';
 
 import React from 'react';
@@ -379,18 +381,19 @@ function loadOlm() {
      *
      * We also need to tell the Olm js to look for its wasm file at the same
      * level as index.html. It really should be in the same place as the js,
-     * ie. in the bundle directory, to avoid caching issues, but as far as I
-     * can tell this is completely impossible with webpack.
+     * ie. in the bundle directory, but as far as I can tell this is
+     * completely impossible with webpack. We do, however, use a hashed
+     * filename to avoid caching issues.
      */
     return Olm.init({
-        locateFile: () => 'olm.wasm',
+        locateFile: () => olmWasmPath,
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
         console.log("Failed to load Olm: trying legacy version");
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = 'olm_legacy.js';
+            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);
