@@ -16,9 +16,6 @@ limitations under the License.
 
 import FixedDistributor from "./fixed";
 
-// const allowWhitespace = true;
-const handleHeight = 1;
-
 function clamp(height, min, max) {
     if (height > max) return max;
     if (height < min) return min;
@@ -26,7 +23,7 @@ function clamp(height, min, max) {
 }
 
 export class Layout {
-    constructor(applyHeight, initialSizes, collapsedState) {
+    constructor(applyHeight, initialSizes, collapsedState, options) {
         // callback to set height of section
         this._applyHeight = applyHeight;
         // list of {id, count} objects,
@@ -49,6 +46,9 @@ export class Layout {
         // used while manually resizing, to clear
         // _clampedOffset when the direction of resizing changes
         this._lastOffset = 0;
+
+        this._allowWhitespace = options && options.allowWhitespace;
+        this._handleHeight = (options && options.handleHeight) || 0;
     }
 
     setAvailableHeight(newSize) {
@@ -112,7 +112,7 @@ export class Layout {
             const collapsed = this._collapsedState[section.id];
             return count + (collapsed ? 0 : 1);
         }, 0);
-        return this._availableHeight - ((nonCollapsedSectionCount - 1) * handleHeight);
+        return this._availableHeight - ((nonCollapsedSectionCount - 1) * this._handleHeight);
     }
 
     _applyNewSize() {
@@ -138,9 +138,10 @@ export class Layout {
 
         if (collapsed) {
             return this._sectionHeight(0);
+        } else if (!this._allowWhitespace) {
+            return this._sectionHeight(section.count);
         } else {
             return 100000;
-            // return this._sectionHeight(section.count);
         }
     }
 

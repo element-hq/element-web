@@ -82,6 +82,10 @@ module.exports = React.createClass({
         this.collapsedState = collapsedJson ? JSON.parse(collapsedJson) : {};
         this._layoutSections = [];
 
+        const options = {
+            allowWhitespace: false,
+            handleHeight: 1,
+        };
         this._layout = new Layout((key, size) => {
             const subList = this._subListRefs[key];
             if (subList) {
@@ -95,7 +99,7 @@ module.exports = React.createClass({
                 window.localStorage.setItem("mx_roomlist_sizes",
                     JSON.stringify(this.subListSizes));
             }
-        }, this.subListSizes, this.collapsedState);
+        }, this.subListSizes, this.collapsedState, options);
 
         return {
             isLoadingLeftRooms: false,
