@@ -566,7 +566,7 @@ module.exports = React.createClass({
             case ServerType.PREMIUM:
                 break;
             case ServerType.ADVANCED:
-                serverDetails = <ServerConfig ref="serverConfig"
+                serverDetails = <ServerConfig
                     customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
                     customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
                     defaultHsUrl={this.props.defaultHsUrl}
