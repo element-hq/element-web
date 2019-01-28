@@ -279,7 +279,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div>
+            <div className='mx_AliasSettings'>
                 {canonical_alias_section}
                 <EditableItemList
                     className={"mx_RoomSettings_localAliases"}
