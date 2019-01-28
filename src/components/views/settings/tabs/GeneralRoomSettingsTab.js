@@ -22,6 +22,8 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
 import AccessibleButton from "../../elements/AccessibleButton";
 import {MatrixClient} from "matrix-js-sdk";
+import dis from "../../../../dispatcher";
+import Modal from "../../../../Modal";
 
 export default class GeneralRoomSettingsTab extends React.Component {
     static childContextTypes = {
@@ -39,20 +41,28 @@ export default class GeneralRoomSettingsTab extends React.Component {
     }
 
     _saveAliases = (e) => {
-        // TODO: Live modification of aliases?
+        // TODO: Live modification?
         if (!this.refs.aliasSettings) return;
         this.refs.aliasSettings.saveSettings();
     };
 
     _saveGroups = (e) => {
-        // TODO: Live modification of aliases?
+        // TODO: Live modification?
         if (!this.refs.flairSettings) return;
         this.refs.flairSettings.saveSettings();
+    };
+
+    _onLeaveClick = () => {
+        dis.dispatch({
+            action: 'leave_room',
+            room_id: this.props.roomId,
+        });
     };
 
     render() {
         const AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
+        const UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
 
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
@@ -89,6 +99,18 @@ export default class GeneralRoomSettingsTab extends React.Component {
                                           relatedGroupsEvent={groupsEvent} />
                     <AccessibleButton onClick={this._saveGroups} kind='primary'>
                         {_t("Save")}
+                    </AccessibleButton>
+                </div>
+
+                <span className='mx_SettingsTab_subheading'>{_t("URL Previews")}</span>
+                <div className='mx_SettingsTab_section'>
+                    <UrlPreviewSettings room={room} />
+                </div>
+
+                <span className='mx_SettingsTab_subheading'>{_t("Leave room")}</span>
+                <div className='mx_SettingsTab_section'>
+                    <AccessibleButton kind='danger' onClick={this._onLeaveClick}>
+                        { _t('Leave room') }
                     </AccessibleButton>
                 </div>
             </div>

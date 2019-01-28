@@ -44,6 +44,19 @@ export default class RoomSettingsDialog extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
+    componentWillMount(): void {
+        this.dispatcherRef = dis.register(this._onAction);
+    }
+
+    componentWillUnmount(): void {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    _onAction = (payload) => {
+        if (payload.action !== 'close_room_settings') return;
+        this.props.onFinished();
+    };
+
     _getTabs() {
         const tabs = [];
 
