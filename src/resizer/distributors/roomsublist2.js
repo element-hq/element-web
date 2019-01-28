@@ -19,8 +19,8 @@ import FixedDistributor from "./fixed";
 // const allowWhitespace = true;
 const handleHeight = 1;
 
-function log(...params) {
-    console.log.apply(console, params);
+function log() {
+    // console.log.apply(console, ["LAYOUT: "].concat(params));
 }
 
 function clamp(height, min, max) {
