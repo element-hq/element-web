@@ -31,9 +31,15 @@ function clamp(height, min, max) {
 
 export class Layout {
     constructor(applyHeight, initialSizes, collapsedState) {
+        // callback to set height of section
         this._applyHeight = applyHeight;
+        // list of {id, count} objects,
+        // determines sections and order of them
         this._sections = [];
+        // stores collapsed by id
         this._collapsedState = Object.assign({}, collapsedState);
+        // total available height to the layout
+        // (including resize handles, ...)
         this._availableHeight = 0;
         // heights stored by section section id
         this._sectionHeights = Object.assign({}, initialSizes);
