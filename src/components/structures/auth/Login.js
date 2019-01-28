@@ -333,8 +333,6 @@ module.exports = React.createClass({
                 break;
             }
             case ServerType.PREMIUM:
-                // TODO: Handle the Modular case.
-                break;
             case ServerType.ADVANCED:
                 this.onServerConfigChange({
                     hsUrl: this.props.defaultHsUrl,
@@ -541,6 +539,7 @@ module.exports = React.createClass({
     serverComponentForStep() {
         const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
+        const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         // TODO: May need to adjust the behavior of this config option
@@ -564,6 +563,13 @@ module.exports = React.createClass({
             case ServerType.FREE:
                 break;
             case ServerType.PREMIUM:
+                serverDetails = <ModularServerConfig
+                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultIsUrl={this.props.defaultIsUrl}
+                    onServerConfigChange={this.onServerConfigChange}
+                    delayTimeMs={1000}
+                />;
                 break;
             case ServerType.ADVANCED:
                 serverDetails = <ServerConfig

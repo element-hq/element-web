@@ -42,6 +42,11 @@ limitations under the License.
     font-weight: normal;
 }
 
+.mx_AuthBody .mx_Field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .mx_AuthBody a:link,
 .mx_AuthBody a:hover,
 .mx_AuthBody a:visited {
