@@ -19,9 +19,11 @@ limitations under the License.
     /* take up remaining space below TopLeftMenu */
     flex: 1;
     min-height: 0;
+    overflow-y: hidden;
 }
 
 .mx_RoomList .mx_ResizeHandle {
+    // needed so the z-index takes effect
     position: relative;
 }
 
