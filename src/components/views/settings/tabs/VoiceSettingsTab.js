@@ -80,8 +80,8 @@ export default class VoiceSettingsTab extends React.Component {
         CallMediaHandler.setVideoInput(e.target.value);
     };
 
-    _setForceTurn = (forced) => {
-        MatrixClientPeg.get().setForceTURN(forced);
+    _changeWebRtcMethod = (p2p) => {
+        MatrixClientPeg.get().setForceTURN(!p2p);
     };
 
     _renderDeviceOptions(devices, category) {
@@ -159,7 +159,6 @@ export default class VoiceSettingsTab extends React.Component {
             }
         }
 
-        // TODO: Make 'webRtcForceTURN' be positively worded
         return (
             <div className="mx_SettingsTab mx_VoiceSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
@@ -169,7 +168,7 @@ export default class VoiceSettingsTab extends React.Component {
                     {microphoneDropdown}
                     {webcamDropdown}
                     <SettingsFlag name='VideoView.flipVideoHorizontally' level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name='webRtcForceTURN' level={SettingLevel.DEVICE} onChange={this._setForceTurn} />
+                    <SettingsFlag name='webRtcForcePeerToPeer' level={SettingLevel.DEVICE} onChange={this._changeWebRtcMethod} />
                 </div>
             </div>
         );

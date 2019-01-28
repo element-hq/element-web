@@ -44,14 +44,14 @@ export default function shouldHideEvent(ev) {
     const isEnabled = (name) => SettingsStore.getValue(name, ev.getRoomId());
 
     // Hide redacted events
-    if (ev.isRedacted() && isEnabled('hideRedactions')) return true;
+    if (ev.isRedacted() && !isEnabled('showRedactions')) return true;
 
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
-        if ((eventDiff.isJoin || eventDiff.isPart) && isEnabled('hideJoinLeaves')) return true;
-        if (eventDiff.isAvatarChange && isEnabled('hideAvatarChanges')) return true;
-        if (eventDiff.isDisplaynameChange && isEnabled('hideDisplaynameChanges')) return true;
+        if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled('showJoinLeaves')) return true;
+        if (eventDiff.isAvatarChange && !isEnabled('showAvatarChanges')) return true;
+        if (eventDiff.isDisplaynameChange && !isEnabled('showDisplaynameChanges')) return true;
     }
 
     return false;
