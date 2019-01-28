@@ -37,6 +37,9 @@ const PHASE_SERVER_DETAILS = 0;
 // Show the appropriate login flow(s) for the server
 const PHASE_LOGIN = 1;
 
+// Disable phases for now, pending UX discussion on WK discovery
+const PHASES_ENABLED = false;
+
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
 _td("Invalid homeserver discovery response");
@@ -549,7 +552,7 @@ module.exports = React.createClass({
 
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
-        if (this.state.phase !== PHASE_SERVER_DETAILS) {
+        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
             return <div>
                 <ServerTypeSelector
                     defaultHsUrl={this.props.defaultHsUrl}
@@ -583,22 +586,27 @@ module.exports = React.createClass({
                 break;
         }
 
+        let nextButton = null;
+        if (PHASES_ENABLED) {
+            nextButton = <AccessibleButton className="mx_Login_submit"
+                onClick={this.onServerDetailsNextPhaseClick}
+            >
+                {_t("Next")}
+            </AccessibleButton>;
+        }
+
         return <div>
             <ServerTypeSelector
                 defaultHsUrl={this.props.defaultHsUrl}
                 onChange={this.onServerTypeChange}
             />
             {serverDetails}
-            <AccessibleButton className="mx_Login_submit"
-                onClick={this.onServerDetailsNextPhaseClick}
-            >
-                {_t("Next")}
-            </AccessibleButton>
+            {nextButton}
         </div>;
     },
 
     loginComponentForStep() {
-        if (this.state.phase !== PHASE_LOGIN) {
+        if (PHASES_ENABLED && this.state.phase !== PHASE_LOGIN) {
             return null;
         }
 
@@ -623,6 +631,7 @@ module.exports = React.createClass({
         // If custom URLs are allowed and we haven't selected the Free server type, wire
         // up the server details edit link.
         if (
+            PHASES_ENABLED &&
             !SdkConfig.get()['disable_custom_urls'] &&
             this.state.serverType !== ServerType.FREE
         ) {
