@@ -20,7 +20,6 @@ import FixedDistributor from "./fixed";
 const handleHeight = 1;
 
 function log() {
-    // console.log.apply(console, ["LAYOUT: "].concat(params));
 }
 
 function clamp(height, min, max) {
