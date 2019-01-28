@@ -38,7 +38,7 @@ export default class RoomProfileSettings extends React.Component {
         let avatarUrl = avatarEvent && avatarEvent.getContent() ? avatarEvent.getContent()["url"] : null;
         if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
         const topicEvent = room.currentState.getStateEvents("m.room.topic", "");
-        const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()['topic'] : null;
+        const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()['topic'] : '';
         this.state = {
             originalDisplayName: room.name,
             displayName: room.name,
