@@ -32,34 +32,13 @@ limitations under the License.
 */
 
 .mx_RoomSubList {
-    min-height: 31px;
-    flex: 0 10000 auto;
     display: flex;
     flex-direction: column;
 }
 
-.mx_RoomSubList.resized-sized {
-    /*
-    flex-basis to 0 so sublists
-    are not shrinking/growing relative
-    to their content (as would be the case with auto),
-    as this intervenes with sizing an item exactly
-    when not available space is available
-    in the flex container
-    */
-    flex: 1 1 0;
-}
 
-.mx_RoomSubList_nonEmpty {
-    min-height: 74px;
-
-    .mx_AutoHideScrollbar_offset {
-        padding-bottom: 4px;
-    }
-}
-
-.mx_RoomSubList_hidden {
-    flex: none !important;
+.mx_RoomSubList_nonEmpty .mx_AutoHideScrollbar_offset {
+    padding-bottom: 4px;
 }
 
 .mx_RoomSubList_labelContainer {

@@ -36,7 +36,8 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer, RoomSubListDistributor} from '../../../resizer'
+import {Resizer} from '../../../resizer'
+import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -79,6 +80,23 @@ module.exports = React.createClass({
         const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
         this.subListSizes = sizesJson ? JSON.parse(sizesJson) : {};
         this.collapsedState = collapsedJson ? JSON.parse(collapsedJson) : {};
+        this._layoutSections = [];
+
+        this._layout = new Layout((key, size) => {
+            const subList = this._subListRefs[key];
+            if (subList) {
+                subList.setHeight(size);
+            }
+            // update overflow indicators
+            this._checkSubListsOverflow();
+            // don't store height for collapsed sublists
+            if(!this.collapsedState[key]) {
+                this.subListSizes[key] = size;
+                window.localStorage.setItem("mx_roomlist_sizes",
+                    JSON.stringify(this.subListSizes));
+            }
+        }, this.subListSizes, this.collapsedState);
+
         return {
             isLoadingLeftRooms: false,
             totalRoomCount: null,
@@ -146,54 +164,38 @@ module.exports = React.createClass({
         this._delayedRefreshRoomListLoopCount = 0;
     },
 
-    _onSubListResize: function(newSize, id) {
-        if (!id) {
-            return;
-        }
-        if (typeof newSize === "string") {
-            newSize = Number.MAX_SAFE_INTEGER;
-        }
-        if (newSize === null) {
-            delete this.subListSizes[id];
-        } else {
-            this.subListSizes[id] = newSize;
-        }
-        window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
-        // update overflow indicators
-        this._checkSubListsOverflow();
-    },
-
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         const cfg = {
-            onResized: this._onSubListResize,
+            layout: this._layout,
         };
-        this.resizer = new Resizer(this.resizeContainer, RoomSubListDistributor, cfg);
+        this.resizer = new Resizer(this.resizeContainer, Distributor, cfg);
         this.resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse"
         });
-
-        // load stored sizes
-        Object.keys(this.subListSizes).forEach((key) => {
-            this._restoreSubListSize(key);
-        });
+        this._layout.update(
+            this._layoutSections,
+            this.resizeContainer && this.resizeContainer.offsetHeight,
+        );
         this._checkSubListsOverflow();
 
         this.resizer.attach();
+        window.addEventListener("resize", this.onWindowResize);
         this.mounted = true;
     },
 
     componentDidUpdate: function(prevProps) {
         this._repositionIncomingCallBox(undefined, false);
-        if (this.props.searchFilter !== prevProps.searchFilter) {
-            // restore sizes
-            Object.keys(this.subListSizes).forEach((key) => {
-                this._restoreSubListSize(key);
-            });
-            this._checkSubListsOverflow();
-        }
+        // if (this.props.searchFilter !== prevProps.searchFilter) {
+        //     this._checkSubListsOverflow();
+        // }
+        this._layout.update(
+            this._layoutSections,
+            this.resizeContainer && this.resizeContainer.clientHeight,
+        );
+        // TODO: call layout.setAvailableHeight, window height was changed when bannerShown prop was changed
     },
 
     onAction: function(payload) {
@@ -222,6 +224,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this.mounted = false;
 
+        window.removeEventListener("resize", this.onWindowResize);
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -249,6 +252,17 @@ module.exports = React.createClass({
 
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
+    },
+
+    onWindowResize: function() {
+        if (this.mounted && this._layout && this.resizeContainer &&
+            Array.isArray(this._layoutSections)
+        ) {
+            this._layout.update(
+                this._layoutSections,
+                this.resizeContainer.offsetHeight
+            );
+        }
     },
 
     onRoom: function(room) {
@@ -551,20 +565,14 @@ module.exports = React.createClass({
         this.collapsedState[key] = collapsed;
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
         // load the persisted size configuration of the expanded sub list
-        if (!collapsed) {
-            this._restoreSubListSize(key);
+        if (collapsed) {
+            this._layout.collapseSection(key);
+        } else {
+            this._layout.expandSection(key, this.subListSizes[key]);
         }
         // check overflow, as sub lists sizes have changed
         // important this happens after calling resize above
         this._checkSubListsOverflow();
-    },
-
-    _restoreSubListSize(key) {
-        const size = this.subListSizes[key];
-        const handle = this.resizer.forHandleWithId(key);
-        if (handle) {
-            handle.resize(size);
-        }
     },
 
     // check overflow for scroll indicator gradient
@@ -581,6 +589,7 @@ module.exports = React.createClass({
     },
 
     _mapSubListProps: function(subListsProps) {
+        this._layoutSections = [];
         const defaultProps = {
             collapsed: this.props.collapsed,
             isFiltered: !!this.props.searchFilter,
@@ -599,6 +608,7 @@ module.exports = React.createClass({
         return subListsProps.reduce((components, props, i) => {
             props = Object.assign({}, defaultProps, props);
             const isLast = i === subListsProps.length - 1;
+            const len = props.list.length + (props.extraTiles ? props.extraTiles.length : 0);
             const {key, label, onHeaderClick, ... otherProps} = props;
             const chosenKey = key || label;
             const onSubListHeaderClick = (collapsed) => {
@@ -608,7 +618,10 @@ module.exports = React.createClass({
                 }
             };
             const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
-
+            this._layoutSections.push({
+                id: chosenKey,
+                count: len,
+            });
             let subList = (<RoomSubList
                 ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
