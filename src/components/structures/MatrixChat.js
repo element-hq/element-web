@@ -1232,6 +1232,7 @@ export default React.createClass({
         this.firstSyncComplete = false;
         this.firstSyncPromise = Promise.defer();
         const cli = MatrixClientPeg.get();
+        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room
@@ -1429,6 +1430,12 @@ export default React.createClass({
                     import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
                 );
             }
+        });
+
+        cli.on("crypto.verification.start", (verifier) => {
+            Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                verifier,
+            });
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied
