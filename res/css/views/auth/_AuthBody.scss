@@ -36,6 +36,12 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
+.mx_Auth_editServerDetails {
+    padding-left: 1em;
+    font-size: 12px;
+    font-weight: normal;
+}
+
 .mx_AuthBody a:link,
 .mx_AuthBody a:hover,
 .mx_AuthBody a:visited {

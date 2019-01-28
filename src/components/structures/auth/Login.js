@@ -360,6 +360,14 @@ module.exports = React.createClass({
         });
     },
 
+    onEditServerDetailsClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_SERVER_DETAILS,
+        });
+    },
+
     _tryWellKnownDiscovery: async function(serverName) {
         if (!serverName.trim()) {
             // Nothing to discover
@@ -605,10 +613,20 @@ module.exports = React.createClass({
 
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
+        let onEditServerDetailsClick = null;
+        // If custom URLs are allowed and we haven't selected the Free server type, wire
+        // up the server details edit link.
+        if (
+            !SdkConfig.get()['disable_custom_urls'] &&
+            this.state.serverType !== ServerType.FREE
+        ) {
+            onEditServerDetailsClick = this.onEditServerDetailsClick;
+        }
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
                onError={this.onPasswordLoginError}
+               onEditServerDetailsClick={onEditServerDetailsClick}
                initialUsername={this.state.username}
                initialPhoneCountry={this.state.phoneCountry}
                initialPhoneNumber={this.state.phoneNumber}

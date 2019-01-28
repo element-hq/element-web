@@ -29,6 +29,7 @@ import SdkConfig from '../../../SdkConfig';
 class PasswordLogin extends React.Component {
     static defaultProps = {
         onError: function() {},
+        onEditServerDetailsClick: null,
         onUsernameChanged: function() {},
         onUsernameBlur: function() {},
         onPasswordChanged: function() {},
@@ -261,6 +262,15 @@ class PasswordLogin extends React.Component {
             }
         }
 
+        let editLink = null;
+        if (this.props.onEditServerDetailsClick) {
+            editLink = <a className="mx_Auth_editServerDetails"
+                href="#" onClick={this.props.onEditServerDetailsClick}
+            >
+                {_t('Edit')}
+            </a>;
+        }
+
         const pwFieldClass = classNames({
             mx_Login_field: true,
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
@@ -289,7 +299,10 @@ class PasswordLogin extends React.Component {
 
         return (
             <div>
-                <h3>{ yourMatrixAccountText }</h3>
+                <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3>
                 <form onSubmit={this.onSubmitForm}>
                     { loginType }
                     { loginField }
