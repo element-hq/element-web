@@ -58,11 +58,25 @@ export class Layout {
         this._applyNewSize();
     }
 
-    // [{id, count}]
     update(sections, availableHeight) {
-        if (Number.isFinite(availableHeight)) {
+        let heightChanged = false;
+
+        if (Number.isFinite(availableHeight) && availableHeight !== this._availableHeight) {
+            heightChanged = true;
             this._availableHeight = availableHeight;
         }
+
+        const sectionsChanged =
+            sections.length !== this._sections.length ||
+            sections.some((a, i) => {
+                const b = this._sections[i];
+                return a.id !== b.id || a.count !== b.count;
+            });
+
+        if (!heightChanged && !sectionsChanged) {
+            return;
+        }
+
         this._sections = sections;
         const totalHeight = this._getAvailableHeight();
         this._sections.forEach((section, i) => {
