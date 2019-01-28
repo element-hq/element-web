@@ -19,15 +19,7 @@ import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
 import dis from '../../../dispatcher';
-import SettingsStore from "../../../settings/SettingsStore";
-import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
-import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
-import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
-import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
-import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
-import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -36,7 +28,7 @@ export class TempTab extends React.Component {
     };
 
     componentDidMount(): void {
-        dis.dispatch({action: "view_old_user_settings"});
+        dis.dispatch({action: "open_old_room_settings"});
         this.props.onClose();
     }
 
@@ -55,44 +47,27 @@ export default class UserSettingsDialog extends React.Component {
 
         tabs.push(new Tab(
             _td("General"),
-            "mx_UserSettingsDialog_settingsIcon",
-            <GeneralSettingsTab />,
-        ));
-        tabs.push(new Tab(
-            _td("Notifications"),
-            "mx_UserSettingsDialog_bellIcon",
-            <NotificationSettingsTab />,
-        ));
-        tabs.push(new Tab(
-            _td("Preferences"),
-            "mx_UserSettingsDialog_preferencesIcon",
-            <PreferencesSettingsTab />,
-        ));
-        tabs.push(new Tab(
-            _td("Voice & Video"),
-            "mx_UserSettingsDialog_voiceIcon",
-            <VoiceSettingsTab />,
+            "mx_RoomSettingsDialog_settingsIcon",
+            <div>General Test</div>,
         ));
         tabs.push(new Tab(
             _td("Security & Privacy"),
-            "mx_UserSettingsDialog_securityIcon",
-            <SecuritySettingsTab />,
+            "mx_RoomSettingsDialog_securityIcon",
+            <div>Security Test</div>,
         ));
-        if (SettingsStore.getLabsFeatures().length > 0) {
-            tabs.push(new Tab(
-                _td("Labs"),
-                "mx_UserSettingsDialog_labsIcon",
-                <LabsSettingsTab />,
-            ));
-        }
         tabs.push(new Tab(
-            _td("Help & About"),
-            "mx_UserSettingsDialog_helpIcon",
-            <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
+            _td("Roles & Permissions"),
+            "mx_RoomSettingsDialog_rolesIcon",
+            <div>Roles Test</div>,
+        ));
+        tabs.push(new Tab(
+            _td("Advanced"),
+            "mx_RoomSettingsDialog_warningIcon",
+            <div>Advanced Test</div>,
         ));
         tabs.push(new Tab(
             _td("Visit old settings"),
-            "mx_UserSettingsDialog_helpIcon",
+            "mx_RoomSettingsDialog_warningIcon",
             <TempTab onClose={this.props.onFinished} />,
         ));
 
@@ -101,7 +76,7 @@ export default class UserSettingsDialog extends React.Component {
 
     render() {
         return (
-            <div className="mx_UserSettingsDialog">
+            <div className="mx_RoomSettingsDialog">
                 <div className="mx_SettingsDialog_header">
                     {_t("Settings")}
                     <span className="mx_SettingsDialog_close">

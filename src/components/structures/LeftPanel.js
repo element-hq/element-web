@@ -212,6 +212,7 @@ const LeftPanel = React.createClass({
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
+                        toolbarShown={this.props.toolbarShown}
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />

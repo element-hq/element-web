@@ -138,7 +138,9 @@ export default class LogoutDialog extends React.Component {
                     // once you can restorew a backup by verifying a device
                     description={_t(
                         "When signing in again, you can access encrypted chat history by " +
-                        "restoring your key backup. You'll need your recovery key.",
+                        "restoring your key backup. You'll need your recovery passphrase " +
+                        "or, if you didn't set a recovery passphrase, your recovery key " +
+                        "(that you downloaded).",
                     )}
                     button={_t("Sign out")}
                     onFinished={this._onFinished}

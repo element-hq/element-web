@@ -30,11 +30,6 @@ class HomePage extends React.Component {
     static displayName = 'HomePage';
 
     static propTypes = {
-        // URL base of the team server. Optional.
-        teamServerUrl: PropTypes.string,
-        // Team token. Optional. If set, used to get the static homepage of the team
-        //      associated. If unset, homePageUrl will be used.
-        teamToken: PropTypes.string,
         // URL to use as the iFrame src. Defaults to /home.html.
         homePageUrl: PropTypes.string,
     };
@@ -56,35 +51,29 @@ class HomePage extends React.Component {
     componentWillMount() {
         this._unmounted = false;
 
-        if (this.props.teamToken && this.props.teamServerUrl) {
-            this.setState({
-                iframeSrc: `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`,
-            });
-        } else {
-            // we use request() to inline the homepage into the react component
-            // so that it can inherit CSS and theming easily rather than mess around
-            // with iframes and trying to synchronise document.stylesheets.
+        // we use request() to inline the homepage into the react component
+        // so that it can inherit CSS and theming easily rather than mess around
+        // with iframes and trying to synchronise document.stylesheets.
 
-            const src = this.props.homePageUrl || 'home.html';
+        const src = this.props.homePageUrl || 'home.html';
 
-            request(
-                { method: "GET", url: src },
-                (err, response, body) => {
-                    if (this._unmounted) {
-                        return;
-                    }
+        request(
+            { method: "GET", url: src },
+            (err, response, body) => {
+                if (this._unmounted) {
+                    return;
+                }
 
-                    if (err || response.status < 200 || response.status >= 300) {
-                        console.warn(`Error loading home page: ${err}`);
-                        this.setState({ page: _t("Couldn't load home page") });
-                        return;
-                    }
+                if (err || response.status < 200 || response.status >= 300) {
+                    console.warn(`Error loading home page: ${err}`);
+                    this.setState({ page: _t("Couldn't load home page") });
+                    return;
+                }
 
-                    body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
-                    this.setState({ page: body });
-                },
-            );
-        }
+                body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
+                this.setState({ page: body });
+            },
+        );
     }
 
     componentWillUnmount() {

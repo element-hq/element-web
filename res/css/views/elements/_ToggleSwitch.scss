@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Fancy transitions
-
 .mx_ToggleSwitch {
+    transition: background-color 0.20s ease-out 0.1s;
     width: 48px;
     height: 24px;
     border-radius: 14px;
@@ -33,6 +32,7 @@ limitations under the License.
 }
 
 .mx_ToggleSwitch_ball {
+    transition: left 0.15s ease-out 0.1s;
     margin: 2px;
     width: 20px;
     height: 20px;
@@ -47,5 +47,5 @@ limitations under the License.
 }
 
 .mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
-    right: 2px;
+    left: 23px; // 48px switch - 20px ball - 5px padding = 23px
 }

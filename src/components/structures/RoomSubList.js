@@ -313,6 +313,12 @@ const RoomSubList = React.createClass({
         }
     },
 
+    setHeight: function(height) {
+        if (this.refs.subList) {
+            this.refs.subList.style.height = `${height}px`;
+        }
+    },
+
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
         if (len) {
@@ -322,13 +328,13 @@ const RoomSubList = React.createClass({
                 "mx_RoomSubList_nonEmpty": len && !this.state.hidden,
             });
             if (this.state.hidden) {
-                return <div className={subListClasses}>
+                return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx()}
                 </div>;
             } else {
                 const tiles = this.makeRoomTiles();
                 tiles.push(...this.props.extraTiles);
-                return <div className={subListClasses}>
+                return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx()}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
                         { tiles }
@@ -343,7 +349,7 @@ const RoomSubList = React.createClass({
             }
 
             return (
-                <div className="mx_RoomSubList">
+                <div ref="subList" className="mx_RoomSubList">
                     { this._getHeaderJsx() }
                     { content }
                 </div>

@@ -17,30 +17,18 @@ limitations under the License.
 // ICONS
 // ==========================================================
 
-.mx_UserSettingsDialog_settingsIcon:before {
+.mx_RoomSettingsDialog_settingsIcon:before {
   mask-image: url('$(res)/img/feather-icons/settings.svg');
 }
 
-.mx_UserSettingsDialog_voiceIcon:before {
-  mask-image: url('$(res)/img/feather-icons/phone.svg');
-}
-
-.mx_UserSettingsDialog_bellIcon:before {
-  mask-image: url('$(res)/img/feather-icons/notifications.svg');
-}
-
-.mx_UserSettingsDialog_preferencesIcon:before {
-  mask-image: url('$(res)/img/feather-icons/sliders.svg');
-}
-
-.mx_UserSettingsDialog_securityIcon:before {
+.mx_RoomSettingsDialog_securityIcon:before {
   mask-image: url('$(res)/img/feather-icons/lock.svg');
 }
 
-.mx_UserSettingsDialog_helpIcon:before {
-  mask-image: url('$(res)/img/feather-icons/help-circle.svg');
+.mx_RoomSettingsDialog_rolesIcon:before {
+  mask-image: url('$(res)/img/feather-icons/users-sm.svg');
 }
 
-.mx_UserSettingsDialog_labsIcon:before {
-  mask-image: url('$(res)/img/feather-icons/flag.svg');
+.mx_RoomSettingsDialog_warningIcon:before {
+  mask-image: url('$(res)/img/feather-icons/warning-triangle.svg');
 }
