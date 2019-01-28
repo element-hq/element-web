@@ -207,8 +207,8 @@ export class Layout {
     }
 
     // @param offset the amount the sectionIndex is moved from what is stored in _sectionHeights, positive if downwards
-    // if we're clamped, return the offset we should be clamped at.
-    _relayout(sectionIndex = 0, offset = 0, clamped = false) {
+    // if we're constrained, return the offset we should be constrained at.
+    _relayout(sectionIndex = 0, offset = 0, constrained = false) {
         this._heights = this._sections.map((section) => this._sectionHeights[section.id]);
         // are these the amounts the items above/below shrank/grew and need to be relayouted?
         let overflowAbove;
@@ -217,12 +217,12 @@ export class Layout {
         const minHeight = this._getMinHeight(sectionIndex);
         // new height > max ?
         if (this._heights[sectionIndex] + offset > maxHeight) {
-            // we're pulling downwards and clamped
+            // we're pulling downwards and constrained
             // overflowAbove = minus how much are we above max height
             overflowAbove = (maxHeight - this._heights[sectionIndex]) - offset;
             overflowBelow = offset;
         } else if (this._heights[sectionIndex] + offset < minHeight) { // new height < min?
-            // we're pulling upwards and clamped
+            // we're pulling upwards and constrained
             overflowAbove = (minHeight - this._heights[sectionIndex]) - offset;
             overflowBelow = offset;
         } else {
@@ -236,7 +236,7 @@ export class Layout {
         overflowAbove = this._rebalanceAbove(sectionIndex, overflowAbove);
         overflowBelow = this._rebalanceBelow(sectionIndex, overflowBelow);
 
-        if (!clamped) { // to avoid risk of infinite recursion
+        if (!constrained) { // to avoid risk of infinite recursion
             // clamp to avoid overflowing or underflowing the page
             if (Math.abs(overflowAbove) > 1.0) {
                 // here we do the layout again with offset - the amount of space we took too much
