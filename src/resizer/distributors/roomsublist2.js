@@ -183,10 +183,10 @@ export class Layout {
         return overflow;
     }
 
-    _rebalanceAbove(anchor, overflowAbove) {
+    _rebalanceAbove(sectionIndex, overflowAbove) {
         if (Math.abs(overflowAbove) > 1.0) {
             const sections = [];
-            for (let i = anchor - 1; i >= 0; i--) {
+            for (let i = sectionIndex - 1; i >= 0; i--) {
                 sections.push(i);
             }
             overflowAbove = this._applyOverflow(overflowAbove, sections);
@@ -194,10 +194,10 @@ export class Layout {
         return overflowAbove;
     }
 
-    _rebalanceBelow(anchor, overflowBelow) {
+    _rebalanceBelow(sectionIndex, overflowBelow) {
         if (Math.abs(overflowBelow) > 1.0) {
             const sections = [];
-            for (let i = anchor + 1; i < this._sections.length; i++) {
+            for (let i = sectionIndex + 1; i < this._sections.length; i++) {
                 sections.push(i);
             }
             overflowBelow = this._applyOverflow(overflowBelow, sections);
@@ -205,47 +205,47 @@ export class Layout {
         return overflowBelow;
     }
 
-    // @param offset the amount the anchor is moved from what is stored in _sectionHeights, positive if downwards
+    // @param offset the amount the sectionIndex is moved from what is stored in _sectionHeights, positive if downwards
     // if we're clamped, return the offset we should be clamped at.
-    _relayout(anchor = 0, offset = 0, clamped = false) {
+    _relayout(sectionIndex = 0, offset = 0, clamped = false) {
         this._heights = this._sections.map((section) => this._sectionHeights[section.id]);
         // are these the amounts the items above/below shrank/grew and need to be relayouted?
         let overflowAbove;
         let overflowBelow;
-        const maxHeight = this._getMaxHeight(anchor);
-        const minHeight = this._getMinHeight(anchor);
+        const maxHeight = this._getMaxHeight(sectionIndex);
+        const minHeight = this._getMinHeight(sectionIndex);
         // new height > max ?
-        if (this._heights[anchor] + offset > maxHeight) {
+        if (this._heights[sectionIndex] + offset > maxHeight) {
             // we're pulling downwards and clamped
             // overflowAbove = minus how much are we above max height
-            overflowAbove = (maxHeight - this._heights[anchor]) - offset;
+            overflowAbove = (maxHeight - this._heights[sectionIndex]) - offset;
             overflowBelow = offset;
-        } else if (this._heights[anchor] + offset < minHeight) { // new height < min?
+        } else if (this._heights[sectionIndex] + offset < minHeight) { // new height < min?
             // we're pulling upwards and clamped
-            overflowAbove = (minHeight - this._heights[anchor]) - offset;
+            overflowAbove = (minHeight - this._heights[sectionIndex]) - offset;
             overflowBelow = offset;
         } else {
             overflowAbove = 0;
             overflowBelow = offset;
         }
-        this._heights[anchor] = clamp(this._heights[anchor] + offset, minHeight, maxHeight);
+        this._heights[sectionIndex] = clamp(this._heights[sectionIndex] + offset, minHeight, maxHeight);
 
         // these are reassigned the amount of overflow that could not be rebalanced
         // meaning we dragged the handle too far and it can't follow the cursor anymore
-        overflowAbove = this._rebalanceAbove(anchor, overflowAbove);
-        overflowBelow = this._rebalanceBelow(anchor, overflowBelow);
+        overflowAbove = this._rebalanceAbove(sectionIndex, overflowAbove);
+        overflowBelow = this._rebalanceBelow(sectionIndex, overflowBelow);
 
         if (!clamped) { // to avoid risk of infinite recursion
             // clamp to avoid overflowing or underflowing the page
             if (Math.abs(overflowAbove) > 1.0) {
                 // here we do the layout again with offset - the amount of space we took too much
-                this._relayout(anchor, offset + overflowAbove, true);
+                this._relayout(sectionIndex, offset + overflowAbove, true);
                 return offset + overflowAbove;
             }
 
             if (Math.abs(overflowBelow) > 1.0) {
                 // here we do the layout again with offset - the amount of space we took too much
-                this._relayout(anchor, offset - overflowBelow, true);
+                this._relayout(sectionIndex, offset - overflowBelow, true);
                 return offset - overflowBelow;
             }
         }
@@ -270,14 +270,14 @@ export class Layout {
 }
 
 class Handle {
-    constructor(layout, anchor, height) {
+    constructor(layout, sectionIndex, height) {
         this._layout = layout;
-        this._anchor = anchor;
+        this._sectionIndex = sectionIndex;
         this._initialHeight = height;
     }
 
     setHeight(height) {
-        this._layout._relayout(this._anchor, height - this._initialHeight);
+        this._layout._relayout(this._sectionIndex, height - this._initialHeight);
         return this;
     }
 
