@@ -26,6 +26,15 @@ module.exports = {
             { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
             { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
             {
+                test: /\.wasm$/,
+                loader: "file-loader",
+                type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                options: {
+                    name: '[name].[hash:7].[ext]',
+                    outputPath: '.',
+                },
+            },
+            {
                 test: /\.scss$/,
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-loader turns the CSS into a JS module whose default

@@ -58,10 +58,6 @@ const COPY_LIST = [
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
-    // XXX: This is tied quite heavily to the matching olm.js so it really should be
-    // in the bundle dir with the js to avoid caching issues giving us wasm that
-    // doesn't match our js, but I cannot find any way to get webpack to do this.
-    ["node_modules/olm/olm.wasm", "webapp", { directwatch: 1 }],
     ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
 ];
