@@ -19,11 +19,7 @@ import FixedDistributor from "./fixed";
 // const allowWhitespace = true;
 const handleHeight = 1;
 
-function log() {
-}
-
 function clamp(height, min, max) {
-    //log(`clamping ${height} between ${min} and ${max}`);
     if (height > max) return max;
     if (height < min) return min;
     return height;
@@ -99,7 +95,6 @@ export class Layout {
 
     openHandle(id) {
         const index = this._getSectionIndex(id);
-        //log(`openHandle resolved ${id} to ${index}`);
         return new Handle(this, index, this._sectionHeights[id]);
     }
 
@@ -148,12 +143,10 @@ export class Layout {
         const section = this._sections[i];
         const collapsed = this._collapsedState[section.id];
         const maxItems = collapsed ? 0 : 1;
-        // log("_getMinHeight", i, section);
         return this._sectionHeight(Math.min(section.count, maxItems));
     }
 
     _applyOverflow(overflow, sections, blend) {
-        //log("applyOverflow", overflow, sections);
         // take the given overflow amount, and applies it to the given sections.
         // calls itself recursively until it has distributed all the overflow
         // or run out of unclamped sections.
@@ -175,10 +168,7 @@ export class Layout {
             // 100 -= -100
             // 200
             overflow -= this._heights[i] - newHeight;
-            // console.log(`this._heights[${i}] (${this._heights[i]}) - newHeight (${newHeight}) = ${this._heights[i] - newHeight}`);
-            // console.log(`changing ${this._heights[i]} to ${newHeight}`);
             this._heights[i] = newHeight;
-            // console.log(`for section ${i} overflow is ${overflow}`);
             if (!blend) {
                 overflowPerSection = overflow;
                 if (Math.abs(overflow) < 1.0) break;
@@ -187,7 +177,6 @@ export class Layout {
 
         if (Math.abs(overflow) > 1.0 && unclampedSections.length > 0) {
             // we weren't able to distribute all the overflow so recurse and try again
-            // log("recursing with", overflow, unclampedSections);
             overflow = this._applyOverflow(overflow, unclampedSections, blend);
         }
 
@@ -196,7 +185,6 @@ export class Layout {
 
     _rebalanceAbove(anchor, overflowAbove) {
         if (Math.abs(overflowAbove) > 1.0) {
-            // log(`trying to rebalance upstream with ${overflowAbove}`);
             const sections = [];
             for (let i = anchor - 1; i >= 0; i--) {
                 sections.push(i);
@@ -208,13 +196,11 @@ export class Layout {
 
     _rebalanceBelow(anchor, overflowBelow) {
         if (Math.abs(overflowBelow) > 1.0) {
-            // log(`trying to rebalance downstream with ${overflowBelow}`);
             const sections = [];
             for (let i = anchor + 1; i < this._sections.length; i++) {
                 sections.push(i);
             }
             overflowBelow = this._applyOverflow(overflowBelow, sections);
-            //log(`rebalanced downstream with ${overflowBelow}`);
         }
         return overflowBelow;
     }
@@ -231,20 +217,16 @@ export class Layout {
         // new height > max ?
         if (this._heights[anchor] + offset > maxHeight) {
             // we're pulling downwards and clamped
-            // overflowAbove = minus how much are we above max height?
+            // overflowAbove = minus how much are we above max height
             overflowAbove = (maxHeight - this._heights[anchor]) - offset;
             overflowBelow = offset;
-            // log(`pulling downwards clamped at max: ${overflowAbove} ${overflowBelow}`);
         } else if (this._heights[anchor] + offset < minHeight) { // new height < min?
             // we're pulling upwards and clamped
-            // overflowAbove = ??? (offset is negative here, so - offset will add)
             overflowAbove = (minHeight - this._heights[anchor]) - offset;
             overflowBelow = offset;
-            // log(`pulling upwards clamped at min: ${overflowAbove} ${overflowBelow}`);
         } else {
             overflowAbove = 0;
             overflowBelow = offset;
-            // log(`resizing the anchor: ${overflowAbove} ${overflowBelow}`);
         }
         this._heights[anchor] = clamp(this._heights[anchor] + offset, minHeight, maxHeight);
 
@@ -256,7 +238,6 @@ export class Layout {
         if (!clamped) { // to avoid risk of infinite recursion
             // clamp to avoid overflowing or underflowing the page
             if (Math.abs(overflowAbove) > 1.0) {
-                // log(`clamping with overflowAbove ${overflowAbove}`);
                 // here we do the layout again with offset - the amount of space we took too much
                 this._relayout(anchor, offset + overflowAbove, true);
                 return offset + overflowAbove;
@@ -264,7 +245,6 @@ export class Layout {
 
             if (Math.abs(overflowBelow) > 1.0) {
                 // here we do the layout again with offset - the amount of space we took too much
-                // log(`clamping with overflowBelow ${overflowBelow}`);
                 this._relayout(anchor, offset - overflowBelow, true);
                 return offset - overflowBelow;
             }
@@ -275,7 +255,6 @@ export class Layout {
     }
 
     _applyHeights() {
-        log("updating layout, heights are now", this._heights);
         // apply the heights
         for (let i = 0; i < this._sections.length; i++) {
             const section = this._sections[i];
