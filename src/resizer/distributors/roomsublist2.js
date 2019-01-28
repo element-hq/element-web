@@ -72,7 +72,7 @@ export class Layout {
                     this._getMinHeight(i),
                     this._getMaxHeight(i),
                 );
-            };
+            }
         });
         this._sections = sections;
         this._applyNewSize();
@@ -143,7 +143,11 @@ export class Layout {
 
         let overflowPerSection = blend ? (overflow / sections.length) : overflow;
         for (const i of sections) {
-            const newHeight = clamp(this._heights[i] - overflowPerSection, this._getMinHeight(i), this._getMaxHeight(i));
+            const newHeight = clamp(
+                this._heights[i] - overflowPerSection,
+                this._getMinHeight(i),
+                this._getMaxHeight(i),
+            );
             if (newHeight == this._heights[i] - overflowPerSection) {
                 unclampedSections.push(i);
             }
