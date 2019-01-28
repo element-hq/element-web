@@ -68,7 +68,7 @@ export class Layout {
         this._applyNewSize();
     }
 
-    update(sections, availableHeight) {
+    update(sections, availableHeight, force = false) {
         let heightChanged = false;
 
         if (Number.isFinite(availableHeight) && availableHeight !== this._availableHeight) {
@@ -83,7 +83,7 @@ export class Layout {
                 return a.id !== b.id || a.count !== b.count;
             });
 
-        if (!heightChanged && !sectionsChanged) {
+        if (!heightChanged && !sectionsChanged && !force) {
             return;
         }
 
