@@ -147,7 +147,7 @@
     "webpack-dev-server": "^3.1.10"
   },
   "optionalDependencies": {
-    "olm": "https://matrix.org/packages/npm/olm/olm-3.0.0.tgz"
+    "olm": "https://matrix.org/packages/npm/olm/olm-3.1.0-pre1.tgz"
   },
   "build": {
     "appId": "im.riot.app",
