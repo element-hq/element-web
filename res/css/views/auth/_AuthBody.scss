@@ -20,4 +20,19 @@ limitations under the License.
     border-radius: 0 4px 4px 0;
     padding: 25px 60px;
     box-sizing: border-box;
+    font-size: 12px;
+    color: $authpage-body-color;
+}
+
+.mx_AuthBody a:link,
+.mx_AuthBody a:hover,
+.mx_AuthBody a:visited {
+    color: $accent-color;
+    text-decoration: none;
+}
+
+.mx_Auth_changeFlow {
+    display: block;
+    text-align: center;
+    width: 100%;
 }

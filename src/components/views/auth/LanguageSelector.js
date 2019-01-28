@@ -32,7 +32,8 @@ export default function LanguageSelector() {
     if (SdkConfig.get()['disable_login_language_selector']) return <div />;
 
     const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
-    return <div className="mx_Login_language_div">
-        <LanguageDropdown onOptionChange={onChange} className="mx_Login_language" value={getCurrentLanguage()} />
-    </div>;
+    return <LanguageDropdown className="mx_Auth_language"
+        onOptionChange={onChange}
+        value={getCurrentLanguage()}
+    />;
 }

@@ -255,3 +255,15 @@ input.mx_UserSettings_phoneNumberField {
 .mx_UserSettings_analyticsModal table {
     margin: 10px 0px;
 }
+
+
+// Temp styles to keep the layout moderately usable. Not perfect, but better
+// than 30 options being impossible to understand.
+.mx_UserSettings .mx_SettingsFlag {
+    height: 30px;
+}
+
+.mx_UserSettings .mx_SettingsFlag .mx_ToggleSwitch {
+    float: left;
+    margin-right: 5px;
+}

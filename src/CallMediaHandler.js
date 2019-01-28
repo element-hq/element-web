@@ -69,4 +69,16 @@ export default {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         Matrix.setMatrixCallVideoInput(deviceId);
     },
+
+    getAudioOutput: function() {
+        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
+    },
+
+    getAudioInput: function() {
+        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audioinput");
+    },
+
+    getVideoInput: function() {
+        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
+    },
 };

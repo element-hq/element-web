@@ -75,8 +75,8 @@ const VIEWS = {
     // we have valid matrix credentials (either via an explicit login, via the
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
-    // process because (a) we need to clear out indexeddb, and (b) we need to
-    // talk to the team server; while it is going on we show a big spinner.
+    // process because we need to clear out indexeddb. While it is going on we
+    // show a big spinner.
     LOGGING_IN: 5,
 
     // we are logged in with an active matrix client.
@@ -256,42 +256,6 @@ export default React.createClass({
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
 
-        // To enable things like riot.im/geektime in a nicer way than rewriting the URL
-        // and appending a team token query parameter, use the first path segment to
-        // indicate a team, with "public" team tokens stored in the config teamTokenMap.
-        let routedTeamToken = null;
-        if (this.props.config.teamTokenMap) {
-            const teamName = window.location.pathname.split('/')[1];
-            if (teamName && this.props.config.teamTokenMap.hasOwnProperty(teamName)) {
-                routedTeamToken = this.props.config.teamTokenMap[teamName];
-            }
-        }
-
-        // Persist the team token across refreshes using sessionStorage. A new window or
-        // tab will not persist sessionStorage, but refreshes will.
-        if (this.props.startingFragmentQueryParams.team_token) {
-            window.sessionStorage.setItem(
-                'mx_team_token',
-                this.props.startingFragmentQueryParams.team_token,
-            );
-        }
-
-        // Use the locally-stored team token first, then as a fall-back, check to see if
-        // a referral link was used, which will contain a query parameter `team_token`.
-        this._teamToken = routedTeamToken ||
-            window.localStorage.getItem('mx_team_token') ||
-            window.sessionStorage.getItem('mx_team_token');
-
-        // Some users have ended up with "undefined" as their local storage team token,
-        // treat that as undefined.
-        if (this._teamToken === "undefined") {
-            this._teamToken = undefined;
-        }
-
-        if (this._teamToken) {
-            console.info(`Team token set to ${this._teamToken}`);
-        }
-
         // Set up the default URLs (async)
         if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
             this.setState({loadingDefaultHomeserver: true});
@@ -359,9 +323,6 @@ export default React.createClass({
         if (this.onGroupClick) {
             linkifyMatrix.onGroupClick = this.onGroupClick;
         }
-
-        const teamServerConfig = this.props.config.teamServerConfig || {};
-        Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
         // the first thing to do is to try the token params in the query-string
         Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
@@ -613,7 +574,7 @@ export default React.createClass({
             case 'view_user_settings': {
                 if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
                     const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {});
+                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
                 } else {
                     this._setPage(PageTypes.UserSettings);
                     this.notifyNewScreen('settings');
@@ -726,7 +687,7 @@ export default React.createClass({
                 });
                 break;
             case 'on_logged_in':
-                this._onLoggedIn(payload.teamToken);
+                this._onLoggedIn();
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -1196,16 +1157,10 @@ export default React.createClass({
 
     /**
      * Called when a new logged in session has started
-     *
-     * @param {string} teamToken
      */
-    _onLoggedIn: async function(teamToken) {
+    _onLoggedIn: async function() {
         this.setStateForNewView({view: VIEWS.LOGGED_IN});
-        if (teamToken) {
-            // A team member has logged in, not a guest
-            this._teamToken = teamToken;
-            dis.dispatch({action: 'view_home_page'});
-        } else if (this._is_registered) {
+        if (this._is_registered) {
             this._is_registered = false;
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
@@ -1261,7 +1216,6 @@ export default React.createClass({
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
-        this._teamToken = null;
         this._setPageSubtitle();
     },
 
@@ -1714,15 +1668,13 @@ export default React.createClass({
 
     onReturnToAppClick: function() {
         // treat it the same as if the user had completed the login
-        this._onLoggedIn(null);
+        this._onLoggedIn();
     },
 
     // returns a promise which resolves to the new MatrixClient
-    onRegistered: function(credentials, teamToken) {
-        // XXX: These both should be in state or ideally store(s) because we risk not
+    onRegistered: function(credentials) {
+        // XXX: This should be in state or ideally store(s) because we risk not
         //      rendering the most up-to-date view of state otherwise.
-        // teamToken may not be truthy
-        this._teamToken = teamToken;
         this._is_registered = true;
         return Lifecycle.setLoggedIn(credentials);
     },
@@ -1895,7 +1847,6 @@ export default React.createClass({
                         onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
-                        teamToken={this._teamToken}
                         showCookieBar={this.state.showCookieBar}
                         {...this.props}
                         {...this.state}
@@ -1936,7 +1887,6 @@ export default React.createClass({
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
-                    teamServerConfig={this.props.config.teamServerConfig}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     makeRegistrationUrl={this._makeRegistrationUrl}
@@ -1962,7 +1912,6 @@ export default React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
-                    onRegisterClick={this.onRegisterClick}
                     onLoginClick={this.onLoginClick} />
             );
         }

@@ -23,9 +23,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/auth/RegistrationForm';
-import RtsClient from '../../../RtsClient';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
@@ -48,13 +46,6 @@ module.exports = React.createClass({
         brand: PropTypes.string,
         email: PropTypes.string,
         referrer: PropTypes.string,
-        teamServerConfig: PropTypes.shape({
-            // Email address to request new teams
-            supportEmail: PropTypes.string.isRequired,
-            // URL of the riot-team-server to get team configurations and track referrals
-            teamServerURL: PropTypes.string.isRequired,
-        }),
-        teamSelected: PropTypes.object,
 
         // The default server name to use when the user hasn't specified
         // one. This is used when displaying the defaultHsUrl in the UI.
@@ -70,18 +61,11 @@ module.exports = React.createClass({
         onLoginClick: PropTypes.func.isRequired,
         onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
-
-        rtsClient: PropTypes.shape({
-            getTeamsConfig: PropTypes.func.isRequired,
-            trackReferral: PropTypes.func.isRequired,
-            getTeam: PropTypes.func.isRequired,
-        }),
     },
 
     getInitialState: function() {
         return {
             busy: false,
-            teamServerBusy: false,
             errorText: null,
             // We remember the values entered by the user because
             // the registration form will be unmounted during the
@@ -106,37 +90,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
-
         this._replaceClient();
-
-        if (
-            this.props.teamServerConfig &&
-            this.props.teamServerConfig.teamServerURL &&
-            !this._rtsClient
-        ) {
-            this._rtsClient = this.props.rtsClient || new RtsClient(this.props.teamServerConfig.teamServerURL);
-
-            this.setState({
-                teamServerBusy: true,
-            });
-            // GET team configurations including domains, names and icons
-            this._rtsClient.getTeamsConfig().then((data) => {
-                const teamsConfig = {
-                    teams: data,
-                    supportEmail: this.props.teamServerConfig.supportEmail,
-                };
-                console.log('Setting teams config to ', teamsConfig);
-                this.setState({
-                    teamsConfig: teamsConfig,
-                    teamServerBusy: false,
-                });
-            }, (err) => {
-                console.error('Error retrieving config for teams', err);
-                this.setState({
-                    teamServerBusy: false,
-                });
-            });
-        }
     },
 
     onServerConfigChange: function(config) {
@@ -191,7 +145,7 @@ module.exports = React.createClass({
         });
     },
 
-    _onUIAuthFinished: function(success, response, extra) {
+    _onUIAuthFinished: async function(success, response, extra) {
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
@@ -240,58 +194,15 @@ module.exports = React.createClass({
             doingUIAuth: false,
         });
 
-        // Done regardless of `teamSelected`. People registering with non-team emails
-        // will just nop. The point of this being we might not have the email address
-        // that the user registered with at this stage (depending on whether this
-        // is the client they initiated registration).
-        let trackPromise = Promise.resolve(null);
-        if (this._rtsClient && extra.emailSid) {
-            // Track referral if this.props.referrer set, get team_token in order to
-            // retrieve team config and see welcome page etc.
-            trackPromise = this._rtsClient.trackReferral(
-                this.props.referrer || '', // Default to empty string = not referred
-                extra.emailSid,
-                extra.clientSecret,
-            ).then((data) => {
-                const teamToken = data.team_token;
-                // Store for use /w welcome pages
-                window.localStorage.setItem('mx_team_token', teamToken);
-
-                this._rtsClient.getTeam(teamToken).then((team) => {
-                    console.log(
-                        `User successfully registered with team ${team.name}`,
-                    );
-                    if (!team.rooms) {
-                        return;
-                    }
-                    // Auto-join rooms
-                    team.rooms.forEach((room) => {
-                        if (room.auto_join && room.room_id) {
-                            console.log(`Auto-joining ${room.room_id}`);
-                            MatrixClientPeg.get().joinRoom(room.room_id);
-                        }
-                    });
-                }, (err) => {
-                    console.error('Error getting team config', err);
-                });
-
-                return teamToken;
-            }, (err) => {
-                console.error('Error tracking referral', err);
-            });
-        }
-
-        trackPromise.then((teamToken) => {
-            return this.props.onLoggedIn({
-                userId: response.user_id,
-                deviceId: response.device_id,
-                homeserverUrl: this._matrixClient.getHomeserverUrl(),
-                identityServerUrl: this._matrixClient.getIdentityServerUrl(),
-                accessToken: response.access_token,
-            }, teamToken);
-        }).then((cli) => {
-            return this._setupPushers(cli);
+        const cli = await this.props.onLoggedIn({
+            userId: response.user_id,
+            deviceId: response.device_id,
+            homeserverUrl: this._matrixClient.getHomeserverUrl(),
+            identityServerUrl: this._matrixClient.getIdentityServerUrl(),
+            accessToken: response.access_token,
         });
+
+        this._setupPushers(cli);
     },
 
     _setupPushers: function(matrixClient) {
@@ -356,12 +267,6 @@ module.exports = React.createClass({
         });
     },
 
-    onTeamSelected: function(teamSelected) {
-        if (!this._unmounted) {
-            this.setState({ teamSelected });
-        }
-    },
-
     onLoginClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -418,7 +323,7 @@ module.exports = React.createClass({
                     poll={true}
                 />
             );
-        } else if (this.state.busy || this.state.teamServerBusy || !this.state.flows) {
+        } else if (this.state.busy || !this.state.flows) {
             registerBody = <Spinner />;
         } else {
             let serverConfigSection;
@@ -443,11 +348,9 @@ module.exports = React.createClass({
                         defaultPhoneCountry={this.state.formVals.phoneCountry}
                         defaultPhoneNumber={this.state.formVals.phoneNumber}
                         defaultPassword={this.state.formVals.password}
-                        teamsConfig={this.state.teamsConfig}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}
-                        onTeamSelected={this.onTeamSelected}
                         flows={this.state.flows}
                     />
                     { serverConfigSection }
@@ -457,7 +360,6 @@ module.exports = React.createClass({
 
         let errorText;
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
-        const header = <h2>{ _t('Create an account') }</h2>;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
@@ -465,28 +367,20 @@ module.exports = React.createClass({
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
-                    { _t('I already have an account') }
+                <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
+                    { _t('Sign in instead') }
                 </a>
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
         return (
             <AuthPage>
-                <AuthHeader
-                    icon={this.state.teamSelected ?
-                        this.props.teamServerConfig.teamServerURL + "/static/common/" +
-                        this.state.teamSelected.domain + "/icon.png" :
-                        null}
-                />
+                <AuthHeader />
                 <AuthBody>
-                    { header }
+                    <h2>{ _t('Create your account') }</h2>
                     { registerBody }
                     { signIn }
                     { errorText }
-                    <LanguageSelector />
                 </AuthBody>
             </AuthPage>
         );

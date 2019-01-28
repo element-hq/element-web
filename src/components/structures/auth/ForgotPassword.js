@@ -34,7 +34,6 @@ module.exports = React.createClass({
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         onLoginClick: PropTypes.func,
-        onRegisterClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
 
         // The default server name to use when the user hasn't specified
@@ -168,12 +167,6 @@ module.exports = React.createClass({
         this.props.onLoginClick();
     },
 
-    onRegisterClick: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.props.onRegisterClick();
-    },
-
     showErrorDialog: function(body, title) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
@@ -195,7 +188,7 @@ module.exports = React.createClass({
             resetPasswordJsx = <Spinner />;
         } else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (
-                <div className="mx_Login_prompt">
+                <div>
                     { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, " +
                         "click below.", { emailAddress: this.state.email }) }
                     <br />
@@ -205,7 +198,7 @@ module.exports = React.createClass({
             );
         } else if (this.state.progress === "complete") {
             resetPasswordJsx = (
-                <div className="mx_Login_prompt">
+                <div>
                     <p>{ _t('Your password has been reset') }.</p>
                     <p>{ _t('You have been logged out of all devices and will no longer receive push notifications. ' +
                         'To re-enable notifications, sign in again on each device') }.</p>
@@ -234,13 +227,11 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
-            const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
             resetPasswordJsx = (
             <div>
-                <div className="mx_Login_prompt">
+                <p>
                     { _t('To reset your password, enter the email address linked to your account') }:
-                </div>
+                </p>
                 <div>
                     <form onSubmit={this.onSubmitForm}>
                         <input className="mx_Login_field" ref="user" type="text"
@@ -265,13 +256,9 @@ module.exports = React.createClass({
                     </form>
                     { serverConfigSection }
                     { errorText }
-                    <a className="mx_Login_create" onClick={this.onLoginClick} href="#">
-                        { _t('Return to login screen') }
+                    <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
+                        { _t('Sign in instead') }
                     </a>
-                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                        { _t('Create an account') }
-                    </a>
-                    <LanguageSelector />
                 </div>
             </div>
             );
@@ -282,6 +269,7 @@ module.exports = React.createClass({
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
+                    <h2> { _t('Set a new password') } </h2>
                     {resetPasswordJsx}
                 </AuthBody>
             </AuthPage>

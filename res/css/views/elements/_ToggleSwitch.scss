@@ -1,0 +1,51 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ToggleSwitch {
+    transition: background-color 0.20s ease-out 0.1s;
+    width: 48px;
+    height: 24px;
+    border-radius: 14px;
+    background-color: $togglesw-off-color;
+    position: relative;
+}
+
+.mx_ToggleSwitch_enabled {
+    cursor: pointer;
+}
+
+.mx_ToggleSwitch.mx_ToggleSwitch_on {
+    background-color: $togglesw-on-color;
+}
+
+.mx_ToggleSwitch_ball {
+    transition: left 0.15s ease-out 0.1s;
+    margin: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: $togglesw-ball-color;
+    position: absolute;
+    top: 0;
+}
+
+.mx_ToggleSwitch:not(.mx_ToggleSwitch_on) > .mx_ToggleSwitch_ball {
+    left: 2px;
+}
+
+.mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
+    left: 23px; // 48px switch - 20px ball - 5px padding = 23px
+}

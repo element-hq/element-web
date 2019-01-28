@@ -257,20 +257,17 @@ export default class KeyBackupPanel extends React.PureComponent {
                 {uploadStatus}
                 <div>{backupSigStatuses}</div><br />
                 <br />
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._restoreBackup}>
+                <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                     { _t("Restore backup") }
                 </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                <AccessibleButton className="mx_UserSettings_button danger"
-                        onClick={this._deleteBackup}>
+                <AccessibleButton kind="danger" onClick={this._deleteBackup}>
                     { _t("Delete backup") }
                 </AccessibleButton>
             </div>;
         } else {
             return <div>
                 {_t("No backup is present")}<br /><br />
-                <AccessibleButton className="mx_UserSettings_button"
-                        onClick={this._startNewBackup}>
+                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
                     { _t("Start a new backup") }
                 </AccessibleButton>
             </div>;

@@ -88,8 +88,8 @@ module.exports = React.createClass({
     },
 
     onHomeserverChanged: function(ev) {
-        this.setState({hs_url: ev.target.value}, function() {
-            this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {
+        this.setState({hs_url: ev.target.value}, () => {
+            this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
                 let hsUrl = this.state.hs_url.trim().replace(/\/$/, "");
                 if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
                 this.props.onServerConfigChange({
@@ -101,8 +101,8 @@ module.exports = React.createClass({
     },
 
     onIdentityServerChanged: function(ev) {
-        this.setState({is_url: ev.target.value}, function() {
-            this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, function() {
+        this.setState({is_url: ev.target.value}, () => {
+            this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
                 let isUrl = this.state.is_url.trim().replace(/\/$/, "");
                 if (isUrl === "") isUrl = this.props.defaultIsUrl;
                 this.props.onServerConfigChange({

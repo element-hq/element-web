@@ -113,6 +113,12 @@ $blockquote-bar-color: #ddd;
 $blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
+$settings-profile-placeholder-bg-color: #e7e7e7;
+$settings-profile-overlay-bg-color: #000;
+$settings-profile-overlay-placeholder-bg-color: transparent;
+$settings-profile-overlay-fg-color: #fff;
+$settings-profile-overlay-placeholder-fg-color: #454545;
+$settings-subsection-fg-color: #61708b;
 
 $voip-decline-color: #f48080;
 $voip-accept-color: #80f480;
@@ -201,6 +207,15 @@ $button-primary-fg-color: #ffffff;
 $button-primary-bg-color: #7ac9a1;
 $button-primary-disabled-fg-color: #ffffff;
 $button-primary-disabled-bg-color: #bce4d0;
+$button-danger-fg-color: #ffffff;
+$button-danger-bg-color: #f56679;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+
+// Toggle switch
+$togglesw-off-color: #c1c9d6;
+$togglesw-on-color: #7ac9a1;
+$togglesw-ball-color: #fff;
 
 // unused?
 $progressbar-color: #000;
@@ -212,6 +227,8 @@ $memberstatus-placeholder-color: $roomtile-name-color;
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
 $authpage-body-bg-color: #ffffff;
+$authpage-lang-color: #4e5054;
+$authpage-body-color: #61708b;
 
 // ***** Mixins! *****
 

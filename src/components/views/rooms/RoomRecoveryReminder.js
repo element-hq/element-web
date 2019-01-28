@@ -62,7 +62,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
 
         let unverifiedDevice;
         for (const sig of backupSigStatus.sigs) {
-            if (!sig.device.isVerified()) {
+            if (sig.device && !sig.device.isVerified()) {
                 unverifiedDevice = sig.device;
                 break;
             }
@@ -133,6 +133,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
 
         let body;
+        let primaryCaption = _t("Set up");
         if (this.state.error) {
             body = <div className="error">
                 {_t("Unable to load key backup status")}
@@ -140,10 +141,20 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         } else if (this.state.unverifiedDevice) {
             // A key backup exists for this account, but the creating device is not
             // verified.
-            body = _t(
-                "To view your secure message history and ensure you can view new " +
-                "messages on future devices, set up Secure Message Recovery.",
-            );
+            body = <div>
+                <p>{_t(
+                    "Secure Message Recovery has been set up on another device: <deviceName></deviceName>",
+                    {},
+                    {
+                        deviceName: () => <i>{this.state.unverifiedDevice.unsigned.device_display_name}</i>,
+                    },
+                )}</p>
+                <p>{_t(
+                    "To view your secure message history and ensure you can view new " +
+                    "messages on future devices, verify that device now.",
+                )}</p>
+            </div>;
+            primaryCaption = _t("Verify device");
         } else {
             // The default case assumes that a key backup doesn't exist for this account.
             // (This component doesn't currently check that itself.)
@@ -167,7 +178,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                     </AccessibleButton>
                     <AccessibleButton className="mx_RoomRecoveryReminder_button"
                         onClick={this.onSetupClick}>
-                        { _t("Set up") }
+                        {primaryCaption}
                     </AccessibleButton>
                 </div>
             </div>

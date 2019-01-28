@@ -31,6 +31,7 @@
 @import "./views/auth/_AuthHeaderLogo.scss";
 @import "./views/auth/_AuthPage.scss";
 @import "./views/auth/_InteractiveAuthEntryComponents.scss";
+@import "./views/auth/_LanguageSelector.scss";
 @import "./views/auth/_ServerConfig.scss";
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
@@ -51,10 +52,12 @@
 @import "./views/dialogs/_EncryptedEventDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_RestoreKeyBackupDialog.scss";
+@import "./views/dialogs/_RoomSettingsDialog.scss";
 @import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
 @import "./views/dialogs/_SetMxIdDialog.scss";
 @import "./views/dialogs/_SetPasswordDialog.scss";
+@import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_UnknownDeviceDialog.scss";
 @import "./views/dialogs/_UserSettingsDialog.scss";
@@ -80,6 +83,7 @@
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
+@import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_ToolTipButton.scss";
 @import "./views/globals/_MatrixToolbar.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";
@@ -128,11 +132,18 @@
 @import "./views/rooms/_TopUnreadMessagesBar.scss";
 @import "./views/rooms/_WhoIsTypingTile.scss";
 @import "./views/settings/_DevicesPanel.scss";
+@import "./views/settings/_EmailAddresses.scss";
 @import "./views/settings/_IntegrationsManager.scss";
 @import "./views/settings/_KeyBackupPanel.scss";
 @import "./views/settings/_Notifications.scss";
+@import "./views/settings/_PhoneNumbers.scss";
+@import "./views/settings/_ProfileSettings.scss";
 @import "./views/settings/tabs/_GeneralSettingsTab.scss";
+@import "./views/settings/tabs/_HelpSettingsTab.scss";
+@import "./views/settings/tabs/_PreferencesSettingsTab.scss";
+@import "./views/settings/tabs/_SecuritySettingsTab.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
+@import "./views/settings/tabs/_VoiceSettingsTab.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_IncomingCallbox.scss";
 @import "./views/voip/_VideoView.scss";

@@ -62,7 +62,7 @@ module.exports = React.createClass({
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
             const protocol = global.location.protocol;
-            if (protocol === "file:") {
+            if (protocol === "vector:") {
                 const warning = document.createElement('div');
                 // XXX: fix hardcoded app URL.  Better solutions include:
                 // * jumping straight to a hosted captcha page (but we don't support that yet)
@@ -71,7 +71,11 @@ module.exports = React.createClass({
                 ReactDOM.render(_t(
                     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
                     {},
-                    { 'a': (sub) => { return <a href='https://riot.im/app'>{ sub }</a>; }}), warning);
+                    {
+                        'a': (sub) => {
+                            return <a target="_blank" rel="noopener" href='https://riot.im/app'>{ sub }</a>;
+                        },
+                    }), warning);
                 this.refs.recaptchaContainer.appendChild(warning);
             } else {
                 const scriptTag = document.createElement('script');

@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { field_input_incorrect } from '../../../UiEffects';
+import { fieldInputIncorrect } from '../../../UiEffects';
 import sdk from '../../../index';
 import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
@@ -28,7 +28,6 @@ import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 
 const FIELD_EMAIL = 'field_email';
-const FIELD_PHONE_COUNTRY = 'field_phone_country';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
 const FIELD_USERNAME = 'field_username';
 const FIELD_PASSWORD = 'field_password';
@@ -47,17 +46,6 @@ module.exports = React.createClass({
         defaultPhoneNumber: PropTypes.string,
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
-        teamsConfig: PropTypes.shape({
-            // Email address to request new teams
-            supportEmail: PropTypes.string,
-            teams: PropTypes.arrayOf(PropTypes.shape({
-                // The displayed name of the team
-                "name": PropTypes.string,
-                // The domain of team email addresses
-                "domain": PropTypes.string,
-            })).required,
-        }),
-
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
@@ -76,7 +64,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             fieldValid: {},
-            selectedTeam: null,
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
         };
@@ -139,8 +126,7 @@ module.exports = React.createClass({
     },
 
     /**
-     * Returns true if all fields were valid last time
-     * they were validated.
+     * @returns {boolean} true if all fields were valid last time they were validated.
      */
     allFieldsValid: function() {
         const keys = Object.keys(this.state.fieldValid);
@@ -152,103 +138,84 @@ module.exports = React.createClass({
         return true;
     },
 
-    _isUniEmail: function(email) {
-        return email.endsWith('.ac.uk') || email.endsWith('.edu') || email.endsWith('matrix.org');
-    },
-
-    validateField: function(field_id) {
+    validateField: function(fieldID) {
         const pwd1 = this.refs.password.value.trim();
         const pwd2 = this.refs.passwordConfirm.value.trim();
 
-        switch (field_id) {
-            case FIELD_EMAIL:
+        switch (fieldID) {
+            case FIELD_EMAIL: {
                 const email = this.refs.email.value;
-                if (this.props.teamsConfig && this._isUniEmail(email)) {
-                    const matchingTeam = this.props.teamsConfig.teams.find(
-                        (team) => {
-                            return email.split('@').pop() === team.domain;
-                        },
-                    ) || null;
-                    this.setState({
-                        selectedTeam: matchingTeam,
-                        showSupportEmail: !matchingTeam,
-                    });
-                    this.props.onTeamSelected(matchingTeam);
-                } else {
-                    this.props.onTeamSelected(null);
-                    this.setState({
-                        selectedTeam: null,
-                        showSupportEmail: false,
-                    });
-                }
                 const emailValid = email === '' || Email.looksValid(email);
                 if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
-                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_EMAIL");
-                } else this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                    this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
+                } else this.markFieldValid(fieldID, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
-            case FIELD_PHONE_NUMBER:
+            }
+            case FIELD_PHONE_NUMBER: {
                 const phoneNumber = this.refs.phoneNumber ? this.refs.phoneNumber.value : '';
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
                 if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
-                    this.markFieldValid(field_id, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
-                } else this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
+                    this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
+                } else this.markFieldValid(fieldID, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
-            case FIELD_USERNAME:
+            }
+            case FIELD_USERNAME: {
                 const username = this.refs.username.value.trim();
                 if (!SAFE_LOCALPART_REGEX.test(username)) {
                     this.markFieldValid(
-                        field_id,
+                        fieldID,
                         false,
                         "RegistrationForm.ERR_USERNAME_INVALID",
                     );
                 } else if (username == '') {
                     this.markFieldValid(
-                        field_id,
+                        fieldID,
                         false,
                         "RegistrationForm.ERR_USERNAME_BLANK",
                     );
                 } else {
-                    this.markFieldValid(field_id, true);
+                    this.markFieldValid(fieldID, true);
                 }
                 break;
+            }
             case FIELD_PASSWORD:
                 if (pwd1 == '') {
                     this.markFieldValid(
-                        field_id,
+                        fieldID,
                         false,
                         "RegistrationForm.ERR_PASSWORD_MISSING",
                     );
                 } else if (pwd1.length < this.props.minPasswordLength) {
                     this.markFieldValid(
-                        field_id,
+                        fieldID,
                         false,
                         "RegistrationForm.ERR_PASSWORD_LENGTH",
                     );
                 } else {
-                    this.markFieldValid(field_id, true);
+                    this.markFieldValid(fieldID, true);
                 }
                 break;
             case FIELD_PASSWORD_CONFIRM:
                 this.markFieldValid(
-                    field_id, pwd1 == pwd2,
+                    fieldID, pwd1 == pwd2,
                     "RegistrationForm.ERR_PASSWORD_MISMATCH",
                 );
                 break;
         }
     },
 
-    markFieldValid: function(field_id, val, error_code) {
+    markFieldValid: function(fieldID, val, errorCode) {
         const fieldValid = this.state.fieldValid;
-        fieldValid[field_id] = val;
+        fieldValid[fieldID] = val;
         this.setState({fieldValid: fieldValid});
         if (!val) {
-            field_input_incorrect(this.fieldElementById(field_id));
-            this.props.onError(error_code);
+            fieldInputIncorrect(this.fieldElementById(fieldID));
+            this.props.onError(errorCode);
         }
     },
 
-    fieldElementById(field_id) {
-        switch (field_id) {
+    fieldElementById(fieldID) {
+        switch (fieldID) {
             case FIELD_EMAIL:
                 return this.refs.email;
             case FIELD_PHONE_NUMBER:
@@ -262,9 +229,9 @@ module.exports = React.createClass({
         }
     },
 
-    _classForField: function(field_id, ...baseClasses) {
+    _classForField: function(fieldID, ...baseClasses) {
         let cls = baseClasses.join(' ');
-        if (this.state.fieldValid[field_id] === false) {
+        if (this.state.fieldValid[fieldID] === false) {
             if (cls) cls += ' ';
             cls += 'error';
         }
@@ -289,7 +256,9 @@ module.exports = React.createClass({
     render: function() {
         const self = this;
 
-        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ? _t("Email address") : _t("Email address (optional)");
+        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
+            _t("Email address") :
+            _t("Email address (optional)");
 
         const emailSection = (
             <div>
@@ -301,32 +270,13 @@ module.exports = React.createClass({
                     value={self.state.email} />
             </div>
         );
-        let belowEmailSection;
-        if (this.props.teamsConfig) {
-            if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
-                belowEmailSection = (
-                    <p className="mx_Login_support">
-                        Sorry, but your university is not registered with us just yet.&nbsp;
-                        Email us on&nbsp;
-                        <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
-                            { this.props.teamsConfig.supportEmail }
-                        </a>&nbsp;
-                        to get your university signed up. Or continue to register with Riot to enjoy our open source platform.
-                    </p>
-                );
-            } else if (this.state.selectedTeam) {
-                belowEmailSection = (
-                    <p className="mx_Login_support">
-                        { _t("You are registering with %(SelectedTeamName)s", {SelectedTeamName: this.state.selectedTeam.name}) }
-                    </p>
-                );
-            }
-        }
 
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
         if (!SdkConfig.get().disable_3pid_login) {
-            const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ? _t("Mobile phone number") : _t("Mobile phone number (optional)");
+            const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ?
+                _t("Mobile phone number") :
+                _t("Mobile phone number (optional)");
             phoneSection = (
                 <div className="mx_Login_phoneSection">
                     <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
@@ -361,7 +311,6 @@ module.exports = React.createClass({
             <div>
                 <form onSubmit={this.onSubmit}>
                     { emailSection }
-                    { belowEmailSection }
                     { phoneSection }
                     <input type="text" ref="username"
                         placeholder={placeholderUserName} defaultValue={this.props.defaultUsername}

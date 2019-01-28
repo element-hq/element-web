@@ -167,13 +167,6 @@ module.exports = React.createClass({
         onClose: PropTypes.func,
         // The brand string given when creating email pushers
         brand: PropTypes.string,
-
-        // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: PropTypes.string,
-
-        // Team token for the referral link. If falsy, the referral section will
-        // not appear
-        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -590,27 +583,6 @@ module.exports = React.createClass({
         return <GroupUserSettings />;
     },
 
-    _renderReferral: function() {
-        const teamToken = this.props.teamToken;
-        if (!teamToken) {
-            return null;
-        }
-        if (typeof teamToken !== 'string') {
-            console.warn('Team token not a string');
-            return null;
-        }
-        const href = (this.props.referralBaseUrl || window.location.origin) +
-            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
-        return (
-            <div>
-                <h3>Referral</h3>
-                <div className="mx_UserSettings_section">
-                    { _t("Refer a friend to Riot:") } <a href={href}>{ href }</a>
-                </div>
-            </div>
-        );
-    },
-
     onLanguageChange: function(newLang) {
         if (this.state.language !== newLang) {
             SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
@@ -637,11 +609,14 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) =>
             SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
+        // HACK: Lack of translations for themes header. We're removing this view in the very near future,
+        // and the header is really only there to maintain some semblance of the UX the section once was.
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
                     { SIMPLE_SETTINGS.map( this._renderAccountSetting ) }
+                    <div><b>Themes</b></div>
                     { THEMES.map( this._renderThemeOption ) }
                     <table>
                         <tbody>
@@ -676,18 +651,12 @@ module.exports = React.createClass({
     },
 
     _renderThemeOption: function(setting) {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-        const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
-        return (
-            <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
-                <SettingsFlag name="theme"
-                                  label={setting.label}
-                                  level={SettingLevel.ACCOUNT}
-                                  onChange={onChange}
-                                  group="theme"
-                                  value={setting.value} />
-            </div>
-        );
+        // HACK: Temporary disablement of theme selection.
+        // We don't support changing themes on experimental anyways, and radio groups aren't
+        // a thing anymore for setting flags. We're also dropping this view in the very near
+        // future, so just replace the theme selection with placeholder text.
+        const currentTheme = SettingsStore.getValue("theme");
+        return <div>{_t(setting.label)} {currentTheme === setting.value ? '(current)' : null}</div>;
     },
 
     _renderCryptoInfo: function() {
@@ -1268,9 +1237,7 @@ module.exports = React.createClass({
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
-                        rowLabelClassName="mx_UserSettings_profileLabelCell"
-                        rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
+                        buttonClassName="mx_UserSettings_button"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
         );
@@ -1359,8 +1326,6 @@ module.exports = React.createClass({
                 </div>
 
                 { this._renderGroupSettings() }
-
-                { this._renderReferral() }
 
                 { notificationArea }
 

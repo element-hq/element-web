@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {field_input_incorrect} from '../../../UiEffects';
+import {fieldInputIncorrect} from '../../../UiEffects';
 import SdkConfig from '../../../SdkConfig';
 
 /**
@@ -71,7 +71,7 @@ class PasswordLogin extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
-            field_input_incorrect(this.isLoginEmpty() ? this._loginField : this._passwordField);
+            fieldInputIncorrect(this.isLoginEmpty() ? this._loginField : this._passwordField);
         }
     }
 
@@ -245,11 +245,16 @@ class PasswordLogin extends React.Component {
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
-            forgotPasswordJsx = (
-                <a className="mx_Login_forgot" onClick={this.props.onForgotPasswordClick} href="#">
-                    { _t('Forgot your password?') }
-                </a>
-            );
+            forgotPasswordJsx = <span>
+                {_t('Not sure of your password? <a>Set a new one</a>', {}, {
+                    a: sub => <a className="mx_Login_forgot"
+                        onClick={this.props.onForgotPasswordClick}
+                        href="#"
+                    >
+                        {sub}
+                    </a>,
+                })}
+            </span>;
         }
 
         let matrixIdText = _t('Matrix ID');

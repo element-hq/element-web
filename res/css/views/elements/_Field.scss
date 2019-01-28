@@ -24,6 +24,7 @@ limitations under the License.
 .mx_Field input,
 .mx_Field select {
     font-weight: normal;
+    font-family: $font-family;
     border-radius: 4px;
     transition: border-color 0.25s;
     border: 1px solid $input-border-color;
@@ -64,7 +65,7 @@ limitations under the License.
 
 .mx_Field input:focus + label,
 .mx_Field input:not(:placeholder-shown) + label,
-.mx_Field select:focus + label {
+.mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,

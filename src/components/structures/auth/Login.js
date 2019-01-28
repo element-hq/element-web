@@ -446,7 +446,9 @@ module.exports = React.createClass({
                         "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
                         {
                             'a': (sub) => {
-                                return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">
+                                return <a target="_blank" rel="noopener"
+                                    href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
+                                >
                                     { sub }
                                 </a>;
                             },
@@ -460,7 +462,9 @@ module.exports = React.createClass({
                         "is not blocking requests.", {},
                         {
                             'a': (sub) => {
-                                return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>;
+                                return <a target="_blank" rel="noopener"
+                                    href={this.state.enteredHomeserverUrl}
+                                >{ sub }</a>;
                             },
                         },
                     ) }
@@ -508,6 +512,14 @@ module.exports = React.createClass({
     },
 
     _renderSsoStep: function(url) {
+        // XXX: This link does *not* have a target="_blank" because single sign-on relies on
+        // redirecting the user back to a URI once they're logged in. On the web, this means
+        // we use the same window and redirect back to riot. On electron, this actually
+        // opens the SSO page in the electron app itself due to
+        // https://github.com/electron/electron/issues/8841 and so happens to work.
+        // If this bug gets fixed, it will break SSO since it will open the SSO page in the
+        // user's browser, let them log into their SSO provider, then redirect their browser
+        // to vector://vector which, of course, will not work.
         return (
             <a href={url} className="mx_Login_sso_link">{ _t('Sign in with single sign-on') }</a>
         );
@@ -526,7 +538,7 @@ module.exports = React.createClass({
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
-                <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
+                <a className="mx_Auth_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Try the app first') }
                 </a>;
         }
@@ -544,8 +556,6 @@ module.exports = React.createClass({
                 delayTimeMs={1000} />;
         }
 
-        const header = <h2>{ _t('Sign in') } { loader }</h2>;
-
         let errorTextSection;
         if (errorText) {
             errorTextSection = (
@@ -555,21 +565,21 @@ module.exports = React.createClass({
             );
         }
 
-        const LanguageSelector = sdk.getComponent('structures.auth.LanguageSelector');
-
         return (
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    { header }
+                    <h2>
+                        {_t('Sign in to your account')}
+                        {loader}
+                    </h2>
                     { errorTextSection }
                     { this.componentForStep(this.state.currentFlow) }
                     { serverConfig }
-                    <a className="mx_Login_create" onClick={this.onRegisterClick} href="#">
-                        { _t('Create an account') }
+                    <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
+                        { _t('Create account') }
                     </a>
                     { loginAsGuestJsx }
-                    <LanguageSelector />
                 </AuthBody>
             </AuthPage>
         );

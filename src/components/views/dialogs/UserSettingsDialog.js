@@ -21,6 +21,13 @@ import {_t, _td} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import GeneralSettingsTab from "../settings/tabs/GeneralSettingsTab";
 import dis from '../../../dispatcher';
+import SettingsStore from "../../../settings/SettingsStore";
+import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
+import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
+import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
+import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
+import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
+import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -44,52 +51,61 @@ export default class UserSettingsDialog extends React.Component {
     };
 
     _getTabs() {
-        return [
-            new Tab(
-                _td("General"),
-                "mx_UserSettingsDialog_settingsIcon",
-                <GeneralSettingsTab />,
-            ),
-            new Tab(
-                _td("Notifications"),
-                "mx_UserSettingsDialog_bellIcon",
-                <div>Notifications Test</div>,
-            ),
-            new Tab(
-                _td("Preferences"),
-                "mx_UserSettingsDialog_preferencesIcon",
-                <div>Preferences Test</div>,
-            ),
-            new Tab(
-                _td("Voice & Video"),
-                "mx_UserSettingsDialog_voiceIcon",
-                <div>Voice Test</div>,
-            ),
-            new Tab(
-                _td("Security & Privacy"),
-                "mx_UserSettingsDialog_securityIcon",
-                <div>Security Test</div>,
-            ),
-            new Tab(
-                _td("Help & About"),
-                "mx_UserSettingsDialog_helpIcon",
-                <div>Help Test</div>,
-            ),
-            new Tab(
-                _td("Visit old settings"),
-                "mx_UserSettingsDialog_helpIcon",
-                <TempTab onClose={this.props.onFinished} />,
-            ),
-        ];
+        const tabs = [];
+
+        tabs.push(new Tab(
+            _td("General"),
+            "mx_UserSettingsDialog_settingsIcon",
+            <GeneralSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Notifications"),
+            "mx_UserSettingsDialog_bellIcon",
+            <NotificationSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Preferences"),
+            "mx_UserSettingsDialog_preferencesIcon",
+            <PreferencesSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Voice & Video"),
+            "mx_UserSettingsDialog_voiceIcon",
+            <VoiceSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Security & Privacy"),
+            "mx_UserSettingsDialog_securityIcon",
+            <SecuritySettingsTab />,
+        ));
+        if (SettingsStore.getLabsFeatures().length > 0) {
+            tabs.push(new Tab(
+                _td("Labs"),
+                "mx_UserSettingsDialog_labsIcon",
+                <LabsSettingsTab />,
+            ));
+        }
+        tabs.push(new Tab(
+            _td("Help & About"),
+            "mx_UserSettingsDialog_helpIcon",
+            <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
+        ));
+        tabs.push(new Tab(
+            _td("Visit old settings"),
+            "mx_UserSettingsDialog_helpIcon",
+            <TempTab onClose={this.props.onFinished} />,
+        ));
+
+        return tabs;
     }
 
     render() {
         return (
             <div className="mx_UserSettingsDialog">
-                <div className="mx_UserSettingsDialog_header">
+                <div className="mx_SettingsDialog_header">
                     {_t("Settings")}
-                    <span className="mx_UserSettingsDialog_close">
-                        <AccessibleButton className="mx_UserSettingsDialog_closeIcon" onClick={this.props.onFinished} />
+                    <span className="mx_SettingsDialog_close">
+                        <AccessibleButton className="mx_SettingsDialog_closeIcon" onClick={this.props.onFinished} />
                     </span>
                 </div>
                 <TabbedView tabs={this._getTabs()} />
