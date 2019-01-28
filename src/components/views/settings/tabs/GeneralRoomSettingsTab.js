@@ -23,7 +23,6 @@ import sdk from "../../../../index";
 import AccessibleButton from "../../elements/AccessibleButton";
 import {MatrixClient} from "matrix-js-sdk";
 import dis from "../../../../dispatcher";
-import Modal from "../../../../Modal";
 
 export default class GeneralRoomSettingsTab extends React.Component {
     static childContextTypes = {
