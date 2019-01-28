@@ -31,6 +31,12 @@ import * as ServerType from '../../views/auth/ServerTypeSelector';
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
+// Phases
+// Show controls to configure server details
+const PHASE_SERVER_DETAILS = 0;
+// Show the appropriate login flow(s) for the server
+const PHASE_LOGIN = 1;
+
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
 _td("Invalid homeserver discovery response");
@@ -90,6 +96,10 @@ module.exports = React.createClass({
             username: "",
             phoneCountry: null,
             phoneNumber: "",
+
+            // Phase of the overall login dialog.
+            phase: PHASE_SERVER_DETAILS,
+            // The current login flow, such as password, SSO, etc.
             currentFlow: "m.login.password",
 
             // .well-known discovery
@@ -316,6 +326,10 @@ module.exports = React.createClass({
                     hsUrl,
                     isUrl,
                 });
+                // Move directly to the login phase since the server details are fixed.
+                this.setState({
+                    phase: PHASE_LOGIN,
+                });
                 break;
             }
             case ServerType.PREMIUM:
@@ -326,6 +340,9 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
                 break;
         }
     },
@@ -334,6 +351,13 @@ module.exports = React.createClass({
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
+    },
+
+    onServerDetailsNextPhaseClick(ev) {
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_LOGIN,
+        });
     },
 
     _tryWellKnownDiscovery: async function(serverName) {
@@ -509,10 +533,22 @@ module.exports = React.createClass({
     serverComponentForStep() {
         const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         // TODO: May need to adjust the behavior of this config option
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
+        }
+
+        // If we're on a different phase, we only show the server type selector,
+        // which is always shown if we allow custom URLs at all.
+        if (this.state.phase !== PHASE_SERVER_DETAILS) {
+            return <div>
+                <ServerTypeSelector
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    onChange={this.onServerTypeChange}
+                />
+            </div>;
         }
 
         let serverDetails = null;
@@ -539,10 +575,19 @@ module.exports = React.createClass({
                 onChange={this.onServerTypeChange}
             />
             {serverDetails}
+            <AccessibleButton className="mx_Login_submit"
+                onClick={this.onServerDetailsNextPhaseClick}
+            >
+                {_t("Next")}
+            </AccessibleButton>
         </div>;
     },
 
     loginComponentForStep() {
+        if (this.state.phase !== PHASE_LOGIN) {
+            return null;
+        }
+
         const step = this.state.currentFlow;
 
         if (!step) {

@@ -46,6 +46,7 @@ limitations under the License.
     margin-top: 35px;
     margin-bottom: 24px;
     box-sizing: border-box;
+    text-align: center;
 }
 
 .mx_Login_submit:hover {
@@ -70,7 +71,6 @@ limitations under the License.
 .mx_AuthBody a.mx_Login_sso_link:hover,
 .mx_AuthBody a.mx_Login_sso_link:visited {
     color: $button-primary-fg-color;
-    text-align: center;
 }
 
 .mx_Login_loader {
