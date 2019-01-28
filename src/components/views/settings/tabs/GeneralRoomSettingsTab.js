@@ -21,11 +21,22 @@ import RoomProfileSettings from "../../room_settings/RoomProfileSettings";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
 import AccessibleButton from "../../elements/AccessibleButton";
+import {MatrixClient} from "matrix-js-sdk";
 
 export default class GeneralRoomSettingsTab extends React.Component {
+    static childContextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    };
+
     static propTypes = {
         roomId: PropTypes.string.isRequired,
     };
+
+    getChildContext() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
+        };
+    }
 
     _saveAliases = (e) => {
         // TODO: Live modification of aliases?
@@ -33,8 +44,15 @@ export default class GeneralRoomSettingsTab extends React.Component {
         this.refs.aliasSettings.saveSettings();
     };
 
+    _saveGroups = (e) => {
+        // TODO: Live modification of aliases?
+        if (!this.refs.flairSettings) return;
+        this.refs.flairSettings.saveSettings();
+    };
+
     render() {
         const AliasSettings = sdk.getComponent("room_settings.AliasSettings");
+        const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
 
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
@@ -43,6 +61,9 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
         const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", '');
         const aliasEvents = room.currentState.getStateEvents("m.room.aliases");
+
+        const canChangeGroups = room.currentState.mayClientSendStateEvent("m.room.related_groups", client);
+        const groupsEvent = room.currentState.getStateEvents("m.room.related_groups", "");
 
         return (
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
@@ -57,6 +78,16 @@ export default class GeneralRoomSettingsTab extends React.Component {
                                    canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
                                    canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
                     <AccessibleButton onClick={this._saveAliases} kind='primary'>
+                        {_t("Save")}
+                    </AccessibleButton>
+                </div>
+
+                <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
+                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
+                    <RelatedGroupSettings ref="flairSettings" roomId={room.roomId}
+                                          canSetRelatedGroups={canChangeGroups}
+                                          relatedGroupsEvent={groupsEvent} />
+                    <AccessibleButton onClick={this._saveGroups} kind='primary'>
                         {_t("Save")}
                     </AccessibleButton>
                 </div>
