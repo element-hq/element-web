@@ -87,11 +87,14 @@ module.exports = React.createClass({
             if (subList) {
                 subList.setHeight(size);
             }
-            this.subListSizes[key] = size;
-            window.localStorage.setItem("mx_roomlist_sizes",
-                JSON.stringify(this.subListSizes));
             // update overflow indicators
             this._checkSubListsOverflow();
+            // don't store height for collapsed sublists
+            if(!this.collapsedState[key]) {
+                this.subListSizes[key] = size;
+                window.localStorage.setItem("mx_roomlist_sizes",
+                    JSON.stringify(this.subListSizes));
+            }
         }, this.subListSizes, this.collapsedState);
 
         return {
@@ -161,23 +164,6 @@ module.exports = React.createClass({
         this._delayedRefreshRoomListLoopCount = 0;
     },
 
-    _onSubListResize: function(newSize, id) {
-        if (!id) {
-            return;
-        }
-        if (typeof newSize === "string") {
-            newSize = Number.MAX_SAFE_INTEGER;
-        }
-        if (newSize === null) {
-            delete this.subListSizes[id];
-        } else {
-            this.subListSizes[id] = newSize;
-        }
-        window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.subListSizes));
-        // update overflow indicators
-        this._checkSubListsOverflow();
-    },
-
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         const cfg = {
@@ -202,13 +188,9 @@ module.exports = React.createClass({
 
     componentDidUpdate: function(prevProps) {
         this._repositionIncomingCallBox(undefined, false);
-        if (this.props.searchFilter !== prevProps.searchFilter) {
-            // restore sizes
-            Object.keys(this.subListSizes).forEach((key) => {
-                this._restoreSubListSize(key);
-            });
-            this._checkSubListsOverflow();
-        }
+        // if (this.props.searchFilter !== prevProps.searchFilter) {
+        //     this._checkSubListsOverflow();
+        // }
         this._layout.update(
             this._layoutSections,
             this.resizeContainer && this.resizeContainer.clientHeight,
@@ -583,18 +565,14 @@ module.exports = React.createClass({
         this.collapsedState[key] = collapsed;
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.collapsedState));
         // load the persisted size configuration of the expanded sub list
-        this._layout.setCollapsed(key, collapsed);
+        if (collapsed) {
+            this._layout.collapseSection(key);
+        } else {
+            this._layout.expandSection(key, this.subListSizes[key]);
+        }
         // check overflow, as sub lists sizes have changed
         // important this happens after calling resize above
         this._checkSubListsOverflow();
-    },
-
-    _restoreSubListSize(key) {
-        const size = this.subListSizes[key];
-        const handle = this.resizer.forHandleWithId(key);
-        if (handle) {
-            handle.resize(size);
-        }
     },
 
     // check overflow for scroll indicator gradient

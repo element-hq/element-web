@@ -34,11 +34,11 @@ export class Layout {
     constructor(applyHeight, initialSizes, collapsedState) {
         this._applyHeight = applyHeight;
         this._sections = [];
-        this._collapsedState = collapsedState || {};
+        this._collapsedState = Object.assign({}, collapsedState);
         this._availableHeight = 0;
         // need to store heights by id so it doesn't get
         // assigned to wrong section when a section gets added?
-        this._sectionHeights = initialSizes || {};
+        this._sectionHeights = Object.assign({}, initialSizes);
         this._originalHeights = [];
         this._heights = [];
     }
@@ -49,10 +49,17 @@ export class Layout {
         this._applyNewSize();
     }
 
-    setCollapsed(id, collapsed) {
-        this._collapsedState[id] = collapsed;
+    expandSection(id, height) {
+        this._collapsedState[id] = false;
+        this._applyNewSize();
+        this.openHandle(id).setHeight(height).finish();
+    }
+
+    collapseSection(id) {
+        this._collapsedState[id] = true;
         this._applyNewSize();
     }
+
     // [{id, count}]
     update(sections, availableHeight) {
         if (Number.isFinite(availableHeight)) {
@@ -98,7 +105,7 @@ export class Layout {
         this._heights = this._originalHeights.slice(0);
         this._applyOverflow(-offset, sections, true);
         this._applyHeights();
-        this._originalHeights = this._heights;
+        this._commitHeights();
         this._sections.forEach((section, i) => {
             this._sectionHeights[section.id] = this._originalHeights[i];
         });
@@ -163,7 +170,7 @@ export class Layout {
 
         if (Math.abs(overflow) > 1.0 && unclampedSections.length > 0) {
             // we weren't able to distribute all the overflow so recurse and try again
-            log("recursing with", overflow, unclampedSections);
+            // log("recursing with", overflow, unclampedSections);
             overflow = this._applyOverflow(overflow, unclampedSections, blend);
         }
 
@@ -275,10 +282,12 @@ class Handle {
 
     setHeight(height) {
         this._layout._relayout(this._anchor, height - this._initialHeight);
+        return this;
     }
 
     finish() {
         this._layout._commitHeights();
+        return this;
     }
 }
 
