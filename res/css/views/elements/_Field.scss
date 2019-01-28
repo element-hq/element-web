@@ -80,3 +80,9 @@ limitations under the License.
 .mx_Field select:focus + label {
     color: $input-focused-border-color;
 }
+
+.mx_Field select:disabled,
+.mx_Field input:disabled {
+    background-color: $field-focused-label-bg-color;
+    color: $greyed-fg-color;
+}
