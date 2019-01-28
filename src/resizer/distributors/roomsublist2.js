@@ -63,9 +63,10 @@ export class Layout {
         if (Number.isFinite(availableHeight)) {
             this._availableHeight = availableHeight;
         }
+        this._sections = sections;
         const totalHeight = this._getAvailableHeight();
         this._sections.forEach((section, i) => {
-            if (!this._sectionHeights.hasOwnProperty(section.id)) {
+            if (!this._sectionHeights[section.id]) {
                 this._sectionHeights[section.id] = clamp(
                     totalHeight / this._sections.length,
                     this._getMinHeight(i),
@@ -73,7 +74,6 @@ export class Layout {
                 );
             }
         });
-        this._sections = sections;
         this._applyNewSize();
     }
 
