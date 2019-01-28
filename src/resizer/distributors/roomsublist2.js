@@ -36,10 +36,9 @@ export class Layout {
         this._sections = [];
         this._collapsedState = Object.assign({}, collapsedState);
         this._availableHeight = 0;
-        // need to store heights by id so it doesn't get
-        // assigned to wrong section when a section gets added?
+        // heights stored by section section id
         this._sectionHeights = Object.assign({}, initialSizes);
-        this._originalHeights = [];
+        // in-progress heights, while dragging. Committed on mouse-up.
         this._heights = [];
     }
 
@@ -67,13 +66,13 @@ export class Layout {
         }
         const totalHeight = this._getAvailableHeight();
         this._sections.forEach((section, i) => {
-            this._originalHeights[i] =
-                this._sectionHeights[section.id] ||
-                clamp(
+            if (!this._sectionHeights.hasOwnProperty(section.id)) {
+                this._sectionHeights[section.id] = clamp(
                     totalHeight / this._sections.length,
                     this._getMinHeight(i),
                     this._getMaxHeight(i),
                 );
+            };
         });
         this._sections = sections;
         this._applyNewSize();
@@ -82,7 +81,7 @@ export class Layout {
     openHandle(id) {
         const index = this._getSectionIndex(id);
         //log(`openHandle resolved ${id} to ${index}`);
-        return new Handle(this, index, this._originalHeights[index]);
+        return new Handle(this, index, this._sectionHeights[id]);
     }
 
     _getAvailableHeight() {
@@ -95,20 +94,15 @@ export class Layout {
 
     _applyNewSize() {
         const newHeight = this._getAvailableHeight();
-        let currHeight = 0;
-        const sections = [];
-        for (let i = 0; i < this._sections.length; i++) {
-            currHeight += this._originalHeights[i];
-            sections.push(i);
-        }
+        const currHeight = this._sections.reduce((sum, section) => {
+            return sum + this._sectionHeights[section.id];
+        }, 0);
         const offset = newHeight - currHeight;
-        this._heights = this._originalHeights.slice(0);
+        this._heights = this._sections.map((section) => this._sectionHeights[section.id]);
+        const sections = this._sections.map((_, i) => i);
         this._applyOverflow(-offset, sections, true);
         this._applyHeights();
         this._commitHeights();
-        this._sections.forEach((section, i) => {
-            this._sectionHeights[section.id] = this._originalHeights[i];
-        });
     }
 
     _getSectionIndex(id) {
@@ -202,10 +196,10 @@ export class Layout {
         return overflowBelow;
     }
 
-    // @param offset the amount the anchor is moved from what is stored in _originalHeights, positive if downwards
+    // @param offset the amount the anchor is moved from what is stored in _sectionHeights, positive if downwards
     // if we're clamped, return the offset we should be clamped at.
     _relayout(anchor = 0, offset = 0, clamped = false) {
-        this._heights = this._originalHeights.slice(0);
+        this._heights = this._sections.map((section) => this._sectionHeights[section.id]);
         // are these the amounts the items above/below shrank/grew and need to be relayouted?
         let overflowAbove;
         let overflowBelow;
@@ -267,9 +261,9 @@ export class Layout {
     }
 
     _commitHeights() {
-        const heights = this._heights.slice(0);
-        log("committing heights:", heights);
-        this._originalHeights = heights;
+        this._sections.forEach((section, i) => {
+            this._sectionHeights[section.id] = this._heights[i];
+        });
     }
 }
 
