@@ -81,10 +81,11 @@ export class Layout {
 
         this._sections = sections;
         const totalHeight = this._getAvailableHeight();
+        const defaultHeight = Math.floor(totalHeight / this._sections.length);
         this._sections.forEach((section, i) => {
             if (!this._sectionHeights[section.id]) {
                 this._sectionHeights[section.id] = clamp(
-                    totalHeight / this._sections.length,
+                    defaultHeight,
                     this._getMinHeight(i),
                     this._getMaxHeight(i),
                 );
