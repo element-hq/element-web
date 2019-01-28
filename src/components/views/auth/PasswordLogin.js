@@ -165,7 +165,6 @@ class PasswordLogin extends React.Component {
 
         switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
-                classes.mx_Login_email = true;
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <input
                     className="mx_Login_field"
@@ -180,7 +179,6 @@ class PasswordLogin extends React.Component {
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
-                classes.mx_Login_username = true;
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <input
                     className={classNames(classes)}
@@ -199,7 +197,6 @@ class PasswordLogin extends React.Component {
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
-                classes.mx_Login_phoneNumberField = true;
                 classes.mx_Login_field_has_prefix = true;
                 classes.error = this.props.loginIncorrect && !this.state.phoneNumber;
                 return <div className="mx_Login_phoneSection">
