@@ -46,6 +46,5 @@ limitations under the License.
 }
 
 .mx_UserSettingsDialog_flairIcon:before {
-  // TODO: Use the real icon
-  mask-image: url('$(res)/img/feather-icons/flag.svg');
+  mask-image: url('$(res)/img/feather-icons/flair.svg');
 }
