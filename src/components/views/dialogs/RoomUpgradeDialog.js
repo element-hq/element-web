@@ -29,13 +29,15 @@ export default React.createClass({
         onFinished: PropTypes.func.isRequired,
     },
 
-    componentWillMount: function() {
-        this._targetVersion = this.props.room.shouldUpgradeToVersion();
+    componentWillMount: async function() {
+        const recommended = await this.props.room.getRecommendedVersion();
+        this._targetVersion = recommended.version;
+        this.setState({busy: false});
     },
 
     getInitialState: function() {
         return {
-            busy: false,
+            busy: true,
         };
     },
 
