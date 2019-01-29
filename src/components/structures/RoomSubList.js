@@ -84,7 +84,7 @@ const RoomSubList = React.createClass({
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isCollapsableOnClick: function() {
         const stuck = this.refs.header.dataset.stuck;
-        if (this.state.hidden || stuck === undefined || stuck === "none") {
+        if (!this.props.forceExpand && (this.state.hidden || stuck === undefined || stuck === "none")) {
             return true;
         } else {
             return false;
@@ -238,7 +238,7 @@ const RoomSubList = React.createClass({
         }
     },
 
-    _getHeaderJsx: function() {
+    _getHeaderJsx: function(isCollapsed) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const subListNotifications = this.roomNotificationCount();
         const subListNotifCount = subListNotifications[0];
@@ -254,9 +254,9 @@ const RoomSubList = React.createClass({
                 badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
                     { FormattingUtils.formatCount(subListNotifCount) }
                 </div>;
-            } else if (this.props.isInvite) {
+            } else if (this.props.isInvite && this.props.list.length) {
                 // no notifications but highlight anyway because this is an invite badge
-                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>!</div>;
+                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>{this.props.list.length}</div>;
             }
         }
 
@@ -287,8 +287,8 @@ const RoomSubList = React.createClass({
         if (len) {
             const chevronClasses = classNames({
                 'mx_RoomSubList_chevron': true,
-                'mx_RoomSubList_chevronRight': this.state.hidden,
-                'mx_RoomSubList_chevronDown': !this.state.hidden,
+                'mx_RoomSubList_chevronRight': isCollapsed,
+                'mx_RoomSubList_chevronDown': !isCollapsed,
             });
             chevron = (<div className={chevronClasses}></div>);
         }
@@ -321,21 +321,23 @@ const RoomSubList = React.createClass({
 
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
+        const isCollapsed = this.state.hidden && !this.props.forceExpand;
         if (len) {
             const subListClasses = classNames({
                 "mx_RoomSubList": true,
-                "mx_RoomSubList_hidden": this.state.hidden,
-                "mx_RoomSubList_nonEmpty": len && !this.state.hidden,
+                "mx_RoomSubList_hidden": isCollapsed,
+                "mx_RoomSubList_nonEmpty": len && !isCollapsed,
             });
-            if (this.state.hidden) {
+
+            if (isCollapsed) {
                 return <div ref="subList" className={subListClasses}>
-                    {this._getHeaderJsx()}
+                    {this._getHeaderJsx(isCollapsed)}
                 </div>;
             } else {
                 const tiles = this.makeRoomTiles();
                 tiles.push(...this.props.extraTiles);
                 return <div ref="subList" className={subListClasses}>
-                    {this._getHeaderJsx()}
+                    {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
                         { tiles }
                     </IndicatorScrollbar>
@@ -344,13 +346,13 @@ const RoomSubList = React.createClass({
         } else {
             const Loader = sdk.getComponent("elements.Spinner");
             let content;
-            if (this.props.showSpinner && !this.state.hidden) {
+            if (this.props.showSpinner && !isCollapsed) {
                 content = <Loader />;
             }
 
             return (
                 <div ref="subList" className="mx_RoomSubList">
-                    { this._getHeaderJsx() }
+                    { this._getHeaderJsx(isCollapsed) }
                     { content }
                 </div>
             );

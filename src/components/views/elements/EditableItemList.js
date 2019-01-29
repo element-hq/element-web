@@ -76,6 +76,7 @@ const EditableItem = React.createClass({
     },
 });
 
+// TODO: Make this use the new Field element
 module.exports = React.createClass({
     displayName: 'EditableItemList',
 

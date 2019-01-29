@@ -30,10 +30,10 @@ export class TopLeftMenu extends React.Component {
     render() {
         return <div className="mx_TopLeftMenu">
             <ul className="mx_TopLeftMenu_section">
-                <li onClick={this.openSettings}>{_t("Settings")}</li>
+                <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
             </ul>
             <ul className="mx_TopLeftMenu_section">
-                <li onClick={this.signOut}>{_t("Sign out")}</li>
+                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
             </ul>
         </div>;
     }
