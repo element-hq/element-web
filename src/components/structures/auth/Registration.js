@@ -316,6 +316,13 @@ module.exports = React.createClass({
         this.props.onLoginClick();
     },
 
+    onServerDetailsNextPhaseClick(ev) {
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_REGISTRATION,
+        });
+    },
+
     _makeRegisterRequest: function(auth) {
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
