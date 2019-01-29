@@ -114,9 +114,8 @@ export default React.createClass({
             );
         }
 
-        // mx_MemberDeviceInfo because the vector's CSS on EncryptedEventDialog is awful
         return (
-            <div className="mx_MemberDeviceInfo mx_DeviceVerifyButtons" >
+            <div className="mx_DeviceVerifyButtons" >
                 { verifyButton }
                 { blacklistButton }
             </div>
