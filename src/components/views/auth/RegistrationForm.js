@@ -49,6 +49,7 @@ module.exports = React.createClass({
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
+        onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
     },
 
@@ -272,6 +273,15 @@ module.exports = React.createClass({
             }
         }
 
+        let editLink = null;
+        if (this.props.onEditServerDetailsClick) {
+            editLink = <a className="mx_Auth_editServerDetails"
+                href="#" onClick={this.props.onEditServerDetailsClick}
+            >
+                {_t('Edit')}
+            </a>;
+        }
+
         const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
             _t("Email address") :
             _t("Email address (optional)");
@@ -325,7 +335,10 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <h3>{yourMatrixAccountText}</h3>
+                <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3>
                 <form onSubmit={this.onSubmit}>
                     { emailSection }
                     { phoneSection }

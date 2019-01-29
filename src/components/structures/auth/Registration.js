@@ -323,6 +323,14 @@ module.exports = React.createClass({
         });
     },
 
+    onEditServerDetailsClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_SERVER_DETAILS,
+        });
+    },
+
     _makeRegisterRequest: function(auth) {
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
@@ -440,6 +448,16 @@ module.exports = React.createClass({
         } else if (this.state.busy || !this.state.flows) {
             return <Spinner />;
         } else {
+            let onEditServerDetailsClick = null;
+            // If custom URLs are allowed and we haven't selected the Free server type, wire
+            // up the server details edit link.
+            if (
+                PHASES_ENABLED &&
+                !SdkConfig.get()['disable_custom_urls'] &&
+                this.state.serverType !== ServerType.FREE
+            ) {
+                onEditServerDetailsClick = this.onEditServerDetailsClick;
+            }
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -449,6 +467,7 @@ module.exports = React.createClass({
                 minPasswordLength={MIN_PASSWORD_LENGTH}
                 onError={this.onFormValidationFailed}
                 onRegisterClick={this.onFormSubmit}
+                onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 hsUrl={this.state.hsUrl}
                 hsName={this.props.defaultServerName}
