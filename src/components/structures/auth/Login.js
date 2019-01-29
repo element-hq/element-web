@@ -539,7 +539,7 @@ module.exports = React.createClass({
         return errorText;
     },
 
-    serverComponentForStep() {
+    renderServerComponentForStep() {
         const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
@@ -605,7 +605,7 @@ module.exports = React.createClass({
         </div>;
     },
 
-    loginComponentForStep() {
+    renderLoginComponentForStep() {
         if (PHASES_ENABLED && this.state.phase !== PHASE_LOGIN) {
             return null;
         }
@@ -707,8 +707,8 @@ module.exports = React.createClass({
                         {loader}
                     </h2>
                     { errorTextSection }
-                    { this.serverComponentForStep() }
-                    { this.loginComponentForStep() }
+                    { this.renderServerComponentForStep() }
+                    { this.renderLoginComponentForStep() }
                     <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
