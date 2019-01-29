@@ -106,8 +106,6 @@ export default React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
