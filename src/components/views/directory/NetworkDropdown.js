@@ -232,7 +232,7 @@ export default class NetworkDropdown extends React.Component {
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
-            <div className="mx_NetworkDropdown_input" onClick={this.onInputClick}>
+            <div className="mx_NetworkDropdown_input mx_no_textinput" onClick={this.onInputClick}>
                 {current_value}
                 <span className="mx_NetworkDropdown_arrow"></span>
                 {menu}

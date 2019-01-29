@@ -44,6 +44,7 @@ module.exports = React.createClass({
 
     propTypes: {
         config: React.PropTypes.object,
+        onFinished: React.PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -61,6 +62,16 @@ module.exports = React.createClass({
             includeAll: false,
             roomServer: null,
             filterString: null,
+        };
+    },
+
+    childContextTypes: {
+        matrixClient: React.PropTypes.object,
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
         };
     },
 
@@ -301,6 +312,11 @@ module.exports = React.createClass({
         }
     },
 
+    onCreateRoomClicked: function() {
+        this.props.onFinished();
+        dis.dispatch({action: 'view_create_room'});
+    },
+
     onJoinClick: function(alias) {
         // If we don't have a particular instance id selected, just show that rooms alias
         if (!this.state.instanceId) {
@@ -348,6 +364,7 @@ module.exports = React.createClass({
     },
 
     showRoom: function(room, room_alias) {
+        this.props.onFinished();
         const payload = {action: 'view_room'};
         if (room) {
             // Don't let the user view a room they won't be able to either
@@ -496,11 +513,13 @@ module.exports = React.createClass({
     render: function() {
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const Loader = sdk.getComponent("elements.Spinner");
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
+        // TODO: clean this up
         if (this.state.protocolsLoading) {
             return (
                 <div className="mx_RoomDirectory">
-                    <SimpleRoomHeader title={ _t('Directory') } />
                     <Loader />
                 </div>
             );
@@ -554,7 +573,7 @@ module.exports = React.createClass({
 
         let placeholder = _t('Search for a room');
         if (!this.state.instanceId) {
-            placeholder = _t('#example') + ':' + this.state.roomServer;
+            placeholder = _t('Search for a room like #example') + ':' + this.state.roomServer;
         } else if (instance_expected_field_type) {
             placeholder = instance_expected_field_type.placeholder;
         }
@@ -567,23 +586,35 @@ module.exports = React.createClass({
             }
         }
 
+        const createRoomButton = (<AccessibleButton
+            onClick={this.onCreateRoomClicked}
+            className="mx_RoomDirectory_createRoom"
+        >{_t("Create new room")}</AccessibleButton>);
+
         const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
-            <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title={ _t('Directory') } icon={require("../../../res/img/icons-directory.svg")} />
-                <div className="mx_RoomDirectory_list">
-                    <div className="mx_RoomDirectory_listheader">
-                        <DirectorySearchBox
-                            className="mx_RoomDirectory_searchbox"
-                            onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
-                            placeholder={placeholder} showJoinButton={showJoinButton}
-                        />
-                        <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
+            <BaseDialog
+                className={'mx_RoomDirectory_dialog'}
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                headerButton={createRoomButton}
+                title={_t("Room directory")}
+            >
+                <div className="mx_RoomDirectory">
+                    <div className="mx_RoomDirectory_list">
+                        <div className="mx_RoomDirectory_listheader">
+                            <DirectorySearchBox
+                                className="mx_RoomDirectory_searchbox"
+                                onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
+                                placeholder={placeholder} showJoinButton={showJoinButton}
+                            />
+                            <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
+                        </div>
+                        {content}
                     </div>
-                    {content}
                 </div>
-            </div>
+            </BaseDialog>
         );
     },
 });

@@ -323,8 +323,6 @@ const LoggedInView = React.createClass({
     _onScrollKeyPressed: function(ev) {
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
-        } else if (this.refs.roomDirectory) {
-            this.refs.roomDirectory.handleScrollKey(ev);
         }
     },
 
@@ -422,7 +420,6 @@ const LoggedInView = React.createClass({
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserSettings = sdk.getComponent('structures.UserSettings');
-        const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
@@ -464,10 +461,7 @@ const LoggedInView = React.createClass({
                 break;
 
             case PageTypes.RoomDirectory:
-                pageElement = <RoomDirectory
-                    ref="roomDirectory"
-                    config={this.props.config.roomDirectory}
-                />;
+                // handled by MatrixChat for now
                 break;
 
             case PageTypes.HomePage:

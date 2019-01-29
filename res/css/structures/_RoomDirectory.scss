@@ -14,29 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomDirectory {
+.mx_RoomDirectory_dialogWrapper > .mx_Dialog {
     max-width: 960px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 12px;
-    color: $primary-fg-color;
-    word-break: break-word;
+    height: 100%;
+    padding: 20px;
+}
 
+.mx_RoomDirectory_dialog {
+    height: 100%;
     display: flex;
-
     flex-direction: column;
 }
 
-.mx_RoomDirectory .mx_RoomHeader_simpleHeader {
-    margin-left: 0px;
+.mx_RoomDirectory {
+    margin-bottom: 12px;
+    color: $primary-fg-color;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.mx_RoomDirectory .gm-scroll-view {
+    // little hack because gemini doesn't seem to detect
+    // the scrollbar width well in this instance
+    // when using css scrollbars
+    scrollbar-width: thin;
+}
+
+.mx_RoomDirectory_createRoom {
+    background-color: $button-bg-color;
+    border-radius: 4px;
+    padding: 8px;
+    color: $button-fg-color;
+    font-weight: 600;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .mx_RoomDirectory_list {
     flex: 1;
-
     display: flex;
-
     flex-direction: column;
 }
 
@@ -45,22 +64,17 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_listheader {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
+    display: flex;
     margin-top: 12px;
     margin-bottom: 12px;
-    border-spacing: 5px;
 }
 
 .mx_RoomDirectory_searchbox {
-    display: table-cell;
-    vertical-align: middle;
+    flex: 1 !important;
 }
 
 .mx_RoomDirectory_listheader .mx_NetworkDropdown {
-    display: table-cell;
-    width: 200px;
+    flex: 0 0 200px;
 }
 
 .mx_RoomDirectory_tableWrapper {
