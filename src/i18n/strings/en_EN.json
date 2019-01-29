@@ -745,6 +745,8 @@
     "Internal room ID: ": "Internal room ID: ",
     "Room version number: ": "Room version number: ",
     "Add a topic": "Add a topic",
+    "This room is using an unstable room version. If you aren't expecting this, please upgrade the room.": "This room is using an unstable room version. If you aren't expecting this, please upgrade the room.",
+    "Click here to upgrade to the latest room version.": "Click here to upgrade to the latest room version.",
     "There is a known vulnerability affecting this room.": "There is a known vulnerability affecting this room.",
     "This room version is vulnerable to malicious modification of room state.": "This room version is vulnerable to malicious modification of room state.",
     "Click here to upgrade to the latest room version and ensure room integrity is protected.": "Click here to upgrade to the latest room version and ensure room integrity is protected.",

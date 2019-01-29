@@ -151,6 +151,10 @@ module.exports = React.createClass({
             auxPanelMaxHeight: undefined,
 
             statusBarVisible: false,
+
+            // We load this later by asking the js-sdk to suggest a version for us.
+            // This object is the result of Room#getRecommendedVersion()
+            upgradeRecommendation: null,
         };
     },
 
@@ -637,6 +641,13 @@ module.exports = React.createClass({
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
         this._loadMembersIfJoined(room);
+        this._calculateRecommendedVersion(room);
+    },
+
+    _calculateRecommendedVersion: async function(room) {
+        this.setState({
+            upgradeRecommendation: await room.getRecommendedVersion(),
+        });
     },
 
     _loadMembersIfJoined: async function(room) {
@@ -1661,8 +1672,10 @@ module.exports = React.createClass({
             />;
         }
 
+        const roomVersionRecommendation = this.state.upgradeRecommendation;
         const showRoomUpgradeBar = (
-            this.state.room.shouldUpgradeToVersion() &&
+            roomVersionRecommendation &&
+            roomVersionRecommendation.needsUpgrade &&
             this.state.room.userMayUpgradeRoom(MatrixClientPeg.get().credentials.userId)
         );
 
@@ -1685,7 +1698,7 @@ module.exports = React.createClass({
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress} onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch} />;
         } else if (showRoomUpgradeBar) {
-            aux = <RoomUpgradeWarningBar room={this.state.room} />;
+            aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
             hideCancel = true;
         } else if (showRoomRecoveryReminder) {
             aux = <RoomRecoveryReminder onDontAskAgainSet={this.onRoomRecoveryReminderDontAskAgain} />;
