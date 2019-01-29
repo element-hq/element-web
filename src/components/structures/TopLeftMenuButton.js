@@ -22,6 +22,7 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
+import { _t } from '../../languageHandler';
 
 const AVATAR_SIZE = 28;
 
@@ -70,7 +71,14 @@ export default class TopLeftMenuButton extends React.Component {
     render() {
         const fallbackUserId = MatrixClientPeg.get().getUserId();
         const profileInfo = this.state.profileInfo;
-        const name = profileInfo ? profileInfo.name : fallbackUserId;
+        let name;
+        if (MatrixClientPeg.get().isGuest()) {
+            name = _t("Guest");
+        } else if (profileInfo) {
+            name = profileInfo.name;
+        } else {
+            name = fallbackUserId;
+        }
         let nameElement;
         if (!this.props.collapsed) {
             nameElement = <div className="mx_TopLeftMenuButton_name">

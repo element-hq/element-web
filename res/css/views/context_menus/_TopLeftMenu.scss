@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_TopLeftMenu {
     min-width: 180px;
+    border-radius: 4px;
 
     .mx_TopLeftMenu_section:not(:last-child) {
         border-bottom: 1px solid $menu-border-color;
@@ -26,10 +27,32 @@ limitations under the License.
         margin: 5px 0;
         padding: 0;
 
+        li.mx_TopLeftMenu_icon_settings::after {
+            mask-image: url('$(res)/img/feather-icons/settings.svg');
+        }
+
+        li.mx_TopLeftMenu_icon_signout::after {
+            mask-image: url('$(res)/img/feather-icons/sign-out.svg');
+        }
+
+        li::after {
+            mask-repeat: no-repeat;
+            mask-position: 0 center;
+            mask-size: 16px;
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            content: "";
+            top: 5px;
+            left: 14px;
+            background-color: $primary-fg-color;
+        }
+
         li {
+            position: relative;
             cursor: pointer;
             white-space: nowrap;
-            padding: 5px 20px;
+            padding: 5px 20px 5px 43px;
         }
 
         li:hover {
