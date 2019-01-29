@@ -14,20 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthPage {
-    width: 100%;
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: $authpage-bg-color;
+.mx_GeneralRoomSettingsTab_profileSection {
+  margin-top: 10px;
 }
 
-.mx_AuthPage_modal {
-    display: flex;
-    margin: 100px auto auto;
-    border-radius: 4px;
-    // Not currently supported in Firefox: https://bugzilla.mozilla.org/show_bug.cgi?id=1178765
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.33);
-    background-color: $authpage-modal-bg-color;
+.mx_GeneralRoomSettingsTab .mx_AliasSettings .mx_Field select {
+  width: 100%;
 }

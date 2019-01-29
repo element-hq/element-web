@@ -122,7 +122,9 @@ class RoomViewStore extends Store {
             case 'open_room_settings':
                 if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
                     const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
-                    Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {}, 'mx_SettingsDialog');
+                    Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
+                        roomId: this._state.roomId,
+                    }, 'mx_SettingsDialog');
                 } else {
                     this._setState({
                         isEditingSettings: true,

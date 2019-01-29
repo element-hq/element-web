@@ -1054,6 +1054,7 @@ export default React.createClass({
                         modal.close();
                         if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
+                            dis.dispatch({action: 'close_room_settings'});
                         }
                     }, (err) => {
                         modal.close();

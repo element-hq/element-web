@@ -119,7 +119,6 @@ module.exports = React.createClass({
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return <div>
-            <h3>{ _t('Flair') }</h3>
             <EditableItemList
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}

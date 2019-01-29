@@ -1,7 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Travis Ralston
-Copyright 2018 New Vector Ltd
+Copyright 2018-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk";
 const React = require('react');
 import PropTypes from 'prop-types';
 const sdk = require("../../../index");
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import dis from "../../../dispatcher";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 
 module.exports = React.createClass({
@@ -31,21 +32,16 @@ module.exports = React.createClass({
         room: PropTypes.object,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
-    saveSettings: function() {
-        const promises = [];
-        if (this.refs.urlPreviewsRoom) promises.push(this.refs.urlPreviewsRoom.save());
-        if (this.refs.urlPreviewsSelf) promises.push(this.refs.urlPreviewsSelf.save());
-        return promises;
+    _onClickUserSettings: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dis.dispatch({action: 'view_user_settings'});
     },
 
     render: function() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const roomId = this.props.room.roomId;
-        const isEncrypted = this.context.matrixClient.isRoomEncrypted(roomId);
+        const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
         let previewsForAccount = null;
         let previewsForRoom = null;
@@ -56,13 +52,13 @@ module.exports = React.createClass({
             if (accountEnabled) {
                 previewsForAccount = (
                     _t("You have <a>enabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                        'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
             } else if (accountEnabled) {
                 previewsForAccount = (
                     _t("You have <a>disabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a href="#/settings">{ sub }</a>,
+                        'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
             }
@@ -73,9 +69,7 @@ module.exports = React.createClass({
                         <SettingsFlag name="urlPreviewsEnabled"
                                       level={SettingLevel.ROOM}
                                       roomId={roomId}
-                                      isExplicit={true}
-                                      manualSave={true}
-                                      ref="urlPreviewsRoom" />
+                                      isExplicit={true} />
                     </label>
                 );
             } else {
@@ -96,20 +90,16 @@ module.exports = React.createClass({
         const previewsForRoomAccount = ( // in an e2ee room we use a special key to enforce per-room opt-in
             <SettingsFlag name={isEncrypted ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled'}
                           level={SettingLevel.ROOM_ACCOUNT}
-                          roomId={roomId}
-                          manualSave={true}
-                          ref="urlPreviewsSelf"
-            />
+                          roomId={roomId} />
         );
 
         return (
-            <div className="mx_RoomSettings_toggles">
-                <h3>{ _t("URL Previews") }</h3>
-                <div>
+            <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     { _t('When someone puts a URL in their message, a URL preview can be shown to give more ' +
                         'information about that link such as the title, description, and an image from the website.') }
                 </div>
-                <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     { previewsForAccount }
                 </div>
                 { previewsForRoom }
