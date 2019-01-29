@@ -82,7 +82,11 @@ module.exports = React.createClass({
         this.collapsedState = collapsedJson ? JSON.parse(collapsedJson) : {};
         this._layoutSections = [];
 
-        this._layout = new Layout((key, size) => {
+        const unfilteredOptions = {
+            allowWhitespace: true,
+            handleHeight: 1,
+        };
+        this._unfilteredlayout = new Layout((key, size) => {
             const subList = this._subListRefs[key];
             if (subList) {
                 subList.setHeight(size);
@@ -95,7 +99,19 @@ module.exports = React.createClass({
                 window.localStorage.setItem("mx_roomlist_sizes",
                     JSON.stringify(this.subListSizes));
             }
-        }, this.subListSizes, this.collapsedState);
+        }, this.subListSizes, this.collapsedState, unfilteredOptions);
+
+        this._filteredLayout = new Layout((key, size) => {
+            const subList = this._subListRefs[key];
+            if (subList) {
+                subList.setHeight(size);
+            }
+        }, null, null, {
+            allowWhitespace: false,
+            handleHeight: 0,
+        });
+
+        this._layout = this._unfilteredlayout;
 
         return {
             isLoadingLeftRooms: false,
@@ -187,15 +203,21 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(prevProps) {
+        let forceLayoutUpdate = false;
         this._repositionIncomingCallBox(undefined, false);
-        // if (this.props.searchFilter !== prevProps.searchFilter) {
-        //     this._checkSubListsOverflow();
-        // }
+        if (!this.props.searchFilter && prevProps.searchFilter) {
+            this._layout = this._unfilteredlayout;
+            forceLayoutUpdate = true;
+        } else if (this.props.searchFilter && !prevProps.searchFilter) {
+            this._layout = this._filteredLayout;
+            forceLayoutUpdate = true;
+        }
         this._layout.update(
             this._layoutSections,
             this.resizeContainer && this.resizeContainer.clientHeight,
+            forceLayoutUpdate,
         );
-        // TODO: call layout.setAvailableHeight, window height was changed when bannerShown prop was changed
+        this._checkSubListsOverflow();
     },
 
     onAction: function(payload) {
@@ -617,7 +639,7 @@ module.exports = React.createClass({
                     onHeaderClick(collapsed);
                 }
             };
-            const startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
+            let startAsHidden = props.startAsHidden || this.collapsedState[chosenKey];
             this._layoutSections.push({
                 id: chosenKey,
                 count: len,
@@ -625,6 +647,7 @@ module.exports = React.createClass({
             let subList = (<RoomSubList
                 ref={this._subListRef.bind(this, chosenKey)}
                 startAsHidden={startAsHidden}
+                forceExpand={!!this.props.searchFilter}
                 onHeaderClick={onSubListHeaderClick}
                 key={chosenKey}
                 label={label}

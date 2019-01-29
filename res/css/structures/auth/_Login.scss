@@ -23,17 +23,14 @@ limitations under the License.
 }
 
 .mx_Login_field {
-    width: 280px;
+    width: 100%;
+    box-sizing: border-box;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
     font-weight: 300;
     font-size: 13px;
     padding: 9px;
     margin-bottom: 14px;
-}
-
-.mx_Login_field_disabled {
-    opacity: 0.3;
 }
 
 .mx_Login_fieldLabel {
@@ -49,6 +46,8 @@ limitations under the License.
     width: 100%;
     margin-top: 35px;
     margin-bottom: 24px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .mx_Login_submit:hover {
@@ -69,10 +68,10 @@ limitations under the License.
     margin-right: 10px;
 }
 
-.mx_Login_sso_link {
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
+.mx_AuthBody a.mx_Login_sso_link:link,
+.mx_AuthBody a.mx_Login_sso_link:hover,
+.mx_AuthBody a.mx_Login_sso_link:visited {
+    color: $button-primary-fg-color;
 }
 
 .mx_Login_loader {
@@ -105,6 +104,7 @@ limitations under the License.
 .mx_Login_type_container {
     display: flex;
     margin-bottom: 14px;
+    color: $primary-fg-color;
 }
 
 .mx_Login_type_label {
@@ -124,9 +124,9 @@ limitations under the License.
 }
 
 .mx_Login_field_prefix {
-    height: 34px;
+    height: 38px;
     padding: 0px 5px;
-    line-height: 33px;
+    line-height: 38px;
 
     background-color: #eee;
     border: 1px solid #c7c7c7;
@@ -136,38 +136,9 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_Login_field_suffix {
-    height: 34px;
-    padding: 0px 5px;
-    line-height: 33px;
-
-    background-color: #eee;
-    border: 1px solid #c7c7c7;
-    border-left: 0px;
-    border-radius: 0px 3px 3px 0px;
-
-    text-align: center;
-    flex-grow: 1;
-}
-
-.mx_Login_username {
-    height: 16px;
-    flex-shrink: 1;
-    min-width: 0px;
-}
-
-.mx_Login_phoneNumberField {
-    height: 16px;
-}
-
 .mx_Login_field_has_prefix {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
-}
-
-.mx_Login_field_has_suffix {
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
 }
 
 .mx_Login_phoneSection {
@@ -190,12 +161,9 @@ limitations under the License.
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option {
-    /*
-        To match height of mx_Login_field
-        33px + 2px border from mx_Dropdown_option = 35px
-    */
-    height: 33px;
-    line-height: 33px;
+    /* To match height of mx_Login_field */
+    height: 38px;
+    line-height: 38px;
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option img {

@@ -74,7 +74,9 @@ $strong-input-border-color: #656565;
 // used for UserSettings EditableText
 $input-underline-color: $primary-fg-color;
 $input-fg-color: $primary-fg-color;
-
+// scrollbars
+$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+$scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;

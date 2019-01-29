@@ -16,9 +16,6 @@ limitations under the License.
 
 import FixedDistributor from "./fixed";
 
-// const allowWhitespace = true;
-const handleHeight = 1;
-
 function clamp(height, min, max) {
     if (height > max) return max;
     if (height < min) return min;
@@ -26,7 +23,7 @@ function clamp(height, min, max) {
 }
 
 export class Layout {
-    constructor(applyHeight, initialSizes, collapsedState) {
+    constructor(applyHeight, initialSizes, collapsedState, options) {
         // callback to set height of section
         this._applyHeight = applyHeight;
         // list of {id, count} objects,
@@ -41,6 +38,17 @@ export class Layout {
         this._sectionHeights = Object.assign({}, initialSizes);
         // in-progress heights, while dragging. Committed on mouse-up.
         this._heights = [];
+        // use while manually resizing to cancel
+        // the resize for a given mouse position
+        // when the previous resize made the layout
+        // constrained
+        this._clampedOffset = 0;
+        // used while manually resizing, to clear
+        // _clampedOffset when the direction of resizing changes
+        this._lastOffset = 0;
+
+        this._allowWhitespace = options && options.allowWhitespace;
+        this._handleHeight = (options && options.handleHeight) || 0;
     }
 
     setAvailableHeight(newSize) {
@@ -60,7 +68,7 @@ export class Layout {
         this._applyNewSize();
     }
 
-    update(sections, availableHeight) {
+    update(sections, availableHeight, force = false) {
         let heightChanged = false;
 
         if (Number.isFinite(availableHeight) && availableHeight !== this._availableHeight) {
@@ -75,7 +83,7 @@ export class Layout {
                 return a.id !== b.id || a.count !== b.count;
             });
 
-        if (!heightChanged && !sectionsChanged) {
+        if (!heightChanged && !sectionsChanged && !force) {
             return;
         }
 
@@ -104,7 +112,7 @@ export class Layout {
             const collapsed = this._collapsedState[section.id];
             return count + (collapsed ? 0 : 1);
         }, 0);
-        return this._availableHeight - ((nonCollapsedSectionCount - 1) * handleHeight);
+        return this._availableHeight - ((nonCollapsedSectionCount - 1) * this._handleHeight);
     }
 
     _applyNewSize() {
@@ -130,9 +138,10 @@ export class Layout {
 
         if (collapsed) {
             return this._sectionHeight(0);
+        } else if (!this._allowWhitespace) {
+            return this._sectionHeight(section.count);
         } else {
             return 100000;
-            // return this._sectionHeight(section.count);
         }
     }
 
@@ -268,6 +277,22 @@ export class Layout {
             this._sectionHeights[section.id] = this._heights[i];
         });
     }
+
+    _setUncommittedSectionHeight(sectionIndex, offset) {
+        if (Math.sign(offset) != Math.sign(this._lastOffset)) {
+            this._clampedOffset = undefined;
+        }
+        if (this._clampedOffset !== undefined) {
+            if (offset < 0 && offset < this._clampedOffset) {
+                return;
+            }
+            if (offset > 0 && offset > this._clampedOffset) {
+                return;
+            }
+        }
+        this._clampedOffset = this._relayout(sectionIndex, offset);
+        this._lastOffset = offset;
+    }
 }
 
 class Handle {
@@ -278,7 +303,10 @@ class Handle {
     }
 
     setHeight(height) {
-        this._layout._relayout(this._sectionIndex, height - this._initialHeight);
+        this._layout._setUncommittedSectionHeight(
+            this._sectionIndex,
+            height - this._initialHeight,
+        );
         return this;
     }
 

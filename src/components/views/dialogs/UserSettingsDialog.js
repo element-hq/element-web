@@ -28,6 +28,7 @@ import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
 import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
 import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
 import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
+import FlairSettingsTab from "../settings/tabs/FlairSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -57,6 +58,11 @@ export default class UserSettingsDialog extends React.Component {
             _td("General"),
             "mx_UserSettingsDialog_settingsIcon",
             <GeneralUserSettingsTab />,
+        ));
+        tabs.push(new Tab(
+            _td("Flair"),
+            "mx_UserSettingsDialog_flairIcon",
+            <FlairSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Notifications"),
