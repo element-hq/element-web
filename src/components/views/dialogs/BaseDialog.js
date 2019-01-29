@@ -111,7 +111,6 @@ export default React.createClass({
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = <AccessibleButton onClick={this._onCancelClick} className="mx_Dialog_cancelButton">
-                <TintableSvg src={require("../../../../res/img/icons-close-button.svg")} width="35" height="35" />
             </AccessibleButton>;
         }
 
@@ -128,10 +127,15 @@ export default React.createClass({
                 // AT users can skip its presentation.
                 aria-describedby={this.props.contentId}
             >
-                { cancelButton }
-                <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
-                    { this.props.title }
+                <div className={classNames('mx_Dialog_header', {
+                    'mx_Dialog_headerWithButton': !!this.props.headerButton,
+                })}>
+                    <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
+                        { this.props.title }
+                    </div>
+                    { this.props.headerButton }
                 </div>
+                { cancelButton }
                 { this.props.children }
             </FocusTrap>
         );

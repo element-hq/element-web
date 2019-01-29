@@ -689,7 +689,7 @@ module.exports = React.createClass({
                 headerItems: this._getHeaderItems('im.vector.fake.recent'),
                 order: "recent",
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
-                onAddRoom: () => {dis.dispatch({action: 'view_create_room'})},
+                onAddRoom: () => {dis.dispatch({action: 'view_room_directory'})},
             },
         ];
         const tagSubLists = Object.keys(this.state.lists)

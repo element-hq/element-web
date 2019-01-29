@@ -157,7 +157,7 @@ textarea {
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    padding: 0 58px 36px;
+    padding: 40px 58px 36px 58px;
     width: 60%;
     max-width: 704px;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
@@ -190,15 +190,36 @@ textarea {
     pointer-events: none;
 }
 
-.mx_Dialog_cancelButton {
-    position: absolute;
-    right: 11px;
-    top: 13px;
-    cursor: pointer;
+.mx_Dialog_header {
+    position: relative;
 }
 
-.mx_Dialog_cancelButton object {
-    pointer-events: none;
+.mx_Dialog_title {
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 36px;
+    color: $primary-fg-color;
+}
+
+.mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
+    text-align: center;
+}
+
+.mx_Dialog_title.danger {
+    color: $warning-color;
+}
+
+.mx_Dialog_cancelButton {
+    mask: url('$(res)/img/feather-icons/cancel.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    width: 36px;
+    height: 36px;
+    background-color: $primary-fg-color;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 .mx_Dialog_content {
@@ -252,19 +273,6 @@ textarea {
 .mx_linkButton {
     cursor: pointer;
     color: $accent-color;
-}
-
-.mx_Dialog_title {
-    min-height: 16px;
-    padding-top: 40px;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 1.4;
-    color: $primary-fg-color;
-}
-
-.mx_Dialog_title.danger {
-    color: $warning-color;
 }
 
 .mx_TextInputDialog_label {

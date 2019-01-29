@@ -615,8 +615,12 @@ export default React.createClass({
             }
             break;
             case 'view_room_directory':
-                this._setPage(PageTypes.RoomDirectory);
-                this.notifyNewScreen('directory');
+                const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                    config: this.props.config,
+                }, 'mx_RoomDirectory_dialogWrapper');
+                // this._setPage(PageTypes.RoomDirectory);
+                // this.notifyNewScreen('directory');
                 break;
             case 'view_my_groups':
                 this._setPage(PageTypes.MyGroups);

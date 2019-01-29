@@ -1298,7 +1298,7 @@
     "Unable to look up room ID from server": "Unable to look up room ID from server",
     "Directory": "Directory",
     "Search for a room": "Search for a room",
-    "#example": "#example",
+    "Search for a room like #example": "Search for a room like #example",
     "Message not sent due to unknown devices being present": "Message not sent due to unknown devices being present",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
@@ -1497,5 +1497,6 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.",
     "Failed to set direct chat tag": "Failed to set direct chat tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room"
+    "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
+    "Join": "Join"
 }
