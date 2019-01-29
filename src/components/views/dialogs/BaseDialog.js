@@ -24,7 +24,6 @@ import { MatrixClient } from 'matrix-js-sdk';
 
 import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
-import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /**
