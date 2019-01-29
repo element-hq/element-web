@@ -24,6 +24,29 @@ limitations under the License.
     color: $authpage-body-color;
 }
 
+.mx_AuthBody h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.mx_AuthBody h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: $primary-fg-color;
+}
+
+.mx_Auth_editServerDetails {
+    padding-left: 1em;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.mx_AuthBody .mx_Field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .mx_AuthBody a:link,
 .mx_AuthBody a:hover,
 .mx_AuthBody a:visited {

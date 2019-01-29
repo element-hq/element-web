@@ -305,7 +305,7 @@ module.exports = React.createClass({
             <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
 
-        const placeholderUserName = _t("User name");
+        const placeholderUsername = _t("Username");
 
         return (
             <div>
@@ -313,7 +313,7 @@ module.exports = React.createClass({
                     { emailSection }
                     { phoneSection }
                     <input type="text" ref="username"
-                        placeholder={placeholderUserName} defaultValue={this.props.defaultUsername}
+                        placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     <br />

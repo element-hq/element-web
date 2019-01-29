@@ -255,7 +255,7 @@ module.exports = React.createClass({
                 errMsg = _t("Only use lower case letters, numbers and '=_-./'");
                 break;
             case "RegistrationForm.ERR_USERNAME_BLANK":
-                errMsg = _t('You need to enter a user name.');
+                errMsg = _t('You need to enter a username.');
                 break;
             default:
                 console.error("Unknown error code: %s", errCode);
@@ -330,7 +330,6 @@ module.exports = React.createClass({
             if (!SdkConfig.get()['disable_custom_urls']) {
                 serverConfigSection = (
                     <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
                         customHsUrl={this.props.customHsUrl}
                         customIsUrl={this.props.customIsUrl}
                         defaultHsUrl={this.props.defaultHsUrl}
