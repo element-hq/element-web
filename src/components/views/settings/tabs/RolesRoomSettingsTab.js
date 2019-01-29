@@ -302,12 +302,6 @@ export default class RolesRoomSettingsTab extends React.Component {
             );
         });
 
-        let unfederatableSection;
-        const createEvent = room.currentState.getStateEvents('m.room.create', '');
-        if (createEvent && createEvent.getContent()['m.federate'] === false) {
-            unfederatableSection = <div>{_t('This room is not accessible by remote Matrix servers')}</div>;
-        }
-
         return (
             <div className="mx_SettingsTab mx_RolesRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Roles & Permissions")}</div>
@@ -318,7 +312,6 @@ export default class RolesRoomSettingsTab extends React.Component {
                     <span className='mx_SettingsTab_subheading'>{_t("Permissions")}</span>
                     {powerSelectors}
                     {eventPowerSelectors}
-                    {unfederatableSection}
                 </div>
             </div>
         );
