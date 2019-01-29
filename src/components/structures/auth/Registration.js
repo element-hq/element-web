@@ -377,9 +377,9 @@ module.exports = React.createClass({
                 <AuthHeader />
                 <AuthBody>
                     <h2>{ _t('Create your account') }</h2>
+                    { errorText }
                     { registerBody }
                     { signIn }
-                    { errorText }
                 </AuthBody>
             </AuthPage>
         );
