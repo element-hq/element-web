@@ -15,21 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const Modal = require('../../../Modal');
-const sdk = require('../../../index');
+import Modal from '../../../Modal';
+import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-/**
+/*
  * A pure UI component which displays the HS and IS to use.
  */
-module.exports = React.createClass({
-    displayName: 'ServerConfig',
 
-    propTypes: {
+export default class ServerConfig extends React.PureComponent {
+    static propTypes = {
         onServerConfigChange: PropTypes.func,
 
         // default URLs are defined in config.json (or the hardcoded defaults)
@@ -47,25 +44,25 @@ module.exports = React.createClass({
         customIsUrl: PropTypes.string,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-    },
+    }
 
-    getDefaultProps: function() {
-        return {
-            onServerConfigChange: function() {},
-            customHsUrl: "",
-            customIsUrl: "",
-            delayTimeMs: 0,
+    static defaultProps = {
+        onServerConfigChange: function() {},
+        customHsUrl: "",
+        customIsUrl: "",
+        delayTimeMs: 0,
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hsUrl: props.customHsUrl,
+            isUrl: props.customIsUrl,
         };
-    },
+    }
 
-    getInitialState: function() {
-        return {
-            hsUrl: this.props.customHsUrl,
-            isUrl: this.props.customIsUrl,
-        };
-    },
-
-    componentWillReceiveProps: function(newProps) {
+    componentWillReceiveProps(newProps) {
         if (newProps.customHsUrl === this.state.hsUrl &&
             newProps.customIsUrl === this.state.isUrl) return;
 
@@ -77,9 +74,9 @@ module.exports = React.createClass({
             hsUrl: newProps.customHsUrl,
             isUrl: newProps.customIsUrl,
         });
-    },
+    }
 
-    onHomeserverChanged: function(ev) {
+    onHomeserverChanged = (ev) => {
         this.setState({hsUrl: ev.target.value}, () => {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
                 let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
@@ -90,9 +87,9 @@ module.exports = React.createClass({
                 });
             });
         });
-    },
+    }
 
-    onIdentityServerChanged: function(ev) {
+    onIdentityServerChanged = (ev) => {
         this.setState({isUrl: ev.target.value}, () => {
             this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
                 let isUrl = this.state.isUrl.trim().replace(/\/$/, "");
@@ -103,21 +100,21 @@ module.exports = React.createClass({
                 });
             });
         });
-    },
+    }
 
-    _waitThenInvoke: function(existingTimeoutId, fn) {
+    _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
             clearTimeout(existingTimeoutId);
         }
         return setTimeout(fn.bind(this), this.props.delayTimeMs);
-    },
+    }
 
-    showHelpPopup: function() {
+    showHelpPopup = () => {
         const CustomServerDialog = sdk.getComponent('auth.CustomServerDialog');
         Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
-    },
+    }
 
-    render: function() {
+    render() {
         const Field = sdk.getComponent('elements.Field');
 
         return (
@@ -144,5 +141,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

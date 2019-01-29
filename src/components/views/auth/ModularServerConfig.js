@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
@@ -23,16 +21,14 @@ import { _t } from '../../../languageHandler';
 
 const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
-/**
+/*
  * Configure the Modular server name.
  *
  * This is a variant of ServerConfig with only the HS field and different body
  * text that is specific to the Modular case.
  */
-module.exports = React.createClass({
-    displayName: 'ModularServerConfig',
-
-    propTypes: {
+export default class ModularServerConfig extends React.PureComponent {
+    static propTypes = {
         onServerConfigChange: PropTypes.func,
 
         // default URLs are defined in config.json (or the hardcoded defaults)
@@ -53,23 +49,23 @@ module.exports = React.createClass({
         customHsUrl: PropTypes.string,
 
         delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
-    },
+    }
 
-    getDefaultProps: function() {
-        return {
-            onServerConfigChange: function() {},
-            customHsUrl: "",
-            delayTimeMs: 0,
+    static defaultProps = {
+        onServerConfigChange: function() {},
+        customHsUrl: "",
+        delayTimeMs: 0,
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hsUrl: props.customHsUrl,
         };
-    },
+    }
 
-    getInitialState: function() {
-        return {
-            hsUrl: this.props.customHsUrl,
-        };
-    },
-
-    componentWillReceiveProps: function(newProps) {
+    componentWillReceiveProps(newProps) {
         if (newProps.customHsUrl === this.state.hsUrl) return;
 
         this.setState({
@@ -79,9 +75,9 @@ module.exports = React.createClass({
             hsUrl: newProps.customHsUrl,
             isUrl: this.props.defaultIsUrl,
         });
-    },
+    }
 
-    onHomeserverChanged: function(ev) {
+    onHomeserverChanged = (ev) => {
         this.setState({hsUrl: ev.target.value}, () => {
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
                 let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
@@ -92,16 +88,16 @@ module.exports = React.createClass({
                 });
             });
         });
-    },
+    }
 
-    _waitThenInvoke: function(existingTimeoutId, fn) {
+    _waitThenInvoke(existingTimeoutId, fn) {
         if (existingTimeoutId) {
             clearTimeout(existingTimeoutId);
         }
         return setTimeout(fn.bind(this), this.props.delayTimeMs);
-    },
+    }
 
-    render: function() {
+    render() {
         const Field = sdk.getComponent('elements.Field');
 
         return (
@@ -126,5 +122,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}
