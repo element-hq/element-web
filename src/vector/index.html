@@ -34,7 +34,7 @@
     } %>
   </head>
   <body style="height: 100%;">
-    <section id="matrixchat" style="height: 100%;"></section>
+    <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <script>
         window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>';
