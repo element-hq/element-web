@@ -361,6 +361,10 @@ module.exports = React.createClass({
                         { emailSection }
                         { phoneSection }
                     </div>
+                    {_t(
+                        "Use an email address to receover your account. Other users " +
+                        "can invite you to rooms using your contact details.",
+                    )}
                     { registerButton }
                 </form>
             </div>
