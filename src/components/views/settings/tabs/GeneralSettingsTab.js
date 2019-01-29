@@ -16,11 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import GroupUserSettings from "../../groups/GroupUserSettings";
-import PropTypes from "prop-types";
-import {MatrixClient} from "matrix-js-sdk";
-import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileSettings from "../ProfileSettings";
 import EmailAddresses from "../EmailAddresses";
 import PhoneNumbers from "../PhoneNumbers";
@@ -37,22 +32,12 @@ const Modal = require("../../../../Modal");
 const dis = require("../../../../dispatcher");
 
 export default class GeneralSettingsTab extends React.Component {
-    static childContextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
-
     constructor() {
         super();
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
-        };
-    }
-
-    getChildContext() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
         };
     }
 
@@ -110,11 +95,6 @@ export default class GeneralSettingsTab extends React.Component {
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 <ProfileSettings />
-
-                <span className="mx_SettingsTab_subheading">{_t("Flair")}</span>
-                <DragDropContext>
-                    <GroupUserSettings />
-                </DragDropContext>
             </div>
         );
     }
