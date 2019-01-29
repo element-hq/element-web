@@ -21,13 +21,11 @@ limitations under the License.
 }
 
 .mx_GroupPublicity_toggle .mx_GroupTile {
-    width: calc(100% - 60px); // 48px switch + some padding
-}
-
-.mx_GroupPublicity_toggle .mx_GroupTile {
     display: flex;
     align-items: flex-start;
     cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .mx_GroupPublicity_toggle .mx_ToggleSwitch {
