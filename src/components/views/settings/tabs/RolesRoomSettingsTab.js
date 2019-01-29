@@ -251,8 +251,6 @@ export default class RolesRoomSettingsTab extends React.Component {
                 </div>;
         }
 
-
-
         const powerSelectors = Object.keys(powerLevelDescriptors).map((key, index) => {
             const descriptor = powerLevelDescriptors[key];
 
