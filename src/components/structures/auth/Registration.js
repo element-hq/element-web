@@ -443,6 +443,8 @@ module.exports = React.createClass({
                 onError={this.onFormValidationFailed}
                 onRegisterClick={this.onFormSubmit}
                 flows={this.state.flows}
+                hsUrl={this.state.hsUrl}
+                hsName={this.props.defaultServerName}
             />;
         }
     },

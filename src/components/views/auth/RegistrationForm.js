@@ -256,6 +256,22 @@ module.exports = React.createClass({
     render: function() {
         const self = this;
 
+        let yourMatrixAccountText = _t('Create your account');
+        if (this.props.hsName) {
+            yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                serverName: this.props.hsName,
+            });
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
+        }
+
         const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
             _t("Email address") :
             _t("Email address (optional)");
@@ -309,6 +325,7 @@ module.exports = React.createClass({
 
         return (
             <div>
+                <h3>{yourMatrixAccountText}</h3>
                 <form onSubmit={this.onSubmit}>
                     { emailSection }
                     { phoneSection }
