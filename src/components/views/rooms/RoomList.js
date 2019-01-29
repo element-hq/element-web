@@ -83,7 +83,7 @@ module.exports = React.createClass({
         this._layoutSections = [];
 
         const unfilteredOptions = {
-            allowWhitespace: true,
+            allowWhitespace: false,
             handleHeight: 1,
         };
         this._unfilteredlayout = new Layout((key, size) => {
