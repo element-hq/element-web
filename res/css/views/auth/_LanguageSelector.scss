@@ -25,22 +25,6 @@ limitations under the License.
     color: $authpage-lang-color;
 }
 
-/* TODO: Consider using this new arrow for all dropdowns */
-.mx_Auth_language .mx_Dropdown_arrow {
-    width: 10px;
-    height: 6px;
-    border: none;
-    right: 6px;
-}
-
 .mx_Auth_language .mx_Dropdown_arrow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
-    mask-repeat: no-repeat;
     background: $authpage-lang-color;
 }
