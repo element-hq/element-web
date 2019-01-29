@@ -17,12 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../languageHandler";
-import RoomProfileSettings from "../../room_settings/RoomProfileSettings";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
-import AccessibleButton from "../../elements/AccessibleButton";
-import {MatrixClient} from "matrix-js-sdk";
-import dis from "../../../../dispatcher";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import {SettingLevel} from "../../../../settings/SettingsStore";
 import Modal from "../../../../Modal";
@@ -182,7 +178,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                     {_t("Anyone who knows the room's link, including guests")}
                 </label>
             </div>
-        )
+        );
     }
 
     _renderHistory() {
@@ -227,7 +223,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                     {_t('Members only (since they joined)')}
                 </label>
             </div>
-        )
+        );
     }
 
     render() {
@@ -239,19 +235,10 @@ export default class SecurityRoomSettingsTab extends React.Component {
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent("m.room.encryption", client);
         const canEnableEncryption = !isEncrypted && hasEncryptionPermission;
 
-        let encryptionSection = (
-            <div>
-                <div className='mx_SettingsTab_subsectionText'>
-                    <span>{_t("Once enabled, encryption cannot be disabled.")}</span>
-                </div>
-                <LabelledToggleSwitch value={isEncrypted} onChange={this._onEncryptionChange}
-                                      label={_t("Encrypted")} disabled={!canEnableEncryption} />
-            </div>
-        );
         let encryptionSettings = null;
         if (isEncrypted) {
             encryptionSettings = <SettingsFlag name="blacklistUnverifiedDevices" level={SettingLevel.ROOM_DEVICE}
-                                               roomId={this.props.roomId} />
+                                               roomId={this.props.roomId} />;
         }
 
         return (
@@ -260,7 +247,13 @@ export default class SecurityRoomSettingsTab extends React.Component {
 
                 <span className='mx_SettingsTab_subheading'>{_t("Encryption")}</span>
                 <div className='mx_SettingsTab_section mx_SecurityRoomSettingsTab_encryptionSection'>
-                    {encryptionSection}
+                    <div>
+                        <div className='mx_SettingsTab_subsectionText'>
+                            <span>{_t("Once enabled, encryption cannot be disabled.")}</span>
+                        </div>
+                        <LabelledToggleSwitch value={isEncrypted} onChange={this._onEncryptionChange}
+                                              label={_t("Encrypted")} disabled={!canEnableEncryption} />
+                    </div>
                     {encryptionSettings}
                 </div>
 
