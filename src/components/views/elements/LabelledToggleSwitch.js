@@ -28,6 +28,9 @@ export default class LabelledToggleSwitch extends React.Component {
 
         // The translated label for the switch
         label: PropTypes.string.isRequired,
+
+        // Whether or not to disable the toggle switch
+        disabled: PropTypes.bool,
     };
 
     render() {
@@ -35,7 +38,8 @@ export default class LabelledToggleSwitch extends React.Component {
         return (
             <div className="mx_SettingsFlag">
                 <span className="mx_SettingsFlag_label">{this.props.label}</span>
-                <ToggleSwitch checked={this.props.value} onChange={this.props.onChange} />
+                <ToggleSwitch checked={this.props.value} disabled={this.props.disabled}
+                              onChange={this.props.onChange} />
             </div>
         );
     }

@@ -21,10 +21,12 @@ limitations under the License.
     border-radius: 14px;
     background-color: $togglesw-off-color;
     position: relative;
+    opacity: 0.5;
 }
 
 .mx_ToggleSwitch_enabled {
     cursor: pointer;
+    opacity: 1;
 }
 
 .mx_ToggleSwitch.mx_ToggleSwitch_on {
