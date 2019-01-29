@@ -16,6 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../languageHandler";
+import MatrixClientPeg from "../../../../MatrixClientPeg";
+import GroupUserSettings from "../../groups/GroupUserSettings";
+import PropTypes from "prop-types";
+import {MatrixClient} from "matrix-js-sdk";
+import { DragDropContext } from 'react-beautiful-dnd';
 import ProfileSettings from "../ProfileSettings";
 import EmailAddresses from "../EmailAddresses";
 import PhoneNumbers from "../PhoneNumbers";
@@ -31,13 +36,23 @@ const sdk = require('../../../../index');
 const Modal = require("../../../../Modal");
 const dis = require("../../../../dispatcher");
 
-export default class GeneralSettingsTab extends React.Component {
+export default class GeneralUserSettingsTab extends React.Component {
+    static childContextTypes = {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    };
+
     constructor() {
         super();
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             theme: SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme"),
+        };
+    }
+
+    getChildContext() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
         };
     }
 
@@ -95,6 +110,11 @@ export default class GeneralSettingsTab extends React.Component {
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 <ProfileSettings />
+
+                <span className="mx_SettingsTab_subheading">{_t("Flair")}</span>
+                <DragDropContext>
+                    <GroupUserSettings />
+                </DragDropContext>
             </div>
         );
     }
@@ -103,7 +123,7 @@ export default class GeneralSettingsTab extends React.Component {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         const passwordChangeForm = (
             <ChangePassword
-                className="mx_GeneralSettingsTab_changePassword"
+                className="mx_GeneralUserSettingsTab_changePassword"
                 rowClassName=""
                 buttonKind="primary"
                 onError={this._onPasswordChangeError}
@@ -111,7 +131,7 @@ export default class GeneralSettingsTab extends React.Component {
         );
 
         return (
-            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_accountSection">
+            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
                 <p className="mx_SettingsTab_subsectionText">
                     {_t("Set a new account password...")}
@@ -132,7 +152,7 @@ export default class GeneralSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
-                <LanguageDropdown className="mx_GeneralSettingsTab_languageInput"
+                <LanguageDropdown className="mx_GeneralUserSettingsTab_languageInput"
                                   onOptionChange={this._onLanguageChange} value={this.state.language} />
             </div>
         );
@@ -142,7 +162,7 @@ export default class GeneralSettingsTab extends React.Component {
         // TODO: Re-enable theme selection once the themes actually work
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return (
-            <div className="mx_SettingsTab_section mx_GeneralSettingsTab_themeSection">
+            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select" disabled={true}
                        value={this.state.theme} onChange={this._onThemeChange}>
