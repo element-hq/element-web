@@ -137,11 +137,6 @@ module.exports = React.createClass({
         const avatarUrl = this.props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             null, null, null, false);
-
-        if (!avatarUrl) {
-            return;
-        }
-
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: avatarUrl,
@@ -163,7 +158,8 @@ module.exports = React.createClass({
             <BaseAvatar {...otherProps} name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls}
-                onClick={this.props.viewAvatarOnClick ? this.onRoomAvatarClick : null} />
+                onClick={this.props.viewAvatarOnClick ? this.onRoomAvatarClick : null}
+                disabled={!this.state.urls[0]} />
         );
     },
 });
