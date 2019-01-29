@@ -254,9 +254,9 @@ const RoomSubList = React.createClass({
                 badge = <div className={badgeClasses} onClick={this._onNotifBadgeClick}>
                     { FormattingUtils.formatCount(subListNotifCount) }
                 </div>;
-            } else if (this.props.isInvite) {
+            } else if (this.props.isInvite && this.props.list.length) {
                 // no notifications but highlight anyway because this is an invite badge
-                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>!</div>;
+                badge = <div className={badgeClasses} onClick={this._onInviteBadgeClick}>{this.props.list.length}</div>;
             }
         }
 
