@@ -40,7 +40,8 @@ module.exports = React.createClass({
         let upgradeText = (
             <div>
                 <div className="mx_RoomUpgradeWarningBar_body">
-                    {_t("This room is using an unstable room version. If you aren't expecting this, please upgrade the room.")}
+                    {_t("This room is using an unstable room version. If you aren't expecting " +
+                        "this, please upgrade the room.")}
                 </div>
                 <p className="mx_RoomUpgradeWarningBar_upgradelink">
                     <AccessibleButton onClick={this.onUpgradeClick}>
@@ -60,7 +61,8 @@ module.exports = React.createClass({
                     </div>
                     <p className="mx_RoomUpgradeWarningBar_upgradelink">
                         <AccessibleButton onClick={this.onUpgradeClick}>
-                            {_t("Click here to upgrade to the latest room version and ensure room integrity is protected.")}
+                            {_t("Click here to upgrade to the latest room version and ensure room integrity " +
+                                "is protected.")}
                         </AccessibleButton>
                     </p>
                 </div>
