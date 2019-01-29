@@ -340,24 +340,27 @@ module.exports = React.createClass({
                     {editLink}
                 </h3>
                 <form onSubmit={this.onSubmit}>
-                    { emailSection }
-                    { phoneSection }
-                    <input type="text" ref="username"
-                        placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
-                        className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_USERNAME);}} />
-                    <br />
-                    <input type="password" ref="password"
-                        className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD);}}
-                        placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
-                    <br />
-                    <input type="password" ref="passwordConfirm"
-                        placeholder={_t("Confirm password")}
-                        className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
-                        defaultValue={this.props.defaultPassword} />
-                    <br />
+                    <div className="mx_Auth_fieldRow">
+                        <input type="text" ref="username"
+                            placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
+                            className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_USERNAME);}} />
+                    </div>
+                    <div className="mx_Auth_fieldRow">
+                        <input type="password" ref="password"
+                            className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_PASSWORD);}}
+                            placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
+                        <input type="password" ref="passwordConfirm"
+                            placeholder={_t("Confirm password")}
+                            className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
+                            defaultValue={this.props.defaultPassword} />
+                    </div>
+                    <div className="mx_Auth_fieldRow">
+                        { emailSection }
+                        { phoneSection }
+                    </div>
                     { registerButton }
                 </form>
             </div>
