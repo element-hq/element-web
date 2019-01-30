@@ -265,7 +265,10 @@ module.exports = React.createClass({
     },
 
     onUsernameBlur: function(username) {
-        this.setState({ username: username });
+        this.setState({
+            username: username,
+            discoveryError: null,
+        });
         if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
             try {
