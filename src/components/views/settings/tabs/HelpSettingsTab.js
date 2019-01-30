@@ -140,9 +140,11 @@ export default class HelpSettingsTab extends React.Component {
                                              target='_blank'>{sub}</a>,
                         })
                     }
-                    <AccessibleButton onClick={this._onStartBotChat} kind='primary'>
-                        {_t("Start a chat with Riot Bot")}
-                    </AccessibleButton>
+                    <div>
+                        <AccessibleButton onClick={this._onStartBotChat} kind='primary'>
+                            {_t("Chat with Riot Bot")}
+                        </AccessibleButton>
+                    </div>
                 </div>
             );
         }
