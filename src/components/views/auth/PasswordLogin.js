@@ -268,7 +268,7 @@ class PasswordLogin extends React.Component {
 
         let editLink = null;
         if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_Auth_editServerDetails"
+            editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
                 {_t('Edit')}

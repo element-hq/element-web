@@ -270,7 +270,7 @@ module.exports = React.createClass({
 
         let editLink = null;
         if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_Auth_editServerDetails"
+            editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
                 {_t('Edit')}
@@ -335,13 +335,13 @@ module.exports = React.createClass({
                     {editLink}
                 </h3>
                 <form onSubmit={this.onSubmit}>
-                    <div className="mx_Auth_fieldRow">
+                    <div className="mx_AuthBody_fieldRow">
                         <input type="text" ref="username"
                             placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
                             className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                             onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     </div>
-                    <div className="mx_Auth_fieldRow">
+                    <div className="mx_AuthBody_fieldRow">
                         <input type="password" ref="password"
                             className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
                             onBlur={function() {self.validateField(FIELD_PASSWORD);}}
@@ -352,7 +352,7 @@ module.exports = React.createClass({
                             onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
                             defaultValue={this.props.defaultPassword} />
                     </div>
-                    <div className="mx_Auth_fieldRow">
+                    <div className="mx_AuthBody_fieldRow">
                         { emailSection }
                         { phoneSection }
                     </div>

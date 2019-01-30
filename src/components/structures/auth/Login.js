@@ -689,7 +689,7 @@ module.exports = React.createClass({
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
-                <a className="mx_Auth_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
+                <a className="mx_AuthBody_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Try the app first') }
                 </a>;
         }
@@ -714,7 +714,7 @@ module.exports = React.createClass({
                     { errorTextSection }
                     { this.renderServerComponentForStep() }
                     { this.renderLoginComponentForStep() }
-                    <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
+                    <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
                     { loginAsGuestJsx }
