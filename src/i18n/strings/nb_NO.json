@@ -12,5 +12,18 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; sammabeid drevet av [matrix]",
     "Search the room directory": "Søk i romutvalget",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Allerede finnes det alskens rom i Matrix, sammenkoblet til eksisterende nettverk (Slack, IRC, Gitter osv.) eller selvstendig. Dersom De formoder, kan De kikke på utvalget!",
-    "Chat with Riot Bot": "Nettprat med Riot Bot"
+    "Chat with Riot Bot": "Nettprat med Riot Bot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruke egendefinert tjener instillingen for å logge inn på andre Matrix tjenere ved å spesifisere enn annen hjemmetrjener URL. Dette lar deg bruke Riot med en eksisterende Matrix konto på en annen hjemmetjener.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan også stille inn en egen idendtitetstjener, men du kommer ikke til å kunne invitere andre brukere med e-post, eller bli invitert med e-post selv.",
+    "Get started with some tips from Riot Bot!": "Kom i gang med noen tips fra Riot Bot!",
+    "General discussion about Matrix and Riot": "Generelle diskusjoner om Matrix og Riot",
+    "Discussion of all things Matrix!": "Diskusjoner om alt Matrix!",
+    "Riot/Web &amp; Desktop chat": "Riot/Web- &amp;  Skrivebordsprat",
+    "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk",
+    "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; matrix-android-sdk",
+    "Matrix technical discussions": "Tekniske Matrix-diskusjoner",
+    "Running Matrix services": "Kjør Matrix servicer",
+    "Community-run support for Synapse": "Samfunnsholdt hjelpetjeneste for Synapse",
+    "Admin support for Dendrite": "Administrator hjelp for Dendrite",
+    "Announcements about Synapse releases": "Kunngjøring om Synapse utgivelser"
 }
