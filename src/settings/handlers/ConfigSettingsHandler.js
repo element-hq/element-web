@@ -27,7 +27,7 @@ export default class ConfigSettingsHandler extends SettingsHandler {
 
         // Special case themes
         if (settingName === "theme") {
-            return config["default_theme"];
+            return "dharma"; // config["default_theme"];
         }
 
         const settingsConfig = config["settingDefaults"];

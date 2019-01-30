@@ -65,24 +65,23 @@ const SIMPLE_SETTINGS = [
     { id: "autoplayGifsAndVideos" },
     { id: "alwaysShowEncryptionIcons" },
     { id: "showRoomRecoveryReminder" },
-    { id: "hideReadReceipts" },
-    { id: "dontSendTypingNotifications" },
+    { id: "showReadReceipts" },
+    { id: "sendTypingNotifications" },
     { id: "alwaysShowTimestamps" },
     { id: "showTwelveHourTimestamps" },
-    { id: "hideJoinLeaves" },
-    { id: "hideAvatarChanges" },
-    { id: "hideDisplaynameChanges" },
+    { id: "showJoinLeaves" },
+    { id: "showAvatarChanges" },
+    { id: "showDisplaynameChanges" },
     { id: "useCompactLayout" },
-    { id: "hideRedactions" },
+    { id: "showRedactions" },
     { id: "enableSyntaxHighlightLanguageDetection" },
     { id: "MessageComposerInput.autoReplaceEmoji" },
-    { id: "MessageComposerInput.dontSuggestEmoji" },
-    { id: "Pill.shouldHidePillAvatar" },
-    { id: "TextualBody.disableBigEmoji" },
+    { id: "MessageComposerInput.suggestEmoji" },
+    { id: "Pill.shouldShowPillAvatar" },
+    { id: "TextualBody.enableBigEmoji" },
     { id: "VideoView.flipVideoHorizontally" },
-    { id: "TagPanel.disableTagPanel" },
+    { id: "TagPanel.enableTagPanel" },
     { id: "enableWidgetScreenshots" },
-    { id: "RoomSubList.showEmpty" },
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
     { id: "showDeveloperTools" },
@@ -102,9 +101,9 @@ const ANALYTICS_SETTINGS = [
 // These settings must be defined in SettingsStore
 const WEBRTC_SETTINGS = [
     {
-        id: 'webRtcForceTURN',
+        id: 'webRtcForcePeerToPeer',
         fn: (val) => {
-            MatrixClientPeg.get().setForceTURN(val);
+            MatrixClientPeg.get().setForceTURN(!val);
         },
     },
 ];
@@ -129,6 +128,7 @@ const CRYPTO_SETTINGS = [
 const THEMES = [
     { label: _td('Light theme'), value: 'light' },
     { label: _td('Dark theme'), value: 'dark' },
+    { label: _td('2018 theme'), value: 'dharma' },
     { label: _td('Status.im theme'), value: 'status' },
 ];
 
@@ -167,13 +167,6 @@ module.exports = React.createClass({
         onClose: PropTypes.func,
         // The brand string given when creating email pushers
         brand: PropTypes.string,
-
-        // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: PropTypes.string,
-
-        // Team token for the referral link. If falsy, the referral section will
-        // not appear
-        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -384,32 +377,8 @@ module.exports = React.createClass({
     },
 
     onLogoutClicked: function(ev) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('Logout E2E Export', '', QuestionDialog, {
-            title: _t("Sign out"),
-            description:
-                <div>
-             { _t("For security, logging out will delete any end-to-end " +
-                  "encryption keys from this browser. If you want to be able " +
-                  "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.") }
-                </div>,
-            button: _t("Sign out"),
-            extraButtons: [
-                <button key="export" className="mx_Dialog_primary"
-                        onClick={this._onExportE2eKeysClicked}>
-                   { _t("Export E2E room keys") }
-                </button>,
-            ],
-            onFinished: (confirmed) => {
-                if (confirmed) {
-                    dis.dispatch({action: 'logout'});
-                    if (this.props.onFinished) {
-                        this.props.onFinished();
-                    }
-                }
-            },
-        });
+        const LogoutDialog = sdk.getComponent("dialogs.LogoutDialog");
+        Modal.createTrackedDialog('Logout E2E Export', '', LogoutDialog);
     },
 
     onPasswordChangeError: function(err) {
@@ -614,27 +583,6 @@ module.exports = React.createClass({
         return <GroupUserSettings />;
     },
 
-    _renderReferral: function() {
-        const teamToken = this.props.teamToken;
-        if (!teamToken) {
-            return null;
-        }
-        if (typeof teamToken !== 'string') {
-            console.warn('Team token not a string');
-            return null;
-        }
-        const href = (this.props.referralBaseUrl || window.location.origin) +
-            `/#/register?referrer=${this._me}&team_token=${teamToken}`;
-        return (
-            <div>
-                <h3>Referral</h3>
-                <div className="mx_UserSettings_section">
-                    { _t("Refer a friend to Riot:") } <a href={href}>{ href }</a>
-                </div>
-            </div>
-        );
-    },
-
     onLanguageChange: function(newLang) {
         if (this.state.language !== newLang) {
             SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
@@ -661,11 +609,14 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) =>
             SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
+        // HACK: Lack of translations for themes header. We're removing this view in the very near future,
+        // and the header is really only there to maintain some semblance of the UX the section once was.
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
                     { SIMPLE_SETTINGS.map( this._renderAccountSetting ) }
+                    <div><b>Themes</b></div>
                     { THEMES.map( this._renderThemeOption ) }
                     <table>
                         <tbody>
@@ -700,18 +651,12 @@ module.exports = React.createClass({
     },
 
     _renderThemeOption: function(setting) {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-        const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
-        return (
-            <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
-                <SettingsFlag name="theme"
-                                  label={setting.label}
-                                  level={SettingLevel.ACCOUNT}
-                                  onChange={onChange}
-                                  group="theme"
-                                  value={setting.value} />
-            </div>
-        );
+        // HACK: Temporary disablement of theme selection.
+        // We don't support changing themes on experimental anyways, and radio groups aren't
+        // a thing anymore for setting flags. We're also dropping this view in the very near
+        // future, so just replace the theme selection with placeholder text.
+        const currentTheme = SettingsStore.getValue("theme");
+        return <div>{_t(setting.label)} {currentTheme === setting.value ? '(current)' : null}</div>;
     },
 
     _renderCryptoInfo: function() {
@@ -859,7 +804,7 @@ module.exports = React.createClass({
         SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
-            const onChange = async(e) => {
+            const onChange = async (e) => {
                 const checked = e.target.checked;
                 if (featureId === "feature_lazyloading") {
                     const confirmed = await this._onLazyLoadChanging(checked);
@@ -1251,7 +1196,7 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <AccessibleButton element="img" src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
+                        <AccessibleButton element="img" src={require("../../../res/img/cancel-small.svg")} width="14" height="14" alt={_t("Remove")}
                             onClick={onRemoveClick} />
                     </div>
                 </div>
@@ -1276,7 +1221,7 @@ module.exports = React.createClass({
                             onValueChanged={this._onAddEmailEditFinished} />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <AccessibleButton element="img" src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
+                         <AccessibleButton element="img" src={require("../../../res/img/plus.svg")} width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
                     </div>
                 </div>
             );
@@ -1292,9 +1237,7 @@ module.exports = React.createClass({
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
-                        rowLabelClassName="mx_UserSettings_profileLabelCell"
-                        rowInputClassName="mx_UserSettings_profileInputCell"
-                        buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
+                        buttonClassName="mx_UserSettings_button"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
         );
@@ -1346,7 +1289,7 @@ module.exports = React.createClass({
 
                     <div className="mx_UserSettings_avatarPicker">
                         <AccessibleButton className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
-                            <img src="img/cancel.svg"
+                            <img src={require("../../../res/img/cancel.svg")}
                                 width="15" height="15"
                                 className="mx_filterFlipColor"
                                 alt={_t("Remove avatar")}
@@ -1358,7 +1301,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
-                                <img src="img/camera.svg" className="mx_filterFlipColor"
+                                <img src={require("../../../res/img/camera.svg")} className="mx_filterFlipColor"
                                     alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
@@ -1383,8 +1326,6 @@ module.exports = React.createClass({
                 </div>
 
                 { this._renderGroupSettings() }
-
-                { this._renderReferral() }
 
                 { notificationArea }
 

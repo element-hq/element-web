@@ -582,19 +582,21 @@ export default class AppTile extends React.Component {
         // editing is done in scalar
         const showEditButton = Boolean(this._scalarClient && this._canUserModify());
         const deleteWidgetLabel = this._deleteWidgetLabel();
-        let deleteIcon = 'img/cancel_green.svg';
+        let deleteIcon = require("../../../../res/img/cancel_green.svg");
         let deleteClasses = 'mx_AppTileMenuBarWidget';
         if (this._canUserModify()) {
-            deleteIcon = 'img/icon-delete-pink.svg';
+            deleteIcon = require("../../../../res/img/icon-delete-pink.svg");
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
         // Picture snapshot - only show button when apps are maximised.
         const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
-        const showPictureSnapshotIcon = 'img/camera_green.svg';
-        const popoutWidgetIcon = 'img/button-new-window.svg';
-        const reloadWidgetIcon = 'img/button-refresh.svg';
-        const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
+        const showPictureSnapshotIcon = require("../../../../res/img/camera_green.svg");
+        const popoutWidgetIcon = require("../../../../res/img/button-new-window.svg");
+        const reloadWidgetIcon = require("../../../../res/img/button-refresh.svg");
+        const minimizeIcon = require("../../../../res/img/minimize.svg");
+        const maximizeIcon = require("../../../../res/img/maximize.svg");
+        const windowStateIcon = (this.props.show ? minimizeIcon : maximizeIcon);
 
         let appTileClass;
         if (this.props.miniMode) {
@@ -653,7 +655,7 @@ export default class AppTile extends React.Component {
 
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
-                            src="img/edit_green.svg"
+                            src={require("../../../../res/img/edit_green.svg")}
                             className={"mx_AppTileMenuBarWidget " +
                               (this.props.showDelete ? "mx_AppTileMenuBarWidgetPadding" : "")}
                             title={_t('Edit')}

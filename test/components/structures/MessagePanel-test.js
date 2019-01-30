@@ -26,11 +26,13 @@ const sdk = require('matrix-react-sdk');
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
 import MatrixClientPeg from '../../../src/MatrixClientPeg';
+import Matrix from 'matrix-js-sdk';
 
 const test_utils = require('test-utils');
 const mockclock = require('mock-clock');
 
 let client;
+const room = new Matrix.Room();
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
 const WrappedMessagePanel = React.createClass({
@@ -45,7 +47,7 @@ const WrappedMessagePanel = React.createClass({
     },
 
     render: function() {
-        return <MessagePanel {...this.props} />;
+        return <MessagePanel room={room} {...this.props} />;
     },
 });
 

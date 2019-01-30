@@ -1,0 +1,46 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_GeneralUserSettingsTab_changePassword,
+.mx_GeneralUserSettingsTab_themeSection {
+    display: block;
+}
+
+.mx_GeneralUserSettingsTab_changePassword .mx_Field,
+.mx_GeneralUserSettingsTab_themeSection .mx_Field {
+    display: block;
+    margin-right: 100px; // Align with the other fields on the page
+}
+
+.mx_GeneralUserSettingsTab_changePassword .mx_Field input {
+    display: block;
+    width: calc(100% - 20px); // subtract 10px padding on left and right
+}
+
+.mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
+    margin-top: 0;
+}
+
+.mx_GeneralUserSettingsTab_themeSection .mx_Field select {
+    display: block;
+    width: 100%;
+}
+
+.mx_GeneralUserSettingsTab_accountSection > .mx_EmailAddresses,
+.mx_GeneralUserSettingsTab_accountSection > .mx_PhoneNumbers,
+.mx_GeneralUserSettingsTab_languageInput {
+    margin-right: 100px; // Align with the other fields on the page
+}

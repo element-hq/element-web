@@ -82,6 +82,8 @@ describe('TimelinePanel', function() {
         sandbox = test_utils.stubClient(sandbox);
 
         room = sinon.createStubInstance(jssdk.Room);
+        room.currentState = sinon.createStubInstance(jssdk.RoomState);
+        room.currentState.members = {};
         room.roomId = ROOM_ID;
 
         timelineSet = sinon.createStubInstance(jssdk.EventTimelineSet);

@@ -15,13 +15,30 @@ limitations under the License.
 */
 
 .mx_RoomTile {
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     cursor: pointer;
-    font-size: 13px;
-    display: block;
     height: 34px;
+    margin: 0;
+    padding: 0 8px 0 10px;
+    position: relative;
+}
 
-    background-color: $secondary-accent-color;
+.mx_RoomTile_menuButton {
+    display: none;
+    flex: 0 0 16px;
+    height: 16px;
+    background-image: url('$(res)/img/icon_context.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+// toggle menuButton and badge on hover/menu displayed
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
+    .mx_RoomTile_menuButton {
+        display: block;
+    }
 }
 
 .mx_RoomTile_tooltip {
@@ -33,9 +50,18 @@ limitations under the License.
 
 
 .mx_RoomTile_nameContainer {
-    display: inline-block;
-    width: 180px;
+    display: flex;
+    align-items: center;
+    flex: 1;
     vertical-align: middle;
+    min-width: 0;
+}
+
+.mx_RoomTile_labelContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
 }
 
 .mx_RoomTile_subtext {
@@ -55,11 +81,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_avatar {
-    display: inline-block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 16px;
-    padding-right: 6px;
+    flex: 0;
+    padding: 4px;
     width: 24px;
     vertical-align: middle;
 }
@@ -78,87 +101,52 @@ limitations under the License.
 }
 
 .mx_RoomTile_name {
-    display: inline-block;
-    position: relative;
-    width: 165px;
-    vertical-align: middle;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 3px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 6px;
     color: $roomtile-name-color;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
 }
 
-.mx_RoomTile_invite {
-/*    color: rgba(69, 69, 69, 0.5); */
-}
+.collapsed {
+    .mx_RoomTile {
+        margin: 0 2px;
+        padding: 0 2px;
+        position: relative;
+        justify-content: center;
+    }
 
-.collapsed .mx_RoomTile_nameContainer {
-    width: 60px; /* colapsed panel width */
-}
+    .mx_RoomTile_name {
+        display: none;
+    }
 
-.collapsed .mx_RoomTile_name {
-    display: none;
-}
+    .mx_RoomTile_badge {
+        position: absolute;
+        right: 6px;
+        top: 0px;
+        border-radius: 16px;
+        z-index: 3;
+        border: 0.18em solid $secondary-accent-color;
+    }
 
-.collapsed .mx_RoomTile_badge {
-    top: 0px;
-    min-width: 12px;
-    border-radius: 16px;
-    padding: 0px 4px 0px 4px;
-    z-index: 3;
-}
-
-/* Hide the bottom of speech bubble */
-.collapsed .mx_RoomTile_highlight .mx_RoomTile_badge:after {
-    display: none;
-}
-
-/* This is the bottom of the speech bubble */
-.mx_RoomTile_highlight .mx_RoomTile_badge:after {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    border-top: 5px solid $warning-color;
-    border-right: 7px solid transparent;
+    .mx_RoomTile_menuButton {
+        display: none;  //no design for this for now
+    }
 }
 
 .mx_RoomTile_badge {
-    display: inline-block;
-    min-width: 15px;
-    height: 15px;
-    position: absolute;
-    right: 8px; /*gutter */
-    top: 9px;
-    border-radius: 8px;
+    flex: 0 1 content;
+    border-radius: 0.8em;
+    padding: 0 0.4em;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 10px;
-    text-align: center;
-    padding-top: 1px;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-.mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menuDisplayed .mx_RoomTile_badge {
-    letter-spacing: 0.1em;
-    opacity: 1;
-}
-
-.mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_menuDisplayed.mx_RoomTile_noBadges .mx_RoomTile_badge {
-    background-color: $neutral-badge-color;
+    font-size: 12px;
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge {
-    background-color: $accent-color;
+    background-color: $roomtile-name-color;
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge {
@@ -167,9 +155,14 @@ limitations under the License.
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
     font-weight: 800;
+
+    .mx_RoomTile_name {
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_RoomTile_selected {
+    border-radius: 4px;
     background-color: $roomtile-selected-bg-color;
 }
 
@@ -187,10 +180,6 @@ limitations under the License.
     background-color: $roomtile-focused-bg-color;
 }
 
-.mx_RoomTile .mx_RoomTile_name.mx_RoomTile_badgeShown {
-    width: 140px;
-}
-
 .mx_RoomTile_arrow {
     position: absolute;
     right: 0px;
@@ -203,4 +192,3 @@ limitations under the License.
 .mx_RoomTile.mx_RoomTile_transparent:focus {
     background-color: $roomtile-transparent-focused-color;
 }
-

@@ -26,11 +26,11 @@ import * as ContextualMenu from "../../structures/ContextualMenu";
 const socials = [
     {
         name: 'Facebook',
-        img: 'img/social/facebook.png',
+        img: require("../../../../res/img/social/facebook.png"),
         url: (url) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     }, {
         name: 'Twitter',
-        img: 'img/social/twitter-2.png',
+        img: require("../../../../res/img/social/twitter-2.png"),
         url: (url) => `https://twitter.com/home?status=${url}`,
     }, /* // icon missing
         name: 'Google Plus',
@@ -38,15 +38,15 @@ const socials = [
         url: (url) => `https://plus.google.com/share?url=${url}`,
     },*/ {
         name: 'LinkedIn',
-        img: 'img/social/linkedin.png',
+        img: require("../../../../res/img/social/linkedin.png"),
         url: (url) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
     }, {
         name: 'Reddit',
-        img: 'img/social/reddit.png',
+        img: require("../../../../res/img/social/reddit.png"),
         url: (url) => `http://www.reddit.com/submit?url=${url}`,
     }, {
         name: 'email',
-        img: 'img/social/email-1.png',
+        img: require("../../../../res/img/social/email-1.png"),
         url: (url) => `mailto:?body=${url}`,
     },
 ];
@@ -202,7 +202,7 @@ export default class ShareDialog extends React.Component {
 
                 <div className="mx_ShareDialog_split">
                     <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo="img/matrix-m.svg" />
+                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         {

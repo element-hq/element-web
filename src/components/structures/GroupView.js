@@ -24,6 +24,9 @@ import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import GroupHeaderButtons from '../views/right_panel/GroupHeaderButtons';
+import MainSplit from './MainSplit';
+import RightPanel from './RightPanel';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
@@ -122,7 +125,7 @@ const CategoryRoomList = React.createClass({
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton"
                 onClick={this.onAddRoomsToSummaryClicked}
             >
-                <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
+                <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     { _t('Add a Room') }
                 </div>
@@ -223,7 +226,7 @@ const FeaturedRoom = React.createClass({
         const deleteButton = this.props.editing ?
             <img
                 className="mx_GroupView_featuredThing_deleteButton"
-                src="img/cancel-small.svg"
+                src={require("../../../res/img/cancel-small.svg")}
                 width="14"
                 height="14"
                 alt="Delete"
@@ -297,7 +300,7 @@ const RoleUserList = React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
-                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
+                 <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
                  <div className="mx_GroupView_featuredThings_addButton_label">
                      { _t('Add a User') }
                  </div>
@@ -376,7 +379,7 @@ const FeaturedUser = React.createClass({
         const deleteButton = this.props.editing ?
             <img
                 className="mx_GroupView_featuredThing_deleteButton"
-                src="img/cancel-small.svg"
+                src={require("../../../res/img/cancel-small.svg")}
                 width="14"
                 height="14"
                 alt="Delete"
@@ -852,7 +855,7 @@ export default React.createClass({
                 onClick={this._onAddRoomsClick}
             >
                 <div className="mx_GroupView_rooms_header_addRow_button">
-                    <TintableSvg src="img/icons-room-add.svg" width="24" height="24" />
+                    <TintableSvg src={require("../../../res/img/icons-room-add.svg")} width="24" height="24" />
                 </div>
                 <div className="mx_GroupView_rooms_header_addRow_label">
                     { _t('Add rooms to this community') }
@@ -1186,7 +1189,7 @@ export default React.createClass({
                         </label>
                         <div className="mx_GroupView_avatarPicker_edit">
                             <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
-                                <img src="img/camera.svg"
+                                <img src={require("../../../res/img/camera.svg")}
                                     alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
@@ -1252,7 +1255,7 @@ export default React.createClass({
                 );
                 rightButtons.push(
                     <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
-                        <img src="img/cancel.svg" className="mx_filterFlipColor"
+                        <img src={require("../../../res/img/cancel.svg")} className="mx_filterFlipColor"
                             width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
@@ -1262,34 +1265,28 @@ export default React.createClass({
                         <AccessibleButton className="mx_GroupHeader_button"
                             onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
                         >
-                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                            <TintableSvg src={require("../../../res/img/icons-settings-room.svg")} width="16" height="16" />
                         </AccessibleButton>,
                     );
                 }
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupHeader_button" onClick={this._onShareClick} title={_t('Share Community')} key="_shareButton">
-                        <TintableSvg src="img/icons-share.svg" width="16" height="16" />
+                        <TintableSvg src={require("../../../res/img/icons-share.svg")} width="16" height="16" />
                     </AccessibleButton>,
                 );
-                if (this.props.collapsedRhs) {
-                    rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onShowRhsClick} title={_t('Show panel')} key="_maximiseButton"
-                        >
-                            <TintableSvg src="img/maximise.svg" width="10" height="16" />
-                        </AccessibleButton>,
-                    );
-                }
             }
 
+            const rightPanel = !this.props.collapsedRhs ? <RightPanel groupId={this.props.groupId} /> : undefined;
+
             const headerClasses = {
-                mx_GroupView_header: true,
-                mx_GroupView_header_view: !this.state.editing,
-                mx_GroupView_header_isUserMember: this.state.isUserMember,
+                "mx_GroupView_header": true,
+                "light-panel": true,
+                "mx_GroupView_header_view": !this.state.editing,
+                "mx_GroupView_header_isUserMember": this.state.isUserMember,
             };
 
             return (
-                <div className="mx_GroupView">
+                <main className="mx_GroupView">
                     <div className={classnames(headerClasses)}>
                         <div className="mx_GroupView_header_leftCol">
                             <div className="mx_GroupView_header_avatar">
@@ -1307,12 +1304,15 @@ export default React.createClass({
                         <div className="mx_GroupView_header_rightCol">
                             { rightButtons }
                         </div>
+                        <GroupHeaderButtons collapsedRhs={this.props.collapsedRhs} />
                     </div>
-                    <GeminiScrollbarWrapper className="mx_GroupView_body">
-                        { this._getMembershipSection() }
-                        { this._getGroupSection() }
-                    </GeminiScrollbarWrapper>
-                </div>
+                    <MainSplit collapsedRhs={this.props.collapsedRhs} panel={rightPanel}>
+                        <GeminiScrollbarWrapper className="mx_GroupView_body">
+                            { this._getMembershipSection() }
+                            { this._getGroupSection() }
+                        </GeminiScrollbarWrapper>
+                    </MainSplit>
+                </main>
             );
         } else if (this.state.error) {
             if (this.state.error.httpStatus === 404) {

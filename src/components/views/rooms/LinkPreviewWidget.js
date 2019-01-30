@@ -135,7 +135,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
-                    src="img/cancel.svg" width="18" height="18"
+                    src={require("../../../../res/img/cancel.svg")} width="18" height="18"
                     onClick={this.props.onCancelClick} />
             </div>
         );

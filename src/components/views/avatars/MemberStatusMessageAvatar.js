@@ -40,38 +40,50 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+
+        this.state = {
+            hasStatus: this.hasStatus,
+        };
     }
 
     componentWillMount() {
         if (this.props.member.userId !== MatrixClientPeg.get().getUserId()) {
             throw new Error("Cannot use MemberStatusMessageAvatar on anyone but the logged in user");
         }
-    }
-
-    componentDidMount() {
-        MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-
-        if (this.props.member.user) {
-            this.setState({message: this.props.member.user._unstable_statusMessage});
-        } else {
-            this.setState({message: ""});
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return;
         }
-    }
-
-    componentWillUnmount() {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
+        const { user } = this.props.member;
+        if (!user) {
+            return;
         }
+        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     }
 
-    _onRoomStateEvents = (ev, state) => {
-        if (ev.getStateKey() !== MatrixClientPeg.get().getUserId()) return;
-        if (ev.getType() !== "im.vector.user_status") return;
-        // TODO: We should be relying on `this.props.member.user._unstable_statusMessage`
-        // We don't currently because the js-sdk doesn't emit a specific event for this
-        // change, and we don't want to race it. This should be improved when we rip out
-        // the im.vector.user_status stuff and replace it with a complete solution.
-        this.setState({message: ev.getContent()["status"]});
+    componentWillUmount() {
+        const { user } = this.props.member;
+        if (!user) {
+            return;
+        }
+        user.removeListener(
+            "User._unstable_statusMessage",
+            this._onStatusMessageCommitted,
+        );
+    }
+
+    get hasStatus() {
+        const { user } = this.props.member;
+        if (!user) {
+            return false;
+        }
+        return !!user._unstable_statusMessage;
+    }
+
+    _onStatusMessageCommitted = () => {
+        // The `User` object has observed a status message change.
+        this.setState({
+            hasStatus: this.hasStatus,
+        });
     };
 
     _onClick = (e) => {
@@ -79,42 +91,43 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
         const elementRect = e.target.getBoundingClientRect();
 
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = (elementRect.left + window.pageXOffset) - (elementRect.width / 2) + 3;
-        const chevronOffset = 12;
-        let y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
-        y = y - (chevronOffset + 4); // where 4 is 1/4 the height of the chevron
+        const x = (elementRect.left + window.pageXOffset);
+        const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
+        const chevronOffset = (elementRect.width - chevronWidth) / 2;
+        const chevronMargin = 1; // Add some spacing away from target
+        const y = elementRect.top + window.pageYOffset - chevronMargin;
 
         ContextualMenu.createMenu(StatusMessageContextMenu, {
             chevronOffset: chevronOffset,
             chevronFace: 'bottom',
             left: x,
             top: y,
-            menuWidth: 190,
+            menuWidth: 226,
             user: this.props.member.user,
         });
     };
 
     render() {
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
-            return <MemberAvatar member={this.props.member}
-                                 width={this.props.width}
-                                 height={this.props.height}
-                                 resizeMethod={this.props.resizeMethod} />;
-        }
+        const avatar = <MemberAvatar
+            member={this.props.member}
+            width={this.props.width}
+            height={this.props.height}
+            resizeMethod={this.props.resizeMethod}
+        />;
 
-        const hasStatus = this.props.member.user ? !!this.props.member.user._unstable_statusMessage : false;
+        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+            return avatar;
+        }
 
         const classes = classNames({
             "mx_MemberStatusMessageAvatar": true,
-            "mx_MemberStatusMessageAvatar_hasStatus": hasStatus,
+            "mx_MemberStatusMessageAvatar_hasStatus": this.state.hasStatus,
         });
 
-        return <AccessibleButton onClick={this._onClick} className={classes} element="div">
-            <MemberAvatar member={this.props.member}
-                          width={this.props.width}
-                          height={this.props.height}
-                          resizeMethod={this.props.resizeMethod} />
+        return <AccessibleButton className={classes}
+            element="div" onClick={this._onClick}
+        >
+            {avatar}
         </AccessibleButton>;
     }
 }

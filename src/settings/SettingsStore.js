@@ -43,10 +43,16 @@ export const SettingLevel = {
 
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings = {};
+const invertedDefaultSettings = {};
 const featureNames = [];
 for (const key of Object.keys(SETTINGS)) {
     defaultSettings[key] = SETTINGS[key].default;
     if (SETTINGS[key].isFeature) featureNames.push(key);
+    if (SETTINGS[key].invertedSettingName) {
+        // Invert now so that the rest of the system will invert it back
+        // to what was intended.
+        invertedDefaultSettings[key] = !SETTINGS[key].default;
+    }
 }
 
 const LEVEL_HANDLERS = {
@@ -56,7 +62,7 @@ const LEVEL_HANDLERS = {
     "account": new AccountSettingsHandler(),
     "room": new RoomSettingsHandler(),
     "config": new ConfigSettingsHandler(),
-    "default": new DefaultSettingsHandler(defaultSettings),
+    "default": new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
 
 // Wrap all the handlers with local echo
@@ -200,11 +206,11 @@ export default class SettingsStore {
      */
     static getValueAt(level, settingName, roomId = null, explicit = false, excludeDefault = false) {
         // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
+        const setting = SETTINGS[settingName];
+        if (!setting) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        const setting = SETTINGS[settingName];
         const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
         if (!levelOrder.includes("default")) levelOrder.push("default"); // always include default
 
@@ -220,11 +226,20 @@ export default class SettingsStore {
 
         const handlers = SettingsStore._getHandlers(settingName);
 
+        // Check if we need to invert the setting at all. Do this after we get the setting
+        // handlers though, otherwise we'll fail to read the value.
+        if (setting.invertedSettingName) {
+            //console.warn(`Inverting ${settingName} to be ${setting.invertedSettingName} - legacy setting`);
+            settingName = setting.invertedSettingName;
+        }
+
         if (explicit) {
             const handler = handlers[level];
-            if (!handler) return SettingsStore._tryControllerOverride(settingName, level, roomId, null, null);
+            if (!handler) {
+                return SettingsStore._getFinalValue(setting, level, roomId, null, null);
+            }
             const value = handler.getValue(settingName, roomId);
-            return SettingsStore._tryControllerOverride(settingName, level, roomId, value, level);
+            return SettingsStore._getFinalValue(setting, level, roomId, value, level);
         }
 
         for (let i = minIndex; i < levelOrder.length; i++) {
@@ -234,20 +249,24 @@ export default class SettingsStore {
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
-            return SettingsStore._tryControllerOverride(settingName, level, roomId, value, levelOrder[i]);
+            return SettingsStore._getFinalValue(setting, level, roomId, value, levelOrder[i]);
         }
 
-        return SettingsStore._tryControllerOverride(settingName, level, roomId, null, null);
+        return SettingsStore._getFinalValue(setting, level, roomId, null, null);
     }
 
-    static _tryControllerOverride(settingName, level, roomId, calculatedValue, calculatedAtLevel) {
-        const controller = SETTINGS[settingName].controller;
-        if (!controller) return calculatedValue;
+    static _getFinalValue(setting, level, roomId, calculatedValue, calculatedAtLevel) {
+        let resultingValue = calculatedValue;
 
-        const actualValue = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
-        if (actualValue !== undefined && actualValue !== null) return actualValue;
-        return calculatedValue;
+        if (setting.controller) {
+            const actualValue = setting.controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
+            if (actualValue !== undefined && actualValue !== null) resultingValue = actualValue;
+        }
+
+        if (setting.invertedSettingName) resultingValue = !resultingValue;
+        return resultingValue;
     }
+
     /* eslint-disable valid-jsdoc */ //https://github.com/eslint/eslint/issues/7307
     /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
@@ -263,7 +282,8 @@ export default class SettingsStore {
     /* eslint-enable valid-jsdoc */
     static async setValue(settingName, roomId, level, value) {
         // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
+        const setting = SETTINGS[settingName];
+        if (!setting) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
@@ -272,13 +292,22 @@ export default class SettingsStore {
             throw new Error("Setting " + settingName + " does not have a handler for " + level);
         }
 
+        if (setting.invertedSettingName) {
+            // Note: We can't do this when the `level` is "default", however we also
+            // know that the user can't possible change the default value through this
+            // function so we don't bother checking it.
+            //console.warn(`Inverting ${settingName} to be ${setting.invertedSettingName} - legacy setting`);
+            settingName = setting.invertedSettingName;
+            value = !value;
+        }
+
         if (!handler.canSetValue(settingName, roomId)) {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
         await handler.setValue(settingName, roomId, value);
 
-        const controller = SETTINGS[settingName].controller;
+        const controller = setting.controller;
         if (controller) {
             controller.onChange(level, roomId, value);
         }
@@ -314,6 +343,101 @@ export default class SettingsStore {
     static isLevelSupported(level) {
         if (!LEVEL_HANDLERS[level]) return false;
         return LEVEL_HANDLERS[level].isSupported();
+    }
+
+    /**
+     * Debugging function for reading explicit setting values without going through the
+     * complicated/biased functions in the SettingsStore. This will print information to
+     * the console for analysis. Not intended to be used within the application.
+     * @param {string} realSettingName The setting name to try and read.
+     * @param {string} roomId Optional room ID to test the setting in.
+     */
+    static debugSetting(realSettingName, roomId) {
+        console.log(`--- DEBUG ${realSettingName}`);
+
+        // Note: we intentionally use JSON.stringify here to avoid the console masking the
+        // problem if there's a type representation issue. Also, this way it is guaranteed
+        // to show up in a rageshake if required.
+
+        const def = SETTINGS[realSettingName];
+        console.log(`--- definition: ${def ? JSON.stringify(def) : '<NOT_FOUND>'}`);
+        console.log(`--- default level order: ${JSON.stringify(LEVEL_ORDER)}`);
+        console.log(`--- registered handlers: ${JSON.stringify(Object.keys(LEVEL_HANDLERS))}`);
+
+        const doChecks = (settingName) => {
+            for (const handlerName of Object.keys(LEVEL_HANDLERS)) {
+                const handler = LEVEL_HANDLERS[handlerName];
+
+                try {
+                    const value = handler.getValue(settingName, roomId);
+                    console.log(`---     ${handlerName}@${roomId || '<no_room>'} = ${JSON.stringify(value)}`);
+                } catch (e) {
+                    console.log(`---     ${handler}@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
+                    console.error(e);
+                }
+
+                if (roomId) {
+                    try {
+                        const value = handler.getValue(settingName, null);
+                        console.log(`---     ${handlerName}@<no_room> = ${JSON.stringify(value)}`);
+                    } catch (e) {
+                        console.log(`---     ${handler}@<no_room> THREW ERROR: ${e.message}`);
+                        console.error(e);
+                    }
+                }
+            }
+
+            console.log(`--- calculating as returned by SettingsStore`);
+            console.log(`--- these might not match if the setting uses a controller - be warned!`);
+
+            try {
+                const value = SettingsStore.getValue(settingName, roomId);
+                console.log(`---     SettingsStore#generic@${roomId || '<no_room>'}  = ${JSON.stringify(value)}`);
+            } catch (e) {
+                console.log(`---     SettingsStore#generic@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
+                console.error(e);
+            }
+
+            if (roomId) {
+                try {
+                    const value = SettingsStore.getValue(settingName, null);
+                    console.log(`---     SettingsStore#generic@<no_room>  = ${JSON.stringify(value)}`);
+                } catch (e) {
+                    console.log(`---     SettingsStore#generic@$<no_room> THREW ERROR: ${e.message}`);
+                    console.error(e);
+                }
+            }
+
+            for (const level of LEVEL_ORDER) {
+                try {
+                    const value = SettingsStore.getValueAt(level, settingName, roomId);
+                    console.log(`---     SettingsStore#${level}@${roomId || '<no_room>'} = ${JSON.stringify(value)}`);
+                } catch (e) {
+                    console.log(`---     SettingsStore#${level}@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
+                    console.error(e);
+                }
+
+                if (roomId) {
+                    try {
+                        const value = SettingsStore.getValueAt(level, settingName, null);
+                        console.log(`---     SettingsStore#${level}@<no_room> = ${JSON.stringify(value)}`);
+                    } catch (e) {
+                        console.log(`---     SettingsStore#${level}@$<no_room> THREW ERROR: ${e.message}`);
+                        console.error(e);
+                    }
+                }
+            }
+        };
+
+        doChecks(realSettingName);
+
+        if (def.invertedSettingName) {
+            console.log(`--- TESTING INVERTED SETTING NAME`);
+            console.log(`--- inverted: ${def.invertedSettingName}`);
+            doChecks(def.invertedSettingName);
+        }
+
+        console.log(`--- END DEBUG`);
     }
 
     static _getHandler(settingName, level) {
@@ -355,3 +479,6 @@ export default class SettingsStore {
         return featureState;
     }
 }
+
+// For debugging purposes
+global.mxSettingsStore = SettingsStore;

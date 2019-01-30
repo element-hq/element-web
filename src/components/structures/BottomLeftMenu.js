@@ -170,7 +170,7 @@ module.exports = React.createClass({
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
 
-        const groupsButton = SettingsStore.getValue("TagPanel.disableTagPanel") ?
+        const groupsButton = !SettingsStore.getValue("TagPanel.enableTagPanel") ?
             <GroupsButton tooltip={true} /> : null;
 
         return (

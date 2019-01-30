@@ -15,69 +15,52 @@ limitations under the License.
 */
 
 .mx_SearchBar {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    height: 56px;
     display: flex;
     align-items: center;
-}
+    border-bottom: 1px solid $primary-hairline-color;
 
-.mx_SearchBar_input {
-    display: inline block;
-    border-radius: 3px 0px 0px 3px;
-    border: 1px solid $input-border-color;
-    font-size: 15px;
-    padding: 9px;
-    padding-left: 11px;
-    width: auto;
-    flex: 1 1 0;
-}
+    .mx_SearchBar_input {
+        // border: 1px solid $input-border-color;
+        // font-size: 15px;
+        flex: 1 1 0;
+        margin-left: 22px;
+    }
 
-.mx_SearchBar_searchButton {
-    cursor: pointer;
-    margin-right: 10px;
-    width: 37px;
-    height: 37px;
-    border-radius: 0px 3px 3px 0px;
-    background-color: $accent-color;
-}
+    .mx_SearchBar_searchButton {
+        cursor: pointer;
+        width: 37px;
+        height: 37px;
+        background-color: $accent-color;
+        mask: url('$(res)/img/feather-icons/search-input.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+    }
 
-@keyframes pulsate {
-    0% { opacity: 1.0; }
-    50% { opacity: 0.1; }
-    100% { opacity: 1.0; }
-}
+    .mx_SearchBar_button {
+        border: 0;
+        margin: 0 0 0 22px;
+        padding: 5px;
+        font-size: 15px;
+        cursor: pointer;
+        color: $primary-fg-color;
+        border-bottom: 2px solid $accent-color;
+        font-weight: 600;
+    }
 
-.mx_SearchBar_searching img {
-    animation: pulsate 0.5s ease-out;
-    animation-iteration-count: infinite;
-}
+    .mx_SearchBar_unselected {
+        color: $input-darker-fg-color;
+        border-color: transparent;
+    }
 
-.mx_SearchBar_button {
-    display: inline;
-    border: 0px;
-    border-radius: 36px;
-    font-weight: 400;
-    font-size: 15px;
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    width: auto;
-    margin: auto;
-    margin-left: 7px;
-    padding-top: 6px;
-    padding-bottom: 4px;
-    padding-left: 24px;
-    padding-right: 24px;
-    cursor: pointer;
-}
-
-.mx_SearchBar_unselected {
-    background-color: $primary-bg-color;
-    color: $accent-color;
-    border: $accent-color 1px solid;
-}
-
-.mx_SearchBar_cancel {
-    padding-left: 14px;
-    padding-right: 14px;
-    cursor: pointer;
+    .mx_SearchBar_cancel {
+        background-color: $warning-color;
+        mask: url('$(res)/img/cancel.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 14px;
+        padding: 9px;
+        margin: 0 12px 0 3px;
+        cursor: pointer;
+    }
 }

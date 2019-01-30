@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -75,8 +75,8 @@ const VIEWS = {
     // we have valid matrix credentials (either via an explicit login, via the
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
-    // process because (a) we need to clear out indexeddb, and (b) we need to
-    // talk to the team server; while it is going on we show a big spinner.
+    // process because we need to clear out indexeddb. While it is going on we
+    // show a big spinner.
     LOGGING_IN: 5,
 
     // we are logged in with an active matrix client.
@@ -163,7 +163,7 @@ export default React.createClass({
             viewUserId: null,
 
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: window.localStorage.getItem("mx_rhs_collapsed") === "true",
             leftDisabled: false,
             middleDisabled: false,
             rightDisabled: false,
@@ -183,7 +183,7 @@ export default React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
-            // Parameters used for setting up the login/registration views
+            // Parameters used for setting up the authentication views
             defaultServerName: this.props.config.default_server_name,
             defaultHsUrl: this.props.config.default_hs_url,
             defaultIsUrl: this.props.config.default_is_url,
@@ -256,42 +256,6 @@ export default React.createClass({
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
 
-        // To enable things like riot.im/geektime in a nicer way than rewriting the URL
-        // and appending a team token query parameter, use the first path segment to
-        // indicate a team, with "public" team tokens stored in the config teamTokenMap.
-        let routedTeamToken = null;
-        if (this.props.config.teamTokenMap) {
-            const teamName = window.location.pathname.split('/')[1];
-            if (teamName && this.props.config.teamTokenMap.hasOwnProperty(teamName)) {
-                routedTeamToken = this.props.config.teamTokenMap[teamName];
-            }
-        }
-
-        // Persist the team token across refreshes using sessionStorage. A new window or
-        // tab will not persist sessionStorage, but refreshes will.
-        if (this.props.startingFragmentQueryParams.team_token) {
-            window.sessionStorage.setItem(
-                'mx_team_token',
-                this.props.startingFragmentQueryParams.team_token,
-            );
-        }
-
-        // Use the locally-stored team token first, then as a fall-back, check to see if
-        // a referral link was used, which will contain a query parameter `team_token`.
-        this._teamToken = routedTeamToken ||
-            window.localStorage.getItem('mx_team_token') ||
-            window.sessionStorage.getItem('mx_team_token');
-
-        // Some users have ended up with "undefined" as their local storage team token,
-        // treat that as undefined.
-        if (this._teamToken === "undefined") {
-            this._teamToken = undefined;
-        }
-
-        if (this._teamToken) {
-            console.info(`Team token set to ${this._teamToken}`);
-        }
-
         // Set up the default URLs (async)
         if (this.getDefaultServerName() && !this.getDefaultHsUrl(false)) {
             this.setState({loadingDefaultHomeserver: true});
@@ -302,7 +266,10 @@ export default React.createClass({
             // will check their settings.
             this.setState({
                 defaultServerName: null, // To un-hide any secrets people might be keeping
-                defaultServerDiscoveryError: _t("Invalid configuration: Cannot supply a default homeserver URL and a default server name"),
+                defaultServerDiscoveryError: _t(
+                    "Invalid configuration: Cannot supply a default homeserver URL and " +
+                    "a default server name",
+                ),
             });
         }
 
@@ -356,9 +323,6 @@ export default React.createClass({
         if (this.onGroupClick) {
             linkifyMatrix.onGroupClick = this.onGroupClick;
         }
-
-        const teamServerConfig = this.props.config.teamServerConfig || {};
-        Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
         // the first thing to do is to try the token params in the query-string
         Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
@@ -579,7 +543,7 @@ export default React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapseRhs) {
+                if (this.state.collapsedRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -607,7 +571,17 @@ export default React.createClass({
             case 'view_indexed_room':
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings':
+            case 'view_user_settings': {
+                if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
+                    const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
+                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
+                } else {
+                    this._setPage(PageTypes.UserSettings);
+                    this.notifyNewScreen('settings');
+                }
+                break;
+            }
+            case 'view_old_user_settings':
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
@@ -640,10 +614,19 @@ export default React.createClass({
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
             }
             break;
-            case 'view_room_directory':
-                this._setPage(PageTypes.RoomDirectory);
-                this.notifyNewScreen('directory');
-                break;
+            case 'view_room_directory': {
+                const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                    config: this.props.config,
+                }, 'mx_RoomDirectory_dialogWrapper');
+
+                // View the home page if we need something to look at
+                if (!this.state.currentGroupId && !this.state.currentRoomId) {
+                    this._setPage(PageTypes.HomePage);
+                    this.notifyNewScreen('home');
+                }
+            }
+            break;
             case 'view_my_groups':
                 this._setPage(PageTypes.MyGroups);
                 this.notifyNewScreen('groups');
@@ -680,13 +663,15 @@ export default React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", true);
                 this.setState({
-                    collapseRhs: true,
+                    collapsedRhs: true,
                 });
                 break;
             case 'show_right_panel':
+                window.localStorage.setItem("mx_rhs_collapsed", false);
                 this.setState({
-                    collapseRhs: false,
+                    collapsedRhs: false,
                 });
                 break;
             case 'panel_disable': {
@@ -697,9 +682,11 @@ export default React.createClass({
                 });
                 break;
             }
-            case 'set_theme':
-                this._onSetTheme(payload.value);
-                break;
+            // case 'set_theme':
+                // disable changing the theme for now
+                // as other themes are not compatible with dharma
+                // this._onSetTheme(payload.value);
+                // break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -709,7 +696,7 @@ export default React.createClass({
                 });
                 break;
             case 'on_logged_in':
-                this._onLoggedIn(payload.teamToken);
+                this._onLoggedIn();
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -923,6 +910,10 @@ export default React.createClass({
     },
 
     _viewHome: function() {
+        // The home page requires the "logged in" view, so we'll set that.
+        this.setStateForNewView({
+            view: VIEWS.LOGGED_IN,
+        });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
     },
@@ -1072,6 +1063,7 @@ export default React.createClass({
                         modal.close();
                         if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
+                            dis.dispatch({action: 'close_room_settings'});
                         }
                     }, (err) => {
                         modal.close();
@@ -1175,19 +1167,10 @@ export default React.createClass({
 
     /**
      * Called when a new logged in session has started
-     *
-     * @param {string} teamToken
      */
-    _onLoggedIn: async function(teamToken) {
-        this.setState({
-            view: VIEWS.LOGGED_IN,
-        });
-
-        if (teamToken) {
-            // A team member has logged in, not a guest
-            this._teamToken = teamToken;
-            dis.dispatch({action: 'view_home_page'});
-        } else if (this._is_registered) {
+    _onLoggedIn: async function() {
+        this.setStateForNewView({view: VIEWS.LOGGED_IN});
+        if (this._is_registered) {
             this._is_registered = false;
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
@@ -1239,11 +1222,10 @@ export default React.createClass({
             view: VIEWS.LOGIN,
             ready: false,
             collapseLhs: false,
-            collapseRhs: false,
+            collapsedRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
-        this._teamToken = null;
         this._setPageSubtitle();
     },
 
@@ -1260,6 +1242,7 @@ export default React.createClass({
         this.firstSyncComplete = false;
         this.firstSyncPromise = Promise.defer();
         const cli = MatrixClientPeg.get();
+        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
         // memory consumed as the JS SDK stores multiple distinct copies of room
@@ -1430,10 +1413,39 @@ export default React.createClass({
                     break;
             }
         });
-        cli.on("crypto.keyBackupFailed", () => {
-            Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
-            );
+        cli.on("crypto.keyBackupFailed", async (errcode) => {
+            let haveNewVersion;
+            let newVersionInfo;
+            // if key backup is still enabled, there must be a new backup in place
+            if (MatrixClientPeg.get().getKeyBackupEnabled()) {
+                haveNewVersion = true;
+            } else {
+                // otherwise check the server to see if there's a new one
+                try {
+                    newVersionInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+                    if (newVersionInfo !== null) haveNewVersion = true;
+                } catch (e) {
+                    console.error("Saw key backup error but failed to check backup version!", e);
+                    return;
+                }
+            }
+
+            if (haveNewVersion) {
+                Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    { newVersionInfo },
+                );
+            } else {
+                Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                );
+            }
+        });
+
+        cli.on("crypto.verification.start", (verifier) => {
+            Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                verifier,
+            });
         });
 
         // Fire the tinter right on startup to ensure the default theme is applied
@@ -1666,15 +1678,13 @@ export default React.createClass({
 
     onReturnToAppClick: function() {
         // treat it the same as if the user had completed the login
-        this._onLoggedIn(null);
+        this._onLoggedIn();
     },
 
     // returns a promise which resolves to the new MatrixClient
-    onRegistered: function(credentials, teamToken) {
-        // XXX: These both should be in state or ideally store(s) because we risk not
+    onRegistered: function(credentials) {
+        // XXX: This should be in state or ideally store(s) because we risk not
         //      rendering the most up-to-date view of state otherwise.
-        // teamToken may not be truthy
-        this._teamToken = teamToken;
         this._is_registered = true;
         return Lifecycle.setLoggedIn(credentials);
     },
@@ -1805,7 +1815,11 @@ export default React.createClass({
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
-        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN || this.state.loadingDefaultHomeserver) {
+        if (
+            this.state.view === VIEWS.LOADING ||
+            this.state.view === VIEWS.LOGGING_IN ||
+            this.state.loadingDefaultHomeserver
+        ) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
@@ -1816,7 +1830,7 @@ export default React.createClass({
 
         // needs to be before normal PageTypes as you are logged in technically
         if (this.state.view === VIEWS.POST_REGISTRATION) {
-            const PostRegistration = sdk.getComponent('structures.login.PostRegistration');
+            const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
             return (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
@@ -1843,7 +1857,6 @@ export default React.createClass({
                         onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
-                        teamToken={this._teamToken}
                         showCookieBar={this.state.showCookieBar}
                         {...this.props}
                         {...this.state}
@@ -1871,7 +1884,7 @@ export default React.createClass({
         }
 
         if (this.state.view === VIEWS.REGISTER) {
-            const Registration = sdk.getComponent('structures.login.Registration');
+            const Registration = sdk.getComponent('structures.auth.Registration');
             return (
                 <Registration
                     clientSecret={this.state.register_client_secret}
@@ -1884,7 +1897,6 @@ export default React.createClass({
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}
-                    teamServerConfig={this.props.config.teamServerConfig}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     makeRegistrationUrl={this._makeRegistrationUrl}
@@ -1900,7 +1912,7 @@ export default React.createClass({
 
 
         if (this.state.view === VIEWS.FORGOT_PASSWORD) {
-            const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
+            const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             return (
                 <ForgotPassword
                     defaultServerName={this.getDefaultServerName()}
@@ -1910,13 +1922,12 @@ export default React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     onComplete={this.onLoginClick}
-                    onRegisterClick={this.onRegisterClick}
                     onLoginClick={this.onLoginClick} />
             );
         }
 
         if (this.state.view === VIEWS.LOGIN) {
-            const Login = sdk.getComponent('structures.login.Login');
+            const Login = sdk.getComponent('structures.auth.Login');
             return (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}

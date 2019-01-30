@@ -26,7 +26,7 @@ import { _t } from './languageHandler';
  * the client owns the given email address, which is then passed to the
  * add threepid API on the homeserver.
  */
-class AddThreepid {
+export default class AddThreepid {
     constructor() {
         this.clientSecret = MatrixClientPeg.get().generateClientSecret();
     }
@@ -124,5 +124,3 @@ class AddThreepid {
         });
     }
 }
-
-module.exports = AddThreepid;

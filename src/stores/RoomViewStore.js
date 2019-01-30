@@ -20,6 +20,7 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
+import SettingsStore from "../settings/SettingsStore";
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -119,6 +120,18 @@ class RoomViewStore extends Store {
                 });
                 break;
             case 'open_room_settings':
+                if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
+                    const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
+                    Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
+                        roomId: this._state.roomId,
+                    }, 'mx_SettingsDialog');
+                } else {
+                    this._setState({
+                        isEditingSettings: true,
+                    });
+                }
+                break;
+            case 'open_old_room_settings':
                 this._setState({
                     isEditingSettings: true,
                 });

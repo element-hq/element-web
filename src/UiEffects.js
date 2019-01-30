@@ -22,6 +22,6 @@ limitations under the License.
 import Velocity from 'velocity-vector';
 import 'velocity-vector/velocity.ui';
 
-export function field_input_incorrect(element) {
+export function fieldInputIncorrect(element) {
     Velocity(element, "callout.shake", 300);
 }

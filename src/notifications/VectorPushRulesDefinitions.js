@@ -83,7 +83,7 @@ module.exports = {
     // Messages containing user's username (localpart/MXID)
     ".m.rule.contains_user_name": new VectorPushRuleDefinition({
         kind: "override",
-        description: _td("Messages containing my user name"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        description: _td("Messages containing my username"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,

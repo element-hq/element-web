@@ -26,6 +26,7 @@ module.exports = React.createClass({
 
     propTypes: {
         room: PropTypes.object.isRequired,
+        recommendation: PropTypes.object.isRequired,
     },
 
     onUpgradeClick: function() {
@@ -35,19 +36,42 @@ module.exports = React.createClass({
 
     render: function() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        return (
-            <div className="mx_RoomUpgradeWarningBar">
-                <div className="mx_RoomUpgradeWarningBar_header">
-                    {_t("There is a known vulnerability affecting this room.")}
-                </div>
+
+        let upgradeText = (
+            <div>
                 <div className="mx_RoomUpgradeWarningBar_body">
-                    {_t("This room version is vulnerable to malicious modification of room state.")}
+                    {_t("This room is using an unstable room version. If you aren't expecting " +
+                        "this, please upgrade the room.")}
                 </div>
                 <p className="mx_RoomUpgradeWarningBar_upgradelink">
                     <AccessibleButton onClick={this.onUpgradeClick}>
-                        {_t("Click here to upgrade to the latest room version and ensure room integrity is protected.")}
+                        {_t("Click here to upgrade to the latest room version.")}
                     </AccessibleButton>
                 </p>
+            </div>
+        );
+        if (this.props.recommendation.urgent) {
+            upgradeText = (
+                <div>
+                    <div className="mx_RoomUpgradeWarningBar_header">
+                        {_t("There is a known vulnerability affecting this room.")}
+                    </div>
+                    <div className="mx_RoomUpgradeWarningBar_body">
+                        {_t("This room version is vulnerable to malicious modification of room state.")}
+                    </div>
+                    <p className="mx_RoomUpgradeWarningBar_upgradelink">
+                        <AccessibleButton onClick={this.onUpgradeClick}>
+                            {_t("Click here to upgrade to the latest room version and ensure room integrity " +
+                                "is protected.")}
+                        </AccessibleButton>
+                    </p>
+                </div>
+            );
+        }
+
+        return (
+            <div className="mx_RoomUpgradeWarningBar">
+                {upgradeText}
                 <div className="mx_RoomUpgradeWarningBar_small">
                     {_t("Only room administrators will see this warning")}
                 </div>

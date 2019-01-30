@@ -24,14 +24,20 @@ export default class DefaultSettingsHandler extends SettingsHandler {
     /**
      * Creates a new default settings handler with the given defaults
      * @param {object} defaults The default setting values, keyed by setting name.
+     * @param {object} invertedDefaults The default inverted setting values, keyed by setting name.
      */
-    constructor(defaults) {
+    constructor(defaults, invertedDefaults) {
         super();
         this._defaults = defaults;
+        this._invertedDefaults = invertedDefaults;
     }
 
     getValue(settingName, roomId) {
-        return this._defaults[settingName];
+        let value = this._defaults[settingName];
+        if (value === undefined) {
+            value = this._invertedDefaults[settingName];
+        }
+        return value;
     }
 
     setValue(settingName, roomId, newValue) {

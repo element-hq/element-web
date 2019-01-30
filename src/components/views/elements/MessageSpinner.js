@@ -27,7 +27,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_Spinner">
                 <div className="mx_Spinner_Msg">{ msg }</div>&nbsp;
-                <img src="img/spinner.gif" width={w} height={h} className={imgClass} />
+                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
             </div>
         );
     },

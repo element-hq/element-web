@@ -224,9 +224,9 @@ class RoomListStore extends Store {
                     }
                 }
 
-                // ignore any m. tag names we don't know about
+                // ignore tags we don't know about
                 tagNames = tagNames.filter((t) => {
-                    return !t.startsWith('m.') || lists[t] !== undefined;
+                    return lists[t] !== undefined;
                 });
 
                 if (tagNames.length) {
@@ -277,7 +277,7 @@ class RoomListStore extends Store {
         const roomCache = this._state.roomCache;
         if (!roomCache[roomId]) roomCache[roomId] = {};
 
-        if (value) roomCache[roomId][type] = value;
+        if (typeof value !== "undefined") roomCache[roomId][type] = value;
         else delete roomCache[roomId][type];
 
         this._setState({roomCache});
