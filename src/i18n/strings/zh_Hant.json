@@ -35,5 +35,7 @@
     "Dev chat for the Dendrite dev team": "Dendrite 開發團隊的開發聊天室",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix 中已有許多聊天室，連結到已有的網路（Slack、IRC 與 Gitter 等等）或是獨立的網路。來看看聊天室目錄吧！",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "您可以使用自訂的伺服器選項，並指定不同的家伺服器 URL 來登入其他的 Matrix 伺服器。<br/>這讓您可以在不同的伺服器上以既有的 Matrix 帳號使用 Riot。<br/><br/>您也可以設定一個自訂的識別伺服器，但您可能無法透過電子郵件地址來邀請使用者，或是讓別人透過電子郵件邀請您。",
-    "Co-ordination for Riot translators": "Riot 翻譯的協作"
+    "Co-ordination for Riot translators": "Riot 翻譯的協作",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以以使用自訂伺服器選項指定不同的家伺服器 URL 以登入其他 Matrix 伺服器。這讓您可以在不同的家伺服器上使用既有的 Matrix 帳號登入 Riot。",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以設定自訂的身份識別伺服器，但您無法透過電子郵件地址邀請使用者，或是被邀請。"
 }
