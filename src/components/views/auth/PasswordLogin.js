@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {fieldInputIncorrect} from '../../../UiEffects';
 import SdkConfig from '../../../SdkConfig';
 
 /**
@@ -69,12 +68,6 @@ class PasswordLogin extends React.Component {
     componentWillMount() {
         this._passwordField = null;
         this._loginField = null;
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
-            fieldInputIncorrect(this.isLoginEmpty() ? this._loginField : this._passwordField);
-        }
     }
 
     onSubmitForm(ev) {

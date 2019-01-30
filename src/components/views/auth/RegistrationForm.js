@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fieldInputIncorrect } from '../../../UiEffects';
 import sdk from '../../../index';
 import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
@@ -211,7 +210,6 @@ module.exports = React.createClass({
         fieldValid[fieldID] = val;
         this.setState({fieldValid: fieldValid});
         if (!val) {
-            fieldInputIncorrect(this.fieldElementById(fieldID));
             this.props.onError(errorCode);
         }
     },
