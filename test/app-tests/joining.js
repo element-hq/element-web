@@ -118,8 +118,9 @@ describe('joining a room', function() {
             }).then(() => {
                 console.log(`${Date.now()} App made requests for directory view; switching to a room.`);
 
+                // Room directory lives in a dialog, so search for it from the page root
                 const roomDir = ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, RoomDirectory);
+                    document, RoomDirectory);
 
                 // enter an alias in the input, and simulate enter
                 const input = ReactTestUtils.findRenderedDOMComponentWithTag(
