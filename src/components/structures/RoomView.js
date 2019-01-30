@@ -899,35 +899,40 @@ module.exports = React.createClass({
 
             // Don't peek whilst registering otherwise getPendingEventList complains
             // Do this by indicating our intention to join
-            dis.dispatch({
-                action: 'will_join',
-            });
 
-            const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-            const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
-                homeserverUrl: cli.getHomeserverUrl(),
-                onFinished: (submitted, credentials) => {
-                    if (submitted) {
-                        this.props.onRegistered(credentials);
-                    } else {
-                        dis.dispatch({
-                            action: 'cancel_after_sync_prepared',
-                        });
-                        dis.dispatch({
-                            action: 'cancel_join',
-                        });
-                    }
-                },
-                onDifferentServerClicked: (ev) => {
-                    dis.dispatch({action: 'start_registration'});
-                    close();
-                },
-                onLoginClick: (ev) => {
-                    dis.dispatch({action: 'start_login'});
-                    close();
-                },
-            }).close;
+            // XXX: ILAG is disabled for now,
+            // see https://github.com/vector-im/riot-web/issues/8222
+            dis.dispatch({action: 'require_registration'});
             return;
+            // dis.dispatch({
+            //     action: 'will_join',
+            // });
+
+            // const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
+            // const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
+            //     homeserverUrl: cli.getHomeserverUrl(),
+            //     onFinished: (submitted, credentials) => {
+            //         if (submitted) {
+            //             this.props.onRegistered(credentials);
+            //         } else {
+            //             dis.dispatch({
+            //                 action: 'cancel_after_sync_prepared',
+            //             });
+            //             dis.dispatch({
+            //                 action: 'cancel_join',
+            //             });
+            //         }
+            //     },
+            //     onDifferentServerClicked: (ev) => {
+            //         dis.dispatch({action: 'start_registration'});
+            //         close();
+            //     },
+            //     onLoginClick: (ev) => {
+            //         dis.dispatch({action: 'start_login'});
+            //         close();
+            //     },
+            // }).close;
+            // return;
         }
 
         Promise.resolve().then(() => {
