@@ -27,7 +27,12 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
+import * as linkify from 'linkifyjs';
+import linkifyString from 'linkifyjs/string';
+import linkifyMatrix from './linkify-matrix';
+import sanitizeHtml from 'sanitize-html';
 
+linkifyMatrix(linkify);
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -125,13 +130,27 @@ export const CommandMap = {
 
     topic: new Command({
         name: 'topic',
-        args: '<topic>',
-        description: _td('Sets the room topic'),
+        args: '[<topic>]',
+        description: _td('Gets or sets the room topic'),
         runFn: function(roomId, args) {
+            const cli = MatrixClientPeg.get();
             if (args) {
-                return success(MatrixClientPeg.get().setRoomTopic(roomId, args));
+                return success(cli.setRoomTopic(roomId, args));
             }
-            return reject(this.getUsage());
+            const room = cli.getRoom(roomId);
+            if (!room) return reject('Bad room ID: ' + roomId);
+
+            const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
+            const topic = topicEvents.getContent().topic;
+            const topicHtml = linkifyString(sanitizeHtml(topic));
+
+            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
+            Modal.createTrackedDialog('Slash Commands', 'Topic', QuestionDialog, {
+                title: room.name,
+                description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
+                hasCancelButton: false,
+            });
+            return success();
         },
     }),
 
