@@ -149,7 +149,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
@@ -208,9 +207,9 @@ module.exports = React.createClass({
         let avatarElement;
         if (avatarUrl) {
             const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
-            avatarElement = <div className="mx_MemberInfo_avatar">
-                <img src={httpUrl} />
-            </div>
+            avatarElement = (<div className="mx_MemberInfo_avatar">
+                            <img src={httpUrl} />
+                        </div>);
         }
 
         const groupRoomName = this.state.groupRoom.displayname;

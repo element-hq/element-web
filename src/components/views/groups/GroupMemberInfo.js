@@ -171,9 +171,9 @@ module.exports = React.createClass({
         let avatarElement;
         if (avatarUrl) {
             const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
-            avatarElement = <div className="mx_MemberInfo_avatar">
-                <img src={httpUrl} />
-            </div>
+            avatarElement = (<div className="mx_MemberInfo_avatar">
+                            <img src={httpUrl} />
+                        </div>);
         }
 
         const groupMemberName = (
