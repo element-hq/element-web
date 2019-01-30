@@ -36,7 +36,7 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         };
     }
 
-    componentWillMount(): void {
+    componentWillMount() {
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         MatrixClientPeg.get().getRoom(this.props.roomId).getRecommendedVersion().then((v) => {
             this.setState({upgradeRecommendation: v});
