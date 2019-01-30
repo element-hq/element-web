@@ -15,13 +15,16 @@ limitations under the License.
 */
 
 .mx_MemberDeviceInfo {
-    padding: 10px 0px;
+    display: flex;
+    padding-bottom: 10px;
+    align-items: start;
 }
 
-.mx_MemberDeviceInfo.mx_DeviceVerifyButtons {
+.mx_MemberDeviceInfo > .mx_DeviceVerifyButtons {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
+    flex: 0 1 auto;
+    align-items: stretch;
 }
 
 .mx_MemberDeviceInfo_textButton {
@@ -39,16 +42,14 @@ limitations under the License.
 }
 
 .mx_MemberDeviceInfo_deviceInfo {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin: 0 5px 5px 8px;
+    flex: 1;
 }
 
 /* "Unblacklist" is too long for a regular button: make it wider and
    reduce the padding. */
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_blacklist,
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_unblacklist {
-    width: 8em;
     padding-left: 1em;
     padding-right: 1em;
 }

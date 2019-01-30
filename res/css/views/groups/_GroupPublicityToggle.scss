@@ -20,23 +20,14 @@ limitations under the License.
     margin: 8px;
 }
 
-.mx_GroupPublicity_toggle > label {
-    display: flex;
-    align-items: flex-start;
-}
-
-.mx_GroupPublicity_toggle > label,
-.mx_GroupPublicity_toggle .mx_GroupTile {
-    width: 50%;
-}
-
-.mx_GroupPublicity_toggle input {
-    margin-right: 8px;
-    vertical-align: -4px;
-}
-
 .mx_GroupPublicity_toggle .mx_GroupTile {
     display: flex;
     align-items: flex-start;
     cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.mx_GroupPublicity_toggle .mx_ToggleSwitch {
+    float: right;
 }

@@ -17,6 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default class DirectorySearchBox extends React.Component {
     constructor() {
@@ -74,6 +76,8 @@ export default class DirectorySearchBox extends React.Component {
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+
         const searchbox_classes = {
             mx_DirectorySearchBox: true,
         };
@@ -81,27 +85,21 @@ export default class DirectorySearchBox extends React.Component {
 
         let join_button;
         if (this.props.showJoinButton) {
-            join_button = <span className="mx_DirectorySearchBox_joinButton"
+            join_button = <AccessibleButton className="mx_DirectorySearchBox_joinButton"
                 onClick={this._onJoinButtonClick}
-            >
-                Join
-            </span>;
+            >{_t("Join")}</AccessibleButton>;
         }
 
-        return <span className={classnames(searchbox_classes)}>
-            <div className="mx_DirectorySearchBox_container">
+        return <div className={`mx_DirectorySearchBox ${this.props.className} mx_textinput`}>
                 <input type="text" name="dirsearch" value={this.state.value}
-                    className="mx_DirectorySearchBox_input"
+                    className="mx_textinput_icon mx_textinput_search"
                     ref={this._collectInput}
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
                     placeholder={this.props.placeholder} autoFocus
                 />
                 { join_button }
-                <span className="mx_DirectorySearchBox_clear_wrapper">
-                    <span className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
-                </span>
-            </div>
-        </span>;
+                <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this._onClearClick}></AccessibleButton>
+            </div>;
     }
 }
 

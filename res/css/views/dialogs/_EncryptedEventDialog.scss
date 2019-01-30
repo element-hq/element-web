@@ -14,10 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_EncryptedEventDialog .mx_MemberDeviceInfo {
+.mx_EncryptedEventDialog .mx_DeviceVerifyButtons {
     float: right;
     padding: 0px;
     margin-right: 42px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .mx_EncryptedEventDialog .mx_MemberDeviceInfo_textButton {

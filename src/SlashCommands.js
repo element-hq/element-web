@@ -86,6 +86,18 @@ export const CommandMap = {
         hideCompletionAfterSpace: true,
     }),
 
+    upgraderoom: new Command({
+        name: 'upgraderoom',
+        args: '<new_version>',
+        description: _td('Upgrades a room to a new version'),
+        runFn: function(roomId, args) {
+            if (args) {
+                return success(MatrixClientPeg.get().upgradeRoom(roomId, args));
+            }
+            return reject(this.getUsage());
+        },
+    }),
+
     nick: new Command({
         name: 'nick',
         args: '<display_name>',
@@ -130,6 +142,18 @@ export const CommandMap = {
         runFn: function(roomId, args) {
             if (args) {
                 return success(MatrixClientPeg.get().setRoomTopic(roomId, args));
+            }
+            return reject(this.getUsage());
+        },
+    }),
+
+    roomname: new Command({
+        name: 'roomname',
+        args: '<name>',
+        description: _td('Sets the room name'),
+        runFn: function(roomId, args) {
+            if (args) {
+                return success(MatrixClientPeg.get().setRoomName(roomId, args));
             }
             return reject(this.getUsage());
         },

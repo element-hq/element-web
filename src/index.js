@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import Skinner from './Skinner';
-import RtsClient from './RtsClient';
 
 module.exports.loadSkin = function(skinObject) {
     Skinner.load(skinObject);
@@ -27,8 +26,4 @@ module.exports.resetSkin = function() {
 
 module.exports.getComponent = function(componentName) {
     return Skinner.getComponent(componentName);
-};
-
-module.exports.setFetch = function(fetchFunction) {
-    RtsClient.setFetch(fetchFunction);
 };

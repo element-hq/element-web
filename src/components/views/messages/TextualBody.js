@@ -174,7 +174,7 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
         let node = nodes[0];
         while (node) {
             let pillified = false;
@@ -436,7 +436,7 @@ module.exports = React.createClass({
 
         const stripReply = ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
+            disableBigEmoji: !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         });

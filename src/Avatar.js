@@ -56,6 +56,6 @@ module.exports = {
         for (let i = 0; i < s.length; ++i) {
             total += s.charCodeAt(i);
         }
-        return 'img/' + images[total % images.length] + '.png';
+        return require('../res/img/' + images[total % images.length] + '.png');
     },
 };

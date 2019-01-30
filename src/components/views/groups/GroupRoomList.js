@@ -18,6 +18,9 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
+import { showGroupAddRoomDialog } from '../../../GroupAddressPicker';
+import AccessibleButton from '../elements/AccessibleButton';
+import TintableSvg from '../elements/TintableSvg';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
@@ -74,7 +77,7 @@ export default React.createClass({
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={this._showFullRoomList} />
         );
@@ -88,6 +91,12 @@ export default React.createClass({
 
     onSearchQueryChanged: function(ev) {
         this.setState({ searchQuery: ev.target.value });
+    },
+
+    onAddRoomToGroupButtonClick() {
+        showGroupAddRoomDialog(this.props.groupId).then(() => {
+            this.forceUpdate();
+        });
     },
 
     makeGroupRoomTiles: function(query) {
@@ -120,25 +129,38 @@ export default React.createClass({
             return null;
         }
 
+        let inviteButton;
+        if (GroupStore.isUserPrivileged(this.props.groupId)) {
+            inviteButton = (
+                <AccessibleButton
+                    className="mx_RightPanel_invite"
+                    onClick={this.onAddRoomToGroupButtonClick}
+                >
+                    <div className="mx_RightPanel_icon" >
+                        <TintableSvg src={require("../../../../res/img/icons-room-add.svg")} width="18" height="14" />
+                    </div>
+                    <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
+                </AccessibleButton>
+            );
+        }
         const inputBox = (
-            <form autoComplete="off">
-                <input className="mx_GroupRoomList_query" id="mx_GroupRoomList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter community rooms')} />
-            </form>
+            <input className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query" type="text"
+                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                    placeholder={_t('Filter community rooms')} autoComplete="off" />
         );
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_GroupRoomList">
-                { inputBox }
+                { inviteButton }
                 <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </GeminiScrollbarWrapper>
+                { inputBox }
             </div>
         );
     },

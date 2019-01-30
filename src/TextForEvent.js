@@ -129,6 +129,11 @@ function textForRoomNameEvent(ev) {
     });
 }
 
+function textForTombstoneEvent(ev) {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    return _t('%(senderDisplayName)s upgraded this room.', {senderDisplayName});
+}
+
 function textForServerACLEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
@@ -433,6 +438,7 @@ const stateHandlers = {
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
     'm.room.server_acl': textForServerACLEvent,
+    'm.room.tombstone': textForTombstoneEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

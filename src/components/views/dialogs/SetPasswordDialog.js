@@ -116,9 +116,8 @@ export default React.createClass({
                     <ChangePassword
                         className="mx_SetPasswordDialog_change_password"
                         rowClassName=""
-                        rowLabelClassName=""
-                        rowInputClassName=""
-                        buttonClassName="mx_Dialog_primary mx_SetPasswordDialog_change_password_button"
+                        buttonClassNames="mx_Dialog_primary mx_SetPasswordDialog_change_password_button"
+                        buttonKind="primary"
                         confirm={false}
                         autoFocusNewPasswordInput={true}
                         shouldAskForEmail={true}

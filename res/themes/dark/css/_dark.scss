@@ -1,6 +1,6 @@
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #dddddd;
+$primary-fg-color: #212121;
 $primary-bg-color: #2d2d2d;
 
 // used for focusing form controls
@@ -12,6 +12,7 @@ $light-fg-color: #747474;
 // button UI (white-on-green in light skin)
 $accent-fg-color: $primary-bg-color;
 $accent-color: #76CFA6;
+$accent-color-alt: $accent-color;
 $accent-color-50pct: #76CFA67F;
 
 $selection-fg-color: $primary-fg-color;
@@ -63,19 +64,27 @@ $primary-hairline-color: #474747;
 // used for the border of input text fields
 $input-border-color: #3a3a3a;
 
+$input-darker-bg-color: #c1c9d6;
+$input-darker-fg-color: #9fa9ba;
+$button-bg-color: #7ac9a1;
+$button-fg-color: white;
 // apart from login forms, which have stronger border
 $strong-input-border-color: #656565;
 
 // used for UserSettings EditableText
 $input-underline-color: $primary-fg-color;
 $input-fg-color: $primary-fg-color;
-
+// scrollbars
+$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+$scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
+$menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #2d2d2d;
 $avatar-bg-color: #ffffff;
+$menu-selected-color: #f5f8fa;
 
 $h3-color: $primary-fg-color;
 
@@ -108,6 +117,15 @@ $roomtile-name-color: rgba(186, 186, 186, 0.8);
 $roomtile-selected-bg-color: #333;
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
 
+$username-variant1-color: #1e7ddc;
+$username-variant2-color: #a756a8;
+$username-variant3-color: #7ac9a1;
+$username-variant4-color: #f2809d;
+$username-variant5-color: #ffc666;
+$username-variant6-color: #76ddd7;
+$username-variant7-color: #45529b;
+$username-variant8-color: #bfd251;
+
 $roomsublist-background: rgba(0, 0, 0, 0.2);
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: $tertiary-accent-color;
@@ -133,8 +151,8 @@ $event-redacted-border-color: #000000;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$edit-button-url: "../../img/icon_context_message_dark.svg";
-$copy-button-url: "../../img/icon_copy_message_dark.svg";
+$edit-button-url: "$(res)/img/icon_context_message_dark.svg";
+$copy-button-url: "$(res)/img/icon_copy_message_dark.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -148,6 +166,7 @@ $lightbox-border-color: #ffffff;
 
 $imagebody-giflabel: rgba(1, 1, 1, 0.7);
 $imagebody-giflabel-border: rgba(1, 1, 1, 0.2);
+$imagebody-giflabel-color: rgba(0, 0, 0, 1);
 
 // unused?
 $progressbar-color: #000;

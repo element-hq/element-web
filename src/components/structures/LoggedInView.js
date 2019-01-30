@@ -34,7 +34,8 @@ import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
-
+import ResizeHandle from '../views/elements/ResizeHandle';
+import {Resizer, CollapseDistributor} from '../../resizer';
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -61,8 +62,7 @@ const LoggedInView = React.createClass({
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
         onRegistered: PropTypes.func,
-
-        teamToken: PropTypes.string,
+        collapsedRhs: PropTypes.bool,
 
         // Used by the RoomView to handle joining rooms
         viaServers: PropTypes.arrayOf(PropTypes.string),
@@ -94,6 +94,12 @@ const LoggedInView = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        this.resizer = this._createResizer();
+        this.resizer.attach();
+        this._loadResizerPreferences();
+    },
+
     componentWillMount: function() {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
@@ -123,6 +129,7 @@ const LoggedInView = React.createClass({
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
+        this.resizer.detach();
     },
 
     // Child components assume that the client peg will not be null, so give them some
@@ -148,6 +155,42 @@ const LoggedInView = React.createClass({
         });
     },
 
+    _createResizer() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse",
+        };
+        const collapseConfig = {
+            toggleSize: 260 - 50,
+            onCollapsed: (collapsed) => {
+                this.setState({collapseLhs: collapsed});
+                if (collapsed) {
+                    window.localStorage.setItem("mx_lhs_size", '0');
+                }
+            },
+            onResized: (size) => {
+                window.localStorage.setItem("mx_lhs_size", '' + size);
+            },
+        };
+        const resizer = new Resizer(
+            this.resizeContainer,
+            CollapseDistributor,
+            collapseConfig);
+        resizer.setClassNames(classNames);
+        return resizer;
+    },
+
+    _loadResizerPreferences() {
+        let lhsSize = window.localStorage.getItem("mx_lhs_size");
+        if (lhsSize !== null) {
+            lhsSize = parseInt(lhsSize, 10);
+        } else {
+            lhsSize = 350;
+        }
+        this.resizer.forHandleAt(0).resize(lhsSize);
+    },
+
     onAccountData: function(event) {
         if (event.getType() === "im.vector.web.settings") {
             this.setState({
@@ -160,7 +203,11 @@ const LoggedInView = React.createClass({
     },
 
     onSync: function(syncState, oldSyncState, data) {
-        const oldErrCode = this.state.syncErrorData && this.state.syncErrorData.error && this.state.syncErrorData.error.errcode;
+        const oldErrCode = (
+            this.state.syncErrorData &&
+            this.state.syncErrorData.error &&
+            this.state.syncErrorData.error.errcode
+        );
         const newErrCode = data && data.error && data.error.errcode;
         if (syncState === oldSyncState && oldErrCode === newErrCode) return;
 
@@ -269,12 +316,13 @@ const LoggedInView = React.createClass({
         }
     },
 
-    /** dispatch a page-up/page-down/etc to the appropriate component */
+    /**
+     * dispatch a page-up/page-down/etc to the appropriate component
+     * @param {Object} ev The key event
+     */
     _onScrollKeyPressed: function(ev) {
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
-        } else if (this.refs.roomDirectory) {
-            this.refs.roomDirectory.handleScrollKey(ev);
         }
     },
 
@@ -364,13 +412,14 @@ const LoggedInView = React.createClass({
         this.setState({mouseDown: null});
     },
 
+    _setResizeContainerRef(div) {
+        this.resizeContainer = div;
+    },
+
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
-        const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserSettings = sdk.getComponent('structures.UserSettings');
-        const CreateRoom = sdk.getComponent('structures.CreateRoom');
-        const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
@@ -381,12 +430,11 @@ const LoggedInView = React.createClass({
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
         const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
-        let page_element;
-        let right_panel = '';
+        let pageElement;
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
-                page_element = <RoomView
+                pageElement = <RoomView
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
@@ -396,70 +444,45 @@ const LoggedInView = React.createClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         disabled={this.props.middleDisabled}
-                        collapsedRhs={this.props.collapseRhs}
+                        collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapseRhs) {
-                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
-                }
                 break;
 
             case PageTypes.UserSettings:
-                page_element = <UserSettings
+                pageElement = <UserSettings
                     onClose={this.props.onCloseAllSettings}
                     brand={this.props.config.brand}
-                    referralBaseUrl={this.props.config.referralBaseUrl}
-                    teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.MyGroups:
-                page_element = <MyGroups />;
-                break;
-
-            case PageTypes.CreateRoom:
-                page_element = <CreateRoom
-                    onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapseRhs}
-                />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                pageElement = <MyGroups />;
                 break;
 
             case PageTypes.RoomDirectory:
-                page_element = <RoomDirectory
-                    ref="roomDirectory"
-                    config={this.props.config.roomDirectory}
-                />;
+                // handled by MatrixChat for now
                 break;
 
             case PageTypes.HomePage:
                 {
-                    // If team server config is present, pass the teamServerURL. props.teamToken
-                    // must also be set for the team page to be displayed, otherwise the
-                    // welcomePageUrl is used (which might be undefined).
-                    const teamServerUrl = this.props.config.teamServerConfig ?
-                        this.props.config.teamServerConfig.teamServerURL : null;
-
-                    page_element = <HomePage
-                        teamServerUrl={teamServerUrl}
-                        teamToken={this.props.teamToken}
+                    pageElement = <HomePage
                         homePageUrl={this.props.config.welcomePageUrl}
                     />;
                 }
                 break;
 
             case PageTypes.UserView:
-                page_element = null; // deliberately null for now
-                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                pageElement = null; // deliberately null for now
+                // TODO: fix/remove UserView
+                // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
-                page_element = <GroupView
+                pageElement = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
-                    collapsedRhs={this.props.collapseRhs}
+                    collapsedRhs={this.props.collapsedRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
@@ -495,7 +518,10 @@ const LoggedInView = React.createClass({
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
-        } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (
+            !isGuest && Notifier.supportsDesktopNotifications() &&
+            !Notifier.isEnabled() && !Notifier.isToolbarHidden()
+        ) {
             topBar = <MatrixToolbar />;
         }
 
@@ -511,15 +537,14 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp}>
                 { topBar }
                 <DragDropContext onDragEnd={this._onDragEnd}>
-                    <div className={bodyClasses}>
+                    <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
-                            collapsed={this.props.collapseLhs || false}
+                            toolbarShown={!!topBar}
+                            collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
-                        <main className='mx_MatrixChat_middlePanel'>
-                            { page_element }
-                        </main>
-                        { right_panel }
+                        <ResizeHandle />
+                        { pageElement }
                     </div>
                 </DragDropContext>
             </div>

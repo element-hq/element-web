@@ -131,7 +131,7 @@ module.exports = React.createClass({
                     if (i === this.state.index) {
                         selected = (
                             <div className="mx_RoomSettings_roomColor_selected">
-                                <img src="img/tick.svg" width="17" height="14" alt="./" />
+                                <img src={require("../../../../res/img/tick.svg")} width="17" height="14" alt="./" />
                             </div>
                         );
                     }

@@ -22,6 +22,7 @@ const ObjectUtils = require("../../../ObjectUtils");
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
+import Field from "../elements/Field";
 const Modal = require("../../../Modal");
 
 module.exports = React.createClass({
@@ -222,7 +223,8 @@ module.exports = React.createClass({
             let found = false;
             const canonicalValue = this.state.canonicalAlias || "";
             canonical_alias_section = (
-                <select onChange={this.onCanonicalAliasChange} value={canonicalValue}>
+                <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
+                       element='select' id='canonicalAlias' label={_t('Main address')}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(self.state.domainToAliases).map((domain, i) => {
@@ -242,7 +244,7 @@ module.exports = React.createClass({
                             { this.state.canonicalAlias }
                         </option>
                     }
-                </select>
+                </Field>
             );
         } else {
             canonical_alias_section = (
@@ -277,11 +279,8 @@ module.exports = React.createClass({
         }
 
         return (
-            <div>
-                <h3>{ _t('Addresses') }</h3>
-                <div className="mx_RoomSettings_aliasLabel">
-                    { _t('The main address for this room is') }: { canonical_alias_section }
-                </div>
+            <div className='mx_AliasSettings'>
+                {canonical_alias_section}
                 <EditableItemList
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}

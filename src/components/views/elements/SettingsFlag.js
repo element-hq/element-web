@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
+import ToggleSwitch from "./ToggleSwitch";
 
 module.exports = React.createClass({
     displayName: 'SettingsFlag',
@@ -29,10 +30,6 @@ module.exports = React.createClass({
         onChange: PropTypes.func,
         isExplicit: PropTypes.bool,
         manualSave: PropTypes.bool,
-
-        // If group is supplied, then this will create a radio button instead.
-        group: PropTypes.string,
-        value: PropTypes.any, // the value for the radio button
     },
 
     getInitialState: function() {
@@ -46,13 +43,12 @@ module.exports = React.createClass({
         };
     },
 
-    onChange: function(e) {
-        if (this.props.group && !e.target.checked) return;
+    onChange: function(checked) {
+        if (this.props.group && !checked) return;
 
-        const newState = this.props.group ? this.props.value : e.target.checked;
-        if (!this.props.manualSave) this.save(newState);
-        else this.setState({ value: newState });
-        if (this.props.onChange) this.props.onChange(newState);
+        if (!this.props.manualSave) this.save(checked);
+        else this.setState({ value: checked });
+        if (this.props.onChange) this.props.onChange(checked);
     },
 
     save: function(val = undefined) {
@@ -78,34 +74,11 @@ module.exports = React.createClass({
         if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
         else label = _t(label);
 
-        // We generate a relatively complex ID to avoid conflicts
-        const id = this.props.name + "_" + this.props.group + "_" + this.props.value + "_" + this.props.level;
-        let checkbox = (
-            <input id={id}
-                   type="checkbox"
-                   defaultChecked={value}
-                   onChange={this.onChange}
-                   disabled={!canChange}
-            />
-        );
-        if (this.props.group) {
-            checkbox = (
-                <input id={id}
-                       type="radio"
-                       name={this.props.group}
-                       value={this.props.value}
-                       checked={value === this.props.value}
-                       onChange={this.onChange}
-                       disabled={!canChange}
-                />
-            );
-        }
-
         return (
-            <label>
-                { checkbox }
-                { label }
-            </label>
+            <div className="mx_SettingsFlag">
+                <span className="mx_SettingsFlag_label">{label}</span>
+                <ToggleSwitch checked={value} onChange={this.onChange} disabled={!canChange} />
+            </div>
         );
     },
 });

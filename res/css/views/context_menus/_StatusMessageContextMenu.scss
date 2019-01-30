@@ -14,42 +14,52 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_StatusMessageContextMenu_message {
-    display: inline-block;
-    border-radius: 3px 0 0 3px;
+.mx_StatusMessageContextMenu {
+    padding: 10px;
+}
+
+.mx_StatusMessageContextMenu_form {
+    display: flex;
+    flex-direction: column;
+}
+
+input.mx_StatusMessageContextMenu_message {
+    border-radius: 4px;
     border: 1px solid $input-border-color;
-    font-size: 13px;
-    padding: 7px 7px 7px 9px;
-    width: 135px;
-    background-color: $primary-bg-color !important;
+    padding: 6.5px 11px;
+    background-color: $primary-bg-color;
+    font-weight: normal;
+    margin: 0 0 10px;
 }
 
-.mx_StatusMessageContextMenu_submit {
-    display: inline-block;
+.mx_StatusMessageContextMenu_message::placeholder {
+    color: $memberstatus-placeholder-color;
 }
 
-.mx_StatusMessageContextMenu_submitFaded {
-    opacity: 0.5;
+.mx_StatusMessageContextMenu_actionContainer {
+    display: flex;
 }
 
-.mx_StatusMessageContextMenu_submit img {
-    vertical-align: middle;
-    margin-left: 8px;
+.mx_StatusMessageContextMenu_submit,
+.mx_StatusMessageContextMenu_clear {
+    @mixin mx_DialogButton;
+    align-self: start;
+    font-size: 12px;
+    padding: 6px 1em;
+    border: 1px solid transparent;
+    margin-right: 10px;
 }
 
-.mx_StatusMessageContextMenu hr {
-    border: 0.5px solid $menu-border-color;
-}
-
-.mx_StatusMessageContextMenu_clearIcon {
-    margin: 5px 15px 5px 5px;
-    vertical-align: middle;
+.mx_StatusMessageContextMenu_submit[disabled] {
+    opacity: 0.49;
 }
 
 .mx_StatusMessageContextMenu_clear {
-    padding: 2px;
+    color: $warning-color;
+    background-color: transparent;
+    border: 1px solid $warning-color;
 }
 
-.mx_StatusMessageContextMenu_hasStatus .mx_StatusMessageContextMenu_clear {
-    color: $warning-color;
+.mx_StatusMessageContextMenu_actionContainer .mx_Spinner {
+    justify-content: start;
 }

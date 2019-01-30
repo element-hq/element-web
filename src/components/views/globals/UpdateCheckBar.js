@@ -71,9 +71,9 @@ export default React.createClass({
 
         let image;
         if (doneStatuses.includes(this.props.status)) {
-            image = <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="" />;
+            image = <img className="mx_MatrixToolbar_warning" src={require("../../../../res/img/warning.svg")} width="24" height="23" alt="" />;
         } else {
-            image = <img className="mx_MatrixToolbar_warning" src="img/spinner.gif" width="24" height="23" alt="" />;
+            image = <img className="mx_MatrixToolbar_warning" src={require("../../../../res/img/spinner.gif")} width="24" height="23" alt="" />;
         }
 
         return (
@@ -83,7 +83,7 @@ export default React.createClass({
                     {message}
                 </div>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.hideToolbar}>
-                    <img src="img/cancel.svg" width="18" height="18" alt={_t('Close')} />
+                    <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" alt={_t('Close')} />
                 </AccessibleButton>
             </div>
         );

@@ -151,8 +151,7 @@ const LeftPanel = React.createClass({
             }
         } while (element && !(
             classes.contains("mx_RoomTile") ||
-            classes.contains("mx_SearchBox_search") ||
-            classes.contains("mx_RoomSubList_ellipsis")));
+            classes.contains("mx_textinput_search")));
 
         if (element) {
             element.focus();
@@ -171,6 +170,12 @@ const LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
+    onSearchCleared: function(source) {
+        if (source === "keyboard") {
+            dis.dispatch({action: 'focus_composer'});
+        }
+    },
+
     collectRoomList: function(ref) {
         this._roomList = ref;
     },
@@ -178,46 +183,43 @@ const LeftPanel = React.createClass({
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
-        const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
+        const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
+        const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        const SearchBox = sdk.getComponent('structures.SearchBox');
-        const topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
-
-        const classes = classNames(
-            "mx_LeftPanel",
-            {
-                "collapsed": this.props.collapsed,
-            },
-        );
-
-        const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
+        const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
         const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
 
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
             {
-                "mx_LeftPanel_container_collapsed": this.props.collapsed,
+                "collapsed": this.props.collapsed,
                 "mx_LeftPanel_container_hasTagPanel": tagPanelEnabled,
                 "mx_fadable_faded": this.props.disabled,
             },
         );
 
+        const searchBox = !this.props.collapsed ?
+            <SearchBox onSearch={ this.onSearch } onCleared={ this.onSearchCleared } /> :
+            undefined;
+
         return (
             <div className={containerClasses}>
                 { tagPanel }
-                <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
-                    { topBox }
+                <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+                    <TopLeftMenuButton collapsed={ this.props.collapsed } />
+                    { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
+                        toolbarShown={this.props.toolbarShown}
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />
-                    <BottomLeftMenu collapsed={this.props.collapsed} />
                 </aside>
             </div>
         );
+        // <BottomLeftMenu collapsed={this.props.collapsed}/>
     },
 });
 
