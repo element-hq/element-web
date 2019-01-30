@@ -619,8 +619,12 @@ export default React.createClass({
                 Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
                     config: this.props.config,
                 }, 'mx_RoomDirectory_dialogWrapper');
-                // this._setPage(PageTypes.RoomDirectory);
-                // this.notifyNewScreen('directory');
+
+                // View the home page if we need something to look at
+                if (!this.state.currentGroupId && !this.state.currentRoomId) {
+                    this._setPage(PageTypes.HomePage);
+                    this.notifyNewScreen('home');
+                }
             }
             break;
             case 'view_my_groups':
