@@ -151,6 +151,9 @@ module.exports = React.createClass({
     },
 
     _replaceClient: async function() {
+        this.setState({
+            errorText: null,
+        });
         this._matrixClient = Matrix.createClient({
             baseUrl: this.state.hsUrl,
             idBaseUrl: this.state.isUrl,
@@ -390,7 +393,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
             case ServerType.ADVANCED:
@@ -400,7 +403,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
         }

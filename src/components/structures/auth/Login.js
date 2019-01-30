@@ -571,7 +571,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
             case ServerType.ADVANCED:
@@ -581,7 +581,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
         }
