@@ -23,11 +23,12 @@ limitations under the License.
 }
 
 .mx_Dropdown_input {
+    display: flex;
+    align-items: center;
     position: relative;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
-    font-weight: 300;
-    font-size: 13px;
+    font-size: 12px;
     user-select: none;
 }
 
@@ -41,29 +42,29 @@ limitations under the License.
 }
 
 .mx_Dropdown_arrow {
-    border-color: $primary-fg-color transparent transparent;
-    border-style: solid;
-    border-width: 5px 5px 0;
     display: block;
-    height: 0;
-    position: absolute;
-    right: 10px;
-    top: 14px;
-    width: 0
+    position: relative;
+    width: 10px;
+    height: 6px;
+    padding-right: 8px;
 }
 
-.mx_Dropdown.left_aligned .mx_Dropdown_arrow {
-    left: 10px;
+.mx_Dropdown_arrow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
+    mask-repeat: no-repeat;
+    background: $primary-fg-color;
 }
 
 .mx_Dropdown_input > .mx_Dropdown_option {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.mx_Dropdown.left_aligned .mx_Dropdown_input > .mx_Dropdown_option {
-    padding-left: 25px;
 }
 
 .mx_Dropdown_option {
@@ -81,7 +82,7 @@ limitations under the License.
 
 .mx_Dropdown_option img {
     margin: 5px;
-    width: 27px;
+    width: 16px;
     vertical-align: middle;
 }
 

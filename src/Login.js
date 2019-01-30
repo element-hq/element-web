@@ -49,6 +49,7 @@ export default class Login {
     /**
      * Get a temporary MatrixClient, which can be used for login or register
      * requests.
+     * @returns {MatrixClient}
      */
     _createTemporaryClient() {
         return Matrix.createClient({
@@ -144,8 +145,8 @@ export default class Login {
         const tryFallbackHs = (originalError) => {
             return sendLoginRequest(
                 self._fallbackHsUrl, this._isUrl, 'm.login.password', loginParams,
-            ).catch((fallback_error) => {
-                console.log("fallback HS login failed", fallback_error);
+            ).catch((fallbackError) => {
+                console.log("fallback HS login failed", fallbackError);
                 // throw the original error
                 throw originalError;
             });

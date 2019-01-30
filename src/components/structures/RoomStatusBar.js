@@ -45,14 +45,6 @@ module.exports = React.createClass({
     propTypes: {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-
-        // the number of messages which have arrived since we've been scrolled up
-        numUnreadMessages: PropTypes.number,
-
-        // this is true if we are fully scrolled-down, and are looking at
-        // the end of the live timeline.
-        atEndOfLiveTimeline: PropTypes.bool,
-
         // This is true when the user is alone in the room, but has also sent a message.
         // Used to suggest to the user to invite someone
         sentMessageAndIsAlone: PropTypes.bool,
@@ -61,10 +53,6 @@ module.exports = React.createClass({
         // the 'Active Call' text in the status bar if there is nothing
         // more interesting)
         hasActiveCall: PropTypes.bool,
-
-        // Number of names to display in typing indication. E.g. set to 3, will
-        // result in "X, Y, Z and 100 others are typing."
-        whoIsTypingLimit: PropTypes.number,
 
         // true if the room is being peeked at. This affects components that shouldn't
         // logically be shown when peeking, such as a prompt to invite people to a room.
@@ -86,9 +74,6 @@ module.exports = React.createClass({
         // 'you are alone' bar
         onStopWarningClick: PropTypes.func,
 
-        // callback for when the user clicks on the 'scroll to bottom' button
-        onScrollToBottomClick: PropTypes.func,
-
         // callback for when we do something that changes the size of the
         // status bar. This is used to trigger a re-layout in the parent
         // component.
@@ -103,24 +88,16 @@ module.exports = React.createClass({
         onVisible: PropTypes.func,
     },
 
-    getDefaultProps: function() {
-        return {
-            whoIsTypingLimit: 3,
-        };
-    },
-
     getInitialState: function() {
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
             syncStateData: MatrixClientPeg.get().getSyncStateData(),
-            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
             unsentMessages: getUnsentMessages(this.props.room),
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
@@ -135,7 +112,6 @@ module.exports = React.createClass({
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
-            client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
             client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
     },
@@ -147,12 +123,6 @@ module.exports = React.createClass({
         this.setState({
             syncState: state,
             syncStateData: data,
-        });
-    },
-
-    onRoomMemberTyping: function(ev, member) {
-        this.setState({
-            usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
         });
     },
 
@@ -199,9 +169,6 @@ module.exports = React.createClass({
     // indicate other sizes.
     _getSize: function() {
         if (this._shouldShowConnectionError() ||
-            (this.state.usersTyping.length > 0) ||
-            this.props.numUnreadMessages ||
-            !this.props.atEndOfLiveTimeline ||
             this.props.hasActiveCall ||
             this.props.sentMessageAndIsAlone
         ) {
@@ -213,36 +180,11 @@ module.exports = React.createClass({
     },
 
     // return suitable content for the image on the left of the status bar.
-    //
-    // if wantPlaceholder is true, we include a "..." placeholder if
-    // there is nothing better to put in.
-    _getIndicator: function(wantPlaceholder) {
-        if (this.props.numUnreadMessages) {
-            return (
-                <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/newmessages.svg" width="24" height="24"
-                        alt="" />
-                </div>
-            );
-        }
-
-            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        if (!this.props.atEndOfLiveTimeline) {
-            return (
-                <AccessibleButton className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={this.props.onScrollToBottomClick}>
-                    <img src="img/scrolldown.svg" width="24" height="24"
-                        alt={_t("Scroll to bottom of page")}
-                        title={_t("Scroll to bottom of page")} />
-                </AccessibleButton>
-            );
-        }
-
+    _getIndicator: function() {
         if (this.props.hasActiveCall) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src="img/sound-indicator.svg" width="23" height="20" />
+                <TintableSvg src={require("../../../res/img/sound-indicator.svg")} width="23" height="20" />
             );
         }
 
@@ -250,53 +192,11 @@ module.exports = React.createClass({
             return null;
         }
 
-        if (wantPlaceholder) {
-            return (
-                <div className="mx_RoomStatusBar_typingIndicatorAvatars">
-                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
-                </div>
-            );
-        }
-
         return null;
     },
 
-    _renderTypingIndicatorAvatars: function(limit) {
-        let users = this.state.usersTyping;
-
-        let othersCount = 0;
-        if (users.length > limit) {
-            othersCount = users.length - limit + 1;
-            users = users.slice(0, limit - 1);
-        }
-
-        const avatars = users.map((u) => {
-            return (
-                <MemberAvatar
-                    key={u.userId}
-                    member={u}
-                    width={24}
-                    height={24}
-                    resizeMethod="crop"
-                />
-            );
-        });
-
-        if (othersCount > 0) {
-            avatars.push(
-                <span className="mx_RoomStatusBar_typingIndicatorRemaining" key="others">
-                    +{ othersCount }
-                </span>,
-            );
-        }
-
-        return avatars;
-    },
-
     _shouldShowConnectionError: function() {
-        // no conn bar trumps unread count since you can't get unread messages
-        // without a connection! (technically may already have some but meh)
-        // It also trumps the "some not sent" msg since you can't resend without
+        // no conn bar trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
         // if it's a resource limit exceeded error: those are shown in the top bar.
@@ -390,7 +290,7 @@ module.exports = React.createClass({
         }
 
         return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt="" />
+            <img src={require("../../../res/img/warning.svg")} width="24" height="23" title={_t("Warning")} alt="" />
             <div>
                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                     { title }
@@ -409,7 +309,7 @@ module.exports = React.createClass({
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
+                    <img src={require("../../../res/img/warning.svg")} width="24" height="23" title="/!\ " alt="/!\ " />
                     <div>
                         <div className="mx_RoomStatusBar_connectionLostBar_title">
                             { _t('Connectivity to the server has been lost.') }
@@ -424,32 +324,6 @@ module.exports = React.createClass({
 
         if (this.state.unsentMessages.length > 0) {
             return this._getUnsentMessageContent();
-        }
-
-        // unread count trumps who is typing since the unread count is only
-        // set when you've scrolled up
-        if (this.props.numUnreadMessages) {
-            // MUST use var name "count" for pluralization to kick in
-            const unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
-
-            return (
-                <div className="mx_RoomStatusBar_unreadMessagesBar"
-                        onClick={this.props.onScrollToBottomClick}>
-                    { unreadMsgs }
-                </div>
-            );
-        }
-
-        const typingString = WhoIsTyping.whoIsTypingString(
-            this.state.usersTyping,
-            this.props.whoIsTypingLimit,
-        );
-        if (typingString) {
-            return (
-                <div className="mx_RoomStatusBar_typingBar">
-                    <EmojiText>{ typingString }</EmojiText>
-                </div>
-            );
         }
 
         if (this.props.hasActiveCall) {
@@ -483,7 +357,7 @@ module.exports = React.createClass({
 
     render: function() {
         const content = this._getContent();
-        const indicator = this._getIndicator(this.state.usersTyping.length > 0);
+        const indicator = this._getIndicator();
 
         return (
             <div className="mx_RoomStatusBar">

@@ -29,6 +29,7 @@ import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
+import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -183,7 +184,8 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
-            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
+            forceTURN: !SettingsStore.getValue('webRtcForcePeerToPeer', false),
+            verificationMethods: [verificationMethods.SAS]
         };
 
         this.matrixClient = createMatrixClient(opts, useIndexedDb);

@@ -18,4 +18,10 @@ limitations under the License.
     position: relative;
     color: $primary-fg-color;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.mx_GroupRoomList_wrapper {
+    padding: 10px;
 }

@@ -97,7 +97,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
-        if (SettingsStore.getValue("MessageComposerInput.dontSuggestEmoji")) {
+        if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji")) {
             return []; // don't give any suggestions if the user doesn't want them
         }
 

@@ -68,7 +68,7 @@ export default class ReplyPreview extends React.Component {
                     { '💬 ' + _t('Replying') }
                 </EmojiText>
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
-                    <img className="mx_filterFlipColor" src="img/cancel.svg" width="18" height="18"
+                    <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18"
                          onClick={cancelQuoting} />
                 </div>
                 <div className="mx_ReplyPreview_clear" />

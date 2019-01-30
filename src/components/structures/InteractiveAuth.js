@@ -20,7 +20,7 @@ const InteractiveAuth = Matrix.InteractiveAuth;
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {getEntryComponentForLoginType} from '../views/login/InteractiveAuthEntryComponents';
+import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
 
 export default React.createClass({
     displayName: 'InteractiveAuth',

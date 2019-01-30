@@ -193,9 +193,6 @@ export default React.createClass({
             return;
         }
 
-        // XXX Implement RTS /register here
-        const teamToken = null;
-
         this.props.onFinished(true, {
             userId: response.user_id,
             deviceId: response.device_id,
@@ -203,7 +200,6 @@ export default React.createClass({
             identityServerUrl: this._matrixClient.getIdentityServerUrl(),
             accessToken: response.access_token,
             password: this._generatedPassword,
-            teamToken: teamToken,
         });
     },
 

@@ -35,7 +35,7 @@ export default class MStickerBody extends MImageBody {
     // img onLoad hasn't fired yet.
     getPlaceholder() {
         const TintableSVG = sdk.getComponent('elements.TintableSvg');
-        return <TintableSVG src="img/icons-show-stickers.svg" width="75" height="75" />;
+        return <TintableSVG src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
     }
 
     // Tooltip to show on mouse over

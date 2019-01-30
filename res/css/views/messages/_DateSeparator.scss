@@ -16,10 +16,21 @@ limitations under the License.
 
 .mx_DateSeparator {
     clear: both;
-    margin-top: 32px;
-    margin-bottom: 8px;
-    margin-left: 63px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid $primary-hairline-color;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: $roomtopic-color;
 }
 
+.mx_DateSeparator > hr {
+    flex: 1 1 0;
+    height: 0;
+    border: none;
+    border-bottom: 1px solid $panel-divider-color;
+}
+
+.mx_DateSeparator > date {
+    margin: 0 25px;
+    flex: 0 0 auto;
+}

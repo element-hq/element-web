@@ -631,12 +631,36 @@ module.exports = React.createClass({
         }
     },
 
+    _onTypingVisible: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
+            scrollPanel.blockShrinking();
+            // scroll down if at bottom
+            scrollPanel.checkScroll();
+        }
+    },
+
+    updateTimelineMinHeight: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        const whoIsTyping = this.refs.whoIsTyping;
+        const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+
+        if (scrollPanel) {
+            if (isTypingVisible) {
+                scrollPanel.blockShrinking();
+            } else {
+                scrollPanel.clearBlockShrinking();
+            }
+        }
+    },
+
     onResize: function() {
         dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     render: function() {
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
         let topSpinner;
         let bottomSpinner;
@@ -656,6 +680,11 @@ module.exports = React.createClass({
             },
         );
 
+        let whoIsTyping;
+        if (this.props.room) {
+            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._onTypingVisible} ref="whoIsTyping" />);
+        }
+
         return (
             <ScrollPanel ref="scrollPanel" className={className}
                     onScroll={this.props.onScroll}
@@ -666,6 +695,7 @@ module.exports = React.createClass({
                     stickyBottom={this.props.stickyBottom}>
                 { topSpinner }
                 { this._getEventTiles() }
+                { whoIsTyping }
                 { bottomSpinner }
             </ScrollPanel>
         );

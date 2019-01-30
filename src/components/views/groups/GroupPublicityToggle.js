@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
-import { _t } from '../../../languageHandler.js';
+import ToggleSwitch from "../elements/ToggleSwitch";
 
 export default React.createClass({
     displayName: 'GroupPublicityToggle',
@@ -52,8 +52,7 @@ export default React.createClass({
         if (this._groupStoreToken) this._groupStoreToken.unregister();
     },
 
-    _onPublicityToggle: function(e) {
-        e.stopPropagation();
+    _onPublicityToggle: function() {
         this.setState({
             busy: true,
             // Optimistic early update
@@ -68,21 +67,11 @@ export default React.createClass({
 
     render() {
         const GroupTile = sdk.getComponent('groups.GroupTile');
-        const input = <input type="checkbox"
-            onChange={this._onPublicityToggle}
-            checked={this.state.isGroupPublicised}
-        />;
-        const labelText = !this.state.ready ? _t("Loading...") :
-            (this.state.isGroupPublicised ?
-             _t("Flair will appear if enabled in room settings") :
-             _t("Flair will not appear")
-            );
         return <div className="mx_GroupPublicity_toggle">
             <GroupTile groupId={this.props.groupId} showDescription={false} avatarHeight={40} />
-            <label onClick={this._onPublicityToggle}>
-                { input }
-                { labelText }
-            </label>
+            <ToggleSwitch checked={this.state.isGroupPublicised}
+                          disabled={!this.state.ready || this.state.busy}
+                          onChange={this._onPublicityToggle} />
         </div>;
     },
 });
