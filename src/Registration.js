@@ -22,9 +22,9 @@ limitations under the License.
 
 import dis from './dispatcher';
 import sdk from './index';
-import MatrixClientPeg from './MatrixClientPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
+// import MatrixClientPeg from './MatrixClientPeg';
 
 // Regex for what a "safe" or "Matrix-looking" localpart would be.
 // TODO: Update as needed for https://github.com/matrix-org/matrix-doc/issues/1514
