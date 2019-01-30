@@ -35,5 +35,7 @@
     "Contributing code to Matrix and Riot": "Kontribut me kod te Matrix dhe te Riot",
     "Dev chat for the Riot/Web dev team": "Fjalosje mbi zhvillimin, për ekipin e zhvilluesve të Riot/Web-i",
     "Dev chat for the Dendrite dev team": "Fjalosje mbi zhvillimi, për ekipin e zhvilluesve të Dendrite-it",
-    "Co-ordination for Riot translators": "Bashkërendim për përkthyes të Riot-it"
+    "Co-ordination for Riot translators": "Bashkërendim për përkthyes të Riot-it",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Mund të përdorni mundësitë mbi shërbyes vetjak, për të bërë hyrjen në shërbyes të tjerë Matrix, duke dhënë një tjetër URL shërbyesi Home. Kjo ju lejon ta përdorni këtë aplikacion në një tjetër shërbyes Home, me një llogari ekzistuese Matrix.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Mundeni edhe të caktoni një shërbyes vetjak identitetesh, por s’do të jeni në gjendje të ftoni përdorues përmes adresash email, ose të ftoheni ju vetë përmes adrese email."
 }
