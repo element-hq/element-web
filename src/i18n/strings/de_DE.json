@@ -1456,5 +1456,14 @@
     "The following users may not exist": "Eventuell existieren folgende Benutzer nicht",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Profile für die unteren Matrix IDs wurden nicht gefunden - willst Du sie trotzdem einladen?",
     "Invite anyway and never warn me again": "Trotzdem einladen und mich nicht mehr warnen",
-    "Invite anyway": "Trotzdem einladen"
+    "Invite anyway": "Trotzdem einladen",
+    "Whether or not you're logged in (we don't record your username)": "Ob du angemeldet bist oder nicht (wir speichern deinen Benutzernamen nicht)",
+    "Upgrades a room to a new version": "Aktualisiert den Raum auf eine neue Version",
+    "Sets the room name": "Setze einen Raumnamen",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s aktualisierte diesen Raum.",
+    "%(displayName)s is typing …": "%(displayName)s tippt…",
+    "%(names)s and %(count)s others are typing …|other": "%(names)s und %(count)s andere tippen…",
+    "%(names)s and %(count)s others are typing …|one": "%(names)s und eine weitere Person tippen…",
+    "%(names)s and %(lastPerson)s are typing …": "%(names)s und %(lastPerson)s tippen…",
+    "Tabbed settings": "Einstellungen in Tabs"
 }
