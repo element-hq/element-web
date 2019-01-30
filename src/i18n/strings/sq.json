@@ -1594,5 +1594,6 @@
     "Recovery Method Removed": "U hoq Metodë Rimarrje",
     "This device has detected that your recovery passphrase and key for Secure Messages have been removed.": "Kjo pajisje ka pikasur se frazëkalimi dhe kyçi juaj i rimarrjeve për Mesazhe të Sigurt janë hequr.",
     "If you did this accidentally, you can setup Secure Messages on this device which will re-encrypt this device's message history with a new recovery method.": "Nëse këtë e keni bërë pa dashje, mund të ujdisni Mesazhe të Sigurt në këtë pajisje, gjë që do të sjellë rifshehtëzimin e historikut të mesazheve të pajisjes me një metodë të re rimarrjesh.",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
+    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh.",
+    "Disinvite this user?": "nga {user}"
 }
