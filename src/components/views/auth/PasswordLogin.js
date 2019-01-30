@@ -131,7 +131,7 @@ class PasswordLogin extends React.Component {
     }
 
     onUsernameBlur(ev) {
-        this.props.onUsernameBlur(this.state.username);
+        this.props.onUsernameBlur(ev.target.value);
     }
 
     onLoginTypeChange(loginType) {
