@@ -1323,5 +1323,7 @@
     "<b>Print it</b> and store it somewhere safe": "<b>Wydrukuj</b> przechowuj w bezpiecznym miejscu",
     "Your Recovery Key is in your <b>Downloads</b> folder.": "Twój Klucz Odzyskiwania znajduje się w Twoim katalogu <b>Pobrane</b>.",
     "That doesn't match.": "To się nie zgadza.",
-    "Go to Settings": "Przejdź do ustawień"
+    "Go to Settings": "Przejdź do ustawień",
+    "%(displayName)s is typing …": "%(displayName)s pisze…",
+    "%(names)s and %(lastPerson)s are typing …": "%(names)s i %(lastPerson)s piszą…"
 }
