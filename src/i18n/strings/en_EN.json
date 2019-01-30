@@ -1074,6 +1074,7 @@
     "Report bugs & give feedback": "Report bugs & give feedback",
     "Go back": "Go back",
     "Visit old settings": "Visit old settings",
+    "Room Settings": "Room Settings",
     "Failed to upgrade room": "Failed to upgrade room",
     "The room upgrade could not be completed": "The room upgrade could not be completed",
     "Upgrade this room to version %(version)s": "Upgrade this room to version %(version)s",

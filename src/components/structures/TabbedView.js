@@ -97,7 +97,9 @@ export class TabbedView extends React.Component {
     _renderTabPanel(tab) {
         return (
             <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
-                {tab.body}
+                <div className='mx_TabbedView_tabPanelContent'>
+                    {tab.body}
+                </div>
             </div>
         );
     }
