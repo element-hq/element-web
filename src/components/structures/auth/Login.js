@@ -284,16 +284,22 @@ module.exports = React.createClass({
     },
 
     onPhoneNumberChanged: function(phoneNumber) {
-        // Validate the phone number entered
-        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({ errorText: _t('The phone number entered looks invalid') });
-            return;
-        }
-
         this.setState({
             phoneNumber: phoneNumber,
+        });
+    },
+
+    onPhoneNumberBlur: function(phoneNumber) {
+        this.setState({
             errorText: null,
         });
+
+        // Validate the phone number entered
+        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
+            this.setState({
+                errorText: _t('The phone number entered looks invalid'),
+            });
+        }
     },
 
     onServerConfigChange: function(config) {
@@ -648,6 +654,7 @@ module.exports = React.createClass({
                onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}
                onPhoneNumberChanged={this.onPhoneNumberChanged}
+               onPhoneNumberBlur={this.onPhoneNumberBlur}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}

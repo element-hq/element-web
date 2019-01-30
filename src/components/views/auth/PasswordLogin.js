@@ -35,6 +35,7 @@ class PasswordLogin extends React.Component {
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
+        onPhoneNumberBlur: function() {},
         initialUsername: "",
         initialPhoneCountry: "",
         initialPhoneNumber: "",
@@ -60,6 +61,7 @@ class PasswordLogin extends React.Component {
         this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
         this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
         this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
+        this.onPhoneNumberBlur = this.onPhoneNumberBlur.bind(this);
         this.onPasswordChanged = this.onPasswordChanged.bind(this);
         this.isLoginEmpty = this.isLoginEmpty.bind(this);
     }
@@ -153,6 +155,10 @@ class PasswordLogin extends React.Component {
         this.props.onPhoneNumberChanged(ev.target.value);
     }
 
+    onPhoneNumberBlur(ev) {
+        this.props.onPhoneNumberBlur(ev.target.value);
+    }
+
     onPasswordChanged(ev) {
         this.setState({password: ev.target.value});
         this.props.onPasswordChanged(ev.target.value);
@@ -214,6 +220,7 @@ class PasswordLogin extends React.Component {
                         type="text"
                         name="phoneNumber"
                         onChange={this.onPhoneNumberChanged}
+                        onBlur={this.onPhoneNumberBlur}
                         placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
