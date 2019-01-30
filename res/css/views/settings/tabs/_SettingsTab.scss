@@ -61,3 +61,9 @@ limitations under the License.
   color: $accent-color;
   word-break: break-all;
 }
+
+.mx_SettingsTab .mx_SettingsTab_subheading:nth-child(n + 2) {
+  // These views have a lot of the same repetitive information on it, so
+  // give them more visual distinction between the sections.
+  margin-top: 30px;
+}
