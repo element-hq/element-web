@@ -28,17 +28,17 @@ const ipcRenderer = window.ipcRenderer;
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
-    if (navigator.userAgent.indexOf('Macintosh')) {
+    if (navigator.userAgent.includes('Macintosh')) {
         return 'macOS';
-    } else if (navigator.userAgent.indexOf('FreeBSD')) {
+    } else if (navigator.userAgent.includes('FreeBSD')) {
         return 'FreeBSD';
-    } else if (navigator.userAgent.indexOf('OpenBSD')) {
+    } else if (navigator.userAgent.includes('OpenBSD')) {
         return 'OpenBSD';
-    } else if (navigator.userAgent.indexOf('SunOS')) {
+    } else if (navigator.userAgent.includes('SunOS')) {
         return 'SunOS';
-    } else if (navigator.userAgent.indexOf('Windows')) {
+    } else if (navigator.userAgent.includes('Windows')) {
         return 'Windows';
-    } else if (navigator.userAgent.indexOf('Linux')) {
+    } else if (navigator.userAgent.includes('Linux')) {
         return 'Linux';
     } else {
         return 'Unknown';
@@ -136,7 +136,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // maybe we should pass basic styling (italics, bold, underline) through from MD
         // we only have to strip out < and > as the spec doesn't include anything about things like &amp;
         // so we shouldn't assume that all implementations will treat those properly. Very basic tag parsing is done.
-        if (navigator.userAgent.indexOf('Linux')) {
+        if (navigator.userAgent.includes('Linux')) {
             msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
