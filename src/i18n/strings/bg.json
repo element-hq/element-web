@@ -12,7 +12,7 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализиран, шифрован чат и колаборация базирани на [matrix]",
     "Search the room directory": "Търсене в директорията със стаи",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "В Matrix съществуват много стаи, свързани към вече съществуващи мрежи (Slack, IRC, Gitter и т.н.) или независими такива. Разгледайте директорията!",
-    "Chat with Riot Bot": "Чат с Riot Bot",
+    "Chat with Riot Bot": "Чати с Riot Bot",
     "Get started with some tips from Riot Bot!": "Започнете с някои съвети от Riot Bot!",
     "General discussion about Matrix and Riot": "Обща дискусия относно Matrix и Riot",
     "Discussion of all things Matrix!": "Дискусия за всичко свързано с Matrix!",
@@ -35,5 +35,7 @@
     "Contributing code to Matrix and Riot": "Допринасяне с код към Matrix и Riot",
     "Dev chat for the Riot/Web dev team": "Чат за разработващия екип на Riot/Web",
     "Dev chat for the Dendrite dev team": "Чат за разработващия екип на Dendrite",
-    "Co-ordination for Riot translators": "Координация за преводачи на Riot"
+    "Co-ordination for Riot translators": "Координация за преводачи на Riot",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Може да настроите и собствен сървър за самоличност, но така няма да можете да каните потребители по имейл адрес или да бъдете поканени посредством вашия имейл адрес.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Може да използвате настройките за собствен сървър за да влезете в друг Matrix сървър, чрез указване на адреса му. Това Ви позволява да използвате Riot със съществуващ Matrix акаунт принадлежащ към друг сървър."
 }
