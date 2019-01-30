@@ -41,7 +41,6 @@ class PasswordLogin extends React.Component {
         initialPassword: "",
         loginIncorrect: false,
         hsUrl: "",
-        hsName: null,
         disableSubmit: false,
     }
 
@@ -251,15 +250,13 @@ class PasswordLogin extends React.Component {
         }
 
         let yourMatrixAccountText = _t('Your account');
-        if (this.props.hsName) {
-            yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: this.props.hsName});
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: parsedHsUrl.hostname});
-            } catch (e) {
-                // ignore
-            }
+        try {
+            const parsedHsUrl = new URL(this.props.hsUrl);
+            yourMatrixAccountText = _t('Your %(serverName)s account', {
+                serverName: parsedHsUrl.hostname,
+            });
+        } catch (e) {
+            // ignore
         }
 
         let editLink = null;
@@ -341,7 +338,6 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
-    hsName: PropTypes.string,
     disableSubmit: PropTypes.bool,
 };
 

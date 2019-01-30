@@ -66,10 +66,6 @@ module.exports = React.createClass({
         // different home server without confusing users.
         fallbackHsUrl: PropTypes.string,
 
-        // The default server name to use when the user hasn't specified
-        // one. This is used when displaying the defaultHsUrl in the UI.
-        defaultServerName: PropTypes.string,
-
         // An error passed along from higher up explaining that something
         // went wrong when finding the defaultHsUrl.
         defaultServerDiscoveryError: PropTypes.string,
@@ -655,7 +651,6 @@ module.exports = React.createClass({
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
-               hsName={this.props.defaultServerName}
                disableSubmit={this.state.findingHomeserver}
                />
         );

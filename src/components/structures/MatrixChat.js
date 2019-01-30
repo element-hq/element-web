@@ -1892,7 +1892,6 @@ export default React.createClass({
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
                     referrer={this.props.startingFragmentQueryParams.referrer}
-                    defaultServerName={this.getDefaultServerName()}
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
@@ -1932,7 +1931,6 @@ export default React.createClass({
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
-                    defaultServerName={this.getDefaultServerName()}
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}

@@ -51,6 +51,7 @@ module.exports = React.createClass({
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
+        hsUrl: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -258,19 +259,13 @@ module.exports = React.createClass({
         const self = this;
 
         let yourMatrixAccountText = _t('Create your account');
-        if (this.props.hsName) {
+        try {
+            const parsedHsUrl = new URL(this.props.hsUrl);
             yourMatrixAccountText = _t('Create your %(serverName)s account', {
-                serverName: this.props.hsName,
+                serverName: parsedHsUrl.hostname,
             });
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Create your %(serverName)s account', {
-                    serverName: parsedHsUrl.hostname,
-                });
-            } catch (e) {
-                // ignore
-            }
+        } catch (e) {
+            // ignore
         }
 
         let editLink = null;
