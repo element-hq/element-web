@@ -349,3 +349,8 @@ limitations under the License.
 .mx_GroupView_changeDelayWarning {
     padding: 40px 20px;
 }
+
+.mx_GroupView .mx_MemberInfo .gm-scroll-view > :not(.mx_MemberInfo_avatar) {
+    padding-left: 16px;
+    padding-right: 16px;
+}
