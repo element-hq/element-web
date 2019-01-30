@@ -23,6 +23,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import dis from '../../../dispatcher';
 import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
+import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -70,7 +71,7 @@ export default class RoomSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Security & Privacy"),
             "mx_RoomSettingsDialog_securityIcon",
-            <div>Security Test</div>,
+            <SecurityRoomSettingsTab roomId={this.props.roomId} />,
         ));
         tabs.push(new Tab(
             _td("Roles & Permissions"),
