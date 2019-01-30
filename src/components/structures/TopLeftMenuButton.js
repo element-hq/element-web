@@ -97,7 +97,7 @@ export default class TopLeftMenuButton extends React.Component {
                     resizeMethod="crop"
                 />
                 { nameElement }
-                <img className="mx_TopLeftMenuButton_chevron" src={require("../../../res/img/topleft-chevron.svg")} width="11" height="6" />
+                <span className="mx_TopLeftMenuButton_chevron"></span>
             </AccessibleButton>
         );
     }
