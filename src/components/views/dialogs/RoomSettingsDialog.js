@@ -21,6 +21,7 @@ import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/AdvancedRoomSettingsTab";
 import AccessibleButton from "../elements/AccessibleButton";
 import dis from '../../../dispatcher';
+import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
 
 // TODO: Ditch this whole component
@@ -74,7 +75,7 @@ export default class RoomSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Roles & Permissions"),
             "mx_RoomSettingsDialog_rolesIcon",
-            <div>Roles Test</div>,
+            <RolesRoomSettingsTab roomId={this.props.roomId} />,
         ));
         tabs.push(new Tab(
             _td("Advanced"),
