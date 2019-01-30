@@ -17,6 +17,7 @@ limitations under the License.
 .mx_MemberDeviceInfo {
     display: flex;
     padding-bottom: 10px;
+    align-items: start;
 }
 
 .mx_MemberDeviceInfo > .mx_DeviceVerifyButtons {
@@ -42,6 +43,7 @@ limitations under the License.
 
 .mx_MemberDeviceInfo_deviceInfo {
     margin: 0 5px 5px 8px;
+    flex: 1;
 }
 
 /* "Unblacklist" is too long for a regular button: make it wider and
