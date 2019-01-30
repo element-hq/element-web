@@ -17,12 +17,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../languageHandler";
-import RoomProfileSettings from "../../room_settings/RoomProfileSettings";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
 import AccessibleButton from "../../elements/AccessibleButton";
-import {MatrixClient} from "matrix-js-sdk";
-import dis from "../../../../dispatcher";
 import Modal from "../../../../Modal";
 
 export default class AdvancedRoomSettingsTab extends React.Component {
