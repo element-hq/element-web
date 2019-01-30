@@ -88,7 +88,7 @@ limitations under the License.
 
     // overrides of .mx_Login
 
-    .mx_Login_box {
+    .mx_AuthPage_modal {
         width: 330px;
         min-height: initial;
         padding-top: 40px;
@@ -100,13 +100,13 @@ limitations under the License.
         font-size: 16px;
         line-height: 25px;
         background-color: $form-bg-color;
-        background-image: url(../../themes/status/img/dot.svg);
-        box-shadow: 0px 5px 16px 0px rgba(25,12,46,0.16);    
+        background-image: url("$(status)/img/dot.svg");
+        box-shadow: 0px 5px 16px 0px rgba(25,12,46,0.16);
         position: relative;
         text-align: center;
     }
 
-    .mx_Login_logo {
+    .mx_AuthHeader_logo {
         background-color: #fff;
         width: 74px;
         height: 74px;
@@ -118,13 +118,13 @@ limitations under the License.
         margin-left: -36px;
     }
 
-    .mx_Login_logo img {
+    .mx_AuthHeader_logo img {
         width: 36px;
         height: 36px;
         padding: 19px;
     }
 
-    .mx_Login_box h2 {
+    .mx_AuthPage_modal h2 {
         text-align: center;
         color: $form-fg-color;
         font-size: 25px;

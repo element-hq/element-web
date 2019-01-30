@@ -157,8 +157,6 @@ For a good example, see https://riot.im/develop/config.json
     1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
     1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
     1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
-1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
-   with referral tracking; please ignore it.
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
 
 

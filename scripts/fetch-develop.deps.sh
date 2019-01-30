@@ -9,45 +9,49 @@
 set -e
 
 GIT_CLONE_ARGS=("$@")
-
-# Look in the many different CI env vars for which branch we're
-# building
-if [[ "$TRAVIS" == true ]]; then
-    curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-else
-    # ghprbSourceBranch for jenkins github pull request builder
-    # GIT_BRANCH for other jenkins builds
-    curbranch="${ghprbSourceBranch:-$GIT_BRANCH}"
-    # Otherwise look at the actual branch we're on
-    if [ -z "$curbranch" ]
-    then
-        curbranch=`git rev-parse --abbrev-ref HEAD`
-    fi
-fi
-
-# Chop 'origin' off the start as jenkins ends up using
-# branches on the origin, but this doesn't work if we
-# specify the branch when cloning.
-curbranch=${curbranch#origin/}
-
-echo "Determined branch to be $curbranch"
+[ -z "$defbranch" ] && defbranch="develop"
 
 # clone a specific branch of a github repo
 function clone() {
     org=$1
     repo=$2
     branch=$3
-    git clone https://github.com/$org/$repo.git $repo --branch $branch \
-        "${GIT_CLONE_ARGS[@]}"
+
+    # Chop 'origin' off the start as jenkins ends up using
+    # branches on the origin, but this doesn't work if we
+    # specify the branch when cloning.
+    branch=${branch#origin/}
+
+    if [ -n "$branch" ]
+    then
+        echo "Trying to use $org/$repo#$branch"
+        git clone https://github.com/$org/$repo.git $repo --branch $branch \
+            "${GIT_CLONE_ARGS[@]}"
+        return $?
+    fi
+    return 1
 }
 
 function dodep() {
     org=$1
     repo=$2
     rm -rf $repo
-    clone $org $repo $curbranch || {
-        [ "$curbranch" != 'develop' ] && clone $org $repo develop
-    } || return $?
+
+    # Try the PR author's branch in case it exists on the deps as well.
+    # Try the target branch of the push or PR.
+    # Use the default branch as the last resort.
+    if [[ "$TRAVIS" == true ]]; then
+        clone $org $repo $TRAVIS_PULL_REQUEST_BRANCH ||
+        clone $org $repo $TRAVIS_BRANCH ||
+        clone $org $repo $defbranch ||
+        return $?
+    else
+        clone $org $repo $ghprbSourceBranch ||
+        clone $org $repo $GIT_BRANCH ||
+        clone $org $repo `git rev-parse --abbrev-ref HEAD` ||
+        clone $org $repo $defbranch ||
+        return $?
+    fi
 
     echo "$repo set to branch "`git -C "$repo" rev-parse --abbrev-ref HEAD`
 

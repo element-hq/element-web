@@ -254,7 +254,7 @@ describe('loading:', function() {
             return awaitLoginComponent(matrixChat).then(() => {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'));
+                    matrixChat, sdk.getComponent('structures.auth.Login'));
 
                 // the only outstanding request should be a GET /login
                 // (in particular there should be no /register request for
@@ -343,40 +343,6 @@ describe('loading:', function() {
             }).done(done, done);
         });
 
-        it("logs in correctly with a Riot Team Server", function() {
-            sdk.setFetch(httpBackend.fetchFn); // XXX: ought to restore this!
-
-            httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-
-            loadApp({
-                config: {
-                    teamServerConfig: {
-                        teamServerURL: 'http://my_team_server',
-                    },
-                },
-            });
-
-            return Promise.delay(1).then(() => {
-                // we expect a loading spinner while we log into the RTS
-                assertAtLoadingSpinner(matrixChat);
-
-                httpBackend.when('GET', 'my_team_server/login').respond(200, {
-                    team_token: 'nom',
-                });
-                return httpBackend.flush();
-            }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
-            }).then(() => {
-                // we got a sync spinner - let the sync complete
-                return expectAndAwaitSync();
-            }).then(() => {
-                // once the sync completes, we should have a home page
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.HomePage'));
-            });
-        });
-
         describe('/#/login link:', function() {
             beforeEach(function() {
                 loadApp({
@@ -390,7 +356,7 @@ describe('loading:', function() {
             it('shows a login view', function() {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'),
+                    matrixChat, sdk.getComponent('structures.auth.Login'),
                 );
 
                 // the only outstanding request should be a GET /login
@@ -554,7 +520,7 @@ describe('loading:', function() {
 
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'),
+                    matrixChat, sdk.getComponent('structures.auth.Login'),
                 );
             });
 
@@ -562,7 +528,7 @@ describe('loading:', function() {
             // ILAG renders this obsolete. I think.
             it('should allow us to return to the app', function() {
                 const login = ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login')
+                    matrixChat, sdk.getComponent('structures.auth.Login')
                 );
 
                 const linkText = 'Return to app';
@@ -630,7 +596,7 @@ describe('loading:', function() {
     function completeLogin(matrixChat) {
         // we expect a single <Login> component
         const login = ReactTestUtils.findRenderedComponentWithType(
-            matrixChat, sdk.getComponent('structures.login.Login'));
+            matrixChat, sdk.getComponent('structures.auth.Login'));
 
         httpBackend.when('POST', '/login').check(function(req) {
             expect(req.data.type).toEqual('m.login.password');
@@ -743,6 +709,6 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
 
 function awaitLoginComponent(matrixChat, attempts) {
     return MatrixReactTestUtils.waitForRenderedComponentWithType(
-        matrixChat, sdk.getComponent('structures.login.Login'), attempts,
+        matrixChat, sdk.getComponent('structures.auth.Login'), attempts,
     );
 }
