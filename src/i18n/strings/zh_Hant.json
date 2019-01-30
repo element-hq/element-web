@@ -1461,5 +1461,6 @@
     "Prompt before sending invites to potentially invalid matrix IDs": "在傳送邀請給潛在的無效 matrix ID 前提示",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "找不到下列 Matrix ID 的簡介，您無論如何都想邀請他們嗎？",
     "Invite anyway and never warn me again": "無論如何都要邀請，而且不要再警告我",
-    "Invite anyway": "無論如何都要邀請"
+    "Invite anyway": "無論如何都要邀請",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以設定自訂的身份識別伺服器，但您無法透過電子郵件地址邀請使用者，或是被邀請。"
 }
