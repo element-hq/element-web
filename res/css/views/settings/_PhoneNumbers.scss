@@ -15,42 +15,42 @@ limitations under the License.
 */
 
 .mx_ExistingPhoneNumber {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .mx_ExistingPhoneNumber_delete {
-  margin-right: 5px;
-  cursor: pointer;
-  vertical-align: middle;
+    margin-right: 5px;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
 .mx_ExistingPhoneNumber_address {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 .mx_ExistingPhoneNumber_promptText {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .mx_ExistingPhoneNumber_confirmBtn {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 
 .mx_PhoneNumbers_new .mx_Field input {
-  // Use 100% of the space available for the input, but don't let the 10px
-  // padding on either side of the input to push it out of alignment.
-  width: calc(100% - 20px);
+    // Use 100% of the space available for the input, but don't let the 10px
+    // padding on either side of the input to push it out of alignment.
+    width: calc(100% - 20px);
 }
 
 .mx_PhoneNumbers_input {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .mx_PhoneNumbers_input > .mx_Field {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .mx_PhoneNumbers_country {
-  width: 80px;
+    width: 80px;
 }

@@ -15,111 +15,111 @@ limitations under the License.
 */
 
 .mx_ProfileSettings_profile {
-  display: flex;
+    display: flex;
 }
 
 .mx_ProfileSettings_controls {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .mx_ProfileSettings_controls .mx_Field #profileDisplayName,
 .mx_ProfileSettings_controls .mx_Field #profileTopic {
-  width: calc(100% - 20px); // subtract 10px padding on left and right
+    width: calc(100% - 20px); // subtract 10px padding on left and right
 }
 
 .mx_ProfileSettings_controls .mx_Field #profileTopic {
-  height: 4em;
+    height: 4em;
 }
 
 .mx_ProfileSettings_controls .mx_Field:first-child {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .mx_ProfileSettings_avatar {
-  width: 88px;
-  height: 88px;
-  margin-left: 13px;
-  position: relative;
-  cursor: pointer;
+    width: 88px;
+    height: 88px;
+    margin-left: 13px;
+    position: relative;
+    cursor: pointer;
 }
 
 .mx_ProfileSettings_avatar > * {
-  display: block;
-  width: 88px;
-  height: 88px;
-  border-radius: 4px;
+    display: block;
+    width: 88px;
+    height: 88px;
+    border-radius: 4px;
 }
 
 .mx_ProfileSettings_avatar .mx_ProfileSettings_avatarOverlay_disabled {
-  cursor: default;
+    cursor: default;
 }
 
 .mx_ProfileSettings_avatar .mx_ProfileSettings_avatarPlaceholder {
-  background-color: $settings-profile-placeholder-bg-color;
+    background-color: $settings-profile-placeholder-bg-color;
 }
 
 .mx_ProfileSettings_avatarOverlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: none;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 10px;
 }
 
 .mx_ProfileSettings_avatar:hover .mx_ProfileSettings_avatarOverlay:not(.mx_ProfileSettings_avatarOverlay_disabled) {
-  display: inline-block;
-  opacity: 0.5 !important;
-  color: $settings-profile-overlay-fg-color !important;
-  background-color: $settings-profile-overlay-bg-color !important;
+    display: inline-block;
+    opacity: 0.5 !important;
+    color: $settings-profile-overlay-fg-color !important;
+    background-color: $settings-profile-overlay-bg-color !important;
 }
 
 .mx_ProfileSettings_avatarOverlay_show {
-  display: inline-block;
-  opacity: 1;
-  color: $settings-profile-overlay-placeholder-fg-color;
-  background-color: $settings-profile-overlay-placeholder-bg-color;
+    display: inline-block;
+    opacity: 1;
+    color: $settings-profile-overlay-placeholder-fg-color;
+    background-color: $settings-profile-overlay-placeholder-bg-color;
 }
 
 .mx_ProfileSettings_avatarOverlayText {
-  display: block;
-  margin-top: 17px;
-  margin-bottom: 8px;
+    display: block;
+    margin-top: 17px;
+    margin-bottom: 8px;
 }
 
 .mx_ProfileSettings_noAvatarText {
-  display: block;
-  margin: 34px auto auto;
+    display: block;
+    margin: 34px auto auto;
 }
 
 .mx_ProfileSettings_avatarOverlayImgContainer {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  margin: auto;
+    position: relative;
+    width: 14px;
+    height: 14px;
+    margin: auto;
 }
 
 .mx_ProfileSettings_avatarOverlayImg:before {
-  background-color: $settings-profile-overlay-placeholder-fg-color;
-  mask: url("$(res)/img/feather-icons/upload.svg");
-  mask-repeat: no-repeat;
-  mask-size: 14px;
-  mask-position: center;
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+    background-color: $settings-profile-overlay-placeholder-fg-color;
+    mask: url("$(res)/img/feather-icons/upload.svg");
+    mask-repeat: no-repeat;
+    mask-size: 14px;
+    mask-position: center;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .mx_ProfileSettings_avatar:hover .mx_ProfileSettings_avatarOverlayImg:before {
-  background-color: $settings-profile-overlay-fg-color !important;
+    background-color: $settings-profile-overlay-fg-color !important;
 }
 
 .mx_ProfileSettings_avatarUpload {
-  display: none;
+    display: none;
 }
