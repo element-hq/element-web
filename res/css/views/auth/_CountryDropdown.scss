@@ -14,17 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Auth_language {
-    width: 100%;
+.mx_CountryDropdown .mx_Dropdown_input .mx_Dropdown_option {
+    padding: 0 3px;
 }
 
-.mx_Auth_language .mx_Dropdown_input {
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: $authpage-lang-color;
+.mx_CountryDropdown .mx_Dropdown_arrow {
+    padding-right: 3px;
 }
 
-.mx_Auth_language .mx_Dropdown_arrow::before {
-    background: $authpage-lang-color;
+.mx_CountryDropdown_shortOption {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+}
+
+.mx_CountryDropdown_option {
+    display: flex;
+    align-items: center;
 }

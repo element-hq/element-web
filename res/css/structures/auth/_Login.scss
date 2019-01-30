@@ -15,13 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Login_support {
-    text-align: center;
-    font-size: 13px;
-    margin-top: 0px;
-    opacity: 0.7;
-}
-
 .mx_Login_field {
     width: 100%;
     box-sizing: border-box;
@@ -31,14 +24,6 @@ limitations under the License.
     font-size: 13px;
     padding: 9px;
     margin-bottom: 14px;
-}
-
-.mx_Login_fieldLabel {
-    margin-top: -10px;
-    margin-left: 8px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    opacity: 0.8;
 }
 
 .mx_Login_submit {
@@ -56,16 +41,6 @@ limitations under the License.
 
 .mx_Login_submit:disabled {
     opacity: 0.3;
-}
-
-.mx_Login_label {
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-.mx_Login_checkbox,
-.mx_Login_radio {
-    margin-right: 10px;
 }
 
 .mx_AuthBody a.mx_Login_sso_link:link,
@@ -119,10 +94,6 @@ limitations under the License.
     flex: 1 1 auto;
 }
 
-.mx_Login_field_group {
-    display: flex;
-}
-
 .mx_Login_field_prefix {
     height: 38px;
     padding: 0px 5px;
@@ -147,7 +118,6 @@ limitations under the License.
 
 .mx_Login_phoneCountry {
     margin-bottom: 14px;
-    width: 150px;
 
     /* To override mx_Login_field_prefix */
     text-align: left;

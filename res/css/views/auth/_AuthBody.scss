@@ -47,6 +47,24 @@ limitations under the License.
     box-sizing: border-box;
 }
 
+.mx_Auth_fieldRow {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.mx_Auth_fieldRow > * {
+    margin: 0 5px;
+    flex: 1;
+}
+
+.mx_Auth_fieldRow > *:first-child {
+    margin-left: 0;
+}
+
+.mx_Auth_fieldRow > *:last-child {
+    margin-right: 0;
+}
+
 .mx_AuthBody a:link,
 .mx_AuthBody a:hover,
 .mx_AuthBody a:visited {

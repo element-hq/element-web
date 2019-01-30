@@ -40,7 +40,7 @@ class PasswordLogin extends React.Component {
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
-        hsDomain: "",
+        hsUrl: "",
         hsName: null,
         disableSubmit: false,
     }

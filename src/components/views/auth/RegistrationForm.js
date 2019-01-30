@@ -49,6 +49,7 @@ module.exports = React.createClass({
         minPasswordLength: PropTypes.number,
         onError: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
+        onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
     },
 
@@ -256,9 +257,34 @@ module.exports = React.createClass({
     render: function() {
         const self = this;
 
+        let yourMatrixAccountText = _t('Create your account');
+        if (this.props.hsName) {
+            yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                serverName: this.props.hsName,
+            });
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        let editLink = null;
+        if (this.props.onEditServerDetailsClick) {
+            editLink = <a className="mx_Auth_editServerDetails"
+                href="#" onClick={this.props.onEditServerDetailsClick}
+            >
+                {_t('Edit')}
+            </a>;
+        }
+
         const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
-            _t("Email address") :
-            _t("Email address (optional)");
+            _t("Email") :
+            _t("Email (optional)");
 
         const emailSection = (
             <div>
@@ -275,8 +301,8 @@ module.exports = React.createClass({
         let phoneSection;
         if (!SdkConfig.get().disable_3pid_login) {
             const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ?
-                _t("Mobile phone number") :
-                _t("Mobile phone number (optional)");
+                _t("Phone") :
+                _t("Phone (optional)");
             phoneSection = (
                 <div className="mx_Login_phoneSection">
                     <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
@@ -309,25 +335,36 @@ module.exports = React.createClass({
 
         return (
             <div>
+                <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3>
                 <form onSubmit={this.onSubmit}>
-                    { emailSection }
-                    { phoneSection }
-                    <input type="text" ref="username"
-                        placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
-                        className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_USERNAME);}} />
-                    <br />
-                    <input type="password" ref="password"
-                        className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD);}}
-                        placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
-                    <br />
-                    <input type="password" ref="passwordConfirm"
-                        placeholder={_t("Confirm password")}
-                        className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
-                        onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
-                        defaultValue={this.props.defaultPassword} />
-                    <br />
+                    <div className="mx_Auth_fieldRow">
+                        <input type="text" ref="username"
+                            placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
+                            className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_USERNAME);}} />
+                    </div>
+                    <div className="mx_Auth_fieldRow">
+                        <input type="password" ref="password"
+                            className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_PASSWORD);}}
+                            placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
+                        <input type="password" ref="passwordConfirm"
+                            placeholder={_t("Confirm")}
+                            className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
+                            onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
+                            defaultValue={this.props.defaultPassword} />
+                    </div>
+                    <div className="mx_Auth_fieldRow">
+                        { emailSection }
+                        { phoneSection }
+                    </div>
+                    {_t(
+                        "Use an email address to receover your account. Other users " +
+                        "can invite you to rooms using your contact details.",
+                    )}
                     { registerButton }
                 </form>
             </div>

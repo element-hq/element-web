@@ -23,12 +23,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
-import RegistrationForm from '../../views/auth/RegistrationForm';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
+import * as ServerType from '../../views/auth/ServerTypeSelector';
 
 const MIN_PASSWORD_LENGTH = 6;
+
+// Phases
+// Show controls to configure server details
+const PHASE_SERVER_DETAILS = 0;
+// Show the appropriate registration flow(s) for the server
+const PHASE_REGISTRATION = 1;
+
+// Enable phases for registration
+const PHASES_ENABLED = true;
 
 module.exports = React.createClass({
     displayName: 'Registration',
@@ -82,6 +91,7 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
+            serverType: null,
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             flows: null,
@@ -105,6 +115,39 @@ module.exports = React.createClass({
         this.setState(newState, () => {
             this._replaceClient();
         });
+    },
+
+    onServerTypeChange(type) {
+        this.setState({
+            serverType: type,
+        });
+
+        // When changing server types, set the HS / IS URLs to reasonable defaults for the
+        // the new type.
+        switch (type) {
+            case ServerType.FREE: {
+                const { hsUrl, isUrl } = ServerType.TYPES.FREE;
+                this.onServerConfigChange({
+                    hsUrl,
+                    isUrl,
+                });
+                // Move directly to the registration phase since the server details are fixed.
+                this.setState({
+                    phase: PHASE_REGISTRATION,
+                });
+                break;
+            }
+            case ServerType.PREMIUM:
+            case ServerType.ADVANCED:
+                this.onServerConfigChange({
+                    hsUrl: this.props.defaultHsUrl,
+                    isUrl: this.props.defaultIsUrl,
+                });
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
+                break;
+        }
     },
 
     _replaceClient: async function() {
@@ -273,6 +316,21 @@ module.exports = React.createClass({
         this.props.onLoginClick();
     },
 
+    onServerDetailsNextPhaseClick(ev) {
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_REGISTRATION,
+        });
+    },
+
+    onEditServerDetailsClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_SERVER_DETAILS,
+        });
+    },
+
     _makeRegisterRequest: function(auth) {
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
@@ -300,62 +358,127 @@ module.exports = React.createClass({
         };
     },
 
+    renderServerComponent() {
+        const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
+        const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+
+        // TODO: May need to adjust the behavior of this config option
+        if (SdkConfig.get()['disable_custom_urls']) {
+            return null;
+        }
+
+        // If we're on a different phase, we only show the server type selector,
+        // which is always shown if we allow custom URLs at all.
+        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
+            return <div>
+                <ServerTypeSelector
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    onChange={this.onServerTypeChange}
+                />
+            </div>;
+        }
+
+        let serverDetails = null;
+        switch (this.state.serverType) {
+            case ServerType.FREE:
+                break;
+            case ServerType.PREMIUM:
+                serverDetails = <ModularServerConfig
+                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultIsUrl={this.props.defaultIsUrl}
+                    onServerConfigChange={this.onServerConfigChange}
+                    delayTimeMs={1000}
+                />;
+                break;
+            case ServerType.ADVANCED:
+                serverDetails = <ServerConfig
+                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
+                    customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
+                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultIsUrl={this.props.defaultIsUrl}
+                    onServerConfigChange={this.onServerConfigChange}
+                    delayTimeMs={1000}
+                />;
+                break;
+        }
+
+        let nextButton = null;
+        if (PHASES_ENABLED) {
+            nextButton = <AccessibleButton className="mx_Login_submit"
+                onClick={this.onServerDetailsNextPhaseClick}
+            >
+                {_t("Next")}
+            </AccessibleButton>;
+        }
+
+        return <div>
+            <ServerTypeSelector
+                defaultHsUrl={this.props.defaultHsUrl}
+                onChange={this.onServerTypeChange}
+            />
+            {serverDetails}
+            {nextButton}
+        </div>;
+    },
+
+    renderRegisterComponent() {
+        if (PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) {
+            return null;
+        }
+
+        const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
+        const Spinner = sdk.getComponent('elements.Spinner');
+        const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
+
+        if (this.state.doingUIAuth) {
+            return <InteractiveAuth
+                matrixClient={this._matrixClient}
+                makeRequest={this._makeRegisterRequest}
+                onAuthFinished={this._onUIAuthFinished}
+                inputs={this._getUIAuthInputs()}
+                makeRegistrationUrl={this.props.makeRegistrationUrl}
+                sessionId={this.props.sessionId}
+                clientSecret={this.props.clientSecret}
+                emailSid={this.props.idSid}
+                poll={true}
+            />;
+        } else if (this.state.busy || !this.state.flows) {
+            return <Spinner />;
+        } else {
+            let onEditServerDetailsClick = null;
+            // If custom URLs are allowed and we haven't selected the Free server type, wire
+            // up the server details edit link.
+            if (
+                PHASES_ENABLED &&
+                !SdkConfig.get()['disable_custom_urls'] &&
+                this.state.serverType !== ServerType.FREE
+            ) {
+                onEditServerDetailsClick = this.onEditServerDetailsClick;
+            }
+            return <RegistrationForm
+                defaultUsername={this.state.formVals.username}
+                defaultEmail={this.state.formVals.email}
+                defaultPhoneCountry={this.state.formVals.phoneCountry}
+                defaultPhoneNumber={this.state.formVals.phoneNumber}
+                defaultPassword={this.state.formVals.password}
+                minPasswordLength={MIN_PASSWORD_LENGTH}
+                onError={this.onFormValidationFailed}
+                onRegisterClick={this.onFormSubmit}
+                onEditServerDetailsClick={onEditServerDetailsClick}
+                flows={this.state.flows}
+                hsUrl={this.state.hsUrl}
+                hsName={this.props.defaultServerName}
+            />;
+        }
+    },
+
     render: function() {
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AuthPage = sdk.getComponent('auth.AuthPage');
-        const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
-        const Spinner = sdk.getComponent("elements.Spinner");
-        const ServerConfig = sdk.getComponent('views.auth.ServerConfig');
-
-        let registerBody;
-        if (this.state.doingUIAuth) {
-            registerBody = (
-                <InteractiveAuth
-                    matrixClient={this._matrixClient}
-                    makeRequest={this._makeRegisterRequest}
-                    onAuthFinished={this._onUIAuthFinished}
-                    inputs={this._getUIAuthInputs()}
-                    makeRegistrationUrl={this.props.makeRegistrationUrl}
-                    sessionId={this.props.sessionId}
-                    clientSecret={this.props.clientSecret}
-                    emailSid={this.props.idSid}
-                    poll={true}
-                />
-            );
-        } else if (this.state.busy || !this.state.flows) {
-            registerBody = <Spinner />;
-        } else {
-            let serverConfigSection;
-            if (!SdkConfig.get()['disable_custom_urls']) {
-                serverConfigSection = (
-                    <ServerConfig ref="serverConfig"
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={1000}
-                    />
-                );
-            }
-            registerBody = (
-                <div>
-                    <RegistrationForm
-                        defaultUsername={this.state.formVals.username}
-                        defaultEmail={this.state.formVals.email}
-                        defaultPhoneCountry={this.state.formVals.phoneCountry}
-                        defaultPhoneNumber={this.state.formVals.phoneNumber}
-                        defaultPassword={this.state.formVals.password}
-                        minPasswordLength={MIN_PASSWORD_LENGTH}
-                        onError={this.onFormValidationFailed}
-                        onRegisterClick={this.onFormSubmit}
-                        flows={this.state.flows}
-                    />
-                    { serverConfigSection }
-                </div>
-            );
-        }
 
         let errorText;
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
@@ -377,9 +500,10 @@ module.exports = React.createClass({
                 <AuthHeader />
                 <AuthBody>
                     <h2>{ _t('Create your account') }</h2>
-                    { registerBody }
-                    { signIn }
                     { errorText }
+                    { this.renderServerComponent() }
+                    { this.renderRegisterComponent() }
+                    { signIn }
                 </AuthBody>
             </AuthPage>
         );

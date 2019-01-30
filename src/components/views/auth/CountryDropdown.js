@@ -81,7 +81,7 @@ export default class CountryDropdown extends React.Component {
         if (this.props.showPrefix) {
             countryPrefix = '+' + COUNTRIES_BY_ISO2[iso2].prefix;
         }
-        return <span>
+        return <span className="mx_CountryDropdown_shortOption">
             { this._flagImgForIso2(iso2) }
             { countryPrefix }
         </span>;
@@ -111,7 +111,7 @@ export default class CountryDropdown extends React.Component {
         }
 
         const options = displayedCountries.map((country) => {
-            return <div key={country.iso2}>
+            return <div className="mx_CountryDropdown_option" key={country.iso2}>
                 { this._flagImgForIso2(country.iso2) }
                 { country.name } <span>(+{ country.prefix })</span>
             </div>;
@@ -121,7 +121,7 @@ export default class CountryDropdown extends React.Component {
         // values between mounting and the initial value propgating
         const value = this.props.value || COUNTRIES[0].iso2;
 
-        return <Dropdown className={this.props.className + " left_aligned"}
+        return <Dropdown className={this.props.className + " mx_CountryDropdown"}
             onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
             menuWidth={298} getShortOption={this._getShortOption}
             value={value} searchEnabled={true} disabled={this.props.disabled}
