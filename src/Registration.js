@@ -79,22 +79,22 @@ export async function startAnyRegistrationFlow(options) {
     //}
 }
 
-async function _getRegistrationFlows() {
-    try {
-        await MatrixClientPeg.get().register(
-            null,
-            null,
-            undefined,
-            {},
-            {},
-        );
-        console.log("Register request succeeded when it should have returned 401!");
-    } catch (e) {
-        if (e.httpStatus === 401) {
-            return e.data.flows;
-        }
-        throw e;
-    }
-    throw new Error("Register request succeeded when it should have returned 401!");
-}
+// async function _getRegistrationFlows() {
+//     try {
+//         await MatrixClientPeg.get().register(
+//             null,
+//             null,
+//             undefined,
+//             {},
+//             {},
+//         );
+//         console.log("Register request succeeded when it should have returned 401!");
+//     } catch (e) {
+//         if (e.httpStatus === 401) {
+//             return e.data.flows;
+//         }
+//         throw e;
+//     }
+//     throw new Error("Register request succeeded when it should have returned 401!");
+// }
 
