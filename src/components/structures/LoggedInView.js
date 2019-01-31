@@ -164,9 +164,11 @@ const LoggedInView = React.createClass({
         const collapseConfig = {
             toggleSize: 260 - 50,
             onCollapsed: (collapsed) => {
-                this.setState({collapseLhs: collapsed});
                 if (collapsed) {
+                    dis.dispatch({action: "hide_left_panel"}, true);
                     window.localStorage.setItem("mx_lhs_size", '0');
+                } else {
+                    dis.dispatch({action: "show_left_panel"}, true);
                 }
             },
             onResized: (size) => {
@@ -540,7 +542,7 @@ const LoggedInView = React.createClass({
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
                             toolbarShown={!!topBar}
-                            collapsed={this.props.collapseLhs || this.state.collapseLhs || false}
+                            collapsed={this.props.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
                         <ResizeHandle />
