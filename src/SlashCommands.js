@@ -27,12 +27,7 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
-import * as linkify from 'linkifyjs';
-import linkifyString from 'linkifyjs/string';
-import linkifyMatrix from './linkify-matrix';
-import sanitizeHtml from 'sanitize-html';
-
-linkifyMatrix(linkify);
+import { linkifyAndSanitizeHtml } from './HtmlUtils';
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -154,7 +149,7 @@ export const CommandMap = {
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents.getContent().topic;
-            const topicHtml = topic ? linkifyString(sanitizeHtml(topic)) : _t('This room has no topic.');
+            const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
 
             const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
