@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import sdk from '../../../index';
 
 export default class Field extends React.PureComponent {
     static propTypes = {
@@ -33,8 +34,21 @@ export default class Field extends React.PureComponent {
         placeholder: PropTypes.string,
         // Optional component to include inside the field before the input.
         prefix: PropTypes.node,
+        // The callback called whenever the contents of the field
+        // changes.  Returns an object with `valid` boolean field
+        // and a `feedback` react component field to provide feedback
+        // to the user.
+        onValidate: PropTypes.function,
         // All other props pass through to the <input>.
     };
+
+    constructor() {
+        super();
+        this.state = {
+            valid: undefined,
+            feedback: undefined,
+        };
+    }
 
     get value() {
         if (!this.refs.fieldInput) return null;
@@ -48,8 +62,18 @@ export default class Field extends React.PureComponent {
         this.refs.fieldInput.value = newValue;
     }
 
+    onChange = (ev) => {
+        if (this.props.onValidate) {
+            const result = this.props.onValidate(this.value);
+            this.setState({
+                valid: result.valid,
+                feedback: result.feedback,
+            });
+        }
+    };
+
     render() {
-        const { element, prefix, children, ...inputProps } = this.props;
+        const { element, prefix, onValidate, children, ...inputProps } = this.props;
 
         const inputElement = element || "input";
 
@@ -58,6 +82,12 @@ export default class Field extends React.PureComponent {
         inputProps.ref = "fieldInput";
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
+        inputProps.onChange = this.onChange;
+        // make sure we use the current `value` for the field and not the original one
+        if (this.value != undefined) {
+            inputProps.value = this.value;
+        }
+
         const fieldInput = React.createElement(inputElement, inputProps, children);
 
         let prefixContainer = null;
@@ -65,17 +95,34 @@ export default class Field extends React.PureComponent {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
-        const classes = classNames("mx_Field", `mx_Field_${inputElement}`, {
+        const validClass = classNames({
+            mx_Field_valid: this.state.valid === true,
+            mx_Field_invalid: this.state.valid === false,
+        });
+
+        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
             mx_Field_labelAlwaysTopLeft: prefix,
+            [validClass]: true,
         });
 
-        return <div className={classes}>
+        // handle displaying feedback on validity
+        const Tooltip = sdk.getComponent("elements.Tooltip");
+        let feedback;
+        if (this.state.feedback) {
+            feedback = <Tooltip
+                tooltipClassName={`mx_Field_tooltip ${validClass}`}
+                label={this.state.feedback}
+            />;
+        }
+
+        return <div className={fieldClasses}>
             {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
+            {feedback}
         </div>;
     }
 }

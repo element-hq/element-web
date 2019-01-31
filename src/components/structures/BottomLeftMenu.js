@@ -145,8 +145,8 @@ module.exports = React.createClass({
     // Get the label/tooltip to show
     getLabel: function(label, show) {
         if (show) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            return <Tooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
         }
     },
 

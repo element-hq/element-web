@@ -156,7 +156,7 @@ export default React.createClass({
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
+        const Tooltip = sdk.getComponent('elements.Tooltip');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
         const avatarHeight = 40;
@@ -181,7 +181,7 @@ export default React.createClass({
         }
 
         const tip = this.state.hover ?
-            <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
+            <Tooltip className="mx_TagTile_tooltip" label={name} /> :
             <div />;
         const contextButton = this.state.hover || this.state.menuDisplayed ?
             <div className="mx_TagTile_context_button" onClick={this.onContextButtonClick}>

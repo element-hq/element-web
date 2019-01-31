@@ -141,6 +141,39 @@ limitations under the License.
     color: $greyed-fg-color;
 }
 
+.mx_Field_valid input,
+.mx_Field_valid select,
+.mx_Field_valid textarea {
+    border-color: $input-valid-border-color ! important;
+}
+
+.mx_Field_valid input + label,
+.mx_Field_valid select + label,
+.mx_Field_valid textarea + label {
+    color: $input-valid-border-color ! important;
+}
+
+.mx_Field_invalid input,
+.mx_Field_invalid select,
+.mx_Field_invalid textarea {
+    border-color: $input-invalid-border-color ! important;
+}
+
+.mx_Field_invalid input + label,
+.mx_Field_invalid select + label,
+.mx_Field_invalid textarea + label {
+    color: $input-invalid-border-color ! important;
+}
+
+.mx_Field_tooltip {
+    margin-top: -12px;
+    margin-left: 4px;
+}
+
+.mx_Field_tooltip.mx_Field_valid {
+    animation: mx_fadeout 1s 2s forwards;
+}
+
 // Customise other components when placed inside a Field
 
 .mx_Field .mx_Dropdown_input {

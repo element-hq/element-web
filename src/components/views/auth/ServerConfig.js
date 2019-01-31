@@ -90,6 +90,15 @@ export default class ServerConfig extends React.PureComponent {
         this.setState({ hsUrl });
     }
 
+    onHomeserverValidate = (value) => {
+        try {
+            new URL(value);
+            return { valid: true, feedback: <div>Valid URL!</div> };
+        } catch (_) {
+            return { valid: false, feedback: <div>Invalid URL!</div>};
+        }
+    }
+
     onIdentityServerBlur = (ev) => {
         this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
             this.props.onServerConfigChange({
@@ -134,6 +143,7 @@ export default class ServerConfig extends React.PureComponent {
                         value={this.state.hsUrl}
                         onBlur={this.onHomeserverBlur}
                         onChange={this.onHomeserverChange}
+                        onValidate={this.onHomeserverValidate}
                     />
                     <Field id="mx_ServerConfig_isUrl"
                         label={_t("Identity Server URL")}
