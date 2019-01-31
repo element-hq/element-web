@@ -60,7 +60,7 @@ export default class Field extends React.PureComponent {
         const element = this.props.element || "input";
         const fieldInput = React.createElement(element, extraProps, this.props.children);
 
-        return <div className="mx_Field">
+        return <div className={`mx_Field mx_Field_${element}`}>
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
         </div>;
