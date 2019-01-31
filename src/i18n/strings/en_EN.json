@@ -134,6 +134,7 @@
     "Changes your display nickname": "Changes your display nickname",
     "Changes colour scheme of current room": "Changes colour scheme of current room",
     "Gets or sets the room topic": "Gets or sets the room topic",
+    "This room has no topic.": "This room has no topic.",
     "Sets the room name": "Sets the room name",
     "Invites user with given id to current room": "Invites user with given id to current room",
     "Joins room with given alias": "Joins room with given alias",
