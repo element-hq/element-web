@@ -19,15 +19,20 @@ limitations under the License.
 
 import ReplyThread from "./components/views/elements/ReplyThread";
 
-const React = require('react');
-const sanitizeHtml = require('sanitize-html');
-const highlight = require('highlight.js');
-const linkifyMatrix = require('./linkify-matrix');
+import React from 'react';
+import sanitizeHtml from 'sanitize-html';
+import highlight from 'highlight.js';
+import * as linkify from 'linkifyjs';
+import linkifyMatrix from './linkify-matrix';
+import _linkifyElement from 'linkifyjs/element';
+import _linkifyString from 'linkifyjs/string';
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
 import url from 'url';
+
+linkifyMatrix(linkify);
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -507,4 +512,36 @@ export function emojifyText(text) {
     return {
         __html: unicodeToImage(escape(text)),
     };
+}
+
+/**
+ * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+export function linkifyString(str) {
+    return _linkifyString(str);
+}
+
+/**
+ * Linkifies the given DOM element. This is a wrapper around 'linkifyjs/element'.
+ *
+ * @param {object} element DOM element to linkify
+ * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
+ * @returns {object}
+ */
+export function linkifyElement(element, options = linkifyMatrix.options) {
+    return _linkifyElement(element, options);
+}
+
+/**
+ * Linkify the given string and sanitize the HTML afterwards.
+ *
+ * @param {string} dirtyHtml The HTML string to sanitize and linkify
+ * @param {object} [sanitizeHtmlOptions] Optional settings for sanitize-html
+ * @returns {string}
+ */
+export function linkifyAndSanitizeHtml(dirtyHtml, sanitizeHtmlOptions = undefined) {
+    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlOptions);
 }
