@@ -8,7 +8,8 @@
  * Previously, they were
  * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&subset=latin-ext,vietnamese
  *
- * Nunito's italic isn't very italic so we currently fudge italic by shearing in CSS.
+ * We explicitly do not include Nunito's italic variants, as they are not italic enough
+ * and it's better to rely on the browser's built-in obliquing behaviour.
  */
 
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.

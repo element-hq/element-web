@@ -453,12 +453,17 @@ limitations under the License.
     display: inline ! important;
 }
 
+/*
+// actually, removing the Italic TTF provides
+// better results seemingly
+
 // compensate for Nunito italics being terrible
 // https://github.com/google/fonts/issues/1726
 .mx_EventTile_content .markdown-body em {
     transform: skewX(-14deg);
     display: inline-block;
 }
+*/
 
 /* end of overrides */
 
