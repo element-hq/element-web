@@ -154,7 +154,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
-    font-weight: 800;
+    font-weight: 700 ! important;
 
     .mx_RoomTile_name {
         color: $roomtile-selected-color;
