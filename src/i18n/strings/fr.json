@@ -1577,5 +1577,6 @@
     "When you log out, you'll lose your secure message history. To prevent this, set up a recovery method.": "Quand vous vous déconnectez, vous perdez votre historique de messages sécurisés. Pour empêcher cela, configurez une méthode de récupération.",
     "Alternatively, advanced users can also manually export encryption keys in <a>Settings</a> before logging out.": "Sinon, les utilisateurs avancés peuvent également exporter manuellement les clés de chiffrements dans les <a>Réglages</a> avant de se déconnecter.",
     "Set a Recovery Method": "Définir une méthode de récupération",
-    "I understand, log out without": "Je comprends, se déconnecter quand même"
+    "I understand, log out without": "Je comprends, se déconnecter quand même",
+    "Go back": "Revenir en arrière"
 }
