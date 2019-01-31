@@ -154,12 +154,18 @@ limitations under the License.
         background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 
+/*
+    // for now, we remove the bottomOverflow entirely as we don't want to
+    // lose the screen real-estate due to a bg-colored gradient, but we also
+    // don't want to use drop shadows and risk a confusing hierarchy of cards.
+    // so, instead, we hard-clip at the bottom but soft-clip at the top.
     &.mx_IndicatorScrollbar_bottomOverflow::after {
         bottom: 0;
         transition: background-image 0.1s ease-in;
         margin: 0px -8px;
-        background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.1));
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.0));
     }
+*/
 }
 
 .collapsed {
