@@ -164,6 +164,10 @@ module.exports = React.createClass({
                 this.setState({
                     flows: e.data.flows,
                 });
+            } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
+                this.setState({
+                    errorText: _t("Registration has been disabled"),
+                });
             } else {
                 this.setState({
                     errorText: _t("Unable to query for supported registration methods"),
