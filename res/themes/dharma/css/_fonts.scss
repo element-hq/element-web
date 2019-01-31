@@ -1,47 +1,36 @@
 /*
  * Nunito.
  * Includes extended Latin and Vietnamese character sets
- * Current URLs are v9, derived from the contents of
+ * Current URLs are taken from
+ * https://github.com/alexeiva/NunitoFont/releases/tag/v3.500
+ * ...in order to include cyrillic.
+ *
+ * Previously, they were
  * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&subset=latin-ext,vietnamese
+ *
+ * We explicitly do not include Nunito's italic variants, as they are not italic enough
+ * and it's better to rely on the browser's built-in obliquing behaviour.
  */
 
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.
  */
 @font-face {
   font-family: 'Nunito';
-  font-style: italic;
-  font-weight: 400;
-  src: url('$(res)/fonts/Nunito/XRXX3I6Li01BKofIMNaDRss.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Nunito';
-  font-style: italic;
-  font-weight: 600;
-  src: url('$(res)/fonts/Nunito/XRXQ3I6Li01BKofIMN5cYtvKUTo.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Nunito';
-  font-style: italic;
-  font-weight: 700;
-  src: url('$(res)/fonts/Nunito/XRXQ3I6Li01BKofIMN44Y9vKUTo.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
-  src: url('$(res)/fonts/Nunito/XRXV3I6Li01BKofINeaE.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 600;
-  src: url('$(res)/fonts/Nunito/XRXW3I6Li01BKofA6sKUYevN.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 700;
-  src: url('$(res)/fonts/Nunito/XRXW3I6Li01BKofAjsOUYevN.ttf') format('truetype');
+  src: url('$(res)/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
 }
 
 /*

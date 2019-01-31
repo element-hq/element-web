@@ -79,11 +79,15 @@
 
 .mx_Markdown_ITALIC {
     font-style: italic;
+/*
+    // interestingly, *not* using the explicit italic font
+    // variant seems yield better results.
 
     // compensate for Nunito italics being terrible
     // https://github.com/google/fonts/issues/1726
     transform: skewX(-14deg);
     display: inline-block;
+*/
 }
 
 .mx_Markdown_CODE {
