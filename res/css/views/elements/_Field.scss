@@ -31,6 +31,7 @@ limitations under the License.
     transition: border-color 0.25s;
     border: 1px solid $input-border-color;
     padding: 8px 9px;
+    background-color: $primary-bg-color;
 }
 
 .mx_Field select {
@@ -48,7 +49,7 @@ limitations under the License.
     height: 6px;
     mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
     mask-repeat: no-repeat;
-    background: $primary-fg-color;
+    background-color: $primary-fg-color;
     z-index: 1;
     pointer-events: none;
 }
