@@ -25,7 +25,7 @@ limitations under the License.
 }
 
 .mx_GroupView_header {
-    min-height: 70px;
+    min-height: 52px;
     align-items: center;
     display: flex;
     padding-bottom: 10px;
@@ -34,7 +34,7 @@ limitations under the License.
 .mx_GroupView_header_view {
     border-bottom: 1px solid $primary-hairline-color;
     padding-bottom: 0px;
-    padding-left: 8px;
+    padding-left: 19px;
     padding-right: 8px;
 }
 
@@ -348,4 +348,9 @@ limitations under the License.
 
 .mx_GroupView_changeDelayWarning {
     padding: 40px 20px;
+}
+
+.mx_GroupView .mx_MemberInfo .gm-scroll-view > :not(.mx_MemberInfo_avatar) {
+    padding-left: 16px;
+    padding-right: 16px;
 }

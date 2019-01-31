@@ -188,7 +188,7 @@ describe('GroupView', function() {
             expect(avatarImgElement).toBeTruthy();
             expect(avatarImgElement.src).toContain(
                 'https://my.home.server/_matrix/media/v1/thumbnail/' +
-                'someavatarurl?width=48&height=48&method=crop',
+                'someavatarurl?width=28&height=28&method=crop',
             );
 
             const name = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_GroupView_header_name');
