@@ -76,30 +76,32 @@ export default class ServerConfig extends React.PureComponent {
         });
     }
 
-    onHomeserverChanged = (ev) => {
-        this.setState({hsUrl: ev.target.value}, () => {
-            this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-                let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
-                if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
-                this.props.onServerConfigChange({
-                    hsUrl: this.state.hsUrl,
-                    isUrl: this.state.isUrl,
-                });
+    onHomeserverBlur = (ev) => {
+        this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
+            this.props.onServerConfigChange({
+                hsUrl: this.state.hsUrl,
+                isUrl: this.state.isUrl,
             });
         });
     }
 
-    onIdentityServerChanged = (ev) => {
-        this.setState({isUrl: ev.target.value}, () => {
-            this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
-                let isUrl = this.state.isUrl.trim().replace(/\/$/, "");
-                if (isUrl === "") isUrl = this.props.defaultIsUrl;
-                this.props.onServerConfigChange({
-                    hsUrl: this.state.hsUrl,
-                    isUrl: this.state.isUrl,
-                });
+    onHomeserverChange = (ev) => {
+        const hsUrl = ev.target.value;
+        this.setState({ hsUrl });
+    }
+
+    onIdentityServerBlur = (ev) => {
+        this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
+            this.props.onServerConfigChange({
+                hsUrl: this.state.hsUrl,
+                isUrl: this.state.isUrl,
             });
         });
+    }
+
+    onIdentityServerChange = (ev) => {
+        const isUrl = ev.target.value;
+        this.setState({ isUrl });
     }
 
     _waitThenInvoke(existingTimeoutId, fn) {
@@ -130,13 +132,15 @@ export default class ServerConfig extends React.PureComponent {
                         label={_t("Homeserver URL")}
                         placeholder={this.props.defaultHsUrl}
                         value={this.state.hsUrl}
-                        onChange={this.onHomeserverChanged}
+                        onBlur={this.onHomeserverBlur}
+                        onChange={this.onHomeserverChange}
                     />
                     <Field id="mx_ServerConfig_isUrl"
                         label={_t("Identity Server URL")}
                         placeholder={this.props.defaultIsUrl}
                         value={this.state.isUrl}
-                        onChange={this.onIdentityServerChanged}
+                        onBlur={this.onIdentityServerBlur}
+                        onChange={this.onIdentityServerChange}
                     />
                 </div>
             </div>

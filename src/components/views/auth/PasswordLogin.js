@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {fieldInputIncorrect} from '../../../UiEffects';
 import SdkConfig from '../../../SdkConfig';
 
 /**
@@ -35,13 +34,13 @@ class PasswordLogin extends React.Component {
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
+        onPhoneNumberBlur: function() {},
         initialUsername: "",
         initialPhoneCountry: "",
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
         hsUrl: "",
-        hsName: null,
         disableSubmit: false,
     }
 
@@ -61,6 +60,7 @@ class PasswordLogin extends React.Component {
         this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
         this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
         this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
+        this.onPhoneNumberBlur = this.onPhoneNumberBlur.bind(this);
         this.onPasswordChanged = this.onPasswordChanged.bind(this);
         this.isLoginEmpty = this.isLoginEmpty.bind(this);
     }
@@ -68,12 +68,6 @@ class PasswordLogin extends React.Component {
     componentWillMount() {
         this._passwordField = null;
         this._loginField = null;
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
-            fieldInputIncorrect(this.isLoginEmpty() ? this._loginField : this._passwordField);
-        }
     }
 
     onSubmitForm(ev) {
@@ -130,7 +124,7 @@ class PasswordLogin extends React.Component {
     }
 
     onUsernameBlur(ev) {
-        this.props.onUsernameBlur(this.state.username);
+        this.props.onUsernameBlur(ev.target.value);
     }
 
     onLoginTypeChange(loginType) {
@@ -152,6 +146,10 @@ class PasswordLogin extends React.Component {
     onPhoneNumberChanged(ev) {
         this.setState({phoneNumber: ev.target.value});
         this.props.onPhoneNumberChanged(ev.target.value);
+    }
+
+    onPhoneNumberBlur(ev) {
+        this.props.onPhoneNumberBlur(ev.target.value);
     }
 
     onPasswordChanged(ev) {
@@ -215,6 +213,7 @@ class PasswordLogin extends React.Component {
                         type="text"
                         name="phoneNumber"
                         onChange={this.onPhoneNumberChanged}
+                        onBlur={this.onPhoneNumberBlur}
                         placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
@@ -251,20 +250,18 @@ class PasswordLogin extends React.Component {
         }
 
         let yourMatrixAccountText = _t('Your account');
-        if (this.props.hsName) {
-            yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: this.props.hsName});
-        } else {
-            try {
-                const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Your %(serverName)s account', {serverName: parsedHsUrl.hostname});
-            } catch (e) {
-                // ignore
-            }
+        try {
+            const parsedHsUrl = new URL(this.props.hsUrl);
+            yourMatrixAccountText = _t('Your %(serverName)s account', {
+                serverName: parsedHsUrl.hostname,
+            });
+        } catch (e) {
+            // ignore
         }
 
         let editLink = null;
         if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_Auth_editServerDetails"
+            editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
                 {_t('Edit')}
@@ -341,7 +338,6 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
-    hsName: PropTypes.string,
     disableSubmit: PropTypes.bool,
 };
 

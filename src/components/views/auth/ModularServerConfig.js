@@ -77,17 +77,18 @@ export default class ModularServerConfig extends React.PureComponent {
         });
     }
 
-    onHomeserverChanged = (ev) => {
-        this.setState({hsUrl: ev.target.value}, () => {
-            this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-                let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
-                if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
-                this.props.onServerConfigChange({
-                    hsUrl: this.state.hsUrl,
-                    isUrl: this.props.defaultIsUrl,
-                });
+    onHomeserverBlur = (ev) => {
+        this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
+            this.props.onServerConfigChange({
+                hsUrl: this.state.hsUrl,
+                isUrl: this.props.defaultIsUrl,
             });
         });
+    }
+
+    onHomeserverChange = (ev) => {
+        const hsUrl = ev.target.value;
+        this.setState({ hsUrl });
     }
 
     _waitThenInvoke(existingTimeoutId, fn) {
@@ -117,7 +118,8 @@ export default class ModularServerConfig extends React.PureComponent {
                         label={_t("Server Name")}
                         placeholder={this.props.defaultHsUrl}
                         value={this.state.hsUrl}
-                        onChange={this.onHomeserverChanged}
+                        onBlur={this.onHomeserverBlur}
+                        onChange={this.onHomeserverChange}
                     />
                 </div>
             </div>

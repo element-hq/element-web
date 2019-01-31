@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Auth_language {
+.mx_AuthBody_language {
     width: 100%;
 }
 
-.mx_Auth_language .mx_Dropdown_input {
+.mx_AuthBody_language .mx_Dropdown_input {
     border: none;
     font-size: 14px;
     font-weight: 600;
     color: $authpage-lang-color;
 }
 
-.mx_Auth_language .mx_Dropdown_arrow {
+.mx_AuthBody_language .mx_Dropdown_arrow {
     background: $authpage-lang-color;
 }
