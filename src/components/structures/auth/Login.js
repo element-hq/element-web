@@ -263,6 +263,11 @@ module.exports = React.createClass({
             username: username,
             discoveryError: null,
         });
+        // If the free server type is selected, we don't show server details at all,
+        // so it doesn't make sense to try .well-known discovery.
+        if (this.state.serverType === ServerType.FREE) {
+            return;
+        }
         if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
             try {
@@ -385,6 +390,15 @@ module.exports = React.createClass({
         this.setState({findingHomeserver: true});
         try {
             const discovery = await AutoDiscovery.findClientConfig(serverName);
+
+            // The server type may have changed while discovery began in the background.
+            // If it has become the free server type which doesn't show server details,
+            // ignore discovery results.
+            if (this.state.serverType === ServerType.FREE) {
+                this.setState({findingHomeserver: false});
+                return;
+            }
+
             const state = discovery["m.homeserver"].state;
             if (state !== AutoDiscovery.SUCCESS && state !== AutoDiscovery.PROMPT) {
                 this.setState({
