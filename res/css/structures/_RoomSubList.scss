@@ -134,7 +134,7 @@ limitations under the License.
         position: sticky;
         left: 0;
         right: 0;
-        height: 35px;
+        height: 8px;
         content: "";
         display: block;
         z-index: 100;
@@ -142,20 +142,23 @@ limitations under the License.
     }
 
     &.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
-        margin-top: -35px;
+        margin-top: -8px;
     }
     &.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
-        margin-bottom: -35px;
+        margin-bottom: -8px;
     }
 
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
+        transition: background-image 0.1s ease-in;
         background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
     }
 
     &.mx_IndicatorScrollbar_bottomOverflow::after {
         bottom: 0;
-        background: linear-gradient(to bottom, rgba(242,245,248,0), rgba(242,245,248,1));
+        transition: background-image 0.1s ease-in;
+        margin: 0px -8px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.1));
     }
 }
 
