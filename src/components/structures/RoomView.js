@@ -892,53 +892,58 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
-                    action: 'join_room',
-                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    action: 'view_room',
+                    room_id: this.state.room.roomId,
                 },
             });
 
             // Don't peek whilst registering otherwise getPendingEventList complains
             // Do this by indicating our intention to join
-            dis.dispatch({
-                action: 'will_join',
-            });
 
-            const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-            const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
-                homeserverUrl: cli.getHomeserverUrl(),
-                onFinished: (submitted, credentials) => {
-                    if (submitted) {
-                        this.props.onRegistered(credentials);
-                    } else {
-                        dis.dispatch({
-                            action: 'cancel_after_sync_prepared',
-                        });
-                        dis.dispatch({
-                            action: 'cancel_join',
-                        });
-                    }
-                },
-                onDifferentServerClicked: (ev) => {
-                    dis.dispatch({action: 'start_registration'});
-                    close();
-                },
-                onLoginClick: (ev) => {
-                    dis.dispatch({action: 'start_login'});
-                    close();
-                },
-            }).close;
-            return;
+            // XXX: ILAG is disabled for now,
+            // see https://github.com/vector-im/riot-web/issues/8222
+            dis.dispatch({action: 'require_registration'});
+            // dis.dispatch({
+            //     action: 'will_join',
+            // });
+
+            // const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
+            // const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
+            //     homeserverUrl: cli.getHomeserverUrl(),
+            //     onFinished: (submitted, credentials) => {
+            //         if (submitted) {
+            //             this.props.onRegistered(credentials);
+            //         } else {
+            //             dis.dispatch({
+            //                 action: 'cancel_after_sync_prepared',
+            //             });
+            //             dis.dispatch({
+            //                 action: 'cancel_join',
+            //             });
+            //         }
+            //     },
+            //     onDifferentServerClicked: (ev) => {
+            //         dis.dispatch({action: 'start_registration'});
+            //         close();
+            //     },
+            //     onLoginClick: (ev) => {
+            //         dis.dispatch({action: 'start_login'});
+            //         close();
+            //     },
+            // }).close;
+            // return;
+        } else {
+            Promise.resolve().then(() => {
+                const signUrl = this.props.thirdPartyInvite ?
+                    this.props.thirdPartyInvite.inviteSignUrl : undefined;
+                dis.dispatch({
+                    action: 'join_room',
+                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                });
+                return Promise.resolve();
+            });
         }
 
-        Promise.resolve().then(() => {
-            const signUrl = this.props.thirdPartyInvite ?
-                this.props.thirdPartyInvite.inviteSignUrl : undefined;
-            dis.dispatch({
-                action: 'join_room',
-                opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
-            });
-            return Promise.resolve();
-        });
     },
 
     onMessageListScroll: function(ev) {

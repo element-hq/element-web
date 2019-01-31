@@ -22,9 +22,9 @@ limitations under the License.
 
 import dis from './dispatcher';
 import sdk from './index';
-import MatrixClientPeg from './MatrixClientPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
+// import MatrixClientPeg from './MatrixClientPeg';
 
 // Regex for what a "safe" or "Matrix-looking" localpart would be.
 // TODO: Update as needed for https://github.com/matrix-org/matrix-doc/issues/1514
@@ -40,25 +40,29 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  */
 export async function startAnyRegistrationFlow(options) {
     if (options === undefined) options = {};
-    const flows = await _getRegistrationFlows();
     // look for an ILAG compatible flow. We define this as one
     // which has only dummy or recaptcha flows. In practice it
     // would support any stage InteractiveAuth supports, just not
     // ones like email & msisdn which require the user to supply
     // the relevant details in advance. We err on the side of
     // caution though.
-    const hasIlagFlow = flows.some((flow) => {
-        return flow.stages.every((stage) => {
-            return ['m.login.dummy', 'm.login.recaptcha', 'm.login.terms'].includes(stage);
-        });
-    });
 
-    if (hasIlagFlow) {
-        dis.dispatch({
-            action: 'view_set_mxid',
-            go_home_on_cancel: options.go_home_on_cancel,
-        });
-    } else {
+    // XXX: ILAG is disabled for now,
+    // see https://github.com/vector-im/riot-web/issues/8222
+
+    // const flows = await _getRegistrationFlows();
+    // const hasIlagFlow = flows.some((flow) => {
+    //     return flow.stages.every((stage) => {
+    //         return ['m.login.dummy', 'm.login.recaptcha', 'm.login.terms'].includes(stage);
+    //     });
+    // });
+
+    // if (hasIlagFlow) {
+    //     dis.dispatch({
+    //         action: 'view_set_mxid',
+    //         go_home_on_cancel: options.go_home_on_cancel,
+    //     });
+    //} else {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
             title: _t("Registration Required"),
@@ -72,25 +76,25 @@ export async function startAnyRegistrationFlow(options) {
                 }
             },
         });
-    }
+    //}
 }
 
-async function _getRegistrationFlows() {
-    try {
-        await MatrixClientPeg.get().register(
-            null,
-            null,
-            undefined,
-            {},
-            {},
-        );
-        console.log("Register request succeeded when it should have returned 401!");
-    } catch (e) {
-        if (e.httpStatus === 401) {
-            return e.data.flows;
-        }
-        throw e;
-    }
-    throw new Error("Register request succeeded when it should have returned 401!");
-}
+// async function _getRegistrationFlows() {
+//     try {
+//         await MatrixClientPeg.get().register(
+//             null,
+//             null,
+//             undefined,
+//             {},
+//             {},
+//         );
+//         console.log("Register request succeeded when it should have returned 401!");
+//     } catch (e) {
+//         if (e.httpStatus === 401) {
+//             return e.data.flows;
+//         }
+//         throw e;
+//     }
+//     throw new Error("Register request succeeded when it should have returned 401!");
+// }
 
