@@ -79,8 +79,6 @@ export default class ModularServerConfig extends React.PureComponent {
 
     onHomeserverBlur = (ev) => {
         this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
-            if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
             this.props.onServerConfigChange({
                 hsUrl: this.state.hsUrl,
                 isUrl: this.props.defaultIsUrl,

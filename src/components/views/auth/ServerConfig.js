@@ -78,8 +78,6 @@ export default class ServerConfig extends React.PureComponent {
 
     onHomeserverBlur = (ev) => {
         this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, () => {
-            let hsUrl = this.state.hsUrl.trim().replace(/\/$/, "");
-            if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
             this.props.onServerConfigChange({
                 hsUrl: this.state.hsUrl,
                 isUrl: this.state.isUrl,
@@ -94,8 +92,6 @@ export default class ServerConfig extends React.PureComponent {
 
     onIdentityServerBlur = (ev) => {
         this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, () => {
-            let isUrl = this.state.isUrl.trim().replace(/\/$/, "");
-            if (isUrl === "") isUrl = this.props.defaultIsUrl;
             this.props.onServerConfigChange({
                 hsUrl: this.state.hsUrl,
                 isUrl: this.state.isUrl,
