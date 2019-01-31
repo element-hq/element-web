@@ -270,11 +270,15 @@ module.exports = React.createClass({
         this.validateField(FIELD_USERNAME, ev.type);
     },
 
+    /**
+     * A step is required if all flows include that step.
+     *
+     * @param {string} step A stage name to check
+     * @returns {boolean} Whether it is required
+     */
     _authStepIsRequired(step) {
-        // A step is required if no flow exists which does not include that step
-        // (Notwithstanding setups like either email or msisdn being required)
-        return !this.props.flows.some((flow) => {
-            return !flow.stages.includes(step);
+        return this.props.flows.every((flow) => {
+            return flow.stages.includes(step);
         });
     },
 
