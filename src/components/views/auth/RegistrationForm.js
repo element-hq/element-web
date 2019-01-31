@@ -305,7 +305,7 @@ module.exports = React.createClass({
         const emailSection = (
             <div>
                 <input type="text" ref="email"
-                    autoFocus={true} placeholder={emailPlaceholder}
+                    placeholder={emailPlaceholder}
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={this.onEmailBlur}
@@ -359,6 +359,7 @@ module.exports = React.createClass({
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
                         <input type="text" ref="username"
+                            autoFocus={true}
                             placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
                             className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                             onBlur={this.onUsernameBlur} />
