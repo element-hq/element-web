@@ -66,10 +66,6 @@ module.exports = React.createClass({
         // different home server without confusing users.
         fallbackHsUrl: PropTypes.string,
 
-        // The default server name to use when the user hasn't specified
-        // one. This is used when displaying the defaultHsUrl in the UI.
-        defaultServerName: PropTypes.string,
-
         // An error passed along from higher up explaining that something
         // went wrong when finding the defaultHsUrl.
         defaultServerDiscoveryError: PropTypes.string,
@@ -265,7 +261,10 @@ module.exports = React.createClass({
     },
 
     onUsernameBlur: function(username) {
-        this.setState({ username: username });
+        this.setState({
+            username: username,
+            discoveryError: null,
+        });
         if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
             try {
@@ -285,16 +284,22 @@ module.exports = React.createClass({
     },
 
     onPhoneNumberChanged: function(phoneNumber) {
-        // Validate the phone number entered
-        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({ errorText: _t('The phone number entered looks invalid') });
-            return;
-        }
-
         this.setState({
             phoneNumber: phoneNumber,
+        });
+    },
+
+    onPhoneNumberBlur: function(phoneNumber) {
+        this.setState({
             errorText: null,
         });
+
+        // Validate the phone number entered
+        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
+            this.setState({
+                errorText: _t('The phone number entered looks invalid'),
+            });
+        }
     },
 
     onServerConfigChange: function(config) {
@@ -571,7 +576,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
             case ServerType.ADVANCED:
@@ -581,7 +586,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
         }
@@ -649,10 +654,10 @@ module.exports = React.createClass({
                onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}
                onPhoneNumberChanged={this.onPhoneNumberChanged}
+               onPhoneNumberBlur={this.onPhoneNumberBlur}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                hsUrl={this.state.enteredHomeserverUrl}
-               hsName={this.props.defaultServerName}
                disableSubmit={this.state.findingHomeserver}
                />
         );
@@ -684,7 +689,7 @@ module.exports = React.createClass({
         let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
-                <a className="mx_Auth_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
+                <a className="mx_AuthBody_changeFlow" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Try the app first') }
                 </a>;
         }
@@ -709,7 +714,7 @@ module.exports = React.createClass({
                     { errorTextSection }
                     { this.renderServerComponentForStep() }
                     { this.renderLoginComponentForStep() }
-                    <a className="mx_Auth_changeFlow" onClick={this.onRegisterClick} href="#">
+                    <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
                     </a>
                     { loginAsGuestJsx }

@@ -36,7 +36,7 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
-.mx_Auth_editServerDetails {
+.mx_AuthBody_editServerDetails {
     padding-left: 1em;
     font-size: 12px;
     font-weight: normal;
@@ -47,21 +47,21 @@ limitations under the License.
     box-sizing: border-box;
 }
 
-.mx_Auth_fieldRow {
+.mx_AuthBody_fieldRow {
     display: flex;
     margin-bottom: 10px;
 }
 
-.mx_Auth_fieldRow > * {
+.mx_AuthBody_fieldRow > * {
     margin: 0 5px;
     flex: 1;
 }
 
-.mx_Auth_fieldRow > *:first-child {
+.mx_AuthBody_fieldRow > *:first-child {
     margin-left: 0;
 }
 
-.mx_Auth_fieldRow > *:last-child {
+.mx_AuthBody_fieldRow > *:last-child {
     margin-right: 0;
 }
 
@@ -72,7 +72,7 @@ limitations under the License.
     text-decoration: none;
 }
 
-.mx_Auth_changeFlow {
+.mx_AuthBody_changeFlow {
     display: block;
     text-align: center;
     width: 100%;

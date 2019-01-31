@@ -56,10 +56,6 @@ module.exports = React.createClass({
         email: PropTypes.string,
         referrer: PropTypes.string,
 
-        // The default server name to use when the user hasn't specified
-        // one. This is used when displaying the defaultHsUrl in the UI.
-        defaultServerName: PropTypes.string,
-
         // An error passed along from higher up explaining that something
         // went wrong when finding the defaultHsUrl.
         defaultServerDiscoveryError: PropTypes.string,
@@ -151,6 +147,9 @@ module.exports = React.createClass({
     },
 
     _replaceClient: async function() {
+        this.setState({
+            errorText: null,
+        });
         this._matrixClient = Matrix.createClient({
             baseUrl: this.state.hsUrl,
             idBaseUrl: this.state.isUrl,
@@ -390,7 +389,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
             case ServerType.ADVANCED:
@@ -400,7 +399,7 @@ module.exports = React.createClass({
                     defaultHsUrl={this.props.defaultHsUrl}
                     defaultIsUrl={this.props.defaultIsUrl}
                     onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={1000}
+                    delayTimeMs={250}
                 />;
                 break;
         }
@@ -470,7 +469,6 @@ module.exports = React.createClass({
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 hsUrl={this.state.hsUrl}
-                hsName={this.props.defaultServerName}
             />;
         }
     },
@@ -489,7 +487,7 @@ module.exports = React.createClass({
         let signIn;
         if (!this.state.doingUIAuth) {
             signIn = (
-                <a className="mx_Auth_changeFlow" onClick={this.onLoginClick} href="#">
+                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                     { _t('Sign in instead') }
                 </a>
             );
