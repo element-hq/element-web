@@ -1178,7 +1178,7 @@ export default React.createClass({
                     avatarImage = <GroupAvatar groupId={this.props.groupId}
                         groupName={this.state.profileForm.name}
                         groupAvatarUrl={this.state.profileForm.avatar_url}
-                        width={48} height={48} resizeMethod='crop'
+                        width={28} height={28} resizeMethod='crop'
                     />;
                 }
 
@@ -1228,7 +1228,7 @@ export default React.createClass({
                     groupAvatarUrl={groupAvatarUrl}
                     groupName={groupName}
                     onClick={onGroupHeaderItemClick}
-                    width={48} height={48}
+                    width={28} height={28}
                 />;
                 if (summary.profile && summary.profile.name) {
                     nameNode = <div onClick={onGroupHeaderItemClick}>
