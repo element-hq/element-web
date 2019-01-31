@@ -154,13 +154,12 @@ export const CommandMap = {
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents.getContent().topic;
-            const topicHtml = linkifyString(sanitizeHtml(topic));
+            const topicHtml = topic ? linkifyString(sanitizeHtml(topic)) : _t('This room has no topic.');
 
-            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-            Modal.createTrackedDialog('Slash Commands', 'Topic', QuestionDialog, {
+            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+            Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
-                hasCancelButton: false,
             });
             return success();
         },
