@@ -1462,5 +1462,15 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "找不到下列 Matrix ID 的簡介，您無論如何都想邀請他們嗎？",
     "Invite anyway and never warn me again": "無論如何都要邀請，而且不要再警告我",
     "Invite anyway": "無論如何都要邀請",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以設定自訂的身份識別伺服器，但您無法透過電子郵件地址邀請使用者，或是被邀請。"
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以設定自訂的身份識別伺服器，但您無法透過電子郵件地址邀請使用者，或是被邀請。",
+    "Whether or not you're logged in (we don't record your username)": "您是否已登入（我們不會記錄您的使用者名稱）",
+    "Upgrades a room to a new version": "升級聊天室到新版本",
+    "Sets the room name": "設定聊天室名稱",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s 升級了此聊天室。",
+    "%(displayName)s is typing …": "%(displayName)s 正在打字……",
+    "%(names)s and %(count)s others are typing …|other": "%(names)s 與其他 %(count)s 個人正在打字……",
+    "%(names)s and %(count)s others are typing …|one": "%(names)s 與其他一個人正在打字……",
+    "%(names)s and %(lastPerson)s are typing …": "%(names)s 與 %(lastPerson)s 正在打字……",
+    "Tabbed settings": "分頁式設定",
+    "Render simple counters in room header": "在聊天室標頭顯示簡單的計數器"
 }
