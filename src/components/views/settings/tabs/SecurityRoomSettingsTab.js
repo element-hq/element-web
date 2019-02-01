@@ -21,7 +21,6 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import {SettingLevel} from "../../../../settings/SettingsStore";
-import Modal from "../../../../Modal";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
