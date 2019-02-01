@@ -4081,7 +4081,7 @@ Changes in [0.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v
    [\#297](https://github.com/matrix-org/matrix-react-sdk/pull/297)
  * multiple URL preview support
    [\#290](https://github.com/matrix-org/matrix-react-sdk/pull/290)
- * Add a fallback home server to log into
+ * Add a fallback homeserver to log into
    [\#293](https://github.com/matrix-org/matrix-react-sdk/pull/293)
  * Hopefully fix memory leak with velocity
    [\#291](https://github.com/matrix-org/matrix-react-sdk/pull/291)

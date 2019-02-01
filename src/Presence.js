@@ -33,7 +33,7 @@ class Presence {
     }
     /**
      * Start listening the user activity to evaluate his presence state.
-     * Any state change will be sent to the Home Server.
+     * Any state change will be sent to the homeserver.
      */
     async start() {
         this._unavailableTimer = new Timer(UNAVAILABLE_TIME_MS);
@@ -78,7 +78,7 @@ class Presence {
 
     /**
      * Set the presence state.
-     * If the state has changed, the Home Server will be notified.
+     * If the state has changed, the homeserver will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
     async setState(newState) {

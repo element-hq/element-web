@@ -63,7 +63,7 @@ module.exports = React.createClass({
         defaultIsUrl: PropTypes.string,
         // Secondary HS which we try to log into if the user is using
         // the default HS but login fails. Useful for migrating to a
-        // different home server without confusing users.
+        // different homeserver without confusing users.
         fallbackHsUrl: PropTypes.string,
 
         // An error passed along from higher up explaining that something
@@ -160,7 +160,7 @@ module.exports = React.createClass({
             // Some error strings only apply for logging in
             const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus === 400 && usingEmail) {
-                errorText = _t('This Home Server does not support login using email address.');
+                errorText = _t('This homeserver does not support login using email address.');
             } else if (error.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
                     error.data.limit_type,
@@ -241,7 +241,7 @@ module.exports = React.createClass({
         }, function(error) {
             let errorText;
             if (error.httpStatus === 403) {
-                errorText = _t("Guest access is disabled on this Home Server.");
+                errorText = _t("Guest access is disabled on this homeserver.");
             } else {
                 errorText = self._errorTextFromError(error);
             }

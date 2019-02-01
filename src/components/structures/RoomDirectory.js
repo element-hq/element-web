@@ -96,9 +96,9 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
-                title: _t('Failed to get protocol list from Home Server'),
-                description: _t('The Home Server may be too old to support third party networks'),
+            Modal.createTrackedDialog('Failed to get protocol list from homeserver', '', ErrorDialog, {
+                title: _t('Failed to get protocol list from homeserver'),
+                description: _t('The homeserver may be too old to support third party networks'),
             });
         });
 

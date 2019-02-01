@@ -78,7 +78,7 @@ module.exports = React.createClass({
         // * invitedEmail (string) The email address that was invited to this room
         thirdPartyInvite: PropTypes.object,
 
-        // Any data about the room that would normally come from the Home Server
+        // Any data about the room that would normally come from the homeserver
         // but has been passed out-of-band, eg. the room name and avatar URL
         // from an email invite (a workaround for the fact that we can't
         // get this information from the HS using an email invite).

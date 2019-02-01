@@ -359,7 +359,7 @@ class ContentMessages {
             if (!upload.canceled) {
                 let desc = _t('The file \'%(fileName)s\' failed to upload', {fileName: upload.fileName}) + '.';
                 if (err.http_status == 413) {
-                    desc = _t('The file \'%(fileName)s\' exceeds this home server\'s size limit for uploads', {fileName: upload.fileName});
+                    desc = _t('The file \'%(fileName)s\' exceeds this homeserver\'s size limit for uploads', {fileName: upload.fileName});
                 }
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {

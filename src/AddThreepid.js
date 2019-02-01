@@ -19,7 +19,7 @@ import MatrixClientPeg from './MatrixClientPeg';
 import { _t } from './languageHandler';
 
 /**
- * Allows a user to add a third party identifier to their Home Server and,
+ * Allows a user to add a third party identifier to their homeserver and,
  * optionally, the identity servers.
  *
  * This involves getting an email token from the identity server to "prove" that
