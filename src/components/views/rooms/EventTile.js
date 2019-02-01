@@ -459,17 +459,21 @@ module.exports = withMatrixClient(React.createClass({
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            return this.state.verified ? <E2ePadlockVerified {...props} /> : <E2ePadlockUnverified {...props} />;
+            if (this.state.verified) {
+                return; // no icon for verified
+            } else {
+                return (<E2ePadlockUnverified {...props} />);
+            }
         }
 
         if (this.props.matrixClient.isRoomEncrypted(ev.getRoomId())) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
-                return <E2ePadlockEncrypting {...props} />;
+                return;
             }
             if (ev.status === EventStatus.NOT_SENT) {
-                return <E2ePadlockNotSent {...props} />;
+                return;
             }
             // if the event is not encrypted, but it's an e2e room, show the open padlock
             return <E2ePadlockUnencrypted {...props} />;
@@ -767,57 +771,29 @@ module.exports.haveTileForEvent = function(e) {
 
 function E2ePadlockUndecryptable(props) {
     return (
-        <E2ePadlock alt={_t("Undecryptable")}
-            src={require("../../../../res/img/e2e-blocked.svg")} width="12" height="12"
-            style={{ marginLeft: "-1px" }} {...props} />
-    );
-}
-
-function E2ePadlockEncrypting(props) {
-    return (
-        <E2ePadlock alt={_t("Encrypting")}
-            src={require("../../../../res/img/e2e-encrypting.svg")} width="10" height="12"
-            {...props} />
-    );
-}
-
-function E2ePadlockNotSent(props) {
-    return (
-        <E2ePadlock alt={_t("Encrypted, not sent")}
-            src={require("../../../../res/img/e2e-not_sent.svg")} width="10" height="12"
-            {...props} />
-    );
-}
-
-function E2ePadlockVerified(props) {
-    return (
-        <E2ePadlock alt={_t("Encrypted by a verified device")}
-            src={require("../../../../res/img/e2e-verified.svg")} width="10" height="12"
-            {...props} />
+        <E2ePadlock title={_t("Undecryptable")} icon="undecryptable" />
     );
 }
 
 function E2ePadlockUnverified(props) {
     return (
-        <E2ePadlock alt={_t("Encrypted by an unverified device")}
-            src={require("../../../../res/img/e2e-warning.svg")} width="15" height="12"
-            style={{ marginLeft: "-2px" }} {...props} />
+        <E2ePadlock title={_t("Encrypted by an unverified device")} icon="unverified" />
     );
 }
 
 function E2ePadlockUnencrypted(props) {
     return (
-        <E2ePadlock alt={_t("Unencrypted message")}
-            src={require("../../../../res/img/e2e-unencrypted.svg")} width="12" height="12"
-            {...props} />
+        <E2ePadlock title={_t("Unencrypted message")} icon="unencrypted" />
     );
 }
 
 function E2ePadlock(props) {
     if (SettingsStore.getValue("alwaysShowEncryptionIcons")) {
-        return <img className="mx_EventTile_e2eIcon" {...props} />;
+        return <div
+            className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${props.icon}`}
+            title={props.title} onClick={props.onClick} />;
     } else {
-        return <img className="mx_EventTile_e2eIcon mx_EventTile_e2eIcon_hidden" {...props} />;
+        return <div className="mx_EventTile_e2eIcon mx_EventTile_e2eIcon_hidden" onClick={props.onClick} />;
     }
 }
 
