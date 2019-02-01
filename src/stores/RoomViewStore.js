@@ -120,7 +120,7 @@ class RoomViewStore extends Store {
                 });
                 break;
             case 'open_room_settings':
-                if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
+                if (true || SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
                     const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                     Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                         roomId: this._state.roomId,

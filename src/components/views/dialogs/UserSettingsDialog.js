@@ -96,11 +96,11 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_helpIcon",
             <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        tabs.push(new Tab(
-            _td("Visit old settings"),
-            "mx_UserSettingsDialog_helpIcon",
-            <TempTab onClose={this.props.onFinished} />,
-        ));
+        // tabs.push(new Tab(
+        //     _td("Visit old settings"),
+        //     "mx_UserSettingsDialog_helpIcon",
+        //     <TempTab onClose={this.props.onFinished} />,
+        // ));
 
         return tabs;
     }

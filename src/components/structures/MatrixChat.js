@@ -572,7 +572,7 @@ export default React.createClass({
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
             case 'view_user_settings': {
-                if (SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
+                if (true || SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
                     const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                     Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
                 } else {
