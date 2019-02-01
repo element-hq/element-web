@@ -21,7 +21,6 @@ import MatrixClientPeg from "../../../../MatrixClientPeg";
 import sdk from "../../../../index";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import {SettingLevel} from "../../../../settings/SettingsStore";
-import Modal from "../../../../Modal";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -37,32 +36,20 @@ export default class SecurityRoomSettingsTab extends React.Component {
     }
 
     _onStateEvent = (e) => {
-        const refreshWhenTypes = ['m.room.join_rules', 'm.room.guest_access', 'm.room.history_visibility'];
+        const refreshWhenTypes = [
+            'm.room.join_rules',
+            'm.room.guest_access',
+            'm.room.history_visibility',
+            'm.room.encryption',
+        ];
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
     _onEncryptionChange = (e) => {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('E2E Enable Warning', '', QuestionDialog, {
-            title: _t('Warning!'),
-            description: (
-                <div>
-                    <p>{ _t('End-to-end encryption is in beta and may not be reliable') }.</p>
-                    <p>{ _t('You should not yet trust it to secure data') }.</p>
-                    <p>{ _t('Devices will not yet be able to decrypt history from before they joined the room') }.</p>
-                    <p>{ _t('Once encryption is enabled for a room it cannot be turned off again (for now)') }.</p>
-                    <p>{ _t('Encrypted messages will not be visible on clients that do not yet implement encryption') }.</p>
-                </div>
-            ),
-            onFinished: (confirm)=>{
-                if (confirm) {
-                    return MatrixClientPeg.get().sendStateEvent(
-                        this.props.roomId, "m.room.encryption",
-                        { algorithm: "m.megolm.v1.aes-sha2" },
-                    );
-                }
-            },
-        });
+        MatrixClientPeg.get().sendStateEvent(
+            this.props.roomId, "m.room.encryption",
+            { algorithm: "m.megolm.v1.aes-sha2" },
+        );
     };
 
     _fixGuestAccess = (e) => {

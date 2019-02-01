@@ -643,7 +643,6 @@ module.exports = React.createClass({
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     _onRoomLoaded: function(room) {
-        this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
         this._loadMembersIfJoined(room);
@@ -674,34 +673,6 @@ module.exports = React.createClass({
                     console.error(err);
                 }
             }
-        }
-    },
-
-    _warnAboutEncryption: function(room) {
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
-            return;
-        }
-        let userHasUsedEncryption = false;
-        if (localStorage) {
-            userHasUsedEncryption = localStorage.getItem('mx_user_has_used_encryption');
-        }
-        if (!userHasUsedEncryption) {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createTrackedDialog('E2E Warning', '', QuestionDialog, {
-                title: _t("Warning!"),
-                hasCancelButton: false,
-                description: (
-                    <div>
-                        <p>{ _t("End-to-end encryption is in beta and may not be reliable") }.</p>
-                        <p>{ _t("You should not yet trust it to secure data") }.</p>
-                        <p>{ _t("Devices will not yet be able to decrypt history from before they joined the room") }.</p>
-                        <p>{ _t("Encrypted messages will not be visible on clients that do not yet implement encryption") }.</p>
-                    </div>
-                ),
-            });
-        }
-        if (localStorage) {
-            localStorage.setItem('mx_user_has_used_encryption', true);
         }
     },
 
