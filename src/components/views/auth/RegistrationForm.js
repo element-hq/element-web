@@ -379,7 +379,7 @@ module.exports = React.createClass({
                         { phoneSection }
                     </div>
                     {_t(
-                        "Use an email address to receover your account. Other users " +
+                        "Use an email address to recover your account. Other users " +
                         "can invite you to rooms using your contact details.",
                     )}
                     { registerButton }
