@@ -24,6 +24,7 @@ import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
 import { MatrixClient } from 'matrix-js-sdk';
+import classnames from 'classnames';
 
 class HomePage extends React.Component {
     static displayName = 'HomePage';
@@ -80,16 +81,22 @@ class HomePage extends React.Component {
     }
 
     render() {
+        const isGuest = this.context.matrixClient.isGuest();
+        const classes = classnames({
+            mx_HomePage: true,
+            mx_HomePage_guest: isGuest,
+        });
+
         if (this.state.iframeSrc) {
             return (
-                <div className="mx_HomePage">
+                <div className={classes}>
                     <iframe src={ this.state.iframeSrc } />
                 </div>
             );
         } else {
             const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
             return (
-                <GeminiScrollbarWrapper autoshow={true} className="mx_HomePage">
+                <GeminiScrollbarWrapper autoshow={true} className={classes}>
                     <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
                     </div>
                 </GeminiScrollbarWrapper>
