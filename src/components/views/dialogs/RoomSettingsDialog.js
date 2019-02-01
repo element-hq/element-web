@@ -83,11 +83,11 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_warningIcon",
             <AdvancedRoomSettingsTab roomId={this.props.roomId} />,
         ));
-        tabs.push(new Tab(
-            _td("Visit old settings"),
-            "mx_RoomSettingsDialog_warningIcon",
-            <TempTab onClose={this.props.onFinished} />,
-        ));
+        // tabs.push(new Tab(
+        //     _td("Visit old settings"),
+        //     "mx_RoomSettingsDialog_warningIcon",
+        //     <TempTab onClose={this.props.onFinished} />,
+        // ));
 
         return tabs;
     }
