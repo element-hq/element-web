@@ -18,32 +18,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import classNames from 'classnames';
 
 export default class MemberDeviceInfo extends React.Component {
     render() {
-        let indicator = null;
         const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
-
-        if (this.props.device.isBlocked()) {
-            indicator = (
-                    <div className="mx_MemberDeviceInfo_blacklisted">
-                    <img src={require("../../../../res/img/e2e-blocked.svg")} width="12" height="12" style={{ marginLeft: "-1px" }} alt={_t("Blacklisted")} />
-                    </div>
-            );
-        } else if (this.props.device.isVerified()) {
-            indicator = (
-                    <div className="mx_MemberDeviceInfo_verified">
-                    <img src={require("../../../../res/img/e2e-verified.svg")} width="10" height="12" alt={_t("Verified")} />
-                    </div>
-            );
-        } else {
-            indicator = (
-                    <div className="mx_MemberDeviceInfo_unverified">
-                    <img src={require("../../../../res/img/e2e-warning.svg")} width="15" height="12" style={{ marginLeft: "-2px" }} alt={_t("Unverified")} />
-                    </div>
-            );
-        }
-
+        const iconClasses = classNames({
+            mx_MemberDeviceInfo_icon: true,
+            mx_MemberDeviceInfo_icon_blacklisted: this.props.device.isBlocked(),
+            mx_MemberDeviceInfo_icon_verified: this.props.device.isVerified(),
+            mx_MemberDeviceInfo_icon_unverified: this.props.device.isUnverified(),
+        });
+        const indicator = (<div className={iconClasses} />);
         const deviceName = this.props.device.ambiguous ?
             (this.props.device.getDisplayName() ? this.props.device.getDisplayName() : "") + " (" + this.props.device.deviceId + ")" :
             this.props.device.getDisplayName();
@@ -52,10 +38,10 @@ export default class MemberDeviceInfo extends React.Component {
         return (
             <div className="mx_MemberDeviceInfo"
                     title={_t("device id: ") + this.props.device.deviceId} >
+                { indicator }
                 <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">
                         { deviceName }
-                        { indicator }
                     </div>
                 </div>
                 <DeviceVerifyButtons userId={this.props.userId} device={this.props.device} />

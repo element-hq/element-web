@@ -26,6 +26,9 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
+import classNames from 'classnames';
+
+import E2EIcon from './E2EIcon';
 
 const formatButtonList = [
     _td("bold"),
@@ -316,24 +319,13 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        let e2eImg; let e2eTitle; let e2eClass;
-        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-        if (roomIsEncrypted) {
-            // FIXME: show a /!\ if there are untrusted devices in the room...
-            e2eImg = require("../../../../res/img/e2e-verified.svg");
-            e2eTitle = _t('Encrypted room');
-            e2eClass = 'mx_MessageComposer_e2eIcon';
-        } else {
-            e2eImg = require("../../../../res/img/e2e-unencrypted.svg");
-            e2eTitle = _t('Unencrypted room');
-            e2eClass = 'mx_MessageComposer_e2eIcon mx_filterFlipColor';
+        if (this.props.e2eStatus) {
+            controls.push(<E2EIcon
+                status={this.props.e2eStatus}
+                key="e2eIcon"
+                className="mx_MessageComposer_e2eIcon" />
+            );
         }
-
-        controls.push(
-            <img key="e2eIcon" className={e2eClass} src={e2eImg} width="12" height="12"
-                alt={e2eTitle} title={e2eTitle}
-            />,
-        );
 
         let callButton;
         let videoCallButton;
@@ -413,6 +405,7 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             ) : null;
 
+            const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             let placeholderText;
             if (this.state.isQuoting) {
                 if (roomIsEncrypted) {
@@ -509,9 +502,13 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
+        const wrapperClasses = classNames({
+            mx_MessageComposer_wrapper: true,
+            mx_MessageComposer_hasE2EIcon: !!this.props.e2eStatus,
+        });
         return (
             <div className="mx_MessageComposer">
-                <div className="mx_MessageComposer_wrapper">
+                <div className={wrapperClasses}>
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>

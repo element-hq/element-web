@@ -168,6 +168,7 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
         MatrixClientPeg.get().on("crypto.keyBackupStatus", this.onKeyBackupStatus);
+        MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this._fetchMediaConfig();
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -457,6 +458,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
+            MatrixClientPeg.get().removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -589,6 +591,10 @@ module.exports = React.createClass({
             this._updatePreviewUrlVisibility(room);
         }
 
+        if (ev.getType() === "m.room.encryption") {
+            this._updateE2EStatus(room);
+        }
+
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
@@ -642,6 +648,7 @@ module.exports = React.createClass({
         this._updatePreviewUrlVisibility(room);
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
+        this._updateE2EStatus(room);
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -730,6 +737,23 @@ module.exports = React.createClass({
             room: room,
         }, () => {
             this._onRoomLoaded(room);
+        });
+    },
+
+    onDeviceVerificationChanged: function(userId, device) {
+        const room = this.state.room;
+        if (!room.currentState.getMember(userId)) {
+            return;
+        }
+        this._updateE2EStatus(room);
+    },
+
+    _updateE2EStatus: function(room) {
+        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
+            return;
+        }
+        room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
+            this.setState({e2eStatus: hasUnverifiedDevices ? "warning" : "verified"});
         });
     },
 
@@ -1575,6 +1599,7 @@ module.exports = React.createClass({
                             room={this.state.room}
                             oobData={this.props.oobData}
                             collapsedRhs={this.props.collapsedRhs}
+                            e2eStatus={this.state.e2eStatus}
                         />
                         <div className="mx_RoomView_body">
                             <div className="mx_RoomView_auxPanel">
@@ -1622,6 +1647,7 @@ module.exports = React.createClass({
                             ref="header"
                             room={this.state.room}
                             collapsedRhs={this.props.collapsedRhs}
+                            e2eStatus={this.state.e2eStatus}
                         />
                         <div className="mx_RoomView_body">
                             <div className="mx_RoomView_auxPanel">
@@ -1767,6 +1793,7 @@ module.exports = React.createClass({
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
                     uploadAllowed={this.isFileUploadAllowed}
+                    e2eStatus={this.state.e2eStatus}
                 />;
         }
 
@@ -1917,6 +1944,7 @@ module.exports = React.createClass({
                     onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
+                    e2eStatus={this.state.e2eStatus}
                 />
                 <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
                     <div className={fadableSectionClasses}>

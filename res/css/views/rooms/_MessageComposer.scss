@@ -23,6 +23,10 @@ limitations under the License.
     padding-left: 84px;
 }
 
+.mx_MessageComposer_wrapper.mx_MessageComposer_hasE2EIcon {
+    padding-left: 109px;
+}
+
 .mx_MessageComposer_replaced_wrapper {
     margin-left: auto;
     margin-right: auto;
@@ -71,9 +75,10 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_MessageComposer_e2eIcon {
+.mx_MessageComposer_e2eIcon.mx_E2EIcon {
     position: absolute;
     left: 60px;
+    background-color: $composer-e2e-icon-color;
 }
 
 .mx_MessageComposer_noperm_error {

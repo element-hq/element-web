@@ -281,9 +281,24 @@ limitations under the License.
 .mx_EventTile_e2eIcon {
     display: block;
     position: absolute;
-    top: 9px;
+    top: 8px;
     left: 46px;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
+    mask-size: 14px;
+    mask-repeat: no-repeat;
+    mask-position: 0;
+}
+
+.mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {
+    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    background-color: $warning-color;
+}
+
+.mx_EventTile_e2eIcon_unencrypted {
+    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    background-color: $composer-e2e-icon-color;
 }
 
 .mx_EventTile_e2eIcon_hidden {

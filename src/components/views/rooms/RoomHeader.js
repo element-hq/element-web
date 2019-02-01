@@ -33,6 +33,7 @@ import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
+import E2EIcon from './E2EIcon';
 
 linkifyMatrix(linkify);
 
@@ -52,6 +53,7 @@ module.exports = React.createClass({
         onSearchClick: PropTypes.func,
         onLeaveClick: PropTypes.func,
         onCancelClick: PropTypes.func,
+        e2eStatus: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -237,6 +239,10 @@ module.exports = React.createClass({
             );
         }
 
+        const e2eIcon = this.props.e2eStatus ?
+            <E2EIcon status={this.props.e2eStatus} /> :
+            undefined;
+
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
         }
@@ -413,6 +419,7 @@ module.exports = React.createClass({
             <div className={"mx_RoomHeader light-panel " + (this.props.editing ? "mx_RoomHeader_editing" : "")}>
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                    { e2eIcon }
                     { name }
                     { topicElement }
                     { spinner }
