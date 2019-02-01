@@ -310,12 +310,6 @@ module.exports = React.createClass({
             promises.push(p);
         }
 
-        // url preview settings
-        const ps = this.saveUrlPreviewSettings();
-        if (ps.length > 0) {
-            ps.map((p) => promises.push(p));
-        }
-
         // related groups
         promises.push(this.saveRelatedGroups());
 
@@ -344,11 +338,6 @@ module.exports = React.createClass({
     saveColor: function() {
         if (!this.refs.color_settings) { return Promise.resolve(); }
         return this.refs.color_settings.saveSettings();
-    },
-
-    saveUrlPreviewSettings: function() {
-        if (!this.refs.url_preview_settings) { return Promise.resolve(); }
-        return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEnableEncryption: function() {
