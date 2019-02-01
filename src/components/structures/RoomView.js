@@ -591,6 +591,10 @@ module.exports = React.createClass({
             this._updatePreviewUrlVisibility(room);
         }
 
+        if (ev.getType() === "m.room.encryption") {
+            this._updateE2EStatus(room);
+        }
+
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
         if (toStartOfTimeline || !data || !data.liveEvent) return;
