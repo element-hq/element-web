@@ -738,9 +738,6 @@ module.exports = React.createClass({
 
     onDeviceVerificationChanged: function(userId, device) {
         const room = this.state.room;
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
-            return;
-        }
         if (!room.currentState.getMember(userId)) {
             return;
         }
@@ -748,6 +745,9 @@ module.exports = React.createClass({
     },
 
     _updateE2EStatus: function(room) {
+        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
+            return;
+        }
         room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
             this.setState({e2eStatus: hasUnverifiedDevices ? "warning" : "verified"});
         });
