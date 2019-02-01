@@ -282,6 +282,18 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * A step is used if any flows include that step.
+     *
+     * @param {string} step A stage name to check
+     * @returns {boolean} Whether it is used
+     */
+    _authStepIsUsed(step) {
+        return this.props.flows.some((flow) => {
+            return flow.stages.includes(step);
+        });
+    },
+
     render: function() {
         let yourMatrixAccountText = _t('Create your account');
         try {
@@ -302,24 +314,28 @@ module.exports = React.createClass({
             </a>;
         }
 
-        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
-            _t("Email") :
-            _t("Email (optional)");
+        let emailSection;
+        if (this._authStepIsUsed('m.login.email.identity')) {
+            const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
+                _t("Email") :
+                _t("Email (optional)");
 
-        const emailSection = (
-            <div>
-                <input type="text" ref="email"
-                    placeholder={emailPlaceholder}
-                    defaultValue={this.props.defaultEmail}
-                    className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                    onBlur={this.onEmailBlur}
-                    value={this.state.email} />
-            </div>
-        );
+            emailSection = (
+                <div>
+                    <input type="text" ref="email"
+                        placeholder={emailPlaceholder}
+                        defaultValue={this.props.defaultEmail}
+                        className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
+                        onBlur={this.onEmailBlur}
+                        value={this.state.email} />
+                </div>
+            );
+        }
 
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
-        if (!SdkConfig.get().disable_3pid_login) {
+        if (threePidLogin && this._authStepIsUsed('m.login.msisdn')) {
             const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ?
                 _t("Phone") :
                 _t("Phone (optional)");
