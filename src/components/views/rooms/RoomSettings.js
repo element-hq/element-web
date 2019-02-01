@@ -538,29 +538,6 @@ module.exports = React.createClass({
         });
     },
 
-    onEnableEncryptionClick() {
-        if (!this.refs.encrypt.checked) return;
-
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('E2E Enable Warning', '', QuestionDialog, {
-            title: _t('Warning!'),
-            description: (
-                <div>
-                    <p>{ _t('End-to-end encryption is in beta and may not be reliable') }.</p>
-                    <p>{ _t('You should not yet trust it to secure data') }.</p>
-                    <p>{ _t('Devices will not yet be able to decrypt history from before they joined the room') }.</p>
-                    <p>{ _t('Once encryption is enabled for a room it cannot be turned off again (for now)') }.</p>
-                    <p>{ _t('Encrypted messages will not be visible on clients that do not yet implement encryption') }.</p>
-                </div>
-            ),
-            onFinished: (confirm)=>{
-                if (!confirm) {
-                    this.refs.encrypt.checked = false;
-                }
-            },
-        });
-    },
-
     _onRoomUpgradeClick: function() {
         const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: this.props.room});
@@ -604,7 +581,7 @@ module.exports = React.createClass({
             return (
                 <div>
                     <label>
-                        <input type="checkbox" ref="encrypt" onClick={this.onEnableEncryptionClick} />
+                        <input type="checkbox" ref="encrypt" />
                         <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src={require("../../../../res/img/e2e-unencrypted.svg")} width="12" height="12" />
                         { _t('Enable encryption') } { _t('(warning: cannot be disabled again!)') }
                     </label>
