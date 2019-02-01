@@ -1277,8 +1277,6 @@
     "This homeserver does not support communities": "This homeserver does not support communities",
     "Failed to load %(groupId)s": "Failed to load %(groupId)s",
     "Couldn't load home page": "Couldn't load home page",
-    "You are currently using Riot anonymously as a guest.": "You are currently using Riot anonymously as a guest.",
-    "If you would like to create a Matrix account you can <a>register</a> now.": "If you would like to create a Matrix account you can <a>register</a> now.",
     "Invalid configuration: Cannot supply a default homeserver URL and a default server name": "Invalid configuration: Cannot supply a default homeserver URL and a default server name",
     "Failed to reject invitation": "Failed to reject invitation",
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite.",

@@ -24,7 +24,7 @@ import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import sdk from '../../index';
 import { MatrixClient } from 'matrix-js-sdk';
-import dis from '../../dispatcher';
+import classnames from 'classnames';
 
 class HomePage extends React.Component {
     static displayName = 'HomePage';
@@ -80,59 +80,23 @@ class HomePage extends React.Component {
         this._unmounted = true;
     }
 
-    onLoginClick(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        dis.dispatch({ action: 'start_login' });
-    }
-
-    onRegisterClick(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        dis.dispatch({ action: 'start_registration' });
-    }
-
     render() {
-        let guestWarning = "";
-        if (this.context.matrixClient.isGuest()) {
-            guestWarning = (
-                <div className="mx_HomePage_guest_warning">
-                    <img src={require("../../../res/img/warning.svg")} width="24" height="23" />
-                    <div>
-                        <div>
-                            { _t("You are currently using Riot anonymously as a guest.") }
-                        </div>
-                        <div>
-                            { _t(
-                                'If you would like to create a Matrix account you can <a>register</a> now.',
-                                {},
-                                { 'a': (sub) => <a href="#" onClick={this.onRegisterClick}>{ sub }</a> },
-                            ) }
-                        </div>
-                        <div>
-                            { _t(
-                                'If you already have a Matrix account you can <a>log in</a> instead.',
-                                {},
-                                { 'a': (sub) => <a href="#" onClick={this.onLoginClick}>{ sub }</a> },
-                            ) }
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+        const isGuest = this.context.matrixClient.isGuest();
+        const classes = classnames({
+            mx_HomePage: true,
+            mx_HomePage_guest: isGuest,
+        });
 
         if (this.state.iframeSrc) {
             return (
-                <div className="mx_HomePage">
-                    { guestWarning }
+                <div className={classes}>
                     <iframe src={ this.state.iframeSrc } />
                 </div>
             );
         } else {
             const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
             return (
-                <GeminiScrollbarWrapper autoshow={true} className="mx_HomePage">
-                    { guestWarning }
+                <GeminiScrollbarWrapper autoshow={true} className={classes}>
                     <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
                     </div>
                 </GeminiScrollbarWrapper>
