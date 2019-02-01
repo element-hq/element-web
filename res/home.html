@@ -100,6 +100,18 @@ h1::after {
   margin: 28px 0;
 }
 
+.mx_ButtonRow_guest {
+    display: none;
+}
+
+/* mx_HomePage_guest is set on the `HomePage` component for guest users */
+.mx_HomePage_guest .mx_ButtonRow_guest {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
 .mx_buttonheadline {
   margin-bottom: 14px;
 }
@@ -162,7 +174,7 @@ h1::after {
     <h1 class="mx_Header2">_t("Welcome to Riot.im")</h1>
     <h4 class="mx_Header22">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
     <div class="mx_Well">
-        <div class="mx_ButtonRow">
+        <div class="mx_ButtonRow mx_ButtonRow_guest">
             <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
                 <div class="mx_buttonlabel">_t("Sign In")</div>
             </a>
