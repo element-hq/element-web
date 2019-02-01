@@ -29,7 +29,8 @@ limitations under the License.
         }
 
         .mx_TabbedView .mx_SettingsTab {
-            max-width: calc(100% - 130px); // 130px right hand padding
+            box-sizing: border-box;
+            padding-right: 130px;
 
             // Put some padding on the bottom to avoid the settings tab from
             // colliding harshly with the dialog when scrolled down.
