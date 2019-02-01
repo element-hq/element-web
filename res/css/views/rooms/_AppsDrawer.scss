@@ -317,14 +317,11 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionButton {
-    padding: 5px;
+    border: none;
+    padding: 5px 20px;
     border-radius: 5px;
-    color: $warning-color;
-    background-color: $primary-bg-color;
-}
-
-.mx_AppPermissionButton:hover {
-    background-color: $primary-fg-color;
+    background-color: $button-bg-color;
+    color: $button-fg-color;
     cursor: pointer;
 }
 
