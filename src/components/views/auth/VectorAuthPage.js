@@ -30,7 +30,7 @@ module.exports = React.createClass({
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
         const pageStyle = {
-            background: 'center/cover fixed url(../../themes/riot/img/backgrounds/valley.jpg)',
+            background: 'center/cover fixed url(themes/riot/img/backgrounds/valley.jpg)',
         };
 
         const modalStyle = {
