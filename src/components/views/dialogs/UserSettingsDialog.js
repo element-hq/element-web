@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
 import GeneralUserSettingsTab from "../settings/tabs/GeneralUserSettingsTab";
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -29,6 +28,7 @@ import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
 import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
 import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 import FlairSettingsTab from "../settings/tabs/FlairSettingsTab";
+import sdk from "../../../index";
 
 // TODO: Ditch this whole component
 export class TempTab extends React.Component {
@@ -106,16 +106,15 @@ export default class UserSettingsDialog extends React.Component {
     }
 
     render() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+
         return (
-            <div className="mx_UserSettingsDialog">
-                <div className="mx_SettingsDialog_header">
-                    {_t("Settings")}
-                    <span className="mx_SettingsDialog_close">
-                        <AccessibleButton className="mx_SettingsDialog_closeIcon" onClick={this.props.onFinished} />
-                    </span>
+            <BaseDialog className='mx_UserSettingsDialog' hasCancel={true}
+                        onFinished={this.props.onFinished} title={_t("Settings")}>
+                <div className='ms_SettingsDialog_content'>
+                    <TabbedView tabs={this._getTabs()} />
                 </div>
-                <TabbedView tabs={this._getTabs()} />
-            </div>
+            </BaseDialog>
         );
     }
 }
