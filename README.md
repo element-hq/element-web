@@ -130,7 +130,7 @@ For a good example, see https://riot.im/develop/config.json
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
-   server is not Riot and normally not your Home Server either. The integration server settings
+   server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
