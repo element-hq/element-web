@@ -239,7 +239,9 @@ module.exports = React.createClass({
             );
         }
 
-        let e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
+        const e2eIcon = this.props.e2eStatus ?
+            <E2EIcon status={this.props.e2eStatus} /> :
+            undefined;
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
