@@ -66,8 +66,12 @@ h1::after {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  border-radius: 10px;
-  width: 140px;
+  border-radius: 4px;
+  width: 150px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  text-decoration: none;
+  color: #2e2f32 !important;
 }
 
 .mx_ButtonRow {
@@ -75,8 +79,7 @@ h1::after {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 600px;
-  height: 120px;
+  width: 480px;
   -webkit-justify-content: space-around;
   -ms-flex-pack: distribute;
   justify-content: space-around;
@@ -84,14 +87,14 @@ h1::after {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-sizing: border-box;
+  margin: 28px 0;
 }
 
 .mx_buttonheadline {
   margin-bottom: 14px;
-}
-
-.mx_buttonicon {
-  width: 40px;
 }
 
 .mx_buttonlabel {
@@ -99,12 +102,13 @@ h1::after {
 }
 
 .mx_buttonwrappertext {
+  font-size: 13px;
   margin-bottom: 10px;
 }
 
 .mx_Header2 {
   font-size: 32px;
-  font-weight: 400;
+  font-weight: 600;
   margin-top: 40px;
 }
 
@@ -115,18 +119,31 @@ h1::after {
 }
 
 .mx_ButtonSignIn {
-  background: #368BD6;
-  color: white;
+  background-color: #368BD6;
+  color: white !important;
 }
 
 .mx_ButtonCreateAccount {
-  background: #03B381;
-  color: white;
+  background-color: #03B381;
+  color: white !important;
 }
 
 .mx_secondarybutton {
-  background: #FFFFFF;
+  background-color: #FFFFFF;
   color: #2E2F32;
+}
+
+.mx_Button_iconSignIn {
+    background-image: url('home/images/icon-sign-in.svg');
+}
+.mx_Button_iconCreateAccount {
+    background-image: url('home/images/icon-create-account.svg');
+}
+.mx_Button_iconHelp {
+    background-image: url('home/images/icon-help.svg');
+}
+.mx_Button_iconRoomDirectory {
+    background-image: url('home/images/icon-room-directory.svg');
 }
 
 </style>
@@ -139,29 +156,25 @@ h1::after {
     <h4 class="mx_Header22">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
     <div class="mx_Well">
         <div class="mx_ButtonRow">
-            <div class="mx_ButtonParent mx_ButtonSignIn">
-                <img src="home/images/icon-sign-in.svg" alt="" class="mx_buttonicon"/>
-                <div class="mx_buttonlabel">Sign In</div>
-            </div>
-            <div class="mx_ButtonParent mx_ButtonCreateAccount">
-                <img src="home/images/icon-create-account.svg" alt="" class="mx_buttonicon"/>
-                <div class="mx_buttonlabel">Create Account</div>
-            </div>
+            <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
+                <div class="mx_buttonlabel">_t("Sign In")</div>
+            </a>
+            <a href="#/register" class="mx_ButtonParent mx_ButtonCreateAccount mx_Button_iconCreateAccount">
+                <div class="mx_buttonlabel">_t("Create Account")</div>
+            </a>
         </div>
         <div class="mx_ButtonRow">
             <div class="mx_buttonwrapper">
-                <div class="mx_buttonwrappertext">Need help?</div>
-                <div class="mx_ButtonParent mx_secondarybutton">
-                    <img src="home/images/icon-help.svg" alt="" class="mx_buttonicon"/>
-                    <div class="mx_buttonlabel">Chat with Riot Bot</div>
-                </div>
+                <div class="mx_buttonwrappertext">_t("Need help?")</div>
+                <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_secondarybutton mx_Button_iconHelp">
+                    <div class="mx_buttonlabel">_t("Chat with Riot Bot")</div>
+                </a>
             </div>
             <div class="mx_buttonwrapper">
-                <div class="mx_buttonwrappertext">Explore rooms</div>
-                <div class="mx_ButtonParent mx_secondarybutton">
-                    <img src="home/images/icon-room-directory.svg" alt="" class="mx_buttonicon"/>
-                    <div class="mx_buttonlabel">Room Directory</div>
-                </div>
+                <div class="mx_buttonwrappertext">_t("Explore rooms")</div>
+                <a href="#/directory" class="mx_ButtonParent mx_secondarybutton mx_Button_iconRoomDirectory">
+                    <div class="mx_buttonlabel">_t("Room Directory")</div>
+                </a>
             </div>
         </div>
     </div>
