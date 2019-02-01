@@ -32,8 +32,8 @@ function DeviceListEntry(props) {
 
     return (
         <li>
-            <DeviceVerifyButtons device={device} userId={userId} />
             { device.deviceId }
+            <DeviceVerifyButtons device={device} userId={userId} />
             <br />
             { device.getDisplayName() }
         </li>
