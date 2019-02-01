@@ -28,6 +28,10 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_UnknownDeviceDialog .mx_DeviceVerifyButtons {
+    float: right;
+}
+
 .mx_UnknownDeviceDialog .mx_Dialog_content {
     margin-bottom: 24px;
 }
