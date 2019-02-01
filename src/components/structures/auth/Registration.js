@@ -170,7 +170,7 @@ module.exports = React.createClass({
                 });
             } else {
                 this.setState({
-                    errorText: _t("Unable to query for supported registration methods"),
+                    errorText: _t("Unable to query for supported registration methods."),
                 });
             }
         }

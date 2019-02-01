@@ -1419,7 +1419,7 @@
     "Set a display name:": "Set a display name:",
     "Upload an avatar:": "Upload an avatar:",
     "Registration has been disabled on this homeserver.": "Registration has been disabled on this homeserver.",
-    "Unable to query for supported registration methods": "Unable to query for supported registration methods",
+    "Unable to query for supported registration methods.": "Unable to query for supported registration methods.",
     "This server does not support authentication with a phone number.": "This server does not support authentication with a phone number.",
     "Missing password.": "Missing password.",
     "Passwords don't match.": "Passwords don't match.",
