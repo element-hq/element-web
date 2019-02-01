@@ -27,9 +27,13 @@ export default function(props) {
     }, props.className);
     let e2eTitle;
     if (isWarning) {
-        e2eTitle = _t("Some devices in this encrypted room are not trusted");
+        e2eTitle = props.isUser ?
+            _t("Some devices for this user are not trusted") :
+            _t("Some devices in this encrypted room are not trusted");
     } else if (isVerified) {
-        e2eTitle = _t("All devices in this encrypted room are trusted");
+        e2eTitle = props.isUser ?
+            _t("All devices for this user are trusted") :
+            _t("All devices in this encrypted room are trusted");
     }
     return (<div className={e2eIconClasses} title={e2eTitle} />);
 }
