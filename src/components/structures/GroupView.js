@@ -1324,7 +1324,7 @@ export default React.createClass({
             } else {
                 let extraText;
                 if (this.state.error.errcode === 'M_UNRECOGNIZED') {
-                    extraText = <div>{ _t('This Home server does not support communities') }</div>;
+                    extraText = <div>{ _t('This homeserver does not support communities') }</div>;
                 }
                 return (
                     <div className="mx_GroupView_error">
