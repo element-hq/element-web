@@ -166,7 +166,7 @@ module.exports = React.createClass({
                 });
             } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
                 this.setState({
-                    errorText: _t("Registration has been disabled"),
+                    errorText: _t("Registration has been disabled on this homeserver."),
                 });
             } else {
                 this.setState({
