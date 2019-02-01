@@ -40,7 +40,13 @@ export default class VoiceSettingsTab extends React.Component {
         this._refreshMediaDevices();
     }
 
-    _refreshMediaDevices = async () => {
+    _refreshMediaDevices = async (stream) => {
+        if (stream) {
+            // kill stream so that we don't leave it lingering around with webcam enabled etc
+            // as here we called gUM to ask user for permission to their device names only
+            stream.getTracks().forEach((track) => track.stop());
+        }
+
         this.setState({
             mediaDevices: await CallMediaHandler.getDevices(),
             activeAudioOutput: CallMediaHandler.getAudioOutput(),
