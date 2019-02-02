@@ -38,6 +38,7 @@ const template = [
             { type: 'separator' },
             { role: 'resetzoom' },
             { role: 'zoomin' },
+            { role: 'zoomin', accelerator: 'CommandOrControl+=' },
             { role: 'zoomout' },
             { type: 'separator' },
             { role: 'togglefullscreen' },
