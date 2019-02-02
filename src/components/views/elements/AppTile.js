@@ -598,7 +598,7 @@ export default class AppTile extends React.Component {
         const menuBarClasses = classNames({
             mx_AppTileMenuBar: true,
             mx_AppTileMenuBar_expanded: this.props.show,
-        })
+        });
 
         return (
             <div className={appTileClass} id={this.props.id}>
