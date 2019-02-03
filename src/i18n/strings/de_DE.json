@@ -1523,5 +1523,10 @@
     "Help & About": "Hilfe & Über",
     "Bug reporting": "Fehler melden",
     "FAQ": "Häufige Fragen",
-    "Versions": "Versionen"
+    "Versions": "Versionen",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kannst auch einen anderen Identitätsserver setzen. Dieser hat einen anderen Wissensstand als der Standardserver, weswegen es beim Einladen oder Eingeladen werden mittels E-Mail-Adresse Probleme geben kann.",
+    "Room Addresses": "Raum-Adressen",
+    "Deactivating your account is a permanent action - be careful!": "Das Deaktivieren deines Kontos ist nicht widerruflich - sei vorsichtig!",
+    "Preferences": "Einstellungen",
+    "Room list": "Raumliste"
 }
