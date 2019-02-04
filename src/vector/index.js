@@ -24,6 +24,10 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
+import olmWasmPath from 'olm/olm.wasm';
+
+import './rageshakesetup';
+
 import React from 'react';
 // add React and ReactPerf to the global namespace, to make them easier to
 // access via the console
@@ -32,7 +36,7 @@ if (process.env.NODE_ENV !== 'production') {
     global.Perf = require('react-addons-perf');
 }
 
-import RunModernizrTests from './modernizr'; // this side-effects a global
+import './modernizr';
 import ReactDOM from 'react-dom';
 import sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
@@ -41,22 +45,20 @@ import VectorConferenceHandler from 'matrix-react-sdk/lib/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
-// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
-import Platform from './platform';
+
+import ElectronPlatform from './platform/ElectronPlatform';
+import WebPlatform from './platform/WebPlatform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
 import Olm from 'olm';
-
-import rageshake from "matrix-react-sdk/lib/rageshake/rageshake";
 
 import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
@@ -68,33 +70,17 @@ let lastLocationHashSet = null;
 // and need to migrate, but they spam the console with warnings.
 Promise.config({warnings: false});
 
-function initRageshake() {
-    rageshake.init().then(() => {
-        console.log("Initialised rageshake: See https://bugs.chromium.org/p/chromium/issues/detail?id=583193 to fix line numbers on Chrome.");
-
-        window.addEventListener('beforeunload', (e) => {
-            console.log('riot-web closing');
-            // try to flush the logs to indexeddb
-            rageshake.flush();
-        });
-
-        rageshake.cleanup();
-    }, (err) => {
-        console.error("Failed to initialise rageshake: " + err);
-    });
-}
-
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
-    var featureComplete = true;
-    for (var i = 0; i < featureList.length; i++) {
+    let featureComplete = true;
+    for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
             console.error(
                 "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i]
+                "Has it been configured correctly?", featureList[i],
             );
             return false;
         }
@@ -115,7 +101,7 @@ function getScreenFromLocation(location) {
     return {
         screen: fragparts.location.substring(1),
         params: fragparts.params,
-    }
+    };
 }
 
 // Here, we do some crude URL analysis to allow
@@ -140,10 +126,10 @@ function onHashChange(ev) {
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen) {
     console.log("newscreen "+screen);
-    var hash = '#/' + screen;
+    const hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-};
+}
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -156,7 +142,7 @@ function onNewScreen(screen) {
 // so in that instance, hardcode to use riot.im/app for now instead.
 function makeRegistrationUrl(params) {
     let url;
-    if (window.location.protocol === "file:") {
+    if (window.location.protocol === "vector:") {
         url = 'https://riot.im/app/#/register';
     } else {
         url = (
@@ -180,7 +166,7 @@ function makeRegistrationUrl(params) {
     return url;
 }
 
-function getConfig(configJsonFilename) {
+export function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename },
@@ -216,16 +202,22 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    var parsedUrl = url.parse(window.location.href);
+    const parsedUrl = url.parse(window.location.href);
     parsedUrl.search = "";
-    var formatted = url.format(parsedUrl);
+    const formatted = url.format(parsedUrl);
     console.log("Redirecting to " + formatted + " to drop loginToken " +
                 "from queryparams");
     window.location.href = formatted;
 }
 
 async function loadApp() {
-    initRageshake();
+    if (window.vector_indexeddb_worker_script === undefined) {
+        // If this is missing, something has probably gone wrong with
+        // the bundling. The js-sdk will just fall back to accessing
+        // indexeddb directly with no worker script, but we want to
+        // make sure the indexeddb script is present, so fail hard.
+        throw new Error("Missing indexeddb worker script!");
+    }
     MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
@@ -238,8 +230,23 @@ async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
-    // set the platform for react sdk (our Platform object automatically picks the right one)
-    PlatformPeg.set(new Platform());
+    // set the platform for react sdk
+    if (window.ipcRenderer) {
+        console.log("Using Electron platform");
+        const plaf = new ElectronPlatform();
+        PlatformPeg.set(plaf);
+
+        // Electron only: see if we need to do a one-time data
+        // migration
+        if (window.localStorage.getItem('mx_user_id') === null) {
+            console.log("Migrating session from old origin...");
+            await plaf.migrateFromOldOrigin();
+            console.log("Origin migration complete");
+        }
+    } else {
+        console.log("Using Web platform");
+        PlatformPeg.set(new WebPlatform());
+    }
 
     // Load the config file. First try to load up a domain-specific config of the
     // form "config.$domain.json" and if that fails, fall back to config.json.
@@ -273,9 +280,8 @@ async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
-    const styleElements = Object.create(null);
     let a;
-    const theme = SettingsStore.getValue("theme");
+    const theme = "dharma";//SettingsStore.getValue("theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         if (!href) continue;
@@ -297,7 +303,7 @@ async function loadApp() {
                 // in case it is the first time loading Riot.
                 // `InstallTrigger` is a Object which only exists on Firefox
                 // (it is used for their Plugins) and can be used as a
-                // feature check. 
+                // feature check.
                 // Firefox loads css always before js. This is why we dont use
                 // onload or it's EventListener as thoose will never trigger.
                 if (typeof InstallTrigger !== 'undefined') {
@@ -349,19 +355,19 @@ async function loadApp() {
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
-            document.getElementById('matrixchat')
+            document.getElementById('matrixchat'),
         );
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
-        var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
+        const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
                 if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
                 console.log("User accepts the compatibility risks.");
                 loadApp();
             }} />,
-            document.getElementById('matrixchat')
+            document.getElementById('matrixchat'),
         );
     }
 }
@@ -375,18 +381,19 @@ function loadOlm() {
      *
      * We also need to tell the Olm js to look for its wasm file at the same
      * level as index.html. It really should be in the same place as the js,
-     * ie. in the bundle directory, to avoid caching issues, but as far as I
-     * can tell this is completely impossible with webpack.
+     * ie. in the bundle directory, but as far as I can tell this is
+     * completely impossible with webpack. We do, however, use a hashed
+     * filename to avoid caching issues.
      */
     return Olm.init({
-        locateFile: () => 'olm.wasm',
+        locateFile: () => olmWasmPath,
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
         console.log("Failed to load Olm: trying legacy version");
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = 'olm_legacy.js';
+            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);

@@ -1,3 +1,95 @@
+Changes in [0.17.9](https://github.com/vector-im/riot-web/releases/tag/v0.17.9) (2019-01-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.9-rc.1...v0.17.9)
+
+ * Bugfix in react-sdk for setting DM rooms
+
+Changes in [0.17.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.9-rc.1) (2019-01-17)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.8...v0.17.9-rc.1)
+
+ * Merge develop into experimental
+   [\#8003](https://github.com/vector-im/riot-web/pull/8003)
+ * Electron: Load app from custom protocol
+   [\#7943](https://github.com/vector-im/riot-web/pull/7943)
+ * Fix the IndexedDB worker
+   [\#7920](https://github.com/vector-im/riot-web/pull/7920)
+ * Make clear that the Debian package is for desktop
+   [\#7919](https://github.com/vector-im/riot-web/pull/7919)
+ * Run the Desktop app in a sandbox
+   [\#7907](https://github.com/vector-im/riot-web/pull/7907)
+ * Update to new electron single instance API
+   [\#7908](https://github.com/vector-im/riot-web/pull/7908)
+ * Update the tests to match https://github.com/matrix-org/matrix-react-
+   sdk/pull/2340
+   [\#7834](https://github.com/vector-im/riot-web/pull/7834)
+
+Changes in [0.17.8](https://github.com/vector-im/riot-web/releases/tag/v0.17.8) (2018-12-10)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.8-rc.1...v0.17.8)
+
+ * No changes since rc.1
+
+Changes in [0.17.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.8-rc.1) (2018-12-06)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.7...v0.17.8-rc.1)
+
+ * Update from Weblate.
+   [\#7784](https://github.com/vector-im/riot-web/pull/7784)
+ * Add a function to send a rageshake from the console
+   [\#7755](https://github.com/vector-im/riot-web/pull/7755)
+ * Re-apply "Run lint on travis builds and use modern node versions"
+   [\#7738](https://github.com/vector-im/riot-web/pull/7738)
+ * Revert "Run lint on travis builds and use modern node versions"
+   [\#7737](https://github.com/vector-im/riot-web/pull/7737)
+ * Run lint on travis builds and use modern node versions
+   [\#7490](https://github.com/vector-im/riot-web/pull/7490)
+ * Fix missing js-sdk logging
+   [\#7736](https://github.com/vector-im/riot-web/pull/7736)
+ * Add $accent-color-50pct as a CSS variable to the Status theme
+   [\#7710](https://github.com/vector-im/riot-web/pull/7710)
+
+Changes in [0.17.7](https://github.com/vector-im/riot-web/releases/tag/v0.17.7) (2018-11-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6...v0.17.7)
+
+ * Warning when crypto DB is too new to use.
+ * Fix missing entries from js-sdk in rageshake logs
+
+Changes in [0.17.6](https://github.com/vector-im/riot-web/releases/tag/v0.17.6) (2018-11-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.2...v0.17.6)
+
+ * No changes since rc.2
+
+Changes in [0.17.6-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.2) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.6-rc.1...v0.17.6-rc.2)
+
+ * Update to js-sdk 0.14 and react-sdk rc.2. rc.1 was broken as it was built against
+   js-sdk 0.13 which does not use the new Olm 3.0 API.
+
+Changes in [0.17.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.17.6-rc.1) (2018-11-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.5...v0.17.6-rc.1)
+
+ * Update from Weblate.
+   [\#7708](https://github.com/vector-im/riot-web/pull/7708)
+ * Add Japanese (#7599)
+   [\#7673](https://github.com/vector-im/riot-web/pull/7673)
+ * Allow Webpack dev server to listen to all interfaces
+   [\#7674](https://github.com/vector-im/riot-web/pull/7674)
+ * Remove the request-only stuff we don't need anymore
+   [\#7637](https://github.com/vector-im/riot-web/pull/7637)
+ * Correct the author of the electron app
+   [\#7615](https://github.com/vector-im/riot-web/pull/7615)
+ * Mock fs, tls, and net to support request in the browser
+   [\#7552](https://github.com/vector-im/riot-web/pull/7552)
+ * Update chokidar to transitively get newer fsevents
+   [\#7598](https://github.com/vector-im/riot-web/pull/7598)
+ * Support WebAssembly version of Olm
+   [\#7385](https://github.com/vector-im/riot-web/pull/7385)
+
 Changes in [0.17.5](https://github.com/vector-im/riot-web/releases/tag/v0.17.5) (2018-11-13)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.4...v0.17.5)

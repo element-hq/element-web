@@ -1,0 +1,20 @@
+{
+    "Riot is not supported on mobile web. Install the app?": "Riot không được hỗ trợ trên mobile web. Hãy cài app?",
+    "Riot Desktop on %(platformName)s": "Riot Desktop trên %(platformName)s",
+    "Unknown device": "Thiết bị không được nhận biết",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s với %(browserName)s trên %(osName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "Bạn phải sử dụng HTTPS để dùng chức năng chia sẻ màn hình.",
+    "Custom Server Options": "Các lựa chọn máy chủ",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Bạn có thể sử dụng các máy chủ khác để đăng nhập vào Matrix bằng cách khai báo đường dẫn Home server.<br/> Cách này cho phép bạn sử dụng tài khoản hiện tại trên một Home server khác.<br/><br/>Bạn cũng có thể chọn một  Server định danh nhưng bạn không thể mời người dùng khác qua email.",
+    "Dismiss": "Bỏ qua",
+    "powered by Matrix": "tài trợ bởi Matrix",
+    "Welcome to Riot.im": "Chào mừng tới Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat phân tán, mã hóa &amp; giao tiếp được tài trợ bởi [matrix]",
+    "Search the room directory": "Tìm trong danh sách phòng",
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Rất nhiều phòng đã có sẵn trong Matrix, liên kết với các hệ thống mạng xã hội khác (Slack, IRC, Gitter,...) hoặc hoạt động độc lập. Hãy kiểm tra!",
+    "Chat with Riot Bot": "Chat với Riot Bot",
+    "Get started with some tips from Riot Bot!": "Bắt đầu với các hướng dẫn từ Riot Bot!",
+    "General discussion about Matrix and Riot": "Thảo luận chung về Matrix và Riot",
+    "Discussion of all things Matrix!": "Thào luận về mọi vấn đề liên quan đến Matrix!",
+    "Riot/Web &amp; Desktop chat": "Riot/Web &amp; Desktop chat"
+}

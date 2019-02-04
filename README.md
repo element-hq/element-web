@@ -28,7 +28,8 @@ Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
 
-### Installation Steps for Debian Stretch
+### Desktop Installation for Debian Stretch
+
 1. Add the repository to your sources.list using either of the following two options:
   - Directly to sources.list: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee -a /etc/apt/sources.list`
   - As a separate entry in sources.list.d: `echo "deb https://riot.im/packages/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/riot.list`
@@ -129,7 +130,7 @@ For a good example, see https://riot.im/develop/config.json
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
-   server is not Riot and normally not your Home Server either. The integration server settings
+   server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
@@ -156,8 +157,6 @@ For a good example, see https://riot.im/develop/config.json
     1. `whitelistedHSUrls`: a list of HS URLs to not redact from the analytics
     1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
     1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
-1. `teamServerConfig`, `teamTokenMap`, `referralBaseUrl`: an obsolete precursor to communities
-   with referral tracking; please ignore it.
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
 
 

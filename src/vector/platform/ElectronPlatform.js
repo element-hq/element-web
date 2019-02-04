@@ -3,6 +3,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,8 +22,9 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
-import {remote, ipcRenderer, desktopCapturer} from 'electron';
 import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
+
+const ipcRenderer = window.ipcRenderer;
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -44,23 +46,21 @@ function onUpdateDownloaded(ev: Event, releaseNotes: string, ver: string, date: 
 }
 
 function platformFriendlyName(): string {
-    console.log(window.process);
-    switch (window.process.platform) {
-        case 'darwin':
-            return 'macOS';
-        case 'freebsd':
-            return 'FreeBSD';
-        case 'openbsd':
-            return 'OpenBSD';
-        case 'sunos':
-            return 'SunOS';
-        case 'win32':
-            return 'Windows';
-        default:
-            // Sorry, Linux users: you get lumped into here,
-            // but only because Linux's capitalisation is
-            // normal. We do care about you.
-            return window.process.platform[0].toUpperCase() + window.process.platform.slice(1);
+    // used to use window.process but the same info is available here
+    if (navigator.userAgent.includes('Macintosh')) {
+        return 'macOS';
+    } else if (navigator.userAgent.includes('FreeBSD')) {
+        return 'FreeBSD';
+    } else if (navigator.userAgent.includes('OpenBSD')) {
+        return 'OpenBSD';
+    } else if (navigator.userAgent.includes('SunOS')) {
+        return 'SunOS';
+    } else if (navigator.userAgent.includes('Windows')) {
+        return 'Windows';
+    } else if (navigator.userAgent.includes('Linux')) {
+        return 'Linux';
+    } else {
+        return 'Unknown';
     }
 }
 
@@ -87,9 +87,11 @@ function getUpdateCheckStatus(status) {
 export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
-        dis.register(_onAction);
-        this.updatable = Boolean(remote.autoUpdater.getFeedURL());
 
+        this._pendingIpcCalls = {};
+        this._nextIpcCallId = 0;
+
+        dis.register(_onAction);
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
@@ -104,6 +106,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
             this.showUpdateCheck = false;
         });
+
+        // try to flush the rageshake logs to indexeddb before quit.
+        ipcRenderer.on('before-quit', function() {
+            console.log('riot-desktop closing');
+            rageshake.flush();
+        });
+
+        ipcRenderer.on('ipcReply', this._onIpcReply.bind(this));
+        ipcRenderer.on('update-downloaded', this.onUpdateDownloaded.bind(this));
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
@@ -125,6 +136,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
             // Run the callback
             globalKeybindings[keybindName].releaseCallback();
+        });
+    }
+
+    async onUpdateDownloaded(ev, updateInfo) {
+        dis.dispatch({
+            action: 'new_version',
+            currentVersion: await this.getAppVersion(),
+            newVersion: updateInfo,
+            releaseNotes: updateInfo.releaseNotes,
         });
     }
 
@@ -154,7 +174,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // maybe we should pass basic styling (italics, bold, underline) through from MD
         // we only have to strip out < and > as the spec doesn't include anything about things like &amp;
         // so we shouldn't assume that all implementations will treat those properly. Very basic tag parsing is done.
-        if (window.process.platform === 'linux') {
+        if (navigator.userAgent.includes('Linux')) {
             msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
@@ -168,17 +188,13 @@ export default class ElectronPlatform extends VectorBasePlatform {
             },
         );
 
-        notification.onclick = function() {
+        notification.onclick = () => {
             dis.dispatch({
                 action: 'view_room',
                 room_id: room.roomId,
             });
             global.focus();
-            const win = remote.getCurrentWindow();
-
-            if (win.isMinimized()) win.restore();
-            else if (!win.isVisible()) win.show();
-            else win.focus();
+            this._ipcCall('focusWindow');
         };
 
         return notification;
@@ -192,8 +208,25 @@ export default class ElectronPlatform extends VectorBasePlatform {
         notif.close();
     }
 
-    getAppVersion(): Promise<string> {
-        return Promise.resolve(remote.app.getVersion());
+    async getAppVersion(): Promise<string> {
+        return await this._ipcCall('getAppVersion');
+    }
+
+    supportsAutoLaunch() {
+        return true;
+    }
+
+    async getAutoLaunchEnabled() {
+        return await this._ipcCall('getAutoLaunchEnabled');
+    }
+
+    async setAutoLaunchEnabled(enabled) {
+        return await this._ipcCall('setAutoLaunchEnabled', enabled);
+    }
+
+    async canSelfUpdate(): boolean {
+        const feedUrl = await this._ipcCall('getUpdateFeedUrl');
+        return Boolean(feedUrl);
     }
 
     startUpdateCheck() {
@@ -238,52 +271,47 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return null;
     }
 
-    isElectron(): boolean { return true; }
-
     requestNotificationPermission(): Promise<string> {
         return Promise.resolve('granted');
     }
 
     reload() {
-        remote.getCurrentWebContents().reload();
+        // we used to remote to the main process to get it to
+        // reload the webcontents, but in practice this is unnecessary:
+        // the normal way works fine.
+        window.location.reload(false);
     }
 
-    /* BEGIN copied and slightly-modified code
-     * setupScreenSharingForIframe function from:
-     * https://github.com/jitsi/jitsi-meet-electron-utils
-     * Copied directly here to avoid the need for a native electron module for
-     * 'just a bit of JavaScript'
-     * NOTE: Apache v2.0 licensed
-     */
-    setupScreenSharingForIframe(iframe: Object) {
-        iframe.contentWindow.JitsiMeetElectron = {
-            /**
-             * Get sources available for screensharing. The callback is invoked
-             * with an array of DesktopCapturerSources.
-             *
-             * @param {Function} callback - The success callback.
-             * @param {Function} errorCallback - The callback for errors.
-             * @param {Object} options - Configuration for getting sources.
-             * @param {Array} options.types - Specify the desktop source types
-             * to get, with valid sources being "window" and "screen".
-             * @param {Object} options.thumbnailSize - Specify how big the
-             * preview images for the sources should be. The valid keys are
-             * height and width, e.g. { height: number, width: number}. By
-             * default electron will return images with height and width of
-             * 150px.
-             */
-            obtainDesktopStreams(callback, errorCallback, options = {}) {
-                desktopCapturer.getSources(options,
-                    (error, sources) => {
-                        if (error) {
-                            errorCallback(error);
-                            return;
-                        }
-
-                        callback(sources);
-                    });
-            },
-        };
+    async migrateFromOldOrigin() {
+        return this._ipcCall('origin_migrate');
     }
-    /* END of copied and slightly-modified code */
+
+    async _ipcCall(name, ...args) {
+        const ipcCallId = ++this._nextIpcCallId;
+        return new Promise((resolve, reject) => {
+            this._pendingIpcCalls[ipcCallId] = {resolve, reject};
+            window.ipcRenderer.send('ipcCall', {id: ipcCallId, name, args});
+            // Maybe add a timeout to these? Probably not necessary.
+        });
+    }
+
+    _onIpcReply(ev, payload) {
+        if (payload.id === undefined) {
+            console.warn("Ignoring IPC reply with no ID");
+            return;
+        }
+
+        if (this._pendingIpcCalls[payload.id] === undefined) {
+            console.warn("Unknown IPC payload ID: " + payload.id);
+            return;
+        }
+
+        const callbacks = this._pendingIpcCalls[payload.id];
+        delete this._pendingIpcCalls[payload.id];
+        if (payload.error) {
+            callbacks.reject(payload.error);
+        } else {
+            callbacks.resolve(payload.reply);
+        }
+    }
 }

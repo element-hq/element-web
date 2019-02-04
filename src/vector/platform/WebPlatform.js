@@ -26,7 +26,7 @@ import Promise from 'bluebird';
 import url from 'url';
 import UAParser from 'ua-parser-js';
 
-var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
+const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
     constructor() {
@@ -140,6 +140,10 @@ export default class WebPlatform extends VectorBasePlatform {
     startUpdater() {
         this.pollForUpdate();
         setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
+    }
+
+    async canSelfUpdate(): boolean {
+        return true;
     }
 
     pollForUpdate() {
