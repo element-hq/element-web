@@ -36,6 +36,8 @@
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:bundle:dev": "webpack --progress --bail --mode development",
     "build:electron": "npm run clean && npm run build && npm run install:electron && build -wml --ia32 --x64",
+    "build:electron:linux": "npm run build && build -l --ia32 --x64",
+    "build:electron:macos": "npm run build && build -m --ia32 --x64",
     "build:electron:windows": "npm run build && build -w --ia32 --x64",
     "build:react-sdk": "node scripts/npm-sub.js matrix-react-sdk run build",
     "build:js-sdk": "node scripts/npm-sub.js matrix-js-sdk run start:init",
