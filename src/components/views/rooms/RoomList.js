@@ -183,7 +183,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         const cfg = {
-            layout: this._layout,
+            getLayout: () => this._layout,
         };
         this.resizer = new Resizer(this.resizeContainer, Distributor, cfg);
         this.resizer.setClassNames({
