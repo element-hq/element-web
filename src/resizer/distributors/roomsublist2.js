@@ -320,7 +320,7 @@ export class Distributor extends FixedDistributor {
     constructor(item, cfg) {
         super(item);
         const layout = cfg.layout;
-        this._handle = layout.openHandle(item.id);
+        this._handle = layout().openHandle(item.id);
     }
 
     finish() {
