@@ -95,8 +95,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
-
         // check for collapsed here and
         // not at parent so we keep
         // searchTerm in our state
