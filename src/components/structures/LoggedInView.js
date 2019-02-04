@@ -57,7 +57,6 @@ const LoggedInView = React.createClass({
         matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         page_type: PropTypes.string.isRequired,
         onRoomCreated: PropTypes.func,
-        onUserSettingsClose: PropTypes.func,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
@@ -421,7 +420,6 @@ const LoggedInView = React.createClass({
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
-        const UserSettings = sdk.getComponent('structures.UserSettings');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
@@ -449,13 +447,6 @@ const LoggedInView = React.createClass({
                         collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                break;
-
-            case PageTypes.UserSettings:
-                pageElement = <UserSettings
-                    onClose={this.props.onCloseAllSettings}
-                    brand={this.props.config.brand}
-                />;
                 break;
 
             case PageTypes.MyGroups:

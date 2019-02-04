@@ -76,7 +76,7 @@ export default class ManageIntegsButton extends React.Component {
         if (this.scalarClient !== null) {
             const integrationsButtonClasses = classNames({
                 mx_RoomHeader_button: true,
-                mx_RoomSettings_integrationsButton_error: !!this.state.scalarError,
+                mx_ManageIntegsButton_error: !!this.state.scalarError,
             });
 
             if (this.state.scalarError && !this.scalarClient.hasCredentials()) {
@@ -87,7 +87,7 @@ export default class ManageIntegsButton extends React.Component {
                 />;
                 // Popup shown when hovering over integrationsButton_error (via CSS)
                 integrationsErrorPopup = (
-                    <span className="mx_RoomSettings_integrationsButton_errorPopup">
+                    <span className="mx_ManageIntegsButton_errorPopup">
                         { _t('Could not connect to the integration server') }
                     </span>
                 );

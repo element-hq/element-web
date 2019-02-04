@@ -119,8 +119,6 @@ module.exports = React.createClass({
             isInitialEventHighlighted: null,
 
             forwardingEvent: null,
-            editingRoomSettings: false,
-            uploadingRoomSettings: false,
             numUnreadMessages: 0,
             draggingFile: false,
             searching: false,
@@ -229,10 +227,7 @@ module.exports = React.createClass({
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
             showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", RoomViewStore.getRoomId()),
-            editingRoomSettings: RoomViewStore.isEditingSettings(),
         };
-
-        if (this.state.editingRoomSettings && !newState.editingRoomSettings) dis.dispatch({action: 'focus_composer'});
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
@@ -1117,7 +1112,7 @@ module.exports = React.createClass({
             // favour longer (more specific) terms first
             highlights = highlights.sort(function(a, b) {
                 return b.length - a.length;
-});
+            });
 
             self.setState({
                 searchHighlights: highlights,
@@ -1231,50 +1226,9 @@ module.exports = React.createClass({
         dis.dispatch({ action: 'open_room_settings' });
     },
 
-    onSettingsSaveClick: function() {
-        if (!this.refs.room_settings) return;
-
-        this.setState({
-            uploadingRoomSettings: true,
-        });
-
-        const newName = this.refs.header.getEditedName();
-        if (newName !== undefined) {
-            this.refs.room_settings.setName(newName);
-        }
-        const newTopic = this.refs.header.getEditedTopic();
-        if (newTopic !== undefined) {
-            this.refs.room_settings.setTopic(newTopic);
-        }
-
-        this.refs.room_settings.save().then((results) => {
-            const fails = results.filter(function(result) { return result.state !== "fulfilled"; });
-            console.log("Settings saved with %s errors", fails.length);
-            if (fails.length) {
-                fails.forEach(function(result) {
-                    console.error(result.reason);
-                });
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to save room settings', '', ErrorDialog, {
-                    title: _t("Failed to save settings"),
-                    description: fails.map(function(result) { return result.reason; }).join("\n"),
-                });
-                // still editing room settings
-            } else {
-                dis.dispatch({ action: 'close_settings' });
-            }
-        }).finally(() => {
-            this.setState({
-                uploadingRoomSettings: false,
-            });
-            dis.dispatch({ action: 'close_settings' });
-        }).done();
-    },
-
     onCancelClick: function() {
         console.log("updateTint from onCancelClick");
         this.updateTint();
-        dis.dispatch({ action: 'close_settings' });
         if (this.state.forwardingEvent) {
             dis.dispatch({
                 action: 'forward_event',
@@ -1432,7 +1386,7 @@ module.exports = React.createClass({
                 (83 + // height of RoomHeader
                  36 + // height of the status area
                  72 + // minimum height of the message compmoser
-                 (this.state.editingRoomSettings ? (window.innerHeight * 0.3) : 120)); // amount of desired scrollback
+                 120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
@@ -1532,7 +1486,6 @@ module.exports = React.createClass({
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
         const MessageComposer = sdk.getComponent('rooms.MessageComposer');
         const ForwardMessage = sdk.getComponent("rooms.ForwardMessage");
-        const RoomSettings = sdk.getComponent("rooms.RoomSettings");
         const AuxPanel = sdk.getComponent("rooms.AuxPanel");
         const SearchBar = sdk.getComponent("rooms.SearchBar");
         const PinnedEventsPanel = sdk.getComponent("rooms.PinnedEventsPanel");
@@ -1690,11 +1643,7 @@ module.exports = React.createClass({
 
         let aux = null;
         let hideCancel = false;
-        if (this.state.editingRoomSettings) {
-            aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
-        } else if (this.state.uploadingRoomSettings) {
-            aux = <Loader />;
-        } else if (this.state.forwardingEvent !== null) {
+        if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
@@ -1736,7 +1685,7 @@ module.exports = React.createClass({
 
         const auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
-              fullHeight={this.state.editingRoomSettings}
+              fullHeight={false}
               userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
@@ -1744,7 +1693,7 @@ module.exports = React.createClass({
               maxHeight={this.state.auxPanelMaxHeight}
               onResize={this.onChildResize}
               showApps={this.state.showApps}
-              hideAppsDrawer={this.state.editingRoomSettings} >
+              hideAppsDrawer={false} >
                 { aux }
             </AuxPanel>
         );
@@ -1904,14 +1853,11 @@ module.exports = React.createClass({
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
                 <RoomHeader ref="header" room={this.state.room} searchInfo={searchInfo}
                     oobData={this.props.oobData}
-                    editing={this.state.editingRoomSettings}
-                    saving={this.state.uploadingRoomSettings}
                     inRoom={myMembership === 'join'}
                     collapsedRhs={this.props.collapsedRhs}
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onPinnedClick={this.onPinnedClick}
-                    onSaveClick={this.onSettingsSaveClick}
                     onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                     onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}

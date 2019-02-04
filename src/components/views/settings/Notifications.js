@@ -721,7 +721,7 @@ module.exports = React.createClass({
                 <div>
                     {masterPushRuleDiv}
 
-                    <div className="mx_UserSettings_notifTable">
+                    <div className="mx_UserNotifSettings_notifTable">
                         { _t('All notifications are currently disabled for all targets.') }
                     </div>
                 </div>
@@ -775,7 +775,7 @@ module.exports = React.createClass({
                     <td>{this.state.pushers[i].device_display_name}</td>
                 </tr>);
             }
-            devicesSection = (<table className="mx_UserSettings_devicesTable">
+            devicesSection = (<table className="mx_UserNotifSettings_devicesTable">
                 <tbody>
                     {rows}
                 </tbody>
@@ -807,7 +807,7 @@ module.exports = React.createClass({
 
                 {masterPushRuleDiv}
 
-                <div className="mx_UserSettings_notifTable">
+                <div className="mx_UserNotifSettings_notifTable">
 
                     { spinner }
 

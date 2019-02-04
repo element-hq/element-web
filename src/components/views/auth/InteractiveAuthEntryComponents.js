@@ -334,7 +334,7 @@ export const TermsAuthEntry = React.createClass({
         let submitButton;
         if (this.props.showContinue !== false) {
             // XXX: button classes
-            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_UserSettings_button"
+            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
                                    onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
         }
 
@@ -525,7 +525,7 @@ export const MsisdnAuthEntry = React.createClass({
             const enableSubmit = Boolean(this.state.token);
             const submitClasses = classnames({
                 mx_InteractiveAuthEntryComponents_msisdnSubmit: true,
-                mx_UserSettings_button: true, // XXX button classes
+                mx_GeneralButton: true,
             });
             let errorSection;
             if (this.state.errorText) {

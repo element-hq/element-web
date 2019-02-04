@@ -20,7 +20,6 @@ import MatrixClientPeg from '../MatrixClientPeg';
 import sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
-import SettingsStore from "../settings/SettingsStore";
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -45,8 +44,6 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
-
-    isEditingSettings: false,
 };
 
 /**
@@ -119,28 +116,13 @@ class RoomViewStore extends Store {
                     replyingToEvent: payload.event,
                 });
                 break;
-            case 'open_room_settings':
-                if (true || SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
-                    const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
-                    Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
-                        roomId: this._state.roomId,
-                    }, 'mx_SettingsDialog');
-                } else {
-                    this._setState({
-                        isEditingSettings: true,
-                    });
-                }
+            case 'open_room_settings': {
+                const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
+                Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
+                    roomId: this._state.roomId,
+                }, 'mx_SettingsDialog');
                 break;
-            case 'open_old_room_settings':
-                this._setState({
-                    isEditingSettings: true,
-                });
-                break;
-            case 'close_settings':
-                this._setState({
-                    isEditingSettings: false,
-                });
-                break;
+            }
         }
     }
 
@@ -337,10 +319,6 @@ class RoomViewStore extends Store {
     // The mxEvent if one is currently being replied to/quoted
     getQuotingEvent() {
         return this._state.replyingToEvent;
-    }
-
-    isEditingSettings() {
-        return this._state.isEditingSettings;
     }
 
     shouldPeek() {

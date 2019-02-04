@@ -19,45 +19,15 @@ import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/AdvancedRoomSettingsTab";
-import dis from '../../../dispatcher';
 import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
 import sdk from "../../../index";
 
-// TODO: Ditch this whole component
-export class TempTab extends React.Component {
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-    };
-
-    componentDidMount(): void {
-        dis.dispatch({action: "open_old_room_settings"});
-        this.props.onClose();
-    }
-
-    render() {
-        return <div>Hello World</div>;
-    }
-}
-
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
-    };
-
-    componentWillMount(): void {
-        this.dispatcherRef = dis.register(this._onAction);
-    }
-
-    componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
-    }
-
-    _onAction = (payload) => {
-        if (payload.action !== 'close_room_settings') return;
-        this.props.onFinished();
     };
 
     _getTabs() {
@@ -83,11 +53,6 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_warningIcon",
             <AdvancedRoomSettingsTab roomId={this.props.roomId} />,
         ));
-        // tabs.push(new Tab(
-        //     _td("Visit old settings"),
-        //     "mx_RoomSettingsDialog_warningIcon",
-        //     <TempTab onClose={this.props.onFinished} />,
-        // ));
 
         return tabs;
     }
