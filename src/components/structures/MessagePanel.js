@@ -642,14 +642,13 @@ module.exports = React.createClass({
 
     updateTimelineMinHeight: function() {
         const scrollPanel = this.refs.scrollPanel;
-        const whoIsTyping = this.refs.whoIsTyping;
-        const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
 
         if (scrollPanel) {
-            if (isTypingVisible) {
+            const isAtBottom = scrollPanel.isAtBottom();
+            const whoIsTyping = this.refs.whoIsTyping;
+            const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+            if (isAtBottom && isTypingVisible) {
                 scrollPanel.blockShrinking();
-            } else {
-                scrollPanel.clearBlockShrinking();
             }
         }
     },
