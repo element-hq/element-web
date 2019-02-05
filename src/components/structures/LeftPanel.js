@@ -199,9 +199,10 @@ const LeftPanel = React.createClass({
             },
         );
 
-        const searchBox = !this.props.collapsed ?
-            <SearchBox onSearch={ this.onSearch } onCleared={ this.onSearchCleared } /> :
-            undefined;
+        const searchBox = (<SearchBox
+            onSearch={ this.onSearch }
+            onCleared={ this.onSearchCleared }
+            collapsed={this.props.collapsed} />);
 
         return (
             <div className={containerClasses}>
