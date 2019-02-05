@@ -76,7 +76,6 @@ module.exports = React.createClass({
 
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: PropTypes.func,
-        onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
     },
 
