@@ -111,7 +111,7 @@ class CustomRoomTagTile extends React.Component {
         return (<AccessibleButton className={className} onClick={this.onClick}>
                     <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
                         <BaseAvatar
-                            name={name}
+                            name={tag.avatarLetter}
                             idName={name}
                             width={avatarHeight}
                             height={avatarHeight}

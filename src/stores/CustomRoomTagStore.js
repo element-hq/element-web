@@ -18,6 +18,27 @@ import dis from '../dispatcher';
 import RoomListStore from './RoomListStore';
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
+function commonPrefix(a, b) {
+    const len = Math.min(a.length, b.length);
+    let prefix;
+    for (let i = 0; i < len; ++i) {
+        if (a.charAt(i) !== b.charAt(i)) {
+            prefix = a.substr(0, i);
+            break;
+        }
+    }
+    if (prefix === undefined) {
+        prefix = a.substr(0, len);
+    }
+    const spaceIdx = prefix.indexOf(' ');
+    if (spaceIdx !== -1) {
+        prefix = prefix.substr(0, spaceIdx + 1);
+    }
+    if (prefix.length >= 2) {
+        return prefix;
+    }
+    return "";
+}
 /**
  * A class for storing application state for ordering tags in the TagPanel.
  */
@@ -41,9 +62,20 @@ class CustomRoomTagStore extends Store {
         return this._state.tags;
     }
 
-    getSortedTags() {this._state.tags
-        return Object.keys(this._state.tags).sort().map((name) => {
-            return {name, selected: this._state.tags[name]};
+    getSortedTags() {
+        const tagNames = Object.keys(this._state.tags).sort();
+        const prefixes = tagNames.map((name, i) => {
+            const isFirst = i === 0;
+            const isLast = i === tagNames.length - 1;
+            const backwardsPrefix = !isFirst ? commonPrefix(name, tagNames[i - 1]) : "";
+            const forwardsPrefix = !isLast ? commonPrefix(name, tagNames[i + 1]) : "";
+            const longestPrefix = backwardsPrefix.length > forwardsPrefix.length ?
+                backwardsPrefix : forwardsPrefix;
+            return longestPrefix;
+        });
+        return tagNames.map((name, i) => {
+            const avatarLetter = name.substr(prefixes[i].length, 1);
+            return {name, selected: this._state.tags[name], avatarLetter};
         });
     }
 
