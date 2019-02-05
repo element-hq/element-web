@@ -54,17 +54,11 @@ module.exports = React.createClass({
         defaultIsUrl: PropTypes.string,
         brand: PropTypes.string,
         email: PropTypes.string,
-        referrer: PropTypes.string,
-
         // An error passed along from higher up explaining that something
         // went wrong when finding the defaultHsUrl.
         defaultServerDiscoveryError: PropTypes.string,
-
-        defaultDeviceDisplayName: PropTypes.string,
-
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
-        onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
     },
 
