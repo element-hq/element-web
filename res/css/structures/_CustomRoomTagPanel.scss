@@ -21,19 +21,12 @@ limitations under the License.
 
 .mx_CustomRoomTagPanel {
     background-color: $tagpanel-bg-color;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    color: white
-}
-
-.mx_CustomRoomTagPanel li.selected {
-    background-color: red;
+    max-height: 40%;
 }
 
 .mx_CustomRoomTagPanel .mx_AccessibleButton {
-    margin: 9px 0;
+    margin: 9px auto;
+    width: 40px;
 }
 
 .mx_CustomRoomTagPanel .mx_BaseAvatar_image {
