@@ -69,6 +69,8 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
+
         return {
             busy: false,
             errorText: null,
@@ -90,6 +92,8 @@ module.exports = React.createClass({
             serverType: null,
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
+            // Phase of the overall registration dialog.
+            phase: customURLsAllowed ? PHASE_SERVER_DETAILS : PHASE_REGISTRATION,
             flows: null,
         };
     },
@@ -367,7 +371,6 @@ module.exports = React.createClass({
         const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        // TODO: May need to adjust the behavior of this config option
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
