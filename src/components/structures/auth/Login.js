@@ -31,13 +31,13 @@ import { AutoDiscovery } from "matrix-js-sdk";
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
 // Phases
-// Show controls to configure server details
-const PHASE_SERVER_DETAILS = 0;
 // Show the appropriate login flow(s) for the server
-const PHASE_LOGIN = 1;
+const PHASE_LOGIN = 0;
+// Show controls to configure server details
+const PHASE_SERVER_DETAILS = 1;
 
-// Disable phases for now, pending UX discussion on WK discovery
-const PHASES_ENABLED = false;
+// Enable phases for login
+const PHASES_ENABLED = true;
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -95,7 +95,7 @@ module.exports = React.createClass({
             phoneNumber: "",
 
             // Phase of the overall login dialog.
-            phase: PHASE_SERVER_DETAILS,
+            phase: PHASE_LOGIN,
             // The current login flow, such as password, SSO, etc.
             currentFlow: "m.login.password",
 
