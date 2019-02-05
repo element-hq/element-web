@@ -26,7 +26,6 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import { AutoDiscovery } from "matrix-js-sdk";
-import * as ServerType from '../../views/auth/ServerTypeSelector';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -87,7 +86,6 @@ module.exports = React.createClass({
             errorText: null,
             loginIncorrect: false,
 
-            serverType: null,
             enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
@@ -263,11 +261,6 @@ module.exports = React.createClass({
             username: username,
             discoveryError: null,
         });
-        // If the free server type is selected, we don't show server details at all,
-        // so it doesn't make sense to try .well-known discovery.
-        if (this.state.serverType === ServerType.FREE) {
-            return;
-        }
         if (username[0] === "@") {
             const serverName = username.split(':').slice(1).join(':');
             try {
@@ -323,39 +316,6 @@ module.exports = React.createClass({
         });
     },
 
-    onServerTypeChange(type) {
-        this.setState({
-            serverType: type,
-        });
-
-        // When changing server types, set the HS / IS URLs to reasonable defaults for the
-        // the new type.
-        switch (type) {
-            case ServerType.FREE: {
-                const { hsUrl, isUrl } = ServerType.TYPES.FREE;
-                this.onServerConfigChange({
-                    hsUrl,
-                    isUrl,
-                });
-                // Move directly to the login phase since the server details are fixed.
-                this.setState({
-                    phase: PHASE_LOGIN,
-                });
-                break;
-            }
-            case ServerType.PREMIUM:
-            case ServerType.ADVANCED:
-                this.onServerConfigChange({
-                    hsUrl: this.props.defaultHsUrl,
-                    isUrl: this.props.defaultIsUrl,
-                });
-                this.setState({
-                    phase: PHASE_SERVER_DETAILS,
-                });
-                break;
-        }
-    },
-
     onRegisterClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -390,14 +350,6 @@ module.exports = React.createClass({
         this.setState({findingHomeserver: true});
         try {
             const discovery = await AutoDiscovery.findClientConfig(serverName);
-
-            // The server type may have changed while discovery began in the background.
-            // If it has become the free server type which doesn't show server details,
-            // ignore discovery results.
-            if (this.state.serverType === ServerType.FREE) {
-                this.setState({findingHomeserver: false});
-                return;
-            }
 
             const state = discovery["m.homeserver"].state;
             if (state !== AutoDiscovery.SUCCESS && state !== AutoDiscovery.PROMPT) {
@@ -554,51 +506,27 @@ module.exports = React.createClass({
         return errorText;
     },
 
-    renderServerComponentForStep() {
-        const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
+    renderServerComponent() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        // If we're on a different phase, we only show the server type selector,
-        // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            return <div>
-                <ServerTypeSelector
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    onChange={this.onServerTypeChange}
-                />
-            </div>;
+            // TODO: ...
+            return null;
         }
 
-        let serverDetails = null;
-        switch (this.state.serverType) {
-            case ServerType.FREE:
-                break;
-            case ServerType.PREMIUM:
-                serverDetails = <ModularServerConfig
-                    customHsUrl={this.state.enteredHsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={250}
-                />;
-                break;
-            case ServerType.ADVANCED:
-                serverDetails = <ServerConfig
-                    customHsUrl={this.state.enteredHsUrl}
-                    customIsUrl={this.state.enteredIsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={250}
-                />;
-                break;
-        }
+        const serverDetails = <ServerConfig
+            customHsUrl={this.state.enteredHsUrl}
+            customIsUrl={this.state.enteredIsUrl}
+            defaultHsUrl={this.props.defaultHsUrl}
+            defaultIsUrl={this.props.defaultIsUrl}
+            onServerConfigChange={this.onServerConfigChange}
+            delayTimeMs={250}
+        />;
 
         let nextButton = null;
         if (PHASES_ENABLED) {
@@ -610,10 +538,6 @@ module.exports = React.createClass({
         }
 
         return <div>
-            <ServerTypeSelector
-                defaultHsUrl={this.props.defaultHsUrl}
-                onChange={this.onServerTypeChange}
-            />
             {serverDetails}
             {nextButton}
         </div>;
@@ -642,13 +566,8 @@ module.exports = React.createClass({
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
         let onEditServerDetailsClick = null;
-        // If custom URLs are allowed and we haven't selected the Free server type, wire
-        // up the server details edit link.
-        if (
-            PHASES_ENABLED &&
-            !SdkConfig.get()['disable_custom_urls'] &&
-            this.state.serverType !== ServerType.FREE
-        ) {
+        // If custom URLs are allowed, wire up the server details edit link.
+        if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
             onEditServerDetailsClick = this.onEditServerDetailsClick;
         }
         return (
@@ -721,7 +640,7 @@ module.exports = React.createClass({
                         {loader}
                     </h2>
                     { errorTextSection }
-                    { this.renderServerComponentForStep() }
+                    { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
                     <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }
