@@ -636,7 +636,7 @@ module.exports = React.createClass({
                 <AuthHeader />
                 <AuthBody>
                     <h2>
-                        {_t('Sign in to your account')}
+                        {_t('Sign in')}
                         {loader}
                     </h2>
                     { errorTextSection }
