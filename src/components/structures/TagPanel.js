@@ -23,7 +23,6 @@ import GroupActions from '../../actions/GroupActions';
 
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
@@ -48,8 +47,6 @@ const TagPanel = React.createClass({
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
         this.context.matrixClient.on("sync", this._onClientSync);
 
-        this._dispatcherRef = dis.register(this._onAction);
-
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
                 return;
@@ -69,9 +66,6 @@ const TagPanel = React.createClass({
         this.context.matrixClient.removeListener("sync", this._onClientSync);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
-        }
-        if (this._dispatcherRef) {
-            dis.unregister(this._dispatcherRef);
         }
     },
 
@@ -106,21 +100,11 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'deselect_tags'});
     },
 
-    _onAction(payload) {
-        if (payload.action === "show_redesign_feedback_dialog") {
-            const RedesignFeedbackDialog =
-                sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
-            Modal.createDialog(RedesignFeedbackDialog);
-        }
-    },
-
     render() {
-        const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-        const ActionButton = sdk.getComponent("elements.ActionButton");
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -174,13 +158,6 @@ const TagPanel = React.createClass({
                     ) }
                 </Droppable>
             </GeminiScrollbarWrapper>
-            <div className="mx_TagPanel_divider" />
-            <div className="mx_TagPanel_groupsButton">
-                <GroupsButton />
-                <ActionButton
-                    className="mx_TagPanel_report" action="show_redesign_feedback_dialog"
-                    label={_t("Report bugs & give feedback")} tooltip={true} />
-            </div>
         </div>;
     },
 });

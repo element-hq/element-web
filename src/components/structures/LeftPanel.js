@@ -24,7 +24,7 @@ import { KeyCode } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
-
+import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
 
 
@@ -188,7 +188,13 @@ const LeftPanel = React.createClass({
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
         const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
-        const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
+        let tagPanelContainer;
+        if (tagPanelEnabled) {
+            tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
+                <TagPanel />
+                <TagPanelButtons />
+            </div>);
+        }
 
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
@@ -206,7 +212,7 @@ const LeftPanel = React.createClass({
 
         return (
             <div className={containerClasses}>
-                { tagPanel }
+                { tagPanelContainer }
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
                     { searchBox }
