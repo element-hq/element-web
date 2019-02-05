@@ -183,6 +183,7 @@ const LeftPanel = React.createClass({
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
         const TagPanel = sdk.getComponent('structures.TagPanel');
+        const CustomRoomTagPanel = sdk.getComponent('structures.CustomRoomTagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
@@ -192,6 +193,7 @@ const LeftPanel = React.createClass({
         if (tagPanelEnabled) {
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
+                <CustomRoomTagPanel />
                 <TagPanelButtons />
             </div>);
         }
@@ -209,6 +211,7 @@ const LeftPanel = React.createClass({
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
             collapsed={this.props.collapsed} />);
+
 
         return (
             <div className={containerClasses}>
