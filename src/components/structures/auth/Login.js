@@ -514,7 +514,6 @@ module.exports = React.createClass({
         }
 
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            // TODO: ...
             return null;
         }
 
