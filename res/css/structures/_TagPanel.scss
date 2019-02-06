@@ -68,10 +68,13 @@ limitations under the License.
 
     height: 100%;
 }
+.mx_TagPanel .mx_TagPanel_tagTileContainer > div {
+    height: 40px;
+    padding: 5px 0 4px 0;
+}
 
 .mx_TagPanel .mx_TagTile {
-    padding-top: 9px;
-    padding-bottom: 9px;
+    margin: 9px 0;
 //  opacity: 0.5;
     position: relative;
 }
@@ -81,13 +84,7 @@ limitations under the License.
 //    opacity: 1;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected {
-    /* To offset border of mx_TagTile_avatar */
-    padding: 3px 0px;
-}
-
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
-    border: 3px solid $accent-color;
     background-color: $accent-color;
     border-radius: 40px;
 
@@ -95,6 +92,13 @@ limitations under the License.
     display: block;
     height: 40px;
     width: 40px;
+}
+
+.mx_TagPanel .mx_TagTile_selected .mx_BaseAvatar_image {
+    border: 3px solid $accent-color;
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
