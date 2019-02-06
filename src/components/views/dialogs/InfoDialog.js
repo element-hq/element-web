@@ -32,8 +32,8 @@ export default React.createClass({
 
     getDefaultProps: function() {
         return {
-            title: "",
-            description: "",
+            title: '',
+            description: '',
         };
     },
 
@@ -50,7 +50,7 @@ export default React.createClass({
                 contentId='mx_Dialog_content'
                 hasCancel={false}
             >
-                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
