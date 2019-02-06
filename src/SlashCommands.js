@@ -148,7 +148,7 @@ export const CommandMap = {
             if (!room) return reject('Bad room ID: ' + roomId);
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
-            const topic = topicEvents.getContent().topic;
+            const topic = topicEvents && topicEvents.getContent().topic;
             const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
 
             const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
