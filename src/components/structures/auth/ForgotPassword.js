@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017, 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -233,24 +233,25 @@ module.exports = React.createClass({
                 </p>
                 <div>
                     <form onSubmit={this.onSubmitForm}>
-                        <input className="mx_Login_field" ref="user" type="text"
-                            name="reset_email" // define a name so browser's password autofill gets less confused
-                            value={this.state.email}
-                            onChange={this.onInputChanged.bind(this, "email")}
-                            placeholder={_t('Email address')} autoFocus />
-                        <br />
-                        <input className="mx_Login_field" ref="pass" type="password"
-                            name="reset_password"
-                            value={this.state.password}
-                            onChange={this.onInputChanged.bind(this, "password")}
-                            placeholder={_t('New password')} />
-                        <br />
-                        <input className="mx_Login_field" ref="pass" type="password"
-                            name="reset_password_confirm"
-                            value={this.state.password2}
-                            onChange={this.onInputChanged.bind(this, "password2")}
-                            placeholder={_t('Confirm your new password')} />
-                        <br />
+                        <div className="mx_AuthBody_fieldRow">
+                            <input className="mx_Login_field" ref="user" type="text"
+                                name="reset_email" // define a name so browser's password autofill gets less confused
+                                value={this.state.email}
+                                onChange={this.onInputChanged.bind(this, "email")}
+                                placeholder={_t('Email address')} autoFocus />
+                        </div>
+                        <div className="mx_AuthBody_fieldRow">
+                            <input className="mx_Login_field" ref="pass" type="password"
+                                name="reset_password"
+                                value={this.state.password}
+                                onChange={this.onInputChanged.bind(this, "password")}
+                                placeholder={_t('New password')} />
+                            <input className="mx_Login_field" ref="pass" type="password"
+                                name="reset_password_confirm"
+                                value={this.state.password2}
+                                onChange={this.onInputChanged.bind(this, "password2")}
+                                placeholder={_t('Confirm your new password')} />
+                        </div>
                         <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
                     </form>
                     { serverConfigSection }
