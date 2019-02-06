@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** The types of page which can be shown by the LoggedInView */
-export default {
-    HomePage: "home_page",
-    RoomView: "room_view",
-    RoomDirectory: "room_directory",
-    UserView: "user_view",
-    GroupView: "group_view",
-    MyGroups: "my_groups",
-};
+.mx_ColorSettings_roomColor {
+    display: inline-block;
+    position: relative;
+    width: 37px;
+    height: 37px;
+    border: 1px solid #979797;
+    margin-right: 13px;
+    cursor: pointer;
+}
+
+.mx_ColorSettings_roomColor_selected {
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    cursor: default ! important;
+}
+
+.mx_ColorSettings_roomColorPrimary {
+    height: 10px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}

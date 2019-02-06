@@ -241,7 +241,7 @@ export default class DeviceVerifyDialog extends React.Component {
                         "and ask them whether the key they see in their User Settings " +
                         "for this device matches the key below:") }
                 </p>
-                <div className="mx_UserSettings_cryptoSection">
+                <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
                         <li><label>{ _t("Device name") }:</label> <span>{ this.props.device.getDisplayName() }</span></li>
                         <li><label>{ _t("Device ID") }:</label> <span><code>{ this.props.device.deviceId }</code></span></li>

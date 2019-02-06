@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/GeneralUserSettingsTab";
-import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
 import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
@@ -29,22 +28,6 @@ import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
 import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
 import FlairSettingsTab from "../settings/tabs/FlairSettingsTab";
 import sdk from "../../../index";
-
-// TODO: Ditch this whole component
-export class TempTab extends React.Component {
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-    };
-
-    componentDidMount(): void {
-        dis.dispatch({action: "view_old_user_settings"});
-        this.props.onClose();
-    }
-
-    render() {
-        return <div>Hello World</div>;
-    }
-}
 
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
@@ -96,11 +79,6 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_helpIcon",
             <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        // tabs.push(new Tab(
-        //     _td("Visit old settings"),
-        //     "mx_UserSettingsDialog_helpIcon",
-        //     <TempTab onClose={this.props.onFinished} />,
-        // ));
 
         return tabs;
     }

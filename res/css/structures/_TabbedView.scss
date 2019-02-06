@@ -51,11 +51,6 @@ limitations under the License.
     color: $tab-label-active-fg-color;
 }
 
-// TODO: Remove temporary hack alongside "visit old settings" tab
-.mx_TabbedView_tabLabel_TEMP_HACK {
-    background-color: orange;
-}
-
 .mx_TabbedView_maskedIcon {;
     margin-left: 6px;
     margin-right: 9px;

@@ -235,7 +235,7 @@ export default class KeyBackupPanel extends React.PureComponent {
 
                 let verifyButton;
                 if (sig.device && !sig.device.isVerified()) {
-                    verifyButton = <div><br /><AccessibleButton className="mx_UserSettings_button"
+                    verifyButton = <div><br /><AccessibleButton className="mx_GeneralButton"
                             onClick={this._verifyDevice} data-sigindex={i}>
                         { _t("Verify...") }
                     </AccessibleButton></div>;

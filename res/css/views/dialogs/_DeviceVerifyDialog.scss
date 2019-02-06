@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** The types of page which can be shown by the LoggedInView */
-export default {
-    HomePage: "home_page",
-    RoomView: "room_view",
-    RoomDirectory: "room_directory",
-    UserView: "user_view",
-    GroupView: "group_view",
-    MyGroups: "my_groups",
-};
+.mx_DeviceVerifyDialog_cryptoSection ul {
+    display: table;
+}
+
+.mx_DeviceVerifyDialog_cryptoSection li {
+    display: table-row;
+}
+
+.mx_DeviceVerifyDialog_cryptoSection label,
+.mx_DeviceVerifyDialog_cryptoSection span {
+    display: table-cell;
+    padding-right: 1em;
+}

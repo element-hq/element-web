@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,47 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
 
-/*
- * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
- */
+// TODO: Decommission.
+// Ref: https://github.com/vector-im/riot-web/issues/8424
 export default {
-    loadProfileInfo: function() {
-        const cli = MatrixClientPeg.get();
-        return cli.getProfileInfo(cli.credentials.userId);
-    },
-
-    saveDisplayName: function(newDisplayname) {
-        return MatrixClientPeg.get().setDisplayName(newDisplayname);
-    },
-
-    loadThreePids: function() {
-        if (MatrixClientPeg.get().isGuest()) {
-            return Promise.resolve({
-                threepids: [],
-            }); // guests can't poke 3pid endpoint
-        }
-        return MatrixClientPeg.get().getThreePids();
-    },
-
-    saveThreePids: function(threePids) {
-        // TODO
-    },
-
-    changePassword: function(oldPassword, newPassword) {
-        const cli = MatrixClientPeg.get();
-
-        const authDict = {
-            type: 'm.login.password',
-            user: cli.credentials.userId,
-            password: oldPassword,
-        };
-
-        return cli.setPassword(authDict, newPassword);
-    },
-
     /*
      * Returns the email pusher (pusher of type 'email') for a given
      * email address. Email pushers all have the same app ID, so since
@@ -72,10 +36,6 @@ export default {
             }
         }
         return undefined;
-    },
-
-    hasEmailPusher: function(pushers, address) {
-        return this.getEmailPusher(pushers, address) !== undefined;
     },
 
     addEmailPusher: function(address, data) {

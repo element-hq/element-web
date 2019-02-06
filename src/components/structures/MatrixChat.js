@@ -136,10 +136,6 @@ export default React.createClass({
         appConfig: PropTypes.object,
     },
 
-    AuxPanel: {
-        RoomSettings: "room_settings",
-    },
-
     getChildContext: function() {
         return {
             appConfig: this.props.config,
@@ -572,40 +568,16 @@ export default React.createClass({
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
             case 'view_user_settings': {
-                if (true || SettingsStore.isFeatureEnabled("feature_tabbed_settings")) {
-                    const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                    Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
-                } else {
-                    this._setPage(PageTypes.UserSettings);
-                    this.notifyNewScreen('settings');
+                const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
+
+                // View the home page if we need something to look at
+                if (!this.state.currentGroupId && !this.state.currentRoomId) {
+                    this._setPage(PageTypes.HomePage);
+                    this.notifyNewScreen('home');
                 }
                 break;
             }
-            case 'view_old_user_settings':
-                this._setPage(PageTypes.UserSettings);
-                this.notifyNewScreen('settings');
-                break;
-            case 'close_settings':
-                this.setState({
-                    leftDisabled: false,
-                    rightDisabled: false,
-                    middleDisabled: false,
-                });
-                if (this.state.page_type === PageTypes.UserSettings) {
-                    // We do this to get setPage and notifyNewScreen
-                    if (this.state.currentRoomId) {
-                        this._viewRoom({
-                            room_id: this.state.currentRoomId,
-                        });
-                    } else if (this.state.currentGroupId) {
-                        this._viewGroup({
-                            group_id: this.state.currentGroupId,
-                        });
-                    } else {
-                        this._viewHome();
-                    }
-                }
-                break;
             case 'view_create_room':
                 this._createRoom();
                 break;
@@ -1063,7 +1035,6 @@ export default React.createClass({
                         modal.close();
                         if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
-                            dis.dispatch({action: 'close_room_settings'});
                         }
                     }, (err) => {
                         modal.close();

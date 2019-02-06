@@ -39,6 +39,10 @@ const ROOM_COLORS = [
     //["#595959", "#ececec"], // Grey makes everything appear disabled, so remove it for now
 ];
 
+// Dev note: this component is not attached anywhere, but is left here as it
+// has a high possibility of being used in the nearish future.
+// Ref: https://github.com/vector-im/riot-web/issues/8421
+
 module.exports = React.createClass({
     displayName: 'ColorSettings',
 
@@ -125,24 +129,24 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="mx_RoomSettings_roomColors">
+            <div className="mx_ColorSettings_roomColors">
                 { ROOM_COLORS.map((room_color, i) => {
                     let selected;
                     if (i === this.state.index) {
                         selected = (
-                            <div className="mx_RoomSettings_roomColor_selected">
+                            <div className="mx_ColorSettings_roomColor_selected">
                                 <img src={require("../../../../res/img/tick.svg")} width="17" height="14" alt="./" />
                             </div>
                         );
                     }
                     const boundClick = this._onColorSchemeChanged.bind(this, i);
                     return (
-                        <div className="mx_RoomSettings_roomColor"
+                        <div className="mx_ColorSettings_roomColor"
                               key={"room_color_" + i}
                               style={{ backgroundColor: room_color[1] }}
                               onClick={boundClick}>
                             { selected }
-                            <div className="mx_RoomSettings_roomColorPrimary" style={{ backgroundColor: room_color[0] }}></div>
+                            <div className="mx_ColorSettings_roomColorPrimary" style={{ backgroundColor: room_color[0] }}></div>
                         </div>
                     );
                 }) }

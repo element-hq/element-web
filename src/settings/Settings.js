@@ -93,12 +93,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_tabbed_settings": {
-        isFeature: true,
-        displayName: _td("Tabbed settings"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
