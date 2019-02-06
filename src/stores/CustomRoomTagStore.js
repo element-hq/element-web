@@ -15,6 +15,7 @@ limitations under the License.
 */
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
+import * as RoomNotifs from '../RoomNotifs';
 import RoomListStore from './RoomListStore';
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -63,6 +64,8 @@ class CustomRoomTagStore extends Store {
     }
 
     getSortedTags() {
+        const roomLists = RoomListStore.getRoomLists();
+
         const tagNames = Object.keys(this._state.tags).sort();
         const prefixes = tagNames.map((name, i) => {
             const isFirst = i === 0;
@@ -74,8 +77,14 @@ class CustomRoomTagStore extends Store {
             return longestPrefix;
         });
         return tagNames.map((name, i) => {
+            const notifs = RoomNotifs.aggregateNotificationCount(roomLists[name]);
+            let badge;
+            if (notifs.count !== 0) {
+                badge = notifs;
+            }
             const avatarLetter = name.substr(prefixes[i].length, 1);
-            return {name, selected: this._state.tags[name], avatarLetter};
+            const selected = this._state.tags[name];
+            return {name, avatarLetter, badge, selected};
         });
     }
 
