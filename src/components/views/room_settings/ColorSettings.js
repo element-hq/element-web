@@ -41,6 +41,7 @@ const ROOM_COLORS = [
 
 // Dev note: this component is not attached anywhere, but is left here as it
 // has a high possibility of being used in the nearish future.
+// Ref: https://github.com/vector-im/riot-web/issues/8421
 
 module.exports = React.createClass({
     displayName: 'ColorSettings',

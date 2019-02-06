@@ -18,6 +18,7 @@ limitations under the License.
 import MatrixClientPeg from './MatrixClientPeg';
 
 // TODO: Decommission.
+// Ref: https://github.com/vector-im/riot-web/issues/8424
 export default {
     /*
      * Returns the email pusher (pusher of type 'email') for a given
