@@ -274,13 +274,13 @@ module.exports = React.createClass({
         if (this._roomListStoreToken) {
             this._roomListStoreToken.remove();
         }
+        if (this._customTagStoreToken) {
+            this._customTagStoreToken.remove();
+        }
 
         // NB: GroupStore is not a Flux.Store
         if (this._groupStoreToken) {
             this._groupStoreToken.unregister();
-        }
-        if (this._customTagStoreToken) {
-            this._customTagStoreToken.unregister();
         }
 
         // cancel any pending calls to the rate_limited_funcs
