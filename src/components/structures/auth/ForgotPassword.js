@@ -174,6 +174,21 @@ module.exports = React.createClass({
         this.setState(newState);
     },
 
+    onServerDetailsNextPhaseClick(ev) {
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_FORGOT,
+        });
+    },
+
+    onEditServerDetailsClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            phase: PHASE_SERVER_DETAILS,
+        });
+    },
+
     onLoginClick: function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -189,25 +204,30 @@ module.exports = React.createClass({
     },
 
     renderServerDetails() {
-        return null;
+        const ServerConfig = sdk.getComponent("auth.ServerConfig");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+
+        if (SdkConfig.get()['disable_custom_urls']) {
+            return null;
+        }
+
+        return <div>
+            <ServerConfig ref="serverConfig"
+                defaultHsUrl={this.props.defaultHsUrl}
+                defaultIsUrl={this.props.defaultIsUrl}
+                customHsUrl={this.state.enteredHsUrl}
+                customIsUrl={this.state.enteredIsUrl}
+                onServerConfigChange={this.onServerConfigChange}
+                delayTimeMs={0} />
+            <AccessibleButton className="mx_Login_submit"
+                onClick={this.onServerDetailsNextPhaseClick}
+            >
+                {_t("Next")}
+            </AccessibleButton>
+        </div>;
     },
 
     renderForgot() {
-        const ServerConfig = sdk.getComponent("auth.ServerConfig");
-
-        let serverConfigSection;
-        if (!SdkConfig.get()['disable_custom_urls']) {
-            serverConfigSection = (
-                <ServerConfig ref="serverConfig"
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    customHsUrl={this.props.customHsUrl}
-                    customIsUrl={this.props.customIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={0} />
-            );
-        }
-
         let errorText = null;
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
         if (err) {
@@ -224,9 +244,20 @@ module.exports = React.createClass({
             // ignore
         }
 
+        // If custom URLs are allowed, wire up the server details edit link.
+        let editLink = null;
+        if (!SdkConfig.get()['disable_custom_urls']) {
+            editLink = <a className="mx_AuthBody_editServerDetails"
+                href="#" onClick={this.onEditServerDetailsClick}
+            >
+                {_t('Change')}
+            </a>;
+        }
+
         return <div>
             <h3>
                 {yourMatrixAccountText}
+                {editLink}
             </h3>
             {errorText}
             <form onSubmit={this.onSubmitForm}>
@@ -255,7 +286,6 @@ module.exports = React.createClass({
                 )}</span>
                 <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
             </form>
-            {serverConfigSection}
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                 {_t('Sign in instead')}
             </a>
