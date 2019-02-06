@@ -25,6 +25,18 @@ import SdkConfig from "../../../SdkConfig";
 
 import PasswordReset from "../../../PasswordReset";
 
+// Phases
+// Show controls to configure server details
+const PHASE_SERVER_DETAILS = 0;
+// Show the forgot password inputs
+const PHASE_FORGOT = 1;
+// Email is in the process of being sent
+const PHASE_SENDING_EMAIL = 2;
+// Email has been sent
+const PHASE_EMAIL_SENT = 3;
+// User has clicked the link in email and completed reset
+const PHASE_DONE = 4;
+
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
@@ -49,7 +61,7 @@ module.exports = React.createClass({
         return {
             enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
-            progress: null,
+            phase: null,
             password: null,
             password2: null,
             errorText: null,
@@ -58,17 +70,17 @@ module.exports = React.createClass({
 
     submitPasswordReset: function(hsUrl, identityUrl, email, password) {
         this.setState({
-            progress: "sending_email",
+            phase: PHASE_SENDING_EMAIL,
         });
         this.reset = new PasswordReset(hsUrl, identityUrl);
         this.reset.resetPassword(email, password).done(() => {
             this.setState({
-                progress: "sent_email",
+                phase: PHASE_EMAIL_SENT,
             });
         }, (err) => {
             this.showErrorDialog(_t('Failed to send email') + ": " + err.message);
             this.setState({
-                progress: null,
+                phase: null,
             });
         });
     },
@@ -80,7 +92,7 @@ module.exports = React.createClass({
             return;
         }
         this.reset.checkEmailLinkClicked().done((res) => {
-            this.setState({ progress: "complete" });
+            this.setState({ phase: PHASE_DONE });
         }, (err) => {
             this.showErrorDialog(err.message);
         });
@@ -184,9 +196,9 @@ module.exports = React.createClass({
 
         let resetPasswordJsx;
 
-        if (this.state.progress === "sending_email") {
+        if (this.state.phase === PHASE_SENDING_EMAIL) {
             resetPasswordJsx = <Spinner />;
-        } else if (this.state.progress === "sent_email") {
+        } else if (this.state.phase === PHASE_EMAIL_SENT) {
             resetPasswordJsx = (
                 <div>
                     { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, " +
@@ -196,7 +208,7 @@ module.exports = React.createClass({
                         value={_t('I have verified my email address')} />
                 </div>
             );
-        } else if (this.state.progress === "complete") {
+        } else if (this.state.phase === PHASE_DONE) {
             resetPasswordJsx = (
                 <div>
                     <p>{ _t('Your password has been reset') }.</p>

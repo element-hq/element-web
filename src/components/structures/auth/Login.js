@@ -31,10 +31,10 @@ import { AutoDiscovery } from "matrix-js-sdk";
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
 // Phases
-// Show the appropriate login flow(s) for the server
-const PHASE_LOGIN = 0;
 // Show controls to configure server details
-const PHASE_SERVER_DETAILS = 1;
+const PHASE_SERVER_DETAILS = 0;
+// Show the appropriate login flow(s) for the server
+const PHASE_LOGIN = 1;
 
 // Enable phases for login
 const PHASES_ENABLED = true;
