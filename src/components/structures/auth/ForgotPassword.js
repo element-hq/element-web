@@ -226,7 +226,20 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
+            let yourMatrixAccountText = _t('Your account');
+            try {
+                const parsedHsUrl = new URL(this.state.enteredHsUrl);
+                yourMatrixAccountText = _t('Your account on %(serverName)s', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
+
             resetPasswordJsx = <div>
+                <h3>
+                    {yourMatrixAccountText}
+                </h3>
                 <form onSubmit={this.onSubmitForm}>
                     <div className="mx_AuthBody_fieldRow">
                         <input className="mx_Login_field" ref="user" type="text"
