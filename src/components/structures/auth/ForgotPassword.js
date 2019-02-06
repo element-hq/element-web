@@ -47,8 +47,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
-            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
+            enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
+            enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
             progress: null,
             password: null,
             password2: null,
@@ -126,7 +126,7 @@ module.exports = React.createClass({
                 onFinished: (confirmed) => {
                     if (confirmed) {
                         this.submitPasswordReset(
-                            this.state.enteredHomeserverUrl, this.state.enteredIdentityServerUrl,
+                            this.state.enteredHsUrl, this.state.enteredIsUrl,
                             this.state.email, this.state.password,
                         );
                     }
@@ -153,10 +153,10 @@ module.exports = React.createClass({
     onServerConfigChange: function(config) {
         const newState = {};
         if (config.hsUrl !== undefined) {
-            newState.enteredHomeserverUrl = config.hsUrl;
+            newState.enteredHsUrl = config.hsUrl;
         }
         if (config.isUrl !== undefined) {
-            newState.enteredIdentityServerUrl = config.isUrl;
+            newState.enteredIsUrl = config.isUrl;
         }
         this.setState(newState);
     },
