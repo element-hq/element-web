@@ -123,3 +123,23 @@ limitations under the License.
     padding-left: 4px;
     padding-right: 4px;
 }
+
+.mx_TagTile_avatar {
+    position: relative;
+}
+
+.mx_TagTile_badge {
+    position: absolute;
+    right: -4px;
+    top: -2px;
+    border-radius: 8px;
+    color: $accent-fg-color;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0 5px;
+    background-color: $roomtile-name-color;
+}
+
+.mx_TagTile_badgeHighlight {
+    background-color: $warning-color;
+}

@@ -20,6 +20,7 @@ import AutoHideScrollbar from './AutoHideScrollbar';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import classNames from 'classnames';
+import * as FormattingUtils from '../../utils/FormattingUtils';
 
 
 const CustomRoomTagPanel = React.createClass({
@@ -104,6 +105,15 @@ class CustomRoomTagTile extends React.Component {
             CustomRoomTagPanel_tileSelected: tag.selected,
         });
         const name = tag.name;
+        const badge = tag.badge;
+        let badgeElement;
+        if (badge) {
+            const badgeClasses = classNames({
+                "mx_TagTile_badge": true,
+                "mx_TagTile_badgeHighlight": badge.highlight,
+            });
+            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+        }
 
         const tip = (this.state.hover ?
             <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
@@ -116,6 +126,7 @@ class CustomRoomTagTile extends React.Component {
                             width={avatarHeight}
                             height={avatarHeight}
                         />
+                        { badgeElement }
                         { tip }
                     </div>
                 </AccessibleButton>);
