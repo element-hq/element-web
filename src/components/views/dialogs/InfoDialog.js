@@ -26,38 +26,24 @@ export default React.createClass({
     propTypes: {
         title: PropTypes.string,
         description: PropTypes.node,
-        extraButtons: PropTypes.node,
         button: PropTypes.string,
-        danger: PropTypes.bool,
-        focus: PropTypes.bool,
-        onFinished: PropTypes.func.isRequired,
+        onFinished: PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
             title: "",
             description: "",
-            extraButtons: null,
-            focus: true,
-            danger: false,
         };
     },
 
-    onOk: function() {
-        this.props.onFinished(true);
-    },
-
-    onCancel: function() {
-        this.props.onFinished(false);
+    onFinished: function() {
+        this.props.onFinished();
     },
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        let primaryButtonClass = "";
-        if (this.props.danger) {
-            primaryButtonClass = "danger";
-        }
         return (
             <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
                 title={this.props.title}
@@ -68,12 +54,9 @@ export default React.createClass({
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
-                    primaryButtonClass={primaryButtonClass}
-                    onPrimaryButtonClick={this.onOk}
+                    onPrimaryButtonClick={this.onFinished}
                     hasCancel={false}
-                    focus={this.props.focus}
                 >
-                    { this.props.extraButtons }
                 </DialogButtons>
             </BaseDialog>
         );
