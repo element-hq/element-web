@@ -81,7 +81,7 @@ module.exports = React.createClass({
         }, (err) => {
             this.showErrorDialog(_t('Failed to send email') + ": " + err.message);
             this.setState({
-                phase: null,
+                phase: PHASE_FORGOT,
             });
         });
     },
