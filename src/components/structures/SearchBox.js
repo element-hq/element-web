@@ -71,7 +71,7 @@ module.exports = React.createClass({
         function() {
             this.props.onSearch(this.refs.search.value);
         },
-        100,
+        500,
     ),
 
     _onKeyDown: function(ev) {
