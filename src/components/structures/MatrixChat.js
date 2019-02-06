@@ -1676,11 +1676,6 @@ export default React.createClass({
         this.showScreen("forgot_password");
     },
 
-    onReturnToAppClick: function() {
-        // treat it the same as if the user had completed the login
-        this._onLoggedIn();
-    },
-
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
         // XXX: This should be in state or ideally store(s) because we risk not
@@ -1936,7 +1931,6 @@ export default React.createClass({
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
-                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     onServerConfigChange={this.onServerConfigChange}
                 />
             );

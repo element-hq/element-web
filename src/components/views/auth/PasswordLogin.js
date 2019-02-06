@@ -249,10 +249,10 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let yourMatrixAccountText = _t('Your account');
+        let signInToText = _t('Sign in');
         try {
             const parsedHsUrl = new URL(this.props.hsUrl);
-            yourMatrixAccountText = _t('Your %(serverName)s account', {
+            signInToText = _t('Sign in to %(serverName)s', {
                 serverName: parsedHsUrl.hostname,
             });
         } catch (e) {
@@ -264,7 +264,7 @@ class PasswordLogin extends React.Component {
             editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
-                {_t('Edit')}
+                {_t('Change')}
             </a>;
         }
 
@@ -297,7 +297,7 @@ class PasswordLogin extends React.Component {
         return (
             <div>
                 <h3>
-                    {yourMatrixAccountText}
+                    {signInToText}
                     {editLink}
                 </h3>
                 <form onSubmit={this.onSubmitForm}>
