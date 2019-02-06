@@ -238,19 +238,19 @@ module.exports = React.createClass({
                                 name="reset_email" // define a name so browser's password autofill gets less confused
                                 value={this.state.email}
                                 onChange={this.onInputChanged.bind(this, "email")}
-                                placeholder={_t('Email address')} autoFocus />
+                                placeholder={_t('Email')} autoFocus />
                         </div>
                         <div className="mx_AuthBody_fieldRow">
                             <input className="mx_Login_field" ref="pass" type="password"
                                 name="reset_password"
                                 value={this.state.password}
                                 onChange={this.onInputChanged.bind(this, "password")}
-                                placeholder={_t('New password')} />
+                                placeholder={_t('Password')} />
                             <input className="mx_Login_field" ref="pass" type="password"
                                 name="reset_password_confirm"
                                 value={this.state.password2}
                                 onChange={this.onInputChanged.bind(this, "password2")}
-                                placeholder={_t('Confirm your new password')} />
+                                placeholder={_t('Confirm')} />
                         </div>
                         <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
                     </form>
