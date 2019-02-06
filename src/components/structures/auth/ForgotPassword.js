@@ -62,8 +62,9 @@ module.exports = React.createClass({
             enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
             phase: PHASE_FORGOT,
-            password: null,
-            password2: null,
+            email: "",
+            password: "",
+            password2: "",
             errorText: null,
         };
     },
