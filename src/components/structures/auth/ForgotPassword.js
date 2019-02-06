@@ -227,6 +227,7 @@ module.exports = React.createClass({
             <h3>
                 {yourMatrixAccountText}
             </h3>
+            {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <input className="mx_Login_field" ref="user" type="text"
@@ -254,7 +255,6 @@ module.exports = React.createClass({
                 <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
             </form>
             {serverConfigSection}
-            {errorText}
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                 {_t('Sign in instead')}
             </a>
