@@ -1379,7 +1379,7 @@
     "Your password has been reset": "Your password has been reset",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device",
     "Return to login screen": "Return to login screen",
-    "To reset your password, enter the email address linked to your account": "To reset your password, enter the email address linked to your account",
+    "A verification email will be sent to your inbox to confirm setting your new password.": "A verification email will be sent to your inbox to confirm setting your new password.",
     "Send Reset Email": "Send Reset Email",
     "Sign in instead": "Sign in instead",
     "Set a new password": "Set a new password",

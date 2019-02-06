@@ -226,44 +226,40 @@ module.exports = React.createClass({
                 errorText = <div className="mx_Login_error">{ err }</div>;
             }
 
-            resetPasswordJsx = (
-            <div>
-                <p>
-                    { _t('To reset your password, enter the email address linked to your account') }:
-                </p>
-                <div>
-                    <form onSubmit={this.onSubmitForm}>
-                        <div className="mx_AuthBody_fieldRow">
-                            <input className="mx_Login_field" ref="user" type="text"
-                                name="reset_email" // define a name so browser's password autofill gets less confused
-                                value={this.state.email}
-                                onChange={this.onInputChanged.bind(this, "email")}
-                                placeholder={_t('Email')} autoFocus />
-                        </div>
-                        <div className="mx_AuthBody_fieldRow">
-                            <input className="mx_Login_field" ref="pass" type="password"
-                                name="reset_password"
-                                value={this.state.password}
-                                onChange={this.onInputChanged.bind(this, "password")}
-                                placeholder={_t('Password')} />
-                            <input className="mx_Login_field" ref="pass" type="password"
-                                name="reset_password_confirm"
-                                value={this.state.password2}
-                                onChange={this.onInputChanged.bind(this, "password2")}
-                                placeholder={_t('Confirm')} />
-                        </div>
-                        <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
-                    </form>
-                    { serverConfigSection }
-                    { errorText }
-                    <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                        { _t('Sign in instead') }
-                    </a>
-                </div>
-            </div>
-            );
+            resetPasswordJsx = <div>
+                <form onSubmit={this.onSubmitForm}>
+                    <div className="mx_AuthBody_fieldRow">
+                        <input className="mx_Login_field" ref="user" type="text"
+                            name="reset_email" // define a name so browser's password autofill gets less confused
+                            value={this.state.email}
+                            onChange={this.onInputChanged.bind(this, "email")}
+                            placeholder={_t('Email')} autoFocus />
+                    </div>
+                    <div className="mx_AuthBody_fieldRow">
+                        <input className="mx_Login_field" ref="pass" type="password"
+                            name="reset_password"
+                            value={this.state.password}
+                            onChange={this.onInputChanged.bind(this, "password")}
+                            placeholder={_t('Password')} />
+                        <input className="mx_Login_field" ref="pass" type="password"
+                            name="reset_password_confirm"
+                            value={this.state.password2}
+                            onChange={this.onInputChanged.bind(this, "password2")}
+                            placeholder={_t('Confirm')} />
+                    </div>
+                    <span>{_t(
+                        'A verification email will be sent to your inbox to confirm ' +
+                        'setting your new password.',
+                    )}</span>
+                    <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
+                </form>
+                {serverConfigSection}
+                {errorText}
+                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+                    {_t('Sign in instead')}
+                </a>
+            </div>;
         }
-
 
         return (
             <AuthPage>
