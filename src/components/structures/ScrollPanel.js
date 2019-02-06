@@ -169,6 +169,10 @@ module.exports = React.createClass({
         //
         // This will also re-check the fill state, in case the paginate was inadequate
         this.checkScroll();
+
+        if (!this.isAtBottom()) {
+            this.clearBlockShrinking();
+        }
     },
 
     componentWillUnmount: function() {

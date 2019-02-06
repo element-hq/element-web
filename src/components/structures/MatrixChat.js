@@ -1647,11 +1647,6 @@ export default React.createClass({
         this.showScreen("forgot_password");
     },
 
-    onReturnToAppClick: function() {
-        // treat it the same as if the user had completed the login
-        this._onLoggedIn();
-    },
-
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
         // XXX: This should be in state or ideally store(s) because we risk not
@@ -1862,7 +1857,6 @@ export default React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
-                    referrer={this.props.startingFragmentQueryParams.referrer}
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
@@ -1870,11 +1864,8 @@ export default React.createClass({
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
                     makeRegistrationUrl={this._makeRegistrationUrl}
-                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
-                    onRegisterClick={this.onRegisterClick}
-                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     onServerConfigChange={this.onServerConfigChange}
                     />
             );
@@ -1911,7 +1902,6 @@ export default React.createClass({
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
-                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     onServerConfigChange={this.onServerConfigChange}
                 />
             );

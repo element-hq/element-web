@@ -97,7 +97,6 @@ module.exports = {
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
         "prefer-const": ["warn"],
-        "arrow-parens": "off",
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",
