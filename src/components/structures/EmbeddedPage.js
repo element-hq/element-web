@@ -27,10 +27,12 @@ import sdk from '../../index';
 import { MatrixClient } from 'matrix-js-sdk';
 import classnames from 'classnames';
 
-export default class HomePage extends React.PureComponent {
+export default class EmbeddedPage extends React.PureComponent {
     static propTypes = {
-        // URL to use as the iFrame src. Defaults to /home.html.
-        homePageUrl: PropTypes.string,
+        // URL to request embedded page content from
+        url: PropTypes.string,
+        // Class name prefix to apply for a given instance
+        className: PropTypes.string,
     };
 
     static contextTypes = {
@@ -57,10 +59,8 @@ export default class HomePage extends React.PureComponent {
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
 
-        const src = this.props.homePageUrl || 'home.html';
-
         request(
-            { method: "GET", url: src },
+            { method: "GET", url: this.props.url },
             (err, response, body) => {
                 if (this._unmounted) {
                     return;
@@ -84,14 +84,17 @@ export default class HomePage extends React.PureComponent {
 
     render() {
         const isGuest = this.context.matrixClient.isGuest();
+        const className = this.props.className;
         const classes = classnames({
-            mx_HomePage: true,
-            mx_HomePage_guest: isGuest,
+            [className]: true,
+            [`${className}_guest`]: isGuest,
         });
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         return <GeminiScrollbarWrapper autoshow={true} className={classes}>
-            <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
+            <div className={`${className}_body`}
+                dangerouslySetInnerHTML={{ __html: this.state.page }}
+            >
             </div>
         </GeminiScrollbarWrapper>;
     }
