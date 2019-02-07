@@ -61,7 +61,7 @@ export default class EmbeddedPage extends React.PureComponent {
             return;
         }
 
-        // we use request() to inline the homepage into the react component
+        // we use request() to inline the page into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
 
@@ -73,8 +73,8 @@ export default class EmbeddedPage extends React.PureComponent {
                 }
 
                 if (err || response.status < 200 || response.status >= 300) {
-                    console.warn(`Error loading home page: ${err}`);
-                    this.setState({ page: _t("Couldn't load home page") });
+                    console.warn(`Error loading page: ${err}`);
+                    this.setState({ page: _t("Couldn't load page") });
                     return;
                 }
 
