@@ -202,6 +202,8 @@ class RoomListStore extends Store {
         // If somehow we dispatched a RoomListActions.tagRoom.failure before a MatrixActions.sync
         if (!this._matrixClient) return;
 
+        const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+
         this._matrixClient.getRooms().forEach((room, index) => {
             const myUserId = this._matrixClient.getUserId();
             const membership = room.getMyMembership();
@@ -226,7 +228,7 @@ class RoomListStore extends Store {
 
                 // ignore any m. tag names we don't know about
                 tagNames = tagNames.filter((t) => {
-                    return !t.startsWith('m.') || lists[t] !== undefined;
+                    return (isCustomTagsEnabled && !t.startsWith('m.')) || lists[t] !== undefined;
                 });
 
                 if (tagNames.length) {

@@ -100,6 +100,12 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
+    "feature_custom_tags": {
+        isFeature: true,
+        displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_lazyloading": {
         isFeature: true,
         displayName: _td("Increase performance by only loading room members on first view"),
