@@ -39,7 +39,6 @@ class HomePage extends React.Component {
     };
 
     state = {
-            iframeSrc: '',
             page: '',
     };
 
@@ -87,21 +86,11 @@ class HomePage extends React.Component {
             mx_HomePage_guest: isGuest,
         });
 
-        if (this.state.iframeSrc) {
-            return (
-                <div className={classes}>
-                    <iframe src={ this.state.iframeSrc } />
-                </div>
-            );
-        } else {
-            const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-            return (
-                <GeminiScrollbarWrapper autoshow={true} className={classes}>
-                    <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
-                    </div>
-                </GeminiScrollbarWrapper>
-            );
-        }
+        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+        return <GeminiScrollbarWrapper autoshow={true} className={classes}>
+            <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
+            </div>
+        </GeminiScrollbarWrapper>;
     }
 }
 
