@@ -28,30 +28,6 @@ export class LabsSettingToggle extends React.Component {
         featureId: PropTypes.string.isRequired,
     };
 
-    async _onLazyLoadChanging(enabling) {
-        // don't prevent turning LL off when not supported
-        if (enabling) {
-            const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
-            if (!supported) {
-                await new Promise((resolve) => {
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createDialog(QuestionDialog, {
-                        title: _t("Lazy loading members not supported"),
-                        description:
-                            <div>
-                                { _t("Lazy loading is not supported by your " +
-                                    "current homeserver.") }
-                            </div>,
-                        button: _t("OK"),
-                        onFinished: resolve,
-                    });
-                });
-                return false;
-            }
-        }
-        return true;
-    }
-
     _onChange = async (checked) => {
         await SettingsStore.setFeatureEnabled(this.props.featureId, checked);
         this.forceUpdate();
