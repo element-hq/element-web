@@ -212,7 +212,7 @@ module.exports = React.createClass({
         }
 
         return <div>
-            <ServerConfig ref="serverConfig"
+            <ServerConfig
                 defaultHsUrl={this.props.defaultHsUrl}
                 defaultIsUrl={this.props.defaultIsUrl}
                 customHsUrl={this.state.enteredHsUrl}
@@ -267,19 +267,19 @@ module.exports = React.createClass({
             {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
-                    <input className="mx_Login_field" ref="user" type="text"
+                    <input className="mx_Login_field" type="text"
                         name="reset_email" // define a name so browser's password autofill gets less confused
                         value={this.state.email}
                         onChange={this.onInputChanged.bind(this, "email")}
                         placeholder={_t('Email')} autoFocus />
                 </div>
                 <div className="mx_AuthBody_fieldRow">
-                    <input className="mx_Login_field" ref="pass" type="password"
+                    <input className="mx_Login_field" type="password"
                         name="reset_password"
                         value={this.state.password}
                         onChange={this.onInputChanged.bind(this, "password")}
                         placeholder={_t('Password')} />
-                    <input className="mx_Login_field" ref="pass" type="password"
+                    <input className="mx_Login_field" type="password"
                         name="reset_password_confirm"
                         value={this.state.password2}
                         onChange={this.onInputChanged.bind(this, "password2")}
