@@ -20,6 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
+import Field from "./Field";
 
 module.exports = React.createClass({
     displayName: 'PowerSelector',
@@ -32,19 +33,15 @@ module.exports = React.createClass({
         // Default user power level for the room
         usersDefault: PropTypes.number.isRequired,
 
-        // if true, the <select/> should be a 'controlled' form element and updated by React
-        // to reflect the current value, rather than left freeform.
-        // MemberInfo uses controlled; RoomSettings uses non-controlled.
-        //
-        // ignored if disabled is truthy. false by default.
-        controlled: PropTypes.bool,
-
         // should the user be able to change the value? false by default.
         disabled: PropTypes.bool,
         onChange: PropTypes.func,
 
         // Optional key to pass as the second argument to `onChange`
         powerLevelKey: PropTypes.string,
+
+        // The name to annotate the selector with
+        label: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -52,6 +49,9 @@ module.exports = React.createClass({
             levelRoleMap: {},
             // List of power levels to show in the drop-down
             options: [],
+
+            customValue: this.props.value,
+            selectValue: 0,
         };
     },
 
@@ -77,61 +77,50 @@ module.exports = React.createClass({
             return l === undefined || l <= newProps.maxValue;
         });
 
+        const isCustom = levelRoleMap[newProps.value] === undefined;
+
         this.setState({
             levelRoleMap,
             options,
-            custom: levelRoleMap[newProps.value] === undefined,
+            custom: isCustom,
+            customLevel: newProps.value,
+            selectValue: isCustom ? "SELECT_VALUE_CUSTOM" : newProps.value,
         });
     },
 
     onSelectChange: function(event) {
-        this.setState({ custom: event.target.value === "SELECT_VALUE_CUSTOM" });
-        if (event.target.value !== "SELECT_VALUE_CUSTOM") {
+        const isCustom = event.target.value === "SELECT_VALUE_CUSTOM";
+        if (isCustom) {
+            this.setState({custom: true});
+        } else {
             this.props.onChange(event.target.value, this.props.powerLevelKey);
+            this.setState({selectValue: event.target.value});
         }
     },
 
+    onCustomChange: function(event) {
+        this.setState({customValue: event.target.value});
+    },
+
     onCustomBlur: function(event) {
-        this.props.onChange(parseInt(this.refs.custom.value), this.props.powerLevelKey);
+        this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
     },
 
     onCustomKeyDown: function(event) {
-        if (event.key == "Enter") {
-            this.props.onChange(parseInt(this.refs.custom.value), this.props.powerLevelKey);
+        if (event.key === "Enter") {
+            this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
         }
     },
 
     render: function() {
-        let customPicker;
+        let picker;
         if (this.state.custom) {
-            if (this.props.disabled) {
-                customPicker = <span>{ _t(
-                    "Custom of %(powerLevel)s",
-                    { powerLevel: this.props.value },
-                ) }</span>;
-            } else {
-                customPicker = <span> = <input
-                    ref="custom"
-                    type="text"
-                    size="3"
-                    defaultValue={this.props.value}
-                    onBlur={this.onCustomBlur}
-                    onKeyDown={this.onCustomKeyDown}
-                />
-                </span>;
-            }
-        }
-
-        let selectValue;
-        if (this.state.custom) {
-            selectValue = "SELECT_VALUE_CUSTOM";
-        } else {
-            selectValue = this.state.levelRoleMap[this.props.value] ?
-                this.props.value : "SELECT_VALUE_CUSTOM";
-        }
-        let select;
-        if (this.props.disabled) {
-            select = <span>{ this.state.levelRoleMap[selectValue] }</span>;
+            picker = (
+                <Field id={`powerSelector_custom_${this.props.powerLevelKey}`} type="number"
+                       label={this.props.label || _t("Power level")} max={this.props.maxValue}
+                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
+                       value={this.state.customValue} disabled={this.props.disabled} />
+            );
         } else {
             // Each level must have a definition in this.state.levelRoleMap
             let options = this.state.options.map((level) => {
@@ -145,20 +134,19 @@ module.exports = React.createClass({
                 return <option value={op.value} key={op.value}>{ op.text }</option>;
             });
 
-            select =
-                <select ref="select"
-                        value={this.props.controlled ? selectValue : undefined}
-                        defaultValue={!this.props.controlled ? selectValue : undefined}
-                        onChange={this.onSelectChange}>
-                    { options }
-                </select>;
+            picker = (
+                <Field id={`powerSelector_notCustom_${this.props.powerLevelKey}`} element="select"
+                       label={this.props.label || _t("Power level")} onChange={this.onSelectChange}
+                       value={this.state.selectValue} disabled={this.props.disabled}>
+                    {options}
+                </Field>
+            );
         }
 
         return (
-            <span className="mx_PowerSelector">
-                { select }
-                { customPicker }
-            </span>
+            <div className="mx_PowerSelector">
+                { picker }
+            </div>
         );
     },
 });

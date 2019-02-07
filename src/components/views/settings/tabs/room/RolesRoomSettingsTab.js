@@ -24,14 +24,14 @@ import Modal from "../../../../../Modal";
 
 const plEventsToLabels = {
     // These will be translated for us later.
-    "m.room.avatar": _td("To change the room's avatar, you must be a"),
-    "m.room.name": _td("To change the room's name, you must be a"),
-    "m.room.canonical_alias": _td("To change the room's main address, you must be a"),
-    "m.room.history_visibility": _td("To change the room's history visibility, you must be a"),
-    "m.room.power_levels": _td("To change the permissions in the room, you must be a"),
-    "m.room.topic": _td("To change the topic, you must be a"),
+    "m.room.avatar": _td("Change room avatar"),
+    "m.room.name": _td("Change room name"),
+    "m.room.canonical_alias": _td("Change main address for the room"),
+    "m.room.history_visibility": _td("Change history visibility"),
+    "m.room.power_levels": _td("Change permissions"),
+    "m.room.topic": _td("Change topic"),
 
-    "im.vector.modular.widgets": _td("To modify widgets in the room, you must be a"),
+    "im.vector.modular.widgets": _td("Modify widgets"),
 };
 
 const plEventsToShow = {
@@ -158,35 +158,35 @@ export default class RolesRoomSettingsTab extends React.Component {
 
         const powerLevelDescriptors = {
             "users_default": {
-                desc: _t('The default role for new room members is'),
+                desc: _t('Default role'),
                 defaultValue: 0,
             },
             "events_default": {
-                desc: _t('To send messages, you must be a'),
+                desc: _t('Send messages'),
                 defaultValue: 0,
             },
             "invite": {
-                desc: _t('To invite users into the room, you must be a'),
+                desc: _t('Invite users'),
                 defaultValue: 50,
             },
             "state_default": {
-                desc: _t('To configure the room, you must be a'),
+                desc: _t('Change settings'),
                 defaultValue: 50,
             },
             "kick": {
-                desc: _t('To kick users, you must be a'),
+                desc: _t('Kick users'),
                 defaultValue: 50,
             },
             "ban": {
-                desc: _t('To ban users, you must be a'),
+                desc: _t('Ban users'),
                 defaultValue: 50,
             },
             "redact": {
-                desc: _t('To remove other users\' messages, you must be a'),
+                desc: _t('Remove messages'),
                 defaultValue: 50,
             },
             "notifications.room": {
-                desc: _t('To notify everyone in the room, you must be a'),
+                desc: _t('Notify everyone'),
                 defaultValue: 50,
             },
         };
@@ -217,20 +217,15 @@ export default class RolesRoomSettingsTab extends React.Component {
             const mutedUsers = [];
 
             Object.keys(userLevels).forEach(function(user) {
+                const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
-                    privilegedUsers.push(<li key={user}>
-                        { _t("%(user)s is a %(userRole)s", {
-                            user: user,
-                            userRole: <PowerSelector value={userLevels[user]} disabled={true} />,
-                        }) }
-                    </li>);
+                    privilegedUsers.push(
+                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                    );
                 } else if (userLevels[user] < defaultUserLevel) { // muted
-                    mutedUsers.push(<li key={user}>
-                        { _t("%(user)s is a %(userRole)s", {
-                            user: user,
-                            userRole: <PowerSelector value={userLevels[user]} disabled={true} />,
-                        }) }
-                    </li>);
+                    mutedUsers.push(
+                        <PowerSelector value={userLevels[user]} disabled={!canChange} label={user} key={user} />,
+                    );
                 }
             });
 
@@ -247,18 +242,14 @@ export default class RolesRoomSettingsTab extends React.Component {
                 privilegedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Privileged Users') }</div>
-                        <ul>
-                            {privilegedUsers}
-                        </ul>
+                        {privilegedUsers}
                     </div>;
             }
             if (mutedUsers.length) {
                 mutedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Muted Users') }</div>
-                        <ul>
-                            {mutedUsers}
-                        </ul>
+                        {mutedUsers}
                     </div>;
             }
         }
@@ -300,11 +291,10 @@ export default class RolesRoomSettingsTab extends React.Component {
 
             const value = parseIntWithDefault(currentObj, descriptor.defaultValue);
             return <div key={index} className="">
-                <span>{descriptor.desc}&nbsp;</span>
                 <PowerSelector
+                    label={descriptor.desc}
                     value={value}
                     usersDefault={defaultUserLevel}
-                    controlled={false}
                     disabled={!canChangeLevels || currentUserLevel < value}
                     powerLevelKey={key} // Will be sent as the second parameter to `onChange`
                     onChange={this._onPowerLevelsChanged}
@@ -317,18 +307,14 @@ export default class RolesRoomSettingsTab extends React.Component {
             if (label) {
                 label = _t(label);
             } else {
-                label = _t(
-                    "To send events of type <eventType/>, you must be a", {},
-                    { 'eventType': <code>{ eventType }</code> },
-                );
+                label = _t("Send %(eventType)s events", {eventType});
             }
             return (
                 <div className="" key={eventType}>
-                    <span>{label}&nbsp;</span>
                     <PowerSelector
+                        label={label}
                         value={eventsLevels[eventType]}
                         usersDefault={defaultUserLevel}
-                        controlled={false}
                         disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                         powerLevelKey={"event_levels_" + eventType}
                         onChange={this._onPowerLevelsChanged}
@@ -345,6 +331,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                 {bannedUsersSection}
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <span className='mx_SettingsTab_subheading'>{_t("Permissions")}</span>
+                    <p>{_t('Select the roles required to change various parts of the room')}</p>
                     {powerSelectors}
                     {eventPowerSelectors}
                 </div>
