@@ -314,9 +314,12 @@ module.exports = React.createClass({
 
     renderDone() {
         return <div>
-            <p>{_t('Your password has been reset')}.</p>
-            <p>{_t('You have been logged out of all devices and will no longer receive push notifications. ' +
-                'To re-enable notifications, sign in again on each device')}.</p>
+            <p>{_t("Your password has been reset.")}</p>
+            <p>{_t(
+                "You have been logged out of all devices and will no longer receive " +
+                "push notifications. To re-enable notifications, sign in again on each " +
+                "device.",
+            )}</p>
             <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />
         </div>;
