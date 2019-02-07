@@ -68,7 +68,7 @@ class CustomRoomTagStore extends EventEmitter {
     addListener(callback) {
         this.on("change", callback);
         return {
-            remove() {
+            remove: () => {
                 this.removeListener("change", callback);
             },
         };
