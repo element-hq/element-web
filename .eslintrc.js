@@ -91,6 +91,7 @@ module.exports = {
             // to JSX.
             ignorePattern: '^\\s*<',
             ignoreComments: true,
+            ignoreRegExpLiterals: true,
             code: 120,
         }],
         "valid-jsdoc": ["warn"],

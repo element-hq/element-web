@@ -23,9 +23,11 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as ContextualMenu from '../../structures/ContextualMenu';
+import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
+import TagOrderStore from '../../../stores/TagOrderStore';
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -168,6 +170,16 @@ export default React.createClass({
             mx_TagTile_selected: this.props.selected,
         });
 
+        const badge = TagOrderStore.getGroupBadge(this.props.tag);
+        let badgeElement;
+        if (badge && !this.state.hover) {
+            const badgeClasses = classNames({
+                "mx_TagTile_badge": true,
+                "mx_TagTile_badgeHighlight": badge.highlight,
+            });
+            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+        }
+
         const tip = this.state.hover ?
             <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
             <div />;
@@ -186,6 +198,7 @@ export default React.createClass({
                 />
                 { tip }
                 { contextButton }
+                { badgeElement }
             </div>
         </AccessibleButton>;
     },

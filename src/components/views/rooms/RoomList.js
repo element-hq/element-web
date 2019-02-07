@@ -32,11 +32,12 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import RoomListStore from '../../../stores/RoomListStore';
+import CustomRoomTagStore from '../../../stores/CustomRoomTagStore';
 import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 
-import {Resizer} from '../../../resizer'
+import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
@@ -121,6 +122,7 @@ module.exports = React.createClass({
             incomingCall: null,
             selectedTags: [],
             hover: false,
+            customTags: CustomRoomTagStore.getTags(),
         };
     },
 
@@ -168,6 +170,12 @@ module.exports = React.createClass({
 
         this._roomListStoreToken = RoomListStore.addListener(() => {
             this._delayedRefreshRoomList();
+        });
+
+        this._customTagStoreToken = CustomRoomTagStore.addListener(() => {
+            this.setState({
+                customTags: CustomRoomTagStore.getTags(),
+            });
         });
 
         this.refreshRoomList();
@@ -265,6 +273,9 @@ module.exports = React.createClass({
 
         if (this._roomListStoreToken) {
             this._roomListStoreToken.remove();
+        }
+        if (this._customTagStoreToken) {
+            this._customTagStoreToken.remove();
         }
 
         // NB: GroupStore is not a Flux.Store
@@ -717,7 +728,7 @@ module.exports = React.createClass({
         ];
         const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
-                return !tagName.match(STANDARD_TAGS_REGEX);
+                return this.state.customTags[tagName] && !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
                     list: this.state.lists[tagName],

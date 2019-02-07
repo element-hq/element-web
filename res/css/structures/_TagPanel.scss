@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_TagPanel {
-    flex: 0 0 70px;
+    flex: 1;
     background-color: $tagpanel-bg-color;
     cursor: pointer;
 
@@ -68,10 +68,13 @@ limitations under the License.
 
     height: 100%;
 }
+.mx_TagPanel .mx_TagPanel_tagTileContainer > div {
+    height: 40px;
+    padding: 5px 0 4px 0;
+}
 
 .mx_TagPanel .mx_TagTile {
-    padding-top: 9px;
-    padding-bottom: 9px;
+    margin: 9px 0;
 //  opacity: 0.5;
     position: relative;
 }
@@ -81,13 +84,7 @@ limitations under the License.
 //    opacity: 1;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected {
-    /* To offset border of mx_TagTile_avatar */
-    padding: 3px 0px;
-}
-
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
-    border: 3px solid $accent-color;
     background-color: $accent-color;
     border-radius: 40px;
 
@@ -95,6 +92,13 @@ limitations under the License.
     display: block;
     height: 40px;
     width: 40px;
+}
+
+.mx_TagPanel .mx_TagTile_selected .mx_BaseAvatar_image {
+    border: 3px solid $accent-color;
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -112,7 +116,7 @@ limitations under the License.
     height: 15px;
     position: absolute;
     right: -5px;
-    top: 1px;
+    top: -8px;
     border-radius: 8px;
     background-color: $neutral-badge-color;
     color: #ffffff;
@@ -124,39 +128,22 @@ limitations under the License.
     padding-right: 4px;
 }
 
-.mx_TagPanel_groupsButton {
-    flex: 0;
-    margin: 17px 0 3px 0;
-}
-
-.mx_TagPanel_groupsButton > .mx_GroupsButton:before {
-    mask: url('$(res)/img/feather-icons/users.svg');
-    mask-position: center 11px;
-}
-
-.mx_TagPanel_groupsButton > .mx_TagPanel_report:before {
-    mask: url('$(res)/img/feather-icons/life-buoy.svg');
-    mask-position: center 9px;
-}
-
-.mx_TagPanel_groupsButton > .mx_AccessibleButton {
-    margin-bottom: 12px;
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
-    background-color: $roomheader-addroom-color;
+.mx_TagTile_avatar {
     position: relative;
-    /* overwrite mx_RoleButton inline-block */
-    display: block !important;
+}
 
-    &:before {
-        background-color: $tagpanel-bg-color;
-        mask-repeat: no-repeat;
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
+.mx_TagTile_badge {
+    position: absolute;
+    right: -4px;
+    top: -2px;
+    border-radius: 8px;
+    color: $accent-fg-color;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0 5px;
+    background-color: $roomtile-name-color;
+}
+
+.mx_TagTile_badgeHighlight {
+    background-color: $warning-color;
 }

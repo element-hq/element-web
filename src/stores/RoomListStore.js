@@ -224,9 +224,9 @@ class RoomListStore extends Store {
                     }
                 }
 
-                // ignore tags we don't know about
+                // ignore any m. tag names we don't know about
                 tagNames = tagNames.filter((t) => {
-                    return lists[t] !== undefined;
+                    return !t.startsWith('m.') || lists[t] !== undefined;
                 });
 
                 if (tagNames.length) {
