@@ -21,7 +21,6 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import LazyLoadingController from "./controllers/LazyLoadingController";
 import CustomStatusController from "./controllers/CustomStatusController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
