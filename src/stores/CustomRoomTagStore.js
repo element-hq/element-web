@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {Store} from 'flux/utils';
 import dis from '../dispatcher';
 import * as RoomNotifs from '../RoomNotifs';
 import RoomListStore from './RoomListStore';
+import EventEmitter from 'events';
+
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function commonPrefix(a, b) {
@@ -43,24 +44,34 @@ function commonPrefix(a, b) {
 /**
  * A class for storing application state for ordering tags in the TagPanel.
  */
-class CustomRoomTagStore extends Store {
+class CustomRoomTagStore extends EventEmitter {
     constructor() {
-        super(dis);
-
+        super();
         // Initialise state
-        this._state = Object.assign({}, {tags: this._getUpdatedTags()});
+        this._state = {tags: this._getUpdatedTags()};
 
         this._roomListStoreToken = RoomListStore.addListener(() => {
-            // UGLY: FluxStore doens't emit changes that
-            // didn't come from a dispatcher action
-            // so emit the change ourselves for now ...
-            this._state.tags = this._getUpdatedTags();
-            this.__emitter.emit("change");
+            this._setState({tags: this._getUpdatedTags()});
         });
+        dis.register(payload => this._onDispatch(payload));
     }
 
     getTags() {
         return this._state.tags;
+    }
+
+    _setState(newState) {
+        this._state = Object.assign(this._state, newState);
+        this.emit("change");
+    }
+
+    addListener(callback) {
+        this.on("change", callback);
+        return {
+            remove() {
+                this.removeListener("change", callback);
+            },
+        };
     }
 
     getSortedTags() {
@@ -88,12 +99,8 @@ class CustomRoomTagStore extends Store {
         });
     }
 
-    _setState(newState) {
-        this._state = Object.assign(this._state, newState);
-        this.__emitChange();
-    }
 
-    __onDispatch(payload) {
+    _onDispatch(payload) {
         switch (payload.action) {
             case 'select_custom_room_tag': {
                 const oldTags = this._state.tags;
@@ -103,15 +110,6 @@ class CustomRoomTagStore extends Store {
                     const tags = Object.assign({}, oldTags, tag);
                     this._setState({tags});
                 }
-            }
-            break;
-            case 'deselect_custom_room_tags': {
-                const tags = Object.keys(this._state.tags)
-                    .reduce((tags, tagName) => {
-                        tags[tagName] = false;
-                        return tags;
-                    }, {});
-                this._setState({tags});
             }
             break;
             case 'on_logged_out': {

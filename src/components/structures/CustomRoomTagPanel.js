@@ -1,5 +1,5 @@
 /*
-Copyright 2017, 2018 New Vector Ltd.
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,34 +22,27 @@ import dis from '../../dispatcher';
 import classNames from 'classnames';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
-
-const CustomRoomTagPanel = React.createClass({
-    displayName: 'CustomRoomTagPanel',
-
-    getInitialState() {
-        return {
+class CustomRoomTagPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             tags: CustomRoomTagStore.getSortedTags(),
         };
-    },
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this._tagStoreToken = CustomRoomTagStore.addListener(() => {
             this.setState({tags: CustomRoomTagStore.getSortedTags()});
         });
-    },
+    }
 
     componentWillUnmount() {
         if (this._tagStoreToken) {
             this._tagStoreToken.remove();
         }
-    },
-
-    onClearFilterClick(ev) {
-        dis.dispatch({action: 'deselect_custom_room_tags'});
-    },
+    }
 
     render() {
-        console.log("CustomRoomTagPanel", this.state.tags);
         const tags = this.state.tags.map((tag) => {
             return (<CustomRoomTagTile tag={tag} key={tag.name} />);
         });
@@ -58,19 +51,14 @@ const CustomRoomTagPanel = React.createClass({
             mx_CustomRoomTagPanel_empty: this.state.tags.length === 0,
         });
 
-        const clearButton = undefined;
-
-        return <div className={classes}>
-            <div className="mx_CustomRoomTagPanel_clearButton_container">
-                { clearButton }
-            </div>
+        return (<div className={classes}>
             <div className="mx_CustomRoomTagPanel_divider" />
             <AutoHideScrollbar className="mx_CustomRoomTagPanel_scroller">
                 {tags}
             </AutoHideScrollbar>
-        </div>;
-    },
-});
+        </div>);
+    }
+}
 
 class CustomRoomTagTile extends React.Component {
     constructor(props) {
@@ -94,7 +82,6 @@ class CustomRoomTagTile extends React.Component {
     }
 
     render() {
-        console.log("rendering CustomRoomTagTile", this.props.tag.name);
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
@@ -118,18 +105,20 @@ class CustomRoomTagTile extends React.Component {
         const tip = (this.state.hover ?
             <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
             <div />);
-        return (<AccessibleButton className={className} onClick={this.onClick}>
-                    <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                        <BaseAvatar
-                            name={tag.avatarLetter}
-                            idName={name}
-                            width={avatarHeight}
-                            height={avatarHeight}
-                        />
-                        { badgeElement }
-                        { tip }
-                    </div>
-                </AccessibleButton>);
+        return (
+            <AccessibleButton className={className} onClick={this.onClick}>
+                <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+                    <BaseAvatar
+                        name={tag.avatarLetter}
+                        idName={name}
+                        width={avatarHeight}
+                        height={avatarHeight}
+                    />
+                    { badgeElement }
+                    { tip }
+                </div>
+            </AccessibleButton>
+        );
     }
 }
 
