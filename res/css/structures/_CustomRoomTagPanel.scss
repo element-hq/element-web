@@ -21,7 +21,11 @@ limitations under the License.
 
 .mx_CustomRoomTagPanel {
     background-color: $tagpanel-bg-color;
-    max-height: 40%;
+    max-height: 40vh;
+}
+
+.mx_CustomRoomTagPanel_scroller {
+    max-height: inherit;
 }
 
 .mx_CustomRoomTagPanel .mx_AccessibleButton {
