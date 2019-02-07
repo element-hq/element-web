@@ -113,7 +113,8 @@ class CustomRoomTagStore extends EventEmitter {
             }
             break;
             case 'on_logged_out': {
-                this._state = {};
+                // we assume to always have a tags object in the state
+                this._state = {tags: {}};
                 if (this._roomListStoreToken) {
                     this._roomListStoreToken.remove();
                     this._roomListStoreToken = null;
