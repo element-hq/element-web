@@ -113,6 +113,39 @@ export default class RolesRoomSettingsTab extends React.Component {
         }
     }
 
+    _onPowerLevelsChanged = (value, powerLevelKey) => {
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(this.props.roomId);
+        let plContent = room.currentState.getStateEvents('m.room.power_levels', '').getContent() || {};
+
+        // Clone the power levels just in case
+        plContent = Object.assign({}, plContent);
+
+        const eventsLevelPrefix = "event_levels_";
+
+        value = parseInt(value);
+
+        if (powerLevelKey.startsWith(eventsLevelPrefix)) {
+            // deep copy "events" object, Object.assign itself won't deep copy
+            plContent["events"] = Object.assign({}, plContent["events"] || {});
+            plContent["events"][powerLevelKey.slice(eventsLevelPrefix.length)] = value;
+        } else {
+            const keyPath = powerLevelKey.split('.');
+            let parentObj;
+            let currentObj = plContent;
+            for (const key of keyPath) {
+                if (!currentObj[key]) {
+                    currentObj[key] = {};
+                }
+                parentObj = currentObj;
+                currentObj = currentObj[key];
+            }
+            parentObj[keyPath[keyPath.length - 1]] = value;
+        }
+
+        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent);
+    };
+
     render() {
         const PowerSelector = sdk.getComponent('elements.PowerSelector');
 
@@ -272,12 +305,12 @@ export default class RolesRoomSettingsTab extends React.Component {
                     controlled={false}
                     disabled={!canChangeLevels || currentUserLevel < value}
                     powerLevelKey={key} // Will be sent as the second parameter to `onChange`
-                    onChange={this.onPowerLevelsChanged}
+                    onChange={this._onPowerLevelsChanged}
                 />
             </div>;
         });
 
-        const eventPowerSelectors = Object.keys(eventsLevels).map(function(eventType, i) {
+        const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
             let label = plEventsToLabels[eventType];
             if (label) {
                 label = _t(label);
@@ -296,7 +329,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                         controlled={false}
                         disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                         powerLevelKey={"event_levels_" + eventType}
-                        onChange={self.onPowerLevelsChanged}
+                        onChange={this._onPowerLevelsChanged}
                     />
                 </div>
             );
