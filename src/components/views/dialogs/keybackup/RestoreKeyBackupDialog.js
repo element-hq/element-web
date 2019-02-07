@@ -88,7 +88,7 @@ export default React.createClass({
         });
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
-                this.state.passPhrase, undefined, undefined, this.state.backupInfo.version,
+                this.state.passPhrase, undefined, undefined, this.state.backupInfo,
             );
             this.setState({
                 loading: false,
@@ -107,11 +107,11 @@ export default React.createClass({
         this.setState({
             loading: true,
             restoreError: null,
-            restoreType: RESTORE_TYPE_PASSPHRASE,
+            restoreType: RESTORE_TYPE_RECOVERYKEY,
         });
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
-                this.state.recoveryKey, undefined, undefined, this.state.backupInfo.version,
+                this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
             );
             this.setState({
                 loading: false,
@@ -185,32 +185,31 @@ export default React.createClass({
             title = _t("Error");
             content = _t("Unable to load backup status");
         } else if (this.state.restoreError) {
-            title = _t("Error");
-            content = _t("Unable to restore backup");
+            if (this.state.restoreError.errcode === MatrixClientPeg.get().RESTORE_BACKUP_ERROR_BAD_KEY) {
+                if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
+                    title = _t("Recovery Key Mismatch");
+                    content = <div>
+                        <p>{_t(
+                            "Backup could not be decrypted with this key: " +
+                            "please verify that you entered the correct recovery key.",
+                        )}</p>
+                    </div>;
+                } else {
+                    title = _t("Incorrect Recovery Passphrase");
+                    content = <div>
+                        <p>{_t(
+                            "Backup could not be decrypted with this passphrase: " +
+                            "please verify that you entered the correct recovery passphrase.",
+                        )}</p>
+                    </div>;
+                }
+            } else {
+                title = _t("Error");
+                content = _t("Unable to restore backup");
+            }
         } else if (this.state.backupInfo === null) {
             title = _t("Error");
             content = _t("No backup found!");
-        } else if (
-            this.state.recoverInfo &&
-            this.state.recoverInfo.imported === 0 &&
-            this.state.recoverInfo.total > 0
-        ) {
-            title = _t("Error Restoring Backup");
-            if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
-                content = <div>
-                    <p>{_t(
-                        "Backup could not be decrypted with this key: " +
-                        "please verify that you entered the correct recovery key.",
-                    )}</p>
-                </div>;
-            } else {
-                content = <div>
-                    <p>{_t(
-                        "Backup could not be decrypted with this passphrase: " +
-                        "please verify that you entered the correct recovery passphrase.",
-                    )}</p>
-                </div>;
-            }
         } else if (this.state.recoverInfo) {
             title = _t("Backup Restored");
             let failedToDecrypt;
