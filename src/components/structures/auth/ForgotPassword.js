@@ -241,7 +241,12 @@ module.exports = React.createClass({
                 serverName: parsedHsUrl.hostname,
             });
         } catch (e) {
-            // ignore
+            errorText = <div className="mx_Login_error">{_t(
+                "The homeserver URL %(hsUrl)s doesn't seem to be valid URL. Please " +
+                "enter a valid URL including the protocol prefix.",
+            {
+                hsUrl: this.state.enteredHsUrl,
+            })}</div>;
         }
 
         // If custom URLs are allowed, wire up the server details edit link.
