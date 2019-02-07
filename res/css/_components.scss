@@ -77,7 +77,6 @@
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
 @import "./views/elements/_Field.scss";
-@import "./views/elements/_HexVerify.scss";
 @import "./views/elements/_ImageView.scss";
 @import "./views/elements/_InlineSpinner.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
@@ -156,6 +155,7 @@
 @import "./views/settings/tabs/_SecuritySettingsTab.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/settings/tabs/_VoiceSettingsTab.scss";
+@import "./views/verification/_VerificationShowSas.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_IncomingCallbox.scss";
 @import "./views/voip/_VideoView.scss";
