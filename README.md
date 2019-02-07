@@ -213,7 +213,7 @@ for 64 bit Linux:
  1. Follow the instructions in 'Building From Source' above
  2. `node_modules/.bin/build -l --x64`
 
-All electron packages go into `electron/dist/`
+All electron packages go into `electron_app/dist/`
 
 Many thanks to @aviraldg for the initial work on the electron integration.
 
