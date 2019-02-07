@@ -48,7 +48,7 @@ class CustomRoomTagStore extends EventEmitter {
     constructor() {
         super();
         // Initialise state
-        this._state = {tags: this._getUpdatedTags()};
+        this._state = {tags: {}};
 
         this._roomListStoreToken = RoomListStore.addListener(() => {
             this._setState({tags: this._getUpdatedTags()});
