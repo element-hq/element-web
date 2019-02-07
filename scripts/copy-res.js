@@ -50,9 +50,9 @@ const INCLUDE_LANGS = [
 // "dest/b/...".
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
-    ["res/home.html", "webapp"],
+    ["res/welcome.html", "webapp"],
     ["res/home-status.html", "webapp"],
-    ["res/home/**", "webapp/home"],
+    ["res/welcome/**", "webapp/welcome"],
     ["res/themes/**", "webapp/themes"],
     ["res/vector-icons/**", "webapp/vector-icons"],
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
