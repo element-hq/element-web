@@ -33,6 +33,8 @@ export default class EmbeddedPage extends React.PureComponent {
         url: PropTypes.string,
         // Class name prefix to apply for a given instance
         className: PropTypes.string,
+        // Whether to wrap the page in a scrollbar
+        scrollbar: PropTypes.bool,
     };
 
     static contextTypes = {
@@ -83,19 +85,28 @@ export default class EmbeddedPage extends React.PureComponent {
     }
 
     render() {
-        const isGuest = this.context.matrixClient.isGuest();
+        const client = this.context.matrixClient;
+        const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames({
             [className]: true,
             [`${className}_guest`]: isGuest,
         });
 
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-        return <GeminiScrollbarWrapper autoshow={true} className={classes}>
-            <div className={`${className}_body`}
-                dangerouslySetInnerHTML={{ __html: this.state.page }}
-            >
-            </div>
-        </GeminiScrollbarWrapper>;
+        const content = <div className={`${className}_body`}
+            dangerouslySetInnerHTML={{ __html: this.state.page }}
+        >
+        </div>;
+
+        if (this.props.scrollbar) {
+            const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
+            return <GeminiScrollbarWrapper autoshow={true} className={classes}>
+                {content}
+            </GeminiScrollbarWrapper>;
+        } else {
+            return <div className={classes}>
+                {content}
+            </div>;
+        }
     }
 }

@@ -461,6 +461,7 @@ const LoggedInView = React.createClass({
                 {
                     pageElement = <EmbeddedPage className="mx_HomePage"
                         url={this.props.config.welcomePageUrl || 'home.html'}
+                        scrollbar={true}
                     />;
                 }
                 break;

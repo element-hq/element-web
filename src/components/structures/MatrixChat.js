@@ -60,27 +60,30 @@ const VIEWS = {
     // trying to re-animate a matrix client or register as a guest.
     LOADING: 0,
 
+    // we are showing the welcome view
+    WELCOME: 1,
+
     // we are showing the login view
-    LOGIN: 1,
+    LOGIN: 2,
 
     // we are showing the registration view
-    REGISTER: 2,
+    REGISTER: 3,
 
     // completeing the registration flow
-    POST_REGISTRATION: 3,
+    POST_REGISTRATION: 4,
 
     // showing the 'forgot password' view
-    FORGOT_PASSWORD: 4,
+    FORGOT_PASSWORD: 5,
 
     // we have valid matrix credentials (either via an explicit login, via the
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
     // process because we need to clear out indexeddb. While it is going on we
     // show a big spinner.
-    LOGGING_IN: 5,
+    LOGGING_IN: 6,
 
     // we are logged in with an active matrix client.
-    LOGGED_IN: 6,
+    LOGGED_IN: 7,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -606,6 +609,9 @@ export default React.createClass({
             case 'view_group':
                 this._viewGroup(payload);
                 break;
+            case 'view_welcome_page':
+                this._viewWelcome();
+                break;
             case 'view_home_page':
                 this._viewHome();
                 break;
@@ -879,6 +885,13 @@ export default React.createClass({
         });
         this._setPage(PageTypes.GroupView);
         this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewWelcome() {
+        this.setStateForNewView({
+            view: VIEWS.WELCOME,
+        });
+        this.notifyNewScreen('welcome');
     },
 
     _viewHome: function() {
@@ -1466,6 +1479,10 @@ export default React.createClass({
             dis.dispatch({
                 action: 'view_user_settings',
             });
+        } else if (screen == 'welcome') {
+            dis.dispatch({
+                action: 'view_welcome_page',
+            });
         } else if (screen == 'home') {
             dis.dispatch({
                 action: 'view_home_page',
@@ -1847,6 +1864,11 @@ export default React.createClass({
                     </div>
                 );
             }
+        }
+
+        if (this.state.view === VIEWS.WELCOME) {
+            const Welcome = sdk.getComponent('auth.Welcome');
+            return <Welcome />;
         }
 
         if (this.state.view === VIEWS.REGISTER) {
