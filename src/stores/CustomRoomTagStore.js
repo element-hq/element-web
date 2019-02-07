@@ -17,6 +17,7 @@ import dis from '../dispatcher';
 import * as RoomNotifs from '../RoomNotifs';
 import RoomListStore from './RoomListStore';
 import EventEmitter from 'events';
+import { throttle } from "lodash";
 
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
@@ -49,7 +50,14 @@ class CustomRoomTagStore extends EventEmitter {
         super();
         // Initialise state
         this._state = {tags: {}};
-
+        // as RoomListStore gets updated by every timeline event
+        // throttle this to only run every 500ms
+        this._getUpdatedTags = throttle(
+            this._getUpdatedTags, 500, {
+                leading: true,
+                trailing: true,
+            },
+        );
         this._roomListStoreToken = RoomListStore.addListener(() => {
             this._setState({tags: this._getUpdatedTags()});
         });
