@@ -183,7 +183,7 @@ class TagOrderStore extends Store {
                 const rooms =
                     GroupStore.getGroupRooms(groupId)
                     .map(r => client.getRoom(r.roomId)) // to Room objects
-                    .filter(r => !!r);   // filter out rooms we haven't joined from the group
+                    .filter(r => r !== null && r !== undefined);   // filter out rooms we haven't joined from the group
                 const badge = rooms && RoomNotifs.aggregateNotificationCount(rooms);
                 changedBadges[groupId] = (badge && badge.count !== 0) ? badge : undefined;
             });
