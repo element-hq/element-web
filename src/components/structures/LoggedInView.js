@@ -459,8 +459,18 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
+                    const pagesConfig = this.props.config.pages;
+                    let pageUrl;
+                    if (pagesConfig) {
+                        pageUrl = pagesConfig.homeUrl;
+                    } else {
+                        // This is a deprecated config option for the home page
+                        // (despite the name, given we also now have a welcome
+                        // page, which is not the same).
+                        pageUrl = this.props.config.welcomePageUrl;
+                    }
                     pageElement = <EmbeddedPage className="mx_HomePage"
-                        url={this.props.config.welcomePageUrl || 'home.html'}
+                        url={pageUrl}
                         scrollbar={true}
                     />;
                 }

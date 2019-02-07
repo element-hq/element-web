@@ -25,12 +25,15 @@ export default class Welcome extends React.PureComponent {
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
 
+        const pagesConfig = SdkConfig.get().pages;
+        const pageUrl = pagesConfig ? pagesConfig.welcomeUrl : 'welcome.html';
+
         return (
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
                     <EmbeddedPage className="mx_WelcomePage"
-                        url={SdkConfig.get().welcomePageUrl || 'home.html'}
+                        url={pageUrl}
                     />
                 </AuthBody>
             </AuthPage>
