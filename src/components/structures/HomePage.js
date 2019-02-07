@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,9 +27,7 @@ import sdk from '../../index';
 import { MatrixClient } from 'matrix-js-sdk';
 import classnames from 'classnames';
 
-class HomePage extends React.Component {
-    static displayName = 'HomePage';
-
+export default class HomePage extends React.PureComponent {
     static propTypes = {
         // URL to use as the iFrame src. Defaults to /home.html.
         homePageUrl: PropTypes.string,
@@ -38,9 +37,13 @@ class HomePage extends React.Component {
         matrixClient: PropTypes.instanceOf(MatrixClient),
     };
 
-    state = {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             page: '',
-    };
+        };
+    }
 
     translate(s) {
         // default implementation - skins may wish to extend this
@@ -93,5 +96,3 @@ class HomePage extends React.Component {
         </GeminiScrollbarWrapper>;
     }
 }
-
-module.exports = HomePage;
