@@ -57,6 +57,10 @@ export default class EmbeddedPage extends React.PureComponent {
     componentWillMount() {
         this._unmounted = false;
 
+        if (!this.props.url) {
+            return;
+        }
+
         // we use request() to inline the homepage into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
