@@ -16,18 +16,14 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
+import { linkifyElement } from '../../../HtmlUtils';
 
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const ImageUtils = require('../../../ImageUtils');
 const Modal = require('../../../Modal');
-
-const linkify = require('linkifyjs');
-const linkifyElement = require('linkifyjs/element');
-const linkifyMatrix = require('../../../linkify-matrix');
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
@@ -62,13 +58,13 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         if (this.refs.description) {
-            linkifyElement(this.refs.description, linkifyMatrix.options);
+            linkifyElement(this.refs.description);
         }
     },
 
     componentDidUpdate: function() {
         if (this.refs.description) {
-            linkifyElement(this.refs.description, linkifyMatrix.options);
+            linkifyElement(this.refs.description);
         }
     },
 

@@ -25,17 +25,13 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
-import * as linkify from 'linkifyjs';
-import linkifyElement from 'linkifyjs/element';
-import linkifyMatrix from '../../../linkify-matrix';
+import { linkifyElement } from '../../../HtmlUtils';
 import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
-
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
@@ -76,7 +72,7 @@ module.exports = React.createClass({
 
     componentDidUpdate: function() {
         if (this.refs.topic) {
-            linkifyElement(this.refs.topic, linkifyMatrix.options);
+            linkifyElement(this.refs.topic);
         }
     },
 
