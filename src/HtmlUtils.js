@@ -539,9 +539,8 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
- * @param {object} [sanitizeHtmlOptions] Optional settings for sanitize-html
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml, sanitizeHtmlOptions = undefined) {
-    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlOptions);
+export function linkifyAndSanitizeHtml(dirtyHtml) {
+    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
 }
