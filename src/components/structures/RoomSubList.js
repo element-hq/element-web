@@ -157,7 +157,7 @@ const RoomSubList = React.createClass({
         // prevent the roomsublist collapsing
         e.preventDefault();
         e.stopPropagation();
-        const room = this.props.lists.find(room => RoomNotifs.getRoomHasBadge(room));
+        const room = this.props.list.find(room => RoomNotifs.getRoomHasBadge(room));
         if (room) {
             dis.dispatch({
                 action: 'view_room',
