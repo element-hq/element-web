@@ -48,7 +48,7 @@ class CustomRoomTagStore extends EventEmitter {
     constructor() {
         super();
         // Initialise state
-        this._state = {tags: this._getUpdatedTags()};
+        this._state = {tags: {}};
 
         this._roomListStoreToken = RoomListStore.addListener(() => {
             this._setState({tags: this._getUpdatedTags()});
@@ -113,7 +113,8 @@ class CustomRoomTagStore extends EventEmitter {
             }
             break;
             case 'on_logged_out': {
-                this._state = {};
+                // we assume to always have a tags object in the state
+                this._state = {tags: {}};
                 if (this._roomListStoreToken) {
                     this._roomListStoreToken.remove();
                     this._roomListStoreToken = null;
