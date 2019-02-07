@@ -53,13 +53,6 @@ export class LabsSettingToggle extends React.Component {
     }
 
     _onChange = async (checked) => {
-        if (this.props.featureId === "feature_lazyloading") {
-            const confirmed = await this._onLazyLoadChanging(checked);
-            if (!confirmed) {
-                return;
-            }
-        }
-
         await SettingsStore.setFeatureEnabled(this.props.featureId, checked);
         this.forceUpdate();
     };

@@ -100,13 +100,6 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_lazyloading": {
-        isFeature: true,
-        displayName: _td("Increase performance by only loading room members on first view"),
-        supportedLevels: LEVELS_FEATURE,
-        controller: new LazyLoadingController(),
-        default: true,
-    },
     "feature_keybackup": {
         isFeature: true,
         displayName: _td("Backup of encryption keys to server"),
