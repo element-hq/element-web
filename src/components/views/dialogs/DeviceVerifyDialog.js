@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
-import SettingsStore from '../../../settings/SettingsStore';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 
 const MODE_LEGACY = 'legacy';
@@ -48,7 +47,7 @@ export default class DeviceVerifyDialog extends React.Component {
         this._showSasEvent = null;
         this.state = {
             phase: PHASE_START,
-            mode: SettingsStore.isFeatureEnabled("feature_sas") ? MODE_SAS : MODE_LEGACY,
+            mode: MODE_SAS,
             sasVerified: false,
         };
     }

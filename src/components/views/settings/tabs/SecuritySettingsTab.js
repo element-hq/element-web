@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
+import {SettingLevel} from "../../../../settings/SettingsStore";
 import MatrixClientPeg from "../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../utils/FormattingUtils";
 import AccessibleButton from "../../elements/AccessibleButton";
@@ -196,18 +196,15 @@ export default class SecuritySettingsTab extends React.Component {
         const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
 
-        let keyBackup = null;
-        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
-            const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
-            keyBackup = (
-                <div className='mx_SettingsTab_section'>
-                    <span className="mx_SettingsTab_subheading">{_t("Key backup")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        <KeyBackupPanel />
-                    </div>
+        const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
+        const keyBackup = (
+            <div className='mx_SettingsTab_section'>
+                <span className="mx_SettingsTab_subheading">{_t("Key backup")}</span>
+                <div className='mx_SettingsTab_subsectionText'>
+                    <KeyBackupPanel />
                 </div>
-            );
-        }
+            </div>
+        );
 
         return (
             <div className="mx_SettingsTab mx_SecuritySettingsTab">
