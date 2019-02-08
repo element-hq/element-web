@@ -48,7 +48,7 @@ export default class DeviceVerifyDialog extends React.Component {
         this._showSasEvent = null;
         this.state = {
             phase: PHASE_START,
-            mode: SettingsStore.isFeatureEnabled("feature_sas") ? MODE_SAS : MODE_LEGACY,
+            mode: MODE_SAS,
             sasVerified: false,
         };
     }
