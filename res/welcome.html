@@ -1,0 +1,184 @@
+<style type="text/css">
+
+/* we deliberately inline style here to avoid flash-of-CSS problems, and to avoid
+ * voodoo where we have to set display: none by default
+ */
+
+h1::after {
+    content: "!";
+}
+
+.mx_Parent {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+    padding: 25px 35px;
+    color: #2e2f32;
+}
+
+.mx_Logo {
+    height: 54px;
+    margin-top: 2px;
+}
+
+.mx_ButtonGroup {
+    margin-top: 10px;
+}
+
+.mx_ButtonRow {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    margin: 12px 0 0;
+}
+
+.mx_ButtonRow > * {
+    margin: 0 10px;
+}
+
+.mx_ButtonRow > *:first-child {
+    margin-left: 0;
+}
+
+.mx_ButtonRow > *:last-child {
+    margin-right: 0;
+}
+
+.mx_ButtonParent {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 10px 20px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 150px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    text-decoration: none;
+    color: #2e2f32 !important;
+}
+
+.mx_ButtonHeadline {
+    margin-bottom: 14px;
+}
+
+.mx_ButtonLabel {
+    margin-left: 20px;
+}
+
+.mx_ButtonWrapperText {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.mx_Header_title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 20px 0 0;
+}
+
+.mx_Header_subtitle {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 8px 0 0;
+}
+
+.mx_ButtonSignIn {
+    background-color: #368BD6;
+    color: white !important;
+}
+
+.mx_ButtonCreateAccount {
+    background-color: #03B381;
+    color: white !important;
+}
+
+.mx_SecondaryButton {
+    background-color: #FFFFFF;
+    color: #2E2F32;
+}
+
+.mx_Button_iconSignIn {
+    background-image: url('welcome/images/icon-sign-in.svg');
+}
+.mx_Button_iconCreateAccount {
+    background-image: url('welcome/images/icon-create-account.svg');
+}
+.mx_Button_iconHelp {
+    background-image: url('welcome/images/icon-help.svg');
+}
+.mx_Button_iconRoomDirectory {
+    background-image: url('welcome/images/icon-room-directory.svg');
+}
+
+</style>
+
+<div class="mx_Parent">
+    <a href="https://riot.im" target="_blank" rel="noopener">
+        <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
+    </a>
+    <h1 class="mx_Header_title">_t("Welcome to Riot.im")</h1>
+    <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
+    <div class="mx_ButtonGroup">
+        <div class="mx_ButtonRow">
+            <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
+                <div class="mx_ButtonLabel">_t("Sign In")</div>
+            </a>
+            <a href="#/register" class="mx_ButtonParent mx_ButtonCreateAccount mx_Button_iconCreateAccount">
+                <div class="mx_ButtonLabel">_t("Create Account")</div>
+            </a>
+        </div>
+        <div class="mx_ButtonRow">
+            <div>
+                <div class="mx_ButtonWrapperText">_t("Need help?")</div>
+                <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconHelp">
+                    <div class="mx_ButtonLabel">_t("Chat with Riot Bot")</div>
+                </a>
+            </div>
+            <div>
+                <div class="mx_ButtonWrapperText">_t("Explore rooms")</div>
+                <a href="#/directory" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconRoomDirectory">
+                    <div class="mx_ButtonLabel">_t("Room Directory")</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

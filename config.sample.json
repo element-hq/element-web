@@ -15,7 +15,6 @@
         "feature_pinning": "labs"
     },
     "default_federate": true,
-    "welcomePageUrl": "home.html",
     "default_theme": "light",
     "roomDirectory": {
         "servers": [
