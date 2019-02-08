@@ -27,6 +27,10 @@ limitations under the License.
         margin: 5px 0;
         padding: 0;
 
+        li.mx_TopLeftMenu_icon_home::after {
+            mask-image: url('$(res)/img/feather-icons/home.svg');
+        }
+
         li.mx_TopLeftMenu_icon_settings::after {
             mask-image: url('$(res)/img/feather-icons/settings.svg');
         }
