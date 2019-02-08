@@ -18,9 +18,7 @@ import React from 'react';
 import {_t} from "../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
-const Modal = require("../../../../Modal");
 const sdk = require("../../../../index");
 
 export class LabsSettingToggle extends React.Component {
