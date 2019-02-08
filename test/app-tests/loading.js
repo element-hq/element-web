@@ -172,12 +172,23 @@ describe('loading:', function() {
     // http requests until we do.
     //
     // returns a promise resolving to the received request
-    async function expectAndAwaitSync(response) {
-        response = response || {};
+    async function expectAndAwaitSync(opts) {
         let syncRequest = null;
+        const isGuest = opts && opts.isGuest;
+        if (!isGuest) {
+            httpBackend.when('GET', '/_matrix/client/versions')
+                .respond(200, {
+                    "versions": ["r0.3.0"],
+                    "unstable_features": {
+                        "m.lazy_load_members": true
+                    }
+                });
+            // the call to create the LL filter
+            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'llfid' });
+        }
         httpBackend.when('GET', '/sync')
             .check((r) => {syncRequest = r;})
-            .respond(200, response);
+            .respond(200, {});
 
         for (let attempts = 10; attempts > 0; attempts--) {
             console.log(Date.now() + " waiting for /sync");
@@ -404,7 +415,7 @@ describe('loading:', function() {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
                 // we got a sync spinner - let the sync complete
-                return expectAndAwaitSync();
+                return expectAndAwaitSync({isGuest: true});
             }).then(() => {
                 // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
@@ -434,7 +445,7 @@ describe('loading:', function() {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                return expectAndAwaitSync();
+                return expectAndAwaitSync({isGuest: true});
             }).then((req) => {
                 expect(req.path).toStartWith(DEFAULT_HS_URL);
 
@@ -468,7 +479,7 @@ describe('loading:', function() {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                return expectAndAwaitSync();
+                return expectAndAwaitSync({isGuest: true});
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
