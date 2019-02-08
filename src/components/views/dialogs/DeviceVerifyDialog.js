@@ -22,7 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
-import SettingsStore from '../../../settings/SettingsStore';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 
 const MODE_LEGACY = 'legacy';
