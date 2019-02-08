@@ -420,7 +420,7 @@ const LoggedInView = React.createClass({
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
-        const HomePage = sdk.getComponent('structures.HomePage');
+        const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
@@ -459,8 +459,20 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
-                    pageElement = <HomePage
-                        homePageUrl={this.props.config.welcomePageUrl}
+                    const pagesConfig = this.props.config.embeddedPages;
+                    let pageUrl = null;
+                    if (pagesConfig) {
+                        pageUrl = pagesConfig.homeUrl;
+                    }
+                    if (!pageUrl) {
+                        // This is a deprecated config option for the home page
+                        // (despite the name, given we also now have a welcome
+                        // page, which is not the same).
+                        pageUrl = this.props.config.welcomePageUrl;
+                    }
+                    pageElement = <EmbeddedPage className="mx_HomePage"
+                        url={pageUrl}
+                        scrollbar={true}
                     />;
                 }
                 break;
