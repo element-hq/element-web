@@ -113,5 +113,7 @@
     "Collapse panel": "Skjul panel",
     "Saturday": "Lørdag",
     "There are advanced notifications which are not shown here": "Det er avanserte varsler som ikke vises her",
-    "Dismiss": "Avvis"
+    "Dismiss": "Avvis",
+    "Whether or not you're logged in (we don't record your username)": "Om du er logget inn eller ikke (vi lagrer ikke brukernavnet ditt)",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan også stille inn en egen idendtitetstjener, men du kommer ikke til å kunne invitere andre brukere med e-post, eller bli invitert med e-post selv."
 }

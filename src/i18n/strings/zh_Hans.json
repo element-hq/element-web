@@ -1324,5 +1324,6 @@
     "Avoid dates and years that are associated with you": "避免与您相关联的日期与年份",
     "Capitalization doesn't help very much": "大写字母并没有很大的作用",
     "All-uppercase is almost as easy to guess as all-lowercase": "全大写的密码通常比全小写的更容易猜测",
-    "Reversed words aren't much harder to guess": "把单词倒过来不会比原来的难猜很多"
+    "Reversed words aren't much harder to guess": "把单词倒过来不会比原来的难猜很多",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以自定义身份服务器，但是您将不能用电子邮箱地址邀请或被邀请。"
 }

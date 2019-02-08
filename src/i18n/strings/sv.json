@@ -1015,7 +1015,7 @@
     "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID": "Varning: En person du lägger till i en community kommer att vara synlig för alla som känner till community-ID:t",
     "Invite new community members": "Bjud in nya community-medlemmar",
     "Which rooms would you like to add to this community?": "Vilka rum vill du lägga till i denna community?",
-    "Show these rooms to non-members on the community page and room list?": "Vissa dessa rum och icke-medlemmar på community-sidan och -rumslistan?",
+    "Show these rooms to non-members on the community page and room list?": "Visa dessa rum för icke-medlemmar på community-sidan och -rumslistan?",
     "Add rooms to the community": "Lägg till rum i communityn",
     "Add to community": "Lägg till i community",
     "Failed to invite users to community": "Det gick inte att bjuda in användare till communityn",
@@ -1290,5 +1290,6 @@
     "Show developer tools": "Visa utvecklingsverktyg",
     "You are currently using Riot anonymously as a guest.": "Du använder för närvarande Riot anonymt som gäst.",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Du är administratör för denna community. Du kommer inte kunna gå med igen utan en inbjudan från en annan administratör.",
-    "If you would like to create a Matrix account you can <a>register</a> now.": "Om du vill skapa ett Matrix-konto kan du <a>registrera dig</a> nu."
+    "If you would like to create a Matrix account you can <a>register</a> now.": "Om du vill skapa ett Matrix-konto kan du <a>registrera dig</a> nu.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda en egen identitetsserver, men då kan du inte bjuda in användare via epostadress eller själv bjudas in med din epostadress."
 }
