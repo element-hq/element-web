@@ -362,4 +362,9 @@ export const SETTINGS = {
         displayName: _td('Show developer tools'),
         default: false,
     },
+    "lowBandwidth": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td('Low Bandwidth Mode'),
+        default: false,
+    },
 };

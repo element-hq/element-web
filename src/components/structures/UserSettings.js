@@ -84,6 +84,13 @@ const SIMPLE_SETTINGS = [
     { id: "enableWidgetScreenshots" },
     { id: "pinMentionedRooms" },
     { id: "pinUnreadRooms" },
+    {
+        id: "lowBandwidth",
+        fn: () => {
+            PlatformPeg.get().reload();
+        },
+        level: SettingLevel.DEVICE,
+    },
     { id: "showDeveloperTools" },
     { id: "promptBeforeInviteUnknownUsers" },
 ];
@@ -644,7 +651,7 @@ module.exports = React.createClass({
             <div className="mx_UserSettings_toggle" key={setting.id}>
                 <SettingsFlag name={setting.id}
                                   label={setting.label}
-                                  level={SettingLevel.ACCOUNT}
+                                  level={setting.level ? setting.level : SettingLevel.ACCOUNT}
                                   onChange={setting.fn} />
             </div>
         );

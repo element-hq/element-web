@@ -300,6 +300,7 @@
     "Enable widget screenshots on supported widgets": "Enable widget screenshots on supported widgets",
     "Prompt before sending invites to potentially invalid matrix IDs": "Prompt before sending invites to potentially invalid matrix IDs",
     "Show developer tools": "Show developer tools",
+    "Low Bandwidth Mode": "Low Bandwidth Mode",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading report": "Uploading report",

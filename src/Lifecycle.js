@@ -31,6 +31,7 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
+import SettingsStore from "./settings/SettingsStore";
 import {sendLoginRequest} from "./Login";
 
 /**
@@ -440,7 +441,9 @@ async function startMatrixClient() {
 
     Notifier.start();
     UserActivity.start();
-    Presence.start();
+    if (!SettingsStore.getValue("lowBandwidth")) {
+        Presence.start();
+    }
     DMRoomMap.makeShared().start();
     ActiveWidgetStore.start();
 
