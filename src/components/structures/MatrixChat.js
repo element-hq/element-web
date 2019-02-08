@@ -357,8 +357,8 @@ export default React.createClass({
                 });
             }).then((loadedSession) => {
                 if (!loadedSession) {
-                    // fall back to showing the login screen
-                    dis.dispatch({action: "start_login"});
+                    // fall back to showing the welcome screen
+                    dis.dispatch({action: "view_welcome_page"});
                 }
             });
             // Note we don't catch errors from this: we catch everything within
@@ -967,11 +967,11 @@ export default React.createClass({
             }
             dis.dispatch({
                 action: 'require_registration',
-                // If the set_mxid dialog is cancelled, view /home because if the browser
-                // was pointing at /user/@someone:domain?action=chat, the URL needs to be
-                // reset so that they can revisit /user/.. // (and trigger
+                // If the set_mxid dialog is cancelled, view /welcome because if the
+                // browser was pointing at /user/@someone:domain?action=chat, the URL
+                // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
-                go_home_on_cancel: true,
+                go_welcome_on_cancel: true,
             });
             return;
         }
@@ -1193,7 +1193,11 @@ export default React.createClass({
                 room_id: localStorage.getItem('mx_last_room_id'),
             });
         } else {
-            dis.dispatch({action: 'view_home_page'});
+            if (MatrixClientPeg.get().isGuest) {
+                dis.dispatch({action: 'view_welcome_page'});
+            } else {
+                dis.dispatch({action: 'view_home_page'});
+            }
         }
     },
 

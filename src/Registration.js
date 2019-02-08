@@ -35,8 +35,10 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  * on what the HS supports
  *
  * @param {object} options
- * @param {bool} options.go_home_on_cancel If true, goes to
- *     the hame page if the user cancels the action
+ * @param {bool} options.go_home_on_cancel
+ *     If true, goes to the home page if the user cancels the action
+ * @param {bool} options.go_welcome_on_cancel
+ *     If true, goes to the welcome page if the user cancels the action
  */
 export async function startAnyRegistrationFlow(options) {
     if (options === undefined) options = {};
@@ -73,6 +75,8 @@ export async function startAnyRegistrationFlow(options) {
                     dis.dispatch({action: 'start_registration'});
                 } else if (options.go_home_on_cancel) {
                     dis.dispatch({action: 'view_home_page'});
+                } else if (options.go_welcome_on_cancel) {
+                    dis.dispatch({action: 'view_welcome_page'});
                 }
             },
         });
