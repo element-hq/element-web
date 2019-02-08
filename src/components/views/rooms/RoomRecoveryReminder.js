@@ -141,11 +141,10 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                         onClick={this.onSetupClick}>
                         {_t("Activate Secure Key Backup")}
                     </AccessibleButton>
-                    <p><AccessibleButton className="mx_RoomRecoveryReminder_button mx_RoomRecoveryReminder_secondary"
+                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onDontAskAgainClick}>
-                        { _t("No Thanks") }
-                    </AccessibleButton>
-                    <div>{_t("I'll download a copy of my decryption keys before I log out")}</div></p>
+                        { _t("No thanks, I'll download a copy of my decryption keys before I log out") }
+                    </AccessibleButton></p>
                 </div>
             </div>
         );
