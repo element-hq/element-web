@@ -99,6 +99,12 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
+    "feature_custom_tags": {
+        isFeature: true,
+        displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_keybackup": {
         isFeature: true,
         displayName: _td("Backup of encryption keys to server"),

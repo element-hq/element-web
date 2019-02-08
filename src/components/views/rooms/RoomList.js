@@ -172,11 +172,14 @@ module.exports = React.createClass({
             this._delayedRefreshRoomList();
         });
 
-        this._customTagStoreToken = CustomRoomTagStore.addListener(() => {
-            this.setState({
-                customTags: CustomRoomTagStore.getTags(),
+
+        if (SettingsStore.isFeatureEnabled("feature_custom_tags")) {
+            this._customTagStoreToken = CustomRoomTagStore.addListener(() => {
+                this.setState({
+                    customTags: CustomRoomTagStore.getTags(),
+                });
             });
-        });
+        }
 
         this.refreshRoomList();
 
@@ -728,7 +731,8 @@ module.exports = React.createClass({
         ];
         const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
-                return this.state.customTags[tagName] && !tagName.match(STANDARD_TAGS_REGEX);
+                return (!this.state.customTags || this.state.customTags[tagName]) &&
+                    !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
                     list: this.state.lists[tagName],

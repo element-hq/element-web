@@ -264,6 +264,7 @@
     "Failed to join room": "Failed to join room",
     "Message Pinning": "Message Pinning",
     "Custom user status messages": "Custom user status messages",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "Group & filter rooms by custom tags (refresh to apply changes)",
     "Backup of encryption keys to server": "Backup of encryption keys to server",
     "Render simple counters in room header": "Render simple counters in room header",
     "Two-way device verification using short text": "Two-way device verification using short text",
