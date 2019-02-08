@@ -24,7 +24,7 @@ export default class Welcome extends React.PureComponent {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
 
-        const pagesConfig = SdkConfig.get().pages;
+        const pagesConfig = SdkConfig.get().embeddedPages;
         let pageUrl = null;
         if (pagesConfig) {
             pageUrl = pagesConfig.welcomeUrl;

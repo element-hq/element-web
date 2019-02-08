@@ -459,7 +459,7 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
-                    const pagesConfig = this.props.config.pages;
+                    const pagesConfig = this.props.config.embeddedPages;
                     let pageUrl = null;
                     if (pagesConfig) {
                         pageUrl = pagesConfig.homeUrl;

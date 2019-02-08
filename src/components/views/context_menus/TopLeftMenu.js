@@ -30,7 +30,7 @@ export class TopLeftMenu extends React.Component {
 
     hasHomePage() {
         const config = SdkConfig.get();
-        const pagesConfig = config.pages;
+        const pagesConfig = config.embeddedPages;
         if (pagesConfig && pagesConfig.homeUrl) {
             return true;
         }
