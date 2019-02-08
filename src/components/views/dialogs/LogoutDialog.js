@@ -124,7 +124,7 @@ export default class LogoutDialog extends React.Component {
                 hasCancelButton={true}
                 title={_t("Sign out")}
                 // TODO: This is made up by me and would need to also mention verifying
-                // once you can restorew a backup by verifying a device
+                // once you can restore a backup by verifying a device
                 description={_t(
                     "When signing in again, you can access encrypted chat history by " +
                     "restoring your key backup. You'll need your recovery passphrase " +
