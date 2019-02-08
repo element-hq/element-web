@@ -250,19 +250,26 @@ export default class KeyBackupPanel extends React.PureComponent {
                 backupSigStatuses = _t("Backup is not signed by any of your devices");
             }
 
+            let trustedLocally;
+            if (this.state.backupSigStatus.trusted_locally) {
+                trustedLocally = _t("This backup is trusted because it has been restored on this device");
+            }
+
             return <div>
-                {_t("Backup version: ")}{this.state.backupInfo.version}<br />
-                {_t("Algorithm: ")}{this.state.backupInfo.algorithm}<br />
-                {clientBackupStatus}<br />
+                <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
+                <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
+                <div>{clientBackupStatus}</div>
                 {uploadStatus}
-                <div>{backupSigStatuses}</div><br />
-                <br />
-                <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                    { _t("Restore backup") }
-                </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                    { _t("Delete backup") }
-                </AccessibleButton>
+                <div>{backupSigStatuses}</div>
+                <div>{trustedLocally}</div>
+                <p>
+                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                        { _t("Restore backup") }
+                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
+                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                        { _t("Delete backup") }
+                    </AccessibleButton>
+                </p>
             </div>;
         } else {
             return <div>

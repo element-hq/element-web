@@ -21,7 +21,6 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import LazyLoadingController from "./controllers/LazyLoadingController";
 import CustomStatusController from "./controllers/CustomStatusController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -100,12 +99,11 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_lazyloading": {
+    "feature_custom_tags": {
         isFeature: true,
-        displayName: _td("Increase performance by only loading room members on first view"),
+        displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
-        controller: new LazyLoadingController(),
-        default: true,
+        default: false,
     },
     "feature_keybackup": {
         isFeature: true,

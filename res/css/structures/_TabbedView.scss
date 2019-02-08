@@ -85,6 +85,7 @@ limitations under the License.
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0; // firefox
 }
 
 .mx_TabbedView_tabPanelContent {

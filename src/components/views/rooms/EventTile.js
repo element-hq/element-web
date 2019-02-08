@@ -63,6 +63,8 @@ const stateEventTileTypes = {
     'm.room.server_acl': 'messages.TextualEvent',
     'im.vector.modular.widgets': 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
+    'm.room.join_rules': 'messages.TextualEvent',
+    'm.room.guest_access': 'messages.TextualEvent',
 };
 
 function getHandlerTile(ev) {
