@@ -14,21 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HexVerify {
+.mx_VerificationShowSas_sas {
     text-align: center;
-}
-
-.mx_HexVerify_pair {
-    display: inline-block;
     font-weight: bold;
     padding-left: 3px;
     padding-right: 3px;
-}
-
-.mx_HexVerify_pair_verified {
-    color: $accent-color;
-}
-
-.mx_HexVerify_pair:hover{
-    color: $accent-color;
 }
