@@ -14,21 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HexVerify {
-    text-align: center;
+.mx_DeviceVerifyDialog_cryptoSection ul {
+    display: table;
 }
 
-.mx_HexVerify_pair {
-    display: inline-block;
-    font-weight: bold;
-    padding-left: 3px;
-    padding-right: 3px;
+.mx_DeviceVerifyDialog_cryptoSection li {
+    display: table-row;
 }
 
-.mx_HexVerify_pair_verified {
-    color: $accent-color;
-}
-
-.mx_HexVerify_pair:hover{
-    color: $accent-color;
+.mx_DeviceVerifyDialog_cryptoSection label,
+.mx_DeviceVerifyDialog_cryptoSection span {
+    display: table-cell;
+    padding-right: 1em;
 }

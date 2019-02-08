@@ -27,7 +27,7 @@ import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
-
+import { linkifyAndSanitizeHtml } from './HtmlUtils';
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -137,13 +137,26 @@ export const CommandMap = {
 
     topic: new Command({
         name: 'topic',
-        args: '<topic>',
-        description: _td('Sets the room topic'),
+        args: '[<topic>]',
+        description: _td('Gets or sets the room topic'),
         runFn: function(roomId, args) {
+            const cli = MatrixClientPeg.get();
             if (args) {
-                return success(MatrixClientPeg.get().setRoomTopic(roomId, args));
+                return success(cli.setRoomTopic(roomId, args));
             }
-            return reject(this.getUsage());
+            const room = cli.getRoom(roomId);
+            if (!room) return reject('Bad room ID: ' + roomId);
+
+            const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
+            const topic = topicEvents && topicEvents.getContent().topic;
+            const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
+
+            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+            Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
+                title: room.name,
+                description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
+            });
+            return success();
         },
     }),
 
@@ -391,13 +404,12 @@ export const CommandMap = {
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-                            Modal.createTrackedDialog('Slash Commands', 'User ignored', QuestionDialog, {
+                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+                            Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
                                     <p>{ _t('You are now ignoring %(userId)s', {userId}) }</p>
                                 </div>,
-                                hasCancelButton: false,
                             });
                         }),
                     );
@@ -423,13 +435,12 @@ export const CommandMap = {
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-                            Modal.createTrackedDialog('Slash Commands', 'User unignored', QuestionDialog, {
+                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+                            Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
                                     <p>{ _t('You are no longer ignoring %(userId)s', {userId}) }</p>
                                 </div>,
-                                hasCancelButton: false,
                             });
                         }),
                     );
@@ -546,8 +557,8 @@ export const CommandMap = {
                             return cli.setDeviceVerified(userId, deviceId, true);
                         }).then(() => {
                             // Tell the user we verified everything
-                            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-                            Modal.createTrackedDialog('Slash Commands', 'Verified key', QuestionDialog, {
+                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+                            Modal.createTrackedDialog('Slash Commands', 'Verified key', InfoDialog, {
                                 title: _t('Verified key'),
                                 description: <div>
                                     <p>
@@ -558,7 +569,6 @@ export const CommandMap = {
                                         }
                                     </p>
                                 </div>,
-                                hasCancelButton: false,
                             });
                         }),
                     );

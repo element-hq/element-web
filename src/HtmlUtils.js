@@ -19,15 +19,20 @@ limitations under the License.
 
 import ReplyThread from "./components/views/elements/ReplyThread";
 
-const React = require('react');
-const sanitizeHtml = require('sanitize-html');
-const highlight = require('highlight.js');
-const linkifyMatrix = require('./linkify-matrix');
+import React from 'react';
+import sanitizeHtml from 'sanitize-html';
+import highlight from 'highlight.js';
+import * as linkify from 'linkifyjs';
+import linkifyMatrix from './linkify-matrix';
+import _linkifyElement from 'linkifyjs/element';
+import _linkifyString from 'linkifyjs/string';
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
 import MatrixClientPeg from './MatrixClientPeg';
 import url from 'url';
+
+linkifyMatrix(linkify);
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -63,8 +68,10 @@ export function containsEmoji(str) {
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
-function unicodeToImage(str) {
-    let replaceWith; let unicode; let alt; let short; let fname;
+function unicodeToImage(str, addAlt) {
+    if (addAlt === undefined) addAlt = true;
+
+    let replaceWith; let unicode; let short; let fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {
@@ -79,10 +86,14 @@ function unicodeToImage(str) {
             fname = emojione.emojioneList[short].fname;
 
             // depending on the settings, we'll either add the native unicode as the alt tag, otherwise the shortname
-            alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
             const title = mappedUnicode[unicode];
 
-            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            if (addAlt) {
+                const alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
+                replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            } else {
+                replaceWith = `<img class="mx_emojione" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            }
             return replaceWith;
         }
     });
@@ -503,8 +514,39 @@ export function bodyToHtml(content, highlights, opts={}) {
         <span className={className} dir="auto">{ strippedBody }</span>;
 }
 
-export function emojifyText(text) {
+export function emojifyText(text, addAlt) {
     return {
-        __html: unicodeToImage(escape(text)),
+        __html: unicodeToImage(escape(text), addAlt),
     };
+}
+
+/**
+ * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+export function linkifyString(str) {
+    return _linkifyString(str);
+}
+
+/**
+ * Linkifies the given DOM element. This is a wrapper around 'linkifyjs/element'.
+ *
+ * @param {object} element DOM element to linkify
+ * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
+ * @returns {object}
+ */
+export function linkifyElement(element, options = linkifyMatrix.options) {
+    return _linkifyElement(element, options);
+}
+
+/**
+ * Linkify the given string and sanitize the HTML afterwards.
+ *
+ * @param {string} dirtyHtml The HTML string to sanitize and linkify
+ * @returns {string}
+ */
+export function linkifyAndSanitizeHtml(dirtyHtml) {
+    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
 }

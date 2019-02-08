@@ -134,6 +134,38 @@ function textForTombstoneEvent(ev) {
     return _t('%(senderDisplayName)s upgraded this room.', {senderDisplayName});
 }
 
+function textForJoinRulesEvent(ev) {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    switch (ev.getContent().join_rule) {
+        case "public":
+            return _t('%(senderDisplayName)s made the room public to whoever knows the link.', {senderDisplayName});
+        case "invite":
+            return _t('%(senderDisplayName)s made the room invite only.', {senderDisplayName});
+        default:
+            // The spec supports "knock" and "private", however nothing implements these.
+            return _t('%(senderDisplayName)s changed the join rule to %(rule)s', {
+                senderDisplayName,
+                rule: ev.getContent().join_rule,
+            });
+    }
+}
+
+function textForGuestAccessEvent(ev) {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    switch (ev.getContent().guest_access) {
+        case "can_join":
+            return _t('%(senderDisplayName)s has allowed guests to join the room.', {senderDisplayName});
+        case "forbidden":
+            return _t('%(senderDisplayName)s has prevented guests from joining the room.', {senderDisplayName});
+        default:
+            // There's no other options we can expect, however just for safety's sake we'll do this.
+            return _t('%(senderDisplayName)s changed guest access to %(rule)s', {
+                senderDisplayName,
+                rule: ev.getContent().guest_access,
+            });
+    }
+}
+
 function textForServerACLEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
@@ -439,6 +471,8 @@ const stateHandlers = {
     'm.room.pinned_events': textForPinnedEvent,
     'm.room.server_acl': textForServerACLEvent,
     'm.room.tombstone': textForTombstoneEvent,
+    'm.room.join_rules': textForJoinRulesEvent,
+    'm.room.guest_access': textForGuestAccessEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

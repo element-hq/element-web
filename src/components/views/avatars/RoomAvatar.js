@@ -158,7 +158,8 @@ module.exports = React.createClass({
             <BaseAvatar {...otherProps} name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls}
-                onClick={this.props.viewAvatarOnClick ? this.onRoomAvatarClick : null} />
+                onClick={this.props.viewAvatarOnClick ? this.onRoomAvatarClick : null}
+                disabled={!this.state.urls[0]} />
         );
     },
 });

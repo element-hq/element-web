@@ -43,6 +43,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
+import E2EIcon from "./E2EIcon";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -153,9 +154,17 @@ module.exports = withMatrixClient(React.createClass({
             // Promise.resolve to handle transition from static result to promise; can be removed
             // in future
             Promise.resolve(this.props.matrixClient.getStoredDevicesForUser(userId)).then((devices) => {
-                this.setState({devices: devices});
+                this.setState({
+                    devices: devices,
+                    e2eStatus: this._getE2EStatus(devices),
+                });
             });
         }
+    },
+
+    _getE2EStatus: function(devices) {
+        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
+        return hasUnverifiedDevice ? "warning" : "verified";
     },
 
     onRoom: function(room) {
@@ -234,8 +243,13 @@ module.exports = withMatrixClient(React.createClass({
                 // we got cancelled - presumably a different user now
                 return;
             }
+
             self._disambiguateDevices(devices);
-            self.setState({devicesLoading: false, devices: devices});
+            self.setState({
+                devicesLoading: false,
+                devices: devices,
+                e2eStatus: self._getE2EStatus(devices),
+            });
         }, function(err) {
             console.log("Error downloading devices", err);
             self.setState({devicesLoading: false});
@@ -965,6 +979,7 @@ module.exports = withMatrixClient(React.createClass({
                         <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
                             <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
                         </AccessibleButton>
+                        { this.state.e2eStatus ? <E2EIcon status={this.state.e2eStatus} isUser={true} /> : undefined }
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>
                     { avatarElement }

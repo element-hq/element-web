@@ -56,9 +56,8 @@ limitations under the License.
     max-width: 960px;
     width: 50%;
     margin-right: 5px;
-    border: 1px solid $primary-hairline-color;
-    border-radius: 2px;
-    background-color: $dialog-background-bg-color;
+    border: 5px solid $widget-menu-bar-bg-color;
+    border-radius: 4px;
 }
 
 .mx_AppTile:last-child {
@@ -71,8 +70,8 @@ limitations under the License.
     height: 100%;
     margin: 0;
     padding: 0;
-    border: 1px solid $primary-hairline-color;
-    border-radius: 2px;
+    border: 5px solid $widget-menu-bar-bg-color;
+    border-radius: 4px;
 }
 
 .mx_AppTile_mini {
@@ -93,15 +92,17 @@ limitations under the License.
 
 .mx_AppTileMenuBar {
     margin: 0;
-    padding: 2px 10px;
-    border-bottom: 1px solid $primary-hairline-color;
-    font-size: 10px;
+    font-size: 12px;
     background-color: $widget-menu-bar-bg-color;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+}
+
+.mx_AppTileMenuBar_expanded {
+    padding-bottom: 5px;
 }
 
 .mx_AppTileMenuBarTitle {
@@ -111,6 +112,10 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_AppTileMenuBarTitle > :last-child {
+    margin-left: 9px;
+}
+
 .mx_AppTileMenuBarWidgets {
     float: right;
     display: flex;
@@ -118,6 +123,53 @@ limitations under the License.
     align-items: center;
 }
 
+.mx_AppTileMenuBar_iconButton {
+    width: 12px;
+    height: 12px;
+    mask-repeat: no-repeat;
+    mask-position: 0 center;
+    mask-size: auto 12px;
+    background-color: $topleftmenu-color;
+    margin: 0 3px;
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_minimise {
+    mask-image: url('$(res)/img/feather-icons/widget/minimise.svg');
+    background-color: $accent-color;
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_maximise {
+    mask-image: url('$(res)/img/feather-icons/widget/maximise.svg');
+    background-color: $accent-color;
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_reload {
+    mask-image: url('$(res)/img/feather-icons/widget/refresh.svg');
+    mask-size: 100%;
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
+    mask-image: url('$(res)/img/feather-icons/widget/external-link.svg');
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_snapshot {
+    mask-image: url('$(res)/img/feather-icons/widget/camera.svg');
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_edit {
+    mask-image: url('$(res)/img/feather-icons/widget/edit.svg');
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_delete {
+    mask-image: url('$(res)/img/feather-icons/widget/bin.svg');
+    background-color: $warning-color;
+}
+
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_cancel {
+    mask-image: url('$(res)/img/feather-icons/widget/x-circle.svg');
+}
+
+/* delete ? */
 .mx_AppTileMenuBarWidget {
     cursor: pointer;
     width: 10px;
@@ -265,14 +317,11 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionButton {
-    padding: 5px;
+    border: none;
+    padding: 5px 20px;
     border-radius: 5px;
-    color: $warning-color;
-    background-color: $primary-bg-color;
-}
-
-.mx_AppPermissionButton:hover {
-    background-color: $primary-fg-color;
+    background-color: $button-bg-color;
+    color: $button-fg-color;
     cursor: pointer;
 }
 

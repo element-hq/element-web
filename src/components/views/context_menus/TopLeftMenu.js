@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
+import SdkConfig from '../../../SdkConfig';
 
 export class TopLeftMenu extends React.Component {
     constructor() {
@@ -27,8 +28,28 @@ export class TopLeftMenu extends React.Component {
         this.signOut = this.signOut.bind(this);
     }
 
+    hasHomePage() {
+        const config = SdkConfig.get();
+        const pagesConfig = config.embeddedPages;
+        if (pagesConfig && pagesConfig.homeUrl) {
+            return true;
+        }
+        // This is a deprecated config option for the home page
+        // (despite the name, given we also now have a welcome
+        // page, which is not the same).
+        return !!config.welcomePageUrl;
+    }
+
     render() {
+        let homePageSection = null;
+        if (this.hasHomePage()) {
+            homePageSection = <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>{_t("Home")}</li>
+            </ul>;
+        }
+
         return <div className="mx_TopLeftMenu">
+            {homePageSection}
             <ul className="mx_TopLeftMenu_section">
                 <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
             </ul>
@@ -36,6 +57,11 @@ export class TopLeftMenu extends React.Component {
                 <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
             </ul>
         </div>;
+    }
+
+    viewHomePage() {
+        dis.dispatch({action: 'view_home_page'});
+        this.closeMenu();
     }
 
     openSettings() {

@@ -26,6 +26,10 @@ limitations under the License.
     display: flex;
 }
 
+.mx_MemberInfo_name > .mx_E2EIcon {
+    margin-left: 0;
+}
+
 .mx_MemberInfo_cancel {
     height: 16px;
     padding: 10px 15px;

@@ -54,21 +54,17 @@ module.exports = React.createClass({
         defaultIsUrl: PropTypes.string,
         brand: PropTypes.string,
         email: PropTypes.string,
-        referrer: PropTypes.string,
-
         // An error passed along from higher up explaining that something
         // went wrong when finding the defaultHsUrl.
         defaultServerDiscoveryError: PropTypes.string,
-
-        defaultDeviceDisplayName: PropTypes.string,
-
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
-        onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
+        const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
+
         return {
             busy: false,
             errorText: null,
@@ -90,6 +86,8 @@ module.exports = React.createClass({
             serverType: null,
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
+            // Phase of the overall registration dialog.
+            phase: customURLsAllowed ? PHASE_SERVER_DETAILS : PHASE_REGISTRATION,
             flows: null,
         };
     },
@@ -164,9 +162,13 @@ module.exports = React.createClass({
                 this.setState({
                     flows: e.data.flows,
                 });
+            } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
+                this.setState({
+                    errorText: _t("Registration has been disabled on this homeserver."),
+                });
             } else {
                 this.setState({
-                    errorText: _t("Unable to query for supported registration methods"),
+                    errorText: _t("Unable to query for supported registration methods."),
                 });
             }
         }
@@ -363,7 +365,6 @@ module.exports = React.createClass({
         const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        // TODO: May need to adjust the behavior of this config option
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }

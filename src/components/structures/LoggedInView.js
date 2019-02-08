@@ -57,7 +57,6 @@ const LoggedInView = React.createClass({
         matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         page_type: PropTypes.string.isRequired,
         onRoomCreated: PropTypes.func,
-        onUserSettingsClose: PropTypes.func,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
@@ -421,8 +420,7 @@ const LoggedInView = React.createClass({
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
-        const UserSettings = sdk.getComponent('structures.UserSettings');
-        const HomePage = sdk.getComponent('structures.HomePage');
+        const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
@@ -451,13 +449,6 @@ const LoggedInView = React.createClass({
                     />;
                 break;
 
-            case PageTypes.UserSettings:
-                pageElement = <UserSettings
-                    onClose={this.props.onCloseAllSettings}
-                    brand={this.props.config.brand}
-                />;
-                break;
-
             case PageTypes.MyGroups:
                 pageElement = <MyGroups />;
                 break;
@@ -468,8 +459,20 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
-                    pageElement = <HomePage
-                        homePageUrl={this.props.config.welcomePageUrl}
+                    const pagesConfig = this.props.config.embeddedPages;
+                    let pageUrl = null;
+                    if (pagesConfig) {
+                        pageUrl = pagesConfig.homeUrl;
+                    }
+                    if (!pageUrl) {
+                        // This is a deprecated config option for the home page
+                        // (despite the name, given we also now have a welcome
+                        // page, which is not the same).
+                        pageUrl = this.props.config.welcomePageUrl;
+                    }
+                    pageElement = <EmbeddedPage className="mx_HomePage"
+                        url={pageUrl}
+                        scrollbar={true}
                     />;
                 }
                 break;

@@ -270,6 +270,20 @@ textarea {
     opacity: 0.7;
 }
 
+// TODO: Review mx_GeneralButton usage to see if it can use a different class
+// These classes were brought in from the old UserSettings and are included here to avoid
+// breaking the app.
+// Ref: https://github.com/vector-im/riot-web/issues/8420
+.mx_GeneralButton {
+    @mixin mx_DialogButton;
+    display: inline;
+    margin: auto;
+}
+
+.mx_GeneralButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_linkButton {
     cursor: pointer;
     color: $accent-color;

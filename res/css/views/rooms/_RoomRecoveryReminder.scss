@@ -38,7 +38,6 @@ limitations under the License.
     margin: 0 10px;
 }
 
-.mx_RoomRecoveryReminder_button.mx_RoomRecoveryReminder_secondary {
-    @mixin mx_DialogButton_secondary;
-    background-color: transparent;
+.mx_RoomRecoveryReminder_secondary {
+    font-size: 90%;
 }

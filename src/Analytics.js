@@ -267,7 +267,7 @@ class Analytics {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
-            description: <div className="mx_UserSettings_analyticsModal">
+            description: <div className="mx_AnalyticsModal">
                 <div>
                     { _t('The information being sent to us to help make Riot.im better includes:') }
                 </div>

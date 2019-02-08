@@ -256,16 +256,16 @@ module.exports = React.createClass({
         if (this.state.remoteDomains.length) {
             remote_aliases_section = (
                 <div>
-                    <div className="mx_RoomSettings_aliasLabel">
+                    <div>
                         { _t("Remote addresses for this room:") }
                     </div>
-                    <div className="mx_RoomSettings_aliasesTable">
+                    <div>
                         { this.state.remoteDomains.map((domain, i) => {
                             return this.state.domainToAliases[domain].map(function(alias, j) {
                                 return (
-                                    <div className="mx_RoomSettings_aliasesTableRow" key={i + "_" + j}>
+                                    <div key={i + "_" + j}>
                                         <EditableText
-                                             className="mx_RoomSettings_alias mx_RoomSettings_editable"
+                                             className="mx_AliasSettings_alias mx_AliasSettings_editable"
                                              blurToCancel={false}
                                              editable={false}
                                              initialValue={alias} />

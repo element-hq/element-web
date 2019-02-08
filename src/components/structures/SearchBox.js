@@ -71,7 +71,7 @@ module.exports = React.createClass({
         function() {
             this.props.onSearch(this.refs.search.value);
         },
-        100,
+        500,
     ),
 
     _onKeyDown: function(ev) {
@@ -95,8 +95,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
-
+        // check for collapsed here and
+        // not at parent so we keep
+        // searchTerm in our state
+        // when collapsing and expanding
+        if (this.props.collapsed) {
+            return null;
+        }
         const clearButton = this.state.searchTerm.length > 0 ?
             (<AccessibleButton key="button"
                     className="mx_SearchBox_closeButton"

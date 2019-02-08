@@ -85,7 +85,7 @@ class MatrixClientPeg {
 
     /**
      * Replace this MatrixClientPeg's client with a client instance that has
-     * Home Server / Identity Server URLs and active credentials
+     * homeserver / identity server URLs and active credentials
      */
     replaceUsingCreds(creds: MatrixClientCreds) {
         this._currentClientCreds = creds;
@@ -135,14 +135,7 @@ class MatrixClientPeg {
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
-
-        const LAZY_LOADING_FEATURE = "feature_lazyloading";
-        if (SettingsStore.isFeatureEnabled(LAZY_LOADING_FEATURE)) {
-            const userId = this.matrixClient.credentials.userId;
-            if (phasedRollOutExpiredForUser(userId, LAZY_LOADING_FEATURE, Date.now())) {
-                opts.lazyLoadMembers = true;
-            }
-        }
+        opts.lazyLoadMembers = true;
 
         // Connect the matrix client to the dispatcher
         MatrixActionCreators.start(this.matrixClient);
@@ -164,14 +157,14 @@ class MatrixClientPeg {
     }
 
     /**
-     * Return the server name of the user's home server
-     * Throws an error if unable to deduce the home server name
+     * Return the server name of the user's homeserver
+     * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
      */
     getHomeServerName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
-            throw new Error("Failed to derive home server name from user ID!");
+            throw new Error("Failed to derive homeserver name from user ID!");
         }
         return matches[1];
     }

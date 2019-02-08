@@ -23,6 +23,47 @@ export const ALL_MESSAGES = 'all_messages';
 export const MENTIONS_ONLY = 'mentions_only';
 export const MUTE = 'mute';
 
+
+function _shouldShowNotifBadge(roomNotifState) {
+    const showBadgeInStates = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
+    return showBadgeInStates.indexOf(roomNotifState) > -1;
+}
+
+function _shouldShowMentionBadge(roomNotifState) {
+    return roomNotifState !== MUTE;
+}
+
+export function aggregateNotificationCount(rooms) {
+    return rooms.reduce((result, room, index) => {
+        const roomNotifState = getRoomNotifsState(room.roomId);
+        const highlight = room.getUnreadNotificationCount('highlight') > 0;
+        const notificationCount = room.getUnreadNotificationCount();
+
+        const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
+        const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+        const badges = notifBadges || mentionBadges;
+
+        if (badges) {
+            result.count += notificationCount;
+            if (highlight) {
+                result.highlight = true;
+            }
+        }
+        return result;
+    }, {count: 0, highlight: false});
+}
+
+export function getRoomHasBadge(room) {
+    const roomNotifState = getRoomNotifsState(room.roomId);
+    const highlight = room.getUnreadNotificationCount('highlight') > 0;
+    const notificationCount = room.getUnreadNotificationCount();
+
+    const notifBadges = notificationCount > 0 && _shouldShowNotifBadge(roomNotifState);
+    const mentionBadges = highlight && _shouldShowMentionBadge(roomNotifState);
+
+    return notifBadges || mentionBadges;
+}
+
 export function getRoomNotifsState(roomId) {
     if (MatrixClientPeg.get().isGuest()) return ALL_MESSAGES;
 

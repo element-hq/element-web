@@ -270,11 +270,27 @@ module.exports = React.createClass({
         this.validateField(FIELD_USERNAME, ev.type);
     },
 
+    /**
+     * A step is required if all flows include that step.
+     *
+     * @param {string} step A stage name to check
+     * @returns {boolean} Whether it is required
+     */
     _authStepIsRequired(step) {
-        // A step is required if no flow exists which does not include that step
-        // (Notwithstanding setups like either email or msisdn being required)
-        return !this.props.flows.some((flow) => {
-            return !flow.stages.includes(step);
+        return this.props.flows.every((flow) => {
+            return flow.stages.includes(step);
+        });
+    },
+
+    /**
+     * A step is used if any flows include that step.
+     *
+     * @param {string} step A stage name to check
+     * @returns {boolean} Whether it is used
+     */
+    _authStepIsUsed(step) {
+        return this.props.flows.some((flow) => {
+            return flow.stages.includes(step);
         });
     },
 
@@ -298,24 +314,28 @@ module.exports = React.createClass({
             </a>;
         }
 
-        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
-            _t("Email") :
-            _t("Email (optional)");
+        let emailSection;
+        if (this._authStepIsUsed('m.login.email.identity')) {
+            const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
+                _t("Email") :
+                _t("Email (optional)");
 
-        const emailSection = (
-            <div>
-                <input type="text" ref="email"
-                    autoFocus={true} placeholder={emailPlaceholder}
-                    defaultValue={this.props.defaultEmail}
-                    className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                    onBlur={this.onEmailBlur}
-                    value={this.state.email} />
-            </div>
-        );
+            emailSection = (
+                <div>
+                    <input type="text" ref="email"
+                        placeholder={emailPlaceholder}
+                        defaultValue={this.props.defaultEmail}
+                        className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
+                        onBlur={this.onEmailBlur}
+                        value={this.state.email} />
+                </div>
+            );
+        }
 
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
-        if (!SdkConfig.get().disable_3pid_login) {
+        if (threePidLogin && this._authStepIsUsed('m.login.msisdn')) {
             const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ?
                 _t("Phone") :
                 _t("Phone (optional)");
@@ -359,6 +379,7 @@ module.exports = React.createClass({
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
                         <input type="text" ref="username"
+                            autoFocus={true}
                             placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
                             className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                             onBlur={this.onUsernameBlur} />
@@ -379,7 +400,7 @@ module.exports = React.createClass({
                         { phoneSection }
                     </div>
                     {_t(
-                        "Use an email address to receover your account. Other users " +
+                        "Use an email address to recover your account. Other users " +
                         "can invite you to rooms using your contact details.",
                     )}
                     { registerButton }

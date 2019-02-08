@@ -44,13 +44,11 @@ src/components/views/rooms/MessageComposer.js
 src/components/views/rooms/PinnedEventTile.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomPreviewBar.js
-src/components/views/rooms/RoomSettings.js
 src/components/views/rooms/SearchableEntityList.js
 src/components/views/rooms/SearchBar.js
 src/components/views/rooms/SearchResultTile.js
 src/components/views/rooms/TopUnreadMessagesBar.js
 src/components/views/rooms/UserTile.js
-src/components/views/settings/AddPhoneNumber.js
 src/components/views/settings/ChangeAvatar.js
 src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js

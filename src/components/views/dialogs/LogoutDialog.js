@@ -20,7 +20,6 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import SettingsStore from "../../../settings/SettingsStore";
 
 export default class LogoutDialog extends React.Component {
     constructor() {
@@ -79,86 +78,59 @@ export default class LogoutDialog extends React.Component {
     }
 
     render() {
-        let description;
-        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
-            description = <div>
-                <p>{_t(
-                    "When you log out, you'll lose your secure message history. To prevent " +
-                    "this, set up a recovery method.",
-                )}</p>
-                <p>{_t(
-                    "Alternatively, advanced users can also manually export encryption keys in " +
-                    "<a>Settings</a> before logging out.", {},
-                    {
-                        a: sub => <a href='#/settings' onClick={this._onSettingsLinkClick}>{sub}</a>,
-                    },
-                )}</p>
-            </div>;
-        } else {
-            description = <div>{_t(
-                "For security, logging out will delete any end-to-end " +
-                "encryption keys from this browser. If you want to be able " +
-                "to decrypt your conversation history from future Riot sessions, " +
-                "please export your room keys for safe-keeping.",
-            )}</div>;
-        }
+        const description = <div>
+            <p>{_t(
+                "When you log out, you'll lose your secure message history. To prevent " +
+                "this, set up a recovery method.",
+            )}</p>
+            <p>{_t(
+                "Alternatively, advanced users can also manually export encryption keys in " +
+                "<a>Settings</a> before logging out.", {},
+                {
+                    a: sub => <a href='#/settings' onClick={this._onSettingsLinkClick}>{sub}</a>,
+                },
+            )}</p>
+        </div>;
 
-        if (SettingsStore.isFeatureEnabled("feature_keybackup")) {
-            if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
-                const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-                const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-                // Not quite a standard question dialog as the primary button cancels
-                // the action and does something else instead, whilst non-default button
-                // confirms the action.
-                return (<BaseDialog
-                    title={_t("Warning!")}
-                    contentId='mx_Dialog_content'
+        if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            // Not quite a standard question dialog as the primary button cancels
+            // the action and does something else instead, whilst non-default button
+            // confirms the action.
+            return (<BaseDialog
+                title={_t("Warning!")}
+                contentId='mx_Dialog_content'
+                hasCancel={false}
+                onFinsihed={this._onFinished}
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { description }
+                </div>
+                <DialogButtons primaryButton={_t('Set a Recovery Method')}
                     hasCancel={false}
-                    onFinsihed={this._onFinished}
+                    onPrimaryButtonClick={this._onSetRecoveryMethodClick}
+                    focus={true}
                 >
-                    <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                        { description }
-                    </div>
-                    <DialogButtons primaryButton={_t('Set a Recovery Method')}
-                        hasCancel={false}
-                        onPrimaryButtonClick={this._onSetRecoveryMethodClick}
-                        focus={true}
-                    >
-                        <button onClick={this._onLogoutConfirm}>
-                            {_t("I understand, log out without")}
-                        </button>
-                    </DialogButtons>
-                </BaseDialog>);
-            } else {
-                const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
-                return (<QuestionDialog
-                    hasCancelButton={true}
-                    title={_t("Sign out")}
-                    // TODO: This is made up by me and would need to also mention verifying
-                    // once you can restorew a backup by verifying a device
-                    description={_t(
-                        "When signing in again, you can access encrypted chat history by " +
-                        "restoring your key backup. You'll need your recovery passphrase " +
-                        "or, if you didn't set a recovery passphrase, your recovery key " +
-                        "(that you downloaded).",
-                    )}
-                    button={_t("Sign out")}
-                    onFinished={this._onFinished}
-                />);
-            }
+                    <button onClick={this._onLogoutConfirm}>
+                        {_t("I understand, log out without")}
+                    </button>
+                </DialogButtons>
+            </BaseDialog>);
         } else {
             const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
             return (<QuestionDialog
                 hasCancelButton={true}
                 title={_t("Sign out")}
-                description={description}
+                // TODO: This is made up by me and would need to also mention verifying
+                // once you can restore a backup by verifying a device
+                description={_t(
+                    "When signing in again, you can access encrypted chat history by " +
+                    "restoring your key backup. You'll need your recovery passphrase " +
+                    "or, if you didn't set a recovery passphrase, your recovery key " +
+                    "(that you downloaded).",
+                )}
                 button={_t("Sign out")}
-                extraButtons={[
-                    (<button key="export" className="mx_Dialog_primary"
-                            onClick={this._onExportE2eKeysClicked}>
-                       { _t("Export E2E room keys") }
-                    </button>),
-                ]}
                 onFinished={this._onFinished}
             />);
         }

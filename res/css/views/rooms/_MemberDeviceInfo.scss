@@ -20,6 +20,25 @@ limitations under the License.
     align-items: start;
 }
 
+.mx_MemberDeviceInfo_icon {
+    margin-top: 4px;
+    width: 12px;
+    height: 12px;
+    mask-repeat: no-repeat;
+}
+.mx_MemberDeviceInfo_icon_blacklisted {
+    mask-image: url('$(res)/img/feather-icons/e2e/blacklisted.svg');
+    background-color: $warning-color;
+}
+.mx_MemberDeviceInfo_icon_verified {
+    mask-image: url('$(res)/img/feather-icons/e2e/verified.svg');
+    background-color: $accent-color;
+}
+.mx_MemberDeviceInfo_icon_unverified {
+    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    background-color: $warning-color;
+}
+
 .mx_MemberDeviceInfo > .mx_DeviceVerifyButtons {
     display: flex;
     flex-direction: column;

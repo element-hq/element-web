@@ -59,10 +59,15 @@ limitations under the License.
     color: $accent-color;
 }
 
-.mx_UserSettings_devicesTable td {
+.mx_UserNotifSettings_devicesTable td {
     padding-left: 20px;
     padding-right: 20px;
 }
-.mx_UserSettings_devicesTable_nodevices {
-    font-style: italic;
+
+.mx_UserNotifSettings_notifTable {
+    display: table;
+}
+
+.mx_UserNotifSettings_notifTable .mx_Spinner {
+    position: absolute;
 }

@@ -24,10 +24,7 @@ const Modal = require('../../Modal');
 const sdk = require('../../index');
 const dis = require('../../dispatcher');
 
-const linkify = require('linkifyjs');
-const linkifyString = require('linkifyjs/string');
-const linkifyMatrix = require('../../linkify-matrix');
-const sanitizeHtml = require('sanitize-html');
+import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import Promise from 'bluebird';
 
 import { _t } from '../../languageHandler';
@@ -36,8 +33,6 @@ import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/Dire
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
-
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
@@ -96,9 +91,9 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
-                title: _t('Failed to get protocol list from Home Server'),
-                description: _t('The Home Server may be too old to support third party networks'),
+            Modal.createTrackedDialog('Failed to get protocol list from homeserver', '', ErrorDialog, {
+                title: _t('Failed to get protocol list from homeserver'),
+                description: _t('The homeserver may be too old to support third party networks'),
             });
         });
 
@@ -438,7 +433,7 @@ module.exports = React.createClass({
             if (topic.length > MAX_TOPIC_LENGTH) {
                 topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
             }
-            topic = linkifyString(sanitizeHtml(topic));
+            topic = linkifyAndSanitizeHtml(topic);
 
             rows.push(
                 <tr key={ rooms[i].room_id }

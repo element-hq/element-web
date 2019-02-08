@@ -127,46 +127,6 @@ const RoomSubList = React.createClass({
         });
     },
 
-    _shouldShowNotifBadge: function(roomNotifState) {
-        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
-        return showBadgeInStates.indexOf(roomNotifState) > -1;
-    },
-
-    _shouldShowMentionBadge: function(roomNotifState) {
-        return roomNotifState !== RoomNotifs.MUTE;
-    },
-
-    /**
-     * Total up all the notification counts from the rooms
-     *
-     * @returns {Array} The array takes the form [total, highlight] where highlight is a bool
-     */
-    roomNotificationCount: function() {
-        const self = this;
-
-        if (this.props.isInvite) {
-            return [0, true];
-        }
-
-        return this.props.list.reduce(function(result, room, index) {
-            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            const highlight = room.getUnreadNotificationCount('highlight') > 0;
-            const notificationCount = room.getUnreadNotificationCount();
-
-            const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
-            const mentionBadges = highlight && self._shouldShowMentionBadge(roomNotifState);
-            const badges = notifBadges || mentionBadges;
-
-            if (badges) {
-                result[0] += notificationCount;
-                if (highlight) {
-                    result[1] = true;
-                }
-            }
-            return result;
-        }, [0, false]);
-    },
-
     _updateSubListCount: function() {
         // Force an update by setting the state to the current state
         // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
@@ -197,22 +157,12 @@ const RoomSubList = React.createClass({
         // prevent the roomsublist collapsing
         e.preventDefault();
         e.stopPropagation();
-        // find first room which has notifications and switch to it
-        for (const room of this.props.list) {
-            const roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            const highlight = room.getUnreadNotificationCount('highlight') > 0;
-            const notificationCount = room.getUnreadNotificationCount();
-
-            const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge(roomNotifState);
-            const mentionBadges = highlight && this._shouldShowMentionBadge(roomNotifState);
-
-            if (notifBadges || mentionBadges) {
-                dis.dispatch({
-                    action: 'view_room',
-                    room_id: room.roomId,
-                });
-                return;
-            }
+        const room = this.props.list.find(room => RoomNotifs.getRoomHasBadge(room));
+        if (room) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId,
+            });
         }
     },
 
@@ -240,9 +190,11 @@ const RoomSubList = React.createClass({
 
     _getHeaderJsx: function(isCollapsed) {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const subListNotifications = this.roomNotificationCount();
-        const subListNotifCount = subListNotifications[0];
-        const subListNotifHighlight = subListNotifications[1];
+        const subListNotifications = !this.props.isInvite ?
+            RoomNotifs.aggregateNotificationCount(this.props.list) :
+            {count: 0, highlight: true};
+        const subListNotifCount = subListNotifications.count;
+        const subListNotifHighlight = subListNotifications.highlight;
 
         let badge;
         if (!this.props.collapsed) {

@@ -26,7 +26,6 @@ import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import { AutoDiscovery } from "matrix-js-sdk";
-import * as ServerType from '../../views/auth/ServerTypeSelector';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -37,8 +36,8 @@ const PHASE_SERVER_DETAILS = 0;
 // Show the appropriate login flow(s) for the server
 const PHASE_LOGIN = 1;
 
-// Disable phases for now, pending UX discussion on WK discovery
-const PHASES_ENABLED = false;
+// Enable phases for login
+const PHASES_ENABLED = true;
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -63,7 +62,7 @@ module.exports = React.createClass({
         defaultIsUrl: PropTypes.string,
         // Secondary HS which we try to log into if the user is using
         // the default HS but login fails. Useful for migrating to a
-        // different home server without confusing users.
+        // different homeserver without confusing users.
         fallbackHsUrl: PropTypes.string,
 
         // An error passed along from higher up explaining that something
@@ -77,7 +76,6 @@ module.exports = React.createClass({
 
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: PropTypes.func,
-        onCancelClick: PropTypes.func,
         onServerConfigChange: PropTypes.func.isRequired,
     },
 
@@ -87,9 +85,8 @@ module.exports = React.createClass({
             errorText: null,
             loginIncorrect: false,
 
-            serverType: null,
-            enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
-            enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
+            enteredHsUrl: this.props.customHsUrl || this.props.defaultHsUrl,
+            enteredIsUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
             // used for preserving form values when changing homeserver
             username: "",
@@ -97,13 +94,11 @@ module.exports = React.createClass({
             phoneNumber: "",
 
             // Phase of the overall login dialog.
-            phase: PHASE_SERVER_DETAILS,
+            phase: PHASE_LOGIN,
             // The current login flow, such as password, SSO, etc.
             currentFlow: "m.login.password",
 
             // .well-known discovery
-            discoveredHsUrl: "",
-            discoveredIsUrl: "",
             discoveryError: "",
             findingHomeserver: false,
         };
@@ -160,7 +155,7 @@ module.exports = React.createClass({
             // Some error strings only apply for logging in
             const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus === 400 && usingEmail) {
-                errorText = _t('This Home Server does not support login using email address.');
+                errorText = _t('This homeserver does not support login using email address.');
             } else if (error.errcode == 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
                     error.data.limit_type,
@@ -241,7 +236,7 @@ module.exports = React.createClass({
         }, function(error) {
             let errorText;
             if (error.httpStatus === 403) {
-                errorText = _t("Guest access is disabled on this Home Server.");
+                errorText = _t("Guest access is disabled on this homeserver.");
             } else {
                 errorText = self._errorTextFromError(error);
             }
@@ -308,49 +303,16 @@ module.exports = React.createClass({
             errorText: null, // reset err messages
         };
         if (config.hsUrl !== undefined) {
-            newState.enteredHomeserverUrl = config.hsUrl;
+            newState.enteredHsUrl = config.hsUrl;
         }
         if (config.isUrl !== undefined) {
-            newState.enteredIdentityServerUrl = config.isUrl;
+            newState.enteredIsUrl = config.isUrl;
         }
 
         this.props.onServerConfigChange(config);
         this.setState(newState, function() {
             self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
-    },
-
-    onServerTypeChange(type) {
-        this.setState({
-            serverType: type,
-        });
-
-        // When changing server types, set the HS / IS URLs to reasonable defaults for the
-        // the new type.
-        switch (type) {
-            case ServerType.FREE: {
-                const { hsUrl, isUrl } = ServerType.TYPES.FREE;
-                this.onServerConfigChange({
-                    hsUrl,
-                    isUrl,
-                });
-                // Move directly to the login phase since the server details are fixed.
-                this.setState({
-                    phase: PHASE_LOGIN,
-                });
-                break;
-            }
-            case ServerType.PREMIUM:
-            case ServerType.ADVANCED:
-                this.onServerConfigChange({
-                    hsUrl: this.props.defaultHsUrl,
-                    isUrl: this.props.defaultIsUrl,
-                });
-                this.setState({
-                    phase: PHASE_SERVER_DETAILS,
-                });
-                break;
-        }
     },
 
     onRegisterClick: function(ev) {
@@ -377,43 +339,42 @@ module.exports = React.createClass({
     _tryWellKnownDiscovery: async function(serverName) {
         if (!serverName.trim()) {
             // Nothing to discover
-            this.setState({discoveryError: "", discoveredHsUrl: "", discoveredIsUrl: "", findingHomeserver: false});
+            this.setState({
+                discoveryError: "",
+                findingHomeserver: false,
+            });
             return;
         }
 
         this.setState({findingHomeserver: true});
         try {
             const discovery = await AutoDiscovery.findClientConfig(serverName);
+
             const state = discovery["m.homeserver"].state;
             if (state !== AutoDiscovery.SUCCESS && state !== AutoDiscovery.PROMPT) {
                 this.setState({
-                    discoveredHsUrl: "",
-                    discoveredIsUrl: "",
                     discoveryError: discovery["m.homeserver"].error,
                     findingHomeserver: false,
                 });
             } else if (state === AutoDiscovery.PROMPT) {
                 this.setState({
-                    discoveredHsUrl: "",
-                    discoveredIsUrl: "",
                     discoveryError: "",
                     findingHomeserver: false,
                 });
             } else if (state === AutoDiscovery.SUCCESS) {
                 this.setState({
-                    discoveredHsUrl: discovery["m.homeserver"].base_url,
-                    discoveredIsUrl:
-                        discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
-                            ? discovery["m.identity_server"].base_url
-                            : "",
                     discoveryError: "",
                     findingHomeserver: false,
+                });
+                this.onServerConfigChange({
+                    hsUrl: discovery["m.homeserver"].base_url,
+                    isUrl: discovery["m.identity_server"].state === AutoDiscovery.SUCCESS
+                        ? discovery["m.identity_server"].base_url
+                        : "",
                 });
             } else {
                 console.warn("Unknown state for m.homeserver in discovery response: ", discovery);
                 this.setState({
-                    discoveredHsUrl: "",
-                    discoveredIsUrl: "",
                     discoveryError: _t("Unknown failure discovering homeserver"),
                     findingHomeserver: false,
                 });
@@ -429,8 +390,8 @@ module.exports = React.createClass({
 
     _initLoginLogic: function(hsUrl, isUrl) {
         const self = this;
-        hsUrl = hsUrl || this.state.enteredHomeserverUrl;
-        isUrl = isUrl || this.state.enteredIdentityServerUrl;
+        hsUrl = hsUrl || this.state.enteredHsUrl;
+        isUrl = isUrl || this.state.enteredIsUrl;
 
         const fallbackHsUrl = hsUrl === this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
 
@@ -440,8 +401,8 @@ module.exports = React.createClass({
         this._loginLogic = loginLogic;
 
         this.setState({
-            enteredHomeserverUrl: hsUrl,
-            enteredIdentityServerUrl: isUrl,
+            enteredHsUrl: hsUrl,
+            enteredIsUrl: isUrl,
             busy: true,
             loginIncorrect: false,
         });
@@ -507,8 +468,8 @@ module.exports = React.createClass({
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
-                (this.state.enteredHomeserverUrl.startsWith("http:") ||
-                 !this.state.enteredHomeserverUrl.startsWith("http"))
+                (this.state.enteredHsUrl.startsWith("http:") ||
+                 !this.state.enteredHsUrl.startsWith("http"))
             ) {
                 errorText = <span>
                     { _t("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
@@ -532,7 +493,7 @@ module.exports = React.createClass({
                         {
                             'a': (sub) => {
                                 return <a target="_blank" rel="noopener"
-                                    href={this.state.enteredHomeserverUrl}
+                                    href={this.state.enteredHsUrl}
                                 >{ sub }</a>;
                             },
                         },
@@ -544,52 +505,26 @@ module.exports = React.createClass({
         return errorText;
     },
 
-    renderServerComponentForStep() {
-        const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
+    renderServerComponent() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        // TODO: May need to adjust the behavior of this config option
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        // If we're on a different phase, we only show the server type selector,
-        // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            return <div>
-                <ServerTypeSelector
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    onChange={this.onServerTypeChange}
-                />
-            </div>;
+            return null;
         }
 
-        let serverDetails = null;
-        switch (this.state.serverType) {
-            case ServerType.FREE:
-                break;
-            case ServerType.PREMIUM:
-                serverDetails = <ModularServerConfig
-                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={250}
-                />;
-                break;
-            case ServerType.ADVANCED:
-                serverDetails = <ServerConfig
-                    customHsUrl={this.state.discoveredHsUrl || this.props.customHsUrl}
-                    customIsUrl={this.state.discoveredIsUrl || this.props.customIsUrl}
-                    defaultHsUrl={this.props.defaultHsUrl}
-                    defaultIsUrl={this.props.defaultIsUrl}
-                    onServerConfigChange={this.onServerConfigChange}
-                    delayTimeMs={250}
-                />;
-                break;
-        }
+        const serverDetails = <ServerConfig
+            customHsUrl={this.state.enteredHsUrl}
+            customIsUrl={this.state.enteredIsUrl}
+            defaultHsUrl={this.props.defaultHsUrl}
+            defaultIsUrl={this.props.defaultIsUrl}
+            onServerConfigChange={this.onServerConfigChange}
+            delayTimeMs={250}
+        />;
 
         let nextButton = null;
         if (PHASES_ENABLED) {
@@ -601,10 +536,6 @@ module.exports = React.createClass({
         }
 
         return <div>
-            <ServerTypeSelector
-                defaultHsUrl={this.props.defaultHsUrl}
-                onChange={this.onServerTypeChange}
-            />
             {serverDetails}
             {nextButton}
         </div>;
@@ -633,13 +564,8 @@ module.exports = React.createClass({
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
         let onEditServerDetailsClick = null;
-        // If custom URLs are allowed and we haven't selected the Free server type, wire
-        // up the server details edit link.
-        if (
-            PHASES_ENABLED &&
-            !SdkConfig.get()['disable_custom_urls'] &&
-            this.state.serverType !== ServerType.FREE
-        ) {
+        // If custom URLs are allowed, wire up the server details edit link.
+        if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
             onEditServerDetailsClick = this.onEditServerDetailsClick;
         }
         return (
@@ -657,7 +583,7 @@ module.exports = React.createClass({
                onPhoneNumberBlur={this.onPhoneNumberBlur}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
-               hsUrl={this.state.enteredHomeserverUrl}
+               hsUrl={this.state.enteredHsUrl}
                disableSubmit={this.state.findingHomeserver}
                />
         );
@@ -708,11 +634,11 @@ module.exports = React.createClass({
                 <AuthHeader />
                 <AuthBody>
                     <h2>
-                        {_t('Sign in to your account')}
+                        {_t('Sign in')}
                         {loader}
                     </h2>
                     { errorTextSection }
-                    { this.renderServerComponentForStep() }
+                    { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
                     <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
                         { _t('Create account') }

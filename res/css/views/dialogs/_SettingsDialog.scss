@@ -15,56 +15,33 @@ limitations under the License.
 */
 
 .mx_SettingsDialog {
-  .mx_Dialog {
-    max-width: 784px; // 900px - 58px (left padding) - 58px (right padding)
-    width: 80%;
-    height: 80%;
-    border-radius: 4px;
+    .mx_Dialog {
+        max-width: 900px;
+        width: 80%;
+        height: 80%;
+        border-radius: 4px;
+        padding-top: 0;
+        padding-right: 0;
+        padding-left: 0;
 
-    .mx_TabbedView_tabLabels {
-      // Force the sidebar to be always visible, letting the rest of the content scroll
-      position: fixed;
-    }
+        .mx_TabbedView {
+            top: 65px;
+        }
 
-    .mx_TabbedView_tabPanel {
-      max-width: 485px;
-      margin-left: 206px; // 70px margin + 136px for the sidebar
-    }
+        .mx_TabbedView .mx_SettingsTab {
+            box-sizing: border-box;
+            min-width: 550px;
+            padding-right: 130px;
 
-    .mx_SettingsDialog_header {
-      font-size: 24px;
-      display: block;
-      text-align: center;
-      color: $dialog-title-fg-color;
-      margin-top: 16px;
-      margin-bottom: 24px;
-      padding: 0;
-    }
+            // Put some padding on the bottom to avoid the settings tab from
+            // colliding harshly with the dialog when scrolled down.
+            padding-bottom: 100px;
+        }
 
-    .mx_SettingsDialog_close {
-      position: absolute;
-      top: 16px;
-      right: 25px;
+        .mx_Dialog_title {
+            text-align: center;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
     }
-
-    .mx_SettingsDialog_closeIcon {
-      width: 16px;
-      height: 16px;
-      display: inline-block;
-    }
-
-    .mx_SettingsDialog_closeIcon:before {
-      mask: url('$(res)/img/feather-icons/cancel.svg');
-      background-color: $dialog-close-fg-color;
-      mask-repeat: no-repeat;
-      mask-size: 16px;
-      mask-position: center;
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-  }
 }

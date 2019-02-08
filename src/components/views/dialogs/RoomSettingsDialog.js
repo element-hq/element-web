@@ -19,45 +19,15 @@ import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/AdvancedRoomSettingsTab";
-import AccessibleButton from "../elements/AccessibleButton";
-import dis from '../../../dispatcher';
 import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
-
-// TODO: Ditch this whole component
-export class TempTab extends React.Component {
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-    };
-
-    componentDidMount(): void {
-        dis.dispatch({action: "open_old_room_settings"});
-        this.props.onClose();
-    }
-
-    render() {
-        return <div>Hello World</div>;
-    }
-}
+import sdk from "../../../index";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
-    };
-
-    componentWillMount(): void {
-        this.dispatcherRef = dis.register(this._onAction);
-    }
-
-    componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
-    }
-
-    _onAction = (payload) => {
-        if (payload.action !== 'close_room_settings') return;
-        this.props.onFinished();
     };
 
     _getTabs() {
@@ -83,26 +53,20 @@ export default class RoomSettingsDialog extends React.Component {
             "mx_RoomSettingsDialog_warningIcon",
             <AdvancedRoomSettingsTab roomId={this.props.roomId} />,
         ));
-        tabs.push(new Tab(
-            _td("Visit old settings"),
-            "mx_RoomSettingsDialog_warningIcon",
-            <TempTab onClose={this.props.onFinished} />,
-        ));
 
         return tabs;
     }
 
     render() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+
         return (
-            <div className="mx_RoomSettingsDialog">
-                <div className="mx_SettingsDialog_header">
-                    {_t("Settings")}
-                    <span className="mx_SettingsDialog_close">
-                        <AccessibleButton className="mx_SettingsDialog_closeIcon" onClick={this.props.onFinished} />
-                    </span>
+            <BaseDialog className='mx_RoomSettingsDialog' hasCancel={true}
+                        onFinished={this.props.onFinished} title={_t("Room Settings")}>
+                <div className='ms_SettingsDialog_content'>
+                    <TabbedView tabs={this._getTabs()} />
                 </div>
-                <TabbedView tabs={this._getTabs()} />
-            </div>
+            </BaseDialog>
         );
     }
 }

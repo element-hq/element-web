@@ -21,7 +21,6 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import LazyLoadingController from "./controllers/LazyLoadingController";
 import CustomStatusController from "./controllers/CustomStatusController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -93,12 +92,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_tabbed_settings": {
-        isFeature: true,
-        displayName: _td("Tabbed settings"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
@@ -106,28 +99,15 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_lazyloading": {
+    "feature_custom_tags": {
         isFeature: true,
-        displayName: _td("Increase performance by only loading room members on first view"),
-        supportedLevels: LEVELS_FEATURE,
-        controller: new LazyLoadingController(),
-        default: true,
-    },
-    "feature_keybackup": {
-        isFeature: true,
-        displayName: _td("Backup of encryption keys to server"),
+        displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_state_counters": {
         isFeature: true,
         displayName: _td("Render simple counters in room header"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_sas": {
-        isFeature: true,
-        displayName: _td("Two-way device verification using short text"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
