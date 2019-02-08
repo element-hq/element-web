@@ -37,5 +37,10 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Die benutzerdefinierten Server-Einstellungen kannst du verwenden, um dich auf anderen Matrix-Servern anzumelden, indem du eine abweichende Heimserver-URL eingibst.<br/>Somit ist es möglich, Riot mit einem bereits bestehendem Matrix-Benutzerkonto auf einem anderen Heimserver zu verwenden.<br/><br/>Außerdem kannst du einen benutzerdefinierten Identitätsserver eingeben. Allerdings kannst du in diesem Fall Benutzer nicht mehr per E-Mail-Adresse einladen und auch selbst nicht mehr per E-Mail-Adresse eingeladen werden.",
     "Co-ordination for Riot translators": "Koordination für Riot-Übersetzer",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kannst die erweiterte Serveroption nutzen um dich an einem anderen Matrixserver anzumelden, indem du eine andere Heimserver-URL angibst. Dies erlaubt dir, Riot mit einem existierenden Matrix-Konto auf einem anderen Heimserver zu nutzen.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kannst auch einen anderen Identitätsserver setzen. Dieser hat einen anderen Wissensstand als der Standardserver, weswegen es beim Einladen oder Eingeladen werden mittels E-Mail-Adresse Probleme geben kann."
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kannst auch einen anderen Identitätsserver setzen. Dieser hat einen anderen Wissensstand als der Standardserver, weswegen es beim Einladen oder Eingeladen werden mittels E-Mail-Adresse Probleme geben kann.",
+    "Sign In": "Anmelden",
+    "Create Account": "Konto erstellen",
+    "Need help?": "Braucht du Hilfe?",
+    "Explore rooms": "Räume erkunden",
+    "Room Directory": "Raumverzeichnis"
 }
