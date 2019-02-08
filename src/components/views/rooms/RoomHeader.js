@@ -209,10 +209,15 @@ module.exports = React.createClass({
         const topicElement =
             <div className="mx_RoomHeader_topic" ref="topic" title={topic} dir="auto">{ topic }</div>;
         const avatarSize = 28;
-        const roomAvatar = (
-            <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} oobData={this.props.oobData}
-                viewAvatarOnClick={true} />
-        );
+        let roomAvatar;
+        if (this.props.room) {
+            roomAvatar = (<RoomAvatar
+                room={this.props.room}
+                width={avatarSize}
+                height={avatarSize}
+                oobData={this.props.oobData}
+                viewAvatarOnClick={true} />);
+        }
 
         if (this.props.onSettingsClick) {
             settingsButton =
