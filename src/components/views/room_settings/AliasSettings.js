@@ -259,21 +259,13 @@ module.exports = React.createClass({
                     <div>
                         { _t("Remote addresses for this room:") }
                     </div>
-                    <div>
+                    <ul>
                         { this.state.remoteDomains.map((domain, i) => {
-                            return this.state.domainToAliases[domain].map(function(alias, j) {
-                                return (
-                                    <div key={i + "_" + j}>
-                                        <EditableText
-                                             className="mx_AliasSettings_alias mx_AliasSettings_editable"
-                                             blurToCancel={false}
-                                             editable={false}
-                                             initialValue={alias} />
-                                    </div>
-                                );
+                            return this.state.domainToAliases[domain].map((alias, j) => {
+                                return <li key={i + "_" + j}>{alias}</li>;
                             });
                         }) }
-                    </div>
+                    </ul>
                 </div>
             );
         }
