@@ -19,6 +19,8 @@ import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
 
+import { MatrixClient } from 'matrix-js-sdk';
+
 import { _t } from '../../../../languageHandler';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
@@ -185,7 +187,7 @@ export default React.createClass({
             title = _t("Error");
             content = _t("Unable to load backup status");
         } else if (this.state.restoreError) {
-            if (this.state.restoreError.errcode === MatrixClientPeg.get().RESTORE_BACKUP_ERROR_BAD_KEY) {
+            if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
                 if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
                     title = _t("Recovery Key Mismatch");
                     content = <div>
