@@ -28,19 +28,11 @@ export default class VerificationShowSas extends React.Component {
 
     constructor() {
         super();
-        this.state = {
-            sasVerified: false,
-        };
-    }
-
-    _onVerifiedStateChange = (newVal) => {
-        this.setState({sasVerified: newVal});
     }
 
     render() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const HexVerify = sdk.getComponent('views.elements.HexVerify');
-        return <div>
+        return <div className="mx_VerificationShowSas">
             <p>{_t(
                 "Verify this user by confirming the following number appears on their screen.",
             )}</p>
@@ -48,15 +40,11 @@ export default class VerificationShowSas extends React.Component {
                 "For maximum security, we recommend you do this in person or use another " +
                 "trusted means of communication.",
             )}</p>
-            <HexVerify text={this.props.sas}
-                onVerifiedStateChange={this._onVerifiedStateChange}
-            />
-            <p>{_t(
-                "To continue, click on each pair to confirm it's correct.",
-            )}</p>
+            <div className="mx_VerificationShowSas_sas">
+                {this.props.sas}
+            </div>
             <DialogButtons onPrimaryButtonClick={this.props.onDone}
                 primaryButton={_t("Continue")}
-                primaryDisabled={!this.state.sasVerified}
                 hasCancel={true}
                 onCancel={this.props.onCancel}
             />

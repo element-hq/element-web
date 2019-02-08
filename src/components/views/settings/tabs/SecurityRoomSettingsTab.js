@@ -27,8 +27,27 @@ export default class SecurityRoomSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
+    constructor() {
+        super();
+
+        this.state = {
+            joinRule: "invite",
+            guestAccess: "can_join",
+            history: "shared",
+            encrypted: false,
+        };
+    }
+
     componentWillMount(): void {
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
+
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const state = room.currentState;
+        const joinRule = state.getStateEvents("m.room.join_rules", "").getContent()['join_rule'];
+        const guestAccess = state.getStateEvents("m.room.guest_access", "").getContent()['guest_access'];
+        const history = state.getStateEvents("m.room.history_visibility", "").getContent()['history_visibility'];
+        const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
+        this.setState({joinRule, guestAccess, history, encrypted});
     }
 
     componentWillUnmount(): void {
@@ -46,19 +65,37 @@ export default class SecurityRoomSettingsTab extends React.Component {
     };
 
     _onEncryptionChange = (e) => {
+        const beforeEncrypted = this.state.encrypted;
+        this.setState({encrypted: true});
         MatrixClientPeg.get().sendStateEvent(
             this.props.roomId, "m.room.encryption",
             { algorithm: "m.megolm.v1.aes-sha2" },
-        );
+        ).catch((e) => {
+            console.error(e);
+            this.setState({encrypted: beforeEncrypted});
+        });
     };
 
     _fixGuestAccess = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
+        const joinRule = "invite";
+        const guestAccess = "can_join";
+
+        const beforeJoinRule = this.state.joinRule;
+        const beforeGuestAccess = this.state.guestAccess;
+        this.setState({joinRule, guestAccess});
+
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, "m.room.join_rules", {join_rule: "invite"}, "");
-        client.sendStateEvent(this.props.roomId, "m.room.guest_access", {guest_access: "can_join"}, "");
+        client.sendStateEvent(this.props.roomId, "m.room.join_rules", {join_rule: joinRule}, "").catch((e) => {
+            console.error(e);
+            this.setState({joinRule: beforeJoinRule});
+        });
+        client.sendStateEvent(this.props.roomId, "m.room.guest_access", {guest_access: guestAccess}, "").catch((e) => {
+            console.error(e);
+            this.setState({guestAccess: beforeGuestAccess});
+        });
     };
 
     _onRoomAccessRadioToggle = (ev) => {
@@ -92,24 +129,39 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 break;
         }
 
+        const beforeJoinRule = this.state.joinRule;
+        const beforeGuestAccess = this.state.guestAccess;
+        this.setState({joinRule, guestAccess});
+
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, "m.room.join_rules", {join_rule: joinRule}, "");
-        client.sendStateEvent(this.props.roomId, "m.room.guest_access", {guest_access: guestAccess}, "");
+        client.sendStateEvent(this.props.roomId, "m.room.join_rules", {join_rule: joinRule}, "").catch((e) => {
+            console.error(e);
+            this.setState({joinRule: beforeJoinRule});
+        });
+        client.sendStateEvent(this.props.roomId, "m.room.guest_access", {guest_access: guestAccess}, "").catch((e) => {
+            console.error(e);
+            this.setState({guestAccess: beforeGuestAccess});
+        });
     };
 
     _onHistoryRadioToggle = (ev) => {
+        const beforeHistory = this.state.history;
+        this.setState({history: ev.target.value});
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.history_visibility", {
             history_visibility: ev.target.value,
-        }, "");
+        }, "").catch((e) => {
+            console.error(e);
+            this.setState({history: beforeHistory});
+        });
     };
 
     _renderRoomAccess() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const joinRule = room.currentState.getStateEvents("m.room.join_rules", "").getContent()['join_rule'];
-        const guestAccess = room.currentState.getStateEvents("m.room.guest_access", "").getContent()['guest_access'];
+        const joinRule = this.state.joinRule;
+        const guestAccess = this.state.guestAccess;
         const aliasEvents = room.currentState.getStateEvents("m.room.aliases") || [];
-        const hasAliases = aliasEvents.includes((ev) => (ev.getContent().aliases || []).length);
+        const hasAliases = !!aliasEvents.find((ev) => (ev.getContent().aliases || []).length > 0);
 
         const canChangeAccess = room.currentState.mayClientSendStateEvent("m.room.join_rules", client)
             && room.currentState.mayClientSendStateEvent("m.room.guest_access", client);
@@ -170,9 +222,8 @@ export default class SecurityRoomSettingsTab extends React.Component {
 
     _renderHistory() {
         const client = MatrixClientPeg.get();
-        const room = client.getRoom(this.props.roomId);
-        const state = room.currentState;
-        const history = state.getStateEvents("m.room.history_visibility", "").getContent()['history_visibility'];
+        const history = this.state.history;
+        const state = client.getRoom(this.props.roomId).currentState;
         const canChangeHistory = state.mayClientSendStateEvent('m.room.history_visibility', client);
 
         return (
@@ -218,7 +269,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
 
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const isEncrypted = client.isRoomEncrypted(this.props.roomId);
+        const isEncrypted = this.state.encrypted;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent("m.room.encryption", client);
         const canEnableEncryption = !isEncrypted && hasEncryptionPermission;
 
