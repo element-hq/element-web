@@ -731,7 +731,7 @@ module.exports = React.createClass({
         ];
         const tagSubLists = Object.keys(this.state.lists)
             .filter((tagName) => {
-                return  (!this.state.customTags || this.state.customTags[tagName]) &&
+                return (!this.state.customTags || this.state.customTags[tagName]) &&
                     !tagName.match(STANDARD_TAGS_REGEX);
             }).map((tagName) => {
                 return {
