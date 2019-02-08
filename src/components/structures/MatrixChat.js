@@ -1193,7 +1193,7 @@ export default React.createClass({
                 room_id: localStorage.getItem('mx_last_room_id'),
             });
         } else {
-            if (MatrixClientPeg.get().isGuest) {
+            if (MatrixClientPeg.get().isGuest()) {
                 dis.dispatch({action: 'view_welcome_page'});
             } else {
                 dis.dispatch({action: 'view_home_page'});
