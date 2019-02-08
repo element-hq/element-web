@@ -18,9 +18,7 @@ import React from 'react';
 import {_t} from "../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
-const Modal = require("../../../../Modal");
 const sdk = require("../../../../index");
 
 export class LabsSettingToggle extends React.Component {
@@ -28,38 +26,7 @@ export class LabsSettingToggle extends React.Component {
         featureId: PropTypes.string.isRequired,
     };
 
-    async _onLazyLoadChanging(enabling) {
-        // don't prevent turning LL off when not supported
-        if (enabling) {
-            const supported = await MatrixClientPeg.get().doesServerSupportLazyLoading();
-            if (!supported) {
-                await new Promise((resolve) => {
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createDialog(QuestionDialog, {
-                        title: _t("Lazy loading members not supported"),
-                        description:
-                            <div>
-                                { _t("Lazy loading is not supported by your " +
-                                    "current homeserver.") }
-                            </div>,
-                        button: _t("OK"),
-                        onFinished: resolve,
-                    });
-                });
-                return false;
-            }
-        }
-        return true;
-    }
-
     _onChange = async (checked) => {
-        if (this.props.featureId === "feature_lazyloading") {
-            const confirmed = await this._onLazyLoadChanging(checked);
-            if (!confirmed) {
-                return;
-            }
-        }
-
         await SettingsStore.setFeatureEnabled(this.props.featureId, checked);
         this.forceUpdate();
     };

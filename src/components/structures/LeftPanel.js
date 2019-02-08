@@ -190,10 +190,13 @@ const LeftPanel = React.createClass({
 
         const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
         let tagPanelContainer;
+
+        const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+
         if (tagPanelEnabled) {
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
-                <CustomRoomTagPanel />
+                { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
                 <TagPanelButtons />
             </div>);
         }
