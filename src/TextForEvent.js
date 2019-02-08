@@ -143,7 +143,7 @@ function textForJoinRulesEvent(ev) {
             return _t('%(senderDisplayName)s made the room invite only.', {senderDisplayName});
         default:
             // The spec supports "knock" and "private", however nothing implements these.
-            return _t('%(senderDisplayName)s changed the join rules to %(rule)s', {
+            return _t('%(senderDisplayName)s changed the join rule to %(rule)s', {
                 senderDisplayName,
                 rule: ev.getContent().join_rule,
             });
