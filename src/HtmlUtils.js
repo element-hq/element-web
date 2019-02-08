@@ -68,8 +68,10 @@ export function containsEmoji(str) {
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
-function unicodeToImage(str) {
-    let replaceWith; let unicode; let alt; let short; let fname;
+function unicodeToImage(str, addAlt) {
+    if (addAlt === undefined) addAlt = true;
+
+    let replaceWith; let unicode; let short; let fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {
@@ -84,10 +86,14 @@ function unicodeToImage(str) {
             fname = emojione.emojioneList[short].fname;
 
             // depending on the settings, we'll either add the native unicode as the alt tag, otherwise the shortname
-            alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
             const title = mappedUnicode[unicode];
 
-            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            if (addAlt) {
+                const alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
+                replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            } else {
+                replaceWith = `<img class="mx_emojione" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
+            }
             return replaceWith;
         }
     });
@@ -508,9 +514,9 @@ export function bodyToHtml(content, highlights, opts={}) {
         <span className={className} dir="auto">{ strippedBody }</span>;
 }
 
-export function emojifyText(text) {
+export function emojifyText(text, addAlt) {
     return {
-        __html: unicodeToImage(escape(text)),
+        __html: unicodeToImage(escape(text), addAlt),
     };
 }
 
