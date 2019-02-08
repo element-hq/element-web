@@ -31,8 +31,8 @@ export class TopLeftMenu extends React.Component {
     hasHomePage() {
         const config = SdkConfig.get();
         const pagesConfig = config.pages;
-        if (pagesConfig) {
-            return !!pagesConfig.homeUrl;
+        if (pagesConfig && pagesConfig.homeUrl) {
+            return true;
         }
         // This is a deprecated config option for the home page
         // (despite the name, given we also now have a welcome

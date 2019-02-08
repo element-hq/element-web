@@ -25,7 +25,13 @@ export default class Welcome extends React.PureComponent {
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
 
         const pagesConfig = SdkConfig.get().pages;
-        const pageUrl = pagesConfig ? pagesConfig.welcomeUrl : 'welcome.html';
+        let pageUrl = null;
+        if (pagesConfig) {
+            pageUrl = pagesConfig.welcomeUrl;
+        }
+        if (!pageUrl) {
+            pageUrl = 'welcome.html';
+        }
 
         return (
             <AuthPage>
