@@ -27,7 +27,6 @@ export default class KeyBackupPanel extends React.PureComponent {
 
         this._startNewBackup = this._startNewBackup.bind(this);
         this._deleteBackup = this._deleteBackup.bind(this);
-        this._verifyDevice = this._verifyDevice.bind(this);
         this._onKeyBackupSessionsRemaining =
             this._onKeyBackupSessionsRemaining.bind(this);
         this._onKeyBackupStatus = this._onKeyBackupStatus.bind(this);
@@ -133,19 +132,6 @@ export default class KeyBackupPanel extends React.PureComponent {
         });
     }
 
-    _verifyDevice(e) {
-        const device = this.state.backupSigStatus.sigs[e.target.getAttribute('data-sigindex')].device;
-
-        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-        Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-            userId: MatrixClientPeg.get().credentials.userId,
-            device: device,
-            onFinished: () => {
-                this._loadBackupStatus();
-            },
-        });
-    }
-
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -163,9 +149,8 @@ export default class KeyBackupPanel extends React.PureComponent {
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
                 clientBackupStatus = _t("This device is using key backup");
             } else {
-                // XXX: display why and how to fix it
                 clientBackupStatus = _t(
-                    "This device is <b>not</b> using key backup", {},
+                    "This device is <b>not</b> using key backup. Restore the backup to start using it.", {},
                     {b: x => <b>{x}</b>},
                 );
             }
@@ -233,17 +218,8 @@ export default class KeyBackupPanel extends React.PureComponent {
                     );
                 }
 
-                let verifyButton;
-                if (sig.device && !sig.device.isVerified()) {
-                    verifyButton = <div><br /><AccessibleButton className="mx_GeneralButton"
-                            onClick={this._verifyDevice} data-sigindex={i}>
-                        { _t("Verify...") }
-                    </AccessibleButton></div>;
-                }
-
                 return <div key={i}>
                     {sigStatus}
-                    {verifyButton}
                 </div>;
             });
             if (this.state.backupSigStatus.sigs.length === 0) {
@@ -256,12 +232,15 @@ export default class KeyBackupPanel extends React.PureComponent {
             }
 
             return <div>
-                <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
-                <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
                 <div>{clientBackupStatus}</div>
-                {uploadStatus}
-                <div>{backupSigStatuses}</div>
-                <div>{trustedLocally}</div>
+                <details>
+                    <summary>{_t("Advanced")}</summary>
+                    <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
+                    <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
+                    {uploadStatus}
+                    <div>{backupSigStatuses}</div>
+                    <div>{trustedLocally}</div>
+                </details>
                 <p>
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         { _t("Restore backup") }
