@@ -1330,5 +1330,7 @@
     "Unrecognised address": "Nierozpoznany adres",
     "Short keyboard patterns are easy to guess": "Krótkie wzory klawiszowe są łatwe do odgadnięcia",
     "Enable Emoji suggestions while typing": "Włącz podpowiedzi Emoji podczas pisania",
-    "Show avatar changes": "Pokaż zmiany awatara"
+    "Show avatar changes": "Pokaż zmiany awatara",
+    "This room has no topic.": "Ten pokój nie ma tematu.",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s zaktualizował(a) ten pokój."
 }
