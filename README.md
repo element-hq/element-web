@@ -1,28 +1,27 @@
 Riot
 ====
 
-Riot (formerly known as Vector) is a Matrix web client built using the Matrix
-React SDK (https://github.com/matrix-org/matrix-react-sdk).
+Riot (formerly known as Vector) is a Matrix web client built using the [Matrix React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
 Getting Started
 ===============
 
-The easiest way to test Riot is to just use the hosted copy at
-https://riot.im/app.  The develop branch is continuously deployed by Jenkins at
-https://riot.im/develop for those who like living dangerously.
+The easiest way to test Riot is to just use the hosted copy at https://riot.im/app.
+The `develop` branch is continuously deployed by Jenkins at https://riot.im/develop
+for those who like living dangerously.
 
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the riot-x.x.x directory to an appropriate name
+1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot.asc
+at https://riot.im/packages/keys/riot.asc .
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -72,13 +71,13 @@ to build.
 1. If you're using the `develop` branch then it is recommended to set up a proper
    development environment ("Setting up a dev environment" below) however one can
    install the develop versions of the dependencies instead:
-   ```
+   ```bash
    scripts/fetch-develop.deps.sh
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
    manually update and rebuild them:
-   ```
+   ```bash
    cd matrix-js-sdk
    git pull
    npm install # re-run to pull in any new dependencies
@@ -101,11 +100,10 @@ to build.
    a version-specific directory containing all the files that need to go on your
    web server.
 
-Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `webapp`
-directory. The version of Riot will not appear in Settings without
-using the dist script. You can then mount the `webapp` directory on your
-webserver to actually serve up the app, which is entirely static content.
+Note that `npm run dist` is not supported on Windows, so Windows users can run `npm run build`,
+which will build all the necessary files into the `webapp` directory. The version of Riot
+will not appear in Settings without using the dist script. You can then mount the
+`webapp` directory on your webserver to actually serve up the app, which is entirely static content.
 
 config.json
 ===========
@@ -183,15 +181,15 @@ To run as a desktop app:
    `npm run build` instead of `npm run dist` (since we don't need the tarball).
 2. Install electron and run it:
 
-   ```
+   ```bash
    npm install electron
    npm run electron
    ```
 
 To build packages, use electron-builder. This is configured to output:
- * dmg + zip for macOS
- * exe + nupkg for Windows
- * deb for Linux
+ * `dmg` + `zip` for macOS
+ * `exe` + `nupkg` for Windows
+ * `deb` for Linux
 But this can be customised by editing the `build` section of package.json
 as per https://github.com/electron-userland/electron-builder/wiki/Options
 
@@ -199,7 +197,7 @@ See https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Bu
 for dependencies required for building packages for various platforms.
 
 The only platform that can build packages for all three platforms is macOS:
-```
+```bash
 brew install wine --without-x11
 brew install mono
 brew install gnu-tar
@@ -221,7 +219,7 @@ Other options for running as a desktop app:
  * https://github.com/krisak/vector-electron-desktop
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
-```
+```bash
 sudo npm install nativefier -g
 nativefier https://riot.im/app/
 ```
@@ -229,13 +227,13 @@ nativefier https://riot.im/app/
 Development
 ===========
 
-Before attempting to develop on Riot you **must** read the developer guide
-for `matrix-react-sdk` at https://github.com/matrix-org/matrix-react-sdk, which
+Before attempting to develop on Riot you **must** read the [developer guide
+for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk), which
 also defines the design, architecture and style for Riot too.
 
-You should also familiarise yourself with the "Here be Dragons" guide to the
-tame & not-so-tame dragons (gotchas) which exist in the codebase:
-https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM
+You should also familiarise yourself with the ["Here be Dragons" guide
+](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
+to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
 
 The idea of Riot is to be a relatively lightweight "skin" of customisations on
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
@@ -260,46 +258,57 @@ having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
-1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
-1. `pushd matrix-js-sdk`
-1. `git checkout develop`
-1. `npm install`
-1. `npm install source-map-loader`  # because webpack is made of fail (https://github.com/webpack/webpack/issues/1472)
-1. `popd`
+``` bash
+git clone https://github.com/matrix-org/matrix-js-sdk.git
+pushd matrix-js-sdk
+git checkout develop
+npm install
+npm install source-map-loader  # because webpack is made of fail
+# see https://github.com/webpack/webpack/issues/1472
+popd
+```
 
 Then similarly with `matrix-react-sdk`:
 
-1. `git clone https://github.com/matrix-org/matrix-react-sdk.git`
-1. `pushd matrix-react-sdk`
-1. `git checkout develop`
-1. `npm link ../matrix-js-sdk`
-1. `popd`
+```bash
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+pushd matrix-react-sdk
+git checkout develop
+npm link ../matrix-js-sdk
+popd
+```
 
 Finally, build and start Riot itself:
 
-1. `git clone https://github.com/vector-im/riot-web.git`
-1. `cd riot-web`
-1. `git checkout develop`
-1. `npm install`
-1. `npm link ../matrix-js-sdk`
-1. `npm link ../matrix-react-sdk`
-1. `npm start`
-1. Wait a few seconds for the initial build to finish; you should see something like:
-    ```
-    Hash: b0af76309dd56d7275c8
-    Version: webpack 1.12.14
-    Time: 14533ms
-             Asset     Size  Chunks             Chunk Names
-         bundle.js   4.2 MB       0  [emitted]  main
-        bundle.css  91.5 kB       0  [emitted]  main
-     bundle.js.map  5.29 MB       0  [emitted]  main
-    bundle.css.map   116 kB       0  [emitted]  main
-        + 1013 hidden modules
-    ```
+```bash
+git clone https://github.com/vector-im/riot-web.git
+cd riot-web
+git checkout develop
+npm install
+npm link ../matrix-js-sdk
+npm link ../matrix-react-sdk
+npm start
+```
+
+Wait a few seconds for the initial build to finish; you should see something like:
+```
+Hash: b0af76309dd56d7275c8
+Version: webpack 1.12.14
+Time: 14533ms
+         Asset     Size  Chunks             Chunk Names
+     bundle.js   4.2 MB       0  [emitted]  main
+    bundle.css  91.5 kB       0  [emitted]  main
+ bundle.js.map  5.29 MB       0  [emitted]  main
+bundle.css.map   116 kB       0  [emitted]  main
+    + 1013 hidden modules
+```
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
-1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
+
+Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
+
+___
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
