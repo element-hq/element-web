@@ -74,6 +74,7 @@ body.mx_scrollbar_nooverlay {
 // or fallback for webkit browsers
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: $scrollbar-track-color;
 }
 
