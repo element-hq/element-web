@@ -16,17 +16,13 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import sdk from 'matrix-react-sdk/lib/index';
 
-module.exports = React.createClass({
-    displayName: 'VectorAuthPage',
+export default class VectorAuthPage extends React.PureComponent {
+    static replaces = 'AuthPage'
 
-    statics: {
-        replaces: 'AuthPage',
-    },
-
-    render: function() {
+    render() {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
         const pageStyle = {
@@ -66,5 +62,5 @@ module.exports = React.createClass({
                 <AuthFooter />
             </div>
         );
-    },
-});
+    }
+}
