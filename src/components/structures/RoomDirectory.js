@@ -78,6 +78,11 @@ module.exports = React.createClass({
         this.protocols = null;
 
         this.setState({protocolsLoading: true});
+        if (!MatrixClientPeg.get()) {
+            // We may not have a client yet when invoked from welcome page
+            this.setState({protocolsLoading: false});
+            return;
+        }
         MatrixClientPeg.get().getThirdpartyProtocols().done((response) => {
             this.protocols = response;
             this.setState({protocolsLoading: false});
