@@ -22,20 +22,18 @@ import PropTypes from 'prop-types';
 
 const LOGO_URI = "themes/riot/img/logos/riot-im-logo-black-text.svg";
 
-module.exports = React.createClass({
-    displayName: 'VectorAuthHeaderLogo',
-    statics: {
-        replaces: 'AuthHeaderLogo',
-    },
-    propTypes: {
-        icon: PropTypes.string,
-    },
+export default class VectorAuthHeaderLogo extends React.PureComponent {
+    static replaces = 'AuthHeaderLogo'
 
-    render: function() {
+    static propTypes = {
+        icon: PropTypes.string,
+    }
+
+    render() {
         return (
             <div className="mx_AuthHeaderLogo">
                 <img src={LOGO_URI} alt="Riot" />
             </div>
         );
-    },
-});
+    }
+}
