@@ -157,6 +157,8 @@ limitations under the License.
     font-weight: 700 !important;
 
     .mx_RoomTile_name {
+        // Parent weighting won't apply to this because the above mx_RoomTile_name overrides.
+        font-weight: 700;
         color: $roomtile-selected-color;
     }
 }
