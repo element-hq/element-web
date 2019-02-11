@@ -397,8 +397,7 @@ describe('loading:', function() {
     });
 
     describe('Guest auto-registration:', function() {
-        // TODO: Repair this test in https://github.com/vector-im/riot-web/issues/8468
-        /* it('shows a welcome page by default', function(done) {
+        it('shows a welcome page by default', function(done) {
             loadApp();
 
             Promise.delay(1).then(() => {
@@ -426,10 +425,9 @@ describe('loading:', function() {
                     matrixChat, sdk.getComponent('auth.Welcome'));
                 expect(windowLocation.hash).toEqual("#/welcome");
             }).done(done, done);
-        }); */
+        });
 
-        // TODO: Repair this test in https://github.com/vector-im/riot-web/issues/8468
-        /* it('uses the default homeserver to register with', function(done) {
+        it('uses the default homeserver to register with', function(done) {
             loadApp();
 
             Promise.delay(1).then(() => {
@@ -453,15 +451,15 @@ describe('loading:', function() {
             }).then((req) => {
                 expect(req.path).toStartWith(DEFAULT_HS_URL);
 
-                // once the sync completes, we should have a home page
+                // once the sync completes, we should have a welcome page
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.EmbeddedPage'));
-                expect(windowLocation.hash).toEqual("#/home");
+                    matrixChat, sdk.getComponent('auth.Welcome'));
+                expect(windowLocation.hash).toEqual("#/welcome");
                 expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
                 expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
             }).done(done, done);
-        }); */
+        });
 
         it('shows a room view if we followed a room link', function(done) {
             loadApp({
@@ -530,15 +528,14 @@ describe('loading:', function() {
                 });
             });
 
-            // TODO: Repair this test in https://github.com/vector-im/riot-web/issues/8468
-            /* it('should give us a login page', function() {
+            it('should give us a login page', function() {
                 expect(windowLocation.hash).toEqual("#/login");
 
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.auth.Login'),
                 );
-            }); */
+            });
 
             /*
             // ILAG renders this obsolete. I think.
@@ -680,8 +677,6 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
 
     console.log(Date.now() + " Awaiting sync spinner: load complete.");
 
-    // state looks good, check the rendered output
-    assertAtSyncingSpinner(matrixChat);
     return Promise.resolve();
 }
 
