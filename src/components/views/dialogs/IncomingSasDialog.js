@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
@@ -37,9 +38,12 @@ export default class IncomingSasDialog extends React.Component {
         this.state = {
             phase: PHASE_START,
             sasVerified: false,
+            opponentProfile: null,
+            opponentProfileError: null,
         };
         this.props.verifier.on('show_sas', this._onVerifierShowSas);
         this.props.verifier.on('cancel', this._onVerifierCancel);
+        this._fetchOpponentProfile();
     }
 
     componentWillUnmount() {
@@ -47,6 +51,21 @@ export default class IncomingSasDialog extends React.Component {
             this.props.verifier.cancel('User cancel');
         }
         this.props.verifier.removeListener('show_sas', this._onVerifierShowSas);
+    }
+
+    async _fetchOpponentProfile() {
+        try {
+            const prof = await MatrixClientPeg.get().getProfileInfo(
+                this.props.verifier.userId,
+            );
+            this.setState({
+                opponentProfile: prof,
+            });
+        } catch (e) {
+            this.setState({
+                opponentProfileError: e,
+            });
+        }
     }
 
     _onFinished = () => {
@@ -93,10 +112,39 @@ export default class IncomingSasDialog extends React.Component {
 
     _renderPhaseStart() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        const Spinner = sdk.getComponent("views.elements.Spinner");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+
+        let profile;
+        if (this.state.opponentProfile) {
+            profile = <div className="mx_IncomingSasDialog_opponentProfile">
+                <BaseAvatar name={this.state.opponentProfile.displayname}
+                    idName={this.props.verifier.userId}
+                    url={MatrixClientPeg.get().mxcUrlToHttp(
+                        this.state.opponentProfile.avatar_url,
+                        Math.floor(48 * window.devicePixelRatio),
+                        Math.floor(48 * window.devicePixelRatio),
+                        'crop',
+                    )}
+                    width={48} height={48} resizeMethod='crop'
+                />
+                <h2>{this.state.opponentProfile.displayname}</h2>
+            </div>;
+        } else if (this.state.opponentProfileError) {
+            profile = <div>
+                <BaseAvatar name={this.props.verifier.userId.slice(1)}
+                    idName={this.props.verifier.userId}
+                    width={48} height={48}
+                />
+                <h2>{this.props.verifier.userId}</h2>
+            </div>;
+        } else {
+            profile = <Spinner />;
+        }
 
         return (
             <div>
-                <h2>{this.props.verifier.userId}</h2>
+                {profile}
                 <p>{_t(
                     "Verify this user to mark them as trusted. " +
                     "Trusting users gives you extra peace of mind when using " +
