@@ -1635,7 +1635,6 @@ module.exports = React.createClass({
         );
 
         const showRoomRecoveryReminder = (
-            SettingsStore.isFeatureEnabled("feature_keybackup") &&
             SettingsStore.getValue("showRoomRecoveryReminder") &&
             MatrixClientPeg.get().isRoomEncrypted(this.state.room.roomId) &&
             !MatrixClientPeg.get().getKeyBackupEnabled()

@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,22 +27,27 @@ import sdk from '../../index';
 import { MatrixClient } from 'matrix-js-sdk';
 import classnames from 'classnames';
 
-class HomePage extends React.Component {
-    static displayName = 'HomePage';
-
+export default class EmbeddedPage extends React.PureComponent {
     static propTypes = {
-        // URL to use as the iFrame src. Defaults to /home.html.
-        homePageUrl: PropTypes.string,
+        // URL to request embedded page content from
+        url: PropTypes.string,
+        // Class name prefix to apply for a given instance
+        className: PropTypes.string,
+        // Whether to wrap the page in a scrollbar
+        scrollbar: PropTypes.bool,
     };
 
     static contextTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient),
     };
 
-    state = {
-            iframeSrc: '',
+    constructor(props) {
+        super(props);
+
+        this.state = {
             page: '',
-    };
+        };
+    }
 
     translate(s) {
         // default implementation - skins may wish to extend this
@@ -51,22 +57,24 @@ class HomePage extends React.Component {
     componentWillMount() {
         this._unmounted = false;
 
-        // we use request() to inline the homepage into the react component
+        if (!this.props.url) {
+            return;
+        }
+
+        // we use request() to inline the page into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
 
-        const src = this.props.homePageUrl || 'home.html';
-
         request(
-            { method: "GET", url: src },
+            { method: "GET", url: this.props.url },
             (err, response, body) => {
                 if (this._unmounted) {
                     return;
                 }
 
                 if (err || response.status < 200 || response.status >= 300) {
-                    console.warn(`Error loading home page: ${err}`);
-                    this.setState({ page: _t("Couldn't load home page") });
+                    console.warn(`Error loading page: ${err}`);
+                    this.setState({ page: _t("Couldn't load page") });
                     return;
                 }
 
@@ -81,28 +89,28 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const isGuest = this.context.matrixClient.isGuest();
+        const client = this.context.matrixClient;
+        const isGuest = client ? client.isGuest() : true;
+        const className = this.props.className;
         const classes = classnames({
-            mx_HomePage: true,
-            mx_HomePage_guest: isGuest,
+            [className]: true,
+            [`${className}_guest`]: isGuest,
         });
 
-        if (this.state.iframeSrc) {
-            return (
-                <div className={classes}>
-                    <iframe src={ this.state.iframeSrc } />
-                </div>
-            );
-        } else {
+        const content = <div className={`${className}_body`}
+            dangerouslySetInnerHTML={{ __html: this.state.page }}
+        >
+        </div>;
+
+        if (this.props.scrollbar) {
             const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-            return (
-                <GeminiScrollbarWrapper autoshow={true} className={classes}>
-                    <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
-                    </div>
-                </GeminiScrollbarWrapper>
-            );
+            return <GeminiScrollbarWrapper autoshow={true} className={classes}>
+                {content}
+            </GeminiScrollbarWrapper>;
+        } else {
+            return <div className={classes}>
+                {content}
+            </div>;
         }
     }
 }
-
-module.exports = HomePage;

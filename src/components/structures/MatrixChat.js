@@ -60,27 +60,30 @@ const VIEWS = {
     // trying to re-animate a matrix client or register as a guest.
     LOADING: 0,
 
+    // we are showing the welcome view
+    WELCOME: 1,
+
     // we are showing the login view
-    LOGIN: 1,
+    LOGIN: 2,
 
     // we are showing the registration view
-    REGISTER: 2,
+    REGISTER: 3,
 
     // completeing the registration flow
-    POST_REGISTRATION: 3,
+    POST_REGISTRATION: 4,
 
     // showing the 'forgot password' view
-    FORGOT_PASSWORD: 4,
+    FORGOT_PASSWORD: 5,
 
     // we have valid matrix credentials (either via an explicit login, via the
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
     // process because we need to clear out indexeddb. While it is going on we
     // show a big spinner.
-    LOGGING_IN: 5,
+    LOGGING_IN: 6,
 
     // we are logged in with an active matrix client.
-    LOGGED_IN: 6,
+    LOGGED_IN: 7,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -354,8 +357,8 @@ export default React.createClass({
                 });
             }).then((loadedSession) => {
                 if (!loadedSession) {
-                    // fall back to showing the login screen
-                    dis.dispatch({action: "start_login"});
+                    // fall back to showing the welcome screen
+                    dis.dispatch({action: "view_welcome_page"});
                 }
             });
             // Note we don't catch errors from this: we catch everything within
@@ -605,6 +608,9 @@ export default React.createClass({
                 break;
             case 'view_group':
                 this._viewGroup(payload);
+                break;
+            case 'view_welcome_page':
+                this._viewWelcome();
                 break;
             case 'view_home_page':
                 this._viewHome();
@@ -881,6 +887,13 @@ export default React.createClass({
         this.notifyNewScreen('group/' + groupId);
     },
 
+    _viewWelcome() {
+        this.setStateForNewView({
+            view: VIEWS.WELCOME,
+        });
+        this.notifyNewScreen('welcome');
+    },
+
     _viewHome: function() {
         // The home page requires the "logged in" view, so we'll set that.
         this.setStateForNewView({
@@ -954,11 +967,11 @@ export default React.createClass({
             }
             dis.dispatch({
                 action: 'require_registration',
-                // If the set_mxid dialog is cancelled, view /home because if the browser
-                // was pointing at /user/@someone:domain?action=chat, the URL needs to be
-                // reset so that they can revisit /user/.. // (and trigger
+                // If the set_mxid dialog is cancelled, view /welcome because if the
+                // browser was pointing at /user/@someone:domain?action=chat, the URL
+                // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
-                go_home_on_cancel: true,
+                go_welcome_on_cancel: true,
             });
             return;
         }
@@ -1180,7 +1193,11 @@ export default React.createClass({
                 room_id: localStorage.getItem('mx_last_room_id'),
             });
         } else {
-            dis.dispatch({action: 'view_home_page'});
+            if (MatrixClientPeg.get().isGuest()) {
+                dis.dispatch({action: 'view_welcome_page'});
+            } else {
+                dis.dispatch({action: 'view_home_page'});
+            }
         }
     },
 
@@ -1465,6 +1482,10 @@ export default React.createClass({
         } else if (screen == 'settings') {
             dis.dispatch({
                 action: 'view_user_settings',
+            });
+        } else if (screen == 'welcome') {
+            dis.dispatch({
+                action: 'view_welcome_page',
             });
         } else if (screen == 'home') {
             dis.dispatch({
@@ -1847,6 +1868,11 @@ export default React.createClass({
                     </div>
                 );
             }
+        }
+
+        if (this.state.view === VIEWS.WELCOME) {
+            const Welcome = sdk.getComponent('auth.Welcome');
+            return <Welcome />;
         }
 
         if (this.state.view === VIEWS.REGISTER) {

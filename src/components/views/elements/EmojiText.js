@@ -20,12 +20,12 @@ import PropTypes from 'prop-types';
 import {emojifyText, containsEmoji} from '../../../HtmlUtils';
 
 export default function EmojiText(props) {
-    const {element, children, ...restProps} = props;
+    const {element, children, addAlt, ...restProps} = props;
 
     // fast path: simple regex to detect strings that don't contain
     // emoji and just return them
     if (containsEmoji(children)) {
-        restProps.dangerouslySetInnerHTML = emojifyText(children);
+        restProps.dangerouslySetInnerHTML = emojifyText(children, addAlt);
         return React.createElement(element, restProps);
     } else {
         return React.createElement(element, restProps, children);
@@ -39,4 +39,5 @@ EmojiText.propTypes = {
 
 EmojiText.defaultProps = {
     element: 'span',
+    addAlt: true,
 };

@@ -972,7 +972,7 @@
     "Code": "Kodea",
     "Debug Logs Submission": "Arazte-egunkarien bidalketak",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Akats bat bidali baduzu GitHub bidez, arazte-egunkariek arazoa aurkitzen lagundu gaitzakete. Arazte-egunkariek aplikazioak darabilen datuak dauzkate, zure erabiltzaile izena barne, bisitatu dituzun gelen ID-ak edo ezizenak eta beste erabiltzaileen izenak. Ez dute mezurik.",
-    "Submit debug logs": "Bidali arazte-txostenak",
+    "Submit debug logs": "Bidali arazte-egunkariak",
     "Opens the Developer Tools dialog": "Garatzailearen tresnen elkarrizketa-koadroa irekitzen du",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s)(e)k ikusita %(dateTime)s(e)tan",
     "Unable to join community": "Ezinekoa komunitatera elkartzea",
@@ -992,7 +992,7 @@
     "Couldn't load home page": "Ezin izan da hasiera orria kargatu",
     "Send Account Data": "Bidali kontuaren datuak",
     "All notifications are currently disabled for all targets.": "Une honetan jakinarazpen guztiak helburu guztietarako desgaituta daude.",
-    "Uploading report": "Igoera txostena",
+    "Uploading report": "Txostena igotzen",
     "Sunday": "Igandea",
     "Notification targets": "Jakinarazpenen helburuak",
     "Today": "Gaur",
@@ -1448,5 +1448,14 @@
     "A new recovery passphrase and key for Secure Messages has been detected.": "Mezu seguruentzako berreskuratze pasa-esaldi eta gako berri bat antzeman dira.",
     "Setting up Secure Messages on this device will re-encrypt this device's message history with the new recovery method.": "Mezu seguruak gailu honetan ezartzeak, gailu honen mezuen historiala birzifratuko du berreskuratze metodo berriarekin.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ez baduzu berreskuratze sistema berria ezarri, erasotzaile bat zure kontua atzitzen saiatzen egon daiteke. Aldatu zure kontuaren pasahitza eta ezarri berreskuratze metodo berria berehala ezarpenetan.",
-    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Zure mezu seguruen historiala ikusteko eta etorkizunean erabiltzen dituzun gailuetan ere mezuak ikusi ahal izango dituzula ziurtatzeko, ezarri mezuen berreskuratze segurua."
+    "To view your secure message history and ensure you can view new messages on future devices, set up Secure Message Recovery.": "Zure mezu seguruen historiala ikusteko eta etorkizunean erabiltzen dituzun gailuetan ere mezuak ikusi ahal izango dituzula ziurtatzeko, ezarri mezuen berreskuratze segurua.",
+    "Waiting for %(userId)s to accept...": "%(userId)s erabiltzaileak onartu dezan itxaroten...",
+    "Waiting for %(userId)s to confirm...": "%(userId)s erabiltzaileak berretsi dezan itxaroten...",
+    "User %(user_id)s may or may not exist": "%(user_id)s erabiltzailea existitu daiteke edo ez",
+    "Unrecognised address": "Helbide ezezaguna",
+    "Prompt before sending invites to potentially invalid matrix IDs": "Galdetu baliogabeak izan daitezkeen matrix ID-eetara gonbidapenak bidali aurretik",
+    "The following users may not exist": "Hurrengo erabiltzaileak agian ez dira existitzen",
+    "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Ezin izan dira behean zerrendatutako Matrix ID-een profilak, berdin gonbidatu nahi dituzu?",
+    "Invite anyway and never warn me again": "Gonbidatu edonola ere eta ez abisatu inoiz gehiago",
+    "Invite anyway": "Gonbidatu hala ere"
 }

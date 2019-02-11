@@ -112,7 +112,11 @@ limitations under the License.
 }
 
 .mx_Field select:disabled,
-.mx_Field input:disabled {
+.mx_Field select:disabled + label,
+.mx_Field input:disabled,
+.mx_Field input:disabled + label,
+.mx_Field textarea:disabled,
+.mx_Field textarea:disabled + label {
     background-color: $field-focused-label-bg-color;
     color: $greyed-fg-color;
 }

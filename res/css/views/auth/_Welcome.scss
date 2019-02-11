@@ -1,6 +1,4 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
 Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HomePage {
-    max-width: 960px;
-    width: 100%;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+.mx_Welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mx_Welcome .mx_AuthBody_language {
+    width: 120px;
+    margin-bottom: 10px;
 }

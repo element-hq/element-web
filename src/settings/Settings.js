@@ -105,21 +105,9 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_keybackup": {
-        isFeature: true,
-        displayName: _td("Backup of encryption keys to server"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_state_counters": {
         isFeature: true,
         displayName: _td("Render simple counters in room header"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_sas": {
-        isFeature: true,
-        displayName: _td("Two-way device verification using short text"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
