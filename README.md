@@ -130,6 +130,8 @@ For a good example, see https://riot.im/develop/config.json
 1. `branding`: Configures various branding and logo details, such as:
     1. `welcomeBackgroundUrl`: An image to use as a wallpaper outside the app
        during authentication flows
+    1. `authHeaderLogoUrl`: An logo image that is shown in the header during
+       authentication flows
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
