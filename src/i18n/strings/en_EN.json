@@ -1061,6 +1061,7 @@
     "Verify by comparing a short text string.": "Verify by comparing a short text string.",
     "Begin Verifying": "Begin Verifying",
     "Waiting for partner to accept...": "Waiting for partner to accept...",
+    "Nothing appearing? Not all clients support interactive verification yet. <button>Use legacy verification</button>.": "Nothing appearing? Not all clients support interactive verification yet. <button>Use legacy verification</button>.",
     "Waiting for %(userId)s to confirm...": "Waiting for %(userId)s to confirm...",
     "Use two-way text verification": "Use two-way text verification",
     "To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:": "To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:",
