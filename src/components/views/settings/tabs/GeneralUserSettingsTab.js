@@ -138,17 +138,14 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderThemeSection() {
-        // TODO: Re-enable theme selection once the themes actually work
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select" disabled={true}
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Light theme")}</option>
+                    <option value="dharma">{_t("Default theme")}</option>
                     <option value="dark">{_t("Dark theme")}</option>
-                    <option value="dharma">{_t("2018 theme")}</option>
-                    <option value="status">{_t("Status.im theme")}</option>
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
