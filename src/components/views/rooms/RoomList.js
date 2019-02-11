@@ -98,7 +98,7 @@ module.exports = React.createClass({
             // update overflow indicators
             this._checkSubListsOverflow();
             // don't store height for collapsed sublists
-            if(!this.collapsedState[key]) {
+            if (!this.collapsedState[key]) {
                 this.subListSizes[key] = size;
                 window.localStorage.setItem("mx_roomlist_sizes",
                     JSON.stringify(this.subListSizes));
