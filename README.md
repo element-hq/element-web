@@ -156,6 +156,13 @@ For a good example, see https://riot.im/develop/config.json
     1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
     1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
+1. `embeddedPages`: Configures the pages displayed in portions of Riot that
+   embed static files, such as:
+    1. `welcomeUrl`: Initial content shown on the outside of the app when not
+       logged in. Defaults to `welcome.html` supplied with Riot.
+    1. `homeUrl`: Content shown on the inside of the app when a specific room is
+       not selected. By default, no home page is configured. If one is set, a
+       button to access it will be shown in the top left menu.
 
 
 Note that `index.html` also has an og:image meta tag that is set to an image
