@@ -19,23 +19,26 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
-const LOGO_URI = "themes/riot/img/logos/riot-im-logo-black-text.svg";
+export default class VectorAuthHeaderLogo extends React.PureComponent {
+    static replaces = 'AuthHeaderLogo'
 
-module.exports = React.createClass({
-    displayName: 'VectorAuthHeaderLogo',
-    statics: {
-        replaces: 'AuthHeaderLogo',
-    },
-    propTypes: {
+    static propTypes = {
         icon: PropTypes.string,
-    },
+    }
 
-    render: function() {
+    render() {
+        const brandingConfig = SdkConfig.get().branding;
+        let logoUrl = "themes/riot/img/logos/riot-im-logo-black-text.svg";
+        if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
+            logoUrl = brandingConfig.authHeaderLogoUrl;
+        }
+
         return (
             <div className="mx_AuthHeaderLogo">
-                <img src={LOGO_URI} alt="Riot" />
+                <img src={logoUrl} alt="Riot" />
             </div>
         );
-    },
-});
+    }
+}
