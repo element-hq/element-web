@@ -35,5 +35,9 @@
     "Dev chat for the Dendrite dev team": "Czat deweloperów zespołu Dendrite",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix ma wiele, już działających pokoi, połączonych z istniejącymi sieciami, takimi jak Slack, IRC lub Gitter, a także wiele zupełnie niezależnych. Możesz przejrzeć je wszystkie w spisie pokoi!",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Możesz skorzystać z opcji niestandardowego serwera, aby zalogować się na inne serwery Matrix, podając inny adres URL serwera domowego.<br/>Pozwala to na używanie Riot z istniejącym kontem Matrix na innym serwerze domowym.<br/><br/>Możesz również ustawić niestandardowy serwer tożsamości, ale nie będziesz w stanie zapraszać użytkowników przez adres e-mail ani otrzymywać zaproszeń na adres e-mail.",
-    "Co-ordination for Riot translators": "Koordynacja tłumaczy Riot"
+    "Co-ordination for Riot translators": "Koordynacja tłumaczy Riot",
+    "Create Account": "Stwórz konto",
+    "Sign In": "Zaloguj",
+    "Need help?": "Potrzebujesz pomocy?",
+    "Room Directory": "Katalog pokojów"
 }
