@@ -819,6 +819,7 @@ export default React.createClass({
         this.focusComposer = true;
 
         const newState = {
+            view: VIEWS.LOGGED_IN,
             currentRoomId: roomInfo.room_id || null,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
@@ -1556,11 +1557,7 @@ export default React.createClass({
                 payload.room_id = roomString;
             }
 
-            // we can't view a room unless we're logged in
-            // (a guest account is fine)
-            if (this.state.view === VIEWS.LOGGED_IN) {
-                dis.dispatch(payload);
-            }
+            dis.dispatch(payload);
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
