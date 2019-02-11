@@ -202,7 +202,7 @@ export default class DeviceVerifyDialog extends React.Component {
                         onClick={this._onSwitchToLegacyClick}
                     >
                         {sub}
-                    </AccessibleButton>}
+                    </AccessibleButton>},
                 )}</p>
             </div>
         );
