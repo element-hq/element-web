@@ -60,9 +60,9 @@ export default class RoomBreadcrumbs extends React.Component {
         if (existingIdx !== -1) {
             rooms.splice(existingIdx, 1);
         }
-        rooms.push(room);
+        rooms.splice(0, 0, room);
         if (rooms.length > MAX_ROOMS) {
-            rooms.splice(0, rooms.length - MAX_ROOMS);
+            rooms.splice(MAX_ROOMS, rooms.length - MAX_ROOMS);
         }
         this.setState({rooms});
     }
@@ -79,6 +79,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 </AccessibleButton>
             );
         });
-        return (<div className="mx_RoomBreadcrumbs"><div>{ avatars }</div></div>);
+        return (<div className="mx_RoomBreadcrumbs">{ avatars }</div>);
     }
 }
