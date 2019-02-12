@@ -1,186 +1,188 @@
+// unified palette
+// try to use these colors when possible
+$bg-color: #181b21;
+$base-color: #15171b;
+$base-text-color: #edf3ff;
+$header-panel-bg-color: #181b21;
+$header-panel-border-color: #1c212b;
+$header-panel-text-primary-color: #a1b2d1;
+$header-panel-text-secondary-color: #c8c8cd;
+$text-primary-color: #edf3ff;
+$text-secondary-color: #a1b2d1;
+$search-bg-color: #22262e;
+$search-placeholder-color: #61708b;
+$room-highlight-color: #22262e;
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #212121;
-$primary-bg-color: #2d2d2d;
-
-// used for focusing form controls
-$focus-bg-color: #101010;
+$primary-fg-color: $text-primary-color;
+$primary-bg-color: $bg-color;
 
 // used for dialog box text
-$light-fg-color: #747474;
+$light-fg-color: $header-panel-text-secondary-color;
 
-// button UI (white-on-green in light skin)
-$accent-fg-color: $primary-bg-color;
-$accent-color: #76CFA6;
-$accent-color-alt: $accent-color;
-$accent-color-50pct: #76CFA67F;
+// used for focusing form controls
+$focus-bg-color: $room-highlight-color;
 
-$selection-fg-color: $primary-fg-color;
+// informational plinth
+$info-plinth-bg-color: $header-panel-bg-color;
+$info-plinth-fg-color: #888;
 
-$focus-brightness: 200%;
+$preview-bar-bg-color: $header-panel-bg-color;
 
-// red warning colour
-$warning-color: #ff0064;
-$warning-bg-color: #DF2A8B;
-$info-bg-color: #2A9EDF;
-
-// groups
-$info-plinth-bg-color: #454545;
-
-$other-user-pill-bg-color: rgba(255, 255, 255, 0.1);
-
-$preview-bar-bg-color: #333;
-
-// left-panel style muted accent color
-$secondary-accent-color: $primary-bg-color;
-$tertiary-accent-color: #454545;
-
-// stop the tinter trying to change the secondary accent color
-// by overriding the key to something untintable
-// XXX: this is a bit of a hack.
-#mx_theme_secondaryAccentColor {
-    color: #c0ffee ! important;
-}
-
-#mx_theme_tertiaryAccentColor {
-    color: #c0ffee ! important;
-}
-
-// used by RoomDirectory permissions
-$plinth-bg-color: #474747;
-
-// used by RoomDropTarget
-$droptarget-bg-color: rgba(45,45,45,0.5);
-
-// used by AddressSelector
-$selected-color: #000000;
+$tagpanel-bg-color: $base-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: #353535;
+$event-selected-color: $search-bg-color;
 
 // used for the hairline dividers in RoomView
-$primary-hairline-color: #474747;
+$primary-hairline-color: $header-panel-border-color;
 
 // used for the border of input text fields
-$input-border-color: #3a3a3a;
+$input-border-color: #e7e7e7;
+$input-darker-bg-color: $search-bg-color;
+$input-darker-fg-color: $search-placeholder-color;
+$input-lighter-bg-color: #f2f5f8;
+$input-lighter-fg-color: $input-darker-fg-color;
+$input-focused-border-color: #238cf5;
+$input-valid-border-color: $accent-color;
 
-$input-darker-bg-color: #c1c9d6;
-$input-darker-fg-color: #9fa9ba;
-$button-bg-color: #7ac9a1;
-$button-fg-color: white;
-// apart from login forms, which have stronger border
-$strong-input-border-color: #656565;
+$field-focused-label-bg-color: $bg-color;
 
-// used for UserSettings EditableText
-$input-underline-color: $primary-fg-color;
-$input-fg-color: $primary-fg-color;
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
 $scrollbar-track-color: transparent;
+
 // context menus
-$menu-border-color: rgba(187, 187, 187, 0.5);
-$menu-bg-color: #373737;
-$menu-selected-color: #f5f8fa;
+$menu-border-color: $header-panel-border-color;
+$menu-bg-color: $header-panel-bg-color;
+$menu-box-shadow-color: $menu-bg-color;
+$menu-selected-color: $room-highlight-color;
 
-$avatar-initial-color: #2d2d2d;
-$avatar-bg-color: #ffffff;
-$menu-selected-color: #f5f8fa;
+$avatar-initial-color: #ffffff;
+$avatar-bg-color: $bg-color;
 
-$h3-color: $primary-fg-color;
-
-$dialog-background-bg-color: #000;
+$dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
 
-$greyed-fg-color: #888;
-
-$neutral-badge-color: #888;
-
-$preview-widget-bar-color: $menu-bg-color;
-$preview-widget-fg-color: $greyed-fg-color;
-
-$blockquote-bar-color: #ddd;
-$blockquote-fg-color: #777;
-
 $settings-grey-fg-color: #a2a2a2;
+$settings-profile-placeholder-bg-color: #e7e7e7;
+$settings-profile-overlay-bg-color: #000;
+$settings-profile-overlay-placeholder-bg-color: transparent;
+$settings-profile-overlay-fg-color: #fff;
+$settings-profile-overlay-placeholder-fg-color: #454545;
+$settings-subsection-fg-color: $text-secondary-color;
 
-$voip-decline-color: #f48080;
-$voip-accept-color: #80f480;
+$topleftmenu-color: $text-primary-color;
+$roomheader-color: $text-primary-color;
+$roomheader-addroom-color: $header-panel-text-primary-color;
+$roomtopic-color: $text-secondary-color;
+$eventtile-meta-color: $roomtopic-color;
 
-$rte-bg-color: #353535;
-$rte-code-bg-color: #000;
+$roomtile-name-color: $header-panel-text-primary-color;
+$roomtile-selected-color: $text-primary-color;
+$roomtile-notified-color: $text-primary-color;
+$roomtile-selected-bg-color: $room-highlight-color;
+$roomtile-focused-bg-color: $room-highlight-color;
 
-$room-warning-bg-color: #2d2d2d;
+$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 
-// ********************
+$panel-divider-color: $header-panel-border-color;
 
-$roomtile-name-color: rgba(186, 186, 186, 0.8);
-$roomtile-selected-bg-color: #333;
-$roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
-
-$username-variant1-color: #1e7ddc;
-$username-variant2-color: #a756a8;
-$username-variant3-color: #7ac9a1;
-$username-variant4-color: #f2809d;
-$username-variant5-color: #ffc666;
-$username-variant6-color: #76ddd7;
-$username-variant7-color: #45529b;
-$username-variant8-color: #bfd251;
-
-$roomsublist-background: rgba(0, 0, 0, 0.2);
-$roomsublist-label-fg-color: $h3-color;
-$roomsublist-label-bg-color: $tertiary-accent-color;
-$roomsublist-chevron-color: $accent-color;
-
-$panel-divider-color: rgba(118, 207, 166, 0.2);
-
-// ********************
-
-$widget-menu-bar-bg-color: $tertiary-accent-color;
-
-// ********************
-
-// event tile lifecycle
-$event-encrypting-color: rgba(171, 221, 188, 0.4);
-$event-sending-color: #888;
-$event-notsent-color: #f44;
-
-// event redaction
-$event-redacted-fg-color: #606060;
-$event-redacted-border-color: #000000;
+$widget-menu-bar-bg-color: $search-bg-color;
 
 // event timestamp
-$event-timestamp-color: #acacac;
+$event-timestamp-color: $text-secondary-color;
 
-$edit-button-url: "$(res)/img/icon_context_message_dark.svg";
-$copy-button-url: "$(res)/img/icon_copy_message_dark.svg";
+// Tabbed views
+$tab-label-fg-color: $text-primary-color;
+$tab-label-active-fg-color: $text-primary-color;
+$tab-label-bg-color: transparent;
+$tab-label-active-bg-color: $accent-color;
+$tab-label-icon-bg-color: $text-primary-color;
+$tab-label-active-icon-bg-color: $text-primary-color;
 
-// e2e
-$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
-$e2e-unverified-color: #e8bf37;
-$e2e-warning-color: #ba6363;
+// Buttons
+$button-primary-fg-color: #ffffff;
+$button-primary-bg-color: $accent-color;
+$button-secondary-bg-color: transparent;
+$button-danger-fg-color: #ffffff;
+$button-danger-bg-color: #f56679;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
-/*** ImageView ***/
-$lightbox-bg-color: #454545;
-$lightbox-fg-color: #ffffff;
-$lightbox-border-color: #ffffff;
+$room-warning-bg-color: $header-panel-bg-color;
 
-$imagebody-giflabel: rgba(1, 1, 1, 0.7);
-$imagebody-giflabel-border: rgba(1, 1, 1, 0.2);
-$imagebody-giflabel-color: rgba(0, 0, 0, 1);
+/*** form elements ***/
 
-// unused?
-$progressbar-color: #000;
+// .mx_textinput is a container for a text input
+// + some other controls like buttons, ...
+// it has the appearance of a text box so the controls
+// appear to be part of the input
 
-// XXX: copypasted from _base in order to pick up the right FG color...
+.mx_Dialog, .mx_MatrixChat {
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        background-color: transparent;
+        color: $input-darker-fg-color;
+        border: 1px solid #c1c1c1;
+    }
+
+    .mx_textinput {
+        > input[type=text],
+        > input[type=search] {
+            color: $primary-fg-color;
+        }
+        input::placeholder {
+            color: $roomsublist-label-fg-color;
+        }
+    }
+}
+
+/*** panels ***/
+.dark-panel {
+    background-color: $primary-bg-color;
+}
+
+.dark-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-darker-fg-color;
+        background-color: $input-darker-bg-color;
+        border: none;
+    }
+}
+
+.light-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-lighter-fg-color;
+        background-color: $input-lighter-bg-color;
+        border: none;
+    }
+}
+
+.input[type=text]::-webkit-input-placeholder,
+.input[type=text]::-moz-placeholder,
+.input[type=search]::-webkit-input-placeholder,
+.input[type=search]::-moz-placeholder {
+    color: #a5aab2;
+}
+
+// ***** Mixins! *****
+
 @define-mixin mx_DialogButton {
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 36px;
+    border-radius: 4px;
     font-family: $font-family;
     font-size: 14px;
-    color: $accent-fg-color;
-    background-color: $accent-color;
+    color: $button-fg-color;
+    background-color: $button-bg-color;
     width: auto;
     padding: 7px;
     padding-left: 1.5em;
@@ -190,50 +192,15 @@ $progressbar-color: #000;
     outline: none;
 }
 
+@define-mixin mx_DialogButton_danger {
+    background-color: $accent-color;
+}
+
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
-    background-color: $accent-fg-color;
+    background-color: $button-secondary-bg-color;
 }
 
-// Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
-// better match the theme.  Typically applied to dark grey 'off' buttons or
-// light grey 'on' buttons.
-.mx_filterFlipColor {
-    filter: invert(1);
-}
-
-.gm-scrollbar .thumb {
-    filter: invert(1);
-}
-
-// markdown overrides:
-.mx_EventTile_content .markdown-body pre:hover {
-    border-color: #808080 !important; // inverted due to rules below
-}
-.mx_EventTile_content .markdown-body {
-    pre, code {
-        filter: invert(1);
-    }
-
-    pre code {
-        filter: none;
-    }
-
-    table {
-        tr {
-            background-color: #000000;
-        }
-
-        tr:nth-child(2n) {
-            background-color: #080808;
-        }
-    }
-}
-
-// Add a line to the right side of the left panel to distinguish it from the middle panel
-.mx_LeftPanel {
-    border-right: 1px solid $tertiary-accent-color;
-}

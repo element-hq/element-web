@@ -96,6 +96,7 @@ $scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: #ebedf8;
 $menu-bg-color: #fff;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
 $menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #ffffff;
@@ -218,8 +219,7 @@ $tab-label-active-icon-bg-color: #ffffff;
 // Buttons
 $button-primary-fg-color: #ffffff;
 $button-primary-bg-color: $accent-color;
-$button-primary-disabled-fg-color: #ffffff;
-$button-primary-disabled-bg-color: #bce4d0;
+$button-secondary-bg-color: $accent-fg-color;
 $button-danger-fg-color: #ffffff;
 $button-danger-bg-color: #f56679;
 $button-danger-disabled-fg-color: #ffffff;
@@ -391,5 +391,5 @@ textarea::placeholder {
     font-weight: 600;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
-    background-color: $accent-fg-color;
+    background-color: $button-secondary-bg-color;
 }
