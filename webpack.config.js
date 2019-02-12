@@ -18,7 +18,6 @@ module.exports = {
         // CSS themes
         "theme-dharma": "./node_modules/matrix-react-sdk/res/themes/dharma/css/dharma.scss",
         "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-        //"theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
         rules: [
