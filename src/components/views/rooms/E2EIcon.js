@@ -36,7 +36,10 @@ export default function(props) {
             _t("All devices for this user are trusted") :
             _t("All devices in this encrypted room are trusted");
     }
-    return (<AccessibleButton onClick={props.onClick}>
-        <div className={e2eIconClasses} title={e2eTitle} />
-    </AccessibleButton>);
+    const icon = (<div className={e2eIconClasses} title={e2eTitle} />);
+    if (props.onClick) {
+        return (<AccessibleButton onClick={props.onClick}>{ icon }</AccessibleButton>);
+    } else {
+        return icon;
+    }
 }
