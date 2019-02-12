@@ -271,9 +271,9 @@ $authpage-body-color: #61708b;
             border: none;
             flex: 1;
             color: $primary-fg-color;
-        },
+        }
         input::placeholder {
-          color: $roomsublist-label-fg-color;
+            color: $roomsublist-label-fg-color;
         }
     }
 }
