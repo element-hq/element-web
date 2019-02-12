@@ -163,7 +163,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t(
                         "This device is <b>not backing up your keys</b>.", {},
-                        {b: x => <b>{x}</b>},
+                        {b: sub => <b>{sub}</b>},
                     )}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
                 </div>;
@@ -270,7 +270,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 <div>
                     <p>{_t(
                         "Your keys are <b>not being backed up from this device</b>.", {},
-                        {b: x => <b>{x}</b>},
+                        {b: sub => <b>{sub}</b>},
                     )}</p>
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
