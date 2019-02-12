@@ -25,5 +25,8 @@
     "Running Matrix services": "Kjør Matrix servicer",
     "Community-run support for Synapse": "Samfunnsholdt hjelpetjeneste for Synapse",
     "Admin support for Dendrite": "Administrator hjelp for Dendrite",
-    "Announcements about Synapse releases": "Kunngjøring om Synapse utgivelser"
+    "Announcements about Synapse releases": "Kunngjøring om Synapse utgivelser",
+    "Sign In": "Logg inn",
+    "Create Account": "Lag konto",
+    "Need help?": "Trenger du hjelp?"
 }
