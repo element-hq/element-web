@@ -39,36 +39,8 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
     }
 
     onSetupClick = async () => {
-        // TODO: Should change to a restore key backup flow that checks the
-        // recovery passphrase while at the same time also cross-signing the
-        // device as well in a single flow.  Since we don't have that yet, we'll
-        // look for an unverified device and verify it.  Note that this means
-        // we won't restore keys yet; instead we'll only trust the backup for
-        // sending our own new keys to it.
-        let backupSigStatus;
-        try {
-            backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(this.props.newVersionInfo);
-        } catch (e) {
-            console.log("Unable to fetch key backup status", e);
-            return;
-        }
-
-        let unverifiedDevice;
-        for (const sig of backupSigStatus.sigs) {
-            if (!sig.device.isVerified()) {
-                unverifiedDevice = sig.device;
-                break;
-            }
-        }
-        if (!unverifiedDevice) {
-            console.log("Unable to find a device to verify.");
-            return;
-        }
-
-        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-        Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
-            userId: MatrixClientPeg.get().credentials.userId,
-            device: unverifiedDevice,
+        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
             onFinished: this.props.onFinished,
         });
     }
@@ -111,11 +83,6 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
         } else {
             content = <div>
                 {newMethodDetected}
-                <p>{_t(
-                    "Setting up Secure Messages on this device " +
-                    "will re-encrypt this device's message history with " +
-                    "the new recovery method.",
-                )}</p>
                 {hackWarning}
                 <DialogButtons
                     primaryButton={_t("Set up Secure Messages")}
