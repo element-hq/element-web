@@ -216,12 +216,17 @@ const LeftPanel = React.createClass({
             onCleared={ this.onSearchCleared }
             collapsed={this.props.collapsed} />);
 
+        let breadcrumbs;
+        if (SettingsStore.isFeatureEnabled("feature_room_breadcrumbs")) {
+            breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
+        }
+
         return (
             <div className={containerClasses}>
                 { tagPanelContainer }
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
-                    <RoomBreadcrumbs collapsed={this.props.collapsed} />
+                    { breadcrumbs }
                     { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
