@@ -38,5 +38,17 @@ limitations under the License.
         height: 100%;
         background: linear-gradient(to right, rgba(242,245,248,0), rgba(242,245,248,1));
     }
+
+    .mx_RoomBreadcrumbs_animate {
+        margin-left: 0;
+        transition: transform 0.3s, width 0.3s;
+        width: 32px;
+        transform: scale(1);
+    }
+
+    .mx_RoomBreadcrumbs_preAnimate {
+        width: 0;
+        transform: scale(0);
+    }
 }
 

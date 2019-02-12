@@ -20,6 +20,7 @@ import dis from "../../../dispatcher";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
+import classNames from 'classnames';
 
 const MAX_ROOMS = 20;
 
@@ -40,6 +41,17 @@ export default class RoomBreadcrumbs extends React.Component {
         dis.unregister(this._dispatcherRef);
     }
 
+    componentDidUpdate() {
+        const rooms = this.state.rooms.slice();
+        if (rooms.length) {
+            const {room, animated} = rooms[0];
+            if (!animated) {
+                rooms[0] = {room, animated: true};
+                setTimeout(() => this.setState({rooms}), 0);
+            }
+        }
+    }
+
     onAction(payload) {
         switch (payload.action) {
             case 'view_room':
@@ -56,11 +68,11 @@ export default class RoomBreadcrumbs extends React.Component {
             return;
         }
         const rooms = this.state.rooms.slice();
-        const existingIdx = rooms.findIndex((r) => r.roomId === room.roomId);
+        const existingIdx = rooms.findIndex((r) => r.room.roomId === room.roomId);
         if (existingIdx !== -1) {
             rooms.splice(existingIdx, 1);
         }
-        rooms.splice(0, 0, room);
+        rooms.splice(0, 0, {room, animated: false});
         if (rooms.length > MAX_ROOMS) {
             rooms.splice(MAX_ROOMS, rooms.length - MAX_ROOMS);
         }
@@ -79,9 +91,15 @@ export default class RoomBreadcrumbs extends React.Component {
         if (this.props.collapsed) {
             return null;
         }
-        const avatars = this.state.rooms.map((room) => {
+        const rooms = this.state.rooms;
+        const avatars = rooms.map(({room, animated}, i) => {
+            const isFirst = i === 0;
+            const classes = classNames({
+                "mx_RoomBreadcrumbs_preAnimate": isFirst && !animated,
+                "mx_RoomBreadcrumbs_animate": isFirst,
+            });
             return (
-                <AccessibleButton key={room.roomId} title={room.name} onClick={() => this._viewRoom(room)}>
+                <AccessibleButton className={classes} key={room.roomId} title={room.name} onClick={() => this._viewRoom(room)}>
                     <RoomAvatar room={room} width={32} height={32} />
                 </AccessibleButton>
             );
