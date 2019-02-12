@@ -265,6 +265,10 @@ export default React.createClass({
 
         return <div>
             <p>{_t(
+                "<b>Warning</b>: you should only set up key backup from a trusted computer.", {},
+                { b: sub => <b>{sub}</b> },
+            )}</p>
+            <p>{_t(
                 "We'll store an encrypted copy of your keys on our server. " +
                 "Protect your backup with a passphrase to keep it secure.",
             )}</p>
