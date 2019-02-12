@@ -6,6 +6,12 @@
    Arial here. */
 $font-family: 'Nunito', Arial, Helvetica, Sans-Serif;
 
+// unified palette
+// try to use these colors when possible
+$accent-color: #03b381;
+$notice-primary-color: #ff4b55;
+$notice-secondary-color: #61708b;
+
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #454545;
 $primary-bg-color: #ffffff;
@@ -18,7 +24,6 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color: #7ac9a1;
 $accent-color-50pct: #92caad;
 $accent-color-alt: #238CF5;
 
@@ -35,8 +40,8 @@ $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // pinned events indicator
-$pinned-unread-color: #ff0064; // $warning-color
-$pinned-color: #888;
+$pinned-unread-color: $notice-primary-color;
+$pinned-color: $notice-secondary-color;
 
 // informational plinth
 $info-plinth-bg-color: #f7f7f7;
@@ -72,11 +77,11 @@ $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
 $input-focused-border-color: #238cf5;
-$input-valid-border-color: #7ac9a1;
+$input-valid-border-color: $accent-color;
 
 $field-focused-label-bg-color: #ffffff;
 
-$button-bg-color: #7ac9a1;
+$button-bg-color: $accent-color;
 $button-fg-color: white;
 
 // apart from login forms, which have stronger border
@@ -206,13 +211,13 @@ $lightbox-border-color: #ffffff;
 $tab-label-fg-color: #45474a;
 $tab-label-active-fg-color: #ffffff;
 $tab-label-bg-color: transparent;
-$tab-label-active-bg-color: #7ac9a1;
+$tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: #454545;
 $tab-label-active-icon-bg-color: #ffffff;
 
 // Buttons
 $button-primary-fg-color: #ffffff;
-$button-primary-bg-color: #7ac9a1;
+$button-primary-bg-color: $accent-color;
 $button-primary-disabled-fg-color: #ffffff;
 $button-primary-disabled-bg-color: #bce4d0;
 $button-danger-fg-color: #ffffff;
@@ -222,7 +227,7 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
 // Toggle switch
 $togglesw-off-color: #c1c9d6;
-$togglesw-on-color: #7ac9a1;
+$togglesw-on-color: $accent-color;
 $togglesw-ball-color: #fff;
 
 $progressbar-color: #000;
