@@ -139,7 +139,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                         "Securely back up your keys to avoid losing them. " +
                         "<a>Learn more.</a>", {},
                         {
-                            // We don't have this link yet: this will prevent the translators
+                            // TODO: We don't have this link yet: this will prevent the translators
                             // having to re-translate the string when we do.
                             a: sub => '',
                         },
