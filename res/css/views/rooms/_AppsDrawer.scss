@@ -14,6 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
+the tile title bar is 5 (top border) + 12 (title, buttons) + 5 (bottom padding) px = 22px
+the body is assumed to be 300px (assumed by at least the sticker pickerm, perhaps elsewhere),
+so the body height would be 300px - 22px (room for title bar) = 278px
+BUT! the sticker picker also assumes it's a little less high than that because the iframe
+for the sticker picker doesn't have any padding or margin on it's bottom.
+so subtracking another 5px, which brings us at 273px.
+*/
+$AppsDrawerBodyHeight: 273px;
+
 .mx_AppsDrawer {
     margin: 5px;
 }
@@ -83,7 +93,7 @@ limitations under the License.
 }
 
 .mx_AppTile_persistedWrapper {
-    height: 280px;
+    height: $AppsDrawerBodyHeight;
 }
 
 .mx_AppTile_mini .mx_AppTile_persistedWrapper {
@@ -189,7 +199,7 @@ limitations under the License.
 }
 
 .mx_AppTileBody{
-    height: 280px;
+    height: $AppsDrawerBodyHeight;
     width: 100%;
     overflow: hidden;
 }
@@ -208,7 +218,7 @@ limitations under the License.
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: 280px;
+    height: $AppsDrawerBodyHeight;
     overflow: hidden;
     border: none;
     padding: 0;
@@ -332,7 +342,7 @@ form.mx_Custom_Widget_Form div {
     align-items: center;
     font-weight: bold;
     position: relative;
-    height: 280px;
+    height: $AppsDrawerBodyHeight;
 }
 
 .mx_AppLoading .mx_Spinner {
