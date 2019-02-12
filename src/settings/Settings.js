@@ -232,7 +232,7 @@ export const SETTINGS = {
         invertedSettingName: 'TagPanel.disableTagPanel',
     },
     "theme": {
-        supportedLevels: ['config'],
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: "dharma",
         controller: new ThemeController(),
     },
