@@ -793,6 +793,7 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
         this._updateDMState();
         this._checkIfAlone(this.state.room);
+        this._updateE2EStatus(this.state.room);
     }, 500),
 
     _checkIfAlone: function(room) {
