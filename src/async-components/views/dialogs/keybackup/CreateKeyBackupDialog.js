@@ -240,7 +240,6 @@ export default React.createClass({
 
     _renderPhasePassPhrase: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let strengthMeter;
         let helpText;
