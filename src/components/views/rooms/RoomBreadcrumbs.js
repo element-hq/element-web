@@ -72,6 +72,13 @@ export default class RoomBreadcrumbs extends React.Component {
     }
 
     render() {
+        // check for collapsed here and
+        // not at parent so we keep
+        // rooms in our state
+        // when collapsing and expanding
+        if (this.props.collapsed) {
+            return null;
+        }
         const avatars = this.state.rooms.map((room) => {
             return (
                 <AccessibleButton key={room.roomId} title={room.name} onClick={() => this._viewRoom(room)}>
