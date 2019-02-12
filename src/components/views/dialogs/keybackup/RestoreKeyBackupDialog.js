@@ -230,10 +230,15 @@ export default React.createClass({
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Enter Recovery Passphrase");
             content = <div>
-                {_t(
+                <p>{_t(
+                    "<b>Warning</b>: you should only set up key backup " +
+                    "from a trusted computer.", {},
+                    { b: sub => <b>{sub}</b> },
+                )}</p>
+                <p>{_t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your recovery passphrase.",
-                )}<br />
+                )}</p>
 
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
@@ -288,10 +293,15 @@ export default React.createClass({
             }
 
             content = <div>
-                {_t(
+                <p>{_t(
+                    "<b>Warning</b>: you should only set up key backup " +
+                    "from a trusted computer.", {},
+                    { b: sub => <b>{sub}</b> },
+                )}</p>
+                <p>{_t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your recovery key.",
-                )}<br />
+                )}</p>
 
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"

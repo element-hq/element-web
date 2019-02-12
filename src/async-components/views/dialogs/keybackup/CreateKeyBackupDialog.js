@@ -240,7 +240,6 @@ export default React.createClass({
 
     _renderPhasePassPhrase: function() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let strengthMeter;
         let helpText;
@@ -265,8 +264,15 @@ export default React.createClass({
         }
 
         return <div>
-            <p>{_t("Secure your encrypted message history with a Recovery Passphrase.")}</p>
-            <p>{_t("You'll need it if you log out or lose access to this device.")}</p>
+            <p>{_t(
+                "<b>Warning</b>: you should only set up key backup from a trusted computer.", {},
+                { b: sub => <b>{sub}</b> },
+            )}</p>
+            <p>{_t(
+                "We'll store an encrypted copy of your keys on our server. " +
+                "Protect your backup with a passphrase to keep it secure.",
+            )}</p>
+            <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
@@ -291,34 +297,12 @@ export default React.createClass({
                 disabled={!this._passPhraseIsValid()}
             />
 
-            <p>{_t(
-                "If you don't want encrypted message history to be available on other devices, "+
-                "<button>opt out</button>.",
-                {},
-                {
-                    button: sub => <AccessibleButton
-                        element="span"
-                        className="mx_linkButton"
-                        onClick={this._onOptOutClick}
-                    >
-                        {sub}
-                    </AccessibleButton>,
-                },
-            )}</p>
-            <p>{_t(
-                "Or, if you don't want to create a Recovery Passphrase, skip this step and "+
-                "<button>download a recovery key</button>.",
-                {},
-                {
-                    button: sub => <AccessibleButton
-                        element="span"
-                        className="mx_linkButton"
-                        onClick={this._onSkipPassPhraseClick}
-                    >
-                        {sub}
-                    </AccessibleButton>,
-                },
-            )}</p>
+            <details>
+                <summary>{_t("Advanced")}</summary>
+                <p><button onClick={this._onSkipPassPhraseClick} >
+                    {_t("Set up with a Recovery Key")}
+                </button></p>
+            </details>
         </div>;
     },
 
@@ -353,9 +337,7 @@ export default React.createClass({
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Type in your Recovery Passphrase to confirm you remember it. " +
-                "If it helps, add it to your password manager or store it " +
-                "somewhere safe.",
+                "Please enter your passphrase a second time to confirm.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
@@ -392,7 +374,13 @@ export default React.createClass({
         }
 
         return <div>
-            <p>{_t("Make a copy of this Recovery Key and keep it safe.")}</p>
+            <p>{_t(
+                "Your recovery key is a safety net - you can use it to restore " +
+                "access to your encrypted messages if you forget your passphrase.",
+            )}</p>
+            <p>{_t(
+                "Keep your recovery key somewhere very secure, like a password manager (or a safe)",
+            )}</p>
             <p>{bodyText}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
@@ -455,10 +443,9 @@ export default React.createClass({
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t(
-                "Your encryption keys are now being backed up in the background " +
-                "to your Homeserver. The initial backup could take several minutes. " +
-                "You can view key backup upload progress in Settings.")}</p>
-            <DialogButtons primaryButton={_t('Close')}
+                "Your keys are being backed up (the first backup could take a few minutes).",
+            )}</p>
+            <DialogButtons primaryButton={_t('Okay')}
                 onPrimaryButtonClick={this._onDone}
                 hasCancel={false}
             />
@@ -484,19 +471,19 @@ export default React.createClass({
     _titleForPhase: function(phase) {
         switch (phase) {
             case PHASE_PASSPHRASE:
-                return _t('Create a Recovery Passphrase');
+                return _t('Secure your backup with a passphrase');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm Recovery Passphrase');
+                return _t('Confirm your passphrase');
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
-                return _t('Recovery Key');
+                return _t('Recovery key');
             case PHASE_KEEPITSAFE:
                 return _t('Keep it safe');
             case PHASE_BACKINGUP:
                 return _t('Starting backup...');
             case PHASE_DONE:
-                return _t('Backup Started');
+                return _t('Success!');
             default:
                 return _t("Create Key Backup");
         }
