@@ -1157,7 +1157,6 @@ export default React.createClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
@@ -1248,13 +1247,17 @@ export default React.createClass({
             if (this.state.editing) {
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onSaveClick} key="_saveButton"
+                        key="_saveButton"
+                        onClick={this._onSaveClick}
                     >
                         { _t('Save') }
                     </AccessibleButton>,
                 );
                 rightButtons.push(
-                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
+                    <AccessibleButton className="mx_RoomHeader_cancelButton"
+                        key="_cancelButton"
+                        onClick={this._onCancelClick}
+                    >
                         <img src={require("../../../res/img/cancel.svg")} className="mx_filterFlipColor"
                             width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
@@ -1262,16 +1265,20 @@ export default React.createClass({
             } else {
                 if (summary.user && summary.user.membership === 'join') {
                     rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                        <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_editButton"
+                            key="_editButton"
+                            onClick={this._onEditClick}
+                            title={_t("Community Settings")}
                         >
-                            <TintableSvg src={require("../../../res/img/icons-settings-room.svg")} width="16" height="16" />
                         </AccessibleButton>,
                     );
                 }
                 rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button" onClick={this._onShareClick} title={_t('Share Community')} key="_shareButton">
-                        <TintableSvg src={require("../../../res/img/icons-share.svg")} width="16" height="16" />
+                    <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_shareButton"
+                        key="_shareButton"
+                        onClick={this._onShareClick}
+                        title={_t('Share Community')}
+                    >
                     </AccessibleButton>,
                 );
             }
