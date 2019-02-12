@@ -58,7 +58,6 @@ limitations under the License.
 
 .mx_RoomHeader_buttons {
     display: flex;
-    align-items: center;
     background-color: $primary-bg-color;
     padding-right: 5px;
 }
@@ -114,10 +113,6 @@ limitations under the License.
 .mx_RoomHeader_searchStatus {
     font-weight: normal;
     opacity: 0.6;
-}
-
-.mx_RoomHeader_settingsButton object {
-    pointer-events: none;
 }
 
 .mx_RoomHeader_name,
@@ -199,10 +194,32 @@ limitations under the License.
 .mx_RoomHeader_button {
     margin-left: 10px;
     cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-color: $roomheader-button-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
 }
 
-.mx_RoomHeader_button object {
-    pointer-events: none;
+.mx_RoomHeader_settingsButton {
+    mask-image: url('$(res)/img/feather-icons/settings.svg');
+}
+
+.mx_RoomHeader_forgetButton {
+    mask-image: url('$(res)/img/leave.svg');
+    width: 26px;
+}
+
+.mx_RoomHeader_searchButton {
+    mask-image: url('$(res)/img/feather-icons/search.svg');
+}
+
+.mx_RoomHeader_shareButton {
+    mask-image: url('$(res)/img/feather-icons/share.svg');
+}
+
+.mx_RoomHeader_manageIntegsButton {
+    mask-image: url('$(res)/img/feather-icons/grid.svg');
 }
 
 .mx_RoomHeader_showPanel {
@@ -219,6 +236,7 @@ limitations under the License.
 
 .mx_RoomHeader_pinnedButton {
     position: relative;
+    mask-image: url('$(res)/img/icons-pin.svg');
 }
 
 .mx_RoomHeader_pinsIndicator {

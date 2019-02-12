@@ -24,7 +24,6 @@ import ScalarMessaging from '../../../ScalarMessaging';
 import Modal from "../../../Modal";
 import { _t } from '../../../languageHandler';
 import AccessibleButton from './AccessibleButton';
-import TintableSvg from './TintableSvg';
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -76,6 +75,7 @@ export default class ManageIntegsButton extends React.Component {
         if (this.scalarClient !== null) {
             const integrationsButtonClasses = classNames({
                 mx_RoomHeader_button: true,
+                mx_RoomHeader_manageIntegsButton: true,
                 mx_ManageIntegsButton_error: !!this.state.scalarError,
             });
 
@@ -94,8 +94,10 @@ export default class ManageIntegsButton extends React.Component {
             }
 
             integrationsButton = (
-                <AccessibleButton className={integrationsButtonClasses} onClick={this.onManageIntegrations} title={_t('Manage Integrations')}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/grid.svg")} width="20" height="20" />
+                <AccessibleButton className={integrationsButtonClasses}
+                    onClick={this.onManageIntegrations}
+                    title={_t('Manage Integrations')}
+                >
                     { integrationsWarningTriangle }
                     { integrationsErrorPopup }
                 </AccessibleButton>
