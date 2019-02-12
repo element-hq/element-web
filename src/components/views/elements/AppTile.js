@@ -579,8 +579,8 @@ export default class AppTile extends React.Component {
         // editing is done in scalar
         const canUserModify = this._canUserModify();
         const showEditButton = Boolean(this._scalarClient && canUserModify);
-        const showDeleteButton = canUserModify;
-        const showCancelButton = !showDeleteButton;
+        const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
+        const showCancelButton = (this.props.showCancel === undefined || this.props.showCancel) && !showDeleteButton;
         // Picture snapshot - only show button when apps are maximised.
         const showPictureSnapshotButton = this._hasCapability('m.capability.screenshot') && this.props.show;
         const showMinimiseButton = this.props.showMinimise && this.props.show;
