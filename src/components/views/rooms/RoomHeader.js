@@ -32,6 +32,7 @@ import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
+import * as cryptodevices from '../../../cryptodevices';
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
@@ -145,6 +146,12 @@ module.exports = React.createClass({
         return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
     },
 
+    _onShowDevicesClick: function() {
+        if (this.props.e2eStatus === "warning") {
+            cryptodevices.showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
+        }
+    },
+
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -156,7 +163,7 @@ module.exports = React.createClass({
         let pinnedEventsButton = null;
 
         const e2eIcon = this.props.e2eStatus ?
-            <E2EIcon status={this.props.e2eStatus} /> :
+            <E2EIcon status={this.props.e2eStatus} onClick={this._onShowDevicesClick} /> :
             undefined;
 
         if (this.props.onCancelClick) {

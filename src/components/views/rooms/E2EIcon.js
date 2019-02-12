@@ -16,6 +16,7 @@ limitations under the License.
 
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import AccessibleButton from '../elements/AccessibleButton';
 
 export default function(props) {
     const isWarning = props.status === "warning";
@@ -35,5 +36,7 @@ export default function(props) {
             _t("All devices for this user are trusted") :
             _t("All devices in this encrypted room are trusted");
     }
-    return (<div className={e2eIconClasses} title={e2eTitle} />);
+    return (<AccessibleButton onClick={props.onClick}>
+        <div className={e2eIconClasses} title={e2eTitle} />
+    </AccessibleButton>);
 }
