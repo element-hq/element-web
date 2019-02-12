@@ -180,27 +180,36 @@ limitations under the License.
     color: $accent-color;
 }
 
-.mx_MessageComposer_upload,
-.mx_MessageComposer_hangup,
-.mx_MessageComposer_voicecall,
-.mx_MessageComposer_videocall,
-.mx_MessageComposer_apps,
-.mx_MessageComposer_stickers {
-    /*display: table-cell;*/
-    /*vertical-align: middle;*/
-    /*padding-left: 10px;*/
-    padding-right: 12px;
+.mx_MessageComposer_button {
+    margin-right: 12px;
     cursor: pointer;
     padding-top: 4px;
+    height: 20px;
+    width: 20px;
+    background-color: $composer-button-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
 }
 
-.mx_MessageComposer_upload object,
-.mx_MessageComposer_hangup object,
-.mx_MessageComposer_voicecall object,
-.mx_MessageComposer_videocall object,
-.mx_MessageComposer_apps object,
-.mx_MessageComposer_stickers object {
-    pointer-events: none;
+.mx_MessageComposer_upload {
+    mask-image: url('$(res)/img/feather-icons/paperclip.svg');
+}
+
+.mx_MessageComposer_hangup {
+    mask-image: url('$(res)/img/hangup.svg');
+}
+
+.mx_MessageComposer_voicecall {
+    mask-image: url('$(res)/img/feather-icons/phone.svg');
+}
+
+.mx_MessageComposer_videocall {
+    mask-image: url('$(res)/img/feather-icons/video.svg');
+}
+
+.mx_MessageComposer_stickers {
+    mask-image: url('$(res)/img/feather-icons/face.svg');
 }
 
 .mx_MessageComposer_formatting {
