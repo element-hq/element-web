@@ -54,6 +54,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         if (this.state.theme === newTheme) return;
 
         SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        this.setState({theme: newTheme});
         dis.dispatch({action: 'set_theme', value: newTheme});
     };
 
