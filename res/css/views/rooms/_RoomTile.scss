@@ -153,9 +153,11 @@ limitations under the License.
     background-color: $warning-color;
 }
 
-.mx_RoomTile_unread, .mx_RoomTile_highlight .mx_RoomTile_name {
-    font-weight: 700;
-    color: $roomtile-selected-color;
+.mx_RoomTile_unread, .mx_RoomTile_highlight {
+    .mx_RoomTile_name {
+        font-weight: 700;
+        color: $roomtile-selected-color;
+    }
 }
 
 .mx_RoomTile_selected {
