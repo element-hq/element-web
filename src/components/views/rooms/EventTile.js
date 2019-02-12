@@ -327,6 +327,7 @@ module.exports = withMatrixClient(React.createClass({
             top: y,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
+            e2eInfoCallback: () => this.onCryptoClicked(),
             onFinished: function() {
                 self.setState({menu: false});
             },
