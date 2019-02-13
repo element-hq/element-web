@@ -54,6 +54,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         if (this.state.theme === newTheme) return;
 
         SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        this.setState({theme: newTheme});
         dis.dispatch({action: 'set_theme', value: newTheme});
     };
 
@@ -138,17 +139,14 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderThemeSection() {
-        // TODO: Re-enable theme selection once the themes actually work
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
-                <Field id="theme" label={_t("Theme")} element="select" disabled={true}
+                <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Light theme")}</option>
+                    <option value="light">{_t("Default theme")}</option>
                     <option value="dark">{_t("Dark theme")}</option>
-                    <option value="dharma">{_t("2018 theme")}</option>
-                    <option value="status">{_t("Status.im theme")}</option>
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
@@ -164,7 +162,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     {_t("Deactivating your account is a permanent action - be careful!")}
                 </span>
                 <AccessibleButton onClick={this._onDeactivateClicked} kind="danger">
-                    {_t("Close Account")}
+                    {_t("Deactivate Account")}
                 </AccessibleButton>
             </div>
         );

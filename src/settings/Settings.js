@@ -22,6 +22,7 @@ import {
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
+import ThemeController from './controllers/ThemeController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -231,12 +232,13 @@ export const SETTINGS = {
         invertedSettingName: 'TagPanel.disableTagPanel',
     },
     "theme": {
-        supportedLevels: ['config'],
-        default: "dharma",
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: "light",
+        controller: new ThemeController(),
     },
-    "webRtcForcePeerToPeer": {
+    "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
+        displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
         default: true,
         invertedSettingName: 'webRtcForceTURN',
     },

@@ -14,16 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HeaderButtons {
-    display: flex;
-}
+import SettingController from "./SettingController";
 
-.mx_HeaderButtons::before {
-    content: "";
-    background-color: $header-divider-color;
-    opacity: 0.5;
-    margin: 0 15px;
-    border-radius: 2px;
-    width: 2px;
-}
+const SUPPORTED_THEMES = [
+    "light",
+    "dark",
+];
 
+export default class ThemeController extends SettingController {
+    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
+        // Override in case some no longer supported theme is stored here
+        if (!SUPPORTED_THEMES.includes(calculatedValue)) {
+            return "light";
+        }
+
+        return null; // no override
+    }
+}

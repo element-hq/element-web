@@ -50,8 +50,54 @@ a:visited {
     color: $accent-color-alt;
 }
 
+input[type=text],
+input[type=search],
+input[type=password] {
+    padding: 9px;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 0;
+}
+
+input[type=text].mx_textinput_icon,
+input[type=search].mx_textinput_icon {
+    padding-left: 36px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+// FIXME THEME - Tint by CSS rather than referencing a duplicate asset
+input[type=text].mx_textinput_icon.mx_textinput_search,
+input[type=search].mx_textinput_icon.mx_textinput_search {
+    background-image: url('$(res)/img/feather-icons/search-input.svg');
+}
+
+// dont search UI as not all browsers support it,
+// we implement it ourselves where needed instead
+input[type=search]::-webkit-search-decoration,
+input[type=search]::-webkit-search-cancel-button,
+input[type=search]::-webkit-search-results-button,
+input[type=search]::-webkit-search-results-decoration {
+    display: none;
+}
+
+.input[type=text]::-webkit-input-placeholder,
+.input[type=text]::-moz-placeholder,
+.input[type=search]::-webkit-input-placeholder,
+.input[type=search]::-moz-placeholder {
+    color: #a5aab2;
+}
+
+// Override Firefox's UA style so we get a consistent look across browsers
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
 input[type=text], input[type=password], textarea {
     background-color: transparent;
+    color: $primary-fg-color;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -62,6 +108,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* Required by Firefox */
 textarea {
     font-family: $font-family;
+    color: $primary-fg-color;
 }
 
 /* Prevent ugly dotted highlight around selected elements in Firefox */
@@ -242,7 +289,7 @@ textarea {
     font-weight: 600;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
-    background-color: $accent-fg-color;
+    background-color: $button-secondary-bg-color;
 }
 
 .mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {

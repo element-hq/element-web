@@ -40,8 +40,7 @@ limitations under the License.
 }
 
 .mx_AccessibleButton_kind_primary.mx_AccessibleButton_disabled {
-    color: $button-primary-disabled-fg-color;
-    background-color: $button-primary-disabled-bg-color;
+    opacity: 0.4;
 }
 
 .mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_primary_sm {
@@ -51,8 +50,7 @@ limitations under the License.
 }
 
 .mx_AccessibleButton_kind_primary_sm.mx_AccessibleButton_disabled {
-    color: $button-primary-disabled-fg-color;
-    background-color: $button-primary-disabled-bg-color;
+    opacity: 0.4;
 }
 
 .mx_AccessibleButton_kind_danger {
