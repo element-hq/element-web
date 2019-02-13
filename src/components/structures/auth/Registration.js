@@ -67,6 +67,8 @@ module.exports = React.createClass({
         let initialPhase = PHASE_SERVER_DETAILS;
         if (
             // if we have these two, skip to the good bit
+            // (they could come in from the URL params in a
+            // registration email link)
             (this.props.clientSecret && this.props.sessionId) ||
             // or if custom URLs aren't allowed, skip them
             !customURLsAllowed
