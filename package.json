@@ -169,7 +169,6 @@
       }
     },
     "mac": {
-      "icon": "electron_app/img/riot.icns"
       "category": "public.app-category.social-networking"
     },
     "win": {
@@ -183,4 +182,4 @@
       "app": "electron_app"
     }
   }
-}
+  }
