@@ -20,11 +20,13 @@ import { _t } from '../../../languageHandler';
 import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export class TopLeftMenu extends React.Component {
     constructor() {
         super();
         this.openSettings = this.openSettings.bind(this);
+        this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
     }
 
@@ -41,10 +43,23 @@ export class TopLeftMenu extends React.Component {
     }
 
     render() {
+        const isGuest = MatrixClientPeg.get().isGuest();
+
         let homePageSection = null;
         if (this.hasHomePage()) {
             homePageSection = <ul className="mx_TopLeftMenu_section">
                 <li className="mx_TopLeftMenu_icon_home" onClick={this.viewHomePage}>{_t("Home")}</li>
+            </ul>;
+        }
+
+        let signInOutSection;
+        if (isGuest) {
+            signInOutSection = <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>{_t("Sign in")}</li>
+            </ul>;
+        } else {
+            signInOutSection = <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
             </ul>;
         }
 
@@ -53,9 +68,7 @@ export class TopLeftMenu extends React.Component {
             <ul className="mx_TopLeftMenu_section">
                 <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
             </ul>
-            <ul className="mx_TopLeftMenu_section">
-                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
-            </ul>
+            {signInOutSection}
         </div>;
     }
 
@@ -66,6 +79,11 @@ export class TopLeftMenu extends React.Component {
 
     openSettings() {
         dis.dispatch({action: 'view_user_settings'});
+        this.closeMenu();
+    }
+
+    signIn() {
+        dis.dispatch({action: 'start_login'});
         this.closeMenu();
     }
 
