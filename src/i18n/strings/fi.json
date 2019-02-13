@@ -924,7 +924,7 @@
     "All notifications are currently disabled for all targets.": "Kaikki ilmoitukset on kytketty pois kaikilta kohteilta.",
     "Uploading report": "Ladataan raporttia",
     "Sunday": "Sunnuntai",
-    "Failed to add tag %(tagName)s to room": "Tagin %(tagName)s lisäämineen huoneelle ei onnistunut",
+    "Failed to add tag %(tagName)s to room": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
     "Notification targets": "Ilmoituksen kohteet",
     "Failed to set direct chat tag": "Suoran viestittelyn tagin asettaminen epäonnistui",
     "Today": "Tänään",
@@ -1049,7 +1049,7 @@
     "Off": "Pois päältä",
     "Riot does not know how to join a room on this network": "Riot ei tiedä miten liittya huoneeseen tässä verkossa",
     "Mentions only": "Vain maininnat",
-    "Failed to remove tag %(tagName)s from room": "Tagin %(tagName)s poistaminen huoneelta epäonnistui",
+    "Failed to remove tag %(tagName)s from room": "Tagin %(tagName)s poistaminen huoneesta epäonnistui",
     "Wednesday": "Keskiviikko",
     "You can now return to your account after signing out, and sign in on other devices.": "Voit nyt palata tilillesi kirjauduttua ulos, sekä kirjautua muilla laitteilla.",
     "Enable email notifications": "Ota käyttöön sähköposti-ilmoitukset",
@@ -1077,5 +1077,6 @@
     "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Tarvitset kutsun liittyäksesi huoneeseen.",
     "%(count)s of your messages have not been sent.|one": "Viestiäsi ei lähetetty.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s asetti näyttönimekseen %(displayName)s.",
-    "Learn more about how we use analytics.": "Lue lisää analytiikkakäytännöistämme."
+    "Learn more about how we use analytics.": "Lue lisää analytiikkakäytännöistämme.",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Täällä ei ole muita! Haluaisitko <inviteText>kutsua muita</inviteText> tai <nowarnText>lopettaa tyhjästä huoneesta huomauttamisen</nowarnText>?"
 }
