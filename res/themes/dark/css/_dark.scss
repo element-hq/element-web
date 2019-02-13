@@ -173,13 +173,6 @@ $room-warning-bg-color: $header-panel-bg-color;
     }
 }
 
-.input[type=text]::-webkit-input-placeholder,
-.input[type=text]::-moz-placeholder,
-.input[type=search]::-webkit-input-placeholder,
-.input[type=search]::-moz-placeholder {
-    color: #a5aab2;
-}
-
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

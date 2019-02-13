@@ -287,16 +287,6 @@ $authpage-body-color: #61708b;
     }
 }
 
-input[type=text],
-input[type=search],
-input[type=password] {
-    padding: 9px;
-    font-family: $font-family;
-    font-size: 14px;
-    font-weight: 600;
-    min-width: 0;
-}
-
 /*** panels ***/
 .dark-panel {
     background-color: $secondary-accent-color;
@@ -329,7 +319,6 @@ input[type=search].mx_textinput_icon {
     background-position: 10px center;
 }
 
-
 // FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
@@ -342,7 +331,7 @@ input[type=search]::-webkit-search-decoration,
 input[type=search]::-webkit-search-cancel-button,
 input[type=search]::-webkit-search-results-button,
 input[type=search]::-webkit-search-results-decoration {
-  display: none;
+    display: none;
 }
 
 .input[type=text]::-webkit-input-placeholder,
