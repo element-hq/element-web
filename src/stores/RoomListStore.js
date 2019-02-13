@@ -95,7 +95,9 @@ class RoomListStore extends Store {
             break;
             case 'MatrixActions.Room.tags': {
                 if (!logicallyReady) break;
-                console.log("!! Tags: ", payload);
+                // TODO: Figure out which rooms changed in the tag and only change those.
+                // This is very blunt and wipes out the sticky room stuff
+                this._generateInitialRoomLists();
             }
             break;
             case 'MatrixActions.Room.timeline': {
@@ -140,8 +142,9 @@ class RoomListStore extends Store {
             case 'MatrixActions.accountData': {
                 if (!logicallyReady) break;
                 if (payload.event_type !== 'm.direct') break;
-                // TODO: Handle direct chat changes
-                console.log("!! Direct Chats: ", payload);
+                // TODO: Figure out which rooms changed in the direct chat and only change those.
+                // This is very blunt and wipes out the sticky room stuff
+                this._generateInitialRoomLists();
             }
             break;
             // TODO: Remove if not actually needed
@@ -181,7 +184,7 @@ class RoomListStore extends Store {
             //     // Reset state according to js-sdk
             //     console.log("!! Optimistic tag failure: ", payload);
             // }
-            break;
+            // break;
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
@@ -213,7 +216,7 @@ class RoomListStore extends Store {
         }
     }
 
-    _setRoomCategory(room, category) {
+    _setRoomCategory(room, category, targetTags = []) {
         const listsClone = {};
         const targetCatIndex = CATEGORY_ORDER.indexOf(category);
 
@@ -221,6 +224,17 @@ class RoomListStore extends Store {
         let doInsert = true;
         if (myMembership !== "join" && myMembership !== "invite") {
             doInsert = false;
+        } else {
+            const dmRoomMap = DMRoomMap.shared();
+            if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
+                if (!targetTags.includes('im.vector.fake.direct')) {
+                    targetTags.push('im.vector.fake.direct');
+                }
+            } else {
+                if (!targetTags.includes('im.vector.fake.recent')) {
+                    targetTags.push('im.vector.fake.recent');
+                }
+            }
         }
 
         // We need to update all instances of a room to ensure that they are correctly organized
@@ -237,7 +251,8 @@ class RoomListStore extends Store {
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
-                    if (!pushedEntry && doInsert) {
+                    const inTag = targetTags.length === 0 || targetTags.includes('im.vector.ake.recent');
+                    if (!pushedEntry && doInsert && inTag) {
                         // If we've hit the top of a boundary (either because there's no rooms in the target or
                         // we've reached the grouping of rooms), insert our room ahead of the others in the category.
                         // This ensures that our room is on top (more recent) than the others.
@@ -266,6 +281,9 @@ class RoomListStore extends Store {
             let tags = [];
             if (doInsert) {
                 tags = Object.keys(room.tags);
+                if (tags.length === 0) {
+                    tags = targetTags;
+                }
                 if (tags.length === 0) {
                     tags.push(myMembership === 'join' ? 'im.vector.fake.recent' : 'im.vector.fake.invite');
                 }
