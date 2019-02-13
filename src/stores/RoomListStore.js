@@ -154,7 +154,6 @@ class RoomListStore extends Store {
             // break;
             case 'MatrixActions.Room.myMembership': {
                 if (!logicallyReady) break;
-                // TODO: Slot room into list
                 this._roomUpdateTriggered(payload.room.roomId);
             }
             break;
@@ -163,25 +162,25 @@ class RoomListStore extends Store {
             // a member.
             case 'MatrixActions.Room': {
                 if (!logicallyReady) break;
-                // TODO: Slot room into list
                 this._roomUpdateTriggered(payload.room.roomId);
             }
             break;
-            case 'RoomListActions.tagRoom.pending': {
-                if (!logicallyReady) break;
-                // XXX: we only show one optimistic update at any one time.
-                // Ideally we should be making a list of in-flight requests
-                // that are backed by transaction IDs. Until the js-sdk
-                // supports this, we're stuck with only being able to use
-                // the most recent optimistic update.
-                console.log("!! Optimistic tag: ", payload);
-            }
-            break;
-            case 'RoomListActions.tagRoom.failure': {
-                if (!logicallyReady) break;
-                // Reset state according to js-sdk
-                console.log("!! Optimistic tag failure: ", payload);
-            }
+            // TODO: Re-enable optimistic updates when we support dragging again
+            // case 'RoomListActions.tagRoom.pending': {
+            //     if (!logicallyReady) break;
+            //     // XXX: we only show one optimistic update at any one time.
+            //     // Ideally we should be making a list of in-flight requests
+            //     // that are backed by transaction IDs. Until the js-sdk
+            //     // supports this, we're stuck with only being able to use
+            //     // the most recent optimistic update.
+            //     console.log("!! Optimistic tag: ", payload);
+            // }
+            // break;
+            // case 'RoomListActions.tagRoom.failure': {
+            //     if (!logicallyReady) break;
+            //     // Reset state according to js-sdk
+            //     console.log("!! Optimistic tag failure: ", payload);
+            // }
             break;
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
@@ -218,11 +217,18 @@ class RoomListStore extends Store {
         const listsClone = {};
         const targetCatIndex = CATEGORY_ORDER.indexOf(category);
 
+        const myMembership = room.getMyMembership();
+        let doInsert = true;
+        if (myMembership !== "join" && myMembership !== "invite") {
+            doInsert = false;
+        }
+
         // We need to update all instances of a room to ensure that they are correctly organized
         // in the list. We do this by shallow-cloning the entire `lists` object using a single
         // iterator. Within the loop, we also rebuild the list of rooms per tag (key) so that the
         // updated room gets slotted into the right spot.
 
+        let inserted = false;
         for (const key of Object.keys(this._state.lists)) {
             listsClone[key] = [];
             let pushedEntry = false;
@@ -231,7 +237,7 @@ class RoomListStore extends Store {
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
-                    if (!pushedEntry) {
+                    if (!pushedEntry && doInsert) {
                         // If we've hit the top of a boundary (either because there's no rooms in the target or
                         // we've reached the grouping of rooms), insert our room ahead of the others in the category.
                         // This ensures that our room is on top (more recent) than the others.
@@ -239,6 +245,7 @@ class RoomListStore extends Store {
                         if (changedBoundary) {
                             listsClone[key].push({room: room, category: category});
                             pushedEntry = true;
+                            inserted = true;
                         }
                     }
 
@@ -250,6 +257,29 @@ class RoomListStore extends Store {
 
                 // Fall through and clone the list.
                 listsClone[key].push(entry);
+            }
+        }
+
+        if (!inserted) {
+            // There's a good chance that we just joined the room, so we need to organize it
+            // We also could have left it...
+            let tags = [];
+            if (doInsert) {
+                tags = Object.keys(room.tags);
+                if (tags.length === 0) {
+                    tags.push(myMembership === 'join' ? 'im.vector.fake.recent' : 'im.vector.fake.invite');
+                }
+            } else {
+                tags = ['im.vector.fake.archived'];
+            }
+            for (const tag of tags) {
+                for (let i = 0; i < listsClone[tag].length; i++) {
+                    const catIdxAtPosition = CATEGORY_ORDER.indexOf(listsClone[tag][i].category);
+                    if (catIdxAtPosition >= targetCatIndex) {
+                        listsClone[tag].splice(i, 0, {room: room, category: category});
+                        break;
+                    }
+                }
             }
         }
 
