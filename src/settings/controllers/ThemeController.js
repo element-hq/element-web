@@ -17,7 +17,7 @@ limitations under the License.
 import SettingController from "./SettingController";
 
 const SUPPORTED_THEMES = [
-    "dharma",
+    "light",
     "dark",
 ];
 
@@ -25,7 +25,7 @@ export default class ThemeController extends SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         // Override in case some no longer supported theme is stored here
         if (!SUPPORTED_THEMES.includes(calculatedValue)) {
-            return "dharma";
+            return "light";
         }
 
         return null; // no override
