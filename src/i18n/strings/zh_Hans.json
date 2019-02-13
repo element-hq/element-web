@@ -36,5 +36,10 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Matrix 中已有许多聊天室，连接到已有的网络（Slack、IRC 与 Gitter 等）或独立的网络，请查看目录！",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "你可以修改主服务器 URL 以登录其他的 Matrix 服务器。<br/>这样，你就可以使用你在其他 Matrix 服务器上的账号。<br/><br/>你也可以修改身份认证服务器，但你可能因此无法使用电子邮件地址来邀请其他用户，或者被其他用户通过电子邮件邀请。",
     "Co-ordination for Riot translators": "Riot 翻译人员的合作讨论",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以自定义身份服务器，但是您将不能用电子邮箱地址邀请或被邀请。"
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以自定义身份服务器，但是您将不能用电子邮箱地址邀请他人或被邀请。",
+    "Sign In": "登入",
+    "Create Account": "创建帐号",
+    "Need help?": "需要帮助？",
+    "Explore rooms": "探索房间",
+    "Room Directory": "房间目录"
 }
