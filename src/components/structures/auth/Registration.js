@@ -64,6 +64,17 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
+        let initialPhase = PHASE_SERVER_DETAILS;
+        if (
+            // if we have these two, skip to the good bit
+            // (they could come in from the URL params in a
+            // registration email link)
+            (this.props.clientSecret && this.props.sessionId) ||
+            // or if custom URLs aren't allowed, skip them
+            !customURLsAllowed
+        ) {
+            initialPhase = PHASE_REGISTRATION;
+        }
 
         return {
             busy: false,
@@ -87,7 +98,7 @@ module.exports = React.createClass({
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
-            phase: customURLsAllowed ? PHASE_SERVER_DETAILS : PHASE_REGISTRATION,
+            phase: initialPhase,
             flows: null,
         };
     },
@@ -111,7 +122,7 @@ module.exports = React.createClass({
         });
     },
 
-    onServerTypeChange(type) {
+    onServerTypeChange(type, initial) {
         this.setState({
             serverType: type,
         });
@@ -137,9 +148,15 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
-                this.setState({
-                    phase: PHASE_SERVER_DETAILS,
-                });
+                // if this is the initial value from the control and we're
+                // already in the registration phase, don't go back to the
+                // server details phase (but do if it's actually a change resulting
+                // from user interaction).
+                if (!initial || !this.state.phase === PHASE_REGISTRATION) {
+                    this.setState({
+                        phase: PHASE_SERVER_DETAILS,
+                    });
+                }
                 break;
         }
     },
@@ -372,9 +389,12 @@ module.exports = React.createClass({
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
+            // if we've been given a custom HS URL we should actually pass that, so
+            // that the appropriate section is selected at the start to match the
+            // homeserver URL we're using
             return <div>
                 <ServerTypeSelector
-                    defaultHsUrl={this.props.defaultHsUrl}
+                    defaultHsUrl={this.props.customHsUrl || this.props.defaultHsUrl}
                     onChange={this.onServerTypeChange}
                 />
             </div>;
