@@ -16,7 +16,7 @@ module.exports = {
         "mobileguide": "./src/vector/mobile_guide/index.js",
 
         // CSS themes
-        "theme-dharma": "./node_modules/matrix-react-sdk/res/themes/dharma/css/dharma.scss",
+        "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
     },
     module: {

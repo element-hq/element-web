@@ -15,7 +15,7 @@
         "feature_pinning": "labs"
     },
     "default_federate": true,
-    "default_theme": "dharma",
+    "default_theme": "light",
     "roomDirectory": {
         "servers": [
             "matrix.org"
