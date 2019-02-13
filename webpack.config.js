@@ -15,44 +15,46 @@ module.exports = {
 
         "mobileguide": "./src/vector/mobile_guide/index.js",
 
-        // We ship olm.js as a separate lump of javascript. This makes it get
-        // loaded via a separate <script/> tag in index.html (which loads it
-        // into the browser global `Olm`, where js-sdk expects to find it).
-        //
-        // (we should probably make js-sdk load it asynchronously at some
-        // point, so that it doesn't block the pageload, but that is a separate
-        // problem)
-        "olm": "./src/vector/olm-loader.js",
-
         // CSS themes
         "theme-light":  "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
         "theme-dark":   "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
         "theme-status": "./res/themes/status/css/status.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+        rules: [
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve(__dirname, 'src') },
             {
                 test: /\.scss$/,
-
                 // 1. postcss-loader turns the SCSS into normal CSS.
-                // 2. css-raw-loader turns the CSS into a javascript module
+                // 2. raw-loader turns the CSS into a javascript module
                 //    whose default export is a string containing the CSS.
-                //    (css-raw-loader is similar to css-loader, but the latter
+                //    (raw-loader is similar to css-loader, but the latter
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "raw-loader",
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                config: {
+                                    path: './postcss.config.js'
+                                }
+                            }
+                        }
+                    ],
+                }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                use: ExtractTextPlugin.extract({
+                    use: "raw-loader"
+                }),
             },
+
         ],
         noParse: [
             // for cross platform compatibility use [\\\/] as the path separator
@@ -106,11 +108,6 @@ module.exports = {
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
         },
     },
-    externals: {
-        // Don't try to bundle electron: leave it as a commonjs dependency
-        // (the 'commonjs' here means it will output a 'require')
-        "electron": "commonjs electron",
-    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -152,14 +149,11 @@ module.exports = {
             // don't fill the console up with a mahoosive list of modules
             chunks: false,
         },
+
+        // hot mdule replacement doesn't work (I think we'd need react-hot-reload?)
+        // so webpack-dev-server reloads the page on every update which is quite
+        // tedious in Riot since that can take a while.
+        hot: false,
+        inline: false,
     },
 };
-
-// olm is an optional dependency. Ignore it if it's not installed, to avoid a
-// scary-looking error.
-try {
-    require('olm');
-} catch (e) {
-    console.log("Olm is not installed; not shipping it");
-    delete(module.exports.entry["olm"]);
-}

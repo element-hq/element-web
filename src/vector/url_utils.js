@@ -23,16 +23,16 @@ import qs from 'querystring';
 export function parseQsFromFragment(location) {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
-    var fragment = location.hash.substring(1);
+    const fragment = location.hash.substring(1);
 
     // our fragment may contain a query-param-like section. we need to fish
     // this out *before* URI-decoding because the params may contain ? and &
     // characters which are only URI-encoded once.
-    var hashparts = fragment.split('?');
+    const hashparts = fragment.split('?');
 
-    var result = {
+    const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: {}
+        params: {},
     };
 
     if (hashparts.length > 1) {

@@ -32,9 +32,12 @@ const olm_entry = webpack_config.entry['olm'];
 // 'preprocessors' config below)
 delete webpack_config['entry'];
 
+// make sure we're flagged as development to avoid wasting time optimising
+webpack_config.mode = 'development';
+
 // add ./test as a search path for js
-webpack_config.module.loaders.unshift({
-    test: /\.js$/, loader: "babel",
+webpack_config.module.rules.unshift({
+    test: /\.js$/, use: "babel-loader",
     include: [path.resolve('./src'), path.resolve('./test')],
 });
 
@@ -46,8 +49,9 @@ webpack_config.module.noParse.push(/sinon\/pkg\/sinon\.js$/);
 // ?
 webpack_config.resolve.alias['sinon'] = 'sinon/pkg/sinon.js';
 
-webpack_config.resolve.root = [
+webpack_config.resolve.modules = [
     path.resolve('./test'),
+    "node_modules"
 ];
 
 webpack_config.devtool = 'inline-source-map';

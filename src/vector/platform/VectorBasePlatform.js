@@ -3,6 +3,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@ export default class VectorBasePlatform extends BasePlatform {
         this.favicon = new Favico({animation: 'none'});
         this.showUpdateCheck = false;
         this._updateFavicon();
-        this.updatable = true;
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
@@ -60,8 +60,8 @@ export default class VectorBasePlatform extends BasePlatform {
             // This needs to be in in a try block as it will throw
             // if there are more than 100 badge count changes in
             // its internal queue
-            let bgColor = "#d00",
-                notif = this.notificationCount;
+            let bgColor = "#d00";
+            let notif = this.notificationCount;
 
             if (this.errorDidOccur) {
                 notif = notif || "×";
@@ -88,6 +88,19 @@ export default class VectorBasePlatform extends BasePlatform {
         this._updateFavicon();
     }
 
+    supportsAutoLaunch() {
+        return false;
+    }
+
+    // XXX: Surely this should be a setting like any other?
+    async getAutoLaunchEnabled() {
+        return false;
+    }
+
+    async setAutoLaunchEnabled(enabled) {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * Begin update polling, if applicable
      */
@@ -97,8 +110,8 @@ export default class VectorBasePlatform extends BasePlatform {
     /**
      * Whether we can call checkForUpdate on this platform build
      */
-    canSelfUpdate(): boolean {
-        return this.updatable;
+    async canSelfUpdate(): boolean {
+        return false;
     }
 
     startUpdateCheck() {
@@ -114,7 +127,7 @@ export default class VectorBasePlatform extends BasePlatform {
         dis.dispatch({
             action: 'check_updates',
             value: false,
-        })
+        });
     }
 
     getUpdateCheckStatusEnum() {
@@ -135,5 +148,13 @@ export default class VectorBasePlatform extends BasePlatform {
      */
     getDefaultDeviceDisplayName(): string {
         return _t("Unknown device");
+    }
+
+    /**
+     * Migrate account data from a previous origin
+     * Used only for the electron app
+     */
+    async migrateFromOldOrigin() {
+        return false;
     }
 }

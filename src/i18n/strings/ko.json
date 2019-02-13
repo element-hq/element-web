@@ -33,5 +33,7 @@
     "Contributing code to Matrix and Riot": "Matrix와 Riot에 코드 기여하기",
     "Dev chat for the Riot/Web dev team": "Riot/웹 개발 팀을 위한 개발자 대화",
     "Dev chat for the Dendrite dev team": "덴드라이트 개발 팀을 위한 개발자 대화",
-    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "기존 네트워크(Slack, IRC, Gitter 등)에 연결되있거나 독립된 많은 방이 이미 Matrix에 있습니다. 목록을 확인해보세요!"
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "기존 네트워크(Slack, IRC, Gitter 등)에 연결되있거나 독립된 많은 방이 이미 Matrix에 있습니다. 목록을 확인해보세요!",
+    "Co-ordination for Riot translators": "Riot 번역자 조합",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "사용자정의 서버 설정에서 다른 홈서버 URL를 지정해 다른 Matrix 서버에 접속할 수 있습니다. <br/>이렇게하면 다른 홈서버에서 기존의 Matrix 계정으로 Riot을 이용할 수 있습니다.<br/><br/>사용자정의 아이덴티티 서버도 설정할 수 있지만 이메일 주소로 이용자를 초대하거나 자신이 이메일 주소로 초대받을 수 없습니다."
 }

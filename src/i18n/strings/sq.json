@@ -1,5 +1,5 @@
 {
-    "Riot is not supported on mobile web. Install the app?": "Riot-i nuk mbulohet nën web për celularët. Të instalohet aplikacioni?",
+    "Riot is not supported on mobile web. Install the app?": "Riot-i nuk mbulohet në web për celularë. Të instalohet aplikacioni?",
     "Riot Desktop on %(platformName)s": "Riot Desktop në %(platformName)s",
     "Unknown device": "Pajisje e panjohur",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s përmes %(browserName)s nën %(osName)s",
@@ -9,7 +9,7 @@
     "Dismiss": "Mos e merr parasysh",
     "powered by Matrix": "bazuar në Matrix",
     "Welcome to Riot.im": "Mirë se vini te Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në [matrix]",
     "Search the room directory": "Kërkoni te drejtoria e dhomave",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Ka tashmë plot dhoma në Matrix, të lidhura me rrjete ekzistues (Slack, IRC, Gitter, etj) ose të pavarur. Hidhini një sy listës!",
     "Chat with Riot Bot": "Fjalosuni me Robotin Riot",
@@ -27,12 +27,13 @@
     "Support for those using and running matrix-appservice-irc": "Asistencë për ata që përdorin dhe xhirojnë matrix-appservice-irc",
     "Building services on Matrix": "Ndërtim shërbimesh mbi Matrix",
     "Support for those using the Matrix spec": "Asistencë për ata që përdorin specifikimet Matrix",
-    "Design and implementation of E2E in Matrix": "Konceptimi dhe sendërtimi i E2E në Matrix",
+    "Design and implementation of E2E in Matrix": "Konceptimi dhe sendërtimi i E2E-s në Matrix",
     "Implementing VR services with Matrix": "Sendërtim shërbimesh VR me Matrix-in",
     "Implementing VoIP services with Matrix": "Sendërtim shërbimesh VoIP me Matrix-in",
-    "Discussion of the Identity Service API": "Diskutime mbi Identity Service API",
+    "Discussion of the Identity Service API": "Diskutime mbi API-n Identity Service",
     "Support for those using, running and writing other bridges": "Asistencë për ata që përdorin, xhirojnë ose programojnë ura të tjera",
     "Contributing code to Matrix and Riot": "Kontribut me kod te Matrix dhe te Riot",
     "Dev chat for the Riot/Web dev team": "Fjalosje mbi zhvillimin, për ekipin e zhvilluesve të Riot/Web-i",
-    "Dev chat for the Dendrite dev team": "Fjalosje zhvillimi, për ekipin e zhvilluesve të Dendrite-it"
+    "Dev chat for the Dendrite dev team": "Fjalosje mbi zhvillimi, për ekipin e zhvilluesve të Dendrite-it",
+    "Co-ordination for Riot translators": "Bashkërendim për përkthyes të Riot-it"
 }

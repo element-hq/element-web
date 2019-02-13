@@ -15,7 +15,7 @@
     "Chat with Riot Bot": "Riot Botと会話",
     "Get started with some tips from Riot Bot!": "Riot Botにヒントをもらって始めましょう！",
     "General discussion about Matrix and Riot": "MatrixとRiotの概略",
-    "Discussion of all things Matrix!": "Matrixなんでも討論",
+    "Discussion of all things Matrix!": "Matrixなんでも議論！",
     "Riot/Web &amp; Desktop chat": "Riot/Web &amp; デスクトップ版チャット",
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk チャット",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; matrix-android-sdk チャット",
@@ -25,14 +25,15 @@
     "Admin support for Dendrite": "Dendriteの管理者サポート",
     "Announcements about Synapse releases": "Synapseの公開についてのお知らせ",
     "Support for those using and running matrix-appservice-irc": "matrix-appservice-ircを利用並びに運営している方へのサポート",
-    "Building services on Matrix": "Matrixでのサービスの開発",
+    "Building services on Matrix": "Matrix上でのサービスの開発",
     "Support for those using the Matrix spec": "Matrixスペックを利用する方へのサポート",
-    "Design and implementation of E2E in Matrix": "Matrixでのデザインとエンドツーエンドの実装",
+    "Design and implementation of E2E in Matrix": "Matrixのデザインとエンドツーエンドの実装",
     "Implementing VR services with Matrix": "MatrixでのVRサービスの実装",
     "Implementing VoIP services with Matrix": "MatrixでのIP電話サービスの実装",
     "Discussion of the Identity Service API": "Identity Service APIの議論",
     "Support for those using, running and writing other bridges": "他のブリッジを利用、運営、作成している方へのサポート",
     "Contributing code to Matrix and Riot": "MatrixとRiotにコードを提供する",
     "Dev chat for the Riot/Web dev team": "Riot/Web開発者チームのための開発者チャット",
-    "Dev chat for the Dendrite dev team": "Dendrite開発者チームのための開発者チャット"
+    "Dev chat for the Dendrite dev team": "Dendrite開発者チームのための開発者チャット",
+    "Co-ordination for Riot translators": "Riot 翻訳者による共同作業"
 }

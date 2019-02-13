@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var sanitizeHtml = require("sanitize-html");
+const React = require("react");
+const sanitizeHtml = require("sanitize-html");
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
@@ -47,5 +47,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });
