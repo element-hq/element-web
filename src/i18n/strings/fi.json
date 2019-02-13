@@ -1076,5 +1076,6 @@
     "<a>In reply to</a> <pill>": "<a>Vastauksena käyttäjälle</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Tarvitset kutsun liittyäksesi huoneeseen.",
     "%(count)s of your messages have not been sent.|one": "Viestiäsi ei lähetetty.",
-    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s asetti näyttönimekseen %(displayName)s."
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s asetti näyttönimekseen %(displayName)s.",
+    "Learn more about how we use analytics.": "Lue lisää analytiikkakäytännöistämme."
 }
