@@ -51,7 +51,6 @@ const INCLUDE_LANGS = [
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
     ["res/welcome.html", "webapp"],
-    ["res/home-status.html", "webapp"],
     ["res/welcome/**", "webapp/welcome"],
     ["res/themes/**", "webapp/themes"],
     ["res/vector-icons/**", "webapp/vector-icons"],
