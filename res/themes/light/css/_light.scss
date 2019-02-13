@@ -33,7 +33,7 @@ $selection-fg-color: $primary-bg-color;
 $focus-brightness: 105%;
 
 // red warning colour
-$warning-color: #f56679;
+$warning-color: $notice-primary-color;
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;
@@ -227,7 +227,7 @@ $button-primary-fg-color: #ffffff;
 $button-primary-bg-color: $accent-color;
 $button-secondary-bg-color: $accent-fg-color;
 $button-danger-fg-color: #ffffff;
-$button-danger-bg-color: #f56679;
+$button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
