@@ -21,7 +21,7 @@ import { _t } from '../../languageHandler';
 import { KeyCode } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -67,9 +67,9 @@ module.exports = React.createClass({
         this.onSearch();
     },
 
-    onSearch: debounce(function() {
+    onSearch: throttle(function() {
         this.props.onSearch(this.refs.search.value);
-    }, 200, {trailing: true}),
+    }, 200, {trailing: true, leading: true}),
 
     _onKeyDown: function(ev) {
         switch (ev.keyCode) {
