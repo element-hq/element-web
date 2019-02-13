@@ -52,6 +52,7 @@ a:visited {
 
 input[type=text], input[type=password], textarea {
     background-color: transparent;
+    color: $primary-fg-color;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
