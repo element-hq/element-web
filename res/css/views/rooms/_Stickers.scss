@@ -7,8 +7,12 @@
     height: 300px;
 }
 
-.mx_Stickers_content .mx_AppTileFullWidth {
-    border: none;
+#mx_persistedElement_stickerPicker .mx_AppTileFullWidth {
+    height: unset;
+    box-sizing: border-box;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
 }
 
 .mx_Stickers_contentPlaceholder {
