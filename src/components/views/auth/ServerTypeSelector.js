@@ -92,7 +92,7 @@ export default class ServerTypeSelector extends React.PureComponent {
         if (onChange) {
             // FIXME: Supply a second 'initial' param here to flag that this is
             // initialising the value rather than from user interaction
-            // (which sometuimes we'll want to ignore). Must be a better way
+            // (which sometimes we'll want to ignore). Must be a better way
             // to do this.
             onChange(type, true);
         }
