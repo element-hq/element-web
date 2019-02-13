@@ -209,3 +209,37 @@ $room-warning-bg-color: $header-panel-bg-color;
     background-color: $button-secondary-bg-color;
 }
 
+// Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
+// better match the theme.  Typically applied to dark grey 'off' buttons or
+// light grey 'on' buttons.
+.mx_filterFlipColor {
+    filter: invert(1);
+}
+
+.gm-scrollbar .thumb {
+    filter: invert(1);
+}
+
+// markdown overrides:
+.mx_EventTile_content .markdown-body pre:hover {
+    border-color: #808080 !important; // inverted due to rules below
+}
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert(1);
+    }
+
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
+}
