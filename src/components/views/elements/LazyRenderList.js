@@ -14,20 +14,79 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const OVERFLOW_ITEMS = 2;
+import React from "react";
 
-export default function LazyRenderList(props) {
-    const {items, itemHeight, scrollTop, height, renderItem} = props;
+const OVERFLOW_ITEMS = 20;
+const OVERFLOW_MARGIN = 5;
 
-    const firstIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - OVERFLOW_ITEMS);
-    const itemsAfterFirst = items.length - firstIdx;
-    const amount = Math.min(Math.ceil(height / itemHeight) + OVERFLOW_ITEMS, itemsAfterFirst);
-    const beforeSpace = firstIdx * itemHeight;
-    const itemsAfter = itemsAfterFirst - amount;
-    const afterSpace = itemsAfter * itemHeight;
-    const renderedItems = items.slice(firstIdx, firstIdx + amount);
+class ItemRange {
+    constructor(topCount, renderCount, bottomCount) {
+        this.topCount = topCount;
+        this.renderCount = renderCount;
+        this.bottomCount = bottomCount;
+    }
 
-    return (<div style={{paddingTop: `${beforeSpace}px`, paddingBottom: `${afterSpace}px`}}>
-        { renderedItems.map(renderItem) }
-    </div>);
+    contains(range) {
+        return range.topCount >= this.topCount &&
+            (range.topCount + range.renderCount) <= (this.topCount + this.renderCount);
+    }
+
+    expand(amount) {
+        const topGrow = Math.min(amount, this.topCount);
+        const bottomGrow = Math.min(amount, this.bottomCount);
+        return new ItemRange(
+            this.topCount - topGrow,
+            this.renderCount + topGrow + bottomGrow,
+            this.bottomCount - bottomGrow,
+        );
+    }
+}
+
+export default class LazyRenderList extends React.Component {
+    constructor(props) {
+        super(props);
+        const renderRange = LazyRenderList.getVisibleRangeFromProps(props).expand(OVERFLOW_ITEMS);
+        this.state = {renderRange};
+    }
+
+    static getVisibleRangeFromProps(props) {
+        const {items, itemHeight, scrollTop, height} = props;
+        const length = items ? items.length : 0;
+        const topCount = Math.max(0, Math.floor(scrollTop / itemHeight));
+        const itemsAfterTop = length - topCount;
+        const renderCount = Math.min(Math.ceil(height / itemHeight), itemsAfterTop);
+        const bottomCount = itemsAfterTop - renderCount;
+        return new ItemRange(topCount, renderCount, bottomCount);
+    }
+
+    componentWillReceiveProps(props) {
+        const state = this.state;
+        const range = LazyRenderList.getVisibleRangeFromProps(props);
+        // only update state if the new range isn't contained by the old anymore
+        if (!state.renderRange || !state.renderRange.contains(range.expand(OVERFLOW_MARGIN))) {
+            this.setState({renderRange: range.expand(OVERFLOW_ITEMS)});
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const itemsChanged = nextProps.items !== this.props.items;
+        const rangeChanged = nextState.renderRange !== this.state.renderRange;
+        return itemsChanged || rangeChanged;
+    }
+
+    render() {
+        const {itemHeight, items, renderItem} = this.props;
+
+        const {renderRange} = this.state;
+        const paddingTop = renderRange.topCount * itemHeight;
+        const paddingBottom = renderRange.bottomCount * itemHeight;
+        const renderedItems = items.slice(
+            renderRange.topCount,
+            renderRange.topCount + renderRange.renderCount,
+        );
+
+        return (<div style={{paddingTop: `${paddingTop}px`, paddingBottom: `${paddingBottom}px`}}>
+            { renderedItems.map(renderItem) }
+        </div>);
+    }
 }

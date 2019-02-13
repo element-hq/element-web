@@ -61,14 +61,14 @@ const RoomSubList = React.createClass({
 
     getInitialState: function() {
         // throttle updates to LazyRenderList
-        this._onScroll = _.throttle(
-            this._onScroll, 100,
-            {leading: false, trailing: true},
-        );
-        this._updateLazyRenderHeight = _.throttle(
-            this._updateLazyRenderHeight, 100,
-            {leading: false, trailing: true},
-        );
+        // this._onScroll = _.throttle(
+        //     this._onScroll, 50,
+        //     {leading: false, trailing: true},
+        // );
+        // this._updateLazyRenderHeight = _.throttle(
+        //     this._updateLazyRenderHeight, 100,
+        //     {leading: false, trailing: true},
+        // );
         return {
             hidden: this.props.startAsHidden || false,
             // some values to get LazyRenderList starting
@@ -307,7 +307,7 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
             } else {
-                const items = this.props.list.concat(this.props.extraTiles);
+                const items = this.props.list; //.concat(this.props.extraTiles);
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
