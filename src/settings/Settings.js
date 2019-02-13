@@ -236,9 +236,9 @@ export const SETTINGS = {
         default: "light",
         controller: new ThemeController(),
     },
-    "webRtcForcePeerToPeer": {
+    "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
+        displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
         default: true,
         invertedSettingName: 'webRtcForceTURN',
     },

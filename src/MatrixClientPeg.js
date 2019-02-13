@@ -177,7 +177,7 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
-            forceTURN: !SettingsStore.getValue('webRtcForcePeerToPeer', false),
+            forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             verificationMethods: [verificationMethods.SAS]
         };
 
