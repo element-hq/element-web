@@ -108,13 +108,6 @@ module.exports = React.createClass({
         return statusUser._unstable_statusMessage;
     },
 
-    onRoomTimeline: function(ev, room) {
-        if (room !== this.props.room) return;
-        this.setState({
-            notificationCount: this.props.room.getUnreadNotificationCount(),
-        });
-    },
-
     onRoomName: function(room) {
         if (room !== this.props.room) return;
         this.setState({
@@ -159,7 +152,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Room.name", this.onRoomName);
         ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
         this.dispatcherRef = dis.register(this.onAction);
@@ -179,7 +171,6 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
@@ -306,7 +297,7 @@ module.exports = React.createClass({
 
     render: function() {
         const isInvite = this.props.room.getMyMembership() === "invite";
-        const notificationCount = this.state.notificationCount;
+        const notificationCount = this.props.notificationCount;
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
         const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();

@@ -145,6 +145,7 @@ const RoomSubList = React.createClass({
                 collapsed={this.props.collapsed || false}
                 unread={Unread.doesRoomHaveUnreadMessages(room)}
                 highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
+                notificationCount={room.getUnreadNotificationCount()}
                 isInvite={this.props.isInvite}
                 refreshSubList={this._updateSubListCount}
                 incomingCall={null}
