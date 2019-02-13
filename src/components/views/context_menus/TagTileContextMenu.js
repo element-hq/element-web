@@ -68,7 +68,7 @@ export default class TagTileContextMenu extends React.Component {
             <hr className="mx_TagTileContextMenu_separator" />
             <div className="mx_TagTileContextMenu_item" onClick={this._onRemoveClick} >
                 <img className="mx_TagTileContextMenu_item_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
-                { _t('Remove') }
+                { _t('Hide') }
             </div>
         </div>;
     }
