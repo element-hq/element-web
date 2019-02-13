@@ -99,6 +99,12 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
+    "feature_room_breadcrumbs": {
+        isFeature: true,
+        displayName: _td("Show recent room avatars above the room list (refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_custom_tags": {
         isFeature: true,
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
