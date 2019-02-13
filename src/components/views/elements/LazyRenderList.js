@@ -62,8 +62,13 @@ export default class LazyRenderList extends React.Component {
     componentWillReceiveProps(props) {
         const state = this.state;
         const range = LazyRenderList.getVisibleRangeFromProps(props);
-        // only update state if the new range isn't contained by the old anymore
-        if (!state.renderRange || !state.renderRange.contains(range.expand(OVERFLOW_MARGIN))) {
+        const intersectRange = range.expand(OVERFLOW_MARGIN);
+
+        const prevSize = this.props.items ? this.props.items.length : 0;
+        const listHasChangedSize = props.items.length !== prevSize;
+        // only update renderRange if the list has shrunk/grown and we need to adjust padding or
+        // if the new range isn't contained by the old anymore
+        if (listHasChangedSize || !state.renderRange || !state.renderRange.contains(intersectRange)) {
             this.setState({renderRange: range.expand(OVERFLOW_ITEMS)});
         }
     }
