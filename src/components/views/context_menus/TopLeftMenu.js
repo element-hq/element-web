@@ -25,6 +25,8 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 export class TopLeftMenu extends React.Component {
     constructor() {
         super();
+        this.viewHomePage = this.viewHomePage.bind(this);
+        this.viewWelcomePage = this.viewWelcomePage.bind(this);
         this.openSettings = this.openSettings.bind(this);
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
@@ -66,6 +68,9 @@ export class TopLeftMenu extends React.Component {
         return <div className="mx_TopLeftMenu">
             {homePageSection}
             <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_welcome" onClick={this.viewWelcomePage}>{_t("Welcome")}</li>
+            </ul>
+            <ul className="mx_TopLeftMenu_section">
                 <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
             </ul>
             {signInOutSection}
@@ -74,6 +79,11 @@ export class TopLeftMenu extends React.Component {
 
     viewHomePage() {
         dis.dispatch({action: 'view_home_page'});
+        this.closeMenu();
+    }
+
+    viewWelcomePage() {
+        dis.dispatch({action: 'view_welcome_page'});
         this.closeMenu();
     }
 
