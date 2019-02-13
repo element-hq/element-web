@@ -1065,5 +1065,14 @@
     "Collapse panel": "Piilota paneeli",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Nykyisellä selaimellasi ohjelman ulkonäkö voi olla aivan virheellinen, ja jotkut ominaisuudet eivät saata toimia. Voit jatkaa jos haluat kokeilla mutta et voi odottaa saavasi apua mahdollisesti ilmeneviin ongelmiin!",
     "Checking for an update...": "Tarkistetaan päivityksen saatavuutta...",
-    "There are advanced notifications which are not shown here": "On kehittyneitä ilmoituksia joita ei näytetä tässä"
+    "There are advanced notifications which are not shown here": "On kehittyneitä ilmoituksia joita ei näytetä tässä",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit myös määrittää toisen identiteettipalvelimen, mutta et voi kutsua muita käyttäjiä sähköpostin perusteella, eivätkä se voi kutsua sinua.",
+    "Your language of choice": "Valitsemasi kieli",
+    "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Yksityisyydensuoja on meille tärkeää, joten emme kerää mitään henkilökohtaista tai yksilöivää tietoa analytiikkaamme varten.",
+    "Send an encrypted reply…": "Lähetä salattu vastaus…",
+    "Send a reply (unencrypted)…": "Lähetä vastaus (salaamaton)…",
+    "Send an encrypted message…": "Lähetä salattu viesti…",
+    "Send a message (unencrypted)…": "Lähetä viesti (salaamaton)…",
+    "<a>In reply to</a> <pill>": "<a>Vastauksena käyttäjälle</a> <pill>",
+    "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Tarvitset kutsun liittyäksesi huoneeseen."
 }
