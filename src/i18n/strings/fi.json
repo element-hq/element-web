@@ -34,5 +34,12 @@
     "Contributing code to Matrix and Riot": "Osallistu kehitystyöhön",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s %(browserName)s %(osName)s",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Salattua ja vikasietoista viestintää Matrix -teknologialla",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit käyttää edistyksellisiä asetuksia kirjautuaksesi muille Matrix palvelimille, määrittelemällä kotipalvelimen URL-osoitteen.<br/>Tämän avulla voit käyttää Riot:ia olemassa olevalla toisen Matrix palvelimen käyttäjätilillä.<br/><br/>Voit myös asettaa valinnaisen identiteettipalvelimen, mutta et voi kutsua käyttäjiä sähköpostiosoitteella tai tulla kutsutuksi."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit käyttää edistyksellisiä asetuksia kirjautuaksesi muille Matrix palvelimille, määrittelemällä kotipalvelimen URL-osoitteen.<br/>Tämän avulla voit käyttää Riot:ia olemassa olevalla toisen Matrix palvelimen käyttäjätilillä.<br/><br/>Voit myös asettaa valinnaisen identiteettipalvelimen, mutta et voi kutsua käyttäjiä sähköpostiosoitteella tai tulla kutsutuksi.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Voit käyttää mukautettuja palvelinasetuksia kirjautuaksesi muihin Matrix-palvelimiin määrittämällä toisen kotipalvelimen osoitteen. Tämä mahdollistaa Riotin käyttämisen toisella palvelimella olevalla Matrix-tunnuksella.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Voit myös määrittää toisen identiteettipalvelimen, mutta et voi kutsua muita käyttäjiä sähköpostin perusteella, eivätkä se voi kutsua sinua.",
+    "Sign In": "Kirjaudu sisään",
+    "Create Account": "Luo tunnus",
+    "Need help?": "Tarvitsetko apua?",
+    "Explore rooms": "Etsi huoneita",
+    "Room Directory": "Huonehakemisto"
 }
