@@ -282,6 +282,20 @@ const RoomSubList = React.createClass({
         this.setState({scrollTop: this.refs.scroller.getScrollTop()});
     },
 
+    _getRenderItems: function() {
+        // try our best to not create a new array
+        // because LazyRenderList rerender when the items prop
+        // is not the same object as the previous value
+        const {list, extraTiles} = this.props;
+        if (!extraTiles || !extraTiles.length) {
+            return list;
+        }
+        if (!list || list.length) {
+            return extraTiles;
+        }
+        return list.concat(extraTiles);
+    },
+
     render: function() {
         const len = this.props.list.length + this.props.extraTiles.length;
         const isCollapsed = this.state.hidden && !this.props.forceExpand;
@@ -297,7 +311,6 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
             } else {
-                const items = this.props.list; //.concat(this.props.extraTiles);
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
@@ -306,7 +319,7 @@ const RoomSubList = React.createClass({
                             height={ this.state.scrollerHeight }
                             renderItem={ this.makeRoomTile }
                             itemHeight={34}
-                            items={items} />
+                            items={this._getRenderItems()} />
                     </IndicatorScrollbar>
                 </div>;
             }
