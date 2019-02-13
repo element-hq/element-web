@@ -36,7 +36,7 @@ limitations under the License.
         top: 0;
         right: 0;
         height: 100%;
-        background: linear-gradient(to right, rgba(242,245,248,0), rgba(242,245,248,1));
+        background: linear-gradient(to right, rgba(242,245,248,0), $header-panel-bg-color);
     }
 
     .mx_RoomBreadcrumbs_animate {
