@@ -29,7 +29,6 @@ import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
-import * as _ from "lodash";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -60,15 +59,6 @@ const RoomSubList = React.createClass({
     },
 
     getInitialState: function() {
-        // throttle updates to LazyRenderList
-        // this._onScroll = _.throttle(
-        //     this._onScroll, 50,
-        //     {leading: false, trailing: true},
-        // );
-        // this._updateLazyRenderHeight = _.throttle(
-        //     this._updateLazyRenderHeight, 100,
-        //     {leading: false, trailing: true},
-        // );
         return {
             hidden: this.props.startAsHidden || false,
             // some values to get LazyRenderList starting
