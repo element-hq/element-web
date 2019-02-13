@@ -25,35 +25,12 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { markAllDevicesKnown } from '../../../cryptodevices';
 
-function DeviceListEntry(props) {
-    const {userId, device} = props;
-
-    const DeviceVerifyButtons = sdk.getComponent('elements.DeviceVerifyButtons');
-
-    return (
-        <li>
-            { device.deviceId }
-            <DeviceVerifyButtons device={device} userId={userId} />
-            <br />
-            { device.getDisplayName() }
-        </li>
-    );
-}
-
-DeviceListEntry.propTypes = {
-    userId: PropTypes.string.isRequired,
-
-    // deviceinfo
-    device: PropTypes.object.isRequired,
-};
-
-
 function UserUnknownDeviceList(props) {
+    const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
     const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-       <DeviceListEntry key={deviceId} userId={userId}
-           device={userDevices[deviceId]} />,
+        <li key={deviceId}><MemberDeviceInfo device={userDevices[deviceId]} userId={userId} showDeviceId={true} /></li>,
     );
 
     return (

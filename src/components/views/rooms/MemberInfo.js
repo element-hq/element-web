@@ -941,6 +941,8 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         let roomMemberDetails = null;
+        let e2eIconElement;
+
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
             roomMemberDetails = <div>
@@ -959,6 +961,11 @@ module.exports = withMatrixClient(React.createClass({
                     {statusLabel}
                 </div>
             </div>;
+
+            const isEncrypted = this.props.matrixClient.isRoomEncrypted(this.props.member.roomId);
+            if (this.state.e2eStatus && isEncrypted) {
+                e2eIconElement = (<E2EIcon status={this.state.e2eStatus} isUser={true} />);
+            }
         }
 
         const avatarUrl = this.props.member.getMxcAvatarUrl();
@@ -967,7 +974,7 @@ module.exports = withMatrixClient(React.createClass({
             const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = <div className="mx_MemberInfo_avatar">
                 <img src={httpUrl} />
-            </div>
+            </div>;
         }
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
@@ -979,7 +986,7 @@ module.exports = withMatrixClient(React.createClass({
                         <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
                             <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
                         </AccessibleButton>
-                        { this.state.e2eStatus ? <E2EIcon status={this.state.e2eStatus} isUser={true} /> : undefined }
+                        { e2eIconElement }
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>
                     { avatarElement }
