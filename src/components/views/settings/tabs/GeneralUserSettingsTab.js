@@ -162,7 +162,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                     {_t("Deactivating your account is a permanent action - be careful!")}
                 </span>
                 <AccessibleButton onClick={this._onDeactivateClicked} kind="danger">
-                    {_t("Close Account")}
+                    {_t("Deactivate Account")}
                 </AccessibleButton>
             </div>
         );
