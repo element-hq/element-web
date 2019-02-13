@@ -1,7 +1,7 @@
 
 <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="LifeBuoy" transform="translate(-77.000000, -862.000000)" stroke="#2E3648" stroke-width="1.6">
+        <g id="LifeBuoy" transform="translate(-77.000000, -862.000000)" stroke="#2E3648" stroke-width="1">
             <g id="Buoy" transform="translate(68.000000, 853.000000)">
                 <g id="life-buoy" transform="translate(10.000000, 10.000000)">
                     <circle id="Oval" cx="10" cy="10" r="10"></circle>
