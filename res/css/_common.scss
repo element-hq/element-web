@@ -62,6 +62,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* Required by Firefox */
 textarea {
     font-family: $font-family;
+    color: $primary-fg-color;
 }
 
 /* Prevent ugly dotted highlight around selected elements in Firefox */
