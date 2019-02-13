@@ -265,7 +265,7 @@
     "Show panel": "Näytä paneeli",
     "Sign in": "Kirjaudu sisään",
     "Sign out": "Kirjaudu ulos",
-    "%(count)s of your messages have not been sent.|other": "Jotkut viesteistäsi ei ole lähetetty.",
+    "%(count)s of your messages have not been sent.|other": "Osaa viesteistäsi ei ole lähetetty.",
     "Someone": "Joku",
     "Start a chat": "Aloita keskustelu",
     "Start Chat": "Aloita keskustelu",
@@ -1074,5 +1074,7 @@
     "Send an encrypted message…": "Lähetä salattu viesti…",
     "Send a message (unencrypted)…": "Lähetä viesti (salaamaton)…",
     "<a>In reply to</a> <pill>": "<a>Vastauksena käyttäjälle</a> <pill>",
-    "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Tarvitset kutsun liittyäksesi huoneeseen."
+    "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Tarvitset kutsun liittyäksesi huoneeseen.",
+    "%(count)s of your messages have not been sent.|one": "Viestiäsi ei lähetetty.",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s asetti näyttönimekseen %(displayName)s."
 }
