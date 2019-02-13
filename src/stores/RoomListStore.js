@@ -19,20 +19,26 @@ import DMRoomMap from '../utils/DMRoomMap';
 import Unread from '../Unread';
 import SettingsStore from "../settings/SettingsStore";
 
+const CATEGORY_RED = "red";
+const CATEGORY_GREY = "grey";
+const CATEGORY_BOLD = "bold";
+const CATEGORY_IDLE = "idle";
+
+const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
+const LIST_ORDERS = {
+    "m.favourite": "manual",
+    "im.vector.fake.invite": "recent",
+    "im.vector.fake.recent": "recent",
+    "im.vector.fake.direct": "recent",
+    "m.lowpriority": "recent",
+    "im.vector.fake.archived": "recent",
+};
+
 /**
  * A class for storing application state for categorising rooms in
  * the RoomList.
  */
 class RoomListStore extends Store {
-    static _listOrders = {
-        "m.favourite": "manual",
-        "im.vector.fake.invite": "recent",
-        "im.vector.fake.recent": "recent",
-        "im.vector.fake.direct": "recent",
-        "m.lowpriority": "recent",
-        "im.vector.fake.archived": "recent",
-    };
-
     constructor() {
         super(dis);
 
@@ -43,44 +49,39 @@ class RoomListStore extends Store {
 
     _init() {
         // Initialise state
+        const defaultLists = {
+            "m.server_notice": [/* { room: js-sdk room, category: string } */],
+            "im.vector.fake.invite": [],
+            "m.favourite": [],
+            "im.vector.fake.recent": [],
+            "im.vector.fake.direct": [],
+            "m.lowpriority": [],
+            "im.vector.fake.archived": [],
+        };
         this._state = {
-            lists: {
-                "m.server_notice": [],
-                "im.vector.fake.invite": [],
-                "m.favourite": [],
-                "im.vector.fake.recent": [],
-                "im.vector.fake.direct": [],
-                "m.lowpriority": [],
-                "im.vector.fake.archived": [],
-            },
+            // The rooms in these arrays are ordered according to either the
+            // 'recents' behaviour or 'manual' behaviour.
+            lists: defaultLists,
+            presentationLists: defaultLists, // like `lists`, but with arrays of rooms instead
             ready: false,
-
-            // The room cache stores a mapping of roomId to cache record.
-            // Each cache record is a key/value pair for various bits of
-            // data used to sort the room list. Currently this stores the
-            // following bits of informations:
-            //   "timestamp":     number, The timestamp of the last relevant
-            //                    event in the room.
-            //   "notifications": boolean, Whether or not the user has been
-            //                    highlighted on any unread events.
-            //   "unread":        boolean, Whether or not the user has any
-            //                    unread events.
-            //
-            // All of the cached values are lazily loaded on read in the
-            // recents comparator. When an event is received for a particular
-            // room, all the cached values are invalidated - forcing the
-            // next read to set new values. The entries do not expire on
-            // their own.
-            roomCache: {},
+            stickyRoomId: null,
         };
     }
 
     _setState(newState) {
+        if (newState['lists']) {
+            const presentationLists = {};
+            for (const key of Object.keys(newState['lists'])) {
+                presentationLists[key] = newState['lists'][key].map((e) => e.room);
+            }
+            newState['presentationLists'] = presentationLists;
+        }
         this._state = Object.assign(this._state, newState);
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch = (payload) => {
+        const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             // Initialise state after initial sync
             case 'MatrixActions.sync': {
@@ -89,30 +90,30 @@ class RoomListStore extends Store {
                 }
 
                 this._matrixClient = payload.matrixClient;
-                this._generateRoomLists();
+                this._generateInitialRoomLists();
             }
             break;
             case 'MatrixActions.Room.tags': {
-                if (!this._state.ready) break;
-                this._generateRoomLists();
+                if (!logicallyReady) break;
+                console.log("!! Tags: ", payload);
             }
             break;
             case 'MatrixActions.Room.timeline': {
-                if (!this._state.ready ||
+                if (!logicallyReady ||
                     !payload.isLiveEvent ||
                     !payload.isLiveUnfilteredRoomTimelineEvent ||
                     !this._eventTriggersRecentReorder(payload.event)
-                ) break;
+                ) {
+                    break;
+                }
 
-                this._clearCachedRoomState(payload.event.getRoomId());
-                this._generateRoomLists();
+                this._roomUpdateTriggered(payload.event.getRoomId());
             }
             break;
             // When an event is decrypted, it could mean we need to reorder the room
             // list because we now know the type of the event.
             case 'MatrixActions.Event.decrypted': {
-                // We may not have synced or done an initial generation of the lists
-                if (!this._matrixClient || !this._state.ready) break;
+                if (!logicallyReady) break;
 
                 const roomId = payload.event.getRoomId();
 
@@ -129,50 +130,57 @@ class RoomListStore extends Store {
 
                 // Either this event was not added to the live timeline (e.g. pagination)
                 // or it doesn't affect the ordering of the room list.
-                if (liveTimeline !== eventTimeline ||
-                    !this._eventTriggersRecentReorder(payload.event)
-                ) break;
+                if (liveTimeline !== eventTimeline || !this._eventTriggersRecentReorder(payload.event)) {
+                    break;
+                }
 
-                this._clearCachedRoomState(payload.event.getRoomId());
-                this._generateRoomLists();
+                this._roomUpdateTriggered(roomId);
             }
             break;
             case 'MatrixActions.accountData': {
+                if (!logicallyReady) break;
                 if (payload.event_type !== 'm.direct') break;
-                this._generateRoomLists();
+                // TODO: Handle direct chat changes
+                console.log("!! Direct Chats: ", payload);
             }
             break;
-            case 'MatrixActions.Room.accountData': {
-                if (payload.event_type === 'm.fully_read') {
-                    this._clearCachedRoomState(payload.room.roomId);
-                    this._generateRoomLists();
-                }
-            }
-            break;
+            // TODO: Remove if not actually needed
+            // case 'MatrixActions.Room.accountData': {
+            //     if (!logicallyReady) break;
+            //     if (payload.event_type === 'm.fully_read') {
+            //         console.log("!! Fully read: ", payload);
+            //     }
+            // }
+            // break;
             case 'MatrixActions.Room.myMembership': {
-                this._generateRoomLists();
+                if (!logicallyReady) break;
+                // TODO: Slot room into list
+                this._roomUpdateTriggered(payload.room.roomId);
             }
             break;
             // This could be a new room that we've been invited to, joined or created
             // we won't get a RoomMember.membership for these cases if we're not already
             // a member.
             case 'MatrixActions.Room': {
-                if (!this._state.ready || !this._matrixClient.credentials.userId) break;
-                this._generateRoomLists();
+                if (!logicallyReady) break;
+                // TODO: Slot room into list
+                this._roomUpdateTriggered(payload.room.roomId);
             }
             break;
             case 'RoomListActions.tagRoom.pending': {
+                if (!logicallyReady) break;
                 // XXX: we only show one optimistic update at any one time.
                 // Ideally we should be making a list of in-flight requests
                 // that are backed by transaction IDs. Until the js-sdk
                 // supports this, we're stuck with only being able to use
                 // the most recent optimistic update.
-                this._generateRoomLists(payload.request);
+                console.log("!! Optimistic tag: ", payload);
             }
             break;
             case 'RoomListActions.tagRoom.failure': {
+                if (!logicallyReady) break;
                 // Reset state according to js-sdk
-                this._generateRoomLists();
+                console.log("!! Optimistic tag failure: ", payload);
             }
             break;
             case 'on_logged_out': {
@@ -182,10 +190,73 @@ class RoomListStore extends Store {
                 this._matrixClient = null;
             }
             break;
+            case 'view_room': {
+                if (!logicallyReady) break;
+
+                // Note: it is important that we set a new stickyRoomId before setting the old room
+                // to IDLE. If we don't, the wrong room gets counted as sticky.
+                const currentSticky = this._state.stickyRoomId;
+                this._setState({stickyRoomId: payload.room_id});
+                if (currentSticky) {
+                    this._setRoomCategory(this._matrixClient.getRoom(currentSticky), CATEGORY_IDLE);
+                }
+            }
+            break;
+        }
+    };
+
+    _roomUpdateTriggered(roomId) {
+        const room = this._matrixClient.getRoom(roomId);
+        if (!room) return;
+
+        if (this._state.stickyRoomId !== room.roomId) {
+            this._setRoomCategory(room, this._calculateCategory(room));
         }
     }
 
-    _generateRoomLists(optimisticRequest) {
+    _setRoomCategory(room, category) {
+        const listsClone = {};
+        const targetCatIndex = CATEGORY_ORDER.indexOf(category);
+
+        // We need to update all instances of a room to ensure that they are correctly organized
+        // in the list. We do this by shallow-cloning the entire `lists` object using a single
+        // iterator. Within the loop, we also rebuild the list of rooms per tag (key) so that the
+        // updated room gets slotted into the right spot.
+
+        for (const key of Object.keys(this._state.lists)) {
+            listsClone[key] = [];
+            let pushedEntry = false;
+            const hasRoom = !!this._state.lists[key].find((e) => e.room.roomId === room.roomId);
+            for (const entry of this._state.lists[key]) {
+                // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
+                // room (sticky rooms have unreliable categories), try to slot the new room in
+                if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
+                    if (!pushedEntry) {
+                        // If we've hit the top of a boundary (either because there's no rooms in the target or
+                        // we've reached the grouping of rooms), insert our room ahead of the others in the category.
+                        // This ensures that our room is on top (more recent) than the others.
+                        const changedBoundary = CATEGORY_ORDER.indexOf(entry.category) >= targetCatIndex;
+                        if (changedBoundary) {
+                            listsClone[key].push({room: room, category: category});
+                            pushedEntry = true;
+                        }
+                    }
+
+                    // We insert our own record as needed, so don't let the old one through.
+                    if (entry.room.roomId === room.roomId) {
+                        continue;
+                    }
+                }
+
+                // Fall through and clone the list.
+                listsClone[key].push(entry);
+            }
+        }
+
+        this._setState({lists: listsClone});
+    }
+
+    _generateInitialRoomLists() {
         const lists = {
             "m.server_notice": [],
             "im.vector.fake.invite": [],
@@ -196,35 +267,19 @@ class RoomListStore extends Store {
             "im.vector.fake.archived": [],
         };
 
-
         const dmRoomMap = DMRoomMap.shared();
-
-        // If somehow we dispatched a RoomListActions.tagRoom.failure before a MatrixActions.sync
-        if (!this._matrixClient) return;
-
         const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
 
-        this._matrixClient.getRooms().forEach((room, index) => {
+        this._matrixClient.getRooms().forEach((room) => {
             const myUserId = this._matrixClient.getUserId();
             const membership = room.getMyMembership();
             const me = room.getMember(myUserId);
 
-            if (membership == "invite") {
-                lists["im.vector.fake.invite"].push(room);
-            } else if (membership == "join" || membership === "ban" || (me && me.isKicked())) {
+            if (membership === "invite") {
+                lists["im.vector.fake.invite"].push({room, category: CATEGORY_RED});
+            } else if (membership === "join" || membership === "ban" || (me && me.isKicked())) {
                 // Used to split rooms via tags
                 let tagNames = Object.keys(room.tags);
-
-                if (optimisticRequest && optimisticRequest.room === room) {
-                    // Remove old tag
-                    tagNames = tagNames.filter((tagName) => tagName !== optimisticRequest.oldTag);
-                    // Add new tag
-                    if (optimisticRequest.newTag &&
-                        !tagNames.includes(optimisticRequest.newTag)
-                    ) {
-                        tagNames.push(optimisticRequest.newTag);
-                    }
-                }
 
                 // ignore any m. tag names we don't know about
                 tagNames = tagNames.filter((t) => {
@@ -235,35 +290,31 @@ class RoomListStore extends Store {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
                         lists[tagName] = lists[tagName] || [];
-                        lists[tagName].push(room);
+
+                        // We categorize all the tagged rooms the same because we don't actually
+                        // care about the order (it's defined elsewhere)
+                        lists[tagName].push({room, category: CATEGORY_RED});
                     }
                 } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push(room);
+                    lists["im.vector.fake.direct"].push({room, category: this._calculateCategory(room)});
                 } else {
-                    lists["im.vector.fake.recent"].push(room);
+                    lists["im.vector.fake.recent"].push({room, category: this._calculateCategory(room)});
                 }
             } else if (membership === "leave") {
-                lists["im.vector.fake.archived"].push(room);
+                lists["im.vector.fake.archived"].push({room, category: this._calculateCategory(room)});
             }
         });
 
-        // Note: we check the settings up here instead of in the forEach or
-        // in the _recentsComparator to avoid hitting the SettingsStore a few
-        // thousand times.
-        const pinUnread = SettingsStore.getValue("pinUnreadRooms");
-        const pinMentioned = SettingsStore.getValue("pinMentionedRooms");
         Object.keys(lists).forEach((listKey) => {
             let comparator;
-            switch (RoomListStore._listOrders[listKey]) {
+            switch (LIST_ORDERS[listKey]) {
                 case "recent":
-                    comparator = (roomA, roomB) => {
-                        return this._recentsComparator(roomA, roomB, pinUnread, pinMentioned);
-                    };
+                    comparator = this._recentsComparator;
                     break;
                 case "manual":
                 default:
-                    comparator = this._getManualComparator(listKey, optimisticRequest);
+                    comparator = this._getManualComparator(listKey);
                     break;
             }
             lists[listKey].sort(comparator);
@@ -271,50 +322,8 @@ class RoomListStore extends Store {
 
         this._setState({
             lists,
-            ready: true, // Ready to receive updates via Room.tags events
+            ready: true, // Ready to receive updates to ordering
         });
-    }
-
-    _updateCachedRoomState(roomId, type, value) {
-        const roomCache = this._state.roomCache;
-        if (!roomCache[roomId]) roomCache[roomId] = {};
-
-        if (typeof value !== "undefined") roomCache[roomId][type] = value;
-        else delete roomCache[roomId][type];
-
-        this._setState({roomCache});
-    }
-
-    _clearCachedRoomState(roomId) {
-        const roomCache = this._state.roomCache;
-        delete roomCache[roomId];
-        this._setState({roomCache});
-    }
-
-    _getRoomState(room, type) {
-        const roomId = room.roomId;
-        const roomCache = this._state.roomCache;
-        if (roomCache[roomId] && typeof roomCache[roomId][type] !== 'undefined') {
-            return roomCache[roomId][type];
-        }
-
-        if (type === "timestamp") {
-            const ts = this._tsOfNewestEvent(room);
-            this._updateCachedRoomState(roomId, "timestamp", ts);
-            return ts;
-        } else if (type === "unread-muted") {
-            const unread = Unread.doesRoomHaveUnreadMessages(room);
-            this._updateCachedRoomState(roomId, "unread-muted", unread);
-            return unread;
-        } else if (type === "unread") {
-            const unread = room.getUnreadNotificationCount() > 0;
-            this._updateCachedRoomState(roomId, "unread", unread);
-            return unread;
-        } else if (type === "notifications") {
-            const notifs = room.getUnreadNotificationCount("highlight") > 0;
-            this._updateCachedRoomState(roomId, "notifications", notifs);
-            return notifs;
-        } else throw new Error("Unrecognized room cache type: " + type);
     }
 
     _eventTriggersRecentReorder(ev) {
@@ -342,53 +351,36 @@ class RoomListStore extends Store {
         }
     }
 
-    _recentsComparator(roomA, roomB, pinUnread, pinMentioned) {
-        // We try and set the ordering to be Mentioned > Unread > Recent
-        // assuming the user has the right settings, of course.
+    _calculateCategory(room) {
+        const mentions = room.getUnreadNotificationCount("highlight") > 0;
+        if (mentions) return CATEGORY_RED;
 
-        const timestampA = this._getRoomState(roomA, "timestamp");
-        const timestampB = this._getRoomState(roomB, "timestamp");
-        const timestampDiff = timestampB - timestampA;
+        let unread = room.getUnreadNotificationCount() > 0;
+        if (unread) return CATEGORY_GREY;
 
-        if (pinMentioned) {
-            const mentionsA = this._getRoomState(roomA, "notifications");
-            const mentionsB = this._getRoomState(roomB, "notifications");
-            if (mentionsA && !mentionsB) return -1;
-            if (!mentionsA && mentionsB) return 1;
+        unread = Unread.doesRoomHaveUnreadMessages(room);
+        if (unread) return CATEGORY_BOLD;
 
-            // If they both have notifications, sort by timestamp.
-            // If neither have notifications (the fourth check not shown
-            // here), then try and sort by unread messages and finally by
-            // timestamp.
-            if (mentionsA && mentionsB) return timestampDiff;
+        return CATEGORY_IDLE;
+    }
+
+    _recentsComparator(entryA, entryB) {
+        const roomA = entryA.room;
+        const roomB = entryB.room;
+        const categoryA = entryA.category;
+        const categoryB = entryB.category;
+
+        if (categoryA !== categoryB) {
+            const idxA = CATEGORY_ORDER.indexOf(categoryA);
+            const idxB = CATEGORY_ORDER.indexOf(categoryB);
+            if (idxA > idxB) return 1;
+            if (idxA < idxB) return -1;
+            return 0;
         }
 
-        if (pinUnread) {
-            let unreadA = this._getRoomState(roomA, "unread");
-            let unreadB = this._getRoomState(roomB, "unread");
-            if (unreadA && !unreadB) return -1;
-            if (!unreadA && unreadB) return 1;
-
-            // If they both have unread messages, sort by timestamp
-            // If nether have unread message (the fourth check not shown
-            // here), then just sort by timestamp anyways.
-            if (unreadA && unreadB) return timestampDiff;
-
-            // Unread can also mean "unread without badge", which is
-            // different from what the above checks for. We're also
-            // going to sort those here.
-            unreadA = this._getRoomState(roomA, "unread-muted");
-            unreadB = this._getRoomState(roomB, "unread-muted");
-            if (unreadA && !unreadB) return -1;
-            if (!unreadA && unreadB) return 1;
-
-            // If they both have unread messages, sort by timestamp
-            // If nether have unread message (the fourth check not shown
-            // here), then just sort by timestamp anyways.
-            if (unreadA && unreadB) return timestampDiff;
-        }
-
-        return timestampDiff;
+        const timestampA = this._tsOfNewestEvent(roomA);
+        const timestampB = this._tsOfNewestEvent(roomB);
+        return timestampB - timestampA;
     }
 
     _lexicographicalComparator(roomA, roomB) {
@@ -396,7 +388,10 @@ class RoomListStore extends Store {
     }
 
     _getManualComparator(tagName, optimisticRequest) {
-        return (roomA, roomB) => {
+        return (entryA, entryB) => {
+            const roomA = entryA.room;
+            const roomB = entryB.room;
+
             let metaA = roomA.tags[tagName];
             let metaB = roomB.tags[tagName];
 
@@ -404,8 +399,8 @@ class RoomListStore extends Store {
             if (optimisticRequest && roomB === optimisticRequest.room) metaB = optimisticRequest.metaData;
 
             // Make sure the room tag has an order element, if not set it to be the bottom
-            const a = metaA ? metaA.order : undefined;
-            const b = metaB ? metaB.order : undefined;
+            const a = metaA ? Number(metaA.order) : undefined;
+            const b = metaB ? Number(metaB.order) : undefined;
 
             // Order undefined room tag orders to the bottom
             if (a === undefined && b !== undefined) {
@@ -414,12 +409,12 @@ class RoomListStore extends Store {
                 return -1;
             }
 
-            return a == b ? this._lexicographicalComparator(roomA, roomB) : ( a > b ? 1 : -1);
+            return a === b ? this._lexicographicalComparator(roomA, roomB) : ( a > b ? 1 : -1);
         };
     }
 
     getRoomLists() {
-        return this._state.lists;
+        return this._state.presentationLists;
     }
 }
 
