@@ -225,5 +225,18 @@
     "You need to be able to invite users to do that.": "Du må kunne invitere andre brukere for å gjøre det.",
     "Unable to create widget.": "Klarte ikke lage widgeten.",
     "Missing roomId.": "Manglende rom-ID.",
-    "Failed to send request.": "Klarte ikke sende forespørsel."
+    "Failed to send request.": "Klarte ikke sende forespørsel.",
+    "This room is not recognised.": "Dette rommet blir ikke gjenkjent.",
+    "Power level must be positive integer.": "Maktnivået må være et positivt heltall.",
+    "You are not in this room.": "Du er ikke i dette rommet.",
+    "You do not have permission to do that in this room.": "Du har ikke tillatelse til å gjøre det i dette rommet.",
+    "Missing room_id in request": "Manglende room_id i forespørselen",
+    "Room %(roomId)s not visible": "Rom %(roomId)s er ikke synlig",
+    "Missing user_id in request": "Manglende user_id i forespørselen",
+    "Usage": "Bruk",
+    "Searches DuckDuckGo for results": "Søker DuckDuckGo for resultater",
+    "/ddg is not a command": "/ddg er ikke en kommando",
+    "To use it, just wait for autocomplete results to load and tab through them.": "For å bruke det, bare vent til autofullfør-resultatetene til å laste, og tab deg gjennom dem.",
+    "Upgrades a room to a new version": "Oppgraderer et rom til en ny versjon",
+    "Changes your display nickname": "Endrer visningsnavnet ditt"
 }
