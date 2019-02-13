@@ -226,6 +226,7 @@ export default class Stickerpicker extends React.Component {
                             showTitle={false}
                             showMinimise={true}
                             showDelete={false}
+                            showCancel={false}
                             showPopout={false}
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}

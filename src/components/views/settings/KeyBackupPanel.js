@@ -111,10 +111,10 @@ export default class KeyBackupPanel extends React.PureComponent {
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
             description: _t(
-                "Delete your backed up encryption keys from the server? " +
-                "You will no longer be able to use your recovery key to read encrypted message history",
+                "Are you sure? You will lose your encrypted messages if your " +
+                "keys are not backed up properly.",
             ),
-            button: _t('Delete backup'),
+            button: _t('Delete Backup'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
@@ -135,6 +135,10 @@ export default class KeyBackupPanel extends React.PureComponent {
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        const encryptedMessageAreEncrypted = _t(
+            "Encrypted messages are secured with end-to-end encryption. " +
+            "Only you and the recipient(s) have the keys to read these messages.",
+        );
 
         if (this.state.error) {
             return (
@@ -145,14 +149,25 @@ export default class KeyBackupPanel extends React.PureComponent {
         } else if (this.state.loading) {
             return <Spinner />;
         } else if (this.state.backupInfo) {
+            const EmojiText = sdk.getComponent('elements.EmojiText');
             let clientBackupStatus;
+            let restoreButtonCaption = _t("Restore from Backup");
+
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                clientBackupStatus = _t("This device is using key backup");
+                clientBackupStatus = <div>
+                    <p>{encryptedMessageAreEncrypted}</p>
+                    <p>{_t("This device is backing up your keys. ")}<EmojiText>✅</EmojiText></p>
+                </div>;
             } else {
-                clientBackupStatus = _t(
-                    "This device is <b>not</b> using key backup. Restore the backup to start using it.", {},
-                    {b: x => <b>{x}</b>},
-                );
+                clientBackupStatus = <div>
+                    <p>{encryptedMessageAreEncrypted}</p>
+                    <p>{_t(
+                        "This device is <b>not backing up your keys</b>.", {},
+                        {b: sub => <b>{sub}</b>},
+                    )}</p>
+                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                </div>;
+                restoreButtonCaption = _t("Use key backup");
             }
 
             let uploadStatus;
@@ -243,18 +258,25 @@ export default class KeyBackupPanel extends React.PureComponent {
                 </details>
                 <p>
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                        { _t("Restore backup") }
+                        {restoreButtonCaption}
                     </AccessibleButton>&nbsp;&nbsp;&nbsp;
                     <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                        { _t("Delete backup") }
+                        { _t("Delete Backup") }
                     </AccessibleButton>
                 </p>
             </div>;
         } else {
             return <div>
-                {_t("No backup is present")}<br /><br />
+                <div>
+                    <p>{_t(
+                        "Your keys are <b>not being backed up from this device</b>.", {},
+                        {b: sub => <b>{sub}</b>},
+                    )}</p>
+                    <p>{encryptedMessageAreEncrypted}</p>
+                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                </div>
                 <AccessibleButton kind="primary" onClick={this._startNewBackup}>
-                    { _t("Start a new backup") }
+                    { _t("Start using Key Backup") }
                 </AccessibleButton>
             </div>;
         }

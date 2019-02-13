@@ -17,6 +17,7 @@ limitations under the License.
 
 'use strict';
 import SettingsStore from "../../../settings/SettingsStore";
+import Timer from "../../../utils/Timer";
 
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -41,6 +42,7 @@ import {Resizer} from '../../../resizer';
 import {Layout, Distributor} from '../../../resizer/distributors/roomsublist2';
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+const HOVER_MOVE_TIMEOUT = 1000;
 
 function labelForTagName(tagName) {
     if (tagName.startsWith('u.')) return tagName.slice(2);
@@ -73,6 +75,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
 
+        this._hoverClearTimer = null;
         this._subListRefs = {
             // key => RoomSubList ref
         };
@@ -95,7 +98,7 @@ module.exports = React.createClass({
             // update overflow indicators
             this._checkSubListsOverflow();
             // don't store height for collapsed sublists
-            if(!this.collapsedState[key]) {
+            if (!this.collapsedState[key]) {
                 this.subListSizes[key] = size;
                 window.localStorage.setItem("mx_roomlist_sizes",
                     JSON.stringify(this.subListSizes));
@@ -357,11 +360,32 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
-    onMouseEnter: function(ev) {
-        this.setState({hover: true});
+    onMouseMove: async function(ev) {
+        if (!this._hoverClearTimer) {
+            this.setState({hover: true});
+            this._hoverClearTimer = new Timer(HOVER_MOVE_TIMEOUT);
+            this._hoverClearTimer.start();
+            let finished = true;
+            try {
+                await this._hoverClearTimer.finished();
+            } catch (err) {
+                finished = false;
+            }
+            this._hoverClearTimer = null;
+            if (finished) {
+                this.setState({hover: false});
+                this._delayedRefreshRoomList();
+            }
+        } else {
+            this._hoverClearTimer.restart();
+        }
     },
 
     onMouseLeave: function(ev) {
+        if (this._hoverClearTimer) {
+            this._hoverClearTimer.abort();
+            this._hoverClearTimer = null;
+        }
         this.setState({hover: false});
 
         // Refresh the room list just in case the user missed something.
@@ -774,7 +798,7 @@ module.exports = React.createClass({
 
         return (
             <div ref={this._collectResizeContainer} className="mx_RoomList"
-                 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                 onMouseMove={this.onMouseMove} onMouseLeave={this.onMouseLeave}>
                 { subListComponents }
             </div>
         );

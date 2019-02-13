@@ -90,6 +90,11 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    e2eInfoClicked: function() {
+        this.props.e2eInfoCallback();
+        this.closeMenu();
+    },
+
     onViewSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
@@ -332,6 +337,13 @@ module.exports = React.createClass({
             );
         }
 
+        let e2eInfo;
+        if (this.props.e2eInfoCallback) {
+            e2eInfo = <div className="mx_MessageContextMenu_field" onClick={this.e2eInfoClicked}>
+                    { _t('End-to-end encryption information') }
+                </div>;
+        }
+
         return (
             <div className="mx_MessageContextMenu">
                 { resendButton }
@@ -347,6 +359,7 @@ module.exports = React.createClass({
                 { replyButton }
                 { externalURLButton }
                 { collapseReplyThread }
+                { e2eInfo }
             </div>
         );
     },

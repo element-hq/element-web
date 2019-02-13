@@ -327,6 +327,7 @@ module.exports = withMatrixClient(React.createClass({
             top: y,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
+            e2eInfoCallback: () => this.onCryptoClicked(),
             onFinished: function() {
                 self.setState({menu: false});
             },
@@ -773,29 +774,31 @@ module.exports.haveTileForEvent = function(e) {
 
 function E2ePadlockUndecryptable(props) {
     return (
-        <E2ePadlock title={_t("Undecryptable")} icon="undecryptable" />
+        <E2ePadlock title={_t("Undecryptable")} icon="undecryptable" {...props} />
     );
 }
 
 function E2ePadlockUnverified(props) {
     return (
-        <E2ePadlock title={_t("Encrypted by an unverified device")} icon="unverified" />
+        <E2ePadlock title={_t("Encrypted by an unverified device")} icon="unverified" {...props} />
     );
 }
 
 function E2ePadlockUnencrypted(props) {
     return (
-        <E2ePadlock title={_t("Unencrypted message")} icon="unencrypted" />
+        <E2ePadlock title={_t("Unencrypted message")} icon="unencrypted" {...props} />
     );
 }
 
 function E2ePadlock(props) {
     if (SettingsStore.getValue("alwaysShowEncryptionIcons")) {
-        return <div
-            className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${props.icon}`}
-            title={props.title} onClick={props.onClick} />;
+        return (<div
+                    className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${props.icon}`}
+                    title={props.title} onClick={props.onClick} />);
     } else {
-        return <div className="mx_EventTile_e2eIcon mx_EventTile_e2eIcon_hidden" onClick={props.onClick} />;
+        return (<div
+                    className={`mx_EventTile_e2eIcon mx_EventTile_e2eIcon_hidden mx_EventTile_e2eIcon_${props.icon}`}
+                    onClick={props.onClick} />);
     }
 }
 
