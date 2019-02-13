@@ -80,7 +80,7 @@ export default class LazyRenderList extends React.Component {
         const {renderRange} = this.state;
         const paddingTop = renderRange.topCount * itemHeight;
         const paddingBottom = renderRange.bottomCount * itemHeight;
-        const renderedItems = items.slice(
+        const renderedItems = (items || []).slice(
             renderRange.topCount,
             renderRange.topCount + renderRange.renderCount,
         );
