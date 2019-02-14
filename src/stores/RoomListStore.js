@@ -43,6 +43,7 @@ class RoomListStore extends Store {
         super(dis);
 
         this._init();
+        this.__onDispatch = this.__onDispatch.bind(this);
         this._getManualComparator = this._getManualComparator.bind(this);
         this._recentsComparator = this._recentsComparator.bind(this);
     }
@@ -80,7 +81,7 @@ class RoomListStore extends Store {
         this.__emitChange();
     }
 
-    __onDispatch = (payload) => {
+    __onDispatch(payload) {
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             // Initialise state after initial sync
@@ -231,7 +232,7 @@ class RoomListStore extends Store {
 
         const myMembership = room.getMyMembership();
         let doInsert = true;
-        let targetTags = [];
+        const targetTags = [];
         if (myMembership !== "join" && myMembership !== "invite") {
             doInsert = false;
         } else {
@@ -253,8 +254,8 @@ class RoomListStore extends Store {
             listsClone[key] = [];
             let pushedEntry = false;
             const hasRoom = !!this._state.lists[key].find((e) => e.room.roomId === room.roomId);
-            let lastCategoryBoundary = 0;
-            let lastCategoryIndex = 0;
+            let desiredCategoryBoundaryIndex = 0;
+            let foundBoundary = false;
             for (const entry of this._state.lists[key]) {
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
@@ -264,16 +265,21 @@ class RoomListStore extends Store {
                         const entryTs = this._tsOfNewestEvent(entry.room);
                         const entryCategory = CATEGORY_ORDER.indexOf(entry.category);
 
+                        if (entryCategory >= targetCatIndex && !foundBoundary) {
+                            desiredCategoryBoundaryIndex = listsClone[key].length - 1;
+                            foundBoundary = true;
+                        }
+
                         // If we've hit the top of a boundary (either because there's no rooms in the target or
                         // we've reached the grouping of rooms), insert our room ahead of the others in the category.
                         // This ensures that our room is on top (more recent) than the others.
-                        const changedBoundary = entryCategory > targetCatIndex;
+                        const changedBoundary = entryCategory >= targetCatIndex;
                         const currentCategory = entryCategory === targetCatIndex;
-                        if (changedBoundary || (currentCategory && targetTs >= entryTs)) {
-                            if (changedBoundary) {
+                        if (changedBoundary || (false && currentCategory && targetTs >= entryTs)) {
+                            if (changedBoundary && false) {
                                 // If we changed a boundary, then we've gone too far - go to the top of the last
                                 // section instead.
-                                listsClone[key].splice(lastCategoryBoundary, 0, {room, category});
+                                listsClone[key].splice(desiredCategoryBoundaryIndex, 0, {room, category});
                             } else {
                                 // If we're ordering by timestamp, just insert normally
                                 listsClone[key].push({room, category});
@@ -281,11 +287,6 @@ class RoomListStore extends Store {
                             pushedEntry = true;
                             inserted = true;
                         }
-
-                        if (entryCategory !== lastCategoryIndex) {
-                            lastCategoryBoundary = listsClone[key].length - 1;
-                        }
-                        lastCategoryIndex = entryCategory;
                     }
 
                     // We insert our own record as needed, so don't let the old one through.
@@ -386,7 +387,7 @@ class RoomListStore extends Store {
             switch (LIST_ORDERS[listKey]) {
                 case "recent":
                     comparator = (entryA, entryB) => {
-                        this._recentsComparator(entryA, entryB, (room) => {
+                        return this._recentsComparator(entryA, entryB, (room) => {
                             if (latestEventTsCache[room.roomId]) {
                                 return latestEventTsCache[room.roomId];
                             }
