@@ -324,12 +324,12 @@ export const SETTINGS = {
     "pinMentionedRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Pin rooms I'm mentioned in to the top of the room list"),
-        default: false,
+        default: true,
     },
     "pinUnreadRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Pin unread rooms to the top of the room list"),
-        default: false,
+        default: true,
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
