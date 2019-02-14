@@ -1,3 +1,62 @@
+Changes in [1.0.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.0-rc.2) (2019-02-14)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.0-rc.1...v1.0.0-rc.2)
+
+ * Update from Weblate.
+   [\#2635](https://github.com/matrix-org/matrix-react-sdk/pull/2635)
+ * use throttle as its more responsive
+   [\#2632](https://github.com/matrix-org/matrix-react-sdk/pull/2632)
+ * update range when items size changes
+   [\#2631](https://github.com/matrix-org/matrix-react-sdk/pull/2631)
+ * Fix registration after clicking email link
+   [\#2630](https://github.com/matrix-org/matrix-react-sdk/pull/2630)
+ * Re-check key backup status when settings opened
+   [\#2626](https://github.com/matrix-org/matrix-react-sdk/pull/2626)
+ * Improve room list rendering performance
+   [\#2629](https://github.com/matrix-org/matrix-react-sdk/pull/2629)
+ * Adjust top left menu items
+   [\#2628](https://github.com/matrix-org/matrix-react-sdk/pull/2628)
+ * Normalised icon strokes to 1px
+   [\#2627](https://github.com/matrix-org/matrix-react-sdk/pull/2627)
+ * Security: Force TURN setting was inverted
+   [\#2623](https://github.com/matrix-org/matrix-react-sdk/pull/2623)
+ * Add redesigned dark theme
+   [\#2619](https://github.com/matrix-org/matrix-react-sdk/pull/2619)
+ * Fix mx_RoomTile_name weighting
+   [\#2610](https://github.com/matrix-org/matrix-react-sdk/pull/2610)
+ * Add divider between tabs and regular buttons in room header
+   [\#2621](https://github.com/matrix-org/matrix-react-sdk/pull/2621)
+ * Update from Weblate.
+   [\#2622](https://github.com/matrix-org/matrix-react-sdk/pull/2622)
+ * Change taking a community off the left-left panel less scary
+   [\#2609](https://github.com/matrix-org/matrix-react-sdk/pull/2609)
+ * Fixes and styling related to e2e icons and dialogs
+   [\#2620](https://github.com/matrix-org/matrix-react-sdk/pull/2620)
+ * Fix: stickers layout
+   [\#2618](https://github.com/matrix-org/matrix-react-sdk/pull/2618)
+ * Fix: dont assume settings label only has one line
+   [\#2616](https://github.com/matrix-org/matrix-react-sdk/pull/2616)
+ * Labs feature: recent room breadcrumbs
+   [\#2615](https://github.com/matrix-org/matrix-react-sdk/pull/2615)
+ * Fix: roomlist reordering lags
+   [\#2612](https://github.com/matrix-org/matrix-react-sdk/pull/2612)
+ *  Change text in e2e UX to new copy
+   [\#2617](https://github.com/matrix-org/matrix-react-sdk/pull/2617)
+ * Add display name / avatar to incoming sas dialog
+   [\#2613](https://github.com/matrix-org/matrix-react-sdk/pull/2613)
+ * Restore backup on new recovery method dialog
+   [\#2614](https://github.com/matrix-org/matrix-react-sdk/pull/2614)
+ * Welcome page cleanup
+   [\#2611](https://github.com/matrix-org/matrix-react-sdk/pull/2611)
+ * Scale up settings UI to be easier to read
+   [\#2604](https://github.com/matrix-org/matrix-react-sdk/pull/2604)
+ * !important shouldn't have a space
+   [\#2608](https://github.com/matrix-org/matrix-react-sdk/pull/2608)
+ * Add legacy verification button on wait
+   [\#2607](https://github.com/matrix-org/matrix-react-sdk/pull/2607)
+ * Update from Weblate.
+   [\#2606](https://github.com/matrix-org/matrix-react-sdk/pull/2606)
+
 Changes in [1.0.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.0-rc.1) (2019-02-08)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.14.8...v1.0.0-rc.1)
