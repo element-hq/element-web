@@ -6,6 +6,13 @@
    Arial here. */
 $font-family: 'Nunito', Arial, Helvetica, Sans-Serif;
 
+// unified palette
+// try to use these colors when possible
+$accent-color: #03b381;
+$notice-primary-color: #ff4b55;
+$notice-secondary-color: #61708b;
+$header-panel-bg-color: #f2f5f8;
+
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #454545;
 $primary-bg-color: #ffffff;
@@ -18,7 +25,6 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color: #7ac9a1;
 $accent-color-50pct: #92caad;
 $accent-color-alt: #238CF5;
 
@@ -27,7 +33,7 @@ $selection-fg-color: $primary-bg-color;
 $focus-brightness: 105%;
 
 // red warning colour
-$warning-color: #f56679;
+$warning-color: $notice-primary-color;
 // background colour for warnings
 $warning-bg-color: #DF2A8B;
 $info-bg-color: #2A9EDF;
@@ -35,8 +41,8 @@ $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // pinned events indicator
-$pinned-unread-color: #ff0064; // $warning-color
-$pinned-color: #888;
+$pinned-unread-color: $notice-primary-color;
+$pinned-color: $notice-secondary-color;
 
 // informational plinth
 $info-plinth-bg-color: #f7f7f7;
@@ -72,11 +78,11 @@ $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
 $input-focused-border-color: #238cf5;
-$input-valid-border-color: #7ac9a1;
+$input-valid-border-color: $accent-color;
 
 $field-focused-label-bg-color: #ffffff;
 
-$button-bg-color: #7ac9a1;
+$button-bg-color: $accent-color;
 $button-fg-color: white;
 
 // apart from login forms, which have stronger border
@@ -91,6 +97,7 @@ $scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: #ebedf8;
 $menu-bg-color: #fff;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
 $menu-selected-color: #f5f8fa;
 
 $avatar-initial-color: #ffffff;
@@ -139,10 +146,16 @@ $rte-group-pill-color: #aaa;
 $topleftmenu-color: #212121;
 $roomheader-color: #45474a;
 $roomheader-addroom-color: #91A1C0;
+$tagpanel-button-color: #91A1C0;
+$roomheader-button-color: #91A1C0;
+$groupheader-button-color: #91A1C0;
+$rightpanel-button-color: #91A1C0;
+$composer-button-color: #91A1C0;
 $roomtopic-color: #9fa9ba;
 $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #c9ced6;
+$header-divider-color: #91A1C0;
 
 // ********************
 
@@ -152,14 +165,14 @@ $roomtile-notified-color: #212121;
 $roomtile-selected-bg-color: #fff;
 $roomtile-focused-bg-color: #fff;
 
-$username-variant1-color: #1e7ddc;
-$username-variant2-color: #a756a8;
-$username-variant3-color: #7ac9a1;
-$username-variant4-color: #f2809d;
-$username-variant5-color: #ffc666;
-$username-variant6-color: #76ddd7;
-$username-variant7-color: #45529b;
-$username-variant8-color: #bfd251;
+$username-variant1-color: #368bd6;
+$username-variant2-color: #ac3ba8;
+$username-variant3-color: #03b381;
+$username-variant4-color: #e64f7a;
+$username-variant5-color: #ff812d;
+$username-variant6-color: #2dc2c5;
+$username-variant7-color: #5c56f5;
+$username-variant8-color: #74d12c;
 
 $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 
@@ -205,26 +218,24 @@ $lightbox-border-color: #ffffff;
 $tab-label-fg-color: #45474a;
 $tab-label-active-fg-color: #ffffff;
 $tab-label-bg-color: transparent;
-$tab-label-active-bg-color: #7ac9a1;
+$tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: #454545;
 $tab-label-active-icon-bg-color: #ffffff;
 
 // Buttons
 $button-primary-fg-color: #ffffff;
-$button-primary-bg-color: #7ac9a1;
-$button-primary-disabled-fg-color: #ffffff;
-$button-primary-disabled-bg-color: #bce4d0;
+$button-primary-bg-color: $accent-color;
+$button-secondary-bg-color: $accent-fg-color;
 $button-danger-fg-color: #ffffff;
-$button-danger-bg-color: #f56679;
+$button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
 // Toggle switch
 $togglesw-off-color: #c1c9d6;
-$togglesw-on-color: #7ac9a1;
+$togglesw-on-color: $accent-color;
 $togglesw-ball-color: #fff;
 
-// unused?
 $progressbar-color: #000;
 
 $room-warning-bg-color: #fff8e3;
@@ -235,7 +246,10 @@ $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
 $authpage-body-bg-color: #ffffff;
 $authpage-lang-color: #4e5054;
-$authpage-body-color: #61708b;
+$authpage-primary-color: #454545;
+$authpage-secondary-color: #61708b;
+
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
 /*** form elements ***/
 
@@ -270,21 +284,11 @@ $authpage-body-color: #61708b;
             border: none;
             flex: 1;
             color: $primary-fg-color;
-        },
+        }
         input::placeholder {
-          color: $roomsublist-label-fg-color;
+            color: $roomsublist-label-fg-color;
         }
     }
-}
-
-input[type=text],
-input[type=search],
-input[type=password] {
-    padding: 9px;
-    font-family: $font-family;
-    font-size: 14px;
-    font-weight: 600;
-    min-width: 0;
 }
 
 /*** panels ***/
@@ -319,7 +323,6 @@ input[type=search].mx_textinput_icon {
     background-position: 10px center;
 }
 
-
 // FIXME THEME - Tint by CSS rather than referencing a duplicate asset
 input[type=text].mx_textinput_icon.mx_textinput_search,
 input[type=search].mx_textinput_icon.mx_textinput_search {
@@ -332,7 +335,7 @@ input[type=search]::-webkit-search-decoration,
 input[type=search]::-webkit-search-cancel-button,
 input[type=search]::-webkit-search-results-button,
 input[type=search]::-webkit-search-results-decoration {
-  display: none;
+    display: none;
 }
 
 .input[type=text]::-webkit-input-placeholder,
@@ -386,5 +389,5 @@ textarea::placeholder {
     font-weight: 600;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
-    background-color: $accent-fg-color;
+    background-color: $button-secondary-bg-color;
 }

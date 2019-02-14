@@ -44,13 +44,22 @@ limitations under the License.
 }
 
 .mx_GroupHeader_button {
-    margin-left: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-color: $groupheader-button-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
 }
 
-.mx_GroupHeader_button object {
-    // prevents clicks from being swallowed by svg in 'object' tag
-    pointer-events: none;
+.mx_GroupHeader_editButton {
+    mask-image: url('$(res)/img/icons-settings-room.svg');
+}
+
+.mx_GroupHeader_shareButton {
+    mask-image: url('$(res)/img/icons-share.svg');
 }
 
 .mx_GroupView_editable {

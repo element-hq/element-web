@@ -152,7 +152,7 @@ limitations under the License.
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
         transition: background-image 0.1s ease-in;
-        background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
+        background: linear-gradient(to top, $panel-gradient);
     }
 
 /*

@@ -42,7 +42,7 @@ export default class KeyBackupPanel extends React.PureComponent {
     }
 
     componentWillMount() {
-        this._loadBackupStatus();
+        this._checkKeyBackupStatus();
 
         MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatus);
         MatrixClientPeg.get().on(
@@ -70,7 +70,30 @@ export default class KeyBackupPanel extends React.PureComponent {
     }
 
     _onKeyBackupStatus() {
+        // This just loads the current backup status rather than forcing
+        // a re-check otherwise we risk causing infinite loops
         this._loadBackupStatus();
+    }
+
+    async _checkKeyBackupStatus() {
+        try {
+            const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
+            this.setState({
+                backupInfo,
+                backupSigStatus: trustInfo,
+                error: null,
+                loading: false,
+            });
+        } catch (e) {
+            console.log("Unable to fetch check backup status", e);
+            if (this._unmounted) return;
+            this.setState({
+                error: e,
+                backupInfo: null,
+                backupSigStatus: null,
+                loading: false,
+            });
+        }
     }
 
     async _loadBackupStatus() {
@@ -80,6 +103,7 @@ export default class KeyBackupPanel extends React.PureComponent {
             const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
             if (this._unmounted) return;
             this.setState({
+                error: null,
                 backupInfo,
                 backupSigStatus,
                 loading: false,
@@ -89,9 +113,10 @@ export default class KeyBackupPanel extends React.PureComponent {
             if (this._unmounted) return;
             this.setState({
                 error: e,
+                backupInfo: null,
+                backupSigStatus: null,
                 loading: false,
             });
-            return;
         }
     }
 

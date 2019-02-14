@@ -59,6 +59,10 @@ export default class IndicatorScrollbar extends React.Component {
         }
     }
 
+    getScrollTop() {
+        return this._autoHideScrollbar.getScrollTop();
+    }
+
     componentWillUnmount() {
         if (this._scrollElement) {
             this._scrollElement.removeEventListener("scroll", this.checkOverflow);
