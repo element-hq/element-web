@@ -93,6 +93,20 @@ class RoomListStore extends Store {
                 this._generateInitialRoomLists();
             }
             break;
+            case 'MatrixActions.Room.receipt': {
+                if (!logicallyReady) break;
+
+                // First see if the receipt event is for our own user
+                const myUserId = this._matrixClient.getUserId();
+                for (const eventId of Object.keys(payload.event.getContent())) {
+                    const receiptUsers = Object.keys(payload.event.getContent()[eventId]['m.read'] || {});
+                    if (receiptUsers.includes(myUserId)) {
+                        this._roomUpdateTriggered(payload.room.roomId);
+                        return;
+                    }
+                }
+            }
+            break;
             case 'MatrixActions.Room.tags': {
                 if (!logicallyReady) break;
                 // TODO: Figure out which rooms changed in the tag and only change those.
@@ -212,7 +226,8 @@ class RoomListStore extends Store {
         if (!room) return;
 
         if (this._state.stickyRoomId !== room.roomId) {
-            this._setRoomCategory(room, this._calculateCategory(room));
+            const category = this._calculateCategory(room);
+            this._setRoomCategory(room, category);
         }
     }
 
