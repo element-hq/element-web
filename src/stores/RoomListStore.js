@@ -231,24 +231,22 @@ class RoomListStore extends Store {
         }
     }
 
-    _setRoomCategory(room, category, targetTags = []) {
+    _setRoomCategory(room, category) {
         const listsClone = {};
         const targetCatIndex = CATEGORY_ORDER.indexOf(category);
+        const targetTs = this._tsOfNewestEvent(room);
 
         const myMembership = room.getMyMembership();
         let doInsert = true;
+        let targetTags = [];
         if (myMembership !== "join" && myMembership !== "invite") {
             doInsert = false;
         } else {
             const dmRoomMap = DMRoomMap.shared();
             if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                if (!targetTags.includes('im.vector.fake.direct')) {
-                    targetTags.push('im.vector.fake.direct');
-                }
+                targetTags.push('im.vector.fake.direct');
             } else {
-                if (!targetTags.includes('im.vector.fake.recent')) {
-                    targetTags.push('im.vector.fake.recent');
-                }
+                targetTags.push('im.vector.fake.recent');
             }
         }
 
@@ -262,21 +260,40 @@ class RoomListStore extends Store {
             listsClone[key] = [];
             let pushedEntry = false;
             const hasRoom = !!this._state.lists[key].find((e) => e.room.roomId === room.roomId);
+            let lastCategoryBoundary = 0;
+            let lastCategoryIndex = 0;
             for (const entry of this._state.lists[key]) {
+
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
-                    const inTag = targetTags.length === 0 || targetTags.includes('im.vector.ake.recent');
+                    const inTag = targetTags.length === 0 || targetTags.includes(key);
                     if (!pushedEntry && doInsert && inTag) {
+                        const entryTs = this._tsOfNewestEvent(entry.room);
+                        const entryCategory = CATEGORY_ORDER.indexOf(entry.category);
+
                         // If we've hit the top of a boundary (either because there's no rooms in the target or
                         // we've reached the grouping of rooms), insert our room ahead of the others in the category.
                         // This ensures that our room is on top (more recent) than the others.
-                        const changedBoundary = CATEGORY_ORDER.indexOf(entry.category) >= targetCatIndex;
-                        if (changedBoundary) {
-                            listsClone[key].push({room: room, category: category});
+                        const changedBoundary = entryCategory > targetCatIndex;
+                        const currentCategory = entryCategory === targetCatIndex;
+                        if (changedBoundary || (currentCategory && targetTs >= entryTs)) {
+                            if (changedBoundary) {
+                                // If we changed a boundary, then we've gone too far - go to the top of the last
+                                // section instead.
+                                listsClone[key].splice(lastCategoryBoundary, 0, {room, category});
+                            } else {
+                                // If we're ordering by timestamp, just insert normally
+                                listsClone[key].push({room, category});
+                            }
                             pushedEntry = true;
                             inserted = true;
                         }
+
+                        if (entryCategory !== lastCategoryIndex) {
+                            lastCategoryBoundary = listsClone[key].length - 1;
+                        }
+                        lastCategoryIndex = entryCategory;
                     }
 
                     // We insert our own record as needed, so don't let the old one through.
