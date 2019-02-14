@@ -126,6 +126,26 @@ export default class HelpSettingsTab extends React.Component {
         );
     }
 
+    _renderCredits() {
+        // Note: This is not translated because it is legal text.
+        // Also, &nbsp; is ugly but necessary.
+        return (
+            <div className='mx_SettingsTab_section'>
+                <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
+                <ul>
+                    <li>
+                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noopener" target="_blank">
+                        default cover photo</a> is (C)&nbsp;
+                        <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>&nbsp;
+                        used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">
+                        CC-BY-SA 4.0</a>. No warranties are given.
+                    </li>
+                </ul>
+            </div>
+        );
+    }
+
     render() {
         let faqText = _t('For help with using Riot, click <a>here</a>.', {}, {
             'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noopener' target='_blank'>{sub}</a>,
@@ -211,6 +231,7 @@ export default class HelpSettingsTab extends React.Component {
                     </div>
                 </div>
                 {this._renderLegal()}
+                {this._renderCredits()}
                 <div className='mx_SettingsTab_section mx_HelpSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                     <div className='mx_SettingsTab_subsectionText'>

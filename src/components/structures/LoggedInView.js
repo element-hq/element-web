@@ -31,6 +31,7 @@ import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
+import { getHomePageUrl } from '../../utils/pages';
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -459,17 +460,7 @@ const LoggedInView = React.createClass({
 
             case PageTypes.HomePage:
                 {
-                    const pagesConfig = this.props.config.embeddedPages;
-                    let pageUrl = null;
-                    if (pagesConfig) {
-                        pageUrl = pagesConfig.homeUrl;
-                    }
-                    if (!pageUrl) {
-                        // This is a deprecated config option for the home page
-                        // (despite the name, given we also now have a welcome
-                        // page, which is not the same).
-                        pageUrl = this.props.config.welcomePageUrl;
-                    }
+                    const pageUrl = getHomePageUrl(this.props.config);
                     pageElement = <EmbeddedPage className="mx_HomePage"
                         url={pageUrl}
                         scrollbar={true}

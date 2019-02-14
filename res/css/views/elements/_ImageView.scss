@@ -77,7 +77,8 @@ limitations under the License.
 
 .mx_ImageView_cancel {
     position: absolute;
-    top: 0px;
+    // hack for mx_Dialog having a top padding of 40px
+    top: 40px;
     right: 0px;
     padding: 35px;
     cursor: pointer;
