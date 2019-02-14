@@ -113,7 +113,7 @@
     "Custom": "Egyedi",
     "Custom level": "Egyedi szint",
     "/ddg is not a command": "/ddg nem egy parancs",
-    "Deactivate Account": "Fiók zárolása",
+    "Deactivate Account": "Fiók bezárása",
     "Deactivate my account": "Fiókom felfüggesztése",
     "Decline": "Elutasít",
     "Decrypt %(text)s": "%(text)s visszafejtése",
@@ -1525,7 +1525,6 @@
     "2018 theme": "2018-as  téma",
     "Account management": "Fiók menedzsment",
     "Deactivating your account is a permanent action - be careful!": "A fiók felfüggesztése végleges - légy óvatos!",
-    "Deactivate Account": "Fiók bezárása",
     "For help with using Riot, click <a>here</a>.": "A Riot használatában való segítséghez kattints <a>ide</a>.",
     "For help with using Riot, click <a>here</a> or start a chat with our bot using the button below.": "A Riot használatában való segítségér kattints <a>ide</a> vagy kezdj beszélgetni a botunkkal az alábbi gombra kattintva.",
     "Start a chat with Riot Bot": "Csevegés kezdése a Riot Bottal",
@@ -1773,5 +1772,8 @@
     "Secure your backup with a passphrase": "Védd a mentést egy jelmondattal",
     "Confirm your passphrase": "Erősítsd meg a jelmondatot",
     "Recovery key": "Visszaállítási Kulcs",
-    "Success!": "Sikeres!"
+    "Success!": "Sikeres!",
+    "Allow Peer-to-Peer for 1:1 calls": "Ponttól-pontig kapcsolat engedélyezése az 1:1 hívásokban",
+    "Default theme": "Alapértelmezett stílus",
+    "Welcome": "Üdvözöllek"
 }
