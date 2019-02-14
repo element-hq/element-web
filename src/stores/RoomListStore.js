@@ -246,6 +246,8 @@ class RoomListStore extends Store {
     }
 
     _setRoomCategory(room, category) {
+        if (!room) return; // This should only happen in tests
+
         const listsClone = {};
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
         const targetTimestamp = this._tsOfNewestEvent(room);
@@ -419,6 +421,8 @@ class RoomListStore extends Store {
                 case "recent":
                     comparator = (entryA, entryB) => {
                         return this._recentsComparator(entryA, entryB, (room) => {
+                            if (!room) return Number.MAX_SAFE_INTEGER; // Should only happen in tests
+
                             if (latestEventTsCache[room.roomId]) {
                                 return latestEventTsCache[room.roomId];
                             }
@@ -452,7 +456,7 @@ class RoomListStore extends Store {
     _tsOfNewestEvent(room) {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
-        if (!room.timeline) return Number.MAX_SAFE_INTEGER;
+        if (!room || !room.timeline) return Number.MAX_SAFE_INTEGER;
 
         for (let i = room.timeline.length - 1; i >= 0; --i) {
             const ev = room.timeline[i];
