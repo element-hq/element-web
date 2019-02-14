@@ -1,3 +1,30 @@
+Changes in [1.0.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.0) (2019-02-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.0-rc.2...v1.0.0)
+
+ * Update from Weblate.
+   [\#2646](https://github.com/matrix-org/matrix-react-sdk/pull/2646)
+ * Remove 'welcome' from top-left menu
+   [\#2641](https://github.com/matrix-org/matrix-react-sdk/pull/2641)
+ * Turn on pin unread rooms for everyone
+   [\#2645](https://github.com/matrix-org/matrix-react-sdk/pull/2645)
+ * Update help buoy text and issue links
+   [\#2640](https://github.com/matrix-org/matrix-react-sdk/pull/2640)
+ * Fix icons being cut off in settings
+   [\#2644](https://github.com/matrix-org/matrix-react-sdk/pull/2644)
+ * Add credit for cover photo usage
+   [\#2643](https://github.com/matrix-org/matrix-react-sdk/pull/2643)
+ * make e2e icons on message transparent
+   [\#2642](https://github.com/matrix-org/matrix-react-sdk/pull/2642)
+ * fix close button being half off screen
+   [\#2639](https://github.com/matrix-org/matrix-react-sdk/pull/2639)
+ * Fix excessive timeline whitespace
+   [\#2638](https://github.com/matrix-org/matrix-react-sdk/pull/2638)
+ * Remove the white screen of welcome
+   [\#2637](https://github.com/matrix-org/matrix-react-sdk/pull/2637)
+ * always rerender room tiles
+   [\#2636](https://github.com/matrix-org/matrix-react-sdk/pull/2636)
+
 Changes in [1.0.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.0-rc.2) (2019-02-14)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.0-rc.1...v1.0.0-rc.2)
