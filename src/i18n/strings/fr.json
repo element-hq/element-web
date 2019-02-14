@@ -1775,5 +1775,7 @@
     "Success!": "Terminé !",
     "Allow Peer-to-Peer for 1:1 calls": "Autoriser les connexions pair-à-pair pour les appels individuels",
     "Default theme": "Thème par défaut",
-    "Welcome": "Bienvenue"
+    "Welcome": "Bienvenue",
+    "Credits": "Crédits",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "Si vous avez rencontré des problèmes ou si vous souhaitez partager votre avis, dites-le nous sur GitHub."
 }
