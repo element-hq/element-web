@@ -1,3 +1,12 @@
+Changes in [1.0.0](https://github.com/vector-im/riot-web/releases/tag/v1.0.0) (2019-02-14)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.2...v1.0.0)
+
+ * Add snipping lines to welcome page without guests
+   [\#8634](https://github.com/vector-im/riot-web/pull/8634)
+ * Add home page to fix loading tests
+   [\#8625](https://github.com/vector-im/riot-web/pull/8625)
+
 Changes in [1.0.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.0-rc.2) (2019-02-14)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.1...v1.0.0-rc.2)
