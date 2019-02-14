@@ -211,6 +211,14 @@ module.exports = React.createClass({
         // forget what we wanted, so don't overwrite the saved state unless
         // this appears to be a user-initiated scroll.
         if (sn.scrollTop != this._lastSetScroll) {
+            // when scrolling, we don't care about disappearing typing notifs shrinking the timeline
+            // this might cause the scrollbar to resize in case the max-height was not correct
+            // but that's better than ending up with a lot of whitespace at the bottom of the timeline.
+            // we need to above check because when showing the typing notifs, an onScroll event is also triggered
+            if (!this.isAtBottom()) {
+                this.clearBlockShrinking();
+            }
+
             this._saveScrollState();
         } else {
             debuglog("Ignoring scroll echo");
