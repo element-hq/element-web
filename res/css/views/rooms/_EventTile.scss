@@ -277,8 +277,7 @@ limitations under the License.
 }
 
 /* End to end encryption stuff */
-
-.mx_EventTile_e2eIcon:hover {
+.mx_EventTile:hover .mx_EventTile_e2eIcon {
     opacity: 1;
 }
 
