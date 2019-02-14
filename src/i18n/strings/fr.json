@@ -92,7 +92,7 @@
     "Current password": "Mot de passe actuel",
     "Curve25519 identity key": "Clé d’identité Curve25519",
     "/ddg is not a command": "/ddg n'est pas une commande",
-    "Deactivate Account": "Désactiver le compte",
+    "Deactivate Account": "Fermer le compte",
     "Deactivate my account": "Désactiver mon compte",
     "Decrypt %(text)s": "Déchiffrer %(text)s",
     "Decryption error": "Erreur de déchiffrement",
@@ -1526,7 +1526,6 @@
     "2018 theme": "Thème 2018",
     "Account management": "Gestion du compte",
     "Deactivating your account is a permanent action - be careful!": "La désactivation du compte est une action permanente. Soyez prudent !",
-    "Deactivate Account": "Fermer le compte",
     "For help with using Riot, click <a>here</a>.": "Pour obtenir de l'aide sur l'utilisation de Riot, cliquez <a>ici</a>.",
     "For help with using Riot, click <a>here</a> or start a chat with our bot using the button below.": "Pour obtenir de l'aide sur l'utilisation de Riot, cliquez <a>ici</a> ou commencez une discussion avec notre bot en utilisant le bouton ci-dessous.",
     "Start a chat with Riot Bot": "Commencer une discussion avec le bot Riot",
@@ -1773,5 +1772,8 @@
     "Secure your backup with a passphrase": "Protégez votre sauvegarde avec une phrase de passe",
     "Confirm your passphrase": "Confirmez votre phrase de passe",
     "Recovery key": "Clé de récupération",
-    "Success!": "Terminé !"
+    "Success!": "Terminé !",
+    "Allow Peer-to-Peer for 1:1 calls": "Autoriser les connexions pair-à-pair pour les appels individuels",
+    "Default theme": "Thème par défaut",
+    "Welcome": "Bienvenue"
 }

@@ -278,6 +278,10 @@ limitations under the License.
 
 /* End to end encryption stuff */
 
+.mx_EventTile_e2eIcon:hover {
+    opacity: 1;
+}
+
 .mx_EventTile_e2eIcon {
     display: block;
     position: absolute;
@@ -289,6 +293,7 @@ limitations under the License.
     mask-size: 14px;
     mask-repeat: no-repeat;
     mask-position: 0;
+    opacity: 0.2;
 }
 
 .mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {

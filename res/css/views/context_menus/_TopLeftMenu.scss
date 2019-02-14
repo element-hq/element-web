@@ -31,10 +31,6 @@ limitations under the License.
             mask-image: url('$(res)/img/feather-icons/home.svg');
         }
 
-        li.mx_TopLeftMenu_icon_welcome::after {
-            mask-image: url('$(res)/img/feather-icons/gift.svg');
-        }
-
         li.mx_TopLeftMenu_icon_settings::after {
             mask-image: url('$(res)/img/feather-icons/settings.svg');
         }

@@ -40,6 +40,7 @@ import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 require('../../stores/LifecycleStore');
 import PageTypes from '../../PageTypes';
+import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
@@ -1198,8 +1199,12 @@ export default React.createClass({
         } else {
             if (MatrixClientPeg.get().isGuest()) {
                 dis.dispatch({action: 'view_welcome_page'});
-            } else {
+            } else if (getHomePageUrl(this.props.config)) {
                 dis.dispatch({action: 'view_home_page'});
+            } else {
+                this.firstSyncPromise.promise.then(() => {
+                    dis.dispatch({action: 'view_next_room'});
+                });
             }
         }
     },
