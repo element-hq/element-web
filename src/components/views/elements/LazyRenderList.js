@@ -73,12 +73,6 @@ export default class LazyRenderList extends React.Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        const itemsChanged = nextProps.items !== this.props.items;
-        const rangeChanged = nextState.renderRange !== this.state.renderRange;
-        return itemsChanged || rangeChanged;
-    }
-
     render() {
         const {itemHeight, items, renderItem} = this.props;
 
