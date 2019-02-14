@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +19,22 @@ import DMRoomMap from '../utils/DMRoomMap';
 import Unread from '../Unread';
 import SettingsStore from "../settings/SettingsStore";
 
-const CATEGORY_RED = "red";
-const CATEGORY_GREY = "grey";
-const CATEGORY_BOLD = "bold";
-const CATEGORY_IDLE = "idle";
+/*
+Room sorting algorithm:
+* Always prefer to have red > grey > bold > idle
+* The room being viewed should be sticky (not jump down to the idle list)
+* When switching to a new room, sort the last sticky room to the top of the idle list.
+
+The approach taken by the store is to generate an initial representation of all the
+tagged lists (accepting that it'll take a little bit longer to calculate) and make
+small changes to that over time. This results in quick changes to the room list while
+also having update operations feel more like popping/pushing to a stack.
+ */
+
+const CATEGORY_RED = "red";     // Mentions in the room
+const CATEGORY_GREY = "grey";   // Unread notified messages (not mentions)
+const CATEGORY_BOLD = "bold";   // Unread messages (not notified, 'Mentions Only' rooms)
+const CATEGORY_IDLE = "idle";   // Nothing of interest
 
 const CATEGORY_ORDER = [CATEGORY_RED, CATEGORY_GREY, CATEGORY_BOLD, CATEGORY_IDLE];
 const LIST_ORDERS = {
@@ -70,6 +82,10 @@ class RoomListStore extends Store {
     }
 
     _setState(newState) {
+        // If we're changing the lists, transparently change the presentation lists (which
+        // is given to requesting components). This dramatically simplifies our code elsewhere
+        // while also ensuring we don't need to update all the calling components to support
+        // categories.
         if (newState['lists']) {
             const presentationLists = {};
             for (const key of Object.keys(newState['lists'])) {
@@ -205,20 +221,24 @@ class RoomListStore extends Store {
 
                 // Note: it is important that we set a new stickyRoomId before setting the old room
                 // to IDLE. If we don't, the wrong room gets counted as sticky.
-                const currentSticky = this._state.stickyRoomId;
+                const currentStickyId = this._state.stickyRoomId;
                 this._setState({stickyRoomId: payload.room_id});
-                if (currentSticky) {
-                    this._setRoomCategory(this._matrixClient.getRoom(currentSticky), CATEGORY_IDLE);
+                if (currentStickyId) {
+                    this._setRoomCategory(this._matrixClient.getRoom(currentStickyId), CATEGORY_IDLE);
                 }
             }
             break;
         }
-    };
+    }
 
     _roomUpdateTriggered(roomId) {
         const room = this._matrixClient.getRoom(roomId);
         if (!room) return;
 
+        // We don't calculate categories for sticky rooms because we have a moderate
+        // interest in trying to maintain the category that they were last in before
+        // being artificially flagged as IDLE. Also, this reduces the amount of time
+        // we spend in _setRoomCategory ever so slightly.
         if (this._state.stickyRoomId !== room.roomId) {
             const category = this._calculateCategory(room);
             this._setRoomCategory(room, category);
@@ -227,8 +247,8 @@ class RoomListStore extends Store {
 
     _setRoomCategory(room, category) {
         const listsClone = {};
-        const targetCatIndex = CATEGORY_ORDER.indexOf(category);
-        const targetTs = this._tsOfNewestEvent(room);
+        const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
+        const targetTimestamp = this._tsOfNewestEvent(room);
 
         const myMembership = room.getMyMembership();
         let doInsert = true;
@@ -247,35 +267,43 @@ class RoomListStore extends Store {
         // We need to update all instances of a room to ensure that they are correctly organized
         // in the list. We do this by shallow-cloning the entire `lists` object using a single
         // iterator. Within the loop, we also rebuild the list of rooms per tag (key) so that the
-        // updated room gets slotted into the right spot.
+        // updated room gets slotted into the right spot. This sacrifices code clarity for not
+        // iterating on potentially large collections multiple times.
 
         let inserted = false;
         for (const key of Object.keys(this._state.lists)) {
             listsClone[key] = [];
             let pushedEntry = false;
             const hasRoom = !!this._state.lists[key].find((e) => e.room.roomId === room.roomId);
+
+            // We track where the boundary within listsClone[key] is just in case our timestamp
+            // ordering fails. If we can't stick the room in at the correct place in the category
+            // grouping based on timestamp, we'll stick it at the top of the group which will be
+            // the index we track here.
             let desiredCategoryBoundaryIndex = 0;
             let foundBoundary = false;
+
             for (const entry of this._state.lists[key]) {
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
                     const inTag = targetTags.length === 0 || targetTags.includes(key);
                     if (!pushedEntry && doInsert && inTag) {
-                        const entryTs = this._tsOfNewestEvent(entry.room);
-                        const entryCategory = CATEGORY_ORDER.indexOf(entry.category);
+                        const entryTimestamp = this._tsOfNewestEvent(entry.room);
+                        const entryCategoryIndex = CATEGORY_ORDER.indexOf(entry.category);
 
-                        if (entryCategory >= targetCatIndex && !foundBoundary) {
+                        // As per above, check if we're meeting that boundary we wanted to locate.
+                        if (entryCategoryIndex >= targetCategoryIndex && !foundBoundary) {
                             desiredCategoryBoundaryIndex = listsClone[key].length - 1;
                             foundBoundary = true;
                         }
 
-                        // If we've hit the top of a boundary (either because there's no rooms in the target or
-                        // we've reached the grouping of rooms), insert our room ahead of the others in the category.
-                        // This ensures that our room is on top (more recent) than the others.
-                        const changedBoundary = entryCategory >= targetCatIndex;
-                        const currentCategory = entryCategory === targetCatIndex;
-                        if (changedBoundary || (false && currentCategory && targetTs >= entryTs)) {
+                        // If we've hit the top of a boundary beyond our target category, insert at the top of
+                        // the grouping to ensure the room isn't slotted incorrectly. Otherwise, try to insert
+                        // based on most recent timestamp.
+                        const changedBoundary = entryCategoryIndex > targetCategoryIndex;
+                        const currentCategory = entryCategoryIndex === targetCategoryIndex;
+                        if (changedBoundary || (false && currentCategory && targetTimestamp >= entryTimestamp)) {
                             if (changedBoundary && false) {
                                 // If we changed a boundary, then we've gone too far - go to the top of the last
                                 // section instead.
@@ -317,8 +345,9 @@ class RoomListStore extends Store {
             }
             for (const tag of tags) {
                 for (let i = 0; i < listsClone[tag].length; i++) {
+                    // Just find the top of our category grouping and insert it there.
                     const catIdxAtPosition = CATEGORY_ORDER.indexOf(listsClone[tag][i].category);
-                    if (catIdxAtPosition >= targetCatIndex) {
+                    if (catIdxAtPosition >= targetCategoryIndex) {
                         listsClone[tag].splice(i, 0, {room: room, category: category});
                         break;
                     }
@@ -379,7 +408,9 @@ class RoomListStore extends Store {
             }
         });
 
-        // We use this cache in the recents comparator because _tsOfNewestEvent can take a while
+        // We use this cache in the recents comparator because _tsOfNewestEvent can take a while. This
+        // cache only needs to survive the sort operation below and should not be implemented outside
+        // of this function, otherwise the room lists will almost certainly be out of date and wrong.
         const latestEventTsCache = {}; // roomId => timestamp
 
         Object.keys(lists).forEach((listKey) => {
