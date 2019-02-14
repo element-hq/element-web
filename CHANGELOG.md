@@ -1,3 +1,108 @@
+Changes in [1.0.0](https://github.com/vector-im/riot-web/releases/tag/v1.0.0) (2019-02-14)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.2...v1.0.0)
+
+ * Add snipping lines to welcome page without guests
+   [\#8634](https://github.com/vector-im/riot-web/pull/8634)
+ * Add home page to fix loading tests
+   [\#8625](https://github.com/vector-im/riot-web/pull/8625)
+
+Changes in [1.0.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.0-rc.2) (2019-02-14)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.1...v1.0.0-rc.2)
+
+ * Update from Weblate.
+   [\#8615](https://github.com/vector-im/riot-web/pull/8615)
+ * Replace favicon assets to ones with transparent backgrounds
+   [\#8600](https://github.com/vector-im/riot-web/pull/8600)
+ * Refreshed icons
+   [\#8594](https://github.com/vector-im/riot-web/pull/8594)
+ * Fix order of fetch-develop-deps / npm install
+   [\#8566](https://github.com/vector-im/riot-web/pull/8566)
+ * Revive building dark theme
+   [\#8540](https://github.com/vector-im/riot-web/pull/8540)
+ * Update from Weblate.
+   [\#8546](https://github.com/vector-im/riot-web/pull/8546)
+ * Repair app loading tests after welcome page
+   [\#8525](https://github.com/vector-im/riot-web/pull/8525)
+ * Support configurable welcome background and logo
+   [\#8528](https://github.com/vector-im/riot-web/pull/8528)
+ * Update from Weblate.
+   [\#8518](https://github.com/vector-im/riot-web/pull/8518)
+ * Document `embeddedPages` configuration
+   [\#8514](https://github.com/vector-im/riot-web/pull/8514)
+ * README.md : Syntax Coloring
+   [\#8502](https://github.com/vector-im/riot-web/pull/8502)
+
+Changes in [1.0.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.0-rc.1) (2019-02-08)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.9...v1.0.0-rc.1)
+
+ * Update from Weblate.
+   [\#8475](https://github.com/vector-im/riot-web/pull/8475)
+ * Add configurable welcome page
+   [\#8466](https://github.com/vector-im/riot-web/pull/8466)
+ * fix app tests after force enabling lazy loading + removing feature flag
+   [\#8464](https://github.com/vector-im/riot-web/pull/8464)
+ * Allow Electron to zoom with CommandOrControl+=
+   [\#8381](https://github.com/vector-im/riot-web/pull/8381)
+ * Hide sign in / create account for logged in users
+   [\#8368](https://github.com/vector-im/riot-web/pull/8368)
+ * Fix home page link target
+   [\#8365](https://github.com/vector-im/riot-web/pull/8365)
+ * Add auth background image and update Riot logo
+   [\#8364](https://github.com/vector-im/riot-web/pull/8364)
+ * New homepage
+   [\#8363](https://github.com/vector-im/riot-web/pull/8363)
+ * Spell homeserver correctly
+   [\#8358](https://github.com/vector-im/riot-web/pull/8358)
+ * Merge redesign into develop
+   [\#8321](https://github.com/vector-im/riot-web/pull/8321)
+ * Disable room directory test because it doesn't work
+   [\#8318](https://github.com/vector-im/riot-web/pull/8318)
+ * Tweak auth overflow on Windows and Linux
+   [\#8307](https://github.com/vector-im/riot-web/pull/8307)
+ * Clean up Custom Server Help dialog
+   [\#8296](https://github.com/vector-im/riot-web/pull/8296)
+ * Cache-bust olm.wasm
+   [\#8283](https://github.com/vector-im/riot-web/pull/8283)
+ * Completely disable other themes for now (#8277)
+   [\#8280](https://github.com/vector-im/riot-web/pull/8280)
+ * Remove support for team servers
+   [\#8271](https://github.com/vector-im/riot-web/pull/8271)
+ * Add target="_blank" to footer links
+   [\#8248](https://github.com/vector-im/riot-web/pull/8248)
+ * Fix device names on desktop
+   [\#8241](https://github.com/vector-im/riot-web/pull/8241)
+ * Fix literal &lt/&gt in notifications
+   [\#8238](https://github.com/vector-im/riot-web/pull/8238)
+ * Fix registration nextLink on desktop
+   [\#8239](https://github.com/vector-im/riot-web/pull/8239)
+ * Add returns to fetch-develop-deps
+   [\#8233](https://github.com/vector-im/riot-web/pull/8233)
+ * Update electron builder
+   [\#8231](https://github.com/vector-im/riot-web/pull/8231)
+ * Try fetching more branches for PRs
+   [\#8225](https://github.com/vector-im/riot-web/pull/8225)
+ * Use content hashing for font and image URLs
+   [\#8159](https://github.com/vector-im/riot-web/pull/8159)
+ * Develop->Experimental
+   [\#8156](https://github.com/vector-im/riot-web/pull/8156)
+ * Update from Weblate.
+   [\#8150](https://github.com/vector-im/riot-web/pull/8150)
+ * Correct the copying of e-mail addresses in the electron app
+   [\#8124](https://github.com/vector-im/riot-web/pull/8124)
+ * Start documenting keyboard shortcuts
+   [\#7165](https://github.com/vector-im/riot-web/pull/7165)
+ * Update issue templates
+   [\#7948](https://github.com/vector-im/riot-web/pull/7948)
+ * Added new colour var to all themes
+   [\#7927](https://github.com/vector-im/riot-web/pull/7927)
+ * Redesign: apply changes from dharma theme to status theme
+   [\#7541](https://github.com/vector-im/riot-web/pull/7541)
+ * Redesign: ignore setting and always show dharma theme for now
+   [\#7540](https://github.com/vector-im/riot-web/pull/7540)
+
 Changes in [0.17.9](https://github.com/vector-im/riot-web/releases/tag/v0.17.9) (2019-01-22)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.9-rc.1...v0.17.9)
