@@ -25,6 +25,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 export class TopLeftMenu extends React.Component {
     constructor() {
         super();
+        this.viewHomePage = this.viewHomePage.bind(this);
         this.openSettings = this.openSettings.bind(this);
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
