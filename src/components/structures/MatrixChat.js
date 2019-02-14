@@ -1199,7 +1199,7 @@ export default React.createClass({
         } else {
             if (MatrixClientPeg.get().isGuest()) {
                 dis.dispatch({action: 'view_welcome_page'});
-            } else if (getHomePageUrl(this.props.config)){
+            } else if (getHomePageUrl(this.props.config)) {
                 dis.dispatch({action: 'view_home_page'});
             } else {
                 this.firstSyncPromise.promise.then(() => {
