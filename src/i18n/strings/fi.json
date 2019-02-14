@@ -1078,5 +1078,6 @@
     "%(count)s of your messages have not been sent.|one": "Viestiäsi ei lähetetty.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s asetti näyttönimekseen %(displayName)s.",
     "Learn more about how we use analytics.": "Lue lisää analytiikkakäytännöistämme.",
-    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Täällä ei ole muita! Haluaisitko <inviteText>kutsua muita</inviteText> tai <nowarnText>lopettaa tyhjästä huoneesta huomauttamisen</nowarnText>?"
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Täällä ei ole muita! Haluaisitko <inviteText>kutsua muita</inviteText> tai <nowarnText>lopettaa tyhjästä huoneesta huomauttamisen</nowarnText>?",
+    "The version of Riot.im": "Riot.im:n versio"
 }
