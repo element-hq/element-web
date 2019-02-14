@@ -1763,5 +1763,7 @@
     "Recovery key": "Ключ за възстановяване",
     "Success!": "Успешно!",
     "Allow Peer-to-Peer for 1:1 calls": "Позволи използването на директна връзка (P2P) за 1:1 повиквания",
-    "Default theme": "Тема по подразбиране"
+    "Default theme": "Тема по подразбиране",
+    "Credits": "Благодарности",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "Ако намерите бъг или желаете да дадете обратна връзка, уведомете ни в Github."
 }
