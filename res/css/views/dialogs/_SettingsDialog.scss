@@ -16,8 +16,8 @@ limitations under the License.
 
 .mx_SettingsDialog {
     .mx_Dialog {
-        max-width: 900px;
-        width: 80%;
+        max-width: 1000px;
+        width: 90%;
         height: 80%;
         border-radius: 4px;
         padding-top: 0;
@@ -30,7 +30,7 @@ limitations under the License.
 
         .mx_TabbedView .mx_SettingsTab {
             box-sizing: border-box;
-            min-width: 550px;
+            min-width: 580px;
             padding-right: 130px;
 
             // Put some padding on the bottom to avoid the settings tab from

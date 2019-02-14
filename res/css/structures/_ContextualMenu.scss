@@ -31,7 +31,7 @@ limitations under the License.
 
 .mx_ContextualMenu {
     border-radius: 4px;
-    box-shadow: 4px 4px 12px 0 rgba(118, 131, 156, 0.6);;
+    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     background-color: $menu-bg-color;
     color: $primary-fg-color;
     position: absolute;

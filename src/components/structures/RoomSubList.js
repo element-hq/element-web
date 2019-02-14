@@ -27,7 +27,8 @@ import IndicatorScrollbar from './IndicatorScrollbar';
 import { KeyCode } from '../../Keyboard';
 import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
-
+import RoomTile from "../views/rooms/RoomTile";
+import LazyRenderList from "../views/elements/LazyRenderList";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -60,6 +61,9 @@ const RoomSubList = React.createClass({
     getInitialState: function() {
         return {
             hidden: this.props.startAsHidden || false,
+            // some values to get LazyRenderList starting
+            scrollerHeight: 800,
+            scrollTop: 0,
         };
     },
 
@@ -134,23 +138,21 @@ const RoomSubList = React.createClass({
         this.setState(this.state);
     },
 
-    makeRoomTiles: function() {
-        const RoomTile = sdk.getComponent("rooms.RoomTile");
-        return this.props.list.map((room, index) => {
-            return <RoomTile
-                room={room}
-                roomSubList={this}
-                tagName={this.props.tagName}
-                key={room.roomId}
-                collapsed={this.props.collapsed || false}
-                unread={Unread.doesRoomHaveUnreadMessages(room)}
-                highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
-                isInvite={this.props.isInvite}
-                refreshSubList={this._updateSubListCount}
-                incomingCall={null}
-                onClick={this.onRoomTileClick}
-            />;
-        });
+    makeRoomTile: function(room) {
+        return <RoomTile
+            room={room}
+            roomSubList={this}
+            tagName={this.props.tagName}
+            key={room.roomId}
+            collapsed={this.props.collapsed || false}
+            unread={Unread.doesRoomHaveUnreadMessages(room)}
+            highlight={room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite}
+            notificationCount={room.getUnreadNotificationCount()}
+            isInvite={this.props.isInvite}
+            refreshSubList={this._updateSubListCount}
+            incomingCall={null}
+            onClick={this.onRoomTileClick}
+        />;
     },
 
     _onNotifBadgeClick: function(e) {
@@ -269,6 +271,29 @@ const RoomSubList = React.createClass({
         if (this.refs.subList) {
             this.refs.subList.style.height = `${height}px`;
         }
+        this._updateLazyRenderHeight(height);
+    },
+
+    _updateLazyRenderHeight: function(height) {
+        this.setState({scrollerHeight: height});
+    },
+
+    _onScroll: function() {
+        this.setState({scrollTop: this.refs.scroller.getScrollTop()});
+    },
+
+    _getRenderItems: function() {
+        // try our best to not create a new array
+        // because LazyRenderList rerender when the items prop
+        // is not the same object as the previous value
+        const {list, extraTiles} = this.props;
+        if (!extraTiles || !extraTiles.length) {
+            return list;
+        }
+        if (!list || list.length) {
+            return extraTiles;
+        }
+        return list.concat(extraTiles);
     },
 
     render: function() {
@@ -286,12 +311,15 @@ const RoomSubList = React.createClass({
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
             } else {
-                const tiles = this.makeRoomTiles();
-                tiles.push(...this.props.extraTiles);
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
-                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll">
-                        { tiles }
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
+                        <LazyRenderList
+                            scrollTop={this.state.scrollTop }
+                            height={ this.state.scrollerHeight }
+                            renderItem={ this.makeRoomTile }
+                            itemHeight={34}
+                            items={this._getRenderItems()} />
                     </IndicatorScrollbar>
                 </div>;
             }

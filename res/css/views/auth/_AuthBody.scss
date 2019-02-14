@@ -21,19 +21,41 @@ limitations under the License.
     padding: 25px 60px;
     box-sizing: border-box;
     font-size: 12px;
-    color: $authpage-body-color;
+    color: $authpage-secondary-color;
 }
 
 .mx_AuthBody h2 {
     font-size: 24px;
     font-weight: 600;
     margin-top: 8px;
+    color: $authpage-primary-color;
 }
 
 .mx_AuthBody h3 {
     font-size: 14px;
     font-weight: 600;
-    color: $primary-fg-color;
+    color: $authpage-primary-color;
+}
+
+.mx_AuthBody input[type=text],
+.mx_AuthBody input[type=password] {
+    color: $authpage-primary-color;
+}
+
+.mx_AuthBody .mx_Field input,
+.mx_AuthBody .mx_Field select {
+    color: $authpage-primary-color;
+    background-color: $authpage-body-bg-color;
+}
+
+.mx_AuthBody .mx_Field label {
+    color: $authpage-primary-color;
+}
+
+.mx_AuthBody .mx_Field input:focus + label,
+.mx_AuthBody .mx_Field input:not(:placeholder-shown) + label,
+.mx_AuthBody .mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
+    background-color: $authpage-body-bg-color;
 }
 
 .mx_AuthBody_editServerDetails {

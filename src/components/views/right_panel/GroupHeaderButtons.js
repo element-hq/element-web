@@ -65,12 +65,14 @@ export default class GroupHeaderButtons extends HeaderButtons {
         ];
 
         return [
-            <HeaderButton key="_groupMembersButton" title={_t('Members')} iconSrc={require("../../../../res/img/icons-people.svg")}
+            <HeaderButton key="groupMembersButton" name="groupMembersButton"
+                title={_t('Members')}
                 isHighlighted={this.isPhase(groupPhases)}
                 clickPhase={RightPanel.Phase.GroupMemberList}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
-            <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc={require("../../../../res/img/icons-room-nobg.svg")}
+            <HeaderButton key="roomsButton" name="roomsButton"
+                title={_t('Rooms')}
                 isHighlighted={this.isPhase(roomPhases)}
                 clickPhase={RightPanel.Phase.GroupRoomList}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}

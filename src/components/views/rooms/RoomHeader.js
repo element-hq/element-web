@@ -32,6 +32,7 @@ import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
+import * as cryptodevices from '../../../cryptodevices';
 
 module.exports = React.createClass({
     displayName: 'RoomHeader',
@@ -145,9 +146,14 @@ module.exports = React.createClass({
         return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
     },
 
+    _onShowDevicesClick: function() {
+        if (this.props.e2eStatus === "warning") {
+            cryptodevices.showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
+        }
+    },
+
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
         let searchStatus = null;
@@ -156,7 +162,7 @@ module.exports = React.createClass({
         let pinnedEventsButton = null;
 
         const e2eIcon = this.props.e2eStatus ?
-            <E2EIcon status={this.props.e2eStatus} /> :
+            <E2EIcon status={this.props.e2eStatus} onClick={this._onShowDevicesClick} /> :
             undefined;
 
         if (this.props.onCancelClick) {
@@ -221,8 +227,10 @@ module.exports = React.createClass({
 
         if (this.props.onSettingsClick) {
             settingsButton =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/settings.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_settingsButton"
+                    onClick={this.props.onSettingsClick}
+                    title={_t("Settings")}
+                >
                 </AccessibleButton>;
         }
 
@@ -238,7 +246,6 @@ module.exports = React.createClass({
                 <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_pinnedButton"
                                   onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
                     { pinsIndicator }
-                    <TintableSvg src={require("../../../../res/img/icons-pin.svg")} width="16" height="16" />
                 </AccessibleButton>;
         }
 
@@ -253,24 +260,30 @@ module.exports = React.createClass({
         let forgetButton;
         if (this.props.onForgetClick) {
             forgetButton =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title={_t("Forget room")}>
-                    <TintableSvg src={require("../../../../res/img/leave.svg")} width="26" height="20" />
+                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
+                    onClick={this.props.onForgetClick}
+                    title={_t("Forget room")}
+                >
                 </AccessibleButton>;
         }
 
         let searchButton;
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={_t("Search")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/search.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_searchButton"
+                    onClick={this.props.onSearchClick}
+                    title={_t("Search")}
+                >
                 </AccessibleButton>;
         }
 
         let shareRoomButton;
         if (this.props.inRoom) {
             shareRoomButton =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShareRoomClick} title={_t('Share room')}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/share.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_shareButton"
+                    onClick={this.onShareRoomClick}
+                    title={_t('Share room')}
+                >
                 </AccessibleButton>;
         }
 

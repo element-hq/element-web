@@ -226,6 +226,7 @@ export default class Stickerpicker extends React.Component {
                             showTitle={false}
                             showMinimise={true}
                             showDelete={false}
+                            showCancel={false}
                             showPopout={false}
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
@@ -321,7 +322,6 @@ export default class Stickerpicker extends React.Component {
     }
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const ContextualMenu = sdk.getComponent('structures.ContextualMenu');
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         let stickersButton;
@@ -347,11 +347,11 @@ export default class Stickerpicker extends React.Component {
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_stickers mx_Stickers_hideStickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers"
                     onClick={this._onHideStickersClick}
                     ref='target'
-                    title={_t("Hide Stickers")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/face.svg")} width="20" height="20" />
+                    title={_t("Hide Stickers")}
+                >
                 </AccessibleButton>;
         } else {
             // Show show-stickers button
@@ -359,10 +359,10 @@ export default class Stickerpicker extends React.Component {
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_show_stickers"
-                    className="mx_MessageComposer_stickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
-                    title={_t("Show Stickers")}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/face.svg")} width="20" height="20" />
+                    title={_t("Show Stickers")}
+                >
                 </AccessibleButton>;
         }
         return <div>

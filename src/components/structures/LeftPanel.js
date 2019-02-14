@@ -182,6 +182,7 @@ const LeftPanel = React.createClass({
 
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
+        const RoomBreadcrumbs = sdk.getComponent('rooms.RoomBreadcrumbs');
         const TagPanel = sdk.getComponent('structures.TagPanel');
         const CustomRoomTagPanel = sdk.getComponent('structures.CustomRoomTagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
@@ -215,12 +216,17 @@ const LeftPanel = React.createClass({
             onCleared={ this.onSearchCleared }
             collapsed={this.props.collapsed} />);
 
+        let breadcrumbs;
+        if (SettingsStore.isFeatureEnabled("feature_room_breadcrumbs")) {
+            breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
+        }
 
         return (
             <div className={containerClasses}>
                 { tagPanelContainer }
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
+                    { breadcrumbs }
                     { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList

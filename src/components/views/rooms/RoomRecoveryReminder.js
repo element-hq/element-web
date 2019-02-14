@@ -39,6 +39,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
             loading: true,
             error: null,
             backupInfo: null,
+            notNowClicked: false,
         };
     }
 
@@ -77,6 +78,10 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         }
     }
 
+    onOnNotNowClick = () => {
+        this.setState({notNowClicked: true});
+    }
+
     onDontAskAgainClick = () => {
         // When you choose "Don't ask again" from the room reminder, we show a
         // dialog to confirm the choice.
@@ -104,46 +109,54 @@ export default class RoomRecoveryReminder extends React.PureComponent {
     }
 
     render() {
-        if (this.state.loading) {
+        // If there was an error loading just don't display the banner: we'll try again
+        // next time the user switchs to the room.
+        if (this.state.error || this.state.loading || this.state.notNowClicked) {
             return null;
         }
 
         const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
 
-        let body;
-        if (this.state.error) {
-            body = <div className="error">
-                {_t("Unable to load key backup status")}
-            </div>;
-        } else if (this.state.backupInfo) {
-            // A key backup exists for this account, but we're not using it.
-            body = <div>
-                <p>{_t(
-                    "Secure Key Backup should be active on all of your devices to avoid " +
-                    "losing access to your encrypted messages.",
-                )}</p>
-            </div>;
+        let setupCaption;
+        if (this.state.backupInfo) {
+            setupCaption = _t("Use Key Backup");
         } else {
-            body = _t(
-                "Securely back up your decryption keys to the server to make sure " +
-                "you'll always be able to read your encrypted messages.",
-            );
+            setupCaption = _t("Start using Key Backup");
         }
 
         return (
             <div className="mx_RoomRecoveryReminder">
                 <div className="mx_RoomRecoveryReminder_header">{_t(
-                    "Don't risk losing your encrypted messages!",
+                    "Never lose encrypted messages",
                 )}</div>
-                <div className="mx_RoomRecoveryReminder_body">{body}</div>
+                <div className="mx_RoomRecoveryReminder_body">
+                    <p>{_t(
+                        "Messages in this room are secured with end-to-end " +
+                        "encryption. Only you and the recipient(s) have the " +
+                        "keys to read these messages.",
+                    )}</p>
+                    <p>{_t(
+                        "Securely back up your keys to avoid losing them. " +
+                        "<a>Learn more.</a>", {},
+                        {
+                            // TODO: We don't have this link yet: this will prevent the translators
+                            // having to re-translate the string when we do.
+                            a: sub => '',
+                        },
+                    )}</p>
+                </div>
                 <div className="mx_RoomRecoveryReminder_buttons">
                     <AccessibleButton className="mx_RoomRecoveryReminder_button"
                         onClick={this.onSetupClick}>
-                        {_t("Activate Secure Key Backup")}
+                        {setupCaption}
                     </AccessibleButton>
                     <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
+                        onClick={this.onOnNotNowClick}>
+                        { _t("Not now") }
+                    </AccessibleButton></p>
+                    <p><AccessibleButton className="mx_RoomRecoveryReminder_secondary mx_linkButton"
                         onClick={this.onDontAskAgainClick}>
-                        { _t("No thanks, I'll download a copy of my decryption keys before I log out") }
+                        { _t("Don't ask me again") }
                     </AccessibleButton></p>
                 </div>
             </div>

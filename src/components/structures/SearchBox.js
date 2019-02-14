@@ -21,7 +21,7 @@ import { _t } from '../../languageHandler';
 import { KeyCode } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import rate_limited_func from '../../ratelimitedfunc';
+import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -67,12 +67,9 @@ module.exports = React.createClass({
         this.onSearch();
     },
 
-    onSearch: new rate_limited_func(
-        function() {
-            this.props.onSearch(this.refs.search.value);
-        },
-        500,
-    ),
+    onSearch: throttle(function() {
+        this.props.onSearch(this.refs.search.value);
+    }, 200, {trailing: true, leading: true}),
 
     _onKeyDown: function(ev) {
         switch (ev.keyCode) {

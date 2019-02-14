@@ -154,9 +154,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
-    font-weight: 700 ! important;
-
     .mx_RoomTile_name {
+        // font-weight: 700; // bold is too loud in the end
         color: $roomtile-selected-color;
     }
 }
@@ -176,7 +175,7 @@ limitations under the License.
 }
 
 .mx_RoomTile:focus {
-    filter: none ! important;
+    filter: none !important;
     background-color: $roomtile-focused-bg-color;
 }
 

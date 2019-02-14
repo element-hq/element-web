@@ -1,50 +1,36 @@
 /*
- * Open Sans
- * Includes extended Latin, Greek, Cyrillic and Vietnamese character sets
+ * Nunito.
+ * Includes extended Latin and Vietnamese character sets
+ * Current URLs are taken from
+ * https://github.com/alexeiva/NunitoFont/releases/tag/v3.500
+ * ...in order to include cyrillic.
+ *
+ * Previously, they were
+ * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&subset=latin-ext,vietnamese
+ *
+ * We explicitly do not include Nunito's italic variants, as they are not italic enough
+ * and it's better to rely on the browser's built-in obliquing behaviour.
  */
 
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.
  */
 @font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: url('$(res)/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
-    font-weight: 400;
-    font-style: italic;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  src: url('$(res)/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
 }
-
 @font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-Semibold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-SemiboldItalic.ttf') format('truetype');
-    font-weight: 600;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Open Sans';
-    src: url('$(res)/fonts/Open_Sans/OpenSans-BoldItalic.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: url('$(res)/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
 }
 
 /*

@@ -306,7 +306,6 @@ export default class MessageComposer extends React.Component {
     render() {
         const uploadInputStyle = {display: 'none'};
         const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
         const controls = [];
@@ -335,17 +334,26 @@ export default class MessageComposer extends React.Component {
         // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
-                <AccessibleButton key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
-                    <img src={require("../../../../res/img/hangup.svg")} alt={_t('Hangup')} title={_t('Hangup')} width="25" height="25" />
+                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
+                    key="controls_hangup"
+                    onClick={this.onHangupClick}
+                    title={_t('Hangup')}
+                >
                 </AccessibleButton>;
         } else {
             callButton =
-                <AccessibleButton key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/phone.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+                    key="controls_call"
+                    onClick={this.onVoiceCallClick}
+                    title={_t('Voice call')}
+                >
                 </AccessibleButton>;
             videoCallButton =
-                <AccessibleButton key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/video.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_videocall"
+                    key="controls_videocall"
+                    onClick={this.onCallClick}
+                    title={_t('Video call')}
+                >
                 </AccessibleButton>;
         }
 
@@ -385,9 +393,11 @@ export default class MessageComposer extends React.Component {
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
             const uploadButton = (
-                <AccessibleButton key="controls_upload" className="mx_MessageComposer_upload"
-                        onClick={this.onUploadClick} title={_t('Upload file')}>
-                    <TintableSvg src={require("../../../../res/img/feather-icons/paperclip.svg")} width="20" height="20" />
+                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_upload"
+                    key="controls_upload"
+                    onClick={this.onUploadClick}
+                    title={_t('Upload file')}
+                >
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple

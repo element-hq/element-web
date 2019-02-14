@@ -20,11 +20,15 @@ import { _t } from '../../../languageHandler';
 import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export class TopLeftMenu extends React.Component {
     constructor() {
         super();
+        this.viewHomePage = this.viewHomePage.bind(this);
+        this.viewWelcomePage = this.viewWelcomePage.bind(this);
         this.openSettings = this.openSettings.bind(this);
+        this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
     }
 
@@ -41,6 +45,8 @@ export class TopLeftMenu extends React.Component {
     }
 
     render() {
+        const isGuest = MatrixClientPeg.get().isGuest();
+
         let homePageSection = null;
         if (this.hasHomePage()) {
             homePageSection = <ul className="mx_TopLeftMenu_section">
@@ -48,14 +54,26 @@ export class TopLeftMenu extends React.Component {
             </ul>;
         }
 
+        let signInOutSection;
+        if (isGuest) {
+            signInOutSection = <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_signin" onClick={this.signIn}>{_t("Sign in")}</li>
+            </ul>;
+        } else {
+            signInOutSection = <ul className="mx_TopLeftMenu_section">
+                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
+            </ul>;
+        }
+
         return <div className="mx_TopLeftMenu">
             {homePageSection}
             <ul className="mx_TopLeftMenu_section">
-                <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
+                <li className="mx_TopLeftMenu_icon_welcome" onClick={this.viewWelcomePage}>{_t("Welcome")}</li>
             </ul>
             <ul className="mx_TopLeftMenu_section">
-                <li className="mx_TopLeftMenu_icon_signout" onClick={this.signOut}>{_t("Sign out")}</li>
+                <li className="mx_TopLeftMenu_icon_settings" onClick={this.openSettings}>{_t("Settings")}</li>
             </ul>
+            {signInOutSection}
         </div>;
     }
 
@@ -64,8 +82,18 @@ export class TopLeftMenu extends React.Component {
         this.closeMenu();
     }
 
+    viewWelcomePage() {
+        dis.dispatch({action: 'view_welcome_page'});
+        this.closeMenu();
+    }
+
     openSettings() {
         dis.dispatch({action: 'view_user_settings'});
+        this.closeMenu();
+    }
+
+    signIn() {
+        dis.dispatch({action: 'start_login'});
         this.closeMenu();
     }
 

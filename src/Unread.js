@@ -32,7 +32,7 @@ module.exports = {
             return false;
         } else if (ev.getType() == 'm.call.answer' || ev.getType() == 'm.call.hangup') {
             return false;
-        } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
+        } else if (ev.getType() == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
         }
         const EventTile = sdk.getComponent('rooms.EventTile');

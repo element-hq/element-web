@@ -283,6 +283,15 @@ module.exports = React.createClass({
         }
     },
 
+    _getRoomId() {
+        // According to `_onRoomViewStoreUpdate`, `state.roomId` can be null
+        // if we have a room alias we haven't resolved yet. To work around this,
+        // first we'll try the room object if it's there, and then fallback to
+        // the bare room ID. (We may want to update `state.roomId` after
+        // resolving aliases, so we could always trust it.)
+        return this.state.room ? this.state.room.roomId : this.state.roomId;
+    },
+
     _onWidgetEchoStoreUpdate: function() {
         this.setState({
             showApps: this._shouldShowApps(this.state.room),
@@ -784,6 +793,7 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
         this._updateDMState();
         this._checkIfAlone(this.state.room);
+        this._updateE2EStatus(this.state.room);
     }, 500),
 
     _checkIfAlone: function(room) {
@@ -877,13 +887,12 @@ module.exports = React.createClass({
         // If the user is a ROU, allow them to transition to a PWLU
         if (cli && cli.isGuest()) {
             // Join this room once the user has registered and logged in
-            const signUrl = this.props.thirdPartyInvite ?
-                this.props.thirdPartyInvite.inviteSignUrl : undefined;
+            // (If we failed to peek, we may not have a valid room object.)
             dis.dispatch({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
                     action: 'view_room',
-                    room_id: this.state.room.roomId,
+                    room_id: this._getRoomId(),
                 },
             });
 

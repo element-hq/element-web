@@ -128,7 +128,7 @@
     "e.g. <CurrentPageURL>": "t.d. <CurrentPageURL>",
     "Your User Agent": "Din Brukaragent",
     "Analytics": "Statistikk",
-    "Unable to capture screen": "Kunne ikkje visa skjerm",
+    "Unable to capture screen": "Klarte ikkje ta opp skjermen",
     "Existing Call": "Samtale er i gang",
     "To use it, just wait for autocomplete results to load and tab through them.": "For å bruka han, vent på at resultata fyller seg ut og tab gjennom dei.",
     "Deops user with given id": "AvOPar brukarar med den gjevne IDen",
@@ -1225,5 +1225,9 @@
     "Only room administrators will see this warning": "Berre romadministratorar vil sjå denne åtvaringa",
     "Please <a>contact your service administrator</a> to continue using the service.": "Ver venleg og <a>tak kontakt med tenesteadministratoren</a> for å halda fram med å bruka tenesten.",
     "This homeserver has hit its Monthly Active User limit.": "Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.",
-    "This homeserver has exceeded one of its resource limits.": "Heimtenaren har gått over ei av ressursgrensene sine."
+    "This homeserver has exceeded one of its resource limits.": "Heimtenaren har gått over ei av ressursgrensene sine.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan òg velja ein eigendefinert identitetstenar, men då kjem du ikkje til å innvitere brukarar gjennom e-post, eller verta invitert med e-post sjølv.",
+    "Whether or not you're logged in (we don't record your username)": "Om du er innlogga eller ikkje (vi lagrar ikkje brukarnamnet ditt)",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Fila %(fileName)s er større enn heimetenaren si grense for opplastningar",
+    "Unable to load! Check your network connectivity and try again.": "Klarte ikkje lasta! Sjå på nettilkoplinga di og prøv igjen."
 }

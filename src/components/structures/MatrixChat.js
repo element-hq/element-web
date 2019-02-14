@@ -574,11 +574,8 @@ export default React.createClass({
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog');
 
-                // View the home page if we need something to look at
-                if (!this.state.currentGroupId && !this.state.currentRoomId) {
-                    this._setPage(PageTypes.HomePage);
-                    this.notifyNewScreen('home');
-                }
+                // View the welcome or home page if we need something to look at
+                this._viewSomethingBehindModal();
                 break;
             }
             case 'view_create_room':
@@ -595,11 +592,8 @@ export default React.createClass({
                     config: this.props.config,
                 }, 'mx_RoomDirectory_dialogWrapper');
 
-                // View the home page if we need something to look at
-                if (!this.state.currentGroupId && !this.state.currentRoomId) {
-                    this._setPage(PageTypes.HomePage);
-                    this.notifyNewScreen('home');
-                }
+                // View the welcome or home page if we need something to look at
+                this._viewSomethingBehindModal();
             }
             break;
             case 'view_my_groups':
@@ -660,11 +654,9 @@ export default React.createClass({
                 });
                 break;
             }
-            // case 'set_theme':
-                // disable changing the theme for now
-                // as other themes are not compatible with dharma
-                // this._onSetTheme(payload.value);
-                // break;
+            case 'set_theme':
+                this._onSetTheme(payload.value);
+                break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
                 // NB. This does not touch 'ready' since if our dispatches
@@ -825,6 +817,7 @@ export default React.createClass({
         this.focusComposer = true;
 
         const newState = {
+            view: VIEWS.LOGGED_IN,
             currentRoomId: roomInfo.room_id || null,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
@@ -885,6 +878,16 @@ export default React.createClass({
         });
         this._setPage(PageTypes.GroupView);
         this.notifyNewScreen('group/' + groupId);
+    },
+
+    _viewSomethingBehindModal() {
+        if (this.state.view !== VIEWS.LOGGED_IN) {
+            this._viewWelcome();
+            return;
+        }
+        if (!this.state.currentGroupId && !this.state.currentRoomId) {
+            this._viewHome();
+        }
     },
 
     _viewWelcome() {
@@ -1552,11 +1555,7 @@ export default React.createClass({
                 payload.room_id = roomString;
             }
 
-            // we can't view a room unless we're logged in
-            // (a guest account is fine)
-            if (this.state.view === VIEWS.LOGGED_IN) {
-                dis.dispatch(payload);
-            }
+            dis.dispatch(payload);
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 

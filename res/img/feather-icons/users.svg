@@ -1,7 +1,7 @@
 
 <svg width="20px" height="16px" viewBox="0 0 20 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="LifeBuoy-Copy" transform="translate(-78.000000, -813.000000)" stroke="#293042" stroke-width="1.6">
+        <g id="LifeBuoy-Copy" transform="translate(-78.000000, -813.000000)" stroke="#293042" stroke-width="1">
             <g id="Buoy-Copy" transform="translate(68.000000, 802.000000)">
                 <g id="users-copy" transform="translate(11.000000, 12.000000)">
                     <path d="M13.0909091,14 L13.0909091,12.4444444 C13.0909091,10.7262252 11.6256592,9.33333333 9.81818182,9.33333333 L3.27272727,9.33333333 C1.46524991,9.33333333 1.81672859e-16,10.7262252 0,12.4444444 L0,14" id="Path"></path>
