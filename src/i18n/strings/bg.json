@@ -686,7 +686,7 @@
     "This setting cannot be changed later!": "Тази настройка не може да бъде променена по-късно!",
     "Unknown error": "Неизвестна грешка",
     "Incorrect password": "Неправилна парола",
-    "Deactivate Account": "Деактивация на профила",
+    "Deactivate Account": "Затвори акаунта",
     "Deactivate my account": "Деактивирай моя профил",
     "Device name": "Име на устройство",
     "Device key": "Ключ на устройство",
@@ -1185,7 +1185,7 @@
     "Encrypting": "Шифроване",
     "Encrypted, not sent": "Шифровано, неизпратено",
     "Share Link to User": "Сподели връзка с потребител",
-    "Share room": "Сподели стая",
+    "Share room": "Сподели стаята",
     "Share Room": "Споделяне на стая",
     "Link to most recent message": "Създай връзка към най-новото съобщение",
     "Share User": "Споделяне на потребител",
@@ -1515,7 +1515,6 @@
     "2018 theme": "Тема 2018",
     "Account management": "Управление на акаунта",
     "Deactivating your account is a permanent action - be careful!": "Деактивирането на акаунта е необратимо действие - внимавайте!",
-    "Deactivate Account": "Затвори акаунта",
     "For help with using Riot, click <a>here</a>.": "За помощ при използването на Riot, кликнете <a>тук</a>.",
     "For help with using Riot, click <a>here</a> or start a chat with our bot using the button below.": "За помощ при използването на Riot, кликнете <a>тук</a> или започнете чат с бота ни използвайки бутона по-долу.",
     "Chat with Riot Bot": "Чати с Riot Bot",
@@ -1762,5 +1761,7 @@
     "Secure your backup with a passphrase": "Защитете резервното копие с парола",
     "Confirm your passphrase": "Потвърдете паролата",
     "Recovery key": "Ключ за възстановяване",
-    "Success!": "Успешно!"
+    "Success!": "Успешно!",
+    "Allow Peer-to-Peer for 1:1 calls": "Позволи използването на директна връзка (P2P) за 1:1 повиквания",
+    "Default theme": "Тема по подразбиране"
 }
