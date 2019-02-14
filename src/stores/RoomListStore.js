@@ -96,7 +96,8 @@ class RoomListStore extends Store {
             case 'MatrixActions.Room.receipt': {
                 if (!logicallyReady) break;
 
-                // First see if the receipt event is for our own user
+                // First see if the receipt event is for our own user. If it was, trigger
+                // a room update (we probably read the room on a different device).
                 const myUserId = this._matrixClient.getUserId();
                 for (const eventId of Object.keys(payload.event.getContent())) {
                     const receiptUsers = Object.keys(payload.event.getContent()[eventId]['m.read'] || {});
@@ -161,14 +162,6 @@ class RoomListStore extends Store {
                 this._generateInitialRoomLists();
             }
             break;
-            // TODO: Remove if not actually needed
-            // case 'MatrixActions.Room.accountData': {
-            //     if (!logicallyReady) break;
-            //     if (payload.event_type === 'm.fully_read') {
-            //         console.log("!! Fully read: ", payload);
-            //     }
-            // }
-            // break;
             case 'MatrixActions.Room.myMembership': {
                 if (!logicallyReady) break;
                 this._roomUpdateTriggered(payload.room.roomId);
@@ -263,7 +256,6 @@ class RoomListStore extends Store {
             let lastCategoryBoundary = 0;
             let lastCategoryIndex = 0;
             for (const entry of this._state.lists[key]) {
-
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
@@ -386,11 +378,23 @@ class RoomListStore extends Store {
             }
         });
 
+        // We use this cache in the recents comparator because _tsOfNewestEvent can take a while
+        const latestEventTsCache = {}; // roomId => timestamp
+
         Object.keys(lists).forEach((listKey) => {
             let comparator;
             switch (LIST_ORDERS[listKey]) {
                 case "recent":
-                    comparator = this._recentsComparator;
+                    comparator = (entryA, entryB) => {
+                        this._recentsComparator(entryA, entryB, (room) => {
+                            if (latestEventTsCache[room.roomId]) {
+                                return latestEventTsCache[room.roomId];
+                            }
+                            const ts = this._tsOfNewestEvent(room);
+                            latestEventTsCache[room.roomId] = ts;
+                            return ts;
+                        });
+                    };
                     break;
                 case "manual":
                 default:
@@ -444,7 +448,7 @@ class RoomListStore extends Store {
         return CATEGORY_IDLE;
     }
 
-    _recentsComparator(entryA, entryB) {
+    _recentsComparator(entryA, entryB, tsOfNewestEventFn) {
         const roomA = entryA.room;
         const roomB = entryB.room;
         const categoryA = entryA.category;
@@ -458,8 +462,8 @@ class RoomListStore extends Store {
             return 0;
         }
 
-        const timestampA = this._tsOfNewestEvent(roomA);
-        const timestampB = this._tsOfNewestEvent(roomB);
+        const timestampA = tsOfNewestEventFn(roomA);
+        const timestampB = tsOfNewestEventFn(roomB);
         return timestampB - timestampA;
     }
 
