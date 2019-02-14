@@ -1,3 +1,30 @@
+Changes in [1.0.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.0-rc.2) (2019-02-14)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.1...v1.0.0-rc.2)
+
+ * Update from Weblate.
+   [\#8615](https://github.com/vector-im/riot-web/pull/8615)
+ * Replace favicon assets to ones with transparent backgrounds
+   [\#8600](https://github.com/vector-im/riot-web/pull/8600)
+ * Refreshed icons
+   [\#8594](https://github.com/vector-im/riot-web/pull/8594)
+ * Fix order of fetch-develop-deps / npm install
+   [\#8566](https://github.com/vector-im/riot-web/pull/8566)
+ * Revive building dark theme
+   [\#8540](https://github.com/vector-im/riot-web/pull/8540)
+ * Update from Weblate.
+   [\#8546](https://github.com/vector-im/riot-web/pull/8546)
+ * Repair app loading tests after welcome page
+   [\#8525](https://github.com/vector-im/riot-web/pull/8525)
+ * Support configurable welcome background and logo
+   [\#8528](https://github.com/vector-im/riot-web/pull/8528)
+ * Update from Weblate.
+   [\#8518](https://github.com/vector-im/riot-web/pull/8518)
+ * Document `embeddedPages` configuration
+   [\#8514](https://github.com/vector-im/riot-web/pull/8514)
+ * README.md : Syntax Coloring
+   [\#8502](https://github.com/vector-im/riot-web/pull/8502)
+
 Changes in [1.0.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.0-rc.1) (2019-02-08)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.17.9...v1.0.0-rc.1)
