@@ -102,7 +102,7 @@
     "cross-env": "^4.0.0",
     "css-loader": "^2.1.0",
     "electron-builder": "^20.38.5",
-    "electron-builder-squirrel-windows": "^11.6.1",
+    "electron-builder-squirrel-windows": "^20.38.5",
     "electron-devtools-installer": "^2.2.4",
     "emojione": "^2.2.7",
     "eslint": "^5.8.0",
