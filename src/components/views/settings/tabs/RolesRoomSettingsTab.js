@@ -116,7 +116,8 @@ export default class RolesRoomSettingsTab extends React.Component {
     _onPowerLevelsChanged = (value, powerLevelKey) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        let plContent = room.currentState.getStateEvents('m.room.power_levels', '').getContent() || {};
+        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        let plContent = plEvent ? (plEvent.getContent() || {}) : {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);
@@ -151,7 +152,8 @@ export default class RolesRoomSettingsTab extends React.Component {
 
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plContent = room.currentState.getStateEvents('m.room.power_levels', '').getContent() || {};
+        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        const plContent = plEvent ? (plEvent.getContent() || {}) : {};
         const canChangeLevels = room.currentState.mayClientSendStateEvent('m.room.power_levels', client);
 
         const powerLevelDescriptors = {
