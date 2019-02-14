@@ -19,7 +19,6 @@ limitations under the License.
 
 const React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
 
 module.exports = React.createClass({
     displayName: 'VectorAuthFooter',
@@ -28,10 +27,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        // FIXME: replace this with a proper Status skin
-        // ...except then we wouldn't be able to switch to the Status theme at runtime.
-        if (SettingsStore.getValue("theme") === 'status') return <div />;
-
         return (
             <div className="mx_AuthFooter">
                 <a href="https://medium.com/@RiotChat" target="_blank" rel="noopener">blog</a>

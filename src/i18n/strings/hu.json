@@ -37,5 +37,10 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Bejelentkezhetsz más Matrix szerverre is az egyedi szerverbeállításoknál megadott Matrix szerver URL-jével.<br/>Így használhatod a Riotot egy már máshol meglévő Matrix fiókkal is.<br/><br/>Beállíthatsz egyéni identitásszervert is, de akkor nem tudsz más felhasználókat e-mail címmel meghívni, illetve ők sem tudnak téged.",
     "Co-ordination for Riot translators": "Koordináció Riot fordítók számára",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Más azonosítási szervert is használhatsz, de akkor nem tudsz másokat e-mail cím alapján meghívni és téged sem fognak tudni.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Használhatod az egyedi szerver beállítást más Matrix szerverre való belépéshez, azzal, hogy megadod a Matrix szerver URL-jét. Ezzel a Riot-ot használhatod más Matrix szerveren lévő fiókkal."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Használhatod az egyedi szerver beállítást más Matrix szerverre való belépéshez, azzal, hogy megadod a Matrix szerver URL-jét. Ezzel a Riot-ot használhatod más Matrix szerveren lévő fiókkal.",
+    "Sign In": "Bejelentkezés",
+    "Create Account": "Fiók készítés",
+    "Need help?": "Segíthetünk?",
+    "Explore rooms": "Szobák felfedezése",
+    "Room Directory": "Szoba lista"
 }

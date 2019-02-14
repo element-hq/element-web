@@ -35,5 +35,12 @@
     "Dev chat for the Dendrite dev team": "Dendrite garapen taldearen txata",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Badauden sareetara lotutako gela ugari daude Matrixen (Slack, IRC, Gitter eta abar), baita independienteak. Begiratu direktorioa!",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Zerbitzari pertsonalizatuaren aukerak erabili ditzakezu beste Matrix zerbitzarietan saioa hasteko, han beste hasiera-zerbitzari baten URLa sartuz.<br/>Horrela Riot aurretik duzun kontu batekin erabili dezakezu beste hasiera-zerbitzari batean.<br/><br/>Identitate-zerbitzari pertsonalizatu bat ezarri dezakezu ere, baina orduan ezin izango dituzu erabiltzaileak e-mail helbidea erabiliz gonbidatu, edo ezin izan izango zaituzte zu e-mail helbidea erabiliz gonbidatu.",
-    "Co-ordination for Riot translators": "Riot itzultzaileen koordinazioa"
+    "Co-ordination for Riot translators": "Riot itzultzaileen koordinazioa",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Zerbitzari pertsonalizatuaren aukera erabili dezakezu bestelako Matrix zerbitzari batera konektatzeko, bere URL-a adierazita. Honek Riot beste zerbitzari batean duzun Matrix kontuarekin erabiltzea ahalbidetzen dizu.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Identitate zerbitzari pertsonalizatu bat ere ezarri dezakezu, baina orduan ezin izango dituzu erabiltzaileak e-mail helbidearen bidez gonbidatu, edo ezin izango zaituzte e-mail helbidearen bidez zu gonbidatu.",
+    "Sign In": "Hasi saioa",
+    "Create Account": "Sortu kontua",
+    "Need help?": "Laguntza behar?",
+    "Explore rooms": "Arakatu gelak",
+    "Room Directory": "Gelen direktorioa"
 }

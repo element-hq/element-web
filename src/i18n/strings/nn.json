@@ -7,7 +7,7 @@
     "Dismiss": "Avvis",
     "powered by Matrix": "Matrixdriven",
     "Welcome to Riot.im": "Velkomen til Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; samarbeid driven av [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; samarbeid drive av [matrix]",
     "Search the room directory": "Søk i romutvalet",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Det finst allereie massevis av rom på Matrix, anten lenkja til nettverk som allereie finst (Slack, IRC, Gitter osv.) eller uavhengige. Tak ein titt på utvalet!",
     "Chat with Riot Bot": "Nettprat med Riot Bot",
@@ -35,5 +35,12 @@
     "Dev chat for the Dendrite dev team": "Utviklar-prat for Dendrite-utviklargruppa",
     "Co-ordination for Riot translators": "Samordning for Riot-omsetjare",
     "Custom Server Options": "Eigentenar-innstillingar",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan bruka eigentenarinnstillingar til å logga inn på andre Matrixtenarar ved å oppgje ein annan Heimtenar-URL. <br/>Dette gjer at du kan bruka Riot med ein Matrixbrukar som allereie finst på ein annan heimtenar.<br/><br/>Du kan òg setja ein eigen identitetstenar men du kjem i so fall ikkje til å kunna byda brukare inn med epost, eller å sjølv verta boden inn med epost."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan bruka eigentenarinnstillingar til å logga inn på andre Matrixtenarar ved å oppgje ein annan Heimtenar-URL. <br/>Dette gjer at du kan bruka Riot med ein Matrixbrukar som allereie finst på ein annan heimtenar.<br/><br/>Du kan òg setja ein eigen identitetstenar men du kjem i so fall ikkje til å kunna byda brukare inn med epost, eller å sjølv verta boden inn med epost.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan nytta dei eigendefinerte tenarinstillingane for å logga inn på andre Matrix-tenarar ved å uppgje ein annan heimtenar-URL. Dette lèt deg bruka Riot med ein Matrix-konto som allereie finst på ein annan heimtenar.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan òg velja ein eigendefinert identitetstenar, men då kjem du ikkje til å innvitere brukarar gjennom e-post, eller verta invitert med e-post sjølv.",
+    "Sign In": "Logg inn",
+    "Create Account": "Lag brukar",
+    "Need help?": "Treng du hjelp?",
+    "Explore rooms": "Vert kjend med romma",
+    "Room Directory": "Romutval"
 }
