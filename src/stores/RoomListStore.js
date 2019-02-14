@@ -450,6 +450,10 @@ class RoomListStore extends Store {
     }
 
     _tsOfNewestEvent(room) {
+        // Apparently we can have rooms without timelines, at least under testing
+        // environments. Just return MAX_INT when this happens.
+        if (!room.timeline) return Number.MAX_SAFE_INTEGER;
+
         for (let i = room.timeline.length - 1; i >= 0; --i) {
             const ev = room.timeline[i];
             if (this._eventTriggersRecentReorder(ev)) {
