@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.14.8",
+  "version": "1.0.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -79,7 +79,7 @@
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
-    "matrix-js-sdk": "0.14.3",
+    "matrix-js-sdk": "1.0.0",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
