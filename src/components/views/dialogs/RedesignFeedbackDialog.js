@@ -20,14 +20,12 @@ import { _t } from '../../../languageHandler';
 
 export default (props) => {
     const existingIssuesUrl = "https://github.com/vector-im/riot-web/issues" +
-        "?q=is%3Aopen+is%3Aissue+label%3Aredesign+sort%3Areactions-%2B1-desc";
-    const newIssueUrl = "https://github.com/vector-im/riot-web/issues/new" +
-        "?assignees=&labels=redesign&template=redesign_issue.md&title=";
+        "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
+    const newIssueUrl = "https://github.com/vector-im/riot-web/issues/new";
 
     const description1 =
-        _t("Thanks for testing the Riot Redesign. " +
-            "If you run into any bugs or visual issues, " +
-            "please let us know on GitHub.");
+        _t("If you run into any bugs or have feedback you'd like to share, " +
+           "please let us know on GitHub.");
     const description2 = _t("To help avoid duplicate issues, " +
         "please <existingIssuesLink>view existing issues</existingIssuesLink> " +
         "first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> " +
