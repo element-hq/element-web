@@ -104,9 +104,11 @@ cp $distdir/*.dmg "$pubdir/install/macos/"
 
 # Windows installers go to the dist dir because they need signing
 mkdir -p "$pubdir/install/win32/ia32/"
+mkdir -p "$projdir/electron_app/dist/unsigned/ia32/"
 cp $distdir/squirrel-windows-ia32/*.exe "$projdir/electron_app/dist/unsigned/ia32/"
 
 mkdir -p "$pubdir/install/win32/x64/"
+mkdir -p "$projdir/electron_app/dist/unsigned/x64/"
 cp $distdir/squirrel-windows/*.exe "$projdir/electron_app/dist/unsigned/x64/"
 
 # Packages for auto-update
