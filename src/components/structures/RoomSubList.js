@@ -282,20 +282,6 @@ const RoomSubList = React.createClass({
         this.setState({scrollTop: this.refs.scroller.getScrollTop()});
     },
 
-    _getList: function() {
-        // try our best to not create a new array
-        // because LazyRenderList rerender when the items prop
-        // is not the same object as the previous value
-        const {list, extraTiles} = this.props;
-        if (!extraTiles || !extraTiles.length) {
-            return list;
-        }
-        if (!list || list.length) {
-            return extraTiles;
-        }
-        return list.concat(extraTiles);
-    },
-
     _canUseLazyListRendering() {
         // for now disable lazy rendering as they are already rendered tiles
         // not rooms like props.list we pass to LazyRenderList
