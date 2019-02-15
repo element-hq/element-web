@@ -1,3 +1,8 @@
+Changes in [1.0.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.1) (2019-02-15)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0...v1.0.1)
+
+
 Changes in [1.0.0](https://github.com/vector-im/riot-web/releases/tag/v1.0.0) (2019-02-14)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0-rc.2...v1.0.0)
