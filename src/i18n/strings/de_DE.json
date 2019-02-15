@@ -1751,6 +1751,6 @@
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Gib die Adresse deines Modular-Heimservers an. Es kann deine eigene Domain oder eine Subdomain von <a>modular.im</a> sein.",
     "Failed to get protocol list from homeserver": "Konnte Protokollliste vom Heimserver nicht abrufen",
     "Unable to query for supported registration methods.": "Konnte unterstützte Registrierungsmethoden nicht abrufen.",
-    "Bulk options": "Massenoptionen",
+    "Bulk options": "Sammeloptionen",
     "Join millions for free on the largest public server": "Tritt wie Millionen andere kostenlos dem größten öffentlichen Server bei"
 }
