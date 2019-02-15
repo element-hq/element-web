@@ -3,22 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Riot</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="vector-icons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="vector-icons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="vector-icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="vector-icons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="vector-icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="vector-icons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="<%= require('../../res/vector-icons/apple-touch-icon-57x57.png') %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= require('../../res/vector-icons/apple-touch-icon-60x60.png') %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= require('../../res/vector-icons/apple-touch-icon-72x72.png') %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= require('../../res/vector-icons/apple-touch-icon-76x76.png') %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= require('../../res/vector-icons/apple-touch-icon-114x114.png') %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/apple-touch-icon-120x120.png') %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/apple-touch-icon-144x144.png') %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152x152.png') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180x180.png') %>">
     <link rel="manifest" href="manifest.json">
-    <link rel="shortcut icon" href="vector-icons/favicon.ico">
+    <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
     <meta name="apple-mobile-web-app-title" content="Riot">
     <meta name="application-name" content="Riot">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
-    <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
+    <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-144x144.png') %>">
+    <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
