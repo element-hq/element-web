@@ -150,6 +150,7 @@ export default React.createClass({
         const classes = classNames('mx_RoomTile mx_RoomTile_highlight', {
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_selected': this.state.selected,
+            'mx_GroupInviteTile': true,
         });
 
         return (
