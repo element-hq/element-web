@@ -1775,5 +1775,7 @@
     "Success!": "Sikeres!",
     "Allow Peer-to-Peer for 1:1 calls": "Ponttól-pontig kapcsolat engedélyezése az 1:1 hívásokban",
     "Default theme": "Alapértelmezett stílus",
-    "Welcome": "Üdvözöllek"
+    "Welcome": "Üdvözöllek",
+    "Credits": "Közreműködők",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "Ha bármilyen hibába botlasz vagy szeretnél visszajelzést küldeni nekünk, kérjük oszd meg velünk a GitHub-on."
 }
