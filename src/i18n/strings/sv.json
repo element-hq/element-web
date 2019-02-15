@@ -1291,5 +1291,7 @@
     "You are currently using Riot anonymously as a guest.": "Du använder för närvarande Riot anonymt som gäst.",
     "You are an administrator of this community. You will not be able to rejoin without an invite from another administrator.": "Du är administratör för denna community. Du kommer inte kunna gå med igen utan en inbjudan från en annan administratör.",
     "If you would like to create a Matrix account you can <a>register</a> now.": "Om du vill skapa ett Matrix-konto kan du <a>registrera dig</a> nu.",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda en egen identitetsserver, men då kan du inte bjuda in användare via epostadress eller själv bjudas in med din epostadress."
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda en egen identitetsserver, men då kan du inte bjuda in användare via epostadress eller själv bjudas in med din epostadress.",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Filen '%(fileName)s' överstiger denna hemserverns storleksgräns för uppladdningar",
+    "Unable to load! Check your network connectivity and try again.": "Kan inte ladda! Kolla din nätverksuppkoppling och försök igen."
 }
