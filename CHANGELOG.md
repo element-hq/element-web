@@ -1,3 +1,10 @@
+Changes in [1.0.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.1) (2019-02-15)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.0...v1.0.1)
+
+ * Fix community invites crashing the app
+   [\#2650](https://github.com/matrix-org/matrix-react-sdk/pull/2650)
+
 Changes in [1.0.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.0) (2019-02-14)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.0-rc.2...v1.0.0)
