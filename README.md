@@ -418,9 +418,9 @@ community engagement
 * bounty? - proposal to be included in a bounty programme
 * bounty - included in Status Open Bounty
 
-== Caching requirements ==
+## Caching requirements
 
-Riot requires the following URLs not to be cached if you are serving riot from your own webserver:
+Riot requires the following URLs not to be cached, when if you are serving riot from your own webserver:
 ```
 /config.*.json
 /i18n
