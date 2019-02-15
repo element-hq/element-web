@@ -45,14 +45,14 @@ limitations under the License.
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
     font-size: 14px;
-    display: block; /* anti-zalgo, with overflow hidden */
+    display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow-y: hidden;
     cursor: pointer;
     padding-left: 65px; /* left gutter */
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
-    line-height: 22px;
+    line-height: 17px;
 }
 
 .mx_EventTile .mx_SenderProfile .mx_Flair {
