@@ -191,3 +191,7 @@ limitations under the License.
 .mx_RoomTile.mx_RoomTile_transparent:focus {
     background-color: $roomtile-transparent-focused-color;
 }
+
+.mx_GroupInviteTile .mx_RoomTile_name {
+    flex: 1;
+}
