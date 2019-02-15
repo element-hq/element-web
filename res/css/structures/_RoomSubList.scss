@@ -83,15 +83,24 @@ limitations under the License.
 }
 
 .mx_RoomSubList_addRoom {
-    background-color: $roomheader-addroom-color;
-    color: $roomsublist-background;
-    background-image: url('$(res)/img/icons-room-add.svg');
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: $roomheader-addroom-bg-color;
     border-radius: 10px; // 16/2 + 2 padding
     height: 16px;
     flex: 0 0 16px;
-    background-clip: content-box;
+    position: relative;
+
+    &:before {
+        background-color: $roomheader-addroom-fg-color;
+        mask: url('$(res)/img/icons-room-add.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
 .mx_RoomSubList_badgeHighlight {
