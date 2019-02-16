@@ -1325,5 +1325,22 @@
     "Capitalization doesn't help very much": "大写字母并没有很大的作用",
     "All-uppercase is almost as easy to guess as all-lowercase": "全大写的密码通常比全小写的更容易猜测",
     "Reversed words aren't much harder to guess": "把单词倒过来不会比原来的难猜很多",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以自定义身份服务器，但是您将不能用电子邮箱地址邀请或被邀请。"
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "您也可以自定义身份服务器，但是您将不能用电子邮箱地址邀请他人或被邀请。",
+    "Whether or not you're logged in (we don't record your username)": "您是否已经登入（我们不会记录您的用户名）",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "文件 %(fileName)s 超过主服务器的文件大小限制",
+    "Upgrades a room to a new version": "将聊天室升级到新版本",
+    "Gets or sets the room topic": "获取或设置聊天室话题",
+    "This room has no topic.": "此聊天室没有话题。",
+    "Sets the room name": "设置聊天室名称",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s 升级了此聊天室。",
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s 将此聊天室对知道此聊天室链接的人公开。",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s 将此聊天室改为仅限邀请。",
+    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s 将加入规则改为 %(rule)s",
+    "%(displayName)s is typing …": "%(displayName)s 正在打字…",
+    "%(names)s and %(count)s others are typing …|other": "%(names)s 与其他 %(count)s 位正在打字…",
+    "%(names)s and %(count)s others are typing …|one": "%(names)s 与另一位正在打字…",
+    "%(names)s and %(lastPerson)s are typing …": "%(names)s 和 %(lastPerson)s正在打字…",
+    "Unrecognised address": "无法识别地址",
+    "User %(user_id)s may or may not exist": "用户 %(user_id)s 不一定存在",
+    "Predictable substitutions like '@' instead of 'a' don't help very much": "可预见的替换如将 '@' 替换为 'a' 并不会有太大效果"
 }

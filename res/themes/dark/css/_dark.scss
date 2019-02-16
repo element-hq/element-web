@@ -67,6 +67,8 @@ $menu-selected-color: $room-highlight-color;
 $avatar-initial-color: #ffffff;
 $avatar-bg-color: $bg-color;
 
+$h3-color: $primary-fg-color;
+
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
 
@@ -102,6 +104,10 @@ $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 $panel-divider-color: $header-panel-border-color;
 
 $widget-menu-bar-bg-color: $search-bg-color;
+
+// event redaction
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
 
 // event timestamp
 $event-timestamp-color: $text-secondary-color;
