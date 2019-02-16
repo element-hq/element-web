@@ -55,7 +55,6 @@ class RoomListStore extends Store {
         super(dis);
 
         this._init();
-        this.__onDispatch = this.__onDispatch.bind(this);
         this._getManualComparator = this._getManualComparator.bind(this);
         this._recentsComparator = this._recentsComparator.bind(this);
     }
