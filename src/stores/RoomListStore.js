@@ -276,7 +276,7 @@ class RoomListStore extends Store {
         for (const key of Object.keys(this._state.lists)) {
             listsClone[key] = [];
             let pushedEntry = false;
-            const hasRoom = !!this._state.lists[key].find((e) => e.room.roomId === room.roomId);
+            const hasRoom = this._state.lists[key].some((e) => e.room.roomId === room.roomId);
 
             // We track where the boundary within listsClone[key] is just in case our timestamp
             // ordering fails. If we can't stick the room in at the correct place in the category
@@ -305,8 +305,8 @@ class RoomListStore extends Store {
                         // based on most recent timestamp.
                         const changedBoundary = entryCategoryIndex > targetCategoryIndex;
                         const currentCategory = entryCategoryIndex === targetCategoryIndex;
-                        if (changedBoundary || (false && currentCategory && targetTimestamp >= entryTimestamp)) {
-                            if (changedBoundary && false) {
+                        if (changedBoundary || (currentCategory && targetTimestamp >= entryTimestamp)) {
+                            if (changedBoundary) {
                                 // If we changed a boundary, then we've gone too far - go to the top of the last
                                 // section instead.
                                 listsClone[key].splice(desiredCategoryBoundaryIndex, 0, {room, category});
