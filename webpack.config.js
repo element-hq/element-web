@@ -162,8 +162,8 @@ module.exports = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
+            'LANGUAGES_FILE': "'../../riot-web/webapp/i18n/languages.json'",    // relative to languageHandler.js in matrix-react-sdk
         }),
-
         new ExtractTextPlugin("bundles/[hash]/[name].css", {
             allChunks: true,
         }),
