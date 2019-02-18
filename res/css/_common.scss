@@ -82,13 +82,6 @@ input[type=search]::-webkit-search-results-decoration {
     display: none;
 }
 
-.input[type=text]::-webkit-input-placeholder,
-.input[type=text]::-moz-placeholder,
-.input[type=search]::-webkit-input-placeholder,
-.input[type=search]::-moz-placeholder {
-    color: #a5aab2;
-}
-
 // Override Firefox's UA style so we get a consistent look across browsers
 input::placeholder,
 textarea::placeholder {
