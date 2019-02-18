@@ -338,9 +338,9 @@ export function getCurrentLanguage() {
 
 function getLangsJson() {
     return new Promise((resolve, reject) => {
-        const url = require("../../riot-web/webapp/i18n/languages.json");
+        // LANGUAGES_FILE is a webpack compile-time define, see webpack config
         request(
-            { method: "GET", url },
+            { method: "GET", url: require(LANGUAGES_FILE) },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     reject({err: err, response: response});
