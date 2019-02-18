@@ -60,6 +60,7 @@ import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
+import AccessibleButton from '../elements/AccessibleButton';
 
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -1582,6 +1583,11 @@ export default class MessageComposerInput extends React.Component {
             placeholder = undefined;
         }
 
+        const markdownClasses = classNames({
+            mx_MessageComposer_input_markdownIndicator: true,
+            mx_MessageComposer_markdownDisabled: this.state.isRichTextEnabled,
+        });
+
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
@@ -1596,10 +1602,10 @@ export default class MessageComposerInput extends React.Component {
                     />
                 </div>
                 <div className={className}>
-                    <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
-                         onMouseDown={this.onMarkdownToggleClicked}
-                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
-                         src={require(`../../../../res/img/button-md-${!this.state.isRichTextEnabled}.png`)} />
+                    <AccessibleButton className={markdownClasses}
+                        onMouseDown={this.onMarkdownToggleClicked}
+                        title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                    />
                     <Editor ref={this._collectEditor}
                             dir="auto"
                             className="mx_MessageComposer_editor"
