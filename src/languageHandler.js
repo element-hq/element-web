@@ -338,8 +338,9 @@ export function getCurrentLanguage() {
 
 function getLangsJson() {
     return new Promise((resolve, reject) => {
+        const url = require("../../riot-web/webapp/i18n/languages.json");
         request(
-            { method: "GET", url: i18nFolder + 'languages.json' },
+            { method: "GET", url },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     reject({err: err, response: response});
