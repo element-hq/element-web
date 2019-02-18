@@ -1052,5 +1052,6 @@
     "Deops user with given id": "Degrada l'usuari amb l'id donat",
     "Opens the Developer Tools dialog": "Obre el diàleg d'Eines del desenvolupador",
     "Verifies a user, device, and pubkey tuple": "Verifica un usuari, dispositiu i tupla de clau pública",
-    "Displays action": "Mostra l'acció"
+    "Displays action": "Mostra l'acció",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "També podeu establir un servidor d'identitat personalitzat, però no podreu convidar usuaris o ser convidats vosaltres mateixos per adreça de correu electrònic."
 }
