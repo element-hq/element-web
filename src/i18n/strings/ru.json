@@ -29,7 +29,7 @@
     "Create Room": "Создать комнату",
     "Cryptography": "Криптография",
     "Curve25519 identity key": "Ключ идентификации Curve25519",
-    "Deactivate Account": "Деактивировать учетную запись",
+    "Deactivate Account": "Закрыть аккаунт",
     "Deactivate my account": "Деактивировать мою учетную запись",
     "Decryption error": "Ошибка расшифровки",
     "Default": "Участник",
@@ -76,7 +76,7 @@
     "Labs": "Лаборатория",
     "Leave room": "Покинуть комнату",
     "Logout": "Выйти",
-    "Low priority": "Неважные",
+    "Low priority": "Маловажные",
     "Manage Integrations": "Управление интеграциями",
     "Mobile phone number": "Номер мобильного телефона",
     "Moderator": "Модератор",
@@ -1114,7 +1114,7 @@
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Обнаружена ошибка (%(errorDetail)s).",
     "Login": "Войти",
-    "Low Priority": "Низкий приоритет",
+    "Low Priority": "Маловажные",
     "Unable to fetch notification target list": "Не удалось получить список устройств для уведомлений",
     "Set Password": "Задать пароль",
     "Enable audible notifications in web client": "Включить звуковые уведомления в веб-клиенте",
@@ -1393,7 +1393,6 @@
     "Developer options": "Параметры разработчика",
     "General": "Основной",
     "Set a new account password...": "Установить новый пароль учетной записи...",
-    "Deactivate Account": "Закрыть аккаунт",
     "Legal": "Правовой",
     "At this time it is not possible to reply with an emote.": "В настоящее время невозможно ответить с помощью эмоции.",
     "Room avatar": "Аватар комнаты",
@@ -1530,5 +1529,6 @@
     "Headphones": "Наушники",
     "Folder": "Папка",
     "Pin": "Кнопка",
-    "Your homeserver does not support device management.": "Ваш сервер не поддерживает управление устройством."
+    "Your homeserver does not support device management.": "Ваш сервер не поддерживает управление устройством.",
+    "Your keys are being backed up (the first backup could take a few minutes).": "Выполняется резервная копия ключей  (первый раз это может занять несколько минут)."
 }
