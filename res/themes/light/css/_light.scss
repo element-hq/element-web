@@ -286,9 +286,12 @@ $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
             flex: 1;
             color: $primary-fg-color;
         }
-        input::placeholder {
-            color: $roomsublist-label-fg-color;
-        }
+    }
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $roomsublist-label-fg-color;
     }
 }
 
