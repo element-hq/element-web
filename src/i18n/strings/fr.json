@@ -863,7 +863,7 @@
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Créez une communauté pour grouper des utilisateurs et des salons ! Construisez une page d'accueil personnalisée pour distinguer votre espace dans l'univers Matrix.",
     "Disable Emoji suggestions while typing": "Désactiver les suggestions d'emojis lors de la saisie",
     "Disable big emoji in chat": "Désactiver les gros emojis dans les discussions",
-    "Mirror local video feed": "Refléter le flux vidéo local",
+    "Mirror local video feed": "Inverser horizontalement la vidéo locale (effet miroir)",
     "Light theme": "Thème clair",
     "Dark theme": "Thème sombre",
     "Ignored Users": "Utilisateurs ignorés",
