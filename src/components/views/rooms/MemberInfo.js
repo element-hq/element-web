@@ -983,9 +983,10 @@ module.exports = withMatrixClient(React.createClass({
         return (
             <div className="mx_MemberInfo">
                     <div className="mx_MemberInfo_name">
-                        <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                            <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
-                        </AccessibleButton>
+                        <AccessibleButton className="mx_MemberInfo_cancel"
+                            onClick={this.onCancel}
+                            title={_t('Close')}
+                        />
                         { e2eIconElement }
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>

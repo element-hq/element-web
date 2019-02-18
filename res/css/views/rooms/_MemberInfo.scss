@@ -34,6 +34,10 @@ limitations under the License.
     height: 16px;
     padding: 10px 15px;
     cursor: pointer;
+    mask-image: url('$(res)/img/minimise.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $rightpanel-button-color;
 }
 
 .mx_MemberInfo_name h2 {
