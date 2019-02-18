@@ -139,13 +139,8 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
 $room-warning-bg-color: $header-panel-bg-color;
 
+$dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
-
-/*** panels ***/
-
-.dark-panel {
-    background-color: $header-panel-bg-color;
-}
 
 // ***** Mixins! *****
 
