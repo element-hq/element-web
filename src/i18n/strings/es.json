@@ -1528,5 +1528,6 @@
     "Use two-way text verification": "Usar verificación de texto en dos sentidos",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifica ese usuario para marcar como confiable. Confiar en usuarios aporta mucha tranquilidad en los mensajes cifrados de extremo a extremo.",
     "Verifying this user will mark their device as trusted, and also mark your device as trusted to them.": "Verificar a este usuario lo marcará como confiable, y también marca tu dispositivo como fiable para él.",
-    "Waiting for partner to confirm...": "Esperando que confirme el compañero..."
+    "Waiting for partner to confirm...": "Esperando que confirme el compañero...",
+    "Incoming Verification Request": "Petición de verificación entrante"
 }
