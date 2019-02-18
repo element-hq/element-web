@@ -261,6 +261,7 @@
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s placed a %(callType)s call.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Please check your email and click on the link it contains. Once this is done, click continue.",
     "Power level must be positive integer.": "Power level must be positive integer.",
+    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
     "Privacy warning": "Privacy warning",
     "Privileged Users": "Privileged Users",
     "Profile": "Profile",
