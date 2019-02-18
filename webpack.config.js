@@ -61,6 +61,20 @@ module.exports = {
                 }),
             },
             {
+                // cache-bust languages.json file placed in
+                // riot-web/webapp/i18n during build by copy-res.js
+                test: /\.*languages.json$/,
+                type: "javascript/auto",
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'i18n/[name].[hash:7].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
                 test: /\.(gif|png|svg|ttf|xml|ico)$/,
                 // Use a content-based hash in the name so that we can set a long cache
                 // lifetime for assets while still delivering changes quickly.
