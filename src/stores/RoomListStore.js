@@ -231,14 +231,15 @@ class RoomListStore extends Store {
     }
 
     _roomUpdateTriggered(roomId) {
-        const room = this._matrixClient.getRoom(roomId);
-        if (!room) return;
-
         // We don't calculate categories for sticky rooms because we have a moderate
         // interest in trying to maintain the category that they were last in before
         // being artificially flagged as IDLE. Also, this reduces the amount of time
         // we spend in _setRoomCategory ever so slightly.
-        if (this._state.stickyRoomId !== room.roomId) {
+        if (this._state.stickyRoomId !== roomId) {
+            // Micro optimization: Only look up the room if we're confident we'll need it.
+            const room = this._matrixClient.getRoom(roomId);
+            if (!room) return;
+
             const category = this._calculateCategory(room);
             this._setRoomCategory(room, category);
         }
@@ -249,7 +250,15 @@ class RoomListStore extends Store {
 
         const listsClone = {};
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
-        const targetTimestamp = this._tsOfNewestEvent(room);
+
+        // Micro optimization: Support lazily loading the last timestamp in a room
+        let _targetTimestamp = null;
+        const targetTimestamp = () => {
+            if (_targetTimestamp === null) {
+                _targetTimestamp = this._tsOfNewestEvent(room);
+            }
+            return _targetTimestamp;
+        };
 
         const myMembership = room.getMyMembership();
         let doInsert = true;
@@ -290,7 +299,15 @@ class RoomListStore extends Store {
                 if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
                     const inTag = targetTags.length === 0 || targetTags.includes(key);
                     if (!pushedEntry && doInsert && inTag) {
-                        const entryTimestamp = this._tsOfNewestEvent(entry.room);
+                        // Micro optimization: Support lazily loading the last timestamp in a room
+                        let _entryTimestamp = null;
+                        const entryTimestamp = () => {
+                            if (_entryTimestamp === null) {
+                                _entryTimestamp = this._tsOfNewestEvent(entry.room);
+                            }
+                            return _entryTimestamp;
+                        };
+
                         const entryCategoryIndex = CATEGORY_ORDER.indexOf(entry.category);
 
                         // As per above, check if we're meeting that boundary we wanted to locate.
@@ -304,7 +321,7 @@ class RoomListStore extends Store {
                         // based on most recent timestamp.
                         const changedBoundary = entryCategoryIndex > targetCategoryIndex;
                         const currentCategory = entryCategoryIndex === targetCategoryIndex;
-                        if (changedBoundary || (currentCategory && targetTimestamp >= entryTimestamp)) {
+                        if (changedBoundary || (currentCategory && targetTimestamp() >= entryTimestamp())) {
                             if (changedBoundary) {
                                 // If we changed a boundary, then we've gone too far - go to the top of the last
                                 // section instead.
