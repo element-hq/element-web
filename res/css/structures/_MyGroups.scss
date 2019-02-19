@@ -49,11 +49,11 @@ limitations under the License.
     height: 40px;
     width: 40px;
     border-radius: 20px;
-    background-color: $roomheader-addroom-color;
+    background-color: $roomheader-addroom-bg-color;
     position: relative;
 
     &:before {
-        background-color: $accent-fg-color;
+        background-color: $roomheader-addroom-fg-color;
         mask: url('$(res)/img/icons-create-room.svg');
         mask-repeat: no-repeat;
         mask-position: center;

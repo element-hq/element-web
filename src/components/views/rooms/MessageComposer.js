@@ -499,15 +499,16 @@ export default class MessageComposer extends React.Component {
                 <div className="mx_MessageComposer_formatbar_wrapper">
                     <div className="mx_MessageComposer_formatbar">
                         { formatButtons }
-                        <div style={{flex: 1}}></div>
-                        <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
-                             onMouseDown={this.onToggleMarkdownClicked}
-                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                            src={require(`../../../../res/img/button-md-${!this.state.inputState.isRichTextEnabled}.png`)} />
+                        <div style={{ flex: 1 }}></div>
+                        <AccessibleButton className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
+                            onMouseDown={this.onToggleMarkdownClicked}
+                            title={_t("Markdown is disabled")}
+                        />
                         <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
-                             onClick={this.onToggleFormattingClicked}
-                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                             src={require("../../../../res/img/icon-text-cancel.svg")} />
+                            onClick={this.onToggleFormattingClicked}
+                            className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                            src={require("../../../../res/img/icon-text-cancel.svg")}
+                        />
                     </div>
                 </div>;
         }

@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
@@ -61,29 +60,15 @@ module.exports = React.createClass({
         } else {
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
-            const protocol = global.location.protocol;
+            let protocol = global.location.protocol;
             if (protocol === "vector:") {
-                const warning = document.createElement('div');
-                // XXX: fix hardcoded app URL.  Better solutions include:
-                // * jumping straight to a hosted captcha page (but we don't support that yet)
-                // * embedding the captcha in an iframe (if that works)
-                // * using a better captcha lib
-                ReactDOM.render(_t(
-                    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
-                    {},
-                    {
-                        'a': (sub) => {
-                            return <a target="_blank" rel="noopener" href='https://riot.im/app'>{ sub }</a>;
-                        },
-                    }), warning);
-                this.refs.recaptchaContainer.appendChild(warning);
-            } else {
-                const scriptTag = document.createElement('script');
-                scriptTag.setAttribute(
-                    'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit",
-                );
-                this.refs.recaptchaContainer.appendChild(scriptTag);
+                protocol = "https:";
             }
+            const scriptTag = document.createElement('script');
+            scriptTag.setAttribute(
+                'src', `${protocol}//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
+            );
+            this.refs.recaptchaContainer.appendChild(scriptTag);
         }
     },
 
@@ -141,8 +126,9 @@ module.exports = React.createClass({
 
         return (
             <div ref="recaptchaContainer">
-                { _t("This homeserver would like to make sure you are not a robot.") }
-                <br />
+                <p>{_t(
+                    "This homeserver would like to make sure you are not a robot.",
+                )}</p>
                 <div id={DIV_ID}></div>
                 { error }
             </div>
