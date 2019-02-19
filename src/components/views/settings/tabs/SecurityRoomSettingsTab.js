@@ -43,11 +43,29 @@ export default class SecurityRoomSettingsTab extends React.Component {
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         const state = room.currentState;
-        const joinRule = state.getStateEvents("m.room.join_rules", "").getContent()['join_rule'];
-        const guestAccess = state.getStateEvents("m.room.guest_access", "").getContent()['guest_access'];
-        const history = state.getStateEvents("m.room.history_visibility", "").getContent()['history_visibility'];
+
+        const joinRule = this._pullContentPropertyFromEvent(
+            state.getStateEvents("m.room.join_rules", ""),
+            'join_rule',
+            'invite',
+        );
+        const guestAccess = this._pullContentPropertyFromEvent(
+            state.getStateEvents("m.room.guest_access", ""),
+            'guest_access',
+            'forbidden',
+        );
+        const history = this._pullContentPropertyFromEvent(
+            state.getStateEvents("m.room.history_visibility", ""),
+            'history_visibility',
+            'shared',
+        );
         const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
         this.setState({joinRule, guestAccess, history, encrypted});
+    }
+
+    _pullContentPropertyFromEvent(event, key, defaultValue) {
+        if (!event || !event.getContent()) return defaultValue;
+        return event.getContent()[key] || defaultValue;
     }
 
     componentWillUnmount(): void {
