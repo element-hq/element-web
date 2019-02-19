@@ -1224,7 +1224,6 @@
     "Sign in": "Sign in",
     "Login": "Login",
     "powered by Matrix": "powered by Matrix",
-    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
     "This homeserver would like to make sure you are not a robot.": "This homeserver would like to make sure you are not a robot.",
     "Custom Server Options": "Custom Server Options",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.",
