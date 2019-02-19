@@ -505,14 +505,9 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let signIn;
-        if (!this.state.doingUIAuth) {
-            signIn = (
-                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                    { _t('Sign in instead') }
-                </a>
-            );
-        }
+        const signIn = <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+            { _t('Sign in instead') }
+        </a>;
 
         return (
             <AuthPage>
