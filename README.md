@@ -116,17 +116,24 @@ config.json
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-For a good example, see https://riot.im/develop/config.json
+For a good example, see https://riot.im/develop/config.json.
 
-1. `default_hs_url` is the default homeserver url.
-1. `default_is_url` is the default identity server url (this is the server used
-   for verifying third party identifiers like email addresses). If this is blank,
-   registering with an email address, adding an email address to your account,
-   or inviting users via email address will not work.  Matrix identity servers are
-   very simple web services which map third party identifiers (currently only email
-   addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
-   for more details.  Currently the only public matrix identity servers are https://matrix.org
-   and https://vector.im.  In future identity servers will be decentralised.
+1. `default_server_name` sets the default server name to use for authentication.
+   This will trigger Riot to ask
+   `https://<server_name>/.well-known/matrix/client` for the homeserver and
+   identity server URLs to use. This is the recommended approach for setting a
+   default server. However, it is also possible to use the following to directly
+   configure each of the URLs:
+   * `default_hs_url` sets the default homeserver URL.
+   * `default_is_url` sets the default identity server URL (this is the server used
+      for verifying third party identifiers like email addresses). If this is blank,
+      registering with an email address, adding an email address to your account,
+      or inviting users via email address will not work.  Matrix identity servers are
+      very simple web services which map third party identifiers (currently only email
+      addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
+      for more details.  Currently the only public matrix identity servers are https://matrix.org
+      and https://vector.im.  In the future, identity servers will be decentralised.
+   * Riot will report an error if you accidentally configure both `default_server_name` _and_ `default_hs_url` since it's unclear which should take priority.
 1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or exposed to the user
    in the `labs` section of settings.  The available optional experimental features vary from
    release to release.
