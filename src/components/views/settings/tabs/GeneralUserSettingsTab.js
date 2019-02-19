@@ -145,7 +145,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 <Field id="theme" label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}>
-                    <option value="light">{_t("Default theme")}</option>
+                    <option value="light">{_t("Light theme")}</option>
                     <option value="dark">{_t("Dark theme")}</option>
                 </Field>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
