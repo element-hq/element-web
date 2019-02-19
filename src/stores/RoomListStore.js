@@ -282,9 +282,15 @@ class RoomListStore extends Store {
 
         let inserted = false;
         for (const key of Object.keys(this._state.lists)) {
-            listsClone[key] = [];
-            let pushedEntry = false;
             const hasRoom = this._state.lists[key].some((e) => e.room.roomId === room.roomId);
+
+            // Speed optimization: Skip the loop below if we're not going to do anything productive
+            if (!hasRoom || LIST_ORDERS[key] !== 'recent') {
+                listsClone[key] = this._state.lists[key];
+                continue;
+            } else {
+                listsClone[key] = [];
+            }
 
             // We track where the boundary within listsClone[key] is just in case our timestamp
             // ordering fails. If we can't stick the room in at the correct place in the category
@@ -292,13 +298,13 @@ class RoomListStore extends Store {
             // the index we track here.
             let desiredCategoryBoundaryIndex = 0;
             let foundBoundary = false;
+            let pushedEntry = false;
 
             for (const entry of this._state.lists[key]) {
                 // if the list is a recent list, and the room appears in this list, and we're not looking at a sticky
                 // room (sticky rooms have unreliable categories), try to slot the new room in
-                if (LIST_ORDERS[key] === 'recent' && hasRoom && entry.room.roomId !== this._state.stickyRoomId) {
-                    const inTag = targetTags.length === 0 || targetTags.includes(key);
-                    if (!pushedEntry && doInsert && inTag) {
+                if (entry.room.roomId !== this._state.stickyRoomId) {
+                    if (!pushedEntry && doInsert && (targetTags.length === 0 || targetTags.includes(key))) {
                         // Micro optimization: Support lazily loading the last timestamp in a room
                         let _entryTimestamp = null;
                         const entryTimestamp = () => {
@@ -356,7 +362,7 @@ class RoomListStore extends Store {
                     tags = targetTags;
                 }
                 if (tags.length === 0) {
-                    tags.push(myMembership === 'join' ? 'im.vector.fake.recent' : 'im.vector.fake.invite');
+                    tags = [myMembership === 'join' ? 'im.vector.fake.recent' : 'im.vector.fake.invite'];
                 }
             } else {
                 tags = ['im.vector.fake.archived'];
@@ -388,7 +394,15 @@ class RoomListStore extends Store {
         };
 
         const dmRoomMap = DMRoomMap.shared();
-        const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+
+        // Speed optimization: Hitting the SettingsStore is expensive, so avoid that at all costs.
+        let _isCustomTagsEnabled = null;
+        const isCustomTagsEnabled = () => {
+            if (_isCustomTagsEnabled === null) {
+                _isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+            }
+            return _isCustomTagsEnabled;
+        };
 
         this._matrixClient.getRooms().forEach((room) => {
             const myUserId = this._matrixClient.getUserId();
@@ -403,7 +417,9 @@ class RoomListStore extends Store {
 
                 // ignore any m. tag names we don't know about
                 tagNames = tagNames.filter((t) => {
-                    return (isCustomTagsEnabled && !t.startsWith('m.')) || lists[t] !== undefined;
+                    // Speed optimization: Avoid hitting the SettingsStore at all costs by making it the
+                    // last condition possible.
+                    return lists[t] !== undefined || (!t.startsWith('m.') && isCustomTagsEnabled());
                 });
 
                 if (tagNames.length) {
@@ -411,9 +427,10 @@ class RoomListStore extends Store {
                         const tagName = tagNames[i];
                         lists[tagName] = lists[tagName] || [];
 
-                        // We categorize all the tagged rooms the same because we don't actually
-                        // care about the order (it's defined elsewhere)
-                        lists[tagName].push({room, category: CATEGORY_RED});
+                        // Default to an arbitrary category for tags which aren't ordered by recents
+                        let category = CATEGORY_IDLE;
+                        if (LIST_ORDERS[tagName] === 'recent') category = this._calculateCategory(room);
+                        lists[tagName].push({room, category: category});
                     }
                 } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
@@ -422,7 +439,9 @@ class RoomListStore extends Store {
                     lists["im.vector.fake.recent"].push({room, category: this._calculateCategory(room)});
                 }
             } else if (membership === "leave") {
-                lists["im.vector.fake.archived"].push({room, category: this._calculateCategory(room)});
+                // The category of these rooms is not super important, so deprioritize it to the lowest
+                // possible value.
+                lists["im.vector.fake.archived"].push({room, category: CATEGORY_IDLE});
             }
         });
 
@@ -442,6 +461,7 @@ class RoomListStore extends Store {
                             if (latestEventTsCache[room.roomId]) {
                                 return latestEventTsCache[room.roomId];
                             }
+
                             const ts = this._tsOfNewestEvent(room);
                             latestEventTsCache[room.roomId] = ts;
                             return ts;
@@ -515,7 +535,7 @@ class RoomListStore extends Store {
             const idxB = CATEGORY_ORDER.indexOf(categoryB);
             if (idxA > idxB) return 1;
             if (idxA < idxB) return -1;
-            return 0;
+            return 0; // Technically not possible
         }
 
         const timestampA = tsOfNewestEventFn(roomA);
