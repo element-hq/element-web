@@ -97,7 +97,7 @@ export default React.createClass({
     render() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
-        const colorNumber = hashCode(mxEvent.getSender()) % 8;
+        const colorNumber = (hashCode(mxEvent.getSender()) % 8) + 1;
         const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         const {msgtype} = mxEvent.getContent();
 
