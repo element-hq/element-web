@@ -255,14 +255,29 @@ limitations under the License.
 }
 
 .mx_MessageComposer_formatbar_markdown {
+    height: 17px;
+    width: 30px;
     margin-right: 64px;
 }
 
 .mx_MessageComposer_input_markdownIndicator {
-    cursor: pointer;
     height: 10px;
+    width: 12px;
     padding: 4px 4px 4px 0;
-    opacity: 0.8;
+}
+
+.mx_MessageComposer_formatbar_markdown,
+.mx_MessageComposer_input_markdownIndicator {
+    cursor: pointer;
+    mask-image: url('$(res)/img/markdown.svg');
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    background-color: $composer-button-color;
+
+    &.mx_MessageComposer_markdownDisabled {
+        opacity: 0.2;
+    }
 }
 
 .mx_MatrixChat_useCompactLayout {

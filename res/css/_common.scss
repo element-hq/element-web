@@ -82,13 +82,6 @@ input[type=search]::-webkit-search-results-decoration {
     display: none;
 }
 
-.input[type=text]::-webkit-input-placeholder,
-.input[type=text]::-moz-placeholder,
-.input[type=search]::-webkit-input-placeholder,
-.input[type=search]::-moz-placeholder {
-    color: #a5aab2;
-}
-
 // Override Firefox's UA style so we get a consistent look across browsers
 input::placeholder,
 textarea::placeholder {
@@ -109,6 +102,71 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 textarea {
     font-family: $font-family;
     color: $primary-fg-color;
+}
+
+// .mx_textinput is a container for a text input
+// + some other controls like buttons, ...
+// it has the appearance of a text box so the controls
+// appear to be part of the input
+
+.mx_Dialog, .mx_MatrixChat {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        display: block;
+        box-sizing: border-box;
+        background-color: transparent;
+        color: $input-darker-fg-color;
+        border-radius: 4px;
+        border: 1px solid #c1c1c1;
+        // these things should probably not be defined
+        // globally
+        margin: 9px;
+        flex: 0 0 auto;
+    }
+
+    .mx_textinput {
+        display: flex;
+        align-items: center;
+
+        > input[type=text],
+        > input[type=search] {
+            border: none;
+            flex: 1;
+            color: $primary-fg-color;
+        }
+    }
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $roomsublist-label-fg-color;
+    }
+}
+
+/*** panels ***/
+.dark-panel {
+    background-color: $dark-panel-bg-color;
+}
+
+.dark-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-darker-fg-color;
+        background-color: $input-darker-bg-color;
+        border: none;
+    }
+}
+
+.light-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-lighter-fg-color;
+        background-color: $input-lighter-bg-color;
+        border: none;
+    }
 }
 
 /* Prevent ugly dotted highlight around selected elements in Firefox */

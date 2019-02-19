@@ -1,7 +1,7 @@
 // unified palette
 // try to use these colors when possible
 $bg-color: #181b21;
-$base-color: #1b1f25;
+$base-color: #15171b;
 $base-text-color: #edf3ff;
 $header-panel-bg-color: #22262e;
 $header-panel-border-color: #000000;
@@ -25,6 +25,8 @@ $focus-bg-color: $room-highlight-color;
 
 $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: $room-highlight-color;
+$rte-room-pill-color: $room-highlight-color;
+$rte-group-pill-color: $room-highlight-color;
 
 // informational plinth
 $info-plinth-bg-color: $header-panel-bg-color;
@@ -69,6 +71,11 @@ $avatar-bg-color: $bg-color;
 
 $h3-color: $primary-fg-color;
 
+$dialog-title-fg-color: #454545;
+$dialog-backdrop-color: #000;
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+$dialog-close-fg-color: #9fa9ba;
+
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
 
@@ -82,7 +89,8 @@ $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
 $roomheader-color: $text-primary-color;
-$roomheader-addroom-color: $header-panel-text-primary-color;
+$roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
+$roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
 $roomheader-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
@@ -103,7 +111,7 @@ $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 
 $panel-divider-color: $header-panel-border-color;
 
-$widget-menu-bar-bg-color: $search-bg-color;
+$widget-menu-bar-bg-color: $header-panel-bg-color;
 
 // event redaction
 $event-redacted-fg-color: #606060;
@@ -131,60 +139,8 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 
 $room-warning-bg-color: $header-panel-bg-color;
 
+$dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
-
-/*** form elements ***/
-
-// .mx_textinput is a container for a text input
-// + some other controls like buttons, ...
-// it has the appearance of a text box so the controls
-// appear to be part of the input
-
-.mx_Dialog, .mx_MatrixChat {
-
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
-    .mx_textinput {
-        background-color: transparent;
-        color: $input-darker-fg-color;
-        border: 1px solid #c1c1c1;
-    }
-
-    .mx_textinput {
-        > input[type=text],
-        > input[type=search] {
-            color: $primary-fg-color;
-        }
-        input::placeholder {
-            color: $roomsublist-label-fg-color;
-        }
-    }
-}
-
-/*** panels ***/
-.dark-panel {
-    background-color: $header-panel-bg-color;
-}
-
-.dark-panel {
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
-    .mx_textinput {
-        color: $input-darker-fg-color;
-        background-color: $input-darker-bg-color;
-        border: none;
-    }
-}
-
-.light-panel {
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
-    .mx_textinput {
-        color: $input-lighter-fg-color;
-        background-color: $input-lighter-bg-color;
-        border: none;
-    }
-}
 
 // ***** Mixins! *****
 
