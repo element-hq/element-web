@@ -126,8 +126,9 @@ module.exports = React.createClass({
 
         return (
             <div ref="recaptchaContainer">
-                { _t("This homeserver would like to make sure you are not a robot.") }
-                <br />
+                <p>{_t(
+                    "This homeserver would like to make sure you are not a robot.",
+                )}</p>
                 <div id={DIV_ID}></div>
                 { error }
             </div>
