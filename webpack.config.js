@@ -6,6 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
 
+// relative to languageHandler.js in matrix-react-sdk
+let RIOT_LANGUAGES_FILE = process.env.RIOT_LANGUAGES_FILE;
+if (!RIOT_LANGUAGES_FILE) {
+    RIOT_LANGUAGES_FILE = "../../riot-web/webapp/i18n/languages.json";
+}
+
 module.exports = {
     entry: {
         // Load babel-polyfill first to avoid issues where some imports (namely react)
@@ -61,7 +67,17 @@ module.exports = {
                 }),
             },
             {
-                test: /\.(gif|png|svg|ttf)$/,
+                // cache-bust languages.json file placed in
+                // riot-web/webapp/i18n during build by copy-res.js
+                test: /\.*languages.json$/,
+                type: "javascript/auto",
+                loader: 'file-loader',
+                options: {
+                    name: 'i18n/[name].[hash:7].[ext]',
+                },
+            },
+            {
+                test: /\.(gif|png|svg|ttf|xml|ico)$/,
                 // Use a content-based hash in the name so that we can set a long cache
                 // lifetime for assets while still delivering changes quickly.
                 oneOf: [
@@ -148,8 +164,8 @@ module.exports = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
+            'LANGUAGES_FILE': JSON.stringify(RIOT_LANGUAGES_FILE),
         }),
-
         new ExtractTextPlugin("bundles/[hash]/[name].css", {
             allChunks: true,
         }),
