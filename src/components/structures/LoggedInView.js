@@ -421,6 +421,7 @@ const LoggedInView = React.createClass({
     render: function() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
+        const UserView = sdk.getComponent('structures.UserView');
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
@@ -469,9 +470,7 @@ const LoggedInView = React.createClass({
                 break;
 
             case PageTypes.UserView:
-                pageElement = null; // deliberately null for now
-                // TODO: fix/remove UserView
-                // right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                pageElement = <UserView userId={this.props.currentUserId} />;
                 break;
             case PageTypes.GroupView:
                 pageElement = <GroupView

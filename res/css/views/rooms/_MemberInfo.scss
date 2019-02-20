@@ -32,11 +32,12 @@ limitations under the License.
 
 .mx_MemberInfo_cancel {
     height: 16px;
-    padding: 10px 15px;
+    width: 16px;
+    padding: 10px 0 10px 10px;
     cursor: pointer;
     mask-image: url('$(res)/img/minimise.svg');
     mask-repeat: no-repeat;
-    mask-position: center;
+    mask-position: 16px center;
     background-color: $rightpanel-button-color;
 }
 
@@ -47,7 +48,7 @@ limitations under the License.
 .mx_MemberInfo h2 {
     font-size: 18px;
     font-weight: 600;
-    margin: 16px 0;
+    margin: 16px 0 16px 15px;
 }
 
 .mx_MemberInfo_container {
