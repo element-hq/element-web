@@ -40,6 +40,10 @@ class PasswordLogin extends React.Component {
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
+        // This is optional and only set if we used a server name to determine
+        // the HS URL via `.well-known` discovery. The server name is used
+        // instead of the HS URL when talking about where to "sign in to".
+        hsName: null,
         hsUrl: "",
         disableSubmit: false,
     }
@@ -250,13 +254,19 @@ class PasswordLogin extends React.Component {
         }
 
         let signInToText = _t('Sign in');
-        try {
-            const parsedHsUrl = new URL(this.props.hsUrl);
+        if (this.props.hsName) {
             signInToText = _t('Sign in to %(serverName)s', {
-                serverName: parsedHsUrl.hostname,
+                serverName: this.props.hsName,
             });
-        } catch (e) {
-            // ignore
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                signInToText = _t('Sign in to %(serverName)s', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
         }
 
         let editLink = null;
@@ -338,6 +348,8 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
+    hsName: PropTypes.string,
+    hsUrl: PropTypes.string,
     disableSubmit: PropTypes.bool,
 };
 
