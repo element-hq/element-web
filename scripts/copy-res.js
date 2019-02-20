@@ -165,7 +165,7 @@ function genLangFile(lang, dest) {
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
-    const digest = loaderUtils.getHashDigest(jsonBuffer, "sha512", "base64", 7);
+    const digest = loaderUtils.getHashDigest(jsonBuffer, null, null, 7);
     const filename = `${lang}.${digest}.json`;
 
     fs.writeFileSync(dest + filename, json);
