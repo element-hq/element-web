@@ -236,15 +236,15 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let yourMatrixAccountText = _t('Your account');
+        let yourMatrixAccountText = _t('Your Matrix account');
         if (this.state.enteredHsUrl === this.props.defaultHsUrl) {
-            yourMatrixAccountText = _t('Your account on %(serverName)s', {
+            yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
                 serverName: this.props.defaultServerName,
             });
         } else {
             try {
                 const parsedHsUrl = new URL(this.state.enteredHsUrl);
-                yourMatrixAccountText = _t('Your account on %(serverName)s', {
+                yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
                     serverName: parsedHsUrl.hostname,
                 });
             } catch (e) {

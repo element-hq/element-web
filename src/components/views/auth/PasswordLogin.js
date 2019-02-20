@@ -253,15 +253,15 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let signInToText = _t('Sign in');
+        let signInToText = _t('Sign in to your Matrix account');
         if (this.props.hsName) {
-            signInToText = _t('Sign in to %(serverName)s', {
+            signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
                 serverName: this.props.hsName,
             });
         } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
-                signInToText = _t('Sign in to %(serverName)s', {
+                signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
                     serverName: parsedHsUrl.hostname,
                 });
             } catch (e) {

@@ -299,15 +299,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let yourMatrixAccountText = _t('Create your account');
+        let yourMatrixAccountText = _t('Create your Matrix account');
         if (this.props.hsName) {
-            yourMatrixAccountText = _t('Create your %(serverName)s account', {
+            yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
                 serverName: this.props.hsName,
             });
         } else {
             try {
                 const parsedHsUrl = new URL(this.props.hsUrl);
-                yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
                     serverName: parsedHsUrl.hostname,
                 });
             } catch (e) {
