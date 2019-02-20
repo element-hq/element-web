@@ -50,6 +50,10 @@ module.exports = React.createClass({
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
+        // This is optional and only set if we used a server name to determine
+        // the HS URL via `.well-known` discovery. The server name is used
+        // instead of the HS URL when talking about "your account".
+        hsName: PropTypes.string,
         hsUrl: PropTypes.string,
     },
 
@@ -296,13 +300,19 @@ module.exports = React.createClass({
 
     render: function() {
         let yourMatrixAccountText = _t('Create your account');
-        try {
-            const parsedHsUrl = new URL(this.props.hsUrl);
+        if (this.props.hsName) {
             yourMatrixAccountText = _t('Create your %(serverName)s account', {
-                serverName: parsedHsUrl.hostname,
+                serverName: this.props.hsName,
             });
-        } catch (e) {
-            // ignore
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                yourMatrixAccountText = _t('Create your %(serverName)s account', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
         }
 
         let editLink = null;

@@ -48,15 +48,20 @@ module.exports = React.createClass({
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
         idSid: PropTypes.string,
+        // The default server name to use when the user hasn't specified
+        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
+        // via `.well-known` discovery. The server name is used instead of the
+        // HS URL when talking about "your account".
+        defaultServerName: PropTypes.string,
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
         brand: PropTypes.string,
         email: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
@@ -470,6 +475,14 @@ module.exports = React.createClass({
             ) {
                 onEditServerDetailsClick = this.onEditServerDetailsClick;
             }
+
+            // If the current HS URL is the default HS URL, then we can label it
+            // with the default HS name (if it exists).
+            let hsName;
+            if (this.state.hsUrl === this.props.defaultHsUrl) {
+                hsName = this.props.defaultServerName;
+            }
+
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -481,6 +494,7 @@ module.exports = React.createClass({
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
+                hsName={hsName}
                 hsUrl={this.state.hsUrl}
             />;
         }
