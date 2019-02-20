@@ -75,12 +75,12 @@ export const CommandMap = {
         args: '<message>',
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
         runFn: function(roomId, args) {
-            let message = '¯\\_(ツ)_/¯'
+            let message = '¯\\_(ツ)_/¯';
             if (args) {
-                message = message + ' ' + args
+                message = message + ' ' + args;
             }
             return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
-        }
+        },
     }),
 
     ddg: new Command({
