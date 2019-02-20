@@ -92,9 +92,11 @@ export default class EditableItemList extends React.Component{
         itemsLabel: PropTypes.string,
         noItemsLabel: PropTypes.string,
         placeholder: PropTypes.string,
+        newItem: PropTypes.string,
 
         onItemAdded: PropTypes.func,
         onItemRemoved: PropTypes.func,
+        onNewItemChanged: PropTypes.func,
 
         canEdit: PropTypes.bool,
     };
@@ -103,22 +105,25 @@ export default class EditableItemList extends React.Component{
         e.stopPropagation();
         e.preventDefault();
 
-        if (!this.refs.newItem) return;
-
-        const value = this.refs.newItem.value;
-        if (this.props.onItemAdded) this.props.onItemAdded(value);
+        if (this.props.onItemAdded) this.props.onItemAdded(this.props.newItem);
     };
 
     _onItemRemoved = (index) => {
         if (this.props.onItemRemoved) this.props.onItemRemoved(index);
     };
 
+    _onNewItemChanged = (e) => {
+        if (this.props.onNewItemChanged) this.props.onNewItemChanged(e.target.value);
+    };
+
     _renderNewItemField() {
         return (
-            <form onSubmit={this._onAddClick} autoComplete={false}
+            <form onSubmit={this._onItemAdded} autoComplete={false}
                   noValidate={true} className="mx_EditableItemList_newItem">
-                <Field id="newEmailAddress" ref="newItem" label={this.props.placeholder}
-                       type="text" autoComplete="off" />
+                <Field id="newEmailAddress" label={this.props.placeholder}
+                       type="text" autoComplete="off" value={this.props.newItem}
+                       onChange={this._onNewItemChanged}
+                />
                 <AccessibleButton onClick={this._onItemAdded} kind="primary">
                     {_t("Add")}
                 </AccessibleButton>

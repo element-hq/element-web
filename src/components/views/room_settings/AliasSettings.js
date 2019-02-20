@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,32 +23,32 @@ const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
+import ErrorDialog from "../dialogs/ErrorDialog";
 const Modal = require("../../../Modal");
 
-module.exports = React.createClass({
-    displayName: 'AliasSettings',
-
-    propTypes: {
+export default class AliasSettings extends React.Component {
+    static propTypes = {
         roomId: PropTypes.string.isRequired,
         canSetCanonicalAlias: PropTypes.bool.isRequired,
         canSetAliases: PropTypes.bool.isRequired,
         aliasEvents: PropTypes.array, // [MatrixEvent]
         canonicalAliasEvent: PropTypes.object, // MatrixEvent
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            canSetAliases: false,
-            canSetCanonicalAlias: false,
-            aliasEvents: [],
-        };
-    },
+    static defaultProps = {
+        canSetAliases: false,
+        canSetCanonicalAlias: false,
+        aliasEvents: [],
+    };
 
-    getInitialState: function() {
-        return this.recalculateState(this.props.aliasEvents, this.props.canonicalAliasEvent);
-    },
+    constructor(props) {
+        super(props);
 
-    recalculateState: function(aliasEvents, canonicalAliasEvent) {
+        const aliasState = this.recalculateState(props.aliasEvents, props.canonicalAliasEvent);
+        this.state = Object.assign({newItem: ""}, aliasState);
+    }
+
+    recalculateState(aliasEvents, canonicalAliasEvent) {
         aliasEvents = aliasEvents || [];
 
         const state = {
@@ -69,9 +69,9 @@ module.exports = React.createClass({
         }
 
         return state;
-    },
+    }
 
-    saveSettings: function() {
+    saveSettings() {
         let promises = [];
 
         // save new aliases for m.room.aliases
@@ -118,9 +118,9 @@ module.exports = React.createClass({
         }
 
         return promises;
-    },
+    }
 
-    aliasEventsToDictionary: function(aliasEvents) { // m.room.alias events
+    aliasEventsToDictionary(aliasEvents) { // m.room.alias events
         const dict = {};
         aliasEvents.forEach((event) => {
             dict[event.getStateKey()] = (
@@ -128,35 +128,53 @@ module.exports = React.createClass({
             );
         });
         return dict;
-    },
+    }
 
-    isAliasValid: function(alias) {
+    isAliasValid(alias) {
         // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
         return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
-    },
+    }
 
-    getAliasOperations: function() {
+    getAliasOperations() {
         const oldAliases = this.aliasEventsToDictionary(this.props.aliasEvents);
         return ObjectUtils.getKeyValueArrayDiffs(oldAliases, this.state.domainToAliases);
-    },
+    }
 
-    onNewAliasChanged: function(value) {
+    onNewAliasChanged = (value) => {
         this.setState({newAlias: value});
-    },
+    };
 
-    onLocalAliasAdded: function(alias) {
+    onLocalAliasAdded = (alias) => {
         if (!alias || alias.length === 0) return; // ignore attempts to create blank aliases
 
         const localDomain = MatrixClientPeg.get().getDomain();
         if (!alias.includes(':')) alias += ':' + localDomain;
         if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
-            this.state.domainToAliases[localDomain] = this.state.domainToAliases[localDomain] || [];
-            this.state.domainToAliases[localDomain].push(alias);
+            MatrixClientPeg.get().createAlias(alias, this.props.roomId).then(() => {
+                const localAliases = this.state.domainToAliases[localDomain] || [];
+                const domainAliases = Object.assign({}, this.state.domainToAliases);
+                domainAliases[localDomain] = [...localAliases, alias];
 
-            this.setState({
-                domainToAliases: this.state.domainToAliases,
-                // Reset the add field
-                newAlias: "",
+                this.setState({
+                    domainToAliases: domainAliases,
+                    // Reset the add field
+                    newAlias: "",
+                });
+
+                if (!this.props.canonicalAlias) {
+                    this.setState({
+                        canonicalAlias: alias,
+                    });
+                }
+            }).catch((err) => {
+                console.error(err);
+                Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
+                    title: _t("Error creating alias"),
+                    description: _t(
+                        "There was an error creating that alias. It may not be allowed by the server " +
+                        "or a temporary failure occurred."
+                    ),
+                });
             });
         } else {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -165,30 +183,9 @@ module.exports = React.createClass({
                 description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
             });
         }
+    };
 
-        if (!this.props.canonicalAlias) {
-            this.setState({
-                canonicalAlias: alias,
-            });
-        }
-    },
-
-    onLocalAliasChanged: function(alias, index) {
-        if (alias === "") return; // hit the delete button to delete please
-        const localDomain = MatrixClientPeg.get().getDomain();
-        if (!alias.includes(':')) alias += ':' + localDomain;
-        if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
-            this.state.domainToAliases[localDomain][index] = alias;
-        } else {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Invalid address format', '', ErrorDialog, {
-                title: _t('Invalid address format'),
-                description: _t('\'%(alias)s\' is not a valid format for an address', { alias: alias }),
-            });
-        }
-    },
-
-    onLocalAliasDeleted: function(index) {
+    onLocalAliasDeleted = (index) => {
         const localDomain = MatrixClientPeg.get().getDomain();
         // It's a bit naughty to directly manipulate this.state, and React would
         // normally whine at you, but it can't see us doing the splice.  Given we
@@ -204,17 +201,15 @@ module.exports = React.createClass({
                 canonicalAlias: null,
             });
         }
-    },
+    };
 
-    onCanonicalAliasChange: function(event) {
+    onCanonicalAliasChange = (event) => {
         this.setState({
             canonicalAlias: event.target.value,
         });
-    },
+    };
 
-    render: function() {
-        const self = this;
-        const EditableText = sdk.getComponent("elements.EditableText");
+    render() {
         const EditableItemList = sdk.getComponent("elements.EditableItemList");
         const localDomain = MatrixClientPeg.get().getDomain();
 
@@ -227,8 +222,8 @@ module.exports = React.createClass({
                        element='select' id='canonicalAlias' label={_t('Main address')}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
-                        Object.keys(self.state.domainToAliases).map((domain, i) => {
-                            return self.state.domainToAliases[domain].map((alias, j) => {
+                        Object.keys(this.state.domainToAliases).map((domain, i) => {
+                            return this.state.domainToAliases[domain].map((alias, j) => {
                                 if (alias === this.state.canonicalAlias) found = true;
                                 return (
                                     <option value={alias} key={i + "_" + j}>
@@ -239,7 +234,7 @@ module.exports = React.createClass({
                         })
                     }
                     {
-                        found || !this.stateCanonicalAlias ? '' :
+                        found || !this.state.canonicalAlias ? '' :
                         <option value={ this.state.canonicalAlias } key='arbitrary'>
                             { this.state.canonicalAlias }
                         </option>
@@ -280,7 +275,6 @@ module.exports = React.createClass({
                     onNewItemChanged={this.onNewAliasChanged}
                     canEdit={this.props.canSetAliases}
                     onItemAdded={this.onLocalAliasAdded}
-                    onItemEdited={this.onLocalAliasChanged}
                     onItemRemoved={this.onLocalAliasDeleted}
                     itemsLabel={_t('Local addresses for this room:')}
                     noItemsLabel={_t('This room has no local addresses')}
@@ -288,10 +282,8 @@ module.exports = React.createClass({
                         'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
                     )}
                 />
-
                 { remote_aliases_section }
-
             </div>
         );
-    },
-});
+    }
+};
