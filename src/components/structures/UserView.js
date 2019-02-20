@@ -18,7 +18,8 @@ import React from "react";
 import Matrix from "matrix-js-sdk";
 import MatrixClientPeg from "../../MatrixClientPeg";
 import sdk from "../../index";
-
+import Modal from '../../Modal';
+import { _t } from '../../languageHandler';
 
 export default class UserView extends React.Component {
     static get propTypes() {
@@ -51,7 +52,11 @@ export default class UserView extends React.Component {
         try {
             profileInfo = await cli.getProfileInfo(this.props.userId);
         } catch (err) {
-            // show dialog or error or something
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+            Modal.createTrackedDialog(_t('Could not load user profile'), '', ErrorDialog, {
+                title: _t('Could not load user profile'),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
             this.setState({loading: false});
             return;
         }
