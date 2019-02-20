@@ -1332,5 +1332,8 @@
     "Enable Emoji suggestions while typing": "Włącz podpowiedzi Emoji podczas pisania",
     "Show avatar changes": "Pokaż zmiany awatara",
     "This room has no topic.": "Ten pokój nie ma tematu.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s zaktualizował(a) ten pokój."
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s zaktualizował(a) ten pokój.",
+    "Show display name changes": "Pokaż zmiany wyświetlanej nazwy",
+    "Show read receipts": "Wyświetl potwierdzenia odczytu",
+    "Send typing notifications": "Wyślij powiadomienia o pisaniu"
 }
