@@ -62,8 +62,8 @@ function getDefaultType(defaultHsUrl) {
     } else if (defaultHsUrl === TYPES.FREE.hsUrl) {
         return FREE;
     } else if (new URL(defaultHsUrl).hostname.endsWith('.modular.im')) {
-        // TODO: Use a Riot config parameter to detect Modular-ness.
-        // https://github.com/vector-im/riot-web/issues/8253
+        // This is an unlikely case to reach, as Modular defaults to hiding the
+        // server type selector.
         return PREMIUM;
     } else {
         return ADVANCED;
