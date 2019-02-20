@@ -15,6 +15,9 @@ module.exports = {
       "flowtype",
       "babel"
     ],
+    globals: {
+        LANGUAGES_FILE: "readonly",
+    },
     env: {
         es6: true,
     },
