@@ -94,7 +94,7 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
-            serverType: null,
+            serverType: ServerType.getTypeFromHsUrl(this.props.customHsUrl),
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
@@ -122,7 +122,7 @@ module.exports = React.createClass({
         });
     },
 
-    onServerTypeChange(type, initial) {
+    onServerTypeChange(type) {
         this.setState({
             serverType: type,
         });
@@ -148,15 +148,10 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
-                // if this is the initial value from the control and we're
-                // already in the registration phase, don't go back to the
-                // server details phase (but do if it's actually a change resulting
-                // from user interaction).
-                if (!initial || !this.state.phase === PHASE_REGISTRATION) {
-                    this.setState({
-                        phase: PHASE_SERVER_DETAILS,
-                    });
-                }
+                // Reset back to server details on type change.
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
                 break;
         }
     },
@@ -389,12 +384,9 @@ module.exports = React.createClass({
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            // if we've been given a custom HS URL we should actually pass that, so
-            // that the appropriate section is selected at the start to match the
-            // homeserver URL we're using
             return <div>
                 <ServerTypeSelector
-                    defaultHsUrl={this.props.customHsUrl || this.props.defaultHsUrl}
+                    selected={this.state.serverType}
                     onChange={this.onServerTypeChange}
                 />
             </div>;
@@ -436,7 +428,7 @@ module.exports = React.createClass({
 
         return <div>
             <ServerTypeSelector
-                defaultHsUrl={this.props.defaultHsUrl}
+                selected={this.state.serverType}
                 onChange={this.onServerTypeChange}
             />
             {serverDetails}
