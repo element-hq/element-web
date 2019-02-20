@@ -71,14 +71,10 @@ module.exports = {
                 // riot-web/webapp/i18n during build by copy-res.js
                 test: /\.*languages.json$/,
                 type: "javascript/auto",
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: 'i18n/[name].[hash:7].[ext]',
-                        },
-                    },
-                ],
+                loader: 'file-loader',
+                options: {
+                    name: 'i18n/[name].[hash:7].[ext]',
+                },
             },
             {
                 test: /\.(gif|png|svg|ttf|xml|ico)$/,
