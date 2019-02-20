@@ -10,7 +10,7 @@
     "Dismiss": "Avvis",
     "Welcome to Riot.im": "Velkommen skal De være til Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; sammabeid drevet av [matrix]",
-    "Search the room directory": "Søk i romutvalget",
+    "Search the room directory": "Søk i alle rom",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Allerede finnes det alskens rom i Matrix, sammenkoblet til eksisterende nettverk (Slack, IRC, Gitter osv.) eller selvstendig. Dersom De formoder, kan De kikke på utvalget!",
     "Chat with Riot Bot": "Nettprat med Riot Bot",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruke egendefinert tjener instillingen for å logge inn på andre Matrix tjenere ved å spesifisere enn annen hjemmetrjener URL. Dette lar deg bruke Riot med en eksisterende Matrix konto på en annen hjemmetjener.",
@@ -28,5 +28,7 @@
     "Announcements about Synapse releases": "Kunngjøring om Synapse utgivelser",
     "Sign In": "Logg inn",
     "Create Account": "Lag konto",
-    "Need help?": "Trenger du hjelp?"
+    "Need help?": "Trenger du hjelp?",
+    "Room Directory": "Alle rom",
+    "Explore rooms": "Se alle rom"
 }
