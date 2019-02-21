@@ -219,8 +219,12 @@ export class RoomPermaLinkCreator {
 
         const serversByPopulation = Object.keys(this._populationMap)
             .sort((a, b) => this._populationMap[b] - this._populationMap[a])
-            .filter(a => !candidates.includes(a) && !isHostnameIpAddress(a)
-                && !isHostInRegex(a, this._bannedHostsRegexps) && isHostInRegex(a, this._allowedHostsRegexps));
+            .filter(a => {
+                return !candidates.includes(a) &&
+                       !isHostnameIpAddress(a) &&
+                       !isHostInRegex(a, this._bannedHostsRegexps) &&
+                       isHostInRegex(a, this._allowedHostsRegexps);
+            });
 
         const remainingServers = serversByPopulation.slice(0, MAX_SERVER_CANDIDATES - candidates.length);
         candidates = candidates.concat(remainingServers);
