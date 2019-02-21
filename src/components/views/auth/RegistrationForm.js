@@ -320,7 +320,7 @@ module.exports = React.createClass({
             editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
-                {_t('Edit')}
+                {_t('Change')}
             </a>;
         }
 
