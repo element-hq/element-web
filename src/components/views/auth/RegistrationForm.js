@@ -82,11 +82,11 @@ module.exports = React.createClass({
         // is the one from the first invalid field.
         // It's not super ideal that this just calls
         // onError once for each invalid field.
+        this.validateField(FIELD_PHONE_NUMBER, ev.type);
+        this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
         this.validateField(FIELD_USERNAME, ev.type);
-        this.validateField(FIELD_PHONE_NUMBER, ev.type);
-        this.validateField(FIELD_EMAIL, ev.type);
 
         const self = this;
         if (this.allFieldsValid()) {
