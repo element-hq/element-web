@@ -808,6 +808,8 @@
     "There was an error creating that alias. It may not be allowed by the server or a temporary failure occurred.": "There was an error creating that alias. It may not be allowed by the server or a temporary failure occurred.",
     "Invalid alias format": "Invalid alias format",
     "'%(alias)s' is not a valid format for an alias": "'%(alias)s' is not a valid format for an alias",
+    "Error removing alias": "Error removing alias",
+    "There was an error removing that alias. It may no longer exist or a temporary error occurred.": "There was an error removing that alias. It may no longer exist or a temporary error occurred.",
     "Main address": "Main address",
     "not specified": "not specified",
     "not set": "not set",

@@ -155,17 +155,18 @@ export default class AliasSettings extends React.Component {
                 const domainAliases = Object.assign({}, this.state.domainToAliases);
                 domainAliases[localDomain] = [...localAliases, alias];
 
-                this.setState({
+                const newState = {
                     domainToAliases: domainAliases,
                     // Reset the add field
                     newAlias: "",
-                });
+                };
 
+                // TODO: How should we do direct manipulation for this?
                 if (!this.props.canonicalAlias) {
-                    this.setState({
-                        canonicalAlias: alias,
-                    });
+                    newState.canonicalAlias = alias;
                 }
+
+                this.setState(newState);
             }).catch((err) => {
                 console.error(err);
                 Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
@@ -187,20 +188,31 @@ export default class AliasSettings extends React.Component {
 
     onLocalAliasDeleted = (index) => {
         const localDomain = MatrixClientPeg.get().getDomain();
-        // It's a bit naughty to directly manipulate this.state, and React would
-        // normally whine at you, but it can't see us doing the splice.  Given we
-        // promptly setState anyway, it's just about acceptable.  The alternative
-        // would be to arbitrarily deepcopy to a temp variable and then setState
-        // that, but why bother when we can cut this corner.
-        const alias = this.state.domainToAliases[localDomain].splice(index, 1);
-        this.setState({
-            domainToAliases: this.state.domainToAliases,
-        });
-        if (this.props.canonicalAlias === alias) {
-            this.setState({
-                canonicalAlias: null,
+
+        const alias = this.state.domainToAliases[localDomain][index];
+
+        // TODO: In future, we should probably be making sure that the alias actually belongs
+        // to this room. See https://github.com/vector-im/riot-web/issues/7353
+        MatrixClientPeg.get().deleteAlias(alias).then(() => {
+            const localAliases = this.state.domainToAliases[localDomain].filter((a) => a !== alias);
+            const domainAliases = Object.assign({}, this.state.domainToAliases);
+            domainAliases[localDomain] = localAliases;
+
+            const newState = {domainToAliases: domainAliases};
+            if (this.props.canonicalAlias === alias) {
+                newState.canonicalAlias = null;
+            }
+            this.setState(newState);
+        }).catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
+                title: _t("Error removing alias"),
+                description: _t(
+                    "There was an error removing that alias. It may no longer exist or a temporary " +
+                    "error occurred."
+                ),
             });
-        }
+        });
     };
 
     onCanonicalAliasChange = (event) => {
@@ -213,11 +225,11 @@ export default class AliasSettings extends React.Component {
         const EditableItemList = sdk.getComponent("elements.EditableItemList");
         const localDomain = MatrixClientPeg.get().getDomain();
 
-        let canonical_alias_section;
+        let canonicalAliasSection;
         if (this.props.canSetCanonicalAlias) {
             let found = false;
             const canonicalValue = this.state.canonicalAlias || "";
-            canonical_alias_section = (
+            canonicalAliasSection = (
                 <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
                        element='select' id='canonicalAlias' label={_t('Main address')}>
                     <option value="" key="unset">{ _t('not specified') }</option>
@@ -242,14 +254,14 @@ export default class AliasSettings extends React.Component {
                 </Field>
             );
         } else {
-            canonical_alias_section = (
+            canonicalAliasSection = (
                 <b>{ this.state.canonicalAlias || _t('not set') }</b>
             );
         }
 
-        let remote_aliases_section;
+        let remoteAliasesSection;
         if (this.state.remoteDomains.length) {
-            remote_aliases_section = (
+            remoteAliasesSection = (
                 <div>
                     <div>
                         { _t("Remote addresses for this room:") }
@@ -267,7 +279,7 @@ export default class AliasSettings extends React.Component {
 
         return (
             <div className='mx_AliasSettings'>
-                {canonical_alias_section}
+                {canonicalAliasSection}
                 <EditableItemList
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}
@@ -282,7 +294,7 @@ export default class AliasSettings extends React.Component {
                         'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
                     )}
                 />
-                { remote_aliases_section }
+                {remoteAliasesSection}
             </div>
         );
     }
