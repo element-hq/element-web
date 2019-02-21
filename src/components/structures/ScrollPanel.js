@@ -199,24 +199,6 @@ module.exports = React.createClass({
         debuglog("Scroll event: offset now:", sn.scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
 
-        // Sometimes we see attempts to write to scrollTop essentially being
-        // ignored. (Or rather, it is successfully written, but on the next
-        // scroll event, it's been reset again).
-        //
-        // This was observed on Chrome 47, when scrolling using the trackpad in OS
-        // X Yosemite.  Can't reproduce on El Capitan. Our theory is that this is
-        // due to Chrome not being able to cope with the scroll offset being reset
-        // while a two-finger drag is in progress.
-        //
-        // By way of a workaround, we detect this situation and just keep
-        // resetting scrollTop until we see the scroll node have the right
-        // value.
-        if (this._lastSetScroll !== undefined && sn.scrollTop < this._lastSetScroll-200) {
-            console.log("Working around vector-im/vector-web#528");
-            this._restoreSavedScrollState();
-            return;
-        }
-
         // If there weren't enough children to fill the viewport, the scroll we
         // got might be different to the scroll we wanted; we don't want to
         // forget what we wanted, so don't overwrite the saved state unless
