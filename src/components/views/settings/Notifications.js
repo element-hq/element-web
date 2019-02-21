@@ -132,9 +132,9 @@ module.exports = React.createClass({
         });
     },
 
-    onEnableEmailNotificationsChange: function(address, event) {
+    onEnableEmailNotificationsChange: function(address, checked) {
         let emailPusherPromise;
-        if (event.target.checked) {
+        if (checked) {
             const data = {};
             data['brand'] = SdkConfig.get().brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
