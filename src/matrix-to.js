@@ -260,12 +260,7 @@ function getServerName(userId) {
 
 function getHostnameFromMatrixDomain(domain) {
     if (!domain) return null;
-
-    // The hostname might have a port, so we convert it to a URL and
-    // split out the real hostname.
-    const parser = document.createElement('a');
-    parser.href = "https://" + domain;
-    return parser.hostname;
+    return new URL(`https://${domain}`).hostname;
 }
 
 function isHostInRegex(hostname, regexps) {
