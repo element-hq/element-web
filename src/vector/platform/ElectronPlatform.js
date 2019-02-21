@@ -218,6 +218,25 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.send('check_updates');
     }
 
+    startListeningKeys() {
+        // Tell iohook to start listening for key events
+        ipcRenderer.send('start-listening-keys');
+    }
+
+    stopListeningKeys() {
+        // Tell iohook to stop listening for key events
+        ipcRenderer.send('stop-listening-keys');
+    }
+
+    onKeypress(self: any, callback: (ev, event) => void ) {
+        ipcRenderer.on('keypress', callback.bind(self));
+    }
+
+    onWindowBlurred(callback: () => void) {
+        // Callback to run on window blur (window loses focus)
+        ipcRenderer.on('window-blurred', callback);
+    }
+
     addGlobalKeybinding(keybindName: string, keybindCode: string, callback: () => void, releaseCallback: () => void) {
         // Add a keybinding that works even when the app is minimized
         const keybinding = {name: keybindName, code: keybindCode};

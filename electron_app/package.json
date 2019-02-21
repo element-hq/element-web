@@ -12,21 +12,6 @@
     "minimist": "^1.2.0",
     "png-to-ico": "^1.0.2"
   },
-  "iohook": {
-    "targets": [
-      "node-64",
-      "electron-69"
-    ],
-    "platforms": [
-      "win32",
-      "darwin",
-      "linux"
-    ],
-    "arches": [
-      "x64",
-      "ia32"
-    ]
-  },
   "cmake-js": {
     "runtime": "electron",
     "runtimeVersion": "4.0.4"
