@@ -1228,5 +1228,9 @@
     "Please contact your service administrator to continue using this service.": "Neem contact op met de beheerder van je thuisserver om de dienst te kunnen blijven gebruiken.",
     "Try the app first": "De app eerst proberen",
     "Ignored users": "Genegeerde gebruikers",
-    "Bulk options": "Bulkinstellingen"
+    "Bulk options": "Bulkinstellingen",
+    "Registration Required": "Registratie vereist",
+    "You need to register to do this. Would you like to register now?": "U moet zich registreren om dit te doen. Wilt u zich nu registreren?",
+    "This homeserver has hit its Monthly Active User limit.": "Deze homeserver heeft de maandelijks actieve gebruikerslimiet bereikt.",
+    "This homeserver has exceeded one of its resource limits.": "Deze homeserver heeft de limiet van een van de systeembronnen bereikt."
 }
