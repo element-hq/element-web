@@ -103,10 +103,6 @@ export class RoomPermaLinkCreator {
     forEvent(eventId) {
         const roomId = this._room.roomId;
         const permalinkBase = `${baseUrl}/#/${roomId}/${eventId}`;
-
-        // If the roomId isn't actually a room ID, don't try to list the servers.
-        // Aliases are already routable, and don't need extra information.
-        if (roomId[0] !== '!') return permalinkBase;
         return `${permalinkBase}${encodeServerCandidates(this._serverCandidates)}`;
     }
 
