@@ -1573,12 +1573,9 @@ export default React.createClass({
                     this._chatCreateOrReuse(userId);
                     return;
                 }
-
-                // get profile info here somehow
-
-            this.notifyNewScreen('user/' + userId);
-            this.setState({currentUserId: userId});
-            this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                this.setState({currentUserId: userId});
+                this._setPage(PageTypes.UserView);
             });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);

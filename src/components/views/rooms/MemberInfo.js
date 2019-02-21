@@ -983,9 +983,9 @@ module.exports = withMatrixClient(React.createClass({
         let backButton;
         if (this.props.member.roomId) {
             backButton = (<AccessibleButton className="mx_MemberInfo_cancel"
-                            onClick={this.onCancel}
-                            title={_t('Close')}
-                        />);
+                onClick={this.onCancel}
+                title={_t('Close')}
+            />);
         }
 
         return (
