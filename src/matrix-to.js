@@ -241,8 +241,11 @@ export function makeRoomPermalink(roomId) {
     // Aliases are already routable, and don't need extra information.
     if (roomId[0] !== '!') return permalinkBase;
 
-    const serverCandidates = pickServerCandidates(roomId);
-    return `${permalinkBase}${encodeServerCandidates(serverCandidates)}`;
+    const client = MatrixClientPeg.get();
+    const room = client.getRoom(roomId);
+    const permaLinkCreator = new RoomPermaLinkCreator(room);
+    permaLinkCreator.load();
+    return permaLinkCreator.forRoom();
 }
 
 export function makeGroupPermalink(groupId) {
