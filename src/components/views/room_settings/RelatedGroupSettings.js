@@ -25,39 +25,33 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
-module.exports = React.createClass({
-    displayName: 'RelatedGroupSettings',
-
-    propTypes: {
+export default class RelatedGroupSettings extends React.Component {
+    static propTypes = {
         roomId: PropTypes.string.isRequired,
         canSetRelatedGroups: PropTypes.bool.isRequired,
         relatedGroupsEvent: PropTypes.instanceOf(MatrixEvent),
-    },
+    };
 
-    contextTypes: {
+    static contextTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient),
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            canSetRelatedGroups: false,
-        };
-    },
+    static defaultProps = {
+        canSetRelatedGroups: false,
+    };
 
-    getInitialState: function() {
-        return {
-            newGroupsList: this.getInitialGroupList(),
+    constructor(props) {
+        super(props);
+
+        this.state = {
             newGroupId: "",
+            newGroupsList: props.relatedGroupsEvent ? (props.relatedGroupsEvent.getContent().groups || []) : [],
         };
-    },
+    }
 
-    getInitialGroupList: function() {
-        return this.props.relatedGroupsEvent ? (this.props.relatedGroupsEvent.getContent().groups || []) : [];
-    },
-
-    updateGroups: function() {
+    updateGroups(newGroupsList) {
         this.context.matrixClient.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
-            groups: this.state.newGroupsList,
+            groups: newGroupsList,
         }, '').catch((err) => {
             console.error(err);
             Modal.createTrackedDialog('Error updating flair', '', ErrorDialog, {
@@ -68,9 +62,9 @@ module.exports = React.createClass({
                 ),
             });
         })
-    },
+    }
 
-    validateGroupId: function(groupId) {
+    validateGroupId(groupId) {
         if (!GROUP_ID_REGEX.test(groupId)) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Invalid related community ID', '', ErrorDialog, {
@@ -80,31 +74,32 @@ module.exports = React.createClass({
             return false;
         }
         return true;
-    },
+    }
 
-    onNewGroupChanged: function(newGroupId) {
+    onNewGroupChanged = (newGroupId) => {
         this.setState({ newGroupId });
-    },
+    };
 
-    onGroupAdded: function(groupId) {
+    onGroupAdded = (groupId) => {
         if (groupId.length === 0 || !this.validateGroupId(groupId)) {
             return;
         }
+        const newGroupsList = [...this.state.newGroupsList, groupId];
         this.setState({
-            newGroupsList: this.state.newGroupsList.concat([groupId]),
+            newGroupsList: newGroupsList,
             newGroupId: '',
         });
-        this.updateGroups();
-    },
+        this.updateGroups(newGroupsList);
+    };
 
-    onGroupDeleted: function(index) {
-        const newGroupsList = this.state.newGroupsList.slice();
-        newGroupsList.splice(index, 1);
+    onGroupDeleted = (index) => {
+        const group = this.state.newGroupsList[index];
+        const newGroupsList = this.state.newGroupsList.filter((g) => g !== group);
         this.setState({ newGroupsList });
-        this.updateGroups();
-    },
+        this.updateGroups(newGroupsList);
+    };
 
-    render: function() {
+    render() {
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return <div>
@@ -123,5 +118,5 @@ module.exports = React.createClass({
                 )}
             />
         </div>;
-    },
-});
+    }
+};

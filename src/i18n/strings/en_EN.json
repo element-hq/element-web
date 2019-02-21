@@ -818,6 +818,8 @@
     "Local addresses for this room:": "Local addresses for this room:",
     "This room has no local addresses": "This room has no local addresses",
     "New address (e.g. #foo:%(localDomain)s)": "New address (e.g. #foo:%(localDomain)s)",
+    "Error updating flair": "Error updating flair",
+    "There was an error updating the flair for this room. The server may not allow it or a temporary error occurred.": "There was an error updating the flair for this room. The server may not allow it or a temporary error occurred.",
     "Invalid community ID": "Invalid community ID",
     "'%(groupId)s' is not a valid community ID": "'%(groupId)s' is not a valid community ID",
     "Showing flair for these communities:": "Showing flair for these communities:",
