@@ -68,12 +68,6 @@ export default class GeneralRoomSettingsTab extends React.Component {
         });
     };
 
-    _saveGroups = (e) => {
-        // TODO: Live modification?
-        if (!this.refs.flairSettings) return;
-        this.refs.flairSettings.saveSettings();
-    };
-
     _onLeaveClick = () => {
         dis.dispatch({
             action: 'leave_room',
@@ -122,12 +116,9 @@ export default class GeneralRoomSettingsTab extends React.Component {
 
                 <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <RelatedGroupSettings ref="flairSettings" roomId={room.roomId}
+                    <RelatedGroupSettings roomId={room.roomId}
                                           canSetRelatedGroups={canChangeGroups}
                                           relatedGroupsEvent={groupsEvent} />
-                    <AccessibleButton onClick={this._saveGroups} kind='primary'>
-                        {_t("Save")}
-                    </AccessibleButton>
                 </div>
 
                 <span className='mx_SettingsTab_subheading'>{_t("URL Previews")}</span>

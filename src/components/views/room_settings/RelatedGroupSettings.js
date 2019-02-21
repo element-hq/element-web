@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import isEqual from 'lodash/isEqual';
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
@@ -46,7 +47,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             newGroupsList: this.getInitialGroupList(),
-            newGroupId: null,
+            newGroupId: "",
         };
     },
 
@@ -54,24 +55,19 @@ module.exports = React.createClass({
         return this.props.relatedGroupsEvent ? (this.props.relatedGroupsEvent.getContent().groups || []) : [];
     },
 
-    needsSaving: function() {
-        const cli = this.context.matrixClient;
-        const room = cli.getRoom(this.props.roomId);
-        if (!room.currentState.maySendStateEvent('m.room.related_groups', cli.getUserId())) return false;
-        return !isEqual(this.getInitialGroupList(), this.state.newGroupsList);
-    },
-
-    saveSettings: function() {
-        if (!this.needsSaving()) return Promise.resolve();
-
-        return this.context.matrixClient.sendStateEvent(
-            this.props.roomId,
-            'm.room.related_groups',
-            {
-                groups: this.state.newGroupsList,
-            },
-            '',
-        );
+    updateGroups: function() {
+        this.context.matrixClient.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
+            groups: this.state.newGroupsList,
+        }, '').catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error updating flair', '', ErrorDialog, {
+                title: _t("Error updating flair"),
+                description: _t(
+                    "There was an error updating the flair for this room. The server may not allow it or " +
+                    "a temporary error occurred."
+                ),
+            });
+        })
     },
 
     validateGroupId: function(groupId) {
@@ -98,21 +94,14 @@ module.exports = React.createClass({
             newGroupsList: this.state.newGroupsList.concat([groupId]),
             newGroupId: '',
         });
-    },
-
-    onGroupEdited: function(groupId, index) {
-        if (groupId.length === 0 || !this.validateGroupId(groupId)) {
-            return;
-        }
-        this.setState({
-            newGroupsList: Object.assign(this.state.newGroupsList, {[index]: groupId}),
-        });
+        this.updateGroups();
     },
 
     onGroupDeleted: function(index) {
         const newGroupsList = this.state.newGroupsList.slice();
         newGroupsList.splice(index, 1);
         this.setState({ newGroupsList });
+        this.updateGroups();
     },
 
     render: function() {
@@ -126,7 +115,6 @@ module.exports = React.createClass({
                 canEdit={this.props.canSetRelatedGroups}
                 onNewItemChanged={this.onNewGroupChanged}
                 onItemAdded={this.onGroupAdded}
-                onItemEdited={this.onGroupEdited}
                 onItemRemoved={this.onGroupDeleted}
                 itemsLabel={_t('Showing flair for these communities:')}
                 noItemsLabel={_t('This room is not showing flair for any communities')}
