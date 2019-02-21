@@ -180,7 +180,8 @@ describe('RoomList', () => {
     }
 
     function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
-        describe('does correct optimistic update when dragging from', () => {
+        // TODO: Re-enable dragging tests when we support dragging again.
+        xdescribe('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
                 expectCorrectMove(undefined, 'im.vector.fake.direct');
             });

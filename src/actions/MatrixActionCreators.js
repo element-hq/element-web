@@ -132,6 +132,24 @@ function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
 }
 
 /**
+ * Create a MatrixActions.Room.receipt action that represents a MatrixClient
+ * `Room.receipt` event, each parameter mapping to a key-value in the action.
+ *
+ * @param {MatrixClient} matrixClient the matrix client
+ * @param {MatrixEvent} event the receipt event.
+ * @param {Room} room the room the receipt happened in.
+ * @returns {Object} an action of type MatrixActions.Room.receipt.
+ */
+function createRoomReceiptAction(matrixClient, event, room) {
+    return {
+        action: 'MatrixActions.Room.receipt',
+        event,
+        room,
+        matrixClient,
+    };
+}
+
+/**
  * @typedef RoomTimelineAction
  * @type {Object}
  * @property {string} action 'MatrixActions.Room.timeline'.
@@ -233,6 +251,7 @@ export default {
         this._addMatrixClientListener(matrixClient, 'Room.accountData', createRoomAccountDataAction);
         this._addMatrixClientListener(matrixClient, 'Room', createRoomAction);
         this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
+        this._addMatrixClientListener(matrixClient, 'Room.receipt', createRoomReceiptAction);
         this._addMatrixClientListener(matrixClient, 'Room.timeline', createRoomTimelineAction);
         this._addMatrixClientListener(matrixClient, 'Room.myMembership', createSelfMembershipAction);
         this._addMatrixClientListener(matrixClient, 'Event.decrypted', createEventDecryptedAction);

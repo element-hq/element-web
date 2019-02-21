@@ -30,11 +30,6 @@ export default class PreferencesSettingsTab extends React.Component {
         'sendTypingNotifications',
     ];
 
-    static ROOM_LIST_SETTINGS = [
-        'pinUnreadRooms',
-        'pinMentionedRooms',
-    ];
-
     static TIMELINE_SETTINGS = [
         'autoplayGifsAndVideos',
         'urlPreviewsEnabled',
@@ -105,9 +100,6 @@ export default class PreferencesSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this._renderGroup(PreferencesSettingsTab.COMPOSER_SETTINGS)}
-
-                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesSettingsTab.ROOM_LIST_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
                     {this._renderGroup(PreferencesSettingsTab.TIMELINE_SETTINGS)}
