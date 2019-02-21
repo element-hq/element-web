@@ -576,9 +576,10 @@ module.exports = React.createClass({
         }
 
         const scrollNode = this._getScrollNode();
-        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-        const boundingRect = node.getBoundingClientRect();
-        const scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+        const scrollBottom = scrollNode.scrollTop + scrollNode.clientHeight;
+
+        const nodeBottom = node.offsetTop + node.clientHeight;
+        const scrollDelta = nodeBottom + pixelOffset - scrollBottom;
 
         debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
@@ -595,37 +596,43 @@ module.exports = React.createClass({
             return;
         }
 
+        const scrollNode = this._getScrollNode();
+        const scrollBottom = scrollNode.scrollTop + scrollNode.clientHeight;
+
         const itemlist = this.refs.itemlist;
-        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
         const messages = itemlist.children;
-        let newScrollState = null;
+        let node = null;
+        let nodeBottom;
 
+        // TODO: change this to not use getBoundingClientRect and save the domnode
         for (let i = messages.length-1; i >= 0; --i) {
-            const node = messages[i];
-            if (!node.dataset.scrollTokens) continue;
+            if (!messages[i].dataset.scrollTokens) {
+                continue;
+            }
+            node = messages[i];
 
-            const boundingRect = node.getBoundingClientRect();
-            newScrollState = {
-                stuckAtBottom: false,
-                trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
-                pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-            };
+            nodeBottom = node.offsetTop + node.clientHeight;
             // If the bottom of the panel intersects the ClientRect of node, use this node
             // as the scrollToken.
             // If this is false for the entire for-loop, we default to the last node
             // (which is why newScrollState is set on every iteration).
-            if (boundingRect.top < wrapperRect.bottom) {
+            if (nodeBottom >= scrollBottom) {
                 // Use this node as the scrollToken
                 break;
             }
         }
-        // This is only false if there were no nodes with `node.dataset.scrollTokens` set.
-        if (newScrollState) {
-            this.scrollState = newScrollState;
-            debuglog("ScrollPanel: saved scroll state", this.scrollState);
-        } else {
+
+        if (!node) {
             debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
+            return;
         }
+
+        debuglog("ScrollPanel: saved scroll state", this.scrollState);
+        this.scrollState = {
+            stuckAtBottom: false,
+            trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
+            pixelOffset: scrollBottom - nodeBottom,
+        };
     },
 
     _restoreSavedScrollState: function() {
