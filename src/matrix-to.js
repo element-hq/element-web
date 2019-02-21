@@ -78,7 +78,6 @@ export class RoomPermaLinkCreator {
         this._allowedHostsRegexps = null;
         this._serverCandidates = null;
 
-        this.onPowerlevel = this.onPowerlevel.bind(this);
         this.onMembership = this.onMembership.bind(this);
         this.onRoomState = this.onRoomState.bind(this);
     }
@@ -92,13 +91,11 @@ export class RoomPermaLinkCreator {
     start() {
         this.load();
         this._room.on("RoomMember.membership", this.onMembership);
-        this._room.on("RoomMember.powerLevel", this.onPowerlevel);
         this._room.on("RoomState.events", this.onRoomState);
     }
 
     stop() {
         this._room.removeListener("RoomMember.membership", this.onMembership);
-        this._room.removeListener("RoomMember.powerLevel", this.onPowerlevel);
         this._room.removeListener("RoomState.events", this.onRoomState);
     }
 
@@ -119,10 +116,16 @@ export class RoomPermaLinkCreator {
     }
 
     onRoomState(event) {
-        if (event.getType() === "m.room.server_acl") {
-            this._updateAllowedServers();
-            this._updatePopulationMap();
-            this._updateServerCandidates();
+        switch (event.getType()) {
+            case "m.room.server_acl":
+                this._updateAllowedServers();
+                this._updatePopulationMap();
+                this._updateServerCandidates();
+                return;
+            case "m.room.power_levels":
+                this._updateHighestPlUser();
+                this._updateServerCandidates();
+                return;
         }
     }
 
@@ -139,11 +142,6 @@ export class RoomPermaLinkCreator {
             this._populationMap[serverName]++;
         }
 
-        this._updateHighestPlUser();
-        this._updateServerCandidates();
-    }
-
-    onPowerlevel() {
         this._updateHighestPlUser();
         this._updateServerCandidates();
     }
