@@ -55,6 +55,7 @@ export default class AliasSettings extends React.Component {
             domainToAliases: {}, // { domain.com => [#alias1:domain.com, #alias2:domain.com] }
             remoteDomains: [], // [ domain.com, foobar.com ]
             canonicalAlias: null, // #canonical:domain.com
+            updatingCanonicalAlias: false,
         };
         const localDomain = MatrixClientPeg.get().getDomain();
 
@@ -140,6 +141,32 @@ export default class AliasSettings extends React.Component {
         return ObjectUtils.getKeyValueArrayDiffs(oldAliases, this.state.domainToAliases);
     }
 
+    changeCanonicalAlias(alias) {
+        if (!this.props.canSetCanonicalAlias) return;
+
+        this.setState({
+            canonicalAlias: alias,
+            updatingCanonicalAlias: true,
+        });
+
+        const eventContent = {};
+        if (alias) eventContent["alias"] = alias;
+
+        MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
+            eventContent, "").catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error updating main address', '', ErrorDialog, {
+                title: _t("Error updating main address"),
+                description: _t(
+                    "There was an error updating the room's main address. It may not be allowed by the server " +
+                    "or a temporary failure occurred."
+                ),
+            });
+        }).finally(() => {
+            this.setState({updatingCanonicalAlias: false});
+        });
+    }
+
     onNewAliasChanged = (value) => {
         this.setState({newAlias: value});
     };
@@ -155,18 +182,15 @@ export default class AliasSettings extends React.Component {
                 const domainAliases = Object.assign({}, this.state.domainToAliases);
                 domainAliases[localDomain] = [...localAliases, alias];
 
-                const newState = {
+                this.setState({
                     domainToAliases: domainAliases,
                     // Reset the add field
                     newAlias: "",
-                };
+                });
 
-                // TODO: How should we do direct manipulation for this?
-                if (!this.props.canonicalAlias) {
-                    newState.canonicalAlias = alias;
+                if (!this.state.canonicalAlias) {
+                    this.changeCanonicalAlias(alias);
                 }
-
-                this.setState(newState);
             }).catch((err) => {
                 console.error(err);
                 Modal.createTrackedDialog('Error creating alias', '', ErrorDialog, {
@@ -198,11 +222,11 @@ export default class AliasSettings extends React.Component {
             const domainAliases = Object.assign({}, this.state.domainToAliases);
             domainAliases[localDomain] = localAliases;
 
-            const newState = {domainToAliases: domainAliases};
-            if (this.props.canonicalAlias === alias) {
-                newState.canonicalAlias = null;
+            this.setState({domainToAliases: domainAliases});
+
+            if (this.state.canonicalAlias === alias) {
+                this.changeCanonicalAlias(null);
             }
-            this.setState(newState);
         }).catch((err) => {
             console.error(err);
             Modal.createTrackedDialog('Error removing alias', '', ErrorDialog, {
@@ -216,9 +240,7 @@ export default class AliasSettings extends React.Component {
     };
 
     onCanonicalAliasChange = (event) => {
-        this.setState({
-            canonicalAlias: event.target.value,
-        });
+        this.changeCanonicalAlias(event.target.value);
     };
 
     render() {
@@ -231,7 +253,8 @@ export default class AliasSettings extends React.Component {
             const canonicalValue = this.state.canonicalAlias || "";
             canonicalAliasSection = (
                 <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
-                       element='select' id='canonicalAlias' label={_t('Main address')}>
+                       disabled={this.state.updatingCanonicalAlias} element='select'
+                       id='canonicalAlias' label={_t('Main address')}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(this.state.domainToAliases).map((domain, i) => {
