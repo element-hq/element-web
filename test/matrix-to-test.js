@@ -104,6 +104,33 @@ describe('matrix-to', function() {
         // we don't check the 2nd and 3rd servers because that is done by the next test
     });
 
+    it('should change candidate server when highest power level user leaves the room', function() {
+        const member95 = {
+            userId: "@alice:pl_95",
+            powerLevel: 95,
+        };
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:pl_50",
+                powerLevel: 50,
+            },
+            {
+                userId: "@alice:pl_75",
+                powerLevel: 75,
+            },
+            member95,
+        ]);
+        const creator = new RoomPermaLinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates[0]).toBe("pl_95");
+        member95.membership = "left";
+        creator.onMembership({}, member95, "join");
+        expect(creator._serverCandidates[0]).toBe("pl_75");
+        member95.membership = "join";
+        creator.onMembership({}, member95, "left");
+        expect(creator._serverCandidates[0]).toBe("pl_95");
+    });
+
     it('should pick candidate servers based on user population', function() {
         const room = mockRoom(null, [
             {
