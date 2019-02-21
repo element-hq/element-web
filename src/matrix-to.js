@@ -84,6 +84,7 @@ export class RoomPermaLinkCreator {
 
     load() {
         this._updateAllowedServers();
+        this._updateHighestPlUser();
         this._updatePopulationMap();
         this._updateServerCandidates();
     }
