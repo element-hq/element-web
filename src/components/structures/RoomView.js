@@ -30,6 +30,7 @@ import Promise from 'bluebird';
 import filesize from 'filesize';
 const classNames = require("classnames");
 import { _t } from '../../languageHandler';
+import {RoomPermaLinkCreator} from "../../matrix-to";
 
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
@@ -441,6 +442,11 @@ module.exports = React.createClass({
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
         }
 
+        // stop tracking room changes to format permalinks
+        if (this.state.permaLinkCreator) {
+            this.state.permaLinkCreator.stop();
+        }
+
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
             // is really just for hygiene - we're going to be
@@ -652,6 +658,11 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
+        if (!this.state.permaLinkCreator) {
+            const permaLinkCreator = new RoomPermaLinkCreator(room);
+            permaLinkCreator.start();
+            this.setState({permaLinkCreator});
+        }
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -1219,6 +1230,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
+                     permaLinkCreator={this.state.permaLinkCreator}
                      onWidgetLoad={onWidgetLoad} />);
         }
         return ret;
@@ -1826,6 +1838,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
+                permaLinkCreator={this.state.permaLinkCreator}
             />);
 
         let topUnreadMessagesBar = null;

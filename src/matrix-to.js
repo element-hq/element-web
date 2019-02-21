@@ -97,9 +97,9 @@ export class RoomPermaLinkCreator {
     }
 
     stop() {
-        this._room.off("RoomMember.membership", this.onMembership);
-        this._room.off("RoomMember.powerLevel", this.onPowerlevel);
-        this._room.off("RoomState.events", this.onRoomState);
+        this._room.removeListener("RoomMember.membership", this.onMembership);
+        this._room.removeListener("RoomMember.powerLevel", this.onPowerlevel);
+        this._room.removeListener("RoomState.events", this.onRoomState);
     }
 
     forEvent(eventId) {
