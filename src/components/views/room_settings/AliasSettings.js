@@ -186,40 +186,33 @@ export default class AliasSettings extends React.Component {
         const EditableItemList = sdk.getComponent("elements.EditableItemList");
         const localDomain = MatrixClientPeg.get().getDomain();
 
-        let canonicalAliasSection;
-        if (this.props.canSetCanonicalAlias) {
-            let found = false;
-            const canonicalValue = this.state.canonicalAlias || "";
-            canonicalAliasSection = (
-                <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
-                       disabled={this.state.updatingCanonicalAlias} element='select'
-                       id='canonicalAlias' label={_t('Main address')}>
-                    <option value="" key="unset">{ _t('not specified') }</option>
-                    {
-                        Object.keys(this.state.domainToAliases).map((domain, i) => {
-                            return this.state.domainToAliases[domain].map((alias, j) => {
-                                if (alias === this.state.canonicalAlias) found = true;
-                                return (
-                                    <option value={alias} key={i + "_" + j}>
-                                        { alias }
-                                    </option>
-                                );
-                            });
-                        })
-                    }
-                    {
-                        found || !this.state.canonicalAlias ? '' :
-                        <option value={ this.state.canonicalAlias } key='arbitrary'>
-                            { this.state.canonicalAlias }
-                        </option>
-                    }
-                </Field>
-            );
-        } else {
-            canonicalAliasSection = (
-                <b>{ this.state.canonicalAlias || _t('not set') }</b>
-            );
-        }
+        let found = false;
+        const canonicalValue = this.state.canonicalAlias || "";
+        const canonicalAliasSection = (
+            <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
+                   disabled={this.state.updatingCanonicalAlias || !this.props.canSetCanonicalAlias}
+                   element='select' id='canonicalAlias' label={_t('Main address')}>
+                <option value="" key="unset">{ _t('not specified') }</option>
+                {
+                    Object.keys(this.state.domainToAliases).map((domain, i) => {
+                        return this.state.domainToAliases[domain].map((alias, j) => {
+                            if (alias === this.state.canonicalAlias) found = true;
+                            return (
+                                <option value={alias} key={i + "_" + j}>
+                                    { alias }
+                                </option>
+                            );
+                        });
+                    })
+                }
+                {
+                    found || !this.state.canonicalAlias ? '' :
+                    <option value={ this.state.canonicalAlias } key='arbitrary'>
+                        { this.state.canonicalAlias }
+                    </option>
+                }
+            </Field>
+        );
 
         let remoteAliasesSection;
         if (this.state.remoteDomains.length) {
