@@ -1401,6 +1401,7 @@
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "Uploading %(filename)s and %(count)s others|zero": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
+    "Could not load user profile": "Could not load user profile",
     "Failed to send email": "Failed to send email",
     "The email address linked to your account must be entered.": "The email address linked to your account must be entered.",
     "A new password must be entered.": "A new password must be entered.",

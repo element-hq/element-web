@@ -1573,14 +1573,9 @@ export default React.createClass({
                     this._chatCreateOrReuse(userId);
                     return;
                 }
-
-                this._setPage(PageTypes.UserView);
                 this.notifyNewScreen('user/' + userId);
-                const member = new Matrix.RoomMember(null, userId);
-                dis.dispatch({
-                    action: 'view_user',
-                    member: member,
-                });
+                this.setState({currentUserId: userId});
+                this._setPage(PageTypes.UserView);
             });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
