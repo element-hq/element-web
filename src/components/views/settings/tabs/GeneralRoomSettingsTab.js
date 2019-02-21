@@ -68,12 +68,6 @@ export default class GeneralRoomSettingsTab extends React.Component {
         });
     };
 
-    _saveAliases = (e) => {
-        // TODO: Live modification?
-        if (!this.refs.aliasSettings) return;
-        this.refs.aliasSettings.saveSettings();
-    };
-
     _saveGroups = (e) => {
         // TODO: Live modification?
         if (!this.refs.flairSettings) return;
@@ -113,12 +107,9 @@ export default class GeneralRoomSettingsTab extends React.Component {
 
                 <span className='mx_SettingsTab_subheading'>{_t("Room Addresses")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <AliasSettings ref="aliasSettings" roomId={this.props.roomId}
+                    <AliasSettings roomId={this.props.roomId}
                                    canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
                                    canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
-                    <AccessibleButton onClick={this._saveAliases} kind='primary'>
-                        {_t("Save")}
-                    </AccessibleButton>
                 </div>
                 <div className='mx_SettingsTab_section'>
                     <LabelledToggleSwitch value={this.state.isRoomPublished}

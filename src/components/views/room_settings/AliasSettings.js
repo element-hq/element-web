@@ -44,81 +44,25 @@ export default class AliasSettings extends React.Component {
     constructor(props) {
         super(props);
 
-        const aliasState = this.recalculateState(props.aliasEvents, props.canonicalAliasEvent);
-        this.state = Object.assign({newItem: ""}, aliasState);
-    }
-
-    recalculateState(aliasEvents, canonicalAliasEvent) {
-        aliasEvents = aliasEvents || [];
-
         const state = {
             domainToAliases: {}, // { domain.com => [#alias1:domain.com, #alias2:domain.com] }
             remoteDomains: [], // [ domain.com, foobar.com ]
             canonicalAlias: null, // #canonical:domain.com
             updatingCanonicalAlias: false,
+            newItem: "",
         };
+
         const localDomain = MatrixClientPeg.get().getDomain();
-
-        state.domainToAliases = this.aliasEventsToDictionary(aliasEvents);
-
+        state.domainToAliases = this.aliasEventsToDictionary(props.aliasEvents || []);
         state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
             return domain !== localDomain && state.domainToAliases[domain].length > 0;
         });
 
-        if (canonicalAliasEvent) {
-            state.canonicalAlias = canonicalAliasEvent.getContent().alias;
+        if (props.canonicalAliasEvent) {
+            state.canonicalAlias = props.canonicalAliasEvent.getContent().alias;
         }
 
-        return state;
-    }
-
-    saveSettings() {
-        let promises = [];
-
-        // save new aliases for m.room.aliases
-        const aliasOperations = this.getAliasOperations();
-        for (let i = 0; i < aliasOperations.length; i++) {
-            const alias_operation = aliasOperations[i];
-            console.log("alias %s %s", alias_operation.place, alias_operation.val);
-            switch (alias_operation.place) {
-                case 'add':
-                    promises.push(
-                        MatrixClientPeg.get().createAlias(
-                            alias_operation.val, this.props.roomId,
-                        ),
-                    );
-                    break;
-                case 'del':
-                    promises.push(
-                        MatrixClientPeg.get().deleteAlias(
-                            alias_operation.val,
-                        ),
-                    );
-                    break;
-                default:
-                    console.log("Unknown alias operation, ignoring: " + alias_operation.place);
-            }
-        }
-
-        let oldCanonicalAlias = null;
-        if (this.props.canonicalAliasEvent) {
-            oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
-        }
-
-        const newCanonicalAlias = this.state.canonicalAlias;
-
-        if (this.props.canSetCanonicalAlias && oldCanonicalAlias !== newCanonicalAlias) {
-            console.log("AliasSettings: Updating canonical alias");
-            promises = [Promise.all(promises).then(
-                MatrixClientPeg.get().sendStateEvent(
-                    this.props.roomId, "m.room.canonical_alias", {
-                        alias: newCanonicalAlias,
-                    }, "",
-                ),
-            )];
-        }
-
-        return promises;
+        this.state = state;
     }
 
     aliasEventsToDictionary(aliasEvents) { // m.room.alias events
@@ -134,11 +78,6 @@ export default class AliasSettings extends React.Component {
     isAliasValid(alias) {
         // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
         return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
-    }
-
-    getAliasOperations() {
-        const oldAliases = this.aliasEventsToDictionary(this.props.aliasEvents);
-        return ObjectUtils.getKeyValueArrayDiffs(oldAliases, this.state.domainToAliases);
     }
 
     changeCanonicalAlias(alias) {
