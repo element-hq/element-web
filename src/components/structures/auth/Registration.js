@@ -48,15 +48,20 @@ module.exports = React.createClass({
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
         idSid: PropTypes.string,
+        // The default server name to use when the user hasn't specified
+        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
+        // via `.well-known` discovery. The server name is used instead of the
+        // HS URL when talking about "your account".
+        defaultServerName: PropTypes.string,
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
         brand: PropTypes.string,
         email: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
@@ -94,7 +99,7 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
-            serverType: null,
+            serverType: ServerType.getTypeFromHsUrl(this.props.customHsUrl),
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
@@ -122,7 +127,7 @@ module.exports = React.createClass({
         });
     },
 
-    onServerTypeChange(type, initial) {
+    onServerTypeChange(type) {
         this.setState({
             serverType: type,
         });
@@ -148,15 +153,10 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
-                // if this is the initial value from the control and we're
-                // already in the registration phase, don't go back to the
-                // server details phase (but do if it's actually a change resulting
-                // from user interaction).
-                if (!initial || !this.state.phase === PHASE_REGISTRATION) {
-                    this.setState({
-                        phase: PHASE_SERVER_DETAILS,
-                    });
-                }
+                // Reset back to server details on type change.
+                this.setState({
+                    phase: PHASE_SERVER_DETAILS,
+                });
                 break;
         }
     },
@@ -389,12 +389,9 @@ module.exports = React.createClass({
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            // if we've been given a custom HS URL we should actually pass that, so
-            // that the appropriate section is selected at the start to match the
-            // homeserver URL we're using
             return <div>
                 <ServerTypeSelector
-                    defaultHsUrl={this.props.customHsUrl || this.props.defaultHsUrl}
+                    selected={this.state.serverType}
                     onChange={this.onServerTypeChange}
                 />
             </div>;
@@ -436,7 +433,7 @@ module.exports = React.createClass({
 
         return <div>
             <ServerTypeSelector
-                defaultHsUrl={this.props.defaultHsUrl}
+                selected={this.state.serverType}
                 onChange={this.onServerTypeChange}
             />
             {serverDetails}
@@ -478,6 +475,14 @@ module.exports = React.createClass({
             ) {
                 onEditServerDetailsClick = this.onEditServerDetailsClick;
             }
+
+            // If the current HS URL is the default HS URL, then we can label it
+            // with the default HS name (if it exists).
+            let hsName;
+            if (this.state.hsUrl === this.props.defaultHsUrl) {
+                hsName = this.props.defaultServerName;
+            }
+
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -489,6 +494,7 @@ module.exports = React.createClass({
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
+                hsName={hsName}
                 hsUrl={this.state.hsUrl}
             />;
         }

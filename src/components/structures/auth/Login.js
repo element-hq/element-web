@@ -56,6 +56,15 @@ module.exports = React.createClass({
 
         enableGuest: PropTypes.bool,
 
+        // The default server name to use when the user hasn't specified
+        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
+        // via `.well-known` discovery. The server name is used instead of the
+        // HS URL when talking about where to "sign in to".
+        defaultServerName: PropTypes.string,
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
+
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
@@ -64,10 +73,6 @@ module.exports = React.createClass({
         // the default HS but login fails. Useful for migrating to a
         // different homeserver without confusing users.
         fallbackHsUrl: PropTypes.string,
-
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
 
         defaultDeviceDisplayName: PropTypes.string,
 
@@ -563,11 +568,20 @@ module.exports = React.createClass({
 
     _renderPasswordStep: function() {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
+
         let onEditServerDetailsClick = null;
         // If custom URLs are allowed, wire up the server details edit link.
         if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
             onEditServerDetailsClick = this.onEditServerDetailsClick;
         }
+
+        // If the current HS URL is the default HS URL, then we can label it
+        // with the default HS name (if it exists).
+        let hsName;
+        if (this.state.enteredHsUrl === this.props.defaultHsUrl) {
+            hsName = this.props.defaultServerName;
+        }
+
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
@@ -583,6 +597,7 @@ module.exports = React.createClass({
                onPhoneNumberBlur={this.onPhoneNumberBlur}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
+               hsName={hsName}
                hsUrl={this.state.enteredHsUrl}
                disableSubmit={this.state.findingHomeserver}
                />
