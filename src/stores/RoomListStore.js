@@ -287,6 +287,7 @@ class RoomListStore extends Store {
             // Speed optimization: Skip the loop below if we're not going to do anything productive
             if (!hasRoom || LIST_ORDERS[key] !== 'recent') {
                 listsClone[key] = this._state.lists[key];
+                inserted = true; // Ensure that we don't try and sort the room into the tag
                 continue;
             } else {
                 listsClone[key] = [];
