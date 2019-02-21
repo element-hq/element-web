@@ -288,7 +288,16 @@ module.exports = React.createClass({
         });
     },
 
-    onFormValidationFailed: function(errCode) {
+    onFormValidationChange: function(fieldErrors) {
+        // Find the first error and show that.
+        const errCode = Object.values(fieldErrors).find(value => value);
+        if (!errCode) {
+            this.setState({
+                errorText: null,
+            });
+            return;
+        }
+
         let errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
@@ -490,7 +499,7 @@ module.exports = React.createClass({
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
                 minPasswordLength={MIN_PASSWORD_LENGTH}
-                onError={this.onFormValidationFailed}
+                onValidationChange={this.onFormValidationChange}
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
