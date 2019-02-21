@@ -206,10 +206,14 @@ module.exports = React.createClass({
                 }
                 break;
             case FIELD_PASSWORD_CONFIRM:
-                this.markFieldValid(
-                    fieldID, pwd1 == pwd2,
-                    "RegistrationForm.ERR_PASSWORD_MISMATCH",
-                );
+                if (allowEmpty && pwd2 === "") {
+                    this.markFieldValid(fieldID, true);
+                } else {
+                    this.markFieldValid(
+                        fieldID, pwd1 == pwd2,
+                        "RegistrationForm.ERR_PASSWORD_MISMATCH",
+                    );
+                }
                 break;
         }
     },
