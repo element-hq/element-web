@@ -119,6 +119,7 @@ export class RoomPermaLinkCreator {
         switch (event.getType()) {
             case "m.room.server_acl":
                 this._updateAllowedServers();
+                this._updateHighestPlUser();
                 this._updatePopulationMap();
                 this._updateServerCandidates();
                 return;
