@@ -160,6 +160,13 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.checkScroll();
+
+        if (typeof ResizeObserver !== "undefined") {
+            this._timelineSizeObserver = new ResizeObserver(() => {
+                this._restoreSavedScrollState();
+            });
+            this._timelineSizeObserver.observe(this.refs.itemlist);
+        }
     },
 
     componentDidUpdate: function() {
@@ -181,6 +188,10 @@ module.exports = React.createClass({
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
+        if (this._timelineSizeObserver) {
+            this._timelineSizeObserver.disconnect();
+            this._timelineSizeObserver = null;
+        }
     },
 
     onScroll: function(ev) {
