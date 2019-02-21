@@ -28,7 +28,7 @@ import {
     PushRuleVectorState,
     ContentRules,
 } from '../../../notifications';
-import * as SdkConfig from "../../../SdkConfig";
+import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
 // TODO: this "view" component still has far too much application logic in it,
