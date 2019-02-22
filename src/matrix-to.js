@@ -166,7 +166,7 @@ export class RoomPermalinkCreator {
                 }, [null, 0]);
                 const [userId, powerLevel] = maxEntry;
                 // object wasn't empty, and max entry wasn't a demotion from the default
-                if (userId !== null && powerLevel > (content.users_default || 0)) {
+                if (userId !== null && powerLevel >= 50) {
                     this._highestPlUserId = userId;
                     return;
                 }
