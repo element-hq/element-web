@@ -1603,7 +1603,7 @@ export default class MessageComposerInput extends React.Component {
                 </div>
                 <div className={className}>
                     <AccessibleButton className={markdownClasses}
-                        onMouseDown={this.onMarkdownToggleClicked}
+                        onClick={this.onMarkdownToggleClicked}
                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                     />
                     <Editor ref={this._collectEditor}

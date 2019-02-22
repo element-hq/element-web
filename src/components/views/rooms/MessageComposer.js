@@ -501,7 +501,7 @@ export default class MessageComposer extends React.Component {
                         { formatButtons }
                         <div style={{ flex: 1 }}></div>
                         <AccessibleButton className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
-                            onMouseDown={this.onToggleMarkdownClicked}
+                            onClick={this.onToggleMarkdownClicked}
                             title={_t("Markdown is disabled")}
                         />
                         <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
