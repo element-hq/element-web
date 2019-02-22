@@ -257,6 +257,8 @@ export default class MessageComposer extends React.Component {
     }
 
     onInputStateChanged(inputState) {
+        // Merge the new input state with old to support partial updates
+        inputState = Object.assign({}, this.state.inputState, inputState);
         this.setState({inputState});
     }
 
@@ -501,7 +503,7 @@ export default class MessageComposer extends React.Component {
                         { formatButtons }
                         <div style={{ flex: 1 }}></div>
                         <AccessibleButton className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
-                            onMouseDown={this.onToggleMarkdownClicked}
+                            onClick={this.onToggleMarkdownClicked}
                             title={_t("Markdown is disabled")}
                         />
                         <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}

@@ -628,7 +628,6 @@ export default class MessageComposerInput extends React.Component {
             }
             const inputState = {
                 marks: editorState.activeMarks,
-                isRichTextEnabled: this.state.isRichTextEnabled,
                 blockType,
             };
             this.props.onInputStateChanged(inputState);
@@ -698,8 +697,13 @@ export default class MessageComposerInput extends React.Component {
         this.setState({
             editorState: this.createEditorState(enabled, editorState),
             isRichTextEnabled: enabled,
-        }, ()=>{
+        }, () => {
             this._editor.focus();
+            if (this.props.onInputStateChanged) {
+                this.props.onInputStateChanged({
+                    isRichTextEnabled: enabled,
+                });
+            }
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
@@ -1603,7 +1607,7 @@ export default class MessageComposerInput extends React.Component {
                 </div>
                 <div className={className}>
                     <AccessibleButton className={markdownClasses}
-                        onMouseDown={this.onMarkdownToggleClicked}
+                        onClick={this.onMarkdownToggleClicked}
                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                     />
                     <Editor ref={this._collectEditor}
