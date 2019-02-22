@@ -267,7 +267,7 @@
     "The version of Riot.im": "Версія Riot.im",
     "Whether or not you're logged in (we don't record your user name)": "Чи увійшли ви, чи ні (ми не зберігаємо ваше ім'я користувача)",
     "Your language of choice": "Обрана мова",
-    "Which officially provided instance you are using, if any": "Яким офіційно наданим клієнтом ви користуєтесь (якщо користуєтесь)",
+    "Which officially provided instance you are using, if any": "Яким офіційно наданим примірником ви користуєтесь (якщо користуєтесь)",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Чи використовуєте ви режим форматованого тексту у редакторі Rich Text Editor",
     "Your homeserver's URL": "URL адреса вашого домашнього сервера",
     "Failed to verify email address: make sure you clicked the link in the email": "Не вдалось перевірити адресу електронної пошти: переконайтесь, що ви перейшли за посиланням у листі",
