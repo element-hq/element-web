@@ -31,7 +31,6 @@ src/components/views/globals/UpdateCheckBar.js
 src/components/views/messages/MFileBody.js
 src/components/views/messages/RoomAvatarEvent.js
 src/components/views/messages/TextualBody.js
-src/components/views/room_settings/AliasSettings.js
 src/components/views/room_settings/ColorSettings.js
 src/components/views/rooms/Autocomplete.js
 src/components/views/rooms/AuxPanel.js
