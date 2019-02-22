@@ -60,6 +60,7 @@ module.exports = React.createClass({
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
+        skipServerDetails: PropTypes.bool,
         brand: PropTypes.string,
         email: PropTypes.string,
         // registration shouldn't know or care how login is done.
@@ -75,8 +76,10 @@ module.exports = React.createClass({
             // (they could come in from the URL params in a
             // registration email link)
             (this.props.clientSecret && this.props.sessionId) ||
-            // or if custom URLs aren't allowed, skip them
-            !customURLsAllowed
+            // if custom URLs aren't allowed, skip to form
+            !customURLsAllowed ||
+            // if other logic says to, skip to form
+            this.props.skipServerDetails
         ) {
             initialPhase = PHASE_REGISTRATION;
         }
