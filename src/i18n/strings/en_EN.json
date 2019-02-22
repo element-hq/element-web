@@ -1129,7 +1129,7 @@
     "Email address": "Email address",
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "Skip": "Skip",
-    "Only use lower case letters, numbers and '=_-./'": "Only use lower case letters, numbers and '=_-./'",
+    "A username can only contain lower case letters, numbers and '=_-./'": "A username can only contain lower case letters, numbers and '=_-./'",
     "Username not available": "Username not available",
     "Username invalid: %(errMessage)s": "Username invalid: %(errMessage)s",
     "An error occurred: %(error_string)s": "An error occurred: %(error_string)s",
