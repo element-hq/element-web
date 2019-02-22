@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
 import {_t} from '../../../languageHandler.js';
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
@@ -80,14 +79,14 @@ export class EditableItem extends React.Component {
         return (
             <div className="mx_EditableItem">
                 <img src={require("../../../../res/img/feather-icons/cancel.svg")} width={14} height={14}
-                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")}/>
+                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")} />
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );
     }
 }
 
-export default class EditableItemList extends React.Component{
+export default class EditableItemList extends React.Component {
     static propTypes = {
         items: PropTypes.arrayOf(PropTypes.string).isRequired,
         itemsLabel: PropTypes.string,
@@ -130,13 +129,13 @@ export default class EditableItemList extends React.Component{
                     {_t("Add")}
                 </AccessibleButton>
             </form>
-        )
+        );
     }
 
     render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
-                return <li>{item}</li>
+                return <li>{item}</li>;
             }
 
             return <EditableItem

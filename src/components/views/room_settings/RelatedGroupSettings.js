@@ -20,7 +20,6 @@ import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import isEqual from 'lodash/isEqual';
 import ErrorDialog from "../dialogs/ErrorDialog";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
@@ -58,10 +57,10 @@ export default class RelatedGroupSettings extends React.Component {
                 title: _t("Error updating flair"),
                 description: _t(
                     "There was an error updating the flair for this room. The server may not allow it or " +
-                    "a temporary error occurred."
+                    "a temporary error occurred.",
                 ),
             });
-        })
+        });
     }
 
     validateGroupId(groupId) {
@@ -120,4 +119,4 @@ export default class RelatedGroupSettings extends React.Component {
             />
         </div>;
     }
-};
+}

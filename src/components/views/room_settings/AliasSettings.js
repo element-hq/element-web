@@ -15,10 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 const React = require('react');
 import PropTypes from 'prop-types';
-const ObjectUtils = require("../../../ObjectUtils");
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
@@ -98,7 +96,7 @@ export default class AliasSettings extends React.Component {
                 title: _t("Error updating main address"),
                 description: _t(
                     "There was an error updating the room's main address. It may not be allowed by the server " +
-                    "or a temporary failure occurred."
+                    "or a temporary failure occurred.",
                 ),
             });
         }).finally(() => {
@@ -136,7 +134,7 @@ export default class AliasSettings extends React.Component {
                     title: _t("Error creating alias"),
                     description: _t(
                         "There was an error creating that alias. It may not be allowed by the server " +
-                        "or a temporary failure occurred."
+                        "or a temporary failure occurred.",
                     ),
                 });
             });
@@ -172,7 +170,7 @@ export default class AliasSettings extends React.Component {
                 title: _t("Error removing alias"),
                 description: _t(
                     "There was an error removing that alias. It may no longer exist or a temporary " +
-                    "error occurred."
+                    "error occurred.",
                 ),
             });
         });
