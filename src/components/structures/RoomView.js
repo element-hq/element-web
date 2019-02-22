@@ -443,8 +443,8 @@ module.exports = React.createClass({
         }
 
         // stop tracking room changes to format permalinks
-        if (this.state.permaLinkCreator) {
-            this.state.permaLinkCreator.stop();
+        if (this.state.permalinkCreator) {
+            this.state.permalinkCreator.stop();
         }
 
         if (this.refs.roomView) {
@@ -658,10 +658,10 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
-        if (!this.state.permaLinkCreator) {
+        if (!this.state.permalinkCreator) {
             const permalinkCreator = new RoomPermalinkCreator(room);
             permalinkCreator.start();
-            this.setState({permaLinkCreator});
+            this.setState({permalinkCreator});
         }
     },
 
@@ -1230,7 +1230,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     permalinkCreator={this.state.permaLinkCreator}
+                     permalinkCreator={this.state.permalinkCreator}
                      onWidgetLoad={onWidgetLoad} />);
         }
         return ret;
@@ -1838,7 +1838,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
-                permalinkCreator={this.state.permaLinkCreator}
+                permalinkCreator={this.state.permalinkCreator}
             />);
 
         let topUnreadMessagesBar = null;

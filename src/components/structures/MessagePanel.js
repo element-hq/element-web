@@ -525,7 +525,7 @@ module.exports = React.createClass({
                         eventSendStatus={mxEv.status}
                         tileShape={this.props.tileShape}
                         isTwelveHour={this.props.isTwelveHour}
-                        permalinkCreator={this.props.permaLinkCreator}
+                        permalinkCreator={this.props.permalinkCreator}
                         last={last} isSelectedEvent={highlight} />
                 </li>,
         );

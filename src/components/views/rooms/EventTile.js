@@ -544,8 +544,8 @@ module.exports = withMatrixClient(React.createClass({
         });
 
         let permalink = "#";
-        if (this.props.permaLinkCreator) {
-            permalink = this.props.permaLinkCreator.forEvent(this.props.mxEvent.getId());
+        if (this.props.permalinkCreator) {
+            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
         const readAvatars = this.getReadAvatars();
