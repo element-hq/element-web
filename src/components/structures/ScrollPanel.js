@@ -590,7 +590,6 @@ module.exports = React.createClass({
         let node = null;
         let nodeBottom;
 
-        // TODO: change this to not use getBoundingClientRect and save the domnode
         for (let i = messages.length-1; i >= 0; --i) {
             if (!messages[i].dataset.scrollTokens) {
                 continue;
@@ -623,7 +622,6 @@ module.exports = React.createClass({
 
     _restoreSavedScrollState: function() {
         const scrollState = this.scrollState;
-        const scrollNode = this._getScrollNode();
 
         if (scrollState.stuckAtBottom) {
             this._setScrollTop(Number.MAX_VALUE);
