@@ -257,6 +257,8 @@ export default class MessageComposer extends React.Component {
     }
 
     onInputStateChanged(inputState) {
+        // Merge the new input state with old to support partial updates
+        inputState = Object.assign({}, this.state.inputState, inputState);
         this.setState({inputState});
     }
 

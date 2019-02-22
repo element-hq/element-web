@@ -628,7 +628,6 @@ export default class MessageComposerInput extends React.Component {
             }
             const inputState = {
                 marks: editorState.activeMarks,
-                isRichTextEnabled: this.state.isRichTextEnabled,
                 blockType,
             };
             this.props.onInputStateChanged(inputState);
@@ -698,8 +697,13 @@ export default class MessageComposerInput extends React.Component {
         this.setState({
             editorState: this.createEditorState(enabled, editorState),
             isRichTextEnabled: enabled,
-        }, ()=>{
+        }, () => {
             this._editor.focus();
+            if (this.props.onInputStateChanged) {
+                this.props.onInputStateChanged({
+                    isRichTextEnabled: enabled,
+                });
+            }
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
