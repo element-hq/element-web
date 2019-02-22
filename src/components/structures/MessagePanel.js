@@ -658,6 +658,13 @@ module.exports = React.createClass({
         }
     },
 
+    clearTimelineHeight: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            scrollPanel.clearBlockShrinking();
+        }
+    },
+
     onResize: function() {
         dis.dispatch({ action: 'timeline_resize' }, true);
     },
