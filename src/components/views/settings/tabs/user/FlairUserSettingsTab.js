@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
+import {_t} from "../../../../../languageHandler";
 import {DragDropContext} from "react-beautiful-dnd";
-import GroupUserSettings from "../../groups/GroupUserSettings";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
+import GroupUserSettings from "../../../groups/GroupUserSettings";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import PropTypes from "prop-types";
 import {MatrixClient} from "matrix-js-sdk";
 
-export default class FlairSettingsTab extends React.Component {
+export default class FlairUserSettingsTab extends React.Component {
     static childContextTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient),
     };

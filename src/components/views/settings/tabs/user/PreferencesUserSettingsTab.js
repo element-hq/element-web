@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
-import {SettingLevel} from "../../../../settings/SettingsStore";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
-import SettingsStore from "../../../../settings/SettingsStore";
-import Field from "../../elements/Field";
-const sdk = require("../../../../index");
-const PlatformPeg = require("../../../../PlatformPeg");
+import {_t} from "../../../../../languageHandler";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
+import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import Field from "../../../elements/Field";
+const sdk = require("../../../../..");
+const PlatformPeg = require("../../../../../PlatformPeg");
 
-export default class PreferencesSettingsTab extends React.Component {
+export default class PreferencesUserSettingsTab extends React.Component {
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
@@ -95,17 +95,17 @@ export default class PreferencesSettingsTab extends React.Component {
         }
 
         return (
-            <div className="mx_SettingsTab mx_PreferencesSettingsTab">
+            <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this._renderGroup(PreferencesSettingsTab.COMPOSER_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this._renderGroup(PreferencesSettingsTab.TIMELINE_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
-                    {this._renderGroup(PreferencesSettingsTab.ADVANCED_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
                     {autoLaunchOption}
                     <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
                            value={SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay')}

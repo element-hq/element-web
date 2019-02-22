@@ -14,6 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_NotificationSettingsTab .mx_SettingsTab_heading {
-    margin-bottom: 10px; // Give some spacing between the title and the first elements
+.mx_VoiceUserSettingsTab .mx_Field select {
+    width: 100%;
+    max-width: 100%;
+}
+
+.mx_VoiceUserSettingsTab .mx_Field {
+    margin-right: 100px; // align with the rest of the fields
+}
+
+.mx_VoiceUserSettingsTab_missingMediaPermissions {
+    margin-bottom: 15px;
 }
