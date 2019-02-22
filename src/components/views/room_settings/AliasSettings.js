@@ -75,7 +75,7 @@ export default class AliasSettings extends React.Component {
 
     isAliasValid(alias) {
         // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
-        return (alias.match(/^#([^\/:,]+?):(.+)$/) && encodeURI(alias) === alias);
+        return (alias.match(/^#([^/:,]+?):(.+)$/) && encodeURI(alias) === alias);
     }
 
     changeCanonicalAlias(alias) {
@@ -252,4 +252,4 @@ export default class AliasSettings extends React.Component {
             </div>
         );
     }
-};
+}
