@@ -78,6 +78,28 @@ if (DEBUG_SCROLL) {
  * scroll down further. If stickyBottom is disabled, we just save the scroll
  * offset as normal.
  */
+
+
+function createTimelineResizeDetector(scrollNode, itemlist, callback) {
+    if (typeof ResizeObserver !== "undefined") {
+        const ro = new ResizeObserver(callback);
+        ro.observe(itemlist);
+        return ro;
+    } else if (typeof IntersectionObserver !== "undefined") {
+        const threshold = [];
+        for (let i = 0; i < 1000; ++i) {
+            threshold.push(i / 1000);
+        }
+        threshold.push(1);
+        const io = new IntersectionObserver(
+            callback,
+            {root: scrollNode, threshold},
+        );
+        io.observe(itemlist);
+        return io;
+    }
+}
+
 module.exports = React.createClass({
     displayName: 'ScrollPanel',
 
@@ -161,12 +183,11 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this.checkScroll();
 
-        if (typeof ResizeObserver !== "undefined") {
-            this._timelineSizeObserver = new ResizeObserver(() => {
-                this._restoreSavedScrollState();
-            });
-            this._timelineSizeObserver.observe(this.refs.itemlist);
-        }
+        this._timelineSizeObserver = createTimelineResizeDetector(
+            this._getScrollNode(),
+            this.refs.itemlist,
+            () => { this._restoreSavedScrollState(); },
+        );
     },
 
     componentDidUpdate: function() {
