@@ -146,7 +146,7 @@ export class RoomPermalinkCreator {
 
     _updateHighestPlUser() {
         const plEvent = this._room.currentState.getStateEvents("m.room.power_levels", "");
-        const content = plEvent.getContent();
+        const content = plEvent && plEvent.getContent();
         if (content) {
             const users = content.users;
             if (users) {
