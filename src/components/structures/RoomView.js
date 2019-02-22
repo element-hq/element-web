@@ -30,7 +30,7 @@ import Promise from 'bluebird';
 import filesize from 'filesize';
 const classNames = require("classnames");
 import { _t } from '../../languageHandler';
-import {RoomPermaLinkCreator} from "../../matrix-to";
+import {RoomPermalinkCreator} from "../../matrix-to";
 
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
@@ -659,8 +659,8 @@ module.exports = React.createClass({
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
         if (!this.state.permaLinkCreator) {
-            const permaLinkCreator = new RoomPermaLinkCreator(room);
-            permaLinkCreator.start();
+            const permalinkCreator = new RoomPermalinkCreator(room);
+            permalinkCreator.start();
             this.setState({permaLinkCreator});
         }
     },
@@ -1230,7 +1230,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     permaLinkCreator={this.state.permaLinkCreator}
+                     permalinkCreator={this.state.permaLinkCreator}
                      onWidgetLoad={onWidgetLoad} />);
         }
         return ret;
@@ -1838,7 +1838,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
-                permaLinkCreator={this.state.permaLinkCreator}
+                permalinkCreator={this.state.permaLinkCreator}
             />);
 
         let topUnreadMessagesBar = null;

@@ -17,7 +17,7 @@ import {
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
-    RoomPermaLinkCreator,
+    RoomPermalinkCreator,
 } from "../src/matrix-to";
 import * as testUtils from "./test-utils";
 
@@ -75,7 +75,7 @@ describe('matrix-to', function() {
 
     it('should pick no candidate servers when the room has no members', function() {
         const room = mockRoom(null, []);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -96,7 +96,7 @@ describe('matrix-to', function() {
                 powerLevel: 95,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(3);
@@ -120,7 +120,7 @@ describe('matrix-to', function() {
             },
             member95,
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates[0]).toBe("pl_95");
         member95.membership = "left";
@@ -158,7 +158,7 @@ describe('matrix-to', function() {
                 powerLevel: 0,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(3);
@@ -186,7 +186,7 @@ describe('matrix-to', function() {
                 powerLevel: 0,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates.length).toBe(3);
         expect(creator._serverCandidates[0]).toBe("first");
@@ -217,7 +217,7 @@ describe('matrix-to', function() {
                 powerLevel: 0,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(3);
@@ -230,7 +230,7 @@ describe('matrix-to', function() {
                 powerLevel: 100,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -243,7 +243,7 @@ describe('matrix-to', function() {
                 powerLevel: 100,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -256,7 +256,7 @@ describe('matrix-to', function() {
                 powerLevel: 100,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -269,7 +269,7 @@ describe('matrix-to', function() {
                 powerLevel: 100,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -283,7 +283,7 @@ describe('matrix-to', function() {
             },
         ]);
 
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(1);
@@ -304,7 +304,7 @@ describe('matrix-to', function() {
             deny: ["evilcorp.com", "*.evilcorp.com"],
             allow: ["*"],
         });
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -324,7 +324,7 @@ describe('matrix-to', function() {
             deny: [],
             allow: [], // implies "ban everyone"
         });
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(0);
@@ -344,7 +344,7 @@ describe('matrix-to', function() {
             deny: ["*.evilcorp.com"], // evilcorp.com is still good though
             allow: ["*"],
         });
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(1);
@@ -365,7 +365,7 @@ describe('matrix-to', function() {
             deny: [],
             allow: ["evilcorp.com"], // implies "ban everyone else"
         });
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator._serverCandidates).toBeTruthy();
         expect(creator._serverCandidates.length).toBe(1);
@@ -374,7 +374,7 @@ describe('matrix-to', function() {
 
     it('should generate an event permalink for room IDs with no candidate servers', function() {
         const room = mockRoom("!somewhere:example.org", []);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         const result = creator.forEvent("$something:example.com");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com");
@@ -391,7 +391,7 @@ describe('matrix-to', function() {
                 powerLevel: 0,
             },
         ]);
-        const creator = new RoomPermaLinkCreator(room);
+        const creator = new RoomPermalinkCreator(room);
         creator.load();
         const result = creator.forEvent("$something:example.com");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com?via=first&via=second");

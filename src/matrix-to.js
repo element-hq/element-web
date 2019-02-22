@@ -69,7 +69,7 @@ const MAX_SERVER_CANDIDATES = 3;
 // The receiving user can then manually append the known-good server to
 // the list and magically have the link work.
 
-export class RoomPermaLinkCreator {
+export class RoomPermalinkCreator {
     constructor(room) {
         this._room = room;
         this._highestPlUserId = null;
@@ -243,9 +243,9 @@ export function makeRoomPermalink(roomId) {
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
-    const permaLinkCreator = new RoomPermaLinkCreator(room);
-    permaLinkCreator.load();
-    return permaLinkCreator.forRoom();
+    const permalinkCreator = new RoomPermalinkCreator(room);
+    permalinkCreator.load();
+    return permalinkCreator.forRoom();
 }
 
 export function makeGroupPermalink(groupId) {

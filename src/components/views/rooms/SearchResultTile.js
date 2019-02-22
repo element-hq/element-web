@@ -56,7 +56,7 @@ module.exports = React.createClass({
             }
             if (EventTile.haveTileForEvent(ev)) {
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
-                          permaLinkCreator={this.props.permaLinkCreator}
+                          permalinkCreator={this.props.permaLinkCreator}
                           highlightLink={this.props.resultLink}
                           onWidgetLoad={this.props.onWidgetLoad} />);
             }
