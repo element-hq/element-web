@@ -686,17 +686,14 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichTextEnabled) return;
 
-        let editorState = null;
-        if (enabled) {
-            editorState = this.mdToRichEditorState(this.state.editorState);
-        } else {
-            editorState = this.richToMdEditorState(this.state.editorState);
-        }
-
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, editorState),
+            editorState: this.createEditorState(
+                enabled,
+                this.state.editorState,
+                this.state.isRichTextEnabled,
+            ),
             isRichTextEnabled: enabled,
         }, ()=>{
             this._editor.focus();
