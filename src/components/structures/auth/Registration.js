@@ -69,8 +69,10 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        const serverType = ServerType.getTypeFromHsUrl(this.props.customHsUrl);
+
         const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
-        let initialPhase = PHASE_SERVER_DETAILS;
+        let initialPhase = this.getDefaultPhaseForServerType(serverType);
         if (
             // if we have these two, skip to the good bit
             // (they could come in from the URL params in a
@@ -81,6 +83,11 @@ module.exports = React.createClass({
             // if other logic says to, skip to form
             this.props.skipServerDetails
         ) {
+            // TODO: It would seem we've now added enough conditions here that the initial
+            // phase will _always_ be the form. It's tempting to remove the complexity and
+            // just do that, but we keep tweaking and changing auth, so let's wait until
+            // things settle a bit.
+            // Filed https://github.com/vector-im/riot-web/issues/8886 to track this.
             initialPhase = PHASE_REGISTRATION;
         }
 
@@ -102,7 +109,7 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
-            serverType: ServerType.getTypeFromHsUrl(this.props.customHsUrl),
+            serverType,
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
@@ -130,6 +137,19 @@ module.exports = React.createClass({
         });
     },
 
+    getDefaultPhaseForServerType(type) {
+        switch (type) {
+            case ServerType.FREE: {
+                // Move directly to the registration phase since the server
+                // details are fixed.
+                return PHASE_REGISTRATION;
+            }
+            case ServerType.PREMIUM:
+            case ServerType.ADVANCED:
+                return PHASE_SERVER_DETAILS;
+        }
+    },
+
     onServerTypeChange(type) {
         this.setState({
             serverType: type,
@@ -144,10 +164,6 @@ module.exports = React.createClass({
                     hsUrl,
                     isUrl,
                 });
-                // Move directly to the registration phase since the server details are fixed.
-                this.setState({
-                    phase: PHASE_REGISTRATION,
-                });
                 break;
             }
             case ServerType.PREMIUM:
@@ -156,12 +172,13 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
-                // Reset back to server details on type change.
-                this.setState({
-                    phase: PHASE_SERVER_DETAILS,
-                });
                 break;
         }
+
+        // Reset the phase to default phase for the server type.
+        this.setState({
+            phase: this.getDefaultPhaseForServerType(type),
+        });
     },
 
     _replaceClient: async function() {
