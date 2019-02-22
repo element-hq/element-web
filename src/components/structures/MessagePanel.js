@@ -635,9 +635,9 @@ module.exports = React.createClass({
     _onTypingVisible: function() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
-            scrollPanel.blockShrinking();
             // scroll down if at bottom
             scrollPanel.checkScroll();
+            scrollPanel.blockShrinking();
         }
     },
 
