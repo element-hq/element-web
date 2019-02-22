@@ -107,6 +107,7 @@ export default class RelatedGroupSettings extends React.Component {
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
                 newItem={this.state.newGroupId}
+                canRemove={this.props.canSetRelatedGroups}
                 canEdit={this.props.canSetRelatedGroups}
                 onNewItemChanged={this.onNewGroupChanged}
                 onItemAdded={this.onGroupAdded}

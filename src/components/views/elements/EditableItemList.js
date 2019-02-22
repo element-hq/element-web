@@ -58,28 +58,29 @@ export class EditableItem extends React.Component {
         this.setState({verifyRemove: false});
     };
 
-    render() {if (this.state.verifyRemove) {
-        return (
-            <div className="mx_EditableItem">
+    render() {
+        if (this.state.verifyRemove) {
+            return (
+                <div className="mx_EditableItem">
                     <span className="mx_EditableItem_promptText">
                         {_t("Are you sure?")}
                     </span>
-                <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
-                                  className="mx_EditableItem_confirmBtn">
-                    {_t("Yes")}
-                </AccessibleButton>
-                <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
-                                  className="mx_EditableItem_confirmBtn">
-                    {_t("No")}
-                </AccessibleButton>
-            </div>
-        );
-    }
+                    <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
+                                      className="mx_EditableItem_confirmBtn">
+                        {_t("Yes")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
+                                      className="mx_EditableItem_confirmBtn">
+                        {_t("No")}
+                    </AccessibleButton>
+                </div>
+            );
+        }
 
         return (
             <div className="mx_EditableItem">
                 <img src={require("../../../../res/img/feather-icons/cancel.svg")} width={14} height={14}
-                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")} />
+                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")}/>
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );
@@ -99,6 +100,7 @@ export default class EditableItemList extends React.Component{
         onNewItemChanged: PropTypes.func,
 
         canEdit: PropTypes.bool,
+        canRemove: PropTypes.bool,
     };
 
     _onItemAdded = (e) => {
@@ -133,6 +135,10 @@ export default class EditableItemList extends React.Component{
 
     render() {
         const editableItems = this.props.items.map((item, index) => {
+            if (!this.props.canRemove) {
+                return <li>{item}</li>
+            }
+
             return <EditableItem
                 key={index}
                 index={index}
@@ -141,13 +147,14 @@ export default class EditableItemList extends React.Component{
             />;
         });
 
+        const editableItemsSection = this.props.canRemove ? editableItems : <ul>{editableItems}</ul>;
         const label = this.props.items.length > 0 ? this.props.itemsLabel : this.props.noItemsLabel;
 
         return (<div className="mx_EditableItemList">
             <div className="mx_EditableItemList_label">
                 { label }
             </div>
-            { editableItems }
+            { editableItemsSection }
             { this.props.canEdit ? this._renderNewItemField() : <div /> }
         </div>);
     }

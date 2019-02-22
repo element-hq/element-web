@@ -240,6 +240,7 @@ export default class AliasSettings extends React.Component {
                     items={this.state.domainToAliases[localDomain] || []}
                     newItem={this.state.newAlias}
                     onNewItemChanged={this.onNewAliasChanged}
+                    canRemove={this.props.canSetAliases}
                     canEdit={this.props.canSetAliases}
                     onItemAdded={this.onLocalAliasAdded}
                     onItemRemoved={this.onLocalAliasDeleted}
