@@ -648,6 +648,10 @@ module.exports = React.createClass({
             const isAtBottom = scrollPanel.isAtBottom();
             const whoIsTyping = this.refs.whoIsTyping;
             const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+            // when messages get added to the timeline,
+            // but somebody else is still typing,
+            // update the min-height, so once the last
+            // person stops typing, no jumping occurs
             if (isAtBottom && isTypingVisible) {
                 scrollPanel.blockShrinking();
             }
