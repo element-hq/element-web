@@ -243,6 +243,9 @@ export function makeRoomPermalink(roomId) {
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
+    if (!room) {
+        return permalinkBase;
+    }
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
     return permalinkCreator.forRoom();
