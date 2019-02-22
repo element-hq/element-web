@@ -131,8 +131,8 @@ export default class NetworkDropdown extends React.Component {
         const options = [];
 
         let servers = [];
-        if (this.props.config.servers) {
-            servers = servers.concat(this.props.config.servers);
+        if (this.props.config.roomDirectory.servers) {
+            servers = servers.concat(this.props.config.roomDirectory.servers);
         }
 
         if (servers.indexOf(MatrixClientPeg.getHomeServerName()) == -1) {
