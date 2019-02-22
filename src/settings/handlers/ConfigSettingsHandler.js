@@ -47,4 +47,12 @@ export default class ConfigSettingsHandler extends SettingsHandler {
     isSupported() {
         return true; // SdkConfig is always there
     }
+
+    watchSetting(settingName, roomId, cb) {
+        // no-op: no changes possible
+    }
+
+    unwatchSetting(cb) {
+        // no-op: no changes possible
+    }
 }

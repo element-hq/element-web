@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,5 +66,13 @@ export default class LocalEchoWrapper extends SettingsHandler {
 
     isSupported() {
         return this._handler.isSupported();
+    }
+
+    watchSetting(settingName, roomId, cb) {
+        this._handler.watchSetting(settingName, roomId, cb);
+    }
+
+    unwatchSetting(cb) {
+        this._handler.unwatchSetting(cb);
     }
 }
