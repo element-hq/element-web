@@ -176,10 +176,6 @@ module.exports = React.createClass({
         //
         // This will also re-check the fill state, in case the paginate was inadequate
         this.checkScroll();
-
-        if (!this.isAtBottom()) {
-            this.clearBlockShrinking();
-        }
     },
 
     componentWillUnmount: function() {
@@ -204,22 +200,15 @@ module.exports = React.createClass({
         // forget what we wanted, so don't overwrite the saved state unless
         // this appears to be a user-initiated scroll.
         if (sn.scrollTop != this._lastSetScroll) {
-            // when scrolling, we don't care about disappearing typing notifs shrinking the timeline
-            // this might cause the scrollbar to resize in case the max-height was not correct
-            // but that's better than ending up with a lot of whitespace at the bottom of the timeline.
-            // we need to above check because when showing the typing notifs, an onScroll event is also triggered
-            if (!this.isAtBottom()) {
-                this.clearBlockShrinking();
-            }
-
             this._saveScrollState();
         } else {
             debuglog("Ignoring scroll echo");
-
             // only ignore the echo once, otherwise we'll get confused when the
             // user scrolls away from, and back to, the autoscroll point.
             this._lastSetScroll = undefined;
         }
+
+        this._checkBlockShrinking();
 
         this.props.onScroll(ev);
 
@@ -228,8 +217,6 @@ module.exports = React.createClass({
 
     onResize: function() {
         this.props.onResize();
-        // clear min-height as the height might have changed
-        this.clearBlockShrinking();
         this.checkScroll();
         if (this._gemScroll) this._gemScroll.forceUpdate();
     },
@@ -238,6 +225,7 @@ module.exports = React.createClass({
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
         this._restoreSavedScrollState();
+        this._checkBlockShrinking();
         this.checkFillState();
     },
 
@@ -379,8 +367,6 @@ module.exports = React.createClass({
             }
             this._unfillDebouncer = setTimeout(() => {
                 this._unfillDebouncer = null;
-                // if timeline shrinks, min-height should be cleared
-                this.clearBlockShrinking();
                 this.props.onUnfillRequest(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
@@ -714,6 +700,21 @@ module.exports = React.createClass({
         const messageList = this.refs.itemlist;
         if (messageList) {
             messageList.style.minHeight = null;
+        }
+    },
+
+    _checkBlockShrinking: function() {
+        const sn = this._getScrollNode();
+        const scrollState = this.scrollState;
+        if (!scrollState.stuckAtBottom) {
+            const spaceBelowViewport = sn.scrollHeight - (sn.scrollTop + sn.clientHeight);
+            // only if we've scrolled up 200px from the bottom
+            // should we clear the min-height used by the typing notifications,
+            // otherwise we might still see it jump as the whitespace disappears
+            // when scrolling up from the bottom
+            if (spaceBelowViewport >= 200) {
+                this.clearBlockShrinking();
+            }
         }
     },
 
