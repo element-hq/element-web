@@ -65,6 +65,7 @@ const stateEventTileTypes = {
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
+    'm.room.related_groups': 'messages.TextualEvent',
 };
 
 function getHandlerTile(ev) {
