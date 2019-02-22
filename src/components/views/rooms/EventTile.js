@@ -321,6 +321,9 @@ module.exports = withMatrixClient(React.createClass({
 
         const {tile, replyThread} = this.refs;
 
+        let e2eInfoCallback = null;
+        if (this.props.mxEvent.isEncrypted()) e2eInfoCallback = () => this.onCryptoClicked();
+
         ContextualMenu.createMenu(MessageContextMenu, {
             chevronOffset: 10,
             mxEvent: this.props.mxEvent,
@@ -328,7 +331,7 @@ module.exports = withMatrixClient(React.createClass({
             top: y,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
-            e2eInfoCallback: () => this.onCryptoClicked(),
+            e2eInfoCallback: e2eInfoCallback,
             onFinished: function() {
                 self.setState({menu: false});
             },
