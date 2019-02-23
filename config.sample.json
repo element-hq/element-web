@@ -1,34 +1,120 @@
 {
-    "default_hs_url": "https://matrix.org",
-    "default_is_url": "https://vector.im",
+    "default_server_name": "matrix.org",
     "disable_custom_urls": false,
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
     "brand": "Riot",
+    "welcomeUserId": "@riot-bot:matrix.org",
+    "default_federate": true,
+    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_jitsi_widget_url": "https://scalar.vector.im/api/widgets/jitsi.html",
-    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
-    "features": {
-        "feature_groups": "labs",
-        "feature_pinning": "labs"
-    },
-    "default_federate": true,
+    "integrations_widgets_urls": [
+        "https://scalar-staging.riot.im/scalar/api",
+        "https://scalar.vector.im/api"
+    ],
     "default_theme": "light",
     "roomDirectory": {
         "servers": [
             "matrix.org"
         ]
     },
-    "welcomeUserId": "@riot-bot:matrix.org",
-    "piwik": {
-        "url": "https://piwik.riot.im/",
-        "whitelistedHSUrls": ["https://matrix.org"],
-        "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
-        "siteId": 1
-    },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false
+    },
+    "piwik": {
+        "siteId": 1,
+        "url": "https://piwik.riot.im",
+        "whitelistedHSUrls": [
+            "https://matrix.org"
+        ],
+        "whitelistedISUrls": [
+            "https://vector.im",
+            "https://matrix.org"
+        ]
+    },
+    "embeddedPages": {
+        "homeUrl": "home.html",
+        "welcomeUrl": "welcome.html"
+    },
+    "cross_origin_renderer_url": "https://usercontent.riot.im/v1.html",
+    "branding": {
+        "authHeaderLogoUrl": "themes/riot/img/logos/riot-im-logo-black-text.svg",
+        "welcomeBackgroundUrl": "themes/riot/img/backgrounds/valley.jpg"
+    },
+    "update_base_url": "https://riot.im/download/desktop/update/",
+    "sync_timeline_limit": 8,
+    "terms_and_conditions_links": [
+        {
+            "url": "https://matrix.org/docs/guides/code_of_conduct",
+            "text": "matrix.org code of conduct"
+        }
+    ],
+    "phasedRollOut": {
+        "feature_pinning": {
+            "offset": 1550893490769,
+            "period": 604800000
+        },
+        "feature_custom_status": {
+            "offset": 1550893490769,
+            "period": 604800000
+        },
+        "feature_room_breadcrumbs": {
+            "offset": 1550893490769,
+            "period": 604800000
+        },
+        "feature_custom_tags": {
+            "offset": 1550893490769,
+            "period": 604800000
+        },
+        "feature_state_counters": {
+            "offset": 1550893490769,
+            "period": 604800000
+        }
+    },
+    "features": {
+        "feature_pinning": "labs",
+        "feature_custom_status": "labs",
+        "feature_room_breadcrumbs": "labs",
+        "feature_custom_tags": "labs",
+        "feature_state_counters": "labs"
+    },
+    "settingDefaults": {
+        "MessageComposerInput.dontSuggestEmoji": false,
+        "useCompactLayout": false,
+        "hideRedactions": false,
+        "hideJoinLeaves": false,
+        "hideAvatarChanges": false,
+        "hideDisplaynameChanges": false,
+        "hideReadReceipts": false,
+        "showTwelveHourTimestamps": false,
+        "alwaysShowTimestamps": false,
+        "autoplayGifsAndVideos": false,
+        "alwaysShowEncryptionIcons": true,
+        "showRoomRecoveryReminder": true,
+        "enableSyntaxHighlightLanguageDetection": false,
+        "Pill.shouldHidePillAvatar": false,
+        "TextualBody.disableBigEmoji": false,
+        "MessageComposerInput.isRichTextEnabled": false,
+        "MessageComposer.showFormatting": false,
+        "dontSendTypingNotifications": false,
+        "MessageComposerInput.autoReplaceEmoji": false,
+        "VideoView.flipVideoHorizontally": false,
+        "TagPanel.disableTagPanel": false,
+        "webRtcForceTURN": false,
+        "language": "en",
+        "analyticsOptIn": false,
+        "showCookieBar": true,
+        "autocompleteDelay": 200,
+        "urlPreviewsEnabled": true,
+        "roomColor": {
+            "primary_color": "#a442f4",
+            "secondary_color": "#cc92fc"
+        },
+        "enableWidgetScreenshots": false,
+        "promptBeforeInviteUnknownUsers": true,
+        "showDeveloperTools": false
     }
 }

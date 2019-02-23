@@ -116,7 +116,7 @@ config.json
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-For a good example, see https://riot.im/develop/config.json.
+For a good example of a production config, see https://riot.im/develop/config.json.
 
 1. `default_server_name` sets the default server name to use for authentication.
    This will trigger Riot to ask
