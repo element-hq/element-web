@@ -123,7 +123,7 @@ export default class BasePlatform {
         return false;
     }
 
-    async setAutoLaunchEnabled(enabled: boolean) {
+    async setAutoLaunchEnabled(enabled: boolean): void {
         throw new Error("Unimplemented");
     }
 
@@ -135,7 +135,7 @@ export default class BasePlatform {
         return false;
     }
 
-    async setMinimizeToTrayEnabled(enabled: boolean) {
+    async setMinimizeToTrayEnabled(enabled: boolean): void {
         throw new Error("Unimplemented");
     }
 }
