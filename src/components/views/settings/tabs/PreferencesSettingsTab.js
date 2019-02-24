@@ -59,22 +59,37 @@ export default class PreferencesSettingsTab extends React.Component {
         this.state = {
             autoLaunch: false,
             autoLaunchSupported: false,
+            minimizeToTray: true,
+            minimizeToTraySupported: false,
         };
     }
 
     async componentWillMount(): void {
-        const autoLaunchSupported = await PlatformPeg.get().supportsAutoLaunch();
+        const platform = PlatformPeg.get();
+
+        const autoLaunchSupported = await platform.supportsAutoLaunch();
         let autoLaunch = false;
 
         if (autoLaunchSupported) {
-            autoLaunch = await PlatformPeg.get().getAutoLaunchEnabled();
+            autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
-        this.setState({autoLaunch, autoLaunchSupported});
+        const minimizeToTraySupported = await platform.supportsMinimizeToTray();
+        let minimizeToTray = true;
+
+        if (minimizeToTraySupported) {
+            minimizeToTray = await platform.getMinimizeToTrayEnabled();
+        }
+
+        this.setState({autoLaunch, autoLaunchSupported, minimizeToTraySupported, minimizeToTray});
     }
 
     _onAutoLaunchChange = (checked) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
+    };
+
+    _onMinimizeToTrayChange = (checked) => {
+        PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({minimizeToTray: checked}));
     };
 
     _onAutocompleteDelayChange = (e) => {
@@ -93,6 +108,12 @@ export default class PreferencesSettingsTab extends React.Component {
                                                      onChange={this._onAutoLaunchChange}
                                                      label={_t('Start automatically after system login')} />;
         }
+        let minimizeToTrayOption = null;
+        if (this.state.minimizeToTraySupported) {
+            minimizeToTrayOption = <LabelledToggleSwitch value={this.state.minimizeToTray}
+                                                         onChange={this._onMinimizeToTrayChange}
+                                                         label={_t('Close button should minimize window to tray')} />;
+        }
 
         return (
             <div className="mx_SettingsTab mx_PreferencesSettingsTab">
@@ -106,6 +127,7 @@ export default class PreferencesSettingsTab extends React.Component {
 
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesSettingsTab.ADVANCED_SETTINGS)}
+                    {minimizeToTrayOption}
                     {autoLaunchOption}
                     <Field id={"autocompleteDelay"} label={_t('Autocomplete delay (ms)')} type='number'
                            value={SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay')}
