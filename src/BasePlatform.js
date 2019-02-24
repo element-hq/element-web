@@ -114,28 +114,28 @@ export default class BasePlatform {
         throw new Error("reload not implemented!");
     }
 
-    supportsAutoLaunch() {
+    supportsAutoLaunch(): boolean {
         return false;
     }
 
     // XXX: Surely this should be a setting like any other?
-    async getAutoLaunchEnabled() {
+    async getAutoLaunchEnabled(): boolean {
         return false;
     }
 
-    async setAutoLaunchEnabled(enabled) {
+    async setAutoLaunchEnabled(enabled: boolean) {
         throw new Error("Unimplemented");
     }
 
-    supportsMinimizeToTray() {
+    supportsMinimizeToTray(): boolean {
         return false;
     }
 
-    async getMinimizeToTrayEnabled() {
+    async getMinimizeToTrayEnabled(): boolean {
         return false;
     }
 
-    async setMinimizeToTrayEnabled() {
+    async setMinimizeToTrayEnabled(enabled: boolean) {
         throw new Error("Unimplemented");
     }
 }
