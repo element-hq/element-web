@@ -1305,7 +1305,7 @@ module.exports = React.createClass({
     },
 
     onSearchClick: function() {
-        this.setState({ searching: true, showingPinned: false });
+        this.setState({ searching: !this.state.searching, showingPinned: false });
     },
 
     onCancelSearchClick: function() {
