@@ -445,7 +445,6 @@ module.exports = React.createClass({
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
         if (room && room.getMyMembership() === 'join') {
-            const TintableSvg = sdk.getComponent("elements.TintableSvg");
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>

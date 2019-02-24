@@ -105,13 +105,14 @@ module.exports = React.createClass({
                     onClick={ () => {this._clearSearch("button"); } }>
             </AccessibleButton>) : undefined;
 
+        const className = this.props.className || "";
         return (
             <div className="mx_SearchBox mx_textinput">
                 <input
                     key="searchfield"
                     type="text"
                     ref="search"
-                    className="mx_textinput_icon mx_textinput_search"
+                    className={"mx_textinput_icon mx_textinput_search " + className}
                     value={ this.state.searchTerm }
                     onFocus={ this._onFocus }
                     onChange={ this.onChange }
