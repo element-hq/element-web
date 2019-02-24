@@ -147,6 +147,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             } else {
                 mainWindow.focus();
             }
+            break;
         case 'origin_migrate':
             migratingOrigin = true;
             await migrateFromOldOrigin();
@@ -262,10 +263,12 @@ app.on('ready', () => {
             path: absTarget,
         });
     }, (error) => {
-        if (error) console.error('Failed to register protocol')
+        if (error) console.error('Failed to register protocol');
     });
 
-    if (vectorConfig['update_base_url']) {
+    if (argv['no-update']) {
+        console.log('Auto update disabled via command line flag "--no-update"');
+    } else if (vectorConfig['update_base_url']) {
         console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
         updater.start(vectorConfig['update_base_url']);
     } else {
