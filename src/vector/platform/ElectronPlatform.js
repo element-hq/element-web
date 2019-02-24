@@ -174,11 +174,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return await this._ipcCall('getAppVersion');
     }
 
-    supportsAutoLaunch() {
+    supportsAutoLaunch(): boolean {
         return true;
     }
 
-    async getAutoLaunchEnabled() {
+    async getAutoLaunchEnabled(): boolean {
         return await this._ipcCall('getAutoLaunchEnabled');
     }
 
@@ -186,11 +186,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return await this._ipcCall('setAutoLaunchEnabled', enabled);
     }
 
-    supportsMinimizeToTray() {
+    supportsMinimizeToTray(): boolean {
         return true;
     }
 
-    async getMinimizeToTrayEnabled() {
+    async getMinimizeToTrayEnabled(): boolean {
         return await this._ipcCall('getMinimizeToTrayEnabled');
     }
 
