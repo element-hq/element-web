@@ -1168,7 +1168,7 @@
     "Integrations Error": "Noko gjekk gale med med Tillegga",
     "Manage Integrations": "Sjå over Innlegg",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "Custom of %(powerLevel)s": "Sjølvsett namn på %(powerLevel)s",
+    "Custom of %(powerLevel)s": "Sjølvsett høgd %(powerLevel)s",
     "Custom level": "Sjølvsett høgd",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debøgg-loggar inneheld æppbrukdata slik som brukarnamnet ditt, IDane eller aliasane på romma eller gruppene du har vore i og brukarnamna til andre brukarar. Dei inneheld ikkje meldingar.",
