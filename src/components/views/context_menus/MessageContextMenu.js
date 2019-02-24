@@ -98,6 +98,8 @@ module.exports = React.createClass({
     onViewSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
@@ -106,6 +108,8 @@ module.exports = React.createClass({
     onViewClearSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
