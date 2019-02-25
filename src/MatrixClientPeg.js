@@ -30,6 +30,7 @@ import MatrixActionCreators from './actions/MatrixActionCreators';
 import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -137,8 +138,9 @@ class MatrixClientPeg {
         opts.pendingEventOrdering = "detached";
         opts.lazyLoadMembers = true;
 
-        // Connect the matrix client to the dispatcher
+        // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
+        MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);
