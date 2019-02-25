@@ -52,7 +52,6 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === "im.vector.web.settings") {
             // We can't really discern what changed, so trigger updates for everything
             for (const settingName of Object.keys(event.getContent())) {
-                console.log(settingName);
                 this._watchers.notifyUpdate(settingName, null, event.getContent()[settingName]);
             }
         }

@@ -64,7 +64,7 @@ class RoomListStore extends Store {
      * behave.
      * @param {boolean} forceRegeneration True to force a change in the algorithm
      */
-    updateSortingAlgorithm(forceRegeneration=false) {
+    updateSortingAlgorithm(forceRegeneration = false) {
         const byImportance = SettingsStore.getValue("RoomList.orderByImportance");
         if (byImportance !== this._state.orderRoomsByImportance || forceRegeneration) {
             console.log("Updating room sorting algorithm: sortByImportance=" + byImportance);
@@ -119,8 +119,15 @@ class RoomListStore extends Store {
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             case 'setting_updated': {
-                if (payload.settingName !== 'RoomList.orderByImportance') break;
-                this.updateSortingAlgorithm();
+                if (payload.settingName === 'RoomList.orderByImportance') {
+                    this.updateSortingAlgorithm();
+                } else if (payload.settingName === 'feature_custom_tags') {
+                    const isActive = SettingsStore.isFeatureEnabled("feature_custom_tags");
+                    if (isActive !== this._state.tagsEnabled) {
+                        this._setState({tagsEnabled: isActive});
+                        this.updateSortingAlgorithm(/*force=*/true);
+                    }
+                }
             }
             break;
             // Initialise state after initial sync
@@ -128,6 +135,8 @@ class RoomListStore extends Store {
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
+
+                this._setState({tagsEnabled: SettingsStore.isFeatureEnabled("feature_custom_tags")});
 
                 this._matrixClient = payload.matrixClient;
                 this.updateSortingAlgorithm(/*force=*/true);
@@ -269,14 +278,19 @@ class RoomListStore extends Store {
         }
     }
 
+    _filterTags(tags) {
+        tags = tags ? Object.keys(tags) : [];
+        if (this._state.tagsEnabled) return tags;
+        return tags.filter((t) => !!LIST_ORDERS[t]);
+    }
+
     _getRecommendedTagsForRoom(room) {
         const tags = [];
 
         const myMembership = room.getMyMembership();
         if (myMembership === 'join' || myMembership === 'invite') {
             // Stack the user's tags on top
-            // TODO: Consider whether tags are enabled at all
-            tags.push(...(room.tags || []));
+            tags.push(...this._filterTags(room.tags));
 
             const dmRoomMap = DMRoomMap.shared();
             if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
@@ -328,83 +342,82 @@ class RoomListStore extends Store {
             // Speed optimization: Don't do complicated math if we don't have to.
             if (!shouldHaveRoom) {
                 listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
+            } else if (LIST_ORDERS[key] !== 'recent') {
+                // Manually ordered tags are sorted later, so for now we'll just clone the tag
+                // and add our room if needed
+                listsClone[key] = this._state.lists[key].filter((e) => e.room.roomId !== room.roomId);
+                listsClone[key].push({room, category});
+                insertedIntoTags.push(key);
             } else {
                 listsClone[key] = [];
 
-                // Tags sorted by recents are more complicated than manually ordered tags, so hope
-                // for the best.
-                // TODO: Use the SettingsStore watcher to determine if tags are enabled or not
-                if (LIST_ORDERS[key] !== 'recent') {
-                    // TODO: Actually insert the room
-                } else {
-                    // We track where the boundary within listsClone[key] is just in case our timestamp
-                    // ordering fails. If we can't stick the room in at the correct place in the category
-                    // grouping based on timestamp, we'll stick it at the top of the group which will be
-                    // the index we track here.
-                    let desiredCategoryBoundaryIndex = 0;
-                    let foundBoundary = false;
-                    let pushedEntry = false;
+                // We track where the boundary within listsClone[key] is just in case our timestamp
+                // ordering fails. If we can't stick the room in at the correct place in the category
+                // grouping based on timestamp, we'll stick it at the top of the group which will be
+                // the index we track here.
+                let desiredCategoryBoundaryIndex = 0;
+                let foundBoundary = false;
+                let pushedEntry = false;
 
-                    for (const entry of this._state.lists[key]) {
-                        // We insert our own record as needed, so don't let the old one through.
-                        if (entry.room.roomId === room.roomId) {
-                            continue;
-                        }
-
-                        // if the list is a recent list, and the room appears in this list, and we're
-                        // not looking at a sticky room (sticky rooms have unreliable categories), try
-                        // to slot the new room in
-                        if (entry.room.roomId !== this._state.stickyRoomId) {
-                            if (!pushedEntry && shouldHaveRoom) {
-                                // Micro optimization: Support lazily loading the last timestamp in a room
-                                let _entryTimestamp = null;
-                                const entryTimestamp = () => {
-                                    if (_entryTimestamp === null) {
-                                        _entryTimestamp = this._tsOfNewestEvent(entry.room);
-                                    }
-                                    return _entryTimestamp;
-                                };
-
-                                const entryCategoryIndex = CATEGORY_ORDER.indexOf(entry.category);
-
-                                // As per above, check if we're meeting that boundary we wanted to locate.
-                                if (entryCategoryIndex >= targetCategoryIndex && !foundBoundary) {
-                                    desiredCategoryBoundaryIndex = listsClone[key].length - 1;
-                                    foundBoundary = true;
-                                }
-
-                                // If we've hit the top of a boundary beyond our target category, insert at the top of
-                                // the grouping to ensure the room isn't slotted incorrectly. Otherwise, try to insert
-                                // based on most recent timestamp.
-                                const changedBoundary = entryCategoryIndex > targetCategoryIndex;
-                                const currentCategory = entryCategoryIndex === targetCategoryIndex;
-                                if (changedBoundary || (currentCategory && targetTimestamp() >= entryTimestamp())) {
-                                    if (changedBoundary) {
-                                        // If we changed a boundary, then we've gone too far - go to the top of the last
-                                        // section instead.
-                                        listsClone[key].splice(desiredCategoryBoundaryIndex, 0, {room, category});
-                                    } else {
-                                        // If we're ordering by timestamp, just insert normally
-                                        listsClone[key].push({room, category});
-                                    }
-                                    pushedEntry = true;
-                                    insertedIntoTags.push(key);
-                                }
-                            }
-                        }
-
-                        // Fall through and clone the list.
-                        listsClone[key].push(entry);
+                for (const entry of this._state.lists[key]) {
+                    // We insert our own record as needed, so don't let the old one through.
+                    if (entry.room.roomId === room.roomId) {
+                        continue;
                     }
 
-                    if (!pushedEntry) {
-                        if (listsClone[key].length === 0) {
-                            listsClone[key].push({room, category});
-                            insertedIntoTags.push(key);
-                        } else {
-                            // In theory, this should never happen
-                            console.warn(`!! Room ${room.roomId} lost: No position available`);
+                    // if the list is a recent list, and the room appears in this list, and we're
+                    // not looking at a sticky room (sticky rooms have unreliable categories), try
+                    // to slot the new room in
+                    if (entry.room.roomId !== this._state.stickyRoomId) {
+                        if (!pushedEntry && shouldHaveRoom) {
+                            // Micro optimization: Support lazily loading the last timestamp in a room
+                            let _entryTimestamp = null;
+                            const entryTimestamp = () => {
+                                if (_entryTimestamp === null) {
+                                    _entryTimestamp = this._tsOfNewestEvent(entry.room);
+                                }
+                                return _entryTimestamp;
+                            };
+
+                            const entryCategoryIndex = CATEGORY_ORDER.indexOf(entry.category);
+
+                            // As per above, check if we're meeting that boundary we wanted to locate.
+                            if (entryCategoryIndex >= targetCategoryIndex && !foundBoundary) {
+                                desiredCategoryBoundaryIndex = listsClone[key].length - 1;
+                                foundBoundary = true;
+                            }
+
+                            // If we've hit the top of a boundary beyond our target category, insert at the top of
+                            // the grouping to ensure the room isn't slotted incorrectly. Otherwise, try to insert
+                            // based on most recent timestamp.
+                            const changedBoundary = entryCategoryIndex > targetCategoryIndex;
+                            const currentCategory = entryCategoryIndex === targetCategoryIndex;
+                            if (changedBoundary || (currentCategory && targetTimestamp() >= entryTimestamp())) {
+                                if (changedBoundary) {
+                                    // If we changed a boundary, then we've gone too far - go to the top of the last
+                                    // section instead.
+                                    listsClone[key].splice(desiredCategoryBoundaryIndex, 0, {room, category});
+                                } else {
+                                    // If we're ordering by timestamp, just insert normally
+                                    listsClone[key].push({room, category});
+                                }
+                                pushedEntry = true;
+                                insertedIntoTags.push(key);
+                            }
                         }
+                    }
+
+                    // Fall through and clone the list.
+                    listsClone[key].push(entry);
+                }
+
+                if (!pushedEntry) {
+                    if (listsClone[key].length === 0) {
+                        listsClone[key].push({room, category});
+                        insertedIntoTags.push(key);
+                    } else {
+                        // In theory, this should never happen
+                        console.warn(`!! Room ${room.roomId} lost: No position available`);
                     }
                 }
             }
@@ -420,6 +433,12 @@ class RoomListStore extends Store {
             if (count !== 1) {
                 console.warn(`!! Room ${room.roomId} inserted ${count} times`);
             }
+        }
+
+        // Sort the favourites before we set the clone
+        for (const tag of Object.keys(listsClone)) {
+            if (LIST_ORDERS[tag] === 'recent') continue; // skip recents (pre-sorted)
+            listsClone[tag].sort(this._getManualComparator(tag));
         }
 
         this._setState({lists: listsClone});
