@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t, _td} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import sdk from "../../../../index";
-import AccessibleButton from "../../elements/AccessibleButton";
-import Modal from "../../../../Modal";
+import {_t, _td} from "../../../../../languageHandler";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import sdk from "../../../../..";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import Modal from "../../../../../Modal";
 
 const plEventsToLabels = {
     // These will be translated for us later.

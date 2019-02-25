@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
-const sdk = require("../../../../index");
+import {_t} from "../../../../../languageHandler";
+const sdk = require("../../../../..");
 
-export default class NotificationSettingsTab extends React.Component {
+export default class NotificationUserSettingsTab extends React.Component {
     constructor() {
         super();
     }
@@ -26,7 +26,7 @@ export default class NotificationSettingsTab extends React.Component {
     render() {
         const Notifications = sdk.getComponent("views.settings.Notifications");
         return (
-            <div className="mx_SettingsTab mx_NotificationSettingsTab">
+            <div className="mx_SettingsTab mx_NotificationUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
                 <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
                     <Notifications />

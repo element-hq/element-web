@@ -66,7 +66,7 @@ module.exports = React.createClass({
             }
             const scriptTag = document.createElement('script');
             scriptTag.setAttribute(
-                'src', `${protocol}//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
+                'src', `${protocol}//www.recaptcha.net/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
             );
             this.refs.recaptchaContainer.appendChild(scriptTag);
         }

@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import sdk from "../../../../index";
-import AccessibleButton from "../../elements/AccessibleButton";
-import Modal from "../../../../Modal";
+import {_t} from "../../../../../languageHandler";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import sdk from "../../../../..";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import Modal from "../../../../../Modal";
 
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
