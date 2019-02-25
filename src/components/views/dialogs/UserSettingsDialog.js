@@ -18,15 +18,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
-import GeneralUserSettingsTab from "../settings/tabs/GeneralUserSettingsTab";
+import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore from "../../../settings/SettingsStore";
-import LabsSettingsTab from "../settings/tabs/LabsSettingsTab";
-import SecuritySettingsTab from "../settings/tabs/SecuritySettingsTab";
-import NotificationSettingsTab from "../settings/tabs/NotificationSettingsTab";
-import PreferencesSettingsTab from "../settings/tabs/PreferencesSettingsTab";
-import VoiceSettingsTab from "../settings/tabs/VoiceSettingsTab";
-import HelpSettingsTab from "../settings/tabs/HelpSettingsTab";
-import FlairSettingsTab from "../settings/tabs/FlairSettingsTab";
+import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
+import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
+import NotificationUserSettingsTab from "../settings/tabs/user/NotificationUserSettingsTab";
+import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSettingsTab";
+import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
+import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
+import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import sdk from "../../../index";
 
 export default class UserSettingsDialog extends React.Component {
@@ -45,39 +45,39 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Flair"),
             "mx_UserSettingsDialog_flairIcon",
-            <FlairSettingsTab />,
+            <FlairUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Notifications"),
             "mx_UserSettingsDialog_bellIcon",
-            <NotificationSettingsTab />,
+            <NotificationUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Preferences"),
             "mx_UserSettingsDialog_preferencesIcon",
-            <PreferencesSettingsTab />,
+            <PreferencesUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Voice & Video"),
             "mx_UserSettingsDialog_voiceIcon",
-            <VoiceSettingsTab />,
+            <VoiceUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
-            <SecuritySettingsTab />,
+            <SecurityUserSettingsTab />,
         ));
         if (SettingsStore.getLabsFeatures().length > 0) {
             tabs.push(new Tab(
                 _td("Labs"),
                 "mx_UserSettingsDialog_labsIcon",
-                <LabsSettingsTab />,
+                <LabsUserSettingsTab />,
             ));
         }
         tabs.push(new Tab(
             _td("Help & About"),
             "mx_UserSettingsDialog_helpIcon",
-            <HelpSettingsTab closeSettingsFn={this.props.onFinished} />,
+            <HelpUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
 
         return tabs;

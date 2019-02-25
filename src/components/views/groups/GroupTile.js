@@ -33,6 +33,7 @@ const GroupTile = React.createClass({
         showDescription: PropTypes.bool,
         // Height of the group avatar in pixels
         avatarHeight: PropTypes.number,
+        draggable: PropTypes.bool,
     },
 
     contextTypes: {
@@ -49,6 +50,7 @@ const GroupTile = React.createClass({
         return {
             showDescription: true,
             avatarHeight: 50,
+            draggable: true,
         };
     },
 
@@ -78,54 +80,54 @@ const GroupTile = React.createClass({
             <div className="mx_GroupTile_desc">{ profile.shortDescription }</div> :
             <div />;
         const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop",
-        ) : null;
+            profile.avatarUrl, avatarHeight, avatarHeight, "crop") : null;
+
+        let avatarElement = (
+            <div className="mx_GroupTile_avatar">
+                <BaseAvatar
+                    name={name}
+                    idName={this.props.groupId}
+                    url={httpUrl}
+                    width={avatarHeight}
+                    height={avatarHeight} />
+            </div>
+        );
+        if (this.props.draggable) {
+            const avatarClone = avatarElement;
+            avatarElement = (
+                <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
+                    { (droppableProvided, droppableSnapshot) => (
+                        <div ref={droppableProvided.innerRef}>
+                            <Draggable
+                                key={"GroupTile " + this.props.groupId}
+                                draggableId={"GroupTile " + this.props.groupId}
+                                index={this.props.groupId}
+                                type="draggable-TagTile"
+                            >
+                                { (provided, snapshot) => (
+                                    <div>
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                        >
+                                            {avatarClone}
+                                        </div>
+                                        { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
+                                        { provided.placeholder ? avatarClone : <div /> }
+                                    </div>
+                                ) }
+                            </Draggable>
+                        </div>
+                    ) }
+                </Droppable>
+            );
+        }
+
         // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
         // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6156
         return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown} onClick={nop}>
-            <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
-                { (droppableProvided, droppableSnapshot) => (
-                    <div ref={droppableProvided.innerRef}>
-                        <Draggable
-                            key={"GroupTile " + this.props.groupId}
-                            draggableId={"GroupTile " + this.props.groupId}
-                            index={this.props.groupId}
-                            type="draggable-TagTile"
-                        >
-                            { (provided, snapshot) => (
-                                <div>
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                    >
-                                        <div className="mx_GroupTile_avatar">
-                                            <BaseAvatar
-                                                name={name}
-                                                idName={this.props.groupId}
-                                                url={httpUrl}
-                                                width={avatarHeight}
-                                                height={avatarHeight} />
-                                        </div>
-                                    </div>
-                                    { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
-                                    { provided.placeholder ?
-                                        <div className="mx_GroupTile_avatar">
-                                            <BaseAvatar
-                                                name={name}
-                                                idName={this.props.groupId}
-                                                url={httpUrl}
-                                                width={avatarHeight}
-                                                height={avatarHeight} />
-                                        </div> :
-                                        <div />
-                                    }
-                                </div>
-                            ) }
-                        </Draggable>
-                    </div>
-                ) }
-            </Droppable>
+            { avatarElement }
             <div className="mx_GroupTile_profile">
                 <div className="mx_GroupTile_name">{ name }</div>
                 { descElement }

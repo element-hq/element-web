@@ -14,11 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HelpSettingsTab_debugButton {
-    margin-bottom: 5px;
-    margin-top: 5px;
-}
-
-.mx_HelpSettingsTab span.mx_AccessibleButton {
-    word-break: break-word;
+.mx_NotificationUserSettingsTab .mx_SettingsTab_heading {
+    margin-bottom: 10px; // Give some spacing between the title and the first elements
 }
