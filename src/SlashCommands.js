@@ -119,7 +119,7 @@ export const CommandMap = {
                 const cli = MatrixClientPeg.get();
                 const ev = cli.getRoom(roomId).currentState.getStateEvents('m.room.member', cli.getUserId());
                 const content = {
-                    ...ev ? ev.getContent() : null,
+                    ...ev ? ev.getContent() : { membership: 'join' },
                     displayname: args,
                 };
                 return success(cli.sendStateEvent(roomId, 'm.room.member', content, cli.getUserId()));
