@@ -249,12 +249,6 @@ textarea {
     box-shadow: none;
 }
 
-/* View Source Dialog overide */
-.mx_Dialog_wrapper.mx_Dialog_viewsource .mx_Dialog {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .mx_Dialog {
     background-color: $primary-bg-color;
     color: $light-fg-color;
