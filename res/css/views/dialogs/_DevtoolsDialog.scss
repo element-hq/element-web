@@ -73,6 +73,14 @@ limitations under the License.
     width: 100%;
 }
 
+.mx_DevTools_content .mx_Field_input {
+    display: inline-block;
+}
+
+.mx_DevTools_content .mx_Field_input + .mx_Field_input {
+    margin-left: 42px;
+}
+
 .mx_DevTools_tgl {
     display: none;
 

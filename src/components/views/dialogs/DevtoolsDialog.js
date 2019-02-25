@@ -57,7 +57,7 @@ class GenericEditor extends DevtoolsComponent {
     }
 
     textInput(id, label) {
-        return <Field id={id} label={label} size="32" autoFocus={true} type="text" autoComplete="on"
+        return <Field id={id} label={label} size="42" autoFocus={true} type="text" autoComplete="on"
                       value={this.state[id]} onChange={this._onChange} />;
     }
 }
