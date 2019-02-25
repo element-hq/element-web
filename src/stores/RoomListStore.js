@@ -59,6 +59,22 @@ class RoomListStore extends Store {
         this._recentsComparator = this._recentsComparator.bind(this);
     }
 
+    /**
+     * Alerts the RoomListStore to a potential change in how room list sorting should
+     * behave.
+     * @param {boolean} forceRegeneration True to force a change in the algorithm
+     */
+    updateSortingAlgorithm(forceRegeneration=false) {
+        const byImportance = SettingsStore.getValue("RoomList.orderByImportance");
+        if (byImportance !== this._state.orderRoomsByImportance || forceRegeneration) {
+            console.log("Updating room sorting algorithm: sortByImportance=" + byImportance);
+            this._setState({orderRoomsByImportance: byImportance});
+
+            // Trigger a resort of the entire list to reflect the change in algorithm
+            this._generateInitialRoomLists();
+        }
+    }
+
     _init() {
         // Initialise state
         const defaultLists = {
@@ -77,7 +93,10 @@ class RoomListStore extends Store {
             presentationLists: defaultLists, // like `lists`, but with arrays of rooms instead
             ready: false,
             stickyRoomId: null,
+            orderRoomsByImportance: true,
         };
+
+        SettingsStore.monitorSetting('RoomList.orderByImportance', null);
     }
 
     _setState(newState) {
@@ -99,6 +118,11 @@ class RoomListStore extends Store {
     __onDispatch(payload) {
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
+            case 'setting_updated': {
+                if (payload.settingName !== 'RoomList.orderByImportance') break;
+                this.updateSortingAlgorithm();
+            }
+            break;
             // Initialise state after initial sync
             case 'MatrixActions.sync': {
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
@@ -106,7 +130,7 @@ class RoomListStore extends Store {
                 }
 
                 this._matrixClient = payload.matrixClient;
-                this._generateInitialRoomLists();
+                this.updateSortingAlgorithm(/*force=*/true);
             }
             break;
             case 'MatrixActions.Room.receipt': {
@@ -531,6 +555,14 @@ class RoomListStore extends Store {
     }
 
     _calculateCategory(room) {
+        if (!this._state.orderRoomsByImportance) {
+            // Effectively disable the categorization of rooms if we're supposed to
+            // be sorting by more recent messages first. This triggers the timestamp
+            // comparison bit of _setRoomCategory and _recentsComparator instead of
+            // the category ordering.
+            return CATEGORY_IDLE;
+        }
+
         const mentions = room.getUnreadNotificationCount("highlight") > 0;
         if (mentions) return CATEGORY_RED;
 

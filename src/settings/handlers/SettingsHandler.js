@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,5 +68,28 @@ export default class SettingsHandler {
      */
     isSupported() {
         return false;
+    }
+
+    /**
+     * Watches for a setting change within this handler. The caller should preserve
+     * a reference to the callback so that it may be unwatched. The caller should
+     * additionally provide a unique callback for multiple watchers on the same setting.
+     * @param {string} settingName The setting name to watch for changes in.
+     * @param {String} roomId The room ID to watch for changes in.
+     * @param {function} cb A function taking two arguments: the room ID the setting changed
+     * in and the new value for the setting at this level in the given room.
+     */
+    watchSetting(settingName, roomId, cb) {
+        throw new Error("Invalid operation: watchSetting was not overridden");
+    }
+
+    /**
+     * Unwatches a previously watched setting. If the callback is not associated with
+     * a watcher, this is a no-op.
+     * @param {function} cb A callback function previously supplied to watchSetting
+     * which should no longer be used.
+     */
+    unwatchSetting(cb) {
+        throw new Error("Invalid operation: unwatchSetting was not overridden");
     }
 }
