@@ -537,12 +537,12 @@ module.exports = React.createClass({
             case 'picture_snapshot':
                 this.uploadFile(payload.file);
                 break;
-            case 'notifier_enabled':
             case 'upload_failed':
                 // 413: File was too big or upset the server in some way.
-                if(payload.error.http_status === 413) {
+                if (payload.error && payload.error.http_status === 413) {
                     this._fetchMediaConfig(true);
                 }
+            case 'notifier_enabled':
             case 'upload_started':
             case 'upload_finished':
                 this.forceUpdate();
@@ -1305,7 +1305,10 @@ module.exports = React.createClass({
     },
 
     onSearchClick: function() {
-        this.setState({ searching: true, showingPinned: false });
+        this.setState({
+            searching: !this.state.searching,
+            showingPinned: false,
+        });
     },
 
     onCancelSearchClick: function() {

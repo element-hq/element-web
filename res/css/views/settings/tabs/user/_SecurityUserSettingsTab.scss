@@ -14,40 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SecuritySettingsTab .mx_DevicesPanel {
+.mx_SecurityUserSettingsTab .mx_DevicesPanel {
     // Normally the panel is 880px, however this can easily overflow the container.
     // TODO: Fix the table to not be squishy
     width: auto;
     max-width: 880px;
 }
 
-.mx_SecuritySettingsTab_deviceInfo {
+.mx_SecurityUserSettingsTab_deviceInfo {
     display: table;
     padding-left: 0;
 }
 
-.mx_SecuritySettingsTab_deviceInfo > li {
+.mx_SecurityUserSettingsTab_deviceInfo > li {
     display: table-row;
 }
 
-.mx_SecuritySettingsTab_deviceInfo > li > label,
-.mx_SecuritySettingsTab_deviceInfo > li > span {
+.mx_SecurityUserSettingsTab_deviceInfo > li > label,
+.mx_SecurityUserSettingsTab_deviceInfo > li > span {
     display: table-cell;
     padding-right: 1em;
 }
 
-.mx_SecuritySettingsTab_importExportButtons .mx_AccessibleButton {
+.mx_SecurityUserSettingsTab_importExportButtons .mx_AccessibleButton {
     margin-right: 10px;
 }
 
-.mx_SecuritySettingsTab_importExportButtons {
+.mx_SecurityUserSettingsTab_importExportButtons {
     margin-bottom: 15px;
 }
 
-.mx_SecuritySettingsTab_ignoredUser {
+.mx_SecurityUserSettingsTab_ignoredUser {
     margin-bottom: 5px;
 }
 
-.mx_SecuritySettingsTab_ignoredUser .mx_AccessibleButton {
+.mx_SecurityUserSettingsTab_ignoredUser .mx_AccessibleButton {
     margin-right: 10px;
 }

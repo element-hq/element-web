@@ -15,16 +15,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
-import CallMediaHandler from "../../../../CallMediaHandler";
-import Field from "../../elements/Field";
-import AccessibleButton from "../../elements/AccessibleButton";
-import {SettingLevel} from "../../../../settings/SettingsStore";
-const Modal = require("../../../../Modal");
-const sdk = require("../../../../index");
-const MatrixClientPeg = require("../../../../MatrixClientPeg");
+import {_t} from "../../../../../languageHandler";
+import CallMediaHandler from "../../../../../CallMediaHandler";
+import Field from "../../../elements/Field";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
+const Modal = require("../../../../../Modal");
+const sdk = require("../../../../..");
+const MatrixClientPeg = require("../../../../../MatrixClientPeg");
 
-export default class VoiceSettingsTab extends React.Component {
+export default class VoiceUserSettingsTab extends React.Component {
     constructor() {
         super();
 
@@ -103,7 +103,7 @@ export default class VoiceSettingsTab extends React.Component {
         let webcamDropdown = null;
         if (this.state.mediaDevices === false) {
             requestButton = (
-                <div className='mx_VoiceSettingsTab_missingMediaPermissions'>
+                <div className='mx_VoiceUserSettingsTab_missingMediaPermissions'>
                     <p>{_t("Missing media permissions, click the button below to request.")}</p>
                     <AccessibleButton onClick={this._requestMediaPermissions} kind="primary">
                         {_t("Request media permissions")}
@@ -166,7 +166,7 @@ export default class VoiceSettingsTab extends React.Component {
         }
 
         return (
-            <div className="mx_SettingsTab mx_VoiceSettingsTab">
+            <div className="mx_SettingsTab mx_VoiceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
                 <div className="mx_SettingsTab_section">
                     {requestButton}

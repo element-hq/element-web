@@ -16,15 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
-import {SettingLevel} from "../../../../settings/SettingsStore";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import * as FormattingUtils from "../../../../utils/FormattingUtils";
-import AccessibleButton from "../../elements/AccessibleButton";
-import Analytics from "../../../../Analytics";
+import {_t} from "../../../../../languageHandler";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import * as FormattingUtils from "../../../../../utils/FormattingUtils";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import Analytics from "../../../../../Analytics";
 import Promise from "bluebird";
-import Modal from "../../../../Modal";
-import sdk from "../../../../index";
+import Modal from "../../../../../Modal";
+import sdk from "../../../../..";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -38,7 +38,7 @@ export class IgnoredUser extends React.Component {
 
     render() {
         return (
-            <div className='mx_SecuritySettingsTab_ignoredUser'>
+            <div className='mx_SecurityUserSettingsTab_ignoredUser'>
                 <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm'>
                     {_t('Unignore')}
                 </AccessibleButton>
@@ -48,7 +48,7 @@ export class IgnoredUser extends React.Component {
     }
 }
 
-export default class SecuritySettingsTab extends React.Component {
+export default class SecurityUserSettingsTab extends React.Component {
     constructor() {
         super();
 
@@ -68,14 +68,14 @@ export default class SecuritySettingsTab extends React.Component {
 
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
-            import('../../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/ExportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
 
     _onImportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
-            import('../../../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/ImportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
@@ -126,7 +126,7 @@ export default class SecuritySettingsTab extends React.Component {
         let importExportButtons = null;
         if (client.isCryptoEnabled()) {
             importExportButtons = (
-                <div className='mx_SecuritySettingsTab_importExportButtons'>
+                <div className='mx_SecurityUserSettingsTab_importExportButtons'>
                     <AccessibleButton kind='primary' onClick={this._onExportE2eKeysClicked}>
                         {_t("Export E2E room keys")}
                     </AccessibleButton>
@@ -140,7 +140,7 @@ export default class SecuritySettingsTab extends React.Component {
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
-                <ul className='mx_SettingsTab_subsectionText mx_SecuritySettingsTab_deviceInfo'>
+                <ul className='mx_SettingsTab_subsectionText mx_SecurityUserSettingsTab_deviceInfo'>
                     <li>
                         <label>{_t("Device ID:")}</label>
                         <span><code>{deviceId}</code></span>
@@ -207,7 +207,7 @@ export default class SecuritySettingsTab extends React.Component {
         );
 
         return (
-            <div className="mx_SettingsTab mx_SecuritySettingsTab">
+            <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Devices")}</span>

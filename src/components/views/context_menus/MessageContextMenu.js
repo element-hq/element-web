@@ -98,6 +98,8 @@ module.exports = React.createClass({
     onViewSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
@@ -106,6 +108,8 @@ module.exports = React.createClass({
     onViewClearSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
+            roomId: this.props.mxEvent.getRoomId(),
+            eventId: this.props.mxEvent.getId(),
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
@@ -211,7 +215,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const eventStatus = this.props.mxEvent.status;
+        const mxEvent = this.props.mxEvent;
+        const eventStatus = mxEvent.status;
         let resendButton;
         let redactButton;
         let cancelButton;
@@ -251,8 +256,8 @@ module.exports = React.createClass({
             );
         }
 
-        if (isSent && this.props.mxEvent.getType() === 'm.room.message') {
-            const content = this.props.mxEvent.getContent();
+        if (isSent && mxEvent.getType() === 'm.room.message') {
+            const content = mxEvent.getContent();
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
                 forwardButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
@@ -282,7 +287,7 @@ module.exports = React.createClass({
             </div>
         );
 
-        if (this.props.mxEvent.getType() !== this.props.mxEvent.getWireType()) {
+        if (mxEvent.getType() !== mxEvent.getWireType()) {
             viewClearSourceButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
                     { _t('View Decrypted Source') }
@@ -303,8 +308,11 @@ module.exports = React.createClass({
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
             <div className="mx_MessageContextMenu_field">
-                <a href={makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId())}
-                  target="_blank" rel="noopener" onClick={this.onPermalinkClick}>{ _t('Share Message') }</a>
+                <a href={makeEventPermalink(mxEvent.getRoomId(), mxEvent.getId())}
+                  target="_blank" rel="noopener" onClick={this.onPermalinkClick}>
+                    { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
+                        ? _t('Share Permalink') : _t('Share Message') }
+                </a>
             </div>
         );
 
@@ -318,12 +326,12 @@ module.exports = React.createClass({
 
         // Bridges can provide a 'external_url' to link back to the source.
         if (
-            typeof(this.props.mxEvent.event.content.external_url) === "string" &&
-            isUrlPermitted(this.props.mxEvent.event.content.external_url)
+            typeof(mxEvent.event.content.external_url) === "string" &&
+            isUrlPermitted(mxEvent.event.content.external_url)
         ) {
             externalURLButton = (
                 <div className="mx_MessageContextMenu_field">
-                    <a href={this.props.mxEvent.event.content.external_url}
+                    <a href={mxEvent.event.content.external_url}
                       rel="noopener" target="_blank" onClick={this.closeMenu}>{ _t('Source URL') }</a>
                 </div>
           );

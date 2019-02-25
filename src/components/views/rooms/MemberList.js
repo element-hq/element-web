@@ -339,12 +339,11 @@ module.exports = React.createClass({
         return nameA.localeCompare(nameB);
     },
 
-    onSearchQueryChanged: function(ev) {
-        const q = ev.target.value;
+    onSearchQueryChanged: function(searchQuery) {
         this.setState({
-            searchQuery: q,
-            filteredJoinedMembers: this._filterMembers(this.state.members, 'join', q),
-            filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', q),
+            searchQuery,
+            filteredJoinedMembers: this._filterMembers(this.state.members, 'join', searchQuery),
+            filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', searchQuery),
         });
     },
 
@@ -438,6 +437,7 @@ module.exports = React.createClass({
             return <div className="mx_MemberList"><Spinner /></div>;
         }
 
+        const SearchBox = sdk.getComponent('structures.SearchBox');
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
@@ -445,7 +445,6 @@ module.exports = React.createClass({
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
         if (room && room.getMyMembership() === 'join') {
-            const TintableSvg = sdk.getComponent("elements.TintableSvg");
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
@@ -477,9 +476,10 @@ module.exports = React.createClass({
                         { invitedSection }
                     </div>
                 </GeminiScrollbarWrapper>
-                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
+
+                <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
+                           placeholder={ _t('Filter room members') }
+                           onSearch={ this.onSearchQueryChanged } />
             </div>
         );
     },

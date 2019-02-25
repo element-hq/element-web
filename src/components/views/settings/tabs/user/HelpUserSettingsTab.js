@@ -16,15 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t, getCurrentLanguage} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import AccessibleButton from "../../elements/AccessibleButton";
-import SdkConfig from "../../../../SdkConfig";
-import createRoom from "../../../../createRoom";
-const packageJson = require('../../../../../package.json');
-const Modal = require("../../../../Modal");
-const sdk = require("../../../../index");
-const PlatformPeg = require("../../../../PlatformPeg");
+import {_t, getCurrentLanguage} from "../../../../../languageHandler";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import SdkConfig from "../../../../../SdkConfig";
+import createRoom from "../../../../../createRoom";
+const packageJson = require('../../../../../../package.json');
+const Modal = require("../../../../../Modal");
+const sdk = require("../../../../..");
+const PlatformPeg = require("../../../../../PlatformPeg");
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha. Prepend version with v, to look like riot-web version
@@ -45,7 +45,7 @@ const ghVersionLabel = function(repo, token='') {
     return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
 };
 
-export default class HelpSettingsTab extends React.Component {
+export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
     };
@@ -117,7 +117,7 @@ export default class HelpSettingsTab extends React.Component {
         }
 
         return (
-            <div className='mx_SettingsTab_section mx_HelpSettingsTab_versions'>
+            <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                 <span className='mx_SettingsTab_subheading'>{_t("Legal")}</span>
                 <div className='mx_SettingsTab_subsectionText'>
                     {legalLinks}
@@ -190,7 +190,7 @@ export default class HelpSettingsTab extends React.Component {
         }
 
         return (
-            <div className="mx_SettingsTab mx_HelpSettingsTab">
+            <div className="mx_SettingsTab mx_HelpUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
@@ -203,12 +203,12 @@ export default class HelpSettingsTab extends React.Component {
                                 "other users. They do not contain messages.",
                             )
                         }
-                        <div className='mx_HelpSettingsTab_debugButton'>
+                        <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onBugReport} kind='primary'>
                                 {_t("Submit debug logs")}
                             </AccessibleButton>
                         </div>
-                        <div className='mx_HelpSettingsTab_debugButton'>
+                        <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
                                 {_t("Clear Cache and Reload")}
                             </AccessibleButton>
@@ -221,7 +221,7 @@ export default class HelpSettingsTab extends React.Component {
                         {faqText}
                     </div>
                 </div>
-                <div className='mx_SettingsTab_section mx_HelpSettingsTab_versions'>
+                <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("matrix-react-sdk version:")} {reactSdkVersion}<br />
@@ -232,7 +232,7 @@ export default class HelpSettingsTab extends React.Component {
                 </div>
                 {this._renderLegal()}
                 {this._renderCredits()}
-                <div className='mx_SettingsTab_section mx_HelpSettingsTab_versions'>
+                <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} {MatrixClientPeg.get().getHomeserverUrl()}<br />
