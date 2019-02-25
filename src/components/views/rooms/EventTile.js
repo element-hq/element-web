@@ -711,7 +711,7 @@ module.exports = withMatrixClient(React.createClass({
                             { this._renderE2EPadlock() }
                             {
                                 this.props.tileShape === 'reply_preview'
-                                && ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread')
+                                && ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, this.props.permalinkCreator, 'replyThread')
                             }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
