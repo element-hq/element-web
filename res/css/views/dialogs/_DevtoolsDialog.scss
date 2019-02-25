@@ -67,10 +67,18 @@ limitations under the License.
 
 .mx_DevTools_textarea {
     font-size: 12px;
-    max-width: 624px;
+    max-width: 684px;
     min-height: 250px;
     padding: 10px;
     width: 100%;
+}
+
+.mx_DevTools_content .mx_Field_input {
+    display: inline-block;
+}
+
+.mx_DevTools_content .mx_Field_input + .mx_Field_input {
+    margin-left: 42px;
 }
 
 .mx_DevTools_tgl {
