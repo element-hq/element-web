@@ -273,10 +273,9 @@ module.exports = React.createClass({
 
     _onClickSettings: function() {
         dis.dispatch({
-            action: 'view_room',
+            action: 'open_room_settings',
             room_id: this.props.room.roomId,
-        }, true);
-        dis.dispatch({ action: 'open_room_settings' });
+        });
         if (this.props.onFinished) {
             this.props.onFinished();
         }
@@ -373,8 +372,9 @@ module.exports = React.createClass({
         // Can't set notif level or tags on non-join rooms
         if (myMembership !== 'join') {
             return <div>
-                { this._renderSettingsMenu() }
                 { this._renderLeaveMenu(myMembership) }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
             </div>;
         }
 
@@ -382,10 +382,11 @@ module.exports = React.createClass({
             <div>
                 { this._renderNotifMenu() }
                 <hr className="mx_RoomTileContextMenu_separator" />
-                { this._renderSettingsMenu() }
                 { this._renderLeaveMenu(myMembership) }
                 <hr className="mx_RoomTileContextMenu_separator" />
                 { this._renderRoomTagMenu() }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
             </div>
         );
     },

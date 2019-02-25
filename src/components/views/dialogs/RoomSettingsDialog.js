@@ -23,6 +23,7 @@ import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
 import sdk from "../../../index";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -60,9 +61,12 @@ export default class RoomSettingsDialog extends React.Component {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const title = _t("Room Settings") + ' - ' + room.name;
+
         return (
             <BaseDialog className='mx_RoomSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Room Settings")}>
+                        onFinished={this.props.onFinished} title={title}>
                 <div className='ms_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} />
                 </div>
