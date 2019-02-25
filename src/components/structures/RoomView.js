@@ -1737,6 +1737,7 @@ module.exports = React.createClass({
                     showApps={this.state.showApps}
                     uploadAllowed={this.isFileUploadAllowed}
                     e2eStatus={this.state.e2eStatus}
+                    permalinkCreator={this.state.permalinkCreator}
                 />;
         }
 

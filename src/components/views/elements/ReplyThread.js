@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
-import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
+import {makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
@@ -32,6 +32,7 @@ export default class ReplyThread extends React.Component {
         parentEv: PropTypes.instanceOf(MatrixEvent),
         // called when the ReplyThread contents has changed, including EventTiles thereof
         onWidgetLoad: PropTypes.func.isRequired,
+        permalinkCreator: PropTypes.object.isRequired,
     };
 
     static contextTypes = {
@@ -85,7 +86,7 @@ export default class ReplyThread extends React.Component {
     }
 
     // Part of Replies fallback support
-    static getNestedReplyText(ev) {
+    static getNestedReplyText(ev, permalinkCreator) {
         if (!ev) return null;
 
         let {body, formatted_body: html} = ev.getContent();
@@ -94,7 +95,7 @@ export default class ReplyThread extends React.Component {
             if (html) html = this.stripHTMLReply(html);
         }
 
-        const evLink = makeEventPermalink(ev.getRoomId(), ev.getId());
+        const evLink = permalinkCreator.forEvent(ev.getId());
         const userLink = makeUserPermalink(ev.getSender());
         const mxid = ev.getSender();
 
@@ -159,11 +160,12 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onWidgetLoad, ref) {
+    static makeThread(parentEv, onWidgetLoad, permalinkCreator, ref) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return <div />;
         }
-        return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad} ref={ref} />;
+        return <ReplyThread parentEv={parentEv} onWidgetLoad={onWidgetLoad}
+            ref={ref} permalinkCreator={permalinkCreator} />;
     }
 
     componentWillMount() {
@@ -294,6 +296,7 @@ export default class ReplyThread extends React.Component {
                 <EventTile mxEvent={ev}
                            tileShape="reply"
                            onWidgetLoad={this.props.onWidgetLoad}
+                           permalinkCreator={this.props.permalinkCreator}
                            isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </blockquote>;
         });

@@ -1195,7 +1195,7 @@ export default class MessageComposerInput extends React.Component {
 
             // Part of Replies fallback support - prepend the text we're sending
             // with the text we're replying to
-            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv, this.props.permalinkCreator);
             if (nestedReply) {
                 if (content.formatted_body) {
                     content.formatted_body = nestedReply.html + content.formatted_body;
