@@ -135,7 +135,6 @@ class SendCustomEvent extends GenericEditor {
 
                 <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
                        autoComplete="off" value={this.state.evContent} onChange={this._onChange} element="textarea" />
-
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -215,12 +214,8 @@ class SendAccountData extends GenericEditor {
                 { this.textInput('eventType', _t('Event Type')) }
                 <br />
 
-                <div className="mx_DevTools_inputLabelCell">
-                    <label htmlFor="evContent"> { _t('Event Content') } </label>
-                </div>
-                <div>
-                    <textarea id="evContent" onChange={this._onChange} value={this.state.evContent} className="mx_DevTools_textarea" />
-                </div>
+                <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
+                       autoComplete="off" value={this.state.evContent} onChange={this._onChange} element="textarea" />
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
