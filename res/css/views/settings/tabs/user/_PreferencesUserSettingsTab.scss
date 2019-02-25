@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VoiceSettingsTab .mx_Field select {
-    width: 100%;
-    max-width: 100%;
+.mx_PreferencesUserSettingsTab .mx_Field {
+    margin-right: 100px; // Align with the rest of the controls
 }
 
-.mx_VoiceSettingsTab .mx_Field {
-    margin-right: 100px; // align with the rest of the fields
-}
+.mx_PreferencesUserSettingsTab .mx_Field input {
+    display: block;
 
-.mx_VoiceSettingsTab_missingMediaPermissions {
-    margin-bottom: 15px;
+    // Subtract 10px padding on left and right
+    // This is to keep the input aligned with the rest of the tab's controls.
+    width: calc(100% - 20px);
 }

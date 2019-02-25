@@ -15,21 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
-import ProfileSettings from "../ProfileSettings";
-import EmailAddresses from "../EmailAddresses";
-import PhoneNumbers from "../PhoneNumbers";
-import Field from "../../elements/Field";
-import * as languageHandler from "../../../../languageHandler";
-import {SettingLevel} from "../../../../settings/SettingsStore";
-import SettingsStore from "../../../../settings/SettingsStore";
-import LanguageDropdown from "../../elements/LanguageDropdown";
-import AccessibleButton from "../../elements/AccessibleButton";
-import DeactivateAccountDialog from "../../dialogs/DeactivateAccountDialog";
-const PlatformPeg = require("../../../../PlatformPeg");
-const sdk = require('../../../../index');
-const Modal = require("../../../../Modal");
-const dis = require("../../../../dispatcher");
+import {_t} from "../../../../../languageHandler";
+import ProfileSettings from "../../ProfileSettings";
+import EmailAddresses from "../../EmailAddresses";
+import PhoneNumbers from "../../PhoneNumbers";
+import Field from "../../../elements/Field";
+import * as languageHandler from "../../../../../languageHandler";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import LanguageDropdown from "../../../elements/LanguageDropdown";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
+const PlatformPeg = require("../../../../../PlatformPeg");
+const sdk = require('../../../../..');
+const Modal = require("../../../../../Modal");
+const dis = require("../../../../../dispatcher");
 
 export default class GeneralUserSettingsTab extends React.Component {
     constructor() {

@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../languageHandler";
+import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
-import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
-const sdk = require("../../../../index");
+import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+const sdk = require("../../../../..");
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -38,7 +38,7 @@ export class LabsSettingToggle extends React.Component {
     }
 }
 
-export default class LabsSettingsTab extends React.Component {
+export default class LabsUserSettingsTab extends React.Component {
     constructor() {
         super();
     }
