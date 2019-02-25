@@ -23,7 +23,7 @@
     "Admin support for Dendrite": "Suporte de administração para o Dendrite",
     "Announcements about Synapse releases": "Anúncios acerca de lançamentos do Synapse",
     "Support for those using and running matrix-appservice-irc": "Suporte para aqueles a correr e a utilizar o matrix-appservice-irc",
-    "Building services on Matrix": "Construir serviços no Matrix",
+    "Building services on Matrix": "Construindo serviços no Matrix",
     "Support for those using the Matrix spec": "Suporte para os utilizadores da especificação do Matrix",
     "Design and implementation of E2E in Matrix": "Design e implementação de encriptação ponto-a-ponto (E2E) no Matrix",
     "Implementing VR services with Matrix": "Implementar serviços de realidade virtual (VR) com o Matrix",
@@ -33,5 +33,7 @@
     "Contributing code to Matrix and Riot": "Contribuir código para o Matrix e para o Riot",
     "Dev chat for the Riot/Web dev team": "Conversa de desenvolvimento para a equipa do Riot/Web",
     "Dev chat for the Dendrite dev team": "Conversa de desenvolvimento para a equipa do Dendrite",
-    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Já existem muitas salas no Matrix, ligadas a redes já existentes (Slack, IRC, Gitter, etc) ou independentes. Dê uma vista de olhos no diretório!"
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Já existem muitas salas no Matrix, ligadas a redes já existentes (Slack, IRC, Gitter, etc) ou independentes. Dê uma vista de olhos no diretório!",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Você pode usar as opções de servidor personalizado para entrar em outros servidores Matrix, especificando um diferente URL de servidor doméstico.<br/>Isto permite que você utilize Riot com uma conta Matrix existente em um servidor doméstico diferente.<br/><br/>Você também pode definir um servidor de identidade personalizado, porém não poderá convidar usuários por endereço de e-mail nem ser convidado por endereço de e-mail.",
+    "Co-ordination for Riot translators": "Coordenação para tradutores do Riot"
 }
