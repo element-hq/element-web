@@ -131,7 +131,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesSettingsTab.ROOM_LIST_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
