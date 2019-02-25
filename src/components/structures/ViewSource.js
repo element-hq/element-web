@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import SyntaxHighlight from '../views/elements/SyntaxHighlight';
+import {_t} from "../../languageHandler";
+import sdk from "../../index";
 
 
 module.exports = React.createClass({
@@ -27,31 +28,24 @@ module.exports = React.createClass({
     propTypes: {
         content: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
-
-    componentDidMount: function() {
-        document.addEventListener("keydown", this.onKeyDown);
-    },
-
-    componentWillUnmount: function() {
-        document.removeEventListener("keydown", this.onKeyDown);
-    },
-
-    onKeyDown: function(ev) {
-        if (ev.keyCode == 27) { // escape
-            ev.stopPropagation();
-            ev.preventDefault();
-            this.props.onFinished();
-        }
+        roomId: PropTypes.string.isRequired,
+        eventId: PropTypes.string.isRequired,
     },
 
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_ViewSource">
-                <SyntaxHighlight className="json">
-                    { JSON.stringify(this.props.content, null, 2) }
-                </SyntaxHighlight>
-            </div>
+            <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t('View Source')}>
+                <div className="mx_ViewSource_label_left">Room ID: { this.props.roomId }</div>
+                <div className="mx_ViewSource_label_right">Event ID: { this.props.eventId }</div>
+                <div className="mx_ViewSource_label_bottom" />
+
+                <div className="mx_Dialog_content">
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.props.content, null, 2) }
+                    </SyntaxHighlight>
+                </div>
+            </BaseDialog>
         );
     },
 });
