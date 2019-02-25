@@ -146,29 +146,31 @@ export class RoomPermalinkCreator {
 
     _updateHighestPlUser() {
         const plEvent = this._room.currentState.getStateEvents("m.room.power_levels", "");
-        const content = plEvent && plEvent.getContent();
-        if (content) {
-            const users = content.users;
-            if (users) {
-                const entries = Object.entries(users);
-                const allowedEntries = entries.filter(([userId]) => {
-                    const member = this._room.getMember(userId);
-                    if (!member || member.membership !== "join") {
-                        return false;
+        if (plEvent) {
+            const content = plEvent.getContent();
+            if (content) {
+                const users = content.users;
+                if (users) {
+                    const entries = Object.entries(users);
+                    const allowedEntries = entries.filter(([userId]) => {
+                        const member = this._room.getMember(userId);
+                        if (!member || member.membership !== "join") {
+                            return false;
+                        }
+                        const serverName = getServerName(userId);
+                        return !isHostnameIpAddress(serverName) &&
+                               !isHostInRegex(serverName, this._bannedHostsRegexps) &&
+                               isHostInRegex(serverName, this._allowedHostsRegexps);
+                    });
+                    const maxEntry = allowedEntries.reduce((max, entry) => {
+                        return (entry[1] > max[1]) ? entry : max;
+                    }, [null, 0]);
+                    const [userId, powerLevel] = maxEntry;
+                    // object wasn't empty, and max entry wasn't a demotion from the default
+                    if (userId !== null && powerLevel >= 50) {
+                        this._highestPlUserId = userId;
+                        return;
                     }
-                    const serverName = getServerName(userId);
-                    return !isHostnameIpAddress(serverName) &&
-                           !isHostInRegex(serverName, this._bannedHostsRegexps) &&
-                           isHostInRegex(serverName, this._allowedHostsRegexps);
-                });
-                const maxEntry = allowedEntries.reduce((max, entry) => {
-                    return (entry[1] > max[1]) ? entry : max;
-                }, [null, 0]);
-                const [userId, powerLevel] = maxEntry;
-                // object wasn't empty, and max entry wasn't a demotion from the default
-                if (userId !== null && powerLevel >= 50) {
-                    this._highestPlUserId = userId;
-                    return;
                 }
             }
         }
