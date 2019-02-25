@@ -44,6 +44,10 @@ export default class PreferencesSettingsTab extends React.Component {
         'showDisplaynameChanges',
     ];
 
+    static ROOM_LIST_SETTINGS = [
+        'RoomList.orderByImportance',
+    ];
+
     static ADVANCED_SETTINGS = [
         'alwaysShowEncryptionIcons',
         'Pill.shouldShowPillAvatar',
@@ -124,6 +128,9 @@ export default class PreferencesSettingsTab extends React.Component {
 
                     <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
                     {this._renderGroup(PreferencesSettingsTab.TIMELINE_SETTINGS)}
+
+                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
+                    {this._renderGroup(PreferencesSettingsTab.ROOM_LIST_SETTINGS)}
 
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesSettingsTab.ADVANCED_SETTINGS)}

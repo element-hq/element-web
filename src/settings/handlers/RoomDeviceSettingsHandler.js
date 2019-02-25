@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +17,19 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
+import {WatchManager} from "../WatchManager";
 
 /**
  * Gets and sets settings at the "room-device" level for the current device in a particular
  * room.
  */
 export default class RoomDeviceSettingsHandler extends SettingsHandler {
+    constructor() {
+        super();
+
+        this._watchers = new WatchManager();
+    }
+
     getValue(settingName, roomId) {
         // Special case blacklist setting to use legacy values
         if (settingName === "blacklistUnverifiedDevices") {
@@ -44,6 +52,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
             if (!value["blacklistUnverifiedDevicesPerRoom"]) value["blacklistUnverifiedDevicesPerRoom"] = {};
             value["blacklistUnverifiedDevicesPerRoom"][roomId] = newValue;
             localStorage.setItem("mx_local_settings", JSON.stringify(value));
+            this._watchers.notifyUpdate(settingName, roomId, newValue);
             return Promise.resolve();
         }
 
@@ -54,6 +63,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
             localStorage.setItem(this._getKey(settingName, roomId), newValue);
         }
 
+        this._watchers.notifyUpdate(settingName, roomId, newValue);
         return Promise.resolve();
     }
 
@@ -63,6 +73,14 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
 
     isSupported() {
         return localStorage !== undefined && localStorage !== null;
+    }
+
+    watchSetting(settingName, roomId, cb) {
+        this._watchers.watchSetting(settingName, roomId, cb);
+    }
+
+    unwatchSetting(cb) {
+        this._watchers.unwatchSetting(cb);
     }
 
     _read(key) {
