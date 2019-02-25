@@ -328,6 +328,7 @@ module.exports = withMatrixClient(React.createClass({
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
+            permalinkCreator: this.props.permalinkCreator,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
             e2eInfoCallback: e2eInfoCallback,
