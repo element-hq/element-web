@@ -132,6 +132,7 @@
     "To use it, just wait for autocomplete results to load and tab through them.": "To use it, just wait for autocomplete results to load and tab through them.",
     "Upgrades a room to a new version": "Upgrades a room to a new version",
     "Changes your display nickname": "Changes your display nickname",
+    "Changes your display nickname in the current room only": "Changes your display nickname in the current room only",
     "Changes colour scheme of current room": "Changes colour scheme of current room",
     "Gets or sets the room topic": "Gets or sets the room topic",
     "This room has no topic.": "This room has no topic.",
