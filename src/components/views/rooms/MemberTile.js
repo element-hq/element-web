@@ -139,11 +139,21 @@ module.exports = React.createClass({
         }
         this.member_last_modified_time = member.getLastModifiedTime();
 
-        // We deliberately leave power levels that are not 100 or 50 undefined
-        const powerStatus = {
-            100: EntityTile.POWER_STATUS_ADMIN,
-            50: EntityTile.POWER_STATUS_MODERATOR,
-        }[this.props.member.powerLevel];
+        const powerStatusMap = new Map([
+            [100, EntityTile.POWER_STATUS_ADMIN],
+            [50, EntityTile.POWER_STATUS_MODERATOR],
+        ]);
+
+        // Find the nearest power level with a badge
+        let powerLevel = this.props.member.powerLevel;
+        for (const [pl] of powerStatusMap) {
+            if (this.props.member.powerLevel >= pl) {
+                powerLevel = pl;
+                break;
+            }
+        }
+
+        const powerStatus = powerStatusMap.get(powerLevel);
 
         return (
             <EntityTile {...this.props} presenceState={presenceState}
