@@ -30,6 +30,7 @@ import Promise from 'bluebird';
 import filesize from 'filesize';
 const classNames = require("classnames");
 import { _t } from '../../languageHandler';
+import {RoomPermalinkCreator} from "../../matrix-to";
 
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
@@ -441,6 +442,11 @@ module.exports = React.createClass({
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
         }
 
+        // stop tracking room changes to format permalinks
+        if (this.state.permalinkCreator) {
+            this.state.permalinkCreator.stop();
+        }
+
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
             // is really just for hygiene - we're going to be
@@ -652,6 +658,11 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
+        if (!this.state.permalinkCreator) {
+            const permalinkCreator = new RoomPermalinkCreator(room);
+            permalinkCreator.start();
+            this.setState({permalinkCreator});
+        }
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -1219,6 +1230,7 @@ module.exports = React.createClass({
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
+                     permalinkCreator={this.state.permalinkCreator}
                      onWidgetLoad={onWidgetLoad} />);
         }
         return ret;
@@ -1725,6 +1737,7 @@ module.exports = React.createClass({
                     showApps={this.state.showApps}
                     uploadAllowed={this.isFileUploadAllowed}
                     e2eStatus={this.state.e2eStatus}
+                    permalinkCreator={this.state.permalinkCreator}
                 />;
         }
 
@@ -1826,6 +1839,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
+                permalinkCreator={this.state.permalinkCreator}
             />);
 
         let topUnreadMessagesBar = null;

@@ -26,7 +26,6 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
-import {makeEventPermalink} from '../../../matrix-to';
 import { isUrlPermitted } from '../../../HtmlUtils';
 
 module.exports = React.createClass({
@@ -197,6 +196,7 @@ module.exports = React.createClass({
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
             target: this.props.mxEvent,
+            permalinkCreator: this.props.permalinkCreator,
         });
         this.closeMenu();
     },
@@ -305,10 +305,17 @@ module.exports = React.createClass({
             }
         }
 
+        let permalink;
+        if (this.props.permalinkCreator) {
+            permalink = this.props.permalinkCreator.forEvent(
+                this.props.mxEvent.getRoomId(),
+                this.props.mxEvent.getId(),
+            );
+        }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
             <div className="mx_MessageContextMenu_field">
-                <a href={makeEventPermalink(mxEvent.getRoomId(), mxEvent.getId())}
+                <a href={permalink}
                   target="_blank" rel="noopener" onClick={this.onPermalinkClick}>
                     { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
                         ? _t('Share Permalink') : _t('Share Message') }

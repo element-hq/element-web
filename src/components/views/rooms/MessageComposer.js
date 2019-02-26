@@ -415,7 +415,8 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
-                    onInputStateChanged={this.onInputStateChanged} />,
+                    onInputStateChanged={this.onInputStateChanged}
+                    permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
                 stickerpickerButton,
                 uploadButton,
