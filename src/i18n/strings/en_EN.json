@@ -1117,7 +1117,7 @@
     "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.",
     "Report bugs & give feedback": "Report bugs & give feedback",
     "Go back": "Go back",
-    "Room Settings": "Room Settings",
+    "Room Settings - %(roomName)s": "Room Settings - %(roomName)s",
     "Failed to upgrade room": "Failed to upgrade room",
     "The room upgrade could not be completed": "The room upgrade could not be completed",
     "Upgrade this room to version %(version)s": "Upgrade this room to version %(version)s",
