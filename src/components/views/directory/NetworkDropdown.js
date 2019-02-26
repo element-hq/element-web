@@ -41,8 +41,8 @@ export default class NetworkDropdown extends React.Component {
         this.state = {
             expanded: false,
             selectedServer: server,
-            selectedInstance: null,
-            includeAllNetworks: false,
+            selectedInstanceId: null,
+            includeAllNetworks: true,
         };
     }
 
@@ -52,7 +52,8 @@ export default class NetworkDropdown extends React.Component {
         document.addEventListener('click', this.onDocumentClick, false);
 
         // fire this now so the defaults can be set up
-        this.props.onOptionChange(this.state.selectedServer, this.state.selectedInstance, this.state.includeAllNetworks);
+        const {selectedServer, selectedInstanceId, includeAllNetworks} = this.state;
+        this.props.onOptionChange(selectedServer, selectedInstanceId, includeAllNetworks);
     }
 
     componentWillUnmount() {
@@ -97,17 +98,18 @@ export default class NetworkDropdown extends React.Component {
             expanded: false,
             selectedServer: server,
             selectedInstanceId: instance ? instance.instance_id : null,
-            includeAll: includeAll,
+            includeAllNetworks: includeAll,
         });
         this.props.onOptionChange(server, instance ? instance.instance_id : null, includeAll);
     }
 
     onInputKeyUp(e) {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
             this.setState({
                 expanded: false,
                 selectedServer: e.target.value,
                 selectedNetwork: null,
+                includeAllNetworks: true,
             });
             this.props.onOptionChange(e.target.value, null);
         }
@@ -227,7 +229,7 @@ export default class NetworkDropdown extends React.Component {
         } else {
             const instance = instanceForInstanceId(this.props.protocols, this.state.selectedInstanceId);
             current_value = this._makeMenuOption(
-                this.state.selectedServer, instance, this.state.includeAll, false,
+                this.state.selectedServer, instance, this.state.includeAllNetworks, false,
             );
         }
 
