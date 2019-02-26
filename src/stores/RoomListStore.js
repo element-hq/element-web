@@ -47,6 +47,20 @@ const LIST_ORDERS = {
 };
 
 /**
+ * Identifier for the "breadcrumb" (or "sort by most important room first") algorithm.
+ * Includes a provision for keeping the currently open room from flying down the room
+ * list.
+ * @type {string}
+ */
+const ALGO_IMPORTANCE = "importance";
+
+/**
+ * Identifier for classic sorting behaviour: sort by the most recent message first.
+ * @type {string}
+ */
+const ALGO_RECENT = "recent";
+
+/**
  * A class for storing application state for categorising rooms in
  * the RoomList.
  */
@@ -60,19 +74,18 @@ class RoomListStore extends Store {
     }
 
     /**
-     * Alerts the RoomListStore to a potential change in how room list sorting should
-     * behave.
-     * @param {boolean} forceRegeneration True to force a change in the algorithm
+     * Changes the sorting algorithm used by the RoomListStore.
+     * @param {string} algorithm The new algorithm to use. Should be one of the ALGO_* constants.
      */
-    updateSortingAlgorithm(forceRegeneration = false) {
-        const byImportance = SettingsStore.getValue("RoomList.orderByImportance");
-        if (byImportance !== this._state.orderRoomsByImportance || forceRegeneration) {
-            console.log("Updating room sorting algorithm: sortByImportance=" + byImportance);
-            this._setState({orderRoomsByImportance: byImportance});
+    updateSortingAlgorithm(algorithm) {
+        // Dev note: We only have two algorithms at the moment, but it isn't impossible that we want
+        // multiple in the future. Also constants make things slightly clearer.
+        const byImportance = algorithm === ALGO_IMPORTANCE;
+        console.log("Updating room sorting algorithm: sortByImportance=" + byImportance);
+        this._setState({orderRoomsByImportance: byImportance});
 
-            // Trigger a resort of the entire list to reflect the change in algorithm
-            this._generateInitialRoomLists();
-        }
+        // Trigger a resort of the entire list to reflect the change in algorithm
+        this._generateInitialRoomLists();
     }
 
     _init() {
@@ -97,6 +110,7 @@ class RoomListStore extends Store {
         };
 
         SettingsStore.monitorSetting('RoomList.orderByImportance', null);
+        SettingsStore.monitorSetting('feature_custom_tags', null);
     }
 
     _setState(newState) {
@@ -120,13 +134,10 @@ class RoomListStore extends Store {
         switch (payload.action) {
             case 'setting_updated': {
                 if (payload.settingName === 'RoomList.orderByImportance') {
-                    this.updateSortingAlgorithm();
+                    this.updateSortingAlgorithm(payload.newValue === true ? ALGO_IMPORTANCE : ALGO_RECENT);
                 } else if (payload.settingName === 'feature_custom_tags') {
-                    const isActive = SettingsStore.isFeatureEnabled("feature_custom_tags");
-                    if (isActive !== this._state.tagsEnabled) {
-                        this._setState({tagsEnabled: isActive});
-                        this.updateSortingAlgorithm(/*force=*/true);
-                    }
+                    this._setState({tagsEnabled: payload.newValue});
+                    this._generateInitialRoomLists(); // Tags means we have to start from scratch
                 }
             }
             break;
@@ -139,7 +150,10 @@ class RoomListStore extends Store {
                 this._setState({tagsEnabled: SettingsStore.isFeatureEnabled("feature_custom_tags")});
 
                 this._matrixClient = payload.matrixClient;
-                this.updateSortingAlgorithm(/*force=*/true);
+
+                const algorithm = SettingsStore.getValue("RoomList.orderByImportance")
+                    ? ALGO_IMPORTANCE : ALGO_RECENT;
+                this.updateSortingAlgorithm(algorithm);
             }
             break;
             case 'MatrixActions.Room.receipt': {
@@ -445,6 +459,11 @@ class RoomListStore extends Store {
     }
 
     _generateInitialRoomLists() {
+        // Log something to show that we're throwing away the old results. This is for the inevitable
+        // question of "why is 100% of my CPU going towards Riot?" - a quick look at the logs would reveal
+        // that something is wrong with the RoomListStore.
+        console.log("Generating initial room lists");
+
         const lists = {
             "m.server_notice": [],
             "im.vector.fake.invite": [],

@@ -52,12 +52,4 @@ export default class DefaultSettingsHandler extends SettingsHandler {
     isSupported() {
         return true;
     }
-
-    watchSetting(settingName, roomId, cb) {
-        // no-op: no changes possible
-    }
-
-    unwatchSetting(cb) {
-        // no-op: no changes possible
-    }
 }

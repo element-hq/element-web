@@ -16,18 +16,18 @@ limitations under the License.
 */
 
 import MatrixClientPeg from '../../MatrixClientPeg';
-import {WatchManager} from "../WatchManager";
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "account" level for the current user.
  * This handler does not make use of the roomId parameter.
  */
 export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor() {
+    constructor(watchManager) {
         super();
 
-        this._watchers = new WatchManager();
+        this._watchers = watchManager;
         this._onAccountData = this._onAccountData.bind(this);
     }
 
@@ -48,11 +48,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 val = !val;
             }
 
-            this._watchers.notifyUpdate("urlPreviewsEnabled", null, val);
+            this._watchers.notifyUpdate("urlPreviewsEnabled", null, SettingLevel.ACCOUNT, val);
         } else if (event.getType() === "im.vector.web.settings") {
             // We can't really discern what changed, so trigger updates for everything
             for (const settingName of Object.keys(event.getContent())) {
-                this._watchers.notifyUpdate(settingName, null, event.getContent()[settingName]);
+                const val = event.getContent()[settingName];
+                this._watchers.notifyUpdate(settingName, null, SettingLevel.ACCOUNT, val);
             }
         }
     }
@@ -100,14 +101,6 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     isSupported() {
         const cli = MatrixClientPeg.get();
         return cli !== undefined && cli !== null;
-    }
-
-    watchSetting(settingName, roomId, cb) {
-        this._watchers.watchSetting(settingName, roomId, cb);
-    }
-
-    unwatchSetting(cb) {
-        this._watchers.unwatchSetting(cb);
     }
 
     _getSettings(eventType = "im.vector.web.settings") {

@@ -67,12 +67,4 @@ export default class LocalEchoWrapper extends SettingsHandler {
     isSupported() {
         return this._handler.isSupported();
     }
-
-    watchSetting(settingName, roomId, cb) {
-        this._handler.watchSetting(settingName, roomId, cb);
-    }
-
-    unwatchSetting(cb) {
-        this._handler.unwatchSetting(cb);
-    }
 }

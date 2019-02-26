@@ -143,11 +143,8 @@ class MyComponent extends React.Component {
     settingWatcherRef = null;
     
     componentWillMount() {
-        this.settingWatcherRef = SettingsStore.watchSetting("roomColor", "!example:matrix.org", (settingName, roomId, level, newVal) => {
-            // Always re-read the setting value from the store to avoid reacting to changes which do not have a consequence. For example, the
-            // room color could have been changed at the device level, but an account override prevents that change from making a difference.
-           const actualVal = SettingsStore.getValue(settingName, "!example:matrix.org");
-           if (actualVal !== this.state.color) this.setState({color: actualVal});
+        this.settingWatcherRef = SettingsStore.watchSetting("roomColor", "!example:matrix.org", (settingName, roomId, level, newValAtLevel, newVal) => {
+           this.setState({color: newVal});
         });
     }
     
@@ -188,7 +185,9 @@ If `enableLabs` is true in the configuration, the default for features becomes `
 
 ### Watchers
 
-Watchers can appear complicated under the hood: the request to watch a setting is actually forked off to individual handlers for watching. This means that the handlers need to track their changes and listen for remote changes where possible, but also makes it much easier for the `SettingsStore` to react to changes. The handler is going to know the best things to listen for (specific events, account data, etc) and thus it is left as a responsibility for the handler to track changes. 
+Watchers can appear complicated under the hood: there is a central `WatchManager` which handles the actual invocation of callbacks, and callbacks are managed by the SettingsStore by redirecting the caller's callback to a dedicated callback. This is done so that the caller can reuse the same function as their callback without worrying about whether or not it'll unsubscribe all watchers. 
+
+Setting changes are emitted into the default `WatchManager`, which calculates the new value for the setting. Ideally, we'd also try and suppress updates which don't have a consequence on this value, however there's not an easy way to do this. Instead, we just dispatch an update for all changes and leave it up to the consumer to deduplicate. 
 
 In practice, handlers which rely on remote changes (account data, room events, etc) will always attach a listener to the `MatrixClient`. They then watch for changes to events they care about and send off appropriate updates to the generalized `WatchManager` - a class specifically designed to deduplicate the logic of managing watchers. The handlers which are localized to the local client (device) generally just trigger the `WatchManager` when they manipulate the setting themselves as there's nothing to really 'watch'.
  
