@@ -102,7 +102,6 @@ limitations under the License.
 
 .mx_RoomTile_name {
     font-size: 14px;
-    font-weight: 600;
     padding: 0 6px;
     color: $roomtile-name-color;
     white-space: nowrap;
@@ -155,7 +154,7 @@ limitations under the License.
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
     .mx_RoomTile_name {
-        // font-weight: 700; // bold is too loud in the end
+        font-weight: 600;
         color: $roomtile-selected-color;
     }
 }
