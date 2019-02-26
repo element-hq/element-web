@@ -289,8 +289,11 @@ module.exports = React.createClass({
     },
 
     onFormValidationChange: function(fieldErrors) {
-        // Find the first error and show that.
-        const errCode = Object.values(fieldErrors).find(value => value);
+        // `fieldErrors` is an object mapping field IDs to error codes when there is an
+        // error or `null` for no error, so the values array will be something like:
+        // `[ null, "RegistrationForm.ERR_PASSWORD_MISSING", null]`
+        // Find the first non-null error code and show that.
+        const errCode = Object.values(fieldErrors).find(value => !!value);
         if (!errCode) {
             this.setState({
                 errorText: null,
