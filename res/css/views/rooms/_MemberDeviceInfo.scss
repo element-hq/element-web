@@ -27,15 +27,15 @@ limitations under the License.
     mask-repeat: no-repeat;
 }
 .mx_MemberDeviceInfo_icon_blacklisted {
-    mask-image: url('$(res)/img/feather-icons/e2e/blacklisted.svg');
+    mask-image: url('$(res)/img/e2e/blacklisted.svg');
     background-color: $warning-color;
 }
 .mx_MemberDeviceInfo_icon_verified {
-    mask-image: url('$(res)/img/feather-icons/e2e/verified.svg');
+    mask-image: url('$(res)/img/e2e/verified.svg');
     background-color: $accent-color;
 }
 .mx_MemberDeviceInfo_icon_unverified {
-    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    mask-image: url('$(res)/img/e2e/warning.svg');
     background-color: $warning-color;
 }
 
