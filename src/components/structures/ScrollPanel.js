@@ -609,20 +609,16 @@ module.exports = React.createClass({
         const itemlist = this.refs.itemlist;
         const messages = itemlist.children;
         let node = null;
-        let nodeBottom;
 
+        // loop backwards, from bottom-most message (as that is the most common case)
         for (let i = messages.length-1; i >= 0; --i) {
             if (!messages[i].dataset.scrollTokens) {
                 continue;
             }
             node = messages[i];
-
-            nodeBottom = node.offsetTop + node.clientHeight;
-            // If the bottom of the panel intersects the ClientRect of node, use this node
-            // as the scrollToken.
-            // If this is false for the entire for-loop, we default to the last node
-            // (which is why newScrollState is set on every iteration).
-            if (nodeBottom >= scrollBottom) {
+            // break at the first message (coming from the bottom)
+            // that has it's offsetTop above the bottom of the viewport.
+            if (node.offsetTop < scrollBottom) {
                 // Use this node as the scrollToken
                 break;
             }
@@ -633,6 +629,7 @@ module.exports = React.createClass({
             return;
         }
 
+        const nodeBottom = node.offsetTop + node.clientHeight;
         debuglog("ScrollPanel: saved scroll state", this.scrollState);
         this.scrollState = {
             stuckAtBottom: false,
