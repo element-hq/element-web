@@ -65,15 +65,15 @@ limitations under the License.
 }
 
 .mx_RightPanel_membersButton::before {
-    mask-image: url('$(res)/img/feather-icons/user.svg');
+    mask-image: url('$(res)/img/feather-customised/user.svg');
 }
 
 .mx_RightPanel_filesButton::before {
-    mask-image: url('$(res)/img/feather-icons/files.svg');
+    mask-image: url('$(res)/img/feather-customised/files.svg');
 }
 
 .mx_RightPanel_notifsButton::before {
-    mask-image: url('$(res)/img/feather-icons/notifications.svg');
+    mask-image: url('$(res)/img/feather-customised/notifications.svg');
 }
 
 .mx_RightPanel_groupMembersButton::before {

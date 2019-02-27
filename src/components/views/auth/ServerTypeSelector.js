@@ -49,7 +49,7 @@ export const TYPES = {
         id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
-            <img src={require('../../../../res/img/feather-icons/globe.svg')} />
+            <img src={require('../../../../res/img/feather-customised/globe.svg')} />
             {_t('Other')}
         </div>,
         description: () => _t('Find other public servers or use a custom server'),
