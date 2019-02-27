@@ -292,11 +292,15 @@ class RoomListStore extends Store {
             // Stack the user's tags on top
             tags.push(...this._filterTags(room.tags));
 
+            // Order matters here: The DMRoomMap updates before invites
+            // are accepted, so we check to see if the room is an invite
+            // first, then if it is a direct chat, and finally default
+            // to the "recents" list.
             const dmRoomMap = DMRoomMap.shared();
-            if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                tags.push("im.vector.fake.direct");
-            } else if (myMembership === 'invite') {
+            if (myMembership === 'invite') {
                 tags.push("im.vector.fake.invite");
+            } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
+                tags.push("im.vector.fake.direct");
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
             }
