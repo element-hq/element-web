@@ -23,11 +23,11 @@ limitations under the License.
 }
 
 .mx_E2EIcon_verified {
-    mask-image: url('$(res)/img/feather-icons/e2e/lock-verified.svg');
+    mask-image: url('$(res)/img/e2e/lock-verified.svg');
     background-color: $accent-color;
 }
 
 .mx_E2EIcon_warning {
-    mask-image: url('$(res)/img/feather-icons/e2e/lock-warning.svg');
+    mask-image: url('$(res)/img/e2e/lock-warning.svg');
     background-color: $warning-color;
 }

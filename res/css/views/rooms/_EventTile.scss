@@ -296,12 +296,12 @@ limitations under the License.
 }
 
 .mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {
-    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    mask-image: url('$(res)/img/e2e/warning.svg');
     background-color: $warning-color;
 }
 
 .mx_EventTile_e2eIcon_unencrypted {
-    mask-image: url('$(res)/img/feather-icons/e2e/warning.svg');
+    mask-image: url('$(res)/img/e2e/warning.svg');
     background-color: $composer-e2e-icon-color;
 }
 

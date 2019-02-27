@@ -30,7 +30,7 @@ export const TYPES = {
     FREE: {
         id: FREE,
         label: () => _t('Free'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/matrix-org-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
         hsUrl: 'https://matrix.org',
         isUrl: 'https://vector.im',
@@ -38,7 +38,7 @@ export const TYPES = {
     PREMIUM: {
         id: PREMIUM,
         label: () => _t('Premium'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/modular-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/modular-bw-logo.svg')} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
             a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
                 {sub}
@@ -49,7 +49,7 @@ export const TYPES = {
         id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
-            <img src={require('../../../../res/img/feather-icons/globe.svg')} />
+            <img src={require('../../../../res/img/feather-customised/globe.svg')} />
             {_t('Other')}
         </div>,
         description: () => _t('Find other public servers or use a custom server'),
