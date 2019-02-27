@@ -495,7 +495,9 @@ module.exports = React.createClass({
                 poll={true}
             />;
         } else if (this.state.busy || !this.state.flows) {
-            return <Spinner />;
+            return <div className="mx_AuthBody_spinner">
+                <Spinner />
+            </div>;
         } else {
             let onEditServerDetailsClick = null;
             // If custom URLs are allowed and we haven't selected the Free server type, wire
