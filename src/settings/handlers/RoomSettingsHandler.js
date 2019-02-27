@@ -17,16 +17,16 @@ limitations under the License.
 
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {WatchManager} from "../WatchManager";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "room" level.
  */
 export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor() {
+    constructor(watchManager) {
         super();
 
-        this._watchers = new WatchManager();
+        this._watchers = watchManager;
         this._onEvent = this._onEvent.bind(this);
     }
 
@@ -49,11 +49,11 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
                 val = !val;
             }
 
-            this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, val);
+            this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
         } else if (event.getType() === "im.vector.web.settings") {
             // We can't really discern what changed, so trigger updates for everything
             for (const settingName of Object.keys(event.getContent())) {
-                this._watchers.notifyUpdate(settingName, roomId, event.getContent()[settingName]);
+                this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
             }
         }
     }
@@ -99,14 +99,6 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     isSupported() {
         const cli = MatrixClientPeg.get();
         return cli !== undefined && cli !== null;
-    }
-
-    watchSetting(settingName, roomId, cb) {
-        this._watchers.watchSetting(settingName, roomId, cb);
-    }
-
-    unwatchSetting(cb) {
-        this._watchers.unwatchSetting(cb);
     }
 
     _getSettings(roomId, eventType = "im.vector.web.settings") {

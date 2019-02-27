@@ -17,17 +17,17 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
-import {WatchManager} from "../WatchManager";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "room-device" level for the current device in a particular
  * room.
  */
 export default class RoomDeviceSettingsHandler extends SettingsHandler {
-    constructor() {
+    constructor(watchManager) {
         super();
 
-        this._watchers = new WatchManager();
+        this._watchers = watchManager;
     }
 
     getValue(settingName, roomId) {
@@ -52,7 +52,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
             if (!value["blacklistUnverifiedDevicesPerRoom"]) value["blacklistUnverifiedDevicesPerRoom"] = {};
             value["blacklistUnverifiedDevicesPerRoom"][roomId] = newValue;
             localStorage.setItem("mx_local_settings", JSON.stringify(value));
-            this._watchers.notifyUpdate(settingName, roomId, newValue);
+            this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_DEVICE, newValue);
             return Promise.resolve();
         }
 
@@ -63,7 +63,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
             localStorage.setItem(this._getKey(settingName, roomId), newValue);
         }
 
-        this._watchers.notifyUpdate(settingName, roomId, newValue);
+        this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_DEVICE, newValue);
         return Promise.resolve();
     }
 
@@ -73,14 +73,6 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
 
     isSupported() {
         return localStorage !== undefined && localStorage !== null;
-    }
-
-    watchSetting(settingName, roomId, cb) {
-        this._watchers.watchSetting(settingName, roomId, cb);
-    }
-
-    unwatchSetting(cb) {
-        this._watchers.unwatchSetting(cb);
     }
 
     _read(key) {

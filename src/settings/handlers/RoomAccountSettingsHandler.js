@@ -17,16 +17,16 @@ limitations under the License.
 
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {WatchManager} from "../WatchManager";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "room-account" level for the current user.
  */
 export default class RoomAccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor() {
+    constructor(watchManager) {
         super();
 
-        this._watchers = new WatchManager();
+        this._watchers = watchManager;
         this._onAccountData = this._onAccountData.bind(this);
     }
 
@@ -49,13 +49,14 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
                 val = !val;
             }
 
-            this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, val);
+            this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM_ACCOUNT, val);
         } else if (event.getType() === "org.matrix.room.color_scheme") {
-            this._watchers.notifyUpdate("roomColor", roomId, event.getContent());
+            this._watchers.notifyUpdate("roomColor", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         } else if (event.getType() === "im.vector.web.settings") {
             // We can't really discern what changed, so trigger updates for everything
             for (const settingName of Object.keys(event.getContent())) {
-                this._watchers.notifyUpdate(settingName, roomId, event.getContent()[settingName]);
+                const val = event.getContent()[settingName];
+                this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_ACCOUNT, val);
             }
         }
     }
@@ -111,14 +112,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
     isSupported() {
         const cli = MatrixClientPeg.get();
         return cli !== undefined && cli !== null;
-    }
-
-    watchSetting(settingName, roomId, cb) {
-        this._watchers.watchSetting(settingName, roomId, cb);
-    }
-
-    unwatchSetting(cb) {
-        this._watchers.unwatchSetting(cb);
     }
 
     _getSettings(roomId, eventType = "im.vector.web.settings") {

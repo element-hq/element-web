@@ -27,6 +27,7 @@ import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
+import {WatchManager} from "./WatchManager";
 
 /**
  * Represents the various setting levels supported by the SettingsStore.
@@ -43,6 +44,8 @@ export const SettingLevel = {
     DEFAULT: "default",
 };
 
+const defaultWatchManager = new WatchManager();
+
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings = {};
 const invertedDefaultSettings = {};
@@ -58,11 +61,11 @@ for (const key of Object.keys(SETTINGS)) {
 }
 
 const LEVEL_HANDLERS = {
-    "device": new DeviceSettingsHandler(featureNames),
-    "room-device": new RoomDeviceSettingsHandler(),
-    "room-account": new RoomAccountSettingsHandler(),
-    "account": new AccountSettingsHandler(),
-    "room": new RoomSettingsHandler(),
+    "device": new DeviceSettingsHandler(featureNames, defaultWatchManager),
+    "room-device": new RoomDeviceSettingsHandler(defaultWatchManager),
+    "room-account": new RoomAccountSettingsHandler(defaultWatchManager),
+    "account": new AccountSettingsHandler(defaultWatchManager),
+    "room": new RoomSettingsHandler(defaultWatchManager),
     "config": new ConfigSettingsHandler(),
     "default": new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
@@ -100,32 +103,30 @@ const LEVEL_ORDER = [
  * be enabled).
  */
 export default class SettingsStore {
-    // We support watching settings for changes, and do so only at the levels which are
-    // relevant to the setting. We pass the watcher on to the handlers and aggregate it
-    // before sending it off to the caller. We need to track which callback functions we
-    // provide to the handlers though so we can unwatch it on demand. In practice, we
-    // return a "callback reference" to the caller which correlates to an entry in this
-    // dictionary for each handler's callback function.
+    // We support watching settings for changes, and do this by tracking which callbacks have
+    // been given to us. We end up returning the callbackRef to the caller so they can unsubscribe
+    // at a later point.
     //
     // We also maintain a list of monitors which are special watchers: they cause dispatches
     // when the setting changes. We track which rooms we're monitoring though to ensure we
     // don't duplicate updates on the bus.
-    static _watchers = {}; // { callbackRef => { level => callbackFn } }
+    static _watchers = {}; // { callbackRef => { callbackFn } }
     static _monitors = {}; // { settingName => { roomId => callbackRef } }
 
     /**
      * Watches for changes in a particular setting. This is done without any local echo
-     * wrapping and fires whenever a change is detected in a setting's value. Watching
-     * is intended to be used in scenarios where the app needs to react to changes made
-     * by other devices. It is otherwise expected that callers will be able to use the
-     * Controller system or track their own changes to settings. Callers should retain
+     * wrapping and fires whenever a change is detected in a setting's value, at any level.
+     * Watching is intended to be used in scenarios where the app needs to react to changes
+     * made by other devices. It is otherwise expected that callers will be able to use the
+     * Controller system or track their own changes to settings. Callers should retain the
+     * returned reference to later unsubscribe from updates.
      * @param {string} settingName The setting name to watch
      * @param {String} roomId The room ID to watch for changes in. May be null for 'all'.
      * @param {function} callbackFn A function to be called when a setting change is
-     * detected. Four arguments can be expected: the setting name, the room ID (may be null),
-     * the level the change happened at, and finally the new value for those arguments. The
-     * callback may need to do a call to #getValue() to see if a consequential change has
-     * occurred.
+     * detected. Five arguments can be expected: the setting name, the room ID (may be null),
+     * the level the change happened at, the new value at the given level, and finally the new
+     * value for the setting regardless of level. The callback is responsible for determining
+     * if the change in value is worthwhile enough to react upon.
      * @returns {string} A reference to the watcher that was employed.
      */
     static watchSetting(settingName, roomId, callbackFn) {
@@ -138,21 +139,15 @@ export default class SettingsStore {
         }
 
         const watcherId = `${new Date().getTime()}_${settingName}_${roomId}`;
-        SettingsStore._watchers[watcherId] = {};
 
-        const levels = Object.keys(LEVEL_HANDLERS);
-        for (const level of levels) {
-            const handler = SettingsStore._getHandler(originalSettingName, level);
-            if (!handler) continue;
+        const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
+            const newValue = SettingsStore.getValue(originalSettingName);
+            callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
+        };
 
-            const localizedCallback = (changedInRoomId, newVal) => {
-                callbackFn(originalSettingName, changedInRoomId, level, newVal);
-            };
-
-            console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'} at level ${level}`);
-            SettingsStore._watchers[watcherId][level] = localizedCallback;
-            handler.watchSetting(settingName, roomId, localizedCallback);
-        }
+        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'}`);
+        SettingsStore._watchers[watcherId] = localizedCallback;
+        defaultWatchManager.watchSetting(settingName, roomId, localizedCallback);
 
         return watcherId;
     }
@@ -166,12 +161,7 @@ export default class SettingsStore {
     static unwatchSetting(watcherReference) {
         if (!SettingsStore._watchers[watcherReference]) return;
 
-        for (const handlerName of Object.keys(SettingsStore._watchers[watcherReference])) {
-            const handler = LEVEL_HANDLERS[handlerName];
-            if (!handler) continue;
-            handler.unwatchSetting(SettingsStore._watchers[watcherReference][handlerName]);
-        }
-
+        defaultWatchManager.unwatchSetting(SettingsStore._watchers[watcherReference]);
         delete SettingsStore._watchers[watcherReference];
     }
 
@@ -179,7 +169,7 @@ export default class SettingsStore {
      * Sets up a monitor for a setting. This behaves similar to #watchSetting except instead
      * of making a call to a callback, it forwards all changes to the dispatcher. Callers can
      * expect to listen for the 'setting_updated' action with an object containing settingName,
-     * roomId, level, and newValue.
+     * roomId, level, newValueAtLevel, and newValue.
      * @param {string} settingName The setting name to monitor.
      * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
      */
@@ -188,12 +178,13 @@ export default class SettingsStore {
 
         const registerWatcher = () => {
             this._monitors[settingName][roomId] = SettingsStore.watchSetting(
-                settingName, roomId, (settingName, inRoomId, level, newValue) => {
+                settingName, roomId, (settingName, inRoomId, level, newValueAtLevel, newValue) => {
                     dis.dispatch({
                         action: 'setting_updated',
                         settingName,
                         roomId: inRoomId,
                         level,
+                        newValueAtLevel,
                         newValue,
                     });
                 },

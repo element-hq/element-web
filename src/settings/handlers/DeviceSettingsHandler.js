@@ -18,7 +18,7 @@ limitations under the License.
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from "../../MatrixClientPeg";
-import {WatchManager} from "../WatchManager";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "device" level for the current device.
@@ -29,11 +29,12 @@ export default class DeviceSettingsHandler extends SettingsHandler {
     /**
      * Creates a new device settings handler
      * @param {string[]} featureNames The names of known features.
+     * @param {WatchManager} watchManager The watch manager to notify updates to
      */
-    constructor(featureNames) {
+    constructor(featureNames, watchManager) {
         super();
         this._featureNames = featureNames;
-        this._watchers = new WatchManager();
+        this._watchers = watchManager;
     }
 
     getValue(settingName, roomId) {
@@ -69,22 +70,22 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         // Special case notifications
         if (settingName === "notificationsEnabled") {
             localStorage.setItem("notifications_enabled", newValue);
-            this._watchers.notifyUpdate(settingName, null, newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "notificationBodyEnabled") {
             localStorage.setItem("notifications_body_enabled", newValue);
-            this._watchers.notifyUpdate(settingName, null, newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "audioNotificationsEnabled") {
             localStorage.setItem("audio_notifications_enabled", newValue);
-            this._watchers.notifyUpdate(settingName, null, newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }
 
         const settings = this._getSettings() || {};
         settings[settingName] = newValue;
         localStorage.setItem("mx_local_settings", JSON.stringify(settings));
-        this._watchers.notifyUpdate(settingName, null, newValue);
+        this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
 
         return Promise.resolve();
     }
