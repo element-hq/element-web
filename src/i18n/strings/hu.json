@@ -1,7 +1,7 @@
 {
     "Custom Server Options": "Egyedi szerverbeállítások",
     "Dismiss": "Eltüntet",
-    "powered by Matrix": "[Matrix]-szal töltve",
+    "powered by Matrix": "Matrix hajtja",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s alkalmazás %(browserName)s böngészőn %(osName)s rendszeren",
     "Riot Desktop on %(platformName)s": "Riot Desktop itt: %(platformName)s",
     "Riot is not supported on mobile web. Install the app?": "A mobilböngésző nem támogatja a Riotot. Telepíted inkább az alkalmazást?",
