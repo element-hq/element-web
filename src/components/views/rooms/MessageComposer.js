@@ -68,6 +68,7 @@ export default class MessageComposer extends React.Component {
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
+            canSendMessages: this.props.room.maySendMessage(),
         };
     }
 
@@ -119,6 +120,9 @@ export default class MessageComposer extends React.Component {
 
         if (ev.getType() === 'm.room.tombstone') {
             this.setState({tombstone: this._getRoomTombstone()});
+        }
+        if (ev.getType() === 'm.room.power_levels') {
+            this.setState({canSendMessages: this.props.room.maySendMessage()});
         }
     }
 
@@ -359,10 +363,7 @@ export default class MessageComposer extends React.Component {
                 </AccessibleButton>;
         }
 
-        const canSendMessages = !this.state.tombstone &&
-            this.props.room.maySendMessage();
-
-        if (canSendMessages) {
+        if (!this.state.tombstone && this.state.canSendMessages) {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
