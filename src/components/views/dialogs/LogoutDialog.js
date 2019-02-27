@@ -34,13 +34,15 @@ export default class LogoutDialog extends React.Component {
         this._onSetRecoveryMethodClick = this._onSetRecoveryMethodClick.bind(this);
         this._onLogoutConfirm = this._onLogoutConfirm.bind(this);
 
+        const shouldLoadBackupStatus = !MatrixClientPeg.get().getKeyBackupEnabled();
+
         this.state = {
-            loading: false,
+            loading: shouldLoadBackupStatus,
             backupInfo: null,
             error: null,
         };
 
-        if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
+        if (shouldLoadBackupStatus) {
             this._loadBackupStatus();
         }
     }
@@ -84,9 +86,17 @@ export default class LogoutDialog extends React.Component {
     }
 
     _onSetRecoveryMethodClick() {
-        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
-        );
+        if (this.state.backupInfo) {
+            // A key backup exists for this account, but the creating device is not
+            // verified, so restore the backup which will give us the keys from it and
+            // allow us to trust it (ie. upload keys to it)
+            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+            Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {});
+        } else {
+            Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
+                import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
+            );
+        }
 
         // close dialog
         this.props.onFinished();
