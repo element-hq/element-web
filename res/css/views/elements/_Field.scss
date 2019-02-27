@@ -88,6 +88,7 @@ limitations under the License.
     top: 0px;
     margin: 7px 8px;
     padding: 2px;
+    pointer-events: none; // Allow clicks to fall through to the input
 }
 
 .mx_Field input:focus + label,
@@ -104,6 +105,7 @@ limitations under the License.
     top: -13px;
     padding: 0 2px;
     background-color: $field-focused-label-bg-color;
+    pointer-events: initial;
 }
 
 .mx_Field input:focus + label,
