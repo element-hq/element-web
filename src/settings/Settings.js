@@ -155,7 +155,7 @@ export const SETTINGS = {
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
-        displayName: _td('Show read receipts'),
+        displayName: _td('Show read receipts sent by other users'),
         default: true,
         invertedSettingName: 'hideReadReceipts',
     },
