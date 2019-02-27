@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from '../../MatrixClientPeg';
+import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "account" level for the current user.
  * This handler does not make use of the roomId parameter.
  */
-export default class AccountSettingHandler extends SettingsHandler {
+export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
+    constructor(watchManager) {
+        super();
+
+        this._watchers = watchManager;
+        this._onAccountData = this._onAccountData.bind(this);
+    }
+
+    initMatrixClient(oldClient, newClient) {
+        if (oldClient) {
+            oldClient.removeListener("accountData", this._onAccountData);
+        }
+
+        newClient.on("accountData", this._onAccountData);
+    }
+
+    _onAccountData(event) {
+        if (event.getType() === "org.matrix.preview_urls") {
+            let val = event.getContent()['disable'];
+            if (typeof(val) !== "boolean") {
+                val = null;
+            } else {
+                val = !val;
+            }
+
+            this._watchers.notifyUpdate("urlPreviewsEnabled", null, SettingLevel.ACCOUNT, val);
+        } else if (event.getType() === "im.vector.web.settings") {
+            // We can't really discern what changed, so trigger updates for everything
+            for (const settingName of Object.keys(event.getContent())) {
+                const val = event.getContent()[settingName];
+                this._watchers.notifyUpdate(settingName, null, SettingLevel.ACCOUNT, val);
+            }
+        }
+    }
+
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {

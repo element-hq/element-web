@@ -18,17 +18,27 @@ limitations under the License.
 // ==========================================================
 
 .mx_RoomSettingsDialog_settingsIcon:before {
-    mask-image: url('$(res)/img/feather-icons/settings.svg');
+    mask-image: url('$(res)/img/feather-customised/settings.svg');
 }
 
 .mx_RoomSettingsDialog_securityIcon:before {
-    mask-image: url('$(res)/img/feather-icons/lock.svg');
+    mask-image: url('$(res)/img/feather-customised/lock.svg');
 }
 
 .mx_RoomSettingsDialog_rolesIcon:before {
-    mask-image: url('$(res)/img/feather-icons/users-sm.svg');
+    mask-image: url('$(res)/img/feather-customised/users-sm.svg');
 }
 
 .mx_RoomSettingsDialog_warningIcon:before {
-    mask-image: url('$(res)/img/feather-icons/warning-triangle.svg');
+    mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
+}
+
+.mx_RoomSettingsDialog .mx_Dialog_title {
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 80px;
 }

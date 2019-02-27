@@ -97,7 +97,7 @@ export class ExistingPhoneNumber extends React.Component {
 
         return (
             <div className="mx_ExistingPhoneNumber">
-                <img src={require("../../../../res/img/feather-icons/cancel.svg")} width={14} height={14}
+                <img src={require("../../../../res/img/feather-customised/cancel.svg")} width={14} height={14}
                      onClick={this._onRemove} className="mx_ExistingPhoneNumber_delete" alt={_t("Remove")} />
                 <span className="mx_ExistingPhoneNumber_address">+{this.props.msisdn.address}</span>
             </div>

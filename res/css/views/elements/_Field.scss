@@ -48,7 +48,7 @@ limitations under the License.
     right: 10px;
     width: 10px;
     height: 6px;
-    mask: url('$(res)/img/feather-icons/dropdown-arrow.svg');
+    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
     background-color: $primary-fg-color;
     z-index: 1;
@@ -88,6 +88,7 @@ limitations under the License.
     top: 0px;
     margin: 7px 8px;
     padding: 2px;
+    pointer-events: none; // Allow clicks to fall through to the input
 }
 
 .mx_Field input:focus + label,
@@ -104,6 +105,7 @@ limitations under the License.
     top: -13px;
     padding: 0 2px;
     background-color: $field-focused-label-bg-color;
+    pointer-events: initial;
 }
 
 .mx_Field input:focus + label,

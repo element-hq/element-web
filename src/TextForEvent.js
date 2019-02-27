@@ -166,6 +166,36 @@ function textForGuestAccessEvent(ev) {
     }
 }
 
+function textForRelatedGroupsEvent(ev) {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const groups = ev.getContent().groups || [];
+    const prevGroups = ev.getPrevContent().groups || [];
+    const added = groups.filter((g) => !prevGroups.includes(g));
+    const removed = prevGroups.filter((g) => !groups.includes(g));
+
+    if (added.length && !removed.length) {
+        return _t('%(senderDisplayName)s enabled flair for %(groups)s in this room.', {
+            senderDisplayName,
+            groups: added.join(', '),
+        });
+    } else if (!added.length && removed.length) {
+        return _t('%(senderDisplayName)s disabled flair for %(groups)s in this room.', {
+            senderDisplayName,
+            groups: removed.join(', '),
+        });
+    } else if (added.length && removed.length) {
+        return _t('%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for ' +
+            '%(oldGroups)s in this room.', {
+            senderDisplayName,
+            newGroups: added.join(', '),
+            oldGroups: removed.join(', '),
+        });
+    } else {
+        // Don't bother rendering this change (because there were no changes)
+        return '';
+    }
+}
+
 function textForServerACLEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
@@ -473,6 +503,7 @@ const stateHandlers = {
     'm.room.tombstone': textForTombstoneEvent,
     'm.room.join_rules': textForJoinRulesEvent,
     'm.room.guest_access': textForGuestAccessEvent,
+    'm.room.related_groups': textForRelatedGroupsEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

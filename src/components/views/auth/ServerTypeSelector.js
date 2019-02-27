@@ -30,7 +30,7 @@ export const TYPES = {
     FREE: {
         id: FREE,
         label: () => _t('Free'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/matrix-org-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/matrix-org-bw-logo.svg')} />,
         description: () => _t('Join millions for free on the largest public server'),
         hsUrl: 'https://matrix.org',
         isUrl: 'https://vector.im',
@@ -38,7 +38,7 @@ export const TYPES = {
     PREMIUM: {
         id: PREMIUM,
         label: () => _t('Premium'),
-        logo: () => <img src={require('../../../../res/img/feather-icons/modular-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/modular-bw-logo.svg')} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
             a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
                 {sub}
@@ -49,21 +49,21 @@ export const TYPES = {
         id: ADVANCED,
         label: () => _t('Advanced'),
         logo: () => <div>
-            <img src={require('../../../../res/img/feather-icons/globe.svg')} />
+            <img src={require('../../../../res/img/feather-customised/globe.svg')} />
             {_t('Other')}
         </div>,
         description: () => _t('Find other public servers or use a custom server'),
     },
 };
 
-function getDefaultType(defaultHsUrl) {
-    if (!defaultHsUrl) {
+export function getTypeFromHsUrl(hsUrl) {
+    if (!hsUrl) {
         return null;
-    } else if (defaultHsUrl === TYPES.FREE.hsUrl) {
+    } else if (hsUrl === TYPES.FREE.hsUrl) {
         return FREE;
-    } else if (new URL(defaultHsUrl).hostname.endsWith('.modular.im')) {
-        // TODO: Use a Riot config parameter to detect Modular-ness.
-        // https://github.com/vector-im/riot-web/issues/8253
+    } else if (new URL(hsUrl).hostname.endsWith('.modular.im')) {
+        // This is an unlikely case to reach, as Modular defaults to hiding the
+        // server type selector.
         return PREMIUM;
     } else {
         return ADVANCED;
@@ -72,8 +72,8 @@ function getDefaultType(defaultHsUrl) {
 
 export default class ServerTypeSelector extends React.PureComponent {
     static propTypes = {
-        // The default HS URL as another way to set the initially selected type.
-        defaultHsUrl: PropTypes.string,
+        // The default selected type.
+        selected: PropTypes.string,
         // Handler called when the selected type changes.
         onChange: PropTypes.func.isRequired,
     }
@@ -82,20 +82,12 @@ export default class ServerTypeSelector extends React.PureComponent {
         super(props);
 
         const {
-            defaultHsUrl,
-            onChange,
+            selected,
         } = props;
-        const type = getDefaultType(defaultHsUrl);
+
         this.state = {
-            selected: type,
+            selected,
         };
-        if (onChange) {
-            // FIXME: Supply a second 'initial' param here to flag that this is
-            // initialising the value rather than from user interaction
-            // (which sometimes we'll want to ignore). Must be a better way
-            // to do this.
-            onChange(type, true);
-        }
     }
 
     updateSelectedType(type) {

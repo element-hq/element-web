@@ -282,18 +282,10 @@ const RoomSubList = React.createClass({
         this.setState({scrollTop: this.refs.scroller.getScrollTop()});
     },
 
-    _getRenderItems: function() {
-        // try our best to not create a new array
-        // because LazyRenderList rerender when the items prop
-        // is not the same object as the previous value
-        const {list, extraTiles} = this.props;
-        if (!extraTiles || !extraTiles.length) {
-            return list;
-        }
-        if (!list || list.length) {
-            return extraTiles;
-        }
-        return list.concat(extraTiles);
+    _canUseLazyListRendering() {
+        // for now disable lazy rendering as they are already rendered tiles
+        // not rooms like props.list we pass to LazyRenderList
+        return !this.props.extraTiles || !this.props.extraTiles.length;
     },
 
     render: function() {
@@ -310,7 +302,7 @@ const RoomSubList = React.createClass({
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
                 </div>;
-            } else {
+            } else if (this._canUseLazyListRendering()) {
                 return <div ref="subList" className={subListClasses}>
                     {this._getHeaderJsx(isCollapsed)}
                     <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
@@ -319,7 +311,16 @@ const RoomSubList = React.createClass({
                             height={ this.state.scrollerHeight }
                             renderItem={ this.makeRoomTile }
                             itemHeight={34}
-                            items={this._getRenderItems()} />
+                            items={ this.props.list } />
+                    </IndicatorScrollbar>
+                </div>;
+            } else {
+                const roomTiles = this.props.list.map(r => this.makeRoomTile(r));
+                const tiles = roomTiles.concat(this.props.extraTiles);
+                return <div ref="subList" className={subListClasses}>
+                    {this._getHeaderJsx(isCollapsed)}
+                    <IndicatorScrollbar ref="scroller" className="mx_RoomSubList_scroll" onScroll={ this._onScroll }>
+                        { tiles }
                     </IndicatorScrollbar>
                 </div>;
             }

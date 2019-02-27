@@ -110,6 +110,24 @@ export const CommandMap = {
         },
     }),
 
+    roomnick: new Command({
+        name: 'roomnick',
+        args: '<display_name>',
+        description: _td('Changes your display nickname in the current room only'),
+        runFn: function(roomId, args) {
+            if (args) {
+                const cli = MatrixClientPeg.get();
+                const ev = cli.getRoom(roomId).currentState.getStateEvents('m.room.member', cli.getUserId());
+                const content = {
+                    ...ev ? ev.getContent() : { membership: 'join' },
+                    displayname: args,
+                };
+                return success(cli.sendStateEvent(roomId, 'm.room.member', content, cli.getUserId()));
+            }
+            return reject(this.getUsage());
+        },
+    }),
+
     tint: new Command({
         name: 'tint',
         args: '<color1> [<color2>]',

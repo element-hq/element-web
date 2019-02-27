@@ -28,19 +28,19 @@ limitations under the License.
         padding: 0;
 
         li.mx_TopLeftMenu_icon_home::after {
-            mask-image: url('$(res)/img/feather-icons/home.svg');
+            mask-image: url('$(res)/img/feather-customised/home.svg');
         }
 
         li.mx_TopLeftMenu_icon_settings::after {
-            mask-image: url('$(res)/img/feather-icons/settings.svg');
+            mask-image: url('$(res)/img/feather-customised/settings.svg');
         }
 
         li.mx_TopLeftMenu_icon_signin::after {
-            mask-image: url('$(res)/img/feather-icons/sign-in.svg');
+            mask-image: url('$(res)/img/feather-customised/sign-in.svg');
         }
 
         li.mx_TopLeftMenu_icon_signout::after {
-            mask-image: url('$(res)/img/feather-icons/sign-out.svg');
+            mask-image: url('$(res)/img/feather-customised/sign-out.svg');
         }
 
         li::after {

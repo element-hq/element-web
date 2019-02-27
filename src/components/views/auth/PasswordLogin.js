@@ -40,6 +40,10 @@ class PasswordLogin extends React.Component {
         initialPhoneNumber: "",
         initialPassword: "",
         loginIncorrect: false,
+        // This is optional and only set if we used a server name to determine
+        // the HS URL via `.well-known` discovery. The server name is used
+        // instead of the HS URL when talking about where to "sign in to".
+        hsName: null,
         hsUrl: "",
         disableSubmit: false,
     }
@@ -54,6 +58,7 @@ class PasswordLogin extends React.Component {
             loginType: PasswordLogin.LOGIN_FIELD_MXID,
         };
 
+        this.onForgotPasswordClick = this.onForgotPasswordClick.bind(this);
         this.onSubmitForm = this.onSubmitForm.bind(this);
         this.onUsernameChanged = this.onUsernameChanged.bind(this);
         this.onUsernameBlur = this.onUsernameBlur.bind(this);
@@ -68,6 +73,12 @@ class PasswordLogin extends React.Component {
     componentWillMount() {
         this._passwordField = null;
         this._loginField = null;
+    }
+
+    onForgotPasswordClick(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.props.onForgotPasswordClick();
     }
 
     onSubmitForm(ev) {
@@ -240,7 +251,7 @@ class PasswordLogin extends React.Component {
             forgotPasswordJsx = <span>
                 {_t('Not sure of your password? <a>Set a new one</a>', {}, {
                     a: sub => <a className="mx_Login_forgot"
-                        onClick={this.props.onForgotPasswordClick}
+                        onClick={this.onForgotPasswordClick}
                         href="#"
                     >
                         {sub}
@@ -249,14 +260,20 @@ class PasswordLogin extends React.Component {
             </span>;
         }
 
-        let signInToText = _t('Sign in');
-        try {
-            const parsedHsUrl = new URL(this.props.hsUrl);
-            signInToText = _t('Sign in to %(serverName)s', {
-                serverName: parsedHsUrl.hostname,
+        let signInToText = _t('Sign in to your Matrix account');
+        if (this.props.hsName) {
+            signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
+                serverName: this.props.hsName,
             });
-        } catch (e) {
-            // ignore
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                signInToText = _t('Sign in to your Matrix account on %(serverName)s', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
         }
 
         let editLink = null;
@@ -338,6 +355,8 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: PropTypes.func,
     onPasswordChanged: PropTypes.func,
     loginIncorrect: PropTypes.bool,
+    hsName: PropTypes.string,
+    hsUrl: PropTypes.string,
     disableSubmit: PropTypes.bool,
 };
 

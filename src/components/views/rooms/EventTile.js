@@ -32,7 +32,6 @@ import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
-import {makeEventPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
 
@@ -65,6 +64,7 @@ const stateEventTileTypes = {
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
+    'm.room.related_groups': 'messages.TextualEvent',
 };
 
 function getHandlerTile(ev) {
@@ -320,14 +320,18 @@ module.exports = withMatrixClient(React.createClass({
 
         const {tile, replyThread} = this.refs;
 
+        let e2eInfoCallback = null;
+        if (this.props.mxEvent.isEncrypted()) e2eInfoCallback = () => this.onCryptoClicked();
+
         ContextualMenu.createMenu(MessageContextMenu, {
             chevronOffset: 10,
             mxEvent: this.props.mxEvent,
             left: x,
             top: y,
+            permalinkCreator: this.props.permalinkCreator,
             eventTileOps: tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined,
             collapseReplyThread: replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined,
-            e2eInfoCallback: () => this.onCryptoClicked(),
+            e2eInfoCallback: e2eInfoCallback,
             onFinished: function() {
                 self.setState({menu: false});
             },
@@ -540,7 +544,10 @@ module.exports = withMatrixClient(React.createClass({
             mx_EventTile_redacted: isRedacted,
         });
 
-        const permalink = makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId());
+        let permalink = "#";
+        if (this.props.permalinkCreator) {
+            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+        }
 
         const readAvatars = this.getReadAvatars();
 
@@ -693,6 +700,15 @@ module.exports = withMatrixClient(React.createClass({
 
             case 'reply':
             case 'reply_preview': {
+                let thread;
+                if (this.props.tileShape === 'reply_preview') {
+                    thread = ReplyThread.makeThread(
+                        this.props.mxEvent,
+                        this.props.onWidgetLoad,
+                        this.props.permalinkCreator,
+                        'replyThread',
+                    );
+                }
                 return (
                     <div className={classes}>
                         { avatar }
@@ -702,10 +718,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
-                            {
-                                this.props.tileShape === 'reply_preview'
-                                && ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread')
-                            }
+                            { thread }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
@@ -717,6 +730,12 @@ module.exports = withMatrixClient(React.createClass({
                 );
             }
             default: {
+                const thread = ReplyThread.makeThread(
+                    this.props.mxEvent,
+                    this.props.onWidgetLoad,
+                    this.props.permalinkCreator,
+                    'replyThread',
+                );
                 return (
                     <div className={classes}>
                         <div className="mx_EventTile_msgOption">
@@ -728,7 +747,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
-                            { ReplyThread.makeThread(this.props.mxEvent, this.props.onWidgetLoad, 'replyThread') }
+                            { thread }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}

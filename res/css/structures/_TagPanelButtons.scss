@@ -24,12 +24,12 @@ limitations under the License.
 }
 
 .mx_TagPanelButtons > .mx_GroupsButton:before {
-    mask: url('$(res)/img/feather-icons/users.svg');
+    mask: url('$(res)/img/feather-customised/users.svg');
     mask-position: center 11px;
 }
 
 .mx_TagPanelButtons > .mx_TagPanelButtons_report:before {
-    mask: url('$(res)/img/feather-icons/life-buoy.svg');
+    mask: url('$(res)/img/feather-customised/life-buoy.svg');
     mask-position: center 9px;
 }
 

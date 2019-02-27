@@ -32,6 +32,7 @@ export default class RightPanel extends React.Component {
         return {
             roomId: React.PropTypes.string, // if showing panels for a given room, this is set
             groupId: React.PropTypes.string, // if showing panels for a given group, this is set
+            user: React.PropTypes.object,
         };
     }
 
@@ -55,7 +56,7 @@ export default class RightPanel extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            phase: this.props.groupId ? RightPanel.Phase.GroupMemberList : RightPanel.Phase.RoomMemberList,
+            phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
         };
         this.onAction = this.onAction.bind(this);
@@ -69,11 +70,24 @@ export default class RightPanel extends React.Component {
         }, 500);
     }
 
+    _getPhaseFromProps() {
+        if (this.props.groupId) {
+            return RightPanel.Phase.GroupMemberList;
+        } else if (this.props.user) {
+            return RightPanel.Phase.RoomMemberInfo;
+        } else {
+            return RightPanel.Phase.RoomMemberList;
+        }
+    }
+
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
+        if (this.props.user) {
+            this.setState({member: this.props.user});
+        }
     }
 
     componentWillUnmount() {

@@ -60,6 +60,7 @@ import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
+import AccessibleButton from '../elements/AccessibleButton';
 
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -627,7 +628,6 @@ export default class MessageComposerInput extends React.Component {
             }
             const inputState = {
                 marks: editorState.activeMarks,
-                isRichTextEnabled: this.state.isRichTextEnabled,
                 blockType,
             };
             this.props.onInputStateChanged(inputState);
@@ -685,20 +685,22 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichTextEnabled) return;
 
-        let editorState = null;
-        if (enabled) {
-            editorState = this.mdToRichEditorState(this.state.editorState);
-        } else {
-            editorState = this.richToMdEditorState(this.state.editorState);
-        }
-
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, editorState),
+            editorState: this.createEditorState(
+                enabled,
+                this.state.editorState,
+                this.state.isRichTextEnabled,
+            ),
             isRichTextEnabled: enabled,
-        }, ()=>{
+        }, () => {
             this._editor.focus();
+            if (this.props.onInputStateChanged) {
+                this.props.onInputStateChanged({
+                    isRichTextEnabled: enabled,
+                });
+            }
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
@@ -1193,7 +1195,7 @@ export default class MessageComposerInput extends React.Component {
 
             // Part of Replies fallback support - prepend the text we're sending
             // with the text we're replying to
-            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv, this.props.permalinkCreator);
             if (nestedReply) {
                 if (content.formatted_body) {
                     content.formatted_body = nestedReply.html + content.formatted_body;
@@ -1582,6 +1584,11 @@ export default class MessageComposerInput extends React.Component {
             placeholder = undefined;
         }
 
+        const markdownClasses = classNames({
+            mx_MessageComposer_input_markdownIndicator: true,
+            mx_MessageComposer_markdownDisabled: this.state.isRichTextEnabled,
+        });
+
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
@@ -1596,10 +1603,10 @@ export default class MessageComposerInput extends React.Component {
                     />
                 </div>
                 <div className={className}>
-                    <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
-                         onMouseDown={this.onMarkdownToggleClicked}
-                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
-                         src={require(`../../../../res/img/button-md-${!this.state.isRichTextEnabled}.png`)} />
+                    <AccessibleButton className={markdownClasses}
+                        onClick={this.onMarkdownToggleClicked}
+                        title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                    />
                     <Editor ref={this._collectEditor}
                             dir="auto"
                             className="mx_MessageComposer_editor"

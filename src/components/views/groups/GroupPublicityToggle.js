@@ -68,7 +68,9 @@ export default React.createClass({
     render() {
         const GroupTile = sdk.getComponent('groups.GroupTile');
         return <div className="mx_GroupPublicity_toggle">
-            <GroupTile groupId={this.props.groupId} showDescription={false} avatarHeight={40} />
+            <GroupTile groupId={this.props.groupId} showDescription={false}
+                       avatarHeight={40} draggable={false}
+            />
             <ToggleSwitch checked={this.state.isGroupPublicised}
                           disabled={!this.state.ready || this.state.busy}
                           onChange={this._onPublicityToggle} />

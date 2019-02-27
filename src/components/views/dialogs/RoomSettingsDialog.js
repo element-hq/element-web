@@ -18,11 +18,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Tab, TabbedView} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
-import AdvancedRoomSettingsTab from "../settings/tabs/AdvancedRoomSettingsTab";
-import RolesRoomSettingsTab from "../settings/tabs/RolesRoomSettingsTab";
-import GeneralRoomSettingsTab from "../settings/tabs/GeneralRoomSettingsTab";
-import SecurityRoomSettingsTab from "../settings/tabs/SecurityRoomSettingsTab";
+import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
+import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
+import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
+import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import sdk from "../../../index";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
@@ -60,9 +61,10 @@ export default class RoomSettingsDialog extends React.Component {
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
+        const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
         return (
             <BaseDialog className='mx_RoomSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Room Settings")}>
+                        onFinished={this.props.onFinished} title={_t("Room Settings - %(roomName)s", {roomName})}>
                 <div className='ms_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} />
                 </div>

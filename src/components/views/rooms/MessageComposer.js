@@ -68,6 +68,7 @@ export default class MessageComposer extends React.Component {
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
+            canSendMessages: this.props.room.maySendMessage(),
         };
     }
 
@@ -119,6 +120,9 @@ export default class MessageComposer extends React.Component {
 
         if (ev.getType() === 'm.room.tombstone') {
             this.setState({tombstone: this._getRoomTombstone()});
+        }
+        if (ev.getType() === 'm.room.power_levels') {
+            this.setState({canSendMessages: this.props.room.maySendMessage()});
         }
     }
 
@@ -257,6 +261,8 @@ export default class MessageComposer extends React.Component {
     }
 
     onInputStateChanged(inputState) {
+        // Merge the new input state with old to support partial updates
+        inputState = Object.assign({}, this.state.inputState, inputState);
         this.setState({inputState});
     }
 
@@ -357,38 +363,7 @@ export default class MessageComposer extends React.Component {
                 </AccessibleButton>;
         }
 
-        const canSendMessages = !this.state.tombstone &&
-            this.props.room.maySendMessage();
-
-        // TODO: Remove temporary logging for riot-web#7838
-        // Note: we rip apart the power level event ourselves because we don't want to
-        // log too much data about it - just the bits we care about. Many of the variables
-        // logged here are to help figure out where in the stack the 'cannot post in room'
-        // warning is coming from. This means logging various numbers from the PL event to
-        // verify RoomState._maySendEventOfType is doing the right thing.
-        const room = this.props.room;
-        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-        let plEventString = "<no power level event>";
-        if (plEvent) {
-            const content = plEvent.getContent();
-            if (!content) {
-                plEventString = "<no event content>";
-            } else {
-                const stringifyFalsey = (v) => v === null ? '<null>' : (v === undefined ? '<undefined>' : v);
-                const actualUserPl = stringifyFalsey(content.users ? content.users[room.myUserId] : "<no users in content>");
-                const usersPl = stringifyFalsey(content.users_default);
-                const actualEventPl = stringifyFalsey(content.events ? content.events['m.room.message'] : "<no events in content>");
-                const eventPl = stringifyFalsey(content.events_default);
-                plEventString = `actualUserPl=${actualUserPl} defaultUserPl=${usersPl} actualEventPl=${actualEventPl} defaultEventPl=${eventPl}`;
-            }
-        }
-        console.log(
-            `[riot-web#7838] renderComposer() hasTombstone=${!!this.state.tombstone} maySendMessage=${room.maySendMessage()}` +
-            ` myMembership=${room.getMyMembership()} maySendEvent=${room.currentState.maySendEvent('m.room.message', room.myUserId)}` +
-            ` myUserId=${room.myUserId} roomId=${room.roomId} hasPlEvent=${!!plEvent} powerLevels='${plEventString}'`
-        );
-
-        if (canSendMessages) {
+        if (!this.state.tombstone && this.state.canSendMessages) {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
@@ -441,7 +416,8 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
-                    onInputStateChanged={this.onInputStateChanged} />,
+                    onInputStateChanged={this.onInputStateChanged}
+                    permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
                 stickerpickerButton,
                 uploadButton,
@@ -467,8 +443,6 @@ export default class MessageComposer extends React.Component {
                 </div>
             </div>);
         } else {
-            // TODO: Remove temporary logging for riot-web#7838
-            console.log("[riot-web#7838] Falling back to showing cannot post in room error");
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
                     { _t('You do not have permission to post to this room') }
@@ -499,15 +473,16 @@ export default class MessageComposer extends React.Component {
                 <div className="mx_MessageComposer_formatbar_wrapper">
                     <div className="mx_MessageComposer_formatbar">
                         { formatButtons }
-                        <div style={{flex: 1}}></div>
-                        <img title={this.state.inputState.isRichTextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
-                             onMouseDown={this.onToggleMarkdownClicked}
-                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                            src={require(`../../../../res/img/button-md-${!this.state.inputState.isRichTextEnabled}.png`)} />
+                        <div style={{ flex: 1 }}></div>
+                        <AccessibleButton className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
+                            onClick={this.onToggleMarkdownClicked}
+                            title={_t("Markdown is disabled")}
+                        />
                         <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
-                             onClick={this.onToggleFormattingClicked}
-                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                             src={require("../../../../res/img/icon-text-cancel.svg")} />
+                            onClick={this.onToggleFormattingClicked}
+                            className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                            src={require("../../../../res/img/icon-text-cancel.svg")}
+                        />
                     </div>
                 </div>;
         }

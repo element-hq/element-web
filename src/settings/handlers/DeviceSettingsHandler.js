@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from "../../MatrixClientPeg";
+import {SettingLevel} from "../SettingsStore";
 
 /**
  * Gets and sets settings at the "device" level for the current device.
@@ -27,10 +29,12 @@ export default class DeviceSettingsHandler extends SettingsHandler {
     /**
      * Creates a new device settings handler
      * @param {string[]} featureNames The names of known features.
+     * @param {WatchManager} watchManager The watch manager to notify updates to
      */
-    constructor(featureNames) {
+    constructor(featureNames, watchManager) {
         super();
         this._featureNames = featureNames;
+        this._watchers = watchManager;
     }
 
     getValue(settingName, roomId) {
@@ -66,18 +70,22 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         // Special case notifications
         if (settingName === "notificationsEnabled") {
             localStorage.setItem("notifications_enabled", newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "notificationBodyEnabled") {
             localStorage.setItem("notifications_body_enabled", newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "audioNotificationsEnabled") {
             localStorage.setItem("audio_notifications_enabled", newValue);
+            this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }
 
         const settings = this._getSettings() || {};
         settings[settingName] = newValue;
         localStorage.setItem("mx_local_settings", JSON.stringify(settings));
+        this._watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
 
         return Promise.resolve();
     }
@@ -88,6 +96,14 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     isSupported() {
         return localStorage !== undefined && localStorage !== null;
+    }
+
+    watchSetting(settingName, roomId, cb) {
+        this._watchers.watchSetting(settingName, roomId, cb);
+    }
+
+    unwatchSetting(cb) {
+        this._watchers.unwatchSetting(cb);
     }
 
     _getSettings() {
@@ -111,5 +127,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     _writeFeature(featureName, enabled) {
         localStorage.setItem("mx_labs_feature_" + featureName, enabled);
+        this._watchers.notifyUpdate(featureName, null, enabled);
     }
 }

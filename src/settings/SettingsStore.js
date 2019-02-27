@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,8 +24,10 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
+import dis from '../dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
+import {WatchManager} from "./WatchManager";
 
 /**
  * Represents the various setting levels supported by the SettingsStore.
@@ -41,6 +44,8 @@ export const SettingLevel = {
     DEFAULT: "default",
 };
 
+const defaultWatchManager = new WatchManager();
+
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings = {};
 const invertedDefaultSettings = {};
@@ -56,11 +61,11 @@ for (const key of Object.keys(SETTINGS)) {
 }
 
 const LEVEL_HANDLERS = {
-    "device": new DeviceSettingsHandler(featureNames),
-    "room-device": new RoomDeviceSettingsHandler(),
-    "room-account": new RoomAccountSettingsHandler(),
-    "account": new AccountSettingsHandler(),
-    "room": new RoomSettingsHandler(),
+    "device": new DeviceSettingsHandler(featureNames, defaultWatchManager),
+    "room-device": new RoomDeviceSettingsHandler(defaultWatchManager),
+    "room-account": new RoomAccountSettingsHandler(defaultWatchManager),
+    "account": new AccountSettingsHandler(defaultWatchManager),
+    "room": new RoomSettingsHandler(defaultWatchManager),
     "config": new ConfigSettingsHandler(),
     "default": new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
@@ -98,6 +103,109 @@ const LEVEL_ORDER = [
  * be enabled).
  */
 export default class SettingsStore {
+    // We support watching settings for changes, and do this by tracking which callbacks have
+    // been given to us. We end up returning the callbackRef to the caller so they can unsubscribe
+    // at a later point.
+    //
+    // We also maintain a list of monitors which are special watchers: they cause dispatches
+    // when the setting changes. We track which rooms we're monitoring though to ensure we
+    // don't duplicate updates on the bus.
+    static _watchers = {}; // { callbackRef => { callbackFn } }
+    static _monitors = {}; // { settingName => { roomId => callbackRef } }
+
+    /**
+     * Watches for changes in a particular setting. This is done without any local echo
+     * wrapping and fires whenever a change is detected in a setting's value, at any level.
+     * Watching is intended to be used in scenarios where the app needs to react to changes
+     * made by other devices. It is otherwise expected that callers will be able to use the
+     * Controller system or track their own changes to settings. Callers should retain the
+     * returned reference to later unsubscribe from updates.
+     * @param {string} settingName The setting name to watch
+     * @param {String} roomId The room ID to watch for changes in. May be null for 'all'.
+     * @param {function} callbackFn A function to be called when a setting change is
+     * detected. Five arguments can be expected: the setting name, the room ID (may be null),
+     * the level the change happened at, the new value at the given level, and finally the new
+     * value for the setting regardless of level. The callback is responsible for determining
+     * if the change in value is worthwhile enough to react upon.
+     * @returns {string} A reference to the watcher that was employed.
+     */
+    static watchSetting(settingName, roomId, callbackFn) {
+        const setting = SETTINGS[settingName];
+        const originalSettingName = settingName;
+        if (!setting) throw new Error(`${settingName} is not a setting`);
+
+        if (setting.invertedSettingName) {
+            settingName = setting.invertedSettingName;
+        }
+
+        const watcherId = `${new Date().getTime()}_${settingName}_${roomId}`;
+
+        const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
+            const newValue = SettingsStore.getValue(originalSettingName);
+            callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
+        };
+
+        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'}`);
+        SettingsStore._watchers[watcherId] = localizedCallback;
+        defaultWatchManager.watchSetting(settingName, roomId, localizedCallback);
+
+        return watcherId;
+    }
+
+    /**
+     * Stops the SettingsStore from watching a setting. This is a no-op if the watcher
+     * provided is not found.
+     * @param {string} watcherReference The watcher reference (received from #watchSetting)
+     * to cancel.
+     */
+    static unwatchSetting(watcherReference) {
+        if (!SettingsStore._watchers[watcherReference]) return;
+
+        defaultWatchManager.unwatchSetting(SettingsStore._watchers[watcherReference]);
+        delete SettingsStore._watchers[watcherReference];
+    }
+
+    /**
+     * Sets up a monitor for a setting. This behaves similar to #watchSetting except instead
+     * of making a call to a callback, it forwards all changes to the dispatcher. Callers can
+     * expect to listen for the 'setting_updated' action with an object containing settingName,
+     * roomId, level, newValueAtLevel, and newValue.
+     * @param {string} settingName The setting name to monitor.
+     * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
+     */
+    static monitorSetting(settingName, roomId) {
+        if (!this._monitors[settingName]) this._monitors[settingName] = {};
+
+        const registerWatcher = () => {
+            this._monitors[settingName][roomId] = SettingsStore.watchSetting(
+                settingName, roomId, (settingName, inRoomId, level, newValueAtLevel, newValue) => {
+                    dis.dispatch({
+                        action: 'setting_updated',
+                        settingName,
+                        roomId: inRoomId,
+                        level,
+                        newValueAtLevel,
+                        newValue,
+                    });
+                },
+            );
+        };
+
+        const hasRoom = Object.keys(this._monitors[settingName]).find((r) => r === roomId || r === null);
+        if (!hasRoom) {
+            registerWatcher();
+        } else {
+            if (roomId === null) {
+                // Unregister all existing watchers and register the new one
+                for (const roomId of Object.keys(this._monitors[settingName])) {
+                    SettingsStore.unwatchSetting(this._monitors[settingName][roomId]);
+                }
+                this._monitors[settingName] = {};
+                registerWatcher();
+            } // else a watcher is already registered for the room, so don't bother registering it again
+        }
+    }
+
     /**
      * Gets the translated display name for a given setting
      * @param {string} settingName The setting to look up.

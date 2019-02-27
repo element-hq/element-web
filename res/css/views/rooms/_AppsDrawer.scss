@@ -144,39 +144,39 @@ $AppsDrawerBodyHeight: 273px;
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_minimise {
-    mask-image: url('$(res)/img/feather-icons/widget/minimise.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/minimise.svg');
     background-color: $accent-color;
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_maximise {
-    mask-image: url('$(res)/img/feather-icons/widget/maximise.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/maximise.svg');
     background-color: $accent-color;
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_reload {
-    mask-image: url('$(res)/img/feather-icons/widget/refresh.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/refresh.svg');
     mask-size: 100%;
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
-    mask-image: url('$(res)/img/feather-icons/widget/external-link.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_snapshot {
-    mask-image: url('$(res)/img/feather-icons/widget/camera.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/camera.svg');
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_edit {
-    mask-image: url('$(res)/img/feather-icons/widget/edit.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/edit.svg');
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_delete {
-    mask-image: url('$(res)/img/feather-icons/widget/bin.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/bin.svg');
     background-color: $warning-color;
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_cancel {
-    mask-image: url('$(res)/img/feather-icons/widget/x-circle.svg');
+    mask-image: url('$(res)/img/feather-customised/widget/x-circle.svg');
 }
 
 /* delete ? */

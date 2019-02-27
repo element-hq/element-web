@@ -46,25 +46,28 @@ module.exports = React.createClass({
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
         minPasswordLength: PropTypes.number,
-        onError: PropTypes.func,
+        onValidationChange: PropTypes.func,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
         onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
+        // This is optional and only set if we used a server name to determine
+        // the HS URL via `.well-known` discovery. The server name is used
+        // instead of the HS URL when talking about "your account".
+        hsName: PropTypes.string,
         hsUrl: PropTypes.string,
     },
 
     getDefaultProps: function() {
         return {
             minPasswordLength: 6,
-            onError: function(e) {
-                console.error(e);
-            },
+            onValidationChange: console.error,
         };
     },
 
     getInitialState: function() {
         return {
-            fieldValid: {},
+            // Field error codes by field ID
+            fieldErrors: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
         };
@@ -77,12 +80,12 @@ module.exports = React.createClass({
         // the error that ends up being displayed
         // is the one from the first invalid field.
         // It's not super ideal that this just calls
-        // onError once for each invalid field.
+        // onValidationChange once for each invalid field.
+        this.validateField(FIELD_PHONE_NUMBER, ev.type);
+        this.validateField(FIELD_EMAIL, ev.type);
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
         this.validateField(FIELD_PASSWORD, ev.type);
         this.validateField(FIELD_USERNAME, ev.type);
-        this.validateField(FIELD_PHONE_NUMBER, ev.type);
-        this.validateField(FIELD_EMAIL, ev.type);
 
         const self = this;
         if (this.allFieldsValid()) {
@@ -130,9 +133,9 @@ module.exports = React.createClass({
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
     allFieldsValid: function() {
-        const keys = Object.keys(this.state.fieldValid);
+        const keys = Object.keys(this.state.fieldErrors);
         for (let i = 0; i < keys.length; ++i) {
-            if (this.state.fieldValid[keys[i]] == false) {
+            if (this.state.fieldErrors[keys[i]]) {
                 return false;
             }
         }
@@ -202,21 +205,29 @@ module.exports = React.createClass({
                 }
                 break;
             case FIELD_PASSWORD_CONFIRM:
-                this.markFieldValid(
-                    fieldID, pwd1 == pwd2,
-                    "RegistrationForm.ERR_PASSWORD_MISMATCH",
-                );
+                if (allowEmpty && pwd2 === "") {
+                    this.markFieldValid(fieldID, true);
+                } else {
+                    this.markFieldValid(
+                        fieldID, pwd1 == pwd2,
+                        "RegistrationForm.ERR_PASSWORD_MISMATCH",
+                    );
+                }
                 break;
         }
     },
 
-    markFieldValid: function(fieldID, val, errorCode) {
-        const fieldValid = this.state.fieldValid;
-        fieldValid[fieldID] = val;
-        this.setState({fieldValid: fieldValid});
-        if (!val) {
-            this.props.onError(errorCode);
+    markFieldValid: function(fieldID, valid, errorCode) {
+        const { fieldErrors } = this.state;
+        if (valid) {
+            fieldErrors[fieldID] = null;
+        } else {
+            fieldErrors[fieldID] = errorCode;
         }
+        this.setState({
+            fieldErrors,
+        });
+        this.props.onValidationChange(fieldErrors);
     },
 
     fieldElementById(fieldID) {
@@ -236,7 +247,7 @@ module.exports = React.createClass({
 
     _classForField: function(fieldID, ...baseClasses) {
         let cls = baseClasses.join(' ');
-        if (this.state.fieldValid[fieldID] === false) {
+        if (this.state.fieldErrors[fieldID]) {
             if (cls) cls += ' ';
             cls += 'error';
         }
@@ -295,14 +306,20 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let yourMatrixAccountText = _t('Create your account');
-        try {
-            const parsedHsUrl = new URL(this.props.hsUrl);
-            yourMatrixAccountText = _t('Create your %(serverName)s account', {
-                serverName: parsedHsUrl.hostname,
+        let yourMatrixAccountText = _t('Create your Matrix account');
+        if (this.props.hsName) {
+            yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+                serverName: this.props.hsName,
             });
-        } catch (e) {
-            // ignore
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                // ignore
+            }
         }
 
         let editLink = null;
@@ -310,7 +327,7 @@ module.exports = React.createClass({
             editLink = <a className="mx_AuthBody_editServerDetails"
                 href="#" onClick={this.props.onEditServerDetailsClick}
             >
-                {_t('Edit')}
+                {_t('Change')}
             </a>;
         }
 

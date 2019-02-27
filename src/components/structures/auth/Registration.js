@@ -48,31 +48,46 @@ module.exports = React.createClass({
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
         idSid: PropTypes.string,
+        // The default server name to use when the user hasn't specified
+        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
+        // via `.well-known` discovery. The server name is used instead of the
+        // HS URL when talking about "your account".
+        defaultServerName: PropTypes.string,
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
+        skipServerDetails: PropTypes.bool,
         brand: PropTypes.string,
         email: PropTypes.string,
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
+        const serverType = ServerType.getTypeFromHsUrl(this.props.customHsUrl);
+
         const customURLsAllowed = !SdkConfig.get()['disable_custom_urls'];
-        let initialPhase = PHASE_SERVER_DETAILS;
+        let initialPhase = this.getDefaultPhaseForServerType(serverType);
         if (
             // if we have these two, skip to the good bit
             // (they could come in from the URL params in a
             // registration email link)
             (this.props.clientSecret && this.props.sessionId) ||
-            // or if custom URLs aren't allowed, skip them
-            !customURLsAllowed
+            // if custom URLs aren't allowed, skip to form
+            !customURLsAllowed ||
+            // if other logic says to, skip to form
+            this.props.skipServerDetails
         ) {
+            // TODO: It would seem we've now added enough conditions here that the initial
+            // phase will _always_ be the form. It's tempting to remove the complexity and
+            // just do that, but we keep tweaking and changing auth, so let's wait until
+            // things settle a bit.
+            // Filed https://github.com/vector-im/riot-web/issues/8886 to track this.
             initialPhase = PHASE_REGISTRATION;
         }
 
@@ -94,7 +109,7 @@ module.exports = React.createClass({
             // If we've been given a session ID, we're resuming
             // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
-            serverType: null,
+            serverType,
             hsUrl: this.props.customHsUrl,
             isUrl: this.props.customIsUrl,
             // Phase of the overall registration dialog.
@@ -122,7 +137,20 @@ module.exports = React.createClass({
         });
     },
 
-    onServerTypeChange(type, initial) {
+    getDefaultPhaseForServerType(type) {
+        switch (type) {
+            case ServerType.FREE: {
+                // Move directly to the registration phase since the server
+                // details are fixed.
+                return PHASE_REGISTRATION;
+            }
+            case ServerType.PREMIUM:
+            case ServerType.ADVANCED:
+                return PHASE_SERVER_DETAILS;
+        }
+    },
+
+    onServerTypeChange(type) {
         this.setState({
             serverType: type,
         });
@@ -136,10 +164,6 @@ module.exports = React.createClass({
                     hsUrl,
                     isUrl,
                 });
-                // Move directly to the registration phase since the server details are fixed.
-                this.setState({
-                    phase: PHASE_REGISTRATION,
-                });
                 break;
             }
             case ServerType.PREMIUM:
@@ -148,17 +172,13 @@ module.exports = React.createClass({
                     hsUrl: this.props.defaultHsUrl,
                     isUrl: this.props.defaultIsUrl,
                 });
-                // if this is the initial value from the control and we're
-                // already in the registration phase, don't go back to the
-                // server details phase (but do if it's actually a change resulting
-                // from user interaction).
-                if (!initial || !this.state.phase === PHASE_REGISTRATION) {
-                    this.setState({
-                        phase: PHASE_SERVER_DETAILS,
-                    });
-                }
                 break;
         }
+
+        // Reset the phase to default phase for the server type.
+        this.setState({
+            phase: this.getDefaultPhaseForServerType(type),
+        });
     },
 
     _replaceClient: async function() {
@@ -288,7 +308,19 @@ module.exports = React.createClass({
         });
     },
 
-    onFormValidationFailed: function(errCode) {
+    onFormValidationChange: function(fieldErrors) {
+        // `fieldErrors` is an object mapping field IDs to error codes when there is an
+        // error or `null` for no error, so the values array will be something like:
+        // `[ null, "RegistrationForm.ERR_PASSWORD_MISSING", null]`
+        // Find the first non-null error code and show that.
+        const errCode = Object.values(fieldErrors).find(value => !!value);
+        if (!errCode) {
+            this.setState({
+                errorText: null,
+            });
+            return;
+        }
+
         let errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
@@ -313,7 +345,7 @@ module.exports = React.createClass({
                 errMsg = _t('A phone number is required to register on this homeserver.');
                 break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = _t("Only use lower case letters, numbers and '=_-./'");
+                errMsg = _t("A username can only contain lower case letters, numbers and '=_-./'");
                 break;
             case "RegistrationForm.ERR_USERNAME_BLANK":
                 errMsg = _t('You need to enter a username.');
@@ -389,12 +421,9 @@ module.exports = React.createClass({
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
         if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
-            // if we've been given a custom HS URL we should actually pass that, so
-            // that the appropriate section is selected at the start to match the
-            // homeserver URL we're using
             return <div>
                 <ServerTypeSelector
-                    defaultHsUrl={this.props.customHsUrl || this.props.defaultHsUrl}
+                    selected={this.state.serverType}
                     onChange={this.onServerTypeChange}
                 />
             </div>;
@@ -436,7 +465,7 @@ module.exports = React.createClass({
 
         return <div>
             <ServerTypeSelector
-                defaultHsUrl={this.props.defaultHsUrl}
+                selected={this.state.serverType}
                 onChange={this.onServerTypeChange}
             />
             {serverDetails}
@@ -466,7 +495,9 @@ module.exports = React.createClass({
                 poll={true}
             />;
         } else if (this.state.busy || !this.state.flows) {
-            return <Spinner />;
+            return <div className="mx_AuthBody_spinner">
+                <Spinner />
+            </div>;
         } else {
             let onEditServerDetailsClick = null;
             // If custom URLs are allowed and we haven't selected the Free server type, wire
@@ -478,6 +509,14 @@ module.exports = React.createClass({
             ) {
                 onEditServerDetailsClick = this.onEditServerDetailsClick;
             }
+
+            // If the current HS URL is the default HS URL, then we can label it
+            // with the default HS name (if it exists).
+            let hsName;
+            if (this.state.hsUrl === this.props.defaultHsUrl) {
+                hsName = this.props.defaultServerName;
+            }
+
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -485,10 +524,11 @@ module.exports = React.createClass({
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
                 minPasswordLength={MIN_PASSWORD_LENGTH}
-                onError={this.onFormValidationFailed}
+                onValidationChange={this.onFormValidationChange}
                 onRegisterClick={this.onFormSubmit}
                 onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
+                hsName={hsName}
                 hsUrl={this.state.hsUrl}
             />;
         }
@@ -505,14 +545,9 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let signIn;
-        if (!this.state.doingUIAuth) {
-            signIn = (
-                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                    { _t('Sign in instead') }
-                </a>
-            );
-        }
+        const signIn = <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+            { _t('Sign in instead') }
+        </a>;
 
         return (
             <AuthPage>

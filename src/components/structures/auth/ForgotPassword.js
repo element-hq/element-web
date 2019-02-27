@@ -41,20 +41,22 @@ module.exports = React.createClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
+        // The default server name to use when the user hasn't specified
+        // one. If set, `defaultHsUrl` and `defaultHsUrl` were derived for this
+        // via `.well-known` discovery. The server name is used instead of the
+        // HS URL when talking about "your account".
+        defaultServerName: PropTypes.string,
+        // An error passed along from higher up explaining that something
+        // went wrong when finding the defaultHsUrl.
+        defaultServerDiscoveryError: PropTypes.string,
+
         defaultHsUrl: PropTypes.string,
         defaultIsUrl: PropTypes.string,
         customHsUrl: PropTypes.string,
         customIsUrl: PropTypes.string,
+
         onLoginClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
-
-        // The default server name to use when the user hasn't specified
-        // one. This is used when displaying the defaultHsUrl in the UI.
-        defaultServerName: PropTypes.string,
-
-        // An error passed along from higher up explaining that something
-        // went wrong when finding the defaultHsUrl.
-        defaultServerDiscoveryError: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -234,19 +236,25 @@ module.exports = React.createClass({
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
 
-        let yourMatrixAccountText = _t('Your account');
-        try {
-            const parsedHsUrl = new URL(this.state.enteredHsUrl);
-            yourMatrixAccountText = _t('Your account on %(serverName)s', {
-                serverName: parsedHsUrl.hostname,
+        let yourMatrixAccountText = _t('Your Matrix account');
+        if (this.state.enteredHsUrl === this.props.defaultHsUrl) {
+            yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
+                serverName: this.props.defaultServerName,
             });
-        } catch (e) {
-            errorText = <div className="mx_Login_error">{_t(
-                "The homeserver URL %(hsUrl)s doesn't seem to be valid URL. Please " +
-                "enter a valid URL including the protocol prefix.",
-            {
-                hsUrl: this.state.enteredHsUrl,
-            })}</div>;
+        } else {
+            try {
+                const parsedHsUrl = new URL(this.state.enteredHsUrl);
+                yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
+                    serverName: parsedHsUrl.hostname,
+                });
+            } catch (e) {
+                errorText = <div className="mx_Login_error">{_t(
+                    "The homeserver URL %(hsUrl)s doesn't seem to be valid URL. Please " +
+                    "enter a valid URL including the protocol prefix.",
+                {
+                    hsUrl: this.state.enteredHsUrl,
+                })}</div>;
+            }
         }
 
         // If custom URLs are allowed, wire up the server details edit link.

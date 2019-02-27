@@ -14,14 +14,51 @@ limitations under the License.
 import expect from 'expect';
 import peg from '../src/MatrixClientPeg';
 import {
-    makeEventPermalink,
     makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
-    pickServerCandidates,
+    RoomPermalinkCreator,
 } from "../src/matrix-to";
 import * as testUtils from "./test-utils";
 
+function mockRoom(roomId, members, serverACL) {
+    members.forEach(m => m.membership = "join");
+    const powerLevelsUsers = members.reduce((pl, member) => {
+        if (Number.isFinite(member.powerLevel)) {
+            pl[member.userId] = member.powerLevel;
+        }
+        return pl;
+    }, {});
+
+    return {
+        roomId,
+        getJoinedMembers: () => members,
+        getMember: (userId) => members.find(m => m.userId === userId),
+        currentState: {
+            getStateEvents: (type, key) => {
+                if (key) {
+                    return null;
+                }
+                let content;
+                switch (type) {
+                    case "m.room.server_acl":
+                        content = serverACL;
+                        break;
+                    case "m.room.power_levels":
+                        content = {users: powerLevelsUsers, users_default: 0};
+                        break;
+                }
+                if (content) {
+                    return {
+                        getContent: () => content,
+                    };
+                } else {
+                    return null;
+                }
+            },
+        },
+    };
+}
 
 describe('matrix-to', function() {
     let sandbox;
@@ -36,442 +73,345 @@ describe('matrix-to', function() {
         sandbox.restore();
     });
 
-    it('should pick no candidate servers when the room is not found', function() {
-        peg.get().getRoom = () => null;
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
-    });
-
     it('should pick no candidate servers when the room has no members', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, []);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should pick a candidate server for the highest power level user in the room', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:pl_50",
-                        powerLevel: 50,
-                    },
-                    {
-                        userId: "@alice:pl_75",
-                        powerLevel: 75,
-                    },
-                    {
-                        userId: "@alice:pl_95",
-                        powerLevel: 95,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(3);
-        expect(pickedServers[0]).toBe("pl_95");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:pl_50",
+                powerLevel: 50,
+            },
+            {
+                userId: "@alice:pl_75",
+                powerLevel: 75,
+            },
+            {
+                userId: "@alice:pl_95",
+                powerLevel: 95,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(3);
+        expect(creator._serverCandidates[0]).toBe("pl_95");
         // we don't check the 2nd and 3rd servers because that is done by the next test
     });
 
-    it('should pick candidate servers based on user population', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@bob:first",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@charlie:first",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:second",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@charlie:third",
-                        powerLevel: 0,
-                    },
-                ],
-            };
+    it('should change candidate server when highest power level user leaves the room', function() {
+        const member95 = {
+            userId: "@alice:pl_95",
+            powerLevel: 95,
         };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(3);
-        expect(pickedServers[0]).toBe("first");
-        expect(pickedServers[1]).toBe("second");
-        expect(pickedServers[2]).toBe("third");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:pl_50",
+                powerLevel: 50,
+            },
+            {
+                userId: "@alice:pl_75",
+                powerLevel: 75,
+            },
+            member95,
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates[0]).toBe("pl_95");
+        member95.membership = "left";
+        creator.onMembership({}, member95, "join");
+        expect(creator._serverCandidates[0]).toBe("pl_75");
+        member95.membership = "join";
+        creator.onMembership({}, member95, "left");
+        expect(creator._serverCandidates[0]).toBe("pl_95");
+    });
+
+    it('should pick candidate servers based on user population', function() {
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:first",
+                powerLevel: 0,
+            },
+            {
+                userId: "@bob:first",
+                powerLevel: 0,
+            },
+            {
+                userId: "@charlie:first",
+                powerLevel: 0,
+            },
+            {
+                userId: "@alice:second",
+                powerLevel: 0,
+            },
+            {
+                userId: "@bob:second",
+                powerLevel: 0,
+            },
+            {
+                userId: "@charlie:third",
+                powerLevel: 0,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(3);
+        expect(creator._serverCandidates[0]).toBe("first");
+        expect(creator._serverCandidates[1]).toBe("second");
+        expect(creator._serverCandidates[2]).toBe("third");
     });
 
     it('should pick prefer candidate servers with higher power levels', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@alice:second",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@charlie:third",
-                        powerLevel: 0,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(3);
-        expect(pickedServers[0]).toBe("first");
-        expect(pickedServers[1]).toBe("second");
-        expect(pickedServers[2]).toBe("third");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:first",
+                powerLevel: 100,
+            },
+            {
+                userId: "@alice:second",
+                powerLevel: 0,
+            },
+            {
+                userId: "@bob:second",
+                powerLevel: 0,
+            },
+            {
+                userId: "@charlie:third",
+                powerLevel: 0,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates.length).toBe(3);
+        expect(creator._serverCandidates[0]).toBe("first");
+        expect(creator._serverCandidates[1]).toBe("second");
+        expect(creator._serverCandidates[2]).toBe("third");
     });
 
     it('should pick a maximum of 3 candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:alpha",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@alice:bravo",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:charlie",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:delta",
-                        powerLevel: 0,
-                    },
-                    {
-                        userId: "@alice:echo",
-                        powerLevel: 0,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(3);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:alpha",
+                powerLevel: 100,
+            },
+            {
+                userId: "@alice:bravo",
+                powerLevel: 0,
+            },
+            {
+                userId: "@alice:charlie",
+                powerLevel: 0,
+            },
+            {
+                userId: "@alice:delta",
+                powerLevel: 0,
+            },
+            {
+                userId: "@alice:echo",
+                powerLevel: 0,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(3);
     });
 
     it('should not consider IPv4 hosts', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:127.0.0.1",
-                        powerLevel: 100,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:127.0.0.1",
+                powerLevel: 100,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should not consider IPv6 hosts', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:[::1]",
-                        powerLevel: 100,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:[::1]",
+                powerLevel: 100,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should not consider IPv4 hostnames with ports', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:127.0.0.1:8448",
-                        powerLevel: 100,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:127.0.0.1:8448",
+                powerLevel: 100,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should not consider IPv6 hostnames with ports', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:[::1]:8448",
-                        powerLevel: 100,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:[::1]:8448",
+                powerLevel: 100,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should work with hostnames with ports', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:example.org:8448",
-                        powerLevel: 100,
-                    },
-                ],
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(1);
-        expect(pickedServers[0]).toBe("example.org:8448");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:example.org:8448",
+                powerLevel: 100,
+            },
+        ]);
+
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(1);
+        expect(creator._serverCandidates[0]).toBe("example.org:8448");
     });
 
     it('should not consider servers explicitly denied by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: ["evilcorp.com", "*.evilcorp.com"],
-                                    allow: ["*"],
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:evilcorp.com",
+                powerLevel: 100,
+            },
+            {
+                userId: "@bob:chat.evilcorp.com",
+                powerLevel: 0,
+            },
+        ], {
+            deny: ["evilcorp.com", "*.evilcorp.com"],
+            allow: ["*"],
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should not consider servers not allowed by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: [],
-                                    allow: [], // implies "ban everyone"
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(0);
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:evilcorp.com",
+                powerLevel: 100,
+            },
+            {
+                userId: "@bob:chat.evilcorp.com",
+                powerLevel: 0,
+            },
+        ], {
+            deny: [],
+            allow: [], // implies "ban everyone"
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(0);
     });
 
     it('should consider servers not explicitly banned by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: ["*.evilcorp.com"], // evilcorp.com is still good though
-                                    allow: ["*"],
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(1);
-        expect(pickedServers[0]).toEqual("evilcorp.com");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:evilcorp.com",
+                powerLevel: 100,
+            },
+            {
+                userId: "@bob:chat.evilcorp.com",
+                powerLevel: 0,
+            },
+        ], {
+            deny: ["*.evilcorp.com"], // evilcorp.com is still good though
+            allow: ["*"],
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(1);
+        expect(creator._serverCandidates[0]).toEqual("evilcorp.com");
     });
 
     it('should consider servers not disallowed by ACLs', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:evilcorp.com",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:chat.evilcorp.com",
-                        powerLevel: 0,
-                    },
-                ],
-                currentState: {
-                    getStateEvents: (type, key) => {
-                        if (type !== "m.room.server_acl" || key !== "") return null;
-                        return {
-                            getContent: () => {
-                                return {
-                                    deny: [],
-                                    allow: ["evilcorp.com"], // implies "ban everyone else"
-                                };
-                            },
-                        };
-                    },
-                },
-            };
-        };
-        const pickedServers = pickServerCandidates("!somewhere:example.org");
-        expect(pickedServers).toBeTruthy();
-        expect(pickedServers.length).toBe(1);
-        expect(pickedServers[0]).toEqual("evilcorp.com");
+        const room = mockRoom(null, [
+            {
+                userId: "@alice:evilcorp.com",
+                powerLevel: 100,
+            },
+            {
+                userId: "@bob:chat.evilcorp.com",
+                powerLevel: 0,
+            },
+        ], {
+            deny: [],
+            allow: ["evilcorp.com"], // implies "ban everyone else"
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator._serverCandidates).toBeTruthy();
+        expect(creator._serverCandidates.length).toBe(1);
+        expect(creator._serverCandidates[0]).toEqual("evilcorp.com");
     });
 
     it('should generate an event permalink for room IDs with no candidate servers', function() {
-        peg.get().getRoom = () => null;
-        const result = makeEventPermalink("!somewhere:example.org", "$something:example.com");
+        const room = mockRoom("!somewhere:example.org", []);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        const result = creator.forEvent("$something:example.com");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com");
     });
 
     it('should generate an event permalink for room IDs with some candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                ],
-            };
-        };
-        const result = makeEventPermalink("!somewhere:example.org", "$something:example.com");
+        const room = mockRoom("!somewhere:example.org", [
+            {
+                userId: "@alice:first",
+                powerLevel: 100,
+            },
+            {
+                userId: "@bob:second",
+                powerLevel: 0,
+            },
+        ]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        const result = creator.forEvent("$something:example.com");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com?via=first&via=second");
     });
 
-    it('should generate a room permalink for room IDs with no candidate servers', function() {
-        peg.get().getRoom = () => null;
-        const result = makeRoomPermalink("!somewhere:example.org");
-        expect(result).toBe("https://matrix.to/#/!somewhere:example.org");
-    });
-
     it('should generate a room permalink for room IDs with some candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                ],
-            };
+        peg.get().getRoom = (roomId) => {
+            return mockRoom(roomId, [
+                {
+                    userId: "@alice:first",
+                    powerLevel: 100,
+                },
+                {
+                    userId: "@bob:second",
+                    powerLevel: 0,
+                },
+            ]);
         };
         const result = makeRoomPermalink("!somewhere:example.org");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org?via=first&via=second");
-    });
-
-    // Technically disallowed but we'll test it anyways
-    it('should generate an event permalink for room aliases with no candidate servers', function() {
-        peg.get().getRoom = () => null;
-        const result = makeEventPermalink("#somewhere:example.org", "$something:example.com");
-        expect(result).toBe("https://matrix.to/#/#somewhere:example.org/$something:example.com");
-    });
-
-    // Technically disallowed but we'll test it anyways
-    it('should generate an event permalink for room aliases without candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                ],
-            };
-        };
-        const result = makeEventPermalink("#somewhere:example.org", "$something:example.com");
-        expect(result).toBe("https://matrix.to/#/#somewhere:example.org/$something:example.com");
     });
 
     it('should generate a room permalink for room aliases with no candidate servers', function() {
@@ -481,19 +421,17 @@ describe('matrix-to', function() {
     });
 
     it('should generate a room permalink for room aliases without candidate servers', function() {
-        peg.get().getRoom = () => {
-            return {
-                getJoinedMembers: () => [
-                    {
-                        userId: "@alice:first",
-                        powerLevel: 100,
-                    },
-                    {
-                        userId: "@bob:second",
-                        powerLevel: 0,
-                    },
-                ],
-            };
+        peg.get().getRoom = (roomId) => {
+            return mockRoom(roomId, [
+                {
+                    userId: "@alice:first",
+                    powerLevel: 100,
+                },
+                {
+                    userId: "@bob:second",
+                    powerLevel: 0,
+                },
+            ]);
         };
         const result = makeRoomPermalink("#somewhere:example.org");
         expect(result).toBe("https://matrix.to/#/#somewhere:example.org");

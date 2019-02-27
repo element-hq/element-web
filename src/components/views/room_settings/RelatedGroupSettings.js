@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd.
+Copyright 2017, 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,61 +20,50 @@ import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import isEqual from 'lodash/isEqual';
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
-module.exports = React.createClass({
-    displayName: 'RelatedGroupSettings',
-
-    propTypes: {
+export default class RelatedGroupSettings extends React.Component {
+    static propTypes = {
         roomId: PropTypes.string.isRequired,
         canSetRelatedGroups: PropTypes.bool.isRequired,
         relatedGroupsEvent: PropTypes.instanceOf(MatrixEvent),
-    },
+    };
 
-    contextTypes: {
+    static contextTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient),
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            canSetRelatedGroups: false,
+    static defaultProps = {
+        canSetRelatedGroups: false,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            newGroupId: "",
+            newGroupsList: props.relatedGroupsEvent ? (props.relatedGroupsEvent.getContent().groups || []) : [],
         };
-    },
+    }
 
-    getInitialState: function() {
-        return {
-            newGroupsList: this.getInitialGroupList(),
-            newGroupId: null,
-        };
-    },
+    updateGroups(newGroupsList) {
+        this.context.matrixClient.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
+            groups: newGroupsList,
+        }, '').catch((err) => {
+            console.error(err);
+            Modal.createTrackedDialog('Error updating flair', '', ErrorDialog, {
+                title: _t("Error updating flair"),
+                description: _t(
+                    "There was an error updating the flair for this room. The server may not allow it or " +
+                    "a temporary error occurred.",
+                ),
+            });
+        });
+    }
 
-    getInitialGroupList: function() {
-        return this.props.relatedGroupsEvent ? (this.props.relatedGroupsEvent.getContent().groups || []) : [];
-    },
-
-    needsSaving: function() {
-        const cli = this.context.matrixClient;
-        const room = cli.getRoom(this.props.roomId);
-        if (!room.currentState.maySendStateEvent('m.room.related_groups', cli.getUserId())) return false;
-        return !isEqual(this.getInitialGroupList(), this.state.newGroupsList);
-    },
-
-    saveSettings: function() {
-        if (!this.needsSaving()) return Promise.resolve();
-
-        return this.context.matrixClient.sendStateEvent(
-            this.props.roomId,
-            'm.room.related_groups',
-            {
-                groups: this.state.newGroupsList,
-            },
-            '',
-        );
-    },
-
-    validateGroupId: function(groupId) {
+    validateGroupId(groupId) {
         if (!GROUP_ID_REGEX.test(groupId)) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Invalid related community ID', '', ErrorDialog, {
@@ -84,38 +73,32 @@ module.exports = React.createClass({
             return false;
         }
         return true;
-    },
+    }
 
-    onNewGroupChanged: function(newGroupId) {
+    onNewGroupChanged = (newGroupId) => {
         this.setState({ newGroupId });
-    },
+    };
 
-    onGroupAdded: function(groupId) {
+    onGroupAdded = (groupId) => {
         if (groupId.length === 0 || !this.validateGroupId(groupId)) {
             return;
         }
+        const newGroupsList = [...this.state.newGroupsList, groupId];
         this.setState({
-            newGroupsList: this.state.newGroupsList.concat([groupId]),
+            newGroupsList: newGroupsList,
             newGroupId: '',
         });
-    },
+        this.updateGroups(newGroupsList);
+    };
 
-    onGroupEdited: function(groupId, index) {
-        if (groupId.length === 0 || !this.validateGroupId(groupId)) {
-            return;
-        }
-        this.setState({
-            newGroupsList: Object.assign(this.state.newGroupsList, {[index]: groupId}),
-        });
-    },
-
-    onGroupDeleted: function(index) {
-        const newGroupsList = this.state.newGroupsList.slice();
-        newGroupsList.splice(index, 1);
+    onGroupDeleted = (index) => {
+        const group = this.state.newGroupsList[index];
+        const newGroupsList = this.state.newGroupsList.filter((g) => g !== group);
         this.setState({ newGroupsList });
-    },
+        this.updateGroups(newGroupsList);
+    };
 
-    render: function() {
+    render() {
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return <div>
@@ -123,10 +106,10 @@ module.exports = React.createClass({
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
                 newItem={this.state.newGroupId}
+                canRemove={this.props.canSetRelatedGroups}
                 canEdit={this.props.canSetRelatedGroups}
                 onNewItemChanged={this.onNewGroupChanged}
                 onItemAdded={this.onGroupAdded}
-                onItemEdited={this.onGroupEdited}
                 onItemRemoved={this.onGroupDeleted}
                 itemsLabel={_t('Showing flair for these communities:')}
                 noItemsLabel={_t('This room is not showing flair for any communities')}
@@ -135,5 +118,5 @@ module.exports = React.createClass({
                 )}
             />
         </div>;
-    },
-});
+    }
+}

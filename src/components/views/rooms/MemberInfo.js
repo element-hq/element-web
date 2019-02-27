@@ -980,12 +980,18 @@ module.exports = withMatrixClient(React.createClass({
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
+        let backButton;
+        if (this.props.member.roomId) {
+            backButton = (<AccessibleButton className="mx_MemberInfo_cancel"
+                onClick={this.onCancel}
+                title={_t('Close')}
+            />);
+        }
+
         return (
             <div className="mx_MemberInfo">
                     <div className="mx_MemberInfo_name">
-                        <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                            <img src={require("../../../../res/img/minimise.svg")} width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
-                        </AccessibleButton>
+                        { backButton }
                         { e2eIconElement }
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>

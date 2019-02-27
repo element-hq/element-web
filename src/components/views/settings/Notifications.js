@@ -28,7 +28,7 @@ import {
     PushRuleVectorState,
     ContentRules,
 } from '../../../notifications';
-import * as SdkConfig from "../../../SdkConfig";
+import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
 // TODO: this "view" component still has far too much application logic in it,
@@ -132,9 +132,9 @@ module.exports = React.createClass({
         });
     },
 
-    onEnableEmailNotificationsChange: function(address, event) {
+    onEnableEmailNotificationsChange: function(address, checked) {
         let emailPusherPromise;
-        if (event.target.checked) {
+        if (checked) {
             const data = {};
             data['brand'] = SdkConfig.get().brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);

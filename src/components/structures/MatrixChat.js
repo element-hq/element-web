@@ -245,6 +245,17 @@ export default React.createClass({
         return this.state.defaultIsUrl || "https://vector.im";
     },
 
+    /**
+     * Whether to skip the server details phase of registration and start at the
+     * actual form.
+     * @return {boolean}
+     *     If there was a configured default HS or default server name, skip the
+     *     the server details.
+     */
+    skipServerDetailsForRegistration() {
+        return !!this.state.defaultHsUrl;
+    },
+
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
@@ -1573,14 +1584,9 @@ export default React.createClass({
                     this._chatCreateOrReuse(userId);
                     return;
                 }
-
-                this._setPage(PageTypes.UserView);
                 this.notifyNewScreen('user/' + userId);
-                const member = new Matrix.RoomMember(null, userId);
-                dis.dispatch({
-                    action: 'view_user',
-                    member: member,
-                });
+                this.setState({currentUserId: userId});
+                this._setPage(PageTypes.UserView);
             });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
@@ -1887,9 +1893,11 @@ export default React.createClass({
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
+                    defaultServerName={this.getDefaultServerName()}
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
+                    skipServerDetails={this.skipServerDetailsForRegistration()}
                     brand={this.props.config.brand}
                     customHsUrl={this.getCurrentHsUrl()}
                     customIsUrl={this.getCurrentIsUrl()}
@@ -1923,6 +1931,7 @@ export default React.createClass({
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
+                    defaultServerName={this.getDefaultServerName()}
                     defaultServerDiscoveryError={this.state.defaultServerDiscoveryError}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
