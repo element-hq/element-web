@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from '../../MatrixClientPeg';
+import {WatchManager} from "../WatchManager";
+import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 
 /**
  * Gets and sets settings at the "account" level for the current user.
  * This handler does not make use of the roomId parameter.
  */
-export default class AccountSettingHandler extends SettingsHandler {
+export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
+    constructor() {
+        super();
+
+        this._watchers = new WatchManager();
+        this._onAccountData = this._onAccountData.bind(this);
+    }
+
+    initMatrixClient(oldClient, newClient) {
+        if (oldClient) {
+            oldClient.removeListener("accountData", this._onAccountData);
+        }
+
+        newClient.on("accountData", this._onAccountData);
+    }
+
+    _onAccountData(event) {
+        if (event.getType() === "org.matrix.preview_urls") {
+            let val = event.getContent()['disable'];
+            if (typeof(val) !== "boolean") {
+                val = null;
+            } else {
+                val = !val;
+            }
+
+            this._watchers.notifyUpdate("urlPreviewsEnabled", null, val);
+        } else if (event.getType() === "im.vector.web.settings") {
+            // We can't really discern what changed, so trigger updates for everything
+            for (const settingName of Object.keys(event.getContent())) {
+                this._watchers.notifyUpdate(settingName, null, event.getContent()[settingName]);
+            }
+        }
+    }
+
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
@@ -65,6 +100,14 @@ export default class AccountSettingHandler extends SettingsHandler {
     isSupported() {
         const cli = MatrixClientPeg.get();
         return cli !== undefined && cli !== null;
+    }
+
+    watchSetting(settingName, roomId, cb) {
+        this._watchers.watchSetting(settingName, roomId, cb);
+    }
+
+    unwatchSetting(cb) {
+        this._watchers.unwatchSetting(cb);
     }
 
     _getSettings(eventType = "im.vector.web.settings") {

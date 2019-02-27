@@ -170,6 +170,7 @@ module.exports = React.createClass({
                     width={24}
                     height={24}
                     resizeMethod="crop"
+                    viewUserOnClick={true}
                 />
             );
         });

@@ -271,6 +271,27 @@ module.exports = React.createClass({
         );
     },
 
+    _onClickSettings: function() {
+        dis.dispatch({
+            action: 'open_room_settings',
+            room_id: this.props.room.roomId,
+        });
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        }
+    },
+
+    _renderSettingsMenu: function() {
+        return (
+            <div>
+                <div className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings} >
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" />
+                    { _t('Settings') }
+                </div>
+            </div>
+        );
+    },
+
     _renderLeaveMenu: function(membership) {
         if (!membership) {
             return null;
@@ -350,7 +371,11 @@ module.exports = React.createClass({
 
         // Can't set notif level or tags on non-join rooms
         if (myMembership !== 'join') {
-            return this._renderLeaveMenu(myMembership);
+            return <div>
+                { this._renderLeaveMenu(myMembership) }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
+            </div>;
         }
 
         return (
@@ -360,6 +385,8 @@ module.exports = React.createClass({
                 { this._renderLeaveMenu(myMembership) }
                 <hr className="mx_RoomTileContextMenu_separator" />
                 { this._renderRoomTagMenu() }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
             </div>
         );
     },

@@ -34,6 +34,7 @@ import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../matrix-to";
+import {Group} from "matrix-js-sdk";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -569,7 +570,7 @@ export default React.createClass({
     _onShareClick: function() {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share community dialog', '', ShareDialog, {
-            target: this._matrixClient.getGroup(this.props.groupId),
+            target: this._matrixClient.getGroup(this.props.groupId) || new Group(this.props.groupId),
         });
     },
 

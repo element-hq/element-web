@@ -26,6 +26,7 @@ import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
 import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
+import {_t} from "../../languageHandler";
 
 
 const LeftPanel = React.createClass({
@@ -212,6 +213,7 @@ const LeftPanel = React.createClass({
         );
 
         const searchBox = (<SearchBox
+            placeholder={ _t('Filter room names') }
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
             collapsed={this.props.collapsed} />);

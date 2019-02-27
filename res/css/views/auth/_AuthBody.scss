@@ -58,6 +58,10 @@ limitations under the License.
     background-color: $authpage-body-bg-color;
 }
 
+.mx_AuthBody input.error {
+    color: $warning-color;
+}
+
 .mx_AuthBody_editServerDetails {
     padding-left: 1em;
     font-size: 12px;

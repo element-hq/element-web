@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import sdk from "../../../../index";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
-import {SettingLevel} from "../../../../settings/SettingsStore";
+import {_t} from "../../../../../languageHandler";
+import MatrixClientPeg from "../../../../../MatrixClientPeg";
+import sdk from "../../../../..";
+import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -188,7 +188,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         if (joinRule !== 'public' && guestAccess === 'forbidden') {
             guestWarning = (
                 <div className='mx_SecurityRoomSettingsTab_warning'>
-                    <img src={require("../../../../../res/img/warning.svg")} width={15} height={15} />
+                    <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
                         {_t("Guests cannot join this room even if explicitly invited.")}&nbsp;
                         <a href="" onClick={this._fixGuestAccess}>{_t("Click here to fix")}</a>
@@ -201,7 +201,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         if (joinRule === 'public' && !hasAliases) {
             aliasWarning = (
                 <div className='mx_SecurityRoomSettingsTab_warning'>
-                    <img src={require("../../../../../res/img/warning.svg")} width={15} height={15} />
+                    <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
                         {_t("To link to this room, please add an alias.")}
                     </span>
