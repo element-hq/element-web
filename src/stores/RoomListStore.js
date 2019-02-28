@@ -529,15 +529,6 @@ class RoomListStore extends Store {
 
         const dmRoomMap = DMRoomMap.shared();
 
-        // Speed optimization: Hitting the SettingsStore is expensive, so avoid that at all costs.
-        let _isCustomTagsEnabled = null;
-        const isCustomTagsEnabled = () => {
-            if (_isCustomTagsEnabled === null) {
-                _isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
-            }
-            return _isCustomTagsEnabled;
-        };
-
         this._matrixClient.getRooms().forEach((room) => {
             const myUserId = this._matrixClient.getUserId();
             const membership = room.getMyMembership();
@@ -553,7 +544,7 @@ class RoomListStore extends Store {
                 tagNames = tagNames.filter((t) => {
                     // Speed optimization: Avoid hitting the SettingsStore at all costs by making it the
                     // last condition possible.
-                    return lists[t] !== undefined || (!t.startsWith('m.') && isCustomTagsEnabled());
+                    return lists[t] !== undefined || (!t.startsWith('m.') && this._state.tagsEnabled);
                 });
 
                 if (tagNames.length) {
