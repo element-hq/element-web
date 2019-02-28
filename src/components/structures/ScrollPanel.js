@@ -87,10 +87,9 @@ function createTimelineResizeDetector(scrollNode, itemlist, callback) {
         return ro;
     } else if (typeof IntersectionObserver !== "undefined") {
         const threshold = [];
-        for (let i = 0; i < 1000; ++i) {
+        for (let i = 0; i <= 1000; ++i) {
             threshold.push(i / 1000);
         }
-        threshold.push(1);
         const io = new IntersectionObserver(
             callback,
             {root: scrollNode, threshold},
