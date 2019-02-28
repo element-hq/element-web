@@ -1455,5 +1455,12 @@
     "Enable Emoji suggestions while typing": "Ativar sugestões de emoticons ao digitar",
     "Show a placeholder for removed messages": "Mostrar um marcador para as mensagens removidas",
     "Show join/leave messages (invites/kicks/bans unaffected)": "Mostrar mensagens de entrar/sair  (convites/chutes/banimentos não afetados)",
-    "Show avatar changes": "Mostrar alterações de avatar"
+    "Show avatar changes": "Mostrar alterações de avatar",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "O arquivo '%(fileName)s' excede o limite de tamanho deste homeserver para uploads",
+    "Changes your display nickname in the current room only": "Altera seu apelido de exibição apenas na sala atual",
+    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s atualizou esta sala.",
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s tornou a sala pública para quem conhece o link.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s tornou a sala disponível apenas por convite.",
+    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s alterou a regra de entrada para %(rule)s",
+    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s permitiu que os convidados entrem na sala."
 }
