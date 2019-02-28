@@ -885,5 +885,6 @@
     "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s changed their display name to %(displayName)s.",
     "Spanner": "Wrench",
-    "Aeroplane": "Airplane"
+    "Aeroplane": "Airplane",
+    "Cat": "Cat"
 }
