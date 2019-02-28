@@ -349,7 +349,6 @@ export default class Stickerpicker extends React.Component {
                     key="controls_hide_stickers"
                     className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers"
                     onClick={this._onHideStickersClick}
-                    ref='target'
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;
