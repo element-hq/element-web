@@ -7,4 +7,4 @@
 set -ev
 
 scripts/travis/build.sh
-npm run test
+CHROME_BIN='/usr/bin/google-chrome-stable' npm run test
