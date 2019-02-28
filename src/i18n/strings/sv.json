@@ -37,5 +37,10 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda anpassade serverinställningar för att logga in på andra Matrix-servrar genom att ange en annan hemserver-URL.<BR/>Du kan då använda Riot med ett befintligt Matrix-konto på en annan hemserver.<br/><br/>Du kan också ange en anpassad identitetsserver men kommer då inte kunna bjuda in användare med epostadress, eller själv bli inbjuden med epostadress.",
     "Co-ordination for Riot translators": "Koordination för Riot-översättare",
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan använda en egen identitetsserver, men då kan du inte bjuda in användare via epostadress eller själv bjudas in med din epostadress.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Under anpassade serverinställningar kan du logga in på andra Matrixservrar genom att ange en egen hemserveradress. På så sätt kan du använda Riot med ett Matrixkonto du redan har på en annan hemserver."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Under anpassade serverinställningar kan du logga in på andra Matrixservrar genom att ange en egen hemserveradress. På så sätt kan du använda Riot med ett Matrixkonto du redan har på en annan hemserver.",
+    "Sign In": "Logga in",
+    "Create Account": "Skapa konto",
+    "Need help?": "Behöver du hjälp?",
+    "Explore rooms": "Utforska rum",
+    "Room Directory": "Rumslista"
 }
