@@ -133,6 +133,8 @@ class RoomListStore extends Store {
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             case 'setting_updated': {
+                if (!logicallyReady) break;
+
                 if (payload.settingName === 'RoomList.orderByImportance') {
                     this.updateSortingAlgorithm(payload.newValue === true ? ALGO_IMPORTANCE : ALGO_RECENT);
                 } else if (payload.settingName === 'feature_custom_tags') {
@@ -146,6 +148,10 @@ class RoomListStore extends Store {
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
+
+                // Always ensure that we set any state needed for settings here. It is possible that
+                // setting updates trigger on startup before we are ready to sync, so we want to make
+                // sure that the right state is in place before we actually react to those changes.
 
                 this._setState({tagsEnabled: SettingsStore.isFeatureEnabled("feature_custom_tags")});
 
@@ -471,7 +477,9 @@ class RoomListStore extends Store {
                     room, category, this._state.lists[key], listsClone[key], lastTimestamp);
 
                 if (!pushedEntry) {
-                    if (listsClone[key].length === 0) {
+                    // Special case invites: they don't really have timelines and can easily get lost when
+                    // the user has multiple pending invites. Pushing them is the least worst option.
+                    if (listsClone[key].length === 0 || key === "im.vector.fake.invite") {
                         listsClone[key].push({room, category});
                         insertedIntoTags.push(key);
                     } else {
@@ -523,15 +531,6 @@ class RoomListStore extends Store {
 
         const dmRoomMap = DMRoomMap.shared();
 
-        // Speed optimization: Hitting the SettingsStore is expensive, so avoid that at all costs.
-        let _isCustomTagsEnabled = null;
-        const isCustomTagsEnabled = () => {
-            if (_isCustomTagsEnabled === null) {
-                _isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
-            }
-            return _isCustomTagsEnabled;
-        };
-
         this._matrixClient.getRooms().forEach((room) => {
             const myUserId = this._matrixClient.getUserId();
             const membership = room.getMyMembership();
@@ -547,7 +546,7 @@ class RoomListStore extends Store {
                 tagNames = tagNames.filter((t) => {
                     // Speed optimization: Avoid hitting the SettingsStore at all costs by making it the
                     // last condition possible.
-                    return lists[t] !== undefined || (!t.startsWith('m.') && isCustomTagsEnabled());
+                    return lists[t] !== undefined || (!t.startsWith('m.') && this._state.tagsEnabled);
                 });
 
                 if (tagNames.length) {
