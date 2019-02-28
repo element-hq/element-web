@@ -560,7 +560,7 @@
     "Advanced options": "Mundësi të mëtejshme",
     "Unknown error": "Gabim i panjohur",
     "Incorrect password": "Fjalëkalim i pasaktë",
-    "Deactivate Account": "Çaktivizoje Llogarinë",
+    "Deactivate Account": "Mbylleni Llogarinë",
     "Device name": "Emër pajisjeje",
     "Device key": "Kyç pajisjeje",
     "Verify device": "Verifiko pajisjen",
@@ -1490,7 +1490,6 @@
     "2018 theme": "Temë e 2018-s",
     "Account management": "Administrim llogarish",
     "Deactivating your account is a permanent action - be careful!": "Çaktivizimi i llogarisë tuaj është një veprim i pakthyeshëm - hapni sytë!",
-    "Deactivate Account": "Mbylleni Llogarinë",
     "For help with using Riot, click <a>here</a>.": "Për ndihmë rreth përdorimit të Riot-it, klikoni <a>këtu</a>.",
     "For help with using Riot, click <a>here</a> or start a chat with our bot using the button below.": "Për ndihmë rreth përdorimit të Riot-it, klikoni <a>këtu</a>, ose nisni një fjalosje me robotin tonë duke përdorur butonin më poshtë.",
     "Help & About": "Ndihmë & Rreth",
@@ -1740,5 +1739,9 @@
     "Secure your backup with a passphrase": "Sigurojeni kopjeruajtjen tuaj me një frazëkalim",
     "Confirm your passphrase": "Ripohoni frazëkalimin tuaj",
     "Recovery key": "Kyç Rikthimesh",
-    "Success!": "Sukses!"
+    "Success!": "Sukses!",
+    "Allow Peer-to-Peer for 1:1 calls": "Lejo Peer-to-Peer për thirrje tek për tek",
+    "Default theme": "Temë parazgjedhje",
+    "Credits": "Kredite",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "Nëse hasni çfarëdo të mete apo keni përshtypje për të na dhënë, ju lutemi, na i bëni të ditura në GitHub."
 }

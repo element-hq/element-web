@@ -1240,5 +1240,6 @@
     "Lazy loading members not supported": "A cargar preguiceira de membros non está soportada",
     "Lazy loading is not supported by your current homeserver.": "A carga preguiceira non está soportada polo servidor actual.",
     "Legal": "Legal",
-    "Please <a>contact your service administrator</a> to continue using this service.": "Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo."
+    "Please <a>contact your service administrator</a> to continue using this service.": "Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Tamén podes fixar un servidor de identidade, pero non poderás invitar a usuarios polo enderezo de correo, e tampouco que te inviten."
 }
