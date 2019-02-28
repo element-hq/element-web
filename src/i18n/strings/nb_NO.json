@@ -76,7 +76,7 @@
     "unknown error code": "ukjent feilkode",
     "Call invitation": "Anropsinvitasjon",
     "Messages containing my display name": "Meldinger som inneholder mitt visningsnavn",
-    "powered by Matrix": "benytter seg av Matrix",
+    "powered by Matrix": "Drevet av Matrix",
     "Notify me for anything else": "Varsle meg om alt annet",
     "View Source": "Vis kilde",
     "Keywords": "Nøkkelord",
@@ -108,14 +108,14 @@
     "Download this file": "Last ned filen",
     "Failed to change settings": "Kunne ikke endre innstillingene",
     "Unhide Preview": "Vis forhåndsvisning",
-    "Custom Server Options": "Tilpassede serveralternativer",
+    "Custom Server Options": "Server-instillinger",
     "Quote": "Sitat",
     "Collapse panel": "Skjul panel",
     "Saturday": "Lørdag",
     "There are advanced notifications which are not shown here": "Det er avanserte varsler som ikke vises her",
     "Dismiss": "Avvis",
     "Whether or not you're logged in (we don't record your username)": "Om du er logget inn eller ikke (vi lagrer ikke brukernavnet ditt)",
-    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan også stille inn en egen idendtitetstjener, men du kommer ikke til å kunne invitere andre brukere med e-post, eller bli invitert med e-post selv.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kan også bruke din egen identitetstjener, men du kommer ikke til å kunne invitere andre brukere med e-post, eller bli invitert med e-post selv.",
     "Which officially provided instance you are using, if any": "Hvilken offisielle leverte instans som du bruker, hvis noen",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Om du bruker rik-tekstmodus i rik-tekstfeltet",
     "Your identity server's URL": "Din identitetstjeners URL",
@@ -238,5 +238,6 @@
     "/ddg is not a command": "/ddg er ikke en kommando",
     "To use it, just wait for autocomplete results to load and tab through them.": "For å bruke det, bare vent til autofullfør-resultatetene til å laste, og tab deg gjennom dem.",
     "Upgrades a room to a new version": "Oppgraderer et rom til en ny versjon",
-    "Changes your display nickname": "Endrer visningsnavnet ditt"
+    "Changes your display nickname": "Endrer visningsnavnet ditt",
+    "Chat with Riot Bot": "Chat med Riot Bot"
 }
