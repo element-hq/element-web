@@ -477,7 +477,9 @@ class RoomListStore extends Store {
                     room, category, this._state.lists[key], listsClone[key], lastTimestamp);
 
                 if (!pushedEntry) {
-                    if (listsClone[key].length === 0) {
+                    // Special case invites: they don't really have timelines and can easily get lost when
+                    // the user has multiple pending invites. Pushing them is the least worst option.
+                    if (listsClone[key].length === 0 || key === "im.vector.fake.invite") {
                         listsClone[key].push({room, category});
                         insertedIntoTags.push(key);
                     } else {
