@@ -432,7 +432,7 @@ class RoomListStore extends Store {
         const listsClone = {};
 
         // Micro optimization: Support lazily loading the last timestamp in a room
-        let timestampCache = {}; // {roomId => ts}
+        const timestampCache = {}; // {roomId => ts}
         const lastTimestamp = (room) => {
             if (!timestampCache[room.roomId]) {
                 timestampCache[room.roomId] = this._tsOfNewestEvent(room);
