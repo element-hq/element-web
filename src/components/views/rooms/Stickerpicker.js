@@ -103,6 +103,9 @@ export default class Stickerpicker extends React.Component {
     }
 
     componentWillUnmount() {
+        const client = MatrixClientPeg.get();
+        if (client) client.removeListener('accountData', this._updateWidget);
+
         window.removeEventListener('resize', this._onResize);
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
