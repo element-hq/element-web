@@ -330,9 +330,9 @@ class RoomListStore extends Store {
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
 
         // The slotting algorithm works by trying to position the room in the most relevant
-        // section of the list (red > grey > etc). To accomplish this, we need to consider
-        // a couple cases: the section existing in the list but having other rooms in it and
-        // the case of the section simply not existing and needing to be started. In order to
+        // category of the list (red > grey > etc). To accomplish this, we need to consider
+        // a couple cases: the category existing in the list but having other rooms in it and
+        // the case of the category simply not existing and needing to be started. In order to
         // do this efficiently, we only want to iterate over the list once and solve our sorting
         // problem as we go.
         //
@@ -342,25 +342,25 @@ class RoomListStore extends Store {
         // let it pass through wherever it resides in the list: it shouldn't be moving around
         // the list too much, so we want to keep it where it is.
         //
-        // The case of the section we want existing is easy to handle: once we hit the section,
+        // The case of the category we want existing is easy to handle: once we hit the category,
         // find the room that has a most recent event later than our own and insert just before
-        // that (making us the more recent room). If we end up hitting the next section before
-        // we can slot the room in, insert the room at the top of the section as a fallback. We
+        // that (making us the more recent room). If we end up hitting the next category before
+        // we can slot the room in, insert the room at the top of the category as a fallback. We
         // do this to ensure that the room doesn't go too far down the list given it was previously
         // considered important (in the case of going down in category) or is now more important
         // (suddenly becoming red, for instance). The boundary tracking is how we end up achieving
         // this, as described in the next paragraphs.
         //
-        // The other case of the section not already existing is a bit more complicated. We track
-        // the boundaries of each section relative to the list we're currently building so that
-        // when we miss the section we can insert the room at the right spot. Most importantly, we
+        // The other case of the category not already existing is a bit more complicated. We track
+        // the boundaries of each category relative to the list we're currently building so that
+        // when we miss the category we can insert the room at the right spot. Most importantly, we
         // can't assume that the end of the list being built is the right spot because of the last
-        // paragraph's requirement: the room should be put to the top of a section if the section
+        // paragraph's requirement: the room should be put to the top of a category if the category
         // runs out of places to put it.
         //
         // All told, our tracking looks something like this:
         //
-        // ------ A <- Section boundary (start of red)
+        // ------ A <- Category boundary (start of red)
         //  RED
         //  RED
         //  RED
