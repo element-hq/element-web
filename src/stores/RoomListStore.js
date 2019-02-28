@@ -133,6 +133,8 @@ class RoomListStore extends Store {
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             case 'setting_updated': {
+                if (!logicallyReady) break;
+
                 if (payload.settingName === 'RoomList.orderByImportance') {
                     this.updateSortingAlgorithm(payload.newValue === true ? ALGO_IMPORTANCE : ALGO_RECENT);
                 } else if (payload.settingName === 'feature_custom_tags') {
@@ -146,6 +148,10 @@ class RoomListStore extends Store {
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
+
+                // Always ensure that we set any state needed for settings here. It is possible that
+                // setting updates trigger on startup before we are ready to sync, so we want to make
+                // sure that the right state is in place before we actually react to those changes.
 
                 this._setState({tagsEnabled: SettingsStore.isFeatureEnabled("feature_custom_tags")});
 
