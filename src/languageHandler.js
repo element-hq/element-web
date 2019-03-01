@@ -341,7 +341,7 @@ function getLangsJson() {
         let url;
         try {
             // Webapp is a webpack resolve alias pointing to the output directory, see webpack config
-            url; = require('Webapp/i18n/languages.json');
+            url = require('Webapp/i18n/languages.json');
         } catch (e) {
             url = i18nFolder + 'languages.json';
         }
