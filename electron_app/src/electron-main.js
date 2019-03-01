@@ -56,7 +56,15 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
-const store = new Store();
+try {
+    // Load local config and use it to override values from the one baked with the build
+    const localConfig = require(path.join(app.getPath('userData'), 'config.json'));
+    vectorConfig = Object.assign(vectorConfig, localConfig);
+} catch (e) {
+    // Could not load local config, this is expected in most cases.
+}
+
+const store = new Store({ name: "electron-config" });
 
 let mainWindow = null;
 global.appQuitting = false;
