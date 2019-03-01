@@ -89,7 +89,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
             title: _t('Enable encryption?'),
             description: _t(
                 "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted " +
-                "room cannot be seen by the server, only be the participants of the room. Enabling encryption " +
+                "room cannot be seen by the server, only by the participants of the room. Enabling encryption " +
                 "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
                 {},
                 {
