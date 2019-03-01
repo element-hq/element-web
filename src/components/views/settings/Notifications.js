@@ -19,7 +19,6 @@ import Promise from 'bluebird';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import UserSettingsStore from '../../../UserSettingsStore';
 import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -132,14 +131,41 @@ module.exports = React.createClass({
         });
     },
 
+    /*
+     * Returns the email pusher (pusher of type 'email') for a given
+     * email address. Email pushers all have the same app ID, so since
+     * pushers are unique over (app ID, pushkey), there will be at most
+     * one such pusher.
+     */
+    getEmailPusher: function(pushers, address) {
+        if (pushers === undefined) {
+            return undefined;
+        }
+        for (let i = 0; i < pushers.length; ++i) {
+            if (pushers[i].kind === 'email' && pushers[i].pushkey === address) {
+                return pushers[i];
+            }
+        }
+        return undefined;
+    },
+
     onEnableEmailNotificationsChange: function(address, checked) {
         let emailPusherPromise;
         if (checked) {
             const data = {};
             data['brand'] = SdkConfig.get().brand || 'Riot';
-            emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
+            emailPusherPromise = MatrixClientPeg.get().setPusher({
+                kind: 'email',
+                app_id: 'm.email',
+                pushkey: address,
+                app_display_name: 'Email Notifications',
+                device_display_name: address,
+                lang: navigator.language,
+                data: data,
+                append: true, // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
+            });
         } else {
-            const emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
+            const emailPusher = this.getEmailPusher(this.state.pushers, address);
             emailPusher.kind = null;
             emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
         }
@@ -697,7 +723,7 @@ module.exports = React.createClass({
     emailNotificationsRow: function(address, label) {
         return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
                                      onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
-                                     label={label} />;
+                                     label={label} key={`emailNotif_${label}`} />;
     },
 
     render: function() {
@@ -729,17 +755,15 @@ module.exports = React.createClass({
         }
 
         const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
-        let emailNotificationsRow;
+        let emailNotificationsRows;
         if (emailThreepids.length === 0) {
-            emailNotificationsRow = <div>
+            emailNotificationsRows = <div>
                 { _t('Add an email address to configure email notifications') }
             </div>;
         } else {
-            // This only supports the first email address in your profile for now
-            emailNotificationsRow = this.emailNotificationsRow(
-                emailThreepids[0].address,
-                `${_t('Enable email notifications')} (${emailThreepids[0].address})`,
-            );
+            emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
+                threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
+            ));
         }
 
         // Build external push rules
@@ -823,7 +847,7 @@ module.exports = React.createClass({
                                           onChange={this.onEnableAudioNotificationsChange}
                                           label={_t('Enable audible notifications in web client')} />
 
-                    { emailNotificationsRow }
+                    { emailNotificationsRows }
 
                     <div className="mx_UserNotifSettings_pushRulesTableWrapper">
                         <table className="mx_UserNotifSettings_pushRulesTable">
