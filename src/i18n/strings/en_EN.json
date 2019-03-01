@@ -612,6 +612,8 @@
     "To send events of type <eventType/>, you must be a": "To send events of type <eventType/>, you must be a",
     "Roles & Permissions": "Roles & Permissions",
     "Permissions": "Permissions",
+    "Enable encryption?": "Enable encryption?",
+    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only be the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only be the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
     "Guests cannot join this room even if explicitly invited.": "Guests cannot join this room even if explicitly invited.",
     "Click here to fix": "Click here to fix",
     "To link to this room, please add an alias.": "To link to this room, please add an alias.",
