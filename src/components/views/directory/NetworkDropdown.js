@@ -137,7 +137,7 @@ export default class NetworkDropdown extends React.Component {
             servers = servers.concat(this.props.config.roomDirectory.servers);
         }
 
-        if (servers.indexOf(MatrixClientPeg.getHomeServerName()) == -1) {
+        if (!servers.includes(MatrixClientPeg.getHomeServerName())) {
             servers.unshift(MatrixClientPeg.getHomeServerName());
         }
 
@@ -147,7 +147,7 @@ export default class NetworkDropdown extends React.Component {
         // we can only show the default room list.
         for (const server of servers) {
             options.push(this._makeMenuOption(server, null, true));
-            if (server == MatrixClientPeg.getHomeServerName()) {
+            if (server === MatrixClientPeg.getHomeServerName()) {
                 options.push(this._makeMenuOption(server, null, false));
                 if (this.props.protocols) {
                     for (const proto of Object.keys(this.props.protocols)) {
@@ -183,18 +183,15 @@ export default class NetworkDropdown extends React.Component {
 
         let icon;
         let name;
-        let span_class;
         let key;
 
         if (!instance && includeAll) {
             key = server;
             name = server;
-            span_class = 'mx_NetworkDropdown_menu_all';
         } else if (!instance) {
             key = server + '_all';
             name = 'Matrix';
             icon = <img src={require("../../../../res/img/network-matrix.svg")} />;
-            span_class = 'mx_NetworkDropdown_menu_network';
         } else {
             key = server + '_inst_' + instance.instance_id;
             const imgUrl = instance.icon ?
@@ -202,41 +199,40 @@ export default class NetworkDropdown extends React.Component {
                 DEFAULT_ICON_URL;
             icon = <img src={imgUrl} />;
             name = instance.desc;
-            span_class = 'mx_NetworkDropdown_menu_network';
         }
 
-        const click_handler = handleClicks ? this.onMenuOptionClick.bind(this, server, instance, includeAll) : null;
+        const clickHandler = handleClicks ? this.onMenuOptionClick.bind(this, server, instance, includeAll) : null;
 
-        return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
+        return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={clickHandler}>
             {icon}
             <span className="mx_NetworkDropdown_menu_network">{name}</span>
         </div>;
     }
 
     render() {
-        let current_value;
+        let currentValue;
 
         let menu;
         if (this.state.expanded) {
-            const menu_options = this._getMenuOptions();
+            const menuOptions = this._getMenuOptions();
             menu = <div className="mx_NetworkDropdown_menu">
-                {menu_options}
+                {menuOptions}
             </div>;
-            current_value = <input type="text" className="mx_NetworkDropdown_networkoption"
+            currentValue = <input type="text" className="mx_NetworkDropdown_networkoption"
                 ref={this.collectInputTextBox} onKeyUp={this.onInputKeyUp}
                 placeholder="matrix.org" // 'matrix.org' as an example of an HS name
             />;
         } else {
             const instance = instanceForInstanceId(this.props.protocols, this.state.selectedInstanceId);
-            current_value = this._makeMenuOption(
+            currentValue = this._makeMenuOption(
                 this.state.selectedServer, instance, this.state.includeAllNetworks, false,
             );
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
             <div className="mx_NetworkDropdown_input mx_no_textinput" onClick={this.onInputClick}>
-                {current_value}
-                <span className="mx_NetworkDropdown_arrow"></span>
+                {currentValue}
+                <span className="mx_NetworkDropdown_arrow" />
                 {menu}
             </div>
         </div>;
