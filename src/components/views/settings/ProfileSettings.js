@@ -72,7 +72,6 @@ export default class ProfileSettings extends React.Component {
             newState.avatarFile = null;
         }
 
-        newState.enableProfileSave = true;
         this.setState(newState);
     };
 
