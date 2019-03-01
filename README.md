@@ -248,6 +248,18 @@ sudo npm install nativefier -g
 nativefier https://riot.im/app/
 ```
 
+Desktop app configuration
+=========================
+
+To run multiple instances of the desktop app for different accounts, you can launch the executable with the `--profile` argument followed by a unique identifier, e.g `riot-web --profile Work` for it to run a separate profile and not interfere with the default one.
+
+To change the config.json for the desktop app, create a config file which will be used to override values in the config which ships in the package:
++ `%APPDATA%\$NAME\config.json` on Windows
++ `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
++ `~Library/Application Support/$NAME/config.json` on macOS
+
+Where `$NAME` is typically Riot, unless you use `--profile $PROFILE` then its `Riot-$PROFILE`.
+
 Development
 ===========
 
