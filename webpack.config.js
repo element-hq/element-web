@@ -152,7 +152,7 @@ module.exports = {
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
 
-            "Webapp": path.resolve('./webapp'),
+            "$webapp": path.resolve('./webapp'),
         },
     },
     plugins: [
