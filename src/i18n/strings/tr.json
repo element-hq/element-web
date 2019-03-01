@@ -582,7 +582,7 @@
     "Please check your email to continue registration.": "Kayıt işlemine devam etmek için lütfen e-postanızı kontrol edin.",
     "Token incorrect": "Belirteç(Token) hatalı",
     "Please enter the code it contains:": "Lütfen içerdiği kodu girin:",
-    "powered by Matrix": "Matrix tarafından desteklenmektedir",
+    "powered by Matrix": "Matrix'den besleniyor",
     "If you don't specify an email address, you won't be able to reset your password. Are you sure?": "Eğer bir e-posta adresi belirtmezseniz , şifrenizi sıfırlayamazsınız . Emin misiniz ?",
     "You are registering with %(SelectedTeamName)s": "%(SelectedTeamName)s ile kayıt oluyorsunuz",
     "Default server": "Varsayılan sunucu",
