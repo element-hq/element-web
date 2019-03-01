@@ -1,3 +1,12 @@
+Changes in [1.0.2-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2-rc.3) (2019-03-01)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.2...v1.0.2-rc.3)
+
+ * Misc room list improvements & invite fix
+   [\#2722](https://github.com/matrix-org/matrix-react-sdk/pull/2722)
+ * Move complex part of room sorting to a dedicated function
+   [\#2716](https://github.com/matrix-org/matrix-react-sdk/pull/2716)
+
 Changes in [1.0.2-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2-rc.2) (2019-03-01)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.1...v1.0.2-rc.2)
