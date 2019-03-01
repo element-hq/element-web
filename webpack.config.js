@@ -6,12 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
 
-// relative to languageHandler.js in matrix-react-sdk
-let RIOT_LANGUAGES_FILE = process.env.RIOT_LANGUAGES_FILE;
-if (!RIOT_LANGUAGES_FILE) {
-    RIOT_LANGUAGES_FILE = "../../riot-web/webapp/i18n/languages.json";
-}
-
 module.exports = {
     entry: {
         // Load babel-polyfill first to avoid issues where some imports (namely react)
@@ -157,6 +151,8 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+
+            "$webapp": path.resolve('./webapp'),
         },
     },
     plugins: [
@@ -164,7 +160,6 @@ module.exports = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
-            'LANGUAGES_FILE': JSON.stringify(RIOT_LANGUAGES_FILE),
         }),
         new ExtractTextPlugin("bundles/[hash]/[name].css", {
             allChunks: true,
