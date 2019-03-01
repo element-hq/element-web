@@ -306,6 +306,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const Field = sdk.getComponent('elements.Field');
+
         let yourMatrixAccountText = _t('Create your Matrix account');
         if (this.props.hsName) {
             yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
@@ -338,14 +340,16 @@ module.exports = React.createClass({
                 _t("Email (optional)");
 
             emailSection = (
-                <div>
-                    <input type="text" ref="email"
-                        placeholder={emailPlaceholder}
-                        defaultValue={this.props.defaultEmail}
-                        className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
-                        onBlur={this.onEmailBlur}
-                        value={this.state.email} />
-                </div>
+                <Field
+                    className={this._classForField(FIELD_EMAIL)}
+                    id="mx_RegistrationForm_email"
+                    ref="email"
+                    type="text"
+                    label={emailPlaceholder}
+                    defaultValue={this.props.defaultEmail}
+                    value={this.state.email}
+                    onBlur={this.onEmailBlur}
+                />
             );
         }
 
@@ -385,8 +389,6 @@ module.exports = React.createClass({
             <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
 
-        const placeholderUsername = _t("Username");
-
         return (
             <div>
                 <h3>
@@ -395,22 +397,36 @@ module.exports = React.createClass({
                 </h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
-                        <input type="text" ref="username"
+                        <Field
+                            className={this._classForField(FIELD_USERNAME)}
+                            id="mx_RegistrationForm_username"
+                            ref="username"
+                            type="text"
                             autoFocus={true}
-                            placeholder={placeholderUsername} defaultValue={this.props.defaultUsername}
-                            className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
-                            onBlur={this.onUsernameBlur} />
+                            label={_t("Username")}
+                            defaultValue={this.props.defaultUsername}
+                            onBlur={this.onUsernameBlur}
+                        />
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        <input type="password" ref="password"
-                            className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
+                        <Field
+                            className={this._classForField(FIELD_PASSWORD)}
+                            id="mx_RegistrationForm_password"
+                            ref="password"
+                            type="password"
+                            label={_t("Password")}
+                            defaultValue={this.props.defaultPassword}
                             onBlur={this.onPasswordBlur}
-                            placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
-                        <input type="password" ref="passwordConfirm"
-                            placeholder={_t("Confirm")}
-                            className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
+                        />
+                        <Field
+                            className={this._classForField(FIELD_PASSWORD_CONFIRM)}
+                            id="mx_RegistrationForm_passwordConfirm"
+                            ref="passwordConfirm"
+                            type="password"
+                            label={_t("Confirm")}
+                            defaultValue={this.props.defaultPassword}
                             onBlur={this.onPasswordConfirmBlur}
-                            defaultValue={this.props.defaultPassword} />
+                        />
                     </div>
                     <div className="mx_AuthBody_fieldRow">
                         { emailSection }

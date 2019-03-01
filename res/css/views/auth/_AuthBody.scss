@@ -78,7 +78,8 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
-.mx_AuthBody_fieldRow > * {
+.mx_AuthBody_fieldRow > *,
+.mx_AuthBody_fieldRow > .mx_Field {
     margin: 0 5px;
     flex: 1;
 }
