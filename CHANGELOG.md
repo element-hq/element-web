@@ -1,3 +1,30 @@
+Changes in [1.0.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.2-rc.1) (2019-03-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.1...v1.0.2-rc.1)
+
+ * Set a require alias for the webapp directory
+   [\#9014](https://github.com/vector-im/riot-web/pull/9014)
+ * Update from Weblate.
+   [\#8973](https://github.com/vector-im/riot-web/pull/8973)
+ * set chrome path for travis CI explicitly
+   [\#8987](https://github.com/vector-im/riot-web/pull/8987)
+ * Updated install spinner
+   [\#8984](https://github.com/vector-im/riot-web/pull/8984)
+ * Allow disabling update mechanism
+   [\#8911](https://github.com/vector-im/riot-web/pull/8911)
+ * Allow configuration of whether closing window closes or minimizes to tray
+   [\#8908](https://github.com/vector-im/riot-web/pull/8908)
+ * Fix language file path for Jenkins
+   [\#8854](https://github.com/vector-im/riot-web/pull/8854)
+ * Document and recommend `default_server_name`
+   [\#8832](https://github.com/vector-im/riot-web/pull/8832)
+ * Cache busting for icons & language files
+   [\#8710](https://github.com/vector-im/riot-web/pull/8710)
+ * Remove redesign issue template
+   [\#8722](https://github.com/vector-im/riot-web/pull/8722)
+ * Make scripts/make-icons.sh work on linux
+   [\#8550](https://github.com/vector-im/riot-web/pull/8550)
+
 Changes in [1.0.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.1) (2019-02-15)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.0...v1.0.1)
