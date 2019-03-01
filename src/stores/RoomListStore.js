@@ -477,18 +477,12 @@ class RoomListStore extends Store {
                     room, category, this._state.lists[key], listsClone[key], lastTimestamp);
 
                 if (!pushedEntry) {
-                    // Special case invites: they don't really have timelines and can easily get lost when
-                    // the user has multiple pending invites. Pushing them is the least worst option.
-                    if (listsClone[key].length === 0 || key === "im.vector.fake.invite") {
-                        listsClone[key].push({room, category});
-                        insertedIntoTags.push(key);
-                    } else {
-                        // In theory, this should never happen
-                        console.warn(`!! Room ${room.roomId} lost: No position available`);
-                    }
-                } else {
-                    insertedIntoTags.push(key);
+                    // There's some circumstances where the room doesn't fit anywhere, so just
+                    // push the room in. We push it in at the start of the list because the room
+                    // is probably important.
+                    listsClone[key].splice(0, 0, {room, category});
                 }
+                insertedIntoTags.push(key);
             }
         }
 
