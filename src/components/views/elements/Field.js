@@ -21,15 +21,16 @@ export default class Field extends React.PureComponent {
     static propTypes = {
         // The field's ID, which binds the input and label together.
         id: PropTypes.string.isRequired,
-        // The field's <input> type. Defaults to "text".
+        // The element to create. Defaults to "input".
+        // Should be "input", "select", or "textarea".
+        // To define options for a select, use <Field><option ... /></Field>
+        element: PropTypes.string,
+        // The field's type (when used as an <input>). Defaults to "text".
         type: PropTypes.string,
         // The field's label string.
         label: PropTypes.string,
         // The field's placeholder string. Defaults to the label.
         placeholder: PropTypes.string,
-        // The type of field to create. Defaults to "input". Should be "input" or "select".
-        // To define options for a select, use <Field><option ... /></Field>
-        element: PropTypes.string,
         // All other props pass through to the <input>.
     };
 
@@ -46,21 +47,18 @@ export default class Field extends React.PureComponent {
     }
 
     render() {
-        const extraProps = Object.assign({}, this.props);
+        const { element, children, ...inputProps } = this.props;
 
-        // Remove explicit properties that shouldn't be copied
-        delete extraProps.element;
-        delete extraProps.children;
+        const inputElement = element || "input";
 
-        // Set some defaults for the element
-        extraProps.type = extraProps.type || "text";
-        extraProps.ref = "fieldInput";
-        extraProps.placeholder = extraProps.placeholder || extraProps.label;
+        // Set some defaults for the <input> element
+        inputProps.type = inputProps.type || "text";
+        inputProps.ref = "fieldInput";
+        inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
-        const element = this.props.element || "input";
-        const fieldInput = React.createElement(element, extraProps, this.props.children);
+        const fieldInput = React.createElement(inputElement, inputProps, children);
 
-        return <div className={`mx_Field mx_Field_${element}`}>
+        return <div className={`mx_Field mx_Field_${inputElement}`}>
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
         </div>;
