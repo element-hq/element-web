@@ -338,8 +338,13 @@ export function getCurrentLanguage() {
 
 function getLangsJson() {
     return new Promise((resolve, reject) => {
-        // LANGUAGES_FILE is a webpack compile-time define, see webpack config
-        const url = (typeof LANGUAGES_FILE === "string") ? require(LANGUAGES_FILE) : (i18nFolder + 'languages.json');
+        let url;
+        try {
+            // $webapp is a webpack resolve alias pointing to the output directory, see webpack config
+            url = require('$webapp/i18n/languages.json');
+        } catch (e) {
+            url = i18nFolder + 'languages.json';
+        }
         request(
             { method: "GET", url },
             (err, response, body) => {
