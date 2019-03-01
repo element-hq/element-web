@@ -1,3 +1,9 @@
+Changes in [1.0.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.2-rc.2) (2019-03-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2-rc.1...v1.0.2-rc.2)
+
+ * Update to react-sdk rc.3
+
 Changes in [1.0.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.2-rc.1) (2019-03-01)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.1...v1.0.2-rc.1)
