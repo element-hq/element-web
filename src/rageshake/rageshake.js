@@ -71,6 +71,18 @@ class ConsoleLogger {
     log(level, ...args) {
         // We don't know what locale the user may be running so use ISO strings
         const ts = new Date().toISOString();
+
+        // Convert objects and errors to helpful things
+        args = args.map((arg) => {
+            if (arg instanceof Error) {
+                return arg.message + (arg.stack ? `\n${arg.stack}` : '');
+            } else if (typeof(arg) === 'object') {
+                return JSON.stringify(arg);
+            } else {
+                return arg;
+            }
+        });
+
         // Some browsers support string formatting which we're not doing here
         // so the lines are a little more ugly but easy to implement / quick to
         // run.
