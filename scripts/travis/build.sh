@@ -23,5 +23,5 @@ ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
 rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 
-RIOT_LANGUAGES_FILE="../riot-web/webapp/i18n/languages.json" npm run build
+npm run build
 popd
