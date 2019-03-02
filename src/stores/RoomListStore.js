@@ -429,6 +429,13 @@ class RoomListStore extends Store {
             newList.push(entry);
         }
 
+        if (!pushedEntry && desiredCategoryBoundaryIndex >= 0) {
+            console.warn(`!! Room ${room.roomId} nearly lost: Ran off the end of the list`);
+            console.warn(`!! Inserting at position ${desiredCategoryBoundaryIndex} with category ${category}`);
+            newList.splice(desiredCategoryBoundaryIndex, 0, {room, category});
+            pushedEntry = true;
+        }
+
         return pushedEntry;
     }
 
@@ -477,22 +484,27 @@ class RoomListStore extends Store {
                     room, category, this._state.lists[key], listsClone[key], lastTimestamp);
 
                 if (!pushedEntry) {
-                    // Special case invites: they don't really have timelines and can easily get lost when
-                    // the user has multiple pending invites. Pushing them is the least worst option.
-                    if (listsClone[key].length === 0 || key === "im.vector.fake.invite") {
-                        listsClone[key].push({room, category});
-                        insertedIntoTags.push(key);
-                    } else {
-                        // In theory, this should never happen
-                        console.warn(`!! Room ${room.roomId} lost: No position available`);
-                    }
-                } else {
-                    insertedIntoTags.push(key);
+                    // This should rarely happen: _slotRoomIntoList has several checks which attempt
+                    // to make sure that a room is not lost in the list. If we do lose the room though,
+                    // we shouldn't throw it on the floor and forget about it. Instead, we should insert
+                    // it somewhere. We'll insert it at the top for a couple reasons: 1) it is probably
+                    // an important room for the user and 2) if this does happen, we'd want a bug report.
+                    console.warn(`!! Room ${room.roomId} nearly lost: Failed to find a position`);
+                    console.warn(`!! Inserting at position 0 in the list and flagging as inserted`);
+                    console.warn("!! Additional info: ", {
+                       category,
+                       key,
+                       upToIndex: listsClone[key].length,
+                       expectedCount: this._state.lists[key].length,
+                    });
+                    listsClone[key].splice(0, 0, {room, category});
                 }
+                insertedIntoTags.push(key);
             }
         }
 
-        // Double check that we inserted the room in the right places
+        // Double check that we inserted the room in the right places.
+        // There should never be a discrepancy.
         for (const targetTag of targetTags) {
             let count = 0;
             for (const insertedTag of insertedIntoTags) {
