@@ -20,13 +20,22 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from 'classnames';
+import {User} from "matrix-js-sdk";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
-        const user = client.getUser(client.getUserId());
+        let user = client.getUser(client.getUserId());
+        if (!user) {
+            // XXX: We shouldn't have to do this.
+            // There seems to be a condition where the User object won't exist until a room
+            // exists on the account. To work around this, we'll just create a temporary User
+            // and use that.
+            console.warn("User object not found - creating one for ProfileSettings");
+            user = new User(client.getUserId());
+        }
         let avatarUrl = user.avatarUrl;
         if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
         this.state = {
