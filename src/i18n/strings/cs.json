@@ -4,7 +4,7 @@
     "Riot is not supported on mobile web. Install the app?": "Riot není podporovaný na mobilním webu. Nainstalovat aplikaci?",
     "You need to be using HTTPS to place a screen-sharing call.": "Pro uskutečnění hovoru se sdílením obrazovky musíte používat HTTPS.",
     "Search the room directory": "Prohledat adresář místností",
-    "Chat with Riot Bot": "Chatujte s Riot Botem",
+    "Chat with Riot Bot": "Konverzovat s Riot Botem",
     "Get started with some tips from Riot Bot!": "Začněte s radami od Riot Bota!",
     "General discussion about Matrix and Riot": "Obecná diskuse o Matrixu a Riotu",
     "Discussion of all things Matrix!": "Diskuse o všem okolo Matrixu!",
@@ -35,5 +35,12 @@
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android a matrix-android-sdk chat",
     "Discussion of the Identity Service API": "Diskuze o API služby identity",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Přes vlastní serverové volby se můžete přihlásit k dalším Matrix serverům tak, že zadáte jinou adresu domovského serveru.<br/>Díky tomu můžete v Riotu používat Matrix účet z jiného domovského serveru.<br/><br/>Můžete nastavit i vlastní server identity, ale pak už nebudete moci zvát ani být zván/a skrze e-mailovou adresu.",
-    "Co-ordination for Riot translators": "Spolupráce pro překladatele Riot"
+    "Co-ordination for Riot translators": "Spolupráce pro překladatele Riot",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Také je možné nastavit vlastní server identity, ale pak nebude možné pozvat uživatele pomocí emailové adresy ani být pozván pomocí emailové adresy.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Ve vlastních serverových volbách si můžete nastavit použití vlastního domovského serveru. To Vám umožní používat Riot s existujícím Matrix účtem na jiném serveru.",
+    "Sign In": "Přihlásit se",
+    "Create Account": "Vytvořit účet",
+    "Need help?": "Chcete pomoct?",
+    "Explore rooms": "Objevit místnosti",
+    "Room Directory": "Adresář místností"
 }
