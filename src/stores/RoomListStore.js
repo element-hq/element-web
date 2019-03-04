@@ -319,7 +319,9 @@ class RoomListStore extends Store {
             const dmRoomMap = DMRoomMap.shared();
             if (myMembership === 'invite') {
                 tags.push("im.vector.fake.invite");
-            } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
+            } else if (dmRoomMap.getUserIdForRoomId(room.roomId) && tags.length === 0) {
+                // We intentionally don't duplicate rooms in other tags into the people list
+                // as a feature.
                 tags.push("im.vector.fake.direct");
             } else if (tags.length === 0) {
                 tags.push("im.vector.fake.recent");
