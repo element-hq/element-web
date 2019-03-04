@@ -76,14 +76,23 @@ export default class VoiceUserSettingsTab extends React.Component {
 
     _setAudioOutput = (e) => {
         CallMediaHandler.setAudioOutput(e.target.value);
+        this.setState({
+            activeAudioOutput: e.target.value,
+        });
     };
 
     _setAudioInput = (e) => {
         CallMediaHandler.setAudioInput(e.target.value);
+        this.setState({
+            activeAudioInput: e.target.value,
+        });
     };
 
     _setVideoInput = (e) => {
         CallMediaHandler.setVideoInput(e.target.value);
+        this.setState({
+            activeVideoInput: e.target.value,
+        });
     };
 
     _changeWebRtcMethod = (p2p) => {
