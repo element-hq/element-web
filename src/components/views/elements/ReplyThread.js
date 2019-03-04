@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
-import {makeUserPermalink} from "../../../matrix-to";
+import {makeUserPermalink, RoomPermalinkCreator} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
@@ -32,7 +32,7 @@ export default class ReplyThread extends React.Component {
         parentEv: PropTypes.instanceOf(MatrixEvent),
         // called when the ReplyThread contents has changed, including EventTiles thereof
         onWidgetLoad: PropTypes.func.isRequired,
-        permalinkCreator: PropTypes.object.isRequired,
+        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
     };
 
     static contextTypes = {

@@ -20,6 +20,8 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
+import PropTypes from "prop-types";
+import {RoomPermalinkCreator} from "../../../matrix-to";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -29,6 +31,10 @@ function cancelQuoting() {
 }
 
 export default class ReplyPreview extends React.Component {
+    static propTypes = {
+        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
+    };
+
     constructor(props, context) {
         super(props, context);
 
@@ -75,6 +81,7 @@ export default class ReplyPreview extends React.Component {
                 <EventTile last={true}
                            tileShape="reply_preview"
                            mxEvent={this.state.event}
+                           permalinkCreator={this.props.permalinkCreator}
                            isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
             </div>
         </div>;
