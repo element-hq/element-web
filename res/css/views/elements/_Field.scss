@@ -89,6 +89,10 @@ limitations under the License.
     margin: 7px 8px;
     padding: 2px;
     pointer-events: none; // Allow clicks to fall through to the input
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 18px);
 }
 
 .mx_Field input:focus + label,
