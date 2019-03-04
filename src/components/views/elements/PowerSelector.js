@@ -103,12 +103,23 @@ module.exports = React.createClass({
     },
 
     onCustomBlur: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
         this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
     },
 
-    onCustomKeyDown: function(event) {
+    onCustomKeyPress: function(event) {
         if (event.key === "Enter") {
-            this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Do not call the onChange handler directly here - it can cause an infinite loop.
+            // Long story short, a user hits Enter to submit the value which onChange handles as
+            // raising a dialog which causes a blur which causes a dialog which causes a blur and
+            // so on. By not causing the onChange to be called here, we avoid the loop because we
+            // handle the onBlur safely.
+            event.target.blur();
         }
     },
 
@@ -118,7 +129,7 @@ module.exports = React.createClass({
             picker = (
                 <Field id={`powerSelector_custom_${this.props.powerLevelKey}`} type="number"
                        label={this.props.label || _t("Power level")} max={this.props.maxValue}
-                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
+                       onBlur={this.onCustomBlur} onKeyPress={this.onCustomKeyPress} onChange={this.onCustomChange}
                        value={this.state.customValue} disabled={this.props.disabled} />
             );
         } else {
