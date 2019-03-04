@@ -101,6 +101,14 @@ export default class MultiInviter {
         if (addrType === 'email') {
             return MatrixClientPeg.get().inviteByEmail(roomId, addr);
         } else if (addrType === 'mx-user-id') {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            if (!room) throw new Error("Room not found");
+
+            const member = room.getMember(addr);
+            if (member && ['join', 'invite'].includes(member.membership)) {
+                throw {errcode: "RIOT.ALREADY_IN_ROOM", error: "Member already invited"};
+            }
+
             if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
                 try {
                     const profile = await MatrixClientPeg.get().getProfileInfo(addr);
@@ -152,6 +160,8 @@ export default class MultiInviter {
                 if (err.errcode === 'M_FORBIDDEN') {
                     fatal = true;
                     errorText = _t('You do not have permission to invite people to this room.');
+                } else if (err.errcode === "RIOT.ALREADY_IN_ROOM") {
+                    errorText = _t("User %(userId)s is already in the room", {userId: address});
                 } else if (err.errcode === 'M_LIMIT_EXCEEDED') {
                     // we're being throttled so wait a bit & try again
                     setTimeout(() => {
@@ -166,6 +176,8 @@ export default class MultiInviter {
                     // Invite without the profile check
                     console.warn(`User ${address} does not have a profile - inviting anyways automatically`);
                     this._doInvite(address, true).then(resolve, reject);
+                } else if (err.errcode === "M_BAD_STATE") {
+                    errorText = _t("The user must be unbanned before they can be invited.");
                 } else {
                     errorText = _t('Unknown server error');
                 }
