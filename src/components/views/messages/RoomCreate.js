@@ -53,7 +53,7 @@ module.exports = React.createClass({
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         return <div className="mx_CreateEvent">
-            <img className="mx_CreateEvent_image" src={require("../../../../res/img/room-continuation.svg")} />
+            <div className="mx_CreateEvent_image" />
             <div className="mx_CreateEvent_header">
                 {_t("This room is a continuation of another conversation.")}
             </div>

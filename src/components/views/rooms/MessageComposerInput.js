@@ -1592,7 +1592,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <ReplyPreview />
+                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

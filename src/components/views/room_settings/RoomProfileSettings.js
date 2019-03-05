@@ -91,7 +91,6 @@ export default class RoomProfileSettings extends React.Component {
             newState.originalTopic = this.state.topic;
         }
 
-        newState.enableProfileSave = true;
         this.setState(newState);
     };
 

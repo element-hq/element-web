@@ -78,6 +78,27 @@ if (DEBUG_SCROLL) {
  * scroll down further. If stickyBottom is disabled, we just save the scroll
  * offset as normal.
  */
+
+
+function createTimelineResizeDetector(scrollNode, itemlist, callback) {
+    if (typeof ResizeObserver !== "undefined") {
+        const ro = new ResizeObserver(callback);
+        ro.observe(itemlist);
+        return ro;
+    } else if (typeof IntersectionObserver !== "undefined") {
+        const threshold = [];
+        for (let i = 0; i <= 1000; ++i) {
+            threshold.push(i / 1000);
+        }
+        const io = new IntersectionObserver(
+            callback,
+            {root: scrollNode, threshold},
+        );
+        io.observe(itemlist);
+        return io;
+    }
+}
+
 module.exports = React.createClass({
     displayName: 'ScrollPanel',
 
@@ -160,6 +181,12 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.checkScroll();
+
+        this._timelineSizeObserver = createTimelineResizeDetector(
+            this._getScrollNode(),
+            this.refs.itemlist,
+            () => { this._restoreSavedScrollState(); },
+        );
     },
 
     componentDidUpdate: function() {
@@ -169,10 +196,6 @@ module.exports = React.createClass({
         //
         // This will also re-check the fill state, in case the paginate was inadequate
         this.checkScroll();
-
-        if (!this.isAtBottom()) {
-            this.clearBlockShrinking();
-        }
     },
 
     componentWillUnmount: function() {
@@ -181,6 +204,10 @@ module.exports = React.createClass({
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
+        if (this._timelineSizeObserver) {
+            this._timelineSizeObserver.disconnect();
+            this._timelineSizeObserver = null;
+        }
     },
 
     onScroll: function(ev) {
@@ -211,22 +238,15 @@ module.exports = React.createClass({
         // forget what we wanted, so don't overwrite the saved state unless
         // this appears to be a user-initiated scroll.
         if (sn.scrollTop != this._lastSetScroll) {
-            // when scrolling, we don't care about disappearing typing notifs shrinking the timeline
-            // this might cause the scrollbar to resize in case the max-height was not correct
-            // but that's better than ending up with a lot of whitespace at the bottom of the timeline.
-            // we need to above check because when showing the typing notifs, an onScroll event is also triggered
-            if (!this.isAtBottom()) {
-                this.clearBlockShrinking();
-            }
-
             this._saveScrollState();
         } else {
             debuglog("Ignoring scroll echo");
-
             // only ignore the echo once, otherwise we'll get confused when the
             // user scrolls away from, and back to, the autoscroll point.
             this._lastSetScroll = undefined;
         }
+
+        this._checkBlockShrinking();
 
         this.props.onScroll(ev);
 
@@ -235,8 +255,6 @@ module.exports = React.createClass({
 
     onResize: function() {
         this.props.onResize();
-        // clear min-height as the height might have changed
-        this.clearBlockShrinking();
         this.checkScroll();
         if (this._gemScroll) this._gemScroll.forceUpdate();
     },
@@ -245,6 +263,7 @@ module.exports = React.createClass({
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
         this._restoreSavedScrollState();
+        this._checkBlockShrinking();
         this.checkFillState();
     },
 
@@ -386,8 +405,6 @@ module.exports = React.createClass({
             }
             this._unfillDebouncer = setTimeout(() => {
                 this._unfillDebouncer = null;
-                // if timeline shrinks, min-height should be cleared
-                this.clearBlockShrinking();
                 this.props.onUnfillRequest(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
@@ -583,9 +600,10 @@ module.exports = React.createClass({
         }
 
         const scrollNode = this._getScrollNode();
-        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-        const boundingRect = node.getBoundingClientRect();
-        const scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+        const scrollBottom = scrollNode.scrollTop + scrollNode.clientHeight;
+
+        const nodeBottom = node.offsetTop + node.clientHeight;
+        const scrollDelta = nodeBottom + pixelOffset - scrollBottom;
 
         debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
@@ -602,42 +620,43 @@ module.exports = React.createClass({
             return;
         }
 
+        const scrollNode = this._getScrollNode();
+        const scrollBottom = scrollNode.scrollTop + scrollNode.clientHeight;
+
         const itemlist = this.refs.itemlist;
-        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
         const messages = itemlist.children;
-        let newScrollState = null;
+        let node = null;
 
+        // loop backwards, from bottom-most message (as that is the most common case)
         for (let i = messages.length-1; i >= 0; --i) {
-            const node = messages[i];
-            if (!node.dataset.scrollTokens) continue;
-
-            const boundingRect = node.getBoundingClientRect();
-            newScrollState = {
-                stuckAtBottom: false,
-                trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
-                pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-            };
-            // If the bottom of the panel intersects the ClientRect of node, use this node
-            // as the scrollToken.
-            // If this is false for the entire for-loop, we default to the last node
-            // (which is why newScrollState is set on every iteration).
-            if (boundingRect.top < wrapperRect.bottom) {
+            if (!messages[i].dataset.scrollTokens) {
+                continue;
+            }
+            node = messages[i];
+            // break at the first message (coming from the bottom)
+            // that has it's offsetTop above the bottom of the viewport.
+            if (node.offsetTop < scrollBottom) {
                 // Use this node as the scrollToken
                 break;
             }
         }
-        // This is only false if there were no nodes with `node.dataset.scrollTokens` set.
-        if (newScrollState) {
-            this.scrollState = newScrollState;
-            debuglog("ScrollPanel: saved scroll state", this.scrollState);
-        } else {
+
+        if (!node) {
             debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
+            return;
         }
+
+        const nodeBottom = node.offsetTop + node.clientHeight;
+        debuglog("ScrollPanel: saved scroll state", this.scrollState);
+        this.scrollState = {
+            stuckAtBottom: false,
+            trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
+            pixelOffset: scrollBottom - nodeBottom,
+        };
     },
 
     _restoreSavedScrollState: function() {
         const scrollState = this.scrollState;
-        const scrollNode = this._getScrollNode();
 
         if (scrollState.stuckAtBottom) {
             this._setScrollTop(Number.MAX_VALUE);
@@ -714,6 +733,21 @@ module.exports = React.createClass({
         const messageList = this.refs.itemlist;
         if (messageList) {
             messageList.style.minHeight = null;
+        }
+    },
+
+    _checkBlockShrinking: function() {
+        const sn = this._getScrollNode();
+        const scrollState = this.scrollState;
+        if (!scrollState.stuckAtBottom) {
+            const spaceBelowViewport = sn.scrollHeight - (sn.scrollTop + sn.clientHeight);
+            // only if we've scrolled up 200px from the bottom
+            // should we clear the min-height used by the typing notifications,
+            // otherwise we might still see it jump as the whitespace disappears
+            // when scrolling up from the bottom
+            if (spaceBelowViewport >= 200) {
+                this.clearBlockShrinking();
+            }
         }
     },
 
