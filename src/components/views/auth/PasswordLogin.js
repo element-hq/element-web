@@ -138,7 +138,8 @@ class PasswordLogin extends React.Component {
         this.props.onUsernameBlur(ev.target.value);
     }
 
-    onLoginTypeChange(loginType) {
+    onLoginTypeChange(ev) {
+        const loginType = ev.target.value;
         this.props.onError(null); // send a null error to clear any error messages
         this.setState({
             loginType: loginType,
@@ -294,8 +295,6 @@ class PasswordLogin extends React.Component {
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
 
-        const Dropdown = sdk.getComponent('elements.Dropdown');
-
         const loginField = this.renderLoginField(this.state.loginType);
 
         let loginType;
@@ -303,14 +302,32 @@ class PasswordLogin extends React.Component {
             loginType = (
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
-                    <Dropdown
+                    <Field
                         className="mx_Login_type_dropdown"
+                        id="mx_PasswordLogin_type"
+                        element="select"
                         value={this.state.loginType}
-                        onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('Username') }</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
-                    </Dropdown>
+                        onChange={this.onLoginTypeChange}
+                    >
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_MXID}
+                            value={PasswordLogin.LOGIN_FIELD_MXID}
+                        >
+                            {_t('Username')}
+                        </option>
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_EMAIL}
+                            value={PasswordLogin.LOGIN_FIELD_EMAIL}
+                        >
+                            {_t('Email address')}
+                        </option>
+                        <option
+                            key={PasswordLogin.LOGIN_FIELD_PHONE}
+                            value={PasswordLogin.LOGIN_FIELD_PHONE}
+                        >
+                            {_t('Phone')}
+                        </option>
+                    </Field>
                 </div>
             );
         }
