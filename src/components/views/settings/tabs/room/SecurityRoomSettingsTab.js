@@ -21,6 +21,8 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
+import Modal from "../../../../../Modal";
+import QuestionDialog from "../../../dialogs/QuestionDialog";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -83,14 +85,36 @@ export default class SecurityRoomSettingsTab extends React.Component {
     };
 
     _onEncryptionChange = (e) => {
-        const beforeEncrypted = this.state.encrypted;
-        this.setState({encrypted: true});
-        MatrixClientPeg.get().sendStateEvent(
-            this.props.roomId, "m.room.encryption",
-            { algorithm: "m.megolm.v1.aes-sha2" },
-        ).catch((e) => {
-            console.error(e);
-            this.setState({encrypted: beforeEncrypted});
+        Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
+            title: _t('Enable encryption?'),
+            description: _t(
+                "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted " +
+                "room cannot be seen by the server, only by the participants of the room. Enabling encryption " +
+                "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
+                {},
+                {
+                    'a': (sub) => {
+                        return <a rel='noopener' target='_blank'
+                                  href='https://about.riot.im/help#end-to-end-encryption'>{sub}</a>;
+                    },
+                },
+            ),
+            onFinished: (confirm) => {
+                if (!confirm) {
+                    this.setState({encrypted: false});
+                    return;
+                }
+
+                const beforeEncrypted = this.state.encrypted;
+                this.setState({encrypted: true});
+                MatrixClientPeg.get().sendStateEvent(
+                    this.props.roomId, "m.room.encryption",
+                    { algorithm: "m.megolm.v1.aes-sha2" },
+                ).catch((e) => {
+                    console.error(e);
+                    this.setState({encrypted: beforeEncrypted});
+                });
+            },
         });
     };
 
