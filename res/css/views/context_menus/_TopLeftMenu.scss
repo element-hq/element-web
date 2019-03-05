@@ -15,17 +15,39 @@ limitations under the License.
 */
 
 .mx_TopLeftMenu {
-    min-width: 180px;
+    min-width: 210px;
     border-radius: 4px;
+
+    .mx_TopLeftMenu_greyedText {
+        font-size: 12px;
+        opacity: 0.5;
+    }
+
+    .mx_TopLeftMenu_upgradeLink {
+        font-size: 12px;
+
+        img {
+            margin-left: 5px;
+        }
+    }
 
     .mx_TopLeftMenu_section:not(:last-child) {
         border-bottom: 1px solid $menu-border-color;
     }
 
-    .mx_TopLeftMenu_section {
-        list-style: none;
+    .mx_TopLeftMenu_section_noIcon {
+        margin: 5px 0;
+        padding: 5px 20px 5px 15px;
+
+        div:not(:first-child) {
+            margin-top: 5px;
+        }
+    }
+
+    .mx_TopLeftMenu_section_withIcon {
         margin: 5px 0;
         padding: 0;
+        list-style: none;
 
         li.mx_TopLeftMenu_icon_home::after {
             mask-image: url('$(res)/img/feather-customised/home.svg');
