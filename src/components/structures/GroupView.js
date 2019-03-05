@@ -21,6 +21,7 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
@@ -816,6 +817,23 @@ export default React.createClass({
         });
 
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
+
+        const hostingSignupLink = getHostingLink('community-settings');
+        let hostingSignup = null;
+        if (hostingSignupLink) {
+            hostingSignup = <div className="mx_GroupView_hostingSignup">
+                {_t(
+                    "Want more than a community? <a>Get your own server</a>", {},
+                    {
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                    },
+                )}
+                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                    <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
+                </a>
+            </div>;
+        }
+
         const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
             <div className="mx_GroupView_changeDelayWarning">
                 { _t(
@@ -830,6 +848,7 @@ export default React.createClass({
             </div> : <div />;
         return <div className={groupSettingsSectionClasses}>
             { header }
+            { hostingSignup }
             { changeDelayWarning }
             { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
