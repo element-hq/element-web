@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import SdkConfig from '../../../SdkConfig';
+import { getHostingLink } from '../../../utils/HostingLink';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
 export class TopLeftMenu extends React.Component {
@@ -53,7 +54,7 @@ export class TopLeftMenu extends React.Component {
     render() {
         const isGuest = MatrixClientPeg.get().isGuest();
 
-        const hostingSignupLink = SdkConfig.get().hosting_signup_link;
+        const hostingSignupLink = getHostingLink('user-context-menu');
         let hostingSignup = null;
         if (hostingSignupLink) {
             hostingSignup = <div className="mx_TopLeftMenu_upgradeLink">

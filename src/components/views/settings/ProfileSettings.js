@@ -21,7 +21,7 @@ import Field from "../elements/Field";
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from 'classnames';
 import {User} from "matrix-js-sdk";
-import SdkConfig from '../../../SdkConfig';
+import { getHostingLink } from '../../../utils/HostingLink';
 
 export default class ProfileSettings extends React.Component {
     constructor() {
@@ -138,7 +138,7 @@ export default class ProfileSettings extends React.Component {
             </div>
         );
 
-        const hostingSignupLink = SdkConfig.get().hosting_signup_link;
+        const hostingSignupLink = getHostingLink('user-settings');
         let hostingSignup = null;
         if (hostingSignupLink) {
             hostingSignup = <span className="mx_ProfileSettings_hostingSignup">
