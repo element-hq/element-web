@@ -92,7 +92,7 @@ limitations under the License.
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: calc(100% - 18px);
+    max-width: calc(100% - 20px); // 100% of parent minus margin and padding
 }
 
 .mx_Field input:focus + label,
