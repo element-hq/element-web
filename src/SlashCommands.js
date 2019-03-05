@@ -70,6 +70,19 @@ function success(promise) {
 /* eslint-disable babel/no-invalid-this */
 
 export const CommandMap = {
+    shrug: new Command({
+        name: 'shrug',
+        args: '<message>',
+        description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '¯\\_(ツ)_/¯';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+    }),
+
     ddg: new Command({
         name: 'ddg',
         args: '<query>',
