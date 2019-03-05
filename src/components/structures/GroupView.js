@@ -21,7 +21,7 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import SdkConfig from '../../SdkConfig';
+import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
@@ -818,7 +818,7 @@ export default React.createClass({
 
         const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
 
-        const hostingSignupLink = SdkConfig.get().hosting_signup_link;
+        const hostingSignupLink = getHostingLink('community-settings');
         let hostingSignup = null;
         if (hostingSignupLink) {
             hostingSignup = <div className="mx_GroupView_hostingSignup">
