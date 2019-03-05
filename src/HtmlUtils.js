@@ -48,6 +48,9 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 // (with plenty of false positives, but that's OK)
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
+// Regex pattern for Zero-Width joiner unicode characters.
+const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
+
 // And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
@@ -231,7 +234,7 @@ const transformTags = { // custom to matrix
     'code': function(tagName, attribs) {
         if (typeof attribs.class !== 'undefined') {
             // Filter out all classes other than ones starting with language- for syntax highlighting.
-            const classes = attribs.class.split(/\s+/).filter(function(cl) {
+            const classes = attribs.class.split(/\s/).filter(function(cl) {
                 return cl.startsWith('language-');
             });
             attribs.class = classes.join(' ');
@@ -498,7 +501,17 @@ export function bodyToHtml(content, highlights, opts={}) {
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
         EMOJI_REGEX.lastIndex = 0;
-        const contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
+        let contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
+
+        // Ignore spaces in body text. Emojis with spaces in between should
+        // still be counted as purely emoji messages.
+        contentBodyTrimmed = contentBodyTrimmed.replace(/\s/g, '');
+
+        // Remove zero width joiner characters from emoji messages. This ensures
+        // that emojis that are made up of multiple unicode characters are still
+        // presented as large.
+        contentBodyTrimmed = contentBodyTrimmed.replace(ZWJ_REGEX, '');
+
         const match = EMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
     }
