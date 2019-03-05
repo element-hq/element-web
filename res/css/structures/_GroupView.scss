@@ -62,6 +62,10 @@ limitations under the License.
     mask-image: url('$(res)/img/icons-share.svg');
 }
 
+.mx_GroupView_hostingSignup img {
+    margin-left: 5px;
+}
+
 .mx_GroupView_editable {
     border-bottom: 1px solid $strong-input-border-color ! important;
     min-width: 150px;
