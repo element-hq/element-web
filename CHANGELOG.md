@@ -1,3 +1,14 @@
+Changes in [1.0.2-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2-rc.4) (2019-03-05)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.3...v1.0.2-rc.4)
+
+ * Patch users not existing when opening settings
+   [\#2752](https://github.com/matrix-org/matrix-react-sdk/pull/2752)
+ * Fix media device selectors not updating
+   [\#2751](https://github.com/matrix-org/matrix-react-sdk/pull/2751)
+ * Support linking to hosting providers
+   [\#2750](https://github.com/matrix-org/matrix-react-sdk/pull/2750)
+
 Changes in [1.0.2-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2-rc.3) (2019-03-01)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.2...v1.0.2-rc.3)
