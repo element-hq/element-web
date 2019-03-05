@@ -140,3 +140,14 @@ limitations under the License.
     background-color: $field-focused-label-bg-color;
     color: $greyed-fg-color;
 }
+
+// Customise other components when placed inside a Field
+
+.mx_Field .mx_Dropdown_input {
+    border: initial;
+    border-radius: initial;
+}
+
+.mx_Field .mx_CountryDropdown {
+    width: 67px;
+}

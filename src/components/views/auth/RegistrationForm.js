@@ -357,32 +357,27 @@ module.exports = React.createClass({
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         let phoneSection;
         if (threePidLogin && this._authStepIsUsed('m.login.msisdn')) {
-            const phonePlaceholder = this._authStepIsRequired('m.login.msisdn') ?
+            const phoneLabel = this._authStepIsRequired('m.login.msisdn') ?
                 _t("Phone") :
                 _t("Phone (optional)");
-            phoneSection = (
-                <div className="mx_Login_phoneSection">
-                    <CountryDropdown ref="phone_country"
-                        className="mx_Login_phoneCountry mx_Login_field_prefix"
-                        value={this.state.phoneCountry}
-                        isSmall={true}
-                        showPrefix={true}
-                        onOptionChange={this.onPhoneCountryChange}
-                    />
-                    <input type="text" ref="phoneNumber"
-                        placeholder={phonePlaceholder}
-                        defaultValue={this.props.defaultPhoneNumber}
-                        className={this._classForField(
-                            FIELD_PHONE_NUMBER,
-                            'mx_Login_phoneNumberField',
-                            'mx_Login_field',
-                            'mx_Login_field_has_prefix',
-                        )}
-                        onBlur={this.onPhoneNumberBlur}
-                        value={this.state.phoneNumber}
-                    />
-                </div>
-            );
+            const phoneCountry = <CountryDropdown
+                value={this.state.phoneCountry}
+                isSmall={true}
+                showPrefix={true}
+                onOptionChange={this.onPhoneCountryChange}
+            />;
+
+            phoneSection = <Field
+                className={this._classForField(FIELD_PHONE_NUMBER)}
+                id="mx_RegistrationForm_phoneNumber"
+                ref="phoneNumber"
+                type="text"
+                label={phoneLabel}
+                defaultValue={this.props.defaultPhoneNumber}
+                value={this.state.phoneNumber}
+                prefix={phoneCountry}
+                onBlur={this.onPhoneNumberBlur}
+            />;
         }
 
         const registerButton = (
