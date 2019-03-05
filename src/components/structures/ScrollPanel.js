@@ -254,6 +254,7 @@ module.exports = React.createClass({
     },
 
     onResize: function() {
+        this.clearBlockShrinking();
         this.props.onResize();
         this.checkScroll();
         if (this._gemScroll) this._gemScroll.forceUpdate();
