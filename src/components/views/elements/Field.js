@@ -22,9 +22,8 @@ export default class Field extends React.PureComponent {
         // The field's ID, which binds the input and label together.
         id: PropTypes.string.isRequired,
         // The element to create. Defaults to "input".
-        // Should be "input", "select", or "textarea".
         // To define options for a select, use <Field><option ... /></Field>
-        element: PropTypes.string,
+        element: PropTypes.oneOf(["input", "select", "textarea"]),
         // The field's type (when used as an <input>). Defaults to "text".
         type: PropTypes.string,
         // The field's label string.
