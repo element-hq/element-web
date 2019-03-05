@@ -144,7 +144,7 @@ export default class ProfileSettings extends React.Component {
                 <a href={hostingSignupLink} target="_blank" rel="noopener">
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
-            </span>
+            </span>;
         }
 
         return (

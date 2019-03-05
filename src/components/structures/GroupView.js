@@ -831,7 +831,7 @@ export default React.createClass({
                 <a href={hostingSignupLink} target="_blank" rel="noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
-            </div>
+            </div>;
         }
 
         const changeDelayWarning = this.state.editing && this.state.isUserPrivileged ?
