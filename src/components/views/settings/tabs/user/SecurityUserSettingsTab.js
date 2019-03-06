@@ -26,9 +26,6 @@ import Promise from "bluebird";
 import Modal from "../../../../../Modal";
 import sdk from "../../../../..";
 
-// Delay between failing invite acceptance/rejections to avoid rate-limiting
-const INVITE_MANAGEMENT_DELAY = 10000;
-
 export class IgnoredUser extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
@@ -132,7 +129,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
                     // Add a delay between each invite change in order to avoid rate
                     // limiting by the server.
-                    await Promise.delay(INVITE_MANAGEMENT_DELAY);
+                    await Promise.delay(e.retry_after_ms);
 
                     // Redo last action
                     i--;
