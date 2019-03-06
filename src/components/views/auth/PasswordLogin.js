@@ -180,7 +180,7 @@ class PasswordLogin extends React.Component {
                 return <Field
                     className={classNames(classes)}
                     id="mx_PasswordLogin_email"
-                    ref={(e) => {this._loginField = e;}}
+                    ref={(e) => { this._loginField = e; }}
                     name="username" // make it a little easier for browser's remember-password
                     key="email_input"
                     type="text"
@@ -196,13 +196,13 @@ class PasswordLogin extends React.Component {
                 return <Field
                     className={classNames(classes)}
                     id="mx_PasswordLogin_username"
-                    ref={(e) => {this._loginField = e;}}
+                    ref={(e) => { this._loginField = e; }}
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
                     label={SdkConfig.get().disable_custom_urls ?
                         _t("Username on %(hs)s", {
-                          hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
+                            hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
                         }) : _t("Username")}
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
@@ -339,19 +339,19 @@ class PasswordLogin extends React.Component {
                     {editLink}
                 </h3>
                 <form onSubmit={this.onSubmitForm}>
-                    { loginType }
-                    { loginField }
+                    {loginType}
+                    {loginField}
                     <Field
                         className={pwFieldClass}
                         id="mx_PasswordLogin_password"
-                        ref={(e) => {this._passwordField = e;}}
+                        ref={(e) => { this._passwordField = e; }}
                         type="password"
                         name="password"
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
                     />
-                    { forgotPasswordJsx }
+                    {forgotPasswordJsx}
                     <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
