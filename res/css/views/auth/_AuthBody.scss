@@ -78,16 +78,16 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
-.mx_AuthBody_fieldRow > * {
+.mx_AuthBody_fieldRow > .mx_Field {
     margin: 0 5px;
     flex: 1;
 }
 
-.mx_AuthBody_fieldRow > *:first-child {
+.mx_AuthBody_fieldRow > .mx_Field:first-child {
     margin-left: 0;
 }
 
-.mx_AuthBody_fieldRow > *:last-child {
+.mx_AuthBody_fieldRow > .mx_Field:last-child {
     margin-right: 0;
 }
 

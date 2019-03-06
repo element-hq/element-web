@@ -230,6 +230,8 @@ module.exports = React.createClass({
     },
 
     renderForgot() {
+        const Field = sdk.getComponent('elements.Field');
+
         let errorText = null;
         const err = this.state.errorText || this.props.defaultServerDiscoveryError;
         if (err) {
@@ -275,23 +277,33 @@ module.exports = React.createClass({
             {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
-                    <input className="mx_Login_field" type="text"
+                    <Field
+                        id="mx_ForgotPassword_email"
                         name="reset_email" // define a name so browser's password autofill gets less confused
+                        type="text"
+                        label={_t('Email')}
                         value={this.state.email}
                         onChange={this.onInputChanged.bind(this, "email")}
-                        placeholder={_t('Email')} autoFocus />
+                        autoFocus
+                    />
                 </div>
                 <div className="mx_AuthBody_fieldRow">
-                    <input className="mx_Login_field" type="password"
+                    <Field
+                        id="mx_ForgotPassword_password"
                         name="reset_password"
+                        type="password"
+                        label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onInputChanged.bind(this, "password")}
-                        placeholder={_t('Password')} />
-                    <input className="mx_Login_field" type="password"
+                    />
+                    <Field
+                        id="mx_ForgotPassword_passwordConfirm"
                         name="reset_password_confirm"
+                        type="password"
+                        label={_t('Confirm')}
                         value={this.state.password2}
                         onChange={this.onInputChanged.bind(this, "password2")}
-                        placeholder={_t('Confirm')} />
+                    />
                 </div>
                 <span>{_t(
                     'A verification email will be sent to your inbox to confirm ' +

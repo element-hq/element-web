@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export default class Field extends React.PureComponent {
     static propTypes = {
@@ -30,6 +31,8 @@ export default class Field extends React.PureComponent {
         label: PropTypes.string,
         // The field's placeholder string. Defaults to the label.
         placeholder: PropTypes.string,
+        // Optional component to include inside the field before the input.
+        prefix: PropTypes.node,
         // All other props pass through to the <input>.
     };
 
@@ -46,7 +49,7 @@ export default class Field extends React.PureComponent {
     }
 
     render() {
-        const { element, children, ...inputProps } = this.props;
+        const { element, prefix, children, ...inputProps } = this.props;
 
         const inputElement = element || "input";
 
@@ -57,7 +60,20 @@ export default class Field extends React.PureComponent {
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
 
-        return <div className={`mx_Field mx_Field_${inputElement}`}>
+        let prefixContainer = null;
+        if (prefix) {
+            prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
+        }
+
+        const classes = classNames("mx_Field", `mx_Field_${inputElement}`, {
+            // If we have a prefix element, leave the label always at the top left and
+            // don't animate it, as it looks a bit clunky and would add complexity to do
+            // properly.
+            mx_Field_labelAlwaysTopLeft: prefix,
+        });
+
+        return <div className={classes}>
+            {prefixContainer}
             {fieldInput}
             <label htmlFor={this.props.id}>{this.props.label}</label>
         </div>;

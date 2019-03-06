@@ -15,17 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Login_field {
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 3px;
-    border: 1px solid $strong-input-border-color;
-    font-weight: 300;
-    font-size: 13px;
-    padding: 9px;
-    margin-bottom: 14px;
-}
-
 .mx_Login_submit {
     @mixin mx_DialogButton;
     width: 100%;
@@ -69,74 +58,24 @@ limitations under the License.
     color: $warning-color;
     font-weight: bold;
     text-align: center;
-/*
-    height: 24px;
-*/
     margin-top: 12px;
     margin-bottom: 12px;
 }
 
 .mx_Login_type_container {
     display: flex;
-    margin-bottom: 14px;
+    align-items: center;
     color: $authpage-primary-color;
+
+    .mx_Field {
+        margin: 0;
+    }
 }
 
 .mx_Login_type_label {
     flex-grow: 1;
-    line-height: 35px;
 }
 
 .mx_Login_type_dropdown {
-    display: inline-block;
-    min-width: 170px;
-    align-self: flex-end;
-    flex: 1 1 auto;
-}
-
-.mx_Login_field_prefix {
-    height: 38px;
-    padding: 0px 5px;
-    line-height: 38px;
-
-    background-color: #eee;
-    border: 1px solid #c7c7c7;
-    border-right: 0px;
-    border-radius: 3px 0px 0px 3px;
-
-    text-align: center;
-}
-
-.mx_Login_field_has_prefix {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-}
-
-.mx_Login_phoneSection {
-    display:flex;
-}
-
-.mx_Login_phoneCountry {
-    margin-bottom: 14px;
-
-    /* To override mx_Login_field_prefix */
-    text-align: left;
-    padding: 0px;
-    background-color: $primary-bg-color;
-}
-
-.mx_Login_field_prefix .mx_Dropdown_input {
-    /* To use prefix border instead of dropdown border */
-    border: 0;
-}
-
-.mx_Login_phoneCountry .mx_Dropdown_option {
-    /* To match height of mx_Login_field */
-    height: 38px;
-    line-height: 38px;
-}
-
-.mx_Login_phoneCountry .mx_Dropdown_option img {
-    margin: 3px;
-    vertical-align: top;
+    min-width: 200px;
 }

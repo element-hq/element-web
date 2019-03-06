@@ -17,8 +17,16 @@ limitations under the License.
 /* TODO: Consider unifying with general input styles in _light.scss */
 
 .mx_Field {
+    display: flex;
     position: relative;
     margin: 1em 0;
+    border-radius: 4px;
+    transition: border-color 0.25s;
+    border: 1px solid $input-border-color;
+}
+
+.mx_Field_prefix {
+    border-right: 1px solid $input-border-color;
 }
 
 .mx_Field input,
@@ -27,9 +35,10 @@ limitations under the License.
     font-weight: normal;
     font-family: $font-family;
     font-size: 14px;
+    border: none;
+    // Even without a border here, we still need this avoid overlapping the rounded
+    // corners on the field above.
     border-radius: 4px;
-    transition: border-color 0.25s;
-    border: 1px solid $input-border-color;
     padding: 8px 9px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
@@ -55,11 +64,14 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_Field:focus-within {
+    border-color: $input-focused-border-color;
+}
+
 .mx_Field input:focus,
 .mx_Field select:focus,
 .mx_Field textarea:focus {
     outline: 0;
-    border-color: $input-focused-border-color;
 }
 
 .mx_Field input::placeholder,
@@ -99,7 +111,8 @@ limitations under the License.
 .mx_Field input:not(:placeholder-shown) + label,
 .mx_Field textarea:focus + label,
 .mx_Field textarea:not(:placeholder-shown) + label,
-.mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
+.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+.mx_Field_labelAlwaysTopLeft label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
@@ -126,4 +139,15 @@ limitations under the License.
 .mx_Field textarea:disabled + label {
     background-color: $field-focused-label-bg-color;
     color: $greyed-fg-color;
+}
+
+// Customise other components when placed inside a Field
+
+.mx_Field .mx_Dropdown_input {
+    border: initial;
+    border-radius: initial;
+}
+
+.mx_Field .mx_CountryDropdown {
+    width: 67px;
 }
