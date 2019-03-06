@@ -213,6 +213,7 @@ const LeftPanel = React.createClass({
         );
 
         const searchBox = (<SearchBox
+            enableRoomSearchFocus={true}
             placeholder={ _t('Filter room names') }
             onSearch={ this.onSearch }
             onCleared={ this.onSearchCleared }
