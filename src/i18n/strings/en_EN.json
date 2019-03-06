@@ -127,6 +127,7 @@
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Missing user_id in request": "Missing user_id in request",
     "Usage": "Usage",
+    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
     "Searches DuckDuckGo for results": "Searches DuckDuckGo for results",
     "/ddg is not a command": "/ddg is not a command",
     "To use it, just wait for autocomplete results to load and tab through them.": "To use it, just wait for autocomplete results to load and tab through them.",
