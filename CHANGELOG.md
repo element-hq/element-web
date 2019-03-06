@@ -1,3 +1,12 @@
+Changes in [1.0.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2) (2019-03-06)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.4...v1.0.2)
+
+ * Only show hosting link if group admin
+   [\#2755](https://github.com/matrix-org/matrix-react-sdk/pull/2755)
+ * Only show hosting link if domain == matrix.org
+   [\#2754](https://github.com/matrix-org/matrix-react-sdk/pull/2754)
+
 Changes in [1.0.2-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2-rc.4) (2019-03-05)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.3...v1.0.2-rc.4)
