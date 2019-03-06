@@ -52,10 +52,15 @@ limitations under the License.
     color: $authpage-primary-color;
 }
 
-.mx_AuthBody .mx_Field input:focus + label,
-.mx_AuthBody .mx_Field input:not(:placeholder-shown) + label,
-.mx_AuthBody .mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
-    background-color: $authpage-body-bg-color;
+.mx_AuthBody {
+    .mx_Field input:focus + label,
+    .mx_Field input:not(:placeholder-shown) + label,
+    .mx_Field textarea:focus + label,
+    .mx_Field textarea:not(:placeholder-shown) + label,
+    .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+    .mx_Field_labelAlwaysTopLeft label {
+        background-color: $authpage-body-bg-color;
+    }
 }
 
 .mx_AuthBody input.error {
