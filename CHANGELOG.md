@@ -1,3 +1,16 @@
+Changes in [1.0.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.3) (2019-03-06)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2...v1.0.3)
+
+ * Don't duplicate direct chats from other tags
+   [\#2762](https://github.com/matrix-org/matrix-react-sdk/pull/2762)
+ * Include tag name when warning about rooms running off lists
+   [\#2761](https://github.com/matrix-org/matrix-react-sdk/pull/2761)
+ * Always insert rooms into lists when they get lost
+   [\#2760](https://github.com/matrix-org/matrix-react-sdk/pull/2760)
+ * Fix the ctrl+k shortcut
+   [\#2759](https://github.com/matrix-org/matrix-react-sdk/pull/2759)
+
 Changes in [1.0.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.2) (2019-03-06)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.2-rc.4...v1.0.2)
