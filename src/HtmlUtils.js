@@ -48,8 +48,11 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 // (with plenty of false positives, but that's OK)
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
-// Regex pattern for Zero-Width joiner unicode characters.
+// Regex pattern for Zero-Width joiner unicode characters
 const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
+
+// Regex pattern for whitespace characters
+const WHITESPACE_REGEX = new RegExp("\\s", "g");
 
 // And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
@@ -505,7 +508,7 @@ export function bodyToHtml(content, highlights, opts={}) {
 
         // Ignore spaces in body text. Emojis with spaces in between should
         // still be counted as purely emoji messages.
-        contentBodyTrimmed = contentBodyTrimmed.replace(/\s/g, '');
+        contentBodyTrimmed = contentBodyTrimmed.replace(WHITESPACE_REGEX, '');
 
         // Remove zero width joiner characters from emoji messages. This ensures
         // that emojis that are made up of multiple unicode characters are still
