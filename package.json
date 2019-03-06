@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -70,8 +70,8 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "1.0.0",
-    "matrix-react-sdk": "1.0.1",
+    "matrix-js-sdk": "1.0.1",
+    "matrix-react-sdk": "1.0.2",
     "modernizr": "^3.6.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.0",
@@ -125,6 +125,7 @@
     "karma-spec-reporter": "0.0.31",
     "karma-summary-reporter": "^1.5.1",
     "karma-webpack": "4.0.0-beta.0",
+    "loader-utils": "^1.2.3",
     "matrix-mock-request": "^1.2.2",
     "matrix-react-test-utils": "^0.2.0",
     "minimist": "^1.2.0",
@@ -151,7 +152,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "4.0.4",
+    "electronVersion": "4.0.6",
     "files": [
       "node_modules/**",
       "src/**",

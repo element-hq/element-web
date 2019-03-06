@@ -35,5 +35,12 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Muitas salas já existem no Matrix, algumas independentes, e outras relacionadas a redes existentes (tais como Slack, IRC, Gitter, entre outras). Dê uma olhada na lista de salas públicas!",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat descentralizado, criptografado e colaborativo oferecido por [matrix]",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Você pode usar as opções customizadas de servidor para conectar-se a outros servidores Matrix ao especificar uma outra URL de Servidor de Base (homeserver).<br/> Isso permite que você use o Riot com uma conta Matrix existente em outro servidor de base.<br/><br/>Você também pode definir um servidor de identidade customizado, mas neste caso você não poderá convidar outras pesoas por endereço de email, ou ser convidada/o pelo seu endereço de email.",
-    "Co-ordination for Riot translators": "Coordenação para tradutores Riot"
+    "Co-ordination for Riot translators": "Coordenação para tradutores Riot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Você pode usar as opções personalizadas do servidor para entrar em outros servidores Matrix, especificando um URL diferente de homeserver. Isso permite que você use o Riot com uma conta Matrix existente em um homeserver diferente.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Você também pode definir um servidor de identidade personalizado, mas não poderá convidar usuários por endereço de e-mail nem ser convidado por endereço de e-mail.",
+    "Sign In": "Entrar",
+    "Create Account": "Criar Conta",
+    "Need help?": "Precisa de ajuda?",
+    "Explore rooms": "Explore as salas",
+    "Room Directory": "Diretório de salas"
 }

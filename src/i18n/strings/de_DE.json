@@ -40,7 +40,7 @@
     "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Du kannst auch einen anderen Identitätsserver setzen. Dieser hat einen anderen Wissensstand als der Standardserver, weswegen es beim Einladen oder Eingeladen werden mittels E-Mail-Adresse Probleme geben kann.",
     "Sign In": "Anmelden",
     "Create Account": "Konto erstellen",
-    "Need help?": "Braucht du Hilfe?",
+    "Need help?": "Brauchst du Hilfe?",
     "Explore rooms": "Räume erkunden",
     "Room Directory": "Raumverzeichnis"
 }

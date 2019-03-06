@@ -61,7 +61,17 @@ module.exports = {
                 }),
             },
             {
-                test: /\.(gif|png|svg|ttf)$/,
+                // cache-bust languages.json file placed in
+                // riot-web/webapp/i18n during build by copy-res.js
+                test: /\.*languages.json$/,
+                type: "javascript/auto",
+                loader: 'file-loader',
+                options: {
+                    name: 'i18n/[name].[hash:7].[ext]',
+                },
+            },
+            {
+                test: /\.(gif|png|svg|ttf|xml|ico)$/,
                 // Use a content-based hash in the name so that we can set a long cache
                 // lifetime for assets while still delivering changes quickly.
                 oneOf: [
@@ -141,6 +151,8 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+
+            "$webapp": path.resolve('./webapp'),
         },
     },
     plugins: [
@@ -149,7 +161,6 @@ module.exports = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
         }),
-
         new ExtractTextPlugin("bundles/[hash]/[name].css", {
             allChunks: true,
         }),

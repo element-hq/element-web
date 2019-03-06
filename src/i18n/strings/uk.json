@@ -1,5 +1,5 @@
 {
-    "Custom Server Options": "Нетипові параметри сервера",
+    "Custom Server Options": "Власні параметри сервера",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s через %(browserName)s на %(osName)s",
     "Dismiss": "Відхилити",
     "powered by Matrix": "працює на Matrix",
@@ -10,7 +10,7 @@
     "Welcome to Riot.im": "Ласкаво просимо до Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентралізований, шифрований чат та засіб для співробітництва, що працює на [matrix]",
     "Search the room directory": "Шукати у каталозі кімнат",
-    "Chat with Riot Bot": "Розмовляти з Riot-ботом",
+    "Chat with Riot Bot": "Чат із Riot-ботом",
     "Get started with some tips from Riot Bot!": "Розпочніть за допомогою декількох підказок від Riot-боту!",
     "General discussion about Matrix and Riot": "Загальне обговорення Matrix та Riot",
     "Discussion of all things Matrix!": "Обговорення усіх деталей про Matrix!",
@@ -35,5 +35,12 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "У мережі Matrix вже існує багато кімнат, що з'єднані як з існуючими мережами (Slack, IRC, Gitter тощо), так і незалежними. Подивіться у каталозі кімнат!",
     "Running Matrix services": "Запуск служби Matrix",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви можете використовувати параметри користувача сервера для входа на другі сервера Matrix, вказав другий URL-адресу домашнього сервера. <br/>Це дозволяє використовувати Riot з обліковим записом Matrix який існує на другому домашньому сервері.<br/><br/>Окрім цього, можливо встановити ідентифікаційний сервер користувача, але ви не зможете запросити других користувачів та бути запрошенному  використовуючи адресу електронної пошти.",
-    "Co-ordination for Riot translators": "Координаційний чат для перекладачів Riot"
+    "Co-ordination for Riot translators": "Координаційний чат для перекладачів Riot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Ви можете використати власні параметри сервера для входу в інші Matrix сервери, вказавши інший URL. Це дозволить використовувати Riot з наявним обліковим записом Matrix на іншому сервері.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Ви також можете встановити власний сервер ідентифікації, але Ви не зможете запрошувати користувачів або бути запрошеним за адресою електронної пошти.",
+    "Need help?": "Допомогти?",
+    "Sign In": "Вхід",
+    "Create Account": "Створити аккаунт",
+    "Explore rooms": "Дослідити кімнати",
+    "Room Directory": "Каталог кімнат"
 }

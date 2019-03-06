@@ -35,6 +35,7 @@ const updater = require('./updater');
 const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
+const Store = require('electron-store');
 
 // boolean flag set whilst we are doing one-time origin migration
 // We only serve the origin migration script while we're actually
@@ -55,8 +56,11 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
+const store = new Store();
+
 let mainWindow = null;
 global.appQuitting = false;
+global.minimizeToTray = store.get('minimizeToTray', true);
 
 
 // handle uncaught errors otherwise it displays
@@ -136,6 +140,12 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 launcher.disable();
             }
             break;
+        case 'getMinimizeToTrayEnabled':
+            ret = global.minimizeToTray;
+            break;
+        case 'setMinimizeToTrayEnabled':
+            store.set('minimizeToTray', global.minimizeToTray = args[0]);
+            break;
         case 'getAppVersion':
             ret = app.getVersion();
             break;
@@ -147,6 +157,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             } else {
                 mainWindow.focus();
             }
+            break;
         case 'origin_migrate':
             migratingOrigin = true;
             await migrateFromOldOrigin();
@@ -262,10 +273,12 @@ app.on('ready', () => {
             path: absTarget,
         });
     }, (error) => {
-        if (error) console.error('Failed to register protocol')
+        if (error) console.error('Failed to register protocol');
     });
 
-    if (vectorConfig['update_base_url']) {
+    if (argv['no-update']) {
+        console.log('Auto update disabled via command line flag "--no-update"');
+    } else if (vectorConfig['update_base_url']) {
         console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
         updater.start(vectorConfig['update_base_url']);
     } else {
@@ -331,7 +344,7 @@ app.on('ready', () => {
         mainWindow = global.mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
+        if (global.minimizeToTray && !global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
