@@ -92,17 +92,31 @@ const EntityTile = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        // We use a listener on the document so we can find out when the cursor leaves the element more
+        // safely. This is a workaround for https://github.com/facebook/react/issues/4492 and
+        // https://github.com/vector-im/riot-web/issues/1997
+        document.addEventListener("mouseover", this.mouseEnter);
+    },
+
+    componentWillUnmount: function() {
+        document.removeEventListener("mouseover", this.mouseEnter);
+    },
+
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.hover !== nextState.hover) return true;
         return this.props.shouldComponentUpdate(nextProps, nextState);
     },
 
-    mouseEnter: function(e) {
-        this.setState({ 'hover': true });
-    },
+    mouseEnter: function(ev) {
+        let targetHover = false;
+        if (this.container && (this.container === ev.target || this.container.contains(ev.target))) {
+            targetHover = true;
+        }
 
-    mouseLeave: function(e) {
-        this.setState({ 'hover': false });
+        if (targetHover !== this.state.hover) {
+            this.setState({hover: targetHover});
+        }
     },
 
     render: function() {
@@ -183,17 +197,18 @@ const EntityTile = React.createClass({
 
         const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
 
+        // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
-            <AccessibleButton className={mainClassName} title={this.props.title}
-                    onClick={this.props.onClick} onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}>
-                <div className="mx_EntityTile_avatar">
-                    { av }
-                    { power }
-                </div>
-                { nameEl }
-                { inviteButton }
-            </AccessibleButton>
+            <div ref={(c) => this.container = c} >
+                <AccessibleButton className={mainClassName} title={this.props.title} onClick={this.props.onClick}>
+                    <div className="mx_EntityTile_avatar">
+                        { av }
+                        { power }
+                    </div>
+                    { nameEl }
+                    { inviteButton }
+                </AccessibleButton>
+            </div>
         );
     },
 });
