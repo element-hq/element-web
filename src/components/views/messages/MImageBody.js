@@ -34,7 +34,7 @@ export default class MImageBody extends React.Component {
         mxEvent: PropTypes.object.isRequired,
 
         /* called when the image has loaded */
-        onWidgetLoad: PropTypes.func.isRequired,
+        onHeightChanged: PropTypes.func.isRequired,
 
         /* the maximum image height to use */
         maxImageHeight: PropTypes.number,
@@ -144,7 +144,7 @@ export default class MImageBody extends React.Component {
     }
 
     onImageLoad() {
-        this.props.onWidgetLoad();
+        this.props.onHeightChanged();
 
         let loadedImageDimensions;
 

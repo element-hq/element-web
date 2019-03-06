@@ -1186,7 +1186,7 @@ module.exports = React.createClass({
 
         // once dynamic content in the search results load, make the scrollPanel check
         // the scroll offsets.
-        const onWidgetLoad = () => {
+        const onHeightChanged = () => {
             const scrollPanel = this.refs.searchResultsPanel;
             if (scrollPanel) {
                 scrollPanel.checkScroll();
@@ -1231,7 +1231,7 @@ module.exports = React.createClass({
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
                      permalinkCreator={this.state.permalinkCreator}
-                     onWidgetLoad={onWidgetLoad} />);
+                     onHeightChanged={onHeightChanged} />);
         }
         return ret;
     },

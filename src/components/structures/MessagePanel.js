@@ -387,7 +387,7 @@ module.exports = React.createClass({
 
                 ret.push(<MemberEventListSummary key={key}
                     events={summarisedEvents}
-                    onToggle={this._onWidgetLoad} // Update scroll state
+                    onToggle={this._onHeightChanged} // Update scroll state
                     startExpanded={highlightInMels}
                 >
                         { eventTiles }
@@ -517,7 +517,7 @@ module.exports = React.createClass({
                         data-scroll-tokens={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
-                        onWidgetLoad={this._onWidgetLoad}
+                        onHeightChanged={this._onHeightChanged}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
                         showUrlPreview={this.props.showUrlPreview}
@@ -625,7 +625,7 @@ module.exports = React.createClass({
 
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
-    _onWidgetLoad: function() {
+    _onHeightChanged: function() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.forceUpdate();

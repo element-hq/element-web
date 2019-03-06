@@ -32,7 +32,7 @@ module.exports = React.createClass({
         link: PropTypes.string.isRequired, // the URL being previewed
         mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
         onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
-        onWidgetLoad: PropTypes.func, // called when the preview's contents has loaded
+        onHeightChanged: PropTypes.func, // called when the preview's contents has loaded
     },
 
     getInitialState: function() {
@@ -49,7 +49,7 @@ module.exports = React.createClass({
             }
             this.setState(
                 { preview: res },
-                this.props.onWidgetLoad,
+                this.props.onHeightChanged,
             );
         }, (error)=>{
             console.error("Failed to get preview for " + this.props.link + " " + error);
