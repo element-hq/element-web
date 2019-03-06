@@ -75,6 +75,18 @@ limitations under the License.
         width: 100%;
         box-sizing: border-box;
     }
+
+    .mx_Dropdown_arrow {
+        background: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_menu {
+        background-color: $authpage-body-bg-color;
+
+        .mx_Dropdown_option_highlight {
+            background-color: $authpage-focus-bg-color;
+        }
+    }
 }
 
 .mx_AuthBody_editServerDetails {
