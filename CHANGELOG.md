@@ -1,3 +1,9 @@
+Changes in [1.0.3](https://github.com/vector-im/riot-web/releases/tag/v1.0.3) (2019-03-06)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2...v1.0.3)
+
+ * react-sdk 1.0.3 to fix ctrl+k shortcut and room list bugs
+
 Changes in [1.0.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.2) (2019-03-06)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2-rc.3...v1.0.2)
