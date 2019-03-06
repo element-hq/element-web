@@ -62,9 +62,7 @@ export default class Field extends React.PureComponent {
 
         let prefixContainer = null;
         if (prefix) {
-            prefixContainer = <span className="mx_Field_prefix">
-                {prefix}
-            </span>;
+            prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
         const classes = classNames("mx_Field", `mx_Field_${inputElement}`, {
