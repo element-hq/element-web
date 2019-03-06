@@ -820,7 +820,7 @@ export default React.createClass({
 
         const hostingSignupLink = getHostingLink('community-settings');
         let hostingSignup = null;
-        if (hostingSignupLink) {
+        if (hostingSignupLink && this.state.isUserPrivileged) {
             hostingSignup = <div className="mx_GroupView_hostingSignup">
                 {_t(
                     "Want more than a community? <a>Get your own server</a>", {},
