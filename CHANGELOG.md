@@ -1,3 +1,9 @@
+Changes in [1.0.2](https://github.com/vector-im/riot-web/releases/tag/v1.0.2) (2019-03-06)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2-rc.3...v1.0.2)
+
+ * New react-sdk for minor hosting link fixes
+
 Changes in [1.0.2-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.0.2-rc.3) (2019-03-05)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2-rc.2...v1.0.2-rc.3)
