@@ -10,9 +10,6 @@ set -x
 
 npm install
 
-# apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
-npm install olm
-
 # check out corresponding branches of dependencies.
 #
 # clone the deps with depth 1: we know we will only ever need that one
