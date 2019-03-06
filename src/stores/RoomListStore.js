@@ -332,7 +332,7 @@ class RoomListStore extends Store {
         return tags;
     }
 
-    _slotRoomIntoList(room, category, existingEntries, newList, lastTimestampFn) {
+    _slotRoomIntoList(room, category, tag, existingEntries, newList, lastTimestampFn) {
         const targetCategoryIndex = CATEGORY_ORDER.indexOf(category);
 
         // The slotting algorithm works by trying to position the room in the most relevant
@@ -430,7 +430,7 @@ class RoomListStore extends Store {
         }
 
         if (!pushedEntry && desiredCategoryBoundaryIndex >= 0) {
-            console.warn(`!! Room ${room.roomId} nearly lost: Ran off the end of the list`);
+            console.warn(`!! Room ${room.roomId} nearly lost: Ran off the end of ${tag}`);
             console.warn(`!! Inserting at position ${desiredCategoryBoundaryIndex} with category ${category}`);
             newList.splice(desiredCategoryBoundaryIndex, 0, {room, category});
             pushedEntry = true;
@@ -481,7 +481,7 @@ class RoomListStore extends Store {
                 listsClone[key] = [];
 
                 const pushedEntry = this._slotRoomIntoList(
-                    room, category, this._state.lists[key], listsClone[key], lastTimestamp);
+                    room, category, key, this._state.lists[key], listsClone[key], lastTimestamp);
 
                 if (!pushedEntry) {
                     // This should rarely happen: _slotRoomIntoList has several checks which attempt
