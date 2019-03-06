@@ -235,6 +235,7 @@ export default class PhoneNumbers extends React.Component {
                                          value={this.state.phoneCountry}
                                          disabled={this.state.verifying}
                                          isSmall={true}
+                                         showPrefix={true}
                         />
                         <Field id="newPhoneNumber" ref="newPhoneNumber" label={_t("Phone Number")}
                                type="text" autoComplete="off" disabled={this.state.verifying} />
