@@ -30,6 +30,17 @@ module.exports = React.createClass({
         onCleared: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
+
+        // If true, the search box will focus and clear itself
+        // on room search focus action (it would be nicer to take
+        // this functionality out, but not obvious how that would work)
+        enableRoomSearchFocus: PropTypes.bool,
+    },
+
+    getDefaultProps: function() {
+        return {
+            enableRoomSearchFocus: false,
+        };
     },
 
     getInitialState: function() {
@@ -47,6 +58,8 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        if (!this.props.enableRoomSearchFocus) return;
+
         switch (payload.action) {
             case 'view_room':
                 if (this.refs.search && payload.clear_search) {
