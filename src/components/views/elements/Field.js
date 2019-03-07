@@ -70,6 +70,10 @@ export default class Field extends React.PureComponent {
                 feedback: result.feedback,
             });
         }
+        // Parent component may have supplied its own `onChange` as well
+        if (this.props.onChange) {
+            this.props.onChange(ev);
+        }
     };
 
     render() {
