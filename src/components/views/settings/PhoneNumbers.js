@@ -224,20 +224,23 @@ export default class PhoneNumbers extends React.Component {
             );
         }
 
+        const phoneCountry = <CountryDropdown onOptionChange={this._onCountryChanged}
+            className="mx_PhoneNumbers_country"
+            value={this.state.phoneCountry}
+            disabled={this.state.verifying}
+            isSmall={true}
+            showPrefix={true}
+        />;
+
         return (
             <div className="mx_PhoneNumbers">
                 {existingPhoneElements}
                 <form onSubmit={this._onAddClick} autoComplete={false}
                       noValidate={true} className="mx_PhoneNumbers_new">
                     <div className="mx_PhoneNumbers_input">
-                        <CountryDropdown onOptionChange={this._onCountryChanged}
-                                         className="mx_PhoneNumbers_country"
-                                         value={this.state.phoneCountry}
-                                         disabled={this.state.verifying}
-                                         isSmall={true}
-                        />
                         <Field id="newPhoneNumber" ref="newPhoneNumber" label={_t("Phone Number")}
-                               type="text" autoComplete="off" disabled={this.state.verifying} />
+                               type="text" autoComplete="off" disabled={this.state.verifying}
+                               prefix={phoneCountry} />
                     </div>
                     {addVerifySection}
                 </form>
