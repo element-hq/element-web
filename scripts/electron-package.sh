@@ -124,8 +124,12 @@ mkdir -p "$pubdir/update/win32/x64/"
 cp $distdir/squirrel-windows/*.nupkg "$pubdir/update/win32/x64/"
 cp $distdir/squirrel-windows/RELEASES "$pubdir/update/win32/x64/"
 
-# Move the debs to the main project dir's dist folder
-cp $distdir/*.deb "$projdir/electron_app/dist/"
+# Move the deb to the main project dir's dist folder
+# (just the 64 bit one - the 32 bit one still gets built because
+# it's one arch argument for all platforms and we still want 32 bit
+# windows, but 32 bit linux is unsupported as of electron 4 and no
+# longer appears to work).
+cp $distdir/*_amd64.deb "$projdir/electron_app/dist/"
 
 rm -rf "$builddir"
 
