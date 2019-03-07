@@ -19,11 +19,10 @@ limitations under the License.
 
 const React = require('react');
 import PropTypes from 'prop-types';
-
-const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require('../../../index');
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
+import classNames from "classnames";
 
 
 const PRESENCE_CLASS = {
@@ -92,64 +91,44 @@ const EntityTile = React.createClass({
         };
     },
 
-    componentWillMount: function() {
-        // We use a listener on the document so we can find out when the cursor leaves the element more
-        // safely. This is a workaround for https://github.com/facebook/react/issues/4492 and
-        // https://github.com/vector-im/riot-web/issues/1997
-        document.addEventListener("mouseover", this.mouseEnter);
-    },
-
-    componentWillUnmount: function() {
-        document.removeEventListener("mouseover", this.mouseEnter);
-    },
-
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.hover !== nextState.hover) return true;
         return this.props.shouldComponentUpdate(nextProps, nextState);
     },
 
-    mouseEnter: function(ev) {
-        let targetHover = false;
-        if (this.container && (this.container === ev.target || this.container.contains(ev.target))) {
-            targetHover = true;
-        }
-
-        if (targetHover !== this.state.hover) {
-            this.setState({hover: targetHover});
-        }
-    },
-
     render: function() {
+        const mainClassNames = {
+            "mx_EntityTile": true,
+            "mx_EntityTile_noHover": this.props.suppressOnHover,
+        };
+        if (this.props.className) mainClassNames[this.props.className] = true;
+
         const presenceClass = presenceClassForMember(
             this.props.presenceState, this.props.presenceLastActiveAgo, this.props.showPresence,
         );
+        mainClassNames[presenceClass] = true;
 
-        let mainClassName = "mx_EntityTile ";
-        mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
         let nameEl;
         const {name} = this.props;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
-        if (this.state.hover && !this.props.suppressOnHover) {
+        if (!this.props.suppressOnHover) {
             const activeAgo = this.props.presenceLastActiveAgo ?
                 (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;
 
-            mainClassName += " mx_EntityTile_hover";
             const PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             let presenceLabel = null;
-            let nameClasses = 'mx_EntityTile_name';
             if (this.props.showPresence) {
                 presenceLabel = <PresenceLabel activeAgo={activeAgo}
                     currentlyActive={this.props.presenceCurrentlyActive}
                     presenceState={this.props.presenceState} />;
-                nameClasses += ' mx_EntityTile_name_hover';
             }
             if (this.props.subtextLabel) {
                 presenceLabel = <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>;
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <EmojiText element="div" className={nameClasses} dir="auto">
+                    <EmojiText element="div" className="mx_EntityTile_name" dir="auto">
                         { name }
                     </EmojiText>
                     {presenceLabel}
@@ -200,7 +179,8 @@ const EntityTile = React.createClass({
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
             <div ref={(c) => this.container = c} >
-                <AccessibleButton className={mainClassName} title={this.props.title} onClick={this.props.onClick}>
+                <AccessibleButton className={classNames(mainClassNames)} title={this.props.title}
+                                  onClick={this.props.onClick}>
                     <div className="mx_EntityTile_avatar">
                         { av }
                         { power }
