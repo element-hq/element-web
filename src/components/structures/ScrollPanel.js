@@ -79,26 +79,6 @@ if (DEBUG_SCROLL) {
  * offset as normal.
  */
 
-
-function createTimelineResizeDetector(scrollNode, itemlist, callback) {
-    if (typeof ResizeObserver !== "undefined") {
-        const ro = new ResizeObserver(callback);
-        ro.observe(itemlist);
-        return ro;
-    } else if (typeof IntersectionObserver !== "undefined") {
-        const threshold = [];
-        for (let i = 0; i <= 1000; ++i) {
-            threshold.push(i / 1000);
-        }
-        const io = new IntersectionObserver(
-            callback,
-            {root: scrollNode, threshold},
-        );
-        io.observe(itemlist);
-        return io;
-    }
-}
-
 module.exports = React.createClass({
     displayName: 'ScrollPanel',
 
@@ -181,12 +161,6 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.checkScroll();
-
-        this._timelineSizeObserver = createTimelineResizeDetector(
-            this._getScrollNode(),
-            this.refs.itemlist,
-            () => { this._restoreSavedScrollState(); },
-        );
     },
 
     componentDidUpdate: function() {
