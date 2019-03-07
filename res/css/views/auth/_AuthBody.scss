@@ -76,6 +76,10 @@ limitations under the License.
         box-sizing: border-box;
     }
 
+    .mx_Field_select::before {
+        background-color: $authpage-primary-color;
+    }
+
     .mx_Dropdown_arrow {
         background: $authpage-primary-color;
     }
