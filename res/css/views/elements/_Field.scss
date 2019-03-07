@@ -141,28 +141,28 @@ limitations under the License.
     color: $greyed-fg-color;
 }
 
-.mx_Field_valid input,
-.mx_Field_valid select,
-.mx_Field_valid textarea {
-    border-color: $input-valid-border-color ! important;
+.mx_Field_valid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $input-valid-border-color;
+    }
+
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $input-valid-border-color;
+    }
 }
 
-.mx_Field_valid input + label,
-.mx_Field_valid select + label,
-.mx_Field_valid textarea + label {
-    color: $input-valid-border-color ! important;
-}
+.mx_Field_invalid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $input-invalid-border-color;
+    }
 
-.mx_Field_invalid input,
-.mx_Field_invalid select,
-.mx_Field_invalid textarea {
-    border-color: $input-invalid-border-color ! important;
-}
-
-.mx_Field_invalid input + label,
-.mx_Field_invalid select + label,
-.mx_Field_invalid textarea + label {
-    color: $input-invalid-border-color ! important;
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $input-invalid-border-color;
+    }
 }
 
 .mx_Field_tooltip {
