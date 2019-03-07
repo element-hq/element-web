@@ -95,10 +95,13 @@ export default class Field extends React.PureComponent {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
-        const validClass = classNames({
-            mx_Field_valid: this.state.valid === true,
-            mx_Field_invalid: this.state.valid === false,
-        });
+        let validClass;
+        if (onValidate) {
+            validClass = classNames({
+                mx_Field_valid: this.state.valid === true,
+                mx_Field_invalid: this.state.valid === false,
+            });
+        }
 
         const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
             // If we have a prefix element, leave the label always at the top left and
