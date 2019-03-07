@@ -38,7 +38,7 @@ export default class Field extends React.PureComponent {
         // changes.  Returns an object with `valid` boolean field
         // and a `feedback` react component field to provide feedback
         // to the user.
-        onValidate: PropTypes.function,
+        onValidate: PropTypes.func,
         // All other props pass through to the <input>.
     };
 
