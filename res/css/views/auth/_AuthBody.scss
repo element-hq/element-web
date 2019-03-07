@@ -22,55 +22,77 @@ limitations under the License.
     box-sizing: border-box;
     font-size: 12px;
     color: $authpage-secondary-color;
-}
 
-.mx_AuthBody h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-top: 8px;
-    color: $authpage-primary-color;
-}
+    h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 8px;
+        color: $authpage-primary-color;
+    }
 
-.mx_AuthBody h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: $authpage-primary-color;
-}
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: $authpage-primary-color;
+    }
 
-.mx_AuthBody input[type=text],
-.mx_AuthBody input[type=password] {
-    color: $authpage-primary-color;
-}
+    a:link,
+    a:hover,
+    a:visited {
+        color: $accent-color;
+        text-decoration: none;
+    }
 
-.mx_AuthBody .mx_Field input,
-.mx_AuthBody .mx_Field select {
-    color: $authpage-primary-color;
-    background-color: $authpage-body-bg-color;
-}
+    input[type=text],
+    input[type=password] {
+        color: $authpage-primary-color;
+    }
 
-.mx_AuthBody .mx_Field label {
-    color: $authpage-primary-color;
-}
+    .mx_Field input,
+    .mx_Field select {
+        color: $authpage-primary-color;
+        background-color: $authpage-body-bg-color;
+    }
 
-.mx_AuthBody .mx_Field input:focus + label,
-.mx_AuthBody .mx_Field input:not(:placeholder-shown) + label,
-.mx_AuthBody .mx_Field select + label /* Always show a select's label on top to not collide with the value */ {
-    background-color: $authpage-body-bg-color;
-}
+    .mx_Field label {
+        color: $authpage-primary-color;
+    }
 
-.mx_AuthBody input.error {
-    color: $warning-color;
+    .mx_Field input:focus + label,
+    .mx_Field input:not(:placeholder-shown) + label,
+    .mx_Field textarea:focus + label,
+    .mx_Field textarea:not(:placeholder-shown) + label,
+    .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+    .mx_Field_labelAlwaysTopLeft label {
+        background-color: $authpage-body-bg-color;
+    }
+
+    input.error {
+        color: $warning-color;
+    }
+
+    .mx_Field input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .mx_Dropdown_arrow {
+        background: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_menu {
+        background-color: $authpage-body-bg-color;
+
+        .mx_Dropdown_option_highlight {
+            background-color: $authpage-focus-bg-color;
+        }
+    }
 }
 
 .mx_AuthBody_editServerDetails {
     padding-left: 1em;
     font-size: 12px;
     font-weight: normal;
-}
-
-.mx_AuthBody .mx_Field input {
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .mx_AuthBody_fieldRow {
@@ -89,13 +111,6 @@ limitations under the License.
 
 .mx_AuthBody_fieldRow > .mx_Field:last-child {
     margin-right: 0;
-}
-
-.mx_AuthBody a:link,
-.mx_AuthBody a:hover,
-.mx_AuthBody a:visited {
-    color: $accent-color;
-    text-decoration: none;
 }
 
 .mx_AuthBody_changeFlow {
