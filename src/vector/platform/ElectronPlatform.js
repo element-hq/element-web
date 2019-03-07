@@ -265,8 +265,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.send('stop-listening-keys');
     }
 
-    onKeypress(self: any, callback: (ev, event) => void ) {
-        ipcRenderer.on('keypress', callback.bind(self));
+    onKeypress(self: any, callback: (ev, event) => void) {
+        ipcRenderer.on('keypress', callback);
+    }
+
+    removeOnKeypress(self: any, callback: (ev, event) => void) {
+        ipcRenderer.removeListener('keypress', callback);
     }
 
     onWindowBlurred(callback: () => void) {
