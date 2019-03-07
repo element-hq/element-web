@@ -203,6 +203,17 @@ module.exports = React.createClass({
         };
     },
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: PropTypes.object.isRequired,
+        /* already decrypted blob */
+        decryptedBlob: PropTypes.object,
+        /* called when the download link iframe is shown */
+        onHeightChanged: PropTypes.func,
+        /* the shape of the tile, used */
+        tileShape: PropTypes.string,
+    },
+
     contextTypes: {
         appConfig: PropTypes.object,
     },
@@ -246,6 +257,12 @@ module.exports = React.createClass({
         this.id = nextMountId++;
         mounts[this.id] = this;
         this.tint();
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
+            this.props.onHeightChanged();
+        }
     },
 
     componentWillUnmount: function() {
