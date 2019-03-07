@@ -88,8 +88,8 @@ export default class Field extends React.PureComponent {
 
         inputProps.onChange = this.onChange;
         // make sure we use the current `value` for the field and not the original one
-        if (this.value != undefined) {
-            inputProps.value = this.value;
+        if (inputProps.value === undefined) {
+            inputProps.value = this.value || "";
         }
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
