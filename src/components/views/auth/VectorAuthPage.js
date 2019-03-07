@@ -16,21 +16,24 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import sdk from 'matrix-react-sdk/lib/index';
+import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
-module.exports = React.createClass({
-    displayName: 'VectorAuthPage',
+export default class VectorAuthPage extends React.PureComponent {
+    static replaces = 'AuthPage'
 
-    statics: {
-        replaces: 'AuthPage',
-    },
-
-    render: function() {
+    render() {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
+        const brandingConfig = SdkConfig.get().branding;
+        let backgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
+        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
+            backgroundUrl = brandingConfig.welcomeBackgroundUrl;
+        }
+
         const pageStyle = {
-            background: 'center/cover fixed url(themes/riot/img/backgrounds/valley.jpg)',
+            background: `center/cover fixed url(${backgroundUrl})`,
         };
 
         const modalStyle = {
@@ -66,5 +69,5 @@ module.exports = React.createClass({
                 <AuthFooter />
             </div>
         );
-    },
-});
+    }
+}

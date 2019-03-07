@@ -28,6 +28,7 @@ const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protoco
 const AutoLaunch = require('auto-launch');
 const ioHook = require('iohook');
 const path = require('path');
+const ioHook = require('iohook');
 
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
@@ -36,6 +37,7 @@ const updater = require('./updater');
 const { migrateFromOldOrigin } = require('./originMigrator');
 
 const windowStateKeeper = require('electron-window-state');
+const Store = require('electron-store');
 
 // boolean flag set whilst we are doing one-time origin migration
 // We only serve the origin migration script while we're actually
@@ -56,8 +58,19 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
+try {
+    // Load local config and use it to override values from the one baked with the build
+    const localConfig = require(path.join(app.getPath('userData'), 'config.json'));
+    vectorConfig = Object.assign(vectorConfig, localConfig);
+} catch (e) {
+    // Could not load local config, this is expected in most cases.
+}
+
+const store = new Store({ name: "electron-config" });
+
 let mainWindow = null;
 global.appQuitting = false;
+global.minimizeToTray = store.get('minimizeToTray', true);
 
 
 // handle uncaught errors otherwise it displays
@@ -137,6 +150,12 @@ ipcMain.on('ipcCall', async function(ev, payload) {
                 launcher.disable();
             }
             break;
+        case 'getMinimizeToTrayEnabled':
+            ret = global.minimizeToTray;
+            break;
+        case 'setMinimizeToTrayEnabled':
+            store.set('minimizeToTray', global.minimizeToTray = args[0]);
+            break;
         case 'getAppVersion':
             ret = app.getVersion();
             break;
@@ -148,6 +167,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             } else {
                 mainWindow.focus();
             }
+            break;
         case 'origin_migrate':
             migratingOrigin = true;
             await migrateFromOldOrigin();
@@ -263,10 +283,12 @@ app.on('ready', () => {
             path: absTarget,
         });
     }, (error) => {
-        if (error) console.error('Failed to register protocol')
+        if (error) console.error('Failed to register protocol');
     });
 
-    if (vectorConfig['update_base_url']) {
+    if (argv['no-update']) {
+        console.log('Auto update disabled via command line flag "--no-update"');
+    } else if (vectorConfig['update_base_url']) {
         console.log(`Starting auto update with base URL: ${vectorConfig['update_base_url']}`);
         updater.start(vectorConfig['update_base_url']);
     } else {
@@ -332,7 +354,7 @@ app.on('ready', () => {
         mainWindow = global.mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
+        if (global.minimizeToTray && !global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
@@ -474,6 +496,92 @@ app.on('second-instance', (ev, commandLine, workingDirectory) => {
         if (mainWindow.isMinimized()) mainWindow.restore();
         mainWindow.focus();
     }
+});
+
+// Counter for keybindings we have registered
+let ioHookTasks = 0;
+
+// Limit for amount of keybindings that can be
+// registered at once.
+const keybindingRegistrationLimit = 1;
+
+// Fires when a global keybinding is being registered
+ipcMain.on('register-keybinding', function(ev, keybinding) {
+    // Prevent registering more than the defined limit
+    if (ioHookTasks >= keybindingRegistrationLimit) {
+        ioHookTasks = keybindingRegistrationLimit;
+        return;
+    }
+
+    // Start listening for global keyboard shortcuts
+    if (ioHookTasks <= 0) {
+        ioHookTasks = 0;
+        ioHook.start();
+    }
+    ioHookTasks++;
+
+    ioHook.registerShortcut(keybinding.code, () => {
+        ev.sender.send('keybinding-pressed', keybinding.name);
+    }, () => {
+        ev.sender.send('keybinding-released', keybinding.name);
+    });
+});
+
+// Fires when a global keybinding is being unregistered
+ipcMain.on('unregister-keybinding', function(ev, keybindingCode) {
+    // Stop listening for global keyboard shortcuts if we're
+    // unregistering the last one
+    if (ioHookTasks <= 1) {
+        ioHook.stop();
+    }
+    ioHookTasks--;
+
+    ioHook.unregisterShortcutByKeys(keybindingCode);
+});
+
+// Tell renderer process what key was pressed
+// iohook has its own encoding for keys, so we can't just use a
+// listener in the renderer process to register iohook shortcuts
+let renderProcessID = null;
+const reportKeyEvent = function(keyEvent) {
+    // "this" is the renderer process because we call this method with .bind()
+    renderProcessID.sender.send('keypress', {
+        keydown: keyEvent.type == 'keydown',
+        keycode: keyEvent.keycode,
+    });
+};
+
+// Fires when listening on all keys
+// !!Security note: Ensure iohook is only allowed to listen to keybindings
+// when the browser window is in focus, else an XSS could lead to keylogging
+// Currently, this is achieved by leveraging browserWindow to act on focus loss
+ipcMain.on('start-listening-keys', function(ev, keybindingCode) {
+    // Start recording keypresses
+    if (ioHookTasks <= 0) {
+        ioHookTasks = 0;
+        ioHook.start();
+    }
+    ioHookTasks++;
+
+    renderProcessID = ev;
+    ioHook.on('keydown', reportKeyEvent);
+    ioHook.on('keyup', reportKeyEvent);
+});
+
+const stopListeningKeys = () => {
+    // Stop recording keypresses
+    ioHook.off('keydown', reportKeyEvent);
+    ioHook.off('keyup', reportKeyEvent);
+};
+
+ipcMain.on('stop-listening-keys', () => {
+    if (ioHookTasks <= 1) {
+        ioHookTasks = 1;
+        ioHook.stop();
+    }
+    ioHookTasks--;
+
+    stopListeningKeys();
 });
 
 // Set the App User Model ID to match what the squirrel

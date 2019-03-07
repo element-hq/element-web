@@ -25,6 +25,7 @@ import Promise from 'bluebird';
 import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 
 const ipcRenderer = window.ipcRenderer;
+var globalKeybindings = {};
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -120,7 +121,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
 
         ipcRenderer.on('keybinding-pressed', (event, keybindName) => {
+<<<<<<< HEAD
             // Prevent holding down a shortcut meaning multiple presses 
+=======
+            // Prevent holding down a shortcut meaning multiple presses
+>>>>>>> fa72152a96b083180efbda662f9b0eb9f720e0b2
             if (globalKeybindings[keybindName].pressed) {
                 return;
             }
@@ -212,16 +217,28 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return await this._ipcCall('getAppVersion');
     }
 
-    supportsAutoLaunch() {
+    supportsAutoLaunch(): boolean {
         return true;
     }
 
-    async getAutoLaunchEnabled() {
+    async getAutoLaunchEnabled(): boolean {
         return await this._ipcCall('getAutoLaunchEnabled');
     }
 
-    async setAutoLaunchEnabled(enabled) {
+    async setAutoLaunchEnabled(enabled: boolean): void {
         return await this._ipcCall('setAutoLaunchEnabled', enabled);
+    }
+
+    supportsMinimizeToTray(): boolean {
+        return true;
+    }
+
+    async getMinimizeToTrayEnabled(): boolean {
+        return await this._ipcCall('getMinimizeToTrayEnabled');
+    }
+
+    async setMinimizeToTrayEnabled(enabled: boolean): void {
+        return await this._ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
     async canSelfUpdate(): boolean {
@@ -236,6 +253,28 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.send('check_updates');
     }
 
+<<<<<<< HEAD
+=======
+    startListeningKeys() {
+        // Tell iohook to start listening for key events
+        ipcRenderer.send('start-listening-keys');
+    }
+
+    stopListeningKeys() {
+        // Tell iohook to stop listening for key events
+        ipcRenderer.send('stop-listening-keys');
+    }
+
+    onKeypress(self: any, callback: (ev, event) => void ) {
+        ipcRenderer.on('keypress', callback.bind(self));
+    }
+
+    onWindowBlurred(callback: () => void) {
+        // Callback to run on window blur (window loses focus)
+        ipcRenderer.on('window-blurred', callback);
+    }
+
+>>>>>>> fa72152a96b083180efbda662f9b0eb9f720e0b2
     addGlobalKeybinding(keybindName: string, keybindCode: string, callback: () => void, releaseCallback: () => void) {
         // Add a keybinding that works even when the app is minimized
         const keybinding = {name: keybindName, code: keybindCode};
@@ -290,7 +329,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const ipcCallId = ++this._nextIpcCallId;
         return new Promise((resolve, reject) => {
             this._pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.ipcRenderer.send('ipcCall', {id: ipcCallId, name, args});
+            ipcRenderer.send('ipcCall', {id: ipcCallId, name, args});
             // Maybe add a timeout to these? Probably not necessary.
         });
     }

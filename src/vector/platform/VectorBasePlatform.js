@@ -88,19 +88,6 @@ export default class VectorBasePlatform extends BasePlatform {
         this._updateFavicon();
     }
 
-    supportsAutoLaunch() {
-        return false;
-    }
-
-    // XXX: Surely this should be a setting like any other?
-    async getAutoLaunchEnabled() {
-        return false;
-    }
-
-    async setAutoLaunchEnabled(enabled) {
-        throw new Error("Unimplemented");
-    }
-
     /**
      * Begin update polling, if applicable
      */
