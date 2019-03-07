@@ -113,7 +113,7 @@ export default class Field extends React.PureComponent {
         let feedback;
         if (this.state.feedback) {
             feedback = <Tooltip
-                tooltipClassName={`mx_Field_tooltip ${validClass}`}
+                tooltipClassName="mx_Field_tooltip"
                 label={this.state.feedback}
             />;
         }
