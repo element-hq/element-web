@@ -28,7 +28,7 @@ class FakeDomEventEmitter extends EventEmitter {
     removeEventListener(what, l) {
         this.removeListener(what, l);
     }
-};
+}
 
 describe('UserActivity', function() {
     let fakeWindow;
