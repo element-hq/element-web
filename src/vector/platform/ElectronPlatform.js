@@ -249,8 +249,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.send('check_updates');
     }
 
-<<<<<<< HEAD
-=======
     startListeningKeys() {
         // Tell iohook to start listening for key events
         ipcRenderer.send('start-listening-keys');
@@ -274,7 +272,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.on('window-blurred', callback);
     }
 
->>>>>>> fa72152a96b083180efbda662f9b0eb9f720e0b2
     addGlobalKeybinding(keybindName: string, keybindCode: string, callback: () => void, releaseCallback: () => void) {
         // Add a keybinding that works even when the app is minimized
         const keybinding = {name: keybindName, code: keybindCode};
