@@ -26,7 +26,6 @@ if (checkSquirrelHooks()) return;
 const argv = require('minimist')(process.argv);
 const {app, ipcMain, powerSaveBlocker, BrowserWindow, Menu, autoUpdater, protocol} = require('electron');
 const AutoLaunch = require('auto-launch');
-const ioHook = require('iohook');
 const path = require('path');
 const ioHook = require('iohook');
 
