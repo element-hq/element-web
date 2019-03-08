@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_Dropdown {
     position: relative;
+    color: $primary-fg-color;
 }
 
 .mx_Dropdown_disabled {
@@ -33,7 +34,7 @@ limitations under the License.
 }
 
 .mx_Dropdown_input:focus {
-    border-color: $accent-color;
+    border-color: $input-focused-border-color;
 }
 
 /* Disable dropdown highlight on focus */
@@ -76,7 +77,9 @@ limitations under the License.
     vertical-align: middle;
 }
 
-input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
+input.mx_Dropdown_option,
+input.mx_Dropdown_option:focus {
+    font-weight: normal;
     border: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -95,7 +98,7 @@ input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
     margin: 0;
     padding: 0px;
     border-radius: 3px;
-    border: 1px solid $accent-color;
+    border: 1px solid $input-focused-border-color;
     background-color: $primary-bg-color;
     max-height: 200px;
     overflow-y: auto;
@@ -108,10 +111,6 @@ input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
 
 .mx_Dropdown_menu .mx_Dropdown_option_highlight {
     background-color: $focus-bg-color;
-}
-
-.mx_Dropdown_menu {
-    font-weight: bold;
 }
 
 .mx_Dropdown_searchPrompt {
