@@ -110,6 +110,17 @@ export async function loadSession(opts) {
 }
 
 /**
+ * Gets the user ID of the persisted session, if one exists. This does not validate
+ * that the user's credentials still work, just that they exist and that a user ID
+ * is associated with them. The session is not loaded.
+ * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
+ */
+export function getStoredSessionOwner() {
+    const {hsUrl, userId, accessToken} = _getLocalStorageSessionVars();
+    return hsUrl && userId && accessToken ? userId : null;
+}
+
+/**
  * @param {Object} queryParams    string->string map of the
  *     query-parameters extracted from the real query-string of the starting
  *     URI.
@@ -214,6 +225,16 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
+function _getLocalStorageSessionVars() {
+    const hsUrl = localStorage.getItem("mx_hs_url");
+    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const accessToken = localStorage.getItem("mx_access_token");
+    const userId = localStorage.getItem("mx_user_id");
+    const deviceId = localStorage.getItem("mx_device_id");
+
+    return {hsUrl, isUrl, accessToken, userId, deviceId};
+}
+
 // returns a promise which resolves to true if a session is found in
 // localstorage
 //
@@ -228,11 +249,8 @@ async function _restoreFromLocalStorage() {
     if (!localStorage) {
         return false;
     }
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-    const accessToken = localStorage.getItem("mx_access_token");
-    const userId = localStorage.getItem("mx_user_id");
-    const deviceId = localStorage.getItem("mx_device_id");
+
+    const {hsUrl, isUrl, accessToken, userId, deviceId} = _getLocalStorageSessionVars();
 
     let isGuest;
     if (localStorage.getItem("mx_is_guest") !== null) {

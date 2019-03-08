@@ -357,25 +357,7 @@ export default React.createClass({
                 return;
             }
 
-            // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
-            // asynchronous ones.
-            return Promise.resolve().then(() => {
-                return Lifecycle.loadSession({
-                    fragmentQueryParams: this.props.startingFragmentQueryParams,
-                    enableGuest: this.props.enableGuest,
-                    guestHsUrl: this.getCurrentHsUrl(),
-                    guestIsUrl: this.getCurrentIsUrl(),
-                    defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-                });
-            }).then((loadedSession) => {
-                if (!loadedSession) {
-                    // fall back to showing the welcome screen
-                    dis.dispatch({action: "view_welcome_page"});
-                }
-            });
-            // Note we don't catch errors from this: we catch everything within
-            // loadSession as there's logic there to ask the user if they want
-            // to try logging out.
+            return this._loadSession();
         });
 
         if (SettingsStore.getValue("showCookieBar")) {
@@ -387,6 +369,28 @@ export default React.createClass({
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
+    },
+
+    _loadSession: function() {
+        // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
+        // asynchronous ones.
+        return Promise.resolve().then(() => {
+            return Lifecycle.loadSession({
+                fragmentQueryParams: this.props.startingFragmentQueryParams,
+                enableGuest: this.props.enableGuest,
+                guestHsUrl: this.getCurrentHsUrl(),
+                guestIsUrl: this.getCurrentIsUrl(),
+                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            });
+        }).then((loadedSession) => {
+            if (!loadedSession) {
+                // fall back to showing the welcome screen
+                dis.dispatch({action: "view_welcome_page"});
+            }
+        });
+        // Note we don't catch errors from this: we catch everything within
+        // loadSession as there's logic there to ask the user if they want
+        // to try logging out.
     },
 
     componentWillUnmount: function() {
@@ -1684,6 +1688,41 @@ export default React.createClass({
         // XXX: This should be in state or ideally store(s) because we risk not
         //      rendering the most up-to-date view of state otherwise.
         this._is_registered = true;
+        if (this.state.register_session_id) {
+            // The user came in through an email validation link. To avoid overwriting
+            // their session, check to make sure the session isn't someone else.
+            const sessionOwner = Lifecycle.getStoredSessionOwner();
+            if (sessionOwner && sessionOwner !== credentials.userId) {
+                console.log(
+                    `Found a session for ${sessionOwner} but ${credentials.userId} is trying to verify their ` +
+                    `email address. Restoring the session for ${sessionOwner} with warning.`,
+                );
+                this._loadSession();
+
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                // N.B. first param is passed to piwik and so doesn't want i18n
+                Modal.createTrackedDialog('Existing session on register', '',
+                    QuestionDialog, {
+                    title: _t('You are logged in to another account'),
+                    description: _t(
+                        "Thank you for verifying your email! The account you're logged into here " +
+                        "(%(sessionUserId)s) appears to be different from the account you've verified an " +
+                        "email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, " +
+                        "please log out first.", {
+                            sessionUserId: sessionOwner,
+                            verifiedUserId: credentials.userId,
+
+                            // TODO: Fix translations to support reusing variables.
+                            // https://github.com/vector-im/riot-web/issues/9086
+                            verifiedUserId2: credentials.userId,
+                        },
+                    ),
+                    hasCancelButton: false,
+                });
+
+                return;
+            }
+        }
         return Lifecycle.setLoggedIn(credentials);
     },
 
