@@ -439,7 +439,7 @@ async function startMatrixClient() {
     dis.dispatch({action: 'will_start_client'}, true);
 
     Notifier.start();
-    UserActivity.start();
+    UserActivity.sharedInstance().start();
     Presence.start();
     DMRoomMap.makeShared().start();
     ActiveWidgetStore.start();

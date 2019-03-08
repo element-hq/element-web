@@ -451,12 +451,12 @@ var TimelinePanel = React.createClass({
                 //
                 // We ignore events we have sent ourselves; we don't want to see the
                 // read-marker when a remote echo of an event we have just sent takes
-                // more than the timeout on userCurrentlyActive.
+                // more than the timeout on userCurrentlyPassive.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
                 var callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
+                if (sender != myUserId && !UserActivity.sharedInstance().userCurrentlyPassive()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -562,7 +562,7 @@ var TimelinePanel = React.createClass({
         this._readMarkerActivityTimer = new Timer(initialTimeout);
 
         while (this._readMarkerActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readMarkerActivityTimer);
+            UserActivity.sharedInstance().timeWhilePassive(this._readMarkerActivityTimer);
             try {
                 await this._readMarkerActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
@@ -574,7 +574,7 @@ var TimelinePanel = React.createClass({
     updateReadReceiptOnUserActivity: async function() {
         this._readReceiptActivityTimer = new Timer(READ_RECEIPT_INTERVAL_MS);
         while (this._readReceiptActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readReceiptActivityTimer);
+            UserActivity.sharedInstance().timeWhileActive(this._readReceiptActivityTimer);
             try {
                 await this._readReceiptActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
