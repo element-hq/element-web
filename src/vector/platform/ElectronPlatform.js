@@ -121,11 +121,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
 
         ipcRenderer.on('keybinding-pressed', (event, keybindName) => {
-<<<<<<< HEAD
-            // Prevent holding down a shortcut meaning multiple presses 
-=======
             // Prevent holding down a shortcut meaning multiple presses
->>>>>>> fa72152a96b083180efbda662f9b0eb9f720e0b2
             if (globalKeybindings[keybindName].pressed) {
                 return;
             }
