@@ -116,7 +116,7 @@ export async function loadSession(opts) {
  * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
  */
 export function getStoredSessionOwner() {
-    const {hsUrl, userId, accessToken} = _getLocalstorageSessionVars();
+    const {hsUrl, userId, accessToken} = _getLocalStorageSessionVars();
     return hsUrl && userId && accessToken ? userId : null;
 }
 
@@ -225,7 +225,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
-function _getLocalstorageSessionVars() {
+function _getLocalStorageSessionVars() {
     const hsUrl = localStorage.getItem("mx_hs_url");
     const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
     const accessToken = localStorage.getItem("mx_access_token");
@@ -250,7 +250,7 @@ async function _restoreFromLocalStorage() {
         return false;
     }
 
-    const {hsUrl, isUrl, accessToken, userId, deviceId} = _getLocalstorageSessionVars();
+    const {hsUrl, isUrl, accessToken, userId, deviceId} = _getLocalStorageSessionVars();
 
     let isGuest;
     if (localStorage.getItem("mx_is_guest") !== null) {
