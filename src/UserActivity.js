@@ -33,7 +33,7 @@ class UserActivity {
         this._attachedTimers = [];
         this._activityTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
         this._onUserActivity = this._onUserActivity.bind(this);
-        this._onDocumentBlurred = this._onDocumentBlurred.bind(this);
+        this._onWindowBlurred = this._onWindowBlurred.bind(this);
         this._onPageVisibilityChanged = this._onPageVisibilityChanged.bind(this);
         this.lastScreenX = 0;
         this.lastScreenY = 0;
@@ -74,8 +74,8 @@ class UserActivity {
         document.onmousemove = this._onUserActivity;
         document.onkeydown = this._onUserActivity;
         document.addEventListener("visibilitychange", this._onPageVisibilityChanged);
-        document.addEventListener("blur", this._onDocumentBlurred);
-        document.addEventListener("focus", this._onUserActivity);
+        window.addEventListener("blur", this._onWindowBlurred);
+        window.addEventListener("focus", this._onUserActivity);
         // can't use document.scroll here because that's only the document
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
@@ -110,13 +110,14 @@ class UserActivity {
 
     _onPageVisibilityChanged(e) {
         if (document.visibilityState === "hidden") {
+            console.log("page hidden");
             this._activityTimeout.abort();
         } else {
             this._onUserActivity(e);
         }
     }
 
-    _onDocumentBlurred() {
+    _onWindowBlurred() {
         this._activityTimeout.abort();
     }
 
