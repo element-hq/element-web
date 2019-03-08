@@ -25,26 +25,7 @@ import Promise from 'bluebird';
 import rageshake from 'matrix-react-sdk/lib/rageshake/rageshake';
 
 const ipcRenderer = window.ipcRenderer;
-var globalKeybindings = {};
-
-remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
-
-var globalKeybindings = {};
-
-// try to flush the rageshake logs to indexeddb before quit.
-ipcRenderer.on('before-quit', function () {
-    console.log('riot-desktop closing');
-    rageshake.flush();
-});
-
-function onUpdateDownloaded(ev: Event, releaseNotes: string, ver: string, date: Date, updateURL: string) {
-    dis.dispatch({
-        action: 'new_version',
-        currentVersion: remote.app.getVersion(),
-        newVersion: ver,
-        releaseNotes: releaseNotes,
-    });
-}
+const globalKeybindings = {};
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
