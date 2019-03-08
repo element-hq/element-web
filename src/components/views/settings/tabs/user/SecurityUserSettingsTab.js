@@ -52,9 +52,13 @@ export default class SecurityUserSettingsTab extends React.Component {
     constructor() {
         super();
 
+        // Get number of rooms we're invited to
+        const invitedRooms = this._getInvitedRooms();
+
         this.state = {
             ignoredUserIds: MatrixClientPeg.get().getIgnoredUsers(),
-            rejectingInvites: false,
+            managingInvites: false,
+            invitedRoomAmt: invitedRooms.length,
         };
     }
 
@@ -93,22 +97,60 @@ export default class SecurityUserSettingsTab extends React.Component {
         this.setState({ignoredUsers});
     };
 
-    _onRejectAllInvitesClicked = (rooms, ev) => {
+    _getInvitedRooms = () => {
+        return MatrixClientPeg.get().getRooms().filter((r) => {
+            return r.hasMembershipState(MatrixClientPeg.get().getUserId(), "invite");
+        });
+    };
+
+    _manageInvites = async (accept) => {
         this.setState({
-            rejectingInvites: true,
+            managingInvites: true,
         });
-        // reject the invites
-        const promises = rooms.map((room) => {
-            return MatrixClientPeg.get().leave(room.roomId).catch((e) => {
-                // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
-                // after trying to reject all the invites.
+
+        // Compile array of invitation room ids
+        const invitedRoomIds = this._getInvitedRooms().map((room) => {
+            return room.roomId;
+        });
+
+        // Execute all acceptances/rejections sequentially
+        const self = this;
+        const cli = MatrixClientPeg.get();
+        const action = accept ? cli.joinRoom.bind(cli) : cli.leave.bind(cli);
+        for (let i = 0; i < invitedRoomIds.length; i++) {
+            const roomId = invitedRoomIds[i];
+
+            // Accept/reject invite
+            await action(roomId).then(() => {
+                // No error, update invited rooms button
+                this.setState({invitedRoomAmt: self.state.invitedRoomAmt - 1});
+            }, async (e) => {
+                // Action failure
+                if (e.errcode === "M_LIMIT_EXCEEDED") {
+                    // Add a delay between each invite change in order to avoid rate
+                    // limiting by the server.
+                    await Promise.delay(e.retry_after_ms || 2500);
+
+                    // Redo last action
+                    i--;
+                } else {
+                    // Print out error with joining/leaving room
+                    console.warn(e);
+                }
             });
+        }
+
+        this.setState({
+            managingInvites: false,
         });
-        Promise.all(promises).then(() => {
-            this.setState({
-                rejectingInvites: false,
-            });
-        });
+    };
+
+    _onAcceptAllInvitesClicked = (ev) => {
+        this._manageInvites(true);
+    };
+
+    _onRejectAllInvitesClicked = (ev) => {
+        this._manageInvites(false);
     };
 
     _renderCurrentDeviceInfo() {
@@ -173,21 +215,25 @@ export default class SecurityUserSettingsTab extends React.Component {
         );
     }
 
-    _renderRejectInvites() {
-        const invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
-            return r.hasMembershipState(MatrixClientPeg.get().getUserId(), "invite");
-        });
-        if (invitedRooms.length === 0) {
+    _renderManageInvites() {
+        if (this.state.invitedRoomAmt === 0) {
             return null;
         }
 
-        const onClick = this._onRejectAllInvitesClicked.bind(this, invitedRooms);
+        const invitedRooms = this._getInvitedRooms();
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+        const onClickAccept = this._onAcceptAllInvitesClicked.bind(this, invitedRooms);
+        const onClickReject = this._onRejectAllInvitesClicked.bind(this, invitedRooms);
         return (
-            <div className='mx_SettingsTab_section'>
+            <div className='mx_SettingsTab_section mx_SecurityUserSettingsTab_bulkOptions'>
                 <span className='mx_SettingsTab_subheading'>{_t('Bulk options')}</span>
-                <AccessibleButton onClick={onClick} kind='danger' disabled={this.state.rejectingInvites}>
-                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
+                <AccessibleButton onClick={onClickAccept} kind='primary' disabled={this.state.managingInvites}>
+                    {_t("Accept all %(invitedRooms)s invites", {invitedRooms: this.state.invitedRoomAmt})}
                 </AccessibleButton>
+                <AccessibleButton onClick={onClickReject} kind='danger' disabled={this.state.managingInvites}>
+                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: this.state.invitedRoomAmt})}
+                </AccessibleButton>
+                {this.state.managingInvites ? <InlineSpinner /> : <div />}
             </div>
         );
     }
@@ -232,7 +278,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                                   onChange={this._updateAnalytics} />
                 </div>
                 {this._renderIgnoredUsers()}
-                {this._renderRejectInvites()}
+                {this._renderManageInvites()}
             </div>
         );
     }

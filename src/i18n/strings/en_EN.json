@@ -560,6 +560,7 @@
     "Device key:": "Device key:",
     "Ignored users": "Ignored users",
     "Bulk options": "Bulk options",
+    "Accept all %(invitedRooms)s invites": "Accept all %(invitedRooms)s invites",
     "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
     "Key backup": "Key backup",
     "Security & Privacy": "Security & Privacy",
