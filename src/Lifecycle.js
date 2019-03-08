@@ -485,7 +485,7 @@ function _clearStorage() {
  */
 export function stopMatrixClient() {
     Notifier.stop();
-    UserActivity.stop();
+    UserActivity.sharedInstance().stop();
     Presence.stop();
     ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
