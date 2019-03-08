@@ -131,11 +131,12 @@ export default class UserActivity {
      * Stop tracking user activity
      */
     stop() {
-        this._document.onmousedown = undefined;
-        this._document.onmousemove = undefined;
-        this._document.onkeydown = undefined;
-        this._window.removeEventListener('wheel', this._onUserActivity,
-                                   { passive: true, capture: true });
+        this._document.removeEventListener('mousedown', this._onUserActivity);
+        this._document.removeEventListener('mousemove', this._onUserActivity);
+        this._document.removeEventListener('keydown', this._onUserActivity);
+        this._window.removeEventListener('wheel', this._onUserActivity, {
+            passive: true, capture: true,
+        });
 
         this._document.removeEventListener("visibilitychange", this._onPageVisibilityChanged);
         this._window.removeEventListener("blur", this._onWindowBlurred);
