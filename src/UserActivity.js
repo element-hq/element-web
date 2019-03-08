@@ -23,7 +23,11 @@ import Timer from './utils/Timer';
 // such as READ_MARKER_INVIEW_THRESHOLD_MS,
 // READ_MARKER_OUTOFVIEW_THRESHOLD_MS,
 // READ_RECEIPT_INTERVAL_MS in TimelinePanel
+
+// 'Under a few seconds'. Must be less than 'CURRENTLY_PASSIVE_THRESHOLD_MS'
 const CURRENTLY_ACTIVE_THRESHOLD_MS = 700;
+
+// 'Under a few minutes'.
 const CURRENTLY_PASSIVE_THRESHOLD_MS = 2 * 60 * 1000;
 
 /**
@@ -108,9 +112,9 @@ export default class UserActivity {
      * Start listening to user activity
      */
     start() {
-        this._document.onmousedown = this._onUserActivity;
-        this._document.onmousemove = this._onUserActivity;
-        this._document.onkeydown = this._onUserActivity;
+        this._document.addEventListener('mousedown', this._onUserActivity);
+        this._document.addEventListener('mousemove', this._onUserActivity);
+        this._document.addEventListener('keydown', this._onUserActivity);
         this._document.addEventListener("visibilitychange", this._onPageVisibilityChanged);
         this._window.addEventListener("blur", this._onWindowBlurred);
         this._window.addEventListener("focus", this._onUserActivity);
@@ -118,8 +122,9 @@ export default class UserActivity {
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
         // fired when the view scrolls down for a new message.
-        this._window.addEventListener('wheel', this._onUserActivity,
-                                { passive: true, capture: true });
+        this._window.addEventListener('wheel', this._onUserActivity, {
+            passive: true, capture: true,
+        });
     }
 
     /**
