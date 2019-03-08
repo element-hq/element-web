@@ -111,7 +111,6 @@ class UserActivity {
 
     _onPageVisibilityChanged(e) {
         if (document.visibilityState === "hidden") {
-            console.log("page hidden");
             this._activityTimeout.abort();
         } else {
             this._onUserActivity(e);
