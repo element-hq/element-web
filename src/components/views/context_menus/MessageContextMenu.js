@@ -307,10 +307,7 @@ module.exports = React.createClass({
 
         let permalink;
         if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(
-                this.props.mxEvent.getRoomId(),
-                this.props.mxEvent.getId(),
-            );
+            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
