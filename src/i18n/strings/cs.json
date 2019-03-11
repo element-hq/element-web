@@ -858,7 +858,7 @@
     "Create a new community": "Vytvořit novou skupinu",
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Vytvořte skupinu s cílem seskupit uživatele a místnosti! Vytvořte si vlastní domovskou stránku a vymezte tak váš prostor ve světe Matrix.",
     "You have no visible notifications": "Nejsou dostupná žádná oznámení",
-    "Connectivity to the server has been lost.": "Spojení se serverem bylo přerušené.",
+    "Connectivity to the server has been lost.": "Spojení se serverem bylo přerušeno.",
     "Sent messages will be stored until your connection has returned.": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
     "Active call": "Aktivní hovor",
     "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Kromě vás není v této místnosti nikdo jiný! Přejete si <inviteText>Pozvat další</inviteText> anebo <nowarnText>Přestat upozorňovat na prázdnou místnost</nowarnText>?",

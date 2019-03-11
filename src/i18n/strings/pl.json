@@ -297,7 +297,7 @@
     "Labs": "Laboratoria",
     "Last seen": "Ostatnio widziany(-a)",
     "Leave room": "Opuść pokój",
-    "%(targetName)s left the room.": "%(targetName)s opuścił pokój.",
+    "%(targetName)s left the room.": "%(targetName)s opuścił(a) pokój.",
     "Level:": "Poziom:",
     "Publish this room to the public in %(domain)s's room directory?": "Czy opublikować ten pokój dla ogółu w spisie pokojów domeny %(domain)s?",
     "Local addresses for this room:": "Lokalne adresy dla tego pokoju:",
