@@ -178,10 +178,6 @@ module.exports = React.createClass({
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
-        if (this._timelineSizeObserver) {
-            this._timelineSizeObserver.disconnect();
-            this._timelineSizeObserver = null;
-        }
     },
 
     onScroll: function(ev) {
