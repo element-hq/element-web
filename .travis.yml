@@ -20,7 +20,7 @@ matrix:
         - name: Linting Checks
           script:
             # run the linter, but exclude any files known to have errors or warnings.
-            - npm run lintwithexclusions
+            - yarn lintwithexclusions
         # - name: End-to-End Tests
         #   if: branch = develop
         #   install:

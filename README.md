@@ -66,7 +66,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
     component is a view or a structure, and then a broad functional grouping
     (e.g. 'rooms' here)
 
-  * After creating a new component you must run `npm run reskindex` to regenerate
+  * After creating a new component you must run `yarn reskindex` to regenerate
     the `component-index.js` for the SDK (used in future for skinning)
 
   * The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
@@ -131,26 +131,37 @@ for now.
 Development
 ===========
 
-Ensure you have the latest stable Node JS runtime installed (v8.x is the best choice). Then check out
-the code and pull in dependencies:
+Ensure you have the latest stable Node JS runtime installed (v8.x is the best
+choice).
+
+Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
+guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+
+Then check out the code and pull in dependencies:
 
 ```bash
 git clone https://github.com/matrix-org/matrix-react-sdk.git
 cd matrix-react-sdk
 git checkout develop
-npm install
+yarn install
 ```
 
-`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the 
+`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
 latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
-you should run the following which will sync changes from the JS sdk here.
+you should check out `matrix-js-sdk`, change into that new directory, and run:
 
 ```bash
-npm link ../matrix-js-sdk
+yarn link
 ```
 
-Command assumes a checked out and installed `matrix-js-sdk` folder in parent
-folder.
+Then, switch back to `matrix-react-sdk` and run:
+
+```bash
+yarn link matrix-js-sdk
+```
+
+See the [help for `yarn link`](https://yarnpkg.com/docs/cli/link) for more
+details about this.
 
 Running tests
 =============
@@ -158,5 +169,5 @@ Running tests
 Ensure you've followed the above development instructions and then:
 
 ```bash
-npm run test
+yarn test
 ```
