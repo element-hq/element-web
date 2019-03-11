@@ -52,7 +52,7 @@ module.exports = React.createClass({
         showUrlPreview: PropTypes.bool,
 
         /* callback for when our widget has loaded */
-        onWidgetLoad: PropTypes.func,
+        onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
         tileShape: PropTypes.string,
@@ -451,7 +451,7 @@ module.exports = React.createClass({
                             link={link}
                             mxEvent={this.props.mxEvent}
                             onCancelClick={this.onCancelClick}
-                            onWidgetLoad={this.props.onWidgetLoad} />;
+                            onHeightChanged={this.props.onHeightChanged} />;
             });
         }
 

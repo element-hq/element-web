@@ -33,7 +33,7 @@ module.exports = React.createClass({
         // href for the highlights in this result
         resultLink: PropTypes.string,
 
-        onWidgetLoad: PropTypes.func,
+        onHeightChanged: PropTypes.func,
     },
 
     render: function() {
@@ -58,7 +58,7 @@ module.exports = React.createClass({
                 ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
                           permalinkCreator={this.props.permalinkCreator}
                           highlightLink={this.props.resultLink}
-                          onWidgetLoad={this.props.onWidgetLoad} />);
+                          onHeightChanged={this.props.onHeightChanged} />);
             }
         }
         return (

@@ -129,7 +129,7 @@ module.exports = withMatrixClient(React.createClass({
         isSelectedEvent: PropTypes.bool,
 
         /* callback called when dynamic content in events are loaded */
-        onWidgetLoad: PropTypes.func,
+        onHeightChanged: PropTypes.func,
 
         /* a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'. */
         readReceipts: PropTypes.arrayOf(React.PropTypes.object),
@@ -165,8 +165,8 @@ module.exports = withMatrixClient(React.createClass({
 
     getDefaultProps: function() {
         return {
-            // no-op function because onWidgetLoad is optional yet some sub-components assume its existence
-            onWidgetLoad: function() {},
+            // no-op function because onHeightChanged is optional yet some sub-components assume its existence
+            onHeightChanged: function() {},
         };
     },
 
@@ -223,7 +223,7 @@ module.exports = withMatrixClient(React.createClass({
      */
     _onDecrypted: function() {
         // we need to re-verify the sending device.
-        // (we call onWidgetLoad in _verifyEvent to handle the case where decryption
+        // (we call onHeightChanged in _verifyEvent to handle the case where decryption
         // has caused a change in size of the event tile)
         this._verifyEvent(this.props.mxEvent);
         this.forceUpdate();
@@ -245,7 +245,7 @@ module.exports = withMatrixClient(React.createClass({
             verified: verified,
         }, () => {
             // Decryption may have caused a change in size
-            this.props.onWidgetLoad();
+            this.props.onHeightChanged();
         });
     },
 
@@ -667,7 +667,7 @@ module.exports = withMatrixClient(React.createClass({
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
-                                           onWidgetLoad={this.props.onWidgetLoad} />
+                                           onHeightChanged={this.props.onHeightChanged} />
                         </div>
                     </div>
                 );
@@ -682,7 +682,7 @@ module.exports = withMatrixClient(React.createClass({
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
                                            tileShape={this.props.tileShape}
-                                           onWidgetLoad={this.props.onWidgetLoad} />
+                                           onHeightChanged={this.props.onHeightChanged} />
                         </div>
                         <a
                             className="mx_EventTile_senderDetailsLink"
@@ -704,7 +704,7 @@ module.exports = withMatrixClient(React.createClass({
                 if (this.props.tileShape === 'reply_preview') {
                     thread = ReplyThread.makeThread(
                         this.props.mxEvent,
-                        this.props.onWidgetLoad,
+                        this.props.onHeightChanged,
                         this.props.permalinkCreator,
                         'replyThread',
                     );
@@ -723,7 +723,7 @@ module.exports = withMatrixClient(React.createClass({
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
-                                           onWidgetLoad={this.props.onWidgetLoad}
+                                           onHeightChanged={this.props.onHeightChanged}
                                            showUrlPreview={false} />
                         </div>
                     </div>
@@ -732,7 +732,7 @@ module.exports = withMatrixClient(React.createClass({
             default: {
                 const thread = ReplyThread.makeThread(
                     this.props.mxEvent,
-                    this.props.onWidgetLoad,
+                    this.props.onHeightChanged,
                     this.props.permalinkCreator,
                     'replyThread',
                 );
@@ -753,7 +753,7 @@ module.exports = withMatrixClient(React.createClass({
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
-                                           onWidgetLoad={this.props.onWidgetLoad} />
+                                           onHeightChanged={this.props.onHeightChanged} />
                             { keyRequestInfo }
                             { editButton }
                         </div>

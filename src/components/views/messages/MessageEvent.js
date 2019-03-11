@@ -37,7 +37,7 @@ module.exports = React.createClass({
         showUrlPreview: PropTypes.bool,
 
         /* callback called when dynamic content in events are loaded */
-        onWidgetLoad: PropTypes.func,
+        onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
         tileShape: PropTypes.string,
@@ -89,6 +89,6 @@ module.exports = React.createClass({
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
             maxImageHeight={this.props.maxImageHeight}
-            onWidgetLoad={this.props.onWidgetLoad} />;
+            onHeightChanged={this.props.onHeightChanged} />;
     },
 });
