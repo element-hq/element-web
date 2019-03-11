@@ -28,6 +28,14 @@ limitations under the License.
     padding-right: 30px;
 }
 
+.mx_EntityTile .mx_PresenceLabel {
+    display: none;
+}
+
+.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_PresenceLabel {
+    display: block;
+}
+
 .mx_EntityTile_invite {
     display: table-cell;
     vertical-align: middle;
@@ -67,7 +75,7 @@ limitations under the License.
     overflow: hidden;
 }
 
-.mx_EntityTile_name_hover {
+.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_EntityTile_name {
     font-size: 13px;
 }
 
@@ -83,24 +91,20 @@ limitations under the License.
 
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,
 .mx_EntityTile_unavailable .mx_EntityTile_name,
-.mx_EntityTile_unavailable .mx_EntityTile_name_hover,
 .mx_EntityTile_offline_beenactive .mx_EntityTile_avatar,
 .mx_EntityTile_offline_beenactive .mx_EntityTile_name,
-.mx_EntityTile_offline_beenactive .mx_EntityTile_name_hover
 {
     opacity: 0.5;
 }
 
 .mx_EntityTile_offline_neveractive .mx_EntityTile_avatar,
 .mx_EntityTile_offline_neveractive .mx_EntityTile_name,
-.mx_EntityTile_offline_neveractive .mx_EntityTile_name_hover
 {
     opacity: 0.25;
 }
 
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
 .mx_EntityTile_unknown .mx_EntityTile_name,
-.mx_EntityTile_unknown .mx_EntityTile_name_hover
 {
     opacity: 0.25;
 }
