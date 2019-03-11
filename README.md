@@ -137,27 +137,26 @@ choice).
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://yarnpkg.com/docs/install/) if you do not have it already.
 
-Then check out the code and pull in dependencies:
+`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
+latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
+you should set up `matrix-js-sdk`:
 
 ```bash
-git clone https://github.com/matrix-org/matrix-react-sdk.git
-cd matrix-react-sdk
+git clone https://github.com/matrix-org/matrix-js-sdk
+cd matrix-js-sdk
 git checkout develop
+yarn link
 yarn install
 ```
 
-`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
-latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
-you should check out `matrix-js-sdk`, change into that new directory, and run:
+Then check out `matrix-react-sdk` and pull in dependencies:
 
 ```bash
-yarn link
-```
-
-Then, switch back to `matrix-react-sdk` and run:
-
-```bash
+git clone https://github.com/matrix-org/matrix-react-sdk
+cd matrix-react-sdk
+git checkout develop
 yarn link matrix-js-sdk
+yarn install
 ```
 
 See the [help for `yarn link`](https://yarnpkg.com/docs/cli/link) for more

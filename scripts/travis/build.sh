@@ -9,19 +9,17 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
+yarn link
+
 scripts/fetchdep.sh vector-im riot-web
+
 pushd "$RIOT_WEB_DIR"
 
-mkdir node_modules
+yarn link matrix-js-sdk
+yarn link matrix-react-sdk
+
 yarn install
 
-# use the version of js-sdk we just used in the react-sdk tests
-rm -r node_modules/matrix-js-sdk
-ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
-
-# ... and, of course, the version of react-sdk we just built
-rm -r node_modules/matrix-react-sdk
-ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
-
 yarn build
+
 popd
