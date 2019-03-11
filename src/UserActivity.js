@@ -34,8 +34,8 @@ const CURRENTLY_PASSIVE_THRESHOLD_MS = 2 * 60 * 1000;
  * This class watches for user activity (moving the mouse or pressing a key)
  * and starts/stops attached timers while the user is active.
  *
- * There are two classes of 'active' a user can be: 'active' and 'passive':
- * see doc on the userCurrently* functions for what these mean.
+ * There are two classes of 'active': 'active now' and 'active recently'
+ * see doc on the userActive* functions for what these mean.
  */
 export default class UserActivity {
     constructor(windowObj, documentObj) {
@@ -44,8 +44,8 @@ export default class UserActivity {
 
         this._attachedTimersActive = [];
         this._attachedTimersPassive = [];
-        this._activeTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
-        this._passiveTimeout = new Timer(CURRENTLY_PASSIVE_THRESHOLD_MS);
+        this._activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
+        this._activeRecentlyTimeout = new Timer(CURRENTLY_PASSIVE_THRESHOLD_MS);
         this._onUserActivity = this._onUserActivity.bind(this);
         this._onWindowBlurred = this._onWindowBlurred.bind(this);
         this._onPageVisibilityChanged = this._onPageVisibilityChanged.bind(this);
@@ -61,8 +61,9 @@ export default class UserActivity {
     }
 
     /**
-     * Runs the given timer while the user is 'active', aborting when the user becomes 'passive'.
-     * See userCurrentlyActive() for what it means for a user to be 'active'.
+     * Runs the given timer while the user is 'active', aborting when the user is no longer
+     * considered currently active.
+     * See userActiveNow() for what it means for a user to be 'active'.
      * Can be called multiple times with the same already running timer, which is a NO-OP.
      * Can be called before the user becomes active, in which case it is only started
      * later on when the user does become active.
@@ -70,15 +71,15 @@ export default class UserActivity {
      */
     timeWhileActive(timer) {
         this._timeWhile(timer, this._attachedTimersActive);
-        if (this.userCurrentlyActive()) {
+        if (this.userActiveNow()) {
             timer.start();
         }
     }
 
     /**
-     * Runs the given timer while the user is 'active' or 'passive', aborting when the user becomes
-     * inactive.
-     * See userCurrentlyPassive() for what it means for a user to be 'passive'.
+     * Runs the given timer while the user is 'active' now or recently,
+     * aborting when the user becomes inactive.
+     * See userActiveRecently() for what it means for a user to be 'active recently'.
      * Can be called multiple times with the same already running timer, which is a NO-OP.
      * Can be called before the user becomes active, in which case it is only started
      * later on when the user does become active.
@@ -86,7 +87,7 @@ export default class UserActivity {
      */
     timeWhilePassive(timer) {
         this._timeWhile(timer, this._attachedTimersPassive);
-        if (this.userCurrentlyPassive()) {
+        if (this.userActiveRecently()) {
             timer.start();
         }
     }
@@ -150,33 +151,34 @@ export default class UserActivity {
      * user's attention at any given moment.
      * @returns {boolean} true if user is currently 'active'
      */
-    userCurrentlyActive() {
-        return this._activeTimeout.isRunning();
+    userActiveNow() {
+        return this._activeNowTimeout.isRunning();
     }
 
     /**
-     * Return true if the user is currently 'active' or 'passive'
-     * A user is 'passive' for a longer period of time (~2 mins) after they have been 'active' and
-     * while the app still has the focus. This is intended to indicate when the app may still have
-     * the user's attention (or they may have gone to make tea and left the window focused).
-     * @returns {boolean} true if user is currently 'active' or 'passive'
+     * Return true if the user is currently active or has been recently
+     * A user is 'active recently' for a longer period of time (~2 mins) after
+     * they have been 'active' and while the app still has the focus. This is
+     * intended to indicate when the app may still have the user's attention
+     * (or they may have gone to make tea and left the window focused).
+     * @returns {boolean} true if user has been active recently
      */
-    userCurrentlyPassive() {
-        return this._passiveTimeout.isRunning();
+    userActiveRecently() {
+        return this._activeRecentlyTimeout.isRunning();
     }
 
     _onPageVisibilityChanged(e) {
         if (this._document.visibilityState === "hidden") {
-            this._activeTimeout.abort();
-            this._passiveTimeout.abort();
+            this._activeNowTimeout.abort();
+            this._activeRecentlyTimeout.abort();
         } else {
             this._onUserActivity(e);
         }
     }
 
     _onWindowBlurred() {
-        this._activeTimeout.abort();
-        this._passiveTimeout.abort();
+        this._activeNowTimeout.abort();
+        this._activeRecentlyTimeout.abort();
     }
 
     _onUserActivity(event) {
@@ -193,21 +195,21 @@ export default class UserActivity {
         }
 
         dis.dispatch({action: 'user_activity'});
-        if (!this._activeTimeout.isRunning()) {
-            this._activeTimeout.start();
+        if (!this._activeNowTimeout.isRunning()) {
+            this._activeNowTimeout.start();
             dis.dispatch({action: 'user_activity_start'});
 
-            this._runTimersUntilTimeout(this._attachedTimersActive, this._activeTimeout);
+            this._runTimersUntilTimeout(this._attachedTimersActive, this._activeNowTimeout);
         } else {
-            this._activeTimeout.restart();
+            this._activeNowTimeout.restart();
         }
 
-        if (!this._passiveTimeout.isRunning()) {
-            this._passiveTimeout.start();
+        if (!this._activeRecentlyTimeout.isRunning()) {
+            this._activeRecentlyTimeout.start();
 
-            this._runTimersUntilTimeout(this._attachedTimersPassive, this._passiveTimeout);
+            this._runTimersUntilTimeout(this._attachedTimersPassive, this._activeRecentlyTimeout);
         } else {
-            this._passiveTimeout.restart();
+            this._activeRecentlyTimeout.restart();
         }
     }
 
