@@ -41,5 +41,6 @@
     "Create Account": "创建帐号",
     "Need help?": "需要帮助？",
     "Explore rooms": "探索房间",
-    "Room Directory": "房间目录"
+    "Room Directory": "房间目录",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以在自定义服务器选项中通过指定其他主服务器的 URL 来登录其他 Matrix 服务器。 这允许您在不同的主服务器上通过已有的 Matrix 帐户来使用 Riot 。"
 }
