@@ -122,7 +122,9 @@ module.exports = React.createClass({
                 const severity = ev.getContent().severity || "normal";
                 const stateKey = ev.getStateKey();
 
-                if (title && value && severity) {
+                // We want a non-empty title but can accept falsey values (e.g.
+                // zero)
+                if (title && value !== undefined) {
                     counters.push({
                         "title": title,
                         "value": value,
