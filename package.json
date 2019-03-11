@@ -50,7 +50,7 @@
     "lintall": "eslint src/ test/",
     "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
     "clean": "rimraf lib",
-    "prepublish": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
+    "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
     "test": "karma start --single-run=true --browsers ChromeHeadless",
     "test-multi": "karma start"
   },
