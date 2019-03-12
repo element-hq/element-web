@@ -457,7 +457,7 @@ async function startMatrixClient() {
     dis.dispatch({action: 'will_start_client'}, true);
 
     Notifier.start();
-    UserActivity.start();
+    UserActivity.sharedInstance().start();
     Presence.start();
     DMRoomMap.makeShared().start();
     ActiveWidgetStore.start();
@@ -503,7 +503,7 @@ function _clearStorage() {
  */
 export function stopMatrixClient() {
     Notifier.stop();
-    UserActivity.stop();
+    UserActivity.sharedInstance().stop();
     Presence.stop();
     ActiveWidgetStore.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
