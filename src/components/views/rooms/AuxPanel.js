@@ -213,35 +213,33 @@ module.exports = React.createClass({
                 const severity = counter.severity;
                 const stateKey = counter.stateKey;
 
-                if (title && value && severity) {
-                    let span = <span>{ title }: { value }</span>
+                let span = <span>{ title }: { value }</span>
 
-                    if (link) {
-                        span = (
-                            <a href={link} target="_blank" rel="noopener">
-                                { span }
-                            </a>
-                        );
-                    }
-
+                if (link) {
                     span = (
-                        <span
-                            className="m_RoomView_auxPanel_stateViews_span"
-                            data-severity={severity}
-                            key={ "x-" + stateKey }
-                        >
-                            {span}
-                        </span>
-                    );
-
-                    counters.push(span);
-                    counters.push(
-                        <span
-                            className="m_RoomView_auxPanel_stateViews_delim"
-                            key={"delim" + idx}
-                        > ─ </span>
+                        <a href={link} target="_blank" rel="noopener">
+                            { span }
+                        </a>
                     );
                 }
+
+                span = (
+                    <span
+                        className="m_RoomView_auxPanel_stateViews_span"
+                        data-severity={severity}
+                        key={ "x-" + stateKey }
+                    >
+                        {span}
+                    </span>
+                );
+
+                counters.push(span);
+                counters.push(
+                    <span
+                        className="m_RoomView_auxPanel_stateViews_delim"
+                        key={"delim" + idx}
+                    > ─ </span>
+                );
             });
 
             if (counters.length > 0) {
