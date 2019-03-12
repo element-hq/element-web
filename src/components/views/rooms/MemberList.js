@@ -20,6 +20,8 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -439,7 +441,6 @@ module.exports = React.createClass({
 
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
@@ -466,7 +467,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     <div className="mx_MemberList_wrapper">
                         <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
@@ -475,7 +476,7 @@ module.exports = React.createClass({
                         { invitedHeader }
                         { invitedSection }
                     </div>
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
 
                 <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
                            placeholder={ _t('Filter room members') }
