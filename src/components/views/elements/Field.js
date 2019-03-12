@@ -53,22 +53,9 @@ export default class Field extends React.PureComponent {
         };
     }
 
-    /* TODO: Remove me */
-    get value() {
-        if (!this.refs.fieldInput) return null;
-        return this.refs.fieldInput.value;
-    }
-
-    set value(newValue) {
-        if (!this.refs.fieldInput) {
-            throw new Error("No field input reference");
-        }
-        this.refs.fieldInput.value = newValue;
-    }
-
     onChange = (ev) => {
         if (this.props.onValidate) {
-            const result = this.props.onValidate(this.value);
+            const result = this.props.onValidate(ev.target.value);
             this.setState({
                 valid: result.valid,
                 feedback: result.feedback,
@@ -91,12 +78,6 @@ export default class Field extends React.PureComponent {
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
         inputProps.onChange = this.onChange;
-
-        /* TODO: Remove me */
-        // make sure we use the current `value` for the field and not the original one
-        if (inputProps.value === undefined) {
-            inputProps.value = this.value || "";
-        }
 
         const fieldInput = React.createElement(inputElement, inputProps, children);
 
