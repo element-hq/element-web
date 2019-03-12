@@ -310,18 +310,22 @@ export default class Stickerpicker extends React.Component {
      */
     _launchManageIntegrations() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+        this.scalarClient.connect().done(() => {
+            const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
                     this.props.room,
                     'type_' + widgetType,
                     this.state.widgetId,
                 ) :
                 null;
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-            src: src,
-        }, "mx_IntegrationsManager");
-
-        this.setState({showStickers: false});
+            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                src: src,
+            }, "mx_IntegrationsManager");
+            this.setState({showStickers: false});
+        }, (err) => {
+            this.setState({imError: err});
+            console.error('Error ensuring a valid scalar_token exists', err);
+        });
     }
 
     render() {
