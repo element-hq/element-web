@@ -18,11 +18,11 @@ limitations under the License.
 import dis from './dispatcher';
 import Timer from './utils/Timer';
 
-// important this is larger than the timeouts of timers
-// used with UserActivity.timeWhileActive,
-// such as READ_MARKER_INVIEW_THRESHOLD_MS,
-// READ_MARKER_OUTOFVIEW_THRESHOLD_MS,
-// READ_RECEIPT_INTERVAL_MS in TimelinePanel
+// important these are larger than the timeouts of timers
+// used with UserActivity.timeWhileActive*,
+// such as READ_MARKER_INVIEW_THRESHOLD_MS (timeWhileActiveRecently),
+// READ_MARKER_OUTOFVIEW_THRESHOLD_MS (timeWhileActiveRecently),
+// READ_RECEIPT_INTERVAL_MS (timeWhileActiveNow) in TimelinePanel
 
 // 'Under a few seconds'. Must be less than 'RECENTLY_ACTIVE_THRESHOLD_MS'
 const CURRENTLY_ACTIVE_THRESHOLD_MS = 700;
