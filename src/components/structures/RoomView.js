@@ -1355,8 +1355,7 @@ module.exports = React.createClass({
 
         const showBar = this.refs.messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
-            this.setState({showTopUnreadMessagesBar: showBar},
-                          this.onChildResize);
+            this.setState({showTopUnreadMessagesBar: showBar});
         }
     },
 
@@ -1399,7 +1398,7 @@ module.exports = React.createClass({
         };
     },
 
-    onResize: function(e) {
+    onResize: function() {
         // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
         // a minimum of the height of the video element, whilst also capping it from pushing out the page
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
@@ -1417,9 +1416,6 @@ module.exports = React.createClass({
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
         this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
-
-        // changing the maxHeight on the auxpanel will trigger a callback go
-        // onChildResize, so no need to worry about that here.
     },
 
     onFullscreenClick: function() {
@@ -1447,10 +1443,6 @@ module.exports = React.createClass({
         const newState = !call.isLocalVideoMuted();
         call.setLocalVideoMuted(newState);
         this.forceUpdate(); // TODO: just update the voip buttons
-    },
-
-    onChildResize: function() {
-        // no longer anything to do here
     },
 
     onStatusBarVisible: function() {
@@ -1645,7 +1637,6 @@ module.exports = React.createClass({
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
-                onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
             />;
@@ -1714,7 +1705,6 @@ module.exports = React.createClass({
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onResize={this.onChildResize}
               showApps={this.state.showApps}
               hideAppsDrawer={false} >
                 { aux }
@@ -1730,7 +1720,6 @@ module.exports = React.createClass({
             messageComposer =
                 <MessageComposer
                     room={this.state.room}
-                    onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}
                     disabled={this.props.disabled}
