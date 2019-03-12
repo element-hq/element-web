@@ -20,6 +20,7 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 
     .mx_Spinner {
         flex: 1 0 auto;
@@ -34,6 +35,10 @@ limitations under the License.
         padding-right: 12px;
         margin-top: 8px;
         margin-bottom: 4px;
+    }
+
+    .mx_AutoHideScrollbar {
+        flex: 1 1 0;
     }
 }
 
