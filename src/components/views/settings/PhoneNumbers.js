@@ -205,22 +205,22 @@ export default class PhoneNumbers extends React.Component {
         if (this.state.verifying) {
             const msisdn = this.state.verifyMsisdn;
             addVerifySection = (
-              <div>
-                  <div>
-                      {_t("A text message has been sent to +%(msisdn)s. " +
-                          "Please enter the verification code it contains", {msisdn: msisdn})}
-                      <br />
-                      {this.state.verifyError}
-                  </div>
-                  <form onSubmit={this._onContinueClick} autoComplete={false} noValidate={true}>
-                      <Field id="newPhoneNumberCode" ref="newPhoneNumberCode" label={_t("Verification code")}
-                             type="text" autoComplete="off" disabled={this.state.continueDisabled} />
-                      <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                        disabled={this.state.continueDisabled}>
-                          {_t("Continue")}
-                      </AccessibleButton>
-                  </form>
-              </div>
+                <div>
+                    <div>
+                        {_t("A text message has been sent to +%(msisdn)s. " +
+                            "Please enter the verification code it contains", { msisdn: msisdn })}
+                        <br />
+                        {this.state.verifyError}
+                    </div>
+                    <form onSubmit={this._onContinueClick} autoComplete={false} noValidate={true}>
+                        <Field id="newPhoneNumberCode" ref="newPhoneNumberCode" label={_t("Verification code")}
+                               type="text" autoComplete="off" disabled={this.state.continueDisabled} />
+                        <AccessibleButton onClick={this._onContinueClick} kind="primary"
+                                          disabled={this.state.continueDisabled}>
+                            {_t("Continue")}
+                        </AccessibleButton>
+                    </form>
+                </div>
             );
         }
 
