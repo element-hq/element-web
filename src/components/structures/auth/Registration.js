@@ -366,6 +366,17 @@ module.exports = React.createClass({
         this.props.onLoginClick();
     },
 
+    onGoToFormClicked(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this._replaceClient();
+        this.setState({
+            busy: false,
+            doingUIAuth: false,
+            phase: PHASE_REGISTRATION,
+        });
+    },
+
     onServerDetailsNextPhaseClick(ev) {
         ev.stopPropagation();
         this.setState({
@@ -549,6 +560,14 @@ module.exports = React.createClass({
             { _t('Sign in instead') }
         </a>;
 
+        // Only show the 'go back' button if you're not looking at the form
+        let goBack;
+        if ((PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) || this.state.doingUIAuth) {
+            goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
+                { _t('Go back') }
+            </a>;
+        }
+
         return (
             <AuthPage>
                 <AuthHeader />
@@ -557,6 +576,7 @@ module.exports = React.createClass({
                     { errorText }
                     { this.renderServerComponent() }
                     { this.renderRegisterComponent() }
+                    { goBack }
                     { signIn }
                 </AuthBody>
             </AuthPage>
