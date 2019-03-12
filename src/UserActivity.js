@@ -42,8 +42,8 @@ export default class UserActivity {
         this._window = windowObj;
         this._document = documentObj;
 
-        this._attachedTimersActive = [];
-        this._attachedTimersPassive = [];
+        this._attachedActiveNowTimers = [];
+        this._attachedActiveRecentlyTimers = [];
         this._activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
         this._activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
         this._onUserActivity = this._onUserActivity.bind(this);
@@ -70,7 +70,7 @@ export default class UserActivity {
      * @param {Timer} timer the timer to use
      */
     timeWhileActiveNow(timer) {
-        this._timeWhile(timer, this._attachedTimersActive);
+        this._timeWhile(timer, this._attachedActiveNowTimers);
         if (this.userActiveNow()) {
             timer.start();
         }
@@ -86,7 +86,7 @@ export default class UserActivity {
      * @param {Timer} timer the timer to use
      */
     timeWhileActiveRecently(timer) {
-        this._timeWhile(timer, this._attachedTimersPassive);
+        this._timeWhile(timer, this._attachedActiveRecentlyTimers);
         if (this.userActiveRecently()) {
             timer.start();
         }
@@ -199,7 +199,7 @@ export default class UserActivity {
             this._activeNowTimeout.start();
             dis.dispatch({action: 'user_activity_start'});
 
-            this._runTimersUntilTimeout(this._attachedTimersActive, this._activeNowTimeout);
+            this._runTimersUntilTimeout(this._attachedActiveNowTimers, this._activeNowTimeout);
         } else {
             this._activeNowTimeout.restart();
         }
@@ -207,7 +207,7 @@ export default class UserActivity {
         if (!this._activeRecentlyTimeout.isRunning()) {
             this._activeRecentlyTimeout.start();
 
-            this._runTimersUntilTimeout(this._attachedTimersPassive, this._activeRecentlyTimeout);
+            this._runTimersUntilTimeout(this._attachedActiveRecentlyTimers, this._activeRecentlyTimeout);
         } else {
             this._activeRecentlyTimeout.restart();
         }
