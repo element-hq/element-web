@@ -1227,6 +1227,7 @@ var TimelinePanel = React.createClass({
                           alwaysShowTimestamps={this.state.alwaysShowTimestamps}
                           className={this.props.className}
                           tileShape={this.props.tileShape}
+                          resizeNotifier={this.props.resizeNotifier}
             />
         );
     },

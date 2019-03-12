@@ -173,6 +173,7 @@ const LoggedInView = React.createClass({
             },
             onResized: (size) => {
                 window.localStorage.setItem("mx_lhs_size", '' + size);
+                this.props.resizeNotifier.notifyLeftHandleResized();
             },
         };
         const resizer = new Resizer(
@@ -448,6 +449,7 @@ const LoggedInView = React.createClass({
                         disabled={this.props.middleDisabled}
                         collapsedRhs={this.props.collapsedRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
+                        resizeNotifier={this.props.resizeNotifier}
                     />;
                 break;
 
