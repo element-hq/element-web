@@ -24,11 +24,11 @@ import Timer from './utils/Timer';
 // READ_MARKER_OUTOFVIEW_THRESHOLD_MS,
 // READ_RECEIPT_INTERVAL_MS in TimelinePanel
 
-// 'Under a few seconds'. Must be less than 'CURRENTLY_PASSIVE_THRESHOLD_MS'
+// 'Under a few seconds'. Must be less than 'RECENTLY_ACTIVE_THRESHOLD_MS'
 const CURRENTLY_ACTIVE_THRESHOLD_MS = 700;
 
 // 'Under a few minutes'.
-const CURRENTLY_PASSIVE_THRESHOLD_MS = 2 * 60 * 1000;
+const RECENTLY_ACTIVE_THRESHOLD_MS = 2 * 60 * 1000;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
@@ -45,7 +45,7 @@ export default class UserActivity {
         this._attachedTimersActive = [];
         this._attachedTimersPassive = [];
         this._activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
-        this._activeRecentlyTimeout = new Timer(CURRENTLY_PASSIVE_THRESHOLD_MS);
+        this._activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
         this._onUserActivity = this._onUserActivity.bind(this);
         this._onWindowBlurred = this._onWindowBlurred.bind(this);
         this._onPageVisibilityChanged = this._onPageVisibilityChanged.bind(this);
@@ -61,7 +61,7 @@ export default class UserActivity {
     }
 
     /**
-     * Runs the given timer while the user is 'active', aborting when the user is no longer
+     * Runs the given timer while the user is 'active now', aborting when the user is no longer
      * considered currently active.
      * See userActiveNow() for what it means for a user to be 'active'.
      * Can be called multiple times with the same already running timer, which is a NO-OP.
@@ -69,7 +69,7 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    timeWhileActive(timer) {
+    timeWhileActiveNow(timer) {
         this._timeWhile(timer, this._attachedTimersActive);
         if (this.userActiveNow()) {
             timer.start();
@@ -85,7 +85,7 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    timeWhilePassive(timer) {
+    timeWhileActiveRecently(timer) {
         this._timeWhile(timer, this._attachedTimersPassive);
         if (this.userActiveRecently()) {
             timer.start();

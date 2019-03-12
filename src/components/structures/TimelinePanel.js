@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -562,7 +563,7 @@ var TimelinePanel = React.createClass({
         this._readMarkerActivityTimer = new Timer(initialTimeout);
 
         while (this._readMarkerActivityTimer) { //unset on unmount
-            UserActivity.sharedInstance().timeWhilePassive(this._readMarkerActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveRecently(this._readMarkerActivityTimer);
             try {
                 await this._readMarkerActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
@@ -574,7 +575,7 @@ var TimelinePanel = React.createClass({
     updateReadReceiptOnUserActivity: async function() {
         this._readReceiptActivityTimer = new Timer(READ_RECEIPT_INTERVAL_MS);
         while (this._readReceiptActivityTimer) { //unset on unmount
-            UserActivity.sharedInstance().timeWhileActive(this._readReceiptActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveNow(this._readReceiptActivityTimer);
             try {
                 await this._readReceiptActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
