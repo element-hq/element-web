@@ -22,7 +22,6 @@ import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
-import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
@@ -119,6 +118,18 @@ const LoggedInView = React.createClass({
         this._matrixClient.on("accountData", this.onAccountData);
         this._matrixClient.on("sync", this.onSync);
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+    },
+
+    componentDidUpdate(prevProps) {
+        // attempt to guess when a banner was opened or closed
+        if (
+            (prevProps.showCookieBar !== this.props.showCookieBar) ||
+            (prevProps.hasNewVersion !== this.props.hasNewVersion) ||
+            (prevProps.userHasGeneratedPassword !== this.props.userHasGeneratedPassword) ||
+            (prevProps.showNotifierToolbar !== this.props.showNotifierToolbar)
+        ) {
+            this.props.resizeNotifier.notifyBannersChanged();
+        }
     },
 
     componentWillUnmount: function() {
@@ -491,7 +502,6 @@ const LoggedInView = React.createClass({
         });
 
         let topBar;
-        const isGuest = this.props.matrixClient.isGuest();
         if (this.state.syncErrorData && this.state.syncErrorData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
             topBar = <ServerLimitBar kind='hard'
                 adminContact={this.state.syncErrorData.error.data.admin_contact}
@@ -515,10 +525,7 @@ const LoggedInView = React.createClass({
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
-        } else if (
-            !isGuest && Notifier.supportsDesktopNotifications() &&
-            !Notifier.isEnabled() && !Notifier.isToolbarHidden()
-        ) {
+        } else if (this.props.showNotifierToolbar) {
             topBar = <MatrixToolbar />;
         }
 
