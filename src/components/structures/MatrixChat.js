@@ -318,6 +318,9 @@ export default React.createClass({
         // N.B. we don't call the whole of setTheme() here as we may be
         // racing with the theme CSS download finishing from index.js
         Tinter.tint();
+
+        // For PersistentElement
+        this.state.resizeNotifier.on("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentDidMount: function() {
@@ -400,6 +403,7 @@ export default React.createClass({
         dis.unregister(this.dispatcherRef);
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
+        this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentWillUpdate: function(props, state) {
@@ -1665,6 +1669,10 @@ export default React.createClass({
 
         this.state.resizeNotifier.notifyWindowResized();
         this._windowWidth = window.innerWidth;
+    },
+
+    _dispatchTimelineResize() {
+        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     onRoomCreated: function(roomId) {

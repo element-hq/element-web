@@ -21,7 +21,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
-import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -663,10 +662,6 @@ module.exports = React.createClass({
         if (scrollPanel) {
             scrollPanel.clearBlockShrinking();
         }
-    },
-
-    onResize: function() {
-        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     render: function() {
