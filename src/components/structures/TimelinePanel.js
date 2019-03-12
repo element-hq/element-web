@@ -457,7 +457,7 @@ var TimelinePanel = React.createClass({
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
                 var callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.sharedInstance().userRecentlyActive()) {
+                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
