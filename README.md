@@ -61,51 +61,45 @@ progress on replacing this with something better.
 Building From Source
 ====================
 
-Riot is a modular webapp built with modern ES6 and requires a npm build system
-to build.
+Riot is a modular webapp built with modern ES6 and uses a Node.js build system.
+Ensure you have the latest LTS version of Node.js installed (v10.x as of this
+writing).
 
-1. Install or update `node.js` so that your `node` is at least v8.12.0 (and `npm`
-   is at least v5.x).
+Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
+guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+
+1. Install or update `node.js` so that your `node` is at least v10.x.
+1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
 1. Switch to the riot-web directory: `cd riot-web`.
-1. Install the prerequisites: `npm install`.
+1. Install the prerequisites: `yarn install`.
 1. If you're using the `develop` branch then it is recommended to set up a proper
    development environment ("Setting up a dev environment" below) however one can
    install the develop versions of the dependencies instead:
    ```bash
    scripts/fetch-develop.deps.sh
    ```
-   Note that running `npm install` will undo the symlinks put in place by
-   `scripts/fetch-develop.deps.sh` so you should run `npm install` first, or
-   run `npm link matrix-js-sdk` and `npm link matrix-react-sdk` after running
-   `npm install`.
-
-   Whenever you git pull on riot-web you will also probably need to force an update
+   Whenever you git pull on `riot-web` you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
    manually update and rebuild them:
    ```bash
    cd matrix-js-sdk
    git pull
-   npm install # re-run to pull in any new dependencies
-   # Depending on your version of npm, npm run build may happen as part of
-   # the npm install above (https://docs.npmjs.com/misc/scripts#prepublish-and-prepare)
-   # If in doubt, run it anyway:
-   npm run build
+   yarn install # re-run to pull in any new dependencies
    cd ../matrix-react-sdk
    git pull
-   npm install
-   npm run build
+   yarn install
    ```
    Or just use https://riot.im/develop - the continuous integration release of the
    develop branch. (Note that we don't reference the develop versions in git directly
    due to https://github.com/npm/npm/issues/3055.)
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details).
-1. `npm run dist` to build a tarball to deploy. Untaring this file will give
+1. `yarn dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
 
-Note that `npm run dist` is not supported on Windows, so Windows users can run `npm run build`,
+Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
 which will build all the necessary files into the `webapp` directory. The version of Riot
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your webserver to actually serve up the app, which is entirely static content.
@@ -188,7 +182,7 @@ appear in some websites like Facebook, and indeed Riot itself. This has to be
 static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
 not possible for this to be an option in config.json. If you'd like to change
 it, you can build Riot as above, but run
-`RIOT_OG_IMAGE_URL="http://example.com/logo.png" npm run build`.
+`RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`.
 Alternatively, you can edit the `og:image` meta tag in `index.html` directly
 each time you download a new version of Riot.
 
@@ -202,12 +196,11 @@ build it yourself. Requires Electron >=1.6.0
 To run as a desktop app:
 
 1. Follow the instructions in 'Building From Source' above, but run
-   `npm run build` instead of `npm run dist` (since we don't need the tarball).
+   `yarn build` instead of `yarn dist` (since we don't need the tarball).
 2. Install electron and run it:
 
    ```bash
-   npm install electron
-   npm run electron
+   yarn electron
    ```
 
 To build packages, use electron-builder. This is configured to output:
@@ -225,8 +218,8 @@ The only platform that can build packages for all three platforms is macOS:
 brew install wine --without-x11
 brew install mono
 brew install gnu-tar
-npm install
-npm run build:electron
+yarn install
+yarn build:electron
 ```
 
 For other packages, use electron-builder manually. For example, to build a package
@@ -244,7 +237,7 @@ Other options for running as a desktop app:
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
-sudo npm install nativefier -g
+yarn global add nativefier
 nativefier https://riot.im/app/
 ```
 
@@ -264,7 +257,7 @@ top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
 
-After creating a new component you must run `npm run reskindex` to regenerate
+After creating a new component you must run `yarn reskindex` to regenerate
 the `component-index.js` for the app (used in future for skinning).
 
 Please note that Riot is intended to run correctly without access to the public
@@ -286,9 +279,8 @@ First clone and build `matrix-js-sdk`:
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
 git checkout develop
-npm install
-npm install source-map-loader  # because webpack is made of fail
-# see https://github.com/webpack/webpack/issues/1472
+yarn link
+yarn install
 popd
 ```
 
@@ -298,7 +290,9 @@ Then similarly with `matrix-react-sdk`:
 git clone https://github.com/matrix-org/matrix-react-sdk.git
 pushd matrix-react-sdk
 git checkout develop
-npm link ../matrix-js-sdk
+yarn link
+yarn link matrix-js-sdk
+yarn install
 popd
 ```
 
@@ -308,10 +302,10 @@ Finally, build and start Riot itself:
 git clone https://github.com/vector-im/riot-web.git
 cd riot-web
 git checkout develop
-npm install
-npm link ../matrix-js-sdk
-npm link ../matrix-react-sdk
-npm start
+yarn link matrix-js-sdk
+yarn link matrix-react-sdk
+yarn install
+yarn start
 ```
 
 Wait a few seconds for the initial build to finish; you should see something like:
@@ -338,7 +332,7 @@ When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
-the skin's index by running, `npm run reskindex`.
+the skin's index by running, `yarn reskindex`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
@@ -354,12 +348,12 @@ are designed to run in a browser instance under the control of
 * Make sure you have Chrome installed (a recent version, like 59)
 * Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
   built, as above
-* `npm run test`
+* `yarn test`
 
 The above will run the tests under Chrome in a `headless` mode.
 
 You can also tell karma to run the tests in a loop (every time the source
-changes), in an instance of Chrome on your desktop, with `npm run
+changes), in an instance of Chrome on your desktop, with `yarn
 test-multi`. This also gives you the option of running the tests in 'debug'
 mode, which is useful for stepping through the tests in the developer tools.
 

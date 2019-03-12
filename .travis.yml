@@ -22,7 +22,7 @@ addons:
 install:
     # clone the deps with depth 1: we know we will only ever need that one
     # commit.
-    - npm install && scripts/fetch-develop.deps.sh --depth 1
+    - scripts/fetch-develop.deps.sh --depth 1 && yarn install
 script:
-    - CHROME_BIN='/usr/bin/google-chrome-stable' npm run test
-    - npm run lint
+    - CHROME_BIN='/usr/bin/google-chrome-stable' yarn test
+    - yarn lint
