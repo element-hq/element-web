@@ -543,7 +543,7 @@ const LoggedInView = React.createClass({
                 <DragDropContext onDragEnd={this._onDragEnd}>
                     <div ref={this._setResizeContainerRef} className={bodyClasses}>
                         <LeftPanel
-                            toolbarShown={!!topBar}
+                            resizeNotifier={this.props.resizeNotifier}
                             collapsed={this.props.collapseLhs || false}
                             disabled={this.props.leftDisabled}
                         />
