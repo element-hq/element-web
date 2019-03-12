@@ -44,6 +44,7 @@ import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
 import E2EIcon from "./E2EIcon";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -1003,7 +1004,7 @@ module.exports = withMatrixClient(React.createClass({
                             { roomMemberDetails }
                         </div>
                     </div>
-                    <GeminiScrollbarWrapper autoshow={true} className="mx_MemberInfo_scrollContainer">
+                    <AutoHideScrollbar className="mx_MemberInfo_scrollContainer">
                         <div className="mx_MemberInfo_container">
                             { this._renderUserOptions() }
 
@@ -1015,7 +1016,7 @@ module.exports = withMatrixClient(React.createClass({
 
                             { spinner }
                         </div>
-                    </GeminiScrollbarWrapper>
+                    </AutoHideScrollbar>
             </div>
         );
     },
