@@ -452,7 +452,7 @@ var TimelinePanel = React.createClass({
                 //
                 // We ignore events we have sent ourselves; we don't want to see the
                 // read-marker when a remote echo of an event we have just sent takes
-                // more than the timeout on userRecentlyActive.
+                // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
