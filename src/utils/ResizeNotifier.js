@@ -31,11 +31,13 @@ export default class ResizeNotifier extends EventEmitter {
     }
 
     notifyBannersChanged() {
+        this.emit("leftPanelResized");
         this.emit("middlePanelResized");
     }
 
     // can be called in quick succession
     notifyLeftHandleResized() {
+        // don't emit event for own region
         this._throttledMiddlePanel();
     }
 
@@ -46,6 +48,12 @@ export default class ResizeNotifier extends EventEmitter {
 
     // can be called in quick succession
     notifyWindowResized() {
+        // no need to throttle this one,
+        // also it could make scrollbars appear for
+        // a split second when the room list manual layout is now
+        // taller than the available space
+        this.emit("leftPanelResized");
+
         this._throttledMiddlePanel();
     }
 }
