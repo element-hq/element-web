@@ -32,6 +32,7 @@ import sessionStore from '../../../stores/SessionStore';
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
+
     propTypes: {
         onFinished: PropTypes.func,
         onError: PropTypes.func,
@@ -73,6 +74,9 @@ module.exports = React.createClass({
         return {
             phase: this.Phases.Edit,
             cachedPassword: null,
+            oldPassword: "",
+            newPassword: "",
+            newPasswordConfirm: "",
         };
     },
 
@@ -165,6 +169,9 @@ module.exports = React.createClass({
         }).finally(() => {
             this.setState({
                 phase: this.Phases.Edit,
+                oldPassword: "",
+                newPassword: "",
+                newPasswordConfirm: "",
             });
         }).done();
     },
@@ -192,11 +199,29 @@ module.exports = React.createClass({
         );
     },
 
+    onChangeOldPassword(ev) {
+        this.setState({
+            oldPassword: ev.target.value,
+        });
+    },
+
+    onChangeNewPassword(ev) {
+        this.setState({
+            newPassword: ev.target.value,
+        });
+    },
+
+    onChangeNewPasswordConfirm(ev) {
+        this.setState({
+            newPasswordConfirm: ev.target.value,
+        });
+    },
+
     onClickChange: function(ev) {
         ev.preventDefault();
-        const oldPassword = this.state.cachedPassword || this.refs.old_input.value;
-        const newPassword = this.refs.new_input.value;
-        const confirmPassword = this.refs.confirm_input.value;
+        const oldPassword = this.state.cachedPassword || this.state.oldPassword;
+        const newPassword = this.state.newPassword;
+        const confirmPassword = this.state.newPasswordConfirm;
         const err = this.props.onCheckPassword(
             oldPassword, newPassword, confirmPassword,
         );
@@ -217,7 +242,12 @@ module.exports = React.createClass({
         if (!this.state.cachedPassword) {
             currentPassword = (
                 <div className={rowClassName}>
-                    <Field id="passwordold" type="password" ref="old_input" label={_t('Current password')} />
+                    <Field id="mx_ChangePassword_oldPassword"
+                        type="password"
+                        label={_t('Current password')}
+                        value={this.state.oldPassword}
+                        onChange={this.onChangeOldPassword}
+                    />
                 </div>
             );
         }
@@ -230,11 +260,21 @@ module.exports = React.createClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <Field id="password1" type="password" ref="new_input" label={passwordLabel}
-                                   autoFocus={this.props.autoFocusNewPasswordInput} />
+                            <Field id="mx_ChangePassword_newPassword"
+                                type="password"
+                                label={passwordLabel}
+                                value={this.state.newPassword}
+                                autoFocus={this.props.autoFocusNewPasswordInput}
+                                onChange={this.onChangeNewPassword}
+                            />
                         </div>
                         <div className={rowClassName}>
-                            <Field id="password2" type="password" ref="confirm_input" label={_t("Confirm password")} />
+                            <Field id="mx_ChangePassword_newPasswordConfirm"
+                                type="password"
+                                label={_t("Confirm password")}
+                                value={this.state.newPasswordConfirm}
+                                onChange={this.onChangeNewPasswordConfirm}
+                            />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
                             { _t('Change Password') }

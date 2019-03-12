@@ -32,6 +32,9 @@ export default class Field extends React.PureComponent {
         label: PropTypes.string,
         // The field's placeholder string. Defaults to the label.
         placeholder: PropTypes.string,
+        // The field's value.
+        // This is a controlled component, so the value is required.
+        value: PropTypes.string.isRequired,
         // Optional component to include inside the field before the input.
         prefix: PropTypes.node,
         // The callback called whenever the contents of the field
@@ -50,6 +53,7 @@ export default class Field extends React.PureComponent {
         };
     }
 
+    /* TODO: Remove me */
     get value() {
         if (!this.refs.fieldInput) return null;
         return this.refs.fieldInput.value;
@@ -87,6 +91,8 @@ export default class Field extends React.PureComponent {
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
 
         inputProps.onChange = this.onChange;
+
+        /* TODO: Remove me */
         // make sure we use the current `value` for the field and not the original one
         if (inputProps.value === undefined) {
             inputProps.value = this.value || "";
