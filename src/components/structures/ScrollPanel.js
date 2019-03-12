@@ -149,6 +149,8 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._pendingFillRequests = {b: null, f: null};
+        this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+
         this.resetScrollState();
     },
 
@@ -171,6 +173,7 @@ module.exports = React.createClass({
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
+        this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
     },
 
     onScroll: function(ev) {

@@ -703,7 +703,8 @@ module.exports = React.createClass({
                     onFillRequest={this.props.onFillRequest}
                     onUnfillRequest={this.props.onUnfillRequest}
                     style={style}
-                    stickyBottom={this.props.stickyBottom}>
+                    stickyBottom={this.props.stickyBottom}
+                    resizeNotifier={this.props.resizeNotifier}>
                 { topSpinner }
                 { this._getEventTiles() }
                 { whoIsTyping }

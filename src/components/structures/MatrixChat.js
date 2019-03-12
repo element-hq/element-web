@@ -48,6 +48,7 @@ import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
+import ResizeNotifier from "../../utils/ResizeNotifier";
 
 const AutoDiscovery = Matrix.AutoDiscovery;
 
@@ -194,6 +195,7 @@ export default React.createClass({
             hideToSRUsers: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
+            resizeNotifier: new ResizeNotifier(),
         };
         return s;
     },
@@ -1661,6 +1663,7 @@ export default React.createClass({
             dis.dispatch({ action: 'show_right_panel' });
         }
 
+        this.state.resizeNotifier.notifyWindowResized();
         this._windowWidth = window.innerWidth;
     },
 

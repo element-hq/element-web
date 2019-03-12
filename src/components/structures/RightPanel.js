@@ -193,7 +193,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.NotificationPanel) {
             panel = <NotificationPanel />;
         } else if (this.state.phase === RightPanel.Phase.FilePanel) {
-            panel = <FilePanel roomId={this.props.roomId} />;
+            panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {
