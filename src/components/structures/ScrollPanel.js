@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 const React = require("react");
-const ReactDOM = require("react-dom");
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
-import sdk from '../../index.js';
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const DEBUG_SCROLL = false;
-// var DEBUG_SCROLL = true;
+// const DEBUG_SCROLL = true;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
@@ -129,11 +128,6 @@ module.exports = React.createClass({
          */
         onScroll: PropTypes.func,
 
-        /* onResize: a callback which is called whenever the Gemini scroll
-         * panel is resized
-         */
-        onResize: PropTypes.func,
-
         /* className: classnames to add to the top-level div
          */
         className: PropTypes.string,
@@ -150,7 +144,6 @@ module.exports = React.createClass({
             onFillRequest: function(backwards) { return Promise.resolve(false); },
             onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
-            onResize: function() {},
         };
     },
 
@@ -184,6 +177,16 @@ module.exports = React.createClass({
         const sn = this._getScrollNode();
         debuglog("Scroll event: offset now:", sn.scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
+
+        // ignore scroll events where scrollTop hasn't changed,
+        // appears to happen when the layout changes outside
+        // of the scroll container, like resizing the right panel.
+        if (sn.scrollTop === this._lastEventScroll) {
+            debuglog("ignore scroll event with same scrollTop as before");
+            return;
+        }
+
+        this._lastEventScroll = sn.scrollTop;
 
         // Sometimes we see attempts to write to scrollTop essentially being
         // ignored. (Or rather, it is successfully written, but on the next
@@ -225,9 +228,7 @@ module.exports = React.createClass({
 
     onResize: function() {
         this.clearBlockShrinking();
-        this.props.onResize();
         this.checkScroll();
-        if (this._gemScroll) this._gemScroll.forceUpdate();
     },
 
     // after an update to the contents of the panel, check that the scroll is
@@ -672,17 +673,17 @@ module.exports = React.createClass({
             throw new Error("ScrollPanel._getScrollNode called when unmounted");
         }
 
-        if (!this._gemScroll) {
+        if (!this._divScroll) {
             // Likewise, we should have the ref by this point, but if not
             // turn the NPE into something meaningful.
             throw new Error("ScrollPanel._getScrollNode called before gemini ref collected");
         }
 
-        return this._gemScroll.scrollbar.getViewElement();
+        return this._divScroll;
     },
 
-    _collectGeminiScroll: function(gemScroll) {
-        this._gemScroll = gemScroll;
+    _collectScroll: function(divScroll) {
+        this._divScroll = divScroll;
     },
 
     /**
@@ -724,19 +725,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
-        return (<GeminiScrollbarWrapper autoshow={true} wrappedRef={this._collectGeminiScroll}
-                onScroll={this.onScroll} onResize={this.onResize}
+        return (<AutoHideScrollbar wrappedRef={this._collectScroll}
+                onScroll={this.onScroll}
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
                             { this.props.children }
                         </ol>
                     </div>
-                </GeminiScrollbarWrapper>
-               );
+                </AutoHideScrollbar>
+            );
     },
 });
