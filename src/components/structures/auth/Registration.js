@@ -560,13 +560,12 @@ module.exports = React.createClass({
             { _t('Sign in instead') }
         </a>;
 
-        let goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
-            { _t('Go back') }
-        </a>;
-
-        // Don't show the 'go back' button in one specific case: when you're staring at the form.
-        if ((PHASES_ENABLED && this.state.phase === PHASE_REGISTRATION) && !this.state.doingUIAuth) {
-            goBack = null;
+        // Only show the 'go back' button if you're not looking at the form
+        let goBack;
+        if ((PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) || this.state.doingUIAuth) {
+            goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
+                { _t('Go back') }
+            </a>;
         }
 
         return (
