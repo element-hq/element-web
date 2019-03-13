@@ -8,31 +8,17 @@ nvm use 10
 
 set -x
 
-npm install
-
 # check out corresponding branches of dependencies.
-#
-# clone the deps with depth 1: we know we will only ever need that one
-# commit.
-# We need to do this after npm install otherwise modern node versions
-# just reset it back.
+# clone the deps with depth 1: we know we will only ever need that one commit.
 `dirname $0`/fetch-develop.deps.sh --depth 1
 
-# install olm. A naive 'npm i ./olm/olm-*.tgz' fails because it uses the url
-# from our package.json (or even matrix-js-sdk's) in preference.
-#
-# disabled for now, to avoid the annoying scenario of a release doing something
-# different to /develop. Instead, add it to the 'npm install' list above.
-# -- rav 2016/02/03
-#tar -C olm -xz < olm/olm-*.tgz
-#rm -r node_modules/olm
-#cp -r olm/package node_modules/olm
+yarn install
 
 # run the mocha tests
-npm run test
+yarn test
 
 # run eslint
-npm run lintall -- -f checkstyle -o eslint.xml || true
+yarn lintall -- -f checkstyle -o eslint.xml || true
 
 rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 

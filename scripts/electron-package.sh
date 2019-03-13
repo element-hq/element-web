@@ -85,8 +85,8 @@ if [ -n "$conffile" ]; then
     pushd "$builddir"
 fi
 
-npm install
-npm run build:electron
+yarn install
+yarn build:electron
 
 popd
 
