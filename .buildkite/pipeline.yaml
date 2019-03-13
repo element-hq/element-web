@@ -1,0 +1,33 @@
+steps:
+  - label: ":eslint: Lint"
+    command:
+      - "./scripts/ci/install-deps.sh"
+      - "yarn lintwithexclusions"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+  - label: ":chrome: End-to-End Tests"
+    command:
+      - "sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev"
+      - "./scripts/ci/install-deps.sh"
+      - "./scripts/ci/end-to-end-tests.sh"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+  - label: ":karma: Tests"
+    command:
+      - "./scripts/ci/install-deps.sh"
+      - "./scripts/ci/unit-tests.sh"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+  - label: "🔧 Riot Tests"
+    command:
+      - "./scripts/ci/install-deps.sh"
+      - "./scripts/ci/riot-unit-tests.sh"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
