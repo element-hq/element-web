@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 Travis Ralston
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,10 @@ limitations under the License.
 
 import FromWidgetPostMessageApi from './FromWidgetPostMessageApi';
 import ToWidgetPostMessageApi from './ToWidgetPostMessageApi';
+import Modal from "./Modal";
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import {_t} from "./languageHandler";
+import MatrixClientPeg from "./MatrixClientPeg";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -40,6 +45,7 @@ export default class WidgetMessaging {
         this.target = target;
         this.fromWidget = global.mxFromWidgetMessaging;
         this.toWidget = global.mxToWidgetMessaging;
+        this._openIdHandlerRef = this._onOpenIdRequest.bind(this);
         this.start();
     }
 
@@ -109,9 +115,48 @@ export default class WidgetMessaging {
 
     start() {
         this.fromWidget.addEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.addListener("get_openid", this._openIdHandlerRef);
     }
 
     stop() {
         this.fromWidget.removeEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.removeListener("get_openid", this._openIdHandlerRef);
+    }
+
+    _onOpenIdRequest(ev, rawEv) {
+        if (ev.widgetId !== this.widgetId) return; // not interesting
+
+        // Confirm that we received the request
+        this.fromWidget.sendResponse(rawEv, {state: "request"});
+
+        // TODO: Support blacklisting widgets
+        // TODO: Support whitelisting widgets
+
+        // Actually ask for permission to send the user's data
+        Modal.createTrackedDialog("OpenID widget permissions", '', QuestionDialog, {
+            title: _t("A widget would like to verify your identity"),
+            description: _t(
+                "A widget located at %(widgetUrl)s would like to verify your identity. " +
+                "By allowing this, the widget will be able to verify your user ID, but not " +
+                "perform actions as you.", {
+                    widgetUrl: this.widgetUrl,
+                },
+            ),
+            button: _t("Allow"),
+            onFinished: async (confirm) => {
+                const responseBody = {success: confirm};
+                if (confirm) {
+                    const credentials = await MatrixClientPeg.get().getOpenIdToken();
+                    Object.assign(responseBody, credentials);
+                }
+                this.messageToWidget({
+                    api: OUTBOUND_API_NAME,
+                    action: "openid_credentials",
+                    data: responseBody,
+                }).catch((error) => {
+                    console.error("Failed to send OpenID credentials: ", error);
+                });
+            },
+        });
     }
 }
