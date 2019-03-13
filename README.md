@@ -131,8 +131,7 @@ for now.
 Development
 ===========
 
-Ensure you have the latest stable Node JS runtime installed (v8.x is the best
-choice).
+Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://yarnpkg.com/docs/install/) if you do not have it already.
