@@ -146,7 +146,7 @@
     "source-map-loader": "^0.2.4",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.11"
   },
   "build": {
     "appId": "im.riot.app",
