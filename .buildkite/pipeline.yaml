@@ -1,6 +1,9 @@
 steps:
   - label: ":eslint: Lint"
     command:
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
       - "./scripts/ci/install-deps.sh"
       - "yarn lintwithexclusions"
     plugins:
@@ -9,6 +12,9 @@ steps:
 
   - label: ":chrome: End-to-End Tests"
     command:
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
       - "sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev"
       - "./scripts/ci/install-deps.sh"
       - "./scripts/ci/end-to-end-tests.sh"
@@ -18,6 +24,9 @@ steps:
 
   - label: ":karma: Tests"
     command:
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
       - "./scripts/ci/install-deps.sh"
       - "./scripts/ci/unit-tests.sh"
     plugins:
@@ -26,6 +35,9 @@ steps:
 
   - label: "🔧 Riot Tests"
     command:
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
       - "./scripts/ci/install-deps.sh"
       - "./scripts/ci/riot-unit-tests.sh"
     plugins:
