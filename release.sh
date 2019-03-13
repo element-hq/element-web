@@ -41,7 +41,7 @@ tag="v${release}"
 echo "electron yarn version"
 
 cd electron_app
-yarn version --no-git-tag-version "$release"
+yarn version --no-git-tag-version --new-version "$release"
 git commit package.json -m "$tag"
 
 cd ..
