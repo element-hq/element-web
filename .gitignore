@@ -11,6 +11,7 @@
 /webapp
 /.npmrc
 /*.log
+package-lock.json
 .DS_Store
 electron/dist
 electron/pub
