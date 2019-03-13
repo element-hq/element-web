@@ -12,7 +12,6 @@
 /.npmrc
 /*.log
 .DS_Store
-npm-debug.log
 electron/dist
 electron/pub
 **/.idea
