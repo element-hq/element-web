@@ -1,5 +1,6 @@
 npm-debug.log
 /.npmrc
+/*.log
 
 /node_modules
 /lib
