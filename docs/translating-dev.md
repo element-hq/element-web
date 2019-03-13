@@ -4,7 +4,7 @@
 
 - A working [Development Setup](../../#setting-up-a-dev-environment)
   - Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
-- Node 8 or later
+- Latest LTS version of Node.js installed
 - Be able to understand English
 - Be able to understand the language you want to translate riot-web into
 

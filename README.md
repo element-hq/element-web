@@ -62,8 +62,7 @@ Building From Source
 ====================
 
 Riot is a modular webapp built with modern ES6 and uses a Node.js build system.
-Ensure you have the latest LTS version of Node.js installed (v10.x as of this
-writing).
+Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://yarnpkg.com/docs/install/) if you do not have it already.
