@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
-npm install
-scripts/fetchdep.sh matrix-org matrix-js-sdk
-rm -r node_modules/matrix-js-sdk || true
-ln -s ../matrix-js-sdk node_modules/matrix-js-sdk
 
-cd matrix-js-sdk
-npm install
-cd ..
+scripts/fetchdep.sh matrix-org matrix-js-sdk
+
+pushd matrix-js-sdk
+yarn link
+yarn install
+popd
+
+yarn link matrix-js-sdk
+yarn install
