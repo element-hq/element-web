@@ -786,7 +786,7 @@ module.exports = React.createClass({
             return;
         }
 
-        this._updateRoomMembers();
+        this._updateRoomMembers(member);
     },
 
     onMyMembership: function(room, membership, oldMembership) {
@@ -798,16 +798,24 @@ module.exports = React.createClass({
 
     // rate limited because a power level change will emit an event for every
     // member in the room.
-    _updateRoomMembers: new rate_limited_func(function() {
+    _updateRoomMembers: new rate_limited_func(function(dueToMember) {
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
         this._updateDMState();
-        this._checkIfAlone(this.state.room);
+
+        let memberCountInfluence = 0;
+        if (dueToMember && dueToMember.membership === "invite" && this.state.room.getInvitedMemberCount() === 0) {
+            // A member got invited, but the room hasn't detected that change yet. Influence the member
+            // count by 1 to counteract this.
+            memberCountInfluence = 1;
+        }
+        this._checkIfAlone(this.state.room, memberCountInfluence);
+
         this._updateE2EStatus(this.state.room);
     }, 500),
 
-    _checkIfAlone: function(room) {
+    _checkIfAlone: function(room, countInfluence) {
         let warnedAboutLonelyRoom = false;
         if (localStorage) {
             warnedAboutLonelyRoom = localStorage.getItem('mx_user_alone_warned_' + this.state.room.roomId);
@@ -817,7 +825,8 @@ module.exports = React.createClass({
             return;
         }
 
-        const joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
+        let joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
+        if (countInfluence) joinedOrInvitedMemberCount += countInfluence;
         this.setState({isAlone: joinedOrInvitedMemberCount === 1});
     },
 
