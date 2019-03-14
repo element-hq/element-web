@@ -37,6 +37,7 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:10"
+          propagate-environment: true
 
   - label: "🔧 Riot Tests"
     command:
@@ -56,3 +57,4 @@ steps:
     plugins:
       - docker#v3.0.1:
           image: "node:10"
+          propagate-environment: true
