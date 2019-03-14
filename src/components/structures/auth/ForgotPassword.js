@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from "../../../Modal";
-import MatrixClientPeg from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 
 import PasswordReset from "../../../PasswordReset";
@@ -124,20 +123,13 @@ module.exports = React.createClass({
                 description:
                     <div>
                         { _t(
-                            'Resetting password will currently reset any ' +
-                            'end-to-end encryption keys on all devices, ' +
-                            'making encrypted chat history unreadable, ' +
-                            'unless you first export your room keys and re-import ' +
-                            'them afterwards. In future this will be improved.',
+                            "Changing your password will reset any end-to-end encryption keys " +
+                            "on all of your devices, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another device before resetting your " +
+                            "password.",
                         ) }
                     </div>,
                 button: _t('Continue'),
-                extraButtons: [
-                    <button key="export_keys" className="mx_Dialog_primary"
-                            onClick={this._onExportE2eKeysClicked}>
-                        { _t('Export E2E room keys') }
-                    </button>,
-                ],
                 onFinished: (confirmed) => {
                     if (confirmed) {
                         this.submitPasswordReset(
@@ -148,15 +140,6 @@ module.exports = React.createClass({
                 },
             });
         }
-    },
-
-    _onExportE2eKeysClicked: function() {
-        Modal.createTrackedDialogAsync('Export E2E Keys', 'Forgot Password',
-            import('../../../async-components/views/dialogs/ExportE2eKeysDialog'),
-            {
-                matrixClient: MatrixClientPeg.get(),
-            },
-        );
     },
 
     onInputChanged: function(stateKey, ev) {
