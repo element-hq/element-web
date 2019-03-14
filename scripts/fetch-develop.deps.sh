@@ -40,9 +40,8 @@ function dodep() {
     # Try the PR author's branch in case it exists on the deps as well.
     # Try the target branch of the push or PR.
     # Use the default branch as the last resort.
-    if [[ "$TRAVIS" == true ]]; then
-        clone $org $repo $TRAVIS_PULL_REQUEST_BRANCH ||
-        clone $org $repo $TRAVIS_BRANCH ||
+    if [[ "$BUILDKITE" == true ]]; then
+        clone $org $repo $BUILDKITE_BRANCH ||
         clone $org $repo $defbranch ||
         return $?
     else
