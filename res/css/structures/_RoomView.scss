@@ -113,6 +113,7 @@ limitations under the License.
     width: 100%;
     overflow-y: auto;
     flex: 1 1 0;
+    overflow-anchor: none;
 }
 
 .mx_RoomView_messagePanelSearchSpinner {
