@@ -28,6 +28,7 @@ import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -105,7 +106,43 @@ export const CommandMap = {
         description: _td('Upgrades a room to a new version'),
         runFn: function(roomId, args) {
             if (args) {
-                return success(MatrixClientPeg.get().upgradeRoom(roomId, args));
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                    QuestionDialog, {
+                    title: _t('Room upgrade confirmation'),
+                    description: (
+                        <div>
+                            { _t(
+                                "Upgrading your room in this way can be dangerous or unnecessary. Room upgrades " +
+                                "are usually done to change the server's behaviour in a given room and not so much " +
+                                "anything to do with client (Riot) behaviour.",
+                            ) }
+                            <br />
+                            <br />
+                            { _t(
+                                "Members of the room will be required to click a link to join the new room. No " +
+                                "one will be automatically joined or invited to the new room.",
+                            ) }
+                            <br />
+                            <br />
+                            { _t(
+                                "Please confirm that you'd like to go forward with upgrading this room from " +
+                                "%(oldVersion)s to %(newVersion)s",
+                                {
+                                    oldVersion: room ? room.getVersion() : "1",
+                                    newVersion: args,
+                                },
+                            ) }
+                        </div>
+                    ),
+                    button: _t("Upgrade Room"),
+                    onFinished: (confirm) => {
+                        if (!confirm) return;
+
+                        MatrixClientPeg.get().upgradeRoom(roomId, args);
+                    },
+                });
+                return success();
             }
             return reject(this.getUsage());
         },
