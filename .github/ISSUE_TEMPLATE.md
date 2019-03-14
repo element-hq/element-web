@@ -43,4 +43,4 @@ For the web app:
 For the desktop app:
 
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **Version**: 0.x.y <!-- check the user settings panel if unsure -->
+- **Version**: 1.x.y <!-- check the user settings panel if unsure -->
