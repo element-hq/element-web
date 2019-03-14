@@ -1,7 +1,6 @@
 steps:
   - label: ":eslint: Lint"
     command:
-      - "./scripts/fetch-develop.deps.sh --depth 1"
       - "yarn install"
       - "yarn lint"
     plugins:
