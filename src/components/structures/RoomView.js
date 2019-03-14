@@ -812,7 +812,6 @@ module.exports = React.createClass({
         }
         this._checkIfAlone(this.state.room, memberCountInfluence);
 
-
         this._updateE2EStatus(this.state.room);
     }, 500),
 
