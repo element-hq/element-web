@@ -1,0 +1,21 @@
+steps:
+  - label: ":eslint: Lint"
+    command:
+      - "./scripts/fetch-develop.deps.sh --depth 1"
+      - "yarn install"
+      - "yarn lint"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+  - label: ":karma: Tests"
+    command:
+      #- "sudo apt-get install git"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
+      - "yarn install"
+      - "yarn test"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+          #image: "buildkite/puppeteer:v1.11.0"
+
