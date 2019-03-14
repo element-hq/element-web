@@ -1,10 +1,7 @@
 steps:
   - label: ":eslint: Lint"
     command:
-      # TODO: Remove hacky chmod for BuildKite
-      - "chmod +x ./scripts/ci/*.sh"
-      - "chmod +x ./scripts/*"
-      - "./scripts/ci/install-deps.sh"
+      - "yarn install"
       - "yarn lintwithexclusions"
     plugins:
       - docker#v3.0.1:
