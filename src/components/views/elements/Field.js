@@ -53,12 +53,6 @@ export default class Field extends React.PureComponent {
         };
     }
 
-    /* TODO: Remove this once `RegistrationForm` no longer uses refs */
-    get value() {
-        if (!this.refs.fieldInput) return null;
-        return this.refs.fieldInput.value;
-    }
-
     onChange = (ev) => {
         if (this.props.onValidate) {
             const result = this.props.onValidate(ev.target.value);
