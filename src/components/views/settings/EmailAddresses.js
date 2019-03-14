@@ -119,6 +119,7 @@ export default class EmailAddresses extends React.Component {
             verifying: false,
             addTask: null,
             continueDisabled: false,
+            newEmailAddress: "",
         };
     }
 
@@ -134,14 +135,20 @@ export default class EmailAddresses extends React.Component {
         this.setState({emails: this.state.emails.filter((e) => e !== address)});
     };
 
+    _onChangeNewEmailAddress = (e) => {
+        this.setState({
+            newEmailAddress: e.target.value,
+        });
+    };
+
     _onAddClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        if (!this.refs.newEmailAddress) return;
+        if (!this.state.newEmailAddress) return;
 
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        const email = this.refs.newEmailAddress.value;
+        const email = this.state.newEmailAddress;
 
         // TODO: Inline field validation
         if (!Email.looksValid(email)) {
@@ -173,14 +180,14 @@ export default class EmailAddresses extends React.Component {
 
         this.setState({continueDisabled: true});
         this.state.addTask.checkEmailLinkClicked().then(() => {
-            const email = this.refs.newEmailAddress.value;
+            const email = this.state.newEmailAddress;
             this.setState({
                 emails: [...this.state.emails, {address: email, medium: "email"}],
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
+                newEmailAddress: "",
             });
-            this.refs.newEmailAddress.value = "";
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
@@ -221,8 +228,14 @@ export default class EmailAddresses extends React.Component {
                 {existingEmailElements}
                 <form onSubmit={this._onAddClick} autoComplete={false}
                       noValidate={true} className="mx_EmailAddresses_new">
-                    <Field id="newEmailAddress" ref="newEmailAddress" label={_t("Email Address")}
-                           type="text" autoComplete="off" disabled={this.state.verifying} />
+                    <Field id="mx_EmailAddressses_newEmailAddress"
+                        type="text"
+                        label={_t("Email Address")}
+                        autoComplete="off"
+                        disabled={this.state.verifying}
+                        value={this.state.newEmailAddress}
+                        onChange={this._onChangeNewEmailAddress}
+                    />
                     {addButton}
                 </form>
             </div>

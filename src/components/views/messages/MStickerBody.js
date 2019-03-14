@@ -44,9 +44,9 @@ export default class MStickerBody extends MImageBody {
 
         if (!content || !content.body || !content.info || !content.info.w) return null;
 
-        const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
+        const Tooltip = sdk.getComponent('elements.Tooltip');
         return <div style={{left: content.info.w + 'px'}} className="mx_MStickerBody_tooltip">
-            <RoomTooltip label={content.body} />
+            <Tooltip label={content.body} />
         </div>;
     }
 

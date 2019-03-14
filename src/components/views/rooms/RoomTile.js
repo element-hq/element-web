@@ -364,8 +364,8 @@ module.exports = React.createClass({
                 label = <EmojiText element="div" title={name} className={nameClasses} dir="auto">{ name }</EmojiText>;
             }
         } else if (this.state.hover) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto" />;
         }
 
         //var incomingCallBox;

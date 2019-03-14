@@ -117,6 +117,8 @@ export default class PhoneNumbers extends React.Component {
             addTask: null,
             continueDisabled: false,
             phoneCountry: "",
+            newPhoneNumber: "",
+            newPhoneNumberCode: "",
         };
     }
 
@@ -132,14 +134,26 @@ export default class PhoneNumbers extends React.Component {
         this.setState({msisdns: this.state.msisdns.filter((e) => e !== address)});
     };
 
+    _onChangeNewPhoneNumber = (e) => {
+        this.setState({
+            newPhoneNumber: e.target.value,
+        });
+    };
+
+    _onChangeNewPhoneNumberCode = (e) => {
+        this.setState({
+            newPhoneNumberCode: e.target.value,
+        });
+    };
+
     _onAddClick = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        if (!this.refs.newPhoneNumber) return;
+        if (!this.state.newPhoneNumber) return;
 
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        const phoneNumber = this.refs.newPhoneNumber.value;
+        const phoneNumber = this.state.newPhoneNumber;
         const phoneCountry = this.state.phoneCountry;
 
         const task = new AddThreepid();
@@ -162,7 +176,7 @@ export default class PhoneNumbers extends React.Component {
         e.preventDefault();
 
         this.setState({continueDisabled: true});
-        const token = this.refs.newPhoneNumberCode.value;
+        const token = this.state.newPhoneNumberCode;
         this.state.addTask.haveMsisdnToken(token).then(() => {
             this.setState({
                 msisdns: [...this.state.msisdns, {address: this.state.verifyMsisdn, medium: "msisdn"}],
@@ -171,8 +185,9 @@ export default class PhoneNumbers extends React.Component {
                 verifying: false,
                 verifyMsisdn: "",
                 verifyError: null,
+                newPhoneNumber: "",
+                newPhoneNumberCode: "",
             });
-            this.refs.newPhoneNumber.value = "";
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
@@ -205,22 +220,28 @@ export default class PhoneNumbers extends React.Component {
         if (this.state.verifying) {
             const msisdn = this.state.verifyMsisdn;
             addVerifySection = (
-              <div>
-                  <div>
-                      {_t("A text message has been sent to +%(msisdn)s. " +
-                          "Please enter the verification code it contains", {msisdn: msisdn})}
-                      <br />
-                      {this.state.verifyError}
-                  </div>
-                  <form onSubmit={this._onContinueClick} autoComplete={false} noValidate={true}>
-                      <Field id="newPhoneNumberCode" ref="newPhoneNumberCode" label={_t("Verification code")}
-                             type="text" autoComplete="off" disabled={this.state.continueDisabled} />
-                      <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                        disabled={this.state.continueDisabled}>
-                          {_t("Continue")}
-                      </AccessibleButton>
-                  </form>
-              </div>
+                <div>
+                    <div>
+                        {_t("A text message has been sent to +%(msisdn)s. " +
+                            "Please enter the verification code it contains", { msisdn: msisdn })}
+                        <br />
+                        {this.state.verifyError}
+                    </div>
+                    <form onSubmit={this._onContinueClick} autoComplete={false} noValidate={true}>
+                        <Field id="mx_PhoneNumbers_newPhoneNumberCode"
+                            type="text"
+                            label={_t("Verification code")}
+                            autoComplete="off"
+                            disabled={this.state.continueDisabled}
+                            value={this.state.newPhoneNumberCode}
+                            onChange={this._onChangeNewPhoneNumberCode}
+                        />
+                        <AccessibleButton onClick={this._onContinueClick} kind="primary"
+                                          disabled={this.state.continueDisabled}>
+                            {_t("Continue")}
+                        </AccessibleButton>
+                    </form>
+                </div>
             );
         }
 
@@ -238,9 +259,15 @@ export default class PhoneNumbers extends React.Component {
                 <form onSubmit={this._onAddClick} autoComplete={false}
                       noValidate={true} className="mx_PhoneNumbers_new">
                     <div className="mx_PhoneNumbers_input">
-                        <Field id="newPhoneNumber" ref="newPhoneNumber" label={_t("Phone Number")}
-                               type="text" autoComplete="off" disabled={this.state.verifying}
-                               prefix={phoneCountry} />
+                        <Field id="mx_PhoneNumbers_newPhoneNumber"
+                            type="text"
+                            label={_t("Phone Number")}
+                            autoComplete="off"
+                            disabled={this.state.verifying}
+                            prefix={phoneCountry}
+                            value={this.state.newPhoneNumber}
+                            onChange={this._onChangeNewPhoneNumber}
+                        />
                     </div>
                     {addVerifySection}
                 </form>

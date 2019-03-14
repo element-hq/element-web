@@ -69,8 +69,8 @@ export default React.createClass({
 
         let tooltip;
         if (this.state.showTooltip) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
         const icon = this.props.iconPath ?
