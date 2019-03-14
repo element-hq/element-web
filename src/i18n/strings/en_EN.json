@@ -581,6 +581,7 @@
     "Camera": "Camera",
     "Voice & Video": "Voice & Video",
     "This room is not accessible by remote Matrix servers": "This room is not accessible by remote Matrix servers",
+    "Members of the room will be required to click a link to join the new room. No one will be automatically joined or invited to the new room.": "Members of the room will be required to click a link to join the new room. No one will be automatically joined or invited to the new room.",
     "Upgrade room to version %(ver)s": "Upgrade room to version %(ver)s",
     "Room information": "Room information",
     "Internal room ID:": "Internal room ID:",

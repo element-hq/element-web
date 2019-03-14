@@ -72,6 +72,12 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomUpgradeWarningBar">
                 {upgradeText}
+                <div className="mx_RoomUpgradeWarningBar_body">
+                    {_t(
+                        "Members of the room will be required to click a link to join the " +
+                        "new room. No one will be automatically joined or invited to the new room.",
+                    )}
+                </div>
                 <div className="mx_RoomUpgradeWarningBar_small">
                     {_t("Only room administrators will see this warning")}
                 </div>
