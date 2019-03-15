@@ -136,7 +136,7 @@ export const CommandMap = {
                                                 https://github.com/vector-im/riot-web/issues/new/choose
                                             </a>;
                                         },
-                                    }
+                                    },
                                 )}
                             </p>
                             <p>
