@@ -19,6 +19,8 @@ clone() {
 
 # Try the target branch of the push or PR.
 clone $BUILDKITE_BRANCH
+# Try the PR author's branch in case it exists on the deps as well.
+clone $BUILDKITE_PULL_REQUEST_BASE_BRANCH
 # Try the current branch from Jenkins.
 clone `"echo $GIT_BRANCH" | sed -e 's/^origin\///'`
 # Use the default branch as the last resort.
