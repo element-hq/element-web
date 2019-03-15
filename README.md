@@ -258,7 +258,7 @@ To change the config.json for the desktop app, create a config file which will b
 + `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
 + `~Library/Application Support/$NAME/config.json` on macOS
 
-Where `$NAME` is typically Riot, unless you use `--profile $PROFILE` then its `Riot-$PROFILE`.
+In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
 
 Development
 ===========
