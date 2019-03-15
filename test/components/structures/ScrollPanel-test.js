@@ -19,6 +19,7 @@ const ReactDOM = require("react-dom");
 const ReactTestUtils = require('react-addons-test-utils');
 const expect = require('expect');
 import Promise from 'bluebird';
+import { EventEmitter } from "events";
 
 const sdk = require('matrix-react-sdk');
 
@@ -29,6 +30,7 @@ const Tester = React.createClass({
     getInitialState: function() {
         return {
             tileKeys: [],
+            resizeNotifier: new EventEmitter(),
         };
     },
 
@@ -130,7 +132,8 @@ const Tester = React.createClass({
         return (
             <ScrollPanel ref="sp"
                 onScroll={this._onScroll}
-                onFillRequest={this._onFillRequest}>
+                onFillRequest={this._onFillRequest}
+                resizeNotifier={this.state.resizeNotifier}>
                     { tiles }
             </ScrollPanel>
         );
