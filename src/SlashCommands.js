@@ -112,30 +112,59 @@ export const CommandMap = {
                     title: _t('Room upgrade confirmation'),
                     description: (
                         <div>
-                            { _t(
-                                "Upgrading your room in this way can be dangerous or unnecessary. Room upgrades " +
-                                "are usually done to change the server's behaviour in a given room and not so much " +
-                                "anything to do with client (Riot) behaviour.",
-                            ) }
-                            <br />
-                            <br />
-                            { _t(
-                                "Members of the room will be required to click a link to join the new room. No " +
-                                "one will be automatically joined or invited to the new room.",
-                            ) }
-                            <br />
-                            <br />
-                            { _t(
-                                "Please confirm that you'd like to go forward with upgrading this room from " +
-                                "%(oldVersion)s to %(newVersion)s",
-                                {
-                                    oldVersion: room ? room.getVersion() : "1",
-                                    newVersion: args,
-                                },
-                            ) }
+                            <p>{_t("Upgrading a room can be destructive and isn't always necessary.")}</p>
+                            <p>
+                                {_t(
+                                    "Room upgrades are usually recommended when a room version is considered " +
+                                    "<i>unstable</i>. Unstable room versions might have bugs, missing features, or " +
+                                    "security vulnerabilities.",
+                                    {}, {
+                                        "i": (sub) => <i>{sub}</i>,
+                                    },
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "Room upgrades usually only affect <i>server-side</i> processing of the " +
+                                    "room. If you're having problems with your Riot client, please file an issue " +
+                                    "with <issueLink />.",
+                                    {}, {
+                                        "i": (sub) => <i>{sub}</i>,
+                                        "issueLink": () => {
+                                            return <a href="https://github.com/vector-im/riot-web/issues/new/choose"
+                                                      target="_blank" rel="noopener">
+                                                https://github.com/vector-im/riot-web/issues/new/choose
+                                            </a>;
+                                        },
+                                    }
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room " +
+                                    "members to the new version of the room.</i> We'll post a link to the new room " +
+                                    "in the old version of the room - room members will have to click this link to " +
+                                    "join the new room.",
+                                    {}, {
+                                        "b": (sub) => <b>{sub}</b>,
+                                        "i": (sub) => <i>{sub}</i>,
+                                    },
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "Please confirm that you'd like to go forward with upgrading this room " +
+                                    "from <oldVersion /> to <newVersion />",
+                                    {},
+                                    {
+                                        oldVersion: () => <code>{room ? room.getVersion() : "1"}</code>,
+                                        newVersion: () => <code>{args}</code>,
+                                    },
+                                )}
+                            </p>
                         </div>
                     ),
-                    button: _t("Upgrade Room"),
+                    button: _t("Upgrade"),
                     onFinished: (confirm) => {
                         if (!confirm) return;
 
