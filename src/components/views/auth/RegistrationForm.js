@@ -70,6 +70,11 @@ module.exports = React.createClass({
             fieldErrors: {},
             // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
+            username: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+            passwordConfirm: "",
         };
     },
 
@@ -89,7 +94,7 @@ module.exports = React.createClass({
 
         const self = this;
         if (this.allFieldsValid()) {
-            if (this.refs.email.value == '') {
+            if (this.state.email == '') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                     title: _t("Warning!"),
@@ -112,13 +117,13 @@ module.exports = React.createClass({
     },
 
     _doSubmit: function(ev) {
-        const email = this.refs.email.value.trim();
+        const email = this.state.email.trim();
         const promise = this.props.onRegisterClick({
-            username: this.refs.username.value.trim(),
-            password: this.refs.password.value.trim(),
+            username: this.state.username.trim(),
+            password: this.state.password.trim(),
             email: email,
             phoneCountry: this.state.phoneCountry,
-            phoneNumber: this.refs.phoneNumber ? this.refs.phoneNumber.value.trim() : '',
+            phoneNumber: this.state.phoneNumber,
         });
 
         if (promise) {
@@ -143,13 +148,13 @@ module.exports = React.createClass({
     },
 
     validateField: function(fieldID, eventType) {
-        const pwd1 = this.refs.password.value.trim();
-        const pwd2 = this.refs.passwordConfirm.value.trim();
+        const pwd1 = this.state.password.trim();
+        const pwd2 = this.state.passwordConfirm.trim();
         const allowEmpty = eventType === "blur";
 
         switch (fieldID) {
             case FIELD_EMAIL: {
-                const email = this.refs.email.value;
+                const email = this.state.email;
                 const emailValid = email === '' || Email.looksValid(email);
                 if (this._authStepIsRequired('m.login.email.identity') && (!emailValid || email === '')) {
                     this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_EMAIL");
@@ -157,7 +162,7 @@ module.exports = React.createClass({
                 break;
             }
             case FIELD_PHONE_NUMBER: {
-                const phoneNumber = this.refs.phoneNumber ? this.refs.phoneNumber.value : '';
+                const phoneNumber = this.state.phoneNumber;
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
                 if (this._authStepIsRequired('m.login.msisdn') && (!phoneNumberValid || phoneNumber === '')) {
                     this.markFieldValid(fieldID, false, "RegistrationForm.ERR_MISSING_PHONE_NUMBER");
@@ -165,7 +170,7 @@ module.exports = React.createClass({
                 break;
             }
             case FIELD_USERNAME: {
-                const username = this.refs.username.value.trim();
+                const username = this.state.username;
                 if (allowEmpty && username === '') {
                     this.markFieldValid(fieldID, true);
                 } else if (!SAFE_LOCALPART_REGEX.test(username)) {
@@ -230,21 +235,6 @@ module.exports = React.createClass({
         this.props.onValidationChange(fieldErrors);
     },
 
-    fieldElementById(fieldID) {
-        switch (fieldID) {
-            case FIELD_EMAIL:
-                return this.refs.email;
-            case FIELD_PHONE_NUMBER:
-                return this.refs.phoneNumber;
-            case FIELD_USERNAME:
-                return this.refs.username;
-            case FIELD_PASSWORD:
-                return this.refs.password;
-            case FIELD_PASSWORD_CONFIRM:
-                return this.refs.passwordConfirm;
-        }
-    },
-
     _classForField: function(fieldID, ...baseClasses) {
         let cls = baseClasses.join(' ');
         if (this.state.fieldErrors[fieldID]) {
@@ -258,12 +248,30 @@ module.exports = React.createClass({
         this.validateField(FIELD_EMAIL, ev.type);
     },
 
+    onEmailChange(ev) {
+        this.setState({
+            email: ev.target.value,
+        });
+    },
+
     onPasswordBlur(ev) {
         this.validateField(FIELD_PASSWORD, ev.type);
     },
 
+    onPasswordChange(ev) {
+        this.setState({
+            password: ev.target.value,
+        });
+    },
+
     onPasswordConfirmBlur(ev) {
         this.validateField(FIELD_PASSWORD_CONFIRM, ev.type);
+    },
+
+    onPasswordConfirmChange(ev) {
+        this.setState({
+            passwordConfirm: ev.target.value,
+        });
     },
 
     onPhoneCountryChange(newVal) {
@@ -277,8 +285,20 @@ module.exports = React.createClass({
         this.validateField(FIELD_PHONE_NUMBER, ev.type);
     },
 
+    onPhoneNumberChange(ev) {
+        this.setState({
+            phoneNumber: ev.target.value,
+        });
+    },
+
     onUsernameBlur(ev) {
         this.validateField(FIELD_USERNAME, ev.type);
+    },
+
+    onUsernameChange(ev) {
+        this.setState({
+            username: ev.target.value,
+        });
     },
 
     /**
@@ -343,12 +363,12 @@ module.exports = React.createClass({
                 <Field
                     className={this._classForField(FIELD_EMAIL)}
                     id="mx_RegistrationForm_email"
-                    ref="email"
                     type="text"
                     label={emailPlaceholder}
                     defaultValue={this.props.defaultEmail}
                     value={this.state.email}
                     onBlur={this.onEmailBlur}
+                    onChange={this.onEmailChange}
                 />
             );
         }
@@ -370,13 +390,13 @@ module.exports = React.createClass({
             phoneSection = <Field
                 className={this._classForField(FIELD_PHONE_NUMBER)}
                 id="mx_RegistrationForm_phoneNumber"
-                ref="phoneNumber"
                 type="text"
                 label={phoneLabel}
                 defaultValue={this.props.defaultPhoneNumber}
                 value={this.state.phoneNumber}
                 prefix={phoneCountry}
                 onBlur={this.onPhoneNumberBlur}
+                onChange={this.onPhoneNumberChange}
             />;
         }
 
@@ -395,32 +415,35 @@ module.exports = React.createClass({
                         <Field
                             className={this._classForField(FIELD_USERNAME)}
                             id="mx_RegistrationForm_username"
-                            ref="username"
                             type="text"
                             autoFocus={true}
                             label={_t("Username")}
                             defaultValue={this.props.defaultUsername}
+                            value={this.state.username}
                             onBlur={this.onUsernameBlur}
+                            onChange={this.onUsernameChange}
                         />
                     </div>
                     <div className="mx_AuthBody_fieldRow">
                         <Field
                             className={this._classForField(FIELD_PASSWORD)}
                             id="mx_RegistrationForm_password"
-                            ref="password"
                             type="password"
                             label={_t("Password")}
                             defaultValue={this.props.defaultPassword}
+                            value={this.state.password}
                             onBlur={this.onPasswordBlur}
+                            onChange={this.onPasswordChange}
                         />
                         <Field
                             className={this._classForField(FIELD_PASSWORD_CONFIRM)}
                             id="mx_RegistrationForm_passwordConfirm"
-                            ref="passwordConfirm"
                             type="password"
                             label={_t("Confirm")}
                             defaultValue={this.props.defaultPassword}
+                            value={this.state.passwordConfirm}
                             onBlur={this.onPasswordConfirmBlur}
+                            onChange={this.onPasswordConfirmChange}
                         />
                     </div>
                     <div className="mx_AuthBody_fieldRow">
