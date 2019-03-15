@@ -42,6 +42,7 @@ function dodep() {
     # Use the default branch as the last resort.
     if [[ "$BUILDKITE" == true ]]; then
         clone $org $repo $BUILDKITE_BRANCH ||
+        clone $org $repo $BUILDKITE_PULL_REQUEST_BASE_BRANCH ||
         clone $org $repo $defbranch ||
         return $?
     else
