@@ -704,6 +704,10 @@ module.exports = React.createClass({
         const rows = [];
         for (const i in this.state.vectorPushRules) {
             const rule = this.state.vectorPushRules[i];
+            if (rule.rule === undefined && rule.vectorRuleId.startsWith(".m.")) {
+                console.warn(`Skipping render of rule ${rule.vectorRuleId} due to no underlying rule`);
+                continue;
+            }
             //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }
