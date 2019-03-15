@@ -7,4 +7,3 @@
 set -ev
 
 scripts/ci/build.sh
-CHROME_BIN='/usr/bin/google-chrome-stable' yarn test
