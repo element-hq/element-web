@@ -102,19 +102,19 @@ limitations under the License.
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,
 .mx_EntityTile_unavailable .mx_EntityTile_name,
 .mx_EntityTile_offline_beenactive .mx_EntityTile_avatar,
-.mx_EntityTile_offline_beenactive .mx_EntityTile_name,
+.mx_EntityTile_offline_beenactive .mx_EntityTile_name
 {
     opacity: 0.5;
 }
 
 .mx_EntityTile_offline_neveractive .mx_EntityTile_avatar,
-.mx_EntityTile_offline_neveractive .mx_EntityTile_name,
+.mx_EntityTile_offline_neveractive .mx_EntityTile_name
 {
     opacity: 0.25;
 }
 
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
-.mx_EntityTile_unknown .mx_EntityTile_name,
+.mx_EntityTile_unknown .mx_EntityTile_name
 {
     opacity: 0.25;
 }
