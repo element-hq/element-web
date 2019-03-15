@@ -7,3 +7,4 @@
 set -ev
 
 scripts/ci/build.sh
+yarn test
