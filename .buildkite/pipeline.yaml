@@ -7,7 +7,7 @@ steps:
       - docker#v3.0.1:
           image: "node:10"
 
-#  - label: ":chrome: End-to-End Tests"
+#  - label: ":chains: End-to-End Tests"
 #    command:
 #      # TODO: Remove hacky chmod for BuildKite
 #      - "chmod +x ./scripts/ci/*.sh"
