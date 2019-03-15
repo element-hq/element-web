@@ -53,8 +53,8 @@ module.exports = React.createClass({
                     {},
                     {
                         'chromeLink': (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
-                        'firefoxLink': (sub) => <a href="https://getfirefox.com">{sub}</a>,
-                        'safariLink': (sub) => <a href="http://apple.com/safari">{sub}</a>,
+                        'firefoxLink': (sub) => <a href="https://firefox.com">{sub}</a>,
+                        'safariLink': (sub) => <a href="https://apple.com/safari">{sub}</a>,
                     },
                 )}
                 </p>
