@@ -51,7 +51,7 @@
     "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
     "clean": "rimraf lib",
     "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
-    "test": "karma start --single-run=true --browsers ChromeHeadless",
+    "test": "karma start --single-run=true --browsers VectorChromeHeadless",
     "test-multi": "karma start"
   },
   "dependencies": {
@@ -131,7 +131,7 @@
     "flow-parser": "^0.57.3",
     "jest-mock": "^23.2.0",
     "karma": "^4.0.1",
-    "karma-chrome-launcher": "^0.2.3",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-junit-reporter": "^2.0.0",
     "karma-logcapture-reporter": "0.0.1",
