@@ -26,6 +26,8 @@ import Modal from "./Modal";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import {_t} from "./languageHandler";
 import MatrixClientPeg from "./MatrixClientPeg";
+import SettingsStore from "./settings/SettingsStore";
+import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -123,40 +125,46 @@ export default class WidgetMessaging {
         this.fromWidget.removeListener("get_openid", this._openIdHandlerRef);
     }
 
-    _onOpenIdRequest(ev, rawEv) {
+    async _onOpenIdRequest(ev, rawEv) {
         if (ev.widgetId !== this.widgetId) return; // not interesting
+
+        const settings = SettingsStore.getValue("widgetOpenIDPermissions");
+        if (settings.blacklist && settings.blacklist.includes(this.widgetId)) {
+            this.fromWidget.sendResponse(rawEv, {state: "blocked"});
+            return;
+        }
+        if (settings.whitelist && settings.whitelist.includes(this.widgetId)) {
+            const responseBody = {state: "allowed"};
+            const credentials = await MatrixClientPeg.get().getOpenIdToken();
+            Object.assign(responseBody, credentials);
+            this.fromWidget.sendResponse(rawEv, responseBody);
+            return;
+        }
 
         // Confirm that we received the request
         this.fromWidget.sendResponse(rawEv, {state: "request"});
 
-        // TODO: Support blacklisting widgets
-        // TODO: Support whitelisting widgets
-
         // Actually ask for permission to send the user's data
-        Modal.createTrackedDialog("OpenID widget permissions", '', QuestionDialog, {
-            title: _t("A widget would like to verify your identity"),
-            description: _t(
-                "A widget located at %(widgetUrl)s would like to verify your identity. " +
-                "By allowing this, the widget will be able to verify your user ID, but not " +
-                "perform actions as you.", {
-                    widgetUrl: this.widgetUrl,
+        Modal.createTrackedDialog("OpenID widget permissions", '',
+            WidgetOpenIDPermissionsDialog, {
+                widgetUrl: this.widgetUrl,
+                widgetId: this.widgetId,
+
+                onFinished: async (confirm) => {
+                    const responseBody = {success: confirm};
+                    if (confirm) {
+                        const credentials = await MatrixClientPeg.get().getOpenIdToken();
+                        Object.assign(responseBody, credentials);
+                    }
+                    this.messageToWidget({
+                        api: OUTBOUND_API_NAME,
+                        action: "openid_credentials",
+                        data: responseBody,
+                    }).catch((error) => {
+                        console.error("Failed to send OpenID credentials: ", error);
+                    });
                 },
-            ),
-            button: _t("Allow"),
-            onFinished: async (confirm) => {
-                const responseBody = {success: confirm};
-                if (confirm) {
-                    const credentials = await MatrixClientPeg.get().getOpenIdToken();
-                    Object.assign(responseBody, credentials);
-                }
-                this.messageToWidget({
-                    api: OUTBOUND_API_NAME,
-                    action: "openid_credentials",
-                    data: responseBody,
-                }).catch((error) => {
-                    console.error("Failed to send OpenID credentials: ", error);
-                });
             },
-        });
+        );
     }
 }
