@@ -79,6 +79,7 @@ $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
 $input-focused-border-color: #238cf5;
 $input-valid-border-color: $accent-color;
+$input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: #ffffff;
 
@@ -95,7 +96,7 @@ $input-fg-color: rgba(74, 74, 74, 0.9);
 $scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
 $scrollbar-track-color: transparent;
 // context menus
-$menu-border-color: #ebedf8;
+$menu-border-color: #e7e7e7;
 $menu-bg-color: #fff;
 $menu-box-shadow-color: rgba(118, 131, 156, 0.6);
 $menu-selected-color: #f5f8fa;

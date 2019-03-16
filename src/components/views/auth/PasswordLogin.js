@@ -70,11 +70,6 @@ class PasswordLogin extends React.Component {
         this.isLoginEmpty = this.isLoginEmpty.bind(this);
     }
 
-    componentWillMount() {
-        this._passwordField = null;
-        this._loginField = null;
-    }
-
     onForgotPasswordClick(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -180,7 +175,6 @@ class PasswordLogin extends React.Component {
                 return <Field
                     className={classNames(classes)}
                     id="mx_PasswordLogin_email"
-                    ref={(e) => { this._loginField = e; }}
                     name="username" // make it a little easier for browser's remember-password
                     key="email_input"
                     type="text"
@@ -196,7 +190,6 @@ class PasswordLogin extends React.Component {
                 return <Field
                     className={classNames(classes)}
                     id="mx_PasswordLogin_username"
-                    ref={(e) => { this._loginField = e; }}
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
@@ -223,7 +216,6 @@ class PasswordLogin extends React.Component {
                 return <Field
                     className={classNames(classes)}
                     id="mx_PasswordLogin_phoneNumber"
-                    ref={(e) => { this._loginField = e; }}
                     name="phoneNumber"
                     key="phone_input"
                     type="text"
@@ -344,7 +336,6 @@ class PasswordLogin extends React.Component {
                     <Field
                         className={pwFieldClass}
                         id="mx_PasswordLogin_password"
-                        ref={(e) => { this._passwordField = e; }}
                         type="password"
                         name="password"
                         label={_t('Password')}

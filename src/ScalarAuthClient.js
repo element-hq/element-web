@@ -21,6 +21,9 @@ const request = require('browser-request');
 const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require('./MatrixClientPeg');
 
+// The version of the integration manager API we're intending to work with
+const imApiVersion = "1.1";
+
 class ScalarAuthClient {
     constructor() {
         this.scalarToken = null;
@@ -66,7 +69,7 @@ class ScalarAuthClient {
             request({
                 method: "GET",
                 uri: url,
-                qs: {scalar_token: token},
+                qs: {scalar_token: token, v: imApiVersion},
                 json: true,
             }, (err, response, body) => {
                 if (err) {
@@ -100,6 +103,7 @@ class ScalarAuthClient {
             request({
                 method: 'POST',
                 uri: scalar_rest_url+'/register',
+                qs: {v: imApiVersion},
                 body: openid_token_object,
                 json: true,
             }, (err, response, body) => {

@@ -45,7 +45,7 @@ export default class ManageIntegsButton extends React.Component {
             this.scalarClient.connect().done(() => {
                 this.forceUpdate();
             }, (err) => {
-                this.setState({ scalarError: err});
+                this.setState({scalarError: err});
                 console.error('Error whilst initialising scalarClient for ManageIntegsButton', err);
             });
         }
@@ -61,11 +61,16 @@ export default class ManageIntegsButton extends React.Component {
             return;
         }
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        Modal.createDialog(IntegrationsManager, {
-            src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room) :
-                null,
-        }, "mx_IntegrationsManager");
+        this.scalarClient.connect().done(() => {
+            Modal.createDialog(IntegrationsManager, {
+                src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+                    this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room) :
+                    null,
+            }, "mx_IntegrationsManager");
+        }, (err) => {
+            this.setState({scalarError: err});
+            console.error('Error ensuring a valid scalar_token exists', err);
+        });
     }
 
     render() {

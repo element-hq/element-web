@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,22 +24,21 @@ import classNames from 'classnames';
 const MIN_TOOLTIP_HEIGHT = 25;
 
 module.exports = React.createClass({
-    displayName: 'RoomTooltip',
+    displayName: 'Tooltip',
 
     propTypes: {
         // Class applied to the element used to position the tooltip
-        className: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string,
         // Class applied to the tooltip itself
         tooltipClassName: React.PropTypes.string,
-        // The tooltip is derived from either the room name or a label
-        room: React.PropTypes.object,
+        // the react element to put into the tooltip
         label: React.PropTypes.node,
     },
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
     componentDidMount: function() {
         this.tooltipContainer = document.createElement("div");
-        this.tooltipContainer.className = "mx_RoomTileTooltip_wrapper";
+        this.tooltipContainer.className = "mx_Tooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
         window.addEventListener('scroll', this._renderTooltip, true);
 
@@ -85,11 +85,11 @@ module.exports = React.createClass({
         style = this._updatePosition(style);
         style.display = "block";
 
-        const tooltipClasses = classNames("mx_RoomTooltip", this.props.tooltipClassName);
+        const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName);
 
         const tooltip = (
             <div className={tooltipClasses} style={style}>
-                <div className="mx_RoomTooltip_chevron" />
+                <div className="mx_Tooltip_chevron" />
                 { this.props.label }
             </div>
         );

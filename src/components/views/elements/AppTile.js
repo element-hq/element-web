@@ -241,11 +241,18 @@ export default class AppTile extends React.Component {
             this.props.onEditClick();
         } else {
             const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-            const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-                this.props.room, 'type_' + this.props.type, this.props.id);
-            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-                src: src,
-            }, "mx_IntegrationsManager");
+            this._scalarClient.connect().done(() => {
+                const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+                    this.props.room, 'type_' + this.props.type, this.props.id);
+                Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                    src: src,
+                }, "mx_IntegrationsManager");
+            }, (err) => {
+                this.setState({
+                    error: err.message,
+                });
+                console.error('Error ensuring a valid scalar_token exists', err);
+            });
         }
     }
 
