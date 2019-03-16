@@ -16,17 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tab, TabbedView} from "../../structures/TabbedView";
-import {_t, _td} from "../../../languageHandler";
-import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
+import {_t} from "../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
-import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
-import NotificationUserSettingsTab from "../settings/tabs/user/NotificationUserSettingsTab";
-import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSettingsTab";
-import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
-import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
-import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
