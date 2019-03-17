@@ -1574,5 +1574,9 @@
     "Accept all %(invitedRooms)s invites": "Принять все приглашения (%(invitedRooms)s)",
     "Missing media permissions, click the button below to request.": "Отсутствует доступ к источнику медиа. Нажмите кнопку ниже чтобы запросить.",
     "Request media permissions": "Запросить доступ к медиа носителю",
-    "Change room name": "Изменить название комнаты"
+    "Change room name": "Изменить название комнаты",
+    "For help with using Riot, click <a>here</a>.": "Для получения помощи по использованию Riot, нажмите <a>здесь</a>.",
+    "For help with using Riot, click <a>here</a> or start a chat with our bot using the button below.": "Для получения помощи по использованию Riot, нажмите <a>здесь</a> или начните чат с нашим ботом, используюя кнопку ниже.",
+    "Bug reporting": "Сообщить об ошибке",
+    "Open Devtools": "Открыть инструменты разработчика"
 }
