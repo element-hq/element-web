@@ -1547,5 +1547,7 @@
     "Order rooms in the room list by most important first instead of most recent": "Сортировать список комнат по важности вместо активности",
     "Verify this user by confirming the following emoji appear on their screen.": "Проверьте собеседника, убедившись, что на его экране отображаются следующие символы (смайлы).",
     "Unable to find a supported verification method.": "Невозможно определить поддерживаемый метод верификации.",
-    "Scissors": "Ножницы"
+    "Scissors": "Ножницы",
+    "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Общение с этим пользователем зашифровано сквозным шифрованием и недоступно третьим лицам.",
+    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Мы отправили вам сообщение для проверки адреса электронной почты. Пожалуйста, выполните указания, данные в сообщении и нажмите кнопку внизу."
 }
