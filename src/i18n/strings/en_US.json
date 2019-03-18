@@ -35,5 +35,12 @@
     "Riot/Web &amp; Desktop chat": "Riot/Web &amp; Desktop chat",
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk chat",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.",
-    "Co-ordination for Riot translators": "Co-ordination for Riot translators"
+    "Co-ordination for Riot translators": "Co-ordination for Riot translators",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.",
+    "Sign In": "Sign In",
+    "Create Account": "Create Account",
+    "Need help?": "Need help?",
+    "Explore rooms": "Explore rooms",
+    "Room Directory": "Room Directory"
 }

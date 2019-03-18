@@ -1,0 +1,21 @@
+{
+    "Riot Desktop on %(platformName)s": "Leagan gnáthríomhaire Riot ar %(platformName)s",
+    "Unknown device": "Gléas nár aithníodh",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s trí %(browserName)s ar %(osName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "Ní mór HTTPS a úsáid chun glaoch ina dhéantar an scáileán a roinnt a chuir.",
+    "powered by Matrix": "á thiomáint le Matrix",
+    "Custom Server Options": "Socruithe do fhreastalaí saincheaptha",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Is féidir na socruithe do fhreastalaí saincheaptha a úsáid chun síniú isteach le freastalaí Matrix eile tríd URL freastalaí ar leith a sholáthar. Cuirfidh sé seo ar do chumas Riot a úsáid le cuntas Matrix atá ar taifead ag freastalaí difriúil.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Freisin is féidir freastalaí aitheantais saincheaptha a úsáid, ach le seo ní bheidh tú in ann cuireadh a thabhairt do dhaoine tríd seoladh ríomhphoist a sholáthar, nó glacadh le cuireadh trí ríomhphoist ach an oiread.",
+    "Dismiss": "Cuir uait",
+    "Welcome to Riot.im": "Fáilte chuig Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Meán comhrá agus comhoibriú neamhláraithe agus criptithe á thiomáint le [matrix]",
+    "Sign In": "Sínigh Isteach",
+    "Create Account": "Déan cuntas a chruthú",
+    "Need help?": "An bhfuil cabhair uait?",
+    "Chat with Riot Bot": "Labhair le Riot Bot",
+    "Explore rooms": "Breathnaigh thart ar na seomraí",
+    "Room Directory": "Eolaire na Seomraí",
+    "Search the room directory": "Cuardaigh eolaire na seomraí",
+    "Get started with some tips from Riot Bot!": "Tosaigh le nod ó Riot Bot!"
+}
