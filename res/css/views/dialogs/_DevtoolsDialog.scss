@@ -18,7 +18,11 @@ limitations under the License.
     margin: 10px 0;
 }
 
-.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_RoomStateExplorer_query {
+.mx_DevTools_ServersInRoomList_button {
+    cursor: default !important;
+}
+
+.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button, .mx_DevTools_RoomStateExplorer_query {
     margin-bottom: 10px;
     width: 100%;
 }
