@@ -1799,6 +1799,7 @@ module.exports = React.createClass({
                     <ScrollPanel ref="searchResultsPanel"
                         className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                         onFillRequest={this.onSearchResultsFillRequest}
+                        resizeNotifier={this.props.resizeNotifier}
                     >
                         <li className={scrollheader_classes}></li>
                         { this.getSearchResultTiles() }

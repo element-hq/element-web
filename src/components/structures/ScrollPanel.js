@@ -135,6 +135,9 @@ module.exports = React.createClass({
         /* style: styles to add to the top-level div
          */
         style: PropTypes.object,
+        /* resizeNotifier: ResizeNotifier to know when middle column has changed size
+         */
+        resizeNotifier: PropTypes.object,
     },
 
     getDefaultProps: function() {
@@ -149,7 +152,10 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._pendingFillRequests = {b: null, f: null};
-        this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+        }
 
         this.resetScrollState();
     },
@@ -173,7 +179,10 @@ module.exports = React.createClass({
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
-        this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+        }
     },
 
     onScroll: function(ev) {
