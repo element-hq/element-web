@@ -1644,5 +1644,17 @@
     "Send %(eventType)s events": "Poslať udalosti %(eventType)s",
     "Roles & Permissions": "Role & Povolenia",
     "Select the roles required to change various parts of the room": "Vyberte role potrebné na zmenu rôznych častí miestnosti",
-    "Enable encryption?": "Povoliť šifrovanie?"
+    "Enable encryption?": "Povoliť šifrovanie?",
+    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Po povolení šifrovania miestnosti nie je možné šifrovanie zakázať. Správy poslané v šifrovanej miestnosti nie sú viditeľné na servery, prečítať ich môžu len členovia miestnosti. Mnohí Boti, premostenia do iných sietí a integrácie nemusia po zapnutí šifrovania fungovať správne. <a>Dozvedieť sa viac o šifrovaní.</a>",
+    "To link to this room, please add an alias.": "Ak chcete získať odkaz do tejto miestnosti, musíte pridať alias.",
+    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Zmena viditeľnosti histórie sa prejaví len na budúcich správach v tejto miestnosti. Viditeľnosť existujúcich správ ostane bez zmeny.",
+    "Encryption": "Šifrovanie",
+    "Once enabled, encryption cannot be disabled.": "Po aktivovaní šifrovanie nie je možné deaktivovať.",
+    "Encrypted": "Zašifrované",
+    "Some devices for this user are not trusted": "Niektoré zariadenia tohoto používateľa nie sú dôverihodné",
+    "Some devices in this encrypted room are not trusted": "Niektoré zariadenia v tejto šifrovanej miestnosti nie sú dôverihodné",
+    "All devices for this user are trusted": "Všetky zariadenia tohoto používateľa sú dôverihodné",
+    "All devices in this encrypted room are trusted": "Všetky zariadenia v tejto šifrovanej miestnosti sú dôverihodné",
+    "Use Key Backup": "Použiť zálohovanie kľúčov",
+    "Never lose encrypted messages": "Nikdy neprídete o zašifrované správy"
 }
