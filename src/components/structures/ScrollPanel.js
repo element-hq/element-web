@@ -18,6 +18,7 @@ const React = require("react");
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
+import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const DEBUG_SCROLL = false;
@@ -30,11 +31,14 @@ const UNPAGINATION_PADDING = 6000;
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
 
+const PAGE_SIZE = 200;
+
+let debuglog;
 if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
-    var debuglog = console.log.bind(console);
+    debuglog = console.log.bind(console, "ScrollPanel debuglog:");
 } else {
-    var debuglog = function() {};
+    debuglog = function() {};
 }
 
 /* This component implements an intelligent scrolling list.
@@ -186,56 +190,12 @@ module.exports = React.createClass({
     },
 
     onScroll: function(ev) {
-        const sn = this._getScrollNode();
-        debuglog("Scroll event: offset now:", sn.scrollTop,
-                 "_lastSetScroll:", this._lastSetScroll);
-
-        // ignore scroll events where scrollTop hasn't changed,
-        // appears to happen when the layout changes outside
-        // of the scroll container, like resizing the right panel.
-        if (sn.scrollTop === this._lastEventScroll) {
-            debuglog("ignore scroll event with same scrollTop as before");
-            return;
-        }
-
-        this._lastEventScroll = sn.scrollTop;
-
-        // Sometimes we see attempts to write to scrollTop essentially being
-        // ignored. (Or rather, it is successfully written, but on the next
-        // scroll event, it's been reset again).
-        //
-        // This was observed on Chrome 47, when scrolling using the trackpad in OS
-        // X Yosemite.  Can't reproduce on El Capitan. Our theory is that this is
-        // due to Chrome not being able to cope with the scroll offset being reset
-        // while a two-finger drag is in progress.
-        //
-        // By way of a workaround, we detect this situation and just keep
-        // resetting scrollTop until we see the scroll node have the right
-        // value.
-        if (this._lastSetScroll !== undefined && sn.scrollTop < this._lastSetScroll-200) {
-            console.log("Working around vector-im/vector-web#528");
-            this._restoreSavedScrollState();
-            return;
-        }
-
-        // If there weren't enough children to fill the viewport, the scroll we
-        // got might be different to the scroll we wanted; we don't want to
-        // forget what we wanted, so don't overwrite the saved state unless
-        // this appears to be a user-initiated scroll.
-        if (sn.scrollTop != this._lastSetScroll) {
-            this._saveScrollState();
-        } else {
-            debuglog("Ignoring scroll echo");
-            // only ignore the echo once, otherwise we'll get confused when the
-            // user scrolls away from, and back to, the autoscroll point.
-            this._lastSetScroll = undefined;
-        }
-
+        this._scrollTimeout.restart();
+        this._saveScrollState();
         this._checkBlockShrinking();
+        this.checkFillState();
 
         this.props.onScroll(ev);
-
-        this.checkFillState();
     },
 
     onResize: function() {
@@ -258,14 +218,7 @@ module.exports = React.createClass({
     // whether it will stay that way when the children update.
     isAtBottom: function() {
         const sn = this._getScrollNode();
-
-        // there seems to be some bug with flexbox/gemini/chrome/richvdh's
-        // understanding of the box model, wherein the scrollNode ends up 2
-        // pixels higher than the available space, even when there are less
-        // than a screenful of messages. + 3 is a fudge factor to pretend
-        // that we're at the bottom when we're still a few pixels off.
-
-        return sn.scrollHeight - Math.ceil(sn.scrollTop) <= sn.clientHeight + 3;
+        return sn.scrollTop === sn.scrollHeight - sn.clientHeight;
     },
 
     // returns the vertical height in the given direction that can be removed from
@@ -301,10 +254,15 @@ module.exports = React.createClass({
     //   `---------'                                       -
     _getExcessHeight: function(backwards) {
         const sn = this._getScrollNode();
+        const contentHeight = this._getMessagesHeight();
+        const listHeight = this._getListHeight();
+        const clippedHeight = contentHeight - listHeight;
+        const unclippedScrollTop = sn.scrollTop + clippedHeight;
+
         if (backwards) {
-            return sn.scrollTop - sn.clientHeight - UNPAGINATION_PADDING;
+            return unclippedScrollTop - sn.clientHeight - UNPAGINATION_PADDING;
         } else {
-            return sn.scrollHeight - (sn.scrollTop + 2*sn.clientHeight) - UNPAGINATION_PADDING;
+            return contentHeight - (unclippedScrollTop + 2*sn.clientHeight) - UNPAGINATION_PADDING;
         }
     },
 
@@ -356,6 +314,9 @@ module.exports = React.createClass({
         if (excessHeight <= 0) {
             return;
         }
+
+        const origExcessHeight = excessHeight;
+
         const tiles = this.refs.itemlist.children;
 
         // The scroll token of the first/last tile to be unpaginated
@@ -367,8 +328,9 @@ module.exports = React.createClass({
         // pagination.
         //
         // If backwards is true, we unpaginate (remove) tiles from the back (top).
+        let tile;
         for (let i = 0; i < tiles.length; i++) {
-            const tile = tiles[backwards ? i : tiles.length - 1 - i];
+            tile = tiles[backwards ? i : tiles.length - 1 - i];
             // Subtract height of tile as if it were unpaginated
             excessHeight -= tile.clientHeight;
             //If removing the tile would lead to future pagination, break before setting scroll token
@@ -380,6 +342,7 @@ module.exports = React.createClass({
                 markerScrollToken = tile.dataset.scrollTokens.split(',')[0];
             }
         }
+        debuglog("unfilling now", backwards, origExcessHeight, Array.prototype.indexOf.call(tiles, tile));
 
         if (markerScrollToken) {
             // Use a debouncer to prevent multiple unfill calls in quick succession
@@ -439,7 +402,7 @@ module.exports = React.createClass({
      *   false, the first token in data-scroll-tokens of the child which we are
      *   tracking.
      *
-     * number pixelOffset: undefined if stuckAtBottom is true; if it is false,
+     * number bottomOffset: undefined if stuckAtBottom is true; if it is false,
      *   the number of pixels the bottom of the tracked child is above the
      *   bottom of the scroll panel.
      */
@@ -460,14 +423,20 @@ module.exports = React.createClass({
      * child list.)
      */
     resetScrollState: function() {
-        this.scrollState = {stuckAtBottom: this.props.startAtBottom};
+        this.scrollState = {
+            stuckAtBottom: this.props.startAtBottom,
+        };
+        this._bottomGrowth = 0;
+        this._pages = 0;
+        this._scrollTimeout = new Timer(100);
+        this._heightUpdateInProgress = false;
     },
 
     /**
      * jump to the top of the content.
      */
     scrollToTop: function() {
-        this._setScrollTop(0);
+        this._getScrollNode().scrollTop = 0;
         this._saveScrollState();
     },
 
@@ -479,24 +448,26 @@ module.exports = React.createClass({
         // saved is to do the scroll, then save the updated state. (Calculating
         // it ourselves is hard, and we can't rely on an onScroll callback
         // happening, since there may be no user-visible change here).
-        this._setScrollTop(Number.MAX_VALUE);
+        const sn = this._getScrollNode();
+        sn.scrollTop = sn.scrollHeight;
         this._saveScrollState();
     },
 
     /**
      * Page up/down.
      *
-     * mult: -1 to page up, +1 to page down
+     * @param {number} mult: -1 to page up, +1 to page down
      */
     scrollRelative: function(mult) {
         const scrollNode = this._getScrollNode();
         const delta = mult * scrollNode.clientHeight * 0.5;
-        this._setScrollTop(scrollNode.scrollTop + delta);
+        scrollNode.scrollTop = scrollNode.scrollTop + delta;
         this._saveScrollState();
     },
 
     /**
      * Scroll up/down in response to a scroll key
+     * @param {object} ev the keyboard event
      */
     handleScrollKey: function(ev) {
         switch (ev.keyCode) {
@@ -529,21 +500,21 @@ module.exports = React.createClass({
     /* Scroll the panel to bring the DOM node with the scroll token
      * `scrollToken` into view.
      *
-     * offsetBase gives the reference point for the pixelOffset. 0 means the
+     * offsetBase gives the reference point for the bottomOffset. 0 means the
      * top of the container, 1 means the bottom, and fractional values mean
      * somewhere in the middle. If omitted, it defaults to 0.
      *
-     * pixelOffset gives the number of pixels *above* the offsetBase that the
+     * bottomOffset gives the number of pixels *above* the offsetBase that the
      * node (specifically, the bottom of it) will be positioned. If omitted, it
      * defaults to 0.
      */
-    scrollToToken: function(scrollToken, pixelOffset, offsetBase) {
-        pixelOffset = pixelOffset || 0;
+    scrollToToken: function(scrollToken, bottomOffset, offsetBase) {
+        bottomOffset = bottomOffset || 0;
         offsetBase = offsetBase || 0;
 
-        // convert pixelOffset so that it is based on the bottom of the
+        // convert bottomOffset so that it is based on the bottom of the
         // container.
-        pixelOffset += this._getScrollNode().clientHeight * (1-offsetBase);
+        bottomOffset += this._getScrollNode().clientHeight * (1-offsetBase);
 
         // save the desired scroll state. It's important we do this here rather
         // than as a result of the scroll event, because (a) we might not *get*
@@ -554,48 +525,11 @@ module.exports = React.createClass({
         this.scrollState = {
             stuckAtBottom: false,
             trackedScrollToken: scrollToken,
-            pixelOffset: pixelOffset,
+            bottomOffset: bottomOffset,
         };
 
         // ... then make it so.
         this._restoreSavedScrollState();
-    },
-
-    // set the scrollTop attribute appropriately to position the given child at the
-    // given offset in the window. A helper for _restoreSavedScrollState.
-    _scrollToToken: function(scrollToken, pixelOffset) {
-        /* find the dom node with the right scrolltoken */
-        let node;
-        const messages = this.refs.itemlist.children;
-        for (let i = messages.length-1; i >= 0; --i) {
-            const m = messages[i];
-            // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
-            // There might only be one scroll token
-            if (m.dataset.scrollTokens &&
-                m.dataset.scrollTokens.split(',').indexOf(scrollToken) !== -1) {
-                node = m;
-                break;
-            }
-        }
-
-        if (!node) {
-            debuglog("ScrollPanel: No node with scrollToken '"+scrollToken+"'");
-            return;
-        }
-
-        const scrollNode = this._getScrollNode();
-        const scrollTop = scrollNode.scrollTop;
-        const viewportBottom = scrollTop + scrollNode.clientHeight;
-        const nodeBottom = node.offsetTop + node.clientHeight;
-        const intendedViewportBottom = nodeBottom + pixelOffset;
-        const scrollDelta = intendedViewportBottom - viewportBottom;
-
-        debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
-                 pixelOffset + " (delta: "+scrollDelta+")");
-
-        if (scrollDelta !== 0) {
-            this._setScrollTop(scrollTop + scrollDelta);
-        }
     },
 
     _saveScrollState: function() {
@@ -606,12 +540,13 @@ module.exports = React.createClass({
         }
 
         const scrollNode = this._getScrollNode();
-        const viewportBottom = scrollNode.scrollTop + scrollNode.clientHeight;
+        const viewportBottom = scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight);
 
         const itemlist = this.refs.itemlist;
         const messages = itemlist.children;
         let node = null;
 
+        // TODO: do a binary search here, as items are sorted by offsetTop
         // loop backwards, from bottom-most message (as that is the most common case)
         for (let i = messages.length-1; i >= 0; --i) {
             if (!messages[i].dataset.scrollTokens) {
@@ -631,12 +566,12 @@ module.exports = React.createClass({
             return;
         }
 
-        const nodeBottom = node.offsetTop + node.clientHeight;
-        debuglog("ScrollPanel: saved scroll state", this.scrollState);
+        debuglog("ScrollPanel: replacing scroll state");
         this.scrollState = {
             stuckAtBottom: false,
+            trackedNode: node,
             trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
-            pixelOffset: viewportBottom - nodeBottom,
+            bottomOffset: this._topFromBottom(node),
         };
     },
 
@@ -644,35 +579,111 @@ module.exports = React.createClass({
         const scrollState = this.scrollState;
 
         if (scrollState.stuckAtBottom) {
-            this._setScrollTop(Number.MAX_VALUE);
+            const sn = this._getScrollNode();
+            sn.scrollTop = sn.scrollHeight;
         } else if (scrollState.trackedScrollToken) {
-            this._scrollToToken(scrollState.trackedScrollToken,
-                               scrollState.pixelOffset);
+            const itemlist = this.refs.itemlist;
+            const trackedNode = this._getTrackedNode();
+            if (trackedNode) {
+                const newBottomOffset = this._topFromBottom(trackedNode);
+                const bottomDiff = newBottomOffset - scrollState.bottomOffset;
+                this._bottomGrowth += bottomDiff;
+                scrollState.bottomOffset = newBottomOffset;
+                itemlist.style.height = `${this._getListHeight()}px`;
+                debuglog("ScrollPanel: balancing height because messages below viewport grew by "+bottomDiff+"px");
+            }
+        }
+        // TODO: also call _updateHeight if not already in progress
+        if (!this._heightUpdateInProgress) {
+            const heightDiff = this._getMessagesHeight() - this._getListHeight();
+            if (heightDiff > 0) {
+                this._updateHeight();
+            }
+        }
+    },
+    // need a better name that also indicates this will change scrollTop? Rebalance height? Reveal content?
+    async _updateHeight() {
+        if (this._heightUpdateInProgress) {
+            return;
+        }
+        this._heightUpdateInProgress = true;
+        try {
+            // wait until user has stopped scrolling
+            if (this._scrollTimeout.isRunning()) {
+                await this._scrollTimeout.finished();
+            }
+
+            const sn = this._getScrollNode();
+            const itemlist = this.refs.itemlist;
+            const contentHeight = this._getMessagesHeight();
+            const minHeight = sn.clientHeight;
+            const height = Math.max(minHeight, contentHeight);
+            this._pages = Math.ceil(height / PAGE_SIZE);
+            this._bottomGrowth = 0;
+            const newHeight = this._getListHeight();
+
+            if (this.scrollState.stuckAtBottom) {
+                itemlist.style.height = `${newHeight}px`;
+                sn.scrollTop = sn.scrollHeight;
+                debuglog("updateHeight to", newHeight);
+            } else {
+                const trackedNode = this._getTrackedNode();
+                const oldTop = trackedNode.offsetTop;
+                itemlist.style.height = `${newHeight}px`;
+                const newTop = trackedNode.offsetTop;
+                const topDiff = newTop - oldTop;
+                sn.scrollTop = sn.scrollTop + topDiff;
+                debuglog("updateHeight to", newHeight, topDiff);
+            }
+        } finally {
+            this._heightUpdateInProgress = false;
         }
     },
 
-    _setScrollTop: function(scrollTop) {
-        const scrollNode = this._getScrollNode();
+    _getTrackedNode() {
+        const scrollState = this.scrollState;
+        const trackedNode = scrollState.trackedNode;
 
-        const prevScroll = scrollNode.scrollTop;
+        if (!trackedNode || !trackedNode.parentElement) {
+            let node;
+            const messages = this.refs.itemlist.children;
+            const scrollToken = scrollState.trackedScrollToken;
 
-        // FF ignores attempts to set scrollTop to very large numbers
-        scrollNode.scrollTop = Math.min(scrollTop, scrollNode.scrollHeight);
-
-        // If this change generates a scroll event, we should not update the
-        // saved scroll state on it. See the comments in onScroll.
-        //
-        // If we *don't* expect a scroll event, we need to leave _lastSetScroll
-        // alone, otherwise we'll end up ignoring a future scroll event which is
-        // nothing to do with this change.
-
-        if (scrollNode.scrollTop != prevScroll) {
-            this._lastSetScroll = scrollNode.scrollTop;
+            for (let i = messages.length-1; i >= 0; --i) {
+                const m = messages[i];
+                // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
+                // There might only be one scroll token
+                if (m.dataset.scrollTokens &&
+                    m.dataset.scrollTokens.split(',').indexOf(scrollToken) !== -1) {
+                    node = m;
+                    break;
+                }
+            }
+            debuglog("had to find tracked node again for " + scrollState.trackedScrollToken);
+            scrollState.trackedNode = node;
         }
 
-        debuglog("ScrollPanel: set scrollTop:", scrollNode.scrollTop,
-                 "requested:", scrollTop,
-                 "_lastSetScroll:", this._lastSetScroll);
+        if (!scrollState.trackedNode) {
+            debuglog("ScrollPanel: No node with ; '"+scrollState.trackedScrollToken+"'");
+            return;
+        }
+
+        return scrollState.trackedNode;
+    },
+
+    _getListHeight() {
+        return this._bottomGrowth + (this._pages * PAGE_SIZE);
+    },
+
+    _getMessagesHeight() {
+        const itemlist = this.refs.itemlist;
+        const lastNode = itemlist.lastElementChild;
+        // 18 is itemlist padding
+        return (lastNode.offsetTop + lastNode.clientHeight) - itemlist.firstElementChild.offsetTop + (18 * 2);
+    },
+
+    _topFromBottom(node) {
+        return this.refs.itemlist.clientHeight - node.offsetTop;
     },
 
     /* get the DOM node which has the scrollTop property we care about for our
@@ -742,7 +753,7 @@ module.exports = React.createClass({
         // it's not obvious why we have a separate div and ol anyway.
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
-                className={this.props.className} style={this.props.style}>
+                className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
                             { this.props.children }
