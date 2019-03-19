@@ -555,7 +555,7 @@ module.exports = React.createClass({
             node = messages[i];
             // break at the first message (coming from the bottom)
             // that has it's offsetTop above the bottom of the viewport.
-            if (node.offsetTop < viewportBottom) {
+            if (this._topFromBottom(node) > viewportBottom) {
                 // Use this node as the scrollToken
                 break;
             }
