@@ -103,7 +103,7 @@ class MatrixClientPeg {
             } catch (err) {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
-                    this.matrixClient.store = new Matrix.MatrixInMemoryStore({
+                    this.matrixClient.store = new Matrix.MemoryStore({
                       localStorage: global.localStorage,
                     });
                 } else {
