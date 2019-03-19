@@ -298,11 +298,14 @@ module.exports = React.createClass({
         //   `---------'                            -
         //
 
-        if (sn.scrollTop < sn.clientHeight) {
+        const contentHeight = this._getMessagesHeight();
+        const contentTop = contentHeight - this._getListHeight();
+        const contentScrollTop = sn.scrollTop + contentTop;
+        if (contentScrollTop < sn.clientHeight) {
             // need to back-fill
             this._maybeFill(true);
         }
-        if (sn.scrollTop > sn.scrollHeight - sn.clientHeight * 2) {
+        if (contentScrollTop > contentHeight - sn.clientHeight * 2) {
             // need to forward-fill
             this._maybeFill(false);
         }
