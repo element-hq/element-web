@@ -578,7 +578,7 @@ module.exports = React.createClass({
         };
     },
 
-    _restoreSavedScrollState: function() {
+    _restoreSavedScrollState: async function() {
         const scrollState = this.scrollState;
 
         if (scrollState.stuckAtBottom) {
@@ -598,48 +598,44 @@ module.exports = React.createClass({
         }
         // TODO: also call _updateHeight if not already in progress
         if (!this._heightUpdateInProgress) {
-            const heightDiff = this._getMessagesHeight() - this._getListHeight();
-            if (heightDiff > 0) {
-                this._updateHeight();
+            this._heightUpdateInProgress = true;
+            try {
+                await this._updateHeight();
+            } finally {
+                this._heightUpdateInProgress = false;
             }
         }
     },
     // need a better name that also indicates this will change scrollTop? Rebalance height? Reveal content?
     async _updateHeight() {
-        if (this._heightUpdateInProgress) {
-            return;
+        const startTs = Date.now();
+        // wait until user has stopped scrolling
+        if (this._scrollTimeout.isRunning()) {
+            debuglog("xxx updateHeight waiting for scrolling to end ... ");
+            await this._scrollTimeout.finished();
         }
-        this._heightUpdateInProgress = true;
-        try {
-            // wait until user has stopped scrolling
-            if (this._scrollTimeout.isRunning()) {
-                await this._scrollTimeout.finished();
-            }
 
-            const sn = this._getScrollNode();
-            const itemlist = this.refs.itemlist;
-            const contentHeight = this._getMessagesHeight();
-            const minHeight = sn.clientHeight;
-            const height = Math.max(minHeight, contentHeight);
-            this._pages = Math.ceil(height / PAGE_SIZE);
-            this._bottomGrowth = 0;
-            const newHeight = this._getListHeight();
+        const sn = this._getScrollNode();
+        const itemlist = this.refs.itemlist;
+        const contentHeight = this._getMessagesHeight();
+        const minHeight = sn.clientHeight;
+        const height = Math.max(minHeight, contentHeight);
+        this._pages = Math.ceil(height / PAGE_SIZE);
+        this._bottomGrowth = 0;
+        const newHeight = this._getListHeight();
 
-            if (this.scrollState.stuckAtBottom) {
-                itemlist.style.height = `${newHeight}px`;
-                sn.scrollTop = sn.scrollHeight;
-                debuglog("updateHeight to", newHeight);
-            } else {
-                const trackedNode = this._getTrackedNode();
-                const oldTop = trackedNode.offsetTop;
-                itemlist.style.height = `${newHeight}px`;
-                const newTop = trackedNode.offsetTop;
-                const topDiff = newTop - oldTop;
-                sn.scrollTop = sn.scrollTop + topDiff;
-                debuglog("updateHeight to", newHeight, topDiff);
-            }
-        } finally {
-            this._heightUpdateInProgress = false;
+        if (this.scrollState.stuckAtBottom) {
+            itemlist.style.height = `${newHeight}px`;
+            sn.scrollTop = sn.scrollHeight;
+            debuglog("xxx updateHeight to", newHeight);
+        } else {
+            const trackedNode = this._getTrackedNode();
+            const oldTop = trackedNode.offsetTop;
+            itemlist.style.height = `${newHeight}px`;
+            const newTop = trackedNode.offsetTop;
+            const topDiff = newTop - oldTop;
+            sn.scrollTop = sn.scrollTop + topDiff;
+            debuglog("xxx updateHeight to", newHeight, topDiff, Date.now() - startTs);
         }
     },
 
