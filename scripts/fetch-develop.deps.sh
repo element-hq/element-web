@@ -6,7 +6,7 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
-set -e
+set -ex
 
 GIT_CLONE_ARGS=("$@")
 [ -z "$defbranch" ] && defbranch="develop"
@@ -33,27 +33,39 @@ function clone() {
 }
 
 function dodep() {
-    org=$1
-    repo=$2
-    rm -rf $repo
+    deforg=$1
+    defrepo=$2
+    rm -rf $defrepo
 
     # Try the PR author's branch in case it exists on the deps as well.
     # Try the target branch of the push or PR.
     # Use the default branch as the last resort.
     if [[ "$BUILDKITE" == true ]]; then
-        clone $org $repo $BUILDKITE_BRANCH ||
-        clone $org $repo $BUILDKITE_PULL_REQUEST_BASE_BRANCH ||
-        clone $org $repo $defbranch ||
+        # If BUILDKITE_BRANCH is set, it will contain either:
+        #   * "branch" when the author's branch and target branch are in the same repo
+        #   * "author:branch" when the author's branch is in their fork
+        # We can split on `:` into an array to check.
+        BUILDKITE_BRANCH_ARRAY=(${BUILDKITE_BRANCH//:/ })
+        if [[ "${#BUILDKITE_BRANCH_ARRAY[@]}" == "2" ]]; then
+            prAuthor=${BUILDKITE_BRANCH_ARRAY[0]}
+            prBranch=${BUILDKITE_BRANCH_ARRAY[1]}
+        else
+            prAuthor=$deforg
+            prBranch=$BUILDKITE_BRANCH
+        fi
+        clone $prAuthor $defrepo $prBranch ||
+        clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH ||
+        clone $deforg $defrepo $defbranch ||
         return $?
     else
-        clone $org $repo $ghprbSourceBranch ||
-        clone $org $repo $GIT_BRANCH ||
-        clone $org $repo `git rev-parse --abbrev-ref HEAD` ||
-        clone $org $repo $defbranch ||
+        clone $deforg $defrepo $ghprbSourceBranch ||
+        clone $deforg $defrepo $GIT_BRANCH ||
+        clone $deforg $defrepo `git rev-parse --abbrev-ref HEAD` ||
+        clone $deforg $defrepo $defbranch ||
         return $?
     fi
 
-    echo "$repo set to branch "`git -C "$repo" rev-parse --abbrev-ref HEAD`
+    echo "$defrepo set to branch "`git -C "$defrepo" rev-parse --abbrev-ref HEAD`
 }
 
 ##############################
