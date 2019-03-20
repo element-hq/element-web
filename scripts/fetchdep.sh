@@ -17,7 +17,7 @@ clone() {
     if [ -n "$branch" ]
     then
         echo "Trying to use $org/$repo#$branch"
-        git clone https://github.com/$org/$repo.git $repo --branch "$branch" && exit 0
+        git clone git://github.com/$org/$repo.git $repo --branch "$branch" && exit 0
     fi
 }
 
