@@ -95,7 +95,7 @@ module.exports = function (config) {
         // available preprocessors:
         // https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            '{src,test}/**/*.js': ['webpack', 'sourcemap'],
+            '{src,test,node_modules/matrix-react-sdk/src}/**/*.js': ['webpack', 'sourcemap'],
         },
 
         // test results reporter to use
