@@ -569,11 +569,12 @@ module.exports = React.createClass({
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-        debuglog("saving anchored scroll state to message", node && node.innerText);
+        const scrollToken = node.dataset.scrollTokens.split(',')[0];
+        debuglog("saving anchored scroll state to message", node && node.innerText, scrollToken);
         this.scrollState = {
             stuckAtBottom: false,
             trackedNode: node,
-            trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
+            trackedScrollToken: scrollToken,
             bottomOffset: this._topFromBottom(node),
         };
     },
