@@ -179,4 +179,5 @@ module.exports = function (config) {
     }
 
     config.set(myconfig);
+    console.log(JSON.stringify(config, null, 2));
 };
