@@ -665,7 +665,9 @@ module.exports = React.createClass({
                     break;
                 }
             }
-            debuglog("had to find tracked node again for " + scrollState.trackedScrollToken);
+            if (node) {
+                debuglog("had to find tracked node again for " + scrollState.trackedScrollToken);
+            }
             scrollState.trackedNode = node;
         }
 
