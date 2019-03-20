@@ -939,7 +939,7 @@ var TimelinePanel = React.createClass({
             // clear the timeline min-height when
             // (re)loading the timeline
             if (this.refs.messagePanel) {
-                this.refs.messagePanel.clearTimelineHeight();
+                this.refs.messagePanel.onTimelineReset();
             }
             this._reloadEvents();
 

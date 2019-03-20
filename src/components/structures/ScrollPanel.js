@@ -175,6 +175,7 @@ module.exports = React.createClass({
         //
         // This will also re-check the fill state, in case the paginate was inadequate
         this.checkScroll();
+        this.updatePreventShrinking();
     },
 
     componentWillUnmount: function() {
@@ -192,22 +193,23 @@ module.exports = React.createClass({
     onScroll: function(ev) {
         this._scrollTimeout.restart();
         this._saveScrollState();
-        this._checkBlockShrinking();
         this.checkFillState();
-
+        this.updatePreventShrinking();
         this.props.onScroll(ev);
     },
 
     onResize: function() {
-        this.clearBlockShrinking();
         this.checkScroll();
+        // update preventShrinkingState if present
+        if (this.preventShrinkingState) {
+            this.preventShrinking();
+        }
     },
 
     // after an update to the contents of the panel, check that the scroll is
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
         this._restoreSavedScrollState();
-        this._checkBlockShrinking();
         this.checkFillState();
     },
 
@@ -718,39 +720,84 @@ module.exports = React.createClass({
     },
 
     /**
-     * Set the current height as the min height for the message list
-     * so the timeline cannot shrink. This is used to avoid
-     * jumping when the typing indicator gets replaced by a smaller message.
-     */
-    blockShrinking: function() {
+    Mark the bottom offset of the last tile so we can balance it out when
+    anything below it changes, by calling updatePreventShrinking, to keep
+    the same minimum bottom offset, effectively preventing the timeline to shrink.
+    */
+    preventShrinking: function() {
         const messageList = this.refs.itemlist;
-        if (messageList) {
-            const currentHeight = messageList.clientHeight;
-            messageList.style.minHeight = `${currentHeight}px`;
+        const tiles = messageList && messageList.children;
+        if (!messageList) {
+            return;
         }
+        let lastTileNode;
+        for (let i = tiles.length - 1; i >= 0; i--) {
+            const node = tiles[i];
+            if (node.dataset.scrollTokens) {
+                lastTileNode = node;
+                break;
+            }
+        }
+        if (!lastTileNode) {
+            return;
+        }
+        this.clearPreventShrinking();
+        const offsetFromBottom = messageList.clientHeight - (lastTileNode.offsetTop + lastTileNode.clientHeight);
+        this.preventShrinkingState = {
+            offsetFromBottom: offsetFromBottom,
+            offsetNode: lastTileNode,
+        };
+        debuglog("prevent shrinking, last tile ", offsetFromBottom, "px from bottom");
+    },
+
+    /** Clear shrinking prevention. Used internally, and when the timeline is reloaded. */
+    clearPreventShrinking: function() {
+        const messageList = this.refs.itemlist;
+        const balanceElement = messageList && messageList.parentElement;
+        if (balanceElement) balanceElement.style.paddingBottom = null;
+        this.preventShrinkingState = null;
+        debuglog("prevent shrinking cleared");
     },
 
     /**
-     * Clear the previously set min height
-     */
-    clearBlockShrinking: function() {
-        const messageList = this.refs.itemlist;
-        if (messageList) {
-            messageList.style.minHeight = null;
-        }
-    },
-
-    _checkBlockShrinking: function() {
-        const sn = this._getScrollNode();
-        const scrollState = this.scrollState;
-        if (!scrollState.stuckAtBottom) {
-            const spaceBelowViewport = sn.scrollHeight - (sn.scrollTop + sn.clientHeight);
-            // only if we've scrolled up 200px from the bottom
-            // should we clear the min-height used by the typing notifications,
-            // otherwise we might still see it jump as the whitespace disappears
-            // when scrolling up from the bottom
-            if (spaceBelowViewport >= 200) {
-                this.clearBlockShrinking();
+    update the container padding to balance
+    the bottom offset of the last tile since
+    preventShrinking was called.
+    Clears the prevent-shrinking state ones the offset
+    from the bottom of the marked tile grows larger than
+    what it was when marking.
+    */
+    updatePreventShrinking: function() {
+        if (this.preventShrinkingState) {
+            const sn = this._getScrollNode();
+            const scrollState = this.scrollState;
+            const messageList = this.refs.itemlist;
+            const {offsetNode, offsetFromBottom} = this.preventShrinkingState;
+            // element used to set paddingBottom to balance the typing notifs disappearing
+            const balanceElement = messageList.parentElement;
+            // if the offsetNode got unmounted, clear
+            let shouldClear = !offsetNode.parentElement;
+            // also if 200px from bottom
+            if (!shouldClear && !scrollState.stuckAtBottom) {
+                const spaceBelowViewport = sn.scrollHeight - (sn.scrollTop + sn.clientHeight);
+                shouldClear = spaceBelowViewport >= 200;
+            }
+            // try updating if not clearing
+            if (!shouldClear) {
+                const currentOffset = messageList.clientHeight - (offsetNode.offsetTop + offsetNode.clientHeight);
+                const offsetDiff = offsetFromBottom - currentOffset;
+                if (offsetDiff > 0) {
+                    balanceElement.style.paddingBottom = `${offsetDiff}px`;
+                    if (this.scrollState.stuckAtBottom) {
+                        sn.scrollTop = sn.scrollHeight;
+                    }
+                    debuglog("update prevent shrinking ", offsetDiff, "px from bottom");
+                } else if (offsetDiff < 0) {
+                    shouldClear = true;
+                }
+            }
+            if (shouldClear) {
+                this.clearPreventShrinking();
             }
         }
     },

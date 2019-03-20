@@ -631,12 +631,22 @@ module.exports = React.createClass({
         }
     },
 
-    _onTypingVisible: function() {
+    _onTypingShown: function() {
         const scrollPanel = this.refs.scrollPanel;
+        // this will make the timeline grow, so checkScroll
+        scrollPanel.checkScroll();
         if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
-            // scroll down if at bottom
-            scrollPanel.checkScroll();
-            scrollPanel.blockShrinking();
+            scrollPanel.preventShrinking();
+        }
+    },
+
+    _onTypingHidden: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            // as hiding the typing notifications doesn't
+            // update the scrollPanel, we tell it to apply
+            // the shrinking prevention once the typing notifs are hidden
+            scrollPanel.updatePreventShrinking();
         }
     },
 
@@ -652,15 +662,15 @@ module.exports = React.createClass({
             // update the min-height, so once the last
             // person stops typing, no jumping occurs
             if (isAtBottom && isTypingVisible) {
-                scrollPanel.blockShrinking();
+                scrollPanel.preventShrinking();
             }
         }
     },
 
-    clearTimelineHeight: function() {
+    onTimelineReset: function() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
-            scrollPanel.clearBlockShrinking();
+            scrollPanel.clearPreventShrinking();
         }
     },
 
@@ -688,7 +698,12 @@ module.exports = React.createClass({
 
         let whoIsTyping;
         if (this.props.room) {
-            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._onTypingVisible} ref="whoIsTyping" />);
+            whoIsTyping = (<WhoIsTypingTile
+                room={this.props.room}
+                onShown={this._onTypingShown}
+                onHidden={this._onTypingHidden}
+                ref="whoIsTyping" />
+            );
         }
 
         return (
