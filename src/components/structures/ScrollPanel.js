@@ -624,18 +624,25 @@ module.exports = React.createClass({
         this._bottomGrowth = 0;
         const newHeight = this._getListHeight();
 
-        if (this.scrollState.stuckAtBottom) {
+        const scrollState = this.scrollState;
+        if (scrollState.stuckAtBottom) {
             itemlist.style.height = `${newHeight}px`;
             sn.scrollTop = sn.scrollHeight;
             debuglog("xxx updateHeight to", newHeight);
-        } else {
+        } else if (scrollState.trackedScrollToken) {
             const trackedNode = this._getTrackedNode();
-            const oldTop = trackedNode.offsetTop;
-            itemlist.style.height = `${newHeight}px`;
-            const newTop = trackedNode.offsetTop;
-            const topDiff = newTop - oldTop;
-            sn.scrollTop = sn.scrollTop + topDiff;
-            debuglog("xxx updateHeight to", newHeight, topDiff, Date.now() - startTs);
+            // if the timeline has been reloaded
+            // this can be called before scrollToBottom or whatever has been called
+            // so don't do anything of the node has disappeared from
+            // the currently filled piece of the timeline
+            if (trackedNode) {
+                const oldTop = trackedNode.offsetTop;
+                itemlist.style.height = `${newHeight}px`;
+                const newTop = trackedNode.offsetTop;
+                const topDiff = newTop - oldTop;
+                sn.scrollTop = sn.scrollTop + topDiff;
+                debuglog("xxx updateHeight to", newHeight, topDiff, Date.now() - startTs);
+            }
         }
     },
 
