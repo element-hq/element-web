@@ -28,6 +28,7 @@ import {MATRIXTO_URL_PATTERN} from "./linkify-matrix";
 import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -105,7 +106,72 @@ export const CommandMap = {
         description: _td('Upgrades a room to a new version'),
         runFn: function(roomId, args) {
             if (args) {
-                return success(MatrixClientPeg.get().upgradeRoom(roomId, args));
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                    QuestionDialog, {
+                    title: _t('Room upgrade confirmation'),
+                    description: (
+                        <div>
+                            <p>{_t("Upgrading a room can be destructive and isn't always necessary.")}</p>
+                            <p>
+                                {_t(
+                                    "Room upgrades are usually recommended when a room version is considered " +
+                                    "<i>unstable</i>. Unstable room versions might have bugs, missing features, or " +
+                                    "security vulnerabilities.",
+                                    {}, {
+                                        "i": (sub) => <i>{sub}</i>,
+                                    },
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "Room upgrades usually only affect <i>server-side</i> processing of the " +
+                                    "room. If you're having problems with your Riot client, please file an issue " +
+                                    "with <issueLink />.",
+                                    {}, {
+                                        "i": (sub) => <i>{sub}</i>,
+                                        "issueLink": () => {
+                                            return <a href="https://github.com/vector-im/riot-web/issues/new/choose"
+                                                      target="_blank" rel="noopener">
+                                                https://github.com/vector-im/riot-web/issues/new/choose
+                                            </a>;
+                                        },
+                                    },
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room " +
+                                    "members to the new version of the room.</i> We'll post a link to the new room " +
+                                    "in the old version of the room - room members will have to click this link to " +
+                                    "join the new room.",
+                                    {}, {
+                                        "b": (sub) => <b>{sub}</b>,
+                                        "i": (sub) => <i>{sub}</i>,
+                                    },
+                                )}
+                            </p>
+                            <p>
+                                {_t(
+                                    "Please confirm that you'd like to go forward with upgrading this room " +
+                                    "from <oldVersion /> to <newVersion />",
+                                    {},
+                                    {
+                                        oldVersion: () => <code>{room ? room.getVersion() : "1"}</code>,
+                                        newVersion: () => <code>{args}</code>,
+                                    },
+                                )}
+                            </p>
+                        </div>
+                    ),
+                    button: _t("Upgrade"),
+                    onFinished: (confirm) => {
+                        if (!confirm) return;
+
+                        MatrixClientPeg.get().upgradeRoom(roomId, args);
+                    },
+                });
+                return success();
             }
             return reject(this.getUsage());
         },
