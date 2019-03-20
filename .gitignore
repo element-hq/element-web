@@ -10,8 +10,9 @@
 /packages/
 /webapp
 /.npmrc
+/*.log
+package-lock.json
 .DS_Store
-npm-debug.log
 electron/dist
 electron/pub
 **/.idea

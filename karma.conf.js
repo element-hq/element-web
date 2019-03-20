@@ -9,7 +9,7 @@ var webpack_config = require('./webpack.config');
  * to build everything; however it's the easiest way to load our dependencies
  * from node_modules.
  *
- * If you run karma in multi-run mode (with `npm run test-multi`), it will watch
+ * If you run karma in multi-run mode (with `yarn test-multi`), it will watch
  * the tests for changes, and webpack will rebuild using a cache. This is much quicker
  * than a clean rebuild.
  */
@@ -138,10 +138,10 @@ module.exports = function (config) {
         ],
 
         customLaunchers: {
-            'ChromeHeadless': {
+            'VectorChromeHeadless': {
                 base: 'Chrome',
                 flags: [
-                    // '--no-sandbox',
+                    '--no-sandbox',
                     // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
                     '--headless',
                     '--disable-gpu',

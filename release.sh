@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to perform a release of vector-web.
+# Script to perform a release of riot-web.
 #
 # Requires github-changelog-generator; to install, do
 #   pip install git+https://github.com/matrix-org/github-changelog-generator.git
@@ -21,7 +21,7 @@ cd `dirname $0`
 for i in matrix-js-sdk matrix-react-sdk
 do
     depver=`cat package.json | jq -r .dependencies[\"$i\"]`
-    latestver=`npm show $i version`
+    latestver=`yarn info -s $i version`
     if [ "$depver" != "$latestver" ]
     then
         echo "The latest version of $i is $latestver but package.json depends on $depver"
@@ -38,12 +38,11 @@ done
 # bump Electron's package.json first
 release="${1#v}"
 tag="v${release}"
-echo "electron npm version"
+echo "electron yarn version"
 
 cd electron_app
-npm version --no-git-tag-version "$release"
+yarn version --no-git-tag-version --new-version "$release"
 git commit package.json -m "$tag"
-
 
 cd ..
 
