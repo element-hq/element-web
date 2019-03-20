@@ -45,8 +45,6 @@ import VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandle
 import Promise from 'bluebird';
 import request from 'browser-request';
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
-// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
-import { _t } from 'matrix-react-sdk/src/languageHandler';
 
 import url from 'url';
 
@@ -56,7 +54,7 @@ import ElectronPlatform from './platform/ElectronPlatform';
 import WebPlatform from './platform/WebPlatform';
 
 import MatrixClientPeg from 'matrix-react-sdk/src/MatrixClientPeg';
-import SettingsStore, {SettingLevel} from "matrix-react-sdk/src/settings/SettingsStore";
+import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/src/Tinter';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
