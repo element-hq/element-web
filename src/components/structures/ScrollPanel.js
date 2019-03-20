@@ -22,7 +22,6 @@ import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const DEBUG_SCROLL = false;
-// const DEBUG_SCROLL = true;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
@@ -347,7 +346,6 @@ module.exports = React.createClass({
                 markerScrollToken = tile.dataset.scrollTokens.split(',')[0];
             }
         }
-        debuglog("unfilling now", backwards, origExcessHeight, Array.prototype.indexOf.call(tiles, tile));
 
         if (markerScrollToken) {
             // Use a debouncer to prevent multiple unfill calls in quick succession
@@ -357,6 +355,7 @@ module.exports = React.createClass({
             }
             this._unfillDebouncer = setTimeout(() => {
                 this._unfillDebouncer = null;
+                debuglog("unfilling now", backwards, origExcessHeight);
                 this.props.onUnfillRequest(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
@@ -366,11 +365,11 @@ module.exports = React.createClass({
     _maybeFill: function(backwards) {
         const dir = backwards ? 'b' : 'f';
         if (this._pendingFillRequests[dir]) {
-            debuglog("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
+            debuglog("Already a "+dir+" fill in progress - not starting another");
             return;
         }
 
-        debuglog("ScrollPanel: starting "+dir+" fill");
+        debuglog("starting "+dir+" fill");
 
         // onFillRequest can end up calling us recursively (via onScroll
         // events) so make sure we set this before firing off the call.
@@ -387,7 +386,7 @@ module.exports = React.createClass({
             // Unpaginate once filling is complete
             this._checkUnfillState(!backwards);
 
-            debuglog("ScrollPanel: "+dir+" fill complete; hasMoreResults:"+hasMoreResults);
+            debuglog(""+dir+" fill complete; hasMoreResults:"+hasMoreResults);
             if (hasMoreResults) {
                 // further pagination requests have been disabled until now, so
                 // it's time to check the fill state again in case the pagination
@@ -540,7 +539,7 @@ module.exports = React.createClass({
     _saveScrollState: function() {
         if (this.props.stickyBottom && this.isAtBottom()) {
             this.scrollState = { stuckAtBottom: true };
-            debuglog("ScrollPanel: Saved scroll state", this.scrollState);
+            debuglog("saved stuckAtBottom state");
             return;
         }
 
@@ -567,11 +566,11 @@ module.exports = React.createClass({
         }
 
         if (!node) {
-            debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
+            debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
 
-        debuglog("ScrollPanel: replacing scroll state");
+        debuglog("saving anchored scroll state to message", node && node.innerText);
         this.scrollState = {
             stuckAtBottom: false,
             trackedNode: node,
@@ -595,7 +594,7 @@ module.exports = React.createClass({
                 this._bottomGrowth += bottomDiff;
                 scrollState.bottomOffset = newBottomOffset;
                 itemlist.style.height = `${this._getListHeight()}px`;
-                debuglog("ScrollPanel: balancing height because messages below viewport grew by "+bottomDiff+"px");
+                debuglog("balancing height because messages below viewport grew by "+bottomDiff+"px");
             }
         }
         // TODO: also call _updateHeight if not already in progress
@@ -606,15 +605,18 @@ module.exports = React.createClass({
             } finally {
                 this._heightUpdateInProgress = false;
             }
+        } else {
+            debuglog("not updating height because request already in progress");
         }
     },
     // need a better name that also indicates this will change scrollTop? Rebalance height? Reveal content?
     async _updateHeight() {
-        const startTs = Date.now();
         // wait until user has stopped scrolling
         if (this._scrollTimeout.isRunning()) {
-            debuglog("xxx updateHeight waiting for scrolling to end ... ");
+            debuglog("updateHeight waiting for scrolling to end ... ");
             await this._scrollTimeout.finished();
+        } else {
+            debuglog("updateHeight getting straight to business, no scrolling going on.");
         }
 
         const sn = this._getScrollNode();
@@ -630,7 +632,7 @@ module.exports = React.createClass({
         if (scrollState.stuckAtBottom) {
             itemlist.style.height = `${newHeight}px`;
             sn.scrollTop = sn.scrollHeight;
-            debuglog("xxx updateHeight to", newHeight);
+            debuglog("updateHeight to", newHeight);
         } else if (scrollState.trackedScrollToken) {
             const trackedNode = this._getTrackedNode();
             // if the timeline has been reloaded
@@ -643,7 +645,7 @@ module.exports = React.createClass({
                 const newTop = trackedNode.offsetTop;
                 const topDiff = newTop - oldTop;
                 sn.scrollTop = sn.scrollTop + topDiff;
-                debuglog("xxx updateHeight to", newHeight, topDiff, Date.now() - startTs);
+                debuglog("updateHeight to", newHeight, topDiff);
             }
         }
     },
@@ -674,7 +676,7 @@ module.exports = React.createClass({
         }
 
         if (!scrollState.trackedNode) {
-            debuglog("ScrollPanel: No node with ; '"+scrollState.trackedScrollToken+"'");
+            debuglog("No node with ; '"+scrollState.trackedScrollToken+"'");
             return;
         }
 
