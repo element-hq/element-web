@@ -37,7 +37,7 @@ webpack_config.mode = 'development';
 
 // add ./test as a search path for js
 webpack_config.module.rules.unshift({
-    test: /\.js$/, use: "babel-loader",
+    test: /\.js$/, use: {loader: "babel-loader", options: {presets: ["react", "es2015", "es2016"], plugins: ["transform-class-properties", "transform-object-rest-spread", "transform-async-to-bluebird", "transform-runtime", "add-module-exports"]}},
     include: [path.resolve('./src'), path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'), path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'), path.resolve('./test')],
 });
 
@@ -179,5 +179,4 @@ module.exports = function (config) {
     }
 
     config.set(myconfig);
-    console.log(JSON.stringify(config, null, 2));
 };
