@@ -216,7 +216,7 @@ module.exports = React.createClass({
     // return true if the content is fully scrolled down right now; else false.
     //
     // note that this is independent of the 'stuckAtBottom' state - it is simply
-    // about whether the the content is scrolled down right now, irrespective of
+    // about whether the content is scrolled down right now, irrespective of
     // whether it will stay that way when the children update.
     isAtBottom: function() {
         const sn = this._getScrollNode();
