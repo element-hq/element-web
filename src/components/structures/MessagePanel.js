@@ -627,7 +627,7 @@ module.exports = React.createClass({
     _onHeightChanged: function() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
-            scrollPanel.forceUpdate();
+            scrollPanel.checkScroll();
         }
     },
 
