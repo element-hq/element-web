@@ -647,6 +647,9 @@ module.exports = React.createClass({
             // update the scrollPanel, we tell it to apply
             // the shrinking prevention once the typing notifs are hidden
             scrollPanel.updatePreventShrinking();
+            // order is important here as checkScroll will scroll down to
+            // reveal added padding to balance the notifs disappearing.
+            scrollPanel.checkScroll();
         }
     },
 

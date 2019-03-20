@@ -789,9 +789,6 @@ module.exports = React.createClass({
                 const offsetDiff = offsetFromBottom - currentOffset;
                 if (offsetDiff > 0) {
                     balanceElement.style.paddingBottom = `${offsetDiff}px`;
-                    if (this.scrollState.stuckAtBottom) {
-                        sn.scrollTop = sn.scrollHeight;
-                    }
                     debuglog("update prevent shrinking ", offsetDiff, "px from bottom");
                 } else if (offsetDiff < 0) {
                     shouldClear = true;
