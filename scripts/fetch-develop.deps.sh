@@ -25,7 +25,7 @@ function clone() {
     if [ -n "$branch" ]
     then
         echo "Trying to use $org/$repo#$branch"
-        git clone https://github.com/$org/$repo.git $repo --branch $branch \
+        git clone git://github.com/$org/$repo.git $repo --branch $branch \
             "${GIT_CLONE_ARGS[@]}"
         return $?
     fi
