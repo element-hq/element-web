@@ -569,7 +569,6 @@ module.exports = React.createClass({
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-
         debuglog("saving anchored scroll state to message", node && node.innerText);
         this.scrollState = {
             stuckAtBottom: false,
@@ -597,7 +596,6 @@ module.exports = React.createClass({
                 debuglog("balancing height because messages below viewport grew by "+bottomDiff+"px");
             }
         }
-        // TODO: also call _updateHeight if not already in progress
         if (!this._heightUpdateInProgress) {
             this._heightUpdateInProgress = true;
             try {
