@@ -42,7 +42,7 @@
     "build:dev": "yarn build:js-sdk && yarn build:react-sdk && yarn reskindex && yarn build:res && yarn build:bundle:dev",
     "dist": "scripts/package.sh",
     "install:electron": "install-app-deps",
-    "electron": "yarn install:electron && yarn electron .",
+    "electron": "yarn install:electron && npx electron .",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
