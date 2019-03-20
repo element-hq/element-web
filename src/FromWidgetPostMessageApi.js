@@ -70,8 +70,8 @@ export default class FromWidgetPostMessageApi {
     removeListener(action, callbackFn) {
         if (!this.widgetListeners[action]) return;
 
-        const idx = this.widgetListeners.indexOf(callbackFn);
-        if (idx !== -1) this.widgetListeners.splice(idx, 1);
+        const idx = this.widgetListeners[action].indexOf(callbackFn);
+        if (idx !== -1) this.widgetListeners[action].splice(idx, 1);
     }
 
     /**
