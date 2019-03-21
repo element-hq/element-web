@@ -518,7 +518,9 @@ module.exports = React.createClass({
 
         // convert bottomOffset so that it is based on the bottom of the
         // container.
-        bottomOffset += this._getScrollNode().clientHeight * (1-offsetBase);
+        const scrollNode = this._getScrollNode();
+        const viewportBottom = scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight);
+        bottomOffset += viewportBottom + scrollNode.clientHeight * (1-offsetBase);
 
         // save the desired scroll state. It's important we do this here rather
         // than as a result of the scroll event, because (a) we might not *get*
