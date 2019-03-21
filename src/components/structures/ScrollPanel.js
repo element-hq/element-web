@@ -216,8 +216,6 @@ module.exports = React.createClass({
             this._lastSetScroll = undefined;
         }
 
-        this._checkBlockShrinking();
-
         this.props.onScroll(ev);
 
         this.checkFillState();
@@ -234,7 +232,6 @@ module.exports = React.createClass({
     // where it ought to be, and set off pagination requests if necessary.
     checkScroll: function() {
         this._restoreSavedScrollState();
-        this._checkBlockShrinking();
         this.checkFillState();
     },
 
@@ -691,36 +688,14 @@ module.exports = React.createClass({
      * jumping when the typing indicator gets replaced by a smaller message.
      */
     blockShrinking: function() {
-        const messageList = this.refs.itemlist;
-        if (messageList) {
-            const currentHeight = messageList.clientHeight;
-            messageList.style.minHeight = `${currentHeight}px`;
-        }
+        // Disabled for now because of https://github.com/vector-im/riot-web/issues/9205
     },
 
     /**
      * Clear the previously set min height
      */
     clearBlockShrinking: function() {
-        const messageList = this.refs.itemlist;
-        if (messageList) {
-            messageList.style.minHeight = null;
-        }
-    },
-
-    _checkBlockShrinking: function() {
-        const sn = this._getScrollNode();
-        const scrollState = this.scrollState;
-        if (!scrollState.stuckAtBottom) {
-            const spaceBelowViewport = sn.scrollHeight - (sn.scrollTop + sn.clientHeight);
-            // only if we've scrolled up 200px from the bottom
-            // should we clear the min-height used by the typing notifications,
-            // otherwise we might still see it jump as the whitespace disappears
-            // when scrolling up from the bottom
-            if (spaceBelowViewport >= 200) {
-                this.clearBlockShrinking();
-            }
-        }
+        // Disabled for now because of https://github.com/vector-im/riot-web/issues/9205
     },
 
     render: function() {

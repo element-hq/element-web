@@ -1,3 +1,10 @@
+Changes in [1.0.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.5) (2019-03-21)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.4...v1.0.5)
+
+ * Hotfix: disable typing notifs jumping prevention for now
+   [\#2811](https://github.com/matrix-org/matrix-react-sdk/pull/2811)
+
 Changes in [1.0.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.4) (2019-03-18)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.4-rc.1...v1.0.4)
