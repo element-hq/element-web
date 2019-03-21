@@ -8,6 +8,10 @@ steps:
           image: "node:10"
 
   - label: ":karma: Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # webpack loves to gorge itself on resources.
+      queue: "medium"
     command:
       # Install chrome
       - "echo '--- Installing Chrome'"
