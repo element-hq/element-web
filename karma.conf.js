@@ -135,9 +135,10 @@ module.exports = function (config) {
         ],
 
         customLaunchers: {
-            'ChromeHeadless': {
+            'VectorChromeHeadless': {
                 base: 'Chrome',
                 flags: [
+                    '--no-sandbox',
                     // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
                     '--headless',
                     '--disable-gpu',

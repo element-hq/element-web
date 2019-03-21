@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -51,7 +51,7 @@
     "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
     "clean": "rimraf lib",
     "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
-    "test": "karma start --single-run=true --browsers ChromeHeadless",
+    "test": "karma start --single-run=true --browsers VectorChromeHeadless",
     "test-multi": "karma start"
   },
   "dependencies": {
@@ -79,7 +79,7 @@
     "linkifyjs": "^2.1.6",
     "lodash": "^4.13.1",
     "lolex": "2.3.2",
-    "matrix-js-sdk": "1.0.1",
+    "matrix-js-sdk": "1.0.2",
     "optimist": "^0.6.1",
     "pako": "^1.0.5",
     "prop-types": "^15.5.8",
@@ -99,7 +99,7 @@
     "slate-react": "^0.18.10",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
-    "velocity-vector": "github:vector-im/velocity#059e3b2",
+    "velocity-animate": "^1.5.2",
     "whatwg-fetch": "^1.1.1",
     "zxcvbn": "^4.4.2"
   },
@@ -131,7 +131,7 @@
     "flow-parser": "^0.57.3",
     "jest-mock": "^23.2.0",
     "karma": "^4.0.1",
-    "karma-chrome-launcher": "^0.2.3",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-junit-reporter": "^2.0.0",
     "karma-logcapture-reporter": "0.0.1",

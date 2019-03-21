@@ -84,7 +84,7 @@ class CustomRoomTagTile extends React.Component {
     render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
+        const Tooltip = sdk.getComponent('elements.Tooltip');
 
         const tag = this.props.tag;
         const avatarHeight = 40;
@@ -103,7 +103,7 @@ class CustomRoomTagTile extends React.Component {
         }
 
         const tip = (this.state.hover ?
-            <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
+            <Tooltip className="mx_TagTile_tooltip" label={name} /> :
             <div />);
         return (
             <AccessibleButton className={className} onClick={this.onClick}>

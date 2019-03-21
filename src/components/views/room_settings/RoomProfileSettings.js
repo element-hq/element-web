@@ -34,14 +34,20 @@ export default class RoomProfileSettings extends React.Component {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(props.roomId);
         if (!room) throw new Error("Expected a room for ID: ", props.roomId);
+
         const avatarEvent = room.currentState.getStateEvents("m.room.avatar", "");
         let avatarUrl = avatarEvent && avatarEvent.getContent() ? avatarEvent.getContent()["url"] : null;
         if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
+
         const topicEvent = room.currentState.getStateEvents("m.room.topic", "");
         const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()['topic'] : '';
+
+        const nameEvent = room.currentState.getStateEvents('m.room.name', '');
+        const name = nameEvent && nameEvent.getContent() ? nameEvent.getContent()['name'] : '';
+
         this.state = {
-            originalDisplayName: room.name,
-            displayName: room.name,
+            originalDisplayName: name,
+            displayName: name,
             originalAvatarUrl: avatarUrl,
             avatarUrl: avatarUrl,
             avatarFile: null,

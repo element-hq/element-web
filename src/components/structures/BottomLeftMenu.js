@@ -19,8 +19,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import Velocity from 'velocity-vector';
-import 'velocity-vector/velocity.ui';
+import Velocity from 'velocity-animate';
+import 'velocity-animate/velocity.ui';
 import SettingsStore from '../../settings/SettingsStore';
 
 const CALLOUT_ANIM_DURATION = 1000;
