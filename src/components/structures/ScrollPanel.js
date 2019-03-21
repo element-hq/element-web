@@ -638,7 +638,7 @@ module.exports = React.createClass({
             const trackedNode = this._getTrackedNode();
             // if the timeline has been reloaded
             // this can be called before scrollToBottom or whatever has been called
-            // so don't do anything of the node has disappeared from
+            // so don't do anything if the node has disappeared from
             // the currently filled piece of the timeline
             if (trackedNode) {
                 const oldTop = trackedNode.offsetTop;
