@@ -1,6 +1,7 @@
 // karma.conf.js - the config file for karma, which runs our tests.
 
 var path = require('path');
+var fs = require('fs');
 var webpack = require('webpack');
 var webpack_config = require('./webpack.config');
 
@@ -37,8 +38,8 @@ webpack_config.mode = 'development';
 
 // add ./test as a search path for js
 webpack_config.module.rules.unshift({
-    test: /\.js$/, use: {loader: "babel-loader", options: {presets: ["react", "es2015", "es2016"], plugins: ["transform-class-properties", "transform-object-rest-spread", "transform-async-to-bluebird", "transform-runtime", "add-module-exports"]}},
-    include: [path.resolve('./src'), path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'), path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'), path.resolve('./test')],
+    test: /\.js$/, use: "babel-loader",
+    include: [path.resolve('./src'), fs.realpathSync(__dirname + '/node_modules/matrix-react-sdk/src'), fs.realpathSync(__dirname + '/node_modules/matrix-js-sdk/src'), path.resolve('./test')],
 });
 
 // disable parsing for sinon, because it
@@ -64,7 +65,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'node_modules/babel-polyfill/browser.js',
+            'node_modules/@babel/polyfill/browser.js',
             testFile,
 
             // make the images available via our httpd. They will be avaliable

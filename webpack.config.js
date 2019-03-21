@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,9 +11,9 @@ if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/rio
 
 module.exports = {
     entry: {
-        // Load babel-polyfill first to avoid issues where some imports (namely react)
-        // are potentially loaded before babel-polyfill.
-        "bundle": ["babel-polyfill", "./src/vector/index.js"],
+        // Load @babel/polyfill first to avoid issues where some imports (namely react)
+        // are potentially loaded before @babel/polyfill.
+        "bundle": ["@babel/polyfill", "./src/vector/index.js"],
         "indexeddb-worker": "./src/vector/indexeddb-worker.js",
 
         "mobileguide": "./src/vector/mobile_guide/index.js",
@@ -29,28 +30,30 @@ module.exports = {
                     path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
                 ]
             },
-            { test: /\.js$/, use: {
-                loader: "babel-loader",
+            { test: /\.js$/, loader: "babel-loader", include: [
+                    fs.realpathSync(__dirname + '/node_modules/matrix-react-sdk/src'),
+                    fs.realpathSync(__dirname + '/node_modules/matrix-js-sdk/src'),
+                    fs.realpathSync(__dirname + '/src'),
+                ],
                 options: {
                     presets: [
-                        "react",
-                        "es2015",
-                        "es2016"
+                        "@babel/preset-react",
+                        ["@babel/preset-env", {modules: "commonjs"}],
+                        "@babel/preset-flow"
                     ],
                     plugins: [
-                        "transform-class-properties",
-                        "transform-object-rest-spread",
-                        "transform-async-to-bluebird",
-                        "transform-runtime",
-                        "add-module-exports"
+                        "@babel/plugin-proposal-class-properties",
+                        "@babel/plugin-proposal-object-rest-spread",
+                        "@babel/plugin-transform-runtime",
+                        "@babel/plugin-syntax-dynamic-import",
+                        "@babel/plugin-proposal-export-default-from",
+                        "add-module-exports",
+                        ["@babel/plugin-transform-async-to-generator", {
+                            module: "bluebird",
+                            method: "coroutine"
+                        }]
                     ]
                 }
-            },
-            include: [
-                    path.resolve(__dirname, 'src'),
-                    path.resolve(__dirname, 'node_modules/matrix-react-sdk/src'),
-                    path.resolve(__dirname, 'node_modules/matrix-js-sdk/src'),
-                ]
             },
             {
                 test: /\.wasm$/,

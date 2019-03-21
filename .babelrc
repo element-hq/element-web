@@ -1,4 +1,17 @@
 {
-  "presets": ["react", "es2015", "es2016"],
-  "plugins": ["transform-class-properties", "transform-object-rest-spread", "transform-async-to-bluebird", "transform-runtime", "add-module-exports"]
+  "presets": [
+    "@babel/preset-react",
+    "@babel/preset-env",
+    "@babel/preset-flow"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-runtime",
+    "add-module-exports",
+    ["@babel/plugin-transform-async-to-generator", {
+      "module": "bluebird",
+      "method": "coroutine"
+    }]
+  ]
 }
