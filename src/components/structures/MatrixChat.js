@@ -1067,10 +1067,11 @@ export default React.createClass({
                     d.then((errors) => {
                         modal.close();
 
-                        if (errors[roomId]) {
-                            // Something went wrong
-                            const err = errors[roomId];
-                            console.error("Failed to leave room " + roomId + " " + err);
+                        for (const leftRoomId of Object.keys(errors)) {
+                            const err = errors[leftRoomId];
+                            if (!err) continue;
+
+                            console.error("Failed to leave room " + leftRoomId + " " + err);
                             let title = _t("Failed to leave room");
                             let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
                             if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
