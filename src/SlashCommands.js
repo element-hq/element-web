@@ -431,7 +431,7 @@ export const CommandMap = {
 
             if (!targetRoomId) targetRoomId = roomId;
             return success(
-                cli.leave(targetRoomId).then(function() {
+                cli.leaveRoomChain(targetRoomId).then(function() {
                     dis.dispatch({action: 'view_next_room'});
                 }),
             );
