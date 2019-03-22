@@ -5336,10 +5336,10 @@ jsx-ast-utils@^2.0.1:
   dependencies:
     array-includes "^3.0.3"
 
-karma-chrome-launcher@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/karma-chrome-launcher/-/karma-chrome-launcher-0.2.3.tgz#4c6d700d163a9d34c618efd87918be49e7a4a8c9"
-  integrity sha1-TG1wDRY6nTTGGO/YeRi+SeekqMk=
+karma-chrome-launcher@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/karma-chrome-launcher/-/karma-chrome-launcher-2.2.0.tgz#cf1b9d07136cc18fe239327d24654c3dbc368acf"
+  integrity sha512-uf/ZVpAabDBPvdPdveyk1EPgbnloPvFFGgmRhYLTDH7gEB4nZdSBk8yTU47w1g/drLSx5uMOkjKk7IWKfWg/+w==
   dependencies:
     fs-access "^1.0.0"
     which "^1.2.1"
@@ -5732,10 +5732,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
   integrity sha1-izqsWIuKZuSXXjzepn97sylgH6w=
 
-matrix-js-sdk@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.1.tgz#783efc501e2521997869cfe8e719134d9e10a45c"
-  integrity sha512-+ErnXHfkxOoRHUYbY/R+2ZHvPKdPCx/eoYjb2Oy7L9pBqCNllI0WRVsro6oqRJQs0krVP8blyIjWOJynWSw96g==
+matrix-js-sdk@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.2.tgz#482d8d2076c7565cf7354722e96c9971e372182a"
+  integrity sha512-4WCBJFSoOLelHi7IUAcVxPQF+gTc/i9NUKZ77qwUfcZVED8VKTIyWZnwpeLgocK5gAOJV9fkAyO5mny9SkZaGg==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5757,10 +5757,10 @@ matrix-mock-request@^1.2.2:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.3.tgz#e2d027a68e47461abcad779219b028eee9399a53"
-  integrity sha512-Igc9ChLpRbN0E/bwA3HMhiYo2c21RA7dQ+eoZ9XEN6vh87ZJz0rUidqmAdvgZQycxW1lZWQ8Aj7/kefHeRswDA==
+matrix-react-sdk@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.4.tgz#cf6ef3d68f29af8ba590ceea74b20979522ef9cb"
+  integrity sha512-7qpnyXNnGvO/i+TPMoYayI4rWy6+hxnpjInx5Odgkw7PhCiapiYRU4poQsgVnOomkihrUWxuksWUmnkGhJ6O+Q==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5786,11 +5786,12 @@ matrix-react-sdk@1.0.3:
     linkifyjs "^2.1.6"
     lodash "^4.13.1"
     lolex "2.3.2"
-    matrix-js-sdk "1.0.1"
+    matrix-js-sdk "1.0.2"
     optimist "^0.6.1"
     pako "^1.0.5"
     prop-types "^15.5.8"
     qrcode-react "^0.1.16"
+    qs "^6.6.0"
     querystring "^0.2.0"
     react "^15.6.0"
     react-addons-css-transition-group "15.3.2"
@@ -7112,6 +7113,11 @@ qs@6.5.2, qs@^6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+
+qs@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.6.0.tgz#a99c0f69a8d26bf7ef012f871cdabb0aee4424c2"
+  integrity sha512-KIJqT9jQJDQx5h5uAVPimw6yVg2SekOKu959OCtktD3FjzbpvaPr8i4zzg07DOMz+igA4W/aNM7OV8H37pFYfA==
 
 querystring-es3@^0.2.0:
   version "0.2.1"

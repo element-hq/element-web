@@ -1,3 +1,38 @@
+Changes in [1.0.5](https://github.com/vector-im/riot-web/releases/tag/v1.0.5) (2019-03-21)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.4...v1.0.5)
+
+ * Hotfix for [\#9205](https://github.com/vector-im/riot-web/issues/9205) disabling jump prevention for typing notifications, while we're reworking this functionally to enable it again soon.
+
+Changes in [1.0.4](https://github.com/vector-im/riot-web/releases/tag/v1.0.4) (2019-03-18)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.4-rc.1...v1.0.4)
+
+ * No changes since rc.1
+
+Changes in [1.0.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.4-rc.1) (2019-03-13)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.3...v1.0.4-rc.1)
+
+ * Update from Weblate
+   [\#9152](https://github.com/vector-im/riot-web/pull/9152)
+ * Use modern Yarn version on Travis CI
+   [\#9151](https://github.com/vector-im/riot-web/pull/9151)
+ * Switch to `yarn` for dependency management
+   [\#9132](https://github.com/vector-im/riot-web/pull/9132)
+ * Update from Weblate
+   [\#9104](https://github.com/vector-im/riot-web/pull/9104)
+ * Don't copy the 32 bit linux deb
+   [\#9075](https://github.com/vector-im/riot-web/pull/9075)
+ * Change olm dependency to normal dep
+   [\#9068](https://github.com/vector-im/riot-web/pull/9068)
+ * Add modular.im hosting link to electron app config
+   [\#9047](https://github.com/vector-im/riot-web/pull/9047)
+ * Nudge karma to 3.1.2
+   [\#8991](https://github.com/vector-im/riot-web/pull/8991)
+ * Add support for localConfig at $appData/config.json.
+   [\#8983](https://github.com/vector-im/riot-web/pull/8983)
+
 Changes in [1.0.3](https://github.com/vector-im/riot-web/releases/tag/v1.0.3) (2019-03-06)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.2...v1.0.3)

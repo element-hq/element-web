@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -56,7 +56,7 @@
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron_app/dist",
     "prepare": "yarn clean && yarn build:compile",
-    "test": "karma start --single-run=true --autoWatch=false --browsers ChromeHeadless",
+    "test": "karma start --single-run=true --autoWatch=false --browsers VectorChromeHeadless",
     "test-multi": "karma start"
   },
   "dependencies": {
@@ -70,8 +70,8 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "1.0.1",
-    "matrix-react-sdk": "1.0.3",
+    "matrix-js-sdk": "1.0.2",
+    "matrix-react-sdk": "1.0.5",
     "modernizr": "^3.6.0",
     "olm": "https://matrix.org/packages/npm/olm/olm-3.1.0-pre1.tgz",
     "prop-types": "^15.6.2",
@@ -117,7 +117,7 @@
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.3",
     "karma": "^3.1.2",
-    "karma-chrome-launcher": "^0.2.3",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-junit-reporter": "^2.0.0",
     "karma-logcapture-reporter": "0.0.1",
