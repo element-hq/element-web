@@ -190,6 +190,7 @@ module.exports = React.createClass({
     },
 
     onScroll: function(ev) {
+        debuglog("onScroll", this._getScrollNode().scrollTop);
         this._scrollTimeout.restart();
         this._saveScrollState();
         this.checkFillState();
