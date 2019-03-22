@@ -1,8 +1,10 @@
 # riot-web Labs features
 
-Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in [#riot-web:matrix.org] for more information.
+Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
+[#riot-web:matrix.org] for more information.
 
-**Be warned! Labs features are not finalised, they may be fragile, they may change, they may be dropped. Ask in the room if you are unclear about any details here.**
+**Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
+dropped. Ask in the room if you are unclear about any details here.**
 
 ## Render simple counters in room header
 
