@@ -642,11 +642,17 @@ module.exports = React.createClass({
             // the currently filled piece of the timeline
             if (trackedNode) {
                 const oldTop = trackedNode.offsetTop;
+                // changing the height might change the scrollTop
+                // if the new height is smaller than the scrollTop.
+                // We calculate the diff that needs to be applied
+                // ourselves, so be sure to measure the
+                // scrollTop before changing the height.
+                const preexistingScrollTop = sn.scrollTop;
                 itemlist.style.height = `${newHeight}px`;
                 const newTop = trackedNode.offsetTop;
                 const topDiff = newTop - oldTop;
-                sn.scrollTop = sn.scrollTop + topDiff;
-                debuglog("updateHeight to", newHeight, topDiff);
+                sn.scrollTop = preexistingScrollTop + topDiff;
+                debuglog("updateHeight to", {newHeight, topDiff, preexistingScrollTop});
             }
         }
     },
