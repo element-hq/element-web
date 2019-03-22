@@ -256,6 +256,12 @@ To change the config.json for the desktop app, create a config file which will b
 
 In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
 
+Labs Features
+=============
+
+Some features of Riot may be enabled by flags in the `Labs` section of the settings.
+Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
+
 Development
 ===========
 
