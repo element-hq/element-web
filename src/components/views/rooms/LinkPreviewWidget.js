@@ -52,7 +52,7 @@ module.exports = React.createClass({
                 this.props.onHeightChanged,
             );
         }, (error)=>{
-            console.error("Failed to get preview for " + this.props.link + " " + error);
+            console.error("Failed to get URL preview: " + error);
         }).done();
     },
 
