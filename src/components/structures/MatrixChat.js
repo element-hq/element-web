@@ -1098,7 +1098,7 @@ export default React.createClass({
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
                         Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                            title: title,
+                            title: _t("Failed to leave room"),
                             description: _t("Unknown error"),
                         });
                     });
