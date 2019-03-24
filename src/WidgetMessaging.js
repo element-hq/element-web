@@ -45,7 +45,7 @@ export default class WidgetMessaging {
         this.target = target;
         this.fromWidget = global.mxFromWidgetMessaging;
         this.toWidget = global.mxToWidgetMessaging;
-        this._openIdHandlerRef = this._onOpenIdRequest.bind(this);
+        this._onOpenIdRequest = this._onOpenIdRequest.bind(this);
         this.start();
     }
 
@@ -115,12 +115,12 @@ export default class WidgetMessaging {
 
     start() {
         this.fromWidget.addEndpoint(this.widgetId, this.widgetUrl);
-        this.fromWidget.addListener("get_openid", this._openIdHandlerRef);
+        this.fromWidget.addListener("get_openid", this._onOpenIdRequest);
     }
 
     stop() {
         this.fromWidget.removeEndpoint(this.widgetId, this.widgetUrl);
-        this.fromWidget.removeListener("get_openid", this._openIdHandlerRef);
+        this.fromWidget.removeListener("get_openid", this._onOpenIdRequest);
     }
 
     async _onOpenIdRequest(ev, rawEv) {
