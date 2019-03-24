@@ -1,4 +1,4 @@
-const Velocity = require('velocity-vector');
+const Velocity = require('velocity-animate');
 
 // courtesy of https://github.com/julianshapiro/velocity/issues/283
 // We only use easeOutBounce (easeInBounce is just sort of nonsensical)

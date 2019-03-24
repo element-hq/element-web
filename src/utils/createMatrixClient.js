@@ -48,10 +48,6 @@ export default function createMatrixClient(opts, useIndexedDb) {
         useAuthorizationHeader: true,
     };
 
-    if (localStorage) {
-        storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
-    }
-
     if (indexedDB && localStorage && useIndexedDb) {
         storeOpts.store = new Matrix.IndexedDBStore({
             indexedDB: indexedDB,
@@ -59,6 +55,16 @@ export default function createMatrixClient(opts, useIndexedDb) {
             localStorage: localStorage,
             workerScript: createMatrixClient.indexedDbWorkerScript,
         });
+    }
+
+    if (localStorage) {
+        storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
+    }
+
+    if (indexedDB && useIndexedDb) {
+        storeOpts.cryptoStore = new Matrix.IndexedDBCryptoStore(
+            indexedDB, "matrix-js-sdk:crypto",
+        );
     }
 
     opts = Object.assign(storeOpts, opts);

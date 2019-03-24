@@ -25,7 +25,6 @@ Developer Guide
 
 Platform Targets:
  * Chrome, Firefox and Safari.
- * Edge should also work, but we're not testing it proactively.
  * WebRTC features (VoIP and Video calling) are only available in Chrome & Firefox.
  * Mobile Web is not currently a target platform - instead please use the native
    iOS (https://github.com/matrix-org/matrix-ios-kit) and Android

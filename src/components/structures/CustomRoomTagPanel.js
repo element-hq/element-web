@@ -84,7 +84,7 @@ class CustomRoomTagTile extends React.Component {
     render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Tooltip = sdk.getComponent('rooms.Tooltip');
+        const Tooltip = sdk.getComponent('elements.Tooltip');
 
         const tag = this.props.tag;
         const avatarHeight = 40;

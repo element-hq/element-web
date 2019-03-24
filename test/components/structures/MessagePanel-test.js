@@ -31,6 +31,8 @@ import Matrix from 'matrix-js-sdk';
 const test_utils = require('test-utils');
 const mockclock = require('mock-clock');
 
+import Velocity from 'velocity-animate';
+
 let client;
 const room = new Matrix.Room();
 
@@ -65,9 +67,17 @@ describe('MessagePanel', function() {
 
         // HACK: We assume all settings want to be disabled
         SettingsStore.getValue = sinon.stub().returns(false);
+
+        // This option clobbers the duration of all animations to be 1ms
+        // which makes unit testing a lot simpler (the animation doesn't
+        // complete without this even if we mock the clock and tick it
+        // what should be the correct amount of time).
+        Velocity.mock = true;
     });
 
     afterEach(function() {
+        delete Velocity.mock;
+
         clock.uninstall();
         sandbox.restore();
     });

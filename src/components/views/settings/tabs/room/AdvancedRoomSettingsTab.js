@@ -67,9 +67,22 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         let roomUpgradeButton;
         if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade) {
             roomUpgradeButton = (
-                <AccessibleButton onClick={this._upgradeRoom} kind='primary'>
-                    {_t("Upgrade room to version %(ver)s", {ver: this.state.upgradeRecommendation.version})}
-                </AccessibleButton>
+                <div>
+                    <p className='mx_SettingsTab_warningText'>
+                        {_t(
+                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
+                            "to the new version of the room.</i> We'll post a link to the new room in the old " +
+                            "version of the room - room members will have to click this link to join the new room.",
+                            {}, {
+                                "b": (sub) => <b>{sub}</b>,
+                                "i": (sub) => <i>{sub}</i>,
+                            },
+                        )}
+                    </p>
+                    <AccessibleButton onClick={this._upgradeRoom} kind='primary'>
+                        {_t("Upgrade this room to the recommended room version")}
+                    </AccessibleButton>
+                </div>
             );
         }
 
