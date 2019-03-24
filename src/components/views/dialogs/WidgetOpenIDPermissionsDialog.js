@@ -20,12 +20,14 @@ import {_t} from "../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
+import WidgetUtils from "../../../utils/WidgetUtils";
 
 export default class WidgetOpenIDPermissionsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         widgetUrl: PropTypes.string.isRequired,
         widgetId: PropTypes.string.isRequired,
+        isUserWidget: PropTypes.bool.isRequired,
     };
 
     constructor() {
@@ -52,7 +54,11 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
             if (!currentValues.whitelist) currentValues.whitelist = [];
             if (!currentValues.blacklist) currentValues.blacklist = [];
 
-            (allowed ? currentValues.whitelist : currentValues.blacklist).push(this.props.widgetId);
+            const securityKey = WidgetUtils.getWidgetSecurityKey(
+                this.props.widgetId,
+                this.props.widgetUrl,
+                this.props.isUserWidget);
+            (allowed ? currentValues.whitelist : currentValues.blacklist).push(securityKey);
             SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
         }
 

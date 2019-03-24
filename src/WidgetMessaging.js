@@ -26,6 +26,7 @@ import Modal from "./Modal";
 import MatrixClientPeg from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
+import WidgetUtils from "./utils/WidgetUtils";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -39,9 +40,10 @@ if (!global.mxToWidgetMessaging) {
 const OUTBOUND_API_NAME = 'toWidget';
 
 export default class WidgetMessaging {
-    constructor(widgetId, widgetUrl, target) {
+    constructor(widgetId, widgetUrl, isUserWidget, target) {
         this.widgetId = widgetId;
         this.widgetUrl = widgetUrl;
+        this.isUserWidget = isUserWidget;
         this.target = target;
         this.fromWidget = global.mxFromWidgetMessaging;
         this.toWidget = global.mxToWidgetMessaging;
@@ -126,12 +128,14 @@ export default class WidgetMessaging {
     async _onOpenIdRequest(ev, rawEv) {
         if (ev.widgetId !== this.widgetId) return; // not interesting
 
+        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, this.widgetUrl, this.isUserWidget);
+
         const settings = SettingsStore.getValue("widgetOpenIDPermissions");
-        if (settings.blacklist && settings.blacklist.includes(this.widgetId)) {
+        if (settings.blacklist && settings.blacklist.includes(widgetSecurityKey)) {
             this.fromWidget.sendResponse(rawEv, {state: "blocked"});
             return;
         }
-        if (settings.whitelist && settings.whitelist.includes(this.widgetId)) {
+        if (settings.whitelist && settings.whitelist.includes(widgetSecurityKey)) {
             const responseBody = {state: "allowed"};
             const credentials = await MatrixClientPeg.get().getOpenIdToken();
             Object.assign(responseBody, credentials);
@@ -147,6 +151,7 @@ export default class WidgetMessaging {
             WidgetOpenIDPermissionsDialog, {
                 widgetUrl: this.widgetUrl,
                 widgetId: this.widgetId,
+                isUserWidget: this.isUserWidget,
 
                 onFinished: async (confirm) => {
                     const responseBody = {success: confirm};
