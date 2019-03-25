@@ -56,7 +56,7 @@ export default class TimelineExplosionDialog extends React.Component {
                 console.log("Logs sent for timeline explosion - reloading Riot");
                 window.location.reload();
             }, (err) => {
-                console.error("Error sending logs for timeline explosion - reloading anyways. ", err);
+                console.error("Error sending logs for timeline explosion - reloading anyways.", err);
                 window.location.reload();
             });
         });
@@ -89,7 +89,7 @@ export default class TimelineExplosionDialog extends React.Component {
                     <p>
                         {_t(
                             "Riot has run into a problem which makes it difficult to show you " +
-                            "your messages right now. Nothing has been lost, and reloading the app " +
+                            "your messages right now. Nothing has been lost and reloading the app " +
                             "should fix this for you. In order to assist us in troubleshooting the " +
                             "problem, we'd like to take a look at your debug logs. You do not need " +
                             "to send your logs unless you want to, but we would really appreciate " +
