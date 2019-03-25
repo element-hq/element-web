@@ -53,7 +53,7 @@ export default class TimelineExplosionDialog extends React.Component {
                 sendLogs: true,
                 progressCallback: this._sendProgressCallback,
             }).then(() => {
-                console.log("logs sent for timeline explosion - reloading riot");
+                console.log("Logs sent for timeline explosion - reloading Riot");
                 window.location.reload();
             }, (err) => {
                 console.error("Error sending logs for timeline explosion - reloading anyways. ", err);
