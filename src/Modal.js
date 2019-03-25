@@ -124,6 +124,10 @@ class ModalManager {
         this.closeAll = this.closeAll.bind(this);
     }
 
+    hasDialogs() {
+        return this._priorityModal || this._staticModal || this._modals.length > 0;
+    }
+
     getOrCreateContainer() {
         let container = document.getElementById(DIALOG_CONTAINER_ID);
 
