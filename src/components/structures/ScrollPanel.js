@@ -195,6 +195,7 @@ module.exports = React.createClass({
         this._saveScrollState();
         this.checkFillState();
         this.updatePreventShrinking();
+        console.timeStamp("onScroll:" + JSON.stringify({st: this._getScrollNode().scrollTop, mh: this._getMessagesHeight(), lh: this._getListHeight()}));
         this.props.onScroll(ev);
     },
 
@@ -596,6 +597,7 @@ module.exports = React.createClass({
                 const bottomDiff = newBottomOffset - scrollState.bottomOffset;
                 this._bottomGrowth += bottomDiff;
                 scrollState.bottomOffset = newBottomOffset;
+                console.timeStamp("restoreSavedScrollState:" + JSON.stringify({bd: bottomDiff, lh: this._getListHeight()}));
                 itemlist.style.height = `${this._getListHeight()}px`;
                 debuglog("balancing height because messages below viewport grew by "+bottomDiff+"px");
             }
@@ -635,6 +637,7 @@ module.exports = React.createClass({
             itemlist.style.height = `${newHeight}px`;
             sn.scrollTop = sn.scrollHeight;
             debuglog("updateHeight to", newHeight);
+            console.timeStamp("updateHeight: to bottom");
         } else if (scrollState.trackedScrollToken) {
             const trackedNode = this._getTrackedNode();
             // if the timeline has been reloaded
@@ -654,6 +657,7 @@ module.exports = React.createClass({
                 const topDiff = newTop - oldTop;
                 sn.scrollTop = preexistingScrollTop + topDiff;
                 debuglog("updateHeight to", {newHeight, topDiff, preexistingScrollTop});
+                console.timeStamp("updateHeight:" + JSON.stringify({nh: newHeight, td: topDiff, st: preexistingScrollTop}));
             }
         }
     },
