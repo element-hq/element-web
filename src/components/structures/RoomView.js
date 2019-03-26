@@ -144,6 +144,7 @@ module.exports = React.createClass({
             // the end of the live timeline. It has the effect of hiding the
             // 'scroll to bottom' knob, among a couple of other things.
             atEndOfLiveTimeline: true,
+            atEndOfLiveTimelineInit: false, // used by componentDidUpdate to avoid unnecessary checks
 
             showTopUnreadMessagesBar: false,
 
@@ -427,6 +428,12 @@ module.exports = React.createClass({
                 roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
                 roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
             }
+        }
+        if (this.refs.messagePanel && !this.state.atEndOfLiveTimelineInit) {
+            this.setState({
+                atEndOfLiveTimelineInit: true,
+                atEndOfLiveTimeline: this.refs.messagePanel.isAtEndOfLiveTimeline(),
+            });
         }
     },
 
