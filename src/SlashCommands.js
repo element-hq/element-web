@@ -29,6 +29,7 @@ import * as querystring from "querystring";
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import WidgetUtils from "./utils/WidgetUtils";
 
 class Command {
     constructor({name, args='', description, runFn, hideCompletionAfterSpace=false}) {
@@ -603,6 +604,26 @@ export const CommandMap = {
             const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
             Modal.createDialog(DevtoolsDialog, {roomId});
             return success();
+        },
+    }),
+
+    addwidget: new Command({
+        name: 'addwidget',
+        args: '<url>',
+        description: _td('Adds a custom widget by URL to the room'),
+        runFn: function(roomId, args) {
+            if (!args || (!args.startsWith("https://") && !args.startsWith("http://"))) {
+                return reject(_t("Please supply a https:// or http:// widget URL"));
+            }
+            if (WidgetUtils.canUserModifyWidgets(roomId)) {
+                const userId = MatrixClientPeg.get().getUserId();
+                const nowMs = (new Date()).getTime();
+                const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
+                return success(WidgetUtils.setRoomWidget(
+                    roomId, widgetId, "m.custom", args, "Custom Widget", {}));
+            } else {
+                return reject(_t("You cannot modify widgets in this room."));
+            }
         },
     }),
 
