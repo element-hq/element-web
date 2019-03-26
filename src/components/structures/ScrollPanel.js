@@ -546,38 +546,35 @@ module.exports = React.createClass({
     /* Scroll the panel to bring the DOM node with the scroll token
      * `scrollToken` into view.
      *
-     * offsetBase gives the reference point for the bottomOffset. 0 means the
+     * offsetBase gives the reference point for the pixelOffset. 0 means the
      * top of the container, 1 means the bottom, and fractional values mean
      * somewhere in the middle. If omitted, it defaults to 0.
      *
-     * bottomOffset gives the number of pixels *above* the offsetBase that the
+     * pixelOffset gives the number of pixels *above* the offsetBase that the
      * node (specifically, the bottom of it) will be positioned. If omitted, it
      * defaults to 0.
      */
-    scrollToToken: function(scrollToken, bottomOffset, offsetBase) {
-        bottomOffset = bottomOffset || 0;
+    scrollToToken: function(scrollToken, pixelOffset, offsetBase) {
+        pixelOffset = pixelOffset || 0;
         offsetBase = offsetBase || 0;
 
-        // convert bottomOffset so that it is based on the bottom of the
-        // container.
-        const scrollNode = this._getScrollNode();
-        const viewportBottom = scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight);
-        bottomOffset += viewportBottom + scrollNode.clientHeight * (1-offsetBase);
-
-        // save the desired scroll state. It's important we do this here rather
-        // than as a result of the scroll event, because (a) we might not *get*
-        // a scroll event, and (b) it might not currently be possible to set
-        // the requested scroll state (eg, because we hit the end of the
-        // timeline and need to do more pagination); we want to save the
-        // *desired* scroll state rather than what we end up achieving.
+        // set the trackedScrollToken so we can get the node through _getTrackedNode
         this.scrollState = {
             stuckAtBottom: false,
             trackedScrollToken: scrollToken,
-            bottomOffset: bottomOffset,
         };
-
-        // ... then make it so.
-        this._restoreSavedScrollState();
+        const trackedNode = this._getTrackedNode();
+        const scrollNode = this._getScrollNode();
+        if (trackedNode) {
+            // set the scrollTop to the position we want.
+            // note though, that this might not succeed if the combination of offsetBase and pixelOffset
+            // would position the trackedNode towards the top of the viewport.
+            // This because when setting the scrollTop only 10 or so events might be loaded,
+            // not giving enough content below the trackedNode to scroll downwards
+            // enough so it ends up in the top of the viewport.
+            scrollNode.scrollTop = (trackedNode.offsetTop - (scrollNode.clientHeight * offsetBase)) + pixelOffset;
+            this._saveScrollState();
+        }
     },
 
     _saveScrollState: function() {
@@ -615,11 +612,13 @@ module.exports = React.createClass({
         }
         const scrollToken = node.dataset.scrollTokens.split(',')[0];
         debuglog("saving anchored scroll state to message", node && node.innerText, scrollToken);
+        const bottomOffset = this._topFromBottom(node);
         this.scrollState = {
             stuckAtBottom: false,
             trackedNode: node,
             trackedScrollToken: scrollToken,
-            bottomOffset: this._topFromBottom(node),
+            bottomOffset: bottomOffset,
+            pixelOffset: bottomOffset - viewportBottom, //needed for restoring the scroll position when coming back to the room
         };
     },
 
