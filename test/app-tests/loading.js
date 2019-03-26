@@ -683,17 +683,6 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
     return Promise.resolve();
 }
 
-function assertAtSyncingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat);
-    expect(domComponent.className).toEqual("mx_MatrixChat_splash");
-
-    ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, sdk.getComponent('elements.Spinner'));
-    const logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
-        matrixChat, 'a');
-    expect(logoutLink.text).toEqual("Logout");
-}
-
 function awaitRoomView(matrixChat, retryLimit, retryCount) {
     if (retryLimit === undefined) {
         retryLimit = 5;
