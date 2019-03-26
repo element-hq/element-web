@@ -154,6 +154,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._fillRequestWhileRunning = false;
+        this._isFilling = false;
         this._pendingFillRequests = {b: null, f: null};
 
         if (this.props.resizeNotifier) {
@@ -302,6 +304,10 @@ module.exports = React.createClass({
         //   `---------'                            -
         //
 
+        // as filling is async and recursive,
+        // don't allow more than 1 chain of calls concurrently
+        // do make a note when a new request comes in while already running one,
+        // so we can trigger a new chain of calls once done.
         if (isFirstCall) {
             if (this._isFilling) {
                 debuglog("_isFilling: not entering while request is ongoing, marking for a subsequent request");
@@ -408,6 +414,10 @@ module.exports = React.createClass({
         // events) so make sure we set this before firing off the call.
         this._pendingFillRequests[dir] = true;
 
+        // wait 1ms before paginating, because otherwise
+        // this will block the scroll event handler for +700ms
+        // if messages are already cached in memory,
+        // This would cause jumping to happen on Chrome/macOS.
         return new Promise(resolve => setTimeout(resolve, 1)).then(() => {
             return this.props.onFillRequest(backwards);
         }).finally(() => {
