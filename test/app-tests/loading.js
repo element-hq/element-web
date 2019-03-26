@@ -123,9 +123,6 @@ describe('loading:', function() {
             toString: function() { return this.search + this.hash; },
         };
 
-        const tokenLoginCompleteDefer = Promise.defer();
-        tokenLoginCompletePromise = tokenLoginCompleteDefer.promise;
-
         function onNewScreen(screen) {
             console.log(Date.now() + " newscreen "+screen);
             const hash = '#/' + screen;
@@ -157,18 +154,21 @@ describe('loading:', function() {
         PlatformPeg.set(new WebPlatform());
 
         const params = parseQs(windowLocation);
-        matrixChat = ReactDOM.render(
-            <MatrixChat
-                onNewScreen={onNewScreen}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParts.params}
-                enableGuest={true}
-                onTokenLoginCompleted={() => tokenLoginCompleteDefer.resolve()}
-                initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
-                makeRegistrationUrl={() => {throw new Error('Not implemented');}}
-            />, parentDiv,
-        );
+
+        tokenLoginCompletePromise = new Promise(resolve => {
+            matrixChat = ReactDOM.render(
+                <MatrixChat
+                    onNewScreen={onNewScreen}
+                    config={config}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragParts.params}
+                    enableGuest={true}
+                    onTokenLoginCompleted={resolve}
+                    initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
+                    makeRegistrationUrl={() => {throw new Error('Not implemented');}}
+                />, parentDiv,
+            );
+        });
     }
 
     // set an expectation that we will get a call to /sync, then flush
