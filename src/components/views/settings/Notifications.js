@@ -837,7 +837,7 @@ module.exports = React.createClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
                                           onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications')} />
+                                          label={_t('Enable desktop notifications for this device')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
                                           onChange={this.onEnableDesktopNotificationBodyChange}
@@ -845,7 +845,7 @@ module.exports = React.createClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
                                           onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications in web client')} />
+                                          label={_t('Enable audible notifications for this device')} />
 
                     { emailNotificationsRows }
 
