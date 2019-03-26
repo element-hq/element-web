@@ -620,7 +620,7 @@ export const CommandMap = {
                 const nowMs = (new Date()).getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
                 return success(WidgetUtils.setRoomWidget(
-                    roomId, widgetId, "customwidget", args, "Custom Widget", {}));
+                    roomId, widgetId, "m.custom", args, "Custom Widget", {}));
             } else {
                 return reject(_t("You cannot modify widgets in this room."));
             }
