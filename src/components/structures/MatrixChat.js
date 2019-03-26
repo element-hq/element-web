@@ -1561,7 +1561,16 @@ export default React.createClass({
         } else if (screen.indexOf('room/') == 0) {
             const segments = screen.substring(5).split('/');
             const roomString = segments[0];
-            const eventId = segments[1]; // undefined if no event id given
+            let eventId = segments.splice(1).join("/"); // empty string if no event id given
+
+            // Previously we pulled the eventID from the segments in such a way
+            // where if there was no eventId then we'd get undefined. However, we
+            // now do a splice and join to handle v3 event IDs which results in
+            // an empty string. To maintain our potential contract with the rest
+            // of the app, we coerce the eventId to be undefined where applicable.
+            if (!eventId) eventId = undefined;
+
+            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
 
             // FIXME: sort_out caseConsistency
             const thirdPartyInvite = {
