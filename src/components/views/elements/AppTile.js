@@ -447,10 +447,14 @@ export default class AppTile extends React.Component {
         }
 
         // Toggle the view state of the apps drawer
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: !this.props.show,
-        });
+        if (this.props.userWidget) {
+            this._onMinimiseClick();
+        } else {
+            dis.dispatch({
+                action: 'appsDrawer',
+                show: !this.props.show,
+            });
+        }
     }
 
     _getSafeUrl() {
@@ -626,7 +630,7 @@ export default class AppTile extends React.Component {
                         { /* Maximise widget */ }
                         { showMaximiseButton && <AccessibleButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_maximise"
-                            title={_t('Minimize apps')}
+                            title={_t('Maximize apps')}
                             onClick={this._onMinimiseClick}
                         /> }
                         { /* Title */ }
