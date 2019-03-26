@@ -51,14 +51,14 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
             console.log(`Remembering ${this.props.widgetId} as allowed=${allowed} for OpenID`);
 
             const currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
-            if (!currentValues.whitelist) currentValues.whitelist = [];
-            if (!currentValues.blacklist) currentValues.blacklist = [];
+            if (!currentValues.allow) currentValues.allow = [];
+            if (!currentValues.deny) currentValues.deny = [];
 
             const securityKey = WidgetUtils.getWidgetSecurityKey(
                 this.props.widgetId,
                 this.props.widgetUrl,
                 this.props.isUserWidget);
-            (allowed ? currentValues.whitelist : currentValues.blacklist).push(securityKey);
+            (allowed ? currentValues.allow : currentValues.deny).push(securityKey);
             SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
         }
 

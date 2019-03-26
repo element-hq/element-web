@@ -343,8 +343,8 @@ export const SETTINGS = {
     "widgetOpenIDPermissions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: {
-            whitelist: [],
-            blacklist: [],
+            allow: [],
+            deny: [],
         },
     },
     "RoomList.orderByImportance": {

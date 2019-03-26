@@ -131,11 +131,11 @@ export default class WidgetMessaging {
         const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, this.widgetUrl, this.isUserWidget);
 
         const settings = SettingsStore.getValue("widgetOpenIDPermissions");
-        if (settings.blacklist && settings.blacklist.includes(widgetSecurityKey)) {
+        if (settings.deny && settings.deny.includes(widgetSecurityKey)) {
             this.fromWidget.sendResponse(rawEv, {state: "blocked"});
             return;
         }
-        if (settings.whitelist && settings.whitelist.includes(widgetSecurityKey)) {
+        if (settings.allow && settings.allow.includes(widgetSecurityKey)) {
             const responseBody = {state: "allowed"};
             const credentials = await MatrixClientPeg.get().getOpenIdToken();
             Object.assign(responseBody, credentials);
