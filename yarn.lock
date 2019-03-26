@@ -5757,10 +5757,10 @@ matrix-mock-request@^1.2.2:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.4.tgz#cf6ef3d68f29af8ba590ceea74b20979522ef9cb"
-  integrity sha512-7qpnyXNnGvO/i+TPMoYayI4rWy6+hxnpjInx5Odgkw7PhCiapiYRU4poQsgVnOomkihrUWxuksWUmnkGhJ6O+Q==
+matrix-react-sdk@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.5.tgz#92ca4f6780f76e183f47d2f96c79ada76492d77a"
+  integrity sha512-aaBmKQO4KM+U9eMhdJgbO/RZtmqayISk+qrcdcXtxDYjn2RZnziTNQ2289xG+dQb7A09Aev3u9rogrD6QCDI3w==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
