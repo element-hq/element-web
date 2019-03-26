@@ -572,6 +572,7 @@ module.exports = React.createClass({
             // This because when setting the scrollTop only 10 or so events might be loaded,
             // not giving enough content below the trackedNode to scroll downwards
             // enough so it ends up in the top of the viewport.
+            debuglog("scrollToken: setting scrollTop", {offsetBase, pixelOffset, offsetTop: trackedNode.offsetTop});
             scrollNode.scrollTop = (trackedNode.offsetTop - (scrollNode.clientHeight * offsetBase)) + pixelOffset;
             this._saveScrollState();
         }
