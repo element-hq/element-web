@@ -21,7 +21,7 @@ import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
-const DEBUG_SCROLL = false;
+const DEBUG_SCROLL = true;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
@@ -193,10 +193,10 @@ module.exports = React.createClass({
         debuglog("onScroll", this._getScrollNode().scrollTop);
         this._scrollTimeout.restart();
         this._saveScrollState();
-        this.checkFillState();
         this.updatePreventShrinking();
         console.timeStamp("onScroll:" + JSON.stringify({st: this._getScrollNode().scrollTop, mh: this._getMessagesHeight(), lh: this._getListHeight()}));
         this.props.onScroll(ev);
+        this.checkFillState();
     },
 
     onResize: function() {
@@ -270,11 +270,12 @@ module.exports = React.createClass({
     },
 
     // check the scroll state and send out backfill requests if necessary.
-    checkFillState: function() {
+    checkFillState: async function(depth=0) {
         if (this.unmounted) {
             return;
         }
 
+        const isFirstCall = depth === 0;
         const sn = this._getScrollNode();
 
         // if there is less than a screenful of messages above or below the
@@ -301,16 +302,46 @@ module.exports = React.createClass({
         //   `---------'                            -
         //
 
+        if (isFirstCall) {
+            if (this._isFilling) {
+                debuglog("_isFilling: not entering while request is ongoing, marking for a subsequent request");
+                this._fillRequestWhileRunning = true;
+                return;
+            }
+            debuglog("_isFilling: setting");
+            this._isFilling = true;
+        }
+
+
         const contentHeight = this._getMessagesHeight();
         const contentTop = contentHeight - this._getListHeight();
         const contentScrollTop = sn.scrollTop + contentTop;
+        const fillPromises = [];
+
         if (contentScrollTop < sn.clientHeight) {
             // need to back-fill
-            this._maybeFill(true);
+            fillPromises.push(this._maybeFill(depth, true));
         }
         if (contentScrollTop > contentHeight - sn.clientHeight * 2) {
             // need to forward-fill
-            this._maybeFill(false);
+            fillPromises.push(this._maybeFill(depth, false));
+        }
+
+        if (fillPromises.length) {
+            try {
+                await Promise.all(fillPromises);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        if (isFirstCall) {
+            debuglog("_isFilling: clearing");
+            this._isFilling = false;
+        }
+
+        if (this._fillRequestWhileRunning) {
+            this._fillRequestWhileRunning = false;
+            this.checkFillState();
         }
     },
 
@@ -364,7 +395,7 @@ module.exports = React.createClass({
     },
 
     // check if there is already a pending fill request. If not, set one off.
-    _maybeFill: function(backwards) {
+    _maybeFill: function(depth, backwards) {
         const dir = backwards ? 'b' : 'f';
         if (this._pendingFillRequests[dir]) {
             debuglog("Already a "+dir+" fill in progress - not starting another");
@@ -377,7 +408,7 @@ module.exports = React.createClass({
         // events) so make sure we set this before firing off the call.
         this._pendingFillRequests[dir] = true;
 
-        Promise.try(() => {
+        return new Promise(resolve => setTimeout(resolve, 1)).then(() => {
             return this.props.onFillRequest(backwards);
         }).finally(() => {
             this._pendingFillRequests[dir] = false;
@@ -393,9 +424,9 @@ module.exports = React.createClass({
                 // further pagination requests have been disabled until now, so
                 // it's time to check the fill state again in case the pagination
                 // was insufficient.
-                this.checkFillState();
+                return this.checkFillState(depth + 1);
             }
-        }).done();
+        });
     },
 
     /* get the current scroll state. This returns an object with the following
