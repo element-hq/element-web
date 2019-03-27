@@ -102,6 +102,8 @@ export default class RoomBreadcrumbs extends React.Component {
 
     render() {
         const Tooltip = sdk.getComponent('elements.Tooltip');
+        const IndicatorScrollbar = sdk.getComponent('structures.IndicatorScrollbar');
+
         // check for collapsed here and
         // not at parent so we keep
         // rooms in our state
@@ -113,6 +115,7 @@ export default class RoomBreadcrumbs extends React.Component {
         const avatars = rooms.map(({room, animated, hover}, i) => {
             const isFirst = i === 0;
             const classes = classNames({
+                "mx_RoomBreadcrumbs_crumb": true,
                 "mx_RoomBreadcrumbs_preAnimate": isFirst && !animated,
                 "mx_RoomBreadcrumbs_animate": isFirst,
             });
@@ -130,6 +133,11 @@ export default class RoomBreadcrumbs extends React.Component {
                 </AccessibleButton>
             );
         });
-        return (<div className="mx_RoomBreadcrumbs">{ avatars }</div>);
+        return (
+            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs" onScroll={ this._onScroll }
+                                trackHorizontalOverflow={true}>
+                { avatars }
+            </IndicatorScrollbar>
+        );
     }
 }
