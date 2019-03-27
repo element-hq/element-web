@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 Travis Ralston
 
 Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
@@ -20,17 +21,19 @@ import IntegrationManager from './IntegrationManager';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 
-const WIDGET_API_VERSION = '0.0.1'; // Current API version
+const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
     '0.0.1',
+    '0.0.2',
 ];
 const INBOUND_API_NAME = 'fromWidget';
 
-// Listen for and handle incomming requests using the 'fromWidget' postMessage
+// Listen for and handle incoming requests using the 'fromWidget' postMessage
 // API and initiate responses
 export default class FromWidgetPostMessageApi {
     constructor() {
         this.widgetMessagingEndpoints = [];
+        this.widgetListeners = {}; // {action: func[]}
 
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
@@ -43,6 +46,32 @@ export default class FromWidgetPostMessageApi {
 
     stop() {
         window.removeEventListener('message', this.onPostMessage);
+    }
+
+    /**
+     * Adds a listener for a given action
+     * @param {string} action The action to listen for.
+     * @param {Function} callbackFn A callback function to be called when the action is
+     * encountered. Called with two parameters: the interesting request information and
+     * the raw event received from the postMessage API. The raw event is meant to be used
+     * for sendResponse and similar functions.
+     */
+    addListener(action, callbackFn) {
+        if (!this.widgetListeners[action]) this.widgetListeners[action] = [];
+        this.widgetListeners[action].push(callbackFn);
+    }
+
+    /**
+     * Removes a listener for a given action.
+     * @param {string} action The action that was subscribed to.
+     * @param {Function} callbackFn The original callback function that was used to subscribe
+     * to updates.
+     */
+    removeListener(action, callbackFn) {
+        if (!this.widgetListeners[action]) return;
+
+        const idx = this.widgetListeners[action].indexOf(callbackFn);
+        if (idx !== -1) this.widgetListeners[action].splice(idx, 1);
     }
 
     /**
@@ -117,6 +146,13 @@ export default class FromWidgetPostMessageApi {
             return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
         }
 
+        // Call any listeners we have registered
+        if (this.widgetListeners[event.data.action]) {
+            for (const fn of this.widgetListeners[event.data.action]) {
+                fn(event.data, event);
+            }
+        }
+
         // Although the requestId is required, we don't use it. We'll be nice and process the message
         // if the property is missing, but with a warning for widget developers.
         if (!event.data.requestId) {
@@ -164,6 +200,8 @@ export default class FromWidgetPostMessageApi {
             if (ActiveWidgetStore.widgetHasCapability(widgetId, 'm.always_on_screen')) {
                 ActiveWidgetStore.setWidgetPersistence(widgetId, val);
             }
+        } else if (action === 'get_openid') {
+            // Handled by caller
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});

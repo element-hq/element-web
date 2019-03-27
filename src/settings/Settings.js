@@ -340,6 +340,13 @@ export const SETTINGS = {
         displayName: _td('Show developer tools'),
         default: false,
     },
+    "widgetOpenIDPermissions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {
+            allow: [],
+            deny: [],
+        },
+    },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Order rooms in the room list by most important first instead of most recent'),
