@@ -1416,6 +1416,8 @@
     "Unknown room %(roomId)s": "Unknown room %(roomId)s",
     "Room": "Room",
     "Failed to reject invite": "Failed to reject invite",
+    "You have %(count)s unread notifications in a prior version of this room.|other": "You have %(count)s unread notifications in a prior version of this room.",
+    "You have %(count)s unread notifications in a prior version of this room.|one": "You have %(count)s unread notification in a prior version of this room.",
     "Fill screen": "Fill screen",
     "Click to unmute video": "Click to unmute video",
     "Click to mute video": "Click to mute video",
