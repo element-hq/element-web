@@ -317,17 +317,20 @@ module.exports = React.createClass({
             this._isFilling = true;
         }
 
-
-        const contentHeight = this._getMessagesHeight();
-        const contentTop = contentHeight - this._getListHeight();
-        const contentScrollTop = sn.scrollTop + contentTop;
+        const itemlist = this.refs.itemlist;
+        const firstTile = itemlist && itemlist.firstElementChild;
+        const contentTop = firstTile && firstTile.offsetTop;
         const fillPromises = [];
 
-        if (contentScrollTop < sn.clientHeight) {
+        // if scrollTop gets to 1 screen from the top of the first tile,
+        // try backward filling
+        if (!firstTile || (sn.scrollTop - contentTop) < sn.clientHeight) {
             // need to back-fill
             fillPromises.push(this._maybeFill(depth, true));
         }
-        if (contentScrollTop > contentHeight - sn.clientHeight * 2) {
+        // if scrollTop gets to 2 screens from the end (so 1 screen below viewport),
+        // try forward filling
+        if ((sn.scrollHeight - sn.scrollTop) < sn.clientHeight * 2) {
             // need to forward-fill
             fillPromises.push(this._maybeFill(depth, false));
         }
