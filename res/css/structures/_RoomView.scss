@@ -70,6 +70,13 @@ limitations under the License.
     background-color: $primary-bg-color;
 }
 
+.mx_RoomView_auxPanel_hiddenHighlights {
+    border-bottom: 1px solid $primary-hairline-color;
+    padding: 10px 26px;
+    color: $warning-color;
+    cursor: pointer;
+}
+
 .mx_RoomView_auxPanel_apps {
     max-width: 1920px ! important;
 }

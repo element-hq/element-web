@@ -52,6 +52,7 @@ import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
+import AccessibleButton from "../views/elements/AccessibleButton";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -1515,6 +1516,25 @@ module.exports = React.createClass({
         }
     },
 
+    _getOldRoom: function() {
+        const createEvent = this.state.room.currentState.getStateEvents("m.room.create", "");
+        if (!createEvent || !createEvent.getContent()['predecessor']) return null;
+
+        return MatrixClientPeg.get().getRoom(createEvent.getContent()['predecessor']['room_id']);
+    },
+
+    _getHiddenHighlightCount: function() {
+        const oldRoom = this._getOldRoom();
+        if (!oldRoom) return 0;
+        return oldRoom.getUnreadNotificationCount('highlight');
+    },
+
+    _onHiddenHighlightsClick: function() {
+        const oldRoom = this._getOldRoom();
+        if (!oldRoom) return;
+        dis.dispatch({action: "view_room", room_id: oldRoom.roomId});
+    },
+
     render: function() {
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
         const MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1673,6 +1693,8 @@ module.exports = React.createClass({
             !MatrixClientPeg.get().getKeyBackupEnabled()
         );
 
+        const hiddenHighlightCount = this._getHiddenHighlightCount();
+
         let aux = null;
         let hideCancel = false;
         if (this.state.forwardingEvent !== null) {
@@ -1712,6 +1734,16 @@ module.exports = React.createClass({
                                 canPreview={this.state.canPeek}
                                 room={this.state.room}
                 />
+            );
+        } else if (hiddenHighlightCount > 0) {
+            aux = (
+                <AccessibleButton element="div" className="mx_RoomView_auxPanel_hiddenHighlights"
+                                  onClick={this._onHiddenHighlightsClick}>
+                    {_t(
+                        "You have %(count)s unread notifications in a prior version of this room.",
+                        {count: hiddenHighlightCount},
+                    )}
+                </AccessibleButton>
             );
         }
 
