@@ -495,9 +495,9 @@ export default class AppTile extends React.Component {
 
     _onPopoutWidgetClick(e) {
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
-        // window.open(this._getSafeUrl(), '_blank', 'noopener=yes,noreferrer=yes');
+        // window.open(this._getSafeUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
-            { target: '_blank', href: this._getSafeUrl(), rel: 'noopener noreferrer'}).click();
+            { target: '_blank', href: this._getSafeUrl(), rel: 'noopener'}).click();
     }
 
     _onReloadWidgetClick(e) {
