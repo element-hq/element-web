@@ -61,10 +61,16 @@ export async function checkConsistency() {
     }
 
     if (indexedDB && localStorage) {
-        const dataInSyncStore = await Matrix.IndexedDBStore.exists(
-            indexedDB, SYNC_STORE_NAME,
-        );
-        log(`Sync store contains data? ${dataInSyncStore}`);
+        try {
+            const dataInSyncStore = await Matrix.IndexedDBStore.exists(
+                indexedDB, SYNC_STORE_NAME,
+            );
+            log(`Sync store contains data? ${dataInSyncStore}`);
+        } catch (e) {
+            healthy = false;
+            error("Sync store inaccessible", e);
+            track("Sync store inaccessible");
+        }
     } else {
         healthy = false;
         error("Sync store cannot be used on this browser");
@@ -72,10 +78,16 @@ export async function checkConsistency() {
     }
 
     if (indexedDB) {
-        dataInCryptoStore = await Matrix.IndexedDBCryptoStore.exists(
-            indexedDB, CRYPTO_STORE_NAME,
-        );
-        log(`Crypto store contains data? ${dataInCryptoStore}`);
+        try {
+            dataInCryptoStore = await Matrix.IndexedDBCryptoStore.exists(
+                indexedDB, CRYPTO_STORE_NAME,
+            );
+            log(`Crypto store contains data? ${dataInCryptoStore}`);
+        } catch (e) {
+            healthy = false;
+            error("Crypto store inaccessible", e);
+            track("Crypto store inaccessible");
+        }
     } else {
         healthy = false;
         error("Crypto store cannot be used on this browser");
