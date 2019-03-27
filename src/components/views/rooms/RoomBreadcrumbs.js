@@ -35,14 +35,32 @@ export default class RoomBreadcrumbs extends React.Component {
 
     componentWillMount() {
         this._dispatcherRef = dis.register(this.onAction);
+
+        const roomStr = localStorage.getItem("mx_breadcrumb_rooms");
+        if (roomStr) {
+            try {
+                const roomIds = JSON.parse(roomStr);
+                this.setState({
+                    rooms: roomIds.map((r) => {
+                        return {
+                            room: MatrixClientPeg.get().getRoom(r),
+                            animated: false,
+                        };
+                    }).filter((r) => r.room),
+                });
+            } catch (e) {
+                console.error("Failed to parse breadcrumbs:", e);
+            }
+        }
     }
 
     componentWillUnmount() {
         dis.unregister(this._dispatcherRef);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(props, state) {
         const rooms = this.state.rooms.slice();
+
         if (rooms.length) {
             const {room, animated} = rooms[0];
             if (!animated) {
@@ -50,6 +68,9 @@ export default class RoomBreadcrumbs extends React.Component {
                 setTimeout(() => this.setState({rooms}), 0);
             }
         }
+
+        const roomStr = JSON.stringify(rooms.map((r) => r.room.roomId));
+        localStorage.setItem("mx_breadcrumb_rooms", roomStr);
     }
 
     onAction(payload) {
