@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
+import Analytics from '../Analytics';
 
 const localStorage = window.localStorage;
 
@@ -37,6 +38,10 @@ function error(msg) {
     console.error(`StorageManager: ${msg}`);
 }
 
+function track(action) {
+    Analytics.trackEvent("StorageManager", action);
+}
+
 export async function checkConsistency() {
     log("Checking storage consistency");
     log(`Local storage supported? ${!!localStorage}`);
@@ -52,6 +57,7 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Local storage cannot be used on this browser");
+        track("Local storage disabled");
     }
 
     if (indexedDB && localStorage) {
@@ -62,6 +68,7 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Sync store cannot be used on this browser");
+        track("Sync store disabled");
     }
 
     if (indexedDB) {
@@ -72,6 +79,7 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Crypto store cannot be used on this browser");
+        track("Crypto store disabled");
     }
 
     if (dataInLocalStorage && !dataInCryptoStore) {
@@ -80,11 +88,14 @@ export async function checkConsistency() {
             "Data exists in local storage but not in crypto store. " +
             "IndexedDB storage has likely been evicted by the browser!",
         );
+        track("Crypto store evicted");
     }
 
     if (healthy) {
         log("Storage consistency checks passed");
+        track("Consistency checks passed");
     } else {
         error("Storage consistency checks failed");
+        track("Consistency checks failed");
     }
 }
