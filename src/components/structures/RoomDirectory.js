@@ -26,13 +26,16 @@ const dis = require('../../dispatcher');
 
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import Promise from 'bluebird';
-
 import { _t } from '../../languageHandler';
-
-import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
+import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
+import Analytics from '../../Analytics';
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
+
+function track(action) {
+    Analytics.trackEvent('RoomDirectory', action);
+}
 
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
@@ -53,6 +56,7 @@ module.exports = React.createClass({
             publicRooms: [],
             loading: true,
             protocolsLoading: true,
+            error: null,
             instanceId: null,
             includeAll: false,
             roomServer: null,
@@ -95,10 +99,12 @@ module.exports = React.createClass({
                 // thing you see when loading the client!
                 return;
             }
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get protocol list from homeserver', '', ErrorDialog, {
-                title: _t('Failed to get protocol list from homeserver'),
-                description: _t('The homeserver may be too old to support third party networks'),
+            track('Failed to get protocol list from homeserver');
+            this.setState({
+                error: _t(
+                    'Riot failed to get the protocol list from the homeserver. ' +
+                    'The homeserver may be too old to support third party networks.',
+                ),
             });
         });
 
@@ -187,12 +193,14 @@ module.exports = React.createClass({
                 return;
             }
 
-            this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
-                title: _t('Failed to get public room list'),
-                description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded')),
+            track('Failed to get public room list');
+            this.setState({
+                loading: false,
+                error:
+                    `${_t('Riot failed to get the public room list.')} ` +
+                    `${(err && err.message) ? err.message : _t('The homeserver may be unavailable or overloaded.')}`
+                ,
             });
         });
     },
@@ -516,7 +524,9 @@ module.exports = React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let content;
-        if (this.state.protocolsLoading || this.state.loading) {
+        if (this.state.error) {
+            content = this.state.error;
+        } else if (this.state.protocolsLoading || this.state.loading) {
             content = <Loader />;
         } else {
             const rows = this.getRows();
