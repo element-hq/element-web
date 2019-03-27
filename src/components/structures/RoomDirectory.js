@@ -511,7 +511,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const Loader = sdk.getComponent("elements.Spinner");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
