@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2019 Travis Ralston
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +22,11 @@ limitations under the License.
 
 import FromWidgetPostMessageApi from './FromWidgetPostMessageApi';
 import ToWidgetPostMessageApi from './ToWidgetPostMessageApi';
+import Modal from "./Modal";
+import MatrixClientPeg from "./MatrixClientPeg";
+import SettingsStore from "./settings/SettingsStore";
+import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
+import WidgetUtils from "./utils/WidgetUtils";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -34,12 +40,14 @@ if (!global.mxToWidgetMessaging) {
 const OUTBOUND_API_NAME = 'toWidget';
 
 export default class WidgetMessaging {
-    constructor(widgetId, widgetUrl, target) {
+    constructor(widgetId, widgetUrl, isUserWidget, target) {
         this.widgetId = widgetId;
         this.widgetUrl = widgetUrl;
+        this.isUserWidget = isUserWidget;
         this.target = target;
         this.fromWidget = global.mxFromWidgetMessaging;
         this.toWidget = global.mxToWidgetMessaging;
+        this._onOpenIdRequest = this._onOpenIdRequest.bind(this);
         this.start();
     }
 
@@ -109,9 +117,57 @@ export default class WidgetMessaging {
 
     start() {
         this.fromWidget.addEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.addListener("get_openid", this._onOpenIdRequest);
     }
 
     stop() {
         this.fromWidget.removeEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.removeListener("get_openid", this._onOpenIdRequest);
+    }
+
+    async _onOpenIdRequest(ev, rawEv) {
+        if (ev.widgetId !== this.widgetId) return; // not interesting
+
+        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, this.widgetUrl, this.isUserWidget);
+
+        const settings = SettingsStore.getValue("widgetOpenIDPermissions");
+        if (settings.deny && settings.deny.includes(widgetSecurityKey)) {
+            this.fromWidget.sendResponse(rawEv, {state: "blocked"});
+            return;
+        }
+        if (settings.allow && settings.allow.includes(widgetSecurityKey)) {
+            const responseBody = {state: "allowed"};
+            const credentials = await MatrixClientPeg.get().getOpenIdToken();
+            Object.assign(responseBody, credentials);
+            this.fromWidget.sendResponse(rawEv, responseBody);
+            return;
+        }
+
+        // Confirm that we received the request
+        this.fromWidget.sendResponse(rawEv, {state: "request"});
+
+        // Actually ask for permission to send the user's data
+        Modal.createTrackedDialog("OpenID widget permissions", '',
+            WidgetOpenIDPermissionsDialog, {
+                widgetUrl: this.widgetUrl,
+                widgetId: this.widgetId,
+                isUserWidget: this.isUserWidget,
+
+                onFinished: async (confirm) => {
+                    const responseBody = {success: confirm};
+                    if (confirm) {
+                        const credentials = await MatrixClientPeg.get().getOpenIdToken();
+                        Object.assign(responseBody, credentials);
+                    }
+                    this.messageToWidget({
+                        api: OUTBOUND_API_NAME,
+                        action: "openid_credentials",
+                        data: responseBody,
+                    }).catch((error) => {
+                        console.error("Failed to send OpenID credentials: ", error);
+                    });
+                },
+            },
+        );
     }
 }

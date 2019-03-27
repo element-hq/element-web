@@ -32,33 +32,34 @@ try {
  * @param {Object} opts  options to pass to Matrix.createClient. This will be
  *    extended with `sessionStore` and `store` members.
  *
- * @param {bool} useIndexedDb True to attempt to use indexeddb, or false to force
- *     use of the memory store. Default: true.
- *
  * @property {string} indexedDbWorkerScript  Optional URL for a web worker script
  *    for IndexedDB store operations. By default, indexeddb ops are done on
  *    the main thread.
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export default function createMatrixClient(opts, useIndexedDb) {
-    if (useIndexedDb === undefined) useIndexedDb = true;
-
+export default function createMatrixClient(opts) {
     const storeOpts = {
         useAuthorizationHeader: true,
     };
 
-    if (localStorage) {
-        storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
-    }
-
-    if (indexedDB && localStorage && useIndexedDb) {
+    if (indexedDB && localStorage) {
         storeOpts.store = new Matrix.IndexedDBStore({
             indexedDB: indexedDB,
             dbName: "riot-web-sync",
             localStorage: localStorage,
             workerScript: createMatrixClient.indexedDbWorkerScript,
         });
+    }
+
+    if (localStorage) {
+        storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
+    }
+
+    if (indexedDB) {
+        storeOpts.cryptoStore = new Matrix.IndexedDBCryptoStore(
+            indexedDB, "matrix-js-sdk:crypto",
+        );
     }
 
     opts = Object.assign(storeOpts, opts);

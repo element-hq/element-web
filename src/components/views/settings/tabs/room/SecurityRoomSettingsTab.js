@@ -197,6 +197,10 @@ export default class SecurityRoomSettingsTab extends React.Component {
         });
     };
 
+    _updateBlacklistDevicesFlag = (checked) => {
+        MatrixClientPeg.get().getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
+    };
+
     _renderRoomAccess() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
@@ -318,6 +322,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         let encryptionSettings = null;
         if (isEncrypted) {
             encryptionSettings = <SettingsFlag name="blacklistUnverifiedDevices" level={SettingLevel.ROOM_DEVICE}
+                                               onChange={this._updateBlacklistDevicesFlag}
                                                roomId={this.props.roomId} />;
         }
 

@@ -50,6 +50,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import TimelineExplosionDialog from "../views/dialogs/TimelineExplosionDialog";
 
 const AutoDiscovery = Matrix.AutoDiscovery;
 
@@ -1067,34 +1068,48 @@ export default React.createClass({
             button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
-                    const d = MatrixClientPeg.get().leave(roomId);
+                    const d = MatrixClientPeg.get().leaveRoomChain(roomId);
 
                     // FIXME: controller shouldn't be loading a view :(
                     const Loader = sdk.getComponent("elements.Spinner");
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                    d.then(() => {
+                    d.then((errors) => {
                         modal.close();
+
+                        for (const leftRoomId of Object.keys(errors)) {
+                            const err = errors[leftRoomId];
+                            if (!err) continue;
+
+                            console.error("Failed to leave room " + leftRoomId + " " + err);
+                            let title = _t("Failed to leave room");
+                            let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
+                            if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
+                                title = _t("Can't leave Server Notices room");
+                                message = _t(
+                                    "This room is used for important messages from the Homeserver, " +
+                                    "so you cannot leave it.",
+                                );
+                            } else if (err && err.message) {
+                                message = err.message;
+                            }
+                            Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
+                                title: title,
+                                description: message,
+                            });
+                            return;
+                        }
+
                         if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
                         }
                     }, (err) => {
+                        // This should only happen if something went seriously wrong with leaving the chain.
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
-                        let title = _t("Failed to leave room");
-                        let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
-                        if (err.errcode == 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
-                            title = _t("Can't leave Server Notices room");
-                            message = _t(
-                                "This room is used for important messages from the Homeserver, " +
-                                "so you cannot leave it.",
-                            );
-                        } else if (err && err.message) {
-                            message = err.message;
-                        }
                         Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                            title: title,
-                            description: message,
+                            title: _t("Failed to leave room"),
+                            description: _t("Unknown error"),
                         });
                     });
                 }
@@ -1286,6 +1301,17 @@ export default React.createClass({
                 return true;
             }
             return self._loggedInView.child.canResetTimelineInRoom(roomId);
+        });
+
+        cli.on('sync.unexpectedError', function(err) {
+            if (err.message && err.message.includes("live timeline ") && err.message.includes(" is no longer live ")) {
+                console.error("Caught timeline explosion - trying to ask user for more information");
+                if (Modal.hasDialogs()) {
+                    console.warn("User has another dialog open - skipping prompt");
+                    return;
+                }
+                Modal.createTrackedDialog('Timeline exploded', '', TimelineExplosionDialog, {});
+            }
         });
 
         cli.on('sync', function(state, prevState, data) {
