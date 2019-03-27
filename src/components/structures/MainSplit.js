@@ -27,7 +27,9 @@ export default class MainSplit extends React.Component {
 
     _onResized(size) {
         window.localStorage.setItem("mx_rhs_size", size);
-        this.props.resizeNotifier.notifyRightHandleResized();
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.notifyRightHandleResized();
+        }
     }
 
     _createResizer() {
