@@ -52,6 +52,7 @@ import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import WidgetUtils from '../../utils/WidgetUtils';
+import AccessibleButton from "../views/elements/AccessibleButton";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -1736,12 +1737,13 @@ module.exports = React.createClass({
             );
         } else if (hiddenHighlightCount > 0) {
             aux = (
-                <div className="mx_RoomView_auxPanel_hiddenHighlights" onClick={this._onHiddenHighlightsClick}>
+                <AccessibleButton element="div" className="mx_RoomView_auxPanel_hiddenHighlights"
+                                  onClick={this._onHiddenHighlightsClick}>
                     {_t(
                         "You have %(count)s unread notifications in a prior version of this room.",
                         {count: hiddenHighlightCount},
                     )}
-                </div>
+                </AccessibleButton>
             );
         }
 
