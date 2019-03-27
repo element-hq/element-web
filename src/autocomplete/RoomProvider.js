@@ -70,11 +70,9 @@ export default class RoomProvider extends AutocompleteProvider {
             matcherObjects = matcherObjects.filter((r) => {
                 const tombstone = r.room.currentState.getStateEvents("m.room.tombstone", "");
                 if (tombstone && tombstone.getContent() && tombstone.getContent()['replacement_room']) {
-                    console.log(r.displayedAlias);
                     const hasReplacementRoom = matcherObjects.some(
                         (r2) => r2.room.roomId === tombstone.getContent()['replacement_room'],
                     );
-                    console.log(hasReplacementRoom);
                     return !hasReplacementRoom;
                 }
                 return true;
