@@ -141,6 +141,8 @@ For a good example, see https://riot.im/develop/config.json.
        during authentication flows
     1. `authHeaderLogoUrl`: An logo image that is shown in the header during
        authentication flows
+    1. `authFooterLinks`: a list of links to show in the authentication page footer:
+      `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
