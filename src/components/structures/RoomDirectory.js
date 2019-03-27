@@ -515,20 +515,9 @@ module.exports = React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
-        // TODO: clean this up
-        if (this.state.protocolsLoading) {
-            return (
-                <div className="mx_RoomDirectory">
-                    <Loader />
-                </div>
-            );
-        }
-
         let content;
-        if (this.state.loading) {
-            content = <div className="mx_RoomDirectory">
-                <Loader />
-            </div>;
+        if (this.state.protocolsLoading || this.state.loading) {
+            content = <Loader />;
         } else {
             const rows = this.getRows();
             // we still show the scrollpanel, at least for now, because
@@ -556,33 +545,48 @@ module.exports = React.createClass({
             </ScrollPanel>;
         }
 
-        const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
-        let instance_expected_field_type;
-        if (
-            protocolName &&
-            this.protocols &&
-            this.protocols[protocolName] &&
-            this.protocols[protocolName].location_fields.length > 0 &&
-            this.protocols[protocolName].field_types
-        ) {
-            const last_field = this.protocols[protocolName].location_fields.slice(-1)[0];
-            instance_expected_field_type = this.protocols[protocolName].field_types[last_field];
-        }
+        let listHeader;
+        if (!this.state.protocolsLoading) {
+            const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
+            const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
 
-
-        let placeholder = _t('Search for a room');
-        if (!this.state.instanceId) {
-            placeholder = _t('Search for a room like #example') + ':' + this.state.roomServer;
-        } else if (instance_expected_field_type) {
-            placeholder = instance_expected_field_type.placeholder;
-        }
-
-        let showJoinButton = this._stringLooksLikeId(this.state.filterString, instance_expected_field_type);
-        if (protocolName) {
-            const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
-            if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.protocols[protocolName], instance) === null) {
-                showJoinButton = false;
+            const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
+            let instance_expected_field_type;
+            if (
+                protocolName &&
+                this.protocols &&
+                this.protocols[protocolName] &&
+                this.protocols[protocolName].location_fields.length > 0 &&
+                this.protocols[protocolName].field_types
+            ) {
+                const last_field = this.protocols[protocolName].location_fields.slice(-1)[0];
+                instance_expected_field_type = this.protocols[protocolName].field_types[last_field];
             }
+
+
+            let placeholder = _t('Search for a room');
+            if (!this.state.instanceId) {
+                placeholder = _t('Search for a room like #example') + ':' + this.state.roomServer;
+            } else if (instance_expected_field_type) {
+                placeholder = instance_expected_field_type.placeholder;
+            }
+
+            let showJoinButton = this._stringLooksLikeId(this.state.filterString, instance_expected_field_type);
+            if (protocolName) {
+                const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
+                if (this._getFieldsForThirdPartyLocation(this.state.filterString, this.protocols[protocolName], instance) === null) {
+                    showJoinButton = false;
+                }
+            }
+
+            listHeader = <div className="mx_RoomDirectory_listheader">
+                <DirectorySearchBox
+                    className="mx_RoomDirectory_searchbox"
+                    onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
+                    placeholder={placeholder} showJoinButton={showJoinButton}
+                />
+                <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
+            </div>;
         }
 
         const createRoomButton = (<AccessibleButton
@@ -590,8 +594,6 @@ module.exports = React.createClass({
             className="mx_RoomDirectory_createRoom"
         >{_t("Create new room")}</AccessibleButton>);
 
-        const NetworkDropdown = sdk.getComponent('directory.NetworkDropdown');
-        const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
@@ -602,14 +604,7 @@ module.exports = React.createClass({
             >
                 <div className="mx_RoomDirectory">
                     <div className="mx_RoomDirectory_list">
-                        <div className="mx_RoomDirectory_listheader">
-                            <DirectorySearchBox
-                                className="mx_RoomDirectory_searchbox"
-                                onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
-                                placeholder={placeholder} showJoinButton={showJoinButton}
-                            />
-                            <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
-                        </div>
+                        {listHeader}
                         {content}
                     </div>
                 </div>
