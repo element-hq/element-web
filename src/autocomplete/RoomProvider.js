@@ -56,7 +56,7 @@ export default class RoomProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            this.matcher.setObjects(client.getRooms().filter(
+            let matcherObjects = client.getRooms().filter(
                 (room) => !!room && !!getDisplayAliasForRoom(room),
             ).map((room) => {
                 return {
@@ -64,7 +64,21 @@ export default class RoomProvider extends AutocompleteProvider {
                     name: room.name,
                     displayedAlias: getDisplayAliasForRoom(room),
                 };
-            }));
+            });
+
+            // Filter out any matches where the user will have also autocompleted new rooms
+            matcherObjects = matcherObjects.filter((r) => {
+                const tombstone = r.room.currentState.getStateEvents("m.room.tombstone", "");
+                if (tombstone && tombstone.getContent() && tombstone.getContent()['replacement_room']) {
+                    const hasReplacementRoom = matcherObjects.some(
+                        (r2) => r2.room.roomId === tombstone.getContent()['replacement_room'],
+                    );
+                    return !hasReplacementRoom;
+                }
+                return true;
+            });
+
+            this.matcher.setObjects(matcherObjects);
             const matchedString = command[0];
             completions = this.matcher.match(matchedString);
             completions = _sortBy(completions, [
