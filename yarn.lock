@@ -4388,10 +4388,10 @@ matrix-js-sdk@1.0.2:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
-matrix-mock-request@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.2.tgz#2710bec0e009bb1562d92cdd7f0b77d5946b2ebd"
-  integrity sha512-9u86m6rOsKekNkqUUkStWXNULrY9G+9ibwolfrmgqTmgR76EGCr9fovM+JPWn4U+TbrewvHMALpPw8OxRg0ExA==
+matrix-mock-request@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
+  integrity sha512-Tr7LDHweTW8Ql4C8XhGQFGMzuh+HmPjOcQqrHH1qfSesq0cwdPWanvdnllNjeHoAMcZ43HpMFMzFZfNW1/6HYg==
   dependencies:
     bluebird "^3.5.0"
     expect "^1.20.2"
