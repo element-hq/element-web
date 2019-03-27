@@ -29,7 +29,6 @@ export default class RoomBreadcrumbs extends React.Component {
         super(props);
         this.state = {rooms: []};
         this.onAction = this.onAction.bind(this);
-        this._previousRoomId = null;
         this._dispatcherRef = null;
     }
 
@@ -55,10 +54,8 @@ export default class RoomBreadcrumbs extends React.Component {
     onAction(payload) {
         switch (payload.action) {
             case 'view_room':
-                if (this._previousRoomId) {
-                    this._appendRoomId(this._previousRoomId);
-                }
-                this._previousRoomId = payload.room_id;
+                this._appendRoomId(payload.room_id);
+                break;
         }
     }
 
