@@ -171,7 +171,7 @@ class MatrixClientPeg {
         return matches[1];
     }
 
-    _createClient(creds: MatrixClientCreds, useIndexedDb) {
+    _createClient(creds: MatrixClientCreds) {
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -183,7 +183,7 @@ class MatrixClientPeg {
             verificationMethods: [verificationMethods.SAS]
         };
 
-        this.matrixClient = createMatrixClient(opts, useIndexedDb);
+        this.matrixClient = createMatrixClient(opts);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

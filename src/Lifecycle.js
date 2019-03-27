@@ -31,7 +31,8 @@ import Modal from './Modal';
 import sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
-import {sendLoginRequest} from "./Login";
+import { sendLoginRequest } from "./Login";
+import * as StorageManager from './utils/StorageManager';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -352,6 +353,8 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     if (clearStorage) {
         await _clearStorage();
     }
+
+    await StorageManager.checkConsistency();
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
 
