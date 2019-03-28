@@ -58,7 +58,7 @@ export default class RoomBreadcrumbs extends React.Component {
         dis.unregister(this._dispatcherRef);
     }
 
-    componentDidUpdate(props, state) {
+    componentDidUpdate() {
         const rooms = this.state.rooms.slice();
 
         if (rooms.length) {
