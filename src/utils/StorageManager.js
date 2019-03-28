@@ -110,4 +110,10 @@ export async function checkConsistency() {
         error("Storage consistency checks failed");
         track("Consistency checks failed");
     }
+
+    return {
+        dataInLocalStorage,
+        dataInCryptoStore,
+        healthy,
+    };
 }
