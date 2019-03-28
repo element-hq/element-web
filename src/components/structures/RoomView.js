@@ -392,7 +392,9 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
 
         window.addEventListener('beforeunload', this.onPageUnload);
-        this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+        }
         this.onResize();
 
         document.addEventListener("keydown", this.onKeyDown);
@@ -472,7 +474,9 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
-        this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+        }
 
         document.removeEventListener("keydown", this.onKeyDown);
 

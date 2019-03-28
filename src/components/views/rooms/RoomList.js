@@ -212,7 +212,9 @@ module.exports = React.createClass({
         this._checkSubListsOverflow();
 
         this.resizer.attach();
-        this.props.resizeNotifier.on("leftPanelResized", this.onResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("leftPanelResized", this.onResize);
+        }
         this.mounted = true;
     },
 
@@ -271,7 +273,10 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
-        this.props.resizeNotifier.removeListener("leftPanelResized", this.onResize);
+
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.removeListener("leftPanelResized", this.onResize);
+        }
 
 
         if (this._tagStoreToken) {
