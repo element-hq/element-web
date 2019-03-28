@@ -21,7 +21,7 @@ import { KeyCode } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
-const DEBUG_SCROLL = true;
+const DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
