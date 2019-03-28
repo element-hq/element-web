@@ -64,8 +64,7 @@ module.exports = React.createClass({
         const isVisible = this._isVisible(this.state);
         if (this.props.onShown && !wasVisible && isVisible) {
             this.props.onShown();
-        }
-        else if (this.props.onHidden && wasVisible && !isVisible) {
+        } else if (this.props.onHidden && wasVisible && !isVisible) {
             this.props.onHidden();
         }
     },

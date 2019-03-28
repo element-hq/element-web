@@ -22,7 +22,6 @@ import { EventEmitter } from "events";
 import { throttle } from "lodash";
 
 export default class ResizeNotifier extends EventEmitter {
-
     constructor() {
         super();
         // with default options, will call fn once at first call, and then every x ms
