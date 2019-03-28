@@ -723,7 +723,7 @@
     "Unban this user?": "Deze gebruiker ontbannen?",
     "Ban this user?": "Deze gebruiker bannen?",
     "Disable big emoji in chat": "Grote emoji in gesprekken uitzetten",
-    "Mirror local video feed": "Lokale videoaanvoer ook elders opslaan (spiegelen)",
+    "Mirror local video feed": "Lokale video aanvoering op meerdere locaties opslaan (mirrors)",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Je kunt deze actie niet ongedaan maken omdat je jezelf degradeert. Als je het laatste persoon met rechten bent, is het onmogelijk deze rechten terug te krijgen.",
     "Unignore": "Niet meer negeren",
     "Ignore": "Negeren",
