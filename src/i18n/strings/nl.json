@@ -1419,5 +1419,6 @@
     "Backup is not signed by any of your devices": "De reservekopie is door geen van uw apparaten ondertekend",
     "This backup is trusted because it has been restored on this device": "Deze reservekopie wordt vertrouwd, daar hij op dit apparaat herladen is",
     "Backup version: ": "Versie reservekopie: ",
-    "Algorithm: ": "Algoritme: "
+    "Algorithm: ": "Algoritme: ",
+    "Chat with Riot Bot": "Chatten met Riot Bot"
 }
