@@ -489,7 +489,7 @@
     "You need to be able to invite users to do that.": "Dat vereist de bevoegdheid gebruikers uit te nodigen.",
     "You need to be logged in.": "Aanmelding vereist.",
     "You need to enter a user name.": "Je moet een gebruikersnaam invoeren.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Het ziet er naar uit dat je e-mailadres niet met een Matrix-ID geassocieerd is op deze thuisserver.",
+    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Het lijkt erop dat je e-mailadres niet met een Matrix-ID geassocieerd is op deze thuisserver.",
     "Your password has been reset": "Je wachtwoord is gereset",
     "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "Je wachtwoord is succesvol veranderd. Je zult op andere apparaten geen mededelingen ontvangen totdat je er opnieuw inlogt",
     "You seem to be in a call, are you sure you want to quit?": "Het ziet er naar uit dat je in een gesprek zit, weet je zeker dat je wilt afsluiten?",
