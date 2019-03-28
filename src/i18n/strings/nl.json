@@ -952,7 +952,7 @@
     "Which officially provided instance you are using, if any": "Welke officieel aangeboden instantie u eventueel gebruikt",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Of u de tekstverwerker al dan niet in de modus voor opgemaakte tekst gebruikt",
     "Your homeserver's URL": "De URL van uw thuisserver",
-    "Your identity server's URL": "De URL van je thuisserver",
+    "Your identity server's URL": "De URL van je identiteitsserver",
     "<a>In reply to</a> <pill>": "<a>Als antwoord op</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Deze ruimte is niet openbaar. Zonder uitnodiging zul je niet opnieuw kunnen toetreden.",
     "were unbanned %(count)s times|one": "waren ontbant",
