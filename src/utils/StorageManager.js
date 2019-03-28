@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
+import LocalStorageCryptoStore from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
 import Analytics from '../Analytics';
 
 const localStorage = window.localStorage;
@@ -78,15 +79,10 @@ export async function checkConsistency() {
     }
 
     if (indexedDB) {
-        try {
-            dataInCryptoStore = await Matrix.IndexedDBCryptoStore.exists(
-                indexedDB, CRYPTO_STORE_NAME,
-            );
-            log(`Crypto store contains data? ${dataInCryptoStore}`);
-        } catch (e) {
+        const results = await checkCryptoStore();
+        dataInCryptoStore = results.exists;
+        if (!results.healthy) {
             healthy = false;
-            error("Crypto store inaccessible", e);
-            track("Crypto store inaccessible");
         }
     } else {
         healthy = false;
@@ -110,4 +106,27 @@ export async function checkConsistency() {
         error("Storage consistency checks failed");
         track("Consistency checks failed");
     }
+}
+
+async function checkCryptoStore() {
+    let exists = false;
+    try {
+        exists = await Matrix.IndexedDBCryptoStore.exists(
+            indexedDB, CRYPTO_STORE_NAME,
+        );
+        log(`Crypto store using IndexedDB contains data? ${exists}`);
+        return { exists, healthy: true };
+    } catch (e) {
+        error("Crypto store using IndexedDB inaccessible", e);
+        track("Crypto store using IndexedDB inaccessible");
+    }
+    try {
+        exists = await LocalStorageCryptoStore.exists(localStorage);
+        log(`Crypto store using local storage contains data? ${exists}`);
+        return { exists, healthy: true };
+    } catch (e) {
+        error("Crypto store using local storage inaccessible", e);
+        track("Crypto store using local storage inaccessible");
+    }
+    return { exists, healthy: false };
 }
