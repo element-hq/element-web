@@ -15,9 +15,17 @@ limitations under the License.
 */
 
 import React from "react";
+import PropTypes from "prop-types";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
 export default class IndicatorScrollbar extends React.Component {
+    static PropTypes = {
+        // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
+        // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
+        // by the parent element.
+        trackHorizontalOverflow: PropTypes.bool,
+    };
+
     constructor(props) {
         super(props);
         this._collectScroller = this._collectScroller.bind(this);
@@ -25,6 +33,11 @@ export default class IndicatorScrollbar extends React.Component {
         this.checkOverflow = this.checkOverflow.bind(this);
         this._scrollElement = null;
         this._autoHideScrollbar = null;
+
+        this.state = {
+            leftIndicatorOffset: 0,
+            rightIndicatorOffset: 0,
+        };
     }
 
     _collectScroller(scroller) {
@@ -43,6 +56,10 @@ export default class IndicatorScrollbar extends React.Component {
         const hasTopOverflow = this._scrollElement.scrollTop > 0;
         const hasBottomOverflow = this._scrollElement.scrollHeight >
             (this._scrollElement.scrollTop + this._scrollElement.clientHeight);
+        const hasLeftOverflow = this._scrollElement.scrollLeft > 0;
+        const hasRightOverflow = this._scrollElement.scrollWidth >
+            (this._scrollElement.scrollLeft + this._scrollElement.clientWidth);
+
         if (hasTopOverflow) {
             this._scrollElement.classList.add("mx_IndicatorScrollbar_topOverflow");
         } else {
@@ -53,9 +70,29 @@ export default class IndicatorScrollbar extends React.Component {
         } else {
             this._scrollElement.classList.remove("mx_IndicatorScrollbar_bottomOverflow");
         }
+        if (hasLeftOverflow) {
+            this._scrollElement.classList.add("mx_IndicatorScrollbar_leftOverflow");
+        } else {
+            this._scrollElement.classList.remove("mx_IndicatorScrollbar_leftOverflow");
+        }
+        if (hasRightOverflow) {
+            this._scrollElement.classList.add("mx_IndicatorScrollbar_rightOverflow");
+        } else {
+            this._scrollElement.classList.remove("mx_IndicatorScrollbar_rightOverflow");
+        }
 
         if (this._autoHideScrollbar) {
             this._autoHideScrollbar.checkOverflow();
+        }
+
+        if (this.props.trackHorizontalOverflow) {
+            this.setState({
+                // Offset from absolute position of the container
+                leftIndicatorOffset: hasLeftOverflow ? `${this._scrollElement.scrollLeft}px` : '0',
+
+                // Negative because we're coming from the right
+                rightIndicatorOffset: hasRightOverflow ? `-${this._scrollElement.scrollLeft}px` : '0',
+            });
         }
     }
 
@@ -70,12 +107,21 @@ export default class IndicatorScrollbar extends React.Component {
     }
 
     render() {
+        const leftIndicatorStyle = {left: this.state.leftIndicatorOffset};
+        const rightIndicatorStyle = {right: this.state.rightIndicatorOffset};
+        const leftOverflowIndicator = this.props.trackHorizontalOverflow
+            ? <div className="mx_IndicatorScrollbar_leftOverflowIndicator" style={leftIndicatorStyle} /> : null;
+        const rightOverflowIndicator = this.props.trackHorizontalOverflow
+            ? <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} /> : null;
+
         return (<AutoHideScrollbar
             ref={this._collectScrollerComponent}
             wrappedRef={this._collectScroller}
             {... this.props}
         >
+            { leftOverflowIndicator }
             { this.props.children }
+            { rightOverflowIndicator }
         </AutoHideScrollbar>);
     }
 }

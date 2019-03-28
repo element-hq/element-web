@@ -15,33 +15,29 @@ limitations under the License.
 */
 
 .mx_RoomBreadcrumbs {
-    overflow-x: auto;
     position: relative;
-    height: 32px;
+    height: 42px;
     margin: 8px;
     margin-bottom: 0;
-
-    overflow-x: hidden;
+    overflow-x: visible;
     display: flex;
     flex-direction: row;
 
-    > * {
-        margin-left: 4px;
+    .mx_AutoHideScrollbar_offset {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
     }
 
-    &::after {
-        content: "";
-        position: absolute;
-        width: 15px;
-        top: 0;
-        right: 0;
-        height: 100%;
-        background: linear-gradient(to right, $panel-gradient);
+    .mx_RoomBreadcrumbs_crumb {
+        margin-left: 4px;
+        height: 32px;
+        display: inline-block;
+        transition: transform 0.3s, width 0.3s;
     }
 
     .mx_RoomBreadcrumbs_animate {
         margin-left: 0;
-        transition: transform 0.3s, width 0.3s;
         width: 32px;
         transform: scale(1);
     }
@@ -49,6 +45,35 @@ limitations under the License.
     .mx_RoomBreadcrumbs_preAnimate {
         width: 0;
         transform: scale(0);
+    }
+
+
+    // Note: we have to manually control the gradient and stuff, but the IndicatorScrollbar
+    // will deal with left/right positioning for us. Normally we'd use position:sticky on
+    // a few key elements, however that doesn't work in horizontal scrolling scenarios.
+
+    .mx_IndicatorScrollbar_leftOverflowIndicator,
+    .mx_IndicatorScrollbar_rightOverflowIndicator {
+        display: none;
+    }
+
+    &.mx_IndicatorScrollbar_leftOverflow .mx_IndicatorScrollbar_leftOverflowIndicator,
+    &.mx_IndicatorScrollbar_rightOverflow .mx_IndicatorScrollbar_rightOverflowIndicator {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 15px;
+        display: block;
+        pointer-events: none;
+        z-index: 100;
+    }
+
+    .mx_IndicatorScrollbar_leftOverflowIndicator {
+        background: linear-gradient(to left, $panel-gradient);
+    }
+
+    .mx_IndicatorScrollbar_rightOverflowIndicator {
+        background: linear-gradient(to right, $panel-gradient);
     }
 }
 

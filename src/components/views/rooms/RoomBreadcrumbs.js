@@ -21,6 +21,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
+import sdk from "../../../index";
 
 const MAX_ROOMS = 20;
 
@@ -101,7 +102,26 @@ export default class RoomBreadcrumbs extends React.Component {
         dis.dispatch({action: "view_room", room_id: room.roomId});
     }
 
+    _onMouseEnter(room) {
+        this._onHover(room);
+    }
+
+    _onMouseLeave(room) {
+        this._onHover(null); // clear hover states
+    }
+
+    _onHover(room) {
+        const rooms = this.state.rooms.slice();
+        for (const r of rooms) {
+            r.hover = room && r.room.roomId === room.roomId;
+        }
+        this.setState({rooms});
+    }
+
     render() {
+        const Tooltip = sdk.getComponent('elements.Tooltip');
+        const IndicatorScrollbar = sdk.getComponent('structures.IndicatorScrollbar');
+
         // check for collapsed here and
         // not at parent so we keep
         // rooms in our state
@@ -110,18 +130,31 @@ export default class RoomBreadcrumbs extends React.Component {
             return null;
         }
         const rooms = this.state.rooms;
-        const avatars = rooms.map(({room, animated}, i) => {
+        const avatars = rooms.map(({room, animated, hover}, i) => {
             const isFirst = i === 0;
             const classes = classNames({
+                "mx_RoomBreadcrumbs_crumb": true,
                 "mx_RoomBreadcrumbs_preAnimate": isFirst && !animated,
                 "mx_RoomBreadcrumbs_animate": isFirst,
             });
+
+            let tooltip = null;
+            if (hover) {
+                tooltip = <Tooltip label={room.name} />;
+            }
+
             return (
-                <AccessibleButton className={classes} key={room.roomId} title={room.name} onClick={() => this._viewRoom(room)}>
+                <AccessibleButton className={classes} key={room.roomId} onClick={() => this._viewRoom(room)}
+                    onMouseEnter={() => this._onMouseEnter(room)} onMouseLeave={() => this._onMouseLeave(room)}>
                     <RoomAvatar room={room} width={32} height={32} />
+                    {tooltip}
                 </AccessibleButton>
             );
         });
-        return (<div className="mx_RoomBreadcrumbs">{ avatars }</div>);
+        return (
+            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs" trackHorizontalOverflow={true}>
+                { avatars }
+            </IndicatorScrollbar>
+        );
     }
 }
