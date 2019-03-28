@@ -88,10 +88,10 @@ export default class IndicatorScrollbar extends React.Component {
         if (this.props.trackHorizontalOverflow) {
             this.setState({
                 // Offset from absolute position of the container
-                leftIndicatorOffset: hasLeftOverflow ? `${this._scrollElement.scrollLeft}px` : 0,
+                leftIndicatorOffset: hasLeftOverflow ? `${this._scrollElement.scrollLeft}px` : '0',
 
                 // Negative because we're coming from the right
-                rightIndicatorOffset: hasRightOverflow ? `-${this._scrollElement.scrollLeft}px` : 0,
+                rightIndicatorOffset: hasRightOverflow ? `-${this._scrollElement.scrollLeft}px` : '0',
             });
         }
     }

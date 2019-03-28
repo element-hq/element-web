@@ -134,8 +134,7 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs" onScroll={ this._onScroll }
-                                trackHorizontalOverflow={true}>
+            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs" trackHorizontalOverflow={true}>
                 { avatars }
             </IndicatorScrollbar>
         );
