@@ -62,15 +62,9 @@ export async function checkConsistency() {
     }
 
     if (indexedDB && localStorage) {
-        try {
-            const dataInSyncStore = await Matrix.IndexedDBStore.exists(
-                indexedDB, SYNC_STORE_NAME,
-            );
-            log(`Sync store contains data? ${dataInSyncStore}`);
-        } catch (e) {
+        const results = await checkSyncStore();
+        if (!results.healthy) {
             healthy = false;
-            error("Sync store inaccessible", e);
-            track("Sync store inaccessible");
         }
     } else {
         healthy = false;
@@ -108,6 +102,22 @@ export async function checkConsistency() {
     }
 }
 
+async function checkSyncStore() {
+    let exists = false;
+    try {
+        exists = await Matrix.IndexedDBStore.exists(
+            indexedDB, SYNC_STORE_NAME,
+        );
+        log(`Sync store using IndexedDB contains data? ${exists}`);
+        return { exists, healthy: true };
+    } catch (e) {
+        error("Sync store using IndexedDB inaccessible", e);
+        track("Sync store using IndexedDB inaccessible");
+    }
+    log("Sync store using memory only");
+    return { exists, healthy: false };
+}
+
 async function checkCryptoStore() {
     let exists = false;
     try {
@@ -128,5 +138,6 @@ async function checkCryptoStore() {
         error("Crypto store using local storage inaccessible", e);
         track("Crypto store using local storage inaccessible");
     }
+    log("Crypto store using memory only");
     return { exists, healthy: false };
 }
