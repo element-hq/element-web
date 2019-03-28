@@ -165,7 +165,7 @@
     "%(displayName)s is typing": "%(displayName)s печатает",
     "%(targetName)s joined the room.": "%(targetName)s вошел(-ла) в комнату.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s выгнал(а) %(targetName)s.",
-    "%(targetName)s left the room.": "%(targetName)s покинул(а) комнату.",
+    "%(targetName)s left the room.": "Комнату покидает %(targetName)s.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников с момента их приглашения.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников с момента их входа в комнату.",
     "%(senderName)s made future room history visible to all room members.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников.",
