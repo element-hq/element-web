@@ -429,6 +429,12 @@ module.exports = React.createClass({
                 roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
             }
         }
+
+        // Note: We check the ref here with a flag because componentDidMount, despite
+        // documentation, does not define our messagePanel ref. It looks like our spinner
+        // in render() prevents the ref from being set on first mount, so we try and
+        // catch the messagePanel when it does mount. Because we only want the ref once,
+        // we use a boolean flag to avoid duplicate work.
         if (this.refs.messagePanel && !this.state.atEndOfLiveTimelineInit) {
             this.setState({
                 atEndOfLiveTimelineInit: true,
