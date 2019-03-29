@@ -22,6 +22,7 @@ import {_t} from "../../../languageHandler";
 import dis from "../../../dispatcher";
 import sdk from "../../../index";
 import Modal from "../../../Modal";
+import {isValid3pidInvite} from "../../../RoomInvite";
 
 export default class ThirdPartyMemberInfo extends React.Component {
     static propTypes = {
@@ -64,7 +65,7 @@ export default class ThirdPartyMemberInfo extends React.Component {
     onRoomStateEvents = (ev) => {
         if (ev.getType() === "m.room.third_party_invite" && ev.getStateKey() === this.state.stateKey) {
             const newDisplayName = ev.getContent().display_name;
-            const isInvited = !!newDisplayName; // display_name indicates a valid invite
+            const isInvited = isValid3pidInvite(ev);
 
             const newState = {invited: isInvited};
             if (newDisplayName) newState['displayName'] = newDisplayName;
@@ -123,8 +124,8 @@ export default class ThirdPartyMemberInfo extends React.Component {
             <div className="mx_MemberInfo">
                 <div className="mx_MemberInfo_name">
                     <AccessibleButton className="mx_MemberInfo_cancel"
-                                      onClick={this.onCancel}
-                                      title={_t('Close')}
+                        onClick={this.onCancel}
+                        title={_t('Close')}
                     />
                     <h2>{this.state.displayName}</h2>
                 </div>
