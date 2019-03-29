@@ -42,6 +42,12 @@ export default class RoomHeaderButtons extends HeaderButtons {
             }
         } else if (payload.action === "view_room") {
             this.setPhase(RightPanel.Phase.RoomMemberList);
+        } else if (payload.action === "view_3pid_invite") {
+            if (payload.event) {
+                this.setPhase(RightPanel.Phase.Room3pidMemberInfo, {event: payload.event});
+            } else {
+                this.setPhase(RightPanel.Phase.RoomMemberList);
+            }
         }
     }
 
@@ -49,6 +55,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         const membersPhases = [
             RightPanel.Phase.RoomMemberList,
             RightPanel.Phase.RoomMemberInfo,
+            RightPanel.Phase.Room3pidMemberInfo,
         ];
 
         return [

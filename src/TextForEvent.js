@@ -366,6 +366,15 @@ function textForCallInviteEvent(event) {
 
 function textForThreePidInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
+
+    if (!event.getContent().display_name) {
+        const targetDisplayName = event.getPrevContent().display_name || _t("Someone");
+        return _t('%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.', {
+            senderName,
+            targetDisplayName,
+        });
+    }
+
     return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {
         senderName,
         targetDisplayName: event.getContent().display_name,
