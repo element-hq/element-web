@@ -222,7 +222,10 @@ module.exports = React.createClass({
     // whether it will stay that way when the children update.
     isAtBottom: function() {
         const sn = this._getScrollNode();
-        return sn.scrollTop === sn.scrollHeight - sn.clientHeight;
+        // fractional values for scrollTop happen on certain browsers/platforms
+        // when scrolled all the way down. E.g. Chrome 72 on debian.
+        // so ceil everything upwards to make sure it aligns.
+        return Math.ceil(sn.scrollTop) === Math.ceil(sn.scrollHeight - sn.clientHeight);
     },
 
     // returns the vertical height in the given direction that can be removed from
