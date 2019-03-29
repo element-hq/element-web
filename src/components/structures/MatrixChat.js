@@ -29,6 +29,7 @@ import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
 import dis from "../../dispatcher";
+import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
@@ -48,6 +49,7 @@ import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
+import ResizeNotifier from "../../utils/ResizeNotifier";
 import TimelineExplosionDialog from "../views/dialogs/TimelineExplosionDialog";
 
 const AutoDiscovery = Matrix.AutoDiscovery;
@@ -195,6 +197,8 @@ export default React.createClass({
             hideToSRUsers: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
+            resizeNotifier: new ResizeNotifier(),
+            showNotifierToolbar: Notifier.shouldShowToolbar(),
         };
         return s;
     },
@@ -317,6 +321,9 @@ export default React.createClass({
         // N.B. we don't call the whole of setTheme() here as we may be
         // racing with the theme CSS download finishing from index.js
         Tinter.tint();
+
+        // For PersistentElement
+        this.state.resizeNotifier.on("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentDidMount: function() {
@@ -399,6 +406,7 @@ export default React.createClass({
         dis.unregister(this.dispatcherRef);
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
+        this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
     },
 
     componentWillUpdate: function(props, state) {
@@ -639,8 +647,9 @@ export default React.createClass({
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
                 break;
-            case 'notifier_enabled':
-                this.forceUpdate();
+            case 'notifier_enabled': {
+                    this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
+                }
                 break;
             case 'hide_left_panel':
                 this.setState({
@@ -1189,6 +1198,7 @@ export default React.createClass({
      */
     _onLoggedIn: async function() {
         this.setStateForNewView({view: VIEWS.LOGGED_IN});
+        this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
         if (this._is_registered) {
             this._is_registered = false;
 
@@ -1696,7 +1706,12 @@ export default React.createClass({
             dis.dispatch({ action: 'show_right_panel' });
         }
 
+        this.state.resizeNotifier.notifyWindowResized();
         this._windowWidth = window.innerWidth;
+    },
+
+    _dispatchTimelineResize() {
+        dis.dispatch({ action: 'timeline_resize' });
     },
 
     onRoomCreated: function(roomId) {

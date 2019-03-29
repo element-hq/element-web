@@ -29,7 +29,8 @@ module.exports = React.createClass({
     propTypes: {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-        onVisible: PropTypes.func,
+        onShown: PropTypes.func,
+        onHidden: PropTypes.func,
         // Number of names to display in typing indication. E.g. set to 3, will
         // result in "X, Y, Z and 100 others are typing."
         whoIsTypingLimit: PropTypes.number,
@@ -59,11 +60,12 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(_, prevState) {
-        if (this.props.onVisible &&
-            !prevState.usersTyping.length &&
-            this.state.usersTyping.length
-        ) {
-            this.props.onVisible();
+        const wasVisible = this._isVisible(prevState);
+        const isVisible = this._isVisible(this.state);
+        if (this.props.onShown && !wasVisible && isVisible) {
+            this.props.onShown();
+        } else if (this.props.onHidden && wasVisible && !isVisible) {
+            this.props.onHidden();
         }
     },
 
@@ -77,8 +79,12 @@ module.exports = React.createClass({
         Object.values(this.state.delayedStopTypingTimers).forEach((t) => t.abort());
     },
 
+    _isVisible: function(state) {
+        return state.usersTyping.length !== 0 || Object.keys(state.delayedStopTypingTimers).length !== 0;
+    },
+
     isVisible: function() {
-        return this.state.usersTyping.length !== 0 || Object.keys(this.state.delayedStopTypingTimers).length !== 0;
+        return this._isVisible(this.state);
     },
 
     onRoomTimeline: function(event, room) {

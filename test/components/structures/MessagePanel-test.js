@@ -21,6 +21,7 @@ const ReactDOM = require("react-dom");
 const TestUtils = require('react-addons-test-utils');
 const expect = require('expect');
 import sinon from 'sinon';
+import { EventEmitter } from "events";
 
 const sdk = require('matrix-react-sdk');
 
@@ -48,8 +49,14 @@ const WrappedMessagePanel = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            resizeNotifier: new EventEmitter(),
+        };
+    },
+
     render: function() {
-        return <MessagePanel room={room} {...this.props} />;
+        return <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />;
     },
 });
 

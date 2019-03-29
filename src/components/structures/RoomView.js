@@ -394,7 +394,9 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
 
         window.addEventListener('beforeunload', this.onPageUnload);
-        window.addEventListener('resize', this.onResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+        }
         this.onResize();
 
         document.addEventListener("keydown", this.onKeyDown);
@@ -486,7 +488,9 @@ module.exports = React.createClass({
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
-        window.removeEventListener('resize', this.onResize);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+        }
 
         document.removeEventListener("keydown", this.onKeyDown);
 
@@ -877,10 +881,6 @@ module.exports = React.createClass({
         if (dmInviter) {
             Rooms.setDMRoom(room.roomId, dmInviter);
         }
-    },
-
-    onSearchResultsResize: function() {
-        dis.dispatch({ action: 'timeline_resize' }, true);
     },
 
     onSearchResultsFillRequest: function(backwards) {
@@ -1378,8 +1378,7 @@ module.exports = React.createClass({
 
         const showBar = this.refs.messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
-            this.setState({showTopUnreadMessagesBar: showBar},
-                          this.onChildResize);
+            this.setState({showTopUnreadMessagesBar: showBar});
         }
     },
 
@@ -1422,7 +1421,7 @@ module.exports = React.createClass({
         };
     },
 
-    onResize: function(e) {
+    onResize: function() {
         // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
         // a minimum of the height of the video element, whilst also capping it from pushing out the page
         // so we have to do it via JS instead.  In this implementation we cap the height by putting
@@ -1440,9 +1439,6 @@ module.exports = React.createClass({
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
         this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
-
-        // changing the maxHeight on the auxpanel will trigger a callback go
-        // onChildResize, so no need to worry about that here.
     },
 
     onFullscreenClick: function() {
@@ -1470,10 +1466,6 @@ module.exports = React.createClass({
         const newState = !call.isLocalVideoMuted();
         call.setLocalVideoMuted(newState);
         this.forceUpdate(); // TODO: just update the voip buttons
-    },
-
-    onChildResize: function() {
-        // no longer anything to do here
     },
 
     onStatusBarVisible: function() {
@@ -1687,7 +1679,6 @@ module.exports = React.createClass({
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
-                onResize={this.onChildResize}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
             />;
@@ -1768,7 +1759,6 @@ module.exports = React.createClass({
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onResize={this.onChildResize}
               showApps={this.state.showApps}
               hideAppsDrawer={false} >
                 { aux }
@@ -1784,7 +1774,6 @@ module.exports = React.createClass({
             messageComposer =
                 <MessageComposer
                     room={this.state.room}
-                    onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}
                     disabled={this.props.disabled}
@@ -1859,7 +1848,7 @@ module.exports = React.createClass({
                     <ScrollPanel ref="searchResultsPanel"
                         className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                         onFillRequest={this.onSearchResultsFillRequest}
-                        onResize={this.onSearchResultsResize}
+                        resizeNotifier={this.props.resizeNotifier}
                     >
                         <li className={scrollheader_classes}></li>
                         { this.getSearchResultTiles() }
@@ -1894,6 +1883,7 @@ module.exports = React.createClass({
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this.state.permalinkCreator}
+                resizeNotifier={this.props.resizeNotifier}
             />);
 
         let topUnreadMessagesBar = null;
@@ -1926,7 +1916,7 @@ module.exports = React.createClass({
             },
         );
 
-        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} /> : undefined;
+        const rightPanel = this.state.room ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} /> : undefined;
 
         return (
             <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
@@ -1942,7 +1932,11 @@ module.exports = React.createClass({
                     onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                     e2eStatus={this.state.e2eStatus}
                 />
-                <MainSplit panel={rightPanel} collapsedRhs={this.props.collapsedRhs}>
+                <MainSplit
+                    panel={rightPanel}
+                    collapsedRhs={this.props.collapsedRhs}
+                    resizeNotifier={this.props.resizeNotifier}
+                >
                     <div className={fadableSectionClasses}>
                         { auxPanel }
                         <div className="mx_RoomView_timeline">

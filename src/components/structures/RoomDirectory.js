@@ -549,7 +549,6 @@ module.exports = React.createClass({
                 onFillRequest={ this.onFillRequest }
                 stickyBottom={false}
                 startAtBottom={false}
-                onResize={function() {}}
             >
                 { scrollpanel_content }
             </ScrollPanel>;

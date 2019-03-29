@@ -412,7 +412,6 @@ export default class MessageComposer extends React.Component {
                 <MessageComposerInput
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
-                    onResize={this.props.onResize}
                     room={this.props.room}
                     placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
@@ -505,10 +504,6 @@ export default class MessageComposer extends React.Component {
 }
 
 MessageComposer.propTypes = {
-    // a callback which is called when the height of the composer is
-    // changed due to a change in content.
-    onResize: PropTypes.func,
-
     // js-sdk Room object
     room: PropTypes.object.isRequired,
 
