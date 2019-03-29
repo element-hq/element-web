@@ -16,8 +16,7 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function createRoom(session, roomName) {
-    session.log.step(`creates room "${roomName}"`);
+async function openRoomDirectory(session) {
     const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
     const roomListHeaderLabels = await Promise.all(roomListHeaders.map(h => session.innerText(h)));
     const roomsIndex = roomListHeaderLabels.findIndex(l => l.toLowerCase().includes("rooms"));
@@ -27,6 +26,11 @@ module.exports = async function createRoom(session, roomName) {
     const roomsHeader = roomListHeaders[roomsIndex];
     const addRoomButton = await roomsHeader.$(".mx_RoomSubList_addRoom");
     await addRoomButton.click();
+}
+
+async function createRoom(session, roomName) {
+    session.log.step(`creates room "${roomName}"`);
+    await openRoomDirectory(session);
     const createRoomButton = await session.waitAndQuery('.mx_RoomDirectory_createRoom');
     await createRoomButton.click();
 
@@ -39,3 +43,5 @@ module.exports = async function createRoom(session, roomName) {
     await session.waitAndQuery('.mx_MessageComposer');
     session.log.done();
 }
+
+module.exports = {openRoomDirectory, createRoom};

@@ -15,14 +15,12 @@ limitations under the License.
 */
 
 const assert = require('assert');
+const {openRoomDirectory} = require('./create-room');
 
 module.exports = async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);
-    //TODO: brittle selector
-    const directoryButton = await session.waitAndQuery('.mx_RoleButton[aria-label="Room directory"]');
-    await directoryButton.click();
-
-    const roomInput = await session.waitAndQuery('.mx_DirectorySearchBox_input');
+    await openRoomDirectory(session);
+    const roomInput = await session.waitAndQuery('.mx_DirectorySearchBox input');
     await session.replaceInputText(roomInput, roomName);
 
     const firstRoomLabel = await session.waitAndQuery('.mx_RoomDirectory_table .mx_RoomDirectory_name:first-child', 1000);
