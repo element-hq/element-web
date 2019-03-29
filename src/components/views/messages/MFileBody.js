@@ -401,12 +401,7 @@ module.exports = React.createClass({
 
                     // Start a fetch for the download
                     // Based upon https://stackoverflow.com/a/49500465
-                    fetch(contentUrl, {
-                        headers: new Headers({
-                            'Origin': window.location.origin,
-                        }),
-                        mode: 'cors',
-                    }).then((response) => response.blob()).then((blob) => {
+                    fetch(contentUrl).then((response) => response.blob()).then((blob) => {
                         const blobUrl = URL.createObjectURL(blob);
 
                         // We have to create an anchor to download the file
