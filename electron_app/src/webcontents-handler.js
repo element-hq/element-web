@@ -1,5 +1,7 @@
-const {clipboard, nativeImage, Menu, MenuItem, shell} = require('electron');
+const {clipboard, nativeImage, Menu, MenuItem, shell, dialog} = require('electron');
 const url = require('url');
+const fs = require('fs');
+const request = require('request');
 
 const MAILTO_PREFIX = "mailto:";
 
@@ -47,6 +49,7 @@ function onLinkContextMenu(ev, params) {
         }));
     }
 
+    let addSaveAs = false;
     if (params.mediaType && params.mediaType === 'image' && !url.startsWith('file://')) {
         popupMenu.append(new MenuItem({
             label: 'Copy image',
@@ -58,6 +61,10 @@ function onLinkContextMenu(ev, params) {
                 }
             },
         }));
+
+        // We want the link to be ordered below the copy stuff, but don't want to duplicate
+        // the `if` statement, so use a flag.
+        addSaveAs = true;
     }
 
     // No point offering to copy a blob: URL either
@@ -79,6 +86,35 @@ function onLinkContextMenu(ev, params) {
             }));
         }
     }
+
+    if (addSaveAs) {
+        popupMenu.append(new MenuItem({
+            label: 'Save image as...',
+            click() {
+                const targetFileName = params.titleText || "image.png";
+                const filePath = dialog.showSaveDialog({
+                    defaultPath: targetFileName,
+                });
+
+                try {
+                    if (url.startsWith("data:")) {
+                        fs.writeFileSync(filePath, nativeImage.createFromDataURL(url));
+                    } else {
+                        request.get(url).pipe(fs.createWriteStream(filePath));
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                    dialog.showMessageBox({
+                        type: "error",
+                        title: "Failed to save image",
+                        message: "The image failed to save",
+                    });
+                }
+            },
+        }));
+    }
+
     // popup() requires an options object even for no options
     popupMenu.popup({});
     ev.preventDefault();
