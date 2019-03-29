@@ -135,10 +135,6 @@ function rangeEquals(a: Range, b: Range): boolean {
  */
 export default class MessageComposerInput extends React.Component {
     static propTypes = {
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: PropTypes.func,
-
         // js-sdk Room object
         room: PropTypes.object.isRequired,
 

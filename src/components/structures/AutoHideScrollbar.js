@@ -121,6 +121,7 @@ export default class AutoHideScrollbar extends React.Component {
     render() {
         return (<div
                     ref={this._collectContainerRef}
+                    style={this.props.style}
                     className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
                     onScroll={this.props.onScroll}
                 >

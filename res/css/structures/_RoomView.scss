@@ -91,6 +91,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
 }
 
 .mx_RoomView_body .mx_RoomView_timeline {
@@ -118,6 +119,8 @@ limitations under the License.
 .mx_RoomView_messagePanel {
     width: 100%;
     overflow-y: auto;
+    flex: 1 1 0;
+    overflow-anchor: none;
 }
 
 .mx_RoomView_messagePanelSearchSpinner {

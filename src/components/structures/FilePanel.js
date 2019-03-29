@@ -123,6 +123,7 @@ const FilePanel = React.createClass({
                     timelineSet={this.state.timelineSet}
                     showUrlPreview = {false}
                     tileShape="file_grid"
+                    resizeNotifier={this.props.resizeNotifier}
                     empty={_t('There are no visible files in this room')}
                 />
             );

@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MainSplit {
-    display: flex;
-    flex-direction: row;
-    min-width: 0;
-}
+.mx_ScrollPanel {
 
-// move hit area 5px to the right so it doesn't overlap with the timeline scrollbar
-.mx_MainSplit > .mx_ResizeHandle.mx_ResizeHandle_horizontal {
-    margin: 0 -10px 0 0;
-    padding: 0 10px 0 0;
+    .mx_RoomView_MessageList {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow-y: hidden;
+    }
 }
