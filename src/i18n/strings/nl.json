@@ -130,7 +130,7 @@
     "Public Chat": "Openbaar gesprek",
     "Reason": "Reden",
     "Reason: %(reasonText)s": "Reden: %(reasonText)s",
-    "Revoke Moderator": "Moderator terugtrekken",
+    "Revoke Moderator": "Moderator degraderen",
     "Refer a friend to Riot:": "Laat een vriend weten over Riot:",
     "Register": "Registreren",
     "%(targetName)s rejected the invitation.": "%(targetName)s heeft de uitnodiging geweigerd.",
