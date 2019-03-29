@@ -65,6 +65,24 @@ export function showRoomInviteDialog(roomId) {
     });
 }
 
+/**
+ * Checks if the given MatrixEvent is a valid 3rd party user invite.
+ * @param {MatrixEvent} event The event to check
+ * @returns {boolean} True if valid, false otherwise
+ */
+export function isValid3pidInvite(event) {
+    if (!event || event.getType() !== "m.room.third_party_invite") return false;
+
+    // any events without these keys are not valid 3pid invites, so we ignore them
+    const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
+    for (let i = 0; i < requiredKeys.length; ++i) {
+        if (!event.getContent()[requiredKeys[i]]) return false;
+    }
+
+    // Valid enough by our standards
+    return true;
+}
+
 function _onStartChatFinished(shouldInvite, addrs) {
     if (!shouldInvite) return;
 

@@ -56,7 +56,7 @@ module.exports = React.createClass({
         user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     },
 
-    componentWillUmount() {
+    componentWillUnmount() {
         const { user } = this.props.member;
         if (!user) {
             return;
