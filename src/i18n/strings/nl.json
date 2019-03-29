@@ -707,7 +707,7 @@
     "Message Pinning": "Bericht vastprikken",
     "Disable Emoji suggestions while typing": "Emoji suggesties tijdens het typen uitzetten",
     "Hide avatar changes": "Avatar veranderingen verbergen",
-    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s,%(day)s %(monthName)s %(fullYear)s",
     "Hide display name changes": "Weergavenaam wijzigingen verbergen",
     "Enable inline URL previews by default": "Inline URL-voorvertoning standaard inschakelen",
     "Enable URL previews for this room (only affects you)": "URL-voorvertoning in deze kamer inschakelen (geldt alleen voor u)",
