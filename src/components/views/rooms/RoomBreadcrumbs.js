@@ -52,10 +52,15 @@ export default class RoomBreadcrumbs extends React.Component {
                 console.error("Failed to parse breadcrumbs:", e);
             }
         }
+
+        MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
     }
 
     componentWillUnmount() {
         dis.unregister(this._dispatcherRef);
+
+        const client = MatrixClientPeg.get();
+        if (client) client.removeListener("Room.myMembership", this.onMyMembership);
     }
 
     componentDidUpdate() {
@@ -80,6 +85,13 @@ export default class RoomBreadcrumbs extends React.Component {
                 break;
         }
     }
+
+    onMyMembership = (room, membership) => {
+        if (membership === "leave" || membership === "ban") {
+            // Force left rooms to render appropriately
+            this.forceUpdate();
+        }
+    };
 
     _appendRoomId(roomId) {
         const room = MatrixClientPeg.get().getRoom(roomId);
@@ -136,6 +148,7 @@ export default class RoomBreadcrumbs extends React.Component {
                 "mx_RoomBreadcrumbs_crumb": true,
                 "mx_RoomBreadcrumbs_preAnimate": isFirst && !animated,
                 "mx_RoomBreadcrumbs_animate": isFirst,
+                "mx_RoomBreadcrumbs_left": !['invite', 'join'].includes(room.getMyMembership()),
             });
 
             let tooltip = null;
