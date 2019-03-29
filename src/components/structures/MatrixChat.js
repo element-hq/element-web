@@ -1702,10 +1702,7 @@ export default React.createClass({
     },
 
     _dispatchTimelineResize() {
-        // prevent dispatch from within dispatch error
-        setTimeout(() => {
-            dis.dispatch({ action: 'timeline_resize' }, true);
-        }, 0);
+        dis.dispatch({ action: 'timeline_resize' });
     },
 
     onRoomCreated: function(roomId) {
