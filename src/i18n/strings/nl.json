@@ -562,7 +562,7 @@
     "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.": "Klik hieronder op de knop ‘Verifiëren’ als de sleutels overeenkomen. Zo niet drukt u op de knop ‘Blokkeren’, want dan onderschept iemand berichten naar dit apparaat.",
     "Blacklist": "Blokkeren",
     "You are currently blacklisting unverified devices; to send messages to these devices you must verify them.": "Momenteel sluit u ongeverifieerde apparaten uit; om berichten naar deze apparaten te versturen moet u ze verifiëren.",
-    "Unblacklist": "Van zwarte lijst halen",
+    "Unblacklist": "Deblokkeren",
     "In future this verification process will be more sophisticated.": "In de toekomst zal dit verificatie proces meer geraffineerd zijn.",
     "Verify device": "Apparaat verifiëren",
     "I verify that the keys match": "Ik verifieer dat de sleutels overeenkomen",
