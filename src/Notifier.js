@@ -226,8 +226,8 @@ const Notifier = {
             return false;
         }
         const isGuest = client.isGuest();
-        return !isGuest && Notifier.supportsDesktopNotifications() &&
-            !Notifier.isEnabled() && !Notifier._isToolbarHidden();
+        return !isGuest && this.supportsDesktopNotifications() &&
+            !this.isEnabled() && !this._isToolbarHidden();
     },
 
     _isToolbarHidden: function() {
