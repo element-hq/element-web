@@ -198,7 +198,7 @@ export default React.createClass({
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
             resizeNotifier: new ResizeNotifier(),
-            showNotifierToolbar: Notifier.shouldShowToolbar(),
+            showNotifierToolbar: false,
         };
         return s;
     },
@@ -1197,8 +1197,7 @@ export default React.createClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
-        this.setStateForNewView({view: VIEWS.LOGGED_IN});
-        this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
+        this.setStateForNewView({ view: VIEWS.LOGGED_IN });
         if (this._is_registered) {
             this._is_registered = false;
 
@@ -1342,7 +1341,10 @@ export default React.createClass({
             self.firstSyncPromise.resolve();
 
             dis.dispatch({action: 'focus_composer'});
-            self.setState({ready: true});
+            self.setState({
+                ready: true,
+                showNotifierToolbar: Notifier.shouldShowToolbar(),
+            });
         });
         cli.on('Call.incoming', function(call) {
             // we dispatch this synchronously to make sure that the event
