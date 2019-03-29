@@ -347,6 +347,13 @@ module.exports = React.createClass({
         });
     },
 
+    _onPending3pidInviteClick: function(inviteEvent) {
+        dis.dispatch({
+            action: 'view_3pid_invite',
+            event: inviteEvent,
+        });
+    },
+
     _filterMembers: function(members, membership, query) {
         return members.filter((m) => {
             if (query) {
@@ -408,6 +415,7 @@ module.exports = React.createClass({
                 return <EntityTile key={e.getStateKey()}
                     name={e.getContent().display_name}
                     suppressOnHover={true}
+                    onClick={() => this._onPending3pidInviteClick(e)}
                 />;
             }));
         }
