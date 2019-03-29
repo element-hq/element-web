@@ -20,12 +20,11 @@ curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output
 unzip -q synapse.zip
 mv synapse-$SYNAPSE_BRANCH $SERVER_DIR
 cd $SERVER_DIR
-virtualenv -p python2.7 env
+virtualenv -p python3 env
 source env/bin/activate
 pip install --upgrade pip
 pip install --upgrade setuptools
-pip install .
-pip install jinja2 # We use the ConsentResource, which requires jinja2
+pip install matrix-synapse[all]
 python -m synapse.app.homeserver \
     --server-name localhost \
     --config-path homeserver.yaml \
