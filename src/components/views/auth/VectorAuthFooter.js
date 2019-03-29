@@ -43,7 +43,9 @@ module.exports = React.createClass({
         const authFooterLinks = [];
         for (const linkEntry of links) {
             authFooterLinks.push(
-                <a href={linkEntry.url} target="_blank" rel="noopener">{linkEntry.text}</a>,
+                <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noopener">
+                    {linkEntry.text}
+                </a>,
             );
         }
 
