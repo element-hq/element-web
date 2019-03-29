@@ -19,31 +19,26 @@ const assert = require('assert');
 module.exports = async function signup(session, username, password, homeserver) {
     session.log.step("signs up");
     await session.goto(session.url('/#/register'));
-    //click 'Custom server' radio button
+    // change the homeserver by clicking the "Change" link.
     if (homeserver) {
-        const advancedRadioButton = await session.waitAndQuery('#advanced');
-        await advancedRadioButton.click();
+        const changeServerDetailsLink = await session.waitAndQuery('.mx_AuthBody_editServerDetails');
+        await changeServerDetailsLink.click();
+        const hsInputField = await session.query('#mx_ServerConfig_hsUrl');
+        await session.replaceInputText(hsInputField, homeserver);
+        const nextButton = await session.query('.mx_Login_submit');
+        await nextButton.click();
     }
-    // wait until register button is visible
-    await session.waitAndQuery('.mx_Login_submit[value=Register]');
     //fill out form
-    const loginFields = await session.queryAll('.mx_Login_field');
-    assert.strictEqual(loginFields.length, 7);
-    const usernameField = loginFields[2];
-    const passwordField = loginFields[3];
-    const passwordRepeatField = loginFields[4];
-    const hsurlField = loginFields[5];
+    const usernameField = await session.waitAndQuery("#mx_RegistrationForm_username");
+    const passwordField = await session.waitAndQuery("#mx_RegistrationForm_password");
+    const passwordRepeatField = await session.waitAndQuery("#mx_RegistrationForm_passwordConfirm");
     await session.replaceInputText(usernameField, username);
     await session.replaceInputText(passwordField, password);
     await session.replaceInputText(passwordRepeatField, password);
-    if (homeserver) {
-        await session.waitAndQuery('.mx_ServerConfig');
-        await session.replaceInputText(hsurlField, homeserver);
-    }
-    //wait over a second because Registration/ServerConfig have a 1000ms
+    //wait over a second because Registration/ServerConfig have a 250ms
     //delay to internally set the homeserver url
     //see Registration::render and ServerConfig::props::delayTimeMs
-    await session.delay(1500);
+    await session.delay(300);
     /// focus on the button to make sure error validation
     /// has happened before checking the form is good to go
     const registerButton = await session.query('.mx_Login_submit');
@@ -60,7 +55,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     await continueButton.click();
 
     //find the privacy policy checkbox and check it
-    const policyCheckbox = await session.waitAndQuery('.mx_Login_box input[type="checkbox"]');
+    const policyCheckbox = await session.waitAndQuery('.mx_InteractiveAuthEntryComponents_termsPolicy input');
     await policyCheckbox.click();
 
     //now click the 'Accept' button to agree to the privacy policy
