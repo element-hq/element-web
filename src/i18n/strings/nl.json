@@ -174,7 +174,7 @@
     "Create an account": "Open een account",
     "Cryptography": "Cryptografie",
     "Current password": "Huidig wachtwoord",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s heeft de kamernaam verwijderd.",
+    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s heeft de naam van het kanaal verwijderd.",
     "Create a new chat or reuse an existing one": "Begin een nieuw gesprek of herbruik er een bestaand",
     "Create Room": "Kamer aanmaken",
     "Curve25519 identity key": "Curve25519-identiteitssleutel",
