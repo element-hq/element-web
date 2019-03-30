@@ -80,7 +80,24 @@ limitations under the License.
     // hack for mx_Dialog having a top padding of 40px
     top: 40px;
     right: 0px;
-    padding: 35px;
+    padding-top: 35px;
+    padding-right: 35px;
+    cursor: pointer;
+}
+
+.mx_ImageView_rotateClockwise {
+    position: absolute;
+    top: 40px;
+    right: 70px;
+    padding-top: 35px;
+    cursor: pointer;
+}
+
+.mx_ImageView_rotateCounterClockwise {
+    position: absolute;
+    top: 40px;
+    right: 105px;
+    padding-top: 35px;
     cursor: pointer;
 }
 
