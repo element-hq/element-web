@@ -6,7 +6,7 @@
     "Riot is not supported on mobile web. Install the app?": "Riot non è supportato sul web mobile. Installare l'applicazione?",
     "Unknown device": "Dispositivo sconosciuto",
     "You need to be using HTTPS to place a screen-sharing call.": "Devi usare HTTPS per effettuare una chiamata con la condivisione dello schermo.",
-    "Welcome to Riot.im": "Benvenuto/a su Riot.im",
+    "Welcome to Riot.im": "Benvenuti su Riot.im",
     "Search the room directory": "Cerca nella lista delle stanze",
     "Chat with Riot Bot": "Chatta con Riot Bot",
     "Get started with some tips from Riot Bot!": "Inizia con alcuni consigli di Riot Bot!",
@@ -35,5 +35,12 @@
     "Dev chat for the Dendrite dev team": "Chat per gli sviluppatori di Dendrite",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Esistono già molte stanze in Matrix, collegate a reti esistenti (Slack, IRC, Gitter, ecc.) o indipendenti. Controlla l'elenco!",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Puoi usare le opzioni server personalizzate per accedere ad altri server Matrix specificando l'indirizzo del server home.<br/> Questo permette di usare Riot con un account Matrix esistente su un server home diverso.<br/><br/>È anche possibile impostare un diverso server identità, ma in tal caso non sarà possibile invitare utenti attraverso l'indirizzo e-mail o essere invitati attraverso l'indirizzo e-mail.",
-    "Co-ordination for Riot translators": "Coordinazione per i traduttori di Riot"
+    "Co-ordination for Riot translators": "Coordinazione per i traduttori di Riot",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Puoi usare le opzioni di server personalizzato per accedere ad altri server Matrix specificando un URL homeserver diverso. Ciò ti permette di usare Riot con un account Matrix esistente su un homeserver differente.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Puoi anche impostare un server di identità personalizzato, ma non sarai in grado di invitare utenti via email o di essere invitato via email.",
+    "Sign In": "Accedi",
+    "Create Account": "Crea account",
+    "Need help?": "Serve aiuto?",
+    "Explore rooms": "Esplora stanze",
+    "Room Directory": "Elenco stanze"
 }
