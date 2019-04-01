@@ -1194,7 +1194,7 @@
     "Upload": "Upload",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded.The file size limit is %(limit)s.": "Some files are <b>too large</b> to be uploaded.The file size limit is %(limit)s.",
+    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
     "Upload %(count)s other files|other": "Upload %(count)s other files",
     "Upload %(count)s other files|one": "Upload %(count)s other file",
     "Cancel All": "Cancel All",

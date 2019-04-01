@@ -83,7 +83,7 @@ export default class UploadFailureDialog extends React.Component {
             />;
         } else {
             message = _t(
-                "Some files are <b>too large</b> to be uploaded." +
+                "Some files are <b>too large</b> to be uploaded. " +
                 "The file size limit is %(limit)s.",
                 {
                     limit: filesize(this.props.contentMessages.getUploadLimit()),
