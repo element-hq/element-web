@@ -1,3 +1,10 @@
+Changes in [1.0.6](https://github.com/vector-im/riot-web/releases/tag/v1.0.6) (2019-04-01)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.6-rc.1...v1.0.6)
+
+ * Add "Save image as..." button to context menu on images
+   [\#9327](https://github.com/vector-im/riot-web/pull/9327)
+
 Changes in [1.0.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.6-rc.1) (2019-03-27)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.5...v1.0.6-rc.1)
