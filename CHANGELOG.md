@@ -1,3 +1,16 @@
+Changes in [1.0.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.6) (2019-04-01)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.6-rc.1...v1.0.6)
+
+ * Handle storage fallback cases in consistency check
+   [\#2853](https://github.com/matrix-org/matrix-react-sdk/pull/2853)
+ * Set title attribute on images in lightbox
+   [\#2852](https://github.com/matrix-org/matrix-react-sdk/pull/2852)
+ * Download PDFs as blobs to avoid empty grey screens
+   [\#2851](https://github.com/matrix-org/matrix-react-sdk/pull/2851)
+ * Add MemberInfo for 3pid invites and support revoking those invites
+   [\#2850](https://github.com/matrix-org/matrix-react-sdk/pull/2850)
+
 Changes in [1.0.6-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.6-rc.1) (2019-03-27)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.5...v1.0.6-rc.1)
