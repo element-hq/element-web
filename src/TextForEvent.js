@@ -17,6 +17,7 @@ import MatrixClientPeg from './MatrixClientPeg';
 import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
+import {isValid3pidInvite} from "./RoomInvite";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -366,6 +367,15 @@ function textForCallInviteEvent(event) {
 
 function textForThreePidInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
+
+    if (!isValid3pidInvite(event)) {
+        const targetDisplayName = event.getPrevContent().display_name || _t("Someone");
+        return _t('%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.', {
+            senderName,
+            targetDisplayName,
+        });
+    }
+
     return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {
         senderName,
         targetDisplayName: event.getContent().display_name,

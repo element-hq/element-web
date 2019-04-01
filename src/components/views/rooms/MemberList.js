@@ -20,6 +20,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import {isValid3pidInvite} from "../../../RoomInvite";
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -347,6 +348,13 @@ module.exports = React.createClass({
         });
     },
 
+    _onPending3pidInviteClick: function(inviteEvent) {
+        dis.dispatch({
+            action: 'view_3pid_invite',
+            event: inviteEvent,
+        });
+    },
+
     _filterMembers: function(members, membership, query) {
         return members.filter((m) => {
             if (query) {
@@ -372,11 +380,7 @@ module.exports = React.createClass({
 
         if (room) {
             return room.currentState.getStateEvents("m.room.third_party_invite").filter(function(e) {
-                // any events without these keys are not valid 3pid invites, so we ignore them
-                const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
-                for (let i = 0; i < requiredKeys.length; ++i) {
-                    if (e.getContent()[requiredKeys[i]] === undefined) return false;
-                }
+                if (!isValid3pidInvite(e)) return false;
 
                 // discard all invites which have a m.room.member event since we've
                 // already added them.
@@ -408,6 +412,7 @@ module.exports = React.createClass({
                 return <EntityTile key={e.getStateKey()}
                     name={e.getContent().display_name}
                     suppressOnHover={true}
+                    onClick={() => this._onPending3pidInviteClick(e)}
                 />;
             }));
         }
