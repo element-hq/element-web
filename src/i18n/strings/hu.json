@@ -1469,9 +1469,9 @@
     "Sets the room name": "Szobanév beállítása",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s frissítette a szobát.",
     "%(displayName)s is typing …": "%(displayName)s gépel …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s és %(count)s másik pötyögnek …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s és még valaki pötyögnek …",
-    "%(names)s and %(lastPerson)s are typing …": "%(names)s és %(lastPerson)s pötyögnek …",
+    "%(names)s and %(count)s others are typing …|other": "%(names)s és %(count)s másik gépelnek …",
+    "%(names)s and %(count)s others are typing …|one": "%(names)s és még valaki gépelnek …",
+    "%(names)s and %(lastPerson)s are typing …": "%(names)s és %(lastPerson)s gépelnek …",
     "Tabbed settings": "Beállítások tabokban",
     "Render simple counters in room header": "Egyszerű számlálók a szoba fejlécében",
     "Two-way device verification using short text": "Kétirányú eszköz ellenőrzés rövid szöveggel",
@@ -1831,5 +1831,7 @@
     "Power level": "Hozzáférési szint",
     "Want more than a community? <a>Get your own server</a>": "Többet szeretnél, mint egy közösség? <a>Szerezz saját szervert</a>",
     "You are logged in to another account": "Másik felhasználói fiókba vagy bejelentkezve",
-    "Thank you for verifying your email! The account you're logged into here (%(sessionUserId)s) appears to be different from the account you've verified an email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, please log out first.": "Köszönjük, hogy ellenőrizted az e-mailed! A fiók ahova be vagy jelentkezve itt (%(sessionUserId)s) különbözőnek tűnik attól a fióktól amihez az e-mailedet ellenőrizted (%(verifiedUserId)s). Ha be szeretnél jelentkezni ide: %(verifiedUserId2)s, ahhoz először ki kell jelentkezned."
+    "Thank you for verifying your email! The account you're logged into here (%(sessionUserId)s) appears to be different from the account you've verified an email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, please log out first.": "Köszönjük, hogy ellenőrizted az e-mailed! A fiók ahova be vagy jelentkezve itt (%(sessionUserId)s) különbözőnek tűnik attól a fióktól amihez az e-mailedet ellenőrizted (%(verifiedUserId)s). Ha be szeretnél jelentkezni ide: %(verifiedUserId2)s, ahhoz először ki kell jelentkezned.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Kérlek telepíts <chromeLink>Chrome</chromeLink>ot, <firefoxLink>Firefox</firefoxLink>ot vagy <safariLink>Safari</safariLink>t a jegjobb élményhez.",
+    "Changing your password will reset any end-to-end encryption keys on all of your devices, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another device before resetting your password.": "A jelszóváltoztatás megváltoztatja minden eszközön az összes végponttól végpontig titkosításhoz használt kulcsodat; így a titkosított csevegések olvashatatlanok lesznek. Készíts biztonsági másolatot vagy mentsd ki a szoba kulcsaidat minden eszközödön mielőtt megváltoztatod a jelszavad."
 }
