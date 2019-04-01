@@ -52,7 +52,6 @@ src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js
 src/components/views/settings/IntegrationsManager.js
 src/components/views/settings/Notifications.js
-src/ContentMessages.js
 src/GroupAddressPicker.js
 src/HtmlUtils.js
 src/ImageUtils.js
