@@ -70,8 +70,8 @@
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "^1.0.3-rc.1",
-    "matrix-react-sdk": "^1.0.6-rc.1",
+    "matrix-js-sdk": "1.0.3",
+    "matrix-react-sdk": "1.0.6",
     "modernizr": "^3.6.0",
     "olm": "https://matrix.org/packages/npm/olm/olm-3.1.0-pre1.tgz",
     "prop-types": "^15.6.2",
@@ -150,7 +150,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "4.0.8",
+    "electronVersion": "4.1.3",
     "files": [
       "node_modules/**",
       "src/**",
