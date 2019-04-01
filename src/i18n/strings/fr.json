@@ -1860,5 +1860,6 @@
     "Send debug logs and reload Riot": "Envoyer les journaux d’anomalies et recharger Riot",
     "Reload Riot without sending logs": "Recharger Riot sans envoyer les journaux",
     "A widget would like to verify your identity": "Un widget voudrait vérifier votre identité",
-    "A widget located at %(widgetUrl)s would like to verify your identity. By allowing this, the widget will be able to verify your user ID, but not perform actions as you.": "Un widget provenant de %(widgetUrl)s souhaite vérifier votre identité. Si vous acceptez cela, le widget pourra vérifier votre identifiant d’utilisateur mais il ne pourra rien faire en se faisant passer pour vous."
+    "A widget located at %(widgetUrl)s would like to verify your identity. By allowing this, the widget will be able to verify your user ID, but not perform actions as you.": "Un widget provenant de %(widgetUrl)s souhaite vérifier votre identité. Si vous acceptez cela, le widget pourra vérifier votre identifiant d’utilisateur mais il ne pourra rien faire en se faisant passer pour vous.",
+    "Remember my selection for this widget": "Se souvenir de mon choix pour ce widget"
 }
