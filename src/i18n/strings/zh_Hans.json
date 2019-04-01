@@ -1750,5 +1750,7 @@
     "Power level": "权限级别",
     "Want more than a community? <a>Get your own server</a>": "想要的不只是社区？ <a>架设您自己的服务器</a>",
     "You are logged in to another account": "您已以另一个账号登入",
-    "Thank you for verifying your email! The account you're logged into here (%(sessionUserId)s) appears to be different from the account you've verified an email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, please log out first.": "感谢您验证电子邮件地址！您在此登入的账号（%(sessionUserId)s）似乎不同于您验证的电子邮件地址（%(verifiedUserId)s）。如果您想要登入的账号是 %(verifiedUserId2)s ，请先登出。"
+    "Thank you for verifying your email! The account you're logged into here (%(sessionUserId)s) appears to be different from the account you've verified an email for (%(verifiedUserId)s). If you would like to log in to %(verifiedUserId2)s, please log out first.": "感谢您验证电子邮件地址！您在此登入的账号（%(sessionUserId)s）似乎不同于您验证的电子邮件地址（%(verifiedUserId)s）。如果您想要登入的账号是 %(verifiedUserId2)s ，请先登出。",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "请安装 <chromeLink>Chrome</chromeLink>，<firefoxLink>Firefox</firefoxLink>，或 <safariLink>Safari</safariLink> 以获得最佳体验。",
+    "Changing your password will reset any end-to-end encryption keys on all of your devices, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another device before resetting your password.": "更改您的密码将会重置您所有设备上的端对端加密密钥，让已加密的聊天历史记录无法读取。在重设密码之前，请设置密钥备份或从其他设备导出您的聊天室密钥。"
 }
