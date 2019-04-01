@@ -58,7 +58,7 @@ export default class UploadConfirmDialog extends React.Component {
             title = _t(
                 "Upload files (%(current)s of %(total)s)",
                 {
-                    current: this.props.currentIndex,
+                    current: this.props.currentIndex + 1,
                     total: this.props.totalFiles,
                 },
             );
