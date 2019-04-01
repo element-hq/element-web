@@ -1,3 +1,107 @@
+Changes in [1.0.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.6) (2019-04-01)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.6-rc.1...v1.0.6)
+
+ * Handle storage fallback cases in consistency check
+   [\#2853](https://github.com/matrix-org/matrix-react-sdk/pull/2853)
+ * Set title attribute on images in lightbox
+   [\#2852](https://github.com/matrix-org/matrix-react-sdk/pull/2852)
+ * Download PDFs as blobs to avoid empty grey screens
+   [\#2851](https://github.com/matrix-org/matrix-react-sdk/pull/2851)
+ * Add MemberInfo for 3pid invites and support revoking those invites
+   [\#2850](https://github.com/matrix-org/matrix-react-sdk/pull/2850)
+
+Changes in [1.0.6-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.6-rc.1) (2019-03-27)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.5...v1.0.6-rc.1)
+
+ * Catch errors when checking IndexedDB
+   [\#2836](https://github.com/matrix-org/matrix-react-sdk/pull/2836)
+ * Remove noreferrer on widget pop-out
+   [\#2835](https://github.com/matrix-org/matrix-react-sdk/pull/2835)
+ * Rework room directory so that new room is always available
+   [\#2834](https://github.com/matrix-org/matrix-react-sdk/pull/2834)
+ * Send telemetry about storage consistency
+   [\#2832](https://github.com/matrix-org/matrix-react-sdk/pull/2832)
+ * Widget OpenID reauth implementation
+   [\#2781](https://github.com/matrix-org/matrix-react-sdk/pull/2781)
+ * Log results of basic storage consistency check
+   [\#2826](https://github.com/matrix-org/matrix-react-sdk/pull/2826)
+ * Clarify devices affected by notification settings
+   [\#2828](https://github.com/matrix-org/matrix-react-sdk/pull/2828)
+ * Add a command for creating custom widgets without an integration manager
+   [\#2824](https://github.com/matrix-org/matrix-react-sdk/pull/2824)
+ * Minimize stickerpicker when the title is clicked
+   [\#2822](https://github.com/matrix-org/matrix-react-sdk/pull/2822)
+ * Add <code> blocks around homeserver and identity server urls
+   [\#2825](https://github.com/matrix-org/matrix-react-sdk/pull/2825)
+ * Fixed drop shadow for tooltip.
+   [\#2815](https://github.com/matrix-org/matrix-react-sdk/pull/2815)
+ * Ask the user for debug logs when the timeline explodes
+   [\#2820](https://github.com/matrix-org/matrix-react-sdk/pull/2820)
+ * Fix typo preventing users from adding more widgets easily
+   [\#2823](https://github.com/matrix-org/matrix-react-sdk/pull/2823)
+ * Attach an onChange listener to the room's blacklist devices option
+   [\#2817](https://github.com/matrix-org/matrix-react-sdk/pull/2817)
+ * Use leaveRoomChain when leaving a room
+   [\#2818](https://github.com/matrix-org/matrix-react-sdk/pull/2818)
+ * Fix bug with NetworkList dropdown
+   [\#2821](https://github.com/matrix-org/matrix-react-sdk/pull/2821)
+ * Trim the logging for URL previews
+   [\#2816](https://github.com/matrix-org/matrix-react-sdk/pull/2816)
+ * Explicitly create `cryptoStore` in React SDK
+   [\#2814](https://github.com/matrix-org/matrix-react-sdk/pull/2814)
+ * Change to new consistent name for `MemoryStore`
+   [\#2812](https://github.com/matrix-org/matrix-react-sdk/pull/2812)
+ * Use medium agents for the more resource intensive builds
+   [\#2813](https://github.com/matrix-org/matrix-react-sdk/pull/2813)
+ * Add log grouping to buildkite
+   [\#2810](https://github.com/matrix-org/matrix-react-sdk/pull/2810)
+ * Switch to `git` protocol for CI dependencies
+   [\#2809](https://github.com/matrix-org/matrix-react-sdk/pull/2809)
+ * Go back to using mainine velocity
+   [\#2808](https://github.com/matrix-org/matrix-react-sdk/pull/2808)
+ * Warn that members won't be autojoined to upgraded rooms
+   [\#2796](https://github.com/matrix-org/matrix-react-sdk/pull/2796)
+ * Support CI for matching branches on forks
+   [\#2807](https://github.com/matrix-org/matrix-react-sdk/pull/2807)
+ * Discard old sticker picker when the URL changes
+   [\#2801](https://github.com/matrix-org/matrix-react-sdk/pull/2801)
+ * Reload widget messaging when widgets reload
+   [\#2799](https://github.com/matrix-org/matrix-react-sdk/pull/2799)
+ * Don't show calculated room name in room settings name input field
+   [\#2806](https://github.com/matrix-org/matrix-react-sdk/pull/2806)
+ * Disable big emoji for m.emote messages as it looks weird
+   [\#2805](https://github.com/matrix-org/matrix-react-sdk/pull/2805)
+ * Remove Edge from browser support statements
+   [\#2803](https://github.com/matrix-org/matrix-react-sdk/pull/2803)
+ * Update from Weblate
+   [\#2802](https://github.com/matrix-org/matrix-react-sdk/pull/2802)
+ * Really fix tag panel
+   [\#2800](https://github.com/matrix-org/matrix-react-sdk/pull/2800)
+ * Update CompatibilityPage to match officially supported browsers
+   [\#2793](https://github.com/matrix-org/matrix-react-sdk/pull/2793)
+ * Use Buildkite for CI
+   [\#2788](https://github.com/matrix-org/matrix-react-sdk/pull/2788)
+ * Fix CSS syntax errors preventing offline member opacity from working
+   [\#2794](https://github.com/matrix-org/matrix-react-sdk/pull/2794)
+ * Make the EntityTile chevron a masked SVG for theming
+   [\#2795](https://github.com/matrix-org/matrix-react-sdk/pull/2795)
+ * Remove refs from `RegistrationForm`
+   [\#2791](https://github.com/matrix-org/matrix-react-sdk/pull/2791)
+ * Fix initial letter avatar vertical offset in Firefox
+   [\#2792](https://github.com/matrix-org/matrix-react-sdk/pull/2792)
+ * Fix the custom tag panel
+   [\#2797](https://github.com/matrix-org/matrix-react-sdk/pull/2797)
+ * Ensure freshly invited members don't count towards the alone warning
+   [\#2786](https://github.com/matrix-org/matrix-react-sdk/pull/2786)
+ * Fix 'forgot password' warning to represent the reality of e2ee
+   [\#2787](https://github.com/matrix-org/matrix-react-sdk/pull/2787)
+ * Restore `Field` value getter for `RegistrationForm`
+   [\#2790](https://github.com/matrix-org/matrix-react-sdk/pull/2790)
+ * Initial portions of support for Field validation
+   [\#2780](https://github.com/matrix-org/matrix-react-sdk/pull/2780)
+
 Changes in [1.0.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.0.5) (2019-03-21)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.0.4...v1.0.5)
