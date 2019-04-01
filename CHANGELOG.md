@@ -1,3 +1,45 @@
+Changes in [1.0.6](https://github.com/vector-im/riot-web/releases/tag/v1.0.6) (2019-04-01)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.6-rc.1...v1.0.6)
+
+ * Add "Save image as..." button to context menu on images
+   [\#9327](https://github.com/vector-im/riot-web/pull/9327)
+
+Changes in [1.0.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.0.6-rc.1) (2019-03-27)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.5...v1.0.6-rc.1)
+
+ * Use `on_logged_in` action in tests
+   [\#9279](https://github.com/vector-im/riot-web/pull/9279)
+ * Convert away from `Promise.defer`
+   [\#9278](https://github.com/vector-im/riot-web/pull/9278)
+ * update react-sdk version in yarn lockfile
+   [\#9233](https://github.com/vector-im/riot-web/pull/9233)
+ * "Render simple counters in room header" details
+   [\#9154](https://github.com/vector-im/riot-web/pull/9154)
+ * Use medium agents for the more resource intensive builds
+   [\#9238](https://github.com/vector-im/riot-web/pull/9238)
+ * Add log grouping to buildkite
+   [\#9223](https://github.com/vector-im/riot-web/pull/9223)
+ * Switch to `git` protocol for CI dependencies
+   [\#9222](https://github.com/vector-im/riot-web/pull/9222)
+ * Support CI for matching branches on forks
+   [\#9212](https://github.com/vector-im/riot-web/pull/9212)
+ * Update from Weblate
+   [\#9199](https://github.com/vector-im/riot-web/pull/9199)
+ * Declare the officially supported browsers in the README
+   [\#9177](https://github.com/vector-im/riot-web/pull/9177)
+ * Document some desktop app things
+   [\#9011](https://github.com/vector-im/riot-web/pull/9011)
+ * Use Buildkite for CI
+   [\#9165](https://github.com/vector-im/riot-web/pull/9165)
+ * Update version number in issue templates
+   [\#9170](https://github.com/vector-im/riot-web/pull/9170)
+ * Remove node 8.x from the build matrix
+   [\#9159](https://github.com/vector-im/riot-web/pull/9159)
+ * Update Electron help menu link
+   [\#9157](https://github.com/vector-im/riot-web/pull/9157)
+
 Changes in [1.0.5](https://github.com/vector-im/riot-web/releases/tag/v1.0.5) (2019-03-21)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.4...v1.0.5)

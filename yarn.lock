@@ -5190,7 +5190,7 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-"jquery@>= 1.4.3", jquery@^3.3.1:
+jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
@@ -5732,10 +5732,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
   integrity sha1-izqsWIuKZuSXXjzepn97sylgH6w=
 
-matrix-js-sdk@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.2.tgz#482d8d2076c7565cf7354722e96c9971e372182a"
-  integrity sha512-4WCBJFSoOLelHi7IUAcVxPQF+gTc/i9NUKZ77qwUfcZVED8VKTIyWZnwpeLgocK5gAOJV9fkAyO5mny9SkZaGg==
+matrix-js-sdk@1.0.3, matrix-js-sdk@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.3.tgz#d4cc46c4dc80278b78f8e0664741b08fcc395c79"
+  integrity sha512-YpF4NvnG2cttRmTPJ9yqs/KwlBXW15O7+nNMs1FKj1CqdW1Phwb0fcqvahjPgmfXyn5DFzU3Deiv9aNgDIlIog==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5757,10 +5757,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.5.tgz#92ca4f6780f76e183f47d2f96c79ada76492d77a"
-  integrity sha512-aaBmKQO4KM+U9eMhdJgbO/RZtmqayISk+qrcdcXtxDYjn2RZnziTNQ2289xG+dQb7A09Aev3u9rogrD6QCDI3w==
+matrix-react-sdk@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.6.tgz#5477cb6f20a5968394e46f55cd4345436fba6372"
+  integrity sha512-qu+BY0I6qu2py8lzOZRPY2xOabXRrU/87dotx6MhyzWFKw+xQav0EggZJeKYtCAvuafS2zpPscTZX0/11Z3MuA==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5786,7 +5786,7 @@ matrix-react-sdk@1.0.5:
     linkifyjs "^2.1.6"
     lodash "^4.13.1"
     lolex "2.3.2"
-    matrix-js-sdk "1.0.2"
+    matrix-js-sdk "1.0.3"
     optimist "^0.6.1"
     pako "^1.0.5"
     prop-types "^15.5.8"
@@ -5806,7 +5806,7 @@ matrix-react-sdk@1.0.5:
     slate-react "^0.18.10"
     text-encoding-utf-8 "^1.0.1"
     url "^0.11.0"
-    velocity-vector "github:vector-im/velocity#059e3b2"
+    velocity-animate "^1.5.2"
     whatwg-fetch "^1.1.1"
     zxcvbn "^4.4.2"
 
@@ -8995,11 +8995,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-"velocity-vector@github:vector-im/velocity#059e3b2":
-  version "1.2.3"
-  resolved "https://codeload.github.com/vector-im/velocity/tar.gz/059e3b2348f1110888d033974d3109fd5a3af00f"
-  dependencies:
-    jquery ">= 1.4.3"
+velocity-animate@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-1.5.2.tgz#5a351d75fca2a92756f5c3867548b873f6c32105"
+  integrity sha512-m6EXlCAMetKztO1ppBhGU1/1MR3IiEevO6ESq6rcrSQ3Q77xYSW13jkfXW88o4xMrkXJhy/U7j4wFR/twMB0Eg==
 
 verror@1.10.0:
   version "1.10.0"
