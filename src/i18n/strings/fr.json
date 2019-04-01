@@ -1863,5 +1863,9 @@
     "A widget located at %(widgetUrl)s would like to verify your identity. By allowing this, the widget will be able to verify your user ID, but not perform actions as you.": "Un widget provenant de %(widgetUrl)s souhaite vérifier votre identité. Si vous acceptez cela, le widget pourra vérifier votre identifiant d’utilisateur mais il ne pourra rien faire en se faisant passer pour vous.",
     "Remember my selection for this widget": "Se souvenir de mon choix pour ce widget",
     "Deny": "Refuser",
-    "Riot failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "Riot n’a pas pu récupérer la liste des protocoles depuis le serveur d’accueil. Ce serveur d’accueil est peut-être trop vieux pour prendre en charge les réseaux tiers."
+    "Riot failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "Riot n’a pas pu récupérer la liste des protocoles depuis le serveur d’accueil. Ce serveur d’accueil est peut-être trop vieux pour prendre en charge les réseaux tiers.",
+    "Riot failed to get the public room list.": "Riot n’a pas pu récupérer la liste des salons publics.",
+    "The homeserver may be unavailable or overloaded.": "Le serveur d’accueil est peut-être indisponible ou surchargé.",
+    "You have %(count)s unread notifications in a prior version of this room.|other": "Vous avez %(count)s notifications non lues dans une version précédente de ce salon.",
+    "You have %(count)s unread notifications in a prior version of this room.|one": "Vous avez %(count)s notification non lue dans une version précédente de ce salon."
 }
