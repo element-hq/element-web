@@ -293,12 +293,19 @@ describe('loading:', function() {
     });
 
     describe("MatrixClient rehydrated from stored credentials:", function() {
-        beforeEach(function() {
+        beforeEach(async function() {
             localStorage.setItem("mx_hs_url", "http://localhost" );
             localStorage.setItem("mx_is_url", "http://localhost" );
             localStorage.setItem("mx_access_token", "access_token");
             localStorage.setItem("mx_user_id", "@me:localhost");
             localStorage.setItem("mx_last_room_id", "!last_room:id");
+
+            // Create a crypto store as well to satisfy storage consistency checks
+            const cryptoStore = new jssdk.IndexedDBCryptoStore(
+                indexedDB,
+                "matrix-js-sdk:crypto",
+            );
+            await cryptoStore._connect();
         });
 
         it('shows the last known room by default', function() {
