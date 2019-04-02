@@ -47,7 +47,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
     },
 
     render: function() {
-        const uploads = ContentMessages.getCurrentUploads();
+        const uploads = ContentMessages.sharedInstance().getCurrentUploads();
 
         // for testing UI... - also fix up the ContentMessages.getCurrentUploads().length
         // check in RoomView
@@ -93,7 +93,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
                 </div>
                 <img className="mx_UploadBar_uploadIcon mx_filterFlipColor" src={require("../../../res/img/fileicon.png")} width="17" height="22" />
                 <img className="mx_UploadBar_uploadCancel mx_filterFlipColor" src={require("../../../res/img/cancel.svg")} width="18" height="18"
-                    onClick={function() { ContentMessages.cancelUpload(upload.promise); }}
+                    onClick={function() { ContentMessages.sharedInstance().cancelUpload(upload.promise); }}
                 />
                 <div className="mx_UploadBar_uploadBytes">
                     { uploadedSize } / { totalSize }

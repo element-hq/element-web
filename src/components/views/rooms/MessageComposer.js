@@ -26,6 +26,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../matrix-to';
+import ContentMessages from '../../../ContentMessages';
 import classNames from 'classnames';
 
 import E2EIcon from './E2EIcon';
@@ -47,8 +48,7 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
-        this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
-        this.uploadFiles = this.uploadFiles.bind(this);
+        this._onUploadFileInputChange = this._onUploadFileInputChange.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
@@ -145,89 +145,25 @@ export default class MessageComposer extends React.Component {
         this.refs.uploadInput.click();
     }
 
-    onUploadFileSelected(files) {
-        const tfiles = files.target.files;
-        this.uploadFiles(tfiles);
-    }
+    _onUploadFileInputChange(ev) {
+        if (ev.target.files.length === 0) return;
 
-    uploadFiles(files) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        const fileList = [];
-        const acceptedFiles = [];
-        const failedFiles = [];
-
-        for (let i=0; i<files.length; i++) {
-            const fileAcceptedOrError = this.props.uploadAllowed(files[i]);
-            if (fileAcceptedOrError === true) {
-                acceptedFiles.push(<li key={i}>
-                    <TintableSvg key={i} src={require("../../../../res/img/files.svg")} width="16" height="16" /> { files[i].name || _t('Attachment') }
-                </li>);
-                fileList.push(files[i]);
-            } else {
-                failedFiles.push(<li key={i}>
-                    <TintableSvg key={i} src={require("../../../../res/img/files.svg")} width="16" height="16" /> { files[i].name || _t('Attachment') } <p>{ _t('Reason') + ": " + fileAcceptedOrError}</p>
-                </li>);
-            }
+        // take a copy so we can safely reset the value of the form control
+        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        const tfiles = [];
+        for (let i = 0; i < ev.target.files.length; ++i) {
+            tfiles.push(ev.target.files[i]);
         }
 
-        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
-        let replyToWarning = null;
-        if (isQuoting) {
-            replyToWarning = <p>{
-                _t('At this time it is not possible to reply with a file so this will be sent without being a reply.')
-            }</p>;
-        }
-
-        const acceptedFilesPart = acceptedFiles.length === 0 ? null : (
-            <div>
-                <p>{ _t('Are you sure you want to upload the following files?') }</p>
-                <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                    { acceptedFiles }
-                </ul>
-            </div>
+        ContentMessages.sharedInstance().sendContentListToRoom(
+            tfiles, this.props.room.roomId, MatrixClientPeg.get(),
         );
 
-        const failedFilesPart = failedFiles.length === 0 ? null : (
-            <div>
-                <p>{ _t('The following files cannot be uploaded:') }</p>
-                <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                    { failedFiles }
-                </ul>
-            </div>
-        );
-        let buttonText;
-        if (acceptedFiles.length > 0 && failedFiles.length > 0) {
-            buttonText = "Upload selected"
-        } else if (failedFiles.length > 0) {
-            buttonText = "Close"
-        }
-
-        Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
-            title: _t('Upload Files'),
-            description: (
-                <div>
-                    { acceptedFilesPart }
-                    { failedFilesPart }
-                    { replyToWarning }
-                </div>
-            ),
-            hasCancelButton: acceptedFiles.length > 0,
-            button: buttonText,
-            onFinished: (shouldUpload) => {
-                if (shouldUpload) {
-                    // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
-                    if (fileList) {
-                        for (let i=0; i<fileList.length; i++) {
-                            this.props.uploadFile(fileList[i]);
-                        }
-                    }
-                }
-
-                this.refs.uploadInput.value = null;
-            },
-        });
+        // This is the onChange handler for a file form control, but we're
+        // not keeping any state, so reset the value of the form control
+        // to empty.
+        // NB. we need to set 'value': the 'files' property is immutable.
+        ev.target.value = '';
     }
 
     onHangupClick() {
@@ -376,7 +312,7 @@ export default class MessageComposer extends React.Component {
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
-                        onChange={this.onUploadFileSelected} />
+                        onChange={this._onUploadFileInputChange} />
                 </AccessibleButton>
             );
 
@@ -414,7 +350,6 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     room={this.props.room}
                     placeholder={placeholderText}
-                    onFilesPasted={this.uploadFiles}
                     onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
@@ -509,12 +444,6 @@ MessageComposer.propTypes = {
 
     // string representing the current voip call state
     callState: PropTypes.string,
-
-    // callback when a file to upload is chosen
-    uploadFile: PropTypes.func.isRequired,
-
-    // function to test whether a file should be allowed to be uploaded.
-    uploadAllowed: PropTypes.func.isRequired,
 
     // string representing the current room app drawer state
     showApps: PropTypes.bool
