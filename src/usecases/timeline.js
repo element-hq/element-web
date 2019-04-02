@@ -117,11 +117,13 @@ function getLastEventTile(session) {
 }
 
 function getAllEventTiles(session) {
-    return session.queryAll(".mx_RoomView_MessageList > *");
+    return session.queryAll(".mx_RoomView_MessageList .mx_EventTile");
 }
 
 async function getMessageFromEventTile(eventTile) {
     const senderElement = await eventTile.$(".mx_SenderProfile_name");
+    const className = await (await eventTile.getProperty("className")).jsonValue();
+    const classNames = className.split(" ");
     const bodyElement = await eventTile.$(".mx_EventTile_body");
     let sender = null;
     if (senderElement) {
@@ -131,11 +133,10 @@ async function getMessageFromEventTile(eventTile) {
         return null;
     }
     const body = await(await bodyElement.getProperty("innerText")).jsonValue();
-    const e2eIcon = await eventTile.$(".mx_EventTile_e2eIcon");
 
     return {
         sender,
         body,
-        encrypted: !!e2eIcon
+        encrypted: classNames.includes("mx_EventTile_verified")
     };
 }
