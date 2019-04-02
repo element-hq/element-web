@@ -88,8 +88,12 @@ export default class RoomBreadcrumbs extends React.Component {
 
     onMyMembership = (room, membership) => {
         if (membership === "leave" || membership === "ban") {
-            // Force left rooms to render appropriately
-            this.forceUpdate();
+            const rooms = this.state.rooms.slice();
+            const roomState = rooms.find((r) => r.room.roomId === room.roomId);
+            if (roomState) {
+                roomState.left = true;
+                this.setState({rooms});
+            }
         }
     };
 
@@ -142,24 +146,24 @@ export default class RoomBreadcrumbs extends React.Component {
             return null;
         }
         const rooms = this.state.rooms;
-        const avatars = rooms.map(({room, animated, hover}, i) => {
+        const avatars = rooms.map((r, i) => {
             const isFirst = i === 0;
             const classes = classNames({
                 "mx_RoomBreadcrumbs_crumb": true,
-                "mx_RoomBreadcrumbs_preAnimate": isFirst && !animated,
+                "mx_RoomBreadcrumbs_preAnimate": isFirst && !r.animated,
                 "mx_RoomBreadcrumbs_animate": isFirst,
-                "mx_RoomBreadcrumbs_left": !['invite', 'join'].includes(room.getMyMembership()),
+                "mx_RoomBreadcrumbs_left": r.left,
             });
 
             let tooltip = null;
-            if (hover) {
-                tooltip = <Tooltip label={room.name} />;
+            if (r.hover) {
+                tooltip = <Tooltip label={r.room.name} />;
             }
 
             return (
-                <AccessibleButton className={classes} key={room.roomId} onClick={() => this._viewRoom(room)}
-                    onMouseEnter={() => this._onMouseEnter(room)} onMouseLeave={() => this._onMouseLeave(room)}>
-                    <RoomAvatar room={room} width={32} height={32} />
+                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room)}
+                    onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
+                    <RoomAvatar room={r.room} width={32} height={32} />
                     {tooltip}
                 </AccessibleButton>
             );
