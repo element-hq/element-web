@@ -22,7 +22,7 @@ const {
     checkTimelineContains,
     scrollToTimelineTop
 } = require('../usecases/timeline');
-const createRoom = require('../usecases/create-room');
+const {createRoom} = require('../usecases/create-room');
 const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
 const {enableLazyLoading} = require('../usecases/settings');
