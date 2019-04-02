@@ -26,7 +26,6 @@ program
     .option('--windowed', "dont run tests headless", false)
     .option('--slow-mo', "run tests slower to follow whats going on", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
-    .option('--travis', "running on travis CI, disable tests known to break on Ubuntu 14.04 LTS", false)
     .parse(process.argv);
 
 const hsUrl = 'http://localhost:5005';
@@ -59,7 +58,7 @@ async function runTests() {
 
     let failure = false;
     try {
-        await scenario(createSession, restCreator, program.travis);
+        await scenario(createSession, restCreator);
     } catch(err) {
         failure = true;
         console.log('failure: ', err);
