@@ -59,7 +59,8 @@ module.exports = async function changeRoomSettings(session, settings) {
     }
 
     securityTabButton.click();
-    const securitySwitches = await session.waitAndQueryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
+    await session.delay(500);
+    const securitySwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
     const e2eEncryptionToggle = securitySwitches[0];
 
     if (typeof settings.encryption === "boolean") {
