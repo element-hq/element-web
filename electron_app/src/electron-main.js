@@ -139,7 +139,7 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             ret = autoUpdater.getFeedURL();
             break;
         case 'getAutoLaunchEnabled':
-            ret = launcher.isEnabled;
+            ret = await launcher.isEnabled();
             break;
         case 'setAutoLaunchEnabled':
             if (args[0]) {
