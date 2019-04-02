@@ -68,7 +68,7 @@ module.exports = async function changeRoomSettings(session, settings) {
         const clicked = await setSettingsToggle(session, e2eEncryptionToggle, settings.encryption);
         // if enabling, accept beta warning dialog
         if (clicked && settings.encryption) {
-            await acceptDialog(session, "encryption");
+            await acceptDialog(session, "Enable encryption?");
         }
     }
 

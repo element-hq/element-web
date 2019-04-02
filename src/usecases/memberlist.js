@@ -16,6 +16,16 @@ limitations under the License.
 
 const assert = require('assert');
 
+async function openMemberInfo(session, name) {
+    const membersAndNames = await getMembersInMemberlist(session);
+    const matchingLabel = membersAndNames.filter((m) => {
+        return m.displayName === name;
+    }).map((m) => m.label)[0];
+    await matchingLabel.click();
+};
+
+module.exports.openMemberInfo = openMemberInfo;
+
 module.exports.verifyDeviceForUser = async function(session, name, expectedDevice) {
     session.log.step(`verifies e2e device for ${name}`);
     const membersAndNames = await getMembersInMemberlist(session);
@@ -23,8 +33,20 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
         return m.displayName === name;
     }).map((m) => m.label)[0];
     await matchingLabel.click();
+    // click verify in member info
     const firstVerifyButton = await session.waitAndQuery(".mx_MemberDeviceInfo_verify");
     await firstVerifyButton.click();
+    // expect "Verify device" dialog and click "Begin Verification"
+    const dialogHeader = await session.innerText(await session.waitAndQuery(".mx_Dialog .mx_Dialog_title"));
+    assert(dialogHeader, "Verify device");
+    const beginVerificationButton = await session.waitAndQuery(".mx_Dialog .mx_Dialog_primary")
+    await beginVerificationButton.click();
+    // get emoji SAS labels
+    const sasLabelElements = await session.waitAndQueryAll(".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
+    const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
+    console.log("my sas labels", sasLabels);
+
+
     const dialogCodeFields = await session.waitAndQueryAll(".mx_QuestionDialog code");
     assert.equal(dialogCodeFields.length, 2);
     const deviceId = await session.innerText(dialogCodeFields[0]);

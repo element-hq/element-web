@@ -24,28 +24,24 @@ const invite = require('../usecases/invite');
 const {receiveMessage} = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
 const changeRoomSettings = require('../usecases/room-settings');
-const {getE2EDeviceFromSettings} = require('../usecases/settings');
-const {verifyDeviceForUser} = require('../usecases/memberlist');
+const {startSasVerifcation, acceptSasVerification} = require('../usecases/verify');
+const assert = require('assert');
 
 module.exports = async function e2eEncryptionScenarios(alice, bob) {
     console.log(" creating an e2e encrypted room and join through invite:");
     const room = "secrets";
     await createRoom(bob, room);
     await changeRoomSettings(bob, {encryption: true});
+    // await cancelKeyBackup(bob);
     await invite(bob, "@alice:localhost");
     await acceptInvite(alice, room);
-    const bobDevice = await getE2EDeviceFromSettings(bob);
-    // wait some time for the encryption warning dialog
-    // to appear after closing the settings
-    await delay(1000);
-    await acceptDialogMaybe(bob, "encryption");
-    const aliceDevice = await getE2EDeviceFromSettings(alice);
-    // wait some time for the encryption warning dialog
-    // to appear after closing the settings
-    await delay(1000);
-    await acceptDialogMaybe(alice, "encryption");
-    await verifyDeviceForUser(bob, "alice", aliceDevice);
-    await verifyDeviceForUser(alice, "bob", bobDevice);
+    // do sas verifcation
+    bob.log.step(`starts SAS verification with ${alice.username}`);
+    const bobSasPromise = startSasVerifcation(bob, alice.username);
+    const aliceSasPromise = acceptSasVerification(alice, bob.username);
+    const [bobSas, aliceSas] = await Promise.all([bobSasPromise, aliceSasPromise]);
+    assert.deepEqual(bobSas, aliceSas);
+    bob.log.done(`done, (${bobSas.join(", ")}) matches!`);
     const aliceMessage = "Guess what I just heard?!"
     await sendMessage(alice, aliceMessage);
     await receiveMessage(bob, {sender: "alice", body: aliceMessage, encrypted: true});
