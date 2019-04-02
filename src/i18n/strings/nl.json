@@ -8,7 +8,7 @@
     "You need to be using HTTPS to place a screen-sharing call.": "U moet HTTPS gebruiken om een oproep met schermdelen te kunnen starten.",
     "Welcome to Riot.im": "Welkom bij Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Gedecentraliseerd en versleuteld chatten &amp; samenwerken mogelijk gemaakt door [matrix]",
-    "Search the room directory": "De kamerlijst doorzoeken",
+    "Search the room directory": "De gesprekscatalogus doorzoeken",
     "Chat with Riot Bot": "Chatten met Riot-robot",
     "Get started with some tips from Riot Bot!": "Begin met enkele tips van Riot Bot!",
     "General discussion about Matrix and Riot": "Algemene discussie over Matrix en Riot",
@@ -42,5 +42,5 @@
     "Create Account": "Account aanmaken",
     "Need help?": "Hulp nodig?",
     "Explore rooms": "Kamers ontdekken",
-    "Room Directory": "Kamerlijst"
+    "Room Directory": "Gesprekscatalogus"
 }
