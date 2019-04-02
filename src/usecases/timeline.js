@@ -54,31 +54,21 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
 
     let lastMessage = null;
     let isExpectedMessage = false;
-    try {
-        lastMessage = await getLastMessage();
-        isExpectedMessage = lastMessage &&
-            lastMessage.body === expectedMessage.body &&
-            lastMessage.sender === expectedMessage.sender;
-    } catch(ex) {}
-    // first try to see if the message is already the last message in the timeline
-    if (isExpectedMessage) {
-        assertMessage(lastMessage, expectedMessage);
-    } else {
-        await session.waitForSyncResponseWith(async (response) => {
-            const body = await response.text();
-            if (expectedMessage.encrypted) {
-                return body.indexOf(expectedMessage.sender) !== -1 &&
-                             body.indexOf("m.room.encrypted") !== -1;
-            } else {
-                return body.indexOf(expectedMessage.body) !== -1;
-            }
-        });
-        // wait a bit for the incoming event to be rendered
-        await session.delay(1000);
-        lastMessage = await getLastMessage();
-        assertMessage(lastMessage, expectedMessage);
+    let totalTime = 0;
+    while (!isExpectedMessage) {
+        try {
+            lastMessage = await getLastMessage();
+            isExpectedMessage = lastMessage &&
+                lastMessage.body === expectedMessage.body &&
+                lastMessage.sender === expectedMessage.sender
+        } catch(err) {}
+        if (totalTime > 5000) {
+            throw new Error("timed out after 5000ms");
+        }
+        totalTime += 200;
+        await session.delay(200);
     }
-
+    assertMessage(lastMessage, expectedMessage);
     session.log.done();
 }
 

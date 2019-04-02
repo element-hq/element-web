@@ -161,15 +161,6 @@ module.exports = class RiotSession {
         });
     }
 
-    waitForSyncResponseWith(predicate) {
-        return this.page.waitForResponse(async (response) => {
-            if (response.request().url().indexOf("/sync") === -1) {
-                return false;
-            }
-            return predicate(response);
-        });
-    }
-
     /** wait for a /sync request started after this call that gets a 200 response */
     async waitForNextSuccessfulSync() {
         const syncUrls = [];
