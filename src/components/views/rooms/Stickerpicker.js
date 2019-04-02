@@ -130,8 +130,13 @@ export default class Stickerpicker extends React.Component {
 
     _updateWidget() {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
+        if (!stickerpickerWidget) {
+            ActiveWidgetStore.delStickerPickerWidget();
+            this.setState({stickerpickerWidget: null, widgetId: null});
+            return;
+        }
 
-        const currentWidget = this.state.stickerpickerWidget;
+        const currentWidget = ActiveWidgetStore.getStickerPickerWidget();
         let currentUrl = null;
         if (currentWidget && currentWidget.content && currentWidget.content.url) {
             currentUrl = currentWidget.content.url;
@@ -147,6 +152,7 @@ export default class Stickerpicker extends React.Component {
             PersistedElement.destroyElement(PERSISTED_ELEMENT_KEY);
         }
 
+        ActiveWidgetStore.setStickerPickerWidget(stickerpickerWidget);
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
