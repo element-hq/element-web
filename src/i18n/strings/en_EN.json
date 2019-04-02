@@ -41,7 +41,7 @@
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
     "Replying With Files": "Replying With Files",
-    "At this time it is not possible to reply with a file so this will be sent without being a reply.": "At this time it is not possible to reply with a file so this will be sent without being a reply.",
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "At this time it is not possible to reply with a file. Would you like to upload this file without replying?",
     "Continue": "Continue",
     "The file '%(fileName)s' failed to upload.": "The file '%(fileName)s' failed to upload.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",

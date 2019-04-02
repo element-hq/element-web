@@ -20,27 +20,27 @@ limitations under the License.
 //  - Search results component
 //  - Drag and drop
 
-import shouldHideEvent from "../../shouldHideEvent";
+import shouldHideEvent from '../../shouldHideEvent';
 
-const React = require("react");
-const ReactDOM = require("react-dom");
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 import filesize from 'filesize';
-const classNames = require("classnames");
+import classNames from 'classnames';
 import { _t } from '../../languageHandler';
-import {RoomPermalinkCreator} from "../../matrix-to";
+import {RoomPermalinkCreator} from '../../matrix-to';
 
-const MatrixClientPeg = require("../../MatrixClientPeg");
+import MatrixClientPeg from '../../MatrixClientPeg';
 import ContentMessages from '../../ContentMessages';
-const Modal = require("../../Modal");
-const sdk = require('../../index');
-const CallHandler = require('../../CallHandler');
-const dis = require("../../dispatcher");
-const Tinter = require("../../Tinter");
-const rate_limited_func = require('../../ratelimitedfunc');
-const ObjectUtils = require('../../ObjectUtils');
-const Rooms = require('../../Rooms');
+import Modal from '../../Modal';
+import sdk from '../../index';
+import CallHandler from '../../CallHandler';
+import dis from '../../dispatcher';
+import Tinter from '../../Tinter';
+import rate_limited_func from '../../ratelimitedfunc';
+import ObjectUtils from '../../ObjectUtils';
+import Rooms from '../../Rooms';
 
 import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 

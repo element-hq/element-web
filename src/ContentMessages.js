@@ -321,6 +321,8 @@ export default class ContentMessages {
     getUploadLimit() {
         if (this._mediaConfig !== null && this._mediaConfig["m.upload.size"] !== undefined) {
             return this._mediaConfig["m.upload.size"];
+        } else {
+            return null;
         }
     }
 
@@ -338,8 +340,8 @@ export default class ContentMessages {
                     title: _t('Replying With Files'),
                     description: (
                         <div>{_t(
-                            'At this time it is not possible to reply with a file ' +
-                            'so this will be sent without being a reply.',
+                            'At this time it is not possible to reply with a file. ' +
+                            'Would you like to upload this file without replying?',
                         )}</div>
                     ),
                     hasCancelButton: true,
