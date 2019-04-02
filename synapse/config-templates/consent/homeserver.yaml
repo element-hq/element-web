@@ -364,11 +364,11 @@ log_config: "{{SYNAPSE_ROOT}}localhost.log.config"
 
 # Number of messages a client can send per second
 #
-#rc_messages_per_second: 0.2
+rc_messages_per_second: 10000
 
 # Number of message a client can send before being throttled
 #
-#rc_message_burst_count: 10.0
+rc_message_burst_count: 10000
 
 # Ratelimiting settings for registration and login.
 #
@@ -389,20 +389,20 @@ log_config: "{{SYNAPSE_ROOT}}localhost.log.config"
 #
 # The defaults are as shown below.
 #
-#rc_registration:
-#  per_second: 0.17
-#  burst_count: 3
-#
-#rc_login:
-#  address:
-#    per_second: 0.17
-#    burst_count: 3
-#  account:
-#    per_second: 0.17
-#    burst_count: 3
-#  failed_attempts:
-#    per_second: 0.17
-#    burst_count: 3
+rc_registration:
+ per_second: 10000
+ burst_count: 10000
+
+rc_login:
+ address:
+   per_second: 10000
+   burst_count: 10000
+ account:
+   per_second: 10000
+   burst_count: 10000
+ failed_attempts:
+   per_second: 10000
+   burst_count: 10000
 
 # The federation window size in milliseconds
 #
