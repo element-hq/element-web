@@ -120,7 +120,7 @@ class MatrixClientPeg {
                 await this.matrixClient.initCrypto();
             }
         } catch (e) {
-            if (e.name === 'InvalidCryptoStoreError') {
+            if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
@@ -130,7 +130,7 @@ class MatrixClientPeg {
             }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
-            console.warn("Unable to initialise e2e: " + e);
+            console.warn("Unable to initialise e2e", e);
         }
 
         const opts = utils.deepCopy(this.opts);
