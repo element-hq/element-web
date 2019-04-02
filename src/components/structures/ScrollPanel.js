@@ -30,7 +30,7 @@ const UNPAGINATION_PADDING = 6000;
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
 
-const PAGE_SIZE = 200;
+const PAGE_SIZE = 400;
 
 let debuglog;
 if (DEBUG_SCROLL) {
