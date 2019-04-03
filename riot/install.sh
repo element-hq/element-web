@@ -30,5 +30,5 @@ unzip -q riot.zip
 rm riot.zip
 mv riot-web-${RIOT_BRANCH} riot-web
 cd riot-web
-npm install
-npm run build
+yarn install
+yarn run build

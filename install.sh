@@ -3,4 +3,4 @@
 set -e
 ./synapse/install.sh
 ./riot/install.sh
-npm install
+yarn install
