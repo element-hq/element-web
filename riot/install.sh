@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
+RIOT_BRANCH=develop
 
-RIOT_BRANCH=master
 BASE_DIR=$(cd $(dirname $0) && pwd)
 if [ -d $BASE_DIR/riot-web ]; then
     echo "riot is already installed"

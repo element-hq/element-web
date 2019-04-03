@@ -34,7 +34,7 @@ pip install --upgrade setuptools
 python synapse/python_dependencies.py | xargs pip install
 pip install lxml mock
 pip install .
-
+pip install jinja2 # We use the ConsentResource, which requires jinja2
 python -m synapse.app.homeserver \
     --server-name localhost \
     --config-path homeserver.yaml \

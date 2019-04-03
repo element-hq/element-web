@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const acceptTerms = require('./consent');
 const assert = require('assert');
 
 module.exports = async function signup(session, username, password, homeserver) {
@@ -59,6 +58,15 @@ module.exports = async function signup(session, username, password, homeserver) 
     //confirm dialog saying you cant log back in without e-mail
     const continueButton = await session.waitAndQuery('.mx_QuestionDialog button.mx_Dialog_primary');
     await continueButton.click();
+
+    //find the privacy policy checkbox and check it
+    const policyCheckbox = await session.waitAndQuery('.mx_Login_box input[type="checkbox"]');
+    await policyCheckbox.click();
+
+    //now click the 'Accept' button to agree to the privacy policy
+    const acceptButton = await session.waitAndQuery('.mx_InteractiveAuthEntryComponents_termsSubmit');
+    await acceptButton.click();
+
     //wait for registration to finish so the hash gets set
     //onhashchange better?
     await session.delay(2000);

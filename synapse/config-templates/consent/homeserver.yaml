@@ -674,6 +674,7 @@ user_consent:
   block_events_error: >-
     To continue using this homeserver you must review and agree to the
     terms and conditions at %(consent_uri)s
+  require_at_registration: true
 
 
 
