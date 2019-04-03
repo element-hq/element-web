@@ -1,5 +1,7 @@
 #!/bin/bash
-BASE_DIR=$(readlink -f $(dirname $0))
+set -e
+
+BASE_DIR=$(cd $(dirname $0) && pwd)
 cd $BASE_DIR
 cd installations/consent
 source env/bin/activate

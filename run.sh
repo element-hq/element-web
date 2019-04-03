@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 stop_servers() {
 	./riot/stop.sh
