@@ -12,7 +12,7 @@ cd $BASE_DIR
 # Install ComplexHttpServer (a drop in replacement for Python's SimpleHttpServer
 # but with support for multiple threads) into a virtualenv.
 (
-    virtualenv env
+    virtualenv -p python3 env
     source env/bin/activate
 
     # Having been bitten by pip SSL fail too many times, I don't trust the existing pip
