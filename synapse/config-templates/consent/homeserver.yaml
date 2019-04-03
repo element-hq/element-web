@@ -177,7 +177,7 @@ listeners:
     x_forwarded: true
 
     resources:
-      - names: [client, federation]
+      - names: [client, federation, consent]
         compress: false
 
     # example additonal_resources:
