@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,8 @@ limitations under the License.
 */
 
 /* Using a textarea for this element, to circumvent autofill */
-.mx_ChatInviteDialog_input,
-.mx_ChatInviteDialog_input:focus
+.mx_AddressPickerDialog_input,
+.mx_AddressPickerDialog_input:focus
 {
     height: 26px;
     font-size: 14px;
@@ -34,11 +35,11 @@ limitations under the License.
     word-wrap: nowrap;
 }
 
-.mx_ChatInviteDialog .mx_Dialog_content {
+.mx_AddressPickerDialog .mx_Dialog_content {
     min-height: 50px
 }
 
-.mx_ChatInviteDialog_inputContainer {
+.mx_AddressPickerDialog_inputContainer {
     border-radius: 3px;
     border: solid 1px $input-border-color;
     line-height: 36px;
@@ -51,19 +52,19 @@ limitations under the License.
     overflow-y: auto;
 }
 
-.mx_ChatInviteDialog_error {
+.mx_AddressPickerDialog_error {
     margin-top: 10px;
     color: $warning-color;
 }
 
-.mx_ChatInviteDialog_cancel {
+.mx_AddressPickerDialog_cancel {
     position: absolute;
     right: 11px;
     top: 13px;
     cursor: pointer;
 }
 
-.mx_ChatInviteDialog_cancel object {
+.mx_AddressPickerDialog_cancel object {
     pointer-events: none;
 }
 

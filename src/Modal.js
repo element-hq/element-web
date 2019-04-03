@@ -20,6 +20,7 @@ limitations under the License.
 const React = require('react');
 const ReactDOM = require('react-dom');
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
@@ -158,7 +159,7 @@ class ModalManager {
     }
 
     createDialog(Element, ...rest) {
-        return this.createDialogAsync(new Promise(resolve => resolve(Element)), ...rest);
+        return this.createDialogAsync(Promise.resolve(Element), ...rest);
     }
 
     createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
