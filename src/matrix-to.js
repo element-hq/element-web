@@ -241,7 +241,7 @@ export function makeRoomPermalink(roomId) {
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
-    if (roomId[0] !== '!') return permalinkBase;
+    if (!roomId || roomId[0] !== '!') return permalinkBase;
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
