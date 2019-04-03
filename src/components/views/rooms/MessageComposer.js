@@ -362,18 +362,22 @@ export default class MessageComposer extends React.Component {
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 
+            const continuesLink = replacementRoomId ? (
+                <a href={makeRoomPermalink(replacementRoomId)}
+                    className="mx_MessageComposer_roomReplaced_link"
+                    onClick={this._onTombstoneClick}
+                >
+                    {_t("The conversation continues here.")}
+                </a>
+            ) : '';
+
             controls.push(<div className="mx_MessageComposer_replaced_wrapper">
                 <div className="mx_MessageComposer_replaced_valign">
                     <img className="mx_MessageComposer_roomReplaced_icon" src={require("../../../../res/img/room_replaced.svg")} />
                     <span className="mx_MessageComposer_roomReplaced_header">
                         {_t("This room has been replaced and is no longer active.")}
                     </span><br />
-                    <a href={makeRoomPermalink(replacementRoomId)}
-                        className="mx_MessageComposer_roomReplaced_link"
-                        onClick={this._onTombstoneClick}
-                    >
-                        {_t("The conversation continues here.")}
-                    </a>
+                    { continuesLink }
                 </div>
             </div>);
         } else {
