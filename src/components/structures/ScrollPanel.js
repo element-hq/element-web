@@ -29,8 +29,11 @@ const UNPAGINATION_PADDING = 6000;
 // The number of milliseconds to debounce calls to onUnfillRequest, to prevent
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
-
-const PAGE_SIZE = 200;
+// _updateHeight makes the height a ceiled multiple of this so we
+// don't have to update the height too often. It also allows the user
+// to scroll past the pagination spinner a bit so they don't feel blocked so
+// much while the content loads.
+const PAGE_SIZE = 400;
 
 let debuglog;
 if (DEBUG_SCROLL) {
@@ -222,10 +225,12 @@ module.exports = React.createClass({
     // whether it will stay that way when the children update.
     isAtBottom: function() {
         const sn = this._getScrollNode();
-        // fractional values for scrollTop happen on certain browsers/platforms
+        // fractional values (both too big and too small)
+        // for scrollTop happen on certain browsers/platforms
         // when scrolled all the way down. E.g. Chrome 72 on debian.
-        // so ceil everything upwards to make sure it aligns.
-        return Math.ceil(sn.scrollTop) === Math.ceil(sn.scrollHeight - sn.clientHeight);
+        // so check difference <= 1;
+        return Math.abs(sn.scrollHeight - (sn.scrollTop + sn.clientHeight)) <= 1;
+
     },
 
     // returns the vertical height in the given direction that can be removed from
