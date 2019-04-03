@@ -33,7 +33,7 @@ module.exports = async function scenario(createSession, restCreator) {
 
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
-
+    console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
 }
