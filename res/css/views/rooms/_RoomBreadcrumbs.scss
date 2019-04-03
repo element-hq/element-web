@@ -47,6 +47,9 @@ limitations under the License.
         transform: scale(0);
     }
 
+    .mx_RoomBreadcrumbs_left {
+        opacity: 0.5;
+    }
 
     // Note: we have to manually control the gradient and stuff, but the IndicatorScrollbar
     // will deal with left/right positioning for us. Normally we'd use position:sticky on
