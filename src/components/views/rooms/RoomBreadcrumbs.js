@@ -109,21 +109,54 @@ export default class RoomBreadcrumbs extends React.Component {
 
     onRoomReceipt = (event, room) => {
         if (this.state.rooms.map(r => r.room.roomId).includes(room.roomId)) {
-            this.forceUpdate();
+            this._calculateRoomBadges(room);
         }
     };
 
     onRoomTimeline = (event, room) => {
         if (this.state.rooms.map(r => r.room.roomId).includes(room.roomId)) {
-            this.forceUpdate();
+            this._calculateRoomBadges(room);
         }
     };
 
     onEventDecrypted = (event) => {
         if (this.state.rooms.map(r => r.room.roomId).includes(event.getRoomId())) {
-            this.forceUpdate();
+            this._calculateRoomBadges(MatrixClientPeg.get().getRoom(event.getRoomId()));
         }
     };
+
+    _calculateRoomBadges(room) {
+        if (!room) return;
+
+        const rooms = this.state.rooms.slice();
+        const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
+        if (!roomModel) return; // No applicable room, so don't do math on it
+
+        // Reset the notification variables for simplicity
+        roomModel.redBadge = false;
+        roomModel.formattedCount = "0";
+        roomModel.showCount = false;
+
+        const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
+        if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
+            const highlightNotifs = RoomNotifs.getUnreadNotificationCount(room, 'highlight');
+            const unreadNotifs = RoomNotifs.getUnreadNotificationCount(room);
+
+            const redBadge = highlightNotifs > 0;
+            const greyBadge = redBadge || (unreadNotifs > 0 && RoomNotifs.BADGE_STATES.includes(notifState));
+
+            if (redBadge || greyBadge) {
+                const notifCount = redBadge ? highlightNotifs : unreadNotifs;
+                const limitedCount = FormattingUtils.formatCount(notifCount);
+
+                roomModel.redBadge = redBadge;
+                roomModel.formattedCount = limitedCount;
+                roomModel.showCount = true;
+            }
+        }
+
+        this.setState({rooms});
+    }
 
     _appendRoomId(roomId) {
         const room = MatrixClientPeg.get().getRoom(roomId);
@@ -188,28 +221,15 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             let badge;
-            const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
-            if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
-                const highlightNotifs = RoomNotifs.getUnreadNotificationCount(room, 'highlight');
-                const unreadNotifs = RoomNotifs.getUnreadNotificationCount(room);
+            if (r.showCount) {
+                const badgeClasses = classNames({
+                    'mx_RoomTile_badge': true,
+                    'mx_RoomTile_badgeButton': true,
+                    'mx_RoomTile_badgeRed': r.redBadge,
+                    'mx_RoomTile_badgeUnread': !r.redBadge,
+                });
 
-                const redBadge = highlightNotifs > 0;
-                const greyBadge = redBadge || (unreadNotifs > 0 && RoomNotifs.BADGE_STATES.includes(notifState));
-
-                if (redBadge || greyBadge) {
-                    const notifCount = redBadge ? highlightNotifs : unreadNotifs;
-                    const limitedCount = FormattingUtils.formatCount(notifCount);
-
-                    // HACK: We are abusing the RoomTile badge styles here
-                    const badgeClasses = classNames({
-                        'mx_RoomTile_badge': true,
-                        'mx_RoomTile_badgeButton': true,
-                        'mx_RoomTile_badgeRed': redBadge,
-                        'mx_RoomTile_badgeUnread': !redBadge,
-                    });
-
-                    badge = <div className={badgeClasses}>{limitedCount}</div>;
-                }
+                badge = <div className={badgeClasses}>{r.formattedCount}</div>;
             }
 
             return (
