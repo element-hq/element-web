@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,17 +18,18 @@ limitations under the License.
 'use strict';
 
 import Promise from 'bluebird';
-const extend = require('./extend');
-const dis = require('./dispatcher');
-const MatrixClientPeg = require('./MatrixClientPeg');
-const sdk = require('./index');
+import extend from './extend';
+import dis from './dispatcher';
+import MatrixClientPeg from './MatrixClientPeg';
+import sdk from './index';
 import { _t } from './languageHandler';
-const Modal = require('./Modal');
+import Modal from './Modal';
+import RoomViewStore from './stores/RoomViewStore';
 
-const encrypt = require("browser-encrypt-attachment");
+import encrypt from "browser-encrypt-attachment";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
-require("blueimp-canvas-to-blob");
+import "blueimp-canvas-to-blob";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -91,7 +93,7 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
 /**
  * Load a file into a newly created image element.
  *
- * @param {File} file The file to load in an image element.
+ * @param {File} imageFile The file to load in an image element.
  * @return {Promise} A promise that resolves with the html image element.
  */
 function loadImageElement(imageFile) {
@@ -119,7 +121,7 @@ function loadImageElement(imageFile) {
  *
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the image will be uploaded in.
- * @param {File} The image to read and thumbnail.
+ * @param {File} imageFile The image to read and thumbnail.
  * @return {Promise} A promise that resolves with the attachment info.
  */
 function infoForImageFile(matrixClient, roomId, imageFile) {
@@ -144,7 +146,7 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
 /**
  * Load a file into a newly created video element.
  *
- * @param {File} file The file to load in an video element.
+ * @param {File} videoFile The file to load in an video element.
  * @return {Promise} A promise that resolves with the video image element.
  */
 function loadVideoElement(videoFile) {
@@ -179,7 +181,7 @@ function loadVideoElement(videoFile) {
  *
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the video will be uploaded to.
- * @param {File} The video to read and thumbnail.
+ * @param {File} videoFile The video to read and thumbnail.
  * @return {Promise} A promise that resolves with the attachment info.
  */
 function infoForVideoFile(matrixClient, roomId, videoFile) {
@@ -200,6 +202,7 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
 
 /**
  * Read the file as an ArrayBuffer.
+ * @param {File} file The file to read
  * @return {Promise} A promise that resolves with an ArrayBuffer when the file
  *   is read.
  */
@@ -269,11 +272,43 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
     }
 }
 
-
-class ContentMessages {
+export default class ContentMessages {
     constructor() {
         this.inprogress = [];
         this.nextId = 0;
+        this._mediaConfig = null;
+    }
+
+    static sharedInstance() {
+        if (global.mx_ContentMessages === undefined) {
+            global.mx_ContentMessages = new ContentMessages();
+        }
+        return global.mx_ContentMessages;
+    }
+
+    _isFileSizeAcceptable(file) {
+        if (this._mediaConfig !== null &&
+            this._mediaConfig["m.upload.size"] !== undefined &&
+            file.size > this._mediaConfig["m.upload.size"]) {
+            return false;
+        }
+        return true;
+    }
+
+    _ensureMediaConfigFetched() {
+        if (this._mediaConfig !== null) return;
+
+        console.log("[Media Config] Fetching");
+        return MatrixClientPeg.get().getMediaConfig().then((config) => {
+            console.log("[Media Config] Fetched config:", config);
+            return config;
+        }).catch(() => {
+            // Media repo can't or won't report limits, so provide an empty object (no limits).
+            console.log("[Media Config] Could not fetch config, so not limiting uploads.");
+            return {};
+        }).then((config) => {
+            this._mediaConfig = config;
+        });
     }
 
     sendStickerContentToRoom(url, roomId, info, text, matrixClient) {
@@ -283,7 +318,90 @@ class ContentMessages {
         });
     }
 
-    sendContentToRoom(file, roomId, matrixClient) {
+    getUploadLimit() {
+        if (this._mediaConfig !== null && this._mediaConfig["m.upload.size"] !== undefined) {
+            return this._mediaConfig["m.upload.size"];
+        } else {
+            return null;
+        }
+    }
+
+    async sendContentListToRoom(files, roomId, matrixClient) {
+        if (matrixClient.isGuest()) {
+            dis.dispatch({action: 'require_registration'});
+            return;
+        }
+
+        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        if (isQuoting) {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const shouldUpload = await new Promise((resolve) => {
+                Modal.createTrackedDialog('Upload Reply Warning', '', QuestionDialog, {
+                    title: _t('Replying With Files'),
+                    description: (
+                        <div>{_t(
+                            'At this time it is not possible to reply with a file. ' +
+                            'Would you like to upload this file without replying?',
+                        )}</div>
+                    ),
+                    hasCancelButton: true,
+                    button: _t("Continue"),
+                    onFinished: (shouldUpload) => {
+                        resolve(shouldUpload);
+                    },
+                });
+            });
+            if (!shouldUpload) return;
+        }
+
+        await this._ensureMediaConfigFetched();
+
+        const tooBigFiles = [];
+        const okFiles = [];
+
+        for (let i = 0; i < files.length; ++i) {
+            if (this._isFileSizeAcceptable(files[i])) {
+                okFiles.push(files[i]);
+            } else {
+                tooBigFiles.push(files[i]);
+            }
+        }
+
+        if (tooBigFiles.length > 0) {
+            const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
+            const uploadFailureDialogPromise = new Promise((resolve) => {
+                Modal.createTrackedDialog('Upload Failure', '', UploadFailureDialog, {
+                    badFiles: tooBigFiles,
+                    totalFiles: files.length,
+                    contentMessages: this,
+                    onFinished: (shouldContinue) => {
+                        resolve(shouldContinue);
+                    },
+                });
+            });
+            const shouldContinue = await uploadFailureDialogPromise;
+            if (!shouldContinue) return;
+        }
+
+        const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
+        for (let i = 0; i < okFiles.length; ++i) {
+            const file = okFiles[i];
+            const shouldContinue = await new Promise((resolve) => {
+                Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
+                    file,
+                    currentIndex: i,
+                    totalFiles: okFiles.length,
+                    onFinished: (shouldContinue) => {
+                        resolve(shouldContinue);
+                    },
+                });
+            });
+            if (!shouldContinue) break;
+            this._sendContentToRoom(file, roomId, matrixClient);
+        }
+    }
+
+    _sendContentToRoom(file, roomId, matrixClient) {
         const content = {
             body: file.name || 'Attachment',
             info: {
@@ -357,9 +475,12 @@ class ContentMessages {
         }, function(err) {
             error = err;
             if (!upload.canceled) {
-                let desc = _t('The file \'%(fileName)s\' failed to upload', {fileName: upload.fileName}) + '.';
+                let desc = _t("The file '%(fileName)s' failed to upload.", {fileName: upload.fileName});
                 if (err.http_status == 413) {
-                    desc = _t('The file \'%(fileName)s\' exceeds this homeserver\'s size limit for uploads', {fileName: upload.fileName});
+                    desc = _t(
+                        "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
+                        {fileName: upload.fileName},
+                    );
                 }
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
@@ -377,9 +498,16 @@ class ContentMessages {
                 }
             }
             if (error) {
+                // 413: File was too big or upset the server in some way:
+                // clear the media size limit so we fetch it again next time
+                // we try to upload
+                if (error && error.http_status === 413) {
+                    this._mediaConfig = null;
+                }
                 dis.dispatch({action: 'upload_failed', upload, error});
             } else {
                 dis.dispatch({action: 'upload_finished', upload});
+                dis.dispatch({action: 'message_sent'});
             }
         });
     }
@@ -404,9 +532,3 @@ class ContentMessages {
         }
     }
 }
-
-if (global.mx_ContentMessage === undefined) {
-    global.mx_ContentMessage = new ContentMessages();
-}
-
-module.exports = global.mx_ContentMessage;

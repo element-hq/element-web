@@ -29,9 +29,9 @@ import PersistedElement from "../elements/PersistedElement";
 
 const widgetType = 'm.stickerpicker';
 
-// We sit in a context menu, so the persisted element container needs to float
-// above it, so it needs a greater z-index than the ContextMenu
-const STICKERPICKER_Z_INDEX = 5000;
+// This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
+// We sit in a context menu, so this should be given to the context menu.
+const STICKERPICKER_Z_INDEX = 3500;
 
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
@@ -373,6 +373,7 @@ export default class Stickerpicker extends React.Component {
             menuPaddingTop={0}
             menuPaddingLeft={0}
             menuPaddingRight={0}
+            zIndex={STICKERPICKER_Z_INDEX}
         />;
 
         if (this.state.showStickers) {
