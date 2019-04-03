@@ -42,9 +42,6 @@ class ActiveWidgetStore extends EventEmitter {
         // What room ID each widget is associated with (if it's a room widget)
         this._roomIdByWidgetId = {};
 
-        // The sticker picker widget definition the app is currently using, if any
-        this._stickerPickerWidget = null;
-
         this.onRoomStateEvents = this.onRoomStateEvents.bind(this);
 
         this.dispatcherRef = null;
@@ -150,18 +147,6 @@ class ActiveWidgetStore extends EventEmitter {
     delRoomId(widgetId) {
         delete this._roomIdByWidgetId[widgetId];
         this.emit('update');
-    }
-
-    getStickerPickerWidget() {
-        return this._stickerPickerWidget;
-    }
-
-    setStickerPickerWidget(widget) {
-        this._stickerPickerWidget = widget;
-    }
-
-    delStickerPickerWidget() {
-        this._stickerPickerWidget = null;
     }
 }
 

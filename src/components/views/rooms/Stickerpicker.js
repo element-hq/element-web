@@ -37,6 +37,9 @@ const STICKERPICKER_Z_INDEX = 3500;
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 export default class Stickerpicker extends React.Component {
+
+    static currentWidget;
+
     constructor(props) {
         super(props);
         this._onShowStickersClick = this._onShowStickersClick.bind(this);
@@ -131,12 +134,12 @@ export default class Stickerpicker extends React.Component {
     _updateWidget() {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         if (!stickerpickerWidget) {
-            ActiveWidgetStore.delStickerPickerWidget();
+            Stickerpicker.currentWidget = null;
             this.setState({stickerpickerWidget: null, widgetId: null});
             return;
         }
 
-        const currentWidget = ActiveWidgetStore.getStickerPickerWidget();
+        const currentWidget = Stickerpicker.currentWidget;
         let currentUrl = null;
         if (currentWidget && currentWidget.content && currentWidget.content.url) {
             currentUrl = currentWidget.content.url;
@@ -152,7 +155,7 @@ export default class Stickerpicker extends React.Component {
             PersistedElement.destroyElement(PERSISTED_ELEMENT_KEY);
         }
 
-        ActiveWidgetStore.setStickerPickerWidget(stickerpickerWidget);
+        Stickerpicker.currentWidget = stickerpickerWidget;
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
