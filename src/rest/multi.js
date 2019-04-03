@@ -59,6 +59,11 @@ module.exports = class RestMultiSession {
         this.log.done();
         return new RestMultiRoom(rooms, roomIdOrAlias, this.log);
     }
+
+    room(roomIdOrAlias) {
+        const rooms = this.sessions.map(s => s.room(roomIdOrAlias));
+        return new RestMultiRoom(rooms, roomIdOrAlias, this.log);
+    }
 }
 
 class RestMultiRoom {
@@ -82,7 +87,7 @@ class RestMultiRoom {
         this.log.step(`leave ${this.roomIdOrAlias}`)
         await Promise.all(this.rooms.map(async (r) => {
             r.log.mute();
-            await r.leave(message);
+            await r.leave();
             r.log.unmute();
         }));
         this.log.done();
