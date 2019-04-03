@@ -29,7 +29,10 @@ const UNPAGINATION_PADDING = 6000;
 // The number of milliseconds to debounce calls to onUnfillRequest, to prevent
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
-
+// _updateHeight makes the height a ceiled multiple of this so we
+// don't have to update the height too often. It also allows the user
+// to scroll past the pagination spinner a bit so they don't feel blocked so
+// much while the content loads.
 const PAGE_SIZE = 400;
 
 let debuglog;
