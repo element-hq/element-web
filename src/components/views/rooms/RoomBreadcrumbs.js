@@ -18,13 +18,13 @@ limitations under the License.
 import React from "react";
 import dis from "../../../dispatcher";
 import MatrixClientPeg from "../../../MatrixClientPeg";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
 import sdk from "../../../index";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const MAX_ROOMS = 20;
 
