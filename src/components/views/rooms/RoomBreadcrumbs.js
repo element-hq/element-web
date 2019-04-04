@@ -173,6 +173,10 @@ export default class RoomBreadcrumbs extends React.Component {
             rooms.splice(MAX_ROOMS, rooms.length - MAX_ROOMS);
         }
         this.setState({rooms});
+
+        if (this.refs.scroller) {
+            this.refs.scroller.moveToOrigin();
+        }
     }
 
     _viewRoom(room) {
