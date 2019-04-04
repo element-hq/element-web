@@ -272,7 +272,7 @@ async function loadApp() {
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isAndroid = /Android/.test(navigator.userAgent);
         if (isIos || isAndroid) {
-            if (!document.cookie.split(';').some((c) => c.startsWith('mobile_redirect_to_guide'))) {
+            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
                 window.location = "mobile_guide/";
                 return;
             }
