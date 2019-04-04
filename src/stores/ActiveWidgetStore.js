@@ -23,7 +23,6 @@ import MatrixClientPeg from '../MatrixClientPeg';
  *  * What widget is set to remain always-on-screen, if any
  *    Only one widget may be 'always on screen' at any one time.
  *  * Negotiated capabilities for active apps
- *  * Which stickerpicker the app is using, if any
  */
 class ActiveWidgetStore extends EventEmitter {
     constructor() {

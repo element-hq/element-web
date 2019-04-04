@@ -37,7 +37,6 @@ const STICKERPICKER_Z_INDEX = 3500;
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 export default class Stickerpicker extends React.Component {
-
     static currentWidget;
 
     constructor(props) {
