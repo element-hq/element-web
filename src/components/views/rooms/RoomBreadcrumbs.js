@@ -24,6 +24,7 @@ import classNames from 'classnames';
 import sdk from "../../../index";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
+import Analytics from "../../../Analytics";
 
 const MAX_ROOMS = 20;
 
@@ -175,7 +176,8 @@ export default class RoomBreadcrumbs extends React.Component {
         this.setState({rooms});
     }
 
-    _viewRoom(room) {
+    _viewRoom(room, index) {
+        Analytics.trackEvent("Breadcrumbs", "click_node", index);
         dis.dispatch({action: "view_room", room_id: room.roomId});
     }
 
@@ -233,7 +235,7 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             return (
-                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room)}
+                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room, i)}
                     onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}

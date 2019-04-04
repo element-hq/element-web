@@ -27,6 +27,7 @@ import VectorConferenceHandler from '../../VectorConferenceHandler';
 import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
+import Analytics from "../../Analytics";
 
 
 const LeftPanel = React.createClass({
@@ -53,10 +54,11 @@ const LeftPanel = React.createClass({
         this.focusedElement = null;
 
         this._settingWatchRef = SettingsStore.watchSetting(
-            "feature_room_breadcrumbs", null,
-            this._onBreadcrumbsChanged);
+            "feature_room_breadcrumbs", null, this._onBreadcrumbsChanged);
 
-        this.setState({breadcrumbs: SettingsStore.isFeatureEnabled("feature_room_breadcrumbs")});
+        const useBreadcrumbs = SettingsStore.isFeatureEnabled("feature_room_breadcrumbs");
+        Analytics.setBreadcrumbs(useBreadcrumbs);
+        this.setState({breadcrumbs: useBreadcrumbs});
     },
 
     componentWillUnmount: function() {
@@ -82,6 +84,10 @@ const LeftPanel = React.createClass({
         }
 
         return false;
+    },
+
+    componentDidUpdate(newProps, newState) {
+        Analytics.setBreadcrumbs(newState.breadcrumbs);
     },
 
     _onBreadcrumbsChanged: function(settingName, roomId, level, valueAtLevel, value) {
