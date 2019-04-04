@@ -19,9 +19,14 @@ limitations under the License.
     height: 42px;
     padding: 8px;
     padding-bottom: 0;
-    overflow-x: visible;
     display: flex;
     flex-direction: row;
+
+    // Autohide the scrollbar
+    overflow-x: hidden;
+    &:hover {
+        overflow-x: visible;
+    }
 
     .mx_AutoHideScrollbar_offset {
         display: flex;
