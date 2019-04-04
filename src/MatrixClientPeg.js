@@ -31,6 +31,7 @@ import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
 import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
+import * as StorageManager from './utils/StorageManager';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -94,6 +95,8 @@ class MatrixClientPeg {
     }
 
     async start() {
+        StorageManager.trackStores(this.matrixClient);
+
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();

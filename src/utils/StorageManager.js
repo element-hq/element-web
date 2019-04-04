@@ -147,3 +147,11 @@ async function checkCryptoStore() {
     log("Crypto store using memory only");
     return { exists, healthy: false };
 }
+
+export function trackStores(client) {
+    if (client.store && client.store.on) {
+        client.store.on("degraded", () => {
+            track("Sync store using IndexedDB degraded to memory");
+        });
+    }
+}
