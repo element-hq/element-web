@@ -2,7 +2,7 @@ import {getVectorConfig} from '../getconfig';
 
 function onBackToRiotClick() {
     // Cookie should expire in 4 hours
-    document.cookie = 'mobile_redirect_to_guide=false;path=/;max-age=14400';
+    document.cookie = 'riot_mobile_redirect_to_guide=false;path=/;max-age=14400';
     window.location.href = '../';
 }
 
