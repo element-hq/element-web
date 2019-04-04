@@ -35,7 +35,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     await session.replaceInputText(usernameField, username);
     await session.replaceInputText(passwordField, password);
     await session.replaceInputText(passwordRepeatField, password);
-    //wait over a second because Registration/ServerConfig have a 250ms
+    //wait 300ms because Registration/ServerConfig have a 250ms
     //delay to internally set the homeserver url
     //see Registration::render and ServerConfig::props::delayTimeMs
     await session.delay(300);
