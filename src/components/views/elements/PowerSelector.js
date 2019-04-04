@@ -73,8 +73,12 @@ module.exports = React.createClass({
     _initStateFromProps: function(newProps) {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
-        const options = Object.keys(levelRoleMap).filter((l) => {
-            return l === undefined || l <= newProps.maxValue || l == newProps.value;
+        const options = Object.keys(levelRoleMap).filter(level => {
+            return (
+                level === undefined ||
+                level <= newProps.maxValue ||
+                level == newProps.value
+            );
         });
 
         const isCustom = levelRoleMap[newProps.value] === undefined;
