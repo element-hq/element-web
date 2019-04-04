@@ -46,7 +46,7 @@ export default class ImageView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { rotationDegrees: 0 }
+        this.state = { rotationDegrees: 0 };
     }
 
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal
