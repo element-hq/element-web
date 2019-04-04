@@ -201,6 +201,7 @@ class Analytics {
 
     trackEvent(category, action, name, value) {
         if (this.disabled) return;
+        this._paq.push(['setCustomUrl', getRedactedUrl()]);
         this._paq.push(['trackEvent', category, action, name, value]);
     }
 
