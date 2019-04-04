@@ -16,10 +16,22 @@ limitations under the License.
 
 const assert = require('assert');
 
-module.exports = async function createRoom(session, roomName) {
+async function openRoomDirectory(session) {
+    const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
+    const roomListHeaderLabels = await Promise.all(roomListHeaders.map(h => session.innerText(h)));
+    const roomsIndex = roomListHeaderLabels.findIndex(l => l.toLowerCase().includes("rooms"));
+    if (roomsIndex === -1) {
+        throw new Error("could not find room list section that contains rooms in header");
+    }
+    const roomsHeader = roomListHeaders[roomsIndex];
+    const addRoomButton = await roomsHeader.$(".mx_RoomSubList_addRoom");
+    await addRoomButton.click();
+}
+
+async function createRoom(session, roomName) {
     session.log.step(`creates room "${roomName}"`);
-    //TODO: brittle selector
-    const createRoomButton = await session.waitAndQuery('.mx_RoleButton[aria-label="Create new room"]');
+    await openRoomDirectory(session);
+    const createRoomButton = await session.waitAndQuery('.mx_RoomDirectory_createRoom');
     await createRoomButton.click();
 
     const roomNameInput = await session.waitAndQuery('.mx_CreateRoomDialog_input');
@@ -31,3 +43,5 @@ module.exports = async function createRoom(session, roomName) {
     await session.waitAndQuery('.mx_MessageComposer');
     session.log.done();
 }
+
+module.exports = {openRoomDirectory, createRoom};

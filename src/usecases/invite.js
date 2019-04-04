@@ -19,7 +19,7 @@ const assert = require('assert');
 module.exports = async function invite(session, userId) {
     session.log.step(`invites "${userId}" to room`);
     await session.delay(1000);
-    const inviteButton = await session.waitAndQuery(".mx_RightPanel_invite");
+    const inviteButton = await session.waitAndQuery(".mx_MemberList_invite");
     await inviteButton.click();
     const inviteTextArea = await session.waitAndQuery(".mx_ChatInviteDialog textarea");
     await inviteTextArea.type(userId);

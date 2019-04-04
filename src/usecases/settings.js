@@ -16,6 +16,17 @@ limitations under the License.
 
 const assert = require('assert');
 
+async function openSettings(session, section) {
+    const menuButton = await session.query(".mx_TopLeftMenuButton_name");
+    await menuButton.click();
+    const settingsItem = await session.waitAndQuery(".mx_TopLeftMenu_icon_settings");
+    await settingsItem.click();
+    if (section) {
+        const sectionButton = await session.waitAndQuery(`.mx_UserSettingsDialog .mx_TabbedView_tabLabels .mx_UserSettingsDialog_${section}Icon`);
+        await sectionButton.click();
+    }
+}
+
 module.exports.enableLazyLoading = async function(session) {
     session.log.step(`enables lazy loading of members in the lab settings`);
     const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
@@ -30,13 +41,12 @@ module.exports.enableLazyLoading = async function(session) {
 
 module.exports.getE2EDeviceFromSettings = async function(session) {
     session.log.step(`gets e2e device/key from settings`);
-    const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
-    await settingsButton.click();
-    const deviceAndKey = await session.waitAndQueryAll(".mx_UserSettings_section.mx_UserSettings_cryptoSection code");
+    await openSettings(session, "security");
+    const deviceAndKey = await session.waitAndQueryAll(".mx_SettingsTab_section .mx_SecurityUserSettingsTab_deviceInfo code");
     assert.equal(deviceAndKey.length, 2);
     const id = await (await deviceAndKey[0].getProperty("innerText")).jsonValue();
     const key = await (await deviceAndKey[1].getProperty("innerText")).jsonValue();
-    const closeButton = await session.query(".mx_RoomHeader_cancelButton");
+    const closeButton = await session.query(".mx_UserSettingsDialog .mx_Dialog_cancelButton");
     await closeButton.click();
     session.log.done();
     return {id, key};

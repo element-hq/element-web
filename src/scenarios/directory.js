@@ -18,7 +18,7 @@ limitations under the License.
 const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
 const {receiveMessage} = require('../usecases/timeline');
-const createRoom = require('../usecases/create-room');
+const {createRoom} = require('../usecases/create-room');
 const changeRoomSettings = require('../usecases/room-settings');
 
 module.exports = async function roomDirectoryScenarios(alice, bob) {

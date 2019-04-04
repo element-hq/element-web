@@ -34,8 +34,5 @@ module.exports = async function acceptInvite(session, name) {
     const acceptInvitationLink = await session.waitAndQuery(".mx_RoomPreviewBar_join_text a:first-child");
     await acceptInvitationLink.click();
 
-    // accept e2e warning dialog
-    acceptDialogMaybe(session, "encryption");
-
     session.log.done();
 }

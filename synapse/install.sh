@@ -22,7 +22,7 @@ curl https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH --output
 unzip -q synapse.zip
 mv synapse-$SYNAPSE_BRANCH $SERVER_DIR
 cd $SERVER_DIR
-virtualenv -p python2.7 env
+virtualenv -p python3 env
 source env/bin/activate
 
 # Having been bitten by pip SSL fail too many times, I don't trust the existing pip
@@ -31,10 +31,7 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 
 pip install --upgrade setuptools
-python synapse/python_dependencies.py | xargs pip install
-pip install lxml mock
-pip install .
-pip install jinja2 # We use the ConsentResource, which requires jinja2
+pip install matrix-synapse[all]
 python -m synapse.app.homeserver \
     --server-name localhost \
     --config-path homeserver.yaml \

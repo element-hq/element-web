@@ -22,7 +22,7 @@ const {
     checkTimelineContains,
     scrollToTimelineTop
 } = require('../usecases/timeline');
-const createRoom = require('../usecases/create-room');
+const {createRoom} = require('../usecases/create-room');
 const {getMembersInMemberlist} = require('../usecases/memberlist');
 const changeRoomSettings = require('../usecases/room-settings');
 const {enableLazyLoading} = require('../usecases/settings');
@@ -30,7 +30,6 @@ const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");
-    await enableLazyLoading(alice);
     const charly1to5 = charlies.slice("charly-1..5", 0, 5);
     const charly6to10 = charlies.slice("charly-6..10", 5);
     assert(charly1to5.sessions.length, 5);

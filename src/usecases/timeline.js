@@ -20,7 +20,7 @@ module.exports.scrollToTimelineTop = async function(session) {
     session.log.step(`scrolls to the top of the timeline`);
     await session.page.evaluate(() => {
         return Promise.resolve().then(async () => {
-            const timelineScrollView = document.querySelector(".mx_RoomView .gm-scroll-view");
+            const timelineScrollView = document.querySelector(".mx_RoomView_timeline .mx_ScrollPanel");
             let timedOut = false;
             let timeoutHandle = null;
             // set scrollTop to 0 in a loop and check every 50ms
@@ -54,31 +54,21 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
 
     let lastMessage = null;
     let isExpectedMessage = false;
-    try {
-        lastMessage = await getLastMessage();
-        isExpectedMessage = lastMessage &&
-            lastMessage.body === expectedMessage.body &&
-            lastMessage.sender === expectedMessage.sender;
-    } catch(ex) {}
-    // first try to see if the message is already the last message in the timeline
-    if (isExpectedMessage) {
-        assertMessage(lastMessage, expectedMessage);
-    } else {
-        await session.waitForSyncResponseWith(async (response) => {
-            const body = await response.text();
-            if (expectedMessage.encrypted) {
-                return body.indexOf(expectedMessage.sender) !== -1 &&
-                             body.indexOf("m.room.encrypted") !== -1;
-            } else {
-                return body.indexOf(expectedMessage.body) !== -1;
-            }
-        });
-        // wait a bit for the incoming event to be rendered
-        await session.delay(1000);
-        lastMessage = await getLastMessage();
-        assertMessage(lastMessage, expectedMessage);
+    let totalTime = 0;
+    while (!isExpectedMessage) {
+        try {
+            lastMessage = await getLastMessage();
+            isExpectedMessage = lastMessage &&
+                lastMessage.body === expectedMessage.body &&
+                lastMessage.sender === expectedMessage.sender
+        } catch(err) {}
+        if (totalTime > 5000) {
+            throw new Error("timed out after 5000ms");
+        }
+        totalTime += 200;
+        await session.delay(200);
     }
-
+    assertMessage(lastMessage, expectedMessage);
     session.log.done();
 }
 
@@ -117,11 +107,13 @@ function getLastEventTile(session) {
 }
 
 function getAllEventTiles(session) {
-    return session.queryAll(".mx_RoomView_MessageList > *");
+    return session.queryAll(".mx_RoomView_MessageList .mx_EventTile");
 }
 
 async function getMessageFromEventTile(eventTile) {
     const senderElement = await eventTile.$(".mx_SenderProfile_name");
+    const className = await (await eventTile.getProperty("className")).jsonValue();
+    const classNames = className.split(" ");
     const bodyElement = await eventTile.$(".mx_EventTile_body");
     let sender = null;
     if (senderElement) {
@@ -131,11 +123,10 @@ async function getMessageFromEventTile(eventTile) {
         return null;
     }
     const body = await(await bodyElement.getProperty("innerText")).jsonValue();
-    const e2eIcon = await eventTile.$(".mx_EventTile_e2eIcon");
 
     return {
         sender,
         body,
-        encrypted: !!e2eIcon
+        encrypted: classNames.includes("mx_EventTile_verified")
     };
 }
