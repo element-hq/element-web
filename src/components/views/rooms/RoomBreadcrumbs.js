@@ -24,6 +24,8 @@ import classNames from 'classnames';
 import sdk from "../../../index";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import {_t} from "../../../languageHandler";
 
 const MAX_ROOMS = 20;
 
@@ -195,6 +197,11 @@ export default class RoomBreadcrumbs extends React.Component {
         this.setState({rooms});
     }
 
+    _isDmRoom(room) {
+        const dmRooms = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        return Boolean(dmRooms);
+    }
+
     render() {
         const Tooltip = sdk.getComponent('elements.Tooltip');
         const IndicatorScrollbar = sdk.getComponent('structures.IndicatorScrollbar');
@@ -232,11 +239,23 @@ export default class RoomBreadcrumbs extends React.Component {
                 badge = <div className={badgeClasses}>{r.formattedCount}</div>;
             }
 
+            let dmIndicator;
+            if (this._isDmRoom(r.room)) {
+                dmIndicator = <img
+                    src={require("../../../../res/img/icon_person.svg")}
+                    className="mx_RoomBreadcrumbs_dmIndicator"
+                    width="13"
+                    height="15"
+                    alt={_t("Direct Chat")}
+                />;
+            }
+
             return (
                 <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room)}
                     onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
+                    {dmIndicator}
                     {tooltip}
                 </AccessibleButton>
             );
