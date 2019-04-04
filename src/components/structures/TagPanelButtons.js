@@ -39,7 +39,7 @@ const TagPanelButtons = React.createClass({
         if (payload.action === "show_redesign_feedback_dialog") {
             const RedesignFeedbackDialog =
                 sdk.getComponent("views.dialogs.RedesignFeedbackDialog");
-            Modal.createDialog(RedesignFeedbackDialog);
+            Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
         }
     },
 
