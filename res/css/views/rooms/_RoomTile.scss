@@ -144,11 +144,14 @@ limitations under the License.
     font-size: 12px;
 }
 
-.mx_RoomTile_unreadNotify .mx_RoomTile_badge {
+.mx_RoomTile_unreadNotify .mx_RoomTile_badge,
+.mx_RoomTile_badge.mx_RoomTile_badgeUnread {
     background-color: $roomtile-name-color;
 }
 
-.mx_RoomTile_highlight .mx_RoomTile_badge {
+.mx_RoomTile_highlight .mx_RoomTile_badge,
+.mx_RoomTile_badge.mx_RoomTile_badgeRed
+{
     background-color: $warning-color;
 }
 

@@ -23,6 +23,8 @@ export const ALL_MESSAGES = 'all_messages';
 export const MENTIONS_ONLY = 'mentions_only';
 export const MUTE = 'mute';
 
+export const BADGE_STATES = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
+export const MENTION_BADGE_STATES = [...BADGE_STATES, MENTIONS_ONLY];
 
 function _shouldShowNotifBadge(roomNotifState) {
     const showBadgeInStates = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
@@ -105,6 +107,28 @@ export function setRoomNotifsState(roomId, newState) {
     } else {
         return setRoomNotifsStateUnmuted(roomId, newState);
     }
+}
+
+export function getUnreadNotificationCount(room, type=null) {
+    let notificationCount = room.getUnreadNotificationCount(type);
+
+    // Check notification counts in the old room just in case there's some lost
+    // there. We only go one level down to avoid performance issues, and theory
+    // is that 1st generation rooms will have already been read by the 3rd generation.
+    const createEvent = room.currentState.getStateEvents("m.room.create", "");
+    if (createEvent && createEvent.getContent()['predecessor']) {
+        const oldRoomId = createEvent.getContent()['predecessor']['room_id'];
+        const oldRoom = MatrixClientPeg.get().getRoom(oldRoomId);
+        if (oldRoom) {
+            // We only ever care if there's highlights in the old room. No point in
+            // notifying the user for unread messages because they would have extreme
+            // difficulty changing their notification preferences away from "All Messages"
+            // and "Noisy".
+            notificationCount += oldRoom.getUnreadNotificationCount("highlight");
+        }
+    }
+
+    return notificationCount;
 }
 
 function setRoomNotifsStateMuted(roomId) {
@@ -204,4 +228,3 @@ function isRuleForRoom(roomId, rule) {
 function isMuteRule(rule) {
     return (rule.actions.length === 1 && rule.actions[0] === 'dont_notify');
 }
-

@@ -22,6 +22,8 @@ import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
 import sdk from "../../../index";
+import * as RoomNotifs from '../../../RoomNotifs';
+import * as FormattingUtils from "../../../utils/FormattingUtils";
 
 const MAX_ROOMS = 20;
 
@@ -54,13 +56,21 @@ export default class RoomBreadcrumbs extends React.Component {
         }
 
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
+        MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
     }
 
     componentWillUnmount() {
         dis.unregister(this._dispatcherRef);
 
         const client = MatrixClientPeg.get();
-        if (client) client.removeListener("Room.myMembership", this.onMyMembership);
+        if (client) {
+            client.removeListener("Room.myMembership", this.onMyMembership);
+            client.removeListener("Room.receipt", this.onRoomReceipt);
+            client.removeListener("Room.timeline", this.onRoomTimeline);
+            client.removeListener("Event.decrypted", this.onEventDecrypted);
+        }
     }
 
     componentDidUpdate() {
@@ -96,6 +106,57 @@ export default class RoomBreadcrumbs extends React.Component {
             }
         }
     };
+
+    onRoomReceipt = (event, room) => {
+        if (this.state.rooms.map(r => r.room.roomId).includes(room.roomId)) {
+            this._calculateRoomBadges(room);
+        }
+    };
+
+    onRoomTimeline = (event, room) => {
+        if (this.state.rooms.map(r => r.room.roomId).includes(room.roomId)) {
+            this._calculateRoomBadges(room);
+        }
+    };
+
+    onEventDecrypted = (event) => {
+        if (this.state.rooms.map(r => r.room.roomId).includes(event.getRoomId())) {
+            this._calculateRoomBadges(MatrixClientPeg.get().getRoom(event.getRoomId()));
+        }
+    };
+
+    _calculateRoomBadges(room) {
+        if (!room) return;
+
+        const rooms = this.state.rooms.slice();
+        const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
+        if (!roomModel) return; // No applicable room, so don't do math on it
+
+        // Reset the notification variables for simplicity
+        roomModel.redBadge = false;
+        roomModel.formattedCount = "0";
+        roomModel.showCount = false;
+
+        const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
+        if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
+            const highlightNotifs = RoomNotifs.getUnreadNotificationCount(room, 'highlight');
+            const unreadNotifs = RoomNotifs.getUnreadNotificationCount(room);
+
+            const redBadge = highlightNotifs > 0;
+            const greyBadge = redBadge || (unreadNotifs > 0 && RoomNotifs.BADGE_STATES.includes(notifState));
+
+            if (redBadge || greyBadge) {
+                const notifCount = redBadge ? highlightNotifs : unreadNotifs;
+                const limitedCount = FormattingUtils.formatCount(notifCount);
+
+                roomModel.redBadge = redBadge;
+                roomModel.formattedCount = limitedCount;
+                roomModel.showCount = true;
+            }
+        }
+
+        this.setState({rooms});
+    }
 
     _appendRoomId(roomId) {
         const room = MatrixClientPeg.get().getRoom(roomId);
@@ -138,13 +199,12 @@ export default class RoomBreadcrumbs extends React.Component {
         const Tooltip = sdk.getComponent('elements.Tooltip');
         const IndicatorScrollbar = sdk.getComponent('structures.IndicatorScrollbar');
 
-        // check for collapsed here and
-        // not at parent so we keep
-        // rooms in our state
+        // check for collapsed here and not at parent so we keep rooms in our state
         // when collapsing and expanding
         if (this.props.collapsed) {
             return null;
         }
+
         const rooms = this.state.rooms;
         const avatars = rooms.map((r, i) => {
             const isFirst = i === 0;
@@ -160,10 +220,23 @@ export default class RoomBreadcrumbs extends React.Component {
                 tooltip = <Tooltip label={r.room.name} />;
             }
 
+            let badge;
+            if (r.showCount) {
+                const badgeClasses = classNames({
+                    'mx_RoomTile_badge': true,
+                    'mx_RoomTile_badgeButton': true,
+                    'mx_RoomTile_badgeRed': r.redBadge,
+                    'mx_RoomTile_badgeUnread': !r.redBadge,
+                });
+
+                badge = <div className={badgeClasses}>{r.formattedCount}</div>;
+            }
+
             return (
                 <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room)}
                     onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
                     <RoomAvatar room={r.room} width={32} height={32} />
+                    {badge}
                     {tooltip}
                 </AccessibleButton>
             );
