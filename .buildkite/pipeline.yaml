@@ -12,7 +12,7 @@ steps:
       # TODO: Remove hacky chmod for BuildKite
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
-      - "sudo apt-get install build-essential python3-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev"
+      - "apt-get -y install build-essential python3-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev"
       - "./scripts/ci/install-deps.sh"
       - "./scripts/ci/end-to-end-tests.sh"
     plugins:
