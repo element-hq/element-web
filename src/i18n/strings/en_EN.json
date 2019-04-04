@@ -958,6 +958,8 @@
     "Home": "Home",
     "You cannot delete this image. (%(code)s)": "You cannot delete this image. (%(code)s)",
     "Uploaded on %(date)s by %(user)s": "Uploaded on %(date)s by %(user)s",
+    "Rotate counter-clockwise": "Rotate counter-clockwise",
+    "Rotate clockwise": "Rotate clockwise",
     "Download this file": "Download this file",
     "Integrations Error": "Integrations Error",
     "Manage Integrations": "Manage Integrations",
