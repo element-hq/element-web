@@ -112,6 +112,8 @@ class ActiveWidgetStore extends EventEmitter {
     }
 
     setWidgetMessaging(widgetId, wm) {
+        // Stop any existing widget messaging first
+        this.delWidgetMessaging(widgetId);
         this._widgetMessagingByWidgetId[widgetId] = wm;
         this.emit('update');
     }
