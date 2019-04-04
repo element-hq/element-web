@@ -1,8 +1,8 @@
 import {getVectorConfig} from '../getconfig';
 
 function onBackToRiotClick() {
-    // Cookie should expire in 24 hours
-    document.cookie = 'mobile_redirect_to_guide=false;path=/;max-age=86400';
+    // Cookie should expire in 4 hours
+    document.cookie = 'mobile_redirect_to_guide=false;path=/;max-age=14400';
     window.location.href = '../';
 }
 
