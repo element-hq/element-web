@@ -88,7 +88,9 @@ export default class RoomBreadcrumbs extends React.Component {
         }
 
         const roomIds = rooms.map((r) => r.room.roomId);
-        SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
+        if (roomIds.length > 0) {
+            SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
+        }
     }
 
     onAction(payload) {
@@ -147,6 +149,8 @@ export default class RoomBreadcrumbs extends React.Component {
     };
 
     _loadRoomIds(roomIds) {
+        if (!roomIds || roomIds.length <= 0) return; // Skip updates with no rooms
+
         // If we're here, the list changed.
         const rooms = roomIds.map((r) => MatrixClientPeg.get().getRoom(r)).filter((r) => r).map((r) => {
             const badges = this._calculateBadgesForRoom(r) || {};
