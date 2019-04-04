@@ -24,6 +24,7 @@ import classNames from 'classnames';
 import sdk from "../../../index";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const MAX_ROOMS = 20;
 
@@ -38,22 +39,22 @@ export default class RoomBreadcrumbs extends React.Component {
     componentWillMount() {
         this._dispatcherRef = dis.register(this.onAction);
 
-        const roomStr = localStorage.getItem("mx_breadcrumb_rooms");
-        if (roomStr) {
-            try {
-                const roomIds = JSON.parse(roomStr);
-                this.setState({
-                    rooms: roomIds.map((r) => {
-                        return {
-                            room: MatrixClientPeg.get().getRoom(r),
-                            animated: false,
-                        };
-                    }).filter((r) => r.room),
-                });
-            } catch (e) {
-                console.error("Failed to parse breadcrumbs:", e);
+        let storedRooms = SettingsStore.getValue("breadcrumb_rooms");
+        if (!storedRooms || !storedRooms.length) {
+            // Fallback to the rooms stored in localstorage for those who would have had this.
+            // TODO: Remove this after a bit - the feature was only on develop, so a few weeks should be plenty time.
+            const roomStr = localStorage.getItem("mx_breadcrumb_rooms");
+            if (roomStr) {
+                try {
+                    storedRooms = JSON.parse(roomStr);
+                } catch (e) {
+                    console.error("Failed to parse breadcrumbs:", e);
+                }
             }
         }
+        this._loadRoomIds(storedRooms || []);
+
+        this._settingWatchRef = SettingsStore.watchSetting("breadcrumb_rooms", null, this.onBreadcrumbsChanged);
 
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
@@ -63,6 +64,8 @@ export default class RoomBreadcrumbs extends React.Component {
 
     componentWillUnmount() {
         dis.unregister(this._dispatcherRef);
+
+        SettingsStore.unwatchSetting(this._settingWatchRef);
 
         const client = MatrixClientPeg.get();
         if (client) {
@@ -84,8 +87,8 @@ export default class RoomBreadcrumbs extends React.Component {
             }
         }
 
-        const roomStr = JSON.stringify(rooms.map((r) => r.room.roomId));
-        localStorage.setItem("mx_breadcrumb_rooms", roomStr);
+        const roomIds = rooms.map((r) => r.room.roomId);
+        SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
     }
 
     onAction(payload) {
@@ -125,17 +128,48 @@ export default class RoomBreadcrumbs extends React.Component {
         }
     };
 
-    _calculateRoomBadges(room) {
-        if (!room) return;
+    onBreadcrumbsChanged = (settingName, roomId, level, valueAtLevel, value) => {
+        if (!value) return;
 
-        const rooms = this.state.rooms.slice();
-        const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
-        if (!roomModel) return; // No applicable room, so don't do math on it
+        const currentState = this.state.rooms.map((r) => r.room.roomId);
+        if (currentState.length === value.length) {
+            let changed = false;
+            for (let i = 0; i < currentState.length; i++) {
+                if (currentState[i] !== value[i]) {
+                    changed = true;
+                    break;
+                }
+            }
+            if (!changed) return;
+        }
+
+        this._loadRoomIds(value);
+    };
+
+    _loadRoomIds(roomIds) {
+        // If we're here, the list changed.
+        const rooms = roomIds.map((r) => MatrixClientPeg.get().getRoom(r)).filter((r) => r).map((r) => {
+            const badges = this._calculateBadgesForRoom(r) || {};
+            return {
+                room: r,
+                animated: false,
+                ...badges,
+            };
+        });
+        this.setState({
+            rooms: rooms,
+        });
+    }
+
+    _calculateBadgesForRoom(room) {
+        if (!room) return null;
 
         // Reset the notification variables for simplicity
-        roomModel.redBadge = false;
-        roomModel.formattedCount = "0";
-        roomModel.showCount = false;
+        const roomModel = {
+            redBadge: false,
+            formattedCount: "0",
+            showCount: false,
+        };
 
         const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
         if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
@@ -155,6 +189,20 @@ export default class RoomBreadcrumbs extends React.Component {
             }
         }
 
+        return roomModel;
+    }
+
+    _calculateRoomBadges(room) {
+        if (!room) return;
+
+        const rooms = this.state.rooms.slice();
+        const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
+        if (!roomModel) return; // No applicable room, so don't do math on it
+
+        const badges = this._calculateBadgesForRoom(room);
+        if (!badges) return; // No badges for some reason
+
+        Object.assign(roomModel, badges);
         this.setState({rooms});
     }
 
