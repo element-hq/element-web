@@ -291,7 +291,7 @@
     "Failed to join room": "Failed to join room",
     "Message Pinning": "Message Pinning",
     "Custom user status messages": "Custom user status messages",
-    "Show recent room avatars above the room list (refresh to apply changes)": "Show recent room avatars above the room list (refresh to apply changes)",
+    "Show recent room avatars above the room list": "Show recent room avatars above the room list",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Group & filter rooms by custom tags (refresh to apply changes)",
     "Render simple counters in room header": "Render simple counters in room header",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",

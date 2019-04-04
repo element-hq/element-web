@@ -102,7 +102,7 @@ export const SETTINGS = {
     },
     "feature_room_breadcrumbs": {
         isFeature: true,
-        displayName: _td("Show recent room avatars above the room list (refresh to apply changes)"),
+        displayName: _td("Show recent room avatars above the room list"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
