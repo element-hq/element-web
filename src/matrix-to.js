@@ -83,6 +83,14 @@ export class RoomPermalinkCreator {
     }
 
     load() {
+        if (!this._room || !this._room.currentState) {
+            // Under rare and unknown circumstances it is possible to have a room with no
+            // currentState, at least potentially at the early stages of joining a room.
+            // To avoid breaking everything, we'll just warn rather than throw as well as
+            // not bother updating the various aspects of the share link.
+            console.warn("Tried to load a permalink creator with no room state");
+            return;
+        }
         this._updateAllowedServers();
         this._updateHighestPlUser();
         this._updatePopulationMap();
