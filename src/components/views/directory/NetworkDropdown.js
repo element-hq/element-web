@@ -42,7 +42,7 @@ export default class NetworkDropdown extends React.Component {
             expanded: false,
             selectedServer: server,
             selectedInstanceId: null,
-            includeAllNetworks: true,
+            includeAllNetworks: false,
         };
     }
 
@@ -109,7 +109,7 @@ export default class NetworkDropdown extends React.Component {
                 expanded: false,
                 selectedServer: e.target.value,
                 selectedNetwork: null,
-                includeAllNetworks: true,
+                includeAllNetworks: false,
             });
             this.props.onOptionChange(e.target.value, null);
         }
