@@ -13,7 +13,7 @@ steps:
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
       - "apt-get update"
-      - "apt-get -y install build-essential python3-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev uuid"
+      - "apt-get -y install build-essential python3-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev util-linux"
       - "./scripts/ci/install-deps.sh"
       - "./scripts/ci/end-to-end-tests.sh"
     plugins:
