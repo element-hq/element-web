@@ -118,19 +118,13 @@ export default class AutoHideScrollbar extends React.Component {
         return this.containerRef.scrollTop;
     }
 
-    onWheel = (e) => {
-        if (this.props.onWheel) {
-            this.props.onWheel(e);
-        }
-    };
-
     render() {
         return (<div
                     ref={this._collectContainerRef}
                     style={this.props.style}
                     className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
                     onScroll={this.props.onScroll}
-                    onWheel={this.onWheel}
+                    onWheel={this.props.onWheel}
                 >
             <div className="mx_AutoHideScrollbar_offset">
                 { this.props.children }
