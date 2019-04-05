@@ -2,6 +2,7 @@
 set -e
 RIOT_BRANCH=develop
 
+BASE_DIR=$(cd $(dirname $0) && pwd)
 cd $BASE_DIR
 # Install ComplexHttpServer (a drop in replacement for Python's SimpleHttpServer
 # but with support for multiple threads) into a virtualenv.
@@ -20,7 +21,6 @@ cd $BASE_DIR
     deactivate
 )
 
-BASE_DIR=$(cd $(dirname $0) && pwd)
 if [ -d $BASE_DIR/riot-web ]; then
     echo "riot is already installed"
     exit
