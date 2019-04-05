@@ -26,7 +26,7 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
-import png_chunks_extract = from "png-chunks-extract";
+import png_chunks_extract from "png-chunks-extract";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
