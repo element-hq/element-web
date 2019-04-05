@@ -76,9 +76,9 @@ export default class RoomBreadcrumbs extends React.Component {
         const rooms = this.state.rooms.slice();
 
         if (rooms.length) {
-            const {room, animated} = rooms[0];
-            if (!animated) {
-                rooms[0] = {room, animated: true};
+            const roomModel = rooms[0];
+            if (!roomModel.animated) {
+                roomModel.animated = true;
                 setTimeout(() => this.setState({rooms}), 0);
             }
         }
@@ -158,16 +158,31 @@ export default class RoomBreadcrumbs extends React.Component {
     }
 
     _appendRoomId(roomId) {
-        const room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) {
-            return;
-        }
+        let room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) return;
+
         const rooms = this.state.rooms.slice();
+
+        // If the room is upgraded, use that room instead. We'll also splice out
+        // any children of the room.
+        const history = MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
+        if (history.length > 1) {
+            room = history[history.length - 1]; // Last room is most recent
+
+            // Take out any room that isn't the most recent room
+            for (let i = 0; i < history.length - 1; i++) {
+                const idx = rooms.findIndex((r) => r.room.roomId === history[i].roomId);
+                if (idx !== -1) rooms.splice(idx, 1);
+            }
+        }
+
         const existingIdx = rooms.findIndex((r) => r.room.roomId === room.roomId);
         if (existingIdx !== -1) {
             rooms.splice(existingIdx, 1);
         }
+
         rooms.splice(0, 0, {room, animated: false});
+
         if (rooms.length > MAX_ROOMS) {
             rooms.splice(MAX_ROOMS, rooms.length - MAX_ROOMS);
         }
