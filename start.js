@@ -41,7 +41,7 @@ async function runTests() {
         args: [],
     };
     if (!program.sandbox) {
-        options.args.push('--no-sandbox');
+        options.args.push('--no-sandbox', '--disable-setuid-sandbox');
     }
     if (process.env.CHROME_PATH) {
         const path = process.env.CHROME_PATH;
