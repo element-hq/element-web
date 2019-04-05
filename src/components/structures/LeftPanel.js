@@ -86,8 +86,10 @@ const LeftPanel = React.createClass({
         return false;
     },
 
-    componentDidUpdate(newProps, newState) {
-        Analytics.setBreadcrumbs(newState.breadcrumbs);
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.breadcrumbs !== this.state.breadcrumbs) {
+            Analytics.setBreadcrumbs(this.state.breadcrumbs);
+        }
     },
 
     _onBreadcrumbsChanged: function(settingName, roomId, level, valueAtLevel, value) {
