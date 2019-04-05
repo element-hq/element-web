@@ -26,6 +26,7 @@ program
     .option('--windowed', "dont run tests headless", false)
     .option('--slow-mo', "run tests slower to follow whats going on", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
+    .option('--no-sandbox', "same as puppeteer arg", false)
     .parse(process.argv);
 
 const hsUrl = 'http://localhost:5005';
@@ -37,7 +38,11 @@ async function runTests() {
         slowMo: program.slowMo ? 20 : undefined,
         devtools: program.devTools,
         headless: !program.windowed,
+        args: [],
     };
+    if (!program.sandbox) {
+        options.args.push('--no-sandbox');
+    }
     if (process.env.CHROME_PATH) {
         const path = process.env.CHROME_PATH;
         console.log(`(using external chrome/chromium at ${path}, make sure it's compatible with puppeteer)`);
