@@ -40,6 +40,13 @@ export default class IndicatorScrollbar extends React.Component {
         };
     }
 
+    moveToOrigin() {
+        if (!this._scrollElement) return;
+
+        this._scrollElement.scrollLeft = 0;
+        this._scrollElement.scrollTop = 0;
+    }
+
     _collectScroller(scroller) {
         if (scroller && !this._scrollElement) {
             this._scrollElement = scroller;

@@ -536,7 +536,9 @@ module.exports = React.createClass({
                   payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
-                this.uploadFile(payload.file);
+                return ContentMessages.sharedInstance().sendContentListToRoom(
+                    [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
+                );
                 break;
             case 'notifier_enabled':
             case 'upload_started':
