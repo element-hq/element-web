@@ -2032,7 +2032,6 @@ export default React.createClass({
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
-                    enableGuest={this.props.enableGuest}
                     onServerConfigChange={this.onServerConfigChange}
                 />
             );
