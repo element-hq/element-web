@@ -95,8 +95,6 @@ class MatrixClientPeg {
     }
 
     async start() {
-        StorageManager.trackStores(this.matrixClient);
-
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
@@ -115,6 +113,8 @@ class MatrixClientPeg {
                 }
             }
         }
+
+        StorageManager.trackStores(this.matrixClient);
 
         // try to initialise e2e on the new client
         try {
