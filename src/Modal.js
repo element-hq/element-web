@@ -20,7 +20,6 @@ limitations under the License.
 const React = require('react');
 const ReactDOM = require('react-dom');
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Analytics from './Analytics';
 import sdk from './index';
 import dis from './dispatcher';
@@ -76,10 +75,9 @@ const AsyncWrapper = React.createClass({
     },
 
     render: function() {
-        const {loader, ...otherProps} = this.props;
         if (this.state.component) {
             const Component = this.state.component;
-            return <Component {...otherProps} />;
+            return <Component {...this.props} />;
         } else if (this.state.error) {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -194,36 +192,35 @@ class ModalManager {
      *                                 also be removed from the stack. This is not compatible
      *                                 with being a priority modal. Only one modal can be
      *                                 static at a time.
+     * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
     createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const self = this;
         const modal = {};
 
         // never call this from onFinished() otherwise it will loop
         //
-        // nb explicit function() rather than arrow function, to get `arguments`
-        const closeDialog = function() {
-            if (props && props.onFinished) props.onFinished.apply(null, arguments);
-            const i = self._modals.indexOf(modal);
+        const closeDialog = (...args) => {
+            if (props && props.onFinished) props.onFinished.apply(null, args);
+            const i = this._modals.indexOf(modal);
             if (i >= 0) {
-                self._modals.splice(i, 1);
+                this._modals.splice(i, 1);
             }
 
-            if (self._priorityModal === modal) {
-                self._priorityModal = null;
+            if (this._priorityModal === modal) {
+                this._priorityModal = null;
 
                 // XXX: This is destructive
-                self._modals = [];
+                this._modals = [];
             }
 
-            if (self._staticModal === modal) {
-                self._staticModal = null;
+            if (this._staticModal === modal) {
+                this._staticModal = null;
 
                 // XXX: This is destructive
-                self._modals = [];
+                this._modals = [];
             }
 
-            self._reRender();
+            this._reRender();
         };
 
         // don't attempt to reuse the same AsyncWrapper for different dialogs,
