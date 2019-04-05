@@ -203,9 +203,6 @@ export function handleInvalidStoreError(e) {
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log(`Doing guest login on ${hsUrl}`);
 
-    // TODO: we should probably de-duplicate this and Login.loginAsGuest.
-    // Not really sure where the right home for it is.
-
     // create a temporary MatrixClient to do the login
     const client = Matrix.createClient({
         baseUrl: hsUrl,
