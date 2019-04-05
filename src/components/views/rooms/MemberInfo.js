@@ -39,9 +39,12 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import SdkConfig from '../../../SdkConfig';
 import MultiInviter from "../../../utils/MultiInviter";
 import SettingsStore from "../../../settings/SettingsStore";
+import E2EIcon from "./E2EIcon";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -49,7 +52,6 @@ module.exports = withMatrixClient(React.createClass({
     propTypes: {
         matrixClient: PropTypes.object.isRequired,
         member: PropTypes.object.isRequired,
-        roomId: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -153,9 +155,17 @@ module.exports = withMatrixClient(React.createClass({
             // Promise.resolve to handle transition from static result to promise; can be removed
             // in future
             Promise.resolve(this.props.matrixClient.getStoredDevicesForUser(userId)).then((devices) => {
-                this.setState({devices: devices});
+                this.setState({
+                    devices: devices,
+                    e2eStatus: this._getE2EStatus(devices),
+                });
             });
         }
+    },
+
+    _getE2EStatus: function(devices) {
+        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
+        return hasUnverifiedDevice ? "warning" : "verified";
     },
 
     onRoom: function(room) {
@@ -234,8 +244,13 @@ module.exports = withMatrixClient(React.createClass({
                 // we got cancelled - presumably a different user now
                 return;
             }
+
             self._disambiguateDevices(devices);
-            self.setState({devicesLoading: false, devices: devices});
+            self.setState({
+                devicesLoading: false,
+                devices: devices,
+                e2eStatus: self._getE2EStatus(devices),
+            });
         }, function(err) {
             console.log("Error downloading devices", err);
             self.setState({devicesLoading: false});
@@ -713,7 +728,7 @@ module.exports = withMatrixClient(React.createClass({
             }
 
             if (!member || !member.membership || member.membership === 'leave') {
-                const roomId = member && member.roomId ? member.roomId : this.props.roomId;
+                const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
                 const onInviteUserButton = async () => {
                     try {
                         // We use a MultiInviter to re-use the invite logic, even though
@@ -815,7 +830,7 @@ module.exports = withMatrixClient(React.createClass({
                 onClick={this.onNewDMClick}
             >
                 <div className="mx_RoomTile_avatar">
-                    <img src="img/create-big.svg" width="26" height="26" />
+                    <img src={require("../../../../res/img/create-big.svg")} width="26" height="26" />
                 </div>
                 <div className={labelClasses}><i>{ _t("Start a chat") }</i></div>
             </AccessibleButton>;
@@ -927,24 +942,29 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         let roomMemberDetails = null;
+        let e2eIconElement;
+
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
             roomMemberDetails = <div>
                 <div className="mx_MemberInfo_profileField">
-                    { _t("Level:") } <b>
-                        <PowerSelector controlled={true}
-                            value={parseInt(this.props.member.powerLevel)}
-                            maxValue={this.state.can.modifyLevelMax}
-                            disabled={!this.state.can.modifyLevel}
-                            usersDefault={powerLevelUsersDefault}
-                            onChange={this.onPowerChange} />
-                    </b>
+                    <PowerSelector
+                        value={parseInt(this.props.member.powerLevel)}
+                        maxValue={this.state.can.modifyLevelMax}
+                        disabled={!this.state.can.modifyLevel}
+                        usersDefault={powerLevelUsersDefault}
+                        onChange={this.onPowerChange} />
                 </div>
                 <div className="mx_MemberInfo_profileField">
                     {presenceLabel}
                     {statusLabel}
                 </div>
             </div>;
+
+            const isEncrypted = this.props.matrixClient.isRoomEncrypted(this.props.member.roomId);
+            if (this.state.e2eStatus && isEncrypted) {
+                e2eIconElement = (<E2EIcon status={this.state.e2eStatus} isUser={true} />);
+            }
         }
 
         const avatarUrl = this.props.member.getMxcAvatarUrl();
@@ -953,18 +973,25 @@ module.exports = withMatrixClient(React.createClass({
             const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = <div className="mx_MemberInfo_avatar">
                 <img src={httpUrl} />
-            </div>
+            </div>;
         }
 
         const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
+        let backButton;
+        if (this.props.member.roomId) {
+            backButton = (<AccessibleButton className="mx_MemberInfo_cancel"
+                onClick={this.onCancel}
+                title={_t('Close')}
+            />);
+        }
+
         return (
             <div className="mx_MemberInfo">
                     <div className="mx_MemberInfo_name">
-                        <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}>
-                            <img src="img/minimise.svg" width="10" height="16" className="mx_filterFlipColor" alt={_t('Close')} />
-                        </AccessibleButton>
+                        { backButton }
+                        { e2eIconElement }
                         <EmojiText element="h2">{ memberName }</EmojiText>
                     </div>
                     { avatarElement }
@@ -977,7 +1004,7 @@ module.exports = withMatrixClient(React.createClass({
                             { roomMemberDetails }
                         </div>
                     </div>
-                    <GeminiScrollbarWrapper autoshow={true} className="mx_MemberInfo_scrollContainer">
+                    <AutoHideScrollbar className="mx_MemberInfo_scrollContainer">
                         <div className="mx_MemberInfo_container">
                             { this._renderUserOptions() }
 
@@ -989,7 +1016,7 @@ module.exports = withMatrixClient(React.createClass({
 
                             { spinner }
                         </div>
-                    </GeminiScrollbarWrapper>
+                    </AutoHideScrollbar>
             </div>
         );
     },

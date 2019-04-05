@@ -17,11 +17,14 @@ limitations under the License.
 
 .mx_RoomList {
     /* take up remaining space below TopLeftMenu */
-    flex: 1 1 auto;
-    /* use flexbox to layout sublists */
-    display: flex;
-    flex-direction: column;
+    flex: 1;
     min-height: 0;
+    overflow-y: hidden;
+}
+
+.mx_RoomList .mx_ResizeHandle {
+    // needed so the z-index takes effect
+    position: relative;
 }
 
 .mx_SearchBox {

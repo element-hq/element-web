@@ -117,7 +117,7 @@ export default class Flair extends React.Component {
 
     render() {
         if (this.state.profiles.length === 0) {
-            return <div />;
+            return <span className="mx_Flair" />;
         }
         const avatars = this.state.profiles.map((profile, index) => {
             return <FlairAvatar key={index} groupProfile={profile} />;

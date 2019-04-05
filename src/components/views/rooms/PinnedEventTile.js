@@ -67,7 +67,7 @@ module.exports = React.createClass({
         if (this._canUnpin()) {
             unpinButton = (
                 <AccessibleButton onClick={this.onUnpinClicked} className="mx_PinnedEventTile_unpinButton">
-                    <img src="img/cancel-red.svg" width="8" height="8" alt={_t('Unpin Message')} title={_t('Unpin Message')} />
+                    <img src={require("../../../../res/img/cancel-red.svg")} width="8" height="8" alt={_t('Unpin Message')} title={_t('Unpin Message')} />
                 </AccessibleButton>
             );
         }
@@ -92,7 +92,7 @@ module.exports = React.createClass({
                 </span>
                 <div className="mx_PinnedEventTile_message">
                     <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" maxImageHeight={150}
-                                  onWidgetLoad={() => {}} // we need to give this, apparently
+                                  onHeightChanged={() => {}} // we need to give this, apparently
                     />
                 </div>
             </div>

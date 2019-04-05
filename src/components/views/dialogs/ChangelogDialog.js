@@ -36,7 +36,7 @@ export default class ChangelogDialog extends React.Component {
         for (let i=0; i<REPOS.length; i++) {
             const oldVersion = version2[2*i];
             const newVersion = version[2*i];
-            const url = `https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`;
+            const url = `https://riot.im/github/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`;
             request(url, (err, response, body) => {
                 if (response.statusCode < 200 || response.statusCode >= 300) {
                     this.setState({ [REPOS[i]]: response.statusText });
@@ -51,7 +51,7 @@ export default class ChangelogDialog extends React.Component {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noopener">
-                    {commit.commit.message}
+                    {commit.commit.message.split('\n')[0]}
                 </a>
             </li>
         );

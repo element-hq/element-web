@@ -143,13 +143,14 @@ export default React.createClass({
 
         let tooltip;
         if (this.props.collapsed && this.state.hover) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" label={groupName} dir="auto" />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            tooltip = <Tooltip className="mx_RoomTile_tooltip" label={groupName} dir="auto" />;
         }
 
         const classes = classNames('mx_RoomTile mx_RoomTile_highlight', {
             'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_selected': this.state.selected,
+            'mx_GroupInviteTile': true,
         });
 
         return (

@@ -24,8 +24,9 @@ import { KeyCode } from '../../Keyboard';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
-
+import TagPanelButtons from './TagPanelButtons';
 import SettingsStore from '../../settings/SettingsStore';
+import {_t} from "../../languageHandler";
 
 
 const LeftPanel = React.createClass({
@@ -182,13 +183,25 @@ const LeftPanel = React.createClass({
 
     render: function() {
         const RoomList = sdk.getComponent('rooms.RoomList');
+        const RoomBreadcrumbs = sdk.getComponent('rooms.RoomBreadcrumbs');
         const TagPanel = sdk.getComponent('structures.TagPanel');
+        const CustomRoomTagPanel = sdk.getComponent('structures.CustomRoomTagPanel');
         const TopLeftMenuButton = sdk.getComponent('structures.TopLeftMenuButton');
         const SearchBox = sdk.getComponent('structures.SearchBox');
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        const tagPanelEnabled = !SettingsStore.getValue("TagPanel.disableTagPanel");
-        const tagPanel = tagPanelEnabled ? <TagPanel /> : <div />;
+        const tagPanelEnabled = SettingsStore.getValue("TagPanel.enableTagPanel");
+        let tagPanelContainer;
+
+        const isCustomTagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+
+        if (tagPanelEnabled) {
+            tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
+                <TagPanel />
+                { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
+                <TagPanelButtons />
+            </div>);
+        }
 
         const containerClasses = classNames(
             "mx_LeftPanel_container", "mx_fadable",
@@ -199,19 +212,29 @@ const LeftPanel = React.createClass({
             },
         );
 
-        const searchBox = !this.props.collapsed ?
-            <SearchBox onSearch={ this.onSearch } onCleared={ this.onSearchCleared } /> :
-            undefined;
+        const searchBox = (<SearchBox
+            enableRoomSearchFocus={true}
+            placeholder={ _t('Filter room names') }
+            onSearch={ this.onSearch }
+            onCleared={ this.onSearchCleared }
+            collapsed={this.props.collapsed} />);
+
+        let breadcrumbs;
+        if (SettingsStore.isFeatureEnabled("feature_room_breadcrumbs")) {
+            breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
+        }
 
         return (
             <div className={containerClasses}>
-                { tagPanel }
+                { tagPanelContainer }
                 <aside className={"mx_LeftPanel dark-panel"} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                     <TopLeftMenuButton collapsed={ this.props.collapsed } />
+                    { breadcrumbs }
                     { searchBox }
                     <CallPreview ConferenceHandler={VectorConferenceHandler} />
                     <RoomList
                         ref={this.collectRoomList}
+                        resizeNotifier={this.props.resizeNotifier}
                         collapsed={this.props.collapsed}
                         searchFilter={this.state.searchFilter}
                         ConferenceHandler={VectorConferenceHandler} />

@@ -38,6 +38,8 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
+import dis from '../../../dispatcher';
+
 import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
@@ -45,6 +47,7 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
+import ContentMessage from '../../../ContentMessages';
 
 import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 
@@ -55,8 +58,10 @@ import {
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
 import ReplyPreview from "./ReplyPreview";
+import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {ContentHelpers} from 'matrix-js-sdk';
+import AccessibleButton from '../elements/AccessibleButton';
 
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -108,6 +113,15 @@ const SLATE_SCHEMA = {
     },
 };
 
+function onSendMessageFailed(err, room) {
+    // XXX: temporary logging to try to diagnose
+    // https://github.com/vector-im/riot-web/issues/3148
+    console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
+    dis.dispatch({
+        action: 'message_send_failed',
+    });
+}
+
 function rangeEquals(a: Range, b: Range): boolean {
     return (a.anchor.key === b.anchor.key
         && a.anchor.offset === b.anchorOffset
@@ -117,34 +131,17 @@ function rangeEquals(a: Range, b: Range): boolean {
         && a.isBackward === b.isBackward);
 }
 
-class NoopHistoryManager {
-    getItem() {}
-    save() {}
-
-    get currentIndex() { return 0; }
-    set currentIndex(_) {}
-
-    get history() { return []; }
-    set history(_) {}
-}
-
-
 /*
  * The textInput part of the MessageComposer
  */
 export default class MessageComposerInput extends React.Component {
     static propTypes = {
-        // a callback which is called when the height of the composer is
-        // changed due to a change in content.
-        onResize: PropTypes.func,
-
         // js-sdk Room object
         room: PropTypes.object.isRequired,
 
         onFilesPasted: PropTypes.func,
 
         onInputStateChanged: PropTypes.func,
-        roomViewStore: PropTypes.object.isRequired,
     };
 
     client: MatrixClient;
@@ -339,29 +336,16 @@ export default class MessageComposerInput extends React.Component {
     }
 
     componentWillMount() {
-        this.dispatcherRef = this.props.roomViewStore.getDispatcher().register(this.onAction);
-        if (this.props.isGrid) {
-            this.historyManager = new NoopHistoryManager();
-        } else {
-            this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
-        }
+        this.dispatcherRef = dis.register(this.onAction);
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId, 'mx_slate_composer_history_');
     }
 
     componentWillUnmount() {
-        this.props.roomViewStore.getDispatcher().unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     _collectEditor = (e) => {
         this._editor = e;
-    }
-
-    onSendMessageFailed = (err, room) => {
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-        this.props.roomViewStore.getDispatcher().dispatch({
-            action: 'message_send_failed',
-        });
     }
 
     onAction = (payload) => {
@@ -500,7 +484,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
-        if (SettingsStore.getValue('dontSendTypingNotifications')) return;
+        if (!SettingsStore.getValue('sendTypingNotifications')) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT,
@@ -641,7 +625,6 @@ export default class MessageComposerInput extends React.Component {
             }
             const inputState = {
                 marks: editorState.activeMarks,
-                isRichTextEnabled: this.state.isRichTextEnabled,
                 blockType,
             };
             this.props.onInputStateChanged(inputState);
@@ -699,20 +682,22 @@ export default class MessageComposerInput extends React.Component {
     enableRichtext(enabled: boolean) {
         if (enabled === this.state.isRichTextEnabled) return;
 
-        let editorState = null;
-        if (enabled) {
-            editorState = this.mdToRichEditorState(this.state.editorState);
-        } else {
-            editorState = this.richToMdEditorState(this.state.editorState);
-        }
-
         Analytics.setRichtextMode(enabled);
 
         this.setState({
-            editorState: this.createEditorState(enabled, editorState),
+            editorState: this.createEditorState(
+                enabled,
+                this.state.editorState,
+                this.state.isRichTextEnabled,
+            ),
             isRichTextEnabled: enabled,
-        }, ()=>{
+        }, () => {
             this._editor.focus();
+            if (this.props.onInputStateChanged) {
+                this.props.onInputStateChanged({
+                    isRichTextEnabled: enabled,
+                });
+            }
         });
 
         SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
@@ -1025,7 +1010,13 @@ export default class MessageComposerInput extends React.Component {
 
         switch (transfer.type) {
             case 'files':
-                return this.props.onFilesPasted(transfer.files);
+                // This actually not so much for 'files' as such (at time of writing
+                // neither chrome nor firefox let you paste a plain file copied
+                // from Finder) but more images copied from a different website
+                // / word processor etc.
+                return ContentMessage.sharedInstance().sendContentListToRoom(
+                    transfer.files, this.props.room.roomId, this.client,
+                );
             case 'html': {
                 if (this.state.isRichTextEnabled) {
                     // FIXME: https://github.com/ianstormtaylor/slate/issues/1497 means
@@ -1129,7 +1120,7 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        const replyingToEv = this.props.roomViewStore.getQuotingEvent();
+        const replyingToEv = RoomViewStore.getQuotingEvent();
         const mustSendHTML = Boolean(replyingToEv);
 
         if (this.state.isRichTextEnabled) {
@@ -1207,7 +1198,7 @@ export default class MessageComposerInput extends React.Component {
 
             // Part of Replies fallback support - prepend the text we're sending
             // with the text we're replying to
-            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv);
+            const nestedReply = ReplyThread.getNestedReplyText(replyingToEv, this.props.permalinkCreator);
             if (nestedReply) {
                 if (content.formatted_body) {
                     content.formatted_body = nestedReply.html + content.formatted_body;
@@ -1217,18 +1208,18 @@ export default class MessageComposerInput extends React.Component {
 
             // Clear reply_to_event as we put the message into the queue
             // if the send fails, retry will handle resending.
-            this.props.roomViewStore.getDispatcher().dispatch({
+            dis.dispatch({
                 action: 'reply_to_event',
                 event: null,
             });
         }
 
         this.client.sendMessage(this.props.room.roomId, content).then((res) => {
-            this.props.roomViewStore.getDispatcher().dispatch({
+            dis.dispatch({
                 action: 'message_sent',
             });
         }).catch((e) => {
-            this.onSendMessageFailed(e, this.props.room);
+            onSendMessageFailed(e, this.props.room);
         });
 
         this.setState({
@@ -1457,7 +1448,7 @@ export default class MessageComposerInput extends React.Component {
                 const url = data.get('href');
                 const completion = data.get('completion');
 
-                const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+                const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
                 const Pill = sdk.getComponent('elements.Pill');
 
                 if (completion === '@room') {
@@ -1596,10 +1587,15 @@ export default class MessageComposerInput extends React.Component {
             placeholder = undefined;
         }
 
+        const markdownClasses = classNames({
+            mx_MessageComposer_input_markdownIndicator: true,
+            mx_MessageComposer_markdownDisabled: this.state.isRichTextEnabled,
+        });
+
         return (
             <div className="mx_MessageComposer_input_wrapper" onClick={this.focusComposer}>
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <ReplyPreview roomViewStore={this.props.roomViewStore} />
+                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}
@@ -1610,10 +1606,10 @@ export default class MessageComposerInput extends React.Component {
                     />
                 </div>
                 <div className={className}>
-                    <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
-                         onMouseDown={this.onMarkdownToggleClicked}
-                         title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
-                         src={`img/button-md-${!this.state.isRichTextEnabled}.png`} />
+                    <AccessibleButton className={markdownClasses}
+                        onClick={this.onMarkdownToggleClicked}
+                        title={this.state.isRichTextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                    />
                     <Editor ref={this._collectEditor}
                             dir="auto"
                             className="mx_MessageComposer_editor"

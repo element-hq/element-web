@@ -22,9 +22,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
-import * as linkify from 'linkifyjs';
-import linkifyElement from 'linkifyjs/element';
-import linkifyMatrix from '../../../linkify-matrix';
 import sdk from '../../../index';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from '../../../Modal';
@@ -37,8 +34,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";
 import {host as matrixtoHost} from '../../../matrix-to';
-
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'TextualBody',
@@ -57,7 +52,7 @@ module.exports = React.createClass({
         showUrlPreview: PropTypes.bool,
 
         /* callback for when our widget has loaded */
-        onWidgetLoad: PropTypes.func,
+        onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
         tileShape: PropTypes.string,
@@ -98,7 +93,7 @@ module.exports = React.createClass({
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
         this.pillifyLinks(this.refs.content.children);
-        linkifyElement(this.refs.content, linkifyMatrix.options);
+        HtmlUtils.linkifyElement(this.refs.content);
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
@@ -174,7 +169,7 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
         let node = nodes[0];
         while (node) {
             let pillified = false;
@@ -436,7 +431,7 @@ module.exports = React.createClass({
 
         const stripReply = ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
+            disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         });
@@ -456,7 +451,7 @@ module.exports = React.createClass({
                             link={link}
                             mxEvent={this.props.mxEvent}
                             onCancelClick={this.onCancelClick}
-                            onWidgetLoad={this.props.onWidgetLoad} />;
+                            onHeightChanged={this.props.onHeightChanged} />;
             });
         }
 

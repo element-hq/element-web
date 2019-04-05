@@ -203,6 +203,14 @@ class GroupStore extends EventEmitter {
         return this._ready[id][groupId];
     }
 
+    getGroupIdsForRoomId(roomId) {
+        const groupIds = Object.keys(this._state[this.STATE_KEY.GroupRooms]);
+        return groupIds.filter(groupId => {
+            const rooms = this._state[this.STATE_KEY.GroupRooms][groupId] || [];
+            return rooms.some(room => room.roomId === roomId);
+        });
+    }
+
     getSummary(groupId) {
         return this._state[this.STATE_KEY.Summary][groupId] || {};
     }

@@ -1,9 +1,11 @@
-npm-debug.log
+/.npmrc
+/*.log
+package-lock.json
 
 /node_modules
 /lib
 
-# version file and tarball created by 'npm pack'
+# version file and tarball created by `npm pack` / `yarn pack`
 /git-revision.txt
 /matrix-react-sdk-*.tgz
 
@@ -14,6 +16,3 @@ npm-debug.log
 /src/component-index.js
 
 .DS_Store
-
-# https://github.com/vector-im/riot-web/issues/7083
-package-lock.json

@@ -245,27 +245,48 @@ module.exports = React.createClass({
         return (
             <div className="mx_RoomTileContextMenu">
                 <div className="mx_RoomTileContextMenu_notif_picker" >
-                    <img src="img/notif-slider.svg" width="20" height="107" />
+                    <img src={require("../../../../res/img/notif-slider.svg")} width="20" height="107" />
                 </div>
                 <div className={alertMeClasses} onClick={this._onClickAlertMe} >
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off-copy.svg")} width="16" height="12" />
                     { _t('All messages (noisy)') }
                 </div>
                 <div className={allNotifsClasses} onClick={this._onClickAllNotifs} >
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off.svg" width="16" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-off.svg")} width="16" height="12" />
                     { _t('All messages') }
                 </div>
                 <div className={mentionsClasses} onClick={this._onClickMentions} >
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute-mentions.svg")} width="16" height="12" />
                     { _t('Mentions only') }
                 </div>
                 <div className={muteNotifsClasses} onClick={this._onClickMute} >
-                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
-                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute.svg" width="16" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_activeIcon" src={require("../../../../res/img/notif-active.svg")} width="12" height="12" />
+                    <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src={require("../../../../res/img/icon-context-mute.svg")} width="16" height="12" />
                     { _t('Mute') }
+                </div>
+            </div>
+        );
+    },
+
+    _onClickSettings: function() {
+        dis.dispatch({
+            action: 'open_room_settings',
+            room_id: this.props.room.roomId,
+        });
+        if (this.props.onFinished) {
+            this.props.onFinished();
+        }
+    },
+
+    _renderSettingsMenu: function() {
+        return (
+            <div>
+                <div className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings} >
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" />
+                    { _t('Settings') }
                 </div>
             </div>
         );
@@ -298,7 +319,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_delete.svg" width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_delete.svg")} width="15" height="15" />
                     { leaveText }
                 </div>
             </div>
@@ -327,18 +348,18 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className={favouriteClasses} onClick={this._onClickFavourite} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_fave.svg" width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_fave_on.svg" width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_fave.svg")} width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_fave_on.svg")} width="15" height="15" />
                     { _t('Favourite') }
                 </div>
                 <div className={lowPriorityClasses} onClick={this._onClickLowPriority} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_low.svg" width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_low.svg")} width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_low_on.svg")} width="15" height="15" />
                     { _t('Low Priority') }
                 </div>
                 <div className={dmClasses} onClick={this._onClickDM} >
-                    <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_person.svg" width="15" height="15" />
-                    <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icon_context_person.svg")} width="15" height="15" />
+                    <img className="mx_RoomTileContextMenu_tag_icon_set" src={require("../../../../res/img/icon_context_person_on.svg")} width="15" height="15" />
                     { _t('Direct Chat') }
                 </div>
             </div>
@@ -350,7 +371,11 @@ module.exports = React.createClass({
 
         // Can't set notif level or tags on non-join rooms
         if (myMembership !== 'join') {
-            return this._renderLeaveMenu(myMembership);
+            return <div>
+                { this._renderLeaveMenu(myMembership) }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
+            </div>;
         }
 
         return (
@@ -360,6 +385,8 @@ module.exports = React.createClass({
                 { this._renderLeaveMenu(myMembership) }
                 <hr className="mx_RoomTileContextMenu_separator" />
                 { this._renderRoomTagMenu() }
+                <hr className="mx_RoomTileContextMenu_separator" />
+                { this._renderSettingsMenu() }
             </div>
         );
     },

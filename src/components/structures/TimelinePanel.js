@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -451,12 +452,12 @@ var TimelinePanel = React.createClass({
                 //
                 // We ignore events we have sent ourselves; we don't want to see the
                 // read-marker when a remote echo of an event we have just sent takes
-                // more than the timeout on userCurrentlyActive.
+                // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
                 const sender = ev.sender ? ev.sender.userId : null;
-                var callback = null;
-                if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
+                var callRMUpdated = false;
+                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -465,11 +466,16 @@ var TimelinePanel = React.createClass({
                     this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
                     updatedState.readMarkerVisible = false;
                     updatedState.readMarkerEventId = lastEv.getId();
-                    callback = this.props.onReadMarkerUpdated;
+                    callRMUpdated = true;
                 }
             }
 
-            this.setState(updatedState, callback);
+            this.setState(updatedState, () => {
+                this.refs.messagePanel.updateTimelineMinHeight();
+                if (callRMUpdated) {
+                    this.props.onReadMarkerUpdated();
+                }
+            });
         });
     },
 
@@ -557,7 +563,7 @@ var TimelinePanel = React.createClass({
         this._readMarkerActivityTimer = new Timer(initialTimeout);
 
         while (this._readMarkerActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readMarkerActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveRecently(this._readMarkerActivityTimer);
             try {
                 await this._readMarkerActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
@@ -569,7 +575,7 @@ var TimelinePanel = React.createClass({
     updateReadReceiptOnUserActivity: async function() {
         this._readReceiptActivityTimer = new Timer(READ_RECEIPT_INTERVAL_MS);
         while (this._readReceiptActivityTimer) { //unset on unmount
-            UserActivity.timeWhileActive(this._readReceiptActivityTimer);
+            UserActivity.sharedInstance().timeWhileActiveNow(this._readReceiptActivityTimer);
             try {
                 await this._readReceiptActivityTimer.finished();
             } catch(e) { continue; /* aborted */ }
@@ -930,6 +936,11 @@ var TimelinePanel = React.createClass({
             {windowLimit: this.props.timelineCap});
 
         const onLoaded = () => {
+            // clear the timeline min-height when
+            // (re)loading the timeline
+            if (this.refs.messagePanel) {
+                this.refs.messagePanel.onTimelineReset();
+            }
             this._reloadEvents();
 
             // If we switched away from the room while there were pending
@@ -1197,6 +1208,7 @@ var TimelinePanel = React.createClass({
         return (
             <MessagePanel ref="messagePanel"
                           room={this.props.timelineSet.room}
+                          permalinkCreator={this.props.permalinkCreator}
                           hidden={this.props.hidden}
                           backPaginating={this.state.backPaginating}
                           forwardPaginating={forwardPaginating}
@@ -1216,6 +1228,7 @@ var TimelinePanel = React.createClass({
                           alwaysShowTimestamps={this.state.alwaysShowTimestamps}
                           className={this.props.className}
                           tileShape={this.props.tileShape}
+                          resizeNotifier={this.props.resizeNotifier}
             />
         );
     },

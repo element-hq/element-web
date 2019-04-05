@@ -124,7 +124,7 @@ module.exports = React.createClass({
                     emailMatchBlock =
                         <div className="mx_RoomPreviewBar_warning">
                             <div className="mx_RoomPreviewBar_warningIcon">
-                                <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
+                                <img src={require("../../../../res/img/warning.svg")} width="24" height="23" title= "/!\\" alt="/!\\" />
                             </div>
                             <div className="mx_RoomPreviewBar_warningText">
                                 { _t("This invitation was sent to an email address which is not associated with this account:") }

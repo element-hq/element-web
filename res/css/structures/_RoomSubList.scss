@@ -32,33 +32,13 @@ limitations under the License.
 */
 
 .mx_RoomSubList {
-    min-height: 31px;
-    flex: 0 100000000 auto;
     display: flex;
     flex-direction: column;
 }
 
-.mx_RoomSubList_nonEmpty {
-    min-height: 70px;
 
-    .mx_AutoHideScrollbar_offset {
-        padding-bottom: 4px;
-    }
-}
-
-.mx_RoomSubList_hidden {
-    flex: none !important;
-}
-
-.mx_RoomSubList.resized-all {
-    flex: 0 1 auto;
-}
-
-.mx_RoomSubList.resized-sized {
-    /*  resizer set max-height on resized-sized,
-        so that limits the height and hence
-        needs a very small flex-shrink */
-    flex: 0 10000 auto;
+.mx_RoomSubList_nonEmpty .mx_AutoHideScrollbar_offset {
+    padding-bottom: 4px;
 }
 
 .mx_RoomSubList_labelContainer {
@@ -95,6 +75,7 @@ limitations under the License.
     font-size: 12px;
     padding: 0 5px;
     background-color: $roomtile-name-color;
+    cursor: pointer;
 }
 
 .mx_RoomSubList_addRoom, .mx_RoomSubList_badge {
@@ -102,15 +83,24 @@ limitations under the License.
 }
 
 .mx_RoomSubList_addRoom {
-    background-color: $roomheader-addroom-color;
-    color: $roomsublist-background;
-    background-image: url('../../img/icons-room-add.svg');
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: $roomheader-addroom-bg-color;
     border-radius: 10px; // 16/2 + 2 padding
     height: 16px;
     flex: 0 0 16px;
-    background-clip: content-box;
+    position: relative;
+
+    &:before {
+        background-color: $roomheader-addroom-fg-color;
+        mask: url('$(res)/img/icons-room-add.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
 .mx_RoomSubList_badgeHighlight {
@@ -119,13 +109,13 @@ limitations under the License.
 
 .mx_RoomSubList_chevron {
     pointer-events: none;
-    background-image: url('../../img/topleft-chevron.svg');
-    background-repeat: no-repeat;
+    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
+    mask-repeat: no-repeat;
     transition: transform 0.2s ease-in;
     width: 10px;
-    height: 10px;
-    background-position: center;
+    height: 6px;
     margin-left: 2px;
+    background-color: $roomsublist-label-fg-color;
 }
 
 .mx_RoomSubList_chevronDown {
@@ -154,7 +144,7 @@ limitations under the License.
         position: sticky;
         left: 0;
         right: 0;
-        height: 30px;
+        height: 8px;
         content: "";
         display: block;
         z-index: 100;
@@ -162,21 +152,30 @@ limitations under the License.
     }
 
     &.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
-        margin-top: -30px;
+        margin-top: -8px;
     }
     &.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
-        margin-bottom: -30px;
+        margin-bottom: -8px;
     }
 
     &.mx_IndicatorScrollbar_topOverflow::before {
         top: 0;
-        background: linear-gradient(to top, rgba(242,245,248,0), rgba(242,245,248,1));
+        transition: background-image 0.1s ease-in;
+        background: linear-gradient(to top, $panel-gradient);
     }
 
+/*
+    // for now, we remove the bottomOverflow entirely as we don't want to
+    // lose the screen real-estate due to a bg-colored gradient, but we also
+    // don't want to use drop shadows and risk a confusing hierarchy of cards.
+    // so, instead, we hard-clip at the bottom but soft-clip at the top.
     &.mx_IndicatorScrollbar_bottomOverflow::after {
         bottom: 0;
-        background: linear-gradient(to bottom, rgba(242,245,248,0), rgba(242,245,248,1));
+        transition: background-image 0.1s ease-in;
+        margin: 0px -8px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.0));
     }
+*/
 }
 
 .collapsed {

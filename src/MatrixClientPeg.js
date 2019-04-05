@@ -29,6 +29,8 @@ import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import {phasedRollOutExpiredForUser} from "./PhasedRollOut";
 import Modal from './Modal';
+import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
+import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -84,7 +86,7 @@ class MatrixClientPeg {
 
     /**
      * Replace this MatrixClientPeg's client with a client instance that has
-     * Home Server / Identity Server URLs and active credentials
+     * homeserver / identity server URLs and active credentials
      */
     replaceUsingCreds(creds: MatrixClientCreds) {
         this._currentClientCreds = creds;
@@ -101,7 +103,7 @@ class MatrixClientPeg {
             } catch (err) {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
-                    this.matrixClient.store = new Matrix.MatrixInMemoryStore({
+                    this.matrixClient.store = new Matrix.MemoryStore({
                       localStorage: global.localStorage,
                     });
                 } else {
@@ -118,7 +120,7 @@ class MatrixClientPeg {
                 await this.matrixClient.initCrypto();
             }
         } catch (e) {
-            if (e.name === 'InvalidCryptoStoreError') {
+            if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
@@ -128,23 +130,17 @@ class MatrixClientPeg {
             }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
-            console.warn("Unable to initialise e2e: " + e);
+            console.warn("Unable to initialise e2e", e);
         }
 
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
+        opts.lazyLoadMembers = true;
 
-        const LAZY_LOADING_FEATURE = "feature_lazyloading";
-        if (SettingsStore.isFeatureEnabled(LAZY_LOADING_FEATURE)) {
-            const userId = this.matrixClient.credentials.userId;
-            if (phasedRollOutExpiredForUser(userId, LAZY_LOADING_FEATURE, Date.now())) {
-                opts.lazyLoadMembers = true;
-            }
-        }
-
-        // Connect the matrix client to the dispatcher
+        // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
+        MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);
@@ -163,19 +159,19 @@ class MatrixClientPeg {
     }
 
     /**
-     * Return the server name of the user's home server
-     * Throws an error if unable to deduce the home server name
+     * Return the server name of the user's homeserver
+     * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
      */
     getHomeServerName() {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
-            throw new Error("Failed to derive home server name from user ID!");
+            throw new Error("Failed to derive homeserver name from user ID!");
         }
         return matches[1];
     }
 
-    _createClient(creds: MatrixClientCreds, useIndexedDb) {
+    _createClient(creds: MatrixClientCreds) {
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -183,10 +179,11 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
-            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
+            forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
+            verificationMethods: [verificationMethods.SAS]
         };
 
-        this.matrixClient = createMatrixClient(opts, useIndexedDb);
+        this.matrixClient = createMatrixClient(opts);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

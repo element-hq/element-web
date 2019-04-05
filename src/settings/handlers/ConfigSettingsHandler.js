@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ export default class ConfigSettingsHandler extends SettingsHandler {
 
         // Special case themes
         if (settingName === "theme") {
-            return "dharma"; // config["default_theme"];
+            return config["default_theme"];
         }
 
         const settingsConfig = config["settingDefaults"];

@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,12 @@ import sdk from '../../../../index';
 import MatrixClientPeg from '../../../../MatrixClientPeg';
 import Modal from '../../../../Modal';
 
+import { MatrixClient } from 'matrix-js-sdk';
+
 import { _t } from '../../../../languageHandler';
+
+const RESTORE_TYPE_PASSPHRASE = 0;
+const RESTORE_TYPE_RECOVERYKEY = 1;
 
 /**
  * Dialog for restoring e2e keys from a backup and the user's recovery key
@@ -36,6 +41,7 @@ export default React.createClass({
             recoveryKeyValid: false,
             forceRecoveryKey: false,
             passPhrase: '',
+            restoreType: null,
         };
     },
 
@@ -80,10 +86,11 @@ export default React.createClass({
         this.setState({
             loading: true,
             restoreError: null,
+            restoreType: RESTORE_TYPE_PASSPHRASE,
         });
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
-                this.state.passPhrase, undefined, undefined, this.state.backupInfo.version,
+                this.state.passPhrase, undefined, undefined, this.state.backupInfo,
             );
             this.setState({
                 loading: false,
@@ -102,10 +109,11 @@ export default React.createClass({
         this.setState({
             loading: true,
             restoreError: null,
+            restoreType: RESTORE_TYPE_RECOVERYKEY,
         });
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
-                this.state.recoveryKey, undefined, undefined, this.state.backupInfo.version,
+                this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
             );
             this.setState({
                 loading: false,
@@ -179,8 +187,28 @@ export default React.createClass({
             title = _t("Error");
             content = _t("Unable to load backup status");
         } else if (this.state.restoreError) {
-            title = _t("Error");
-            content = _t("Unable to restore backup");
+            if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
+                if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
+                    title = _t("Recovery Key Mismatch");
+                    content = <div>
+                        <p>{_t(
+                            "Backup could not be decrypted with this key: " +
+                            "please verify that you entered the correct recovery key.",
+                        )}</p>
+                    </div>;
+                } else {
+                    title = _t("Incorrect Recovery Passphrase");
+                    content = <div>
+                        <p>{_t(
+                            "Backup could not be decrypted with this passphrase: " +
+                            "please verify that you entered the correct recovery passphrase.",
+                        )}</p>
+                    </div>;
+                }
+            } else {
+                title = _t("Error");
+                content = _t("Unable to restore backup");
+            }
         } else if (this.state.backupInfo === null) {
             title = _t("Error");
             content = _t("No backup found!");
@@ -202,10 +230,15 @@ export default React.createClass({
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Enter Recovery Passphrase");
             content = <div>
-                {_t(
+                <p>{_t(
+                    "<b>Warning</b>: you should only set up key backup " +
+                    "from a trusted computer.", {},
+                    { b: sub => <b>{sub}</b> },
+                )}</p>
+                <p>{_t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your recovery passphrase.",
-                )}<br />
+                )}</p>
 
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
@@ -260,10 +293,15 @@ export default React.createClass({
             }
 
             content = <div>
-                {_t(
+                <p>{_t(
+                    "<b>Warning</b>: you should only set up key backup " +
+                    "from a trusted computer.", {},
+                    { b: sub => <b>{sub}</b> },
+                )}</p>
+                <p>{_t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your recovery key.",
-                )}<br />
+                )}</p>
 
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"

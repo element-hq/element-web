@@ -33,6 +33,11 @@ limitations under the License.
     flex: 0 0 140px;
 }
 
+.mx_LeftPanel_tagPanelContainer {
+    flex: 0 0 70px;
+    height: 100%;
+}
+
 .mx_LeftPanel_hideButton {
     position: absolute;
     top: 10px;

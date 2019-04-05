@@ -32,6 +32,7 @@ export default class RightPanel extends React.Component {
         return {
             roomId: React.PropTypes.string, // if showing panels for a given room, this is set
             groupId: React.PropTypes.string, // if showing panels for a given group, this is set
+            user: React.PropTypes.object,
         };
     }
 
@@ -49,13 +50,14 @@ export default class RightPanel extends React.Component {
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
         RoomMemberInfo: 'RoomMemberInfo',
+        Room3pidMemberInfo: 'Room3pidMemberInfo',
         GroupMemberInfo: 'GroupMemberInfo',
     });
 
     constructor(props, context) {
         super(props, context);
         this.state = {
-            phase: this.props.groupId ? RightPanel.Phase.GroupMemberList : RightPanel.Phase.RoomMemberList,
+            phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
         };
         this.onAction = this.onAction.bind(this);
@@ -69,11 +71,24 @@ export default class RightPanel extends React.Component {
         }, 500);
     }
 
+    _getPhaseFromProps() {
+        if (this.props.groupId) {
+            return RightPanel.Phase.GroupMemberList;
+        } else if (this.props.user) {
+            return RightPanel.Phase.RoomMemberInfo;
+        } else {
+            return RightPanel.Phase.RoomMemberList;
+        }
+    }
+
     componentWillMount() {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
+        if (this.props.user) {
+            this.setState({member: this.props.user});
+        }
     }
 
     componentWillUnmount() {
@@ -141,6 +156,7 @@ export default class RightPanel extends React.Component {
                 groupRoomId: payload.groupRoomId,
                 groupId: payload.groupId,
                 member: payload.member,
+                event: payload.event,
             });
         }
     }
@@ -148,6 +164,7 @@ export default class RightPanel extends React.Component {
     render() {
         const MemberList = sdk.getComponent('rooms.MemberList');
         const MemberInfo = sdk.getComponent('rooms.MemberInfo');
+        const ThirdPartyMemberInfo = sdk.getComponent('rooms.ThirdPartyMemberInfo');
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
 
@@ -165,7 +182,9 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.GroupRoomList) {
             panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
         } else if (this.state.phase === RightPanel.Phase.RoomMemberInfo) {
-            panel = <MemberInfo roomId={this.props.roomId} member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
+            panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
+        } else if (this.state.phase === RightPanel.Phase.Room3pidMemberInfo) {
+            panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
         } else if (this.state.phase === RightPanel.Phase.GroupMemberInfo) {
             panel = <GroupMemberInfo
                 groupMember={this.state.member}
@@ -179,7 +198,7 @@ export default class RightPanel extends React.Component {
         } else if (this.state.phase === RightPanel.Phase.NotificationPanel) {
             panel = <NotificationPanel />;
         } else if (this.state.phase === RightPanel.Phase.FilePanel) {
-            panel = <FilePanel roomId={this.props.roomId} />;
+            panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {

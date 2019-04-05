@@ -21,7 +21,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
-import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -387,7 +386,7 @@ module.exports = React.createClass({
 
                 ret.push(<MemberEventListSummary key={key}
                     events={summarisedEvents}
-                    onToggle={this._onWidgetLoad} // Update scroll state
+                    onToggle={this._onHeightChanged} // Update scroll state
                     startExpanded={highlightInMels}
                 >
                         { eventTiles }
@@ -517,7 +516,7 @@ module.exports = React.createClass({
                         data-scroll-tokens={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
-                        onWidgetLoad={this._onWidgetLoad}
+                        onHeightChanged={this._onHeightChanged}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
                         showUrlPreview={this.props.showUrlPreview}
@@ -525,6 +524,7 @@ module.exports = React.createClass({
                         eventSendStatus={mxEv.status}
                         tileShape={this.props.tileShape}
                         isTwelveHour={this.props.isTwelveHour}
+                        permalinkCreator={this.props.permalinkCreator}
                         last={last} isSelectedEvent={highlight} />
                 </li>,
         );
@@ -624,22 +624,57 @@ module.exports = React.createClass({
 
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
-    _onWidgetLoad: function() {
-        const scrollPanel = this.refs.scrollPanel;
-        if (scrollPanel) {
-            scrollPanel.forceUpdate();
-        }
-    },
-
-    _scrollDownIfAtBottom: function() {
+    _onHeightChanged: function() {
         const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.checkScroll();
         }
     },
 
-    onResize: function() {
-        dis.dispatch({ action: 'timeline_resize' }, true);
+    _onTypingShown: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        // this will make the timeline grow, so checkScroll
+        scrollPanel.checkScroll();
+        if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
+            scrollPanel.preventShrinking();
+        }
+    },
+
+    _onTypingHidden: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            // as hiding the typing notifications doesn't
+            // update the scrollPanel, we tell it to apply
+            // the shrinking prevention once the typing notifs are hidden
+            scrollPanel.updatePreventShrinking();
+            // order is important here as checkScroll will scroll down to
+            // reveal added padding to balance the notifs disappearing.
+            scrollPanel.checkScroll();
+        }
+    },
+
+    updateTimelineMinHeight: function() {
+        const scrollPanel = this.refs.scrollPanel;
+
+        if (scrollPanel) {
+            const isAtBottom = scrollPanel.isAtBottom();
+            const whoIsTyping = this.refs.whoIsTyping;
+            const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+            // when messages get added to the timeline,
+            // but somebody else is still typing,
+            // update the min-height, so once the last
+            // person stops typing, no jumping occurs
+            if (isAtBottom && isTypingVisible) {
+                scrollPanel.preventShrinking();
+            }
+        }
+    },
+
+    onTimelineReset: function() {
+        const scrollPanel = this.refs.scrollPanel;
+        if (scrollPanel) {
+            scrollPanel.clearPreventShrinking();
+        }
     },
 
     render: function() {
@@ -666,7 +701,12 @@ module.exports = React.createClass({
 
         let whoIsTyping;
         if (this.props.room) {
-            whoIsTyping = (<WhoIsTypingTile room={this.props.room} onVisible={this._scrollDownIfAtBottom} />);
+            whoIsTyping = (<WhoIsTypingTile
+                room={this.props.room}
+                onShown={this._onTypingShown}
+                onHidden={this._onTypingHidden}
+                ref="whoIsTyping" />
+            );
         }
 
         return (
@@ -676,7 +716,8 @@ module.exports = React.createClass({
                     onFillRequest={this.props.onFillRequest}
                     onUnfillRequest={this.props.onUnfillRequest}
                     style={style}
-                    stickyBottom={this.props.stickyBottom}>
+                    stickyBottom={this.props.stickyBottom}
+                    resizeNotifier={this.props.resizeNotifier}>
                 { topSpinner }
                 { this._getEventTiles() }
                 { whoIsTyping }

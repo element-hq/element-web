@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Sizer} from "./sizer";
-
 /*
 classNames:
     // class on resize-handle
@@ -28,12 +26,14 @@ classNames:
     resizing: string
 */
 
-export class Resizer {
-    constructor(container, distributorCtor, distributorCfg, sizerCtor = Sizer) {
+
+export default class Resizer {
+    // TODO move vertical/horizontal to config option/container class
+    // as it doesn't make sense to mix them within one container/Resizer
+    constructor(container, distributorCtor, config) {
         this.container = container;
         this.distributorCtor = distributorCtor;
-        this.distributorCfg = distributorCfg;
-        this.sizerCtor = sizerCtor;
+        this.config = config;
         this.classNames = {
             handle: "resizer-handle",
             reverse: "resizer-reverse",
@@ -79,7 +79,11 @@ export class Resizer {
         }
     }
 
-    _isResizeHandle(el) {
+    isReverseResizeHandle(el) {
+        return el && el.classList.contains(this.classNames.reverse);
+    }
+
+    isResizeHandle(el) {
         return el && el.classList.contains(this.classNames.handle);
     }
 
@@ -99,6 +103,7 @@ export class Resizer {
         }
 
         const {sizer, distributor} = this._createSizerAndDistributor(resizeHandle);
+        distributor.start();
 
         const onMouseMove = (event) => {
             const offset = sizer.offsetFromEvent(event);
@@ -106,48 +111,33 @@ export class Resizer {
         };
 
         const body = document.body;
-        const onMouseUp = (event) => {
+        const finishResize = () => {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
-            body.removeEventListener("mouseup", onMouseUp, false);
+            distributor.finish();
+            body.removeEventListener("mouseup", finishResize, false);
+            document.removeEventListener("mouseleave", finishResize, false);
             body.removeEventListener("mousemove", onMouseMove, false);
         };
-        body.addEventListener("mouseup", onMouseUp, false);
+        body.addEventListener("mouseup", finishResize, false);
+        document.addEventListener("mouseleave", finishResize, false);
         body.addEventListener("mousemove", onMouseMove, false);
     }
 
     _createSizerAndDistributor(resizeHandle) {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
-        const reverse = resizeHandle.classList.contains(this.classNames.reverse);
-
-        // eslint-disable-next-line new-cap
-        const sizer = new this.sizerCtor(this.container, vertical, reverse);
-
-        const items = this._getResizableItems();
-        const prevItem = resizeHandle.previousElementSibling;
-        // if reverse, resize the item after the handle instead of before, so + 1
-        const itemIndex = items.indexOf(prevItem) + (reverse ? 1 : 0);
-        const item = items[itemIndex];
-        const id = resizeHandle.getAttribute("data-id");
-        // eslint-disable-next-line new-cap
-        const distributor = new this.distributorCtor(
-            sizer, item, id, this.distributorCfg,
-            items, this.container);
+        const reverse = this.isReverseResizeHandle(resizeHandle);
+        const Distributor = this.distributorCtor;
+        const sizer = Distributor.createSizer(this.container, vertical, reverse);
+        const item = Distributor.createItem(resizeHandle, this, sizer);
+        const distributor = new Distributor(item, this.config);
         return {sizer, distributor};
-    }
-
-    _getResizableItems() {
-        return Array.from(this.container.children).filter(el => {
-            return !this._isResizeHandle(el) && (
-                this._isResizeHandle(el.previousElementSibling) ||
-                this._isResizeHandle(el.nextElementSibling));
-        });
     }
 
     _getResizeHandles() {
         return Array.from(this.container.children).filter(el => {
-            return this._isResizeHandle(el);
+            return this.isResizeHandle(el);
         });
     }
 }

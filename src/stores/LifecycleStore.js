@@ -22,8 +22,8 @@ const INITIAL_STATE = {
 };
 
 /**
- * A class for storing application state to do with login/registration. This is a simple
- * flux store that listens for actions and updates its state accordingly, informing any
+ * A class for storing application state to do with authentication. This is a simple flux
+ * store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  */
 class LifecycleStore extends Store {

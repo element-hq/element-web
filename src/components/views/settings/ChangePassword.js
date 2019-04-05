@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018-2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import Field from "../elements/Field";
 
 const React = require('react');
 import PropTypes from 'prop-types';
@@ -30,14 +32,14 @@ import sessionStore from '../../../stores/SessionStore';
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
+
     propTypes: {
         onFinished: PropTypes.func,
         onError: PropTypes.func,
         onCheckPassword: PropTypes.func,
         rowClassName: PropTypes.string,
-        rowLabelClassName: PropTypes.string,
-        rowInputClassName: PropTypes.string,
         buttonClassName: PropTypes.string,
+        buttonKind: PropTypes.string,
         confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
         autoFocusNewPasswordInput: PropTypes.bool,
@@ -72,6 +74,9 @@ module.exports = React.createClass({
         return {
             phase: this.Phases.Edit,
             cachedPassword: null,
+            oldPassword: "",
+            newPassword: "",
+            newPasswordConfirm: "",
         };
     },
 
@@ -114,7 +119,11 @@ module.exports = React.createClass({
                         'making encrypted chat history unreadable, unless you first export your room keys ' +
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',
-                    ) } (<a href="https://github.com/vector-im/riot-web/issues/2671">https://github.com/vector-im/riot-web/issues/2671</a>)
+                    ) }
+                    {' '}
+                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noopener">
+                        https://github.com/vector-im/riot-web/issues/2671
+                    </a>
                 </div>,
             button: _t("Continue"),
             extraButtons: [
@@ -160,6 +169,9 @@ module.exports = React.createClass({
         }).finally(() => {
             this.setState({
                 phase: this.Phases.Edit,
+                oldPassword: "",
+                newPassword: "",
+                newPasswordConfirm: "",
             });
         }).done();
     },
@@ -187,11 +199,29 @@ module.exports = React.createClass({
         );
     },
 
+    onChangeOldPassword(ev) {
+        this.setState({
+            oldPassword: ev.target.value,
+        });
+    },
+
+    onChangeNewPassword(ev) {
+        this.setState({
+            newPassword: ev.target.value,
+        });
+    },
+
+    onChangeNewPasswordConfirm(ev) {
+        this.setState({
+            newPasswordConfirm: ev.target.value,
+        });
+    },
+
     onClickChange: function(ev) {
         ev.preventDefault();
-        const oldPassword = this.state.cachedPassword || this.refs.old_input.value;
-        const newPassword = this.refs.new_input.value;
-        const confirmPassword = this.refs.confirm_input.value;
+        const oldPassword = this.state.cachedPassword || this.state.oldPassword;
+        const newPassword = this.state.newPassword;
+        const confirmPassword = this.state.newPasswordConfirm;
         const err = this.props.onCheckPassword(
             oldPassword, newPassword, confirmPassword,
         );
@@ -203,21 +233,23 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        // TODO: Live validation on `new pw == confirm pw`
+
         const rowClassName = this.props.rowClassName;
-        const rowLabelClassName = this.props.rowLabelClassName;
-        const rowInputClassName = this.props.rowInputClassName;
         const buttonClassName = this.props.buttonClassName;
 
         let currentPassword = null;
         if (!this.state.cachedPassword) {
-            currentPassword = <div className={rowClassName}>
-                <div className={rowLabelClassName}>
-                    <label htmlFor="passwordold">{ _t('Current password') }</label>
+            currentPassword = (
+                <div className={rowClassName}>
+                    <Field id="mx_ChangePassword_oldPassword"
+                        type="password"
+                        label={_t('Current password')}
+                        value={this.state.oldPassword}
+                        onChange={this.onChangeOldPassword}
+                    />
                 </div>
-                <div className={rowInputClassName}>
-                    <input id="passwordold" type="password" ref="old_input" />
-                </div>
-            </div>;
+            );
         }
 
         switch (this.state.phase) {
@@ -228,24 +260,23 @@ module.exports = React.createClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <div className={rowLabelClassName}>
-                                <label htmlFor="password1">{ passwordLabel }</label>
-                            </div>
-                            <div className={rowInputClassName}>
-                                <input id="password1" type="password" ref="new_input" autoFocus={this.props.autoFocusNewPasswordInput} />
-                            </div>
+                            <Field id="mx_ChangePassword_newPassword"
+                                type="password"
+                                label={passwordLabel}
+                                value={this.state.newPassword}
+                                autoFocus={this.props.autoFocusNewPasswordInput}
+                                onChange={this.onChangeNewPassword}
+                            />
                         </div>
                         <div className={rowClassName}>
-                            <div className={rowLabelClassName}>
-                                <label htmlFor="password2">{ _t('Confirm password') }</label>
-                            </div>
-                            <div className={rowInputClassName}>
-                                <input id="password2" type="password" ref="confirm_input" />
-                            </div>
+                            <Field id="mx_ChangePassword_newPasswordConfirm"
+                                type="password"
+                                label={_t("Confirm password")}
+                                value={this.state.newPasswordConfirm}
+                                onChange={this.onChangeNewPasswordConfirm}
+                            />
                         </div>
-                        <AccessibleButton className={buttonClassName}
-                                onClick={this.onClickChange}
-                                element="button">
+                        <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
                             { _t('Change Password') }
                         </AccessibleButton>
                     </form>

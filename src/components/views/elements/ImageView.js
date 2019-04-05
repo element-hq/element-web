@@ -173,10 +173,10 @@ module.exports = React.createClass({
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
-                    <img src={this.props.src} style={style} />
+                    <img src={this.props.src} title={this.props.name} style={style} />
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src="img/cancel-white.svg" width="18" height="18" alt={ _t('Close') } /></AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } /></AccessibleButton>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">

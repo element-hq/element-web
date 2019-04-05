@@ -33,7 +33,7 @@ module.exports = React.createClass({
         mxEvent: PropTypes.object.isRequired,
 
         /* called when the video has loaded */
-        onWidgetLoad: PropTypes.func.isRequired,
+        onHeightChanged: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
-                    this.props.onWidgetLoad();
+                    this.props.onHeightChanged();
                 });
             }).catch((err) => {
                 console.warn("Unable to decrypt attachment: ", err);
@@ -135,7 +135,7 @@ module.exports = React.createClass({
         if (this.state.error !== null) {
             return (
                 <span className="mx_MVideoBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16" />
+                    <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting video") }
                 </span>
             );
@@ -148,7 +148,7 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MVideoBody" ref="body">
                     <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
-                        <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
+                        <img src={require("../../../../res/img/spinner.gif")} alt={content.body} width="16" height="16" />
                     </div>
                 </span>
             );

@@ -16,18 +16,14 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
+import { linkifyElement } from '../../../HtmlUtils';
 
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const ImageUtils = require('../../../ImageUtils');
 const Modal = require('../../../Modal');
-
-const linkify = require('linkifyjs');
-const linkifyElement = require('linkifyjs/element');
-const linkifyMatrix = require('../../../linkify-matrix');
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
@@ -36,7 +32,7 @@ module.exports = React.createClass({
         link: PropTypes.string.isRequired, // the URL being previewed
         mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
         onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
-        onWidgetLoad: PropTypes.func, // called when the preview's contents has loaded
+        onHeightChanged: PropTypes.func, // called when the preview's contents has loaded
     },
 
     getInitialState: function() {
@@ -53,22 +49,22 @@ module.exports = React.createClass({
             }
             this.setState(
                 { preview: res },
-                this.props.onWidgetLoad,
+                this.props.onHeightChanged,
             );
         }, (error)=>{
-            console.error("Failed to get preview for " + this.props.link + " " + error);
+            console.error("Failed to get URL preview: " + error);
         }).done();
     },
 
     componentDidMount: function() {
         if (this.refs.description) {
-            linkifyElement(this.refs.description, linkifyMatrix.options);
+            linkifyElement(this.refs.description);
         }
     },
 
     componentDidUpdate: function() {
         if (this.refs.description) {
-            linkifyElement(this.refs.description, linkifyMatrix.options);
+            linkifyElement(this.refs.description);
         }
     },
 
@@ -135,7 +131,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
-                    src="img/cancel.svg" width="18" height="18"
+                    src={require("../../../../res/img/cancel.svg")} width="18" height="18"
                     onClick={this.props.onCancelClick} />
             </div>
         );

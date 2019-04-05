@@ -26,7 +26,7 @@ export function CancelButton(props) {
 
     return (
         <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
-            <img src="img/cancel.svg" className='mx_filterFlipColor'
+            <img src={require("../../../../res/img/cancel.svg")} className='mx_filterFlipColor'
                 width="18" height="18" alt={_t("Cancel")} />
         </AccessibleButton>
     );

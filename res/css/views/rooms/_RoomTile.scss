@@ -29,7 +29,7 @@ limitations under the License.
     display: none;
     flex: 0 0 16px;
     height: 16px;
-    background-image: url('../../img/icon_context.svg');
+    background-image: url('$(res)/img/icon_context.svg');
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -102,7 +102,6 @@ limitations under the License.
 
 .mx_RoomTile_name {
     font-size: 14px;
-    font-weight: 600;
     padding: 0 6px;
     color: $roomtile-name-color;
     white-space: nowrap;
@@ -154,9 +153,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_unread, .mx_RoomTile_highlight {
-    font-weight: 800;
-
     .mx_RoomTile_name {
+        font-weight: 600;
         color: $roomtile-selected-color;
     }
 }
@@ -176,7 +174,7 @@ limitations under the License.
 }
 
 .mx_RoomTile:focus {
-    filter: none ! important;
+    filter: none !important;
     background-color: $roomtile-focused-bg-color;
 }
 
@@ -191,4 +189,8 @@ limitations under the License.
 
 .mx_RoomTile.mx_RoomTile_transparent:focus {
     background-color: $roomtile-transparent-focused-color;
+}
+
+.mx_GroupInviteTile .mx_RoomTile_name {
+    flex: 1;
 }

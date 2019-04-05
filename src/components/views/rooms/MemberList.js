@@ -20,6 +20,8 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {isValid3pidInvite} from "../../../RoomInvite";
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -253,7 +255,7 @@ module.exports = React.createClass({
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={onClick} />
         );
@@ -339,12 +341,18 @@ module.exports = React.createClass({
         return nameA.localeCompare(nameB);
     },
 
-    onSearchQueryChanged: function(ev) {
-        const q = ev.target.value;
+    onSearchQueryChanged: function(searchQuery) {
         this.setState({
-            searchQuery: q,
-            filteredJoinedMembers: this._filterMembers(this.state.members, 'join', q),
-            filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', q),
+            searchQuery,
+            filteredJoinedMembers: this._filterMembers(this.state.members, 'join', searchQuery),
+            filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', searchQuery),
+        });
+    },
+
+    _onPending3pidInviteClick: function(inviteEvent) {
+        dis.dispatch({
+            action: 'view_3pid_invite',
+            event: inviteEvent,
         });
     },
 
@@ -373,11 +381,7 @@ module.exports = React.createClass({
 
         if (room) {
             return room.currentState.getStateEvents("m.room.third_party_invite").filter(function(e) {
-                // any events without these keys are not valid 3pid invites, so we ignore them
-                const requiredKeys = ['key_validity_url', 'public_key', 'display_name'];
-                for (let i = 0; i < requiredKeys.length; ++i) {
-                    if (e.getContent()[requiredKeys[i]] === undefined) return false;
-                }
+                if (!isValid3pidInvite(e)) return false;
 
                 // discard all invites which have a m.room.member event since we've
                 // already added them.
@@ -409,6 +413,7 @@ module.exports = React.createClass({
                 return <EntityTile key={e.getStateKey()}
                     name={e.getContent().display_name}
                     suppressOnHover={true}
+                    onClick={() => this._onPending3pidInviteClick(e)}
                 />;
             }));
         }
@@ -438,14 +443,13 @@ module.exports = React.createClass({
             return <div className="mx_MemberList"><Spinner /></div>;
         }
 
+        const SearchBox = sdk.getComponent('structures.SearchBox');
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
         if (room && room.getMyMembership() === 'join') {
-            const TintableSvg = sdk.getComponent("elements.TintableSvg");
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick}>
@@ -467,7 +471,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_MemberList">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     <div className="mx_MemberList_wrapper">
                         <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
                             createOverflowElement={this._createOverflowTileJoined}
@@ -476,10 +480,11 @@ module.exports = React.createClass({
                         { invitedHeader }
                         { invitedSection }
                     </div>
-                </GeminiScrollbarWrapper>
-                <input className="mx_MemberList_query mx_textinput_icon mx_textinput_search" id="mx_MemberList_query" type="text"
-                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
+                </AutoHideScrollbar>
+
+                <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
+                           placeholder={ _t('Filter room members') }
+                           onSearch={ this.onSearchQueryChanged } />
             </div>
         );
     },

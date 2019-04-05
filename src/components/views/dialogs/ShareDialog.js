@@ -20,17 +20,17 @@ import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
-import {makeEventPermalink, makeGroupPermalink, makeRoomPermalink, makeUserPermalink} from "../../../matrix-to";
+import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../matrix-to";
 import * as ContextualMenu from "../../structures/ContextualMenu";
 
 const socials = [
     {
         name: 'Facebook',
-        img: 'img/social/facebook.png',
+        img: require("../../../../res/img/social/facebook.png"),
         url: (url) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     }, {
         name: 'Twitter',
-        img: 'img/social/twitter-2.png',
+        img: require("../../../../res/img/social/twitter-2.png"),
         url: (url) => `https://twitter.com/home?status=${url}`,
     }, /* // icon missing
         name: 'Google Plus',
@@ -38,15 +38,15 @@ const socials = [
         url: (url) => `https://plus.google.com/share?url=${url}`,
     },*/ {
         name: 'LinkedIn',
-        img: 'img/social/linkedin.png',
+        img: require("../../../../res/img/social/linkedin.png"),
         url: (url) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
     }, {
         name: 'Reddit',
-        img: 'img/social/reddit.png',
+        img: require("../../../../res/img/social/reddit.png"),
         url: (url) => `http://www.reddit.com/submit?url=${url}`,
     }, {
         name: 'email',
-        img: 'img/social/email-1.png',
+        img: require("../../../../res/img/social/email-1.png"),
         url: (url) => `mailto:?body=${url}`,
     },
 ];
@@ -123,6 +123,14 @@ export default class ShareDialog extends React.Component {
         });
     }
 
+    componentWillMount() {
+        if (this.props.target instanceof Room) {
+            const permalinkCreator = new RoomPermalinkCreator(this.props.target);
+            permalinkCreator.load();
+            this.setState({permalinkCreator});
+        }
+    }
+
     render() {
         let title;
         let matrixToUrl;
@@ -146,9 +154,9 @@ export default class ShareDialog extends React.Component {
             }
 
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = makeEventPermalink(this.props.target.roomId, events[events.length - 1].getId());
+                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
             } else {
-                matrixToUrl = makeRoomPermalink(this.props.target.roomId);
+                matrixToUrl = this.state.permalinkCreator.forRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             title = _t('Share User');
@@ -169,9 +177,9 @@ export default class ShareDialog extends React.Component {
             </div>;
 
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = makeEventPermalink(this.props.target.getRoomId(), this.props.target.getId());
+                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
             } else {
-                matrixToUrl = makeRoomPermalink(this.props.target.getRoomId());
+                matrixToUrl = this.props.permalinkCreator.forRoom();
             }
         }
 
@@ -202,7 +210,7 @@ export default class ShareDialog extends React.Component {
 
                 <div className="mx_ShareDialog_split">
                     <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo="img/matrix-m.svg" />
+                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         {

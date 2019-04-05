@@ -70,6 +70,13 @@ limitations under the License.
     background-color: $primary-bg-color;
 }
 
+.mx_RoomView_auxPanel_hiddenHighlights {
+    border-bottom: 1px solid $primary-hairline-color;
+    padding: 10px 26px;
+    color: $warning-color;
+    cursor: pointer;
+}
+
 .mx_RoomView_auxPanel_apps {
     max-width: 1920px ! important;
 }
@@ -77,7 +84,6 @@ limitations under the License.
 
 .mx_RoomView .mx_MainSplit {
     flex: 1 1 0;
-    display: flex;
 }
 
 .mx_RoomView_body {
@@ -85,6 +91,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
 }
 
 .mx_RoomView_body .mx_RoomView_timeline {
@@ -95,12 +102,10 @@ limitations under the License.
     flex-direction: column;
 }
 
-.mx_RoomView_body .mx_RoomView_messagePanel {
-    order: 2;
-}
-
-.mx_RoomView_body .mx_RoomView_messagePanelSpinner {
-    order: 2;
+.mx_RoomView_body {
+    .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner{
+        order: 2;
+    }
 }
 
 .mx_RoomView_body .mx_RoomView_statusArea {
@@ -114,6 +119,31 @@ limitations under the License.
 .mx_RoomView_messagePanel {
     width: 100%;
     overflow-y: auto;
+    flex: 1 1 0;
+    overflow-anchor: none;
+}
+
+.mx_RoomView_messagePanelSearchSpinner {
+    flex: 1;
+    background-image: url('$(res)/img/typing-indicator-2x.gif');
+    background-position: center 367px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.mx_RoomView_messagePanelSearchSpinner:before {
+    background-color: $greyed-fg-color;
+    mask: url('$(res)/img/feather-customised/search-input.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 50px;
+    content: '';
+    position: absolute;
+    top: 286px;
+    left: 0;
+    right: 0;
+    height: 50px;
 }
 
 .mx_RoomView_messageListWrapper {
@@ -126,8 +156,15 @@ limitations under the License.
     justify-content: flex-end;
 }
 
-.mx_RoomView_searchResultsPanel .mx_RoomView_messageListWrapper {
-    justify-content: flex-start;
+.mx_RoomView_searchResultsPanel {
+    .mx_RoomView_messageListWrapper {
+        justify-content: flex-start;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 }
 
 .mx_RoomView_empty {
@@ -143,6 +180,10 @@ limitations under the License.
 .mx_RoomView_MessageList {
     list-style-type: none;
     padding: 18px;
+    margin: 0;
+    /* needed as min-height is set to clientHeight in ScrollPanel
+    to prevent shrinking when WhoIsTypingTile is hidden */
+    box-sizing: border-box;
 }
 
 .mx_RoomView_MessageList li {

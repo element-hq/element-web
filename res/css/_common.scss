@@ -50,8 +50,47 @@ a:visited {
     color: $accent-color-alt;
 }
 
+input[type=text],
+input[type=search],
+input[type=password] {
+    padding: 9px;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 0;
+}
+
+input[type=text].mx_textinput_icon,
+input[type=search].mx_textinput_icon {
+    padding-left: 36px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+// FIXME THEME - Tint by CSS rather than referencing a duplicate asset
+input[type=text].mx_textinput_icon.mx_textinput_search,
+input[type=search].mx_textinput_icon.mx_textinput_search {
+    background-image: url('$(res)/img/feather-customised/search-input.svg');
+}
+
+// dont search UI as not all browsers support it,
+// we implement it ourselves where needed instead
+input[type=search]::-webkit-search-decoration,
+input[type=search]::-webkit-search-cancel-button,
+input[type=search]::-webkit-search-results-button,
+input[type=search]::-webkit-search-results-decoration {
+    display: none;
+}
+
+// Override Firefox's UA style so we get a consistent look across browsers
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
 input[type=text], input[type=password], textarea {
     background-color: transparent;
+    color: $primary-fg-color;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -62,6 +101,72 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* Required by Firefox */
 textarea {
     font-family: $font-family;
+    color: $primary-fg-color;
+}
+
+// .mx_textinput is a container for a text input
+// + some other controls like buttons, ...
+// it has the appearance of a text box so the controls
+// appear to be part of the input
+
+.mx_Dialog, .mx_MatrixChat {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        display: block;
+        box-sizing: border-box;
+        background-color: transparent;
+        color: $input-darker-fg-color;
+        border-radius: 4px;
+        border: 1px solid #c1c1c1;
+        // these things should probably not be defined
+        // globally
+        margin: 9px;
+        flex: 0 0 auto;
+    }
+
+    .mx_textinput {
+        display: flex;
+        align-items: center;
+
+        > input[type=text],
+        > input[type=search] {
+            border: none;
+            flex: 1;
+            color: $primary-fg-color;
+        }
+    }
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $roomsublist-label-fg-color;
+    }
+}
+
+/*** panels ***/
+.dark-panel {
+    background-color: $dark-panel-bg-color;
+}
+
+.dark-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-darker-fg-color;
+        background-color: $input-darker-bg-color;
+        border: none;
+    }
+}
+
+.light-panel {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    .mx_textinput {
+        color: $input-lighter-fg-color;
+        background-color: $input-lighter-bg-color;
+        border: none;
+    }
 }
 
 /* Prevent ugly dotted highlight around selected elements in Firefox */
@@ -123,6 +228,17 @@ textarea {
     color: $roomsublist-label-bg-color;
 }
 
+/* Expected z-indexes for dialogs:
+    4000 - Default wrapper index
+    4009 - Static dialog background
+    4010 - Static dialog itself
+    4011 - Standard dialog background
+    4012 - Standard dialog itself
+
+   These are set up such that the static dialog always appears
+   underneath the standard dialogs.
+ */
+
 .mx_Dialog_wrapper {
     position: fixed;
     z-index: 4000;
@@ -144,25 +260,23 @@ textarea {
     box-shadow: none;
 }
 
-/* View Source Dialog overide */
-.mx_Dialog_wrapper.mx_Dialog_viewsource .mx_Dialog {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .mx_Dialog {
     background-color: $primary-bg-color;
     color: $light-fg-color;
-    z-index: 4010;
+    z-index: 4012;
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    padding: 0 58px 36px;
+    padding: 40px 58px 36px 58px;
     width: 60%;
     max-width: 704px;
-    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     max-height: 80%;
     overflow-y: auto;
+}
+
+.mx_Dialog_staticWrapper .mx_Dialog {
+    z-index: 4010;
 }
 
 .mx_Dialog_background {
@@ -171,8 +285,19 @@ textarea {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $dialog-background-bg-color;
+    background-color: $dialog-backdrop-color;
     opacity: 0.8;
+    z-index: 4011;
+}
+
+.mx_Dialog_background.mx_Dialog_staticBackground {
+    z-index: 4009;
+}
+
+.mx_Dialog_wrapperWithStaticUnder .mx_Dialog_background {
+    // Roughly half of what it would normally be - we don't want to black out
+    // the app, just make it clear that the dialogs are stacked.
+    opacity: 0.4;
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
@@ -190,15 +315,36 @@ textarea {
     pointer-events: none;
 }
 
-.mx_Dialog_cancelButton {
-    position: absolute;
-    right: 11px;
-    top: 13px;
-    cursor: pointer;
+.mx_Dialog_header {
+    position: relative;
 }
 
-.mx_Dialog_cancelButton object {
-    pointer-events: none;
+.mx_Dialog_title {
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 36px;
+    color: $primary-fg-color;
+}
+
+.mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
+    text-align: center;
+}
+
+.mx_Dialog_title.danger {
+    color: $warning-color;
+}
+
+.mx_Dialog_cancelButton {
+    mask: url('$(res)/img/feather-customised/cancel.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    width: 36px;
+    height: 36px;
+    background-color: $primary-fg-color;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 .mx_Dialog_content {
@@ -221,7 +367,7 @@ textarea {
     font-weight: 600;
     border: 1px solid $accent-color ! important;
     color: $accent-color;
-    background-color: $accent-fg-color;
+    background-color: $button-secondary-bg-color;
 }
 
 .mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
@@ -249,22 +395,23 @@ textarea {
     opacity: 0.7;
 }
 
+// TODO: Review mx_GeneralButton usage to see if it can use a different class
+// These classes were brought in from the old UserSettings and are included here to avoid
+// breaking the app.
+// Ref: https://github.com/vector-im/riot-web/issues/8420
+.mx_GeneralButton {
+    @mixin mx_DialogButton;
+    display: inline;
+    margin: auto;
+}
+
+.mx_GeneralButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_linkButton {
     cursor: pointer;
     color: $accent-color;
-}
-
-.mx_Dialog_title {
-    min-height: 16px;
-    padding-top: 40px;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 1.4;
-    color: $primary-fg-color;
-}
-
-.mx_Dialog_title.danger {
-    color: $warning-color;
 }
 
 .mx_TextInputDialog_label {

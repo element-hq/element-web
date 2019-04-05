@@ -61,7 +61,7 @@ export default class DevicesPanel extends React.Component {
                 let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
-                    errtxt = _t("Your home server does not support device management.");
+                    errtxt = _t("Your homeserver does not support device management.");
                 } else {
                     console.error("Error loading devices:", error);
                     errtxt = _t("Unable to load device list");

@@ -33,11 +33,11 @@ module.exports = React.createClass({
     },
 
     onThisRoomClick: function() {
-        this.setState({ scope: 'Room' });
+        this.setState({ scope: 'Room' }, () => this._searchIfQuery());
     },
 
     onAllRoomsClick: function() {
-        this.setState({ scope: 'All' });
+        this.setState({ scope: 'All' }, () => this._searchIfQuery());
     },
 
     onSearchChange: function(e) {
@@ -46,6 +46,12 @@ module.exports = React.createClass({
         }
         if (e.keyCode === 27) { // escape...
             this.props.onCancelClick();
+        }
+    },
+
+    _searchIfQuery: function() {
+        if (this.refs.search_term.value) {
+            this.onSearch();
         }
     },
 
@@ -60,11 +66,13 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_SearchBar">
-                <input ref="search_term" className="mx_SearchBar_input" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
-                <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}><img src="img/search-button.svg" width="37" height="37" alt={_t("Search")} /></AccessibleButton>
                 <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick}>{_t("This Room")}</AccessibleButton>
                 <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick}>{_t("All Rooms")}</AccessibleButton>
-                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
+                <div className="mx_SearchBar_input mx_textinput">
+                    <input ref="search_term" type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch}></AccessibleButton>
+                </div>
+                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick}></AccessibleButton>
             </div>
         );
     },

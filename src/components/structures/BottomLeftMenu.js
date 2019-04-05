@@ -19,8 +19,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import Velocity from 'velocity-vector';
-import 'velocity-vector/velocity.ui';
+import Velocity from 'velocity-animate';
+import 'velocity-animate/velocity.ui';
 import SettingsStore from '../../settings/SettingsStore';
 
 const CALLOUT_ANIM_DURATION = 1000;
@@ -145,8 +145,8 @@ module.exports = React.createClass({
     // Get the label/tooltip to show
     getLabel: function(label, show) {
         if (show) {
-            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
+            const Tooltip = sdk.getComponent("elements.Tooltip");
+            return <Tooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
         }
     },
 
@@ -170,7 +170,7 @@ module.exports = React.createClass({
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
 
-        const groupsButton = SettingsStore.getValue("TagPanel.disableTagPanel") ?
+        const groupsButton = !SettingsStore.getValue("TagPanel.enableTagPanel") ?
             <GroupsButton tooltip={true} /> : null;
 
         return (

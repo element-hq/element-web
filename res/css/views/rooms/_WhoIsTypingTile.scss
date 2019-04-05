@@ -40,6 +40,7 @@ limitations under the License.
 }
 
 .mx_WhoIsTypingTile_remainingAvatarPlaceholder {
+    position: relative;
     display: inline-block;
     color: #acacac;
     background-color: #ddd;
@@ -61,7 +62,7 @@ limitations under the License.
 }
 
 .mx_WhoIsTypingTile_label > span {
-    background-image: url('../../img/typing-indicator-2x.gif');
+    background-image: url('$(res)/img/typing-indicator-2x.gif');
     background-size: 25px;
     background-position: left bottom;
     background-repeat: no-repeat;

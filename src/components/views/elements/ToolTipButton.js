@@ -39,8 +39,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-        const tip = this.state.hover ? <RoomTooltip
+        const Tooltip = sdk.getComponent("elements.Tooltip");
+        const tip = this.state.hover ? <Tooltip
             className="mx_ToolTipButton_container"
             tooltipClassName="mx_ToolTipButton_helpText"
             label={this.props.helpText}

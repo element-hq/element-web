@@ -22,6 +22,7 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import Avatar from '../../Avatar';
+import { _t } from '../../languageHandler';
 
 const AVATAR_SIZE = 28;
 
@@ -67,10 +68,18 @@ export default class TopLeftMenuButton extends React.Component {
         }
     }
 
+    _getDisplayName() {
+        if (MatrixClientPeg.get().isGuest()) {
+            return _t("Guest");
+        } else if (this.state.profileInfo) {
+            return this.state.profileInfo.name;
+        } else {
+            return MatrixClientPeg.get().getUserId();
+        }
+    }
+
     render() {
-        const fallbackUserId = MatrixClientPeg.get().getUserId();
-        const profileInfo = this.state.profileInfo;
-        const name = profileInfo ? profileInfo.name : fallbackUserId;
+        const name = this._getDisplayName();
         let nameElement;
         if (!this.props.collapsed) {
             nameElement = <div className="mx_TopLeftMenuButton_name">
@@ -81,15 +90,15 @@ export default class TopLeftMenuButton extends React.Component {
         return (
             <AccessibleButton className="mx_TopLeftMenuButton" onClick={this.onToggleMenu}>
                 <BaseAvatar
-                    idName={fallbackUserId}
+                    idName={MatrixClientPeg.get().getUserId()}
                     name={name}
-                    url={profileInfo && profileInfo.avatarUrl}
+                    url={this.state.profileInfo && this.state.profileInfo.avatarUrl}
                     width={AVATAR_SIZE}
                     height={AVATAR_SIZE}
                     resizeMethod="crop"
                 />
                 { nameElement }
-                <img className="mx_TopLeftMenuButton_chevron" src="img/topleft-chevron.svg" width="11" height="6" />
+                <span className="mx_TopLeftMenuButton_chevron"></span>
             </AccessibleButton>
         );
     }
@@ -106,6 +115,8 @@ export default class TopLeftMenuButton extends React.Component {
             chevronFace: "none",
             left: x,
             top: y,
+            userId: MatrixClientPeg.get().getUserId(),
+            displayName: this._getDisplayName(),
             onFinished: () => {
                 this.setState({ menuDisplayed: false });
             },

@@ -27,6 +27,9 @@ export default class MainSplit extends React.Component {
 
     _onResized(size) {
         window.localStorage.setItem("mx_rhs_size", size);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.notifyRightHandleResized();
+        }
     }
 
     _createResizer() {
@@ -71,13 +74,14 @@ export default class MainSplit extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const shouldAllowResizing =
-            !this.props.collapsedRhs &&
-            this.props.panel;
+        const wasExpanded = !this.props.collapsedRhs && prevProps.collapsedRhs;
+        const wasCollapsed = this.props.collapsedRhs && !prevProps.collapsedRhs;
+        const wasPanelSet = this.props.panel && !prevProps.panel;
+        const wasPanelCleared = !this.props.panel && prevProps.panel;
 
-        if (shouldAllowResizing && !this.resizer) {
+        if (wasExpanded || wasPanelSet) {
             this._createResizer();
-        } else if (!shouldAllowResizing && this.resizer) {
+        } else if (wasCollapsed || wasPanelCleared) {
             this.resizer.detach();
             this.resizer = null;
         }

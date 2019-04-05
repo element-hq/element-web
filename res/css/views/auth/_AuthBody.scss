@@ -1,0 +1,132 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AuthBody {
+    width: 500px;
+    background-color: $authpage-body-bg-color;
+    border-radius: 0 4px 4px 0;
+    padding: 25px 60px;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: $authpage-secondary-color;
+
+    h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 8px;
+        color: $authpage-primary-color;
+    }
+
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: $authpage-primary-color;
+    }
+
+    a:link,
+    a:hover,
+    a:visited {
+        color: $accent-color;
+        text-decoration: none;
+    }
+
+    input[type=text],
+    input[type=password] {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Field input,
+    .mx_Field select {
+        color: $authpage-primary-color;
+        background-color: $authpage-body-bg-color;
+    }
+
+    .mx_Field label {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Field input:focus + label,
+    .mx_Field input:not(:placeholder-shown) + label,
+    .mx_Field textarea:focus + label,
+    .mx_Field textarea:not(:placeholder-shown) + label,
+    .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+    .mx_Field_labelAlwaysTopLeft label {
+        background-color: $authpage-body-bg-color;
+    }
+
+    input.error {
+        color: $warning-color;
+    }
+
+    .mx_Field input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .mx_Field_select::before {
+        background-color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_arrow {
+        background: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_menu {
+        background-color: $authpage-body-bg-color;
+
+        .mx_Dropdown_option_highlight {
+            background-color: $authpage-focus-bg-color;
+        }
+    }
+}
+
+.mx_AuthBody_editServerDetails {
+    padding-left: 1em;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.mx_AuthBody_fieldRow {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field {
+    margin: 0 5px;
+    flex: 1;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field:first-child {
+    margin-left: 0;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field:last-child {
+    margin-right: 0;
+}
+
+.mx_AuthBody_changeFlow {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.mx_AuthBody_spinner {
+    margin: 1em 0;
+}

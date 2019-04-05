@@ -15,6 +15,9 @@ module.exports = {
       "flowtype",
       "babel"
     ],
+    globals: {
+        LANGUAGES_FILE: "readonly",
+    },
     env: {
         es6: true,
     },
@@ -42,9 +45,8 @@ module.exports = {
 
         // bind or arrow function in props causes performance issues
         // (but we currently use them in some places)
-        "react/jsx-no-bind": ["warn", {
-            "ignoreRefs": true,
-        }],
+        // It's disabled here, but we should using it sparingly.
+        "react/jsx-no-bind": "off",
         "react/jsx-key": ["error"],
 
         // Components in JSX should always be defined.
@@ -92,13 +94,13 @@ module.exports = {
             // to JSX.
             ignorePattern: '^\\s*<',
             ignoreComments: true,
+            ignoreRegExpLiterals: true,
             code: 120,
         }],
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],
         "key-spacing": ["warn"],
         "prefer-const": ["warn"],
-        "arrow-parens": "off",
 
         // crashes currently: https://github.com/eslint/eslint/issues/6274
         "generator-star-spacing": "off",

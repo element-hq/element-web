@@ -28,41 +28,56 @@ import { KeyCode } from '../../../Keyboard';
  * @returns {Object} rendered react
  */
 export default function AccessibleButton(props) {
-    const {element, onClick, children, ...restProps} = props;
-    restProps.onClick = onClick;
-    // We need to consume enter onKeyDown and space onKeyUp
-    // otherwise we are risking also activating other keyboard focusable elements
-    // that might receive focus as a result of the AccessibleButtonClick action
-    // It's because we are using html buttons at a few places e.g. inside dialogs
-    // And divs which we report as role button to assistive technologies.
-    // Browsers handle space and enter keypresses differently and we are only adjusting to the
-    // inconsistencies here
-    restProps.onKeyDown = function(e) {
-        if (e.keyCode === KeyCode.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-            return onClick(e);
-        }
-        if (e.keyCode === KeyCode.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-    restProps.onKeyUp = function(e) {
-        if (e.keyCode === KeyCode.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            return onClick(e);
-        }
-        if (e.keyCode === KeyCode.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
+    const {element, onClick, children, kind, disabled, ...restProps} = props;
+
+    if (!disabled) {
+        restProps.onClick = onClick;
+        // We need to consume enter onKeyDown and space onKeyUp
+        // otherwise we are risking also activating other keyboard focusable elements
+        // that might receive focus as a result of the AccessibleButtonClick action
+        // It's because we are using html buttons at a few places e.g. inside dialogs
+        // And divs which we report as role button to assistive technologies.
+        // Browsers handle space and enter keypresses differently and we are only adjusting to the
+        // inconsistencies here
+        restProps.onKeyDown = function(e) {
+            if (e.keyCode === KeyCode.ENTER) {
+                e.stopPropagation();
+                e.preventDefault();
+                return onClick(e);
+            }
+            if (e.keyCode === KeyCode.SPACE) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        };
+        restProps.onKeyUp = function(e) {
+            if (e.keyCode === KeyCode.SPACE) {
+                e.stopPropagation();
+                e.preventDefault();
+                return onClick(e);
+            }
+            if (e.keyCode === KeyCode.ENTER) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        };
+    }
+
     restProps.tabIndex = restProps.tabIndex || "0";
     restProps.role = "button";
     restProps.className = (restProps.className ? restProps.className + " " : "") +
                           "mx_AccessibleButton";
+
+    if (kind) {
+        // We apply a hasKind class to maintain backwards compatibility with
+        // buttons which might not know about kind and break
+        restProps.className += " mx_AccessibleButton_hasKind mx_AccessibleButton_kind_" + kind;
+    }
+
+    if (disabled) {
+        restProps.className += " mx_AccessibleButton_disabled";
+    }
+
     return React.createElement(element, restProps, children);
 }
 
@@ -76,6 +91,12 @@ AccessibleButton.propTypes = {
     children: PropTypes.node,
     element: PropTypes.string,
     onClick: PropTypes.func.isRequired,
+
+    // The kind of button, similar to how Bootstrap works.
+    // See available classes for AccessibleButton for options.
+    kind: PropTypes.string,
+
+    disabled: PropTypes.bool,
 };
 
 AccessibleButton.defaultProps = {

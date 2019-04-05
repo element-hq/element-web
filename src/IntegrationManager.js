@@ -51,6 +51,11 @@ export default class IntegrationManager {
    */
   static async open(integName, integId, onFinished) {
     await IntegrationManager._init();
+    if (global.mxIntegrationManager.client) {
+        await global.mxIntegrationManager.client.connect();
+    } else {
+        return;
+    }
     const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
     if (global.mxIntegrationManager.error ||
         !(global.mxIntegrationManager.client && global.mxIntegrationManager.client.hasCredentials())) {

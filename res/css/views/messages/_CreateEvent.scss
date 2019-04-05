@@ -24,9 +24,14 @@ limitations under the License.
 
 .mx_CreateEvent_image {
     float: left;
-    padding-right: 20px;
+    margin-right: 20px;
     width: 72px;
     height: 34px;
+
+    background-color: $primary-fg-color;
+    mask: url('$(res)/img/room-continuation.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
 }
 
 .mx_CreateEvent_header {

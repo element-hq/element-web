@@ -25,7 +25,7 @@ limitations under the License.
 }
 
 .mx_GroupView_header {
-    min-height: 70px;
+    min-height: 52px;
     align-items: center;
     display: flex;
     padding-bottom: 10px;
@@ -34,7 +34,7 @@ limitations under the License.
 .mx_GroupView_header_view {
     border-bottom: 1px solid $primary-hairline-color;
     padding-bottom: 0px;
-    padding-left: 8px;
+    padding-left: 19px;
     padding-right: 8px;
 }
 
@@ -44,13 +44,26 @@ limitations under the License.
 }
 
 .mx_GroupHeader_button {
-    margin-left: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-color: $groupheader-button-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
 }
 
-.mx_GroupHeader_button object {
-    // prevents clicks from being swallowed by svg in 'object' tag
-    pointer-events: none;
+.mx_GroupHeader_editButton {
+    mask-image: url('$(res)/img/icons-settings-room.svg');
+}
+
+.mx_GroupHeader_shareButton {
+    mask-image: url('$(res)/img/icons-share.svg');
+}
+
+.mx_GroupView_hostingSignup img {
+    margin-left: 5px;
 }
 
 .mx_GroupView_editable {
@@ -161,7 +174,6 @@ limitations under the License.
 
 .mx_GroupView > .mx_MainSplit {
     flex: 1;
-    display: flex;
 }
 
 .mx_GroupView_body  {
@@ -348,4 +360,9 @@ limitations under the License.
 
 .mx_GroupView_changeDelayWarning {
     padding: 40px 20px;
+}
+
+.mx_GroupView .mx_MemberInfo .gm-scroll-view > :not(.mx_MemberInfo_avatar) {
+    padding-left: 16px;
+    padding-right: 16px;
 }

@@ -66,7 +66,7 @@ const customVariables = {
     },
     'User Type': {
         id: 3,
-        expl: _td('Whether or not you\'re logged in (we don\'t record your user name)'),
+        expl: _td('Whether or not you\'re logged in (we don\'t record your username)'),
         example: 'Logged In',
     },
     'Chosen Language': {
@@ -267,7 +267,7 @@ class Analytics {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
-            description: <div className="mx_UserSettings_analyticsModal">
+            description: <div className="mx_AnalyticsModal">
                 <div>
                     { _t('The information being sent to us to help make Riot.im better includes:') }
                 </div>

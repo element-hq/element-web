@@ -166,17 +166,15 @@ module.exports = React.createClass({
             }
         }
 
-        const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
-            this.props.groupMember.avatarUrl,
-            36, 36, 'crop',
-        );
 
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const avatar = (
-            <BaseAvatar name={this.props.groupMember.userId} width={36} height={36}
-                url={avatarUrl}
-            />
-        );
+        const avatarUrl = this.props.groupMember.avatarUrl;
+        let avatarElement;
+        if (avatarUrl) {
+            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            avatarElement = (<div className="mx_MemberInfo_avatar">
+                            <img src={httpUrl} />
+                        </div>);
+        }
 
         const groupMemberName = (
             this.props.groupMember.displayname || this.props.groupMember.userId
@@ -188,12 +186,9 @@ module.exports = React.createClass({
             <div className="mx_MemberInfo">
                 <GeminiScrollbarWrapper autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
+                        <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
-                    <div className="mx_MemberInfo_avatar">
-                        { avatar }
-                    </div>
-
+                    { avatarElement }
                     <EmojiText element="h2">{ groupMemberName }</EmojiText>
 
                     <div className="mx_MemberInfo_profile">

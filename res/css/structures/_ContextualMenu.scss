@@ -30,8 +30,8 @@ limitations under the License.
 }
 
 .mx_ContextualMenu {
-    border-radius: 2px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.21);
+    border-radius: 4px;
+    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     background-color: $menu-bg-color;
     color: $primary-fg-color;
     position: absolute;
@@ -41,10 +41,6 @@ limitations under the License.
 
 .mx_ContextualMenu.mx_ContextualMenu_right {
     right: 8px;
-}
-
-.mx_ContextualMenu_noChevron {
-    border-radius: unset !important;
 }
 
 .mx_ContextualMenu_chevron_right {

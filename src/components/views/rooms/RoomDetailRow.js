@@ -17,14 +17,10 @@ limitations under the License.
 import sdk from '../../../index';
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import * as linkify from 'linkifyjs';
-import linkifyElement from 'linkifyjs/element';
-import linkifyMatrix from '../../../linkify-matrix';
+import { linkifyElement } from '../../../HtmlUtils';
 import { ContentRepo } from 'matrix-js-sdk';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-
-linkifyMatrix(linkify);
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -53,7 +49,7 @@ export default React.createClass({
 
     _linkifyTopic: function() {
         if (this.refs.topic) {
-            linkifyElement(this.refs.topic, linkifyMatrix.options);
+            linkifyElement(this.refs.topic);
         }
     },
 

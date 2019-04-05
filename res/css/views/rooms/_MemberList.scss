@@ -20,6 +20,7 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 
     .mx_Spinner {
         flex: 1 0 auto;
@@ -34,6 +35,10 @@ limitations under the License.
         padding-right: 12px;
         margin-top: 8px;
         margin-bottom: 4px;
+    }
+
+    .mx_AutoHideScrollbar {
+        flex: 1 1 0;
     }
 }
 
@@ -53,10 +58,6 @@ limitations under the License.
 .mx_MemberList_query,
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
-    flex: 0 0 auto;
-}
-
-.mx_MemberList .gm-scrollbar-container {
     flex: 1 1 0;
 }
 
@@ -76,6 +77,7 @@ limitations under the License.
     padding: 8px;
     margin: 9px;
     display: flex;
+    justify-content: center;
     color: $button-fg-color;
     font-weight: 600;
 
@@ -86,8 +88,7 @@ limitations under the License.
 }
 
 .mx_MemberList_invite span {
-    margin: 0 auto;
-    background-image: url('../../img/feather-icons/user-add.svg');
+    background-image: url('$(res)/img/feather-customised/user-add.svg');
     background-repeat: no-repeat;
     background-position: center left;
     padding-left: 25px;

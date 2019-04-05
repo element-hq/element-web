@@ -1,0 +1,74 @@
+steps:
+  - label: ":eslint: Lint"
+    command:
+      - "yarn install"
+      - "yarn lintwithexclusions"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+#  - label: ":chains: End-to-End Tests"
+#    command:
+#      # TODO: Remove hacky chmod for BuildKite
+#      - "chmod +x ./scripts/ci/*.sh"
+#      - "chmod +x ./scripts/*"
+#      - "sudo apt-get install build-essential python2.7-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev"
+#      - "./scripts/ci/install-deps.sh"
+#      - "./scripts/ci/end-to-end-tests.sh"
+#    plugins:
+#      - docker#v3.0.1:
+#          image: "node:10"
+
+  - label: ":karma: Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # webpack loves to gorge itself on resources.
+      queue: "medium"
+    command:
+      # Install chrome
+      - "echo '--- Installing Chrome'"
+      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
+      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
+      - "apt-get update"
+      - "apt-get install -y google-chrome-stable"
+      # Run tests
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
+      - "echo '--- Installing Dependencies'"
+      - "./scripts/ci/install-deps.sh"
+      - "echo '+++ Running Tests'"
+      - "./scripts/ci/unit-tests.sh"
+    env:
+      CHROME_BIN: "/usr/bin/google-chrome-stable"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+          propagate-environment: true
+
+  - label: "🔧 Riot Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # webpack loves to gorge itself on resources.
+      queue: "medium"
+    command:
+      # Install chrome
+      - "echo '--- Installing Chrome'"
+      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
+      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
+      - "apt-get update"
+      - "apt-get install -y google-chrome-stable"
+      # Run tests
+      # TODO: Remove hacky chmod for BuildKite
+      - "chmod +x ./scripts/ci/*.sh"
+      - "chmod +x ./scripts/*"
+      - "echo '--- Installing Dependencies'"
+      - "./scripts/ci/install-deps.sh"
+      - "echo '+++ Running Tests'"
+      - "./scripts/ci/riot-unit-tests.sh"
+    env:
+      CHROME_BIN: "/usr/bin/google-chrome-stable"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+          propagate-environment: true

@@ -14,8 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberStatusMessageAvatar_hasStatus {
-    border: 2px solid $accent-color;
-    border-radius: 40px;
-    padding-right: 0 !important; /* Override AccessibleButton styling */
+.mx_MessageComposer_avatar .mx_BaseAvatar {
+    padding: 2px;
+    border: 1px solid transparent;
+    border-radius: 15px;
+}
+
+.mx_MessageComposer_avatar .mx_BaseAvatar_initial {
+    left: 2px;
+}
+
+.mx_MemberStatusMessageAvatar_hasStatus .mx_BaseAvatar {
+    border-color: $accent-color;
 }

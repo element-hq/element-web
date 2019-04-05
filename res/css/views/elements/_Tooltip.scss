@@ -1,0 +1,69 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+@keyframes mx_fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes mx_fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.mx_Tooltip_chevron {
+    position: absolute;
+    left: -7px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid $menu-border-color;
+    border-bottom: 7px solid transparent;
+}
+
+.mx_Tooltip_chevron:after {
+    content:'';
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-right: 6px solid $menu-bg-color;
+    border-bottom: 6px solid transparent;
+    position: absolute;
+    top: -6px;
+    left: 1px;
+}
+
+.mx_Tooltip {
+    display: none;
+    animation: mx_fadein 0.2s;
+    position: fixed;
+    border: 1px solid $menu-border-color;
+    border-radius: 4px;
+    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
+    background-color: $menu-bg-color;
+    z-index: 2000;
+    padding: 10px;
+    pointer-events: none;
+    line-height: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $primary-fg-color;
+    max-width: 200px;
+    word-break: break-word;
+    margin-right: 50px;
+}

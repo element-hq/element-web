@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Travis Ralston
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
+import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -395,5 +397,26 @@ export default class WidgetUtils {
         if (appType == 'jitsi') capWhitelist.push("m.always_on_screen");
 
         return capWhitelist;
+    }
+
+    static getWidgetSecurityKey(widgetId, widgetUrl, isUserWidget) {
+        let widgetLocation = ActiveWidgetStore.getRoomId(widgetId);
+
+        if (isUserWidget) {
+            const userWidget = WidgetUtils.getUserWidgetsArray()
+                .find((w) => w.id === widgetId && w.content && w.content.url === widgetUrl);
+
+            if (!userWidget) {
+                throw new Error("No matching user widget to form security key");
+            }
+
+            widgetLocation = userWidget.sender;
+        }
+
+        if (!widgetLocation) {
+            throw new Error("Failed to locate where the widget resides");
+        }
+
+        return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 }
