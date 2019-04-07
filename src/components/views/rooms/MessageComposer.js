@@ -117,6 +117,24 @@ HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
 }
 
+function FormattingButton(props) {
+    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    return <AccessibleButton
+        element="img"
+        className="mx_MessageComposer_formatting"
+        alt={_t("Show Text Formatting Toolbar")}
+        title={_t("Show Text Formatting Toolbar")}
+        src={require("../../../../res/img/button-text-formatting.svg")}
+        style={{visibility: props.showFormatting ? 'hidden' : 'visible'}}
+        onClick={props.onClickHandler}
+    />;
+}
+
+FormattingButton.propTypes = {
+    showFormatting: PropTypes.bool.isRequired,
+    onClickHandler: PropTypes.func.isRequired,
+}
+
 class UploadButton extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -374,32 +392,19 @@ export default class MessageComposer extends React.Component {
     }
 
     render() {
-        const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
-
-        const callInProgress = this.props.callState && this.props.callState !== 'ended';
-
         const controls = [
             this.state.me ? <Avatar key="controls_avatar" me={this.state.me} /> : null,
             this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
         ];
-
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         if (!this.state.tombstone && this.state.canSendMessages) {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
 
-            const formattingButton = this.state.inputState.isRichTextEnabled ? (
-                <AccessibleButton element="img" className="mx_MessageComposer_formatting"
-                     alt={_t("Show Text Formatting Toolbar")}
-                     title={_t("Show Text Formatting Toolbar")}
-                     src={require("../../../../res/img/button-text-formatting.svg")}
-                     onClick={this.onToggleFormattingClicked}
-                     style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
-                     key="controls_formatting" />
-            ) : null;
-
+            const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
+            const showFormattingButton = this.state.inputState.isRichTextEnabled;
+            const callInProgress = this.props.callState && this.props.callState !== 'ended';
 
             controls.push(
                 <MessageComposerInput
@@ -409,7 +414,8 @@ export default class MessageComposer extends React.Component {
                     placeholder={this.renderPlaceholderText()}
                     onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
-                formattingButton,
+                showFormattingButton ? <FormattingButton key="controls_formatting"
+                    showFormatting={this.state.showFormatting} onClickHandler={this.onToggleFormattingClicked} /> : null,
                 <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
