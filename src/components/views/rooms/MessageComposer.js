@@ -131,6 +131,7 @@ export default class MessageComposer extends React.Component {
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
+        this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
 
         this.state = {
             inputState: {
@@ -289,6 +290,23 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    renderPlaceholderText() {
+        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+        if (this.state.isQuoting) {
+            if (roomIsEncrypted) {
+                return _t('Send an encrypted reply…');
+            } else {
+                return _t('Send a reply (unencrypted)…');
+            }
+        } else {
+            if (roomIsEncrypted) {
+                return _t('Send an encrypted message…');
+            } else {
+                return _t('Send a message (unencrypted)…');
+            }
+        }
+    }
+
     render() {
         const uploadInputStyle = {display: 'none'};
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
@@ -329,22 +347,6 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             ) : null;
 
-            const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-            let placeholderText;
-            if (this.state.isQuoting) {
-                if (roomIsEncrypted) {
-                    placeholderText = _t('Send an encrypted reply…');
-                } else {
-                    placeholderText = _t('Send a reply (unencrypted)…');
-                }
-            } else {
-                if (roomIsEncrypted) {
-                    placeholderText = _t('Send an encrypted message…');
-                } else {
-                    placeholderText = _t('Send a message (unencrypted)…');
-                }
-            }
-
             const stickerpickerButton = <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />;
 
             controls.push(
@@ -352,7 +354,7 @@ export default class MessageComposer extends React.Component {
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     room={this.props.room}
-                    placeholder={placeholderText}
+                    placeholder={this.renderPlaceholderText()}
                     onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
