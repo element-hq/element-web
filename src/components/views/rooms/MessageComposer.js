@@ -186,6 +186,7 @@ export default class MessageComposer extends React.Component {
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
+        this.renderFormatBar = this.renderFormatBar.bind(this);
 
         this.state = {
             inputState: {
@@ -331,6 +332,47 @@ export default class MessageComposer extends React.Component {
         }
     }
 
+    renderFormatBar() {
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const {marks, blockType} = this.state.inputState;
+        const formatButtons = formatButtonList.map((name) => {
+            // special-case to match the md serializer and the special-case in MessageComposerInput.js
+            const markName = name === 'inline-code' ? 'code' : name;
+            const active = marks.some(mark => mark.type === markName) || blockType === name;
+            const suffix = active ? '-on' : '';
+            const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
+            const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
+            return (
+                <img className={className}
+                    title={_t(name)}
+                    onMouseDown={onFormatButtonClicked}
+                    key={name}
+                    src={require(`../../../../res/img/button-text-${name}${suffix}.svg`)}
+                    height="17"
+                />
+            );
+        })
+
+        return (
+            <div className="mx_MessageComposer_formatbar_wrapper">
+                <div className="mx_MessageComposer_formatbar">
+                { formatButtons }
+                <div style={{ flex: 1 }}></div>
+                <AccessibleButton
+                    className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
+                    onClick={this.onToggleMarkdownClicked}
+                    title={_t("Markdown is disabled")}
+                />
+                <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
+                    onClick={this.onToggleFormattingClicked}
+                    className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                    src={require("../../../../res/img/icon-text-cancel.svg")}
+                />
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -403,42 +445,7 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        let formatBar;
-        if (this.state.showFormatting && this.state.inputState.isRichTextEnabled) {
-            const {marks, blockType} = this.state.inputState;
-            const formatButtons = formatButtonList.map((name) => {
-                // special-case to match the md serializer and the special-case in MessageComposerInput.js
-                const markName = name === 'inline-code' ? 'code' : name;
-                const active = marks.some(mark => mark.type === markName) || blockType === name;
-                const suffix = active ? '-on' : '';
-                const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
-                return <img className={className}
-                            title={_t(name)}
-                            onMouseDown={onFormatButtonClicked}
-                            key={name}
-                            src={require(`../../../../res/img/button-text-${name}${suffix}.svg`)}
-                            height="17" />;
-                },
-            );
-
-            formatBar =
-                <div className="mx_MessageComposer_formatbar_wrapper">
-                    <div className="mx_MessageComposer_formatbar">
-                        { formatButtons }
-                        <div style={{ flex: 1 }}></div>
-                        <AccessibleButton className="mx_MessageComposer_formatbar_markdown mx_MessageComposer_markdownDisabled"
-                            onClick={this.onToggleMarkdownClicked}
-                            title={_t("Markdown is disabled")}
-                        />
-                        <AccessibleButton element="img" title={_t("Hide Text Formatting Toolbar")}
-                            onClick={this.onToggleFormattingClicked}
-                            className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                            src={require("../../../../res/img/icon-text-cancel.svg")}
-                        />
-                    </div>
-                </div>;
-        }
+        const showFormatBar = this.state.showFormatting && this.state.inputState.isRichTextEnabled;
 
         const wrapperClasses = classNames({
             mx_MessageComposer_wrapper: true,
@@ -451,7 +458,7 @@ export default class MessageComposer extends React.Component {
                         { controls }
                     </div>
                 </div>
-                { formatBar }
+                { showFormatBar ? this.renderFormatBar() : null }
             </div>
         );
     }
