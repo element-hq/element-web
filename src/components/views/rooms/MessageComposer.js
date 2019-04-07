@@ -42,6 +42,17 @@ const formatButtonList = [
     _td("numbered-list"),
 ];
 
+function Avatar(props) {
+    const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
+    return <div className="mx_MessageComposer_avatar">
+        <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
+    </div>;
+}
+
+Avatar.propTypes = {
+    me: PropTypes.object.isRequired,
+}
+
 function CallButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onVoiceCallClick = (ev) => {
@@ -280,26 +291,12 @@ export default class MessageComposer extends React.Component {
 
     render() {
         const uploadInputStyle = {display: 'none'};
-        const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
-        const controls = [];
-
-        if (this.state.me) {
-            controls.push(
-                <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                    <MemberStatusMessageAvatar member={this.state.me} width={24} height={24} />
-                </div>,
-            );
-        }
-
-        if (this.props.e2eStatus) {
-            controls.push(<E2EIcon
-                status={this.props.e2eStatus}
-                key="e2eIcon"
-                className="mx_MessageComposer_e2eIcon" />
-            );
-        }
+        const controls = [
+            this.state.me ? <Avatar key="controls_avatar" me={this.state.me} /> : null,
+            this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
+        ];
 
         let callButton;
         let videoCallButton;
