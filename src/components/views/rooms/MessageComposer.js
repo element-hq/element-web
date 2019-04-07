@@ -117,12 +117,66 @@ HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
 }
 
+class UploadButton extends React.Component {
+    static propTypes = {
+        roomId: PropTypes.string.isRequired,
+    }
+    constructor(props, context) {
+        super(props, context);
+        this.onUploadClick = this.onUploadClick.bind(this);
+        this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
+    }
+
+    onUploadClick(ev) {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'require_registration'});
+            return;
+        }
+        this.refs.uploadInput.click();
+    }
+
+    onUploadFileInputChange(ev) {
+        if (ev.target.files.length === 0) return;
+
+        // take a copy so we can safely reset the value of the form control
+        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        const tfiles = [];
+        for (let i = 0; i < ev.target.files.length; ++i) {
+            tfiles.push(ev.target.files[i]);
+        }
+
+        ContentMessages.sharedInstance().sendContentListToRoom(
+            tfiles, this.props.roomId, MatrixClientPeg.get(),
+        );
+
+        // This is the onChange handler for a file form control, but we're
+        // not keeping any state, so reset the value of the form control
+        // to empty.
+        // NB. we need to set 'value': the 'files' property is immutable.
+        ev.target.value = '';
+    }
+
+    render() {
+        const uploadInputStyle = {display: 'none'};
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return (
+            <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_upload"
+                onClick={this.onUploadClick}
+                title={_t('Upload file')}
+            >
+                <input ref="uploadInput" type="file"
+                    style={uploadInputStyle}
+                    multiple
+                    onChange={this.onUploadFileInputChange}
+                />
+            </AccessibleButton>
+        );
+    }
+}
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this.onUploadClick = this.onUploadClick.bind(this);
-        this._onUploadFileInputChange = this._onUploadFileInputChange.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -210,36 +264,6 @@ export default class MessageComposer extends React.Component {
         this.setState({ isQuoting });
     }
 
-    onUploadClick(ev) {
-        if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
-            return;
-        }
-
-        this.refs.uploadInput.click();
-    }
-
-    _onUploadFileInputChange(ev) {
-        if (ev.target.files.length === 0) return;
-
-        // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sesnible iteration).
-        const tfiles = [];
-        for (let i = 0; i < ev.target.files.length; ++i) {
-            tfiles.push(ev.target.files[i]);
-        }
-
-        ContentMessages.sharedInstance().sendContentListToRoom(
-            tfiles, this.props.room.roomId, MatrixClientPeg.get(),
-        );
-
-        // This is the onChange handler for a file form control, but we're
-        // not keeping any state, so reset the value of the form control
-        // to empty.
-        // NB. we need to set 'value': the 'files' property is immutable.
-        ev.target.value = '';
-    }
-
 
     onInputStateChanged(inputState) {
         // Merge the new input state with old to support partial updates
@@ -308,7 +332,6 @@ export default class MessageComposer extends React.Component {
     }
 
     render() {
-        const uploadInputStyle = {display: 'none'};
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
         const callInProgress = this.props.callState && this.props.callState !== 'ended';
@@ -324,18 +347,6 @@ export default class MessageComposer extends React.Component {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
-            const uploadButton = (
-                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_upload"
-                    key="controls_upload"
-                    onClick={this.onUploadClick}
-                    title={_t('Upload file')}
-                >
-                    <input ref="uploadInput" type="file"
-                        style={uploadInputStyle}
-                        multiple
-                        onChange={this._onUploadFileInputChange} />
-                </AccessibleButton>
-            );
 
             const formattingButton = this.state.inputState.isRichTextEnabled ? (
                 <AccessibleButton element="img" className="mx_MessageComposer_formatting"
@@ -359,7 +370,7 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
                 stickerpickerButton,
-                uploadButton,
+                <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
                 callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
                 callInProgress ? null : <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
