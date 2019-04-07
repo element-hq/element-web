@@ -293,23 +293,14 @@ export default class MessageComposer extends React.Component {
         const uploadInputStyle = {display: 'none'};
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
+        const callInProgress = this.props.callState && this.props.callState !== 'ended';
+
         const controls = [
             this.state.me ? <Avatar key="controls_avatar" me={this.state.me} /> : null,
             this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
         ];
 
-        let callButton;
-        let videoCallButton;
-        let hangupButton;
-
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        // Call buttons
-        if (this.props.callState && this.props.callState !== 'ended') {
-            hangupButton = <HangupButton key="controls_hangup" roomId={this.props.room.roomId} />;
-        } else {
-            callButton = <CallButton key="controls_call" roomId={this.props.room.roomId} />;
-            videoCallButton = <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />;
-        }
 
         if (!this.state.tombstone && this.state.canSendMessages) {
             // This also currently includes the call buttons. Really we should
@@ -367,9 +358,9 @@ export default class MessageComposer extends React.Component {
                 formattingButton,
                 stickerpickerButton,
                 uploadButton,
-                hangupButton,
-                callButton,
-                videoCallButton,
+                callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
+                callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
+                callInProgress ? null : <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
             );
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
