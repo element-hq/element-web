@@ -42,14 +42,76 @@ const formatButtonList = [
     _td("numbered-list"),
 ];
 
+function CallButton(props) {
+    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    const onVoiceCallClick = (ev) => {
+        dis.dispatch({
+            action: 'place_call',
+            type: "voice",
+            room_id: props.roomId,
+        });
+    };
+
+    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+        onClick={onVoiceCallClick}
+        title={_t('Voice call')}
+    />
+}
+
+CallButton.propTypes = {
+    roomId: PropTypes.string.isRequired
+}
+
+function VideoCallButton(props) {
+    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    const onCallClick = (ev) => {
+        dis.dispatch({
+            action: 'place_call',
+            type: ev.shiftKey ? "screensharing" : "video",
+            room_id: props.roomId,
+        });
+    };
+
+    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_videocall"
+        onClick={onCallClick}
+        title={_t('Video call')}
+    />;
+}
+
+VideoCallButton.propTypes = {
+    roomId: PropTypes.string.isRequired,
+};
+
+function HangupButton(props) {
+    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    const onHangupClick = () => {
+        const call = CallHandler.getCallForRoom(props.roomId);
+        if (!call) {
+            return;
+        }
+        dis.dispatch({
+            action: 'hangup',
+            // hangup the call for this room, which may not be the room in props
+            // (e.g. conferences which will hangup the 1:1 room instead)
+            room_id: call.roomId,
+        });
+    };
+    return  <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
+        onClick={onHangupClick}
+        title={_t('Hangup')}
+    />;
+}
+
+HangupButton.propTypes = {
+    roomId: PropTypes.string.isRequired,
+}
+
+
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this.onCallClick = this.onCallClick.bind(this);
-        this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
         this._onUploadFileInputChange = this._onUploadFileInputChange.bind(this);
-        this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -166,35 +228,6 @@ export default class MessageComposer extends React.Component {
         ev.target.value = '';
     }
 
-    onHangupClick() {
-        const call = CallHandler.getCallForRoom(this.props.room.roomId);
-        //var call = CallHandler.getAnyActiveCall();
-        if (!call) {
-            return;
-        }
-        dis.dispatch({
-            action: 'hangup',
-            // hangup the call for this room, which may not be the room in props
-            // (e.g. conferences which will hangup the 1:1 room instead)
-            room_id: call.roomId,
-        });
-    }
-
-    onCallClick(ev) {
-        dis.dispatch({
-            action: 'place_call',
-            type: ev.shiftKey ? "screensharing" : "video",
-            room_id: this.props.room.roomId,
-        });
-    }
-
-    onVoiceCallClick(ev) {
-        dis.dispatch({
-            action: 'place_call',
-            type: "voice",
-            room_id: this.props.room.roomId,
-        });
-    }
 
     onInputStateChanged(inputState) {
         // Merge the new input state with old to support partial updates
@@ -275,28 +308,10 @@ export default class MessageComposer extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
-            hangupButton =
-                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_hangup"
-                    key="controls_hangup"
-                    onClick={this.onHangupClick}
-                    title={_t('Hangup')}
-                >
-                </AccessibleButton>;
+            hangupButton = <HangupButton key="controls_hangup" roomId={this.props.room.roomId} />;
         } else {
-            callButton =
-                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-                    key="controls_call"
-                    onClick={this.onVoiceCallClick}
-                    title={_t('Voice call')}
-                >
-                </AccessibleButton>;
-            videoCallButton =
-                <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_videocall"
-                    key="controls_videocall"
-                    onClick={this.onCallClick}
-                    title={_t('Video call')}
-                >
-                </AccessibleButton>;
+            callButton = <CallButton key="controls_call" roomId={this.props.room.roomId} />;
+            videoCallButton = <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />;
         }
 
         if (!this.state.tombstone && this.state.canSendMessages) {
