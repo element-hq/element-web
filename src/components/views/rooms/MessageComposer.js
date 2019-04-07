@@ -358,7 +358,6 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             ) : null;
 
-            const stickerpickerButton = <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />;
 
             controls.push(
                 <MessageComposerInput
@@ -369,7 +368,7 @@ export default class MessageComposer extends React.Component {
                     onInputStateChanged={this.onInputStateChanged}
                     permalinkCreator={this.props.permalinkCreator} />,
                 formattingButton,
-                stickerpickerButton,
+                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
                 callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
