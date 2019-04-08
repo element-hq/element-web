@@ -41,13 +41,10 @@ limitations under the License.
             margin-top: 16px;
             margin-bottom: 24px;
         }
-        .mx_Dialog_fixedWidth {
-            width: 100%;
-        }
 
         .mx_Dialog_fixedWidth {
             max-width: 1000px;
-            width: 90%;
+            width: 90vw;
         }
     }
 }
