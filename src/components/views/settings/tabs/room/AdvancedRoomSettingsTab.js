@@ -38,8 +38,13 @@ export default class AdvancedRoomSettingsTab extends React.Component {
 
     componentWillMount() {
         // we handle lack of this object gracefully later, so don't worry about it failing here.
-        MatrixClientPeg.get().getRoom(this.props.roomId).getRecommendedVersion().then((v) => {
-            this.setState({upgradeRecommendation: v});
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        room.getRecommendedVersion().then((v) => {
+            const tombstone = room.currentState.getStateEvents("m.room.tombstone", "");
+            this.setState({
+                upgraded: tombstone && tombstone.getContent().replacement_room,
+                upgradeRecommendation: v,
+            });
         });
     }
 
@@ -65,7 +70,7 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         }
 
         let roomUpgradeButton;
-        if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade) {
+        if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade && !this.state.upgraded) {
             roomUpgradeButton = (
                 <div>
                     <p className='mx_SettingsTab_warningText'>
