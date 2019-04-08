@@ -29,6 +29,13 @@ export default class IndicatorScrollbar extends React.Component {
         // scroll horizontally rather than vertically. This should only be used on components
         // with no vertical scroll opportunity.
         verticalScrollsHorizontally: PropTypes.bool,
+
+        // An object containing 2 numbers: xyThreshold and yReduction. xyThreshold is the amount
+        // of horizontal movement required in order to ignore any vertical changes in scroll, and
+        // only applies when verticalScrollsHorizontally is true. yReduction is the factor to
+        // multiply the vertical delta by when verticalScrollsHorizontally is true. The default
+        // behaviour is to have an xyThreshold of infinity and a yReduction of 0.8
+        scrollTolerances: PropTypes.object,
     };
 
     constructor(props) {
@@ -120,8 +127,20 @@ export default class IndicatorScrollbar extends React.Component {
 
     onMouseWheel = (e) => {
         if (this.props.verticalScrollsHorizontally && this._scrollElement) {
+            const xyThreshold = this.props.scrollTolerances
+                ? this.props.scrollTolerances.xyThreshold
+                : Number.MAX_SAFE_INTEGER;
+
+            const yReduction = this.props.scrollTolerances
+                ? this.props.scrollTolerances.yReduction
+                : 0.8;
+
+            // Don't apply vertical motion to horizontal scrolls. This is meant to eliminate
+            // trackpads causing excessive scroll motion.
+            if (e.deltaX >= xyThreshold) return;
+
             // noinspection JSSuspiciousNameCombination
-            this._scrollElement.scrollLeft += e.deltaY / 2; // divide by 2 to reduce harshness
+            this._scrollElement.scrollLeft += e.deltaY * yReduction;
         }
     };
 
