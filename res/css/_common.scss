@@ -268,7 +268,6 @@ textarea {
     font-size: 15px;
     position: relative;
     padding: 25px 30px 30px 30px;
-    max-width: 704px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     border-radius: 4px;
@@ -277,6 +276,7 @@ textarea {
 
 .mx_Dialog_fixedWidth {
     width: 60vw;
+    max-width: 704px;
 }
 
 .mx_Dialog_staticWrapper .mx_Dialog {
