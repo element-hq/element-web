@@ -543,6 +543,7 @@ module.exports = React.createClass({
             case 'notifier_enabled':
             case 'upload_started':
             case 'upload_finished':
+            case 'upload_canceled':
                 this.forceUpdate();
                 break;
             case 'call_state':
