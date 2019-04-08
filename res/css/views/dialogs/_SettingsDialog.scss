@@ -16,6 +16,11 @@ limitations under the License.
 
 // Not actually a component but things shared by settings components
 .mx_UserSettingsDialog, .mx_RoomSettingsDialog {
+    width: 90vw;
+    max-width: 1000px;
+    // set the height too since tabbed view scrolls itself.
+    height: 80vh;
+
     .mx_TabbedView {
         top: 65px;
     }
@@ -34,9 +39,4 @@ limitations under the License.
         text-align: center;
         margin-bottom: 24px;
     }
-
-    max-width: 1000px;
-    width: 90vw;
-    // set the height too since tabbed view scrolls itself.
-    height: 80vh;
 }
