@@ -26,6 +26,7 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
+// eslint-disable-next-line camelcase
 import png_chunks_extract from "png-chunks-extract";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
@@ -132,8 +133,8 @@ function loadImageElement(imageFile) {
     // Once ready, create a thumbnail
     img.onload = function() {
         URL.revokeObjectURL(objectUrl);
-        let width = hidpi ? (img.width >> 1) : img.width;
-        let height = hidpi ? (img.height >> 1) : img.height;
+        const width = hidpi ? (img.width >> 1) : img.width;
+        const height = hidpi ? (img.height >> 1) : img.height;
         deferred.resolve({ img, width, height });
     };
     img.onerror = function(e) {
