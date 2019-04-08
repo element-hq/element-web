@@ -34,7 +34,7 @@ import "blueimp-canvas-to-blob";
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
 
-export class UploadCancelledError extends Error {}
+export class UploadCanceledError extends Error {}
 
 /**
  * Create a thumbnail for a image DOM element.
@@ -237,15 +237,15 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
-        let cancelled = false;
+        let canceled = false;
         let uploadPromise;
         let encryptInfo;
         const prom = readFileAsArrayBuffer(file).then(function(data) {
-            if (cancelled) throw new UploadCancelledError();
+            if (canceled) throw new UploadCanceledError();
             // Then encrypt the file.
             return encrypt.encryptAttachment(data);
         }).then(function(encryptResult) {
-            if (cancelled) throw new UploadCancelledError();
+            if (canceled) throw new UploadCanceledError();
             // Record the information needed to decrypt the attachment.
             encryptInfo = encryptResult.info;
             // Pass the encrypted data as a Blob to the uploader.
@@ -267,7 +267,7 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
             return {"file": encryptInfo};
         });
         prom.abort = () => {
-            cancelled = true;
+            canceled = true;
             if (uploadPromise) MatrixClientPeg.get().cancelUpload(uploadPromise);
         };
         return prom;
