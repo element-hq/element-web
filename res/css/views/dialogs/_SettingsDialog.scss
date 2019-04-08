@@ -16,8 +16,6 @@ limitations under the License.
 
 .mx_SettingsDialog {
     .mx_Dialog {
-        max-width: 1000px;
-        width: 90%;
         height: 80%;
         border-radius: 4px;
         padding-top: 0;
@@ -43,8 +41,10 @@ limitations under the License.
             margin-top: 16px;
             margin-bottom: 24px;
         }
+
         .mx_Dialog_fixedWidth {
-            width: 100%;
+            max-width: 1000px;
+            width: 90vw;
         }
     }
 }
