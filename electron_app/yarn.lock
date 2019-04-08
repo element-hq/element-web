@@ -400,10 +400,10 @@ inherits@~2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
-iohook@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/iohook/-/iohook-0.3.1.tgz#dab2cd194f0bcfe7cb4879a0b7a9541a9b1bced7"
-  integrity sha512-E4+KO7ZN9GJBAQmM/htvE2bv+IOwXX68dV5qRS9O0wt6nQXk9v/K3wOl/uPI7hl3ysgKC447yYqBP2mrgLAwZw==
+iohook@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/iohook/-/iohook-0.4.2.tgz#9c9a2e3c80dc32a226bf993863720e7dfea292ad"
+  integrity sha512-xlrau0SdwtCYU2+jqAxZKbXSxFi16AR6PQr/op//j18uRl6bttEwnS5CaZ+7RYD3e7TxF1CrG78O7PF1bnwbKw==
   dependencies:
     "@types/node" "^7.0.62"
     bindings "^1.3.0"
