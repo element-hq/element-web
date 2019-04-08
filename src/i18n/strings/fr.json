@@ -1840,7 +1840,7 @@
     "Room upgrades usually only affect <i>server-side</i> processing of the room. If you're having problems with your Riot client, please file an issue with <issueLink />.": "Les mises à niveau de salon n’affectent généralement que le traitement <i>par le serveur</i> du salon. Si vous avez un problème avec votre client Riot, créez un rapport avec <issueLink />.",
     "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Attention</b> : La mise à niveau du salon <i>ne migrera pas automatiquement les membres du salon vers la nouvelle version du salon.</i> Nous enverrons un lien vers le nouveau salon dans l’ancienne version du salon. Les participants au salon devront cliquer sur ce lien pour rejoindre le nouveau salon.",
     "Please confirm that you'd like to go forward with upgrading this room from <oldVersion /> to <newVersion />": "Veuillez confirmer la mise à niveau de ce salon depuis <oldVersion /> vers <newVersion />",
-    "Upgrade": "Mise à niveau",
+    "Upgrade": "Mettre à niveau",
     "Adds a custom widget by URL to the room": "Ajoute un widget personnalisé par URL au salon",
     "Please supply a https:// or http:// widget URL": "Veuillez fournir une URL du widget en https:// ou http://",
     "You cannot modify widgets in this room.": "Vous ne pouvez pas modifier les widgets de ce salon.",
