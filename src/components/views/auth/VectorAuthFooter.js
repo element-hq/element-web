@@ -18,6 +18,8 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
@@ -27,11 +29,29 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const brandingConfig = SdkConfig.get().branding;
+        let links = [
+            {"text": "blog", "url": "https://medium.com/@RiotChat"},
+            {"text": "twitter", "url": "https://twitter.com/@RiotChat"},
+            {"text": "github", "url": "https://github.com/vector-im/riot-web"},
+        ];
+
+        if (brandingConfig && brandingConfig.authFooterLinks) {
+            links = brandingConfig.authFooterLinks;
+        }
+
+        const authFooterLinks = [];
+        for (const linkEntry of links) {
+            authFooterLinks.push(
+                <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noopener">
+                    {linkEntry.text}
+                </a>,
+            );
+        }
+
         return (
             <div className="mx_AuthFooter">
-                <a href="https://medium.com/@RiotChat" target="_blank" rel="noopener">blog</a>
-                <a href="https://twitter.com/@RiotChat" target="_blank" rel="noopener">twitter</a>
-                <a href="https://github.com/vector-im/riot-web" target="_blank" rel="noopener">github</a>
+                {authFooterLinks}
                 <a href="https://matrix.org" target="_blank" rel="noopener">{ _t('powered by Matrix') }</a>
             </div>
         );

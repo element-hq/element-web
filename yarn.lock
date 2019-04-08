@@ -5190,7 +5190,7 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-"jquery@>= 1.4.3", jquery@^3.3.1:
+jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
@@ -5732,10 +5732,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
   integrity sha1-izqsWIuKZuSXXjzepn97sylgH6w=
 
-matrix-js-sdk@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.2.tgz#482d8d2076c7565cf7354722e96c9971e372182a"
-  integrity sha512-4WCBJFSoOLelHi7IUAcVxPQF+gTc/i9NUKZ77qwUfcZVED8VKTIyWZnwpeLgocK5gAOJV9fkAyO5mny9SkZaGg==
+matrix-js-sdk@1.0.3, matrix-js-sdk@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-1.0.3.tgz#d4cc46c4dc80278b78f8e0664741b08fcc395c79"
+  integrity sha512-YpF4NvnG2cttRmTPJ9yqs/KwlBXW15O7+nNMs1FKj1CqdW1Phwb0fcqvahjPgmfXyn5DFzU3Deiv9aNgDIlIog==
   dependencies:
     another-json "^0.2.0"
     babel-runtime "^6.26.0"
@@ -5749,18 +5749,18 @@ matrix-js-sdk@1.0.2:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
-matrix-mock-request@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.2.tgz#2710bec0e009bb1562d92cdd7f0b77d5946b2ebd"
-  integrity sha512-9u86m6rOsKekNkqUUkStWXNULrY9G+9ibwolfrmgqTmgR76EGCr9fovM+JPWn4U+TbrewvHMALpPw8OxRg0ExA==
+matrix-mock-request@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
+  integrity sha512-Tr7LDHweTW8Ql4C8XhGQFGMzuh+HmPjOcQqrHH1qfSesq0cwdPWanvdnllNjeHoAMcZ43HpMFMzFZfNW1/6HYg==
   dependencies:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.4.tgz#cf6ef3d68f29af8ba590ceea74b20979522ef9cb"
-  integrity sha512-7qpnyXNnGvO/i+TPMoYayI4rWy6+hxnpjInx5Odgkw7PhCiapiYRU4poQsgVnOomkihrUWxuksWUmnkGhJ6O+Q==
+matrix-react-sdk@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-1.0.6.tgz#5477cb6f20a5968394e46f55cd4345436fba6372"
+  integrity sha512-qu+BY0I6qu2py8lzOZRPY2xOabXRrU/87dotx6MhyzWFKw+xQav0EggZJeKYtCAvuafS2zpPscTZX0/11Z3MuA==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     babel-runtime "^6.26.0"
@@ -5786,7 +5786,7 @@ matrix-react-sdk@1.0.4:
     linkifyjs "^2.1.6"
     lodash "^4.13.1"
     lolex "2.3.2"
-    matrix-js-sdk "1.0.2"
+    matrix-js-sdk "1.0.3"
     optimist "^0.6.1"
     pako "^1.0.5"
     prop-types "^15.5.8"
@@ -5806,7 +5806,7 @@ matrix-react-sdk@1.0.4:
     slate-react "^0.18.10"
     text-encoding-utf-8 "^1.0.1"
     url "^0.11.0"
-    velocity-vector "github:vector-im/velocity#059e3b2"
+    velocity-animate "^1.5.2"
     whatwg-fetch "^1.1.1"
     zxcvbn "^4.4.2"
 
@@ -6383,9 +6383,9 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-"olm@https://matrix.org/packages/npm/olm/olm-3.1.0-pre1.tgz":
-  version "3.1.0-pre1"
-  resolved "https://matrix.org/packages/npm/olm/olm-3.1.0-pre1.tgz#54f14fa901ff5c81db516b3b2adb294b91726eaa"
+"olm@https://matrix.org/packages/npm/olm/olm-3.1.0-pre3.tgz":
+  version "3.1.0-pre3"
+  resolved "https://matrix.org/packages/npm/olm/olm-3.1.0-pre3.tgz#525aa8191b4b6fcb07a3aa6815687780b99be411"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -8995,11 +8995,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-"velocity-vector@github:vector-im/velocity#059e3b2":
-  version "1.2.3"
-  resolved "https://codeload.github.com/vector-im/velocity/tar.gz/059e3b2348f1110888d033974d3109fd5a3af00f"
-  dependencies:
-    jquery ">= 1.4.3"
+velocity-animate@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-1.5.2.tgz#5a351d75fca2a92756f5c3867548b873f6c32105"
+  integrity sha512-m6EXlCAMetKztO1ppBhGU1/1MR3IiEevO6ESq6rcrSQ3Q77xYSW13jkfXW88o4xMrkXJhy/U7j4wFR/twMB0Eg==
 
 verror@1.10.0:
   version "1.10.0"

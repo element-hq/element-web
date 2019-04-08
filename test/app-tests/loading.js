@@ -123,9 +123,6 @@ describe('loading:', function() {
             toString: function() { return this.search + this.hash; },
         };
 
-        const tokenLoginCompleteDefer = Promise.defer();
-        tokenLoginCompletePromise = tokenLoginCompleteDefer.promise;
-
         function onNewScreen(screen) {
             console.log(Date.now() + " newscreen "+screen);
             const hash = '#/' + screen;
@@ -157,18 +154,21 @@ describe('loading:', function() {
         PlatformPeg.set(new WebPlatform());
 
         const params = parseQs(windowLocation);
-        matrixChat = ReactDOM.render(
-            <MatrixChat
-                onNewScreen={onNewScreen}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParts.params}
-                enableGuest={true}
-                onTokenLoginCompleted={() => tokenLoginCompleteDefer.resolve()}
-                initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
-                makeRegistrationUrl={() => {throw new Error('Not implemented');}}
-            />, parentDiv,
-        );
+
+        tokenLoginCompletePromise = new Promise(resolve => {
+            matrixChat = ReactDOM.render(
+                <MatrixChat
+                    onNewScreen={onNewScreen}
+                    config={config}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragParts.params}
+                    enableGuest={true}
+                    onTokenLoginCompleted={resolve}
+                    initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
+                    makeRegistrationUrl={() => {throw new Error('Not implemented');}}
+                />, parentDiv,
+            );
+        });
     }
 
     // set an expectation that we will get a call to /sync, then flush
@@ -293,12 +293,19 @@ describe('loading:', function() {
     });
 
     describe("MatrixClient rehydrated from stored credentials:", function() {
-        beforeEach(function() {
+        beforeEach(async function() {
             localStorage.setItem("mx_hs_url", "http://localhost" );
             localStorage.setItem("mx_is_url", "http://localhost" );
             localStorage.setItem("mx_access_token", "access_token");
             localStorage.setItem("mx_user_id", "@me:localhost");
             localStorage.setItem("mx_last_room_id", "!last_room:id");
+
+            // Create a crypto store as well to satisfy storage consistency checks
+            const cryptoStore = new jssdk.IndexedDBCryptoStore(
+                indexedDB,
+                "matrix-js-sdk:crypto",
+            );
+            await cryptoStore._connect();
         });
 
         it('shows the last known room by default', function() {
@@ -307,8 +314,8 @@ describe('loading:', function() {
 
             loadApp();
 
-            return awaitSyncingSpinner(matrixChat).then(() => {
-                // we got a sync spinner - let the sync complete
+            return awaitLoggedIn(matrixChat).then(() => {
+                // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
@@ -327,8 +334,8 @@ describe('loading:', function() {
 
             loadApp();
 
-            return awaitSyncingSpinner(matrixChat).then(() => {
-                // we got a sync spinner - let the sync complete
+            return awaitLoggedIn(matrixChat).then(() => {
+                // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a home page
@@ -347,8 +354,8 @@ describe('loading:', function() {
                 uriFragment: "#/room/!room:id",
             });
 
-            return awaitSyncingSpinner(matrixChat).then(() => {
-                // we got a sync spinner - let the sync complete
+            return awaitLoggedIn(matrixChat).then(() => {
+                // we are logged in - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
@@ -417,9 +424,9 @@ describe('loading:', function() {
 
                 return httpBackend.flush();
             }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
+                return awaitLoggedIn(matrixChat);
             }).then(() => {
-                // we got a sync spinner - let the sync complete
+                // we are logged in - let the sync complete
                 return expectAndAwaitSync({isGuest: true});
             }).then(() => {
                 // once the sync completes, we should have a welcome page
@@ -448,7 +455,7 @@ describe('loading:', function() {
 
                 return httpBackend.flush();
             }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
+                return awaitLoggedIn(matrixChat);
             }).then(() => {
                 return expectAndAwaitSync({isGuest: true});
             }).then((req) => {
@@ -482,7 +489,7 @@ describe('loading:', function() {
 
                 return httpBackend.flush();
             }).then(() => {
-                return awaitSyncingSpinner(matrixChat);
+                return awaitLoggedIn(matrixChat);
             }).then(() => {
                 return expectAndAwaitSync({isGuest: true});
             }).then(() => {
@@ -507,7 +514,7 @@ describe('loading:', function() {
                 });
 
                 return httpBackend.flush().then(() => {
-                    return awaitSyncingSpinner(matrixChat);
+                    return awaitLoggedIn(matrixChat);
                 }).then(() => {
                     // we got a sync spinner - let the sync complete
                     return expectAndAwaitSync();
@@ -654,44 +661,22 @@ function assertAtLoadingSpinner(matrixChat) {
     expect(domComponent.children.length).toEqual(1);
 }
 
-// we've got login creds, and are waiting for the sync to finish.
-// the page includes a logout link.
-function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
-    if (retryLimit === undefined) {
-        retryLimit = 10;
+function awaitLoggedIn(matrixChat) {
+    if (matrixChat.state.view === VIEWS.LOGGED_IN) {
+        return Promise.resolve();
     }
-    if (retryCount === undefined) {
-        retryCount = 0;
-    }
-
-    if (matrixChat.state.view === VIEWS.LOADING ||
-            matrixChat.state.view === VIEWS.LOGGING_IN) {
-        console.log(Date.now() + " Awaiting sync spinner: still loading.");
-        if (retryCount >= retryLimit) {
-            throw new Error("MatrixChat still not loaded after " +
-                            retryCount + " tries");
-        }
-        // loading can take quite a long time, because we delete the
-        // indexedDB store.
-        return Promise.delay(5).then(() => {
-            return awaitSyncingSpinner(matrixChat, retryLimit, retryCount + 1);
-        });
-    }
-
-    console.log(Date.now() + " Awaiting sync spinner: load complete.");
-
-    return Promise.resolve();
-}
-
-function assertAtSyncingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat);
-    expect(domComponent.className).toEqual("mx_MatrixChat_splash");
-
-    ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, sdk.getComponent('elements.Spinner'));
-    const logoutLink = ReactTestUtils.findRenderedDOMComponentWithTag(
-        matrixChat, 'a');
-    expect(logoutLink.text).toEqual("Logout");
+    return new Promise(resolve => {
+        const onAction = ({ action }) => {
+            if (action !== "on_logged_in") {
+                return;
+            }
+            console.log(Date.now() + ": Received on_logged_in action");
+            dis.unregister(dispatcherRef);
+            resolve();
+        };
+        const dispatcherRef = dis.register(onAction);
+        console.log(Date.now() + ": Waiting for on_logged_in action");
+    });
 }
 
 function awaitRoomView(matrixChat, retryLimit, retryCount) {

@@ -141,6 +141,8 @@ For a good example, see https://riot.im/develop/config.json.
        during authentication flows
     1. `authHeaderLogoUrl`: An logo image that is shown in the header during
        authentication flows
+    1. `authFooterLinks`: a list of links to show in the authentication page footer:
+      `[{"text": "Link text", "url": "https://link.target"}, {"text": "Other link", ...}]`
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
    server is not Riot and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
@@ -255,6 +257,12 @@ To change the config.json for the desktop app, create a config file which will b
 + `~Library/Application Support/$NAME/config.json` on macOS
 
 In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
+
+Labs Features
+=============
+
+Some features of Riot may be enabled by flags in the `Labs` section of the settings.
+Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
 
 Development
 ===========
