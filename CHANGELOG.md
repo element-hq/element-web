@@ -1,3 +1,9 @@
+Changes in [1.0.7](https://github.com/vector-im/riot-web/releases/tag/v1.0.7) (2019-04-08)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.6...v1.0.7)
+
+ * Hotfix: bump js-sdk to 1.0.4, see https://github.com/matrix-org/matrix-js-sdk/releases/tag/v1.0.4
+
 Changes in [1.0.6](https://github.com/vector-im/riot-web/releases/tag/v1.0.6) (2019-04-01)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.0.6-rc.1...v1.0.6)
