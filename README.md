@@ -238,7 +238,6 @@ All electron packages go into `electron_app/dist/`
 Many thanks to @aviraldg for the initial work on the electron integration.
 
 Other options for running as a desktop app:
- * https://github.com/krisak/vector-electron-desktop
  * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
