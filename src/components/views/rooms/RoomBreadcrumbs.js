@@ -88,11 +88,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 setTimeout(() => this.setState({rooms}), 0);
             }
         }
-
-        const roomIds = rooms.map((r) => r.room.roomId);
-        if (roomIds.length > 0) {
-            SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
-        }
     }
 
     onAction(payload) {
@@ -245,6 +240,11 @@ export default class RoomBreadcrumbs extends React.Component {
 
         if (this.refs.scroller) {
             this.refs.scroller.moveToOrigin();
+        }
+
+        const roomIds = rooms.map((r) => r.room.roomId);
+        if (roomIds.length > 0) {
+            SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
         }
     }
 
