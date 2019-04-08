@@ -150,19 +150,7 @@ export default class MImageBody extends React.Component {
 
         if (this.refs.image) {
             const { naturalWidth, naturalHeight } = this.refs.image;
-
-            // XXX: if this is a retina image, the naturalWidth/Height
-            // are going to be off by a factor of 2. However, we don't know
-            // this at this point - so until we include a resolution param
-            // in info, this might cause scroll jumps for retina images?
-            //
-            // Something like:
-            //
-            // if (content.info && content.info.devicePixelRatio) {
-            //    naturalWidth /= content.info.devicePixelRatio;
-            //    naturalHeight /= content.info.devicePixelRatio;
-            // }
-
+            // this is only used as a fallback in case content.info.w/h is missing
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
 
@@ -183,6 +171,9 @@ export default class MImageBody extends React.Component {
         // So either we need to support custom timeline widths here, or reimpose the cap, otherwise the
         // thumbnail resolution will be unnecessarily reduced.
         // custom timeline widths seems preferable.
+        const pixelRatio = window.devicePixelRatio;
+        const thumbWidth = 800 * pixelRatio;
+        const thumbHeight = 600 * pixelRatio;
 
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -197,23 +188,23 @@ export default class MImageBody extends React.Component {
             // billion lol attacks and similar
             return this.context.matrixClient.mxcUrlToHttp(
                 content.info.thumbnail_url,
-                800 * window.devicePixelRatio,
-                600 * window.devicePixelRatio,
+                thumbWidth,
+                thumbHeight,
             );
         } else {
-            if (window.devicePixelRatio === 1.0 ||
+            // we try to download the correct resolution
+            // for hi-res images (like retina screenshots).
+            // synapse only supports 800x600 thumbnails for now though,
+            // so we'll need to download the original image for this to work
+            // well for now. First, let's try a few cases that let us avoid
+            // downloading the original:
+            if (pixelRatio === 1.0 ||
                     (!content.info || !content.info.w ||
-                     !content.info.h || !content.info.size))
-            {
+                     !content.info.h || !content.info.size)) {
                 // always thumbnail. it may look a bit worse, but it'll save bandwidth.
                 // which is probably desirable on a lo-dpi device anyway.
-                return this.context.matrixClient.mxcUrlToHttp(
-                    content.url,
-                    800 * window.devicePixelRatio,
-                    600 * window.devicePixelRatio
-                );
-            }
-            else {
+                return this.context.matrixClient.mxcUrlToHttp(content.url, thumbWidth, thumbHeight);
+            } else {
                 // we should only request thumbnails if the image is bigger than 800x600
                 // (or 1600x1200 on retina) otherwise the image in the timeline will just
                 // end up resampled and de-retina'd for no good reason.
@@ -223,25 +214,28 @@ export default class MImageBody extends React.Component {
                 // image is both physically too large and going to be massive to load in the
                 // timeline (e.g. >1MB).
 
-                if ((content.info.w > 800 * window.devicePixelRatio ||
-                     content.info.h > 600 * window.devicePixelRatio) &&
-                     content.info.size > 1*1024*1024)
-                {
+                const isLargerThanThumbnail = (
+                    content.info.w > thumbWidth ||
+                    content.info.h > thumbHeight
+                );
+                const isLargeFileSize = content.info.size > 1*1024*1024;
+
+                if (isLargeFileSize && isLargerThanThumbnail) {
                     // image is too large physically and bytewise to clutter our timeline so
                     // we ask for a thumbnail, despite knowing that it will be max 800x600
                     // despite us being retina (as synapse doesn't do 1600x1200 thumbs yet).
-
                     return this.context.matrixClient.mxcUrlToHttp(
                         content.url,
-                        800 * window.devicePixelRatio,
-                        600 * window.devicePixelRatio
+                        thumbWidth,
+                        thumbHeight,
                     );
-                }
-                else {
-                    // no width/height means we want the original image.
+                } else {
+                    // download the original image otherwise, so we can scale it client side
+                    // to take pixelRatio into account.
+                    // ( no width/height means we want the original image)
                     return this.context.matrixClient.mxcUrlToHttp(
                         content.url,
-                    };
+                    );
                 }
             }
         }
