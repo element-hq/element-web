@@ -1161,6 +1161,10 @@ module.exports = React.createClass({
             }
         };
 
+        // We cache the permalink creators to avoid creating a ton of them in popular searches
+        const permalinkCreators = {}; // [roomId] => creator
+        permalinkCreators[this.state.room.roomId] = this.state.permalinkCreator;
+
         let lastRoomId;
 
         for (let i = this.state.searchResults.results.length - 1; i >= 0; i--) {
@@ -1168,6 +1172,7 @@ module.exports = React.createClass({
 
             const mxEv = result.context.getEvent();
             const roomId = mxEv.getRoomId();
+            const room = cli.getRoom(roomId);
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -1177,7 +1182,6 @@ module.exports = React.createClass({
 
             if (this.state.searchScope === 'All') {
                 if (roomId != lastRoomId) {
-                    const room = cli.getRoom(roomId);
 
                     // XXX: if we've left the room, we might not know about
                     // it. We should tell the js sdk to go and find out about
@@ -1194,11 +1198,17 @@ module.exports = React.createClass({
 
             const resultLink = "#/room/"+roomId+"/"+mxEv.getId();
 
+            let permalinkCreator = permalinkCreators[roomId];
+            if (!permalinkCreator) {
+                permalinkCreator = permalinkCreators[roomId] = new RoomPermalinkCreator(room);
+                permalinkCreator.stop(); // We're not interested in monitoring for updates here.
+            }
+
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     permalinkCreator={this.state.permalinkCreator}
+                     permalinkCreator={permalinkCreator}
                      onHeightChanged={onHeightChanged} />);
         }
         return ret;
