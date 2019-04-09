@@ -56,8 +56,7 @@ module.exports = class RestSessionCreator {
             '-c homeserver.yaml',
             `-u ${username}`,
             `-p ${password}`,
-            // '--regular-user',
-            '-a',   //until PR gets merged
+            '--no-admin',
             this.hsUrl
         ];
         const registerCmd = `./scripts/register_new_matrix_user ${registerArgs.join(' ')}`;
