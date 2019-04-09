@@ -262,6 +262,13 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "breadcrumb_scroll_tolerances": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {
+            xyThreshold: 10,
+            yReduction: 0.8,
+        },
+    },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Send analytics data'),
