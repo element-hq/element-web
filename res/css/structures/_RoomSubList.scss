@@ -89,7 +89,7 @@ limitations under the License.
     flex: 0 0 16px;
     position: relative;
 
-    &:before {
+    &::before {
         background-color: $roomheader-addroom-fg-color;
         mask: url('$(res)/img/icons-room-add.svg');
         mask-repeat: no-repeat;
@@ -137,6 +137,26 @@ limitations under the License.
     padding: 0 8px;
 }
 
+.collapsed {
+    .mx_RoomSubList_scroll {
+        padding: 0;
+    }
+
+    .mx_RoomSubList_labelContainer {
+        margin-right: 14px;
+        margin-left: 2px;
+    }
+
+    .mx_RoomSubList_addRoom {
+        margin-left: 3px;
+        margin-right: 10px;
+    }
+
+    .mx_RoomSubList_label > span {
+        display: none;
+    }
+}
+
 // overflow indicators
 .mx_RoomSubList:not(.resized-all) > .mx_RoomSubList_scroll {
     &.mx_IndicatorScrollbar_topOverflow::before,
@@ -164,7 +184,7 @@ limitations under the License.
         background: linear-gradient(to top, $panel-gradient);
     }
 
-/*
+    /*
     // for now, we remove the bottomOverflow entirely as we don't want to
     // lose the screen real-estate due to a bg-colored gradient, but we also
     // don't want to use drop shadows and risk a confusing hierarchy of cards.
@@ -175,26 +195,5 @@ limitations under the License.
         margin: 0px -8px;
         background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.0));
     }
-*/
-}
-
-.collapsed {
-
-    .mx_RoomSubList_scroll {
-        padding: 0;
-    }
-
-    .mx_RoomSubList_labelContainer {
-        margin-right: 14px;
-        margin-left: 2px;
-    }
-
-    .mx_RoomSubList_addRoom {
-        margin-left: 3px;
-        margin-right: 10px;
-    }
-
-    .mx_RoomSubList_label > span {
-        display: none;
-    }
+    */
 }

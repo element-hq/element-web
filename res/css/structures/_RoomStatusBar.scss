@@ -40,12 +40,12 @@ limitations under the License.
     opacity: 0.5;
     position: relative;
     top: -4px;
-/*
+    /*
     animation-duration: 1s;
     animation-name: bounce;
     animation-direction: alternate;
     animation-iteration-count: infinite;
-*/
+    */
 }
 
 .mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
@@ -173,12 +173,12 @@ limitations under the License.
     }
 
     .mx_RoomStatusBar_callBar {
-      height: 40px;
-      line-height: 40px;
+        height: 40px;
+        line-height: 40px;
     }
 
     .mx_RoomStatusBar_typingBar {
-      height: 40px;
-      line-height: 40px;
+        height: 40px;
+        line-height: 40px;
     }
 }

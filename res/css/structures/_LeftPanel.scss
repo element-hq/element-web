@@ -67,11 +67,6 @@ limitations under the License.
     z-index: 6;
 }
 
-.mx_LeftPanel_container.collapsed .mx_BottomLeftMenu {
-   flex: 0 0 160px;
-   margin-bottom: 9px;
-}
-
 .mx_LeftPanel .mx_BottomLeftMenu {
     order: 3;
 
@@ -80,6 +75,11 @@ limitations under the License.
     margin-right: 16px; /* gutter */
     flex: 0 0 60px;
     z-index: 1;
+}
+
+.mx_LeftPanel_container.collapsed .mx_BottomLeftMenu {
+    flex: 0 0 160px;
+    margin-bottom: 9px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu_options {

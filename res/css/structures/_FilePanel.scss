@@ -101,10 +101,10 @@ limitations under the License.
     padding-left: 0px;
 }
 
-.mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
-    background-color: $primary-bg-color;
-}
-
 .mx_FilePanel .mx_EventTile_selected .mx_EventTile_line {
     padding-left: 0px;
+}
+
+.mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
+    background-color: $primary-bg-color;
 }
