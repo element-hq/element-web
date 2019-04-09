@@ -26,8 +26,7 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
-// eslint-disable-next-line camelcase
-import png_chunks_extract from "png-chunks-extract";
+import extractPngChunks from "png-chunks-extract";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
@@ -117,11 +116,11 @@ function loadImageElement(imageFile) {
         // in practice macOS happens to order the chunks so they fall in
         // the first 0x1000 bytes (thanks to a massive ICC header).
         // Thus we could slice the file down to only sniff the first 0x1000
-        // bytes (but this makes png_chunks_extract choke on the corrupt file)
+        // bytes (but this makes extractPngChunks choke on the corrupt file)
         const headers = imageFile; //.slice(0, 0x1000);
         readFileAsArrayBuffer(headers).then(arrayBuffer=>{
             const buffer = new Uint8Array(arrayBuffer);
-            const chunks = png_chunks_extract(buffer);
+            const chunks = extractPngChunks(buffer);
             for (const chunk of chunks) {
                 if (chunk.name === 'pHYs') {
                     if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
