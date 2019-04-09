@@ -1772,7 +1772,7 @@ export default React.createClass({
                     hasCancelButton: false,
                 });
 
-                return;
+                return MatrixClientPeg.get();
             }
         }
         return Lifecycle.setLoggedIn(credentials);
