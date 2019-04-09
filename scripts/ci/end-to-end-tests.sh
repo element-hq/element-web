@@ -7,8 +7,7 @@
 set -ev
 
 upload_logs() {
-    buildkite-agent artifact upload synapse/installations/consent/homeserver.log
-    buildkite-agent artifact upload logs/**/*
+    buildkite-agent artifact upload "logs/**/*;synapse/installations/consent/homeserver.log"
 }
 
 handle_error() {
