@@ -63,9 +63,9 @@ module.exports = class RestSessionCreator {
         const registerCmd = `./scripts/register_new_matrix_user ${registerArgs.join(' ')}`;
         const allCmds = [
             `cd ${this.synapseSubdir}`,
-            "source env/bin/activate",
+            ". env/bin/activate",
             registerCmd
-        ].join(';');
+        ].join('&&');
 
         await execAsync(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
     }
