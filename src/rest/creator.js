@@ -14,11 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const {exec} = require('child_process');
 const request = require('request-promise-native');
 const RestSession = require('./session');
 const RestMultiSession = require('./multi');
+
+function execAsync(command, options) {
+    return new Promise((resolve, reject) => {
+        exec(command, options, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({stdout, stderr});
+            }
+        });
+    });
+}
 
 module.exports = class RestSessionCreator {
     constructor(synapseSubdir, hsUrl, cwd) {
@@ -56,14 +67,7 @@ module.exports = class RestSessionCreator {
             registerCmd
         ].join(';');
 
-        try {
-            await exec(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
-        } catch (result) {
-            // const lines = result.stdout.trim().split('\n');
-            // const failureReason = lines[lines.length - 1];
-            // const logs = (await exec("tail -n 100 synapse/installations/consent/homeserver.log")).stdout;
-            throw new Error(`creating user ${username} failed, script output:\n ${result.stdout.trim()}`);
-        }
+        await execAsync(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
     }
 
     async _authenticate(username, password) {
