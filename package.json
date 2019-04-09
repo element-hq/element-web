@@ -49,6 +49,7 @@
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
+    "stylelint": "stylelint res/css/**/*.scss",
     "clean": "rimraf lib",
     "prepare": "yarn clean && yarn build && git rev-parse HEAD > git-revision.txt",
     "test": "karma start --single-run=true --browsers VectorChromeHeadless",
@@ -149,6 +150,8 @@
     "rimraf": "^2.4.3",
     "sinon": "^5.0.7",
     "source-map-loader": "^0.2.3",
+    "stylelint": "^9.10.1",
+    "stylelint-config-standard": "^18.2.0",
     "walk": "^2.3.9",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1"
