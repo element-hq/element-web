@@ -4,7 +4,7 @@
 #
 # clones riot-web develop and runs the tests against our version of react-sdk.
 
-set -ev
+# set -ev
 
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
@@ -18,4 +18,5 @@ ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 ./install.sh
 ./run.sh --no-sandbox
+cat synapse/installations/consent/homeserver.log
 popd
