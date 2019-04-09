@@ -227,9 +227,15 @@ export default class KeyBackupPanel extends React.PureComponent {
                         "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.",
                         { deviceId: sig.deviceId }, { verify },
                     );
-                } else if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()) {
+                } else if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key() && sig.valid) {
                     sigStatus = _t(
                         "Backup has a <validity>valid</validity> signature from this device",
+                        {}, { validity },
+                    );
+                } else if (sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key() && !sig.valid) {
+                    // it can happen...
+                    sigStatus = _t(
+                        "Backup has an <validity>invalid</validity> signature from this device",
                         {}, { validity },
                     );
                 } else if (sig.valid && sig.device.isVerified()) {
