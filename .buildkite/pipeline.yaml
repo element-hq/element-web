@@ -3,6 +3,7 @@ steps:
     command:
       - "yarn install"
       - "yarn lintwithexclusions"
+      - "yarn stylelint"
     plugins:
       - docker#v3.0.1:
           image: "node:10"
