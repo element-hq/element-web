@@ -66,8 +66,7 @@ body.mx_scrollbar_nooverlay {
     */
     .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow > .mx_AutoHideScrollbar_offset,
     .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::before,
-    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::after
-    {
+    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::after {
         margin-right: calc(-1 * var(--scrollbar-width));
     }
 }
