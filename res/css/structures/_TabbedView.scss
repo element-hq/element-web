@@ -50,7 +50,7 @@ limitations under the License.
     color: $tab-label-active-fg-color;
 }
 
-.mx_TabbedView_maskedIcon {;
+.mx_TabbedView_maskedIcon {
     margin-left: 6px;
     margin-right: 9px;
     margin-top: 1px;
@@ -59,7 +59,7 @@ limitations under the License.
     display: inline-block;
 }
 
-.mx_TabbedView_maskedIcon:before {
+.mx_TabbedView_maskedIcon::before {
     display: inline-block;
     background-color: $tab-label-icon-bg-color;
     mask-repeat: no-repeat;
@@ -71,7 +71,7 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon:before {
+.mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon::before {
     background-color: $tab-label-active-icon-bg-color;
 }
 

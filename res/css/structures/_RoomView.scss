@@ -78,42 +78,12 @@ limitations under the License.
 }
 
 .mx_RoomView_auxPanel_apps {
-    max-width: 1920px ! important;
+    max-width: 1920px !important;
 }
 
 
 .mx_RoomView .mx_MainSplit {
     flex: 1 1 0;
-}
-
-.mx_RoomView_body {
-    position: relative; //for .mx_RoomView_auxPanel_fullHeight
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-}
-
-.mx_RoomView_body .mx_RoomView_timeline {
-    /* offset parent for mx_RoomView_topUnreadMessagesBar  */
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.mx_RoomView_body {
-    .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner{
-        order: 2;
-    }
-}
-
-.mx_RoomView_body .mx_RoomView_statusArea {
-    order: 3;
-}
-
-.mx_RoomView_body .mx_MessageComposer {
-    order: 4;
 }
 
 .mx_RoomView_messagePanel {
@@ -132,7 +102,7 @@ limitations under the License.
     position: relative;
 }
 
-.mx_RoomView_messagePanelSearchSpinner:before {
+.mx_RoomView_messagePanelSearchSpinner::before {
     background-color: $greyed-fg-color;
     mask: url('$(res)/img/feather-customised/search-input.svg');
     mask-repeat: no-repeat;
@@ -144,6 +114,62 @@ limitations under the License.
     left: 0;
     right: 0;
     height: 50px;
+}
+
+.mx_RoomView_body {
+    position: relative; //for .mx_RoomView_auxPanel_fullHeight
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+
+    .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner {
+        order: 2;
+    }
+}
+
+.mx_RoomView_body .mx_RoomView_timeline {
+    /* offset parent for mx_RoomView_topUnreadMessagesBar  */
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_RoomView_statusArea {
+    width: 100%;
+    flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: $primary-bg-color;
+    z-index: 1000;
+    overflow: hidden;
+
+    transition: all .2s ease-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 100px;
+}
+
+.mx_RoomView_statusAreaBox {
+    margin: auto;
+    min-height: 50px;
+}
+
+.mx_RoomView_statusAreaBox_line {
+    margin-left: 65px;
+    border-top: 1px solid $primary-hairline-color;
+    height: 1px;
+}
+
+
+.mx_RoomView_body .mx_RoomView_statusArea {
+    order: 3;
+}
+
+.mx_RoomView_body .mx_MessageComposer {
+    order: 4;
 }
 
 .mx_RoomView_messageListWrapper {
@@ -206,33 +232,6 @@ hr.mx_RoomView_myReadMarker {
     z-index: 1;
 }
 
-.mx_RoomView_statusArea {
-    width: 100%;
-    flex: 0 0 auto;
-
-    max-height: 0px;
-    background-color: $primary-bg-color;
-    z-index: 1000;
-    overflow: hidden;
-
-    transition: all .2s ease-out;
-}
-
-.mx_RoomView_statusArea_expanded {
-    max-height: 100px;
-}
-
-.mx_RoomView_statusAreaBox {
-    margin: auto;
-    min-height: 50px;
-}
-
-.mx_RoomView_statusAreaBox_line {
-    margin-left: 65px;
-    border-top: 1px solid $primary-hairline-color;
-    height: 1px;
-}
-
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
     background-color: $primary-bg-color;
 }
@@ -293,7 +292,7 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_ongoingConfCallNotification a {
-    color: $accent-fg-color ! important;
+    color: $accent-fg-color !important;
 }
 
 .mx_MatrixChat_useCompactLayout {

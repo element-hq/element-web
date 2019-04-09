@@ -35,7 +35,7 @@ limitations under the License.
     background-color: $menu-bg-color;
     color: $primary-fg-color;
     position: absolute;
-	font-size: 14px;
+    font-size: 14px;
     z-index: 5001;
 }
 
@@ -54,14 +54,14 @@ limitations under the License.
     border-bottom: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_right:after {
-    content:'';
+.mx_ContextualMenu_chevron_right::after {
+    content: '';
     width: 0;
     height: 0;
     border-top: 7px solid transparent;
     border-left: 7px solid $menu-bg-color;
     border-bottom: 7px solid transparent;
-    position:absolute;
+    position: absolute;
     top: -7px;
     right: 1px;
 }
@@ -81,14 +81,14 @@ limitations under the License.
     border-bottom: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_left:after{
-    content:'';
+.mx_ContextualMenu_chevron_left::after {
+    content: '';
     width: 0;
     height: 0;
     border-top: 7px solid transparent;
     border-right: 7px solid $menu-bg-color;
     border-bottom: 7px solid transparent;
-    position:absolute;
+    position: absolute;
     top: -7px;
     left: 1px;
 }
@@ -108,14 +108,14 @@ limitations under the License.
     border-right: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_top:after{
-    content:'';
+.mx_ContextualMenu_chevron_top::after {
+    content: '';
     width: 0;
     height: 0;
     border-left: 7px solid transparent;
     border-bottom: 7px solid $menu-bg-color;
     border-right: 7px solid transparent;
-    position:absolute;
+    position: absolute;
     left: -7px;
     top: 1px;
 }
@@ -135,14 +135,14 @@ limitations under the License.
     border-right: 8px solid transparent;
 }
 
-.mx_ContextualMenu_chevron_bottom:after{
-    content:'';
+.mx_ContextualMenu_chevron_bottom::after {
+    content: '';
     width: 0;
     height: 0;
     border-left: 7px solid transparent;
     border-top: 7px solid $menu-bg-color;
     border-right: 7px solid transparent;
-    position:absolute;
+    position: absolute;
     left: -7px;
     bottom: 1px;
 }
