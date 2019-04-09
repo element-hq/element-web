@@ -242,6 +242,9 @@ export default class RoomBreadcrumbs extends React.Component {
             this.refs.scroller.moveToOrigin();
         }
 
+        // We don't track room aesthetics (badges, membership, etc) over the wire so we
+        // don't need to do this elsewhere in the file. Just where we alter the room IDs
+        // and their order.
         const roomIds = rooms.map((r) => r.room.roomId);
         if (roomIds.length > 0) {
             SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
