@@ -101,48 +101,48 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
  * @param {File} imageFile The file to load in an image element.
  * @return {Promise} A promise that resolves with the html image element.
  */
-function loadImageElement(imageFile) {
-    const deferred = Promise.defer();
-
+async function loadImageElement(imageFile) {
     // Load the file into an html element
     const img = document.createElement("img");
     const objectUrl = URL.createObjectURL(imageFile);
+    const imgPromise = new Promise((resolve, reject) => {
+        img.onload = function() {
+            URL.revokeObjectURL(objectUrl);
+            resolve(img);
+        };
+        img.onerror = function(e) {
+            reject(e);
+        };
+    });
     img.src = objectUrl;
 
     // check for hi-dpi PNGs and fudge display resolution as needed.
     // this is mainly needed for macOS screencaps
-    let hidpi = false;
+    let parsePromise;
     if (imageFile.type === "image/png") {
         // in practice macOS happens to order the chunks so they fall in
         // the first 0x1000 bytes (thanks to a massive ICC header).
         // Thus we could slice the file down to only sniff the first 0x1000
         // bytes (but this makes extractPngChunks choke on the corrupt file)
         const headers = imageFile; //.slice(0, 0x1000);
-        readFileAsArrayBuffer(headers).then(arrayBuffer=>{
+        parsePromise = readFileAsArrayBuffer(headers).then(arrayBuffer => {
             const buffer = new Uint8Array(arrayBuffer);
             const chunks = extractPngChunks(buffer);
             for (const chunk of chunks) {
                 if (chunk.name === 'pHYs') {
                     if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
-                    hidpi = chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
-                    return;
+                    const hidpi = chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
+                    return hidpi;
                 }
             }
+            return false;
         });
     }
 
-    // Once ready, create a thumbnail
-    img.onload = function() {
-        URL.revokeObjectURL(objectUrl);
-        const width = hidpi ? (img.width >> 1) : img.width;
-        const height = hidpi ? (img.height >> 1) : img.height;
-        deferred.resolve({ img, width, height });
-    };
-    img.onerror = function(e) {
-        deferred.reject(e);
-    };
-
-    return deferred.promise;
+    const [hidpi] = await Promise.all([parsePromise, imgPromise]);
+    const width = hidpi ? (img.width >> 1) : img.width;
+    const height = hidpi ? (img.height >> 1) : img.height;
+    return {width, height, img};
 }
 
 /**
