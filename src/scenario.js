@@ -42,7 +42,6 @@ module.exports = async function scenario(createSession, restCreator) {
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
-    throw new Error("f41l!!!");
 }
 
 async function createRestUsers(restCreator) {
