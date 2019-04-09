@@ -10,6 +10,7 @@ steps:
   - label: ":chains: End-to-End Tests"
     command:
       # TODO: Remove hacky chmod for BuildKite
+      - "echo \"--- Installing packages, & setup\""
       - "chmod +x ./scripts/ci/*.sh"
       - "chmod +x ./scripts/*"
       - "apt-get update"
