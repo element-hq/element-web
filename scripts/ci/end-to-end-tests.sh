@@ -4,7 +4,22 @@
 #
 # clones riot-web develop and runs the tests against our version of react-sdk.
 
-# set -ev
+set -ev
+
+upload_logs() {
+    buildkite-agent artifact upload synapse/installations/consent/homeserver.log
+    buildkite-agent artifact upload e2etests.log
+}
+
+handle_error() {
+    EXIT_CODE=$?
+    if [ $TESTS_STARTED -eq 1 ]; then
+        upload_logs
+    fi
+    exit $EXIT_CODE
+}
+
+trap 'handle_error' ERR
 
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
@@ -17,7 +32,6 @@ ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 ./install.sh
+TESTS_STARTED=1
 ./run.sh --no-sandbox --error-log e2etests.log
-cat synapse/installations/consent/homeserver.log
-cat e2etests.log
 popd
