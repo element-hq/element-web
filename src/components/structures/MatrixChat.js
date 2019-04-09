@@ -597,8 +597,8 @@ export default React.createClass({
                 break;
             case 'view_user_settings': {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {}, 'mx_SettingsDialog',
-                    /*isPriority=*/false, /*isStatic=*/true);
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 
                 // View the welcome or home page if we need something to look at
                 this._viewSomethingBehindModal();
