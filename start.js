@@ -101,6 +101,7 @@ async function writeLogs(sessions, dir) {
         fs.writeFileSync(appHtmlName, documentHtml);
         fs.writeFileSync(networkLogName, session.networkLogs());
         fs.writeFileSync(consoleLogName, session.consoleLogs());
+        await session.page.screenshot({path: `${userLogDir}/screenshot.png`});
     }
     return logs;
 }
