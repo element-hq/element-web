@@ -270,7 +270,6 @@ const LeftPanel = React.createClass({
                 </aside>
             </div>
         );
-        // <BottomLeftMenu collapsed={this.props.collapsed}/>
     },
 });
 
