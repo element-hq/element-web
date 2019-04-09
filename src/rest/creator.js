@@ -59,10 +59,10 @@ module.exports = class RestSessionCreator {
         try {
             await exec(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
         } catch (result) {
-            const lines = result.stdout.trim().split('\n');
-            const failureReason = lines[lines.length - 1];
-            const logs = (await exec("tail -n 100 synapse/installations/consent/homeserver.log")).stdout;
-            throw new Error(`creating user ${username} failed: ${failureReason}, synapse logs:\n${logs}`);
+            // const lines = result.stdout.trim().split('\n');
+            // const failureReason = lines[lines.length - 1];
+            // const logs = (await exec("tail -n 100 synapse/installations/consent/homeserver.log")).stdout;
+            throw new Error(`creating user ${username} failed, script output:\n ${result.stdout.trim()}`);
         }
     }
 
