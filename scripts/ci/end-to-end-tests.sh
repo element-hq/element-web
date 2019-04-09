@@ -17,6 +17,7 @@ ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 ./install.sh
-./run.sh --no-sandbox
+./run.sh --no-sandbox --error-log e2etests.log
 cat synapse/installations/consent/homeserver.log
+cat e2etests.log
 popd
