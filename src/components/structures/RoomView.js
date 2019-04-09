@@ -272,6 +272,20 @@ module.exports = React.createClass({
         return this.state.room ? this.state.room.roomId : this.state.roomId;
     },
 
+    _getPermalinkCreatorForRoom: function(room) {
+        if (!this._permalinkCreators) this._permalinkCreators = {};
+        if (this._permalinkCreators[room.roomId]) return this._permalinkCreators[room.roomId];
+
+        return this._permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
+    },
+
+    _stopAllPermalinkCreators: function() {
+        if (!this._permalinkCreators) return;
+        for (const roomId of Object.keys(this._permalinkCreators)) {
+            this._permalinkCreators[roomId].stop();
+        }
+    },
+
     _onWidgetEchoStoreUpdate: function() {
         this.setState({
             showApps: this._shouldShowApps(this.state.room),
@@ -436,9 +450,7 @@ module.exports = React.createClass({
         }
 
         // stop tracking room changes to format permalinks
-        if (this.state.permalinkCreator) {
-            this.state.permalinkCreator.stop();
-        }
+        this._stopAllPermalinkCreators();
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -650,11 +662,9 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
-        if (!this.state.permalinkCreator) {
-            const permalinkCreator = new RoomPermalinkCreator(room);
-            permalinkCreator.start();
-            this.setState({permalinkCreator});
-        }
+
+        let creator = this._getPermalinkCreatorForRoom(room);
+        if (!creator.isStarted()) creator.start();
     },
 
     _calculateRecommendedVersion: async function(room) {
@@ -1161,10 +1171,6 @@ module.exports = React.createClass({
             }
         };
 
-        // We cache the permalink creators to avoid creating a ton of them in popular searches
-        const permalinkCreators = {}; // [roomId] => creator
-        permalinkCreators[this.state.room.roomId] = this.state.permalinkCreator;
-
         let lastRoomId;
 
         for (let i = this.state.searchResults.results.length - 1; i >= 0; i--) {
@@ -1198,17 +1204,11 @@ module.exports = React.createClass({
 
             const resultLink = "#/room/"+roomId+"/"+mxEv.getId();
 
-            let permalinkCreator = permalinkCreators[roomId];
-            if (!permalinkCreator) {
-                permalinkCreator = permalinkCreators[roomId] = new RoomPermalinkCreator(room);
-                permalinkCreator.stop(); // We're not interested in monitoring for updates here.
-            }
-
             ret.push(<SearchResultTile key={mxEv.getId()}
                      searchResult={result}
                      searchHighlights={this.state.searchHighlights}
                      resultLink={resultLink}
-                     permalinkCreator={permalinkCreator}
+                     permalinkCreator={this._getPermalinkCreatorForRoom(room)}
                      onHeightChanged={onHeightChanged} />);
         }
         return ret;
@@ -1733,7 +1733,7 @@ module.exports = React.createClass({
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
-                    permalinkCreator={this.state.permalinkCreator}
+                    permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 />;
         }
 
@@ -1835,7 +1835,7 @@ module.exports = React.createClass({
                 showUrlPreview = {this.state.showUrlPreview}
                 className="mx_RoomView_messagePanel"
                 membersLoaded={this.state.membersLoaded}
-                permalinkCreator={this.state.permalinkCreator}
+                permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
             />);
 
