@@ -22,8 +22,14 @@ const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
 
 module.exports = async function scenario(createSession, restCreator) {
+    let firstUser = true;
     async function createUser(username) {
         const session = await createSession(username);
+        if (firstUser) {
+            // only show browser version for first browser opened
+            console.log(`running tests on ${await session.browser.version()} ...`);
+            firstUser = false;
+        }
         await signup(session, session.username, 'testtest', session.hsUrl);
         return session;
     }

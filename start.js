@@ -35,7 +35,6 @@ const hsUrl = 'http://localhost:5005';
 
 async function runTests() {
     let sessions = [];
-    console.log("running tests ...");
     const options = {
         slowMo: program.slowMo ? 20 : undefined,
         devtools: program.devTools,
