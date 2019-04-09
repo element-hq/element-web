@@ -28,7 +28,7 @@ program
     .option('--slow-mo', "run tests slower to follow whats going on", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
     .option('--no-sandbox', "same as puppeteer arg", false)
-    .option('--error-log <n>', 'stdout, or a file to dump html and network logs in when the tests fail')
+    .option('--log-directory <dir>', 'a directory to dump html and network logs in when the tests fail')
     .parse(process.argv);
 
 const hsUrl = 'http://localhost:5005';
@@ -68,14 +68,8 @@ async function runTests() {
     } catch(err) {
         failure = true;
         console.log('failure: ', err);
-        if (program.errorLog) {
-            const logs = await createLogs(sessions);
-            if (program.errorLog === "stdout") {
-                process.stdout.write(logs);
-            } else {
-                console.log(`wrote logs to "${program.errorLog}"`);
-                fs.writeFileSync(program.errorLog, logs);
-            }
+        if (program.logDirectory) {
+            await writeLogs(sessions, program.logDirectory);
         }
     }
 
@@ -94,19 +88,19 @@ async function runTests() {
     }
 }
 
-async function createLogs(sessions) {
+async function writeLogs(sessions, dir) {
     let logs = "";
     for(let i = 0; i < sessions.length; ++i) {
         const session = sessions[i];
+        const userLogDir = `${dir}/${session.username}`;
+        fs.mkdirSync(userLogDir);
+        const consoleLogName = `${userLogDir}/console.log`;
+        const networkLogName = `${userLogDir}/network.log`;
+        const appHtmlName = `${userLogDir}/app.html`;
         documentHtml = await session.page.content();
-        logs = logs + `---------------- START OF ${session.username} LOGS ----------------\n`;
-        logs = logs + '\n---------------- console.log output:\n';
-        logs = logs + session.consoleLogs();
-        logs = logs + '\n---------------- network requests:\n';
-        logs = logs + session.networkLogs();
-        logs = logs + '\n---------------- document html:\n';
-        logs = logs + documentHtml;
-        logs = logs + `\n---------------- END OF ${session.username} LOGS   ----------------\n`;
+        fs.writeFileSync(appHtmlName, documentHtml);
+        fs.writeFileSync(networkLogName, session.networkLogs());
+        fs.writeFileSync(consoleLogName, session.consoleLogs());
     }
     return logs;
 }
