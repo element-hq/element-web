@@ -20,6 +20,7 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
 module.exports = React.createClass({
     displayName: 'RoomUpgradeWarningBar',
@@ -27,6 +28,24 @@ module.exports = React.createClass({
     propTypes: {
         room: PropTypes.object.isRequired,
         recommendation: PropTypes.object.isRequired,
+    },
+
+    componentWillMount: function() {
+        const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
+        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
+
+        MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
+    },
+
+    _onStateEvents: function(event, state) {
+        if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
+            return;
+        }
+
+        if (event.getType() !== "m.room.tombstone") return;
+
+        const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
+        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
     },
 
     onUpgradeClick: function() {
@@ -37,19 +56,8 @@ module.exports = React.createClass({
     render: function() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
-        return (
-            <div className="mx_RoomUpgradeWarningBar">
-                <div className="mx_RoomUpgradeWarningBar_header">
-                    {_t(
-                        "This room is running room version <roomVersion />, which this homeserver has " +
-                        "marked as <i>unstable</i>.",
-                        {},
-                        {
-                            "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
-                            "i": (sub) => <i>{sub}</i>,
-                        },
-                    )}
-                </div>
+        let doUpgradeWarnings = (
+            <div>
                 <div className="mx_RoomUpgradeWarningBar_body">
                     <p>
                         {_t(
@@ -74,6 +82,33 @@ module.exports = React.createClass({
                         {_t("Upgrade this room to the recommended room version")}
                     </AccessibleButton>
                 </p>
+            </div>
+        );
+
+        if (this.state.upgraded) {
+            doUpgradeWarnings = (
+                <div className="mx_RoomUpgradeWarningBar_body">
+                    <p>
+                        {_t("This room has already been upgraded.")}
+                    </p>
+                </div>
+            );
+        }
+
+        return (
+            <div className="mx_RoomUpgradeWarningBar">
+                <div className="mx_RoomUpgradeWarningBar_header">
+                    {_t(
+                        "This room is running room version <roomVersion />, which this homeserver has " +
+                        "marked as <i>unstable</i>.",
+                        {},
+                        {
+                            "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
+                            "i": (sub) => <i>{sub}</i>,
+                        },
+                    )}
+                </div>
+                {doUpgradeWarnings}
                 <div className="mx_RoomUpgradeWarningBar_small">
                     {_t("Only room administrators will see this warning")}
                 </div>
