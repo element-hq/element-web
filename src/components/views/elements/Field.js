@@ -86,20 +86,13 @@ export default class Field extends React.PureComponent {
             prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
         }
 
-        let validClass;
-        if (onValidate) {
-            validClass = classNames({
-                mx_Field_valid: this.state.valid === true,
-                mx_Field_invalid: this.state.valid === false,
-            });
-        }
-
         const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
             mx_Field_labelAlwaysTopLeft: prefix,
-            [validClass]: true,
+            mx_Field_valid: onValidate && this.state.valid === true,
+            mx_Field_invalid: onValidate && this.state.valid === false,
         });
 
         // handle displaying feedback on validity
