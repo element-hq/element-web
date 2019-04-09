@@ -25,7 +25,7 @@ RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
 
-echo "--- Building copy of Riot"
+echo "--- Building Riot"
 scripts/ci/build.sh
 # run end to end tests
 echo "--- Fetching end-to-end tests from master"
