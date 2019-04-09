@@ -8,7 +8,7 @@ set -ev
 
 upload_logs() {
     buildkite-agent artifact upload synapse/installations/consent/homeserver.log
-    buildkite-agent artifact upload e2etests.log
+    buildkite-agent artifact upload logs/**/*
 }
 
 handle_error() {
@@ -32,6 +32,7 @@ ln -s $REACT_SDK_DIR/$RIOT_WEB_DIR riot/riot-web
 # PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true ./install.sh
 # CHROME_PATH=$(which google-chrome-stable) ./run.sh
 ./install.sh
+mkdir logs
 TESTS_STARTED=1
-./run.sh --no-sandbox --error-log e2etests.log
+./run.sh --no-sandbox --log-directory logs/
 popd
