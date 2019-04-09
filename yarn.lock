@@ -2240,6 +2240,11 @@ counterpart@^0.18.0:
     pluralizers "^0.1.7"
     sprintf-js "^1.0.3"
 
+crc-32@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/crc-32/-/crc-32-0.3.0.tgz#6a3d3687f5baec41f7e9b99fe1953a2e5d19775e"
+  integrity sha1-aj02h/W67EH36bmf4ZU6Ll0Zd14=
+
 create-ecdh@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.3.tgz#c9111b6f33045c4697f144787f9254cdc77c45ff"
@@ -5862,6 +5867,13 @@ pluralizers@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/pluralizers/-/pluralizers-0.1.7.tgz#8d38dd0a1b660e739b10ab2eab10b684c9d50142"
   integrity sha512-mw6AejUiCaMQ6uPN9ObjJDTnR5AnBSmnHHy3uVTbxrSFSxO5scfwpTs8Dxyb6T2v7GSulhvOq+pm9y+hXUvtOA==
+
+png-chunks-extract@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/png-chunks-extract/-/png-chunks-extract-1.0.0.tgz#fad4a905e66652197351c65e35b92c64311e472d"
+  integrity sha1-+tSpBeZmUhlzUcZeNbksZDEeRy0=
+  dependencies:
+    crc-32 "^0.3.0"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
