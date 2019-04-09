@@ -536,11 +536,14 @@ module.exports = React.createClass({
                   payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
-                this.uploadFile(payload.file);
+                return ContentMessages.sharedInstance().sendContentListToRoom(
+                    [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
+                );
                 break;
             case 'notifier_enabled':
             case 'upload_started':
             case 'upload_finished':
+            case 'upload_canceled':
                 this.forceUpdate();
                 break;
             case 'call_state':
@@ -728,8 +731,19 @@ module.exports = React.createClass({
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) {
             return;
         }
+        if (!MatrixClientPeg.get().isCryptoEnabled()) {
+            // If crypto is not currently enabled, we aren't tracking devices at all,
+            // so we don't know what the answer is. Let's error on the safe side and show
+            // a warning for this case.
+            this.setState({
+                e2eStatus: "warning",
+            });
+            return;
+        }
         room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
-            this.setState({e2eStatus: hasUnverifiedDevices ? "warning" : "verified"});
+            this.setState({
+                e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
+            });
         });
     },
 

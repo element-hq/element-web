@@ -39,6 +39,8 @@ const MAX_HEIGHT = 600;
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
+export class UploadCanceledError extends Error {}
+
 /**
  * Create a thumbnail for a image DOM element.
  * The image will be smaller than MAX_WIDTH and MAX_HEIGHT.
@@ -264,28 +266,40 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
-        return readFileAsArrayBuffer(file).then(function(data) {
+        let canceled = false;
+        let uploadPromise;
+        let encryptInfo;
+        const prom = readFileAsArrayBuffer(file).then(function(data) {
+            if (canceled) throw new UploadCanceledError();
             // Then encrypt the file.
             return encrypt.encryptAttachment(data);
         }).then(function(encryptResult) {
+            if (canceled) throw new UploadCanceledError();
             // Record the information needed to decrypt the attachment.
-            const encryptInfo = encryptResult.info;
+            encryptInfo = encryptResult.info;
             // Pass the encrypted data as a Blob to the uploader.
             const blob = new Blob([encryptResult.data]);
-            return matrixClient.uploadContent(blob, {
+            uploadPromise = matrixClient.uploadContent(blob, {
                 progressHandler: progressHandler,
                 includeFilename: false,
-            }).then(function(url) {
-                // If the attachment is encrypted then bundle the URL along
-                // with the information needed to decrypt the attachment and
-                // add it under a file key.
-                encryptInfo.url = url;
-                if (file.type) {
-                    encryptInfo.mimetype = file.type;
-                }
-                return {"file": encryptInfo};
             });
+
+            return uploadPromise;
+        }).then(function(url) {
+            // If the attachment is encrypted then bundle the URL along
+            // with the information needed to decrypt the attachment and
+            // add it under a file key.
+            encryptInfo.url = url;
+            if (file.type) {
+                encryptInfo.mimetype = file.type;
+            }
+            return {"file": encryptInfo};
         });
+        prom.abort = () => {
+            canceled = true;
+            if (uploadPromise) MatrixClientPeg.get().cancelUpload(uploadPromise);
+        };
+        return prom;
     } else {
         const basePromise = matrixClient.uploadContent(file, {
             progressHandler: progressHandler,
@@ -541,7 +555,7 @@ export default class ContentMessages {
     }
 
     getCurrentUploads() {
-        return this.inprogress;
+        return this.inprogress.filter(u => !u.canceled);
     }
 
     cancelUpload(promise) {
@@ -557,6 +571,7 @@ export default class ContentMessages {
         if (upload) {
             upload.canceled = true;
             MatrixClientPeg.get().cancelUpload(upload.promise);
+            dis.dispatch({action: 'upload_canceled', upload});
         }
     }
 }

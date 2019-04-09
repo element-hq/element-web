@@ -59,7 +59,6 @@ src/languageHandler.js
 src/linkify-matrix.js
 src/Markdown.js
 src/MatrixClientPeg.js
-src/Modal.js
 src/notifications/ContentRules.js
 src/notifications/PushRuleVectorState.js
 src/notifications/VectorPushRulesDefinitions.js

@@ -68,12 +68,11 @@ module.exports = React.createClass({
     },
 
     _shouldShowNotifBadge: function() {
-        const showBadgeInStates = [RoomNotifs.ALL_MESSAGES, RoomNotifs.ALL_MESSAGES_LOUD];
-        return showBadgeInStates.indexOf(this.state.notifState) > -1;
+        return RoomNotifs.BADGE_STATES.includes(this.state.notifState);
     },
 
     _shouldShowMentionBadge: function() {
-        return this.state.notifState !== RoomNotifs.MUTE;
+        return RoomNotifs.MENTION_BADGE_STATES.includes(this.state.notifState);
     },
 
     _isDirectMessageRoom: function(roomId) {

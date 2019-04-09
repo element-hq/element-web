@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2017, 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -566,7 +566,7 @@ module.exports = React.createClass({
                 rows="1"
                 id="textinput"
                 ref="textinput"
-                className="mx_ChatInviteDialog_input"
+                className="mx_AddressPickerDialog_input"
                 onChange={this.onQueryChanged}
                 placeholder={this.props.placeholder}
                 defaultValue={this.props.value}
@@ -578,7 +578,7 @@ module.exports = React.createClass({
         let addressSelector;
         if (this.state.error) {
             const validTypeDescriptions = this.props.validAddressTypes.map((t) => _t(addressTypeName[t]));
-            error = <div className="mx_ChatInviteDialog_error">
+            error = <div className="mx_AddressPickerDialog_error">
                 { _t("You have entered an invalid address.") }
                 <br />
                 { _t("Try using one of the following valid address types: %(validTypesList)s.", {
@@ -586,9 +586,9 @@ module.exports = React.createClass({
                 }) }
             </div>;
         } else if (this.state.searchError) {
-            error = <div className="mx_ChatInviteDialog_error">{ this.state.searchError }</div>;
+            error = <div className="mx_AddressPickerDialog_error">{ this.state.searchError }</div>;
         } else if (this.state.query.length > 0 && filteredSuggestedList.length === 0 && !this.state.busy) {
-            error = <div className="mx_ChatInviteDialog_error">{ _t("No results") }</div>;
+            error = <div className="mx_AddressPickerDialog_error">{ _t("No results") }</div>;
         } else {
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
@@ -601,13 +601,13 @@ module.exports = React.createClass({
         }
 
         return (
-            <BaseDialog className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}
+            <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
                 onFinished={this.props.onFinished} title={this.props.title}>
-                <div className="mx_ChatInviteDialog_label">
+                <div className="mx_AddressPickerDialog_label">
                     <label htmlFor="textinput">{ this.props.description }</label>
                 </div>
                 <div className="mx_Dialog_content">
-                    <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
+                    <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>
                     { error }
                     { addressSelector }
                     { this.props.extraNode }

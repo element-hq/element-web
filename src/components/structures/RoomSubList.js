@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import { Group } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
-import MatrixClientPeg from "../../MatrixClientPeg";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -139,28 +138,6 @@ const RoomSubList = React.createClass({
         this.setState(this.state);
     },
 
-    getUnreadNotificationCount: function(room, type=null) {
-        let notificationCount = room.getUnreadNotificationCount(type);
-
-        // Check notification counts in the old room just in case there's some lost
-        // there. We only go one level down to avoid performance issues, and theory
-        // is that 1st generation rooms will have already been read by the 3rd generation.
-        const createEvent = room.currentState.getStateEvents("m.room.create", "");
-        if (createEvent && createEvent.getContent()['predecessor']) {
-            const oldRoomId = createEvent.getContent()['predecessor']['room_id'];
-            const oldRoom = MatrixClientPeg.get().getRoom(oldRoomId);
-            if (oldRoom) {
-                // We only ever care if there's highlights in the old room. No point in
-                // notifying the user for unread messages because they would have extreme
-                // difficulty changing their notification preferences away from "All Messages"
-                // and "Noisy".
-                notificationCount += oldRoom.getUnreadNotificationCount("highlight");
-            }
-        }
-
-        return notificationCount;
-    },
-
     makeRoomTile: function(room) {
         return <RoomTile
             room={room}
@@ -169,8 +146,8 @@ const RoomSubList = React.createClass({
             key={room.roomId}
             collapsed={this.props.collapsed || false}
             unread={Unread.doesRoomHaveUnreadMessages(room)}
-            highlight={this.props.isInvite || this.getUnreadNotificationCount(room, 'highlight') > 0}
-            notificationCount={this.getUnreadNotificationCount(room)}
+            highlight={this.props.isInvite || RoomNotifs.getUnreadNotificationCount(room, 'highlight') > 0}
+            notificationCount={RoomNotifs.getUnreadNotificationCount(room)}
             isInvite={this.props.isInvite}
             refreshSubList={this._updateSubListCount}
             incomingCall={null}

@@ -127,6 +127,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     _writeFeature(featureName, enabled) {
         localStorage.setItem("mx_labs_feature_" + featureName, enabled);
-        this._watchers.notifyUpdate(featureName, null, enabled);
+        this._watchers.notifyUpdate(featureName, null, SettingLevel.DEVICE, enabled);
     }
 }

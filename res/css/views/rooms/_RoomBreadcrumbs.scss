@@ -17,11 +17,16 @@ limitations under the License.
 .mx_RoomBreadcrumbs {
     position: relative;
     height: 42px;
-    margin: 8px;
-    margin-bottom: 0;
-    overflow-x: visible;
+    padding: 8px;
+    padding-bottom: 0;
     display: flex;
     flex-direction: row;
+
+    // Autohide the scrollbar
+    overflow-x: hidden;
+    &:hover {
+        overflow-x: visible;
+    }
 
     .mx_AutoHideScrollbar_offset {
         display: flex;
@@ -34,6 +39,19 @@ limitations under the License.
         height: 32px;
         display: inline-block;
         transition: transform 0.3s, width 0.3s;
+        position: relative;
+
+        .mx_RoomTile_badge {
+            position: absolute;
+            top: -3px;
+            right: -4px;
+        }
+
+        .mx_RoomBreadcrumbs_dmIndicator {
+            position: absolute;
+            bottom: 0;
+            right: -4px;
+        }
     }
 
     .mx_RoomBreadcrumbs_animate {

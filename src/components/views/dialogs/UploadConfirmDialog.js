@@ -87,6 +87,7 @@ export default class UploadConfirmDialog extends React.Component {
 
         return (
             <BaseDialog className='mx_UploadConfirmDialog'
+                fixedWidth={false}
                 onFinished={this._onCancelClick}
                 title={title}
                 contentId='mx_Dialog_content'

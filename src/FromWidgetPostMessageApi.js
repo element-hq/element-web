@@ -116,10 +116,8 @@ export default class FromWidgetPostMessageApi {
         const origin = u.protocol + '//' + u.host;
         if (this.widgetMessagingEndpoints && this.widgetMessagingEndpoints.length > 0) {
             const length = this.widgetMessagingEndpoints.length;
-            this.widgetMessagingEndpoints = this.widgetMessagingEndpoints.
-                filter(function(endpoint) {
-                return (endpoint.widgetId != widgetId || endpoint.endpointUrl != origin);
-            });
+            this.widgetMessagingEndpoints = this.widgetMessagingEndpoints
+                .filter((endpoint) => endpoint.widgetId !== widgetId || endpoint.endpointUrl !== origin);
             return (length > this.widgetMessagingEndpoints.length);
         }
         return false;

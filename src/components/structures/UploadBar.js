@@ -16,7 +16,7 @@ limitations under the License.
 
 const React = require('react');
 import PropTypes from 'prop-types';
-const ContentMessages = require('../../ContentMessages');
+import ContentMessages from '../../ContentMessages';
 const dis = require('../../dispatcher');
 const filesize = require('filesize');
 import { _t } from '../../languageHandler';
@@ -40,6 +40,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
         switch (payload.action) {
             case 'upload_progress':
             case 'upload_finished':
+            case 'upload_canceled':
             case 'upload_failed':
                 if (this.mounted) this.forceUpdate();
                 break;

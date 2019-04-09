@@ -27,10 +27,8 @@ const Modal = require('../../../Modal');
 const sdk = require('../../../index');
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
-    displayName: 'ImageView',
-
-    propTypes: {
+export default class ImageView extends React.Component {
+    static propTypes = {
         src: React.PropTypes.string.isRequired, // the source of the image being displayed
         name: React.PropTypes.string, // the main title ('name') for the image
         link: React.PropTypes.string, // the link (if any) applied to the name of the image
@@ -44,27 +42,32 @@ module.exports = React.createClass({
         // properties above, which let us use lightboxes to display images which aren't associated
         // with events.
         mxEvent: React.PropTypes.object,
-    },
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = { rotationDegrees: 0 };
+    }
 
     // XXX: keyboard shortcuts for managing dialogs should be done by the modal
     // dialog base class somehow, surely...
-    componentDidMount: function() {
+    componentDidMount() {
         document.addEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyDown);
-    },
+    }
 
-    onKeyDown: function(ev) {
+    onKeyDown = (ev) => {
         if (ev.keyCode == 27) { // escape
             ev.stopPropagation();
             ev.preventDefault();
             this.props.onFinished();
         }
-    },
+    };
 
-    onRedactClick: function() {
+    onRedactClick = () => {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
         Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
@@ -83,17 +86,29 @@ module.exports = React.createClass({
                 }).done();
             },
         });
-    },
+    };
 
-    getName: function() {
+    getName() {
         let name = this.props.name;
         if (name && this.props.link) {
             name = <a href={ this.props.link } target="_blank" rel="noopener">{ name }</a>;
         }
         return name;
-    },
+    }
 
-    render: function() {
+    rotateCounterClockwise = () => {
+        const cur = this.state.rotationDegrees;
+        const rotationDegrees = (cur - 90) % 360;
+        this.setState({ rotationDegrees });
+    };
+
+    rotateClockwise = () => {
+        const cur = this.state.rotationDegrees;
+        const rotationDegrees = (cur + 90) % 360;
+        this.setState({ rotationDegrees });
+    };
+
+    render() {
 /*
         // In theory max-width: 80%, max-height: 80% on the CSS should work
         // but in practice, it doesn't, so do it manually:
@@ -122,7 +137,8 @@ module.exports = React.createClass({
             height: displayHeight
         };
 */
-        let style; let res;
+        let style = {};
+        let res;
 
         if (this.props.width && this.props.height) {
             style = {
@@ -168,15 +184,26 @@ module.exports = React.createClass({
             </div>);
         }
 
+        const rotationDegrees = this.state.rotationDegrees;
+        const effectiveStyle = {transform: `rotate(${rotationDegrees}deg)`, ...style};
+
         return (
             <div className="mx_ImageView">
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
-                    <img src={this.props.src} title={this.props.name} style={style} />
+                    <img src={this.props.src} title={this.props.name} style={effectiveStyle} className="mainImage" />
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } /></AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_rotateCounterClockwise" onClick={ this.rotateCounterClockwise }>
+                                <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
+                            </AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_rotateClockwise" onClick={ this.rotateClockwise }>
+                                <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
+                            </AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }>
+                              <img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } />
+                            </AccessibleButton>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
@@ -199,5 +226,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

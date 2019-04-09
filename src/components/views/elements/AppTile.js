@@ -339,9 +339,7 @@ export default class AppTile extends React.Component {
         // Destroy the old widget messaging before starting it back up again. Some widgets
         // have startup routines that run when they are loaded, so we just need to reinitialize
         // the messaging for them.
-        if (ActiveWidgetStore.getWidgetMessaging(this.props.id)) {
-            ActiveWidgetStore.delWidgetMessaging(this.props.id);
-        }
+        ActiveWidgetStore.delWidgetMessaging(this.props.id);
         this._setupWidgetMessaging();
 
         ActiveWidgetStore.setRoomId(this.props.id, this.props.room.roomId);

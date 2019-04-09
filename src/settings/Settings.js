@@ -102,7 +102,7 @@ export const SETTINGS = {
     },
     "feature_room_breadcrumbs": {
         isFeature: true,
-        displayName: _td("Show recent room avatars above the room list (refresh to apply changes)"),
+        displayName: _td("Show recent room avatars above the room list"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -257,6 +257,10 @@ export const SETTINGS = {
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
+    },
+    "breadcrumb_rooms": {
+        supportedLevels: ['account'],
+        default: [],
     },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

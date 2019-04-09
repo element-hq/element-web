@@ -24,6 +24,11 @@ export default class IndicatorScrollbar extends React.Component {
         // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
         // by the parent element.
         trackHorizontalOverflow: PropTypes.bool,
+
+        // If true, when the user tries to use their mouse wheel in the component it will
+        // scroll horizontally rather than vertically. This should only be used on components
+        // with no vertical scroll opportunity.
+        verticalScrollsHorizontally: PropTypes.bool,
     };
 
     constructor(props) {
@@ -38,6 +43,13 @@ export default class IndicatorScrollbar extends React.Component {
             leftIndicatorOffset: 0,
             rightIndicatorOffset: 0,
         };
+    }
+
+    moveToOrigin() {
+        if (!this._scrollElement) return;
+
+        this._scrollElement.scrollLeft = 0;
+        this._scrollElement.scrollTop = 0;
     }
 
     _collectScroller(scroller) {
@@ -106,6 +118,13 @@ export default class IndicatorScrollbar extends React.Component {
         }
     }
 
+    onMouseWheel = (e) => {
+        if (this.props.verticalScrollsHorizontally && this._scrollElement) {
+            // noinspection JSSuspiciousNameCombination
+            this._scrollElement.scrollLeft += e.deltaY / 2; // divide by 2 to reduce harshness
+        }
+    };
+
     render() {
         const leftIndicatorStyle = {left: this.state.leftIndicatorOffset};
         const rightIndicatorStyle = {right: this.state.rightIndicatorOffset};
@@ -117,6 +136,7 @@ export default class IndicatorScrollbar extends React.Component {
         return (<AutoHideScrollbar
             ref={this._collectScrollerComponent}
             wrappedRef={this._collectScroller}
+            onWheel={this.onMouseWheel}
             {... this.props}
         >
             { leftOverflowIndicator }

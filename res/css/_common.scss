@@ -118,7 +118,7 @@ textarea {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid #c1c1c1;
+        border: 1px solid $dialog-close-fg-color;
         // these things should probably not be defined
         // globally
         margin: 9px;
@@ -267,12 +267,16 @@ textarea {
     font-weight: 300;
     font-size: 15px;
     position: relative;
-    padding: 40px 58px 36px 58px;
-    width: 60%;
-    max-width: 704px;
-    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
+    padding: 25px 30px 30px 30px;
     max-height: 80%;
+    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
+    border-radius: 4px;
     overflow-y: auto;
+}
+
+.mx_Dialog_fixedWidth {
+    width: 60vw;
+    max-width: 704px;
 }
 
 .mx_Dialog_staticWrapper .mx_Dialog {
@@ -317,13 +321,13 @@ textarea {
 
 .mx_Dialog_header {
     position: relative;
+    margin-bottom: 20px;
 }
 
 .mx_Dialog_title {
-    font-weight: bold;
     font-size: 22px;
     line-height: 36px;
-    color: $primary-fg-color;
+    color: $dialog-title-fg-color;
 }
 
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
@@ -338,13 +342,14 @@ textarea {
     mask: url('$(res)/img/feather-customised/cancel.svg');
     mask-repeat: no-repeat;
     mask-position: center;
-    width: 36px;
-    height: 36px;
-    background-color: $primary-fg-color;
+    mask-size: cover;
+    width: 14px;
+    height: 14px;
+    background-color: $dialog-close-fg-color;
     cursor: pointer;
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 4px;
+    right: 0px;
 }
 
 .mx_Dialog_content {
@@ -355,6 +360,7 @@ textarea {
 }
 
 .mx_Dialog_buttons {
+    margin-top: 20px;
     text-align: right;
 }
 
@@ -370,6 +376,10 @@ textarea {
     background-color: $button-secondary-bg-color;
 }
 
+.mx_Dialog button:last-child {
+    margin-right: 0px;
+}
+
 .mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
@@ -381,6 +391,7 @@ textarea {
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
+    min-width: 156px;
 }
 
 .mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
