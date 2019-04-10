@@ -565,20 +565,6 @@ export default React.createClass({
                     },
                 });
                 break;
-            case 'view_user':
-                // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapsedRhs) {
-                    setTimeout(()=>{
-                        dis.dispatch({
-                            action: 'show_right_panel',
-                        });
-                        dis.dispatch({
-                            action: 'view_user',
-                            member: payload.member,
-                        });
-                    }, 0);
-                }
-                break;
             case 'view_room':
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID

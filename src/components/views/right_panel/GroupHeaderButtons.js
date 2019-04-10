@@ -33,9 +33,6 @@ export default class GroupHeaderButtons extends HeaderButtons {
         super.onAction(payload);
 
         if (payload.action === "view_user") {
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
             if (payload.member) {
                 this.setPhase(RightPanel.Phase.RoomMemberInfo, {member: payload.member});
             } else {
