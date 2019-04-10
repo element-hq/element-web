@@ -42,7 +42,9 @@ const Store = require('electron-store');
 // migrating to mitigate any risk of it being used maliciously.
 let migratingOrigin = false;
 
-if (argv['profile']) {
+if (argv['profile-dir']) {
+    app.setPath('userData', argv['profile-dir']);
+} else if (argv['profile']) {
     app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
 }
 
