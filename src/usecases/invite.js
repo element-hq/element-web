@@ -21,7 +21,7 @@ module.exports = async function invite(session, userId) {
     await session.delay(1000);
     const inviteButton = await session.waitAndQuery(".mx_MemberList_invite");
     await inviteButton.click();
-    const inviteTextArea = await session.waitAndQuery(".mx_ChatInviteDialog textarea");
+    const inviteTextArea = await session.waitAndQuery(".mx_AddressPickerDialog textarea");
     await inviteTextArea.type(userId);
     await inviteTextArea.press("Enter");
     const confirmButton = await session.query(".mx_Dialog_primary");
