@@ -1530,21 +1530,20 @@ module.exports = React.createClass({
                             e2eStatus={this.state.e2eStatus}
                         />
                         <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                                onForgetClick={this.onForgetClick}
-                                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                                canPreview={false} error={this.state.roomLoadError}
-                                                roomAlias={roomAlias}
-                                                spinner={this.state.joining}
-                                                spinnerState="joining"
-                                                inviterName={inviterName}
-                                                invitedEmail={invitedEmail}
-                                                room={this.state.room}
-                                />
-                            </div>
+                            <div className="mx_RoomView_auxPanel"></div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
+                        <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                            onForgetClick={this.onForgetClick}
+                            onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                            canPreview={false} error={this.state.roomLoadError}
+                            roomAlias={roomAlias}
+                            spinner={this.state.joining}
+                            spinnerState="joining"
+                            inviterName={inviterName}
+                            invitedEmail={invitedEmail}
+                            room={this.state.room}
+                        />
                     </div>
                 );
             }
@@ -1578,19 +1577,18 @@ module.exports = React.createClass({
                             e2eStatus={this.state.e2eStatus}
                         />
                         <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
-                                                onForgetClick={this.onForgetClick}
-                                                onRejectClick={this.onRejectButtonClicked}
-                                                inviterName={inviterName}
-                                                canPreview={false}
-                                                spinner={this.state.joining}
-                                                spinnerState="joining"
-                                                room={this.state.room}
-                                />
-                            </div>
+                            <div className="mx_RoomView_auxPanel"></div>
                         </div>
                         <div className="mx_RoomView_messagePanel"></div>
+                        <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                            onForgetClick={this.onForgetClick}
+                            onRejectClick={this.onRejectButtonClicked}
+                            inviterName={inviterName}
+                            canPreview={false}
+                            spinner={this.state.joining}
+                            spinnerState="joining"
+                            room={this.state.room}
+                        />
                     </div>
                 );
             }
@@ -1646,6 +1644,7 @@ module.exports = React.createClass({
         const hiddenHighlightCount = this._getHiddenHighlightCount();
 
         let aux = null;
+        let previewBar;
         let hideCancel = false;
         if (this.state.forwardingEvent !== null) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
@@ -1673,7 +1672,7 @@ module.exports = React.createClass({
                 invitedEmail = this.props.thirdPartyInvite.invitedEmail;
             }
             hideCancel = true;
-            aux = (
+            previewBar = (
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
@@ -1895,6 +1894,7 @@ module.exports = React.createClass({
                                 { statusBar }
                             </div>
                         </div>
+                        { previewBar }
                         { messageComposer }
                     </div>
                 </MainSplit>
