@@ -35,5 +35,12 @@
     "Contributing code to Matrix and Riot": "Додавање кода у Матрикс и Riot",
     "Dev chat for the Riot/Web dev team": "Програмерско ћаскање за Riot/веб програмерски тим",
     "Dev chat for the Dendrite dev team": "Програмерско ћаскање за Dendrite програмерски тим",
-    "Co-ordination for Riot translators": "Координација за Riot преводиоце"
+    "Co-ordination for Riot translators": "Координација за Riot преводиоце",
+    "Sign In": "Пријава",
+    "Create Account": "Направи налог",
+    "Need help?": "Потребна помоћ?",
+    "Explore rooms": "Истражи собе",
+    "Room Directory": "Фасцикла са собама",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Можете користити опције прилагођеног сервера да бисте се пријавили на друге Матрикс сервере тако што ћете навести другачију адресу кућног сервера. Ово вам омогућава да користите Riot са постојећим Матрикс налогом на другом кућном серверу.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "Такође, можете подесити прилагођени сервер идентитета али у том случају нећете моћи да позивате кориснике преко мејла адресе или да сами будете позвани преко мејл адресе."
 }

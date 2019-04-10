@@ -13,11 +13,11 @@ else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
-npm run clean
-npm run build$dev
+yarn clean
+yarn build$dev
 
 # include the sample config in the tarball. Arguably this should be done by
-# `npm run build`, but it's just too painful.
+# `yarn build`, but it's just too painful.
 cp config.sample.json webapp/
 
 mkdir -p dist

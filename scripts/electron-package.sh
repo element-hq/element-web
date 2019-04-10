@@ -85,8 +85,8 @@ if [ -n "$conffile" ]; then
     pushd "$builddir"
 fi
 
-npm install
-npm run build:electron
+yarn install
+yarn build:electron
 
 popd
 
@@ -104,10 +104,12 @@ cp $distdir/*.dmg "$pubdir/install/macos/"
 
 # Windows installers go to the dist dir because they need signing
 mkdir -p "$pubdir/install/win32/ia32/"
-cp $distdir/win-ia32/*.exe "$projdir/electron_app/dist/unsigned/"
+mkdir -p "$projdir/electron_app/dist/unsigned/ia32/"
+cp $distdir/squirrel-windows-ia32/*.exe "$projdir/electron_app/dist/unsigned/ia32/"
 
 mkdir -p "$pubdir/install/win32/x64/"
-cp $distdir/win/*.exe "$projdir/electron_app/dist/unsigned/"
+mkdir -p "$projdir/electron_app/dist/unsigned/x64/"
+cp $distdir/squirrel-windows/*.exe "$projdir/electron_app/dist/unsigned/x64/"
 
 # Packages for auto-update
 mkdir -p "$pubdir/update/macos"
@@ -115,15 +117,19 @@ cp $distdir/*-mac.zip "$pubdir/update/macos/"
 echo "$vername" > "$pubdir/update/macos/latest"
 
 mkdir -p "$pubdir/update/win32/ia32/"
-cp $distdir/win-ia32/*.nupkg "$pubdir/update/win32/ia32/"
-cp $distdir/win-ia32/RELEASES "$pubdir/update/win32/ia32/"
+cp $distdir/squirrel-windows-ia32/*.nupkg "$pubdir/update/win32/ia32/"
+cp $distdir/squirrel-windows-ia32/RELEASES "$pubdir/update/win32/ia32/"
 
 mkdir -p "$pubdir/update/win32/x64/"
-cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
-cp $distdir/win/RELEASES "$pubdir/update/win32/x64/"
+cp $distdir/squirrel-windows/*.nupkg "$pubdir/update/win32/x64/"
+cp $distdir/squirrel-windows/RELEASES "$pubdir/update/win32/x64/"
 
-# Move the debs to the main project dir's dist folder
-cp $distdir/*.deb "$projdir/electron_app/dist/"
+# Move the deb to the main project dir's dist folder
+# (just the 64 bit one - the 32 bit one still gets built because
+# it's one arch argument for all platforms and we still want 32 bit
+# windows, but 32 bit linux is unsupported as of electron 4 and no
+# longer appears to work).
+cp $distdir/*_amd64.deb "$projdir/electron_app/dist/"
 
 rm -rf "$builddir"
 

@@ -7,9 +7,9 @@
     "Unknown device": "Onbekend apparaat",
     "You need to be using HTTPS to place a screen-sharing call.": "U moet HTTPS gebruiken om een oproep met schermdelen te kunnen starten.",
     "Welcome to Riot.im": "Welkom bij Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Gedecentaliseerd en versleuteld chatten &amp; samenwerken mogelijk gemaakt door [matrix]",
-    "Search the room directory": "De kamerlijst doorzoeken",
-    "Chat with Riot Bot": "Met Riot Bot chatten",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Gedecentraliseerd en versleuteld chatten &amp; samenwerken mogelijk gemaakt door [matrix]",
+    "Search the room directory": "De gesprekscatalogus doorzoeken",
+    "Chat with Riot Bot": "Chatten met Riot-robot",
     "Get started with some tips from Riot Bot!": "Begin met enkele tips van Riot Bot!",
     "General discussion about Matrix and Riot": "Algemene discussie over Matrix en Riot",
     "Discussion of all things Matrix!": "Discussie over alles wat met Matrix te maken heeft!",
@@ -35,5 +35,12 @@
     "Dev chat for the Riot/Web dev team": "Dev-chat voor het Riot/Web ontwikkelteam",
     "Dev chat for the Dendrite dev team": "Dev-chat voor het Dendrite-ontwikkelteam",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Je kan de custom serveropties gebruiken om op andere Matrix-servers in te loggen door een andere thuisserver-URL op te geven.<br/> Dit laat je toe om Riot te gebruiken met een bestaand Matrix-account op een andere thuisserver.<br/><br/>Je kan ook een aangepaste-identiteitsserver opzetten maar dan kan je geen gebruikers uitnodigen via hun e-mailadres, of zelf uitgenodigd worden via je e-mailadres.",
-    "Co-ordination for Riot translators": "Coördinatie voor Riot vertalers"
+    "Co-ordination for Riot translators": "Coördinatie voor Riot vertalers",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "U kunt de aangepaste serverinstellingen gebruiken om u aan te melden bij andere Matrix-servers, door een andere thuisserver-URL in te voeren. Dit laat u toe Riot te gebruiken met een bestaande Matrix-account bij een andere thuisserver.",
+    "You can also set a custom identity server, but you won't be able to invite users by email address, or be invited by email address yourself.": "U kunt ook een aangepaste identiteitsserver instellen, maar u zult geen gebruikers kunnen uitnodigen via e-mail, of zelf via e-mail uitgenodigd worden.",
+    "Sign In": "Aanmelden",
+    "Create Account": "Account aanmaken",
+    "Need help?": "Hulp nodig?",
+    "Explore rooms": "Kamers ontdekken",
+    "Room Directory": "Gesprekscatalogus"
 }

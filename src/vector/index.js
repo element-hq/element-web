@@ -24,6 +24,8 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 require('draft-js/dist/Draft.css');
 
+import olmWasmPath from 'olm/olm.wasm';
+
 import './rageshakesetup';
 
 import React from 'react';
@@ -47,7 +49,9 @@ import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
-import Platform from './platform';
+
+import ElectronPlatform from './platform/ElectronPlatform';
+import WebPlatform from './platform/WebPlatform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
@@ -138,7 +142,7 @@ function onNewScreen(screen) {
 // so in that instance, hardcode to use riot.im/app for now instead.
 function makeRegistrationUrl(params) {
     let url;
-    if (window.location.protocol === "file:") {
+    if (window.location.protocol === "vector:") {
         url = 'https://riot.im/app/#/register';
     } else {
         url = (
@@ -207,6 +211,13 @@ function onTokenLoginCompleted() {
 }
 
 async function loadApp() {
+    if (window.vector_indexeddb_worker_script === undefined) {
+        // If this is missing, something has probably gone wrong with
+        // the bundling. The js-sdk will just fall back to accessing
+        // indexeddb directly with no worker script, but we want to
+        // make sure the indexeddb script is present, so fail hard.
+        throw new Error("Missing indexeddb worker script!");
+    }
     MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
@@ -219,8 +230,23 @@ async function loadApp() {
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
-    // set the platform for react sdk (our Platform object automatically picks the right one)
-    PlatformPeg.set(new Platform());
+    // set the platform for react sdk
+    if (window.ipcRenderer) {
+        console.log("Using Electron platform");
+        const plaf = new ElectronPlatform();
+        PlatformPeg.set(plaf);
+
+        // Electron only: see if we need to do a one-time data
+        // migration
+        if (window.localStorage.getItem('mx_user_id') === null) {
+            console.log("Migrating session from old origin...");
+            await plaf.migrateFromOldOrigin();
+            console.log("Origin migration complete");
+        }
+    } else {
+        console.log("Using Web platform");
+        PlatformPeg.set(new WebPlatform());
+    }
 
     // Load the config file. First try to load up a domain-specific config of the
     // form "config.$domain.json" and if that fails, fall back to config.json.
@@ -246,7 +272,7 @@ async function loadApp() {
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isAndroid = /Android/.test(navigator.userAgent);
         if (isIos || isAndroid) {
-            if (!document.cookie.split(';').some((c) => c.startsWith('mobile_redirect_to_guide'))) {
+            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
                 window.location = "mobile_guide/";
                 return;
             }
@@ -355,18 +381,19 @@ function loadOlm() {
      *
      * We also need to tell the Olm js to look for its wasm file at the same
      * level as index.html. It really should be in the same place as the js,
-     * ie. in the bundle directory, to avoid caching issues, but as far as I
-     * can tell this is completely impossible with webpack.
+     * ie. in the bundle directory, but as far as I can tell this is
+     * completely impossible with webpack. We do, however, use a hashed
+     * filename to avoid caching issues.
      */
     return Olm.init({
-        locateFile: () => 'olm.wasm',
+        locateFile: () => olmWasmPath,
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
         console.log("Failed to load Olm: trying legacy version");
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = 'olm_legacy.js';
+            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);

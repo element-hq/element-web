@@ -1,0 +1,33 @@
+steps:
+  - label: ":eslint: Lint"
+    command:
+      - "yarn install"
+      - "yarn lint"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+
+  - label: ":karma: Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # webpack loves to gorge itself on resources.
+      queue: "medium"
+    command:
+      # Install chrome
+      - "echo '--- Installing Chrome'"
+      - "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
+      - "sh -c 'echo \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'"
+      - "apt-get update"
+      - "apt-get install -y google-chrome-stable"
+      # Run tests
+      - "echo '--- Fetching Dependencies'"
+      - "./scripts/fetch-develop.deps.sh --depth 1"
+      - "yarn install"
+      - "echo '+++ Running Tests'"
+      - "yarn test"
+    env:
+      CHROME_BIN: "/usr/bin/google-chrome-stable"
+    plugins:
+      - docker#v3.0.1:
+          image: "node:10"
+          propagate-environment: true
