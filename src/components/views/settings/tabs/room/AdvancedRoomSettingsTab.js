@@ -21,10 +21,12 @@ import MatrixClientPeg from "../../../../../MatrixClientPeg";
 import sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
+import dis from "../../../../../dispatcher";
 
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
+        closeSettingsFn: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -41,9 +43,21 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         room.getRecommendedVersion().then((v) => {
             const tombstone = room.currentState.getStateEvents("m.room.tombstone", "");
+
+            let additionalStateChanges = {};
+            const createEvent = room.currentState.getStateEvents("m.room.create", "");
+            let predecessor = createEvent ? createEvent.getContent().predecessor : null;
+            if (predecessor && predecessor.room_id) {
+                additionalStateChanges['oldRoomId'] = predecessor.room_id;
+                additionalStateChanges['oldEventId'] = predecessor.event_id;
+                additionalStateChanges['hasPreviousRoom'] = true;
+            }
+
+
             this.setState({
                 upgraded: tombstone && tombstone.getContent().replacement_room,
                 upgradeRecommendation: v,
+                ...additionalStateChanges,
             });
         });
     }
@@ -57,6 +71,18 @@ export default class AdvancedRoomSettingsTab extends React.Component {
     _openDevtools = (e) => {
         const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
         Modal.createDialog(DevtoolsDialog, {roomId: this.props.roomId});
+    };
+
+    _onOldRoomClicked = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.oldRoomId,
+            event_id: this.state.oldEventId,
+        });
+        this.props.closeSettingsFn();
     };
 
     render() {
@@ -91,6 +117,26 @@ export default class AdvancedRoomSettingsTab extends React.Component {
             );
         }
 
+        let oldRoomLink;
+        if (this.state.hasPreviousRoom) {
+            oldRoomLink = (
+                <div>
+                    {_t(
+                        "This is the upgraded version of another room. <a>Click here to visit the old room</a>.",
+                        {}, {
+                            'a': (sub) => {
+                                return (
+                                    <AccessibleButton element='a' onClick={this._onOldRoomClicked}>
+                                        {sub}
+                                    </AccessibleButton>
+                                );
+                            },
+                        },
+                    )}
+                </div>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
@@ -108,6 +154,7 @@ export default class AdvancedRoomSettingsTab extends React.Component {
                         <span>{_t("Room version:")}</span>&nbsp;
                         {room.getVersion()}
                     </div>
+                    {oldRoomLink}
                     {roomUpgradeButton}
                 </div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>

@@ -599,6 +599,7 @@
     "Voice & Video": "Voice & Video",
     "This room is not accessible by remote Matrix servers": "This room is not accessible by remote Matrix servers",
     "Upgrade this room to the recommended room version": "Upgrade this room to the recommended room version",
+    "This is the upgraded version of another room. <a>Click here to visit the old room</a>.": "This is the upgraded version of another room. <a>Click here to visit the old room</a>.",
     "Room information": "Room information",
     "Internal room ID:": "Internal room ID:",
     "Room version": "Room version",
