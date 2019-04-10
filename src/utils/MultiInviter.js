@@ -178,6 +178,8 @@ export default class MultiInviter {
                     this._doInvite(address, true).then(resolve, reject);
                 } else if (err.errcode === "M_BAD_STATE") {
                     errorText = _t("The user must be unbanned before they can be invited.");
+                } else if (err.errcode === "M_UNSUPPORTED_ROOM_VERSION") {
+                    errorText = _t("The user's homeserver does not support the version of the room.");
                 } else {
                     errorText = _t('Unknown server error');
                 }
