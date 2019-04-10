@@ -519,7 +519,7 @@ export function bodyToHtml(content, highlights, opts={}) {
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length
                     // Prevent user pills expanding for users with only emoji in
                     // their username
-                    && content.formatted_body == undefined;
+                    && !content.formatted_body.includes("https://matrix.to/");
     }
 
     const className = classNames({
