@@ -62,19 +62,19 @@ export default class RoomHeaderButtons extends HeaderButtons {
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(membersPhases)}
-                clickPhase={RightPanel.Phase.RoomMemberList}
+                onClick={() => this.togglePhase(RightPanel.Phase.RoomMemberList)}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
             <HeaderButton key="filesButton" name="filesButton"
                 title={_t('Files')}
                 isHighlighted={this.isPhase(RightPanel.Phase.FilePanel)}
-                clickPhase={RightPanel.Phase.FilePanel}
+                onClick={() => this.togglePhase(RightPanel.Phase.FilePanel)}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
             <HeaderButton key="notifsButton" name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanel.Phase.NotificationPanel)}
-                clickPhase={RightPanel.Phase.NotificationPanel}
+                onClick={() => this.togglePhase(RightPanel.Phase.NotificationPanel)}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
             />,
         ];

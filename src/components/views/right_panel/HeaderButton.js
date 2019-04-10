@@ -32,11 +32,7 @@ export default class HeaderButton extends React.Component {
 
     onClick(ev) {
         Analytics.trackEvent(...this.props.analytics);
-        dis.dispatch({
-            action: 'view_right_panel_phase',
-            phase: this.props.clickPhase,
-            fromHeader: true,
-        });
+        this.props.onClick();
     }
 
     render() {

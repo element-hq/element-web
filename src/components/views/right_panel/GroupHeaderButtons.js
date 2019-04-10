@@ -68,13 +68,13 @@ export default class GroupHeaderButtons extends HeaderButtons {
             <HeaderButton key="groupMembersButton" name="groupMembersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(groupPhases)}
-                clickPhase={RightPanel.Phase.GroupMemberList}
+                onClick={() => this.togglePhase(RightPanel.Phase.GroupMemberList)}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
             <HeaderButton key="roomsButton" name="roomsButton"
                 title={_t('Rooms')}
                 isHighlighted={this.isPhase(roomPhases)}
-                clickPhase={RightPanel.Phase.GroupRoomList}
+                onClick={() => this.togglePhase(RightPanel.Phase.GroupRoomList)}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
             />,
         ];
