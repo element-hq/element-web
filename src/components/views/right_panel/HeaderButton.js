@@ -20,7 +20,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
 import Analytics from '../../../Analytics';
 import AccessibleButton from '../elements/AccessibleButton';
 

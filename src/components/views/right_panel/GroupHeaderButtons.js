@@ -19,7 +19,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher';
 import HeaderButton from './HeaderButton';
 import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
