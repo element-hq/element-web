@@ -259,6 +259,41 @@ To change the config.json for the desktop app, create a config file which will b
 
 In the paths above, `$NAME` is typically `Riot`, unless you use `--profile $PROFILE` in which case it becomes `Riot-$PROFILE`.
 
+Running from Docker
+===================
+
+The Docker image can be used to serve riot-web as a web server. The easiest way to use 
+it is to use the prebuilt image:
+```bash
+docker run -p 80:80 vectorim/riot-web
+``` 
+
+To supply your own custom `config.json`, map a volume to `/app/config.json`. For example, 
+if your custom config was located at `/etc/riot-web/config.json` then your Docker command
+would be:
+```bash
+docker run -p 80:80 -v /etc/riot-web/config.json:/app/config.json vectorim/riot-web
+```
+
+To build the image yourself:
+```bash
+git clone https://github.com/vector-im/riot-web.git riot-web
+cd riot-web
+git checkout master
+docker build -t vectorim/riot-web .
+```
+
+If you're building a custom branch, or want to use the develop branch, check out the appropriate
+riot-web branch and then run:
+```bash
+docker build -t vectorim/riot-web:develop \
+    --build-arg REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git" \
+    --build-arg REACT_SDK_BRANCH="develop" \
+    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
+    --build-arg JS_SDK_BRANCH="develop" \
+    .
+```
+
 Labs Features
 =============
 
