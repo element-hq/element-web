@@ -44,9 +44,9 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         room.getRecommendedVersion().then((v) => {
             const tombstone = room.currentState.getStateEvents("m.room.tombstone", "");
 
-            let additionalStateChanges = {};
+            const additionalStateChanges = {};
             const createEvent = room.currentState.getStateEvents("m.room.create", "");
-            let predecessor = createEvent ? createEvent.getContent().predecessor : null;
+            const predecessor = createEvent ? createEvent.getContent().predecessor : null;
             if (predecessor && predecessor.room_id) {
                 additionalStateChanges['oldRoomId'] = predecessor.room_id;
                 additionalStateChanges['oldEventId'] = predecessor.event_id;
