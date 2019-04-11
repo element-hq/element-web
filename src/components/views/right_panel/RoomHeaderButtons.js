@@ -26,6 +26,9 @@ import RightPanel from '../../structures/RightPanel';
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, RightPanel.Phase.RoomMemberList);
+        this._onMembersClicked = this._onMembersClicked.bind(this);
+        this._onFilesClicked = this._onFilesClicked.bind(this);
+        this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
     }
 
     onAction(payload) {
@@ -47,6 +50,18 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
+    _onMembersClicked() {
+        this.togglePhase(RightPanel.Phase.RoomMemberList);
+    }
+
+    _onFilesClicked() {
+        this.togglePhase(RightPanel.Phase.FilePanel);
+    }
+
+    _onNotificationsClicked() {
+        this.togglePhase(RightPanel.Phase.NotificationPanel);
+    }
+
     renderButtons() {
         const membersPhases = [
             RightPanel.Phase.RoomMemberList,
@@ -58,19 +73,19 @@ export default class RoomHeaderButtons extends HeaderButtons {
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(membersPhases)}
-                onClick={() => this.togglePhase(RightPanel.Phase.RoomMemberList)}
+                onClick={this._onMembersClicked}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
             <HeaderButton key="filesButton" name="filesButton"
                 title={_t('Files')}
                 isHighlighted={this.isPhase(RightPanel.Phase.FilePanel)}
-                onClick={() => this.togglePhase(RightPanel.Phase.FilePanel)}
+                onClick={this._onFilesClicked}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
             <HeaderButton key="notifsButton" name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanel.Phase.NotificationPanel)}
-                onClick={() => this.togglePhase(RightPanel.Phase.NotificationPanel)}
+                onClick={this._onNotificationsClicked}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
             />,
         ];
