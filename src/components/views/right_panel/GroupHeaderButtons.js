@@ -23,6 +23,15 @@ import HeaderButton from './HeaderButton';
 import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
+const GROUP_PHASES = [
+    RightPanel.Phase.GroupMemberInfo,
+    RightPanel.Phase.GroupMemberList,
+];
+const ROOM_PHASES = [
+    RightPanel.Phase.GroupRoomList,
+    RightPanel.Phase.GroupRoomInfo,
+];
+
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, RightPanel.Phase.GroupMemberList);
@@ -53,33 +62,24 @@ export default class GroupHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        this.togglePhase(RightPanel.Phase.GroupMemberList);
+        this.togglePhase(RightPanel.Phase.GroupMemberList, GROUP_PHASES);
     }
 
     _onRoomsClicked() {
-        this.togglePhase(RightPanel.Phase.GroupRoomList);
+        this.togglePhase(RightPanel.Phase.GroupRoomList, ROOM_PHASES);
     }
 
     renderButtons() {
-        const groupPhases = [
-            RightPanel.Phase.GroupMemberInfo,
-            RightPanel.Phase.GroupMemberList,
-        ];
-        const roomPhases = [
-            RightPanel.Phase.GroupRoomList,
-            RightPanel.Phase.GroupRoomInfo,
-        ];
-
         return [
             <HeaderButton key="groupMembersButton" name="groupMembersButton"
                 title={_t('Members')}
-                isHighlighted={this.isPhase(groupPhases)}
+                isHighlighted={this.isPhase(GROUP_PHASES)}
                 onClick={this._onMembersClicked}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
             <HeaderButton key="roomsButton" name="roomsButton"
                 title={_t('Rooms')}
-                isHighlighted={this.isPhase(roomPhases)}
+                isHighlighted={this.isPhase(ROOM_PHASES)}
                 onClick={this._onRoomsClicked}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
             />,

@@ -23,6 +23,12 @@ import HeaderButton from './HeaderButton';
 import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
+const MEMBER_PHASES = [
+    RightPanel.Phase.RoomMemberList,
+    RightPanel.Phase.RoomMemberInfo,
+    RightPanel.Phase.Room3pidMemberInfo,
+];
+
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, RightPanel.Phase.RoomMemberList);
@@ -51,7 +57,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        this.togglePhase(RightPanel.Phase.RoomMemberList);
+        this.togglePhase(RightPanel.Phase.RoomMemberList, MEMBER_PHASES);
     }
 
     _onFilesClicked() {
@@ -63,16 +69,10 @@ export default class RoomHeaderButtons extends HeaderButtons {
     }
 
     renderButtons() {
-        const membersPhases = [
-            RightPanel.Phase.RoomMemberList,
-            RightPanel.Phase.RoomMemberInfo,
-            RightPanel.Phase.Room3pidMemberInfo,
-        ];
-
         return [
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
-                isHighlighted={this.isPhase(membersPhases)}
+                isHighlighted={this.isPhase(MEMBER_PHASES)}
                 onClick={this._onMembersClicked}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,

@@ -60,8 +60,8 @@ export default class HeaderButtons extends React.Component {
         }, extras));
     }
 
-    togglePhase(phase) {
-        if (this.state.phase === phase) {
+    togglePhase(phase, validPhases = [phase]) {
+        if (validPhases.includes(this.state.phase)) {
             dis.dispatch({
                 action: 'hide_right_panel',
             });
