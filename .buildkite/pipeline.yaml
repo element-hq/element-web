@@ -9,6 +9,10 @@ steps:
           image: "node:10"
 
   - label: ":chains: End-to-End Tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # e2e tests otherwise take +-8min
+      queue: "medium"
     command:
       # TODO: Remove hacky chmod for BuildKite
       - "echo '--- Setup'"
