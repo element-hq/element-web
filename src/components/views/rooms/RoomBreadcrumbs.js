@@ -33,12 +33,7 @@ const MAX_ROOMS = 20;
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
         super(props);
-
-        const tolerances = SettingsStore.getValue("breadcrumb_scroll_tolerances");
-        this.state = {rooms: [], scrollTolerances: tolerances};
-
-        // Record this for debugging purposes
-        console.log("Breadcrumbs scroll tolerances:", tolerances);
+        this.state = {rooms: []};
 
         this.onAction = this.onAction.bind(this);
         this._dispatcherRef = null;
@@ -343,8 +338,7 @@ export default class RoomBreadcrumbs extends React.Component {
         });
         return (
             <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs"
-                trackHorizontalOverflow={true} verticalScrollsHorizontally={true}
-                scrollTolerances={this.state.scrollTolerances}>
+                trackHorizontalOverflow={true} verticalScrollsHorizontally={true}>
                 { avatars }
             </IndicatorScrollbar>
         );
