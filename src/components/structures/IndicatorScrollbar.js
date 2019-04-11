@@ -29,13 +29,6 @@ export default class IndicatorScrollbar extends React.Component {
         // scroll horizontally rather than vertically. This should only be used on components
         // with no vertical scroll opportunity.
         verticalScrollsHorizontally: PropTypes.bool,
-
-        // An object containing 2 numbers: xyThreshold and yReduction. xyThreshold is the amount
-        // of horizontal movement required in order to ignore any vertical changes in scroll, and
-        // only applies when verticalScrollsHorizontally is true. yReduction is the factor to
-        // multiply the vertical delta by when verticalScrollsHorizontally is true. The default
-        // behaviour is to have an xyThreshold of infinity and a yReduction of 0.8
-        scrollTolerances: PropTypes.object,
     };
 
     constructor(props) {
@@ -127,20 +120,19 @@ export default class IndicatorScrollbar extends React.Component {
 
     onMouseWheel = (e) => {
         if (this.props.verticalScrollsHorizontally && this._scrollElement) {
-            const xyThreshold = this.props.scrollTolerances
-                ? this.props.scrollTolerances.xyThreshold
-                : Number.MAX_SAFE_INTEGER;
+            // xyThreshold is the amount of horizontal motion required for the component to
+            // ignore the vertical delta in a scroll. Used to stop trackpads from acting in
+            // strange ways. Should be positive.
+            const xyThreshold = 0;
 
-            const yReduction = this.props.scrollTolerances
-                ? this.props.scrollTolerances.yReduction
-                : 0.8;
+            // yRetention is the factor multiplied by the vertical delta to try and reduce
+            // the harshness of the scroll behaviour. Should be a value between 0 and 1.
+            const yRetention = 1.0;
 
-            // Don't apply vertical motion to horizontal scrolls. This is meant to eliminate
-            // trackpads causing excessive scroll motion.
-            if (e.deltaX >= xyThreshold) return;
-
-            // noinspection JSSuspiciousNameCombination
-            this._scrollElement.scrollLeft += e.deltaY * yReduction;
+            if (Math.abs(e.deltaX) < xyThreshold) {
+                // noinspection JSSuspiciousNameCombination
+                this._scrollElement.scrollLeft += e.deltaY * yRetention;
+            }
         }
     };
 
