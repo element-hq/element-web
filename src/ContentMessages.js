@@ -450,6 +450,9 @@ export default class ContentMessages {
             },
         };
 
+        // Focus the composer view
+        dis.dispatch({action: 'focus_composer'})
+
         // if we have a mime type for the file, add it to the message metadata
         if (file.type) {
             content.info.mimetype = file.type;
