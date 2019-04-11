@@ -276,7 +276,9 @@ module.exports = React.createClass({
         if (!this._permalinkCreators) this._permalinkCreators = {};
         if (this._permalinkCreators[room.roomId]) return this._permalinkCreators[room.roomId];
 
-        return this._permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
+        this._permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
+        this._permalinkCreators[room.roomId].load();
+        return this._permalinkCreators[room.roomId];
     },
 
     _stopAllPermalinkCreators: function() {
