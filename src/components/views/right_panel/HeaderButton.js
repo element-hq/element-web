@@ -20,7 +20,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
 import Analytics from '../../../Analytics';
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -32,11 +31,7 @@ export default class HeaderButton extends React.Component {
 
     onClick(ev) {
         Analytics.trackEvent(...this.props.analytics);
-        dis.dispatch({
-            action: 'view_right_panel_phase',
-            phase: this.props.clickPhase,
-            fromHeader: true,
-        });
+        this.props.onClick();
     }
 
     render() {

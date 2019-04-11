@@ -19,28 +19,33 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher';
 import HeaderButton from './HeaderButton';
 import HeaderButtons from './HeaderButtons';
 import RightPanel from '../../structures/RightPanel';
 
+const MEMBER_PHASES = [
+    RightPanel.Phase.RoomMemberList,
+    RightPanel.Phase.RoomMemberInfo,
+    RightPanel.Phase.Room3pidMemberInfo,
+];
+
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, RightPanel.Phase.RoomMemberList);
+        this._onMembersClicked = this._onMembersClicked.bind(this);
+        this._onFilesClicked = this._onFilesClicked.bind(this);
+        this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
     }
 
     onAction(payload) {
         super.onAction(payload);
         if (payload.action === "view_user") {
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
             if (payload.member) {
                 this.setPhase(RightPanel.Phase.RoomMemberInfo, {member: payload.member});
             } else {
                 this.setPhase(RightPanel.Phase.RoomMemberList);
             }
-        } else if (payload.action === "view_room") {
+        } else if (payload.action === "view_room" && !this.props.collapsedRhs) {
             this.setPhase(RightPanel.Phase.RoomMemberList);
         } else if (payload.action === "view_3pid_invite") {
             if (payload.event) {
@@ -51,30 +56,36 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    renderButtons() {
-        const membersPhases = [
-            RightPanel.Phase.RoomMemberList,
-            RightPanel.Phase.RoomMemberInfo,
-            RightPanel.Phase.Room3pidMemberInfo,
-        ];
+    _onMembersClicked() {
+        this.togglePhase(RightPanel.Phase.RoomMemberList, MEMBER_PHASES);
+    }
 
+    _onFilesClicked() {
+        this.togglePhase(RightPanel.Phase.FilePanel);
+    }
+
+    _onNotificationsClicked() {
+        this.togglePhase(RightPanel.Phase.NotificationPanel);
+    }
+
+    renderButtons() {
         return [
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
-                isHighlighted={this.isPhase(membersPhases)}
-                clickPhase={RightPanel.Phase.RoomMemberList}
+                isHighlighted={this.isPhase(MEMBER_PHASES)}
+                onClick={this._onMembersClicked}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
             <HeaderButton key="filesButton" name="filesButton"
                 title={_t('Files')}
                 isHighlighted={this.isPhase(RightPanel.Phase.FilePanel)}
-                clickPhase={RightPanel.Phase.FilePanel}
+                onClick={this._onFilesClicked}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
             <HeaderButton key="notifsButton" name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanel.Phase.NotificationPanel)}
-                clickPhase={RightPanel.Phase.NotificationPanel}
+                onClick={this._onNotificationsClicked}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
             />,
         ];
