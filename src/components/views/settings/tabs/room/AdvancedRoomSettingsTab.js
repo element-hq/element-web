@@ -119,21 +119,13 @@ export default class AdvancedRoomSettingsTab extends React.Component {
 
         let oldRoomLink;
         if (this.state.hasPreviousRoom) {
+            let name = _t("this room");
+            const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            if (room && room.name) name = room.name;
             oldRoomLink = (
-                <div>
-                    {_t(
-                        "This is the upgraded version of another room. <a>Click here to visit the old room</a>.",
-                        {}, {
-                            'a': (sub) => {
-                                return (
-                                    <AccessibleButton element='a' onClick={this._onOldRoomClicked}>
-                                        {sub}
-                                    </AccessibleButton>
-                                );
-                            },
-                        },
-                    )}
-                </div>
+                <AccessibleButton element='a' onClick={this._onOldRoomClicked}>
+                    {_t("View older messages in %(roomName)s.", {roomName: name})}
+                </AccessibleButton>
             );
         }
 
