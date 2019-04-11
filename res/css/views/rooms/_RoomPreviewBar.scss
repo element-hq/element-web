@@ -15,22 +15,17 @@ limitations under the License.
 */
 
 .mx_RoomPreviewBar {
+    flex: 0 0 auto;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid $panel-divider-color;
     text-align: center;
-    height: 176px;
-    background-color: $event-selected-color;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     display: flex;
-    background-color: $preview-bar-bg-color;
     -webkit-align-items: center;
-}
-
-.mx_RoomPreviewBar_wrapper {
-}
-
-.mx_RoomPreviewBar_invite_text {
-    color: $primary-fg-color;
 }
 
 .mx_RoomPreviewBar_join_text {

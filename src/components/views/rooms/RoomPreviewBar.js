@@ -235,7 +235,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_RoomPreviewBar">
+            <div className="mx_RoomPreviewBar dark-panel">
                 <div className="mx_RoomPreviewBar_wrapper">
                     { joinBlock }
                     { previewBlock }
