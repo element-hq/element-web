@@ -25,6 +25,20 @@ import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 
+const MessageCase = Object.freeze({
+    NotLoggedIn: "NotLoggedIn",
+    Joining: "Joining",
+    Busy: "Busy",
+    Kicked: "Kicked",
+    Banned: "Banned",
+    OtherThreePIDError: "OtherThreePIDError",
+    MismatchThreePIDInvite: "MismatchThreePIDInvite",
+    Invite: "Invite",
+    ViewingRoom: "ViewingRoom",
+    RoomNotFound: "RoomNotFound",
+    OtherError: "OtherError",
+});
+
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
 
@@ -32,6 +46,8 @@ module.exports = React.createClass({
         onJoinClick: PropTypes.func,
         onRejectClick: PropTypes.func,
         onForgetClick: PropTypes.func,
+        onSignInClick: PropTypes.func,
+        onSignUpClick: PropTypes.func,
 
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
@@ -73,7 +89,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         // If this is an invite and we've been told what email
-        // address was invited, fetch the user's list of 3pids
+        // address was invited, fetch the user's list of Threepids
         // so we can check them against the one that was invited
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
@@ -89,15 +105,151 @@ module.exports = React.createClass({
         }
     },
 
+    _getMessageCase() {
+        if (this.props.spinner || this.state.busy) {
+            if (this.props.spinnerState === "joining") {
+                return MessageCase.Joining;
+            } else {
+                return MessageCase.Busy;
+            }
+        }
+        const myMember = this.props.room ?
+            this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
+            null;
+
+        if (this.props.inviterName) {
+            if (this.props.invitedEmail) {
+                if (this.state.threePidFetchError) {
+                    return MessageCase.OtherThreePIDError;
+                } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
+                    return MessageCase.MismatchThreePIDInvite;
+                }
+            }
+            return MessageCase.Invite;
+        } else if (myMember && myMember.isKicked()) {
+            return MessageCase.Kicked;
+        } else if (myMember && myMember && myMember.membership == 'ban') {
+            return MessageCase.Banned;
+        } else if (this.props.error) {
+            if (this.props.error.errcode == 'M_NOT_FOUND') {
+                return MessageCase.RoomNotFound;
+            } else {
+                return MessageCase.OtherError;
+            }
+        } else {
+            return MessageCase.ViewingRoom;
+        }
+    },
+
+    _getKickOrBanInfo() {
+        const myMember = this.props.room ?
+            this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
+            null;
+        if (!myMember) {
+            return {};
+        }
+        const kickerMember = this.props.room.currentState.getMember(
+            myMember.events.member.getSender(),
+        );
+        const memberName = kickerMember ?
+            kickerMember.name : myMember.events.member.getSender();
+        const reason = myMember.events.member.getContent().reason;
+        return {memberName, reason};
+    },
+
     _roomNameElement: function() {
         return this.props.room ? this.props.room.name : (this.props.room_alias || "");
     },
 
     render: function() {
+        let showSpinner = false;
+        let darkStyle = false;
+        let title;
+        let subTitle;
+        let primaryActionHandler;
+        let primaryActionLabel;
+        let secondaryActionHandler;
+        let secondaryActionLabel;
+
+        switch (this._getMessageCase()) {
+            case MessageCase.Joining: {
+                title = _t("Joining room...");
+                showSpinner = true;
+                break;
+            }
+            case MessageCase.Busy: {
+                title = _t("In progress ...");
+                showSpinner = true;
+                break;
+            }
+            case MessageCase.NotLoggedIn: {
+                darkStyle = true;
+                title = _t("Join the conversation with an account");
+                primaryActionLabel = _t("Sign Up");
+                primaryActionLabel = this.props.onSignUpClick;
+                secondaryActionLabel = _t("Sign In");
+                secondaryActionLabel = this.props.onSignInClick;
+                break;
+            }
+            case MessageCase.Kicked: {
+                const info = this._getKickOrBanInfo();
+                title = _t("You were kicked from this room by %(memberName)", info);
+                subTitle = _t("Reason: %(reason)", info);
+                primaryActionLabel = _t("Re-join");
+                primaryActionLabel = this.props.onJoinClick;
+                secondaryActionLabel = _t("Forget this room");
+                secondaryActionLabel = this.props.onForgetClick;
+                break;
+            }
+            case MessageCase.Banned: {
+                const info = this._getKickOrBanInfo();
+                title = _t("You were banned from this room by %(memberName)", info);
+                subTitle = _t("Reason: %(reason)", info);
+                primaryActionLabel = _t("Forget this room");
+                primaryActionLabel = this.props.onForgetClick;
+                break;
+            }
+            case MessageCase.OtherThreePIDError: {
+                break;
+            }
+            case MessageCase.MismatchThreePIDInvite: {
+                title = _t("The room invite wasn't sent to your account");
+                subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email) to this account.", {email: this.props.invitedEmail});
+                break;
+            }
+            case MessageCase.Invite: {
+                title = _t("%(memberName) invited you to this room", {memberName: this.props.inviterName});
+                primaryActionLabel = _t("Accept");
+                primaryActionLabel = this.props.onJoinClick;
+                secondaryActionLabel = _t("Reject");
+                secondaryActionLabel = this.props.onRejectClick;
+                break;
+            }
+            case MessageCase.ViewingRoom: {
+                if (this.props.canPreview) {
+                    title = _t("You are previewing this room. Want to join it?");
+                } else {
+                    title = _t("This room can't be previewed. Do you want to join it?");
+                }
+
+                title = _t("%(memberName) invited you to this room", {memberName: this.props.inviterName});
+                primaryActionLabel = _t("Accept");
+                primaryActionLabel = this.props.onJoinClick;
+                secondaryActionLabel = _t("Reject");
+                secondaryActionLabel = this.props.onRejectClick;
+                break;
+            }
+            case MessageCase.RoomNotFound: {
+                break;
+            }
+            case MessageCase.OtherError: {
+                break;
+            }
+        }
+
         let joinBlock; let previewBlock;
 
         if (this.props.spinner || this.state.busy) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             let spinnerIntro = "";
             if (this.props.spinnerState === "joining") {
                 spinnerIntro = _t("Joining room...");
