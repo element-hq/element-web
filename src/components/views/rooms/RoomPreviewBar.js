@@ -21,6 +21,7 @@ const React = require('react');
 import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
+import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 
@@ -234,8 +235,13 @@ module.exports = React.createClass({
             );
         }
 
+        const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
+            "mx_RoomPreviewBar_panel": this.props.canPreview,
+            "mx_RoomPreviewBar_dialog": !this.props.canPreview,
+        });
+
         return (
-            <div className="mx_RoomPreviewBar dark-panel">
+            <div className={classes}>
                 <div className="mx_RoomPreviewBar_wrapper">
                     { joinBlock }
                     { previewBlock }

@@ -28,6 +28,10 @@ limitations under the License.
     -webkit-align-items: center;
 }
 
+.mx_RoomPreviewBar_dialog {
+    margin: auto;
+}
+
 .mx_RoomPreviewBar_join_text {
     color: $warning-color;
 }
