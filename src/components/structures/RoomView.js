@@ -1523,16 +1523,6 @@ module.exports = React.createClass({
                 const roomAlias = this.state.roomAlias;
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader ref="header"
-                            room={this.state.room}
-                            oobData={this.props.oobData}
-                            collapsedRhs={this.props.collapsedRhs}
-                            e2eStatus={this.state.e2eStatus}
-                        />
-                        <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel"></div>
-                        </div>
-                        <div className="mx_RoomView_messagePanel"></div>
                         <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                             onForgetClick={this.onForgetClick}
                             onRejectClick={this.onRejectThreepidInviteButtonClicked}
@@ -1570,16 +1560,6 @@ module.exports = React.createClass({
                 // We have a regular invite for this room.
                 return (
                     <div className="mx_RoomView">
-                        <RoomHeader
-                            ref="header"
-                            room={this.state.room}
-                            collapsedRhs={this.props.collapsedRhs}
-                            e2eStatus={this.state.e2eStatus}
-                        />
-                        <div className="mx_RoomView_body">
-                            <div className="mx_RoomView_auxPanel"></div>
-                        </div>
-                        <div className="mx_RoomView_messagePanel"></div>
                         <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                             onForgetClick={this.onForgetClick}
                             onRejectClick={this.onRejectButtonClicked}
@@ -1684,6 +1664,13 @@ module.exports = React.createClass({
                                 room={this.state.room}
                 />
             );
+            if (!this.state.canPeek) {
+                return (
+                    <div className="mx_RoomView">
+                        { previewBar }
+                    </div>
+                );
+            }
         } else if (hiddenHighlightCount > 0) {
             aux = (
                 <AccessibleButton element="div" className="mx_RoomView_auxPanel_hiddenHighlights"
