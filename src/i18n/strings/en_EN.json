@@ -469,7 +469,6 @@
     "This device is backing up your keys. ": "This device is backing up your keys. ",
     "This device is <b>not backing up your keys</b>.": "This device is <b>not backing up your keys</b>.",
     "Back up your keys before signing out to avoid losing them.": "Back up your keys before signing out to avoid losing them.",
-    "Use key backup": "Use key backup",
     "Backing up %(sessionsRemaining)s keys...": "Backing up %(sessionsRemaining)s keys...",
     "All keys backed up": "All keys backed up",
     "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.": "Backup has a signature from <verify>unknown</verify> device with ID %(deviceId)s.",
