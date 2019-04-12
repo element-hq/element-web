@@ -36,6 +36,12 @@ body {
     color: $warning-color;
 }
 
+b {
+    // On Firefox, the default weight for `<b>` is `bolder` which results in no bold
+    // effect since we only have specific weights of our fonts available.
+    font-weight: bold;
+}
+
 h2 {
     color: $primary-fg-color;
     font-weight: 400;
