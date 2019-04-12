@@ -221,7 +221,10 @@ export default class KeyBackupPanel extends React.PureComponent {
                         {sub}
                     </span>;
                 const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;
-                const fromThisDevice = sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key();
+                const fromThisDevice = (
+                    sig.device &&
+                    sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
+                );
                 let sigStatus;
                 if (!sig.device) {
                     sigStatus = _t(
