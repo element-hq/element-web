@@ -54,9 +54,8 @@ export default class HeaderButton extends React.Component {
 HeaderButton.propTypes = {
     // Whether this button is highlighted
     isHighlighted: PropTypes.bool.isRequired,
-    // The phase to swap to when the button is clicked
-    clickPhase: PropTypes.string.isRequired,
-
+    // click handler
+    onClick: PropTypes.func.isRequired,
     // The badge to display above the icon
     badge: PropTypes.node,
     // The parameters to track the click event
