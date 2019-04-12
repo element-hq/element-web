@@ -277,7 +277,13 @@ module.exports = React.createClass({
         if (this._permalinkCreators[room.roomId]) return this._permalinkCreators[room.roomId];
 
         this._permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
-        this._permalinkCreators[room.roomId].load();
+        if (this.state.room && room.roomId === this.state.room.roomId) {
+            // We want to watch for changes in the creator for the primary room in the view, but
+            // don't need to do so for search results.
+            this._permalinkCreators[room.roomId].start();
+        } else {
+            this._permalinkCreators[room.roomId].load();
+        }
         return this._permalinkCreators[room.roomId];
     },
 
@@ -664,9 +670,6 @@ module.exports = React.createClass({
         this._loadMembersIfJoined(room);
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
-
-        let creator = this._getPermalinkCreatorForRoom(room);
-        if (!creator.isStarted()) creator.start();
     },
 
     _calculateRecommendedVersion: async function(room) {
