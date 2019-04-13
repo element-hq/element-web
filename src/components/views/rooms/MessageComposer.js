@@ -42,14 +42,14 @@ const formatButtonList = [
     _td("numbered-list"),
 ];
 
-function Avatar(props) {
+function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
         <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
     </div>;
 }
 
-Avatar.propTypes = {
+ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
 }
 
@@ -393,7 +393,7 @@ export default class MessageComposer extends React.Component {
 
     render() {
         const controls = [
-            this.state.me ? <Avatar key="controls_avatar" me={this.state.me} /> : null,
+            this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
             this.props.e2eStatus ? <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> : null,
         ];
 
