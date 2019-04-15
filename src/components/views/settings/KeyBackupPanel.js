@@ -176,7 +176,7 @@ export default class KeyBackupPanel extends React.PureComponent {
         } else if (this.state.backupInfo) {
             const EmojiText = sdk.getComponent('elements.EmojiText');
             let clientBackupStatus;
-            const restoreButtonCaption = _t("Restore from Backup");
+            let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
                 clientBackupStatus = <div>
@@ -188,16 +188,16 @@ export default class KeyBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t(
                         "This device is <b>not backing up your keys</b>, " +
-                        "but there is an existing backup you can restore from " +
+                        "but you do have an existing backup you can restore from " +
                         "and add to going forward.", {},
                         {b: sub => <b>{sub}</b>},
                     )}</p>
                     <p>{_t(
-                        "Enable key backup on this device via the restore " +
-                        "process before signing out to avoid losing any keys " +
-                        "that may only be on this device.",
+                        "Connect this device to key backup before signing out to avoid " +
+                        "losing any keys that may only be on this device.",
                     )}</p>
                 </div>;
+                restoreButtonCaption = _t("Connect this device to Key Backup");
             }
 
             let uploadStatus;
