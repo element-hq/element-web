@@ -77,7 +77,6 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             onJoinClick: function() {},
-            canPreview: true,
         };
     },
 
@@ -222,19 +221,18 @@ module.exports = React.createClass({
             case MessageCase.OtherThreePIDError: {
                 title = _t("Something went wrong with your invite to this room");
                 const joinRule = this._joinRule();
-                const errCodeMessage = _t("<code>%(errcode)s</code> was returned while trying to valide your invite. You could try to pass this information on to a room admin.",
+                const errCodeMessage = _t("%(errcode)s was returned while trying to valide your invite. You could try to pass this information on to a room admin.",
                     {errcode: this.state.threePidFetchError.errcode},
-                    {code: label => <code>{label}</code>}
                 );
                 switch (joinRule) {
                     case "invite":
                         subTitle = [
-                            _t("Sadly, you can only join it with a working invite."),
+                            _t("You can only join it with a working invite."),
                             errCodeMessage,
                         ];
                         break;
                     case "public":
-                        subTitle = _t("Luckily, you can still join it because this is a public room.");
+                        subTitle = _t("You can still join it because this is a public room.");
                         primaryActionLabel = _t("Join the discussion");
                         primaryActionHandler = this.props.onJoinClick;
                         break;
@@ -250,7 +248,7 @@ module.exports = React.createClass({
                 title = _t("The room invite wasn't sent to your account");
                 const joinRule = this._joinRule();
                 if (joinRule === "public") {
-                    subTitle = _t("Luckily, you can still join it because this is a public room.");
+                    subTitle = _t("You can still join it because this is a public room.");
                     primaryActionLabel = _t("Join the discussion");
                     primaryActionHandler = this.props.onJoinClick;
                 } else {
@@ -292,20 +290,20 @@ module.exports = React.createClass({
             }
             case MessageCase.OtherError: {
                 title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName()});
-                subTitle = ([
+                subTitle = [
                     _t("Try again later, or ask a room admin to check if you have access."),
-                    _t("<code>%(errcode)s</code> was returned while trying to access the room.", {errcode: this.props.error.errcode}),
-                    _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
-                        issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                                                  target="_blank" rel="noopener">{ label }</a>,
-                        code: label => <code>{label}</code>,
-                    }),
-                ]);
+                    _t("%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
+                        { errcode: this.props.error.errcode },
+                        { issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
+                            target="_blank" rel="noopener">{ label }</a> }
+                    ),
+                ];
                 break;
             }
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const Spinner = sdk.getComponent('elements.Spinner');
 
         let subTitleElements;
         if (subTitle) {
@@ -318,12 +316,20 @@ module.exports = React.createClass({
         const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
             "mx_RoomPreviewBar_panel": this.props.canPreview,
             "mx_RoomPreviewBar_dialog": !this.props.canPreview,
+            "mx_RoomPreviewBar_dark": darkStyle,
         });
+
+        let titleElement;
+        if (showSpinner) {
+            titleElement = <h3 className="mx_RoomPreviewBar_spinnerTitle"><Spinner />{ title }</h3>;
+        } else {
+            titleElement = <h3>{ title }</h3>;
+        }
 
         return (
             <div className={classes}>
                 <div className="mx_RoomPreviewBar_message">
-                    <h3>{ title }</h3>
+                    { titleElement }
                     { subTitleElements }
                 </div>
                 <div className="mx_RoomPreviewBar_actions">
