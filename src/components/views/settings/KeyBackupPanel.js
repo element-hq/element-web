@@ -187,12 +187,17 @@ export default class KeyBackupPanel extends React.PureComponent {
                 clientBackupStatus = <div>
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t(
-                        "This device is <b>not backing up your keys</b>.", {},
+                        "This device is <b>not backing up your keys</b>, " +
+                        "but you do have an existing backup you can restore from " +
+                        "and add to going forward.", {},
                         {b: sub => <b>{sub}</b>},
                     )}</p>
-                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                    <p>{_t(
+                        "Connect this device to key backup before signing out to avoid " +
+                        "losing any keys that may only be on this device.",
+                    )}</p>
                 </div>;
-                restoreButtonCaption = _t("Use key backup");
+                restoreButtonCaption = _t("Connect this device to Key Backup");
             }
 
             let uploadStatus;
