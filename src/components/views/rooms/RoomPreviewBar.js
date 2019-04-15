@@ -306,7 +306,7 @@ module.exports = React.createClass({
                     _t("%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
                         { errcode: this.props.error.errcode },
                         { issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                            target="_blank" rel="noopener">{ label }</a> }
+                            target="_blank" rel="noopener">{ label }</a> },
                     ),
                 ];
                 break;
@@ -324,18 +324,36 @@ module.exports = React.createClass({
             subTitleElements = subTitle.map((t, i) => <p key={`subTitle${i}`}>{t}</p>);
         }
 
-        const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
-            "mx_RoomPreviewBar_panel": this.props.canPreview,
-            "mx_RoomPreviewBar_dialog": !this.props.canPreview,
-            "mx_RoomPreviewBar_dark": darkStyle,
-        });
-
         let titleElement;
         if (showSpinner) {
             titleElement = <h3 className="mx_RoomPreviewBar_spinnerTitle"><Spinner />{ title }</h3>;
         } else {
             titleElement = <h3>{ title }</h3>;
         }
+
+        let primaryButton;
+        if (primaryActionHandler) {
+            primaryButton = (
+                <AccessibleButton kind="primary" onClick={primaryActionHandler}>
+                    { primaryActionLabel }
+                </AccessibleButton>
+            );
+        }
+
+        let secondaryButton;
+        if (secondaryActionHandler) {
+            secondaryButton = (
+                <AccessibleButton kind="secondary" onClick={secondaryActionHandler}>
+                    { secondaryActionLabel }
+                </AccessibleButton>
+            );
+        }
+
+        const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
+            "mx_RoomPreviewBar_panel": this.props.canPreview,
+            "mx_RoomPreviewBar_dialog": !this.props.canPreview,
+            "mx_RoomPreviewBar_dark": darkStyle,
+        });
 
         return (
             <div className={classes}>
@@ -344,12 +362,10 @@ module.exports = React.createClass({
                     { subTitleElements }
                 </div>
                 <div className="mx_RoomPreviewBar_actions">
-                    { secondaryActionHandler ? <AccessibleButton kind="secondary" onClick={secondaryActionHandler}>{ secondaryActionLabel }</AccessibleButton> : undefined }
-                    { primaryActionHandler ? <AccessibleButton kind="primary" onClick={primaryActionHandler}>{ primaryActionLabel }</AccessibleButton> : undefined }
+                    { secondaryButton }
+                    { primaryButton }
                 </div>
             </div>
         );
-
-
     },
 });
