@@ -16,46 +16,94 @@ limitations under the License.
 
 .mx_RoomPreviewBar {
     flex: 0 0 auto;
-    margin: 15px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid $panel-divider-color;
     text-align: center;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     display: flex;
     -webkit-align-items: center;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 600;
+
+        &.mx_RoomPreviewBar_spinnerTitle {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+
+    .mx_Spinner {
+        width: auto;
+        height: auto;
+        margin: 10px 10px 10px 0;
+    }
+}
+
+.mx_RoomPreviewBar_dark {
+    background-color: $tagpanel-bg-color;
+    color: $accent-fg-color;
+}
+
+.mx_RoomPreviewBar_actions {
+    display: flex;
+}
+
+.mx_RoomPreviewBar_message {
+    display: flex;
+}
+
+.mx_RoomPreviewBar_panel {
+    padding: 8px 8px 8px 20px;
+    border-top: 1px solid $panel-divider-color;
+
+    flex-direction: row;
+
+    .mx_RoomPreviewBar_actions {
+        flex: 0 0 auto;
+        flex-direction: row;
+        padding: 3px 8px;
+
+        &>* {
+            margin-left: 12px;
+        }
+    }
+
+    .mx_RoomPreviewBar_message {
+        flex: 1 0 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+
+        &>* {
+            margin: 4px;
+        }
+    }
 }
 
 .mx_RoomPreviewBar_dialog {
     margin: auto;
-}
+    box-sizing: content;
+    width: 400px;
+    border-radius: 4px;
+    flex-direction: column;
+    padding: 20px;
 
-.mx_RoomPreviewBar_join_text {
-    color: $warning-color;
-}
+    .mx_RoomPreviewBar_message {
+        flex-direction: column;
 
-.mx_RoomPreviewBar_preview_text {
-    margin-top: 25px;
-    color: $settings-grey-fg-color;
-}
+        &>* {
+            margin: 10px;
+        }
+    }
 
-.mx_RoomPreviewBar_join_text a {
-    text-decoration: underline;
-    cursor: pointer;
-}
+    .mx_RoomPreviewBar_actions {
+        flex-direction: column-reverse;
 
-.mx_RoomPreviewBar_warning {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-}
-
-.mx_RoomPreviewBar_warningIcon {
-    padding: 12px;
-}
-
-.mx_RoomPreviewBar_spinnerIntro {
-    margin-top: 50px;
+        &>* {
+            margin-top: 12px;
+        }
+    }
 }
