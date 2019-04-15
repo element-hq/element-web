@@ -17,12 +17,12 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher';
 import classNames from 'classnames';
-
 import { _t } from '../../../languageHandler';
 
 const MessageCase = Object.freeze({
@@ -112,11 +112,14 @@ module.exports = React.createClass({
                 return MessageCase.Busy;
             }
         }
-        const myMember = this.props.room ?
+        const isGuest = MatrixClientPeg.get().isGuest();
+        const myMember = !isGuest && this.props.room ?
             this.props.room.getMember(MatrixClientPeg.get().getUserId()) :
             null;
 
-        if (this.props.inviterName) {
+        if (isGuest) {
+            return MessageCase.NotLoggedIn;
+        } else if (this.props.inviterName) {
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     return MessageCase.OtherThreePIDError;
@@ -170,6 +173,14 @@ module.exports = React.createClass({
         return this.props.room ? this.props.room.name : (this.props.room_alias || _t("This room"));
     },
 
+    onLoginClick: function() {
+        dis.dispatch({ action: 'start_login' });
+    },
+
+    onRegisterClick: function() {
+        dis.dispatch({ action: 'start_registration' });
+    },
+
     render: function() {
         let showSpinner = false;
         let darkStyle = false;
@@ -195,9 +206,9 @@ module.exports = React.createClass({
                 darkStyle = true;
                 title = _t("Join the conversation with an account");
                 primaryActionLabel = _t("Sign Up");
-                primaryActionHandler = this.props.onSignUpClick;
+                primaryActionHandler = this.onRegisterClick;
                 secondaryActionLabel = _t("Sign In");
-                secondaryActionHandler = this.props.onSignInClick;
+                secondaryActionHandler = this.onLoginClick;
                 break;
             }
             case MessageCase.Kicked: {

@@ -1714,11 +1714,6 @@ module.exports = React.createClass({
                 />;
         }
 
-        if (MatrixClientPeg.get().isGuest()) {
-            const AuthButtons = sdk.getComponent('views.auth.AuthButtons');
-            messageComposer = <AuthButtons />;
-        }
-
         // TODO: Why aren't we storing the term/scope/count in this format
         // in this.state if this is what RoomHeader desires?
         if (this.state.searchResults) {
