@@ -157,13 +157,21 @@ module.exports = React.createClass({
         return {memberName, reason};
     },
 
-    _roomNameElement: function() {
-        return this.props.room ? this.props.room.name : (this.props.room_alias || "");
+    _joinRule: function() {
+        const room = this.props.room;
+        if (room) {
+            const joinRules = room.currentState.getStateEvents('m.room.join_rules', '');
+            if (joinRules) {
+                return joinRules.getContent().join_rule;
+            }
+        }
+    },
+
+    _roomName: function() {
+        return this.props.room ? this.props.room.name : (this.props.room_alias || _t("This room"));
     },
 
     render: function() {
-        const name = this.props.roomAlias || _t("This room");
-
         let showSpinner = false;
         let darkStyle = false;
         let title;
@@ -212,13 +220,46 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.OtherThreePIDError: {
-                // "Unable to ascertain that the address this invite was sent to matches one associated with your account."
-                // need to show invited by "name", join buttons here?
+                title = _t("Something went wrong with your invite to this room");
+                const joinRule = this._joinRule();
+                const errCodeMessage = _t("%(errcode)s was returned while trying to valide your invite. You could try to pass this information on to a room admin.", {errcode: this.state.threePidFetchError.errcode});
+                switch (joinRule) {
+                    case "invite":
+                        subTitle = [
+                            <p key="subTitle1">{_t("Sadly, you can only join it with a working invite.")}</p>,
+                            <p key="subTitle2">{ errCodeMessage }</p>,
+                        ];
+                        break;
+                    case "public":
+                        subTitle = _t("Luckily, you can still join it because this is a public room.");
+                        primaryActionLabel = _t("Join the discussion");
+                        primaryActionHandler = this.props.onJoinClick;
+                        break;
+                    default:
+                        subTitle = errCodeMessage;
+                        primaryActionLabel = _t("Try to join anyway");
+                        primaryActionHandler = this.props.onJoinClick;
+                        break;
+                }
                 break;
             }
             case MessageCase.InvitedEmailMismatch: {
                 title = _t("The room invite wasn't sent to your account");
-                subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.", {email: this.props.invitedEmail});
+                const joinRule = this._joinRule();
+                switch (joinRule) {
+                    case "public":
+                        subTitle = _t("Luckily, you can still join it because this is a public room.");
+                        primaryActionLabel = _t("Join the discussion");
+                        primaryActionHandler = this.props.onJoinClick;
+                        break;
+                    default:
+                        subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.", {email: this.props.invitedEmail});
+                        if (joinRule !== "invite") {
+                            primaryActionLabel = _t("Try to join anyway");
+                            primaryActionHandler = this.props.onJoinClick;
+                        }
+                        break;
+                }
                 break;
             }
             case MessageCase.Invite: {
@@ -245,15 +286,16 @@ module.exports = React.createClass({
                 break;
             }
             case MessageCase.RoomNotFound: {
-                title = _t("%(roomName)s does not exist.", {roomName: name});
+                title = _t("%(roomName)s does not exist.", {roomName: this._roomName()});
                 subTitle = _t("This room doesn't exist. Are you sure you're at the right place?");
                 break;
             }
             case MessageCase.OtherError: {
-                title = _t("%(roomName)s is not accessible at this time.", {roomName: name});
+                title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName()});
                 subTitle = ([
                     <p key="subTitle1">{ _t("Try again later, or ask a room admin to check if you have access.") }</p>,
-                    <p key="subTitle2">{ _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
+                    <p key="subTitle2">{ _t("%(errcode)s was returned when trying to access the room.", {errcode: this.props.error.errcode}) }</p>,
+                    <p key="subTitle3">{ _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
                         issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
                                                   target="_blank" rel="noopener">{ label }</a>,
                     }) }</p>,
