@@ -226,8 +226,8 @@ module.exports = React.createClass({
                 switch (joinRule) {
                     case "invite":
                         subTitle = [
-                            <p key="subTitle1">{_t("Sadly, you can only join it with a working invite.")}</p>,
-                            <p key="subTitle2">{ errCodeMessage }</p>,
+                            _t("Sadly, you can only join it with a working invite."),
+                            errCodeMessage,
                         ];
                         break;
                     case "public":
@@ -246,19 +246,16 @@ module.exports = React.createClass({
             case MessageCase.InvitedEmailMismatch: {
                 title = _t("The room invite wasn't sent to your account");
                 const joinRule = this._joinRule();
-                switch (joinRule) {
-                    case "public":
-                        subTitle = _t("Luckily, you can still join it because this is a public room.");
-                        primaryActionLabel = _t("Join the discussion");
+                if (joinRule === "public") {
+                    subTitle = _t("Luckily, you can still join it because this is a public room.");
+                    primaryActionLabel = _t("Join the discussion");
+                    primaryActionHandler = this.props.onJoinClick;
+                } else {
+                    subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.", {email: this.props.invitedEmail});
+                    if (joinRule !== "invite") {
+                        primaryActionLabel = _t("Try to join anyway");
                         primaryActionHandler = this.props.onJoinClick;
-                        break;
-                    default:
-                        subTitle = _t("Sign in with a different account, ask for another invite, or add the e-mail address %(email)s to this account.", {email: this.props.invitedEmail});
-                        if (joinRule !== "invite") {
-                            primaryActionLabel = _t("Try to join anyway");
-                            primaryActionHandler = this.props.onJoinClick;
-                        }
-                        break;
+                    }
                 }
                 break;
             }
@@ -293,12 +290,12 @@ module.exports = React.createClass({
             case MessageCase.OtherError: {
                 title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName()});
                 subTitle = ([
-                    <p key="subTitle1">{ _t("Try again later, or ask a room admin to check if you have access.") }</p>,
-                    <p key="subTitle2">{ _t("%(errcode)s was returned when trying to access the room.", {errcode: this.props.error.errcode}) }</p>,
-                    <p key="subTitle3">{ _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
+                    _t("Try again later, or ask a room admin to check if you have access."),
+                    _t("%(errcode)s was returned when trying to access the room.", {errcode: this.props.error.errcode}),
+                    _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
                         issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
                                                   target="_blank" rel="noopener">{ label }</a>,
-                    }) }</p>,
+                    }),
                 ]);
                 break;
             }
@@ -308,11 +305,10 @@ module.exports = React.createClass({
 
         let subTitleElements;
         if (subTitle) {
-            if (Array.isArray(subTitle)) {
-                subTitleElements = subTitle;
-            } else {
-                subTitleElements = [<p key="subTitle1">{ subTitle }</p>];
+            if (!Array.isArray(subTitle)) {
+                subTitle = [subTitle];
             }
+            subTitleElements = subTitle.map((t, i) => <p key={`subTitle${i}`}>{t}</p>);
         }
 
         const classes = classNames("mx_RoomPreviewBar", "dark-panel", {
