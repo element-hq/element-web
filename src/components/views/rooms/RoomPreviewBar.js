@@ -222,7 +222,10 @@ module.exports = React.createClass({
             case MessageCase.OtherThreePIDError: {
                 title = _t("Something went wrong with your invite to this room");
                 const joinRule = this._joinRule();
-                const errCodeMessage = _t("%(errcode)s was returned while trying to valide your invite. You could try to pass this information on to a room admin.", {errcode: this.state.threePidFetchError.errcode});
+                const errCodeMessage = _t("<code>%(errcode)s</code> was returned while trying to valide your invite. You could try to pass this information on to a room admin.",
+                    {errcode: this.state.threePidFetchError.errcode},
+                    {code: label => <code>{label}</code>}
+                );
                 switch (joinRule) {
                     case "invite":
                         subTitle = [
@@ -291,10 +294,11 @@ module.exports = React.createClass({
                 title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName()});
                 subTitle = ([
                     _t("Try again later, or ask a room admin to check if you have access."),
-                    _t("%(errcode)s was returned when trying to access the room.", {errcode: this.props.error.errcode}),
+                    _t("<code>%(errcode)s</code> was returned while trying to access the room.", {errcode: this.props.error.errcode}),
                     _t("If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.", {}, {
                         issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
                                                   target="_blank" rel="noopener">{ label }</a>,
+                        code: label => <code>{label}</code>,
                     }),
                 ]);
                 break;
